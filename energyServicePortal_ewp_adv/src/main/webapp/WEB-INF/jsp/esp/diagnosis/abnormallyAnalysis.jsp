@@ -36,17 +36,15 @@
 
 	$(function () {
 		const compareArea = $('#siteList').next().find('.compare_area');
-		const dropdownArea = compareArea.find('.dropdown');
-		const compareSelectBox = compareArea.find('.dropdown-toggle');
+		const dropdownArea = compareArea.find('.search_expand');
+		const compareSelectBox = compareArea.find('.btn.clear-btn');
 		const modalCompare = compareSelectBox.next('ul');
-		// const innerSelectBox = selectModal.find("btn.dropdown-toggle");
-		const confirmBtn = modalCompare.find('comp_btn_wrap button');
 
 		compareSelectBox.on('click', function () {
 			dropdownArea.toggleClass("open");
 		});
 
-		confirmBtn.on('click', function () {
+		$("#renderBtn").on('click', function () {
 			dropdownArea.removeClass('open');
 		});
 
@@ -90,7 +88,7 @@
 			deviceType();
 
 			//사이트 변경시 선택 초기화
-			$('.offset_dropdown button.btn-primary').each(function () {
+			$('.offset_dropdown .dropdown-toggle').each(function () {
 				let divObj = $(this).parent(),
 					divId = divObj.attr('id');
 				if (divId == 'interval') {
@@ -432,7 +430,7 @@
 			}
 		}
 
-		$('#siteList').next().find('.compare_area').find('.dropdown').removeClass('open');
+		$('#compareList').parents(".search_expand").removeClass('open');
 
 		let standard = makeStandard(interval);
 		makeTableTemplate(standard, interval);
@@ -1127,11 +1125,10 @@
 	</div>
 	<div class="col-lg-10 col-md-8 col-sm-9">
 		<div class="compare_area">
-			<div class="dropdown">
-				<button class="dropdown-toggle clear-btn" type="button">
-					비교하기<span class="caret"></span>
-				</button>
-				<ul class="dropdown-menu search_dropdown unused">
+			<div class="search_expand">
+				<button type="button" class="btn clear-btn" data-target="#compareList" data-name="상세 조건" 
+						onclick="$('#searchDetail').toggleClass('open')">비교하기<span class="caret"></span></button>
+				<ul id="compareList" class="dropdown-menu search_dropdown unused">
 					<li>
 						<div class="compare_bx">
 							<div class="row align-group2">
@@ -1439,7 +1436,7 @@
 										</ul>
 									</div>
 								</div>
-							</div>
+							</div>						
 							<p class="comp_tit type2">시간 단위</p>
 							<div class="row align-group2">
 								<div class="bx_align">

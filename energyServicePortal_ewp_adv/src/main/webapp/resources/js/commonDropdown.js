@@ -27,7 +27,6 @@ $(document).on('click', '.dropdown-menu:not(.unused) li:not(.disabled, .dropdown
 	} else {
 		let $displayData = $selector.data();
 		let $displayText = $selector.text();
-		console.log("displayText===", $displayText)
 		$displayButton.eq(0).html($displayText + '<span class="caret"></span>').data("name", $displayText).addClass("active");
 		//data Setting
 		if (!isEmpty($displayData)) {
@@ -74,7 +73,6 @@ const displayDropdown = ($selector) => {
 			}
 		}
 	}
-	console.log("displayText===", $displayText)
 	$displayButton.eq(0).html($displayText + '<span class="caret"></span>').data("name", $displayText).addClass("active");
 	// $displayButton.eq(0).text().replace(/<[^>]+>/g, $displayText);   <== 이 부분 적용시 '외' 의 텍스트가 나오지 않음.
 

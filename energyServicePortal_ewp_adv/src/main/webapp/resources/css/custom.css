@@ -10971,7 +10971,7 @@ html.darkmode .modal-content.spc-detail-content li.alarm-item a .btn_next {
 	margin-top: 0;
 }
 
-.compare_area>.dropdown>.dropdown-menu {
+.compare_area .search_dropdown {
 	width: 584px;
 	min-width: auto;
 }
