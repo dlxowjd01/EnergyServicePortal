@@ -1131,7 +1131,7 @@
 					<h2 class="tx_tit">설비 타입</h2>
 					<div class="flex_start">
 						<div class="dropdown" id="deviceType"><!--
-						--><button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="설비유형 선택">설비유형 선택<span class="caret"></span></button><!--
+						--><button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="설비유형 선택">설비유형 선택<span class="caret"></span></button><!--
 						--><ul class="dropdown-menu chk_type" role="menu" id="typeULList">
 								<li data-value="[type]">
 									<a href="javascript:void(0);" tabindex="-1">
@@ -1142,7 +1142,7 @@
 							</ul><!--
 					--></div>
 						<div class="dropdown ml-16" id="devices"><!--
-						--><button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="복수 선택">복수 선택<span class="caret"></span></button><!--
+						--><button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="복수 선택">복수 선택<span class="caret"></span></button><!--
 						--><div class="dropdown-menu dropdown-menu-form chk_type"><!--
 							 --><ul class="dropdown_cov clear"></ul>
 								<div class="li_btn_bx clear"><!--
@@ -1169,7 +1169,7 @@
 						</div>
 						<div class="dropdown" id="interval">
 							<h2 class="tx_tit">단위</h2>
-							<button class="dropdown-toggle w3" type="button" data-toggle="dropdown" data-value="15min" data-name="15분">15분<span class="caret"></span></button>
+							<button type="button" class="dropdown-toggle w3" data-toggle="dropdown" data-value="15min" data-name="15분">15분<span class="caret"></span></button>
 							<ul class="dropdown-menu">
 								<li data-value="1min"><a href="javascript:void(0);">1분</a></li>
 								<li data-value="15min"><a href="javascript:void(0);">15분</a></li>
@@ -1207,19 +1207,19 @@
 					<div class="fl mr-12" id="analyzeDiv1">
 						<div class="sa_select pb-10">
 							<div class="dropdown" id="chartDid">
-								<button class="dropdown-toggle w2" type="button" data-toggle="dropdown" data-name="설비명 선택">설비명 선택<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="설비명 선택">설비명 선택<span class="caret"></span></button>
 								<ul class="dropdown-menu" id="chartDidUl"><li data-value="[val]" data-sid="[sid]" data-type="[type]"><a href="javascript:void(0);">[siteDevice]</a></li></ul>
 							</div>
 						</div>
 						<div class="sa_select pb-10">
 							<div class="dropdown">
-								<button class="dropdown-toggle w2" type="button" data-toggle="dropdown" data-name="설비속성 선택">설비속성 선택<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="설비속성 선택">설비속성 선택<span class="caret"></span></button>
 								<ul class="dropdown-menu rdo_type" role="menu" id="columnLi"><li data-value="[key]"><a href="javascript:void(0);" tabindex="-1"><input type="radio" id="column[INDEX]" name="column" value="[key]"><label for="column[INDEX]">[value]</label></a></li></ul>
 							</div>
 						</div>
 						<div class="sa_select pb-10">
 							<div class="dropdown">
-								<button class="dropdown-toggle w4" type="button" data-toggle="dropdown" data-vlue="mean" data-name="평균">평균 <span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle w4" data-toggle="dropdown" data-vlue="mean" data-name="평균">평균 <span class="caret"></span></button>
 								<ul class="dropdown-menu rdo_type" role="menu">
 									<li data-value="max">
 										<a href="javascript:void(0);" tabindex="-1">
@@ -1244,7 +1244,7 @@
 						</div>
 						<div class="sa_select pb-10">
 							<div class="dropdown" id="way">
-								<button class="dropdown-toggle w5" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle w5" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 								<ul class="dropdown-menu">
 									<li data-value="l"><a href="javascript:void(0);">y-좌</a></li>
 									<li data-value="r"><a href="javascript:void(0);">y-우</a></li>
@@ -1258,7 +1258,7 @@
 							<span class="tx_tit">x축</span>
 							<div class="sa_select">
 								<div class="dropdown" id="chartDid2">
-									<button class="dropdown-toggle w2" type="button" data-toggle="dropdown" data-name="설비명 선택">설비명 선택<span class="caret"></span></button>
+									<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="설비명 선택">설비명 선택<span class="caret"></span></button>
 									<ul class="dropdown-menu" id="chartDidUl2">
 										<li data-value="[val]" data-sid="[sid]" data-type="[type]"><a>[siteDevice]</a></li>
 									</ul>
@@ -1266,7 +1266,7 @@
 							</div>
 							<div class="sa_select">
 								<div class="dropdown" id="columnDrop2">
-									<button class="dropdown-toggle w2" type="button" data-toggle="dropdown" data-name="설비속성 선택">설비속성 선택<span class="caret"></span></button>
+									<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="설비속성 선택">설비속성 선택<span class="caret"></span></button>
 									<ul class="dropdown-menu chk_type" role="menu" id="columnLi2">
 										<li data-value="[key]">
 											<a href="javascript:void(0);" tabindex="-1">
@@ -1279,7 +1279,7 @@
 							</div>
 							<div class="sa_select">
 								<div class="dropdown">
-									<button class="dropdown-toggle w4" type="button" data-toggle="dropdown" data-value="mean" data-name="평균">평균<span class="caret"></span></button>
+									<button type="button" class="dropdown-toggle w4" data-toggle="dropdown" data-value="mean" data-name="평균">평균<span class="caret"></span></button>
 									<ul class="dropdown-menu rdo_type " role="menu">
 										<li data-value="max">
 											<a href="javascript:void(0);" tabindex="-1">
@@ -1307,7 +1307,7 @@
 							<span class="tx_tit">y축</span>
 							<div class="sa_select">
 								<div class="dropdown" id="chartDid3">
-									<button class="dropdown-toggle w2" type="button" data-toggle="dropdown" data-name="설비명 선택">
+									<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="설비명 선택">
 										설비명 선택<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu" id="chartDidUl3">
@@ -1317,7 +1317,7 @@
 							</div>
 							<div class="sa_select">
 								<div class="dropdown" id="columnDrop3">
-									<button class="dropdown-toggle w2" type="button" data-toggle="dropdown" data-name="설비속성 선택">설비속성 선택<span class="caret"></span></button>
+									<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="설비속성 선택">설비속성 선택<span class="caret"></span></button>
 									<ul class="dropdown-menu chk_type" role="menu" id="columnLi3">
 										<li>
 											<a href="javascript:void(0);" data-value="[key]" tabindex="-1">
@@ -1330,7 +1330,7 @@
 							</div>
 							<div class="sa_select">
 								<div class="dropdown">
-									<button class="dropdown-toggle w4" type="button" data-toggle="dropdown" data-value="mean" data-name="평균">평균<span class="caret"></span></button>
+									<button type="button" class="dropdown-toggle w4" data-toggle="dropdown" data-value="mean" data-name="평균">평균<span class="caret"></span></button>
 									<ul class="dropdown-menu rdo_type" role="menu">
 										<li data-value="max">
 											<a href="javascript:void(0);" tabindex="-1">
@@ -1377,7 +1377,7 @@
 
 						<div class="sa_select">
 							<div class="dropdown" id="summation">
-								<button class="dropdown-toggle w6" type="button" data-toggle="dropdown" data-value="siteAccrue">선택안함<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle w6" data-toggle="dropdown" data-value="siteAccrue">선택안함<span class="caret"></span></button>
 								<ul class="dropdown-menu rdo_type">
 									<li>
 										<a href="javascript:void(0);" data-value="option1" tabindex="-1">

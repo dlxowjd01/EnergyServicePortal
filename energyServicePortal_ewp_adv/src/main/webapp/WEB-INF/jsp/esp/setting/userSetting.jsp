@@ -627,20 +627,23 @@
 					// "bDeferRender": true,
 					// "fixedHeader": true,
 					"table-layout": "fixed",
+					// "bStateSave": true,
+					"bSearchable" : true,
 					// "autoWidth": true,
 					"bAutoWidth": true,
 					"sScrollX": "110%",
 					"sScrollY": false,
 					"sScrollXInner": "110%",
 					"bScrollCollapse": true,
-					"bFilter": false,
+					// "bFilter": false, disabling this option will prevent table.search()
 					"aaSorting": [[ 0, 'asc' ]],
-					// "order": [[ 1, 'asc' ]],
+					"order": [[ 1, 'asc' ]],
 					"aoColumns": [
 						{
 							"sTitle": "순번",
 							"mData": null,
-							"className": "dt-center idx no-sorting"
+							"className": "dt-center idx"
+							// "className": "dt-center idx no-sorting"
 						},
 						{
 							"sTitle": "ID",
@@ -780,6 +783,7 @@
 				});
 
 				table.on( 'order.dt search.dt', function(){
+					console.log("order===")
 					table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
 						cell.innerHTML = i+1;
 					});
@@ -795,9 +799,9 @@
 				});
 				$("#userList").find("li").on( 'click', function(){
 					if(!isEmpty($(this).data("value"))){
-						filterColumn("7", $(this).data("value"));
+						filterColumn( "#userTable", "6", $(this).data("value"));
 					} else {
-						filterColumn("7", "");
+						filterColumn("#userTable", "6", "");
 					}
 				});
 				$("#pageLengthList").find("li").on( 'click', function(){ 
@@ -814,8 +818,8 @@
 			});
 		}
 
-		function filterColumn ( idx, val ) {
-			$('#userTable').DataTable().column(idx).search(val).draw();
+		function filterColumn ( id, idx, val ) {
+			$(id).DataTable().column(idx).search(val).draw();
 		}
 
 
@@ -1188,7 +1192,7 @@
 							<div class="col-lg-2 col-sm-3"><span class="input_label offset asterisk">권한 등급</span></div>
 							<div class="col-lg-4 col-sm-9">
 								<div class="dropdown">
-									<button class="dropdown-toggle asterisk" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+									<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 									<ul id="newAccLevel" class="dropdown-menu">
 										<li data-value="1" data-name="시스템 관리자"><a href="#">시스템 관리자</a></li>
 										<li data-value="2" data-name="일반 사용자"><a href="#">일반 사용자</a></li>
@@ -1348,7 +1352,7 @@
 		<div class="flex_group">
 			<span class="tx_tit">사용자 유형</span>
 			<div class="dropdown">
-				<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+				<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 				<ul class="dropdown-menu" id="userList">
 					<li data-value=""><a href="#" tabindex="-1">전체</a></li>
 					<li data-value="관리자"><a href="#" tabindex="-1">시스템 관리자</a></li>
@@ -1369,7 +1373,7 @@
 		<div class="indiv">
 			<div class="flex_group">
 				<div class="dropdown">
-					<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+					<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 					<ul class="dropdown-menu" id="pageLengthList">
 						<li data-value=""><a href="#" tabindex="-1">전체</a></li>
 						<li data-value="10"><a href="#" tabindex="-1">10</a></li>

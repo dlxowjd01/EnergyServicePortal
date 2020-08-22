@@ -46,7 +46,7 @@ html.darkmode:root {
 .dataTables_scrollHeadInner > .dataTable td {
 	background: var(--box-darker);
 	height: auto;
-	padding: 14px 0;
+	padding: 14px 10px;
 	font-size: 13px;
 	white-space: nowrap;
 }
@@ -54,7 +54,7 @@ html.darkmode:root {
 .dataTable tbody th,
 .dataTable tbody td {
 	height: auto;
-	padding: 14px 0px;
+	padding: 14px 10px;
 	font-size: 13px;
 	white-space: nowrap;
 }
@@ -659,6 +659,11 @@ a.dt-button:focus:not(.disabled) {
 
 .dt-button embed {
 	outline: none;
+}
+
+.inline.dt-buttons.button-group {
+	display: inline-block;
+	width: auto;
 }
 
 div.dt-buttons {

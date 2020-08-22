@@ -20,7 +20,7 @@
 		<div class="flex_group">
 			<span class="tx_tit">설비 타입</span>
 			<div class="dropdown">
-				<button class="dropdown-toggle" type="button" data-toggle="dropdown">선택<span class="caret"></span></button>
+				<button type="button" class="dropdown-toggle" data-toggle="dropdown">선택<span class="caret"></span></button>
 				<ul class="dropdown-menu chk_type" role="menu" id="siteList">
 					<li>
 						<a href="#" tabindex="-1">
@@ -34,7 +34,7 @@
 		<div class="flex_group">
 			<span class="tx_tit">제조사</span>
 			<div class="dropdown">
-				<button class="dropdown-toggle" type="button"
+				<button type="button" class="dropdown-toggle"
 					data-toggle="dropdown">선택<span class="caret"></span></button>
 				<ul class="dropdown-menu chk_type" role="menu">
 				</ul>
@@ -43,7 +43,7 @@
 		<div class="flex_group">
 			<span class="tx_tit">모델명</span>
 			<div class="dropdown">
-				<button class="dropdown-toggle" type="button"
+				<button type="button" class="dropdown-toggle"
 					data-toggle="dropdown">선택<span class="caret"></span></button>
 				<ul class="dropdown-menu">
 					<li data-value="solar" class="on"><a href="#">태양광</a></li>

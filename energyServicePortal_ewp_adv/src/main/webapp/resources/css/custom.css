@@ -712,8 +712,7 @@ a.btn.btn_type03:hover {
 	cursor: pointer;
 }
 
-.btn-text-blue,
-.btn-export {
+.btn-text-blue {
 	padding: 0 10px 0 0;
 	background: none;
 	outline-style: none;
@@ -725,12 +724,6 @@ a.btn.btn_type03:hover {
 	cursor: pointer;
 }
 
-.btn-export {
-	padding-right: 18px;
-	height: 36px;
-	line-height: 36px;
-}
-
 .btn-text-blue:before {
 	display: inline-block;
 	margin: 0 3px 0 0;
@@ -740,24 +733,6 @@ a.btn.btn_type03:hover {
 	background: var(--ico-add-blue) no-repeat 0 2px;
 	content: "";
 	cursor: pointer;
-}
-
-.btn-export:before {
-	display: inline-block;
-	content: "";
-	position: absolute;
-	right: 14px;
-	top: 25px;
-	width: 7px;
-	height: 7px;
-	border: 2px solid var(--vivid-blue);
-	border-left: 0;
-	border-top: 0;
-	transform: rotate(45deg);
-}
-
-.btn-export.collapsed:before{
-	transform: rotate(225deg);
 }
 
 .btn_type06+.btn_type07 {
@@ -1967,16 +1942,12 @@ nav .nav_right li.member {
 	margin-right: 16px;
 }
 
-nav .nav_right li.member .btn_type03 {
+.member .btn_type03,
+.btn-type-sm.btn_type03 {
 	height: 28px;
 	line-height: 27px;
 	border: 1px solid var(--white60);
-}
-
-nav .nav_right li.member .fl {
-	display: none;
-	border-radius: 4px;
-	overflow: hidden;
+	background: none;
 }
 
 nav .nav_right li.member .fl img {
@@ -2281,12 +2252,25 @@ nav .lang.dropdown.open .dropdown-toggle .caret {
 	transform: rotate(45deg);
 }
 
+.dropdown-toggle.mini {
+	padding: 0 30px 0 10px;
+	height: 28px;
+}
+
+.dropdown-toggle.mini .caret {
+	top: 9px;
+}
+
+.dropdown.open>.dropdown-toggle.mini .caret {
+	top: 7px;
+}
+
 .search_expand.open>.btn .caret,
-.dropdown.open>.btn .caret {
+.dropdown.open>.btn .caret,
+.dropdown.open>.dropdown-toggle .caret  {
 	top: 14px;
 	transform: rotate(225deg);
 }
-
 
 .darkmode .dropdown>.btn,
 .darkmode .dropdown.open>.btn {
@@ -4236,334 +4220,6 @@ input.inp[readonly]:focus {
 	height: 40px;
 }
 
-/* 상세보기 레이어 팝업 */
-
-.dview {
-	max-width: 1000px;
-}
-
-.dview .ltit h2 span.ioe {
-	background: var(--river-bed) url("/img/icon_ioe.png") no-repeat center center !important;
-}
-
-.dview .ltit h2 span.pcs {
-	background: var(--river-bed) url("/img/icon_pcs.png") no-repeat center center !important;
-}
-
-.dview .ltit h2 span.bms {
-	background: var(--river-bed) url("/img/icon_bms.png") no-repeat center center !important;
-}
-
-.dview .ltit h2 span.pv {
-	background: var(--river-bed) var(--icon-pv) no-repeat center center !important;
-}
-
-/* top */
-
-.dview .ltop {
-	display: table;
-	margin-top: 20px;
-	width: 100%;
-	padding: 14px 0;
-	border: solid 1px var(--porcelain);
-	border-radius: 4px;
-	background: var(--white);
-	font-size: 0;
-}
-
-.dview .ltop dl {
-	display: table-cell;
-	width: 25%;
-	text-align: center;
-}
-
-.dview .ltop dl+dl {
-	border-left: solid 1px var(--porcelain);
-}
-
-.dview .ltop dl dt {
-	font-size: 14px;
-	color: var(--dark-grey);
-	opacity: 0.5;
-}
-
-.dview .ltop dl dd {
-	padding-top: 10px;
-	font-size: 26px;
-	color: var(--river-bed);
-	white-space: nowrap;
-}
-
-/* body */
-
-.dview .lbody {
-	min-width: 800px;
-}
-
-.dview .lstat+.lstat {
-	margin-top: -1px;
-}
-
-.dview .lstat {
-	display: table;
-	width: 100%;
-	border: solid 1px var(--porcelain);
-	border-radius: 4px;
-	background: var(--white);
-	font-size: 0;
-}
-
-.dview .lstat div {
-	display: table-cell;
-	width: auto;
-}
-
-.dview .lstat div:not(:first-child) {
-	border-left: solid 1px var(--porcelain);
-}
-
-.dview .lstat div.dt {
-	height: 60px;
-	line-height: 60px;
-	width: 150px;
-	padding: 0 15px;
-	text-align: center;
-	background: #eef0f2;
-	font-size: 18px;
-	color: var(--river-bed);
-	font-weight: bold;
-}
-
-.dview .lstat div.dd {
-	height: 50px;
-	min-width: 150px;
-	padding: 15px 15px;
-	line-height: 1.5;
-	font-size: 18px;
-	color: var(--river-bed);
-}
-
-.dview .lstat div.dd span.run:before {
-	display: inline-block;
-	content: "";
-	width: 14px;
-	height: 14px;
-	background: var(--vivid-blue);
-	border-radius: 4px;
-	margin-right: 10px;
-	vertical-align: middle;
-}
-
-.dview h2.tbl_tit {
-	margin-top: 30px;
-	font-size: 18px;
-	color: var(--river-bed);
-	font-weight: bold;
-}
-
-.dview .ltbl {
-	margin-top: 10px;
-	overflow-x: auto;
-	border: solid 1px var(--porcelain);
-	border-radius: 4px;
-}
-
-.dview .ltbl table {
-	width: 100%;
-}
-
-.dview .ltbl table thead th {
-	background: var(--porcelain);
-	font-size: 15px;
-	color: var(--river-bed);
-	border-bottom: solid 1px var(--porcelain);
-}
-
-.dview .ltbl table tbody td {
-	background: var(--white);
-	font-size: 20px;
-	color: var(--river-bed);
-}
-
-.dview .ltbl table th,
-.dview .ltbl table td {
-	height: 55px;
-	line-height: 55px;
-	text-align: center;
-	padding: 0 10px;
-	white-space: nowrap;
-}
-
-/* 명세서 확인 및 출력 레이어 팝업 => 버튼 */
-
-.dprint .lbutton {
-	width: 100%;
-	text-align: left;
-	font-size: 0;
-	margin: -10px 0 20px;
-	padding-bottom: 20px;
-	border-bottom: solid 1px var(--silver);
-}
-
-.dprint .lbutton a {
-	display: inline-block;
-	height: 36px;
-	line-height: 34px;
-	background: var(--grey);
-	border-radius: 4px;
-	padding: 0 20px;
-	font-size: 13px;
-	color: var(--white);
-	font-weight: 600;
-}
-
-.dprint .lbutton a+a {
-	margin-left: 10px;
-}
-
-.dprint .lbutton a span {
-	display: inline-block;
-	padding-left: 22px;
-}
-
-.dprint .lbutton a.lbtn_pdf {
-	background: var(--grey);
-}
-
-.dprint .lbutton a.lbtn_pdf span {
-	background: url("/img/icon_data.png") no-repeat 0 center;
-}
-
-.dprint .lbutton a.lbtn_print {
-	background: var(--vivid-blue);
-}
-
-.dprint .lbutton a.lbtn_print span {
-	background: url("/img/icon_print.png") no-repeat 0 center;
-}
-
-.dprint .ltit a {
-	top: -5px !important;
-	width: 20px !important;
-	height: 20px !important;
-	overflow: hidden;
-	background: url("/img/layer_close.png") no-repeat center center !important;
-}
-
-.dprint .lbody {
-	clear: both;
-	min-width: 800px;
-	min-height: 500px;
-}
-
-.dprint .dp_total {
-	display: inline-block;
-	color: var(--light-blue) !important;
-}
-
-/* 테이블 설정 */
-
-.dprint .lbody td {
-	vertical-align: middle;
-}
-
-.dprint .lbody table.tbl {
-	width: 100%;
-	border-top: solid 1px #111;
-	border-left: solid 1px var(--silver);
-}
-
-.dprint .lbody table.tbl th,
-.dprint .lbody table.tbl td {
-	padding: 8px 15px;
-	font-size: 13px;
-	border-bottom: solid 1px var(--silver);
-	border-right: solid 1px var(--silver);
-	line-height: 1.5;
-}
-
-.dprint .lbody table.tbl th {
-	background: #eaeaea;
-}
-
-.dprint .lbody table.tbl thead th,
-.dprint .lbody table.tbl thead td {
-	font-weight: bold;
-}
-
-.dprint .lbody table.tbl thead th {
-	text-align: center;
-}
-
-.dprint .lbody table.tbl tfoot th,
-.dprint .lbody table.tbl tfoot td {
-	font-weight: bold;
-}
-
-/* 전기 요금 청구서 */
-
-.dprint .e_bill th,
-.dprint .e_bill td {
-	padding: 10px 15px !important;
-}
-
-/* 스타일 없는 내부 테이블 */
-
-.dprint .lbody table.noline {
-	margin-top: -3px;
-}
-
-.dprint .lbody table.noline th,
-.dprint .lbody table.noline td {
-	border: 0;
-	padding: 3px 10px 3px 0;
-}
-
-/* 명세서내 차트 */
-
-.dprint .inchart {
-	margin-top: 10px;
-	padding: 5px;
-	border: solid 1px var(--silver);
-	border-top: solid 1px #111;
-}
-
-
-/* 장치그룹관리 팝업 */
-
-.dgdevice .dgset_top {
-	padding-bottom: 20px;
-}
-
-.dgdevice .dgset_top .ntit {
-	margin-right: 10px;
-}
-
-.dgdevice .dgset_top .dropdown {
-	margin-right: 30px;
-}
-
-/* 장치그룹편집 팝업 */
-
-.dgdevice_edit {
-	border: solid 1px var(--silver);
-}
-
-.dgdevice_edit .submit {
-	display: inline-block;
-	width: 100px;
-	height: 36px;
-	line-height: 32px;
-	border: 0;
-	outline-style: none;
-	background: var(--dark-grey);
-	color: var(--white);
-	font-size: 13px;
-	border-radius: 4px;
-	font-weight: 600;
-	margin-top: 9px;
-}
-
 .default_tbl tbody tr.click th,
 .default_tbl tbody tr.click td,
 .tbl_box tbody tr.click th,
@@ -4663,15 +4319,15 @@ input.inp[readonly]:focus {
 
 .save_btn {
 	display: inline-block;
-	/* width: 115px; */
+	padding-left: 32px;
 	height: 36px;
 	line-height: 36px;
-	background: url("/img/icon_data2.png") no-repeat 0 6px;
-	padding-left: 32px;
-	font-size: 13px;
+	background: var(--btn-download) no-repeat 3px 9px;
 	color: var(--vivid-blue);
+	font-size: 13px;
 	font-weight: 500;
 	white-space: nowrap;
+	border: 0;
 }
 
 .save_btn:link,
@@ -5089,7 +4745,9 @@ input.inp[readonly]:focus {
 	border-radius: 0 200px 200px 0;
 }
 
-/* no-data */
+.no-text {
+	font-size: 0;
+}
 
 .no-data {
 	position: relative;
@@ -5107,19 +4765,6 @@ input.inp[readonly]:focus {
 	line-height: 1.5;
 	font-size: 16px;
 	color: var(--white);
-}
-
-.no-data span:before {
-	position: absolute;
-	top: -92px;
-	left: 50%;
-	margin-left: -36px;
-	display: block;
-	margin-bottom: 20px;
-	content: "";
-	width: 72px;
-	height: 72px;
-	background: url("/img/icon_nodata.png") no-repeat center;
 }
 
 .alarm .no-data {
@@ -5158,51 +4803,6 @@ input.inp[readonly]:focus {
 
 .smain_device .no-data {
 	height: 332px;
-}
-
-/* no-device */
-
-.no-device {
-	display: table;
-	width: 100%;
-	text-align: center;
-}
-
-.no-device .row {
-	margin: 0;
-	display: table-cell;
-	vertical-align: middle;
-}
-
-.no-device .device_box span {
-	position: relative;
-	display: block;
-	padding-top: 75px;
-	line-height: 1.5;
-	font-size: 16px;
-	color: var(--white);
-}
-
-.no-device .device_box span:before {
-	position: absolute;
-	top: 0px;
-	left: 50%;
-	margin-left: -36px;
-	display: block;
-	content: "";
-	width: 72px;
-	height: 72px;
-	background: url("/img/icon_nodevice.png") no-repeat center;
-}
-
-.no-device .device_box+.link_box {
-	margin-top: 10px;
-}
-
-.no-device .link_box span {
-	display: block;
-	font-size: 16px;
-	color: var(--white);
 }
 
 .alarm .no-device {
@@ -6989,7 +6589,7 @@ div.di_wrap dl .link a {
 .scontrol dd ul li .cont .tfl span.ic_bms {
 	width: 25px;
 	height: 31px;
-	background: url("/img/icon_eq3_4k_on_click.png") no-repeat center;
+	background: url("/img/icon_eq3_on_click.png") no-repeat center;
 }
 
 .scontrol dd ul li .cont .tfr {
@@ -8298,7 +7898,7 @@ div.di_wrap dl .link a {
 	content: '';
 	position: absolute;
 	left: 6px;
-	top: 5px;
+	top: 6px;
 	width: 6px;
 	height: 11px;
 	border: solid var(--active);
@@ -9119,14 +8719,6 @@ div.di_wrap dl .link a {
 	text-decoration: underline;
 }
 
-.btn_file {
-	display: block;
-	width: 24px;
-	height: 24px;
-	background: none;
-	border: 0;
-	text-indent: -9999px;
-}
 
 .btn_close {
 	margin-left: 30px;
@@ -9178,6 +8770,15 @@ div.di_wrap dl .link a {
 	vertical-align: middle;
 	background: var(--btn-trash) no-repeat center center;
 	outline: none;
+}
+
+.btn_file {
+	display: block;
+	width: 24px;
+	height: 24px;
+	background: none;
+	border: 0;
+	text-indent: -9999px;
 }
 
 .btn_file.down {

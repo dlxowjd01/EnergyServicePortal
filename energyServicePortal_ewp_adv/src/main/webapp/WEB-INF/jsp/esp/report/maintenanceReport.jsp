@@ -206,7 +206,7 @@
 			<span class="tx_tit">보고서 구분</span>
 			<div class="sa_select">
 				<div class="dropdown">
-					<button id="report_type" class="dropdown-toggle w5" type="button"
+					<button type="button" id="report_type" class="dropdown-toggle w5"
 						data-toggle="dropdown" data-value="">
 						전체
 						<span class="caret"></span>

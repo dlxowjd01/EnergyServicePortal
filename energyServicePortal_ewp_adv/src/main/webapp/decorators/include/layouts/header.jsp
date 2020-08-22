@@ -227,18 +227,17 @@
 
 		function validateName(name){
 			let re = /\S+@\S+\.\S+/;
-			// let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-
 			return re.test(email);
 		}
 
 		function validateEmail(email){
-			// let re = /\S+@\S+\.\S+/;
 			let re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
-			// let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+			// let re = \b[\w.!#$%&’*+\/=?^`{|}~-]+@[\w-]+(?:\.[\w-]+)*\b
 
 			return re.test(email);
 		}
+
+
 
 		function validatePassword() {
 			const rules = [
@@ -495,7 +494,6 @@
 	</div>
 	<ul class="nav_right">
 		<li class="member clear">
-			<div class="fl"><img src="../img/m_member_pic.png" alt=""></div>
 			<div class="fr"><button type="button" data-toggle="modal" data-target="#updateUserInfoModal" data-backdrop="static" data-keyboard="false" id="userInfoBtn" class="btn_type03">${sessionScope.userInfo.name}<span class="light">&emsp;${sessionScope.userInfo.login_id}</span></button></div>
 		</li>
 		<%--

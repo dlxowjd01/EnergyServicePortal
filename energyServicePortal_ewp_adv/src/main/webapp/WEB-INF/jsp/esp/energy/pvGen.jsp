@@ -9,7 +9,7 @@
 <div class="row content-wrapper">
 	<div class="col-lg-2 col-md-4 col-sm-6 header_drop_area">
 		<div class="dropdown" id="siteList">
-			<button class="dropdown-toggle w-100" type="button" data-toggle="dropdown">선택해주세요.<span class="caret"></span></button>
+			<button type="button" class="dropdown-toggle w-100" data-toggle="dropdown">선택해주세요.<span class="caret"></span></button>
 			<ul class="dropdown-menu chk_type"></ul>
 		</div>
 	</div>
@@ -29,7 +29,7 @@
 						<span class="tx_tit">계량값</span>
 						<div class="sa_select">
 							<div class="dropdown">
-								<button class="dropdown-toggle w7" type="button" data-toggle="dropdown">복수 선택<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle w7" data-toggle="dropdown">복수 선택<span class="caret"></span></button>
 								<div class="dropdown-menu chk_type"><!--
 								--><ul class="dropdown_cov clear selectDevices"></ul><!--
 								 --><div class="li_btn_bx clear">
@@ -47,7 +47,7 @@
 						<span class="tx_tit">기간</span>
 						<div class="sa_select">
 							<div class="dropdown" id="period">
-								<button class="dropdown-toggle" type="button" data-toggle="dropdown">오늘<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown">오늘<span class="caret"></span></button>
 								<ul class="dropdown-menu">
 									<li data-value="today" class="on"><a href="#">오늘</a></li>
 									<li data-value="week"><a href="#">이번 주</a></li>
@@ -69,7 +69,7 @@
 						<span class="tx_tit">단위</span>
 						<div class="sa_select">
 							<div class="dropdown" id="interval">
-								<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
 									선택 <span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu">
@@ -86,7 +86,7 @@
 				<div class="end"><span class="tx_tit">그래프</span><!--
 				--><div class="sa_select">
 						<div class="dropdown" id="chartStyle"><!--
-						--><button class="dropdown-toggle" type="button" data-toggle="dropdown" data-value="each">개별 막대<span class="caret"></span></button><!--
+						--><button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="each">개별 막대<span class="caret"></span></button><!--
 						--><ul class="dropdown-menu"><!--
 							--><li data-value="allSum"><a href="#">전체 합산</a></li><!--
 							--><li data-value="siteSum"><a href="#">사이트별 합산</a></li><!--

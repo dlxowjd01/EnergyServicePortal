@@ -373,7 +373,7 @@
 					<span class="tx_tit">기준</span>
 					<div class="sa_select">
 						<div class="dropdown" id="year">
-							<button class="dropdown-toggle w5" type="button" data-toggle="dropdown">
+							<button type="button" class="dropdown-toggle w5" data-toggle="dropdown">
 <%--								${fn:substring(param.yyyymm, 0, 4)}년--%>
 								<span class="caret"></span>
 							</button>
@@ -384,7 +384,7 @@
 					</div>
 					<div class="sa_select">
 						<div class="dropdown" id="month">
-							<button class="dropdown-toggle w8" type="button" data-toggle="dropdown">
+							<button type="button" class="dropdown-toggle w8" data-toggle="dropdown">
 <%--								${fn:substring(param.yyyymm, 4, 6)}월--%>
 								<span class="caret"></span>
 							</button>

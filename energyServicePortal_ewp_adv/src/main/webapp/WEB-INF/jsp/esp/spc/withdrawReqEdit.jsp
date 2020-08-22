@@ -580,7 +580,7 @@
 			<div class="sa_select"><!--
 			--><span class="tx_tit">출금 계좌번호</span><!--
 			--><div class="dropdown"><!--
-				--><button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="" data-value=""><span class="caret"></span></button>
+				--><button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="" data-value=""><span class="caret"></span></button>
 					<ul id="withdrawList" class="dropdown-menu unused center" role="menu"><li data-acc-holder="*acc_holder*" data-name="*bank_name*" data-value="*acc_num*"><a href="#" tabindex="-1">*bank_name* *acc_num*</a></li></ul>
 				</div>
 			</div>
@@ -633,7 +633,7 @@
 								<td>
 									<div class="sa_select">
 										<div class="dropdown placeholder">
-											<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="*purposeTitle*" data-value="*purposeVal*">*purposeTitle*<span class="caret"></span></button>
+											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="*purposeTitle*" data-value="*purposeVal*">*purposeTitle*<span class="caret"></span></button>
 											<ul id="purposeList*index*" class="purpose-list dropdown-menu" role="menu">
 												<li data-value="0"><a href="#" tabindex="-1">관리운영비</a></li>
 												<li data-value="1"><a href="#" tabindex="-1">사무수탁비</a></li>
@@ -659,7 +659,7 @@
 								<td>
 									<div class="sa_select">
 										<div class="dropdown placeholder">
-											<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-acc-holder="*accHolder*" data-name="*bankName*" data-value="*accNum*">*bankName*  *accNum* (*accHolder*)<span class="caret"></span></button>
+											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-acc-holder="*accHolder*" data-name="*bankName*" data-value="*accNum*">*bankName*  *accNum* (*accHolder*)<span class="caret"></span></button>
 												<ul id="receiveList*index*" class="receive-list dropdown-menu" role="menu">
 												</ul>
 										</div>

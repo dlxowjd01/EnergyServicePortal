@@ -260,7 +260,7 @@
 <div class="row">
 	<div class="header_drop_area col-8">
 		<div class="dropdown" id="spcGen">
-			<button class="dropdown-toggle w8" type="button" data-toggle="dropdown">
+			<button type="button" class="dropdown-toggle w8" data-toggle="dropdown">
 				전체<span class="caret"></span>
 			</button>
 			<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu">
@@ -278,7 +278,7 @@
 		<div class="indiv entity_site">
 			<div class="btn_wrap_type">
 				<div class="dropdown" id="year">
-					<button class="dropdown-toggle w8" type="button" data-toggle="dropdown" data-value="2020">
+					<button type="button" class="dropdown-toggle w8" data-toggle="dropdown" data-value="2020">
 						2020년<span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu">

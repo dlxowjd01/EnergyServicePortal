@@ -16,7 +16,7 @@
 <div class="row">
 	<div class="col-12">
 		<div class="dropdown fl" id="selectSiteList">
-			<button class="dropdown-toggle w10" type="button" data-toggle="dropdown" data-name="사업소 선택">
+			<button type="button" class="dropdown-toggle w10" data-toggle="dropdown" data-name="사업소 선택">
 				사업소 선택<span class="caret"></span>
 			</button>
 			<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="siteULList">
@@ -42,7 +42,7 @@
 				<div class="input-group inline-flex">
 					<label for="rtuSite" class="input_label">사이트</label>
 					<div class="dropdown" id="rtuSite">
-						<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="사업소 선택">
+						<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="사업소 선택">
 							사업소 선택<span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu chk_type" id="rtuSiteULList">

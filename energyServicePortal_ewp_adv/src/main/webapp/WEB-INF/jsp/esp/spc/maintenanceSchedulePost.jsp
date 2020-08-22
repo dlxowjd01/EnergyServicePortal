@@ -45,7 +45,7 @@
 							<th>점검 구분</th>
 							<td>
 								<div class="dropdown">
-								  <button class="dropdown-toggle" type="button" data-toggle="dropdown" style="width:55%">점검 계획 항목 선택
+								  <button type="button" class="dropdown-toggle" data-toggle="dropdown" style="width:55%">점검 계획 항목 선택
 								  <span class="caret"></span></button>
 								  <ul class="dropdown-menu">
 									<li class="on"><a href="#">점검 계획 항목</a></li>

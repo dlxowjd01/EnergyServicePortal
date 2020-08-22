@@ -588,7 +588,7 @@
 							<div class="flex_wrap">
 								<span class="input_label">SPC</span>
 								<div class="dropdown placeholder" id="spc_id">
-									<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="">
+									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="">
 										선택<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu"></ul>
@@ -597,7 +597,7 @@
 							<div class="flex_wrap">
 								<span class="input_label">보고서 유형</span>
 								<div class="dropdown placeholder" id="report_type">
-									<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="선택">
+									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
 										선택<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu">
@@ -617,7 +617,7 @@
 							<div class="flex_wrap">
 								<span class="input_label">발전소</span>
 								<div class="dropdown placeholder" id="site_id">
-									<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="">
+									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="">
 										선택<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu"></ul>
@@ -638,7 +638,7 @@
 					<ul class="yield_list" id="yield_list">
 						<li>
 							<div class="dropdown placeholder" id="report_variable_key_[index]">
-								<button class="dropdown-toggle" type="button" data-toggle="dropdown" data-name="">
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="">
 									선택<span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu">
@@ -676,7 +676,7 @@
 			<span class="tx_tit">유형</span>
 			<div class="sa_select">
 				<div class="dropdown" id="reportClass">
-					<button class="dropdown-toggle w7" type="button" data-toggle="dropdown">전체<span class="caret"></span></button>
+					<button type="button" class="dropdown-toggle w7" data-toggle="dropdown">전체<span class="caret"></span></button>
 					<ul class="dropdown-menu" role="menu">
 						<li data-value=""><a href="javascript:void(0);">전체</a></li>
 						<li data-value="regular_mm"><a href="javascript:void(0);">월간실적</a></li>
@@ -691,7 +691,7 @@
 			<span class="tx_tit">적용 시작 월</span>
 			<div class="sa_select">
 				<div class="dropdown" id="year">
-					<button class="dropdown-toggle w7" type="button" data-toggle="dropdown">2020년<span class="caret"></span></button>
+					<button type="button" class="dropdown-toggle w7" data-toggle="dropdown">2020년<span class="caret"></span></button>
 					<ul class="dropdown-menu" role="menu">
 						<li><a href="javascript:void(0);">전체</a></li>
 						<li><a href="javascript:void(0);">2020년</a></li>
@@ -702,7 +702,7 @@
 			</div>
 			<div class="sa_select">
 				<div class="dropdown" id="month">
-					<button class="dropdown-toggle w3" type="button" data-toggle="dropdown">전체<span class="caret"></span></button>
+					<button type="button" class="dropdown-toggle w3" data-toggle="dropdown">전체<span class="caret"></span></button>
 					<ul class="dropdown-menu" role="menu">
 						<li><a href="javascript:void(0);">전체</a></li>
 						<li><a href="javascript:void(0);">1월</a></li>

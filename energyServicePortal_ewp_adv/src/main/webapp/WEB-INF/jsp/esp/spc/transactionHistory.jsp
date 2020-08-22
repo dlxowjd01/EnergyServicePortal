@@ -749,7 +749,7 @@
 	</div>
 	<div class="col-1">
 		<div class='dropdown fr'><!--
-		--><button class="dropdown-toggle w-100" type="button" data-toggle="dropdown" value="" aria-expanded="true">건 별<span class="caret"></span></button><!-- 
+		--><button type="button" class="dropdown-toggle w-100" data-toggle="dropdown" value="" aria-expanded="true">건 별<span class="caret"></span></button><!-- 
 		--><ul id='sumOptList' class='dropdown-menu' role='menu'><!--
 			--><li data-value="noSum"><a href="javascript:void(0)" tabindex="-1">건 별</a></li><!--
 			--><li data-value="monthSum"><a href="javascript:void(0)" tabindex="-1">월 별</a></li><!--

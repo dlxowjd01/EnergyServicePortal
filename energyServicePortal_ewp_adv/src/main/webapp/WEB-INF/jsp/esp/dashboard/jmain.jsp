@@ -196,7 +196,7 @@
 					<span class="tx_tit">설비 상태</span>
 					<div class="sa_select">
 						<div class="dropdown" id="deviceStatus">
-							<button class="dropdown-toggle w8" type="button"
+							<button type="button" class="dropdown-toggle w8"
 									data-toggle="dropdown" data-name="설비 상태">
 								전체<span class="caret"></span>
 							</button>
@@ -364,8 +364,6 @@
 <script type="text/javascript" src="/js/commonDropdown.js"></script>
 <script type="text/javascript" src="/js/dashboard.js"></script>
 <script type="text/javascript">
-	const siteList = JSON.parse('${siteList}');
-	const sgid = '<c:out value="${sgid}" escapeXml="false" />';
 	const today = new Date();
 
 	let actualCount = 0;
