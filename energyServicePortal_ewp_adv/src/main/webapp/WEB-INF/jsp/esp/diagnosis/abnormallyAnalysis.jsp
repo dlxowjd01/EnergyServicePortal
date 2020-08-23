@@ -44,10 +44,6 @@
 			dropdownArea.toggleClass("open");
 		});
 
-		$("#renderBtn").on('click', function () {
-			dropdownArea.removeClass('open');
-		});
-
 		setInitList('siteULList'); //사업소 리스트 초기화
 		setInitList('typeULList'); //검증설비 - 설비유형 리스트 초기화
 		setInitList('compareTypeULList'); //검증설비 - 설비유형 리스트 초기화
@@ -65,6 +61,7 @@
 
 		//확인 클릭시
 		$('#renderBtn').on('click', function () {
+			dropdownArea.removeClass('open');
 			searchGrid();
 		});
 

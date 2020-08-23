@@ -231,31 +231,31 @@
 						<thead>
 						<tr>
 							<th>
-								<button class="btn_align">설비상태</button>
+								<button type="button" class="btn_align">설비상태</button>
 							</th>
 							<th>
-								<button class="btn_align">오류</button>
+								<button type="button" class="btn_align">오류</button>
 							</th>
 							<th>
-								<button class="btn_align">경고</button>
+								<button type="button" class="btn_align">경고</button>
 							</th>
 							<th>
-								<button class="btn_align">사업소</button>
+								<button type="button" class="btn_align">사업소</button>
 							</th>
 							<th>
-								<button class="btn_align">설비용량</button>
+								<button type="button" class="btn_align">설비용량</button>
 							</th>
 							<th>
-								<button class="btn_align">금일예측</button>
+								<button type="button" class="btn_align">금일예측</button>
 							</th>
 							<th>
-								<button class="btn_align">금일누적</button>
+								<button type="button" class="btn_align">금일누적</button>
 							</th>
 							<th class="ESS">
-								<button class="btn_align">금일충전</button>
+								<button type="button" class="btn_align">금일충전</button>
 							</th>
 							<th class="ESS">
-								<button class="btn_align">금일방전</button>
+								<button type="button" class="btn_align">금일방전</button>
 							</th>
 						</tr>
 						</thead>
@@ -1278,17 +1278,13 @@
 			setInterval(() => fn_cycle_1hour(), 60 * 60 * 1000);
 			setInterval(() => fn_cycle_1min(), 60 * 1000);
 		} else {
-			alert('해당 그룹에 등록 된 사이트가 존재하지 않습니다.');
+			$("#errMsg").text("해당 그룹에 등록 된 사이트가 존재하지 않습니다.");
+			$("#errorModal").modal("show");
+			setTimeout(function(){
+				$("#errorModal").modal("hide");
+			}, 2000);
+			// alert('해당 그룹에 등록 된 사이트가 존재하지 않습니다.');
 			return false;
 		}
 	});
 </script>
-
-
-
-
-
-
-
-
-

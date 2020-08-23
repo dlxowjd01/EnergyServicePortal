@@ -316,7 +316,7 @@
 						let confirmed_date = (new Date(temp.confirmed_at)).format('yyyy-MM-dd hh:mm:ss');
 						let linkData = JSON.parse(temp.confirmed_file_link);
 						let file_link = 'location.href=\'' + apiHost + '/files/download/' + linkData.fileKey + '?oid=' + oid + '&orgFilename=' + linkData.orgFileName + '\'';
-						result.data[i].confirmed_date = confirmed_date + '<button class="btn_file fr down" onclick="' + file_link + '">다운로드</button>';
+						result.data[i].confirmed_date = confirmed_date + '<button type="button" class="btn_file fr down" onclick="' + file_link + '">다운로드</button>';
 					} else {
 						let confirmed_date = '확정 보고서 업로드';
 						result.data[i].confirmed_date = confirmed_date + '<label for="confirmFile' + temp.id + '" class="btn_file fr up"">업로드</label> <input type="file" id="confirmFile' + temp.id + '" name="confirmFile' + temp.id + '" class="uploadBtn hidden">';
@@ -650,7 +650,7 @@
 							<div class="tx_inp_type fl">
 								<input type="text" id="report_variable_val_[index]" name="report_variable_val_[index]" placeholder="입력">
 							</div>
-							<button class="btn_type07">삭제</button>
+							<button type="button" class="btn_type07">삭제</button>
 						</li>
 					</ul>
 					<div class="btn_wrap_type02">
@@ -745,14 +745,14 @@
 								<input type="checkbox" id="chk_header" value="순번" onclick="setCheckedAll(this, 'rowCheck');">
 								<label for="chk_header">순번</label>
 							</th>
-							<th><button class="btn_align down">SPC명</button></th>
-							<th><button class="btn_align down">발전소명</button></th>
-							<th><button class="btn_align down">보고서 유형</button></th>
-							<th><button class="btn_align down">적용기간</button></th>
+							<th><button type="button" class="btn_align down">SPC명</button></th>
+							<th><button type="button" class="btn_align down">발전소명</button></th>
+							<th><button type="button" class="btn_align down">보고서 유형</button></th>
+							<th><button type="button" class="btn_align down">적용기간</button></th>
 							<th>다운로드</th>
-							<th><button class="btn_align down">보고서 생성 시간</button></th>
-							<th><button class="btn_align down">보고서 확정</button></th>
-							<th><button class="btn_align down">최종 작업자</button></th>
+							<th><button type="button" class="btn_align down">보고서 생성 시간</button></th>
+							<th><button type="button" class="btn_align down">보고서 확정</button></th>
+							<th><button type="button" class="btn_align down">최종 작업자</button></th>
 						</tr>
 					</thead>
 					<tbody id="listData">
@@ -766,7 +766,7 @@
 							<td>[reportTypeName]</td>
 							<td>[report_date]</td>
 							<td onclick="[file_link]">
-								<button class="tx_file">EXCEL</button>
+								<button type="button" class="tx_file">EXCEL</button>
 							</td>
 							<td>[generated_date]</td>
 							<td>[confirmed_date]</td>

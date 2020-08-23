@@ -433,7 +433,7 @@
 									<div class="file_list ml-16" id="modi_attachement_info">
 										<p class="tx_file">
 											<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-											<button class="btn_type07" onclick="setRemoveFileList('modi_attachement_info', [INDEX]);">삭제</button>
+											<button type="button" class="btn_type07" onclick="setRemoveFileList('modi_attachement_info', [INDEX]);">삭제</button>
 										</p>
 									</div>
 								</div>
@@ -522,7 +522,7 @@
 			<div class="tx_inp_type mr-12">
 				<input type="text" id="search" name="search" placeholder="입력" onKeyDown="pressEnter()">
 			</div>
-			<button class="btn_type" onclick="getNoticeList(1);">검색</button>
+			<button type="button" class="btn_type" onclick="getNoticeList(1);">검색</button>
 		</div>
 	</div>
 </div>

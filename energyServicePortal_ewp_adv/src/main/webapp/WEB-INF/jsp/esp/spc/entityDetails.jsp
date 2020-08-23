@@ -1521,7 +1521,7 @@
 								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
 						</td>
-						<td><button class="btn_file down"></button></td>
+						<td><button type="button" class="btn_file down"></button></td>
 					</tr>
 					<tr>
 						<th>수배전반</th>
@@ -1530,7 +1530,7 @@
 								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
 						</td>
-						<td><button class="btn_file down"></button></td>
+						<td><button type="button" class="btn_file down"></button></td>
 					</tr>
 					<tr>
 						<th>케이블</th>
@@ -1539,7 +1539,7 @@
 								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
 						</td>
-						<td><button class="btn_file down"></button></td>
+						<td><button type="button" class="btn_file down"></button></td>
 					</tr>
 					<tr>
 						<th>모듈</th>
@@ -1548,7 +1548,7 @@
 								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
 						</td>
-						<td><button class="btn_file down"></button></td>
+						<td><button type="button" class="btn_file down"></button></td>
 					</tr>
 					<tr>
 						<th>인버터</th>
@@ -1557,7 +1557,7 @@
 								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
 						</td>
-						<td><button class="btn_file down"></button></td>
+						<td><button type="button" class="btn_file down"></button></td>
 					</tr>
 					<tr>
 						<th>결선도</th>
@@ -1566,7 +1566,7 @@
 								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
 						</td>
-						<td><button class="btn_file down"></button></td>
+						<td><button type="button" class="btn_file down"></button></td>
 					</tr>
 					<tr>
 						<th>토목</th>
@@ -1575,7 +1575,7 @@
 								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
 						</td>
-						<td><button class="btn_file down"></button></td>
+						<td><button type="button" class="btn_file down"></button></td>
 					</tr>
 					<tr>
 						<th>구조물</th>
@@ -1584,7 +1584,7 @@
 								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
 						</td>
-						<td><button class="btn_file down"></button></td>
+						<td><button type="button" class="btn_file down"></button></td>
 					</tr>
 					<tr>
 						<th>접속반</th>
@@ -1593,7 +1593,7 @@
 								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
 						</td>
-						<td><button class="btn_file down"></button></td>
+						<td><button type="button" class="btn_file down"></button></td>
 					</tr>
 					<tr>
 						<th>기타설비</th>
@@ -1602,7 +1602,7 @@
 								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
 						</td>
-						<td><button class="btn_file down"></button></td>
+						<td><button type="button" class="btn_file down"></button></td>
 					</tr>
 				</table>
 				</div>

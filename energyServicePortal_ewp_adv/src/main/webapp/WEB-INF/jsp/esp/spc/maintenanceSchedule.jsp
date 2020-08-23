@@ -861,9 +861,9 @@
 			<div class="schedule_area">
 				<div class="sch_top_info clear">
 					<div class="sch_btn fl">
-						<button class="btn_type03 active">오늘</button>
-						<button class="btn_prev_mon">prev</button>
-						<button class="btn_next_mon">next</button>
+						<button type="button" class="btn_type03 active">오늘</button>
+						<button type="button" class="btn_prev_mon">prev</button>
+						<button type="button" class="btn_next_mon">next</button>
 						<strong></strong>
 					</div>
 					<a href="javascript:void(0);" class="btn_type fr" id="register">등록</a>

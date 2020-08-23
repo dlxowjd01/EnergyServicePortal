@@ -33,7 +33,7 @@
 			<div class="toggle_bx">
 				<div class="tb_area clear">
 					<p class="tb_tx fl">예측 오차 계산법</p>
-					<button class="tb_fold_btn fr">펼치기</button>
+					<button type="button" class="tb_fold_btn fr">펼치기</button>
 				</div>
 				<div class="tb_fold_div">
 					<div class="dropdown" id="measure">

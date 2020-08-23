@@ -264,13 +264,13 @@
 								<input type="checkbox" id="chk_op01" value="순번">
 								<label for="chk_op01">순번</label>
 							</th>
-							<th><button class="btn_align down">SPC명</button></th>
-							<th><button class="btn_align down">발전소 명</button></th>
-							<th><button class="btn_align down">기준년월</button></th>
-<%--							<th class="right"><button class="btn_align down">용량(kW)</button></th>--%>
-							<th class="right"><button class="btn_align down">현금유입(원)</button></th>
-							<th class="right"><button class="btn_align down">현금유출(원)</button></th>
-							<th class="right"><button class="btn_align down">기말 현금흐름(원)</button></th>
+							<th><button type="button" class="btn_align down">SPC명</button></th>
+							<th><button type="button" class="btn_align down">발전소 명</button></th>
+							<th><button type="button" class="btn_align down">기준년월</button></th>
+<%--							<th class="right"><button type="button" class="btn_align down">용량(kW)</button></th>--%>
+							<th class="right"><button type="button" class="btn_align down">현금유입(원)</button></th>
+							<th class="right"><button type="button" class="btn_align down">현금유출(원)</button></th>
+							<th class="right"><button type="button" class="btn_align down">기말 현금흐름(원)</button></th>
 						</tr>
 					</thead>
 					<tbody id="listData">

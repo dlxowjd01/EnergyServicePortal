@@ -572,7 +572,7 @@
 	<input type="hidden" id="reqEditSpcId" name="req_edit_spc_id" value=''/>
 	<input type="hidden" id="reqEditSpcName" name="req_edit_spc_name" value=''/>
 	<input type="hidden" id="reqEditReqId" name="req_edit_req_id" value=''/>
-	<!-- <button id="forwardDetailBtn" type="submit" class="hidden"></button> -->
+	<!-- <button type="submit" id="forwardDetailBtn" class="hidden"></button> -->
 </form>
 
 <form id="reqDetailForm" class="" action="/spc/withdrawReqStatusDetail.do" method="post">
@@ -582,7 +582,7 @@
 	<input type="hidden" id="reqDetailAccountInfo" name="req_detail_acc_info" value=''/>
 	<input type="hidden" id="reqDetailStatus" name="req_detail_status" value=''/>
 	<input type="hidden" id="reqDetailStatusVal" name="req_detail_status_val" value=''/>
-	<!-- <button id="forwardDetailBtn" type="submit" class="hidden"></button> -->
+	<!-- <button type="submit" id="forwardDetailBtn" class="hidden"></button> -->
 </form>
 
 <div class="modal fade" id="warningModal" role="dialog" aria-labelledby="warningModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
@@ -613,7 +613,7 @@
 		--><span class='tx_tit'>SPC 선택</span><!--
 		--><div class='sa_select'>
 				<div class='dropdown'>
-					<button class='dropdown-toggle no-close' type='button' data-toggle='dropdown' data-name="선택" data-value="">전체<span class='caret'></span></button>
+					<button type='button' class='dropdown-toggle no-close' data-toggle='dropdown' data-name="선택" data-value="">전체<span class='caret'></span></button>
 					<ul id='spcList' class='dropdown-menu chk_type' role='menu'>
 						<li data-value="*spcId*"><!--
 						--><a href="javascript:void(0);" tabindex="-1"><!--
@@ -653,7 +653,7 @@
 						<div class='row align-group3'>
 							<div class='bx_align dropdown'>
 								<h2 class='comp_tit'>상태</h2>
-								<button class='dropdown-toggle' type='button' data-toggle='dropdown' data-name="선택" value="">전체<span class='caret'></span></button>
+								<button type='button' class='dropdown-toggle' data-toggle='dropdown' data-name="선택" value="">전체<span class='caret'></span></button>
 								<ul id="spcStatus" class='dropdown-menu chk_type dropdown_offset' role='menu'>
 									<li>
 										<a href='javascript:void(0)' tabindex='-1'>
@@ -695,7 +695,7 @@
 							<div class='bx_align'>
 								<h2 class='comp_tit'>용도 구분</h2>
 								<div class='dropdown w-100'>
-									<button class='dropdown-toggle' type='button' data-toggle='dropdown' data-name="선택">전체<span class='caret'></span></button>
+									<button type='button' class='dropdown-toggle' data-toggle='dropdown' data-name="선택">전체<span class='caret'></span></button>
 									<ul id="spcPurposeList" class='dropdown-menu chk_type dropdown_offset' role='menu'>
 										<li>
 											<a href='javascript:void(0)'tabindex='-1'>
@@ -780,17 +780,17 @@
 					</colgroup>
 					<thead>
 						<tr>
-							<!-- <th><button class='btn_align down'>순번</button></th> -->
+							<!-- <th><button type='button' class='btn_align down'>순번</button></th> -->
 							<th>순번</th>
-							<th><button class='btn_align down'>입출금 일자</button></th>
-							<th><button class='btn_align down'>입출금 구분</button></th>
-							<th><button class='btn_align down'>용도 구분</button></th>
-							<!-- <th><button class='btn_align down'>계좌 구분</button></th> -->
-							<th class="right pr-16"><button class='btn_align down'>금액</button></th>
-							<th><button class='btn_align down'>최종 업데이트</button></th>
+							<th><button type='button' class='btn_align down'>입출금 일자</button></th>
+							<th><button type='button' class='btn_align down'>입출금 구분</button></th>
+							<th><button type='button' class='btn_align down'>용도 구분</button></th>
+							<!-- <th><button type='button' class='btn_align down'>계좌 구분</button></th> -->
+							<th class="right pr-16"><button type='button' class='btn_align down'>금액</button></th>
+							<th><button type='button' class='btn_align down'>최종 업데이트</button></th>
 							<th>요청자</th>
 							<th>승인자</th>
-							<th class='left'><button class='btn_align down'>상태</button></th>
+							<th class='left'><button type='button' class='btn_align down'>상태</button></th>
 						</tr>
 					</thead>
 					<tbody id='tableBody'>

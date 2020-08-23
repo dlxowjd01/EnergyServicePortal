@@ -354,7 +354,7 @@
 								<div id="fileList01" class="hide-no-data">
 									<p class="tx_file">
 										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);">삭제</button>
+										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);">삭제</button>
 									</p>
 								</div>
 								<div id="addFileList01">
@@ -396,7 +396,7 @@
 								<div id="fileList02" class="hide-no-data">
 									<p class="tx_file">
 										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button class="btn_type07" onclick="setRemoveFileList('fileList02', [INDEX]);">삭제</button>
+										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList02', [INDEX]);">삭제</button>
 									</p>
 								</div>
 								<div id="addFileList02">

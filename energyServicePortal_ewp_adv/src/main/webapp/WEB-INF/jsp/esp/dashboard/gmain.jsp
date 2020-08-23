@@ -226,31 +226,31 @@
 								<thead>
 								<tr>
 									<th>
-										<button class="btn_align"><fmt:message key="gdash.7.status" /></button>
+										<button type="button" class="btn_align"><fmt:message key="gdash.7.status" /></button>
 									</th>
 									<th>
-										<button class="btn_align"><fmt:message key="gdash.7.err" /></button>
+										<button type="button" class="btn_align"><fmt:message key="gdash.7.err" /></button>
 									</th>
 									<th>
-										<button class="btn_align"><fmt:message key="gdash.7.medium" /></button>
+										<button type="button" class="btn_align"><fmt:message key="gdash.7.medium" /></button>
 									</th>
 									<th>
-										<button class="btn_align"><fmt:message key="gdash.7.site" /></button>
+										<button type="button" class="btn_align"><fmt:message key="gdash.7.site" /></button>
 									</th>
 									<th>
-										<button class="btn_align"><fmt:message key="gdash.7.cap" /></button>
+										<button type="button" class="btn_align"><fmt:message key="gdash.7.cap" /></button>
 									</th>
 									<th>
-										<button class="btn_align"><fmt:message key="gdash.7.forecast" /></button>
+										<button type="button" class="btn_align"><fmt:message key="gdash.7.forecast" /></button>
 									</th>
 									<th>
-										<button class="btn_align"><fmt:message key="gdash.7.gen" /></button>
+										<button type="button" class="btn_align"><fmt:message key="gdash.7.gen" /></button>
 									</th>
 									<th class="ESS">
-										<button class="btn_align"><fmt:message key="gdash.7.charge" /></button>
+										<button type="button" class="btn_align"><fmt:message key="gdash.7.charge" /></button>
 									</th>
 									<th class="ESS">
-										<button class="btn_align"><fmt:message key="gdash.7.discharge" /></button>
+										<button type="button" class="btn_align"><fmt:message key="gdash.7.discharge" /></button>
 									</th>
 								</tr>
 								</thead>
@@ -390,7 +390,11 @@
 			setInterval(() => fn_cycle_1hour(), 60 * 60 * 1000);
 			setInterval(() => fn_cycle_1min(), 60 * 1000);
 		} else {
-			alert('해당 그룹에 등록 된 사이트가 존재하지 않습니다.');
+			$("#errMsg").text("해당 그룹에 등록 된 사이트가 존재하지 않습니다.");
+			$("#errorModal").modal("show");
+			setTimeout(function(){
+				$("#errorModal").modal("hide");
+			}, 2000);
 			return false;
 		}
 	});

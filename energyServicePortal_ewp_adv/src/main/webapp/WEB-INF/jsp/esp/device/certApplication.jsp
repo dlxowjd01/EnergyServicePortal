@@ -177,7 +177,7 @@
 									<input type="file" id="file1" class="hidden" name="file1" accept=".xls, .xlsx">
 									<label for="file1" class="btn file_upload">파일 선택</label>
 									<span class="upload_text ml-16"></span>
-									<button class="btn_close fixed_height hidden mt-0" onclick="$(this).parents().closest('.group_type').remove()"></button>
+									<button type="button" class="btn_close fixed_height hidden mt-0" onclick="$(this).parents().closest('.group_type').remove()"></button>
 								</td>
 								</tbody>
 							</table>

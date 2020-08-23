@@ -641,32 +641,32 @@
 						</a>
 					</th>
 					<th>
-						<button class="btn_align" data-column="withdrawDay">출금 일자</button>
+						<button type="button" class="btn_align" data-column="withdrawDay">출금 일자</button>
 					</th>
 					<th>
-						<button class="btn_align" data-column="spcName">SPC 명</button>
+						<button type="button" class="btn_align" data-column="spcName">SPC 명</button>
 					</th>
 					<th class="right">
-						<button class="btn_align" data-column="totalAmount">금액</button>
+						<button type="button" class="btn_align" data-column="totalAmount">금액</button>
 					</th>
 					<th>
-						<button class="btn_align" data-column="requestedAt">요청/수정일</button>
+						<button type="button" class="btn_align" data-column="requestedAt">요청/수정일</button>
 					</th>
 					<th>
-						<button class="btn_align" data-column="requestedBy">사무 수탁사</button>
+						<button type="button" class="btn_align" data-column="requestedBy">사무 수탁사</button>
 					</th>
 					<th>
-						<button class="btn_align" data-column="transferAgent">담당자</button>
+						<button type="button" class="btn_align" data-column="transferAgent">담당자</button>
 					</th>
 					<th>
-						<button class="btn_align" data-column="status">상태</button>
+						<button type="button" class="btn_align" data-column="status">상태</button>
 					</th>
 
 					<th>
-						<button class="btn_align" data-column="statusChangedBy">승인자</button>
+						<button type="button" class="btn_align" data-column="statusChangedBy">승인자</button>
 					</th>
 					<th>
-						<button class="btn_align" data-column="statusChangedAt">승인일</button>
+						<button type="button" class="btn_align" data-column="statusChangedAt">승인일</button>
 					</th>
 				</tr>
 				</thead>

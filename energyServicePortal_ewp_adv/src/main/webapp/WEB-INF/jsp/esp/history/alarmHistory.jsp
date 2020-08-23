@@ -704,7 +704,7 @@
 				hCell.innerHTML = '<input type="checkbox" id="alarmConfirmCheck' + deviceType + '" onclick="alarmConfirmCheckAll(\'' + deviceType + '\');"><label for="alarmConfirmCheck' + deviceType + '"></label>';
 				tRow.appendChild(hCell);
 			} else {
-				hCell.innerHTML = '<button class="btn_align">' + colList[i - 1] + '</button>';
+				hCell.innerHTML = '<button type="button" class="btn_align">' + colList[i - 1] + '</button>';
 				tRow.appendChild(hCell);
 			}
 		}

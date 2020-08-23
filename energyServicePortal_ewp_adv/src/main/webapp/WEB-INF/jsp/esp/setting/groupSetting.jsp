@@ -205,12 +205,7 @@
 					}
 				});
 			}).fail(function (jqXHR, textStatus, errorThrown) {
-				if(textStatus == "error"){
-					if(jqXHR.statusText == "Unauthorized" || jqXHR.status == 401){
-						$("#oldPwdErr").removeClass("hidden");
-					}
-					console.log("jqXHR==", jqXHR )
-				}
+
 				return false;
 			});
 		}

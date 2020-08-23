@@ -453,8 +453,12 @@
 			console.error(jqXHR);
 			console.error(textStatus);
 			console.error(errorThrown);
-
-			alert('처리 중 오류가 발생했습니다.');
+			$("#errMsg").text("처리 중 오류가 발생했습니다.");
+			$("#errorModal").modal("show");
+			setTimeout(function(){
+				$("#errorModal").modal("hide");
+			}, 2000);
+			// alert('처리 중 오류가 발생했습니다.');
 			return false;
 		});
 	}
@@ -508,11 +512,14 @@
 				});
 			});
 		}).fail(function (jqXHR, textStatus, errorThrown) {
-			console.error(jqXHR);
-			console.error(textStatus);
-			console.error(errorThrown);
-
-			alert('처리 중 오류가 발생했습니다.');
+			let r = JSON.parse(jqXHR.responseText);
+			console.log("에러코드:" + jqXHR.status + "\n" + "메세지: " + r);
+			$("#errMsg").text("처리 중 오류가 발생했습니다.");
+			$("#errorModal").modal("show");
+			setTimeout(function(){
+				$("#errorModal").modal("hide");
+			}, 2000);
+			// alert('처리 중 오류가 발생했습니다.');
 			return false;
 		}).always(function (jqXHR, textStatus) {
 			deviceInfoList();

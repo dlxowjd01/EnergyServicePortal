@@ -34,7 +34,7 @@
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
 				let data = json;
 				let newArr = [];
-				// 1. 사업소 타입
+				// 1. 사업소 유형
 				// 2. 사업소명
 				// 3. 지역
 				// 4. 발전원 => 0: MicroGrid, 1: photovoltaic, 2: wind, 3: SmallHydro (hydroelectric power for local community)
@@ -221,29 +221,24 @@
 							this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
 								cell.innerHTML = i+1;
 								$(cell).data("id", i);
+								// $(cell).attr ('style', 'min-width: 160px;');
 							});
-							// this.api().columns().header().each ((el, i) => {
-							// 	if(i>1){
-							// 		$ (el).attr ('style', 'min-width: 160px;');
-							// 	}
-							// });
 						},
-						createRow: function (row, data, dataIndex){
-							console.log("row===", row);
-							// $(row).attr({
-							// 	'data-sid': data.sid,
-							// });
-
+						createdRow: function (row, data, dataIndex){
+							// console.log("row===", row);
+							$(row).attr({
+								'data-sid': data.sid,
+							});
 						},
 						// every time DataTables performs a draw
 						drawCallback: function () {
 							selectRow(this);
 							$('#siteTable_wrapper').addClass('mb-28');
 						},
-						rowCallback: function ( row, data ) {
+						// rowCallback: function ( row, data ) {
 							// console.log("row-selected--", row)
 							// $('input.editor-active', row).prop( 'checked', data.active == 1 );
-						}
+						// }
 					}).on("select", function(e, dt, type, indexes) {
 						let btn = $("#btnGroup").find(".btn_type03");
 						btn.each(function(index, element){
@@ -342,15 +337,8 @@
 					});
 
 				});
-
-
 			}).fail(function (jqXHR, textStatus, errorThrown) {
-				if(textStatus == "error"){
-					if(jqXHR.statusText == "Unauthorized" || jqXHR.status == 401){
-						$("#oldPwdErr").removeClass("hidden");
-					}
-					console.log("jqXHR==", jqXHR )
-				}
+
 				return false;
 			});
 		}
@@ -432,6 +420,7 @@
 	});
 
 	function updateModal(option){
+		// RPS(Renewable Portfolio Standard), SMP(System Marginal Price), REC(Renewable Energy Certificate) => subsidies
 		if(isEmpty(option)) {
 			let form = $("#addUserForm");
 			let input = form.find("input");
@@ -700,7 +689,7 @@
 	<div class="modal-dialog modal-sm">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 id="deleteSuccessMsg" class="ntit">사용자 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>
+				<h5 id="deleteSuccessMsg" class="ntit">사이트 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>
 			</div>
 			<div class="modal-body">
 			<div class="tx_inp_type"><input type="text" id="confirmUserId" name="confirm_user_id" placeholder="사용자 아이디 입력"/></div>
@@ -722,199 +711,208 @@
 			<div class="modal-body">
 				<div class="container-fluid">
 					<form id="addUserForm" name="add_user_form">
-						<div class="row">
-							<div class="col-lg-2 col-sm-3"><span class="input_label asterisk">사업소 명</span></div>
-							<div class="col-lg-4 col-sm-3">
-								<div class="flex_start">
-									<div class="tx_inp_type offset-width">
-										<input type="text" name="new_id" id="newId" placeholder="입력" minlength="5" maxlength="15">
-									</div>
-									<button type="button" class="btn_type disabled fr" disabled onclick="checkId($('#newId').val())">중복 체크</button>
-								</div>
-								<small class="hidden warning">사용자 아이디를 입력해 주세요</small>
-							</div>
-
-							<div class="col-lg-2 col-sm-3"><span class="input_label offset asterisk">자원 유형</span></div>
-							<div class="col-lg-4 col-sm-9">
-								<div class="dropdown">
-									<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-									<ul id="newAccLevel" class="dropdown-menu">
-										<li data-value="1" data-name="Demand"><a href="#">수요(Demand)</a></li>
-										<li data-value="2" data-name="Generation"><a href="#">발전(Generation)</a></li>
-									</ul>
-								</div>
-							</div>
-							<div class="col-lg-2 col-sm-3"><span class="input_label offset asterisk">발전원</span></div>
-							<div class="col-lg-4 col-sm-9">
-								<div class="dropdown">
-									<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-									<ul id="newAccLevel" class="dropdown-menu">
-										<li data-value="0" data-name="ess"><a href="#">ESS</a></li>
-										<li data-value="1" data-name="pv"><a href="#">태양광</a></li>
-										<li data-value="2" data-name="wind"><a href="#">풍력</a></li>
-										<!-- <li data-value="2" data-name="smallhydro"><a href="#">소수력</a></li> -->
-									</ul>
-								</div>
-							</div>
-							<div class="col-lg-2 col-sm-3"><span class="input_label offset asterisk">ESS 유무</span></div>
-							<div class="col-lg-4 col-sm-9">
-								<div class="dropdown">
-									<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-									<ul id="newAccLevel" class="dropdown-menu">
-										<li data-value="1"><a href="#">유</a></li>
-										<li data-value="0"><a href="#">무</a></li>
-									</ul>
-								</div>
-							</div>
-						</div>
-
-						<div class="row">
-							<div class="col-lg-2 col-sm-3"><span class="input_label asterisk">지역</span></div>
-							<div class="col-lg-4 col-sm-9">
-								<div class="tx_inp_type"><input type="text" id="newFullName" name="new_full_name" placeholder="입력" minlength="3" maxlength="28"></div>
-								<small class="hidden warning">영문/한글(3~28 글자) 조합의 이름을 입력해 주세요</small>
-							</div>
-							<div class="col-lg-2 col-sm-3"><span class="input_label offset asterisk">권한 등급</span></div>
-							<div class="col-lg-4 col-sm-9">
-								<div class="dropdown">
-									<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-									<ul id="newAccLevel" class="dropdown-menu">
-										<li data-value="1" data-name="시스템 관리자"><a href="#">시스템 관리자</a></li>
-										<li data-value="2" data-name="일반 사용자"><a href="#">일반 사용자</a></li>
-									</ul>
-								</div>
-							</div>
-						</div>
-
-						<div class="row">
-							<div class="col-lg-2 col-sm-3"><span class="input_label">휴대폰</span></div>
-							<div class="col-lg-4 col-sm-9">
-								<div class="tx_inp_type"><input type="text" id="newMobileNum" name="new_mobil_num" placeholder="입력" maxlength="13"></div>
-								<small id="isValidNewMobileNum" class=" warning hidden">10자리 이상의 휴대폰 번호를 입력해 주세요.</small>
-							</div>
-							<div class="col-lg-2 col-sm-3"><span class="input_label offset">소속</span></div>
-							<div class="col-lg-4 col-sm-9">
-								<div class="tx_inp_type"><input type="text" id="newAffiliation" name="new_affiliation" placeholder="입력">
-								</div>
-							</div>
-						</div>
-
-						<div class="row">
-							<div class="col-lg-2 col-sm-3"><span class="input_label">이메일</span></div>
-							<div class="col-lg-4 col-sm-9">
-								<div class="tx_inp_type"><input type="text" id="newEmailAddr" name="new_email_addr" placeholder="입력"></div>
-								<small class="hidden warning">올바른 이메일 형식을 입력해 주세요.</small>
-							</div>
-							<div class="col-lg-2 col-sm-3"><span class="input_label offset">업무 구분</span></div>
-							<div class="col-lg-4 col-sm-9">
-								<div class="dropdown">
-									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-									<ul id="newTaskList" class="dropdown-menu">
-										<li data-value="0"><a href="#">일반</a></li>
-										<li data-value="1"><a href="#">사무 수탁사</a></li>
-										<li data-value="2"><a href="#">자산 운용사</a></li>
-										<li data-value="3"><a href="#">사업주</a></li>
-									</ul>
-								</div>
-							</div>
-						</div>
-
-						<div class="row">
-							<div class="col-lg-2 col-sm-3"><span class="input_label">사용 여부</span></div>
-							<div class="col-lg-4 col-sm-9">
-								<div class="dropdown">
-									<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-									<ul id="newUseOpt" class="dropdown-menu">
-										<li data-value="Y"><a href="#">Y</a></li>
-										<li data-value="N"><a href="#">N</a></li>
-									</ul>
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-lg-2 col-sm-3"><span class="input_label">설명</span></div>
-							<div class="col-lg-10 col-sm-9">
-								<textarea name="new_user_desc" id="newUserDesc" class="textarea w-100" placeholder="입력"></textarea>
-							</div>
-						</div>
-
-						<div class="row">
-							<div class="col-12">
-								<ul class="nav nav-tabs">
-									<li class="active w-50"><a data-toggle="tab" href="#siteTab">사업소</a></li>
-									<li class="w-50"><a data-toggle="tab" href="#spcTab">SPC</a></li>
-								</ul>
-							</div>
-						</div>
-
-						<div class="tab-content">
-							<div id="siteTab" class="tab-pane fade in active">
-								<div class="row user-row">
-									<div class="col-lg-8 col-sm-12">
-										<div class="flex_start">
-											<div class="dropdown w-50">
-												<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-												<ul id="siteOptList" class="dropdown-menu">
-													<c:if test="${fn:length(siteList) > 1}">
-														<c:forEach var="site" items="${siteList}">
-															<c:if test="${site.name != '직접입력'}">
-																<li data-name="${site.name}" data-value="${site.sid}"><a href="#" tabindex="-1">${site.name}</a></li>
-															</c:if>
-														</c:forEach>
-													</c:if>
-												</ul>
-											</div>
-											<div class="dropdown ml-16 w-25">
-												<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-												<ul id="siteAccOpt" class="dropdown-menu">
-													<li data-value="1" data-name="수정/조회"><a href="#">관리 권한</a></li>
-													<li data-value="2" data-name="조회"><a href="#">조회 권한</a></li>
-												</ul>
-											</div>
-											<button type="button" class="btn-add ml-16" onclick="addToList('site')">추가</button>
+						<section id="sectionSiteInfo">
+							<div class="row">
+								<div class="col-lg-7 col-sm-12">
+									<div class="flex_start">
+										<span class="input_label asterisk">사업소 명</span>
+										<div class="tx_inp_type offset-width">
+											<input type="text" name="new_id" id="newId" placeholder="입력" minlength="5" maxlength="15">
 										</div>
-										<small id="isSiteEmpty" class="warning hidden">추가하실 사이트의 옵션을 선택해 주세요.</small>
-										<small id="isSiteSelected" class="warning hidden">동일한 사이트가 이미 추가 되었습니다.</small>
+										<button type="button" class="btn_type disabled fr" disabled onclick="checkId($('#newId').val())">중복 체크</button>
 									</div>
-									<div class="col-lg-4 col-sm-12 px-0"><h2 class="stit hidden">추가 리스트</h2><ol id="selectedSiteList" class="selected-list"></ol></div>
-								</div>
-							</div>
-							<div id="spcTab" class="tab-pane fade">
-								<div id="spcRow" class="row user-row">
-									<div class="col-lg-8 col-sm-12">
-										<div class="flex_start">
-											<div class="dropdown w-50">
-												<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-												<ul id="spcOptList" class="dropdown-menu">
-													<template>
-														<li data-value="*spcId*" data-name="*spcName*"><a href="#" tabindex="-1">*spcName*</a></li>
-													</template>
-												</ul>
-											</div>
-											<div class="dropdown ml-16 w-25">
-												<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-												<ul id="spcAccOpt" class="dropdown-menu">
-													<li data-value="1" data-name="수정/조회"><a href="#">수정/조회</a></li>
-													<li data-value="2" data-name="조회"><a href="#">조회</a></li>
-												</ul>
-											</div>
-											<button type="button" class="btn-add ml-16" onclick="addToList('spc')">추가</button>
+									<div class="flex_start">
+										<span class="input_label offset asterisk">사업소 유형</span>
+										<div class="dropdown">
+											<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+											<ul id="newAccLevel" class="dropdown-menu">
+												<li data-value="1" data-name="Demand"><a href="#">수요(Demand)</a></li>
+												<li data-value="2" data-name="Generation"><a href="#">발전(Generation)</a></li>
+											</ul>
 										</div>
-										<small id="isSpcEmpty" class="warning hidden">추가하실 SPC 옵션을 선택해 주세요.</small>
-										<small id="isSpcSelected" class="warning hidden">동일한 SPC가 이미 추가 되었습니다.</small>
 									</div>
-									<div class="col-lg-4 col-sm-12"><h2 class="stit">추가 리스트</h2><ul id="selectedSpcList" class="selected-list"></ul></div>
+								</div>
 
+								<div class="col-lg-5 col-sm-12">
+									<div class="flex_start">
+										<span class="input_label offset asterisk">발전원</span>
+										<div class="dropdown">
+											<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+											<ul id="newAccLevel" class="dropdown-menu">
+												<li data-value="0" data-name="ess"><a href="#">ESS</a></li>
+												<li data-value="1" data-name="pv"><a href="#">태양광</a></li>
+												<li data-value="2" data-name="wind"><a href="#">풍력</a></li>
+											</ul>
+										</div>
+									</div>
+
+									<div class="flex_start">
+										<span class="input_label offset asterisk">ESS 유무</span>
+										<div class="dropdown">
+											<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+											<ul id="newAccLevel" class="dropdown-menu">
+												<li data-value="1"><a href="#">유</a></li>
+												<li data-value="0"><a href="#">무</a></li>
+											</ul>
+										</div>
+									</div>
 								</div>
 							</div>
-						</div>
+
+							<div class="row">
+								<div class="col-lg-7 col-sm-12">
+									<div class="flex_start">
+										<span class="input_label asterisk">사업소 소재지</span>
+										<div class="dropdown">
+											<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+											<ul id="newAccLevel" class="dropdown-menu">
+												<li data-value="1" data-name="시스템 관리자"><a href="#">시스템 관리자</a></li>
+												<li data-value="2" data-name="일반 사용자"><a href="#">일반 사용자</a></li>
+											</ul>
+										</div>
+										<div class="tx_inp_type"><input type="text" id="newFullName" name="new_full_name" placeholder="입력" minlength="3" maxlength="28"></div>
+									</div>
+								</div>
+								<div class="col-lg-5 col-sm-12">
+									<div class="flex_start">
+										<span class="input_label asterisk">위경도</span>
+										<div class="tx_inp_type"><input type="text" id="newFullName" name="new_full_name" placeholder="입력" minlength="3" maxlength="28"></div>
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-12">
+									<span class="input_label">휴대폰</span>
+									<textarea name="new_user_desc" id="newUserDesc" class="textarea w-100" placeholder="입력"></textarea>
+								</div>
+							</div>
+						</section>
+
+						<section id="sectionPowerBillInfo">
+							<h2 class="ntit">전력 구매 정보</h2>
+							<div class="row">
+								<div class="col-lg-2 col-sm-3"><span class="input_label">이메일</span></div>
+								<div class="col-lg-4 col-sm-9">
+									<div class="tx_inp_type"><input type="text" id="newEmailAddr" name="new_email_addr" placeholder="입력"></div>
+									<small class="hidden warning">올바른 이메일 형식을 입력해 주세요.</small>
+								</div>
+								<div class="col-lg-2 col-sm-3"><span class="input_label offset">업무 구분</span></div>
+								<div class="col-lg-4 col-sm-9">
+									<div class="dropdown">
+										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+										<ul id="newTaskList" class="dropdown-menu">
+											<li data-value="0"><a href="#">일반</a></li>
+											<li data-value="1"><a href="#">사무 수탁사</a></li>
+											<li data-value="2"><a href="#">자산 운용사</a></li>
+											<li data-value="3"><a href="#">사업주</a></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</section>
+
+						<section id="sectionRevenueInfo">
+							<h2 class="ntit">매전 정보</h2>
+							<div class="row">
+								<div class="col-12">
+									<div class="flex_start">
+										<span class="input_label">정상 단가</span>
+										<div class="dropdown">
+											<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+											<ul id="newUseOpt" class="dropdown-menu">
+												<li data-value="Y"><a href="#">Y</a></li>
+												<li data-value="N"><a href="#">N</a></li>
+											</ul>
+										</div>
+										<div class="tx_inp_type"><input type="text" id="newFullName" name="new_full_name" placeholder="입력" minlength="3" maxlength="28"></div>
+									</div>
+								</div>
+							</div>
+						</section>
+
+						<section id="sectionDRInfo">
+							<h2 class="ntit">DR 거래 정보</h2>
+							<div class="row">
+								<div class="col-lg-7 col-sm-12">
+									<div class="flex_start">
+										<span class="input_label asterisk">자원 ID</span>
+										<div class="tx_inp_type offset-width">
+											<input type="text" name="new_id" id="newId" placeholder="입력" minlength="5" maxlength="15">
+										</div>
+										<button type="button" class="btn_type disabled fr" disabled onclick="checkId($('#newId').val())">중복 체크</button>
+									</div>
+									<div class="flex_start">
+										<span class="input_label offset asterisk">계약 용량</span>
+										<div class="dropdown">
+											<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+											<ul id="newAccLevel" class="dropdown-menu">
+												<li data-value="1" data-name="Demand"><a href="#">수요(Demand)</a></li>
+												<li data-value="2" data-name="Generation"><a href="#">발전(Generation)</a></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-lg-5 col-sm-12">
+									<div class="flex_start">
+										<span class="input_label offset asterisk">CBL 계산식</span>
+										<div class="dropdown">
+											<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+											<ul id="newAccLevel" class="dropdown-menu">
+												<li data-value="0" data-name="ess"><a href="#">ESS</a></li>
+												<li data-value="1" data-name="pv"><a href="#">태양광</a></li>
+												<li data-value="2" data-name="wind"><a href="#">풍력</a></li>
+											</ul>
+										</div>
+									</div>
+
+									<div class="flex_start">
+										<span class="input_label offset asterisk">수익 분배 비율</span>
+										<div class="dropdown">
+											<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+											<ul id="newAccLevel" class="dropdown-menu">
+												<li data-value="1"><a href="#">유</a></li>
+												<li data-value="0"><a href="#">무</a></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+						</section>
+
+						<section id="sectionTradeInfo">
+							<h2 class="ntit">중개 거래 정보</h2>
+							<div class="row">
+								<div class="col-lg-7 col-sm-12">
+									<div class="flex_start">
+										<span class="input_label asterisk">자원 ID</span>
+										<div class="dropdown">
+											<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+											<ul id="newAccLevel" class="dropdown-menu">
+												<li data-value="1" data-name="Demand"><a href="#">수요(Demand)</a></li>
+												<li data-value="2" data-name="Generation"><a href="#">발전(Generation)</a></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+
+								<div class="col-lg-5 col-sm-12">
+									<div class="flex_start">
+										<span class="input_label offset asterisk">수익 분배율</span>
+										<div class="tx_inp_type offset-width">
+											<input type="text" name="new_id" id="newId" placeholder="입력" minlength="5" maxlength="15">
+										</div>
+									</div>
+								</div>
+							</div>
+						</section>
 
 						<div class="row">
 							<div class="col-12">
 								<div class="btn_wrap_type02">
 									<button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button>
 									<button type="submit" id="addUserBtn" class="btn_type disabled" disabled>등록</button>
-									<!-- <button type="submit" id="addUserBtn" class="btn_type">확인</button> -->
 								</div>
 							</div>
 						</div>

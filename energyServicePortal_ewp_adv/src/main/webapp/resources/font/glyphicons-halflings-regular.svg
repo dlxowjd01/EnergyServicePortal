@@ -398,9 +398,8 @@
   <div class="file-navigation">
     
 <div class="select-menu branch-select-menu js-menu-container js-select-menu float-left">
-  <button class=" btn btn-sm select-menu-button js-menu-target css-truncate" data-hotkey="w"
-    
-    type="button" aria-label="Switch branches or tags" aria-expanded="false" aria-haspopup="true">
+  <button type="button" class=" btn btn-sm select-menu-button js-menu-target css-truncate" data-hotkey="w"
+     aria-label="Switch branches or tags" aria-expanded="false" aria-haspopup="true">
       <i>Branch:</i>
       <span class="js-select-button css-truncate-target">master</span>
   </button>
@@ -642,7 +641,7 @@
   <details class="details-reset details-overlay details-overlay-dark lh-default text-gray-dark" open>
     <summary aria-haspopup="dialog" aria-label="Close dialog"></summary>
     <details-dialog class="Box Box--overlay d-flex flex-column anim-fade-in fast">
-      <button class="m-3 btn-octicon position-absolute right-0 top-0" type="button" aria-label="Close dialog" data-close-dialog>
+      <button type="button" class="m-3 btn-octicon position-absolute right-0 top-0" aria-label="Close dialog" data-close-dialog>
         <svg class="octicon octicon-x" viewBox="0 0 12 16" version="1.1" width="12" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48L7.48 8z"/></svg>
       </button>
       <div class="octocat-spinner my-6 js-details-dialog-spinner"></div>
@@ -662,4 +661,3 @@
 
   </body>
 </html>
-

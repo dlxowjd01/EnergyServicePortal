@@ -281,7 +281,8 @@
 						}
 
 					}).fail(function (jqXHR, textStatus, errorThrown) {
-						console.log("에러코드:" + jqXHR.status + "\n" + "메세지: " + jqXHR.responseText +"\n" + "에러: " + thrownError);
+						let r = JSON.parse(jqXHR.responseText);
+						console.log("에러코드:" + jqXHR.status + "\n" + "메세지: " + r);
 						return false;
 					});
 				}
