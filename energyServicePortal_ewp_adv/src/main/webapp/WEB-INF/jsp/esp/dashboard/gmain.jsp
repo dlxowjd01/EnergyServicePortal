@@ -23,8 +23,8 @@
 	<div class="col-xl-4 col-md-12 col-sm-12">
 		<div class="indiv gmain_chart gmain_chart1">
 			<div class="chart_top clear">
-				<h2 class="ntit"><fmt:message key="gdash.1.month" /></h2>
-				<span class="term"></span>
+				<h2 class="ntit"><fmt:message key="gdash.1.month" /></h2><span class="term"></span>
+				<ul id="monthlySum" class="sum-list mobile-visible"></ul>
 			</div>
 			<%--					<div class="no-data">--%>
 			<%--						<span>올해 발전량 정보를 가져올 수 없습니다.</span>--%>
@@ -36,8 +36,8 @@
 
 		<div class="indiv gmain_chart gmain_chart2">
 			<div class="chart_top clear">
-				<h2 class="ntit"><fmt:message key="gdash.2.daily" /></h2>
-				<span class="term"></span>
+				<h2 class="ntit"><fmt:message key="gdash.2.daily" /></h2><span class="term"></span>
+				<ul id="dailySum" class="sum-list mobile-visible"></ul>
 			</div>
 			<div class="inchart">
 				<div id="dailyChart"></div>
@@ -46,8 +46,8 @@
 
 		<div class="indiv gmain_chart gmain_chart3">
 			<div class="chart_top clear">
-				<h2 class="ntit"><fmt:message key="gdash.3.yesterday" /></h2>
-				<span class="term"></span>
+				<h2 class="ntit"><fmt:message key="gdash.3.yesterday" /></h2><span class="term"></span>
+				<ul id="yesterdaySum" class="sum-list mobile-visible"></ul>
 			</div>
 			<%--					<ul class="gtab_menu">--%>
 			<%--						<li class="active"><a href="#;">사업소별 현황</a></li>--%>

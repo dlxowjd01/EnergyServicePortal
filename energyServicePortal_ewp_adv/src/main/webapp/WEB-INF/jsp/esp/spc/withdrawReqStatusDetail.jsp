@@ -34,6 +34,18 @@
 		unCheckAll(memoOpt);
 		getDataList();
 
+		// const setAttributes = function (attrs) {
+		// 	for (var idx in attrs) {
+		// 		if ((idx === 'styles' || idx === 'style') && typeof attrs[idx] === 'object') {
+		// 			for (var prop in attrs[idx]){this.style[prop] = attrs[idx][prop];}
+		// 		} else if (idx === 'html') {
+		// 			this.innerHTML = attrs[idx];
+		// 		} else {
+		// 			this.setAttribute(idx, attrs[idx]);
+		// 		}
+		// 	}
+		// };
+
 		function getDataList(page) {
 			page == undefined ? page = 1 : page = page;
 			var sortList = [];
@@ -381,30 +393,40 @@
 			url: url,
 			method: 'GET',
 			beforeSend: function (jqXHR, settings) {
+				$("#loadingCircle").show();
 			},
 			xhrFields: {
 				responseType: 'blob'
 			},
 			success: function(data) {
 				let src = window.URL.createObjectURL(data);
-				let wrapper = document.createElement('div');
+				let btn = document.createElement('div');
 				let preview = document.createElement('iframe');
-				let el = document.querySelector(".outer-wrapper");
+				let el = document.getElementById("outerWrapper");
 
-				wrapper.setAttribute("id", "previewWrapper")
-				wrapper.style.cssText = "position:absolute; top:0px; left:0; right:0; bottom: 0px; margin: 0 auto; width:100%; height:100%;"
 				preview.setAttribute("type", "application/pdf");
-				preview.setAttribute("id", "previewFrame");
-				preview.style.cssText = "position:absolute; top:0px; left:0; right:0; bottom: 20px; margin: 0 auto; padding: 0 20%; width:100%; height:100%; z-index:999999; frameborder: 0"
-				wrapper.appendChild(preview)
-				document.body.insertBefore(wrapper, el);
+				preview.setAttribute( "id", "previewFrame");
+				preview.setAttribute("class", "iframe-fixed");
 				preview.src = src;
-				document.body.querySelector(".outer-wrapper").style.cssText = "filter: blur(4px);"
 
-				$("#previewWrapper").on("click", function(){
-					$(this).remove();
-					document.body.querySelector(".outer-wrapper").style.cssText = "filter: none"
-				})
+				btn.setAttribute("id", "iframeBtn");
+
+				document.body.insertBefore(preview, el);
+				document.body.insertBefore(btn, preview);
+
+				el.setAttribute("class", "blur");
+
+				document.getElementById("previewFrame").addEventListener("click", function(){
+					this.remove();
+					document.getElementById("outerWrapper").classList.remove("blur");
+					document.getElementById("iframeBtn").remove();
+				});
+
+				document.getElementById("iframeBtn").addEventListener("click", function(){
+					document.getElementById("previewFrame").remove();
+					document.getElementById("outerWrapper").classList.remove("blur");
+					this.remove();
+				});
 			}
 		});
 	}

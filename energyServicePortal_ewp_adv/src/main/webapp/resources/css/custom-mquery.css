@@ -148,7 +148,8 @@
 	.gmain_chart.gmain_chart1,
 	.gmain_chart.gmain_chart2,
 	.gmain_chart.gmain_chart3 {
-		height: 60px;
+		padding: 20px 30px;
+		height: auto;
 	}
 
 	.gmain_chart.gmain_chart1 .chart_top .ntit,
@@ -166,6 +167,10 @@
 		display: none;
 	}
 
+	.mobile-visible {
+		display: block;
+	}
+
 	.gmain_map.gmain_chart.gmain_chart4,
 	.gmain_alarm {
 		height: 520px;
@@ -181,6 +186,10 @@
 
 	.indiv.diagnosis_chart .chart_top.clear .btn_type {
 		margin-top: 16px;
+	}
+	
+	.modal-dialog.modal-xl {
+		min-width: 80%;
 	}
 }
 
@@ -336,7 +345,6 @@
 	.modal .modal-md-lg {
 		width: 70%;
 	}
-
 }
 
 
@@ -1387,6 +1395,16 @@
 		padding-left: 5px;
 	}
 
+}
+
+@media all and (max-width: 575px) {
+	.site-modal-content .row .pl-0 {
+		padding: 0 12px 12px;
+		margin-top: -12px;
+	}
+	.site-modal-content .unit {
+		top: 10px;
+	}
 }
 
 @media all and (max-width: 487px) {

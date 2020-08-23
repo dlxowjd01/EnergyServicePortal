@@ -151,7 +151,7 @@
 			$("#confirmUserId").val("");
 		});
 
-		$("#addUserForm").on("submit", function(e){
+		$("#updateUserForm").on("submit", function(e){
 			e.preventDefault();
 
 			let option = {};
@@ -445,7 +445,7 @@
 
 		});
 
-		$("#addUserForm").on("change", function(e){
+		$("#updateUserForm").on("change", function(e){
 			if(!$("#addUserModal").hasClass("edit")){
 				if(validateAddForm() == 1) {
 					$("#addUserBtn").prop("disabled", false).removeClass("disabled");
@@ -490,7 +490,7 @@
 		}
 
 		function validateAddForm(){
-			if( ( $("#validId:not('.hidden')").length >= 0 ) && ( $("#addUserForm .tick:not('.checked')").index() == -1 ) && ( $(".warning:not(.hidden)").index() == -1 ) && ( !isEmpty($("#newFullName").val() ) ) && ( !isEmpty($("#newAccLevel").prev().data("value")) )){
+			if( ( $("#validId:not('.hidden')").length >= 0 ) && ( $("#updateUserForm .tick:not('.checked')").index() == -1 ) && ( $(".warning:not(.hidden)").index() == -1 ) && ( !isEmpty($("#newFullName").val() ) ) && ( !isEmpty($("#newAccLevel").prev().data("value")) )){
 				return 1;
 			}
 		}
@@ -498,7 +498,7 @@
 		function validateEditForm(){
 			if(!isEmpty($("#newUserPwd").val())) {
 				console.log("newUserPwd NOT empty===" )
-				if( ($("#addUserForm .tick:not('.checked')").index() == -1) && ($(".warning:not(.hidden)").index() == -1) ) {
+				if( ($("#updateUserForm .tick:not('.checked')").index() == -1) && ($(".warning:not(.hidden)").index() == -1) ) {
 					return 1;
 				}
 			} else {
@@ -837,8 +837,8 @@
 				return false;
 			});
 
-			let dropdown = $("#addUserForm").find(".dropdown ul");
-			// callback(dropdown);
+			let dropdown = $("#updateUserForm").find(".dropdown ul");
+			callback(dropdown);
 		}
 	});
 
@@ -968,7 +968,7 @@
 
 	function updateModal(option){
 		if(isEmpty(option)) {
-			let form = $("#addUserForm");
+			let form = $("#updateUserForm");
 			let input = form.find("input");
 			let dropdown = form.find(".dropdown-toggle");
 			let tick = form.find(".tick");
@@ -986,7 +986,7 @@
 		} else {
 			let titleAdd = $('#titleAdd');
 			let id = $('#newId');
-			let required = $("#addUserForm").find(".asterisk");
+			let required = $("#updateUserForm").find(".asterisk");
 			if(option == "all"){
 				if(id.parent().next().hasClass("hidden")) {
 					id.parent().next().removeClass("hidden");
@@ -1156,7 +1156,7 @@
 			<div id="titleEdit" class="modal-header"><h1>사용자 정보 수정</h1></div>
 			<div class="modal-body">
 				<div class="container-fluid">
-					<form id="addUserForm" name="add_user_form">
+					<form id="updateUserForm" name="add_user_form">
 						<div class="row">
 							<div class="col-lg-2 col-sm-3"><span class="input_label asterisk">ID</span></div>
 							<div class="col-lg-4 col-sm-9">

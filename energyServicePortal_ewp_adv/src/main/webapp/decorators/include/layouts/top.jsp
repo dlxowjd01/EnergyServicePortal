@@ -51,7 +51,7 @@
 	<script src="/js/html2canvas.js"></script>
 
 	<!-- 화면 엑셀 다운로드용 -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsjqxhr.full.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
 
 	<!-- timepicker -->
@@ -61,6 +61,7 @@
 	<script src="/js/data_tables/extensions/buttons.js" type="text/javascript"></script>
 	<script src="/js/data_tables/extensions/col_reorder.js" type="text/javascript"></script>
 	<script src="/js/data_tables/extensions/pdf_make.js" type="text/javascript"></script>
+	<script src="/js/data_tables/extensions/jszip.js" type="text/javascript"></script>
 	<script src="/js/data_tables/extensions/vfs_fonts_kr.js" type="text/javascript"></script>
 	<script src="/js/data_tables/extensions/select.js" type="text/javascript"></script>
 	<script src="/js/data_tables/extensions/fixed_header.js" type="text/javascript"></script>

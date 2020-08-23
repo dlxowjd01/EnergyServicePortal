@@ -18,8 +18,10 @@
 	<mvc:resources mapping="/img/**" location="/resources/img/" />
 	<mvc:resources mapping="/js/**" location="/resources/js/" />
 	<mvc:resources mapping="/api/**" location="/resources/api/" />
-	<mvc:resources mapping="/favicon.ico" location="/resources/favicon.ico" />
-	<mvc:resources mapping="/favicon_encored.ico" location="/resources/favicon_encored.ico" />
+
+	<!-- <mvc:resources mapping="/favicon.ico" location="/resources/favicon.ico" />
+	<mvc:resources mapping="/favicon_encored.ico" location="/resources/favicon_encored.ico" /> -->
+
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 
 	<context:component-scan base-package="egovframework,kr.co.esp">
