@@ -1314,6 +1314,11 @@ function addCustomRow(tbody, options) {
 		let newId = oldId + cnt;
 		$(this).prev().html($(this).prev().html().replace($(this).prev().text(),'선택'));
 		$(this).prev().data("value", "");
+		$.map($(this).prev().data(), function(val, key) {
+			if (key != 'toggle') {
+				toggle.eq(index).prev().data(key, "");
+			}
+		});
 		$(this).attr("id", newId);
 	});
 
