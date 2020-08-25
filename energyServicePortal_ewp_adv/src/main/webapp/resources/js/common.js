@@ -65,30 +65,6 @@ $(function() {
     });
 });
 
-/* 
-    ## 모바일 레이아웃 스크립트 ##
-*/
-$(function() {
-	if ($(window).width() > 768) {
-		$('#gnb').hide();
-	}
-    /* 카테고리 열기 */
-    $('.category').click(function(){
-        $('#mask').fadeTo("slow", 0.5);
-        $('body').addClass("sidenav-no-scroll");
-        $('#gnb').show(200);
-    });
-    /* 카테고리 닫기 */
-    $('.category_close').click(function(){
-        $('#mask').hide();
-        $('body').removeClass("sidenav-no-scroll");
-        $('#gnb').hide();
-    });
-    /* 서브메뉴 열기/닫기 */
-    $('.g_menu li a').click(function(){
-        $(this).siblings("ul").slideToggle(500);
-	});
-});
 
 /* 표 접기/펼치기 */
 $(function() {
@@ -274,11 +250,7 @@ $(function () {
                 $(this).parent().find(".upload_text").html(labelText).after(listItem);
             } else {
                 let listItem = `${labelText}<button type='button' class='btn_close icon_btn' onclick='deleteFile($(this))'></button>`;
-                // $(this).prev('label').text(listItem);
                 $(this).parent().find(".upload_text").html(listItem);
-                // if ($(this).parent().find(".btn_close")) {
-                // 	$(this).parent().find(".btn_close").removeClass('hidden')
-                // }
             }
 		}
 	});

@@ -23,8 +23,8 @@
 	<div class="col-xl-4 col-md-12 col-sm-12">
 		<div class="indiv gmain_chart gmain_chart1">
 			<div class="chart_top clear">
-				<h2 class="ntit"><fmt:message key="gdash.1.month" /></h2>
-				<span class="term"></span>
+				<h2 class="ntit"><fmt:message key="gdash.1.month" /></h2><span class="term"></span>
+				<ul id="monthlySum" class="sum-list mobile-visible"></ul>
 			</div>
 			<%--					<div class="no-data">--%>
 			<%--						<span>올해 발전량 정보를 가져올 수 없습니다.</span>--%>
@@ -36,8 +36,8 @@
 
 		<div class="indiv gmain_chart gmain_chart2">
 			<div class="chart_top clear">
-				<h2 class="ntit"><fmt:message key="gdash.2.daily" /></h2>
-				<span class="term"></span>
+				<h2 class="ntit"><fmt:message key="gdash.2.daily" /></h2><span class="term"></span>
+				<ul id="dailySum" class="sum-list mobile-visible"></ul>
 			</div>
 			<div class="inchart">
 				<div id="dailyChart"></div>
@@ -46,8 +46,8 @@
 
 		<div class="indiv gmain_chart gmain_chart3">
 			<div class="chart_top clear">
-				<h2 class="ntit"><fmt:message key="gdash.3.yesterday" /></h2>
-				<span class="term"></span>
+				<h2 class="ntit"><fmt:message key="gdash.3.yesterday" /></h2><span class="term"></span>
+				<ul id="yesterdaySum" class="sum-list mobile-visible"></ul>
 			</div>
 			<%--					<ul class="gtab_menu">--%>
 			<%--						<li class="active"><a href="#;">사업소별 현황</a></li>--%>
@@ -191,7 +191,7 @@
 							<span class="tx_tit"><fmt:message key="gdash.7.status" /></span>
 							<div class="sa_select">
 								<div class="dropdown" id="deviceStatus">
-									<button class="btn btn-primary dropdown-toggle w8" type="button"
+									<button type="button" class="dropdown-toggle w8"
 											data-toggle="dropdown" data-name="설비 상태">
 										전체<span class="caret"></span>
 									</button>
@@ -226,31 +226,31 @@
 								<thead>
 								<tr>
 									<th>
-										<button class="btn_align"><fmt:message key="gdash.7.status" /></button>
+										<button type="button" class="btn_align"><fmt:message key="gdash.7.status" /></button>
 									</th>
 									<th>
-										<button class="btn_align"><fmt:message key="gdash.7.err" /></button>
+										<button type="button" class="btn_align"><fmt:message key="gdash.7.err" /></button>
 									</th>
 									<th>
-										<button class="btn_align"><fmt:message key="gdash.7.medium" /></button>
+										<button type="button" class="btn_align"><fmt:message key="gdash.7.medium" /></button>
 									</th>
 									<th>
-										<button class="btn_align"><fmt:message key="gdash.7.site" /></button>
+										<button type="button" class="btn_align"><fmt:message key="gdash.7.site" /></button>
 									</th>
 									<th>
-										<button class="btn_align"><fmt:message key="gdash.7.cap" /></button>
+										<button type="button" class="btn_align"><fmt:message key="gdash.7.cap" /></button>
 									</th>
 									<th>
-										<button class="btn_align"><fmt:message key="gdash.7.forecast" /></button>
+										<button type="button" class="btn_align"><fmt:message key="gdash.7.forecast" /></button>
 									</th>
 									<th>
-										<button class="btn_align"><fmt:message key="gdash.7.gen" /></button>
+										<button type="button" class="btn_align"><fmt:message key="gdash.7.gen" /></button>
 									</th>
 									<th class="ESS">
-										<button class="btn_align"><fmt:message key="gdash.7.charge" /></button>
+										<button type="button" class="btn_align"><fmt:message key="gdash.7.charge" /></button>
 									</th>
 									<th class="ESS">
-										<button class="btn_align"><fmt:message key="gdash.7.discharge" /></button>
+										<button type="button" class="btn_align"><fmt:message key="gdash.7.discharge" /></button>
 									</th>
 								</tr>
 								</thead>
@@ -390,7 +390,11 @@
 			setInterval(() => fn_cycle_1hour(), 60 * 60 * 1000);
 			setInterval(() => fn_cycle_1min(), 60 * 1000);
 		} else {
-			alert('해당 그룹에 등록 된 사이트가 존재하지 않습니다.');
+			$("#errMsg").text("해당 그룹에 등록 된 사이트가 존재하지 않습니다.");
+			$("#errorModal").modal("show");
+			setTimeout(function(){
+				$("#errorModal").modal("hide");
+			}, 2000);
 			return false;
 		}
 	});
@@ -451,7 +455,6 @@
 	}
 
 	const pinSymbol = (color) => {
-		console.log("color===", color)
 		return {
 			path: 'M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0 1,1 10,-30 C 10,-22 2,-20 0,0 z M -2,-30 a 2,2 0 1,1 4,0 2,2 0 1,1 -4,0',
 			fillColor: color,

@@ -134,7 +134,7 @@ function getCollect_sch_condition(endLoadingFlag) {
 	var formData = $("#schForm").serializeObject();
 	console.log(formData);
 
-	$('.loading').show();
+	$('#loadingCircle').show();
 	var today = new Date();
 	setTimeout(function () {
 		getDBData(formData); // DB 데이터 조회(각 화면마다 존재)
@@ -142,7 +142,7 @@ function getCollect_sch_condition(endLoadingFlag) {
 	update_updtDataTime(today, "updtTime"); // 검색시간(차트 새로고침시간) 업데이트
 	if(endLoadingFlag !== 'worker' || (endLoadingFlag === 'worker' && !window.Worker)) {
 		setTimeout(function () {
-			$('.loading').hide();
+			$('#loadingCircle').hide();
 		}, 1000);
 	}
 }
@@ -243,7 +243,7 @@ function settingSelTerm() {
 function drawData() {
 	drawData_chart(); // 차트 그리기
 	drawData_table(); // 표(테이블) 그리기
-	$('.loading').hide();
+	$('#loadingCircle').hide();
 }
 
 // 그래프 새로고침시간 업데이트

@@ -6,7 +6,7 @@
 <script type="text/javascript">
 	$(function () {
 		let fullName = '${userInfo.name}';
-		// let affiliation = '${userInfo.org_name}';
+		let affiliation = '${userInfo.org_name}';
 		let loginMail = '${userInfo.contact_email}';
 		let mobileNum = '${userInfo.contact_phone}';
 		let accLevel = "";
@@ -29,8 +29,7 @@
 			$("#userId").val(loginId);
 		}
 		if(!isEmpty(oid)) {
-			// $("#affiliation").val(affiliation);
-			$("#affiliation").val(oid);
+			$("#affiliation").val(affiliation);
 		}
 		if(!isEmpty(accLevel)) {
 			$("#accessLevel").val(accLevel);
@@ -58,7 +57,15 @@
 		// 	}
 		// });
 
-		
+		$(".nav-brand a").each(function(index, element) {
+			// console.log("window.href===", window.location.pathname)
+			let current = window.location.pathname;
+			let mainPage ='/dashboard/gmain.do'
+			if (current == mainPage) {
+				$(this).on('click', false);
+			}
+		});
+
 		$("#fullName").on('keyup', function(evt) {
 			if(!isEmpty($(this).val())){
 				var kr = /[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/g
@@ -142,11 +149,11 @@
 				new_password : $("#newPwd").val(),
 			}
 			let option = {
-				url: 'https://iderms-api.iderms.ai/config/users/' + userInfoId + '/password',
+				url: apiHost + '/config/users/' + userInfoId + '/password',
 				dataType: 'json',
 				type: 'patch',
 				beforeSend: function (jqXHR, settings) {
-					$('.loading').show();
+					$('#loadingCircle').show();
 				},
 				async: false,
 				contentType: "application/json",
@@ -165,7 +172,8 @@
 					if(jqXHR.status == 401){
 						$("#oldPwdErr").removeClass("hidden");
 					}
-					console.log("jqXHR==", jqXHR )
+					console.log("에러:", formatErrorMessage(jqXHR, errorThrown) )
+					
 				}
 				return false;
 			});
@@ -198,7 +206,7 @@
 				dataType: 'json',
 				type: 'patch',
 				beforeSend: function (jqXHR, settings) {
-					$('.loading').show();
+					$('#loadingCircle').show();
 				},
 				async: false,
 				contentType: "application/json",
@@ -212,26 +220,31 @@
 				}, 2500);
 
 			}).fail(function (jqXHR, textStatus, errorThrown) {
-				alert('처리 중 오류가 발생했습니다.');
-				console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
+				let r = formatErrorMessage(jqXHR, errorThrown);
+				$("#errMsg").text("처리 중 오류가 발생했습니다." + r);
+				$("#errorModal").modal("show");
+				setTimeout(function(){
+					$("#errorModal").modal("hide");
+				}, 2000);
+				// alert('처리 중 오류가 발생했습니다.');
+				console.log("에러:", r )
 				return false;
 			});
 		});
 
 		function validateName(name){
 			let re = /\S+@\S+\.\S+/;
-			// let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-
 			return re.test(email);
 		}
 
 		function validateEmail(email){
-			// let re = /\S+@\S+\.\S+/;
 			let re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
-			// let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+			// let re = \b[\w.!#$%&’*+\/=?^`{|}~-]+@[\w-]+(?:\.[\w-]+)*\b
 
 			return re.test(email);
 		}
+
+
 
 		function validatePassword() {
 			const rules = [
@@ -289,7 +302,12 @@
 		} else if(type == 'vpp') {
 			$('#dashboardForm').append(inp).attr('action', '/dashboard/jmain.do').submit();
 		} else {
-			alert('아직 정의 되지않은 타입입니다.');
+			$("#errMsg").text("아직 정의 되지않은 타입입니다.");
+			$("#errorModal").modal("show");
+			setTimeout(function(){
+				$("#errorModal").modal("hide");
+			}, 2000);
+			// alert('아직 정의 되지않은 타입입니다.');
 			return;
 		}
 	}
@@ -298,7 +316,7 @@
 <form id="dashboardForm" name="dashboardForm" method="post"></form>
 
 <nav class="clear">
-	<button type="button" class="category">카테고리</button>
+	<button type="button" id="mobileNavBtn" class="category">카테고리</button>
 	<c:choose>
 		<c:when test="${fn:contains(pageContext.request.serverName, 'spower')}">
 			<div class="nav-brand spower"><a href="/dashboard/gmain.do">${sessionScope.userInfo.login_id}</a></div>
@@ -323,7 +341,7 @@
 							<dt>사업소 분석</dt>
 							<dd>
 								<a href="#">사업소별</a>
-								<ul>
+								<ul class="overflow-list">
 									<li><a href="#"  onclick="dashboardMove('group', '', ''); return false">전체</a></li>
 									<c:if test="${fn:length(siteList) > 0}">
 										<c:forEach var="site" items="${siteList}">
@@ -342,7 +360,7 @@
 								<dt></dt>
 								<dd>
 									<a href="#">그룹별</a>
-									<ul>
+									<ul class="overflow-list">
 										<c:forEach var="group" items="${tagList}">
 											<li>
 												<a href="#" onclick="dashboardMove('group', 'sgid', '${group.sgid}'); return false">${group.name}</a>
@@ -370,7 +388,7 @@
 									<dt>에너지 거래</dt>
 									<dd>
 										<a href="#">중개거래</a>
-										<ul>
+										<ul class="overflow-list">
 											<c:forEach var="vpp" items="${vppList}">
 												<li>
 													<a href="#" onclick="dashboardMove('vpp', 'vgid', '${vpp.vgid}'); return false">${vpp.name}</a>
@@ -488,10 +506,7 @@
 	</div>
 	<ul class="nav_right">
 		<li class="member clear">
-			<div class="fl"><img src="../img/m_member_pic.png" alt=""></div>
-			<div class="fr">
-				<button type="button" data-toggle="modal" data-target="#updateUserInfoModal" data-backdrop="static" data-keyboard="false" id="userInfoBtn" class="btn_type03">${sessionScope.userInfo.name}<span class="light">&emsp;${sessionScope.userInfo.login_id}</span></button>
-			</div>
+			<div class="fr"><button type="button" data-toggle="modal" data-target="#updateUserInfoModal" data-backdrop="static" data-keyboard="false" id="userInfoBtn" class="btn_type03">${sessionScope.userInfo.name}<span class="light">&emsp;${sessionScope.userInfo.login_id}</span></button></div>
 		</li>
 		<%--
 		<li>
@@ -514,6 +529,15 @@
 	</ul>
 </nav>
 
+<div class="modal fade" id="errorModal" role="dialog" aria-labelledby="errorModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h3 id="errMsg" class="warning-text center"></h3>
+			</div>
+		</div>
+	</div>
+</div>
 
 <div class="modal stack" id="closeModal" tabindex="-1" role="dialog" aria-labelledby="closeModal" aria-hidden="true">
 	<div class="modal-dialog modal-sm">
@@ -534,12 +558,12 @@
 
 
 <div class="modal fade" id="updateUserInfoModal" tabindex="-1" role="dialog" aria-labelledby="updateUserInfoModal" aria-hidden="true">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content settings-content">
+	<div class="modal-dialog modal-md">
+		<div class="modal-content settings-modal-content">
 			<div class="modal-header"><h2>개인정보 설정</h2></div>
 			<div class="modal-body">
 				<div class="row">
-					<div class="col-8">
+					<div class="col-lg-9 col-md-9 col-sm-12">
 						<form id="pwdForm" name="pwd_form">
 							<h3 class="sub-title">비밀번호</h3>
 							<div class="input-group inline-flex">
@@ -605,8 +629,7 @@
 							</div>
 						</form>
 					</div>
-					<div class="col-1"></div>
-					<div class="col-3">
+					<div class="col-lg-3 col-md-3 col-sm-12">
 						<div class="mb-10">
 							<label for="userId" class="input_label pt-0">아이디</label>
 							<input type="text" name="user_id" id="userId" class="clear-input" readonly="" autocomplete="off">

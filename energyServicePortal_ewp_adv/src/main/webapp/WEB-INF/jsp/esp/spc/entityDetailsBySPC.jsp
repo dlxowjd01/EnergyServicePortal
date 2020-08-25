@@ -411,7 +411,7 @@
 							<input type="hidden" id="사업조직도_filedName" value="">
 						</td>
 						<td>
-							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
+							<button type="button" class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
 						</td>
 						<td class="px-0">
 							<input type="text" id="사업조직도_다운로드" name="사업조직도_다운로드" class="fileName tx_file w50" readonly>
@@ -421,7 +421,7 @@
 						</td>
 						<td class="px-0">
 							<label for="사업조직도" class="btn_type_attachment">추가</label>
-							<button class="btn_type07 btn_img">삭제</button>
+							<button type="button" class="btn_type07 btn_img">삭제</button>
 						</td>
 					</tr>
 					<tr>
@@ -433,7 +433,7 @@
 							<input type="hidden" id="설치_업체_담당자_연락처_filedName" value="">
 						</td>
 						<td>
-							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
+							<button type="button" class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
 						</td>
 						<td class="px-0">
 							<input type="text" id="설치_업체_담당자_연락처_다운로드" name="설치_업체_담당자_연락처_다운로드" class="fileName tx_file w50" readonly>
@@ -443,7 +443,7 @@
 						</td>
 						<td class="px-0">
 							<label for="설치_업체_담당자_연락처" class="btn_type_attachment">추가</label>
-							<button class="btn_type07 btn_img">삭제</button>
+							<button type="button" class="btn_type07 btn_img">삭제</button>
 						</td>
 					</tr>
 					<tr>
@@ -455,7 +455,7 @@
 							<input type="hidden" id="투자_계약_심의_filedName" value="">
 						</td>
 						<td>
-							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
+							<button type="button" class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
 						</td>
 						<td class="px-0">
 							<input type="text" id="투자_계약_심의_다운로드" name="투자_계약_심의_다운로드" class="fileName tx_file w50" readonly>
@@ -465,7 +465,7 @@
 						</td>
 						<td class="px-0">
 							<label for="투자_계약_심의" class="btn_type_attachment">추가</label>
-							<button class="btn_type07 btn_img">삭제</button>
+							<button type="button" class="btn_type07 btn_img">삭제</button>
 						</td>
 					</tr>
 					<tr>
@@ -477,7 +477,7 @@
 							<input type="hidden" id="사업자_등록증_filedName" value="">
 						</td>
 						<td>
-							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
+							<button type="button" class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
 						</td>
 						<td class="px-0">
 							<input type="text" id="사업자_등록증_다운로드" name="사업자_등록증_다운로드" class="fileName tx_file w50" readonly>
@@ -487,7 +487,7 @@
 						</td>
 						<td class="px-0">
 							<label for="사업자_등록증" class="btn_type_attachment">추가</label>
-							<button class="btn_type07 btn_img">삭제</button>
+							<button type="button" class="btn_type07 btn_img">삭제</button>
 						</td>
 					</tr>
 					<tr>
@@ -499,7 +499,7 @@
 							<input type="hidden" id="발전사업_허가증_filedName" value="">
 						</td>
 						<td>
-							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
+							<button type="button" class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
 						</td>
 						<td class="px-0">
 							<input type="text" id="발전사업_허가증_다운로드" name="발전사업_허가증_다운로드" class="fileName tx_file w50" readonly>
@@ -509,7 +509,7 @@
 						</td>
 						<td class="px-0">
 							<label for="발전사업_허가증" class="btn_type_attachment">추가</label>
-							<button class="btn_type07 btn_img">삭제</button>
+							<button type="button" class="btn_type07 btn_img">삭제</button>
 						</td>
 					</tr>
 					<tr>
@@ -521,7 +521,7 @@
 							<input type="hidden" id="토지_및_건물_등기부등록_filedName" value="">
 						</td>
 						<td>
-							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
+							<button type="button" class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
 						</td>
 						<td class="px-0">
 							<input type="text" id="토지_및_건물_등기부등록_다운로드" name="토지_및_건물_등기부등록_다운로드" class="fileName tx_file w50" readonly>
@@ -531,7 +531,7 @@
 						</td>
 						<td class="px-0">
 							<label for="토지_및_건물_등기부등록" class="btn_type_attachment">추가</label>
-							<button class="btn_type07 btn_img">삭제</button>
+							<button type="button" class="btn_type07 btn_img">삭제</button>
 						</td>
 					</tr>
 					<tr>
@@ -543,7 +543,7 @@
 							<input type="hidden" id="토지대장_및_건물도면_filedName" value="">
 						</td>
 						<td>
-							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
+							<button type="button" class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
 						</td>
 						<td class="px-0">
 							<input type="text" id="토지대장_및_건물도면_다운로드" name="토지대장_및_건물도면_다운로드" class="fileName tx_file w50" readonly>
@@ -553,7 +553,7 @@
 						</td>
 						<td class="px-0">
 							<label for="토지대장_및_건물도면" class="btn_type_attachment">추가</label>
-							<button class="btn_type07 btn_img">삭제</button>
+							<button type="button" class="btn_type07 btn_img">삭제</button>
 						</td>
 					</tr>
 					<tr>
@@ -565,7 +565,7 @@
 							<input type="hidden" id="원도급_계약서_실사_협약서_filedName" value="">
 						</td>
 						<td>
-							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
+							<button type="button" class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
 						</td>
 						<td class="px-0">
 							<input type="text" id="원도급_계약서_실사_협약서_다운로드" name="원도급_계약서_실사_협약서_다운로드" class="fileName tx_file w50" readonly>
@@ -575,7 +575,7 @@
 						</td>
 						<td class="px-0">
 							<label for="원도급_계약서_실사_협약서" class="btn_type_attachment">추가</label>
-							<button class="btn_type07 btn_img">삭제</button>
+							<button type="button" class="btn_type07 btn_img">삭제</button>
 						</td>
 					</tr>
 					<tr>
@@ -587,7 +587,7 @@
 							<input type="hidden" id="원도급_계약서_토지이용_허가서_filedName" value="">
 						</td>
 						<td>
-							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
+							<button type="button" class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
 						</td>
 						<td class="px-0">
 							<input type="text" id="원도급_계약서_토지이용_허가서_다운로드" name="원도급_계약서_토지이용_허가서_다운로드" class="fileName tx_file w50" readonly>
@@ -597,7 +597,7 @@
 						</td>
 						<td class="px-0">
 							<label for="원도급_계약서_토지이용_허가서" class="btn_type_attachment">추가</label>
-							<button class="btn_type07 btn_img">삭제</button>
+							<button type="button" class="btn_type07 btn_img">삭제</button>
 						</td>
 					</tr>
 					<tr>
@@ -609,7 +609,7 @@
 							<input type="hidden" id="하도급_계약서_공사도급_계약서_filedName" value="">
 						</td>
 						<td>
-							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
+							<button type="button" class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
 						</td>
 						<td class="px-0">
 							<input type="text" id="하도급_계약서_공사도급_계약서_다운로드" name="하도급_계약서_공사도급_계약서_다운로드" class="fileName tx_file w50" readonly>
@@ -619,7 +619,7 @@
 						</td>
 						<td class="px-0">
 							<label for="하도급_계약서_공사도급_계약서" class="btn_type_attachment">추가</label>
-							<button class="btn_type07 btn_img">삭제</button>
+							<button type="button" class="btn_type07 btn_img">삭제</button>
 						</td>
 					</tr>
 					<tr>
@@ -631,7 +631,7 @@
 							<input type="hidden" id="하도급_계약서_설계용역_계약서_filedName" value="">
 						</td>
 						<td>
-							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
+							<button type="button" class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
 						</td>
 						<td class="px-0">
 							<input type="text" id="하도급_계약서_설계용역_계약서_다운로드" name="하도급_계약서_설계용역_계약서_다운로드" class="fileName tx_file w50" readonly>
@@ -641,7 +641,7 @@
 						</td>
 						<td class="px-0">
 							<label for="하도급_계약서_설계용역_계약서" class="btn_type_attachment">추가</label>
-							<button class="btn_type07 btn_img">삭제</button>
+							<button type="button" class="btn_type07 btn_img">삭제</button>
 						</td>
 					</tr>
 					<tr>
@@ -653,7 +653,7 @@
 							<input type="hidden" id="하도급_계약서_감리용역_계약서_filedName" value="">
 						</td>
 						<td>
-							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
+							<button type="button" class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
 						</td>
 						<td class="px-0">
 							<input type="text" id="하도급_계약서_감리용역_계약서_다운로드" name="하도급_계약서_감리용역_계약서_다운로드" class="fileName tx_file w50" readonly>
@@ -663,7 +663,7 @@
 						</td>
 						<td class="px-0">
 							<label for="하도급_계약서_감리용역_계약서" class="btn_type_attachment">추가</label>
-							<button class="btn_type07 btn_img">삭제</button>
+							<button type="button" class="btn_type07 btn_img">삭제</button>
 						</td>
 					</tr>
 					<tr>
@@ -675,7 +675,7 @@
 							<input type="hidden" id="기자재_시험_성적서_인버터_filedName" value="">
 						</td>
 						<td>
-							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
+							<button type="button" class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
 						</td>
 						<td class="px-0">
 							<input type="text" id="기자재_시험_성적서_인버터_다운로드" name="기자재_시험_성적서_인버터_다운로드" class="fileName tx_file w50" readonly>
@@ -685,7 +685,7 @@
 						</td>
 						<td class="px-0">
 							<label for="기자재_시험_성적서_인버터" class="btn_type_attachment">추가</label>
-							<button class="btn_type07 btn_img">삭제</button>
+							<button type="button" class="btn_type07 btn_img">삭제</button>
 						</td>
 					</tr>
 					<tr>
@@ -697,7 +697,7 @@
 							<input type="hidden" id="기자재_시험_성적서_모듈_filedName" value="">
 						</td>
 						<td>
-							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
+							<button type="button" class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
 						</td>
 						<td class="px-0">
 							<input type="text" id="기자재_시험_성적서_모듈_다운로드" name="기자재_시험_성적서_모듈_다운로드" class="fileName tx_file w50" readonly>
@@ -707,7 +707,7 @@
 						</td>
 						<td class="px-0">
 							<label for="기자재_시험_성적서_모듈" class="btn_type_attachment">추가</label>
-							<button class="btn_type07 btn_img">삭제</button>
+							<button type="button" class="btn_type07 btn_img">삭제</button>
 						</td>
 					</tr>
 					<tr>
@@ -719,7 +719,7 @@
 							<input type="hidden" id="기자재_시험_성적서_변압기_filedName" value="">
 						</td>
 						<td>
-							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
+							<button type="button" class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
 						</td>
 						<td class="px-0">
 							<input type="text" id="기자재_시험_성적서_변압기_다운로드" name="기자재_시험_성적서_변압기_다운로드" class="fileName tx_file w50" readonly>
@@ -729,7 +729,7 @@
 						</td>
 						<td class="px-0">
 							<label for="기자재_시험_성적서_변압기" class="btn_type_attachment">추가</label>
-							<button class="btn_type07 btn_img">삭제</button>
+							<button type="button" class="btn_type07 btn_img">삭제</button>
 						</td>
 					</tr>
 					<tr>
@@ -741,7 +741,7 @@
 							<input type="hidden" id="기자재_시험_성적서_수배전반_filedName" value="">
 						</td>
 						<td>
-							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
+							<button type="button" class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
 						</td>
 						<td class="px-0">
 							<input type="text" id="기자재_시험_성적서_수배전반_다운로드" name="기자재_시험_성적서_수배전반_다운로드" class="fileName tx_file w50" readonly>
@@ -751,7 +751,7 @@
 						</td>
 						<td class="px-0">
 							<label for="기자재_시험_성적서_수배전반" class="btn_type_attachment">추가</label>
-							<button class="btn_type07 btn_img">삭제</button>
+							<button type="button" class="btn_type07 btn_img">삭제</button>
 						</td>
 					</tr>
 					<tr>
@@ -763,7 +763,7 @@
 							<input type="hidden" id="모듈_Inspection_Sheet_filedName" value="">
 						</td>
 						<td>
-							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
+							<button type="button" class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
 						</td>
 						<td class="px-0">
 							<input type="text" id="모듈_Inspection_Sheet_다운로드" name="모듈_Inspection_Sheet_다운로드" class="fileName tx_file w50" readonly>
@@ -773,7 +773,7 @@
 						</td>
 						<td class="px-0">
 							<label for="모듈_Inspection_Sheet" class="btn_type_attachment">추가</label>
-							<button class="btn_type07 btn_img">삭제</button>
+							<button type="button" class="btn_type07 btn_img">삭제</button>
 						</td>
 					</tr>
 					<tr id="addList">
@@ -786,11 +786,11 @@
 								<input type="hidden" id="사용자정의[index]_filedName" name="사용자정의[index]_filedName" value="">
 
 							</div>
-							<button class="btn_type07 hidden" name="rowDelete">삭제</button>
+							<button type="button" class="btn_type07 hidden" name="rowDelete">삭제</button>
 						</td>
 						<td><input type="text" class="fileName tx_file" readonly="readonly"></td>
 						<td>
-							<button class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
+							<button type="button" class="btn_file down" onclick="downloadFile($(this));">다운로드</button>
 						</td>
 						<td class="px-0">
 							<input type="text" id="사용자정의[index]_다운로드" name="사용자정의[index]_다운로드" class="fileName tx_file w50" readonly>
@@ -800,7 +800,7 @@
 						</td>
 						<td class="px-0">
 							<label for="사용자정의[index]" class="btn_type_attachment">추가</label>
-							<button class="btn_type07 btn_img">삭제</button>
+							<button type="button" class="btn_type07 btn_img">삭제</button>
 						</td>
 					</tr>
 				</table>

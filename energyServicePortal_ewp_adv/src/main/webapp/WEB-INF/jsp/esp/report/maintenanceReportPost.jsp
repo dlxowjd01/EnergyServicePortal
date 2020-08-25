@@ -168,7 +168,7 @@
 			<span class="tx_tit">보고서 구분</span>
 			<div class="sa_select">
 				<div class="dropdown" id="report_type">
-					<button class="btn btn-primary dropdown-toggle w9" type="button" data-toggle="dropdown" data-value="">
+					<button type="button" class="dropdown-toggle w9" data-toggle="dropdown" data-value="">
 						선택<span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu chk_type" role="menu">
@@ -204,7 +204,7 @@
 						<th>발전소</th>
 						<td>
 							<div class="dropdown placeholder edit" id="gen" >
-								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-value="">
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="">
 									선택 <span class="caret"></span>
 								</button>
 								<ul id="genList" class="dropdown-menu" role="menu">

@@ -16,18 +16,13 @@
 	</c:choose>
 	
 	<link rel="stylesheet" href="/css/bootstrap.min.css">
-	<%--
-	<link rel="stylesheet" href="/css/font-awesome.min.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css"/>
-	<link href="https://fonts.googleapis.com/css?family=Nanum+Gothic:400" rel="stylesheet">
-	--%>
 
 	<link rel="stylesheet" href="/css/custom.css">
 	<link rel="stylesheet" href="/css/custom-grid.min.css">
 	<link rel="stylesheet" href="/css/custom-mquery.css">
 	<link rel="stylesheet" type="text/css" media="all" href="/css/jquery-ui.css">
 	<link rel="stylesheet" type="text/css" media="all" href="/css/wickedpicker.css">
-	<!-- dataTables (work in progress) -->
+
 	<link rel="stylesheet" type="text/css" href="/css/data_tables/default.css"/>
 <!--[if lt IE 9]>
 		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -48,28 +43,13 @@
 	<script src="/js/sectionDisplay.js"></script>
 	<script src="/js/common.js"></script>
 
-	<%--
-	<script src="/js/jquery.bxslider.js" type="text/javascript"></script>
-	<c:set var="timeOffset"><spring:eval expression="@local.getProperty('server.offset')" /></c:set>
-	--%>
 	<script src="/js/custom/common.js"></script>
-	<!-- START: 현재 안씀 - 확인 필요 -->
-	<!-- <script src="/js/custom/lems.js"></script>
-	<script src="/js/custom/searchRequirement.js"></script> -->
-	<!-- END -->
+
 	<script src="/js/custom/utils.js"></script>
 	<script src="/js/custom/numberFormat.js"></script>
 
 	<script src="/js/html2canvas.js"></script>
-	<!-- START: 현재 안씀 - 확인 필요 -->
-	<!-- <script src="/js/jspdf.min.js"></script> -->
-	<!-- END -->
-	<!-- print preview -->
-	<!-- <script src="/js/printPreview.js"></script> -->
-	<!-- <script src="/js/printThis.js"></script> -->
 
-	<!-- 다크 모드 지원 -->
-	<!-- <script src="/js/custom/theme.js"></script> -->
 	<!-- 화면 엑셀 다운로드용 -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
@@ -77,11 +57,14 @@
 	<!-- timepicker -->
 	<script type="text/javascript" src="/js/wickedpicker.js"></script>
 	<script src="/js/data_tables/default.js" type="text/javascript"></script>
+	<script src="/js/data_tables/extensions/responsive.js" type="text/javascript"></script>
 	<script src="/js/data_tables/extensions/buttons.js" type="text/javascript"></script>
 	<script src="/js/data_tables/extensions/col_reorder.js" type="text/javascript"></script>
 	<script src="/js/data_tables/extensions/pdf_make.js" type="text/javascript"></script>
+	<script src="/js/data_tables/extensions/jszip.js" type="text/javascript"></script>
 	<script src="/js/data_tables/extensions/vfs_fonts_kr.js" type="text/javascript"></script>
 	<script src="/js/data_tables/extensions/select.js" type="text/javascript"></script>
+	<script src="/js/data_tables/extensions/fixed_header.js" type="text/javascript"></script>
 
 	<script>
 		// role: 1: 시스템관리자, 2: 일반
@@ -94,52 +77,17 @@
 		const loginName = '${sessionScope.userInfo.name}';
 		const loginMail = '${sessionScope.userInfo.contact_email}';
 		const contact_phone = '${sessionScope.userInfo.contact_phone}';
-
-
-		let pagePerData = 15; //페이지당 게시글 갯수
-		const navCount = 10; //한 화면당 네비게이션 갯수
-		let page = 1; //현재 페이지
-
 		const apiHost = '${sessionScope.apiHost}';
-
-		//API 토큰 세팅
-		$.ajaxSetup({
-			headers: {'Authorization': 'Bearer <c:out value="${sessionScope.userInfo.token}" escapeXml="false" />'}
-		});
-
+		const navCount = 10; //한 화면당 네비게이션 갯수
+		let pagePerData = 15; //페이지당 게시글 갯수
+		let page = 1; //현재 페이지
 		var timeOffset = '${timeOffset}';
-		$(document).ready(function () {
-			<c:if test="${!fn:contains(pageContext.request.serverName, 'spower')}">
-				changeFavicon('/img/logo-only.ico');
-			</c:if>
-
-			$('.loading').hide();
-
-			$(window).resize(function() {
-				if ($(window).width() > 768) {
-					$('#mask').hide();
-					$('body').removeClass("sidenav-no-scroll");
-					$('#gnb').hide();
-				}
-			});
-
-		});
-
-		$(document).ajaxSuccess(function() {
-			$('.loading').hide();
-		});
-
-		$(document).ajaxError(function( event, jqxhr, settings, thrownError ) {
-			$('.loading').hide();
-		});
+		var sessionUser = null;
 
 		const changeFavicon = link => {
-			let $favicon = document.querySelector('link[rel="icon"]')
-			// If a <link rel="icon"> element already exists,
-			// change its href to the given link.
+			let $favicon = document.querySelector('link[rel="icon"]') || document.createElement('link');
 			if ($favicon !== null) {
 				$favicon.href = link
-				// Otherwise, create a new element and append it to <head>.
 			} else {
 				$favicon = document.createElement("link")
 				$favicon.rel = "icon"
@@ -147,6 +95,59 @@
 				document.head.appendChild($favicon)
 			}
 		};
+
+
+		$(document).ready(function () {
+			<c:if test="${!fn:contains(pageContext.request.serverName, 'spower')}">
+				changeFavicon('/resources/favicon_encored.ico');
+			</c:if>
+
+			$('#loadingCircle').hide();
+
+			$(window).resize(function() {
+				if ($(window).width() > 768) {
+					$('#mask').hide();
+					$('body').removeClass("sidenav-no-scroll");
+					$('#mobileNav').hide();
+				}
+			});
+
+		});
+
+		//API 토큰 세팅
+		$.ajaxSetup({
+			headers: {'Authorization': 'Bearer <c:out value="${sessionScope.userInfo.token}" escapeXml="false" />'},
+			"timeout": 10000
+		});
+
+		$(document).ajaxSuccess(function() {
+			$('#loadingCircle').hide();
+		});
+
+		$(document).ajaxError(function(event, jqxhr, settings, thrownError) {
+			$('#loadingCircle').hide();
+			// test 용 주석 유지 (~ 9월 말까지)
+			// let r = JSON.parse(jqxhr.responseText);
+			// console.log("에러코드:" + jqxhr.status + "\n" + "메세지: " + r);
+		});
+
+		function formatErrorMessage(jqXHR, exception) {
+			if (jqXHR.status === 0) {
+				return ('Not connected.\nPlease verify your network connection.');
+			} else if (jqXHR.status == 404) {
+				return ('The requested page not found. [404]');
+			} else if (jqXHR.status == 500) {
+				return ('Internal Server Error [500].');
+			} else if (exception === 'parsererror') {
+				return ('Requested JSON parse failed.');
+			} else if (exception === 'timeout') {
+				return ('Time out error.');
+			} else if (exception === 'abort') {
+				return ('Ajax request aborted.');
+			} else {
+				return ('Uncaught Error.\n' + jqXHR.responseText);
+			}
+		}
 
 		function sessionRefresh() {
 			$.ajax({
@@ -159,16 +160,27 @@
 				},
 				success: function (result) {
 					if (result == -1) {
-						alert("세션 새로고침에 실패하였습니다.");
+						$("#errMsg").text("세션 새로고침에 실패하였습니다.");
+						$("#errorModal").modal("show");
+						setTimeout(function(){
+							$("#errorModal").modal("hide");
+						}, 2000);
+						// alert("세션 새로고침에 실패하였습니다.");
 					}
 
 				},
 				error: function (request, status, error) {
-//		 			alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+					// alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+					let r = JSON.parse(jqxhr.responseText);
+					console.log("에러코드:" + request.status + "\n" + "메세지: " + r);
+					$("#errMsg").text("오류가 발생하였습니다. \n" + r);
+					$("#errorModal").modal("show");
+					setTimeout(function(){
+						$("#errorModal").modal("hide");
+					}, 2000);
 				}
 			});
 		}
-		
 		// 세션 userInfo 조회
 		function getUserInfo(fn) {
 			$.ajax({
@@ -180,12 +192,10 @@
 				}
 			});
 		}
-	 
-		var sessionUser = null;
 		function setSession(result) {
 			sessionUser = result;
 		}
-		
+
 		//날짜포멧 변경
 		Date.prototype.format = function (f) {
 			if (!this.valueOf()) return " ";

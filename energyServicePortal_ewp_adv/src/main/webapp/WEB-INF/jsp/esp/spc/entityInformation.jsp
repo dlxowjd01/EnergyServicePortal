@@ -331,7 +331,7 @@
 			<div class="flex_start">
 				<label for="operation_select" class="tx_tit">운영 여부</label>
 				<div class="dropdown sa_select mr-16" id="operation_select">
-					<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown" data-name="운영 여부 선택">
+					<button type="button" class="dropdown-toggle w7" data-toggle="dropdown" data-name="운영 여부 선택">
 						운영 여부 선택<span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu chk_type" role="menu" id="operationList">
@@ -358,7 +358,7 @@
 
 				<label for="warranty_select" class="tx_tit">보증 방식</label>
 				<div class="dropdown sa_select mr-16" id="warranty_select">
-					<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown" data-name="보증 방식 선택">
+					<button type="button" class="dropdown-toggle w7" data-toggle="dropdown" data-name="보증 방식 선택">
 						보증 방식 선택<span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu chk_type" role="menu" id="warrantyList">
@@ -385,7 +385,7 @@
 
 				<label for="contract_select" class="tx_tit">계약 구분</label>
 				<div class="dropdown sa_select mr-24" id="contract_select">
-					<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown" data-name="계약 구분 선택">
+					<button type="button" class="dropdown-toggle w7" data-toggle="dropdown" data-name="계약 구분 선택">
 						계약 구분 선택<span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu chk_type" role="menu" id="contractList">
@@ -461,28 +461,28 @@
 								type="checkbox" id="chk_header" value="순번"
 								onclick="setCheckedAll(this, 'rowCheck');"><label for="chk_header">순번</label></th>
 						<th>
-							<button class="btn_align down">SPC명</button>
+							<button type="button" class="btn_align down">SPC명</button>
 						</th>
 						<th>
-							<button class="btn_align down">발전소 명</button>
+							<button type="button" class="btn_align down">발전소 명</button>
 						</th>
 						<th>
-							<button class="btn_align down">연차</button>
+							<button type="button" class="btn_align down">연차</button>
 						</th>
 						<th>
-							<button class="btn_align down">관리 운영기간</button>
+							<button type="button" class="btn_align down">관리 운영기간</button>
 						</th>
 						<th>
-							<button class="btn_align down">보증</button>
+							<button type="button" class="btn_align down">보증</button>
 						</th>
 						<th class="right">
-							<button class="btn_align down">보증 값</button>
+							<button type="button" class="btn_align down">보증 값</button>
 						</th>
 						<th class="right">
-							<button class="btn_align down">감소율</button>
+							<button type="button" class="btn_align down">감소율</button>
 						</th>
 						<th>
-							<button class="btn_align down">- 추가보수</button>
+							<button type="button" class="btn_align down">- 추가보수</button>
 						</th>
 					</tr>
 					</thead>

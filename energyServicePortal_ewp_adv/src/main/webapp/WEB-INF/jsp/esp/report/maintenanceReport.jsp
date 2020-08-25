@@ -208,7 +208,7 @@
 			<span class="tx_tit"><fmt:message key="workreport.1.reportType" /></span>
 			<div class="sa_select">
 				<div class="dropdown">
-					<button id="report_type" class="btn btn-primary dropdown-toggle w5" type="button"
+					<button type="button" id="report_type" class="dropdown-toggle w5"
 						data-toggle="dropdown" data-value="">
 						<fmt:message key="workreportmain.1.all" />
 						<span class="caret"></span>
@@ -264,22 +264,22 @@
 						<tr>
 							<th><fmt:message key="workreportmain.2.number" /></th>
 							<th>
-								<button class="btn_align"><fmt:message key="workreportmain.2.reportType" /></button>
+								<button type="button" class="btn_align"><fmt:message key="workreportmain.2.reportType" /></button>
 							</th>
 							<th>
-								<button class="btn_align"><fmt:message key="workreportmain.2.documentNumber" /></button>
+								<button type="button" class="btn_align"><fmt:message key="workreportmain.2.documentNumber" /></button>
 							</th>
 							<th>
-								<button class="btn_align"><fmt:message key="workreportmain.2.reportName" /></button>
+								<button type="button" class="btn_align"><fmt:message key="workreportmain.2.reportName" /></button>
 							</th>
 							<th>
-								<button class="btn_align"><fmt:message key="workreportmain.2.writer" /></button>
+								<button type="button" class="btn_align"><fmt:message key="workreportmain.2.writer" /></button>
 							</th>
 							<th>
-								<button class="btn_align"><fmt:message key="workreportmain.2.dateOfIssue" /></button>
+								<button type="button" class="btn_align"><fmt:message key="workreportmain.2.dateOfIssue" /></button>
 							</th>
 							<th>
-								<button class="btn_align"><fmt:message key="workreportmain.2.registrationStatus" /></button>
+								<button type="button" class="btn_align"><fmt:message key="workreportmain.2.registrationStatus" /></button>
 							</th>
 						</tr>
 					</thead>

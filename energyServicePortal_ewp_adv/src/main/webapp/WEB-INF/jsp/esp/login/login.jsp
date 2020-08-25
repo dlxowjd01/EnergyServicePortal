@@ -37,7 +37,7 @@
 			</c:choose>
 			<%@ include file="/decorators/include/selectLang.jsp" %>
 		</nav>
-		<form action="/loginUser.do" method="post" name="loginForm" id="loginForm" class="login-form" onsubmit="checkLogin();">
+		<form action="/loginUser.do" method="post" name="loginForm" id="loginForm" class="login-form">
 			<input type="hidden" id="language" name="language"/>
 			<div class="inner-wrapper">
 				<c:choose>
@@ -80,13 +80,48 @@
 		</form>
 	</div>
 
-	<script type="text/javascript">
-		<c:if test="${not empty msg}">
-		alert('${msg}');
-		</c:if>
+	<div class="modal fade" id="warningModal" role="dialog" aria-labelledby="warningModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content collection_modal_content">
+				<div class="modal-body">
+					<h2 id="warningMsg" class="warning"></h2>
+				</div>
+			</div>
+		</div>
+	</div>
 
-		$(function () {
+
+	<c:if test="${not empty msg}">
+		<script type="text/javascript">
+			let message = '${msg}'
+			$("#warningMsg").text(message);
+			$("#warningModal").modal("show");
+			setTimeout(function(){
+				$("#warningModal").modal("hide");
+			}, 1800);
+		</script>
+	</c:if>
+
+	<c:if test="${!fn:contains(pageContext.request.serverName, 'spower')}">
+		changeFavicon('/resources/favicon_encored.ico');
+	</c:if>
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+			var changeFavicon = link => {
+				let $favicon = document.querySelector('link[rel="icon"]') || document.createElement('link');
+				if ($favicon !== null) {
+					$favicon.href = link
+				} else {
+					$favicon = document.createElement("link")
+					$favicon.rel = "icon"
+					$favicon.href = link
+					document.head.appendChild($favicon)
+				}
+			};
+
 			var lan = location.search.substr(location.search.length - 2, 2);
+
 			if ( isEmpty(lan) ) {
 				$("#language").val("ko");
 			} else {
@@ -109,7 +144,41 @@
 					$("#loginBtn").prop("disabled", false);
 				}
 			});
-		});
+
+		})
+
+		// TO KEEP!!! (signUP)
+		// function checkLogin(self){
+			// let id = document.getElementById('loginUserId');
+			// let pwd = document.getElementById('loginUserPw');
+			// let modal = $("#warningModal");
+
+			// if (isEmpty(id.value) ) {
+			// 	let msg = '<spring:message code="ewp.login.Singup_ID" />'
+			// 	$("#warningMsg").text(msg);
+			// 	modal.modal("show");
+			// 	setTimeout(function(){
+			// 		modal.modal("hide");
+			// 	}, 1800);
+			// 	id.focus();
+			// 	loading.hide();
+			// 	return false;
+			// }
+			// if ( isEmpty(pwd.value) ) {
+			// 	let msg = '<spring:message code="ewp.login.Singup_PW" />'
+			// 	$("#warningMsg").text(msg);
+			// 	modal.modal("show");
+			// 	setTimeout(function(){
+			// 		modal.modal("hide");
+			// 	}, 1800);
+
+			// 	pwd.focus();
+			// 	loading.hide();
+			// 	return false;
+			// }
+
+		// 	return true;
+		// }
 
 		function isEmpty (value) {
 			if (value === "" || value === null || value === undefined || (value !== null && typeof value === "object" && !Object.keys(value).length)) {
@@ -130,28 +199,6 @@
 
 			f.method = "post";
 			f.submit();
-		}
-
-		function checkLogin() {
-			loading.show();
-
-			let id = document.getElementById('loginUserId');
-			let pwd = document.getElementById('loginUserPw');
-
-			if (isEmpty(id.value) ) {
-				alert('<spring:message code="ewp.login.Singup_ID" />');
-				id.focus();
-				loading.hide();
-				return false;
-			}
-			if ( isEmpty(pwd.value) ) {
-				alert('<spring:message code="ewp.login.Singup_PW" />');
-				pwd.focus();
-				loading.hide();
-				return false;
-			}
-
-			return true;
 		}
 
 		function showPwd(self) {

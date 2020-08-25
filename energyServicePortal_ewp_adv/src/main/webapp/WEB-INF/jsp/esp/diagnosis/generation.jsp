@@ -7,7 +7,7 @@
 	</div>
 	<div class="header_drop_area col-lg-2">
 		<div class="dropdown" id="siteList">
-			<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+			<button type="button" class="dropdown-toggle" data-toggle="dropdown">
 				<fmt:message key="genforecast.1.select" /><span class="caret"></span>
 			</button>
 			<ul class="dropdown-menu chk_type"></ul>
@@ -33,11 +33,11 @@
 			<div class="toggle_bx">
 				<div class="tb_area clear">
 					<p class="tb_tx fl"><fmt:message key="genforecast.2.forecast_err_method" /></p>
-					<button class="tb_fold_btn fr">펼치기</button>
+					<button type="button" class="tb_fold_btn fr">펼치기</button>
 				</div>
 				<div class="tb_fold_div">
 					<div class="dropdown" id="measure">
-						<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown"
+						<button type="button" class="dropdown-toggle w8" data-toggle="dropdown"
 							data-value="NMAE">
 							NMAE<span class="caret"></span>
 						</button>
@@ -51,7 +51,7 @@
 					</div>
 					<p class="tb_tx">오차 계산 데이터 필터</p>
 					<div class="dropdown mb-10" id="ignore_ref">
-						<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+						<button type="button" class="dropdown-toggle" data-toggle="dropdown">
 							용량 대비 발전량 % 이상<span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu">
@@ -90,7 +90,7 @@
 					<span class="tx_tit"><fmt:message key="genforecast.3.measured_data" /></span>
 					<div class="sa_select">
 						<div class="dropdown">
-							<button class="btn btn-primary dropdown-toggle w7" type="button" data-toggle="dropdown" data-name="복수 선택">
+							<button type="button" class="dropdown-toggle w7" type="button" data-toggle="dropdown" data-name="복수 선택">
 								<fmt:message key="genforecast.3.multiple_selection" /><span class="caret"></span>
 							</button>
 							<div class="dropdown-menu chk_type"><!--
@@ -113,7 +113,7 @@
 						<span class="tx_tit">기간</span>
 						<div class="sa_select">
 							<div class="dropdown" id="period">
-								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="오늘">
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="오늘">
 									<fmt:message key="genforecast.3.today" /><span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu">
@@ -138,7 +138,7 @@
 						<span class="tx_tit">단위</span>
 						<div class="sa_select">
 							<div class="dropdown" id="interval">
-								<button class="btn btn-primary dropdown-toggle w3" type="button" data-toggle="dropdown">
+								<button type="button" class="dropdown-toggle w3" data-toggle="dropdown">
 									<fmt:message key="genforecast.3.term" /><span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu">
@@ -425,7 +425,7 @@
 	};
 
 	const device = function () {
-		$('#deviceType button.btn-primary').empty().append('복수 선택').append('<span class="caret"></span>');
+		$('#deviceType .dropdown-toggle').empty().append('복수 선택').append('<span class="caret"></span>');
 
 		if ($(':checkbox[name="site"]:checked').length > 0) {
 			$('#deviceType .sec_li_bx').remove();

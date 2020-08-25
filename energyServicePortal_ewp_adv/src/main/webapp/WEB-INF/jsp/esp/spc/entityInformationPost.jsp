@@ -818,7 +818,7 @@
 							<th>SPC명</th>
 							<td class="group_type">
 								<div class="dropdown placeholder edit" id="spcId">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+									<button type="button" class="dropdown-toggle" data-toggle="dropdown">
 										SPC<span class="caret"></span>
 									</button>
 									<ul id="spcList" class="dropdown-menu" role="menu">
@@ -857,7 +857,7 @@
 							<th>주소</th>
 							<td class="group_type">
 								<div class="dropdown placeholder edit" id="spcCountry">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+									<button type="button" class="dropdown-toggle" data-toggle="dropdown">
 										국가 선택<span class="caret"></span>
 									</button>
 									<ul id="spcCountryList" class="dropdown-menu" role="menu">
@@ -867,7 +867,7 @@
 									</ul>
 								</div>
 								<div class="dropdown placeholder edit mr-12" id="spcSido">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+									<button type="button" class="dropdown-toggle" data-toggle="dropdown">
 										시/도 선택<span class="caret"></span>
 									</button>
 									<ul id="spcSidoList" class="dropdown-menu" role="menu">
@@ -971,7 +971,7 @@
 							<td id="addList_registered_seal" class="entity">
 								<div class="group_type">
 									<div class="dropdown placeholder edit" id="spcSeal[index]">
-										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+										<button type="button" class="dropdown-toggle" data-toggle="dropdown">
 											인감 선택<span class="caret"></span>
 										</button>
 										<ul class="dropdown-menu" role="menu">
@@ -991,7 +991,7 @@
 											<input type="radio" id="SPC_법인_인감_대표[index]" name="SPC_법인_인감_대표" value="[index]">
 											<label for="SPC_법인_인감_대표[index]">대표 인감</label>
 										</span>
-										<button class="btn_close fixed_height hidden mt-0" onclick="$(this).parents().closest('.group_type').remove()"></button>
+										<button type="button" class="btn_close fixed_height hidden mt-0" onclick="$(this).parents().closest('.group_type').remove()"></button>
 									</div>
 								</div>
 							</td>
@@ -1022,7 +1022,7 @@
 						<th><label for="genName">발전소명</label></th>
 						<td class="group_type">
 							<div class="dropdown placeholder edit" id="genId">
-								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" data-name="발전소명 선택">
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="발전소명 선택">
 									발전소명 선택<span class="caret"></span>
 								</button>
 								<ul id="genList" class="dropdown-menu" role="menu">
@@ -1044,7 +1044,7 @@
 						<th>주소</th>
 						<td class="group_type">
 							<div class="dropdown placeholder edit" id="발전소_국가">
-								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown">
 									국가 선택<span class="caret"></span>
 								</button>
 								<ul id="countryList" class="dropdown-menu" role="menu">
@@ -1054,7 +1054,7 @@
 								</ul>
 							</div>
 							<div class="dropdown placeholder edit mr-12" id="발전소_시도">
-								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown">
 									시/도 선택<span class="caret"></span>
 								</button>
 								<ul id="sidoList" class="dropdown-menu" role="menu">
@@ -1154,7 +1154,7 @@
 						<td class="addList_affiliation entity">
 							<div class="group_type">
 								<div class="dropdown placeholder edit" id="등기이사_소속[index]">
-									<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+									<button type="button" class="dropdown-toggle" data-toggle="dropdown">
 										소속 선택<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu chk_type" role="menu">
@@ -1327,7 +1327,7 @@
 						<th>관리 계약 구분</th>
 						<td>
 							<div class="dropdown placeholder edit mr-12 w300" id="관리_계약_구분">
-								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown">
 									선택<span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu chk_type" role="menu">
@@ -1493,7 +1493,7 @@
 									<div class="sel_calendar edit">
 										<input type="text" id="이자_지급일[index]" class="sel datepicker" name="이자_지급일[index]" value="" autocomplete="off" placeholder="날짜 선택" readonly>
 									</div>
-									<button class="btn_close hidden fr" onclick="removeList(this)"></button>
+									<button type="button" class="btn_close hidden fr" onclick="removeList(this)"></button>
 								</div>
 							</td>
 						</tr>
@@ -1507,7 +1507,7 @@
 									<div class="sel_calendar edit">
 										<input type="text" id="보장발전시간_정산일[index]" class="sel datepicker" name="보장발전시간_정산일[index]" value="" autocomplete="off" placeholder="날짜 선택" readonly>
 									</div>
-									<button class="btn_close hidden fr" onclick="removeList(this)"></button>
+									<button type="button" class="btn_close hidden fr" onclick="removeList(this)"></button>
 								</div>
 							</td>
 							<th>
@@ -1519,7 +1519,7 @@
 									<div class="sel_calendar edit">
 										<input type="text" id="대리기관_수수료_지급일[index]" class="sel datepicker" name="대리기관_수수료_지급일[index]" value="" autocomplete="off" placeholder="날짜 선택" readonly>
 									</div>
-									<button class="btn_close hidden fr" onclick="removeList(this)"></button>
+									<button type="button" class="btn_close hidden fr" onclick="removeList(this)"></button>
 								</div>
 							</td>
 						</tr>
@@ -1532,7 +1532,7 @@
 							<td>
 								<div class="fixed_height group_type short">
 									<div class="account-type dropdown placeholder edit" id="입출금_구분[index]">
-										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+										<button type="button" class="dropdown-toggle" data-toggle="dropdown">
 											입출금 구분<span class="caret"></span>
 										</button>
 										<ul class="dropdown-menu" role="menu">
@@ -1541,7 +1541,7 @@
 										</ul>
 									</div>
 									<div class="dropdown placeholder edit" id="계좌구분[index]">
-										<button class="btn btn-primary dropdown-toggle accdropdown" type="button" data-toggle="dropdown">계좌구분<span class="caret"></span>
+										<button type="button" class="dropdown-toggle accdropdown" data-toggle="dropdown">계좌구분<span class="caret"></span>
 										</button><!--
 									--><ul id="계좌구분리스트[index]" class="dropdown-menu" role="menu"><!--
 										--><li data-default="select" data-value="select"><a href="javascript:void(0);">입출금 구분을 선택해 주세요.</a></li><!--
@@ -1576,7 +1576,7 @@
 									--></ul><!--
 								--></div>
 									<div class="dropdown placeholder edit" id="은행_리스트[index]">
-										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+										<button type="button" class="dropdown-toggle" data-toggle="dropdown">
 											은행 리스트<span class="caret"></span>
 										</button><!--
 									--><ul class="dropdown-menu" role="menu"><!--
@@ -1624,7 +1624,7 @@
 								<div class="tx_inp_type edit">
 									<input type="text" id="계좌_번호[index]" name="계좌_번호[index]" placeholder="직접 입력">
 								</div>
-								<button class="btn_close hidden mr-12 fr" onclick="$(this).parents().closest('tr').remove()"></button>
+								<button type="button" class="btn_close hidden mr-12 fr" onclick="$(this).parents().closest('tr').remove()"></button>
 								<div class="tx_inp_type edit">
 									<input type="text" id="계좌개설_은행(지점)[index]" name="계좌개설_은행(지점)[index]" placeholder="직접 입력">
 								</div>
@@ -1647,7 +1647,7 @@
 							<td class="addList_certificate_registration entity">
 								<div class="group_type flex_start">
 									<div id="용도[index]" class="dropdown placeholder edit mxw100">
-										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+										<button type="button" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 											용도 선택<span class="caret"></span>
 										</button>
 										<ul class="dropdown-menu" role="menu">
@@ -1739,7 +1739,7 @@
 								</div>
 								<div class="group_type">
 									<div class="dropdown placeholder edit" id="SMP">
-										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+										<button type="button" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 											선택<span class="caret"></span>
 										</button>
 										<ul class="dropdown-menu" role="menu">
@@ -1756,7 +1756,7 @@
 								</div>
 								<div class="group_type">
 									<div class="dropdown placeholder edit" id="REC">
-										<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+										<button type="button" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 											고정가<span class="caret"></span>
 										</button>
 										<ul class="dropdown-menu" role="menu">
@@ -1792,7 +1792,7 @@
 								<div class="fixed_height"></div>
 								<div class="sel_calendar group_type edit addList_rental_deduction entity">
 									<input type="text" id="임대료_지급일[index]" class="sel datepicker" name="임대료_지급일[index]" value="" autocomplete="off" placeholder="날짜 선택" readonly>
-									<button class="btn_close hidden" onclick="removeList(this)"></button>
+									<button type="button" class="btn_close hidden" onclick="removeList(this)"></button>
 								</div>
 								<div class="fixed_height"></div>
 							</td>
@@ -2095,7 +2095,7 @@
 									<label class="sr-only">모듈 제조사 모델</label>
 									<input type="text" id="모듈_제조사_모델[index]" name="모듈_제조사_모델[index]" placeholder="모델">
 								</div>
-								<button class="btn_close hidden fixed_height" onclick="removeList(this);">삭제</button>
+								<button type="button" class="btn_close hidden fixed_height" onclick="removeList(this);">삭제</button>
 							</div>
 						</td>
 						<th>설치 용량</th>
@@ -2118,7 +2118,7 @@
 						<td id="addList_module_angle" class="entity">
 							<div class="tx_inp_type edit unit t1 fl">
 								<input type="text" id="모듈_설치_각도[index]" name="모듈_설치_각도[index]">&ensp;&deg;
-								<button class="btn_close hidden" onclick="$(this).parent().remove()">삭제</button>
+								<button type="button" class="btn_close hidden" onclick="$(this).parent().remove()">삭제</button>
 							</div>
 						</td>
 						<th>모듈 설치 방식</th>
@@ -2147,7 +2147,7 @@
 										<input type="text" id="인버터_제조사_모델[index]" name="인버터_제조사_모델[index]" placeholder="모델">
 									</div>
 								</fieldset>
-								<button class="btn_close hidden" onclick="removeList(this);">삭제</button>
+								<button type="button" class="btn_close hidden" onclick="removeList(this);">삭제</button>
 							</div>
 						</td>
 						<th>인버터 용량 / 대수<a href="javascript:addRow('addList_inverter_vol');" class="btn_add fr">추가</a></th>
@@ -2160,7 +2160,7 @@
 								<div class="tx_inp_type edit unit t1">
 									<input type="text" id="인버터_용량_대수[index]" name="인버터_용량_대수[index]"><span>대</span>
 
-									<button class="btn_close hidden" onclick="$(this).parents('.group_type').remove();">삭제</button>
+									<button type="button" class="btn_close hidden" onclick="$(this).parents('.group_type').remove();">삭제</button>
 								</div>
 							</fieldset>
 						</td>
@@ -2175,7 +2175,7 @@
 								<div class="tx_inp_type edit">
 									<input type="text" placeholder="모델" id="접속반_제조사_모델[index]" name="접속반_제조사_모델[index]">
 								</div>
-								<button class="btn_close hidden fixed_height mt-0" onclick="removeList(this);">삭제</button>
+								<button type="button" class="btn_close hidden fixed_height mt-0" onclick="removeList(this);">삭제</button>
 							</div>
 						</td>
 						<th>접속반 채널 / 대수<a href="javascript:addRow('addList_connection');" class="btn_add fr">추가</a></th>
@@ -2187,7 +2187,7 @@
 								<div class="tx_inp_type edit unit t1">
 									<input type="text" id="접속반_채널_대수[index]" name="접속반_채널_대수[index]"><span>대</span>
 								</div>
-								<button class="btn_close hidden" onclick="removeList(this);">삭제</button>
+								<button type="button" class="btn_close hidden" onclick="removeList(this);">삭제</button>
 							</div>
 						</td>
 					</tr>
@@ -2239,7 +2239,7 @@
 								<div class="tx_inp_type edit">
 									<input type="text" id="수배전반_모델[index]" name="수배전반_모델[index]" placeholder="모델">
 								</div>
-								<button class="btn_close hidden" onclick="removeList(this);">삭제</button>
+								<button type="button" class="btn_close hidden" onclick="removeList(this);">삭제</button>
 							</div>
 						</td>
 					</tr>
@@ -2295,7 +2295,7 @@
 						<th>기준 단가</th>
 						<td class="group_type">
 							<div class="dropdown placeholder edit" id="기준_단가">
-								<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">기준 단가 선택<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown">기준 단가 선택<span class="caret"></span></button>
 								<ul class="dropdown-menu" role="menu">
 									<li data-value=""><a href="javascript:void(0);">기준 단가 선택</a></li>
 									<li data-value="FIT 단가"><a href="javascript:void(0);">FIT 단가</a></li>

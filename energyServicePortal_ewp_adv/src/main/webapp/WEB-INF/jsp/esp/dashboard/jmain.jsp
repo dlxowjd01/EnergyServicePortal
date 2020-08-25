@@ -196,7 +196,7 @@
 					<span class="tx_tit"><fmt:message key="vppdash.8.status" /></span>
 					<div class="sa_select">
 						<div class="dropdown" id="deviceStatus">
-							<button class="btn btn-primary dropdown-toggle w8" type="button"
+							<button type="button" class="dropdown-toggle w8"
 									data-toggle="dropdown" data-name="설비 상태">
 								전체<span class="caret"></span>
 							</button>
@@ -231,31 +231,31 @@
 						<thead>
 						<tr>
 							<th>
-								<button class="btn_align"><fmt:message key="vppdash.8.status" /></button>
+								<button type="button" class="btn_align"><fmt:message key="vppdash.8.status" /></button>
 							</th>
 							<th>
-								<button class="btn_align"><fmt:message key="vppdash.8.err" /></button>
+								<button type="button" class="btn_align"><fmt:message key="vppdash.8.err" /></button>
 							</th>
 							<th>
-								<button class="btn_align"><fmt:message key="vppdash.8.warn" /></button>
+								<button type="button" class="btn_align"><fmt:message key="vppdash.8.warn" /></button>
 							</th>
 							<th>
-								<button class="btn_align"><fmt:message key="vppdash.8.site" /></button>
+								<button type="button" class="btn_align"><fmt:message key="vppdash.8.site" /></button>
 							</th>
 							<th>
-								<button class="btn_align"><fmt:message key="vppdash.8.cap" /></button>
+								<button type="button" class="btn_align"><fmt:message key="vppdash.8.cap" /></button>
 							</th>
 							<th>
-								<button class="btn_align"><fmt:message key="vppdash.8.forecast" /></button>
+								<button type="button" class="btn_align"><fmt:message key="vppdash.8.forecast" /></button>
 							</th>
 							<th>
-								<button class="btn_align"><fmt:message key="vppdash.8.gen" /></button>
+								<button type="button" class="btn_align"><fmt:message key="vppdash.8.gen" /></button>
 							</th>
 							<th class="ESS">
-								<button class="btn_align"><fmt:message key="vppdash.8.charge" /></button>
+								<button type="button" class="btn_align"><fmt:message key="vppdash.8.charge" /></button>
 							</th>
 							<th class="ESS">
-								<button class="btn_align"><fmt:message key="vppdash.8.discharge" /></button>
+								<button type="button" class="btn_align"><fmt:message key="vppdash.8.discharge" /></button>
 							</th>
 						</tr>
 						</thead>
@@ -364,8 +364,6 @@
 <script type="text/javascript" src="/js/commonDropdown.js"></script>
 <script type="text/javascript" src="/js/dashboard.js"></script>
 <script type="text/javascript">
-	const siteList = JSON.parse('${siteList}');
-	const sgid = '<c:out value="${sgid}" escapeXml="false" />';
 	const today = new Date();
 
 	let actualCount = 0;
@@ -1280,16 +1278,13 @@
 			setInterval(() => fn_cycle_1hour(), 60 * 60 * 1000);
 			setInterval(() => fn_cycle_1min(), 60 * 1000);
 		} else {
-			alert('해당 그룹에 등록 된 사이트가 존재하지 않습니다.');
+			$("#errMsg").text("해당 그룹에 등록 된 사이트가 존재하지 않습니다.");
+			$("#errorModal").modal("show");
+			setTimeout(function(){
+				$("#errorModal").modal("hide");
+			}, 2000);
+			// alert('해당 그룹에 등록 된 사이트가 존재하지 않습니다.');
 			return false;
 		}
 	});
 </script>
-
-
-
-
-
-
-
-

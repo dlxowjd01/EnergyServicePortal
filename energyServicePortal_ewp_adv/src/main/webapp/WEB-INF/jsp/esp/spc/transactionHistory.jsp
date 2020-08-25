@@ -572,7 +572,7 @@
 	<input type="hidden" id="reqEditSpcId" name="req_edit_spc_id" value=''/>
 	<input type="hidden" id="reqEditSpcName" name="req_edit_spc_name" value=''/>
 	<input type="hidden" id="reqEditReqId" name="req_edit_req_id" value=''/>
-	<!-- <button id="forwardDetailBtn" type="submit" class="hidden"></button> -->
+	<!-- <button type="submit" id="forwardDetailBtn" class="hidden"></button> -->
 </form>
 
 <form id="reqDetailForm" class="" action="/spc/withdrawReqStatusDetail.do" method="post">
@@ -582,10 +582,10 @@
 	<input type="hidden" id="reqDetailAccountInfo" name="req_detail_acc_info" value=''/>
 	<input type="hidden" id="reqDetailStatus" name="req_detail_status" value=''/>
 	<input type="hidden" id="reqDetailStatusVal" name="req_detail_status_val" value=''/>
-	<!-- <button id="forwardDetailBtn" type="submit" class="hidden"></button> -->
+	<!-- <button type="submit" id="forwardDetailBtn" class="hidden"></button> -->
 </form>
 
-<div class="modal fade" id="warningModal" role="dialog">
+<div class="modal fade" id="warningModal" role="dialog" aria-labelledby="warningModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog">
 		<div class="modal-content collection_modal_content">
 			<div class="modal-header">
@@ -613,7 +613,7 @@
 		--><span class='tx_tit'>SPC 선택</span><!--
 		--><div class='sa_select'>
 				<div class='dropdown'>
-					<button class='btn btn-primary dropdown-toggle noClose' type='button' data-toggle='dropdown' data-name="선택" data-value="">전체<span class='caret'></span></button>
+					<button type='button' class='dropdown-toggle no-close' data-toggle='dropdown' data-name="선택" data-value="">전체<span class='caret'></span></button>
 					<ul id='spcList' class='dropdown-menu chk_type' role='menu'>
 						<li data-value="*spcId*"><!--
 						--><a href="javascript:void(0);" tabindex="-1"><!--
@@ -626,34 +626,34 @@
 				</div>
 			</div><!--
 		--><div class='dropdown'>
-				<button type='button' id='collapseBtn' class='btn btn-primary dropdown-toggle no_bg w-100 ml-24' data-toggle='collapse' data-target='#searchOption'>상세 조건<span class='caret'></span></button>
+				<button type='button' id='collapseBtn' class='dropdown-toggle clear-btn ml-24' data-toggle='collapse' data-target='#searchOption'>상세 조건<span class='caret'></span></button>
 				<ul id='searchOption' class='collapse dropdown-menu unused'>
-					<li class="ml-6">
-						<div class='bx_row aN3'>
-							<h2 class='comp_tit'>입출금 조회 기간</h2>
-							<div id="dateTerm" class='bx_align mr-30 dropdown'>
-								<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown' data-target="#dateTerm" data-name="선택" value="">선택<span class='caret'></span></button>
+					<li class=""><!--
+					--><h2 class='comp_tit'>입출금 조회 기간</h2>
+						<div class='row align-group3'>
+							<div id="dateTerm" class='dropdown'>
+								<button type='button' class='dropdown-toggle' data-toggle='dropdown' data-target="#dateTerm" data-name="선택" value="">선택<span class='caret'></span></button>
 								<ul id="unitOpt" class='dropdown-menu dropdown_offset' role='menu'>
 									<li data-value="yearly"><a href='javascript:void(0)' tabindex='-1'>년</a></li>
 									<li data-value="monthly"><a href='javascript:void(0)' tabindex='-1'>월</a></li>
 									<li data-value="daily"><a href='javascript:void(0)' tabindex='-1'>일</a></li>
 								</ul>
-							</div>
-							<div class='w-33 dropdown'>
+							</div><!--
+						--><div class='dropdown'>
 								<input type='text' id='fromDate' name='fromDate' class='sel fromDate w-100' value='' autocomplete='off' placeholder='시작'>
 								<small class="hidden warning">선택해 주세요.</small>
 							</div><!--
-						--><div class='w-33 ml-12 dropdown'>
+						--><div class='dropdown'>
 								<input type='text' id='toDate' name='toDate' class='sel toDate w-100' value='' autocomplete='off' placeholder='종료'>
 								<small class="hidden warning">선택해 주세요.</small>
 							</div>
-						</div>
-					</li>
-					<li class="ml-6">
-						<div class='bx_row aN3'>
+						</div><!--
+				--></li><!--
+				--><li class="">
+						<div class='row align-group3'>
 							<div class='bx_align dropdown'>
 								<h2 class='comp_tit'>상태</h2>
-								<button class='btn btn-primary dropdown-toggle' type='button' data-toggle='dropdown' data-name="선택" value="">전체<span class='caret'></span></button>
+								<button type='button' class='dropdown-toggle' data-toggle='dropdown' data-name="선택" value="">전체<span class='caret'></span></button>
 								<ul id="spcStatus" class='dropdown-menu chk_type dropdown_offset' role='menu'>
 									<li>
 										<a href='javascript:void(0)' tabindex='-1'>
@@ -684,7 +684,7 @@
 							</div>
 							<div class='bx_align dropdown'>
 								<h2 class='comp_tit'>입출금 구분</h2>
-								<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown' value="" data-value="all">전체<span class='caret'></span></button>
+								<button type='button' class='dropdown-toggle' data-toggle='dropdown' value="" data-value="all">전체<span class='caret'></span></button>
 								<ul id="transactionType" class='dropdown-menu dropdown_offset' role='menu'>
 									<li data-value='all'><a href='javascript:void(0)' tabindex='-1'>전체</a></li>
 									<li data-value='deposit'><a href='javascript:void(0)' tabindex='-1'>입금</a></li>
@@ -694,8 +694,8 @@
 							</div>
 							<div class='bx_align'>
 								<h2 class='comp_tit'>용도 구분</h2>
-								<div class='dropdown'>
-									<button class='btn btn-primary dropdown-toggle' type='button' data-toggle='dropdown' data-name="선택">전체<span class='caret'></span></button>
+								<div class='dropdown w-100'>
+									<button type='button' class='dropdown-toggle' data-toggle='dropdown' data-name="선택">전체<span class='caret'></span></button>
 									<ul id="spcPurposeList" class='dropdown-menu chk_type dropdown_offset' role='menu'>
 										<li>
 											<a href='javascript:void(0)'tabindex='-1'>
@@ -749,7 +749,7 @@
 	</div>
 	<div class="col-1">
 		<div class='dropdown fr'><!--
-		--><button class="btn btn-primary dropdown-toggle w-100" type="button" data-toggle="dropdown" value="" aria-expanded="true">건 별<span class="caret"></span></button><!-- 
+		--><button type="button" class="dropdown-toggle w-100" data-toggle="dropdown" value="" aria-expanded="true">건 별<span class="caret"></span></button><!-- 
 		--><ul id='sumOptList' class='dropdown-menu' role='menu'><!--
 			--><li data-value="noSum"><a href="javascript:void(0)" tabindex="-1">건 별</a></li><!--
 			--><li data-value="monthSum"><a href="javascript:void(0)" tabindex="-1">월 별</a></li><!--
@@ -780,17 +780,17 @@
 					</colgroup>
 					<thead>
 						<tr>
-							<!-- <th><button class='btn_align down'>순번</button></th> -->
+							<!-- <th><button type='button' class='btn_align down'>순번</button></th> -->
 							<th>순번</th>
-							<th><button class='btn_align down'>입출금 일자</button></th>
-							<th><button class='btn_align down'>입출금 구분</button></th>
-							<th><button class='btn_align down'>용도 구분</button></th>
-							<!-- <th><button class='btn_align down'>계좌 구분</button></th> -->
-							<th class="right pr-16"><button class='btn_align down'>금액</button></th>
-							<th><button class='btn_align down'>최종 업데이트</button></th>
+							<th><button type='button' class='btn_align down'>입출금 일자</button></th>
+							<th><button type='button' class='btn_align down'>입출금 구분</button></th>
+							<th><button type='button' class='btn_align down'>용도 구분</button></th>
+							<!-- <th><button type='button' class='btn_align down'>계좌 구분</button></th> -->
+							<th class="right pr-16"><button type='button' class='btn_align down'>금액</button></th>
+							<th><button type='button' class='btn_align down'>최종 업데이트</button></th>
 							<th>요청자</th>
 							<th>승인자</th>
-							<th class='left'><button class='btn_align down'>상태</button></th>
+							<th class='left'><button type='button' class='btn_align down'>상태</button></th>
 						</tr>
 					</thead>
 					<tbody id='tableBody'>

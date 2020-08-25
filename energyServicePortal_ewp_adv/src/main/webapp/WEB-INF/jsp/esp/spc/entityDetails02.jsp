@@ -337,52 +337,52 @@
 						<tr>
 							<th>현장 사진</th>
 							<td><div class="img_bx"><img src="../img/@sample03.png"></div></td>
-							<td class="vbt"><button class="btn_file up">업로드</button></td>
+							<td class="vbt"><button type="button" class="btn_file up">업로드</button></td>
 						</tr>
 						<tr>
 							<th>수배전반</th>
 							<td></td>
-							<td><button class="btn_file down">다운로드</button></td>
+							<td><button type="button" class="btn_file down">다운로드</button></td>
 						</tr>
 						<tr>
 							<th>케이블</th>
 							<td></td>
-							<td><button class="btn_file down">다운로드</button></td>
+							<td><button type="button" class="btn_file down">다운로드</button></td>
 						</tr>
 						<tr>
 							<th>모듈</th>
 							<td></td>
-							<td><button class="btn_file down">다운로드</button></td>
+							<td><button type="button" class="btn_file down">다운로드</button></td>
 						</tr>
 						<tr>
 							<th>인버터</th>
 							<td><p class="tx_file">GCI2014-PS007-M10-100옥외형_제작사양서_V010_140922.pdf</p></td>
-							<td><button class="btn_file down">다운로드</button></td>
+							<td><button type="button" class="btn_file down">다운로드</button></td>
 						</tr>
 						<tr>
 							<th>결선도</th>
 							<td><p class="tx_file">M10-100_계통도V020_150302.pdf</p></td>
-							<td><button class="btn_file down">다운로드</button></td>
+							<td><button type="button" class="btn_file down">다운로드</button></td>
 						</tr>
 						<tr>
 							<th>토목</th>
 							<td></td>
-							<td><button class="btn_file down">다운로드</button></td>
+							<td><button type="button" class="btn_file down">다운로드</button></td>
 						</tr>
 						<tr>
 							<th>구조물</th>
 							<td></td>
-							<td><button class="btn_file up">업로드</button></td>
+							<td><button type="button" class="btn_file up">업로드</button></td>
 						</tr>
 						<tr>
 							<th>접속반</th>
 							<td></td>
-							<td><button class="btn_file down">다운로드</button></td>
+							<td><button type="button" class="btn_file down">다운로드</button></td>
 						</tr>
 						<tr>
 							<th>기타설비</th>
 							<td></td>
-							<td><button class="btn_file down">다운로드</button></td>
+							<td><button type="button" class="btn_file down">다운로드</button></td>
 						</tr>
 					</table>
 				</div>

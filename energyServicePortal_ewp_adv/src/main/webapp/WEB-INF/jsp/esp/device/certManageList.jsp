@@ -19,7 +19,7 @@
 			<span class="tx_tit">기기 고유정보</span>
 			<div class="sa_select">
 				<div class="dropdown">
-					<button id="report_type" class="btn btn-primary dropdown-toggle w5" type="button" data-toggle="dropdown" data-value="">
+					<button type="button" id="report_type" class="dropdown-toggle w5" data-toggle="dropdown" data-value="">
 						MAC 주소 <span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu" role="menu">

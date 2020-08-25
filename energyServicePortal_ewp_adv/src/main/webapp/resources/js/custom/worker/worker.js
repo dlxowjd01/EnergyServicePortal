@@ -173,5 +173,5 @@ function endWorker(command) {
 //    drawData(); // 표(테이블) 그리기
 	drawData_table(); // 표(테이블) 그리기
     drawData_chart(); // 차트 그리기
-    $('.loading').hide();
+    $('#loadingCircle').hide();
 }

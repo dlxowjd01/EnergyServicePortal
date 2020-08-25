@@ -49,7 +49,7 @@
 						<span class="tx_tit">그래프 옵션</span>
 						<div class="sa_select">
 							<div class="dropdown" id="chartType">
-								<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">
+								<button type="button" class="dropdown-toggle w8" data-toggle="dropdown">
 									PR<span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu rdo_type" role="menu">
@@ -284,7 +284,7 @@
 						<span class="tx_tit">설비 상태</span>
 						<div class="sa_select">
 							<div class="dropdown" id="statusDevice">
-								<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown" data-name="선택">
+								<button type="button" class="dropdown-toggle w8" data-toggle="dropdown" data-name="선택">
 									전체 <span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu chk_type" role="menu">
@@ -453,8 +453,12 @@
 			console.error(jqXHR);
 			console.error(textStatus);
 			console.error(errorThrown);
-
-			alert('처리 중 오류가 발생했습니다.');
+			$("#errMsg").text("처리 중 오류가 발생했습니다.");
+			$("#errorModal").modal("show");
+			setTimeout(function(){
+				$("#errorModal").modal("hide");
+			}, 2000);
+			// alert('처리 중 오류가 발생했습니다.');
 			return false;
 		});
 	}
@@ -508,11 +512,14 @@
 				});
 			});
 		}).fail(function (jqXHR, textStatus, errorThrown) {
-			console.error(jqXHR);
-			console.error(textStatus);
-			console.error(errorThrown);
-
-			alert('처리 중 오류가 발생했습니다.');
+			let r = JSON.parse(jqXHR.responseText);
+			console.log("에러코드:" + jqXHR.status + "\n" + "메세지: " + r);
+			$("#errMsg").text("처리 중 오류가 발생했습니다.");
+			$("#errorModal").modal("show");
+			setTimeout(function(){
+				$("#errorModal").modal("hide");
+			}, 2000);
+			// alert('처리 중 오류가 발생했습니다.');
 			return false;
 		}).always(function (jqXHR, textStatus) {
 			deviceInfoList();

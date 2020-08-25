@@ -11506,7 +11506,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sInfo": "_START_ " + "- "  +  "_END_ / 총 _TOTAL_",
+			"sInfo": "_START_ " + "- "  +  "_END_ / 총 _TOTAL_" + "개",
 	
 	
 			/**
@@ -11549,7 +11549,8 @@
 			 *      } );
 			 *    } );
 			 */
-			"sInfoFiltered": "(filtered from _MAX_ total entries)",
+			// "sInfoFiltered": "(filtered from _MAX_ total entries)",
+			"sInfoFiltered": "( 검색 결과 )",
 	
 	
 			/**
@@ -11667,7 +11668,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sLengthMenu": "_MENU_" + "씩 보기",
+			"sLengthMenu": "열" + "_MENU_" + "씩 보기",
 	
 	
 			/**
@@ -11747,7 +11748,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sSearch": "키워드 검색",
+			"sSearch": "",
 	
 	
 			/**

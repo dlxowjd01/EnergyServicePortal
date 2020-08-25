@@ -193,7 +193,7 @@
 			<div class="tx_inp_type">
 				<input type="text" id="key_word" placeholder="입력">
 			</div>
-			<button class="btn_type" onclick="getDataList();">검색</button>
+			<button type="button" class="btn_type" onclick="getDataList();">검색</button>
 		</div>
 	</div>
 	<div class="col-lg-9 col-md-8 col-sm-8">
@@ -223,12 +223,12 @@
 								<input type="hidden" id="chk_header" value="순번">
 								<label for="chk_header">순번</label>
 							</th>
-							<th><button class="btn_align down">SPC명</button></th>
-							<th><button class="btn_align down">발전소 명</button></th>
-<%--							<th class="right"><button class="btn_align down">용량(kW)</button></th>--%>
-							<th><button class="btn_align down">관리 운영기간</button></th>
-							<th class="right"><button class="btn_align down">이관자료</button></th>
-							<th class="right"><button class="btn_align up">첨부파일</button></th>
+							<th><button type="button" class="btn_align down">SPC명</button></th>
+							<th><button type="button" class="btn_align down">발전소 명</button></th>
+<%--							<th class="right"><button type="button" class="btn_align down">용량(kW)</button></th>--%>
+							<th><button type="button" class="btn_align down">관리 운영기간</button></th>
+							<th class="right"><button type="button" class="btn_align down">이관자료</button></th>
+							<th class="right"><button type="button" class="btn_align up">첨부파일</button></th>
 						</tr>
 					</thead>
 					<tbody id="listData">

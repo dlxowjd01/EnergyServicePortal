@@ -127,7 +127,7 @@
 			<span class="tx_tit">보고서 구분</span>
 			<div class="sa_select">
 				<div class="dropdown" id="report_type">
-					<button class="btn btn-primary dropdown-toggle w9 disabled" type="button" data-toggle="dropdown">
+					<button type="button" class="dropdown-toggle w9 disabled" data-toggle="dropdown">
 						출장/조치 보고서
 						<span class="caret"></span>
 					</button>

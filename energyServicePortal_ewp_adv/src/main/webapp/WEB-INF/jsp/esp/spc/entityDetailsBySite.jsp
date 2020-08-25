@@ -253,32 +253,32 @@
 </div>
 
 <div class="row">
-	<div class="col-lg-12">
+	<div class="col-12">
 		<h1 class="page-header">SPC 금융관리</h1>
 	</div>
 </div>
 <div class="row">
-	<div class="header_drop_area col-lg-2">
+	<div class="header_drop_area col-8">
 		<div class="dropdown" id="spcGen">
-			<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown">
+			<button type="button" class="dropdown-toggle w8" data-toggle="dropdown">
 				전체<span class="caret"></span>
 			</button>
 			<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu">
 			</ul>
 		</div>
 	</div>
-	<div class="col-lg-10">
+	<div class="col-4">
 		<div class="right">
 			<a href="javascript:void(0);" class="save_btn">다운로드</a>
 		</div>
 	</div>
 </div>
 <div class="row">
-	<div class="col-lg-12">
+	<div class="col-12">
 		<div class="indiv entity_site">
 			<div class="btn_wrap_type">
 				<div class="dropdown" id="year">
-					<button class="btn btn-primary dropdown-toggle w8" type="button" data-toggle="dropdown" data-value="2020">
+					<button type="button" class="dropdown-toggle w8" data-toggle="dropdown" data-value="2020">
 						2020년<span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu">

@@ -26,6 +26,11 @@ const getYearGenData = async function () {
 	let dischargeList = new Array(12).fill(0);
 	let pvList = new Array(12).fill(0);
 	let payList = new Array(12).fill(0);
+	let sumObj = {
+		chargeSum: 0,
+		dischargeSum: 0,
+		pvSum: 0,
+	};
 
 	$(`.gmain_chart1 span.term`).text(today.getFullYear() + '.1.1 ~ ' + today.getFullYear() + '.' + (Number(today.getMonth()) + 1) + '.' + today.getDate());
 	siteList.forEach(site => {
@@ -49,11 +54,13 @@ const getYearGenData = async function () {
 								$.each(el.items, function (i, element) {
 									const month = Number(String(element.basetime).slice(4, 6)) - 1;
 									chargeList[month] += element.energy;
+									sumObj.chargeSum += element.energy;								sumObj.chargeSum += element.energy;
 								});
 							} else if (k == 'discharging') {
 								$.each(el.items, function (i, element) {
 									const month = Number(String(element.basetime).slice(4, 6)) - 1;
 									dischargeList[month] += element.energy;
+									sumObj.dischargeSum += element.energy;
 								});
 							}
 						});
@@ -64,6 +71,7 @@ const getYearGenData = async function () {
 									const month = Number(String(element.basetime).slice(4, 6)) - 1;
 									pvList[month] += Math.floor(element.energy / 1000);
 									payList[month] += Math.floor(element.money / 1000);
+									sumObj.pvSum += Math.floor(element.energy / 1000);
 								}
 							});
 						}
@@ -74,11 +82,15 @@ const getYearGenData = async function () {
 			console.error(jqXHR);
 			console.error(textStatus);
 			console.error(errorThrown);
-
-			alert('처리 중 오류가 발생했습니다.');
+			// alert('처리 중 오류가 발생했습니다.');
+			$("#errMsg").text("처리 중 오류가 발생했습니다." + r);
+			$("#errorModal").modal("show");
+			setTimeout(function(){
+				$("#errorModal").modal("hide");
+			}, 2000);
 			return false;
 		}).always(function (jqXHR, textStatus) {
-			monthlyChartDraw('before', chargeList, dischargeList, pvList, payList);
+			monthlyChartDraw('before', chargeList, dischargeList, pvList, payList, sumObj);
 		});
 
 		$.ajax({
@@ -93,6 +105,7 @@ const getYearGenData = async function () {
 			if (data.data[site.sid].energy) {
 				const month = Number(data.data[site.sid].start.toString().slice(4, 6)) - 1;
 				pvList[month] += Math.floor(data.data[site.sid].energy / 1000);
+				sumObj.pvSum += Math.floor(data.data[site.sid].energy / 1000);
 			}
 			if (data.data[site.sid].money) {
 				const month = Number(data.data[site.sid].start.toString().slice(4, 6)) - 1;
@@ -103,15 +116,20 @@ const getYearGenData = async function () {
 			console.error(textStatus);
 			console.error(errorThrown);
 
-			alert('처리 중 오류가 발생했습니다.');
+			// alert('처리 중 오류가 발생했습니다.');
+			$("#errMsg").text("처리 중 오류가 발생했습니다." + r);
+			$("#errorModal").modal("show");
+			setTimeout(function(){
+				$("#errorModal").modal("hide");
+			}, 2000);
 			return false;
 		}).always(function (jqXHR, textStatus) {
-			monthlyChartDraw('now', chargeList, dischargeList, pvList, payList);
+			monthlyChartDraw('now', chargeList, dischargeList, pvList, payList, sumObj);
 		});
 	});
 }
 
-const monthlyChartDraw = function (type, chargeList, dischargeList, pvList, payList) {
+const monthlyChartDraw = function (type, chargeList, dischargeList, pvList, payList, obj) {
 	if (type == 'before') {
 		monthlyBefore++;
 	} else {
@@ -141,7 +159,46 @@ const monthlyChartDraw = function (type, chargeList, dischargeList, pvList, payL
 		});
 
 		monthlyChart.redraw(); // 차트 데이터를 다시 그린다
+
+		return new Promise((resolve, reject) => {
+			let str = '';
+			Object.entries(obj).forEach(([key, value]) => {
+				if(key == "chargeSum"){
+					let newValue = '';
+					if (String(value).length  >= 5) {
+						newValue = numberComma(value / 1000) + ' M';
+					} else {
+						newValue = String(value);
+					}
+					str += '<li class="charge">충전 : ' + newValue + '</li>';
+				}
+				if(key == "dischargeSum"){
+					let newValue = '';
+					if (String(value).length  >= 5) {
+						newValue = numberComma(value / 1000) + ' M';
+					} else {
+						newValue = String(value);
+					}
+					str += '<li class="discharge">방전 : ' + newValue + '</li>';
+				}
+				if(key == "pvSum"){
+					let newValue = '';
+					if (String(value).length  >= 5) {
+						newValue = numberComma(value / 1000) + ' M';
+					} else {
+						newValue = String(value);
+					}
+					str += '<li class="pv">태양광 : ' + newValue + '</li>';
+				}
+			});
+			resolve(str);
+		}).then(res => {
+			$("#monthlySum").append(res)
+		});
+
 	}
+
+
 }
 
 const monthlyChart = Highcharts.chart('monthlyChart', {
@@ -173,8 +230,8 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 			color: 'var(--white60)',
 			width: 1
 		}],
-		type: 'datetime', // 08.20 이우람 추가
-		dateTimeLabelFormats: { // 08.20 이우람 추가
+		type: 'datetime',
+		dateTimeLabelFormats: {
 			millisecond: '%H:%M:%S.%L',
 			second: '%H:%M:%S',
 			minute: '%H:%M',
@@ -414,6 +471,11 @@ const getDailyGenData = async function () {
 	const today = new Date();
 	const lastDay = new Date(today.getFullYear(), today.getMonth() + 2, 0);
 	const formData = getSiteMainSchCollection("month");//api에 맞게 수정 필요
+	let sumObj = {
+		chargeSum: 0,
+		dischargeSum: 0,
+		pvSum: 0,
+	};
 
 	dailyBefore = 0;
 	dailyNow = 0;
@@ -450,11 +512,13 @@ const getDailyGenData = async function () {
 								$.each(el.items, function (i, element) {
 									const day = Number(String(element.basetime).slice(6, 8)) - 1;
 									chargeList[day] += element.energy;
+									sumObj.chargeSum += element.energy;
 								});
 							} else if (k == 'discharging') {
 								$.each(el.items, function (i, element) {
 									const day = Number(String(element.basetime).slice(6, 8)) - 1;
 									dischargeList[day] += element.energy;
+									sumObj.dischargeSum += element.energy;
 								});
 							}
 						});
@@ -465,6 +529,7 @@ const getDailyGenData = async function () {
 									const day = Number(String(element.basetime).slice(6, 8)) - 1;
 									pvList[day] += Math.floor(element.energy / 1000);
 									payList[day] += Math.floor(element.money / 1000);
+									sumObj.pvSum += Math.floor(element.energy / 1000);
 								}
 							});
 						}
@@ -479,7 +544,7 @@ const getDailyGenData = async function () {
 			alert('처리 중 오류가 발생했습니다.');
 			return false;
 		}).always(function (jqXHR, textStatus) {
-			dailyChartDraw('before', chargeList, dischargeList, pvList, payList, categories);
+			dailyChartDraw('before', chargeList, dischargeList, pvList, payList, categories, sumObj);
 		});
 
 		$.ajax({
@@ -494,6 +559,7 @@ const getDailyGenData = async function () {
 			const day = Number(String(data.data[site.sid].start).slice(6, 8)) - 1;
 			if (data.data[site.sid].energy) {
 				pvList[day] += Math.floor(data.data[site.sid].energy / 1000);
+				sumObj.pvSum += Math.floor(data.data[site.sid].energy / 1000);
 			}
 			if (data.data[site.sid].money) {
 				payList[day] += Math.floor(data.data[site.sid].money / 1000);
@@ -506,12 +572,12 @@ const getDailyGenData = async function () {
 			alert('처리 중 오류가 발생했습니다.');
 			return false;
 		}).always(function (jqXHR, textStatus) {
-			dailyChartDraw('now', chargeList, dischargeList, pvList, payList, categories);
+			dailyChartDraw('now', chargeList, dischargeList, pvList, payList, categories, sumObj);
 		});
 	});
 }
 
-const dailyChartDraw = function (type, chargeList, dischargeList, pvList, payList, categories) {
+const dailyChartDraw = function (type, chargeList, dischargeList, pvList, payList, categories, obj) {
 	if (type == 'before') {
 		dailyBefore++;
 	} else {
@@ -542,6 +608,42 @@ const dailyChartDraw = function (type, chargeList, dischargeList, pvList, payLis
 
 		dailyChart.xAxis[0].setCategories(categories);
 		dailyChart.redraw(); // 차트 데이터를 다시 그린다
+		return new Promise((resolve, reject) => {
+			let str = '';
+			Object.entries(obj).forEach(([key, value]) => {
+				if(key == "chargeSum"){
+					let newValue = '';
+					if (String(value).length  >= 5) {
+						newValue = numberComma(value / 1000) + ' M';
+					} else {
+						newValue = String(value);
+					}
+					str += '<li class="charge">충전 : ' + newValue + '</li>';
+				}
+				if(key == "dischargeSum"){
+					let newValue = '';
+					if (String(value).length  >= 5) {
+						newValue = numberComma(value / 1000) + ' M';
+					} else {
+						newValue = String(value);
+					}
+					str += '<li class="discharge">방전 : ' + newValue + '</li>';
+				}
+				if(key == "pvSum"){
+					let newValue = '';
+					if (String(value).length  >= 5) {
+						newValue = numberComma(value / 1000) + ' M';
+					} else {
+						newValue = String(value);
+					}
+					str += '<li class="pv">태양광 : ' + newValue + '</li>';
+				}
+			});
+			resolve(str);
+		}).then(res => {
+			$("#dailySum").append(res)
+		});
+
 	}
 }
 
@@ -774,6 +876,7 @@ const getGenDataBySiteYesterday = async function () { //3번째 indiv 사업소�
 	yesterday.setDate(Number(today.getDate()) - 1);
 
 	$(`.gmain_chart3 span.term`).text(yesterday.getFullYear() + '.' + (Number(yesterday.getMonth()) + 1) + '.' + yesterday.getDate());
+	
 	siteList.forEach((site, siteIdx) => {
 		let siteGenSum = 0;
 		let siteForeGenSum = 0;
@@ -845,7 +948,6 @@ const getGenDataBySiteYesterday = async function () { //3번째 indiv 사업소�
 					}
 				}
 			});
-
 			siteForeGenSum = displayNumberFixedUnit(siteForeGenSum, 'Wh', 'kWh', 0)[0];
 			siteForeGenArray[siteIdx] = Number(String(siteForeGenSum).replace(/[^0-9]/g, ''));
 		}).fail(function (jqXHR, textStatus, errorThrown) {
@@ -861,7 +963,7 @@ const getGenDataBySiteYesterday = async function () { //3번째 indiv 사업소�
 	});
 }
 
-const setGenDataBySiteYesterday = function (type, siteGenArray, siteForeGenArray, categories) {
+const setGenDataBySiteYesterday = function (type, siteGenArray, siteForeGenArray, categories, obj) {
 	if (type == 'energy') {
 		yesterDayGen++;
 	} else {
@@ -905,7 +1007,34 @@ const setGenDataBySiteYesterday = function (type, siteGenArray, siteForeGenArray
 		//typeSiteCurrent.xAxis[0].categories = true;
 		typeSiteCurrent.xAxis[0].setCategories(categories);
 		typeSiteCurrent.redraw();
+		
+		let str = '';
+		let genSum = 0;
+		let genForecastSum = 0;
 
+		if(!isEmpty(tmepGenArray)){
+			let newValue = '';
+			genSum = tmepGenArray.reduce((acc, val) => { return acc + val } , 0);
+			if (String(genSum).length  >= 5) {
+				newValue = numberComma(value / 1000) + ' M';
+			} else {
+				newValue = String(genSum) + "kWh";
+			}
+			str += '<li class="charge">발전 : ' + newValue + '</li>';
+			console.log("2---", genSum)
+		}
+		if(!isEmpty(tempForeArray)){
+			let newValue = '';
+			genForecastSum = tempForeArray.reduce((acc, val) => { return acc + val } , 0);
+			if (String(genForecastSum).length  >= 5) {
+				newValue = numberComma(value / 1000) + ' M';
+			} else {
+				newValue = String(genForecastSum) + "kWh";
+			}
+			str += '<li class="discharge">발전 예측 : ' + newValue + '</li>';
+			console.log("2---", genForecastSum)
+		}
+		$("#yesterdaySum").append(str);
 		setSiteList();
 	}
 }
@@ -1999,7 +2128,7 @@ const makeSiteList = () => {
 		if (site.devices != null) {
 			const devices = site.devices;
 			devices.forEach(device => {
-				console.log(device.device_type);
+				// console.log(device.device_type);
 				if ((device.device_type.toUpperCase()).match('ESS')) {
 					ess = true;
 				}
