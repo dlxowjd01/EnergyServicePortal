@@ -825,7 +825,7 @@
 							<th>SPC명</th>
 							<td class="group_type">
 								<div class="dropdown placeholder edit" id="spcId">
-									<button type="button" class="dropdown-toggle" data-toggle="dropdown">
+									<button type="button" class="dropdown-toggle w-100" data-toggle="dropdown">
 										SPC<span class="caret"></span>
 									</button>
 									<ul id="spcList" class="dropdown-menu" role="menu">
@@ -862,7 +862,7 @@
 							<th>주소</th>
 							<td class="group_type">
 								<div class="dropdown placeholder edit" id="spcCountry">
-									<button type="button" class="dropdown-toggle" data-toggle="dropdown">
+									<button type="button" class="dropdown-toggle underline w-100" data-toggle="dropdown">
 										국가 선택<span class="caret"></span>
 									</button>
 									<ul id="spcCountryList" class="dropdown-menu" role="menu">
@@ -872,7 +872,7 @@
 									</ul>
 								</div>
 								<div class="dropdown placeholder edit mr-12" id="spcSido">
-									<button type="button" class="dropdown-toggle" data-toggle="dropdown">
+									<button type="button" class="dropdown-toggle underline w-100" data-toggle="dropdown">
 										시/도 선택<span class="caret"></span>
 									</button>
 									<ul id="spcSidoList" class="dropdown-menu" role="menu">

@@ -389,6 +389,8 @@
 			url = apiHost + '/spcs/transactions/download/evidence?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId + '&output_file_name=' + name;;
 		};
 
+			console.log("url=-===", url)
+			
 		$.ajax({
 			url: url,
 			method: 'GET',
@@ -399,14 +401,27 @@
 				responseType: 'blob'
 			},
 			success: function(data) {
+				// var blob = new Blob([data]);
+				// var fileName = request.getResponseHeader('fileName');
+
+				// console.log("data===", data);
+
 				let src = window.URL.createObjectURL(data);
 				let btn = document.createElement('div');
 				let preview = document.createElement('iframe');
 				let el = document.getElementById("outerWrapper");
 
-				preview.setAttribute("type", "application/pdf");
-				preview.setAttribute( "id", "previewFrame");
-				preview.setAttribute("class", "iframe-fixed");
+				setAttributes(preview, {
+					type: "application/pdf",
+					id: "previewFrame",
+					class: "iframe-fixed",
+					embedded: true,
+
+				});
+				// preview.setAttribute("type", "application/pdf");
+				// preview.setAttribute( "id", "previewFrame");
+				// preview.setAttribute("class", "iframe-fixed");
+				// preview.setAttribute("embedded", true)
 				preview.src = src;
 
 				btn.setAttribute("id", "iframeBtn");
@@ -416,6 +431,22 @@
 
 				el.setAttribute("class", "blur");
 
+				let iframe = document.getElementById('previewFrame');
+				if(iframe.length) { 
+					iframe.remove(); 
+				}
+
+				$('<iframe id="iFrame" width="500" height="600" src=' + src + '#page=1">').prepend('#outerWrapper');
+
+				iframe.onload = function () {
+					// let embedded = document.getElementsByTagName('embed')[0];
+					// console.log("this---", this)
+					// // $(this).contents().scrollTop(0)
+					// // this.scrollTop = 0;
+					// var childDocument = this.contentDocument ? this.contentDocument : this.contentWindow.document;
+					// childDocument.documentElement.scrollTop = 0;
+					window.scrollTo(0,0);
+				}
 				document.getElementById("previewFrame").addEventListener("click", function(){
 					this.remove();
 					document.getElementById("outerWrapper").classList.remove("blur");
@@ -469,7 +500,9 @@
 		});
 	}
 
-
+	function setAttributes(el, attrs) {
+		Object.keys(attrs).forEach(key => el.setAttribute(key, attrs[key]));
+	}
 
 	// function downloadFile(action, originalName, fakeName){
 	// 		console.log("downloadFile--", action)
