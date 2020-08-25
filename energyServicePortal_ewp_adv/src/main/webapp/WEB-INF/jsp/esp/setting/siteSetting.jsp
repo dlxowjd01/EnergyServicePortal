@@ -14,8 +14,90 @@
 
 		getSiteList(oid);
 		getAjaxList();
+		getVppDrData();
 
+		var alarmTable = $('#alarmTable').DataTable({
+			// "fixedHeader": true,
+			// "table-layout": "fixed",
+			"scrollX": false,
+			"scrollY": true,
+			"scrollXInner": "110%",
+			"scrollCollapse": true,
+			"columnDefs": [
+				{
+					"searchable": false,
+					"orderable": false,
+					"targets": 0
+				},
+			],
+			"columns": [
+				{
+					"title": "순번",
+				},
+				{
+					"title": "설비타입",
+					"render": function ( data, type, row ) {
+						return '<div class="tx_inp_type"><input type="text" id="deviceType" name="device_type" placeholder=""/></div>';
+					},
+				},
+				{
+					"title": "설비명",
+					"render": function ( data, type, row ) {
+						return '<div class="tx_inp_type"><input type="text" id="deviceType" name="device_type" placeholder=""/></div>';
+					},
+				},
+				{
+					"title": "알람레벨",
+					"render": function ( data, type, row ) {
+						return '<div class="tx_inp_type"><input type="text" id="deviceType" name="device_type" placeholder=""/></div>';
+					},
+				},
+				{
+					"title": "담당자",
+					"render": function ( data, type, row ) {
+						return '<div class="tx_inp_type"><input type="text" id="deviceType" name="device_type" placeholder=""/></div>';
+					},
+				},
+				{
+					"title": "",
+					"className": ""
+				},
+				{
+					"title": "",
+					"className": "",
+				},
+			],
 
+			"dom": 'ti',
+			"select": {
+				style: 'single',
+				items: 'row'
+			},
+			"order": [[ 1, 'asc' ]],
+			initComplete: function(){
+				let str = `
+					<button type="button" class="btn-text-blue ml-24" onclick="addAlarmRow()">추가</button>
+				`
+				$("#addAlarmModal").find(".modal-header").append($(str));
+
+				this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+					cell.innerHTML = i+1;
+					$(cell).data("id", i);
+				});
+
+				// this.api().columns().header().each ((el, i) => {
+				// 	if(i === 0 ){
+				// 		$ (el).attr ('style', 'min-width: 160px;');
+				// 	}
+				// });
+			},
+		});
+
+		alarmTable.on( 'order.dt search.dt', function () {
+			alarmTable.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+				cell.innerHTML = i+1;
+			} );
+		}).draw();
 
 		$("#newSiteName").on('keydown', function() {
 			$(this).val($(this).val().replace(/\s/g, ''));
@@ -25,7 +107,7 @@
 		$("#newSiteName").on('keyup', function() {
 			let warning = $("#validSite").parent().find(".warning");
 
-			$("#validId").addClass("hidden")
+			$("#validSite").addClass("hidden")
 
 			if( $(this).val().match(/^[.!#$%&'*+/=?^`{|}~]/) ) {
 				warning.eq(2).removeClass("hidden");
@@ -47,20 +129,38 @@
 
 		});
 
-		$("#newSmartPwd").on('input', validatePassword);
-
-		$("#newSiteTypeList").find("li").on("click", function() {
+		$("#newSiteType").find("li").on("click", function() {
 			let val = $(this).data("value");
-			let items = $("#newResourceList").find("li");
-
-			setDropdownValue($("#newSiteTypeList"));
-
-			if(val == 0) {
-				$("#newResourceList").find().show();
+			let items = $("#newResList").find("li");
+			if(val == "0") {
+				$("#newResList").find().show();
 				items.eq(0).siblings().addClass("hidden");
 			} else {
 				items.eq(0).addClass("hidden").siblings().removeClass("hidden");
 			}
+		});
+
+		$("#newPriceModelList").find("li").on("click", function() {
+			let val = $(this).data("value");
+			if(val == "fixed") {
+				$("#newPrice").parent().removeClass("hidden");
+			} else {
+				$("#newPrice").parent().addClass("hidden");
+			}
+		});
+
+		$("#newCoord").on('keyup', function(e) {
+			if( $(this).val().match(/[^\x00-\x80]/) ){
+				$(this).val("");
+			}
+		});
+		$("#newCoord").on('input', function(e) {
+			var re = /^[0-9] + (?:\,[0-9]+)*$/;
+			var isvalid = re.test($(this).value);
+			if(isvalid == false){
+				console.log("no match---")
+			}
+			// $(this).val($(this).val().replace(/\s/g, ''));
 		});
 
 		$("#addSiteModal").on("hide.bs.modal", function() {
@@ -71,288 +171,313 @@
 			initModal();
 		});
 
+		$("#deleteConfirmModal").on("hide.bs.modal", function() {
+			console.log("deleteConfirmModal closed===");
+			$("#deleteSuccessMsg").html('<h5 id="deleteSuccessMsg" class="ntit">사이트 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>');
+			$("#confirmSite").val("");
+		});
+
+
+		$("#resultModal").on("hide.bs.modal", function() {
+			console.log("resultModal closed===");
+			document.location.reload();
+			$("#resultFailureMsg").addClass("hidden");
+			$("#resultSuccessMsg").addClass("hidden");
+		});
+
+
 		$("#updateSiteForm").on("submit", function(e){
 			e.preventDefault();
 
-			let option = {};
-			let optionPwd = {};
-			let userObj = {};
-
 			let newSiteName = $("#newSiteName").val();
-			let newFullName = $("#newFullName").val();
-			let newPwd = $("#newUserPwd").val();
-			let newAccVal = Number($("#newAccLevel").prev().data("value"));
-			let newAccName =$("#newAccLevel").prev().data("name");
+			let newResType = Number($("#newUserPwd").prev().data("value"));
+			let newCity = $("#newCityList").prev().data("value");
 
-			let newPhoneNum = $("#newMobileNum").val();
-			let newAffiliation = $("#newAffiliation").val();
-			let newEmailAddr =$("#newEmailAddr").val();
-			let newTaskList = $("#newTaskList").prev().data("value");
-			let newUseOpt = $("#newUseOpt").prev().data("value");
-			let newUserDesc = $("#newUserDesc").val();
+			let newSiteType = Number($("#newSiteType").prev().data("value"));
+			let newSiteTypeName = $("#newSiteType").prev().data("name");
 
-			let siteInfo = $("#selectedSiteList").find("li");
-			let spcInfo = $("#selectedSpcList").find("li");
+			let newEssList = Number($("#newEssList").prev().data("value"));
+			let newStreetAddr= $("#newStreetAddr").val();
+			let newCoord = [...$("#newCoord").val()];
+			let newSiteDetail = $("#newSiteDetail").val();
 
-			// 1. ADD a USER
+			// Utility
+			let newUtilObj = {}
+			let newUtilPlan = $("#newContractList").prev().data("value");
+			let newVolRange = $("#newVoltList").prev().data("value");
+			let newPeakDemand = Number($("#newPeakDemand").prev().data("value"));
+			let newDrCharge = Number($("#newDrCharge").val());
+			let newInspection = Number($("#newInspection").prev().data("value"));
+			let newKepcoId = $("#newKepcoId").val();
+			let newISmartId = $("#newISmartId").val();
+			let newISmartPwd = $("#newISmartPwd").val();
+
+			// Power Market
+			let newPowerMarketObj = {}
+			let newPowerModel = $("#newPriceModelList").prev().data("value");
+			let newPrice = Number($("#newPrice").val());
+
+			// DR
+			let newDrObj = {}
+			let newDrResId = $("#newDrResIdList").prev().data("value");
+			let newDrVol = Number($("#drVol").val());
+			let newCblMethod = $("#cblList").prev().data("value");
+			let newDrRevShare = $("#newDrRevShare").val();
+
+			// VPP
+			let newVppObj = {}
+			let newVppResId = $("#newVppResIdList").val();
+			let newVppRevShare =$("#newVppRevShare").val();
+
+			// AJAX && FormData Obj
+			let option = {};
+			let siteObj = {};
+
+			// 1. ADD a Site
 			if(!$("#addSiteModal").hasClass("edit")) {
-				userObj.login_id = newSiteName;
-				userObj.name = newFullName;
-				userObj.password = newPwd;
-				userObj.role = newAccVal;
+				siteObj.name = newSiteName;
+				siteObj.location = newCity;
+				siteObj.resource_type = newResType;
 
-				if( !isEmpty(newPhoneNum)){
-					userObj.contact_phone = newPhoneNum;
+				if( !isEmpty(newSiteType)){
+					siteObj.ess = newSiteType;
 				}
-				if( !isEmpty(newAffiliation) ){
-					userObj.team = newAffiliation;
+				if( !isEmpty(newCoord) ){
+					siteObj.latlng = newCoord;
 				}
-				if( !isEmpty(newEmailAddr)){
-					userObj.contact_email = newEmailAddr;
+
+				siteObj.tz = "Asia/Seoul";
+
+				if( !isEmpty(newStreetAddr)){
+					siteObj.address = newStreetAddr;
 				}
-				if( !isEmpty(newTaskList)){
-					userObj.task = newTaskList;
+				if( !isEmpty(newSiteDetail)){
+					siteObj.detail_info = newSiteDetail;
 				}
-				if( !isEmpty(newUseOpt)){
-					userObj.valid_yn = newUseOpt;
+				if( !isEmpty(newDrResId) ){
+					siteObj.dr_group_id = newDrResId;
 				}
-				if( !isEmpty(newUserDesc) ){
-					userObj.description = JSON.stringify(newUserDesc);
+				if( !isEmpty(newVppResId) ){
+					siteObj.dr_group_id = newVppResId;
+				}
+
+				// Util JSON
+				if( !isEmpty(newUtilPlan)){
+					if(isEmpty(newVolRange)){
+						newUtilObj.utility_plan_id = newUtilPlan;
+					} else {
+						newUtilObj.utility_plan_id = newUtilPlan + ',' + newVolRange;
+					}
+				}
+				if( !isEmpty(newPeakDemand) ){
+					newUtilObj.peak_demand = newPeakDemand;
+				}
+				if( !isEmpty(newPeakDemand) ){
+					newUtilObj.demand_charge = newDrCharge;
+				}
+				if( !isEmpty(newInspection) ){
+					newUtilObj.metering_day = newInspection;
+				}
+				if( !isEmpty(newKepcoId) ){
+					newUtilObj.kepco_id = newKepcoId;
+				}
+				if( !isEmpty(newISmartId) ){
+					newUtilObj.ismart_id = newISmartId;
+				}
+				if( !isEmpty(newISmartPwd) ){
+					newUtilObj.ismart_pass = newISmartPwd;
+				}
+				if( !isEmpty(newUtilObj) ){
+					siteObj.utility = JSON.stringify(newUserDesc);
+				}
+
+				// Power Market JSON
+				if( !isEmpty(newPowerModel) ){
+					newPowerMarketObj.price_type = newPowerModel;
+					if( !isEmpty(newPrice) ){
+						newPowerMarketObj.price = newPrice;
+					}
+				}
+				if( !isEmpty(newPowerMarketObj) ){
+					siteObj.power_market = JSON.stringify(newPowerMarketObj);
+				}
+
+				// DR JSON
+				if( !isEmpty(newDrVol) ){
+					newDrObj.contract_capacity = newDrVol;
+				}
+				if( !isEmpty(newCblMethod) ){
+					newDrObj.cbl_method = newCblMethod;
+				}
+				if( !isEmpty(newDrRevShare) ){
+					newDrObj.cbl_method = newDrRevShare;
+				}
+				if( !isEmpty(newDrObj) ){
+					siteObj.dr_info = JSON.stringify(newDrObj);
+				}
+
+				// VPP JSON
+
+				if( !isEmpty(newVppRevShare) ){
+					newVppObj.revenue_share = newVppRevShare;
+				}
+				if( !isEmpty(newVppObj) ){
+					siteObj.vpp_info = JSON.stringify(newVppObj);
 				}
 
 				option = {
-					url: apiHost + '/config/users?oid=' + oid,
+					url: apiHost + '/config/sites?oid=' + oid,
 					type: 'post',
 					async: true,
 					dataType: 'json',
 					contentType: "application/json",
-					data: JSON.stringify(userObj)
+					data: JSON.stringify(siteObj)
 				}
 
-				if( siteInfo.length <= 0 && spcInfo.length <= 0 ){
-					$.ajax(option).done(function (json, textStatus, jqXHR) {
-						$("#addSiteModal").modal("hide");
-						$("#resultSuccessMsg").text("사용자가 추가 되었습니다.").removeClass("hidden");
-						$("#resultModal").modal("show");
-						// let table = $("#siteTable").DataTable();
+				$.ajax(option).done(function (json, textStatus, jqXHR) {
+					$("#addSiteModal").modal("hide");
+					$("#resultSuccessMsg").text("사이트가 추가 되었습니다.").removeClass("hidden");
+					$("#resultBtn").parent().addClass("hidden");
 
-						// table.row.add({
+					$("#resultModal").modal("show");
 
-						// });
-						setTimeout(function(){
-							$("#resultModal").modal("hide");
-							// location.reload();
-						}, 1600);
-					}).fail(function (jqXHR, textStatus, errorThrown) {
-						$("#failMsg2").removeClass("hidden");
-						$("#resultModal").modal("show");
-						setTimeout(function(){
-							$("#resultModal").modal("hide");
-						}, 1600);
-						console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
-						return false;
-					});
-				} else {
-					let siteObj = {};
-					let spcObj = {};
+					setTimeout(function(){
+						$("#resultBtn").trigger("click");
+					}, 1600);
+				}).fail(function (jqXHR, textStatus, errorThrown) {
+					$("#resultFailureMsg").removeClass("hidden");
+					$("#resultBtn").parent().removeClass("hidden");
+					$("#resultModal").modal("show");
+					console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
+					return false;
+				});
 
-					$.ajax(option).done(function (json, textStatus, jqXHR) {
-						let newUid = json.uid;
-
-						let siteOption = {
-							url: apiHost + '/config/user_sites?uid=' + newUid,
-							type: 'post',
-							dataType: 'json',
-							contentType: "application/json",
-							async: true
-						}
-						let spcOption = {
-							url: apiHost + '/config/user_spcs?uid=' + newUid,
-							type: 'post',
-							dataType: 'json',
-							contentType: "application/json",
-							async: true
-						}
-						if(siteInfo.length > 0) {
-							var sitePromises = [];
-							$.each(siteInfo, function(index, element){
-								siteObj.sid = $(element).data("sid");
-								siteObj.role = Number($(element).data("role"));
-								siteOption.data = JSON.stringify(siteObj);
-								sitePromises.push(Promise.resolve(makeAjaxCall(siteOption)));
-							});
-							Promise.all(sitePromises).then(res => {
-								console.log("res---", res);
-							});
-						}
-						if(spcInfo.length > 0 ){
-							var spcPromises = [];
-							$.each(spcInfo, function(index, element){
-								let spcObj = {
-									spcid: $(element).data("value"),
-									role: Number($(element).data("role"))
-								};
-								spcOption.data = JSON.stringify(spcObj);
-								sitePromises.push(Promise.resolve(makeAjaxCall(spcOption)));
-							});
-							Promise.all(spcPromises).then(res => {
-								console.log("res---", res);
-							});
-						}
-
-					}).fail(function (jqXHR, textStatus, errorThrown) {
-						let r = JSON.parse(jqXHR.responseText);
-						console.log("에러코드:" + jqXHR.status + "\n" + "메세지: " + r);
-						return false;
-					});
-				}
 			} else {
-			// 2. Edit existing user info
 				let tr = $("#siteTable").find("tbody tr.selected");
 				let td = tr.find("td");
+				let sid = tr.data("sid");
+				let siteEditObj = {};
 
-				let newUid = tr.data("uid");
-				let role = $("#newAccLevel").prev().data("value");
-				let roleTitle = $("#newAccLevel").prev().data("name");
-				let pwd = '';
-
-				if( !isEmpty(newFullName) && ( newFullName != td.eq(2).text() ) ) {
-					userObj.name = newFullName;
+				if( !isEmpty(newSiteType) && td.eq(1).text() != newSiteTypeName ){
+					siteEditObj.ess = newSiteType;
 				}
-				if( !isEmpty(newAccVal) && ( newAccName != td.eq(6).text() ) ) {
-					userObj.role = newAccVal;
+				if( !isEmpty(newCoord) ){
+					siteEditObj.latlng = newCoord;
 				}
 
-				if( !isEmpty(newPhoneNum) && ( newPhoneNum != td.eq(3).text() ) ) {
-					userObj.contact_phone = newPhoneNum;
+				// if( !isEmpty(systemLocale)){
+				// 	siteObj.tz = "systemLocale";
+				// }
+
+				if( !isEmpty(newStreetAddr)){
+					siteEditObj.address = newStreetAddr;
 				}
-				if( !isEmpty(newEmailAddr) && ( newEmailAddr != td.eq(4).text() ) ) {
-					userObj.contact_email = newEmailAddr;
+				if( !isEmpty(newSiteDetail)){
+					siteEditObj.detail_info = newSiteDetail;
 				}
-				if( !isEmpty(newAffiliation) && ( newAffiliation != td.eq(5).text() ) ) {
-					userObj.team = newAffiliation;
+				if( !isEmpty(newDrResId) && td.eq(8).text() != newDrResId ){
+					siteEditObj.dr_group_id = newDrResId;
 				}
-				if( !isEmpty(newTaskList) && ( newTaskList != td.eq(7).text() ) ) {
-					userObj.task = newTaskList;
+				if( !isEmpty(newVppResId) && td.eq(9).text() != newVppResId ){
+					siteEditObj.dr_group_id = newVppResId;
 				}
-				if( !isEmpty(newPhoneNum) && ( newPhoneNum != td.eq(8).text() ) ) {
-					userObj.valid_yn = newPhoneNum;
+
+				// Util JSON
+				if( !isEmpty(newUtilPlan)){
+					if(isEmpty(newVolRange)){
+						newUtilObj.utility_plan_id = newUtilPlan;
+					} else {
+						newUtilObj.utility_plan_id = newUtilPlan + ',' + newVolRange;
+					}
 				}
-				if( !isEmpty(newUserDesc)) {
-					userObj.description = JSON.stringify(newUserDesc);
+				if( !isEmpty(newPeakDemand) ){
+					newUtilObj.peak_demand = newPeakDemand;
+				}
+				if( !isEmpty(newPeakDemand) ){
+					newUtilObj.demand_charge = newDrCharge;
+				}
+				if( !isEmpty(newInspection) ){
+					newUtilObj.metering_day = newInspection;
+				}
+				if( !isEmpty(newKepcoId) ){
+					newUtilObj.kepco_id = newKepcoId;
+				}
+				if( !isEmpty(newISmartId) ){
+					newUtilObj.ismart_id = newISmartId;
+				}
+				if( !isEmpty(newISmartPwd) ){
+					newUtilObj.ismart_pass = newISmartPwd;
+				}
+				if( !isEmpty(newUtilObj) ){
+					siteEditObj.utility = JSON.stringify(newUserDesc);
+				}
+
+				// Power Market JSON
+				if( !isEmpty(newPowerModel) ){
+					newPowerMarketObj.price_type = newPowerModel;
+					if( !isEmpty(newPrice) ){
+						newPowerMarketObj.price = newPrice;
+					}
+				}
+				if( !isEmpty(newPowerMarketObj) ){
+					siteEditObj.power_market = JSON.stringify(newPowerMarketObj);
+				}
+
+				// DR JSON
+				if( !isEmpty(newDrVol) ){
+					newDrObj.contract_capacity = newDrVol;
+				}
+				if( !isEmpty(newCblMethod) ){
+					newDrObj.cbl_method = newCblMethod;
+				}
+				if( !isEmpty(newDrRevShare) ){
+					newDrObj.cbl_method = newDrRevShare;
+				}
+				if( !isEmpty(newDrObj) ){
+					siteEditObj.dr_info = JSON.stringify(newDrObj);
+				}
+
+				// VPP JSON
+
+				if( !isEmpty(newVppRevShare) ){
+					newVppObj.revenue_share = newVppRevShare;
+				}
+				if( !isEmpty(newVppObj) ){
+					siteEditObj.vpp_info = JSON.stringify(newVppObj);
 				}
 
 				option = {
-					url: apiHost + '/config/users/' + newUid,
+					url: apiHost + "/config/sites/" + sid,
 					type: 'patch',
-					beforeSend: function (jqXHR, settings) {
-						$("#loadingCircle").show();
-					},
 					async: true,
-					dataType: 'json',
-					contentType: "application/json",
-					data: JSON.stringify(userObj)
+					data: JSON.stringify(siteEditObj),
+					contentType: 'application/json; charset=UTF-8',
 				}
 
-				if( isEmpty($("#newUserPwd").val()) && isEmpty(userObj) ) {
-					// if no changes have been made
-					$("#resultFailureMsg").text("변경하실 정보를 입력해 주세요").removeClass("hidden");
+				$.ajax(option).done(function (json, textStatus, jqXHR) {
+					$("#addSiteModal").modal("hide");
+					$("#resultSuccessMsg").text("사이트 정보가 변경 되었습니다.").removeClass("hidden");
+					$("#resultBtn").parent().addClass("hidden");
+
 					$("#resultModal").modal("show");
+
 					setTimeout(function(){
-						$("#resultModal").modal("hide");
-					}, 5000);
+						$("#resultBtn").trigger("click");
+					}, 1600);
+				}).fail(function (jqXHR, textStatus, errorThrown) {
+					$("#resultFailureMsg").removeClass("hidden");
+					$("#resultBtn").parent().removeClass("hidden");
+					$("#resultModal").modal("show");
+					console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
 					return false;
-				} else {
-					// if pwd && other values are present
-					if( !isEmpty($("#newUserPwd").val()) && !isEmpty(userObj) ){
-						pwd = $("#newUserPwd").val();
-						optionPwd = {
-							url: apiHost + '/config/users/' + newUid + '/password2',
-							type: 'patch',
-							async: true,
-							data: JSON.stringify(pwd),
-							contentType: 'application/json; charset=UTF-8'
-						}
-						$.when($.ajax(optionPwd),$.ajax(option)).done(function (result1, result2) {
-							if(siteInfo.length<=0 && spcInfo<=0){
-								$("#resultSuccessMsg").text("사용자 정보가 성공적으로 변경 되었습니다.").removeClass("hidden");
-								$("#resultModal").modal("show");
-								setTimeout(function(){
-									$("#resultModal").modal("hide");
-								}, 1000);
-							}
-							if(siteInfo.length > 0) {
-								$.each(siteInfo, function(index, element){
-									siteObj.sid = $(element).data("sid");
-									siteObj.role = Number($(element).data("role"));
-									siteOption.data = JSON.stringify(siteObj);
-									makeAjaxCall(siteOption);
-								});
-							}
-							if(spcInfo.length > 0 ){
-								$.each(spcInfo, function(index, element){
-									let spcObj = {
-										spcid: $(element).data("value"),
-										role: Number($(element).data("role"))
-									};
-									spcOption.data = JSON.stringify(spcObj);
-									makeAjaxCall(spcOption);
-								});
-							}
-						}).fail(function (jqXHR, textStatus, errorThrown) {
-							console.log("result1===", jqXHR)
-							$("#resultFailureMsg").text("사용자 정보 변경에 실패하였습니다. 다시 시도해 주세요.").removeClass("hidden");
-							$("#resultModal").modal("show");
-							setTimeout(function(){
-								$("#resultModal").modal("hide");
-							}, 1000);
-							return false;
-						});
-					} else {
-						if( ! ( isEmpty($("#newUserPwd").val()) ) ){
-							console.log("pwd exist===", $("#newUserPwd").val() )
-							$.ajax(optionPwd).done(function (json, textStatus, jqXHR) {
-								$("#resultSuccessMsg").multiline("사용자 정보가\n성공적으로 변경 되었습니다.").removeClass("hidden");
-								$("#resultModal").modal("show");
-								setTimeout(function(){
-									$("#resultModal").modal("hide");
-								}, 1800);
-							}).fail(function (jqXHR, textStatus, errorThrown) {
-								let errorMsg = "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText +"\n" + "에러: " + errorThrown;
-								$("#resultFailureMsg").multiline(errorMsg).removeClass("hidden");
-								$("#resultModal").modal("show");
-								console.log('erro===', errorMsg)
-								setTimeout(function(){
-									$("#resultModal").modal("hide");
-								}, 1800);
-								return false;
-							});
-						}
-						if( !isEmpty(userObj) ){
-							console.log("pwd DOESNOT exist===", $("#newUserPwd").val() )
-							$.ajax(option).done(function (json, textStatus, jqXHR) {
-								$("#resultSuccessMsg").multiline("사용자 정보가\n성공적으로 변경 되었습니다.").removeClass("hidden");
-								$("#resultModal").modal("show");
-								setTimeout(function(){
-									$("#resultModal").modal("hide");
-								}, 1800);
-							}).fail(function (jqXHR, textStatus, errorThrown) {
-								let errorMsg = "에러코드:" + jqXHR.status + "\n" + "메세지: " + jqXHR.responseText +"\n" + "에러: " + errorThrown;
-								$("#resultFailureMsg").text(errorMsg).removeClass("hidden");
-								$("#resultModal").modal("show");
-								setTimeout(function(){
-									$("#resultModal").modal("hide");
-								}, 1800);
-								return false;
-							});
-						}
-					}
-				}
+				});
+
 			}
 		});
 
 
 		$("#updateSiteForm").on("change", function(e){
+			console.log("changing===")
 			if(!$("#addSiteModal").hasClass("edit")){
 				if(validateAddForm() == 1) {
 					$("#addUserBtn").prop("disabled", false).removeClass("disabled");
@@ -369,37 +494,12 @@
 
 		});
 
-		function validatePassword() {
-			const rules = [
-				{
-					Pattern: "[a-zA-Z]",
-					Target: "hasLet"
-				},
-				{
-					Pattern: "[0-9]",
-					Target: "hasNum"
-				},
-			];
-
-			let password = $(this).val();
-			password.length >= 6 ? $("#sixCharLong").addClass("checked") : $("#sixCharLong").removeClass("checked");
-
-			for (var i = 0; i < rules.length; i++) {
-				if( new RegExp(rules[i].Pattern).test(password) ) {
-					$("#" + rules[i].Target).addClass("checked")
-				} else {
-					$("#" + rules[i].Target).removeClass("checked")
-				}
-			}
-		}
-
-
 		function getSiteList(siteId) {
 			let option = {
 				url: apiHost + "/config/sites",
 				// url: apiHost + "/config/sites/" + sid,
 				type: "get",
-				async: false,
+				async: true,
 				data: {
 					oid: siteId,
 					filter: {
@@ -484,10 +584,10 @@
 						// 	obj.siteType = "Demand"
 						// }
 						if(x.resource_type === 0) {
-							obj.resType = "Demand"
+							obj.siteType = "Demand"
 							obj.powerSource = "ESS"
 						} else {
-							obj.resType = "Generation"
+							obj.siteType = "Generation"
 							if(x.resource_type === 1){
 								obj.powerSource = "태양광"
 							} else if(x.resource_type === 2){
@@ -533,7 +633,7 @@
 							},
 							{
 								"sTitle": "사업소 유형",
-								"mData": "resType",
+								"mData": "siteType",
 							},
 							{
 								"sTitle": "사업소명",
@@ -755,7 +855,7 @@
 					// siteTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup").addClass("hidden inline");
 
 
-					$("#siteTypeList").find("li").on( 'click', function(){
+					$("#siteType").find("li").on( 'click', function(){
 						if(!isEmpty($(this).data("name"))){
 							filterColumn("1", $(this).data("value"));
 						} else {
@@ -778,215 +878,211 @@
 
 				});
 			}).fail(function (jqXHR, textStatus, errorThrown) {
-
+				console.log("error====", jqXHR);
 				return false;
 			});
 		}
+		
+		function filterColumn ( id, idx, val ) {
+			$(id).DataTable().column(idx).search(val).draw();
+		}
+
+		function getUniqueListBy(arr, key) {
+			return [...new Map(arr.map(item => [item[key], item] )).values()]
+		}
 
 		function getAjaxList() {
-			const contractList = $("#contractTypeList");	
-			let arr = [
-				{
-					id: 1,
-					country: "KR",
-					utilityName: "KEPCO",
-					planName: "주택용(저압)",
-					voltageType: null
-				},
-				{
-					id: 2,
-					country: "KR",
-					utilityName: "KEPCO",
-					planName: "주택용(고압)",
-					voltageType: null
-				},
-				{
-					id: 3,
-					country: "KR",
-					utilityName: "KEPCO",
-					planName: "일반용(갑)I",
-					voltageType: [ "저압전력", "고압A:선택 I", "고압A:선택 II", "고압B:선택 I", "고압B:선택 II" ]
-				},
-				{
-					id: 4,
-					country: "KR",
-					utilityName: "KEPCO",
-					planName: "일반용(갑)II",
-					voltageType: [ "고압A:선택 I", "고압A:선택 II", "고압B:선택 I", "고압B:선택 II" ]
-				},
-				{
-					id: 5,
-					country: "KR",
-					utilityName: "KEPCO",
-					planName: "일반용(을)",
-					voltageType: [ "고압A:선택 I", "고압A:선택 II", "고압A:선택 III", "고압B:선택 I", "고압B:선택 II", "고압B:선택 III", "고압C:선택 I", "고압C:선택 II", "고압C:선택 III" ]
-				},
-				{
-					id: 6,
-					country: "KR",
-					utilityName: "KEPCO",
-					planName: "교육용(갑)",
-					voltageType: [ "저압전력", "고압A:선택 I", "고압A:선택 II", "고압B:선택 I", "고압B:선택 II" ]
-				},
-				{
-					id: 7,
-					country: "KR",
-					utilityName: "KEPCO",
-					planName: "교육용(을)",
-					voltageType: [ "고압A:선택 I", "고압A:선택 II", "고압B:선택 I", "고압B:선택 II" ]
-				},
-				{
-					id: 8,
-					country: "KR",
-					utilityName: "KEPCO",
-					planName: "산업용(갑)I",
-					voltageType: [ "저압전력", "고압A:선택 I", "고압A:선택 II", "고압B:선택 I", "고압B:선택 II" ]
-				},
-				{
-					id: 9,
-					country: "KR",
-					utilityName: "KEPCO",
-					planName: "산업용(갑)II",
-					voltageType: [ "고압A:선택 I", "고압A:선택 II", "고압B:선택 I", "고압B:선택 II" ]
-				},
-				{
-					id: 10,
-					country: "KR",
-					utilityName: "KEPCO",
-					planName: "산업용(을)",
-					voltageType: [ "고압A:선택 I", "고압A:선택 II", "고압A:선택 III", "고압B:선택 I", "고압B:선택 II", "고압B:선택 III", "고압C:선택 I", "고압C:선택 II", "고압C:선택 III" ]
-				},
-				{
-					id: 11,
-					country: "KR",
-					utilityName: "KEPCO",
-					planName: "임시(갑)",
-					voltageType: null
-				},
-				{
-					id: 12,
-					country: "KR",
-					utilityName: "KEPCO",
-					planName: "임시(을)",
-					voltageType: [ "저압전력", "고압A:선택 I", "고압A:선택 II", "고압B:선택 I", "고압B:선택 II" ]
-				},
-				{
-					id: 13,
-					country: "KR",
-					utilityName: "KEPCO",
-					planName: "가로등(을)",
-					voltageType: null
-				},
-				{
-					id: 14,
-					country: "KR",
-					utilityName: "KEPCO",
-					planName: "심야전력(갑)",
-					voltageType: null
-				},
-				{
-					id: 15,
-					country: "KR",
-					utilityName: "KEPCO",
-					planName: "농사용(갑)",
-					voltageType: [ "저압전력", "고압전력" ]
-				},
-				{
-					id: 16,
-					country: "KR",
-					utilityName: "KEPCO",
-					planName: "농사용(을)",
-					voltageType: [ "저압전력", "고압A", "고압B", "고압B" ]
-				},
-				{
-					id: 17,
-					country: "KR",
-					utilityName: "KEPCO",
-					planName: "심야전력(갑)",
-					voltageType: null
-				},
-				{
-					id: 18,
-					country: "KR",
-					utilityName: "KEPCO",
-					planName: "심야전력(을)I",
-					voltageType: null
-				},
-				{
-					id: 19,
-					country: "KR",
-					utilityName: "KEPCO",
-					planName: "심야전력(을)II",
-					voltageType: null
-				},
-				{
-					id: 20,
-					country: "KR",
-					utilityName: "KEPCO",
-					planName: "미정",
-					voltageType: null
-				}
-			];
-			let str = '';
+			let optionContract = {
+				url: apiHost + "/bills/plans?country=kr",
+				type: "get",
+				async: true
+			}
 
-			$.each(arr, function(index, element) {
-				str += `
-					<li data-id="${'${element.id}'}" data-vol-type="${'${element.voltageType}'}" data-value="${'${element.planName}'}"><a href="#">${'${element.planName}'}</a></li>
-				`
-			});
-			contractList.append(str);
+			$.ajax(optionContract).done(function (json, textStatus, jqXHR) {
+				const contractList = $("#newContractList");
+				const cArr = json.data.reduce((acc, val, index, array) => {
+					let key = val["planName"];
+					let vKey = val["voltageType"];
+					let planId = String(val["id"]);
+					let utilName = val["utilityName"];
 
-			contractList.find("li").on("click", function(){
-				let val = $(this).data("value");
-				let subOpt = $("#contractSubList");
-				let btn = subOpt.prev();
-
-				subOpt.empty().prev().data("value", "").html("선택<span class='caret'></span>");
-
-				if(!isEmpty($(this).data("vol-type"))){
-					let str = '';
-					let subValArr = [...$(this).data("vol-type").split(",")];
-					if(btn.hasClass("disabled")){
-						btn.removeClass("disabled")
+					if (!acc[key]) {
+						acc[key] = {};
+						acc[key].planId = '';
+						acc[key].voltRange = '';
+						acc[key].utilName = '';
+						// acc[key].dataArr = [];
 					}
-					$.each(subValArr, function(index, element){
-						str += '<li data-value="element"><a href="#">' + element + '</a></li>';
-					});
-					subOpt.append(str);
+					acc[key].planName = key;
+
+					if(!isEmpty(vKey)){
+						acc[key].voltRange += ( vKey + "," );
+					} else {
+						acc[key].voltRange = vKey
+					}
+
+					if(!isEmpty(planId)){
+						acc[key].planId += ( planId + "," );
+					} else {
+						acc[key].planId = planId
+					}
+
+					if(!isEmpty(utilName)){
+						acc[key].utilName += ( utilName + "," );
+					} else {
+						acc[key].utilName = utilName
+					}
+					return acc
+				}, {});
+
+				// let groupByVol = getUniqueListBy(json.data, "voltageType");
+
+				let cStr = '';
+				Object.entries(cArr).forEach((item, index, arr) => {
+				// Object.keys(cArr).forEach((item, index, arr) => {
+					let v = '';
+
+					// console.log("item---", item[1].dataArr.find(x => x.voltageType == ))
+					if(!isEmpty(item[1].voltRange)){
+						v = item[1].voltRange.replace(/,\s*$/, "")
+					} else {
+						v = item[1].voltRange
+					}
+					let id = item[1].planId.replace(/,\s*$/, "");
+					let util = item[1].utilName.replace(/,\s*$/, "");
+
+					cStr += `
+						<li data-util-name="${'${util}'}" data-plan-id="${'${id}'}" data-vol-type="${'${v}'}" data-value="${'${item[0]}'}"><a href="#">${'${item[0]}'}</a></li>
+					`
+				});
+				contractList.append(cStr);
+
+				contractList.find("li").on("click", function(){
+					let val = $(this).data("value");
+					let subOpt = $("#newVoltList");
+					let btn = subOpt.prev();
+
+					subOpt.empty().prev().data("value", "").html("선택<span class='caret'></span>");
+
+					if(!isEmpty($(this).data("vol-type"))){
+						let str = '';
+						let idArr = [...$(this).data("plan-id").split(",")];
+						let vArr = [...$(this).data("vol-type").split(",")];
+						let utilArr = [...$(this).data("util-name").split(",")];
+
+						if(btn.hasClass("disabled")){
+							btn.removeClass("disabled")
+						}
+						for(let i=0, length = vArr.length; i<length; i++){
+							str += `<li data-util-name="${'${utilArr[i]}'}" data-id="${'${idArr[i]}'}" data-value="${'${vArr[i]}'}"><a href="#">${'${vArr[i]}'}</a></li>`;
+						}
+						subOpt.append(str);
+					} else {
+						btn.html("<span class='caret'></span>")
+						if(!btn.hasClass("disabled")){
+							btn.addClass("disabled");
+						}
+					}
+				});
+
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				console.log("siteInfo/spcInfo Ajax Error:", jqXHR)
+			});
+
+
+			let selectOpt = {
+				url: apiHost + "/config/view/properties?types=site_type,resource",
+				// url: apiHost + "/config/view/properties?types=site_type,resource,location",
+				// url: apiHost + "/config/types=site_type,resource,location",
+				type: 'get',
+				async: true
+			}
+
+
+			$.ajax(selectOpt).done(function (json, textStatus, jqXHR) {
+
+				let r = json.resource;
+				let s = json.site_type;
+				let resStr = '';
+				let siteStr = '';
+				let allStr = '<li><a href="#">전체</a></li>'
+				$.each(r, function(index, el){
+					console.log("r===", el);
+					resStr += `
+						<li data-name-kr="${'${el.name.kr}'}" data-name-en="${'${el.name.en}'}" data-value="${'${el.code}'}"><a href="#">${'${el.name.kr}'}</a></li>
+					`
+				});
+				$("#resTypeList").append(resStr).prepend(allStr);
+
+				$("#resTypeList li").on("click", function(){
+					if(!isEmpty($(this).data("value"))){
+						filterColumn( "#siteTable", "4", $(this).data("name-kr"));
+					} else {
+						filterColumn("#siteTable", "4", "");
+					}
+				});
+
+				$.each(s, function(index, el){
+					console.log("el===", el);
+					// let siteStr = ``;
+					if(el.code == "demand"){
+						siteStr += `
+							<li data-name="Demand" data-value="2"><a href="#">수요(` + `${'${el.name.en}'}` + ` )</a></li>
+						`
+					} else if(el.code == "gen"){
+						siteStr += `
+							<li data-name="Generation" data-value="1" class="on"><a href="#">발전(` + `${'${el.name.en}'}` + ` )</a></li>
+						`
+					}
+				});
+				$("#siteType").append(siteStr).prepend(allStr);
+
+				$("#siteType li").on("click", function(){
+					if(!isEmpty($(this).data("value"))){
+						filterColumn( "#siteTable", "1", $(this).data("name"));
+					} else {
+						filterColumn("#siteTable", "1", "");
+					}
+				})
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				console.log("site_type Error:", jqXHR)
+			});
+
+			$("#countryList li").on("click", function(){
+				if(!isEmpty($(this).data("id"))){
+					filterColumn( "#siteTable", "3", $(this).data("id"));
 				} else {
-					btn.html("<span class='caret'></span>")
-					if(!btn.hasClass("disabled")){
-						btn.addClass("disabled");
-					}
+					filterColumn("#siteTable", "3", "");
 				}
-			});
+			})
+		}
 
-			let optionList = [
-				{
-					url: apiHost + "/config/dr-groups"+'?oid=' + oid,
-					type: 'get',
-					async: false,
-				},
-				{
-					url: apiHost + "/config/vpp-groups/"+'?oid=' + oid,
-					type: 'get',
-					async: false,
-				}
-			];
+		function getVppDrData() {
+			let drOption = {
+				url: apiHost + "/config/dr-groups?oid="+oid,
+				type: 'get',
+				async: true
+			};
 
-			$.when($.ajax(optionList[0]), $.ajax(optionList[1])).done(function (result1, result2) {
-				let drList = $("#drResList");
-				let vppResList = $("#vppResList");
-				// 	$("#drResList").empty();
-				// $("#vppResList").empty();
+			let vppOption = {
+				url: apiHost + "/config/vpp-groups?oid="+oid,
+				type:'get',
+				async: true
+			}
 
-				drList.empty();
-				vppResList.empty();
+			$.when($.ajax(drOption), $.ajax(vppOption)).done(function (result1, result2) {
+				let newDrResIdList = $("#newDrResIdList");
+				let newVppResIdList = $("#newVppResIdList");
+				// 	$("#newDrResIdList").empty();
+				// $("#newVppResIdList").empty();
+
+				newDrResIdList.empty();
+				newVppResIdList.empty();
 
 				if(!isEmpty(result1[0])) {
-					// console.log("1---", result1[0])
+					console.log("1---", result1[0])
 					let str = '';
-					$.each(result1[0], function(index, element) {	
+					$.each(result1[0], function(index, element) {
 						if(!isEmpty(element.resourceId)) {
 							str += '<li data-value="' + element.dgid + '"><a href="#" tabindex="-1">' + element.resourceId + '<span class="res-name">' + element.name +  '</a></span></li>'
 						} else {
@@ -994,15 +1090,16 @@
 						}
 					});
 
-					drList.append(str);
-					// $("#drResList").append(str);
+					newDrResIdList.append(str);
+					$("#newDrResIdList").append(str);
 				} else {
-					drList.prev().html("등록된 자원 ID가 없습니다.<span class='caret'></span>").addClass("disabled");
-					// console.log("array empty")
+					newDrResIdList.prev().html("등록된 자원 ID가 없습니다.<span class='caret'></span>").addClass("disabled");
+					// console.log("1 array empty")
 				}
 
+
 				if(!isEmpty(result2[0])) {
-					// console.log("1---", result2[0])
+					console.log("1---", result1[1])
 					let str = '';
 					$.each(result2[0], function(index, element) {
 						// console.log("2---", element)
@@ -1013,13 +1110,16 @@
 						}
 					});
 
-					vppResList.append(str);
-					// $("#vppResList").append(str);
+					newVppResIdList.append(str);
+					$("#newVppResIdList").append(str);
 				} else {
-					vppResList.prev().html("등록 ID가 없습니다.<span class='caret'></span>").addClass("disabled");
-					// console.log("array empty")
+					newVppResIdList.prev().html("등록 ID가 없습니다.<span class='caret'></span>").addClass("disabled");
+					// console.log("2 array empty")
 				}
 			});
+		
+			let dropdown = $("#addSiteModal").find(".dropdown-toggle");
+			setDropdownValue(dropdown);
 		}
 
 		function selectRow(dataTable) {
@@ -1032,6 +1132,7 @@
 		}
 
 		function makeAjaxCall(option, callback){
+			console.log("option--", option)
 			return $.ajax(option).done(function (json, textStatus, jqXHR) {
 				console.log("makeAjaxCall json--", json)
 			}).fail(function (jqXHR, textStatus, errorThrown) {
@@ -1041,21 +1142,15 @@
 		}
 
 		function validateAddForm(){
-			if( ( $("#validId:not('.hidden')").length >= 0 ) && ( $("#updateSiteForm .tick:not('.checked')").index() == -1 ) && ( $(".warning:not(.hidden)").index() == -1 ) && ( !isEmpty($("#newFullName").val() ) ) && ( !isEmpty($("#siteTypeList").prev().data("value")) )){
+			if( ($("#validSite:not('.hidden')").length > 0 ) && ($(".warning:not('.hidden')").index() == -1) && (!isEmpty($("#newCityList").prev().data("value"))) && (!isEmpty($("#newResList").prev().data("value"))) ){
 				return 1;
 			}
 		}
 
 		function validateEditForm(){
-			if(!isEmpty($("#newUserPwd").val())) {
-				console.log("newUserPwd NOT empty===" )
-				if( ($("#updateSiteForm .tick:not('.checked')").index() == -1) && ($(".warning:not(.hidden)").index() == -1) ) {
-					return 1;
-				}
-			} else {
-				if( $(".warning:not(.hidden)").index() == -1 ) {
-					return 1;
-				}
+			console.log("validate---")
+			if( ( $(".warning:not('.hidden')").index() == -1 ) && $("#validSite:not('.hidden')").length > 0 ) {
+				return 1;
 			}
 		}
 
@@ -1079,14 +1174,12 @@
 		let form = $("#updateSiteForm");
 		let input = form.find("input");
 		let dropdown = form.find(".dropdown-toggle");
-		let tick = form.find(".tick");
 		let warning = form.find(".warning");
 
-		$("#validId").addClass("hidden");
+		$("#validSite").addClass("hidden");
 		$("#addSiteBtn").prop("disabled", true).addClass("disabled");
 
 		warning.addClass("hidden")
-		tick.removeClass("checked");
 		input.val("");
 
 		$.each(dropdown, function(index, element){
@@ -1100,36 +1193,52 @@
 		let titleAdd = $('#titleAdd');
 		let newSiteName = $('#newSiteName');
 		let required = $("#updateSiteForm").find(".asterisk");
+		let addBtn = $("#addSiteBtn");
 
-		if(option == "all"){
+		// ADD !!!
+		if(option == "add"){
 			if(newSiteName.parent().next().hasClass("hidden")) {
 				newSiteName.parent().next().removeClass("hidden");
 				newSiteName.parent().addClass("offset-width").removeClass("w-100");
 			}
 			titleAdd.removeClass("hidden").next().addClass("hidden");
 			required.hasClass("no-symbol") ? required.removeClass("no-symbol") : null;
+			addBtn.text("등록");
 			$('#newSiteName').prop('disabled', false);
 			$("#addSiteModal").removeClass("edit").modal("show");
 		} else {
-			var tr = $("#siteTable").find("tbody tr.selected");
+			let tr = $("#siteTable").find("tbody tr.selected");
 			let td = tr.find("td");
+			let sid = tr.data("sid");
+			$("#validSite").is(".hidden") ? null : $("#validSite").addClass("hidden");
+
+			// console.log("selected===", tr.data())
+
+			// EDIT !!!
 			if(option == "edit") {
-				$("#addSiteBtn").prop("disabled", false).removeClass("disabled");
+				let optSite = {
+					url: apiHost + "/config/sites/" + sid,
+					type: "patch",
+					async: true,
+					contentType: 'application/json; charset=UTF-8',
+				}
+
+				addBtn.prop("disabled", false).removeClass("disabled").text("수정");
+				
 				titleAdd.addClass("hidden").next().removeClass("hidden");
 				required.hasClass("no-symbol") ? null : required.addClass("no-symbol");
+
 				if(!newSiteName.parent().next().hasClass("hidden")) {
 					newSiteName.parent().next().addClass("hidden");
 					newSiteName.parent().removeClass("offset-width").addClass("w-100");
 				}
 				newSiteName.val(td.eq(2).text()).prop('disabled', true).addClass("disabled");
 
-				$('#newSiteTypeList').prev().data({"name": td.eq(1).text(), "value" : td.eq(1).data("value") }).html(td.eq(1).text() + "<span class='caret'></span>");
+				$('#newSiteType').prev().data({"name": td.eq(1).text(), "value" : td.eq(1).data("value") }).html(td.eq(1).text() + "<span class='caret'></span>");
 
-				$("#newResourceList").prev().data({"name": td.eq(4).text(), "value" : td.eq(4).data("value") }).html(td.eq(4).text() + "<span class='caret'></span>");
+				$("#newResList").prev().data({"name": td.eq(4).text(), "value" : td.eq(4).data("value") }).html(td.eq(4).text() + "<span class='caret'></span>");
 
-				if(!isEmpty(td.eq(4))){
-					$('#newMobileNum').val(td.eq(4).text())
-				}
+
 				if(!isEmpty(td.eq(5))){
 					$('#newEmailAddr').val(td.eq(5).text())
 				}
@@ -1137,49 +1246,47 @@
 					$('#newAffiliation').val(td.eq(6).text())
 				}
 				if(!isEmpty(td.eq(8))){
-					$('#newTaskList').prev().data("value", td.eq(8).text()).html(td.eq(8).text(), '<span class="caret">');
+					$('#newInspection').prev().data("value", td.eq(8).text()).html(td.eq(8).text(), '<span class="caret">');
 				}
 				if(!isEmpty(td.eq(9))){
-					$('#contractTypeList').prev().data("value", td.eq(9).text()).html(td.eq(9).text(), '<span class="caret">');
+					$('#newContractList').prev().data("value", td.eq(9).text()).html(td.eq(9).text(), '<span class="caret">');
 				}
 				$("#addSiteModal").addClass("edit").modal("show");
 			}
+			// DELETE MODAL!!!
 			if(option == "delete") {
-				let td = $("#siteTable").find("tbody tr.selected td");
-				let id = td.eq(0).find("input").data("id");
-				let userId = $("#siteTable").find("tbody tr.selected td:nth-of-type(3)").text();
-				$("#deleteSuccessMsg span").text(userId);
+				let siteName = td.eq(2).text();
+				$("#deleteSuccessMsg span").text(siteName);
 				$("#deleteConfirmModal").modal("show");
 
-				$("#confirmUserId").on('input', function() {
+				$("#confirmSite").on('input', function() {
 					$(this).val($(this).val().replace(/\s/g, ''));
 				});
 
-				$("#confirmUserId").on("keyup", function() {
-					if($(this).val() != userId) {
+				$("#confirmSite").on("keyup", function() {
+					if($(this).val() != siteName) {
 						return false
 					} else {
 						$("#warningConfirmBtn").prop("disabled", false).removeClass("disabled");
 						$("#warningConfirmBtn").on("click", function(){
 							let optDelete = {
-								url: apiHost + "/config/users/" + id,
-								type: 'delete',
+								url: apiHost + "/config/users/" + sid,
+								type: "delete",
 								async: true,
-								beforeSend: function (jqXHR, settings) {
-
-								},
 							}
 
 							$.ajax(optDelete).done(function (json, textStatus, jqXHR) {
 								var newTable = $('#siteTable').DataTable();
-
-								$("#deleteSuccessMsg").text("사용자가 삭제 되었습니다.").removeClass("hidden");
-								newTable.rows(tr).remove().draw(false);
+								$("#deleteSuccessMsg").text("사이트가 삭제 되었습니다.").removeClass("hidden");
 								setTimeout(function(){
-									$("#deleteConfirmModal").modal("hide");
+									document.location.reload();
 								}, 1200);
 
 							}).fail(function (jqXHR, textStatus, errorThrown) {
+								$("#deleteSuccessMsg").text("사이트 삭제에 실패하였습니다.\n다시 시도해 주세요.").removeClass("hidden");
+								setTimeout(function(){
+									document.location.reload();
+								}, 1200);
 								console.log("fail==", jqXHR)
 							});
 						});
@@ -1193,8 +1300,18 @@
 
 	}
 
+	function addAlarm(option){
+		$("#addAlarmModal").modal("show");
+	}
+
+	function addAlarmRow(){
+		let table = $("#alarmTable");
+		let row =	table.find("tbody tr:first-of-type");
+		table.append(row);
+	}
+
 	function showPwd(self) {
-		var x = document.getElementById("newSmartPwd");
+		var x = document.getElementById("newISmartPwd");
 		if (x.type === "password") {
 			x.type = "text";
 			self.classList.add("close");
@@ -1213,15 +1330,14 @@
 		let siteList = '${siteList}';
 		siteList = JSON.parse(siteList);
 
-		console.log("id===", id );
-
 		if(!isEmpty(siteList)) {
+			// console.log("siteList==", siteList)
 			if(siteList.some(x => x.name == id)){
 				$("#invalidSite").removeClass("hidden");
-				console.log("match==")
+				// console.log("match==")
 			} else {
 				$("#validSite").removeClass("hidden");
-				console.log("no match==")
+				// console.log("no match==")
 			}
 		} else {
 			$("#validSite").removeClass("hidden");
@@ -1247,50 +1363,21 @@
 			<div class="dropdown">
 				<button type="button" class="dropdown-toggle"
 					data-toggle="dropdown">전체<span class="caret"></span></button>
-					<ul id="siteTypeList" class="dropdown-menu">
-						<li data-name="Demand" data-value="0"><a href="#">수요(Demand)</a></li>
-						<li data-name="Generation" data-value="1"><a href="#">발전(Generation)</a></li>
-					</ul>
+					<ul id="siteType" class="dropdown-menu"></ul>
 			</div>
-
-			<%--
-			<div class="dropdown">
-				<button type="button" class="dropdown-toggle"
-					data-toggle="dropdown">선택<span class="caret"></span></button>
-				<ul class="dropdown-menu chk_type" role="menu" id="siteList">
-					<li>
-						<a href="#" tabindex="-1">
-							<input type="checkbox" name="allSites" id="allSites" value="all">
-							<label for="allSites">전체</label>
-						</a>
-					</li>
-					<c:if test="${fn:length(siteList) > 0}">
-						<c:forEach var="site" items="${siteList}">
-							<li>
-								<a href="#" tabindex="-1">
-									<input type="checkbox" name="${site.name}" id="${site.sid}" value="${site.index}">
-									<label for="${site.sid}">${site.name}</label>
-								</a>
-							</li>
-						</c:forEach>
-					</c:if>
-				</ul>
-			</div>
-			--%>
 		</div>
 		<div class="flex_group">
 			<span class="inline-title">지역</span>
 			<div class="dropdown">
 				<button type="button" class="dropdown-toggle" data-toggle="dropdown">선택<span class="caret"></span></button>
-				<ul class="dropdown-menu chk_type" role="menu">
+				<ul id="countryList" class="dropdown-menu chk_type" role="menu">
 					<li><a href="#">전체</a></li>
-					<c:set var="systemLoc" value="${sessionScope.systemLoc}"/>
 					<c:forEach var="country" items="${location}">
-						<c:if test="${fn:length(systemLoc) > 0} && ${country.value.code eq 'kr'}">
+						<c:if test="${country.value.code eq 'kr'}">
 							<c:forEach var="city" items="${country.value.locations}" varStatus="cityName">
-								<li>
+								<li data-id="${city.value.code}" data-value="${city.value.name.kr}">
 									<a href="#" tabindex="-1">
-										<input type="checkbox" name="" id="${city.value.code}" value="${city.value.name.kr}">
+										<input type="checkbox" name="${city.value.name.en}" id="${city.value.code}" value="${city.value.name.kr}">
 										<label for="${city.value.code}" class="on"><c:out value="${city.value.name.kr}"></c:out></label>
 									</a>
 								</li>
@@ -1305,12 +1392,7 @@
 			<div class="dropdown">
 				<button type="button" class="dropdown-toggle"
 					data-toggle="dropdown">선택<span class="caret"></span></button>
-				<ul class="dropdown-menu">
-					<li data-value="solar" class="on"><a href="#">태양광</a></li>
-					<li data-value="wind"><a href="#">풍력</a></li>
-					<li data-value="wind"><a href="#">소수력</a></li>
-					<li data-value="wind"><a href="#">부하</a></li>
-				</ul>
+				<ul id="resTypeList" class="dropdown-menu"></ul>
 			</div>
 		</div>
 		<div class="flex_group">
@@ -1343,7 +1425,7 @@
 				</div>
 				<span class="tx_tit pl-16">개 씩 보기&ensp;</span>
 			</div>
-			<button type="button" class="btn_type fr mb-20" onclick="updateModal('all')">추가</button>
+			<button type="button" class="btn_type fr mb-20" onclick="updateModal('add')">추가</button>
 			
 			<table id="siteTable">
 				<colgroup>
@@ -1367,6 +1449,7 @@
 	</div>
 </div>
 
+
 <div class="modal fade stack" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-sm">
 		<div class="modal-content">
@@ -1374,9 +1457,13 @@
 				<h4 id="resultSuccessMsg" class="text-blue hidden">사용자가 성공적으로<br>추가 되었습니다.</h4>
 				<h4 id="resultFailureMsg" class="warning-text hidden">사업소 추가에 실패하였습니다.<br>다시 시도해 주세요.</h4>
 			</div>
+			<div class="btn_wrap_type05"><!--
+			--><button type="button" id="resultBtn" class="btn_type03" data-dismiss="modal" onclick="$('#addSiteModal').modal('hide')" aria-label="Close">확인</button><!--
+		--></div>
 		</div>
 	</div>
 </div>
+
 
 <div class="modal fade stack" id="deleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="resultModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-sm">
@@ -1385,7 +1472,7 @@
 				<h5 id="deleteSuccessMsg" class="ntit">사이트 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>
 			</div>
 			<div class="modal-body">
-			<div class="tx_inp_type"><input type="text" id="confirmUserId" name="confirm_user_id" placeholder="사용자 아이디 입력"/></div>
+				<div class="tx_inp_type"><input type="text" name="confirm_site" id="confirmSite" placeholder="사이트 이름 입력"/></div>
 			</div>
 			<div class="btn_wrap_type05"><!--
 				--><button type="button" class="btn_type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
@@ -1396,12 +1483,54 @@
 </div>
 
 
+<div class="modal fade" id="addAlarmModal" tabindex="-1" role="dialog" aria-labelledby="addAlarmModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog modal-md">
+		<div class="modal-content site-modal-content">
+			<div class="modal-header flex_start"><h1>알람 추가</h1></div>
+			<div class="modal-body mt10">
+				<div class="container-fluid">
+					<table id="alarmTable" class="w-100">
+						<!-- <colgroup>
+							<col style="width:6%">
+							<col style="width:14%">
+							<col style="width:14%">
+							<col style="width:14%">
+							<col style="width:14%">
+							<col style="width:14%">
+							<col style="width:12%">
+							<col style="width:12%">
+						</colgroup> -->
+						<!-- <thead>
+							<tr>
+								<td>순번</td>
+								<td>설비타입</td>
+								<td>설비명</td>
+								<td>알람레벨</td>
+								<td>담당자</td>
+								<td></td>
+								<td></td>
+							</tr>
+						</thead> -->
+						<tbody></tbody>
+					</table>
+				</div>
+			</div>
+			<div class="btn_wrap_type05"><!--
+			--><button type="button" class="btn_type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
+			--><button type="submit" id="warningConfirmBtn" class="btn_type w80 ml-12 disabled" disabled>확인</button><!--
+		--></div>
+		</div>
+	</div>
+</div>
+
+
+
 <div class="modal fade" id="addSiteModal" tabindex="-1" role="dialog" aria-labelledby="addSiteModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-xl">
 		<div class="modal-content site-modal-content">
 			<div id="titleAdd" class="modal-header mb-10"><h1>사업소 추가<span class="required px-4 fr">필수 입력 항목</span></h1></div>
 			<div id="titleEdit" class="modal-header"><h1>사업소 정보 수정</h1></div>
-			<!-- <div class="modal-body"> -->
+			<div class="modal-body">
 				<div class="container-fluid">
 					<form id="updateSiteForm" name="add_user_form">
 						<section id="sectionSiteInfo">
@@ -1421,11 +1550,11 @@
 									<small id="validSite" class="text-blue text-sm hidden">추가 가능한 사이트 입니다.</small>
 								</div>
 
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label asterisk">사업소 유형</span></div>
+								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">사업소 유형</span></div>
 								<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
 									<div class="dropdown">
 										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-										<ul id="newSiteTypeList" class="dropdown-menu">
+										<ul id="newSiteType" class="dropdown-menu">
 											<li data-value="0" data-name="Demand"><a href="#">수요(Demand)</a></li>
 											<li data-value="1" data-name="Generation"><a href="#">발전(Generation)</a></li>
 										</ul>
@@ -1437,7 +1566,7 @@
 								<div class="col-xl-2 col-lg-6 col-md-4 col-sm-10 pl-0">
 									<div class="dropdown">
 										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-										<ul id="newResourceList" class="dropdown-menu">
+										<ul id="newResList" class="dropdown-menu">
 											<li data-value="0" data-name="ESS"><a href="#">ESS</a></li>
 											<li data-value="1" data-name="태양광"><a href="#">태양광</a></li>
 											<li data-value="2" data-name="풍력"><a href="#">풍력</a></li>
@@ -1450,7 +1579,7 @@
 								<div class="col-xl-1 col-lg-2 col-md-4 col-sm-10 pl-0">
 									<div class="dropdown">
 										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-										<ul id="" class="dropdown-menu">
+										<ul id="newEssList" class="dropdown-menu">
 											<li data-value="1"><a href="#">유</a></li>
 											<li data-value="0"><a href="#">무</a></li>
 										</ul>
@@ -1462,25 +1591,35 @@
 								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label asterisk">사업소재지</span></div>
 								<div class="col-xl-6 col-lg-6 col-md-4 col-sm-10 pl-0">
 									<div class="flex_start">
-										<div class="dropdown w-42">
+										<div class="dropdown w-55">
 											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-											<ul id="" class="dropdown-menu"></ul>
+											<ul id="newCityList" class="dropdown-menu">
+												<c:forEach var="country" items="${location}">
+													<c:if test="${country.value.code eq 'kr'}">
+														<c:forEach var="city" items="${country.value.locations}" varStatus="cityName">
+															<li data-id="${city.value.code}" data-value="${city.value.name.kr}">
+																<a href="#" tabindex="-1"><c:out value="${city.value.name.kr}"></c:out></a>
+															</li>
+														</c:forEach>
+													</c:if>
+												</c:forEach>
+											</ul>
 										</div>
-										<div class="tx_inp_type w-54"><input type="text" name="new_full_name" id="" placeholder="입력" minlength="3" maxlength="28"></div>
+										<div class="tx_inp_type w-55"><input type="text" name="new_street_addr" id="newStreetAddr" placeholder="입력" minlength="3" maxlength="28"></div>
 									</div>
 									<small class="hidden warning">사업소재지를 선택해 주세요</small>
 								</div>
 
 								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">위경도</span></div>
-								<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
-									<div class="tx_inp_type"><input type="text" id="" name="new_full_name" placeholder="입력" minlength="3" maxlength="28"></div>
+								<div class="col-xl-4 col-lg-2 col-md-4 col-sm-10 pl-0">
+									<div class="tx_inp_type"><input type="text" name="new_coord" id="newCoord" placeholder="예) 35.9078, 127.7669" minlength="3" maxlength="28"></div>
 								</div>
 							</div>
 
 							<div class="row">
 								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">추가 정보</span></div>
 								<div class="col-xl-6 col-lg-6 col-md-10 col-sm-10 pl-0">
-									<textarea name="new_site_desc" id="newSiteDesc" class="textarea" placeholder="입력"></textarea>
+									<textarea name="new_site_desc" id="newSiteDetail" class="textarea" placeholder="입력"></textarea>
 								</div>
 							</div>
 						</section>
@@ -1491,38 +1630,38 @@
 								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">계약종 별</span></div>
 								<div class="col-xl-3 col-lg-6 col-md-4 col-sm-10 pl-0">
 									<div class="flex_start">
-										<div class="dropdown w-42">
+										<div class="dropdown">
 											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-											<ul id="contractTypeList" class="dropdown-menu"></ul>
+											<ul id="newContractList" class="dropdown-menu"></ul>
 										</div>
-										<div class="dropdown w-54">
+										<div class="dropdown w-100">
 											<button type="button" class="dropdown-toggle disabled" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-											<ul id="contractSubList" class="dropdown-menu"></ul>
+											<ul id="newVoltList" class="dropdown-menu"></ul>
 										</div>
 									</div>
 								</div>
 								
 								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">계약 전력</span></div>
 								<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
-									<div class="tx_inp_type"><input type="text" name="new_power_rate" id="newPowerRate" class="pr-36" placeholder="입력" minlength="3" maxlength="28"><span class="unit">kW</span></div>
+									<div class="tx_inp_type"><input type="text" name="new_peak_demand" id="newPeakDemand" class="pr-36" placeholder="입력" minlength="3" maxlength="28"><span class="unit">kW</span></div>
 								</div>
 
 								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label offset-top">요금 적용<br>전력</span></div>
 								<div class="col-xl-2 col-lg-6 col-md-4 col-sm-10 pl-0">
-									<div class="tx_inp_type"><input type="text" name="" id="" class="pr-36" placeholder="입력" minlength="3" maxlength="28"><span class="unit">kW</span></div>
+									<div class="tx_inp_type"><input type="text" name="new_dr_charge" id="newDrCharge" class="pr-36" placeholder="입력" minlength="3" maxlength="28"><span class="unit">kW</span></div>
 								</div>
 
 								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">검침일</span></div>
 								<div class="col-xl-1 col-lg-2 col-md-4 col-sm-10 pl-0">
 									<div class="dropdown">
 										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-										<ul id="newTaskList" class="dropdown-menu">
+										<ul id="newInspection" class="dropdown-menu">
 											<li data-value="1"><a href="#">1일</a></li>
 											<li data-value="5"><a href="#">5일</a></li>
 											<li data-value="10"><a href="#">10 일</a></li>
 											<li data-value="15"><a href="#">15일</a></li>
 											<li data-value="20"><a href="#">20일</a></li>
-											<li data-value="end"><a href="#">말일</a></li>
+											<li data-value="0"><a href="#">말일</a></li>
 										</ul>
 									</div>
 								</div>
@@ -1531,30 +1670,25 @@
 							<div class="row">
 								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label offset-top">한전<br>고객번호</span></div>
 								<div class="col-xl-3 col-lg-3 col-md-4 col-sm-10 pl-0">
-									<div class="tx_inp_type"><input type="text" id="newCustomerNum" name="new_customer_num" placeholder="입력" minlength="3" maxlength="28"></div>
+									<div class="tx_inp_type"><input type="text" name="new_kepco_id" id="newKepcoId" placeholder="입력" minlength="3" maxlength="28"></div>
 								</div>
 
 								<div class="col-xl-1 col-lg-1 col-md-2 col-sm-2"><span class="input_label offset-top">iSMART<br>아이디</span></div>
 								<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
-									<div class="tx_inp_type"><input type="text" id="newSmartId" name="new_smart_id" placeholder="입력" minlength="3" maxlength="28"></div>
+									<div class="tx_inp_type"><input type="text" name="new_smart_id" id="newISmartId" placeholder="입력" minlength="3" maxlength="28"></div>
 								</div>
 
 								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label offset-top">iSMART<br>비밀번호</span></div>
 								<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
 									<div class="tx_inp_type"><!--
-									--><input type="password" id="newSmartPwd" name="new_smart_pwd" placeholder="입력" minlength="3" maxlength="28"><!--
+									--><input type="password" name="new_smart_pwd" id="newISmartPwd" placeholder="입력" minlength="3" maxlength="28"><!--
 									--><button type="button" class="pwd-icon" onclick="showPwd(this)">show</button><!--
 								--></div>
-									<div class="flex_start warning-wrapper">
-										<small id="hasLet" class="tick">영문</small>
-										<small id="hasNum" class="tick">숫자</small>
-										<small id="sixCharLong" class="tick">6자리 이상</small>
-									</div>
 								</div>
 							</div>
 						</section>
 
-						<section id="sectionTariffInfo">
+						<section id="sectionPowerMarketInfo">
 							<h2 class="stit">매전 정보</h2>
 							<div class="row">
 								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">정상 단가</span></div>
@@ -1562,13 +1696,13 @@
 									<div class="flex_start">
 										<div class="dropdown">
 											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-											<ul id="tariffList" class="dropdown-menu">
-												<li data-value="fixed"><a href="#">고정가</a></li>
-												<li data-value="SMP_mean"><a href="#">SMP평균</a></li>
-												<li data-value="SMP"><a href="#">SMP</a></li>
+											<ul id="newPriceModelList" class="dropdown-menu">
+												<li data-name="고정가" data-value="fixed"><a href="#">고정가</a></li>
+												<li data-name="SMP평균" data-value="SMP_mean"><a href="#">SMP평균</a></li>
+												<li data-name="SMP" data-value="SMP"><a href="#">SMP</a></li>
 											</ul>
 										</div>
-										<div class="tx_inp_type"><input type="text" id="tariffCharge" name="tariff_charge" placeholder="입력" maxlength="8"></div>
+										<div class="tx_inp_type hidden"><input type="text" name="Price" id="newPrice" placeholder="입력" maxlength="8"></div>
 									</div>
 								</div>
 							</div>
@@ -1581,7 +1715,7 @@
 								<div class="col-xl-3 col-lg-3 col-md-4 col-sm-10 pl-0">
 									<div class="dropdown offset-width">
 										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-										<ul id="drResList" class="dropdown-menu"></ul>
+										<ul id="newDrResIdList" class="dropdown-menu"></ul>
 									</div>
 								</div>
 
@@ -1605,7 +1739,7 @@
 
 								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">수익 분배율</span></div>
 								<div class="col-xl-1 col-lg-3 col-md-4 col-sm-10 pl-0">
-									<div class="tx_inp_type"><input type="text" name="dr_rev_share" id="drRevShare" class="pr-36" placeholder="입력" maxlength="3"><span class="unit">%</span></div>
+									<div class="tx_inp_type"><input type="text" name="dr_rev_share" id="newDrRevShare" class="pr-36" placeholder="입력" maxlength="3"><span class="unit">%</span></div>
 								</div>
 							</div>
 						</section>
@@ -1617,14 +1751,14 @@
 								<div class="col-xl-3 col-lg-3 col-sm-4 pl-0">
 									<div class="dropdown">
 										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-										<ul id="vppResList" class="dropdown-menu"></ul>
+										<ul id="newVppResIdList" class="dropdown-menu"></ul>
 									</div>
 								</div>
 
 								<div class="col-xl-1 col-lg-2 col-sm-2"><span class="input_label">수익 분배율</span></div>
 								<div class="col-xl-2 col-lg-2 col-sm-4 pl-0">
 									<div class="tx_inp_type">
-										<input type="text" name="vpp_rev_share" id="vppRevShare" class="pr-36" placeholder="입력" maxlength="3"><span class="unit">%</span>
+										<input type="text" name="vpp_rev_share" id="newVppRevShare" class="pr-36" placeholder="입력" maxlength="3"><span class="unit">%</span>
 									</div>
 								</div>
 							</div>
@@ -1644,3 +1778,6 @@
 		</div>
 	</div>
 </div>
+
+
+
