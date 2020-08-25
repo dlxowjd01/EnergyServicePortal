@@ -1904,7 +1904,7 @@
 							<th><label for="인증서_비밀번호[index]">인증서 비밀번호</label></th>
 							<td class="addList_certificate_registration2 entity">
 								<div class="group_type flex_start">
-									<div class="tx_inp_type edit">
+									<div class="tx_inp_type edit w300">
 										<input type="text" id="인증서_비밀번호[index]" name="인증서_비밀번호[index]" placeholder="비밀번호를 입력해 주세요.">
 									</div>
 									<div class="fr fixed_height mt5 mr-12">
