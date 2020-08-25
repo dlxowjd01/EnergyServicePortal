@@ -1947,28 +1947,28 @@
 										<input type="text" id="관리_운영비" class="right" name="관리_운영비" placeholder="">
 										<span>원</span>
 									</div>
-									<span class="fixed_height"><span class="auto_price"></span>원/MW</span>
+									<span class="fixed_height"><span class="auto_price mr-6"></span>원/MW</span>
 								</div>
 								<div class="flex_start">
 									<div class="tx_inp_type edit unit t1 mr-30">
 										<input type="text" id="대수선비" class="right" name="대수선비" placeholder="">
 										<span>원</span>
 									</div>
-									<span class="fixed_height"><span class="auto_price"></span>원/MW</span>
+									<span class="fixed_height"><span class="auto_price mr-6"></span>원/MW</span>
 								</div>
 								<div class="flex_start">
 									<div class="tx_inp_type edit unit t1 mr-30">
 										<input type="text" id="사무_수탁비" class="right" name="사무_수탁비" placeholder="">
 										<span>원</span>
 									</div>
-									<span class="fixed_height"><span class="auto_price"></span>원/MW</span>
+									<span class="fixed_height"><span class="auto_price mr-6"></span>원/MW</span>
 								</div>
 								<div class="flex_start">
 									<div class="tx_inp_type edit unit t1 mr-30">
 										<input type="text" id="임대료" class="right" name="임대료" placeholder="">
 										<span>원</span>
 									</div>
-									<span class="fixed_height"><span class="auto_price"></span>원/MW</span>
+									<span class="fixed_height"><span class="auto_price mr-6"></span>원/MW</span>
 								</div>
 								<div class="group_type">
 									<div class="dropdown placeholder edit" id="SMP">

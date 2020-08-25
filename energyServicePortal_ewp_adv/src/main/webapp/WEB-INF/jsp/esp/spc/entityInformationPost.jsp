@@ -825,7 +825,7 @@
 							<th>SPC명</th>
 							<td class="group_type">
 								<div class="dropdown placeholder edit" id="spcId">
-									<button type="button" class="dropdown-toggle w-100" data-toggle="dropdown">
+									<button type="button" class="dropdown-toggle" data-toggle="dropdown">
 										SPC<span class="caret"></span>
 									</button>
 									<ul id="spcList" class="dropdown-menu" role="menu">
@@ -862,7 +862,7 @@
 							<th>주소</th>
 							<td class="group_type">
 								<div class="dropdown placeholder edit" id="spcCountry">
-									<button type="button" class="dropdown-toggle underline w-100" data-toggle="dropdown">
+									<button type="button" class="dropdown-toggle" data-toggle="dropdown">
 										국가 선택<span class="caret"></span>
 									</button>
 									<ul id="spcCountryList" class="dropdown-menu" role="menu">
@@ -872,7 +872,7 @@
 									</ul>
 								</div>
 								<div class="dropdown placeholder edit mr-12" id="spcSido">
-									<button type="button" class="dropdown-toggle underline w-100" data-toggle="dropdown">
+									<button type="button" class="dropdown-toggle" data-toggle="dropdown">
 										시/도 선택<span class="caret"></span>
 									</button>
 									<ul id="spcSidoList" class="dropdown-menu" role="menu">
@@ -1719,28 +1719,28 @@
 										<input type="text" id="관리_운영비" class="right" name="관리_운영비" placeholder="">
 										<span>원</span>
 									</div>
-									<span class="fixed_height"><span class="auto_price"></span>원/MW</span>
+									<span class="fixed_height"><span class="auto_price mr-6"></span>원/MW</span>
 								</div>
 								<div class="flex_start">
 									<div class="tx_inp_type edit unit t1 mr-30">
 										<input type="text" id="대수선비" class="right" name="대수선비" placeholder="">
 										<span>원</span>
 									</div>
-									<span class="fixed_height"><span class="auto_price"></span>원/MW</span>
+									<span class="fixed_height"><span class="auto_price mr-6"></span>원/MW</span>
 								</div>
 								<div class="flex_start">
 									<div class="tx_inp_type edit unit t1 mr-30">
 										<input type="text" id="사무_수탁비" class="right" name="사무_수탁비" placeholder="">
 										<span>원</span>
 									</div>
-									<span class="fixed_height"><span class="auto_price"></span>원/MW</span>
+									<span class="fixed_height"><span class="auto_price mr-6"></span>원/MW</span>
 								</div>
 								<div class="flex_start">
 									<div class="tx_inp_type edit unit t1 mr-30">
 										<input type="text" id="임대료" class="right" name="임대료" placeholder="">
 										<span>원</span>
 									</div>
-									<span class="fixed_height"><span class="auto_price"></span>원/MW</span>
+									<span class="fixed_height"><span class="auto_price mr-6"></span>원/MW</span>
 								</div>
 								<div class="group_type">
 									<div class="dropdown placeholder edit" id="SMP">
