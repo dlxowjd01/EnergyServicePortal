@@ -924,28 +924,28 @@
 									<span id="관리_운영비"></span>
 									<span class="ml-6">원</span>
 								</div>
-								<span class="fixed_height"><span class="auto_price"></span>원/MW</span>
+								<span class="fixed_height"><span class="auto_price mr-6"></span>원/MW</span>
 							</div>
 							<div class="flex_start">
 								<div class="fixed_height mr-30">
 									<span id="대수선비"></span>
 									<span class="ml-6">원</span>
 								</div>
-								<span class="fixed_height"><span class="auto_price"></span>원/MW</span>
+								<span class="fixed_height"><span class="auto_price mr-6"></span>원/MW</span>
 							</div>
 							<div class="flex_start">
 								<div class="fixed_height mr-30">
 									<span id="사무_수탁비"></span>
 									<span class="ml-6">원</span>
 								</div>
-								<span class="fixed_height"><span class="auto_price"></span>원/MW</span>
+								<span class="fixed_height"><span class="auto_price mr-6"></span>원/MW</span>
 							</div>
 							<div class="flex_start">
 								<div class="fixed_height mr-30">
 									<span id="임대료"></span>
 									<span class="ml-6">원</span>
 								</div>
-								<span class="fixed_height"><span class="auto_price"></span>원/MW</span>
+								<span class="fixed_height"><span class="auto_price mr-6"></span>원/MW</span>
 							</div>
 							<div class="group_type">
 								<div class="fixed_height">

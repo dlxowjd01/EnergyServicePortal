@@ -418,10 +418,7 @@
 					embedded: true,
 
 				});
-				// preview.setAttribute("type", "application/pdf");
-				// preview.setAttribute( "id", "previewFrame");
-				// preview.setAttribute("class", "iframe-fixed");
-				// preview.setAttribute("embedded", true)
+
 				preview.src = src;
 
 				btn.setAttribute("id", "iframeBtn");
@@ -431,22 +428,6 @@
 
 				el.setAttribute("class", "blur");
 
-				let iframe = document.getElementById('previewFrame');
-				if(iframe.length) { 
-					iframe.remove(); 
-				}
-
-				$('<iframe id="iFrame" width="500" height="600" src=' + src + '#page=1">').prepend('#outerWrapper');
-
-				iframe.onload = function () {
-					// let embedded = document.getElementsByTagName('embed')[0];
-					// console.log("this---", this)
-					// // $(this).contents().scrollTop(0)
-					// // this.scrollTop = 0;
-					// var childDocument = this.contentDocument ? this.contentDocument : this.contentWindow.document;
-					// childDocument.documentElement.scrollTop = 0;
-					window.scrollTo(0,0);
-				}
 				document.getElementById("previewFrame").addEventListener("click", function(){
 					this.remove();
 					document.getElementById("outerWrapper").classList.remove("blur");
