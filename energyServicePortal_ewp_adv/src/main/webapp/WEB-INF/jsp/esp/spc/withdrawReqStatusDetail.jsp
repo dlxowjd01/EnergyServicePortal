@@ -438,15 +438,15 @@
 
 				$('<iframe id="iFrame" width="500" height="600" src=' + src + '#page=1">').prepend('#outerWrapper');
 
-				iframe.onload = function () {
+				// iframe.onload = function () {
 					// let embedded = document.getElementsByTagName('embed')[0];
 					// console.log("this---", this)
 					// // $(this).contents().scrollTop(0)
 					// // this.scrollTop = 0;
 					// var childDocument = this.contentDocument ? this.contentDocument : this.contentWindow.document;
 					// childDocument.documentElement.scrollTop = 0;
-					window.scrollTo(0,0);
-				}
+				// 	window.scrollTo(0,0);
+				// }
 				document.getElementById("previewFrame").addEventListener("click", function(){
 					this.remove();
 					document.getElementById("outerWrapper").classList.remove("blur");
