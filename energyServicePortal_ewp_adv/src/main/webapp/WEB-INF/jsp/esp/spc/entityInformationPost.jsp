@@ -2,6 +2,7 @@
 <%@ include file="/decorators/include/taglibs.jsp" %>
 <script type="text/javascript" src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
+	const siteList = JSON.parse('${siteList}');
 	const countryList = [{'value': '대한민국'}];
 	const sidoList = [
 		{'value': '서울'}, {'value': '부산'}, {'value': '대구'}, {'value': '인천'}, {'value': '광주'},
@@ -267,25 +268,31 @@
 	}
 
 	function getgenIdData() {
-		$.ajax({
-			url: apiHost + '/config/sites/',
-			type: 'get',
-			async: false,
-			data: {oid: oid},
-			success: function (json) {
-				let spcGens = new Array();
-				if (!isEmpty(json)) {
-					spcGens = json;
+		if (role == 1) {
+			$.ajax({
+				url: apiHost + '/config/sites/',
+				type: 'get',
+				async: false,
+				data: {oid: oid},
+				success: function (json) {
+					let spcGens = new Array();
+					if (!isEmpty(json)) {
+						spcGens = json;
+					}
+
+					spcGens.push({sid: '', name: '직접입력', location: '', address: ''});
+					setMakeList(spcGens, 'genList', {'dataFunction': {}});
+
+				},
+				error: function (request, status, error) {
+
 				}
-
-				spcGens.push({sid: '', name: '직접입력', location: '', address: ''});
-				setMakeList(spcGens, 'genList', {'dataFunction': {}});
-
-			},
-			error: function (request, status, error) {
-
-			}
-		});
+			});
+		} else {
+			let spcGens = Array.from(siteList);
+			spcGens.push({sid: '', name: '직접입력', location: '', address: ''});
+			setMakeList(spcGens, 'genList', {'dataFunction': {}});
+		}
 	}
 
 	function setComboBoxData() {
@@ -825,8 +832,6 @@
 										<li data-value="[spc_id]"><a href="javascript:void(0);">[name]</a></li>
 									</ul>
 								</div>
-
-
 								<div class="tx_inp_type edit disabled">
 									<label for="spcName" class="sr-only">SPC명 입력</label>
 									<input type="text" id="spcName" name="spcName" placeholder="SPC명 입력" readonly>
