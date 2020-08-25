@@ -1,4 +1,6 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+<%@ include file="/decorators/include/taglibs.jsp" %>
+
 <script src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
 	$(function () {
@@ -203,20 +205,20 @@
 <div class="row">
 	<div class="col-lg-12 clear inp_align">
 		<div class="fl">
-			<span class="tx_tit">보고서 구분</span>
+			<span class="tx_tit"><fmt:message key="workreport.1.reportType" /></span>
 			<div class="sa_select">
 				<div class="dropdown">
 					<button type="button" id="report_type" class="dropdown-toggle w5"
 						data-toggle="dropdown" data-value="">
-						전체
+						<fmt:message key="workreportmain.1.all" />
 						<span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu" role="menu">
 						<li data-value="">
-							<a href="javascript:void(0);">전체</a>
+							<a href="javascript:void(0);"><fmt:message key="workreportmain.1.all" /></a>
 						</li>
 						<li data-value="1">
-							<a href="javascript:void(0);">출장/조치 보고서</a>
+							<a href="javascript:void(0);"><fmt:message key="workreport.1.tripActionReport" /></a>
 						</li>
 						<li data-value="2">
 							<a href="javascript:void(0);">QC 보고서</a>
@@ -226,7 +228,7 @@
 			</div>
 		</div>
 		<div class="fl">
-			<span class="tx_tit">작성 일자</span>
+			<span class="tx_tit"><fmt:message key="workreportmain.1.dateOfIssue" /></span>
 			<div class="sel_calendar">
 				<input type="text" id="write_date_from" class="sel datepicker fromDate" value="" autocomplete="off" />
 				<em></em>
@@ -240,11 +242,11 @@
 		</div>
 		<div class="fl">
 			<button type="submit" class="btn_type" onclick="getDataList();">
-				검색
+				<fmt:message key="workreportmain.1.search" />
 			</button>
 		</div>
 		<div class="fr">
-			<a href="javascript:void(0);" class="save_btn" onclick="getCsvDown();">CVS 다운로드</a>
+			<a href="javascript:void(0);" class="save_btn" onclick="getCsvDown();"><fmt:message key="workreportmain.1.dataExtracts" /></a>
 		</div>
 	</div>
 </div>
@@ -253,31 +255,31 @@
 		<div class="indiv report maintenance_report">
 			<div class="btn_wrap_type02">
 				<button type="button" class="btn_type" onclick="location.href='/report/maintenanceReportPost.do'">
-					등록
+					<fmt:message key="workreportmain.2.register" />
 				</button>
 			</div>
 			<div class="spc_tbl align_type">
 				<table class="sort_table chk_type">
 					<thead>
 						<tr>
-							<th>순번</th>
+							<th><fmt:message key="workreportmain.2.number" /></th>
 							<th>
-								<button type="button" class="btn_align">보고서 구분</button>
+								<button type="button" class="btn_align"><fmt:message key="workreportmain.2.reportType" /></button>
 							</th>
 							<th>
-								<button type="button" class="btn_align">문서번호</button>
+								<button type="button" class="btn_align"><fmt:message key="workreportmain.2.documentNumber" /></button>
 							</th>
 							<th>
-								<button type="button" class="btn_align">보고서명</button>
+								<button type="button" class="btn_align"><fmt:message key="workreportmain.2.reportName" /></button>
 							</th>
 							<th>
-								<button type="button" class="btn_align">작성자</button>
+								<button type="button" class="btn_align"><fmt:message key="workreportmain.2.writer" /></button>
 							</th>
 							<th>
-								<button type="button" class="btn_align">작성일자</button>
+								<button type="button" class="btn_align"><fmt:message key="workreportmain.2.dateOfIssue" /></button>
 							</th>
 							<th>
-								<button type="button" class="btn_align">등록상태</button>
+								<button type="button" class="btn_align"><fmt:message key="workreportmain.2.registrationStatus" /></button>
 							</th>
 						</tr>
 					</thead>
@@ -293,7 +295,7 @@
 							</td>
 							<td>[updated_by]</td>
 							<td>[write_date]</td>
-							<td>저장완료</td>
+							<td><fmt:message key="workreportmain.2.saved" /></td>
 						</tr>
 					</tbody>
 				</table>

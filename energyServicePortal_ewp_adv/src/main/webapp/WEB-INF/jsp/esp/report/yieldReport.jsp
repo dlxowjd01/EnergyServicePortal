@@ -595,7 +595,7 @@
 								</div>
 							</div>
 							<div class="flex_wrap">
-								<span class="input_label">보고서 유형</span>
+								<span class="input_label"><fmt:message key="revenuereport.2.report_classification" /></span>
 								<div class="dropdown placeholder" id="report_type">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
 										선택<span class="caret"></span>
@@ -673,12 +673,12 @@
 <div class="row">
 	<div class="col-12 clear inp_align">
 		<div class="fl">
-			<span class="tx_tit">유형</span>
+			<span class="tx_tit"><fmt:message key="revenuereport.1.type" /></span>
 			<div class="sa_select">
 				<div class="dropdown" id="reportClass">
-					<button type="button" class="dropdown-toggle w7" data-toggle="dropdown">전체<span class="caret"></span></button>
+					<button type="button" class="dropdown-toggle w7" data-toggle="dropdown"><fmt:message key="revenuereport.1.all" /><span class="caret"></span></button>
 					<ul class="dropdown-menu" role="menu">
-						<li data-value=""><a href="javascript:void(0);">전체</a></li>
+						<li data-value=""><a href="javascript:void(0);"><fmt:message key="revenuereport.1.all" /></a></li>
 						<li data-value="regular_mm"><a href="javascript:void(0);">월간실적</a></li>
 						<li data-value="regular_qt"><a href="javascript:void(0);">분기실적</a></li>
 						<li data-value="regular_yy"><a href="javascript:void(0);">년간실적</a></li>
@@ -691,32 +691,32 @@
 			<span class="tx_tit">적용 시작 월</span>
 			<div class="sa_select">
 				<div class="dropdown" id="year">
-					<button type="button" class="dropdown-toggle w7" data-toggle="dropdown">2020년<span class="caret"></span></button>
+					<button type="button" class="dropdown-toggle w7" data-toggle="dropdown"><fmt:message key="revenuereport.1.2020" /><span class="caret"></span></button>
 					<ul class="dropdown-menu" role="menu">
-						<li><a href="javascript:void(0);">전체</a></li>
-						<li><a href="javascript:void(0);">2020년</a></li>
-						<li><a href="javascript:void(0);">2019년</a></li>
-						<li><a href="javascript:void(0);">2018년</a></li>
+						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.all" /></a></li>
+						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.2020" /></a></li>
+						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.2019" /></a></li>
+						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.2018" /></a></li>
 					</ul>
 				</div>
 			</div>
 			<div class="sa_select">
 				<div class="dropdown" id="month">
-					<button type="button" class="dropdown-toggle w3" data-toggle="dropdown">전체<span class="caret"></span></button>
+					<button type="button" class="dropdown-toggle w3" data-toggle="dropdown"><fmt:message key="revenuereport.1.all" /><span class="caret"></span></button>
 					<ul class="dropdown-menu" role="menu">
-						<li><a href="javascript:void(0);">전체</a></li>
-						<li><a href="javascript:void(0);">1월</a></li>
-						<li><a href="javascript:void(0);">2월</a></li>
-						<li><a href="javascript:void(0);">3월</a></li>
-						<li><a href="javascript:void(0);">4월</a></li>
-						<li><a href="javascript:void(0);">5월</a></li>
-						<li><a href="javascript:void(0);">6월</a></li>
-						<li><a href="javascript:void(0);">7월</a></li>
-						<li><a href="javascript:void(0);">8월</a></li>
-						<li><a href="javascript:void(0);">9월</a></li>
-						<li><a href="javascript:void(0);">10월</a></li>
-						<li><a href="javascript:void(0);">11월</a></li>
-						<li><a href="javascript:void(0);">12월</a></li>
+						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.all" /></a></li>
+						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.january" /></a></li>
+						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.february" /></a></li>
+						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.march" /></a></li>
+						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.april" /></a></li>
+						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.may" /></a></li>
+						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.june" /></a></li>
+						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.july" /></a></li>
+						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.august" /></a></li>
+						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.september" /></a></li>
+						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.october" /></a></li>
+						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.november" /></a></li>
+						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.december" /></a></li>
 					</ul>
 				</div>
 			</div>
@@ -724,7 +724,7 @@
 		<div class="fl">
 			<div class="tx_inp_type"><input type="text" id="key_word" placeholder="입력"></div>
 		</div>
-		<div class="fl"><button type="submit" class="btn_type" onclick="getDataList(page);">검색</button></div>
+		<div class="fl"><button type="submit" class="btn_type" onclick="getDataList(page);"><fmt:message key="revenuereport.1.search" /></button></div>
 	</div>
 </div>
 <div class="row">
@@ -743,15 +743,15 @@
 						<tr>
 							<th>
 								<input type="checkbox" id="chk_header" value="순번" onclick="setCheckedAll(this, 'rowCheck');">
-								<label for="chk_header">순번</label>
+								<label for="chk_header"><fmt:message key="revenuereport.2.number" /></label>
 							</th>
 							<th><button type="button" class="btn_align down">SPC명</button></th>
-							<th><button type="button" class="btn_align down">발전소명</button></th>
-							<th><button type="button" class="btn_align down">보고서 유형</button></th>
+							<th><button type="button" class="btn_align down"><fmt:message key="revenuereport.2.plant" /></button></th>
+							<th><button type="button" class="btn_align down"><fmt:message key="revenuereport.2.report_classification" /></button></th>
 							<th><button type="button" class="btn_align down">적용기간</button></th>
-							<th>다운로드</th>
+							<th><fmt:message key="revenuereport.2.download" /></th>
 							<th><button type="button" class="btn_align down">보고서 생성 시간</button></th>
-							<th><button type="button" class="btn_align down">보고서 확정</button></th>
+							<th><button type="button" class="btn_align down"><fmt:message key="revenuereport.2.report_confirmation" /></button></th>
 							<th><button type="button" class="btn_align down">최종 작업자</button></th>
 						</tr>
 					</thead>
