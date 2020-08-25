@@ -117,7 +117,7 @@
 		//API 토큰 세팅
 		$.ajaxSetup({
 			headers: {'Authorization': 'Bearer <c:out value="${sessionScope.userInfo.token}" escapeXml="false" />'},
-			"timeout": 10000
+			"timeout": 30000
 		});
 
 		$(document).ajaxSuccess(function() {
