@@ -1500,7 +1500,7 @@ table input[type="text"] {
 }
 
 .w300 {
-	width: 300px;
+	width: 300px !important;
 }
 
 #mask {
@@ -10173,6 +10173,9 @@ table.table-footer tfoot td.light {
 
 .indiv.spc-detail .flex_wrapper .btn_type02 {
 	line-height: 43px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
 }
 
 .indiv.spc-detail .flex_start h2 {
@@ -10740,6 +10743,7 @@ html.darkmode .modal-content.spc-detail-content li.alarm-item a .btn_next {
 }
 
 .group_type > .dropdown + .dropdown,
+.group_type > .dropdown + .tx_inp_type.edit,
 .group_type > .tx_inp_type.edit + .tx_inp_type.edit {
 	margin-left: 16px;
 }
