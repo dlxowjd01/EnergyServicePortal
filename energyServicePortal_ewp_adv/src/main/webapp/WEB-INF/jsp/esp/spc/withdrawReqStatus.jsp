@@ -105,7 +105,7 @@
 				const id = $(this).parents('tr').find('td:nth-child(8) button').data('req-id');
 
 				if (statusValue == 4) {
-					updateStatus('55', id);
+					updateStatus('5', id);
 				}
 			});
 			$('#approvalModal').modal('hide');
@@ -254,30 +254,30 @@
 								} else if(index==1){
 									spc_name = spcArr[found].spc_name;
 								} else if(index==2) {
-									if (item.status == 50 ) {
+									if (item.status == 0 ) {
 										status="반송";
 										link_attr = "text-link";
-										status_val = 50;
-									} else if (item.status == 51) {
+										status_val = 0;
+									} else if (item.status == 1) {
 										status="검토 대기";
 										link_attr = "text-link";
-										status_val = 51;
-									} else if (item.status == 52) {
+										status_val = 1;
+									} else if (item.status == 2) {
 										status="검토 중";
 										link_attr = "text-link";
-										status_val = 52;
-									} else if (item.status == 53) {
+										status_val = 2;
+									} else if (item.status == 3) {
 										status="승인 완료";
 										link_attr = "text-blue";
-										status_val = 53;
-									} else if (item.status == 54) {
+										status_val = 3;
+									} else if (item.status == 4) {
 										status="출금 가승인";
 										link_attr = "text-link";
-										status_val = 54;
-									} else if (item.status == 55) {
+										status_val = 4;
+									} else if (item.status == 5) {
 										status="출금 최종승인";
 										link_attr = "text-blue";
-										status_val = 55;
+										status_val = 5;
 									}
 								} else if(index == 3) {
 									requested_at = new Date(item.requested_at).format('yyyy-MM-dd HH:mm:ss');

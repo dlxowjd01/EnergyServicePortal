@@ -266,7 +266,7 @@
 		// approval => status: 3
 		$("#attachedFileForm").on("submit", function(e){
 			e.preventDefault();
-			const newStatus = 53;
+			const newStatus = 3;
 			handleReq(newStatus, updateReq);
 		});
 
@@ -306,19 +306,19 @@
 		});
 
 		$("#rejectBtn").on("click", function() {
-			updateReq(50);
+			updateReq(0);
 		});
 
 		$("#reviewBtn").on("click", function() {
-			updateReq(51);
+			updateReq(1);
 		});
 
 		$("#provisionalBtn").on("click", function() {
-			updateReq(54);
+			updateReq(4);
 		});
 
 		$("#finalApprovalBtn").on("click", function() {
-			updateReq(53);
+			updateReq(3);
 		});
 
 		$("#backList").on("click", function() {

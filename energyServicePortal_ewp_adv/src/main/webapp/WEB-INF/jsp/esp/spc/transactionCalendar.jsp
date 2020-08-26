@@ -544,13 +544,13 @@
 			Object.entries(tData).map((item, index) => {
 				// "반송" : 0,  "승인 대기" : 1", "승인 중" : "2", "승인완료": "3"
 				let statusList = [
-					{ id: 50, val: "출금 - 반송" },
-					{ id: 51, val: "출금 - 승인 대기" },
-					{ id: 52, val: "출금 - 승인 중" },
-					{ id: 53, val: "출금 - 승인 완료" },
-					{ id: 54, val: "출금 - 가승인" },
-					{ id: 55, val: "출금 - 최종 승인" },
-					{ id: 71, val: "입금" }
+					{ id: 0, val: "출금 - 반송" },
+					{ id: 1, val: "출금 - 승인 대기" },
+					{ id: 2, val: "출금 - 승인 중" },
+					{ id: 3, val: "출금 - 승인 완료" },
+					{ id: 4, val: "출금 - 가승인" },
+					{ id: 5, val: "출금 - 최종 승인" },
+					{ id: 6, val: "입금" }
 				];
 				let tStr = ''
 				let bStr = '';
@@ -572,6 +572,10 @@
 					bulletIdx = "3";
 				} else if(item[1][0].status == 3) {
 					bulletIdx = "1";
+				} else if(item[1][0].status == 4) {
+					bulletIdx = "4";
+				} else if(item[1][0].status == 5) {
+					bulletIdx = "5";
 				}
 				if ($.inArray(bulletIdx, checkType) === -1) {
 					hiddenClass = 'hidden';
