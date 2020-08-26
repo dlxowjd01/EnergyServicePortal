@@ -108,6 +108,7 @@
 					// promises.push(resolve(JSON.parse(element)));
 				});
 				Promise.all(promises).then(res => {
+					withdrawList.prev().data({"value": transactionData.withdraw_account_no, "name": transactionData.withdraw_bank }).html(transactionData.withdraw_bank + '&nbsp;' + transactionData.withdraw_account_no + '<span class="caret"></span>');
 					if(transactionData.to_account){
 						var withdraw_day = transactionData.withdraw_day;
 						if (!isEmpty(withdraw_day) && withdraw_day.length == 8) {
@@ -241,7 +242,7 @@
 										// console.log("v---", v);
 										let accInfo = bankName + '&nbsp;' + accNum;
 										let newHtml;
-										withdrawList.prev().data({"value": accNum, "name": bankName }).html(accInfo + '<span class="caret"></span>');
+										//withdrawList.prev().data({"value": accNum, "name": bankName }).html(accInfo + '<span class="caret"></span>');
 										// selectedAcc.html( selectedAcc.html().replace(/\*bank_name\*/g, bankName).replace(/\*acc_num\*/g, accNum) );
 										sending = copyWithdrawList.replace(/\*bank_name\*/g, bankName).replace(/\*acc_num\*/g, accNum).replace(/\*acc_holder\*/g, accHolder);
 										withdrawList.append($(sending));

@@ -311,27 +311,39 @@
 						transaction_spc_id = item.spc_id;
 						transaction_req_id = item.request_id;
 
-						if(item.status == 0) {
+						if(item.status == 50) {
 							status="반송"
-							status_val = "0"
+							status_val = "50"
 							visibility = "show";
 							edit_visibility = "hidden";
 							link_attr = "text-link";
-						} else if(item.status == 1) {
+						} else if(item.status == 51) {
 							status="승인 대기"
-							status_val = "1"
+							status_val = "51"
 							visibility = "show";
 							edit_visibility = "show";
 							link_attr = "text-link";
-						} else if (item.status == 2) {
+						} else if (item.status == 52) {
 							status="승인 중"
-							status_val = "2"
+							status_val = "52"
 							link_attr = "text-link";
 							visibility = "hidden";
 							edit_visibility = "hidden";
-						} else if(item.status == 3) {
+						} else if(item.status == 53) {
 							status="승인 완료"
-							status_val = "3"
+							status_val = "53"
+							visibility = "hidden";
+							edit_visibility = "hidden";
+							link_attr = "text-blue";
+						} else if(item.status == 54) {
+							status="출금 가승인"
+							status_val = "54"
+							visibility = "hidden";
+							edit_visibility = "hidden";
+							link_attr = "text-link";
+						} else if(item.status == 55) {
+							status="출금 최종승인"
+							status_val = "55"
 							visibility = "hidden";
 							edit_visibility = "hidden";
 							link_attr = "text-blue";
@@ -462,7 +474,7 @@
 		$("#reqDetailStatus").val(status);
 		if(statusVal == 1 && task == 2) {
 			status = "검토 중";
-			statusVal = 2;
+			statusVal = 52;
 			$("#reqDetailStatus").val(status);
 			$("#reqDetailStatusVal").val(statusVal);
 			updateStatus(statusVal, reqId)
@@ -657,25 +669,25 @@
 								<ul id="spcStatus" class='dropdown-menu chk_type dropdown_offset' role='menu'>
 									<li>
 										<a href='javascript:void(0)' tabindex='-1'>
-											<input type='checkbox' id='approved' value='' data-value='3' name='approvalStatus' checked>
+											<input type='checkbox' id='approved' value='' data-value='53' name='approvalStatus' checked>
 											<label for='approved'>승인 완료</label>
 										</a>
 									</li>
 									<li>
 										<a href='javascript:void(0)' tabindex='-1'>
-											<input type='checkbox' id='onHold' value='' data-value='1' name='approvalStatus' checked>
+											<input type='checkbox' id='onHold' value='' data-value='51' name='approvalStatus' checked>
 											<label for='onHold'>승인 대기</label>
 										</a>
 									</li>
 									<li>
 										<a href='javascript:void(0)' tabindex='-1'>
-											<input type='checkbox' id='inProgress' value='' data-value='2' name='approvalStatus' checked>
+											<input type='checkbox' id='inProgress' value='' data-value='52' name='approvalStatus' checked>
 											<label for='inProgress'>승인 중</label>
 										</a>
 									</li>
 									<li>
 										<a href='javascript:void(0)' tabindex='-1'>
-											<input type='checkbox' id='rejected' value='' data-value='0' name='approvalStatus' checked>
+											<input type='checkbox' id='rejected' value='' data-value='50' name='approvalStatus' checked>
 											<label for='rejected'>반송</label>
 										</a>
 									</li>
