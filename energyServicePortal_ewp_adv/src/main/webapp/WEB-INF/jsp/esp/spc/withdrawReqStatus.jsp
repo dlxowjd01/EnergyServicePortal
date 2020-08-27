@@ -557,7 +557,7 @@
 		$("#reviewStatus").val(status);
 		if(statusVal == 1 && task == 2){
 			status = "검토 중";
-			statusVal = 52;
+			statusVal = 2;
 			$("#reviewStatus").val(status);
 			$("#reviewStatusVal").val(statusVal);
 			// console.log("reqId===", reqId)
