@@ -347,14 +347,18 @@ public class RestApiUtil {
 	}
 
 	private static String toStringParameter(Map<String, Object> urlParameters) {
-		StringBuilder query = new StringBuilder();
-		for (Map.Entry<String, Object> elem : urlParameters.entrySet()) {
-			if (query.length() > 1) {
-				query.append("&");
+		if (urlParameters != null && !"".equals(urlParameters)) {
+			StringBuilder query = new StringBuilder();
+			for (Map.Entry<String, Object> elem : urlParameters.entrySet()) {
+				if (query.length() > 1) {
+					query.append("&");
+				}
+				query.append(elem.getKey()).append("=").append(elem.getValue());
 			}
-			query.append(elem.getKey()).append("=").append(elem.getValue());
-		}
 
-		return query.toString();
+			return query.toString();
+		} else {
+			return "";
+		}
 	}
 }
