@@ -50,19 +50,19 @@ public class LoginServiceImpl extends EgovAbstractServiceImpl implements LoginSe
 
 				if (targetHost.contains("-")) {
 					rtnMap.put("oid", targetHost.split("-")[0]);
-					rtnMap.put("mode", "");
+					rtnMap.put("mode", "test");
 				} else {
 					if (targetHost.matches("[^0-9]")) {
-						rtnMap.put("oid", targetHost);
-						rtnMap.put("mode", "");
-					} else {
 						rtnMap.put("oid", defualtOid);
+						rtnMap.put("mode", "test");
+					} else {
+						rtnMap.put("oid", targetHost);
 						rtnMap.put("mode", "");
 					}
 				}
 			} else {
 				rtnMap.put("oid", defualtOid);
-				rtnMap.put("mode", "");
+				rtnMap.put("mode", "test");
 			}
 		} catch (Exception e) {
 			LOGGER.error("LoginService - selectOid - Exception : " + e.getMessage());

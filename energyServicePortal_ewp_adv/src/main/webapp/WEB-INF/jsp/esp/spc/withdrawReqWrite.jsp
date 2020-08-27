@@ -38,12 +38,14 @@
 			});
 		});
 
-		$("#fileInput").change(function(){
-			fileList = [];
-			for(let i = 0, fileLength = $(this)[0].files.length; i < fileLength; i++){
-				fileList.push($(this)[0].files[i]);
+		$("#fileInput").change(function() {
+			let fieldName = genUuid();
+			for(let i = 0, fileLength = $(this)[0].files.length; i < fileLength; i++) {
+				let fieldName = genUuid();
+				uploadFile('post', $(this)[0].files[i], fieldName);
 			}
-			// console.log("fileLost===", fileList)
+
+			$('#fileInput').val('');
 		});
 
 		let purposeArr = [
@@ -337,7 +339,6 @@
 				}
 			});
 			if(flagArr.length > 0){
-				console.log("flag===", flagArr)
 				warning.eq(2).removeClass('hidden');
 			} else {
 				warning.eq(2).addClass('hidden');
@@ -354,9 +355,6 @@
 				};
 
 				$.ajax(opt).done(function (json, textStatus, jqXHR) {
-					$.each(fileList, function(index, element){
-						uploadFile('post', $("#fileInput")[0].files[index], finalNameList[index].filedName);
-					});
 					window.location.href = window.location.origin + '/spc/transactionHistory.do'
 				}).fail(function (jqXHR, textStatus, errorThrown) {
 					alert('처리 중 오류가 발생했습니다.');
@@ -371,6 +369,7 @@
 		function uploadFile(action, file, filedName){
 			let formData = new FormData($('#fileUploadForm')[0]);
 			formData.append(filedName, file);
+			console.log(file);
 
 			let option= {
 				type: action,
@@ -385,9 +384,21 @@
 			}
 
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
-				console.log("success===", json)
+				let fileList = json.files;
+
+				if ($('#fileInput').parent().find('div.file_list li').length == 1 && $('#fileInput').parent().find('div.file_list li').text() == '선택된 파일이 없습니다.') {
+					$('#fileInput').parent().find('div.file_list ul').empty();
+				}
+
+				fileList.forEach(file => {
+					let listItem = `<li class='upload_text' data-id="${'${file.fieldname}'}">
+									${'${file.originalname}'}
+									<button type='button' class='btn_close icon_btn' onclick='deleteFile($(this))'></button>
+								</li>`;
+
+					$('#fileInput').parent().find('div.file_list ul').append(listItem);
+				});
 			}).fail(function (jqXHR, textStatus, errorThrown) {
-				console.log("jqXHR===", jqXHR)
 				alert('처리 중 오류가 발생했습니다.');
 				return false;
 			});
@@ -583,7 +594,7 @@
 						<tr>
 							<th class="th_type">증빙 첨부</th>
 							<td id="addFileList" class="flex_start_td"><!--
-								--><input type="file" name="file" id="fileInput" class="uploadBtn hidden" accept=".pdf" multiple><!--
+								--><input type="file" name="file" id="fileInput" class="uploadBtn hidden stand-alone" accept=".pdf" multiple><!--
 								--><label for="fileInput" class="btn file_upload">파일 선택</label><!--
 								--><div class="file_list ml-16"><ul><li>선택된 파일이 없습니다.</li></ul></div>
 							</td>

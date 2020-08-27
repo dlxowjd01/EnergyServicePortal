@@ -132,10 +132,8 @@ public class RestApiUtil {
 			SSLContext sc = SSLContext.getInstance("SSL");
 			sc.init(null, trustAllCerts, new SecureRandom());
 
-			URL url = new URL(apiHost + strUrl);
-
 			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-			HttpsURLConnection con = (HttpsURLConnection) new URL("https://iderms-api.iderms.ai" + strUrl + parameters).openConnection();
+			HttpsURLConnection con = (HttpsURLConnection) new URL(apiHost + strUrl + "?" + parameters).openConnection();
 			con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정
 			con.setReadTimeout(5000); // InputStream 읽어 오는 Timeout 시간 설정
 			con.setRequestMethod("GET");
@@ -185,26 +183,103 @@ public class RestApiUtil {
 	}
 
 	/**
-	 * @param strUrl
-	 * @param jsonMessage
-	 * @return
-	 */
-	public static Map<String, Object> post(String strUrl, String mode, String jsonMessage) {
-		return post(strUrl, mode, jsonMessage, null);
-	}
-
-	/**
-	 * API POST 처리
+	 * Post
 	 *
 	 * @param strUrl
 	 * @param jsonMessage
 	 * @return
 	 */
-	public static Map<String, Object> post(String strUrl, String mode, String jsonMessage, String token) {
+	public static Map<String, Object> post(String strUrl, String mode, String jsonMessage) {
+		if (mode != null && "test".equals(mode)) {
+			return basicPost(strUrl, jsonMessage, null);
+		} else {
+			return securePost(strUrl, mode, jsonMessage, null);
+		}
+	}
+
+	/**
+	 * Post
+	 *
+	 * @param strUrl
+	 * @param jsonMessage
+	 * @param token
+	 * @return
+	 */
+	public static Map<String, Object> basicPost(String strUrl, String jsonMessage, String token) {
 		Map<String, Object> rtnMap = new HashMap<String, Object>();
 
 		try {
 			URL url = new URL(apiHostTest + strUrl);
+			HttpURLConnection con = (HttpURLConnection) url.openConnection();
+			con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정
+			con.setReadTimeout(5000); // InputStream 읽어 오는 Timeout 시간 설정
+			con.setRequestMethod("POST");
+			if (token != null && !"".equals(token)) {
+				con.setRequestProperty("Authorization", "Bearer " + token);
+			}
+
+			//json으로 message를 전달하고자 할 때
+			con.setRequestProperty("Content-Type", "application/json");
+			con.setDoInput(true);
+			con.setDoOutput(true); //POST 데이터를 OutputStream으로 넘겨 주겠다는 설정
+			con.setUseCaches(false);
+			con.setDefaultUseCaches(false);
+
+			OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
+			wr.write(jsonMessage); //json 형식의 message 전달
+			wr.flush();
+
+			StringBuilder sb = new StringBuilder();
+			if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
+				BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"));
+				String line;
+				while ((line = br.readLine()) != null) {
+					sb.append(line).append("\n");
+				}
+				br.close();
+
+				ObjectMapper mapper = new ObjectMapper();
+				if (sb.toString().startsWith("[")) {
+					List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+					list = mapper.readValue(sb.toString(), new TypeReference<List<Map<String, Object>>>() {
+					});
+					rtnMap.put("data", list);
+				} else {
+					Map<String, Object> map = new HashMap<String, Object>();
+					map = mapper.readValue(sb.toString(), new TypeReference<Map<String, Object>>() {
+					});
+					rtnMap.put("data", map);
+				}
+
+				rtnMap.put("code", con.getResponseCode());
+				rtnMap.put("msg", con.getResponseMessage());
+			} else {
+				rtnMap.put("data", null);
+				rtnMap.put("code", con.getResponseCode());
+				rtnMap.put("msg", con.getResponseMessage());
+			}
+		} catch (Exception e) {
+			System.err.println(e.toString());
+			rtnMap.put("data", null);
+			rtnMap.put("code", "");
+			rtnMap.put("msg", e.toString());
+		}
+
+		return rtnMap;
+	}
+
+	/**
+	 * Post
+	 *
+	 * @param strUrl
+	 * @param jsonMessage
+	 * @return
+	 */
+	public static Map<String, Object> securePost(String strUrl, String mode, String jsonMessage, String token) {
+		Map<String, Object> rtnMap = new HashMap<String, Object>();
+
+		try {
+			URL url = new URL(apiHost + strUrl);
 			HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
 			con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정
 			con.setReadTimeout(5000); // InputStream 읽어 오는 Timeout 시간 설정
