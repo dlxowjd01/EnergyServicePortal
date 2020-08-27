@@ -1,5 +1,6 @@
 package kr.co.esp.common.util;
 
+import egovframework.com.cmm.service.EgovProperties;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.codehaus.jettison.json.JSONObject;
@@ -23,6 +24,9 @@ import java.util.Map;
 @Component
 public class RestApiUtil {
 	private static final Logger logger = LoggerFactory.getLogger(RestApiUtil.class);
+
+	private static final String apiHost = EgovProperties.getProperty("servletApiHost");
+	private static final String apiHostTest = EgovProperties.getProperty("servletApiHostTest");
 
 	/**
 	 * GET
@@ -61,7 +65,7 @@ public class RestApiUtil {
 		Map<String, Object> rtnMap = new HashMap<String, Object>();
 
 		try {
-			URI uri = new URI("http://iderms.enertalk.com:8443" + strUrl);
+			URI uri = new URI(apiHostTest + strUrl);
 			if (parameters != null) {
 				uri = applyParameters(uri, parameters);
 			}
@@ -128,7 +132,7 @@ public class RestApiUtil {
 			SSLContext sc = SSLContext.getInstance("SSL");
 			sc.init(null, trustAllCerts, new SecureRandom());
 
-			URL url = new URL("https://iderms-api.iderms.ai" + strUrl);
+			URL url = new URL(apiHost + strUrl);
 
 			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
 			HttpsURLConnection con = (HttpsURLConnection) new URL("https://iderms-api.iderms.ai" + strUrl + parameters).openConnection();
@@ -200,9 +204,7 @@ public class RestApiUtil {
 		Map<String, Object> rtnMap = new HashMap<String, Object>();
 
 		try {
-			String postUrl = "https://iderms-api.iderms.ai";
-
-			URL url = new URL(postUrl + strUrl);
+			URL url = new URL(apiHostTest + strUrl);
 			HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
 			con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정
 			con.setReadTimeout(5000); // InputStream 읽어 오는 Timeout 시간 설정

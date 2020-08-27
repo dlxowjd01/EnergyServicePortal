@@ -437,7 +437,7 @@
 			siteArray.push(site.sid);
 
 			$.ajax({
-				url: 'http://iderms.enertalk.com:8443/energy/sites',
+				url: apiHost + '/energy/sites',
 				type: 'get',
 				data: {
 					sid: site.sid,
@@ -461,7 +461,7 @@
 			});
 
 			$.ajax({
-				url: 'http://iderms.enertalk.com:8443/energy/forecasting/sites',
+				url: apiHost + '/energy/forecasting/sites',
 				type: 'get',
 				data: {
 					sid: site.sid,
@@ -486,7 +486,7 @@
 
 			//사이트별 현재 시간 예측
 			$.ajax({
-				url: 'http://iderms.enertalk.com:8443/energy/forecasting/sites',
+				url: apiHost + '/energy/forecasting/sites',
 				type: 'get',
 				data: {
 					sid: site.sid,
@@ -510,7 +510,7 @@
 
 			//사이트별 오늘 예측
 			$.ajax({
-				url: 'http://iderms.enertalk.com:8443/energy/forecasting/sites',
+				url: apiHost + '/energy/forecasting/sites',
 				type: 'get',
 				data: {
 					sid: site.sid,
@@ -537,7 +537,7 @@
 
 		//사이트별 현재 시간 출력
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/energy/now/sites',
+			url: apiHost + '/energy/now/sites',
 			type: 'get',
 			data: {
 				sids: siteArray.join(','),
@@ -561,7 +561,7 @@
 
 		//사이트별 오늘 출력
 		$.ajax({
-			url: 'http://iderms.enertalk.com:8443/energy/now/sites',
+			url: apiHost + '/energy/now/sites',
 			type: 'get',
 			data: {
 				sids: siteArray.join(','),

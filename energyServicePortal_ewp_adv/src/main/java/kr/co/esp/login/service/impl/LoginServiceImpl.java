@@ -1,6 +1,7 @@
 package kr.co.esp.login.service.impl;
 
 import egovframework.com.cmm.config.EgovWebApplicationInitializer;
+import egovframework.com.cmm.service.EgovProperties;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
 import kr.co.esp.common.util.RestApiUtil;
 import kr.co.esp.login.service.LoginService;
@@ -21,6 +22,8 @@ public class LoginServiceImpl extends EgovAbstractServiceImpl implements LoginSe
 
 	@Resource(name="restApiUtil")
 	RestApiUtil restApiUtil;
+
+	private static final String defualtOid = EgovProperties.getProperty("default.oid");
 
 	/**
 	 * 도메인 기준으로 OID와 MODE 세팅
@@ -47,19 +50,24 @@ public class LoginServiceImpl extends EgovAbstractServiceImpl implements LoginSe
 
 				if (targetHost.contains("-")) {
 					rtnMap.put("oid", targetHost.split("-")[0]);
-					rtnMap.put("mode", "test");
+					rtnMap.put("mode", "");
 				} else {
-					rtnMap.put("oid", targetHost);
-					rtnMap.put("mode", "test");
+					if (targetHost.matches("[^0-9]")) {
+						rtnMap.put("oid", targetHost);
+						rtnMap.put("mode", "");
+					} else {
+						rtnMap.put("oid", defualtOid);
+						rtnMap.put("mode", "");
+					}
 				}
 			} else {
-				rtnMap.put("oid", "encored");
-				rtnMap.put("mode", "test");
+				rtnMap.put("oid", defualtOid);
+				rtnMap.put("mode", "");
 			}
 		} catch (Exception e) {
 			LOGGER.error("LoginService - selectOid - Exception : " + e.getMessage());
 			e.printStackTrace();
-			rtnMap.put("oid", "encored");
+			rtnMap.put("oid", defualtOid);
 			rtnMap.put("mode", "test");
 		}
 		return rtnMap;
