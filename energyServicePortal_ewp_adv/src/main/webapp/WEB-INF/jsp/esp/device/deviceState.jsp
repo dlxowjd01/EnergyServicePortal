@@ -1405,8 +1405,8 @@
 			if (!isEmpty(alarmArray)) {
 				areaData['alarm_code'] = alarmArray.join(',');
 			}
-			areaData['capacity'] = Number(areaData['capacity']);
-			areaData['capacity_unit'] = 'kW';
+			areaData['capacity'] = Number(areaData['capacity']) * 1000;
+			areaData['capacity_unit'] = 'W';
 
 			if (isEmpty(areaData['parent_did'])) {
 				delete areaData['parent_did'];

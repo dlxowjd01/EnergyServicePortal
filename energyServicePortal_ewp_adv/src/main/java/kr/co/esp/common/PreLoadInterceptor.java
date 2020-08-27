@@ -25,6 +25,9 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		System.out.println("++++++++++++++++PreLoadInterceptor start++++++++++++++++");
 
+		String apiHost = EgovProperties.getProperty("jsApiHost");
+		String apiHostTest = EgovProperties.getProperty("jsApiHostTest");
+
 		HttpSession session = request.getSession();
 		Map<String, Object> groupMap = new HashMap<String, Object>();
 		List<Map<String, Object>> refineList = new ArrayList<Map<String, Object>>();
@@ -47,9 +50,9 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			parameters.put("includeDevices", "true");
 
 			if (mode != null && "test".equals(mode)) {
-				session.setAttribute("apiHost", "http://iderms.enertalk.com:8443");
+				session.setAttribute("apiHost", apiHostTest);
 			} else {
-				session.setAttribute("apiHost", "https://iderms-api.iderms.ai");
+				session.setAttribute("apiHost", apiHost);
 			}
 
 			Map<String, Object> siteMap = get("/auth/me/sites", mode, parameters, token); //사이트 리스트 정보

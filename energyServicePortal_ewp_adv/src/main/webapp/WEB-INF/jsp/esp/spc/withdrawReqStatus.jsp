@@ -54,6 +54,87 @@
 			}
 		});
 
+		$('#approvalBtn').on('click', function(e) {
+			e.preventDefault();
+
+			let agree = true;
+			let checkedList = new Array();
+			$(':checkbox[name="reviewOpt"]:checked').each(function() {
+				let statusValue = $(this).parents('tr').find('td:nth-child(8)').data('value');
+				let withdrawDay = $(this).parents('tr').find('td:nth-child(2)').text();
+				let spcName = $(this).parents('tr').find('td:nth-child(3)').text();
+				let totalAmount = $(this).parents('tr').find('td:nth-child(4)').text();
+
+				checkedList.push({
+					statusValue: statusValue,
+					withdrawDay: withdrawDay,
+					spcName: spcName,
+					totalAmount: totalAmount
+				});
+
+				if (statusValue != 4) {
+					agree = false;
+				}
+			});
+
+			if (agree == false) {
+				$("#warningMsg").text('출금 가승인 항목만 선택해 주세요.');
+				$("#warningModal").modal("show");
+				setTimeout(function(){
+					$("#warningModal").modal("hide");
+				}, 1800);
+
+				return false;
+			}
+
+			$('#approvalModal .modal-body .row').empty();
+			checkedList.forEach(el => {
+				let temp = `<div class="col-12">${'${el.withdrawDay}'} ${'${el.spcName}'} ${'${el.totalAmount}'}</div>`
+				$('#approvalModal .modal-body .row').append(temp);
+			});
+
+			$('#approvalModal .modal-header h2').text('다음 ' + checkedList.length + '건의 출금을 최종승인 합니다.');
+			$('#approvalModal').modal('show');
+		});
+
+		$('#finalApprovalBtn').on('click', function(e) {
+			e.preventDefault();
+
+			$(':checkbox[name="reviewOpt"]:checked').each(function() {
+				const statusValue = $(this).parents('tr').find('td:nth-child(8)').data('value');
+				const id = $(this).parents('tr').find('td:nth-child(8) button').data('req-id');
+
+				if (statusValue == 4) {
+					updateStatus('5', id);
+				}
+			});
+			$('#approvalModal').modal('hide');
+
+			let searchOpt = {};
+			let checkbox = $("#reqStatus").find("input[type='checkbox']");
+			var status= [];
+
+			if (checkbox.first().is(':checked')) {
+				checkbox.each(function(){
+					status.push($(this).val())
+				});
+			} else {
+				checkbox.each(function(){
+					if($(this).is(":checked")){
+						status.push($(this).val())
+					}
+				});
+			}
+			searchOpt.status = status;
+			searchOpt.keyword = $("#keyword").val().trim().toLowerCase();
+
+			if (isEmpty(searchOpt.status) && isEmpty(searchOpt.keyword)) {
+				getDataList(1, null);
+			} else {
+				getDataList(1, searchOpt);
+			}
+		});
+
 		function getSpcList() {
 			let action = 'get';
 			let syncOpt = true;
@@ -185,10 +266,18 @@
 										status="검토 중";
 										link_attr = "text-link";
 										status_val = 2;
-									} else if (item.status==3 ) {
+									} else if (item.status == 3) {
 										status="승인 완료";
 										link_attr = "text-blue";
 										status_val = 3;
+									} else if (item.status == 4) {
+										status="출금 가승인";
+										link_attr = "text-link";
+										status_val = 4;
+									} else if (item.status == 5) {
+										status="출금 최종승인";
+										link_attr = "text-blue";
+										status_val = 5;
 									}
 								} else if(index == 3) {
 									requested_at = new Date(item.requested_at).format('yyyy-MM-dd HH:mm:ss');
@@ -385,6 +474,7 @@
 			});
 
 		}
+
 		function getNumberIndex(index) {
 			return index + 1;
 		}
@@ -591,7 +681,7 @@
 
 <form id="searchForm" name="search_form">
 	<div class="row spc-search-bar">
-		<div class="col-12">
+		<div class="col-11">
 			<div class="sa_select"><!--
 				--><span class="tx_tit">검토 상태</span><!--
 				--><div id="reqStatus" class="dropdown"><!--
@@ -601,6 +691,8 @@
 					--><li data-value="2" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="wait" name="review_status" value="2"><label for="wait">검토 중</label></a></li><!--
 					--><li data-value="1" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="inProgress" name="review_status" value="1"><label for="inProgress">검토 대기</label></a></li><!--
 					--><li data-value="3" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="complete" name="review_status" value="3"><label for="complete">승인 완료</label></a></li><!--
+					--><li data-value="3" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="provisional" name="review_status" value="4"><label for="provisional">출금 가승인</label></a></li><!--
+					--><li data-value="3" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="finalApproval" name="review_status" value="5"><label for="finalApproval">출금 최종승인</label></a></li><!--
 					--><li data-value="3" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="reject" name="review_status" value="0"><label for="reject">반송</label></a></li><!--
 				--></ul>
 				</div>
@@ -609,6 +701,9 @@
 				<div class="tx_inp_type mr-16"><input type="text" id="keyword" placeholder="입력"></div>
 				<button type="submit" class="btn_type">검색</button>
 			</div>
+		</div>
+		<div class="col-1">
+			<button type="button" id="approvalBtn" class="btn_type">출금 최종승인</button>
 		</div>
 	</div>
 </form>
@@ -700,6 +795,32 @@
 				</tfoot>
 			</table>
 			<div class='pagination' id='pagination'></div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="warningModal" role="dialog" aria-labelledby="warningModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content collection_modal_content">
+			<div class="modal-body">
+				<h2 id="warningMsg" class="warning"></h2>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade in" id="approvalModal" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content device_modal_content">
+			<div class="modal-header stit">
+				<h2></h2>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+				</div>
+				<div class="btn_wrap_type02">
+					<button type="button" class="btn_type" id="finalApprovalBtn">확인</button>
+					<button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

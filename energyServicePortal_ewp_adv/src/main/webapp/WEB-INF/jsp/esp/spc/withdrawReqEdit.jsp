@@ -35,11 +35,13 @@
 		});
 
 		$("#fileInput").change(function(){
-			fileList = [];
-			for(let i = 0, fileLength = $(this)[0].files.length; i < fileLength; i++){
-				fileList.push($(this)[0].files);
+			let fieldName = genUuid();
+			for(let i = 0, fileLength = $(this)[0].files.length; i < fileLength; i++) {
+				let fieldName = genUuid();
+				uploadFile('post', $(this)[0].files[i], fieldName);
 			}
-			// console.log("fileLost===", fileList)
+
+			$('#fileInput').val('');
 		});
 
 		getData(spcId);
@@ -108,6 +110,7 @@
 					// promises.push(resolve(JSON.parse(element)));
 				});
 				Promise.all(promises).then(res => {
+					withdrawList.prev().data({"value": transactionData.withdraw_account_no, "name": transactionData.withdraw_bank }).html(transactionData.withdraw_bank + '&nbsp;' + transactionData.withdraw_account_no + '<span class="caret"></span>');
 					if(transactionData.to_account){
 						var withdraw_day = transactionData.withdraw_day;
 						if (!isEmpty(withdraw_day) && withdraw_day.length == 8) {
@@ -241,7 +244,7 @@
 										// console.log("v---", v);
 										let accInfo = bankName + '&nbsp;' + accNum;
 										let newHtml;
-										withdrawList.prev().data({"value": accNum, "name": bankName }).html(accInfo + '<span class="caret"></span>');
+										//withdrawList.prev().data({"value": accNum, "name": bankName }).html(accInfo + '<span class="caret"></span>');
 										// selectedAcc.html( selectedAcc.html().replace(/\*bank_name\*/g, bankName).replace(/\*acc_num\*/g, accNum) );
 										sending = copyWithdrawList.replace(/\*bank_name\*/g, bankName).replace(/\*acc_num\*/g, accNum).replace(/\*acc_holder\*/g, accHolder);
 										withdrawList.append($(sending));
@@ -477,7 +480,20 @@
 			}
 
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
-				console.log("success===", json)
+				let fileList = json.files;
+
+				if ($('#fileInput').parent().find('div.file_list li').length == 1 && $('#fileInput').parent().find('div.file_list li').text() == '선택된 파일이 없습니다.') {
+					$('#fileInput').parent().find('div.file_list ul').empty();
+				}
+
+				fileList.forEach(file => {
+					let listItem = `<li class='upload_text' data-id="${'${file.fieldname}'}">
+									${'${file.originalname}'}
+									<button type='button' class='btn_close icon_btn' onclick='deleteFile($(this))'></button>
+								</li>`;
+
+					$('#fileInput').parent().find('div.file_list ul').append(listItem);
+				});
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				console.log("jqXHR===", jqXHR)
 				alert('처리 중 오류가 발생했습니다.');
@@ -701,7 +717,7 @@
 						<tr>
 							<th class="th_type">증빙 첨부</th>
 							<td id="addFileList" class="flex_start_td"><!--
-								--><input type="file" name="file" id="fileInput" class="uploadBtn hidden" accept=".pdf" multiple><!--
+								--><input type="file" name="file" id="fileInput" class="uploadBtn hidden stand-alone" accept=".pdf" multiple><!--
 								--><label for="fileInput" class="btn file_upload">파일 선택</label><!--
 								--><div class="file_list ml-16"><ul><li>선택된 파일이 없습니다.</li></ul></div>
 							</td>

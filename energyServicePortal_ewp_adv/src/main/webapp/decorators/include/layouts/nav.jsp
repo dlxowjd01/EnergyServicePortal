@@ -169,7 +169,7 @@
 		</li>
 		</c:if>
 
-		<c:if test="${oid eq 'encored'}">
+		<c:if test="${oid eq 'encored' or oid eq 'kpx'}">
 		<li class="smn8 menu-item">
 			<a href="javascript:void(0);">설정</a>
 			<div class="sub_layer">
@@ -281,7 +281,7 @@
 				</ul>
 			</li>
 			</c:if>
-			<c:if test="${oid eq 'encored'}">
+			<c:if test="${oid eq 'encored' or oid eq 'kpx'}">
 			<li class="gmn8 menu-item">
 				<a href="javascript:void(0);">설정</a>
 				<ul class="sub-menu-list">

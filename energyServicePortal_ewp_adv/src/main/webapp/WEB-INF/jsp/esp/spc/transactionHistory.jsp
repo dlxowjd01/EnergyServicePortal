@@ -335,6 +335,18 @@
 							visibility = "hidden";
 							edit_visibility = "hidden";
 							link_attr = "text-blue";
+						} else if(item.status == 4) {
+							status="출금 가승인"
+							status_val = "4"
+							visibility = "hidden";
+							edit_visibility = "hidden";
+							link_attr = "text-link";
+						} else if(item.status == 5) {
+							status="출금 최종승인"
+							status_val = "5"
+							visibility = "hidden";
+							edit_visibility = "hidden";
+							link_attr = "text-blue";
 						}
 						
 						item.total_amount ? ( amount = item.total_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원' ) : amount = '-';
@@ -671,6 +683,18 @@
 										<a href='javascript:void(0)' tabindex='-1'>
 											<input type='checkbox' id='inProgress' value='' data-value='2' name='approvalStatus' checked>
 											<label for='inProgress'>승인 중</label>
+										</a>
+									</li>
+									<li>
+										<a href='javascript:void(0)' tabindex='-1'>
+											<input type='checkbox' id='approval' value='' data-value='4' name='approvalStatus' checked>
+											<label for='approval'>출금 가승인</label>
+										</a>
+									</li>
+									<li>
+										<a href='javascript:void(0)' tabindex='-1'>
+											<input type='checkbox' id='final' value='' data-value='5' name='approvalStatus' checked>
+											<label for='final'>출금 최종승인</label>
 										</a>
 									</li>
 									<li>

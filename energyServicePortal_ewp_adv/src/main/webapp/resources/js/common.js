@@ -200,7 +200,7 @@ $(function(){
 /* input[file] multi-select || single select label */
 $(function () {
 	var clone = '';
-	$(document).on('change', 'input[type=file]', function () {
+	$(document).on('change', 'input[type=file]:not(.stand-alone)', function () {
 		var t = $(this).val();
 		var labelText = 'File : ' + t.substr(12, t.length);
 
