@@ -175,38 +175,26 @@
 					let type = x.device_type;
 					let manufacturer = x.manufacturer;
 					if (typeArray.includes(type) && manufArray.includes(manufacturer) && model == x.model) {
-
-						// if (!isEmpty(x.codes)) {
-						// 	let codes = x.codes;
-						// 	let baseIdx = newArr.length;
-						// 	codes.forEach((code, index) => {
-						// 		codes['DEV_TYPE'] = type;
-						// 		codes['MANUFACTURER'] = manufacturer;
-						// 		codes['VERSION'] = x.version;
-						// 		codes['DEV_TYPE'] = type;
-						// 		codes['DEV_TYPE'] = type;
-						// 		codes['index'] = baseIdx + index;
-						// 		newArr.push({
-						// 			DEV_TYPE: type,
-						// 			MANUFACTURER: manufacturer,
-						// 			VERSION: x.version,
-						// 			ALRAM_CODE: code.code,
-						// 			ALRAM_MSG: code.message,
-						// 			ALRAM_LEVEL: code.level,
-						// 			MODEL: x.model
-						// 		});
-						// 	});
-						// }
+						let alarmCodeSet = x.device_type + '_' + x.manufacturer + '_' + x.model + '_' + x.version;
+						newArr.push({
+							ALRAM_CODE_SET: alarmCodeSet,
+							DEVICE_TYPE: type,
+							MANUFACTURER: manufacturer,
+							MODEL: x.model,
+							VERSION: x.version,
+							SET_ID: x.set_id
+						});
 					}
 				})).then(result => {
 					let alramTable = $('#alramTable').DataTable({
+						destroy: true,
 						'aaData': newArr,
 						'table-layout': 'fixed',
 						// "autoWidth": true,
 						'bAutoWidth': true,
 						'bSearchable' : true,
-						'sScrollX': '110%',
-						"'sScrollXInner": '110%',
+						'sScrollX': '100%',
+						'sScrollXInner': '100%',
 						'sScrollY': false,
 						'bScrollCollapse': true,
 						// "bFilter": false, disabling this option will prevent table.search()
@@ -218,53 +206,36 @@
 								'className': 'dt-center idx no-sorting'
 							},
 							{
+								'sTitle': '알람 코드 셋',
+								'mData': 'ALRAM_CODE_SET',
+							},
+							{
 								'sTitle': '설비타입',
-								'mData': 'DEV_TYPE',
+								'mData': 'DEVICE_TYPE',
 							},
 							{
 								'sTitle': '제조사',
 								'mData': 'MANUFACTURER',
 							},
 							{
+								'sTitle': '추가 정보',
+								'mData': 'MODEL',
+							},
+							{
 								'sTitle': '펌웨어 버전',
 								'mData': 'VERSION',
 							},
 							{
-								'sTitle': '에러 코드',
-								'mData': 'ALRAM_CODE',
-							},
-							{
-								'sTitle': '메세지',
-								'mData': 'ALRAM_MSG',
-							},
-							{
-								'sTitle': '알람 레벨',
-								'mData': 'ALRAM_LEVEL',
-							},
-							{
-								'sTitle': '추가 정보',
-								'mData': 'MODEL',
+								'sTitle': 'ID',
+								'mData': 'SET_ID',
 							},
 						],
 						'aoColumnDefs': [
 							{
-								'aTargets': [ 0 ],
+								'aTargets': [ 6 ],
 								'bSortable': false,
-								'orderable': false
-							},
-							{
-								"aTargets": [ 6 ],
-								"createdCell":  function (td, cellData, rowData, row, col) {
-									if(rowData.powerSource == "ESS"){
-										$(td).attr('data-value', 0);
-									} else if(rowData.powerSource == "태양광"){
-										$(td).attr('data-value', 1);
-									} else if(rowData.powerSource == "풍력"){
-										$(td).attr('data-value', 2);
-									} else if(rowData.powerSource == "소수력"){
-										$(td).attr('data-value', 3);
-									}
-								}
+								'orderable': false,
+								'bVisible': false
 							}
 						],
 						"dom": 'tip',
@@ -273,15 +244,9 @@
 							items: 'row'
 						},
 						initComplete: function(){
-							let str = `<div id="btnGroup" class="right-end"><!--
-										--><button type="button" disabled class="btn_type03 disabled" onclick="updateModal('edit')">선택 수정</button><!--
-										--><button type="button" disabled class="btn_type03 disabled" onclick="updateModal('delete')">선택 삭제</button><!--
-										--></div>`;
-							$("#siteTable_wrapper").append($(str));
 							this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-								cell.innerHTML = i+1;
+								cell.innerHTML = i + 1;
 								$(cell).data("id", i);
-								// $(cell).attr ('style', 'min-width: 160px;');
 							});
 						},
 						createdRow: function (row, data, dataIndex){
@@ -375,25 +340,21 @@
 				</div>
 				<span class="tx_tit pl-16">개 씩 보기&ensp;</span>
 			</div>
+			<button type="button" class="btn_type fr mb-20" onclick="updateModal('all')">삭제</button>
+			<button type="button" class="btn_type fr mb-20 mr-8" onclick="updateModal('all')">수정</button>
 			<button type="button" class="btn_type fr mb-20" onclick="updateModal('all')">추가</button>
 
 			<table id="alramTable">
 				<colgroup>
-					<col style="width:6%">
 					<col style="width:10%">
-					<col style="width:16%">
-					<col style="width:8%">
-					<col style="width:8%">
-					<col style="width:8%">
-					<col style="width:8%">
-					<col style="width:8%">
-					<col style="width:8%">
-					<col style="width:8%">
-					<col style="width:14%">
+					<col style="width:35%">
+					<col style="width:15%">
+					<col style="width:15%">
+					<col style="width:15%">
+					<col style="width:15%">
 				</colgroup>
 				<thead></thead>
 				<tbody></tbody>
-				<!-- <tfoot></tfoot> -->
 			</table>
 		</div>
 	</div>

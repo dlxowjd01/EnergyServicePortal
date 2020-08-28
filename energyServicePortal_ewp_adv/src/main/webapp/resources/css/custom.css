@@ -1277,6 +1277,10 @@ table input[type="text"] {
 	margin-right: 6px;
 }
 
+.mr-8 {
+	margin-right: 8px;
+}
+
 .mr-12 {
 	margin-right: 12px;
 }
@@ -1437,6 +1441,10 @@ table input[type="text"] {
 
 .w-10 {
 	width: 10% !important;
+}
+
+.w-20 {
+	width: 20% !important;
 }
 
 .w-25 {

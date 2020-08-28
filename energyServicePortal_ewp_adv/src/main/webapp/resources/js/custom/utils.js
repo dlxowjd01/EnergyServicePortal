@@ -1311,7 +1311,9 @@ function addCustomRow(tbody, options) {
 
 	toggle.each(function(index, element){
 		let oldId = $(this).attr("id");
+		let oldId2 = $(this).parents('.dropdown').attr('id');
 		let newId = oldId + cnt;
+		let newId2 = oldId2 + cnt;
 		$(this).prev().html($(this).prev().html().replace($(this).prev().text(),'선택'));
 		$(this).prev().data("value", "");
 		$.map($(this).prev().data(), function(val, key) {
@@ -1320,6 +1322,7 @@ function addCustomRow(tbody, options) {
 			}
 		});
 		$(this).attr("id", newId);
+		$(this).parents('.dropdown').attr('id', newId2);
 	});
 
 	copy.find('input').each(function(index, element){
