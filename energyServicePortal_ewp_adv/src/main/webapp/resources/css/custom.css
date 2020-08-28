@@ -292,6 +292,7 @@ html.darkmode:root {
 *::-webkit-scrollbar {
 	border-radius: 2px;
 	background-color: var(--scroll-track);
+	width: 6px;
 }
 
 *::-webkit-scrollbar-corner {
@@ -1706,7 +1707,7 @@ footer .copyright {
 
 
 .mobile-visible {
-	display: none;
+	display: none !important;
 }
 
 /* sidebar */
@@ -2953,6 +2954,10 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 	padding: 40px 48px 42px;
 }
 
+.user-modal-content .modal-header {
+	padding: 0 4px;
+}
+
 .user-modal-content .warning-text {
 	text-align: left;
 }
@@ -2969,7 +2974,14 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 	margin-bottom: 20px;
 }
 
+.user-modal-content .row.user-row.col-lg-5,
+.user-modal-content .row.user-row.col-md-5 {
+	padding: 12px 0;
+	margin-left: -28px;
+}
+
 .user-modal-content .row.user-row .stit {
+	display: table;
 	margin: 9px 0 20px;
 }
 
@@ -3981,6 +3993,10 @@ input.inp[readonly]:focus {
 	background: none;
 	color: var(--white60);
 	font-size: 13px;
+}
+
+.nav-tabs>li + li >a {
+	padding: 12px 24px 12px 36px;
 }
 
 .nav-tabs>li>a:focus,
