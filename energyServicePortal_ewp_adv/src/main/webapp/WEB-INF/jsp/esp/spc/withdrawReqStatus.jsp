@@ -16,6 +16,10 @@
 		tableBody.find("template").remove();
 		tableFooter.find("template").remove();
 
+		if (task != 3) {
+			$('#approvalBtn').remove();
+		}
+
 		// $("#warningModal .modal-title").text('처리 중 오류가 발생했습니다.');
 		// $("#warningModal").modal("show");
 		unCheckAll($("#reqStatus"));
@@ -59,6 +63,17 @@
 
 			let agree = true;
 			let checkedList = new Array();
+
+			if ($(':checkbox[name="reviewOpt"]:checked').length <= 0) {
+				$("#warningMsg").text('하나이상의 항목을 선택해 주세요.');
+				$("#warningModal").modal("show");
+				setTimeout(function(){
+					$("#warningModal").modal("hide");
+				}, 1800);
+
+				return false;
+			}
+
 			$(':checkbox[name="reviewOpt"]:checked').each(function() {
 				let statusValue = $(this).parents('tr').find('td:nth-child(8)').data('value');
 				let withdrawDay = $(this).parents('tr').find('td:nth-child(2)').text();
@@ -597,7 +612,7 @@
 		let option = {
 			url: apiHost + '/spcs/transactions/' + id + '?oid=' + oid,
 			type: 'patch',
-			async: true,
+			async: false,
 			dataType: 'json',
 			contentType: "application/json",
 			data: jsonData

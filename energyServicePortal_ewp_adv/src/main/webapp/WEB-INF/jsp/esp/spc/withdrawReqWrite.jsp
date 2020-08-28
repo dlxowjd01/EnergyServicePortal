@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
-
 <script src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
 	$(function() {
@@ -16,6 +15,7 @@
 		const copyWithdrawList = $("#withdrawList").clone().html();
 		const copyReceiveList = $("#receiveList").clone().html();
 		const copyPurposeList = $("#purposeList").clone().html();
+		const copyBankList = $("#bankList").clone().html();
 		let fileList = [];
 		// let uploadForm = $("#uploadForm")[0];
 		let totalAmount = 0;
@@ -28,6 +28,7 @@
 		unCheckAll(tableBody);
 		getSpcList();
 		calcTotal();
+		bankProperties();
 		$("#total").val(totalAmount);
 
 		$("#requestedDate").change(function(){
@@ -216,6 +217,8 @@
 								});
 							}
 						});
+					}).finally(() => {
+						$(".receive-list").append(`<li data-value="직접입력"><a href="#" tabindex="-1">직접입력</a></li>`);
 					});
 				} else {
 					sending = copyWithdrawList.replace(/\*bank_name\*/g, '등록 계좌 없음').replace(/\*acc_num\*/g,'').replace(/\*acc_holder\*/g, '');
@@ -284,17 +287,25 @@
 			tr.each(function(index, element){
 				let purposeOpt = $("#tableBody").find("td:nth-of-type(3) .dropdown-toggle");
 				let amountOpt = $("#tableBody").find("td:nth-of-type(4) input");
-				let accOpt = $("#tableBody").find("td:nth-of-type(5) .dropdown-toggle");
+				let accOpt = $("#tableBody").find("td:nth-of-type(5) .dropdown-toggle").eq(0);
+				let accOpt2 = $("#tableBody").find("td:nth-of-type(5) .dropdown-toggle").eq(1);
+				let accNo = $("#tableBody").find("td:nth-of-type(5) input[type='text']");
 				let descOpt = $("#tableBody").find("td:nth-of-type(6) input");
 				let obj = {};
 				obj.purpose = purposeOpt.eq(index).data("value");
 				console.log("purposeOpt===", purposeOpt.eq(index).data("value"))
 
 				obj.amount = Number(amountOpt.eq(index).val().replace(/,/g, ''));
-				obj.to_account_owner = accOpt.eq(index).data("acc-holder");
-				obj.to_account_bank = accOpt.eq(index).data("name");
-				obj.to_account_no = accOpt.eq(index).data("value");
 				obj.desc = descOpt.eq(index).val();
+				if (accOpt.eq(index).data("value") == '직접입력') {
+					obj.to_account_owner = '직접입력';
+					obj.to_account_bank = accOpt2.eq(index).data("value");
+					obj.to_account_no = accNo.val();
+				} else {
+					obj.to_account_owner = accOpt.eq(index).data("acc-holder");
+					obj.to_account_bank = accOpt.eq(index).data("name");
+					obj.to_account_no = accOpt.eq(index).data("value");
+				}
 				arr.push(obj);
 			});
 			jsonData.total_amount = totalAmount;
@@ -459,8 +470,47 @@
 		$("#selectAll").on("click", function(){
 			$("#tableBody").find('input:checkbox').prop('checked', this.checked);
 		});
+
+		function bankProperties() {
+			let opt = {
+				url: apiHost + '/config/view/properties?types=bank_name',
+				type: 'GET',
+				dataType: 'json'
+			};
+
+			$.ajax(opt).done(function (json, textStatus, jqXHR) {
+				const bankList = json.bank_name;
+				$('.bank-list').empty();
+				if (bankList != null) {
+					Object.entries(bankList).map(bank => {
+						let bankObj = bank[1];
+						let temp = copyBankList.replace(/\*code\*/g, bankObj.name.kr).replace(/\*bankName\*/g, bankObj.name.kr);
+						$('.bank-list').append(temp);
+					});
+				} else {
+					$('.bank-list').append(copyBankList.replace(/\*code\*/g, '').replace(/\*bankName\*/g, '조회된 은행이 없습니다.'));
+				}
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				alert('처리 중 오류가 발생했습니다.');
+				console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
+				return false;
+			});
+		}
 	});
 
+	function rtnDropdown($selector) {
+		if ($selector.match('receiveDropDown')) {
+			const obj = $('#' + $selector);
+			const selValue = obj.find('button').data('value');
+			if (selValue == '직접입력') {
+				obj.parents('td').find('div:nth-child(2)').removeClass('hidden');
+				obj.parents('td').find('div:nth-child(3)').removeClass('hidden');
+			} else {
+				obj.parents('td').find('div:nth-child(2)').addClass('hidden');
+				obj.parents('td').find('div:nth-child(3)').addClass('hidden');
+			}
+		}
+	}
 
 </script>
 
@@ -552,12 +602,21 @@
 						--></td>
 							<td>
 								<div class="sa_select">
-									<div class="dropdown placeholder">
+									<div class="dropdown placeholder" id="receiveDropDown">
 										<button type="button" class="dropdown-toggle" data-clone="empty" data-toggle="dropdown" data-name="">선택<span class="caret"></span></button>
 										<ul id="receiveList" class="receive-list dropdown-menu" role="menu"><li data-acc-holder="*acc_holder*" data-acc-type="*to_acc_type*" data-name="*to_bank_name*" data-value="*to_account_no*"><a href="#" tabindex="-1">*to_bank_name* *to_account_no* (*acc_holder*)</a></li></ul>
 									</div>
 								</div>
-							</td>
+								<div class="sa_select w-50 hidden">
+									<div class="dropdown placeholder">
+										<button type="button" class="dropdown-toggle" data-clone="empty" data-toggle="dropdown" data-name="">선택<span class="caret"></span></button>
+										<ul id="bankList" class="bank-list dropdown-menu" role="menu"><li data-value="*code*"><a href="#" tabindex="-1">*bankName*</a></li></ul>
+									</div>
+								</div><!--
+							--><div class="tx_inp_type hidden"><!--
+								--><input type="text" id="accountNo" class="right" name="accountNo" placeholder="계좌번호" maxlength="18"><!--
+							--></div><!--
+						--></td>
 							<td>
 								<div class="tx_inp_type"><input type="text" id="note" name="note" placeholder="직접 입력"></div>
 							</td>

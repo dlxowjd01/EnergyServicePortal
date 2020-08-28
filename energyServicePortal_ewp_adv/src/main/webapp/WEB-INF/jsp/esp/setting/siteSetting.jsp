@@ -885,6 +885,14 @@
 				return false;
 			});
 		}
+		
+		function filterColumn ( id, idx, val ) {
+			$(id).DataTable().column(idx).search(val).draw();
+		}
+
+		function getUniqueListBy(arr, key) {
+			return [...new Map(arr.map(item => [item[key], item] )).values()]
+		}
 
 		function filterColumn ( id, idx, val ) {
 			$(id).DataTable().column(idx).search(val).draw();

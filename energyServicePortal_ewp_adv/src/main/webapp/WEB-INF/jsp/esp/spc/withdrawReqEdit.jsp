@@ -266,7 +266,7 @@
 										});
 
 									}
-								});
+								})
 							});
 							$(".purpose-list").each(function(){
 								let purpose = $(this);
@@ -283,6 +283,8 @@
 							});
 						}).finally(() => {
 							setDatepicker();
+							$(".receive-list").append(`<li data-value="직접입력"><a href="#" tabindex="-1">직접입력</a></li>`);
+							bankProperties();
 						});
 					}
 				});
@@ -388,12 +390,18 @@
 				let accOpt = $("#tableBody").find("td:nth-of-type(5) .dropdown-toggle");
 				let descOpt = $("#tableBody").find("td:nth-of-type(6) input");
 				let obj = {};
-				obj.purpose = purposeOpt.eq(index).data("value");
+
 				obj.amount = Number(amountOpt.eq(index).val().replace(/,/g, ''));
-				obj.to_account_owner = accOpt.eq(index).data("acc-holder");
-				obj.to_account_bank = accOpt.eq(index).data("name");
-				obj.to_account_no = accOpt.eq(index).data("value");
 				obj.desc = descOpt.eq(index).val();
+				if (accOpt.eq(index).data("value") == '직접입력') {
+					obj.to_account_owner = '직접입력';
+					obj.to_account_bank = accOpt2.eq(index).data("value");
+					obj.to_account_no = accNo.val();
+				} else {
+					obj.to_account_owner = accOpt.eq(index).data("acc-holder");
+					obj.to_account_bank = accOpt.eq(index).data("name");
+					obj.to_account_no = accOpt.eq(index).data("value");
+				}
 				arr.push(obj);
 			});
 			// console.log("total===0", totalAmount)
@@ -562,6 +570,33 @@
 		$("#selectAll").on("click", function(){
 			$("#tableBody").find('input:checkbox').prop('checked', this.checked);
 		});
+
+		function bankProperties() {
+			let opt = {
+				url: apiHost + '/config/view/properties?types=bank_name',
+				type: 'GET',
+				dataType: 'json'
+			};
+
+			$.ajax(opt).done(function (json, textStatus, jqXHR) {
+				const bankList = json.bank_name;
+				$('.bank-list').empty();
+				if (bankList != null) {
+					Object.entries(bankList).map(bank => {
+						let bankObj = bank[1];
+						let temp = `<li data-value="${'${bankObj.name.kr}'}"><a href="#" tabindex="-1">${'${bankObj.name.kr}'}</a></li>`
+						$('.bank-list').append(temp);
+					});
+				} else {
+					let temp = `<li data-value=""><a href="#" tabindex="-1">조회된 은행이 없습니다.</a></li>`
+					$('.bank-list').append(temp);
+				}
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				alert('처리 중 오류가 발생했습니다.');
+				console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
+				return false;
+			});
+		}
 	});
 
 	function setDatepicker() {
@@ -576,6 +611,19 @@
 		});
 	}
 
+	function rtnDropdown($selector) {
+		if ($selector.match('receiveDropDown')) {
+			const obj = $('#' + $selector);
+			const selValue = obj.find('button').data('value');
+			if (selValue == '직접입력') {
+				obj.parents('td').find('div:nth-child(2)').removeClass('hidden');
+				obj.parents('td').find('div:nth-child(3)').removeClass('hidden');
+			} else {
+				obj.parents('td').find('div:nth-child(2)').addClass('hidden');
+				obj.parents('td').find('div:nth-child(3)').addClass('hidden');
+			}
+		}
+	}
 </script>
 
 
@@ -674,13 +722,21 @@
 							--></td>
 								<td>
 									<div class="sa_select">
-										<div class="dropdown placeholder">
+										<div class="dropdown placeholder" id="receiveDropDown">
 											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-acc-holder="*accHolder*" data-name="*bankName*" data-value="*accNum*">*bankName*  *accNum* (*accHolder*)<span class="caret"></span></button>
-												<ul id="receiveList*index*" class="receive-list dropdown-menu" role="menu">
-												</ul>
+												<ul id="receiveList*index*" class="receive-list dropdown-menu" role="menu"></ul>
 										</div>
 									</div>
-								</td>
+									<div class="sa_select w-50 hidden">
+										<div class="dropdown placeholder">
+											<button type="button" class="dropdown-toggle" data-clone="empty" data-toggle="dropdown" data-name="">선택<span class="caret"></span></button>
+											<ul id="bankList" class="bank-list dropdown-menu" role="menu"></ul>
+										</div>
+									</div><!--
+								--><div class="tx_inp_type hidden"><!--
+									--><input type="text" id="accountNo" class="right" name="accountNo" placeholder="계좌번호" maxlength="18"><!--
+								--></div><!--
+							--></td>
 								<td>
 									<div class="tx_inp_type"><input type="text" id="note*index*" name="note*index*" value="*desc*" placeholder="직접 입력"></div>
 								</td>
