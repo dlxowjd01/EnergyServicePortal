@@ -1015,24 +1015,27 @@ const setGenDataBySiteYesterday = function (type, siteGenArray, siteForeGenArray
 		if(!isEmpty(tmepGenArray)){
 			let newValue = '';
 			genSum = tmepGenArray.reduce((acc, val) => { return acc + val } , 0);
-			if (String(genSum).length  >= 5) {
-				newValue = numberComma(value / 1000) + ' M';
+			if ( ( String(genSum).length  >= 3 ) && ( String(genSum).length  < 5 ) ) {
+				newValue = String(genSum).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " kWh";
+			} else if (String(genSum).length  >= 5) {
+				newValue = String(numberComma(genSum / 1000))  + ' M';
 			} else {
 				newValue = String(genSum) + "kWh";
 			}
 			str += '<li class="charge">발전 : ' + newValue + '</li>';
-			console.log("2---", genSum)
 		}
 		if(!isEmpty(tempForeArray)){
 			let newValue = '';
 			genForecastSum = tempForeArray.reduce((acc, val) => { return acc + val } , 0);
-			if (String(genForecastSum).length  >= 5) {
-				newValue = numberComma(value / 1000) + ' M';
+
+			if ( ( String(genForecastSum).length  >= 3 ) && ( String(genForecastSum).length  < 5 ) ) {
+				newValue = String(genForecastSum).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " kWh";
+			} else if (String(genForecastSum).length  >= 5) {
+				newValue = String(numberComma(genForecastSum / 1000)) + ' M';
 			} else {
 				newValue = String(genForecastSum) + "kWh";
 			}
 			str += '<li class="discharge">발전 예측 : ' + newValue + '</li>';
-			console.log("2---", genForecastSum)
 		}
 		$("#yesterdaySum").append(str);
 		setSiteList();
