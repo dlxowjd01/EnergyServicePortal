@@ -19,7 +19,8 @@ html.darkmode:root {
 	--ico-sort-down: url("/img/sorting_down.png");
 }
 
-.dataTable {
+.dataTable,
+.dataTable.no-stripe {
 	width: 100%;
 	margin: 0 auto;
 	clear: both;
@@ -42,6 +43,23 @@ html.darkmode:root {
 	display: none;
 }
 
+.dataTable.no-footer.no-stripe thead th:first-of-type,
+.dataTable.no-footer.no-stripe tbody tr td:first-of-type,
+.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table.no-stripe>tbody>tr>td:first-of-type {
+	padding: 16px 10px 16px 40px;
+}
+
+.dataTable.no-footer.no-stripe thead th:last-of-type,
+.dataTable.no-footer.no-stripe tbody tr td:last-of-type,
+.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table.no-stripe>tbody>tr>td:last-of-type {
+	padding: 16px 40px 16px 10px;
+}
+
+.dataTable.no-footer.no-stripe thead {
+	width: 100%;
+}
+
+.dataTable.no-footer.no-stripe thead th,
 .dataTables_scrollHeadInner > .dataTable th,
 .dataTables_scrollHeadInner > .dataTable td {
 	background: var(--box-darker);
@@ -119,7 +137,7 @@ html.darkmode:root {
 	background: var(--vivid-blue) !important;
 }
 
-.dataTable tbody tr.even td {
+.dataTable:not(.no-stripe) tbody tr.even td {
 	background: var(--box-darker);
 	font-weight: normal;
 }
@@ -383,6 +401,7 @@ html.darkmode:root {
 }
 
 .dataTables_wrapper .dataTables_scroll {
+	margin-bottom: 12px;
 	clear: both;
 	overflow: auto;
 }
@@ -390,6 +409,14 @@ html.darkmode:root {
 .dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody {
 	*margin-top: -1px;
 	-webkit-overflow-scrolling: touch;
+}
+
+.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody::-webkit-scrollbar,
+.dataTables_wrapper .dataTables.no-stripe::-webkit-scrollbar {
+	border-radius: 2px;
+	background-color: var(--scroll-track);
+	width: 6px;
+	height: 6px;
 }
 
 .dataTables_scrollBody > table > thead > tr {
@@ -416,6 +443,11 @@ html.darkmode:root {
 	padding: 0 !important;
 }
 
+
+
+
+
+
 .dataTables_wrapper.no-footer div.dataTables_scrollHead .dataTable,
 .dataTables_wrapper.no-footer div.dataTables_scrollBody>table {
 	border-bottom: none;
@@ -434,6 +466,7 @@ html.darkmode:root {
 
 .dataTable.fixedHeader-floating {
 	position: fixed !important;
+	box-shadow: var(--box-shadow);
 }
 
 .dataTable.fixedHeader-floating thead th {

@@ -43,8 +43,6 @@
 	<script src="/js/sectionDisplay.js"></script>
 	<script src="/js/common.js"></script>
 
-	<script src="/js/custom/common.js"></script>
-
 	<script src="/js/custom/utils.js"></script>
 	<script src="/js/custom/numberFormat.js"></script>
 

@@ -49,7 +49,7 @@
 					</c:otherwise>
 				</c:choose>
 				<div class="input-field"><input type="text" id="loginUserId" name="login_id" class="clear-input" placeholder=<spring:message code="ewp.login.ID"/>></div>
-				<div class="input-field"><input type="password" id="loginUserPw" name="password" class="clear-input" placeholder=<spring:message code="ewp.login.Password"/>><button type="button" class="clear-btn" onclick="showPwd(this)">show</button></div>
+				<div class="input-field"><input type="password" id="loginUserPw" name="password" class="clear-input" placeholder=<spring:message code="ewp.login.Password"/>><button type="button" class="clear-btn" onclick="showPwd( 'loginUserPw', this)">show</button></div>
 				<div class="input-field no-border"><a class="chk_type"><input type="checkbox" id="saveLogin" name="save_login"><label for="saveLogin">로그인 유지</label></a></div>
 
 				<div class="btn-wrapper">
@@ -201,14 +201,14 @@
 			f.submit();
 		}
 
-		function showPwd(self) {
-			var x = document.getElementById("loginUserPw");
-			if (x.type === "password") {
-				x.type = "text";
-				self.classList.add("close");
+		function showPwd(inputId, btn) {
+			var target = document.getElementById(inputId);
+			if (target.type === "password") {
+				target.type = "text";
+				btn.classList.add("eye-close");
 			} else {
-				x.type = "password";
-				self.classList.remove("close");
+				target.type = "password";
+				btn.classList.remove("eye-close");
 			}
 		}
 	</script>

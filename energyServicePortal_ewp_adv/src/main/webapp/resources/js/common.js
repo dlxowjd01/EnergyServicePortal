@@ -431,8 +431,6 @@ $(document).ready(function(e){
 });
 
 
-
-
 /* 상단 전체메뉴 */
 $(function() {
     $("nav .all-menu > a").click(function(){
@@ -535,3 +533,131 @@ $(function() {
         $(this).siblings('.fileName').val(filename);
     });
 });
+
+$(function() {
+	$(document).on('click', '.dropdown-menu li:not(.disabled) a', function(){
+		selectBoxTextApply(this);
+	});
+
+});
+
+function selectBoxTextApply(obj) {
+	var txt = $(obj).text();
+	$(obj).closest('.dropdown').find('[data-toggle="dropdown"]').html(txt+'<span class="caret"></span>').data('value', $(obj).parents().data('value'));
+}
+
+function unCheckAll(data){
+	if(data){
+		if(data.is("input[type='checkbox']")){
+			var input = data
+		} else {
+			var input = data.find('input');
+		}
+		var textArea = data.find("textarea");
+	
+		textArea.each(function(){
+			$(this).val("");
+		})
+		
+		for(var i = 0; i < input.length; i++){
+			if(input[i].type=='checkbox'){
+				input[i].checked = false;
+			} else {
+				input.val('');
+			}
+		}
+	} else {
+		return false;
+	}
+
+}
+
+
+// 사용 안하고 있는 function 인지 확인 필요 (290820 ~ 150920)
+function getPdfDownload() {
+	html2canvas(document.getElementById("layerbox"), {
+		onrendered: function (canvas) {
+			var imgData = canvas.toDataURL('image/png');
+			var imgWidth = 210; // A4용지 기준 이미지 width길이
+			var imgHeight = canvas.height * imgWidth / canvas.width; //화면내용 이미지화 했을때 이미지파일의 height
+			var pageHeight = imgWidth * 1.414;  // A4용지 세로 길이
+			var heightLeft = imgHeight;
+
+			/**
+			 * Creates new jsPDF document object instance.
+			 * @param orientation One of "portrait" or "landscape" (or shortcuts "p" (Default), "l")
+			 * @param unit		Measurement unit to be used when coordinates are specified.
+			 *					One of "pt" (points), "mm" (Default), "cm", "in"
+			 * @param format	  One of 'pageFormats' as shown below, default: a4
+			 * @name jsPDF
+			 */
+			var doc = new jsPDF('p', 'mm', 'a4');
+			var position = 0;
+
+			//function(imageData, format, x, y, w, h[, alias[, compression[, rotation]]])
+			doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight); //화면의 이미지 파일 추가
+			heightLeft -= pageHeight;
+
+			//화면이 길어 1장 이상일때
+			while (heightLeft >= 20) {
+				position = heightLeft - imgHeight;
+				doc.addPage();
+				doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+				heightLeft -= pageHeight;
+			}
+
+			doc.save('download.pdf');
+		}
+	});
+}
+
+function showPwd(inputId, btn) {
+	let target = document.getElementById(inputId);
+	if (target.type === "password") {
+		target.type = "text";
+		btn.classList.add("eye-close");
+	} else {
+		target.type = "password";
+		btn.classList.remove("eye-close");
+	}
+}
+
+function filterColumn ( id, idx, val, arr ) {
+	if(opt){
+		$.each(arr, function(index, el){
+
+		});
+	} else {
+		$(id).DataTable().column(idx).search(val).draw();
+	}
+}
+
+
+function getUniqueListBy(arr, key) {
+	return [...new Map(arr.map(item => [item[key], item] )).values()]
+}
+
+function makeAjaxCall(option){
+	return $.ajax(option).done(function (json, textStatus, jqXHR) {
+		console.log("makeAjaxCall json--", json)
+	}).fail(function (jqXHR, textStatus, errorThrown) {
+		console.log("siteInfo/spcInfo Ajax Error:", jqXHR.responseJSON.error.message)
+		return false;
+	});
+}
+
+function makeAjaxCall(option, callback){
+	return $.ajax(option).done(function (json, textStatus, jqXHR) {
+		// console.log("makeAjaxCall json--", json)
+		if(callback){ callback(); }
+	}).fail(function (jqXHR, textStatus, errorThrown) {
+		console.log("siteInfo/spcInfo Ajax Error:", jqXHR.responseJSON.error.message)
+		return false;
+	});
+}
+
+$.fn.multiline = function(text){
+	this.text(text);
+	this.html(this.html().replace(/\n/g,'<br/>'));
+	return this;
+}

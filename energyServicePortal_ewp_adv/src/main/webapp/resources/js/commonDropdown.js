@@ -73,8 +73,6 @@ const displayDropdown = ($selector) => {
 			}
 		}
 	}
-	$displayButton.eq(0).html($displayText + '<span class="caret"></span>').addClass("active");
-	// $displayButton.eq(0).text().replace(/<[^>]+>/g, $displayText);   <== 이 부분 적용시 '외' 의 텍스트가 나오지 않음.
 
 	//data Setting
 	if (!isEmpty($displayData)) {
@@ -231,3 +229,7 @@ const setSingleSelectDropdown = ($selector) => {
 	});
 	return false;
 }
+
+
+// TO DO !!!!!!    선택 클릭시 btn => disabled color 적용
+// $displayButton.eq(0).html($displayText + '<span class="caret"></span>').addClass("active");

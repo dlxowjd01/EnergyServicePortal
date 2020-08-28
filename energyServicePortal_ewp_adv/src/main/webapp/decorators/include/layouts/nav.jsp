@@ -2,6 +2,7 @@
 <%@ include file="/decorators/include/taglibs.jsp" %>
 <c:set var="oid" value="${userInfo.oid}"/> <%-- 메뉴 관리용 OID --%>
 <c:set var="task" value="${userInfo.task}"/> <%-- 메뉴 관리용 Task --%>
+
 <script type="text/javascript">
 	$(function () {
 		const sideBar = $("#sidebar"),
@@ -12,7 +13,6 @@
 			subMenuLink = subMenu.find("a"),
 			mobileMenu = $("#mobileNav").find(".menu-item"),
 			path = $(location).attr("pathname");
-
 
 		subMenuLink.each(function (e) {
 			if ($(this).attr("href") === path) {
@@ -25,11 +25,9 @@
 			let link = $(this).attr("href");
 
 			if (current == link) {
-				console.log("link same===", link, "cirremt==0", current)
 				$(this).on('click', false);
 				event.preventDefault();
 			} else {
-				console.log("link differmet===", link, "cirremt==0", current)
 				$(this).on('click', true);
 			}
 		});
@@ -177,7 +175,9 @@
 					<li><a href="/setting/siteSetting.do">사업소 관리</a></li>
 					<li><a href="/setting/groupSetting.do">그룹 관리</a></li>
 					<li><a href="/setting/alarmSetting.do">알람 설정</a></li>
+					<c:if test="${role ne '2'}">
 					<li><a href="/setting/userSetting.do">사용자 관리</a></li>
+					</c:if>
 					<li><a href="/setting/comCodeSetting.do">공통 코드 관리</a></li>
 					<li><a href="/setting/batchSetting.do">배치 관리</a></li>
 				</ul>
@@ -288,7 +288,9 @@
 					<li><a href="/setting/siteSetting.do">사업소 관리</a></li>
 					<li><a href="/setting/groupSetting.do">그룹 관리</a></li>
 					<li><a href="/setting/alarmSetting.do">알람 설정</a></li>
+					<c:if test="${role ne '2'}">
 					<li><a href="/setting/userSetting.do">사용자 관리</a></li>
+					</c:if>
 					<li><a href="/setting/comCodeSetting.do">공통 코드 관리</a></li>
 					<li><a href="/setting/batchSetting.do">배치 관리</a></li>
 				</ul>
