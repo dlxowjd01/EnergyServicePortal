@@ -168,7 +168,7 @@
 	}
 
 	.mobile-visible {
-		display: block;
+		display: flex !important;
 	}
 
 	.gmain_map.gmain_chart.gmain_chart4,

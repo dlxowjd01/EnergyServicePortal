@@ -32,7 +32,7 @@
 				url: apiHost + "/spcs?oid=" + oid + "&includeGens=false",
 				type: "get",
 				async: true,
-			}
+			},
 		];
 
 
@@ -811,6 +811,8 @@
 					} else if(item.task == 2){
 						obj.user_task = "자산 운용사"
 					} else if(item.task == 3){
+						obj.user_task = "출금 관리자"
+					} else if(item.task == 4){
 						obj.user_task = "사업주"
 					}
 
@@ -1123,7 +1125,7 @@
 			let name = $("#siteOptList").prev().data("name");
 			let siteVal = $("#siteOptList").prev().data("value");
 
-			let accName = $("#siteAccOpt").prev().data("name");
+			let siteAccName = $("#siteAccOpt").prev().data("name");
 			let accVal = $("#siteAccOpt").prev().data("value");
 
 			let selectedList = $("#selectedSiteList").find("li");
@@ -1158,7 +1160,7 @@
 				}
 
 				html = `
-					<li data-sid="${'${siteVal}'}" data-role="${'${accVal}'}" data-site-name="${'${name}'}">${'${name}'}&nbsp;(&nbsp;${'${accName}'}&nbsp;)<!--
+					<li data-sid="${'${siteVal}'}" data-role="${'${accVal}'}" data-site-name="${'${name}'}">${'${name}'}&nbsp;(&nbsp;${'${siteAccName}'}&nbsp;)<!--
 					--><button type="button" class="icon-delete" onclick="removeList( $(this).closest('li') )">삭제</button><!--
 				--></li>
 				`;
@@ -1167,7 +1169,7 @@
 		} else {
 			let name = $("#spcOptList").prev().data("name");
 			let spcVal = $("#spcOptList").prev().data("value");
-			let accName = $("#spcAccOpt").prev().data("name");
+			let spcAccName = $("#spcAccOpt").prev().data("name");
 			let accVal = $("#spcAccOpt").prev().data("value");
 
 			let selectedList = $("#selectedSpcList").find("li");
@@ -1202,7 +1204,7 @@
 			}
 
 			html = `
-				<li data-spc-id="${'${spcVal}'}" data-role="${'${accVal}'}" data-spc-name="${'${name}'}">${'${name}'}&nbsp;(&nbsp;${'${accName}'}&nbsp;)<!--
+				<li data-spc-id="${'${spcVal}'}" data-role="${'${accVal}'}" data-spc-name="${'${name}'}">${'${name}'}&nbsp;(&nbsp;${'${spcAccName}'}&nbsp;)<!--
 				--><button type="button" class="icon-delete" onclick="removeList( $(this).closest('li') )">삭제</button><!--
 			--></li>
 			`;
@@ -1275,21 +1277,24 @@
 					if(!isEmpty(tr.data("site-list"))){
 						$.when($.ajax(optSite), $.ajax(optSpc)).done(function (result1, result2) {
 							let siteData = result1[0].data;
-							let siteOptList = $("#siteOptList li").toArray();
-							let siteStr = ``;
 
 							if(siteData.length > 0){
+
+								let siteOptList = $("#siteOptList li").toArray();
+								let siteStr = ``;
+
 								$.each(siteData, function( index, item ) {
 									siteOptList.some( x => {
 										if($(x).data("value") === item.sid) {
+											// console.log("item---", item)
 											let name = $(x).data("name");
 											let role = '';
-											item.role == 1 ? role = "조회 권한" : role = "관리 권한";
+											item.role == "1" ? role = "조회 권한" : role = "관리 권한";
 
 											siteStr += `
-											<li class="user-site delete" data-sid="${'${item.sid}'}" data-role="${'${item.role}'}" data-site-name="${'${name}'}">${'${name}'}&nbsp;(&nbsp;${'${role}'}&nbsp;)<!--
-											--><button type="button" class="icon-delete text-btn" onclick="removeList( $(this).closest('li'), $(this) )">삭제 예정</button><!--
-										--></li>
+											<li class="user-site delete" data-sid="${'${item.sid}'}" data-role="${'${item.role}'}" data-site-name="${'${name}'}">${'${name}'}&nbsp;(&nbsp;${'${role}'}&nbsp;)
+												<button type="button" class="icon-delete text-btn" onclick="removeList( $(this).closest('li'), $(this) )">삭제 예정</button>
+											</li>
 											`;
 											siteDeleteList.push(item.usid);
 										}
@@ -1298,8 +1303,11 @@
 								$("#selectedSiteList").append(siteStr).prev().html("수정 리스트&emsp;<span class='fr'>(&nbsp;<strong class='text-orange'>삭제 예정</strong>&ensp;선택 시, 등록된 기존 정보 삭제)</span>").removeClass("hidden");
 							}
 
-							if(!isEmpty(tr.data("spc-list"))){
-								let spcData = result2[0].data;
+
+							let spcData = result2[0].data;
+
+							if(spcData.length > 0){
+
 								let spcOptList = $("#spcOptList li").toArray();
 								let spcStr = ``;
 
@@ -1308,12 +1316,12 @@
 										if($(x).data("value") === item.spcid) {
 											let name = $(x).data("name");
 											let role = '';
-											item.role == 1 ? role = "조회 권한" : role = "관리 권한";
+											item.role == "1" ? role = "수정/조회" : role = "조회";
 
 											spcStr += `
-												<li class="user-spc delete" data-spc-id="${'${item.spcid}'}" data-role="${'${item.role}'}" data-spc-name="${'${name}'}">${'${name}'}&nbsp;(&nbsp;${'${role}'}&nbsp;)<!--
-												--><button type="button" class="icon-delete text-btn" onclick="removeList( $(this).closest('li'), $(this) )">삭제 예정</button><!--
-											--></li>
+												<li class="user-spc delete" data-spc-id="${'${item.spcid}'}" data-role="${'${item.role}'}" data-spc-name="${'${name}'}">${'${name}'}&nbsp;(&nbsp;${'${role}'}&nbsp;)
+													<button type="button" class="icon-delete text-btn" onclick="removeList( $(this).closest('li'), $(this) )">삭제 예정</button>
+												</li>
 											`;
 											spcDeleteList.push(item.uspcid);
 										}
@@ -1342,11 +1350,11 @@
 					id.val(td.eq(1).text()).prop('disabled', true).addClass("disabled");
 
 					$('#newFullName').val(td.eq(2).text());
-
+					let accName = td.eq(6).text();
 					if(td.eq(6).text() == "시스템 관리자"){
-						accLevBtn.data( { "name" : td.eq(6).text(), "value" : "1"}).html(td.eq(6).text() + '<span class="caret">');
+						accLevBtn.data( { "name" : accName, "value" : "1"}).html(accName+ '<span class="caret">');
 					} else if(td.eq(6).text() == "일반 사용자"){
-						accLevBtn.data( { "name" : td.eq(6).text(), "value" : "2"}).html(td.eq(7).text() + '<span class="caret">');
+						accLevBtn.data( { "name" : accName, "value" : "2"}).html(accName + '<span class="caret">');
 					}
 
 					if( !isEmpty(td.eq(3).text() ) && td.eq(3).text() != "-" ){
@@ -1513,7 +1521,7 @@
 <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-md-lg">
 		<div class="modal-content user-modal-content">
-			<div id="titleAdd" class="modal-header"><h1>사용자 추가<span class="required px-4 fr">필수 입력 항목</span></h1></div>
+			<div id="titleAdd" class="modal-header"><h1>사용자 추가<span class="required fr">필수 입력 항목</span></h1></div>
 			<div id="titleEdit" class="modal-header"><h1>사용자 정보 수정</h1></div>
 			<div class="modal-body">
 				<div class="container-fluid">
@@ -1587,10 +1595,11 @@
 								<div class="dropdown">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 									<ul id="newTaskList" class="dropdown-menu">
-										<li data-value="0"><a href="#">일반</a></li>
-										<li data-value="1"><a href="#">사무 수탁사</a></li>
-										<li data-value="2"><a href="#">자산 운용사</a></li>
-										<li data-value="3"><a href="#">사업주</a></li>
+										<li data-name="일반" data-value="0"><a href="#">일반</a></li>
+										<li data-name="사무수탁사" data-value="1"><a href="#">사무 수탁사</a></li>
+										<li data-name="자산운용사" data-value="2"><a href="#">자산 운용사</a></li>
+										<li data-name="출금관리자" data-value="3"><a href="#">출금 관리자</a></li>
+										<li data-name="사업주" data-value="4"><a href="#">사업주</a></li>
 									</ul>
 								</div>
 							</div>
@@ -1629,7 +1638,7 @@
 								<div class="row user-row">
 									<div class="col-lg-7 col-md-7 col-sm-12">
 										<div class="flex_start">
-											<div class="dropdown w-50">
+											<div class="dropdown w-40">
 												<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 												<ul id="siteOptList" class="dropdown-menu">
 													<c:if test="${fn:length(siteList) > 1}">
@@ -1653,14 +1662,14 @@
 										<small id="isSiteEmpty" class="warning hidden">추가하실 사이트의 옵션을 선택해 주세요.</small>
 										<small id="isSiteSelected" class="warning hidden">동일한 사이트가 이미 추가 되었습니다.</small>
 									</div>
-									<div class="col-lg-5 col-sm-5 px-0"><h2 class="stit hidden">추가 리스트</h2><ol id="selectedSiteList" class="selected-list"></ol></div>
+									<div class="col-lg-5 col-md-5 col-sm-12"><h2 class="stit hidden">추가 리스트</h2><ol id="selectedSiteList" class="selected-list"></ol></div>
 								</div>
 							</div>
 							<div id="spcTab" class="tab-pane fade">
 								<div id="spcRow" class="row user-row">
 									<div class="col-lg-7 col-md-5 col-sm-12">
 										<div class="flex_start">
-											<div class="dropdown w-50">
+											<div class="dropdown w-40">
 												<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 												<ul id="spcOptList" class="dropdown-menu">
 													<template>

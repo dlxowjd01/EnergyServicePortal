@@ -8,8 +8,6 @@
 		// let l = "${location}"
 		// console.log("location---", l);
 		// let siteList = JSON.parse('${siteList}');
-		
-
 		// console.log("siteList---", siteList);
 
 		getSiteList(oid);
@@ -616,13 +614,18 @@
 					var siteTable = $('#siteTable').DataTable({
 						"aaData": newArr,
 						"table-layout": "fixed",
+						"fixedHeader": true,
 						// "autoWidth": true,
-						"bAutoWidth": true,
+						// "bAutoWidth": true,
 						"bSearchable" : true,
-						"sScrollX": "110%",
-						"sScrollXInner": "110%",
-						"sScrollY": false,
+						// "sScrollX": "110%",
+						// "sScrollXInner": "110%",
+						"sScrollY": true,
+						// "sScrollY": false,
 						"bScrollCollapse": true,
+						"scrollY": "500px",
+						"paging": false,
+
 						// "bFilter": false, disabling this option will prevent table.search()
 						"aaSorting": [[ 0, 'asc' ]],
 						"aoColumns": [
@@ -636,7 +639,7 @@
 								"mData": "siteType",
 							},
 							{
-								"sTitle": "사업소명",
+								"sTitle": "사업소 명",
 								"mData": "name"
 							},
 							{
@@ -644,7 +647,7 @@
 								"mData": "location",
 							},
 							{
-								"sTitle": "발전원",
+								"sTitle": "발전 자원",
 								"mData": "powerSource",
 							},
 							{
@@ -863,7 +866,7 @@
 						}
 					});
 					$("#siteSearchBox").on( 'keyup search input paste cut', function(){
-						siteTable.search( this.value ).draw();
+						siteTable.columns(2).search( this.value ).draw();
 					});
 
 					$("#pageLengthList").find("li").on( 'click', function(){
@@ -883,6 +886,14 @@
 			});
 		}
 		
+		function filterColumn ( id, idx, val ) {
+			$(id).DataTable().column(idx).search(val).draw();
+		}
+
+		function getUniqueListBy(arr, key) {
+			return [...new Map(arr.map(item => [item[key], item] )).values()]
+		}
+
 		function filterColumn ( id, idx, val ) {
 			$(id).DataTable().column(idx).search(val).draw();
 		}
@@ -939,10 +950,7 @@
 
 				let cStr = '';
 				Object.entries(cArr).forEach((item, index, arr) => {
-				// Object.keys(cArr).forEach((item, index, arr) => {
 					let v = '';
-
-					// console.log("item---", item[1].dataArr.find(x => x.voltageType == ))
 					if(!isEmpty(item[1].voltRange)){
 						v = item[1].voltRange.replace(/,\s*$/, "")
 					} else {
@@ -953,7 +961,7 @@
 
 					cStr += `
 						<li data-util-name="${'${util}'}" data-plan-id="${'${id}'}" data-vol-type="${'${v}'}" data-value="${'${item[0]}'}"><a href="#">${'${item[0]}'}</a></li>
-					`
+					`;
 				});
 				contractList.append(cStr);
 
@@ -992,22 +1000,18 @@
 
 			let selectOpt = {
 				url: apiHost + "/config/view/properties?types=site_type,resource",
-				// url: apiHost + "/config/view/properties?types=site_type,resource,location",
-				// url: apiHost + "/config/types=site_type,resource,location",
 				type: 'get',
 				async: true
 			}
 
 
 			$.ajax(selectOpt).done(function (json, textStatus, jqXHR) {
-
 				let r = json.resource;
 				let s = json.site_type;
 				let resStr = '';
 				let siteStr = '';
-				let allStr = '<li><a href="#">전체</a></li>'
+				let allStr = '<li><a href="#">전체</a></li>';
 				$.each(r, function(index, el){
-					console.log("r===", el);
 					resStr += `
 						<li data-name-kr="${'${el.name.kr}'}" data-name-en="${'${el.name.en}'}" data-value="${'${el.code}'}"><a href="#">${'${el.name.kr}'}</a></li>
 					`
@@ -1023,16 +1027,14 @@
 				});
 
 				$.each(s, function(index, el){
-					console.log("el===", el);
-					// let siteStr = ``;
 					if(el.code == "demand"){
 						siteStr += `
 							<li data-name="Demand" data-value="2"><a href="#">수요(` + `${'${el.name.en}'}` + ` )</a></li>
-						`
+						`;
 					} else if(el.code == "gen"){
 						siteStr += `
 							<li data-name="Generation" data-value="1" class="on"><a href="#">발전(` + `${'${el.name.en}'}` + ` )</a></li>
-						`
+						`;
 					}
 				});
 				$("#siteType").append(siteStr).prepend(allStr);
@@ -1056,6 +1058,7 @@
 				}
 			})
 		}
+
 
 		function getVppDrData() {
 			let drOption = {
@@ -1178,6 +1181,7 @@
 
 		$("#validSite").addClass("hidden");
 		$("#addSiteBtn").prop("disabled", true).addClass("disabled");
+		$("#newResList li").removeClass("hidden");
 
 		warning.addClass("hidden")
 		input.val("");
@@ -1329,7 +1333,7 @@
 
 		let siteList = '${siteList}';
 		siteList = JSON.parse(siteList);
-
+		console.log("console==", siteList)
 		if(!isEmpty(siteList)) {
 			// console.log("siteList==", siteList)
 			if(siteList.some(x => x.name == id)){
@@ -1396,7 +1400,7 @@
 			</div>
 		</div>
 		<div class="flex_group">
-			<span class="tx_tit">발전소명</span>
+			<span class="tx_tit">사업소 명</span>
 			<div class="flex_start">
 				<div class="tx_inp_type">
 					<input type="text" id="siteSearchBox" name="site_search_box" placeholder="입력">
