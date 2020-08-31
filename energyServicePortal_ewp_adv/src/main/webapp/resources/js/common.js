@@ -623,13 +623,7 @@ function showPwd(inputId, btn) {
 }
 
 function filterColumn ( id, idx, val, arr ) {
-	if(opt){
-		$.each(arr, function(index, el){
-
-		});
-	} else {
-		$(id).DataTable().column(idx).search(val).draw();
-	}
+	$(id).DataTable().column(idx).search(val).draw();
 }
 
 

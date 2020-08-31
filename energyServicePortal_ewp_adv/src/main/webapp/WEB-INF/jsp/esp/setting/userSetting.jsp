@@ -333,9 +333,13 @@
 							$("#resultBtn").trigger("click");
 						}, 1600);
 					}).fail(function (jqXHR, textStatus, errorThrown) {
+						$("#addUserModal").modal("hide");
 						$("#resultFailureMsg").removeClass("hidden");
 						$("#resultBtn").parent().removeClass("hidden");
 						$("#resultModal").modal("show");
+						setTimeout(function(){
+							$("#resultBtn").trigger("click");
+						}, 1600);
 						console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
 						return false;
 					});
@@ -362,24 +366,17 @@
 							async: true
 						}
 
-						if(siteItemList.length > 0) {
-							var sitePromises = [];
+						if( (siteItemList.length > 0) && (spcItemList.length > 0 ) ) {
+
+							var muliPromises = [];
+
 							$.each(siteItemList, function(index, element){
 								siteObj.sid = $(element).data("sid");
 								siteObj.role = Number($(element).data("role"));
 								siteOption.data = JSON.stringify(siteObj);
-								sitePromises.push(Promise.resolve(makeAjaxCall(siteOption)));
+								muliPromises.push(Promise.resolve(makeAjaxCall(siteOption)));
 							});
-							Promise.all(sitePromises).then(res => {
-								console.log("res---", res);
-								$("#addUserModal").modal("hide");
-								setTimeout(function(){
-									$("#resultBtn").trigger("click");
-								}, 1000);
-							});
-						}
-						if(spcItemList.length > 0 ){
-							var spcPromises = [];
+
 							$.each(spcItemList, function(index, element){
 								let spcObj = {
 									spcid: $(element).data("spc-id"),
@@ -387,17 +384,64 @@
 								};
 								// console.log("opcObj===", spcObj)
 								spcOption.data = JSON.stringify(spcObj);
-								spcPromises.push(Promise.resolve(makeAjaxCall(spcOption)));
+								muliPromises.push(Promise.resolve(makeAjaxCall(spcOption)));
 							});
-							Promise.all(spcPromises).then(res => {
-								// console.log("res---", res);
+
+							Promise.all(muliPromises).then(res => {
+								console.log("altogether---", res);
 								$("#addUserModal").modal("hide");
+								$("#resultSuccessMsg").text("SPC, 사이트 정보 모두 추가 되었습니다.").removeClass("hidden");
+								$("#resultBtn").parent().addClass("hidden");
+								$("#resultModal").modal("show");
 								setTimeout(function(){
 									$("#resultBtn").trigger("click");
-								}, 1000);
+								}, 1300);
 							});
-						}
 
+						} else {
+							if(siteItemList.length > 0) {
+								var sitePromises = [];
+								$.each(siteItemList, function(index, element){
+									siteObj.sid = $(element).data("sid");
+									siteObj.role = Number($(element).data("role"));
+									siteOption.data = JSON.stringify(siteObj);
+									sitePromises.push(Promise.resolve(makeAjaxCall(siteOption)));
+								});
+								Promise.all(sitePromises).then(res => {
+									console.log("res---", res);
+									$("#addUserModal").modal("hide");
+									$("#resultSuccessMsg").text("사이트 정보가 추가 되었습니다.").removeClass("hidden");
+									$("#resultBtn").parent().addClass("hidden");
+									$("#resultModal").modal("show");
+									setTimeout(function(){
+										$("#resultBtn").trigger("click");
+									}, 1300);
+								});
+							}
+
+							if(spcItemList.length > 0 ){
+								var spcPromises = [];
+								$.each(spcItemList, function(index, element){
+									let spcObj = {
+										spcid: $(element).data("spc-id"),
+										role: Number($(element).data("role"))
+									};
+									// console.log("opcObj===", spcObj)
+									spcOption.data = JSON.stringify(spcObj);
+									spcPromises.push(Promise.resolve(makeAjaxCall(spcOption)));
+								});
+								Promise.all(spcPromises).then(res => {
+									// console.log("res---", res);
+									$("#addUserModal").modal("hide");
+									$("#resultSuccessMsg").text("SPC 정보가 추가 되었습니다.").removeClass("hidden");
+									$("#resultBtn").parent().addClass("hidden");
+									$("#resultModal").modal("show");
+									setTimeout(function(){
+										$("#resultBtn").trigger("click");
+									}, 1300);
+								});
+							}
+						}
 					}).fail(function (jqXHR, textStatus, errorThrown) {
 						let r = JSON.parse(jqXHR.responseText);
 						console.log("에러코드:" + jqXHR.status + "\n" + "메세지: " + r);
@@ -447,7 +491,7 @@
 					console.log("newUseOpt===", newUseOpt, "newUswOptName===", newUswOptName)
 					editUserObj.valid_yn = newUseOpt;
 				}
-				if( !isEmpty(newUserDesc)) {
+				if( !isEmpty(newUserDesc) && ( newUserDesc != tr.data("desc")) ) {
 					editUserObj.description = JSON.stringify(newUserDesc);
 				}
 
@@ -509,20 +553,22 @@
 						// if pwd && editUserObj values are present but no userSpc && userSite info
 						if( !isEmpty($("#newUserPwd").val()) && !isEmpty(editUserObj) ){
 							$.when($.ajax(optionPwd),$.ajax(option)).done(function (result1, result2) {
+								$("#addUserModal").modal("hide");
 								$("#resultSuccessMsg").text("사용자 정보가 성공적으로 변경 되었습니다.").removeClass("hidden");
 								$("#resultBtn").parent().addClass("hidden");
 								$("#resultModal").modal("show");
 								setTimeout(function(){
 									$("#resultBtn").trigger("click");
-								}, 1000);
+								}, 1200);
 							}).fail(function (jqXHR, textStatus, errorThrown) {
-								console.log("result1===", jqXHR)
+								console.log("result1===", jqXHR);
+								$("#addUserModal").modal("hide");
 								$("#resultFailureMsg").text("사용자 정보 변경에 실패하였습니다. 다시 시도해 주세요.").removeClass("hidden");
 								$("#resultBtn").parent().removeClass("hidden");
 								$("#resultModal").modal("show");
 								setTimeout(function(){
 									$("#resultBtn").trigger("click");
-								}, 1600);
+								}, 1200);
 								return false;
 							});
 
@@ -531,15 +577,18 @@
 							if( !isEmpty($("#newUserPwd").val()) ){
 								console.log("optionPwd===", optionPwd)
 								$.ajax(optionPwd).done(function (json, textStatus, jqXHR) {
+									console.log("only password has been changed=====");
+									$("#addUserModal").modal("hide");
 									$("#resultSuccessMsg").multiline("사용자 정보가\n성공적으로 변경 되었습니다.").removeClass("hidden");
 									$("#resultBtn").parent().addClass("hidden");
 									$("#resultModal").modal("show");
 									setTimeout(function(){
 										$("#resultBtn").trigger("click");
-									}, 1800);
+									}, 1200);
 									console.log("newUserPwd edit success===", json)
 								}).fail(function (jqXHR, textStatus, errorThrown) {
 									let errorMsg = "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText +"\n" + "에러: " + errorThrown;
+									$("#addUserModal").modal("hide");
 									$("#resultFailureMsg").multiline(errorMsg).removeClass("hidden");
 									$("#resultBtn").parent().removeClass("hidden");
 									$("#resultModal").modal("show");
@@ -551,14 +600,16 @@
 							if( !isEmpty(editUserObj) ){
 								console.log("editUserObj===", editUserObj)
 								$.ajax(option).done(function (json, textStatus, jqXHR) {
+									$("#addUserModal").modal("hide");
 									$("#resultSuccessMsg").multiline("사용자 정보가\n성공적으로 변경 되었습니다.").removeClass("hidden");
 									$("#resultBtn").parent().addClass("hidden");
 									$("#resultModal").modal("show");
 									setTimeout(function(){
 										$("#resultBtn").trigger("click");
-									}, 1800);
+									}, 1200);
 								}).fail(function (jqXHR, textStatus, errorThrown) {
 									let errorMsg = "에러코드:" + jqXHR.status + "\n" + "메세지: " + jqXHR.responseText +"\n" + "에러: " + errorThrown;
+									$("#addUserModal").modal("hide");
 									$("#resultFailureMsg").text(errorMsg).removeClass("hidden");
 									$("#resultBtn").parent().removeClass("hidden");
 									$("#resultModal").modal("show");
@@ -648,7 +699,8 @@
 							$.when($.ajax(optionPwd),$.ajax(option)).done(function (result1, result2) {
 								if(nestedPromises.length>0){
 									Promise.all(nestedPromises).then(res => {
-										console.log("res---", res)
+										console.log("res---", res);
+										$("#addUserModal").modal("hide");
 										$("#resultSuccessMsg").text("사용자 정보가 성공적으로 변경 되었습니다.").removeClass("hidden");
 										$("#resultBtn").parent().addClass("hidden");
 										$("#resultModal").modal("show");
@@ -658,7 +710,8 @@
 									});
 								}
 							}).fail(function (jqXHR, textStatus, errorThrown) {
-								console.log("result1===", jqXHR)
+								console.log("result1===", jqXHR);
+								$("#addUserModal").modal("hide");
 								$("#resultFailureMsg").text("사용자 정보 변경에 실패하였습니다. 다시 시도해 주세요.").removeClass("hidden");
 								$("#resultBtn").parent().removeClass("hidden");
 								$("#resultModal").modal("show");
@@ -671,7 +724,8 @@
 								// console.log("only flagArr is present---");
 								if(nestedPromises.length>0){
 									Promise.all(nestedPromises).then(res => {
-										console.log("res---", res)
+										console.log("res---", res);
+										$("#addUserModal").modal("hide");
 										$("#resultSuccessMsg").text("사이트/SPC 정보가 성공적으로 변경 되었습니다.").removeClass("hidden");
 										$("#resultBtn").parent().addClass("hidden");
 										$("#resultModal").modal("show");
@@ -685,6 +739,7 @@
 									$.ajax(optionPwd).done(function (json, textStatus, jqXHR) {
 										if(nestedPromises.length>0){
 											Promise.all(nestedPromises).then(res => {
+												$("#addUserModal").modal("hide");
 												$("#resultSuccessMsg").text("사용자 정보가 성공적으로 변경 되었습니다.").removeClass("hidden");
 												$("#resultBtn").parent().addClass("hidden");
 												$("#resultModal").modal("show");
@@ -693,6 +748,7 @@
 												}, 1500);
 											});
 										} else {
+											$("#addUserModal").modal("hide");
 											$("#resultSuccessMsg").text("사용자 정보가 성공적으로 변경 되었습니다.").removeClass("hidden");
 											$("#resultBtn").parent().addClass("hidden");
 											$("#resultModal").modal("show");
@@ -716,6 +772,7 @@
 									$.ajax(option).done(function (json, textStatus, jqXHR) {
 										if(nestedPromises.length>0){
 											Promise.all(nestedPromises).then(res => {
+												$("#addUserModal").modal("hide");
 												$("#resultSuccessMsg").text("사용자 정보가 성공적으로 변경 되었습니다.").removeClass("hidden");
 												$("#resultBtn").parent().addClass("hidden");
 												$("#resultModal").modal("show");
@@ -726,6 +783,7 @@
 										}
 									}).fail(function (jqXHR, textStatus, errorThrown) {
 										let errorMsg = "에러코드:" + jqXHR.status + "\n" + "메세지: " + jqXHR.responseText +"\n" + "에러: " + errorThrown;
+										$("#addUserModal").modal("hide");
 										$("#resultFailureMsg").text(errorMsg).removeClass("hidden");
 										$("#resultBtn").parent().removeClass("hidden");
 										$("#resultModal").modal("show");
@@ -886,17 +944,10 @@
 								"sTitle": "",
 								"mData": "null",
 								"mRender": function ( data, type, row )  {
-									// console.log('row==', row)
 									return '<a class="chk_type" href="#"><input type="checkbox" id="' + row.idx + '" name="table_checkbox"><label for="' + row.idx + '"></label></a>'
 								},
 								"className": "dt-body-center no-sorting"
 							},
-							// {
-							// 	"sTitle": "순번",
-							// 	"mData": null,
-							// 	"className": "dt-center idx"
-							// 	// "className": "dt-center idx no-sorting"
-							// },
 							{
 								"sTitle": "ID",
 								// "mData": null,
@@ -1061,7 +1112,6 @@
 								"sTitle": "",
 								"mData": "null",
 								"mRender": function ( data, type, row )  {
-									console.log('row==', row)
 									return '<a class="chk_type" href="#"><input type="checkbox" id="' + row.idx + '" name="table_checkbox"><label for="' + row.idx + '"></label></a>'
 								},
 								"className": "dt-body-center no-sorting"
@@ -1532,6 +1582,12 @@
 						}
 					}
 
+					if(!isEmpty(tr.data("desc"))){
+						let str = tr.data("desc");
+						str = JSON.parse(str);
+						$('#newUserDesc').val(str);
+					}
+
 					$("#addUserModal").addClass("edit").modal("show");
 				}
 				// DELETE MODAL!!!
@@ -1717,7 +1773,7 @@
 				<h4 id="resultFailureMsg" class="warning-text hidden">사용자 추가에 실패하였습니다.<br>다시 시도해 주세요.</h4>
 			</div>
 			<div class="btn_wrap_type05"><!--
-			--><button type="button" id="resultBtn" class="btn_type03" data-dismiss="modal" onclick="$('#addUserModal').modal('hide')" aria-label="Close">확인</button><!--
+			--><button type="button" id="resultBtn" class="btn_type03" data-dismiss="modal" aria-label="Close">확인</button><!--
 		--></div>
 		</div>
 	</div>
