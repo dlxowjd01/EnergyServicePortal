@@ -633,7 +633,6 @@ function getUniqueListBy(arr, key) {
 
 function makeAjaxCall(option){
 	return $.ajax(option).done(function (json, textStatus, jqXHR) {
-		console.log("makeAjaxCall json--", json)
 	}).fail(function (jqXHR, textStatus, errorThrown) {
 		console.log("siteInfo/spcInfo Ajax Error:", jqXHR.responseJSON.error.message)
 		return false;
