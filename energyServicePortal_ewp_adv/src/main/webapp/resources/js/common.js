@@ -640,16 +640,6 @@ function makeAjaxCall(option){
 	});
 }
 
-function makeAjaxCall(option, callback){
-	return $.ajax(option).done(function (json, textStatus, jqXHR) {
-		// console.log("makeAjaxCall json--", json)
-		if(callback){ callback(); }
-	}).fail(function (jqXHR, textStatus, errorThrown) {
-		console.log("siteInfo/spcInfo Ajax Error:", jqXHR.responseJSON.error.message)
-		return false;
-	});
-}
-
 $.fn.multiline = function(text){
 	this.text(text);
 	this.html(this.html().replace(/\n/g,'<br/>'));
