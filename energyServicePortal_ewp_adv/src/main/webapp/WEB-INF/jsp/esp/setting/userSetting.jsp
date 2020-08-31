@@ -328,11 +328,9 @@
 						$("#addUserModal").modal("hide");
 						$("#resultSuccessMsg").text("사용자가 추가 되었습니다.").removeClass("hidden");
 						$("#resultBtn").parent().addClass("hidden");
-
 						$("#resultModal").modal("show");
-
 						setTimeout(function(){
-							$("#resultModal").modal("hide");
+							$("#resultBtn").trigger("click");
 						}, 1600);
 					}).fail(function (jqXHR, textStatus, errorThrown) {
 						$("#resultFailureMsg").removeClass("hidden");
@@ -375,6 +373,9 @@
 							Promise.all(sitePromises).then(res => {
 								console.log("res---", res);
 								$("#addUserModal").modal("hide");
+								setTimeout(function(){
+									$("#resultBtn").trigger("click");
+								}, 1000);
 							});
 						}
 						if(spcItemList.length > 0 ){
@@ -391,6 +392,9 @@
 							Promise.all(spcPromises).then(res => {
 								// console.log("res---", res);
 								$("#addUserModal").modal("hide");
+								setTimeout(function(){
+									$("#resultBtn").trigger("click");
+								}, 1000);
 							});
 						}
 
@@ -498,7 +502,7 @@
 					$("#resultBtn").parent().addClass("hidden");
 					$("#resultModal").modal("show");
 					setTimeout(function(){
-						$("#resultModal").modal("hide");
+						$("#resultBtn").trigger("click");
 					}, 1800);
 				} else {
 					if( (flagIndex < 0) ){
@@ -509,13 +513,16 @@
 								$("#resultBtn").parent().addClass("hidden");
 								$("#resultModal").modal("show");
 								setTimeout(function(){
-									$("#resultModal").modal("hide");
+									$("#resultBtn").trigger("click");
 								}, 1000);
 							}).fail(function (jqXHR, textStatus, errorThrown) {
 								console.log("result1===", jqXHR)
 								$("#resultFailureMsg").text("사용자 정보 변경에 실패하였습니다. 다시 시도해 주세요.").removeClass("hidden");
 								$("#resultBtn").parent().removeClass("hidden");
 								$("#resultModal").modal("show");
+								setTimeout(function(){
+									$("#resultBtn").trigger("click");
+								}, 1600);
 								return false;
 							});
 
@@ -528,7 +535,7 @@
 									$("#resultBtn").parent().addClass("hidden");
 									$("#resultModal").modal("show");
 									setTimeout(function(){
-										$("#resultModal").modal("hide");
+										$("#resultBtn").trigger("click");
 									}, 1800);
 									console.log("newUserPwd edit success===", json)
 								}).fail(function (jqXHR, textStatus, errorThrown) {
@@ -537,9 +544,6 @@
 									$("#resultBtn").parent().removeClass("hidden");
 									$("#resultModal").modal("show");
 									console.log("newUserPwd edit error===", errorMsg);
-									setTimeout(function(){
-										$("#resultModal").modal("hide");
-									}, 1800);
 									return false;
 								});
 							}
@@ -550,11 +554,8 @@
 									$("#resultSuccessMsg").multiline("사용자 정보가\n성공적으로 변경 되었습니다.").removeClass("hidden");
 									$("#resultBtn").parent().addClass("hidden");
 									$("#resultModal").modal("show");
-
-									console.log("editUserObj edit SUCCESS===");
-
 									setTimeout(function(){
-										$("#resultModal").modal("hide");
+										$("#resultBtn").trigger("click");
 									}, 1800);
 								}).fail(function (jqXHR, textStatus, errorThrown) {
 									let errorMsg = "에러코드:" + jqXHR.status + "\n" + "메세지: " + jqXHR.responseText +"\n" + "에러: " + errorThrown;
@@ -652,7 +653,7 @@
 										$("#resultBtn").parent().addClass("hidden");
 										$("#resultModal").modal("show");
 										setTimeout(function(){
-											$("#resultModal").modal("hide");
+											$("#resultBtn").trigger("click");
 										}, 1500);
 									});
 								}
@@ -675,7 +676,7 @@
 										$("#resultBtn").parent().addClass("hidden");
 										$("#resultModal").modal("show");
 										setTimeout(function(){
-											$("#resultModal").modal("hide");
+											$("#resultBtn").trigger("click");
 										}, 1500);
 									});
 								}
@@ -688,7 +689,7 @@
 												$("#resultBtn").parent().addClass("hidden");
 												$("#resultModal").modal("show");
 												setTimeout(function(){
-													$("#resultModal").modal("hide");
+													$("#resultBtn").trigger("click");
 												}, 1500);
 											});
 										} else {
@@ -696,7 +697,7 @@
 											$("#resultBtn").parent().addClass("hidden");
 											$("#resultModal").modal("show");
 											setTimeout(function(){
-												$("#resultModal").modal("hide");
+												$("#resultBtn").trigger("click");
 											}, 1500);
 										}
 									
@@ -719,7 +720,7 @@
 												$("#resultBtn").parent().addClass("hidden");
 												$("#resultModal").modal("show");
 												setTimeout(function(){
-													$("#resultModal").modal("hide");
+													$("#resultBtn").trigger("click");
 												}, 1500);
 											});
 										}

@@ -822,12 +822,12 @@
 		$('#detailInfoModal .alarm-item.link').each(function () {
 			let targetSpan = $(this).find('span.bu');
 			let clsName = targetSpan.attr('class').replace(/[^0-9]/g, '').trim();
-			let spcName = targetSpan.html().match(/\[(.*?)\]/)[1];
+			let spcName = targetSpan.html().match(/\[(.*?)\]/)[1].toLowerCase();
 			if ($.inArray(clsName, checkType) > -1) {
 				if ($('#searchName').val() == '') {
 					$(this).removeClass('hidden');
 				} else {
-					if (spcName.match($('#searchName').val())) {
+					if (spcName.match($('#searchName').val().toLowerCase())) {
 						$(this).removeClass('hidden');
 					} else {
 						$(this).addClass('hidden');
@@ -841,12 +841,12 @@
 
 		$('#calendar td .bu').each(function () {
 			let clsName = $(this).attr('class').replace(/[^0-9]/g, '').trim();
-			let spcName = $(this).html().match(/\[(.*?)\]/)[1];
+			let spcName = $(this).html().match(/\[(.*?)\]/)[1].toLowerCase();
 			if ($.inArray(clsName, checkType) > -1) {
 				if ($('#searchName').val() == '') {
 					$(this).removeClass('hidden');
 				} else {
-					if (spcName.match($('#searchName').val())) {
+					if (spcName.match($('#searchName').val().toLowerCase())) {
 						$(this).removeClass('hidden');
 					} else {
 						$(this).addClass('hidden');

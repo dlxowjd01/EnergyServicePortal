@@ -1347,6 +1347,9 @@ function addCustomRow(tbody, options) {
 			}
 		}
 	});
+
+	copy.find('td:nth-of-type(5)').find('div:nth-of-type(2)').addClass('hidden');
+	copy.find('td:nth-of-type(5)').find('div:nth-of-type(3)').addClass('hidden');
 	tbody.append(copy);
 }
 

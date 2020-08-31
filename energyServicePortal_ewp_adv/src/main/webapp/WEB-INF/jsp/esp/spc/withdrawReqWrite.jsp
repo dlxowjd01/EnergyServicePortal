@@ -285,26 +285,25 @@
 			jsonData.attachement_info = JSON.stringify(finalNameList);
 
 			tr.each(function(index, element){
-				let purposeOpt = $("#tableBody").find("td:nth-of-type(3) .dropdown-toggle");
-				let amountOpt = $("#tableBody").find("td:nth-of-type(4) input");
-				let accOpt = $("#tableBody").find("td:nth-of-type(5) .dropdown-toggle").eq(0);
-				let accOpt2 = $("#tableBody").find("td:nth-of-type(5) .dropdown-toggle").eq(1);
-				let accNo = $("#tableBody").find("td:nth-of-type(5) input[type='text']");
-				let descOpt = $("#tableBody").find("td:nth-of-type(6) input");
+				let $elm = $(element);
+				let purposeOpt = $elm.find('td:nth-of-type(3) .dropdown-toggle');
+				let amountOpt = $elm.find('td:nth-of-type(4) input');
+				let accOpt = $elm.find('td:nth-of-type(5) .dropdown-toggle:nth-of-type(1)');
+				let accOpt2 = $elm.find('td:nth-of-type(5) .dropdown-toggle:nth-of-type(2)');
+				let accNo = $elm.find('td:nth-of-type(5) input');
+				let descOpt = $elm.find('td:nth-of-type(5) input');
 				let obj = {};
-				obj.purpose = purposeOpt.eq(index).data("value");
-				console.log("purposeOpt===", purposeOpt.eq(index).data("value"))
-
-				obj.amount = Number(amountOpt.eq(index).val().replace(/,/g, ''));
-				obj.desc = descOpt.eq(index).val();
-				if (accOpt.eq(index).data("value") == '직접입력') {
+				obj.purpose = purposeOpt.data("value");
+				obj.amount = Number(amountOpt.val().replace(/,/g, ''));
+				obj.desc = descOpt.val();
+				if (accOpt.data("value") == '직접입력') {
 					obj.to_account_owner = '직접입력';
-					obj.to_account_bank = accOpt2.eq(index).data("value");
+					obj.to_account_bank = accOpt2.data("value");
 					obj.to_account_no = accNo.val();
 				} else {
-					obj.to_account_owner = accOpt.eq(index).data("acc-holder");
-					obj.to_account_bank = accOpt.eq(index).data("name");
-					obj.to_account_no = accOpt.eq(index).data("value");
+					obj.to_account_owner = accOpt.data("acc-holder");
+					obj.to_account_bank = accOpt.data("name");
+					obj.to_account_no = accOpt.data("value");
 				}
 				arr.push(obj);
 			});
@@ -503,12 +502,10 @@
 			const obj = $('#' + $selector);
 			const selValue = obj.find('button').data('value');
 			if (selValue == '직접입력') {
-				obj.parents('td').find('div:nth-child(1)').addClass('w-50');
-				obj.parents('td').find('div:nth-child(2)').addClass('w-50').removeClass('hidden');
+				obj.parents('td').find('div:nth-child(2)').removeClass('hidden');
 				obj.parents('td').find('div:nth-child(3)').removeClass('hidden');
 			} else {
-				obj.parents('td').find('div:nth-child(2)').removeClass('w-50');
-				obj.parents('td').find('div:nth-child(2)').removeClass('w-50').addClass('hidden');
+				obj.parents('td').find('div:nth-child(2)').addClass('hidden');
 				obj.parents('td').find('div:nth-child(3)').addClass('hidden');
 			}
 		}

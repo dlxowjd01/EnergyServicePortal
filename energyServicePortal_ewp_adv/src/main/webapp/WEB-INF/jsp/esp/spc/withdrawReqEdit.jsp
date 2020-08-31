@@ -385,10 +385,11 @@
 			jsonData.attachement_info = JSON.stringify(finalNameList);
 
 			tr.each(function(index, element){
-				let purposeOpt = $("#tableBody").find("td:nth-of-type(3) .dropdown-toggle");
-				let amountOpt = $("#tableBody").find("td:nth-of-type(4) input");
-				let accOpt = $("#tableBody").find("td:nth-of-type(5) .dropdown-toggle");
-				let descOpt = $("#tableBody").find("td:nth-of-type(6) input");
+				let $elm = $(element);
+				let purposeOpt = $elm.find("td:nth-of-type(3) .dropdown-toggle");
+				let amountOpt = $elm.find("td:nth-of-type(4) input");
+				let accOpt = $elm.find("td:nth-of-type(5) .dropdown-toggle");
+				let descOpt = $elm.find("td:nth-of-type(6) input");
 				let obj = {};
 
 				obj.amount = Number(amountOpt.eq(index).val().replace(/,/g, ''));
