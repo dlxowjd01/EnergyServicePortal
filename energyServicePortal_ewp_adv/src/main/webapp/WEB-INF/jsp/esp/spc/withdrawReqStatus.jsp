@@ -115,14 +115,36 @@
 		$('#finalApprovalBtn').on('click', function(e) {
 			e.preventDefault();
 
+			let finalArray = new Array();
 			$(':checkbox[name="reviewOpt"]:checked').each(function() {
 				const statusValue = $(this).parents('tr').find('td:nth-child(8)').data('value');
 				const id = $(this).parents('tr').find('td:nth-child(8) button').data('req-id');
 
 				if (statusValue == 4) {
 					updateStatus('5', id);
+					finalArray.push(id);
 				}
 			});
+
+			let option = {
+				url: apiHost + '/spcs/transactions/data_send?oid=' + oid,
+				type: 'post',
+				async: false,
+				dataType: 'json',
+				contentType: "application/json",
+				data: JSON.stringify({
+					reqIds: finalArray.join(',')
+				})
+			}
+
+			$.ajax(option).done(function (json, textStatus, jqXHR) {
+				//console.log("success---", json)
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				finalArray.forEach(reqId => {
+					updateStatus('4', reqId);
+				});
+			});
+
 			$('#approvalModal').modal('hide');
 
 			let searchOpt = {};
@@ -136,7 +158,7 @@
 			} else {
 				checkbox.each(function(){
 					if($(this).is(":checked")){
-						status.push($(this).val())
+						status.push($(this).val());
 					}
 				});
 			}

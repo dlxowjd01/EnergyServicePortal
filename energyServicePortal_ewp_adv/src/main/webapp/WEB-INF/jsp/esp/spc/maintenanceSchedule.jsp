@@ -834,7 +834,7 @@
 				</div>
 				<div class="chk_type c11">
 					<input type="checkbox" id="chk_op11" name="type" value="11" checked>
-					<label for="chk_op11">부자점검</label>
+					<label for="chk_op11">부지점검</label>
 				</div>
 				<div class="chk_type c12">
 					<input type="checkbox" id="chk_op12" name="type" value="12" checked>

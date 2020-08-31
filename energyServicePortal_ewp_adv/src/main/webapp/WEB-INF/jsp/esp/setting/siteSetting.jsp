@@ -1462,6 +1462,7 @@
 			$("#newInspection").append($(str));
 		}
 
+
 		function getVppDrData() {
 			let drOption = {
 				url: apiHost + "/config/dr-groups?oid="+oid,

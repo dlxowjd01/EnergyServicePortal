@@ -83,7 +83,7 @@
 		var sessionUser = null;
 
 		const changeFavicon = link => {
-			let $favicon = document.querySelector('link[rel="icon"]') || document.createElement('link');
+			let $favicon = document.querySelector('link[rel="icon"]');
 			if ($favicon !== null) {
 				$favicon.href = link
 			} else {

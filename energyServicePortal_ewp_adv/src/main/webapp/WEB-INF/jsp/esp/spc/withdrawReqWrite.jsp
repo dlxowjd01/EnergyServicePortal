@@ -503,10 +503,12 @@
 			const obj = $('#' + $selector);
 			const selValue = obj.find('button').data('value');
 			if (selValue == '직접입력') {
-				obj.parents('td').find('div:nth-child(2)').removeClass('hidden');
+				obj.parents('td').find('div:nth-child(1)').addClass('w-50');
+				obj.parents('td').find('div:nth-child(2)').addClass('w-50').removeClass('hidden');
 				obj.parents('td').find('div:nth-child(3)').removeClass('hidden');
 			} else {
-				obj.parents('td').find('div:nth-child(2)').addClass('hidden');
+				obj.parents('td').find('div:nth-child(2)').removeClass('w-50');
+				obj.parents('td').find('div:nth-child(2)').removeClass('w-50').addClass('hidden');
 				obj.parents('td').find('div:nth-child(3)').addClass('hidden');
 			}
 		}
@@ -607,7 +609,7 @@
 										<ul id="receiveList" class="receive-list dropdown-menu" role="menu"><li data-acc-holder="*acc_holder*" data-acc-type="*to_acc_type*" data-name="*to_bank_name*" data-value="*to_account_no*"><a href="#" tabindex="-1">*to_bank_name* *to_account_no* (*acc_holder*)</a></li></ul>
 									</div>
 								</div>
-								<div class="sa_select w-50 hidden">
+								<div class="sa_select hidden">
 									<div class="dropdown placeholder">
 										<button type="button" class="dropdown-toggle" data-clone="empty" data-toggle="dropdown" data-name="">선택<span class="caret"></span></button>
 										<ul id="bankList" class="bank-list dropdown-menu" role="menu"><li data-value="*code*"><a href="#" tabindex="-1">*bankName*</a></li></ul>

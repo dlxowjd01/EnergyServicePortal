@@ -493,15 +493,6 @@
 					resolve(JSON.parse(v.job_info))
 				}).then(result => {
 					job_info = result;
-					if ($.inArray(job_type, checkType) === -1) {
-						hiddenClass = 'hidden';
-					} else {
-						if (!isEmpty(serachName)) {
-							if ((spcName.match(serachName) || job_Name(job_type).match(serachName)) == null) {
-								hiddenClass = 'hidden';
-							}
-						}
-					}
 
 					let spcName = '';
 					if(spcList.length>0){
@@ -514,6 +505,16 @@
 
 					if(isEmpty(spcName)){
 						spcName = "spc_no_name";
+					}
+
+					if ($.inArray(job_type, checkType) === -1) {
+						hiddenClass = 'hidden';
+					} else {
+						if (!isEmpty(serachName)) {
+							if ((spcName.toLowerCase().match(serachName) || job_Name(job_type).match(serachName)) == null) {
+								hiddenClass = 'hidden';
+							}
+						}
 					}
 
 					// console.log("job_type===", job_type);
@@ -581,7 +582,7 @@
 					hiddenClass = 'hidden';
 				} else {
 					if (!isEmpty(serachName)) {
-						if ((spcName.match(serachName) || (statusList[firstStatus].val).toLowerCase().match(serachName)) == null) {
+						if ((spcName.toLowerCase().match(serachName) || (statusList[firstStatus].val).toLowerCase().match(serachName)) == null) {
 							hiddenClass = 'hidden';
 						}
 					}
@@ -868,19 +869,19 @@
 			// 	break;
 			// case '4': rtn = '입금'
 				// break;
-			case '5': rtn = '이자 지급일'
+			case '6': rtn = '이자 지급일'
 				break;
-			case '6': rtn = '보장발전시간 정산일'
+			case '7': rtn = '보장발전시간 정산일'
 				break;
-			case '7': rtn = '보험 갱신일'
+			case '8': rtn = '보험 갱신일'
 				break;
-			case '8': rtn = '보험 납부일'
+			case '9': rtn = '보험 납부일'
 				break;
-			case '9': rtn = '임대료 지급일'
+			case '10': rtn = '임대료 지급일'
 				break;
-			case '10': rtn = '대리기관수수료 지급일'
+			case '11': rtn = '대리기관수수료 지급일'
 				break;
-			case '11': rtn = '대출상환 만기일'
+			case '12': rtn = '대출상환 만기일'
 				break;
 			case 'default': rtn = ''
 				break;
@@ -1135,13 +1136,13 @@
 								<div class="dropdown placeholder" id="job_type">
 									<button type="button" class="dropdown-toggle required" data-toggle="dropdown" data-name="알림 항목 선택">선택<span class="caret"></span></button>
 									<ul class="dropdown-menu">
-										<li data-value="5"><a href="javascript:void(0);">이자 지급일</a></li>
-										<li data-value="6"><a href="javascript:void(0);">보장발전시간 정산일</a></li>
-										<li data-value="7"><a href="javascript:void(0);">보험 갱신일</a></li>
-										<li data-value="8"><a href="javascript:void(0);">보험 납부일</a></li>
-										<li data-value="9"><a href="javascript:void(0);">임대료 지급일</a></li>
-										<li data-value="10"><a href="javascript:void(0);">대리기관 수수료 지급일</a></li>
-										<li data-value="11"><a href="javascript:void(0);">대출상환 만기일</a></li>
+										<li data-value="6"><a href="javascript:void(0);">이자 지급일</a></li>
+										<li data-value="7"><a href="javascript:void(0);">보장발전시간 정산일</a></li>
+										<li data-value="8"><a href="javascript:void(0);">보험 갱신일</a></li>
+										<li data-value="9"><a href="javascript:void(0);">보험 납부일</a></li>
+										<li data-value="10"><a href="javascript:void(0);">임대료 지급일</a></li>
+										<li data-value="11"><a href="javascript:void(0);">대리기관 수수료 지급일</a></li>
+										<li data-value="12"><a href="javascript:void(0);">대출상환 만기일</a></li>
 <!--
 										<li data-value="1"><a href="javascript:void(0);">출금-승인 완료</a></li>
 										<li data-value="2"><a href="javascript:void(0);">출금-승인중</a></li>
@@ -1309,44 +1310,47 @@
 					<input type="checkbox" id="chk_op03" name="type" value="3" checked>
 					<label for="chk_op03">출금 - 승인 중</label>
 				</div>
-<%--				<div class="chk_type c4">--%>
-<%--					<input type="checkbox" id="chk_op04" name="type" value="4" checked>--%>
-<%--					<label for="chk_op04">입금</label>--%>
-<%--				</div>--%>
+				<div class="chk_type c4">
+					<input type="checkbox" id="chk_op04" name="type" value="4" checked>
+					<label for="chk_op04">출금 - 가승인</label>
+				</div>
+				<div class="chk_type c5">
+					<input type="checkbox" id="chk_op05" name="type" value="5" checked>
+					<label for="chk_op05">출금 - 최종승인</label>
+				</div>
 
 				<div class="flex_wrapper mt40">
 					<h2 class="ntit">주요 일정</h2>
 					<button type="button" id="addAlarmBtn" class="btn_add">알림 등록</button>
 				</div>
 
-
-				<div class="chk_type c5">
-					<input type="checkbox" id="chk_op05" name="type" value="5" checked>
-					<label for="chk_op05">이자 지급일</label>
-				</div>
 				<div class="chk_type c6">
 					<input type="checkbox" id="chk_op06" name="type" value="6" checked>
-					<label for="chk_op06">보장발전시간 정산일</label>
+					<label for="chk_op06">이자 지급일</label>
 				</div>
 				<div class="chk_type c7">
 					<input type="checkbox" id="chk_op07" name="type" value="7" checked>
-					<label for="chk_op07">보험 갱신일</label>
+					<label for="chk_op07">보장발전시간 정산일</label>
 				</div>
 				<div class="chk_type c8">
 					<input type="checkbox" id="chk_op08" name="type" value="8" checked>
-					<label for="chk_op08">보험 납부일</label>
+					<label for="chk_op08">보험 갱신일</label>
 				</div>
 				<div class="chk_type c9">
 					<input type="checkbox" id="chk_op09" name="type" value="9" checked>
-					<label for="chk_op09">임대료 지급일</label>
+					<label for="chk_op09">보험 납부일</label>
 				</div>
 				<div class="chk_type c10">
 					<input type="checkbox" id="chk_op10" name="type" value="10" checked>
-					<label for="chk_op10">대리기관수수료 지급일</label>
+					<label for="chk_op10">임대료 지급일</label>
 				</div>
 				<div class="chk_type c11">
 					<input type="checkbox" id="chk_op11" name="type" value="11" checked>
-					<label for="chk_op11">대출상환 만기일</label>
+					<label for="chk_op11">대리기관수수료 지급일</label>
+				</div>
+				<div class="chk_type c12">
+					<input type="checkbox" id="chk_op12" name="type" value="12" checked>
+					<label for="chk_op12">대출상환 만기일</label>
 				</div>
 			</div>
 			<div class="sch_inp_area flex_wrapper">
