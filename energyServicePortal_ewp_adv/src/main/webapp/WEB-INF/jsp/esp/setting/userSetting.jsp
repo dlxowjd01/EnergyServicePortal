@@ -1762,9 +1762,6 @@
 
 </script>
 
-<c:set var="siteList" value="${siteHeaderList}"/> <!-- 사이트 별 -->
-
-
 <div class="modal fade stack" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-sm">
 		<div class="modal-content">
