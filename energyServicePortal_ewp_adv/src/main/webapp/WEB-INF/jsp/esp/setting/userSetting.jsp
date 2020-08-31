@@ -221,8 +221,8 @@
 		});
 
 		$("#deleteConfirmBtn").click(function(){
-			let modalBody = $("#deleteConfirmModal .modal-body");
 			let dTable = $("#userTable").DataTable();
+			let modalBody = $("#deleteConfirmModal .modal-body");
 			let tr = $("#userTable").find("tbody tr.selected");
 			let uid = dTable.row(tr).data().uid;
 
@@ -1449,7 +1449,6 @@
 				let tr = $("#userTable").find("tbody tr.selected");
 				let td = tr.find("td");
 				let uid = dTable.row(tr).data().uid;
-	
 				// EDIT!!!!!
 				if(option == "edit") {
 					let optSpc = {
@@ -1760,9 +1759,9 @@
 	// 	});
 	// }
 
-
-
 </script>
+
+<c:set var="siteList" value="${siteHeaderList}"/> <!-- 사이트 별 -->
 
 <div class="modal fade stack" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-sm">
