@@ -288,10 +288,10 @@
 				let $elm = $(element);
 				let purposeOpt = $elm.find('td:nth-of-type(3) .dropdown-toggle');
 				let amountOpt = $elm.find('td:nth-of-type(4) input');
-				let accOpt = $elm.find('td:nth-of-type(5) .dropdown-toggle:nth-of-type(1)');
-				let accOpt2 = $elm.find('td:nth-of-type(5) .dropdown-toggle:nth-of-type(2)');
+				let accOpt = $elm.find('td:nth-of-type(5) .dropdown-toggle').eq(0);
+				let accOpt2 = $elm.find('td:nth-of-type(5) .dropdown-toggle').eq(1);
 				let accNo = $elm.find('td:nth-of-type(5) input');
-				let descOpt = $elm.find('td:nth-of-type(5) input');
+				let descOpt = $elm.find('td:nth-of-type(6) input');
 				let obj = {};
 				obj.purpose = purposeOpt.data("value");
 				obj.amount = Number(amountOpt.val().replace(/,/g, ''));

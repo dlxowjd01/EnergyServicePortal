@@ -388,20 +388,23 @@
 				let $elm = $(element);
 				let purposeOpt = $elm.find("td:nth-of-type(3) .dropdown-toggle");
 				let amountOpt = $elm.find("td:nth-of-type(4) input");
-				let accOpt = $elm.find("td:nth-of-type(5) .dropdown-toggle");
+				let accOpt = $elm.find("td:nth-of-type(5) .dropdown-toggle").eq(0);
+				let accOpt2 = $elm.find('td:nth-of-type(5) .dropdown-toggle').eq(1);
+				let accNo = $elm.find('td:nth-of-type(5) input');
 				let descOpt = $elm.find("td:nth-of-type(6) input");
 				let obj = {};
 
-				obj.amount = Number(amountOpt.eq(index).val().replace(/,/g, ''));
-				obj.desc = descOpt.eq(index).val();
-				if (accOpt.eq(index).data("value") == '직접입력') {
+				obj.purpose = purposeOpt.data("value");
+				obj.amount = Number(amountOpt.val().replace(/,/g, ''));
+				obj.desc = descOpt.val();
+				if (accOpt.data("value") == '직접입력') {
 					obj.to_account_owner = '직접입력';
-					obj.to_account_bank = accOpt2.eq(index).data("value");
+					obj.to_account_bank = accOpt2.data("value");
 					obj.to_account_no = accNo.val();
 				} else {
-					obj.to_account_owner = accOpt.eq(index).data("acc-holder");
-					obj.to_account_bank = accOpt.eq(index).data("name");
-					obj.to_account_no = accOpt.eq(index).data("value");
+					obj.to_account_owner = accOpt.data("acc-holder");
+					obj.to_account_bank = accOpt.data("name");
+					obj.to_account_no = accOpt.data("value");
 				}
 				arr.push(obj);
 			});
