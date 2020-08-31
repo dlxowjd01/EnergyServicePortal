@@ -222,7 +222,10 @@
 
 		$("#deleteConfirmBtn").click(function(){
 			let modalBody = $("#deleteConfirmModal .modal-body");
-			let uid = $("#userTable").find("tbody tr.selected").data("uid");
+			let dTable = $("#userTable").DataTable();
+			let tr = $("#userTable").find("tbody tr.selected");
+			let uid = dTable.row(tr).data().uid;
+
 			let optDelete = {
 				url: apiHost + "/config/users/" + uid,
 				type: 'delete',
@@ -450,10 +453,12 @@
 				}
 			} else {
 			// 2. Edit existing user info
+				let dTable = $("#userTable").DataTable();
 				let tr = $("#userTable").find("tbody tr.selected");
 				let td = tr.find("td");
-			
-				let newUid = tr.data("uid");
+
+				let newUid = dTable.row(tr).data().uid;
+
 				let role = $("#newAccLevel").prev().data("value");
 				let roleTitle = $("#newAccLevel").prev().data("name");
 
@@ -1022,14 +1027,12 @@
 						createdRow: function ( row, data, index ){
 							if(!isEmpty(data.desc)){
 								$(row).attr({
-									'data-uid': data.uid,
 									'data-role': data.user_role,
 									'data-name': data.name,
 									'data-desc': data.desc
 								});
 							} else {
 								$(row).attr({
-									'data-uid': data.uid,
 									'data-role': data.user_role,
 									'data-name': data.name
 								});
@@ -1197,14 +1200,12 @@
 						createdRow: function ( row, data, index ){
 							if(!isEmpty(data.desc)){
 								$(row).attr({
-									'data-uid': data.uid,
 									'data-role': data.user_role,
 									'data-name': data.name,
 									'data-desc': data.desc
 								});
 							} else {
 								$(row).attr({
-									'data-uid': data.uid,
 									'data-role': data.user_role,
 									'data-name': data.name
 								});
@@ -1444,10 +1445,11 @@
 				$('#newId').prop('disabled', false);
 				$("#addUserModal").removeClass("edit").modal("show");
 			} else {
+				let dTable = $("#userTable").DataTable();
 				let tr = $("#userTable").find("tbody tr.selected");
 				let td = tr.find("td");
-				let uid = tr.data("uid");
-
+				let uid = dTable.row(tr).data().uid;
+	
 				// EDIT!!!!!
 				if(option == "edit") {
 					let optSpc = {
@@ -1761,9 +1763,6 @@
 
 
 </script>
-
-<c:set var="siteList" value="${siteHeaderList}"/> <!-- 사이트 별 -->
-
 
 <div class="modal fade stack" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-sm">

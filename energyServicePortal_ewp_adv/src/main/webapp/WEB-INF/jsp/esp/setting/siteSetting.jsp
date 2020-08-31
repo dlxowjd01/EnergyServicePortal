@@ -526,8 +526,10 @@
 		function readWriteTable(siteList, callback) {
 			// console.log("siteList===", siteList);
 			if(siteList) {
+				console.log("siteList---", siteList)
 				let newArr = [];
 				Promise.resolve(siteList.map((item, index) => {
+				
 					let rawDataOpt = {
 						url: apiHost + "/status/raw/site",
 						type: 'get',
@@ -586,7 +588,7 @@
 						}
 
 						$.when(makeAjaxCall(deviceOpt)).done(function(res) {
-							console.log("deviceOpt===", res)
+							// console.log("deviceOpt===", res)
 							if(!isEmpty(res)) {
 								item.deviceAlarm = "1";
 								item.alarmData = res;
@@ -1514,7 +1516,7 @@
 					let t = $("siteTable").DataTable();
 
 					addBtn.prop("disabled", false).text("수정");
-					
+
 					titleAdd.addClass("hidden").next().removeClass("hidden");
 					required.hasClass("no-symbol") ? null : required.addClass("no-symbol");
 
@@ -1539,7 +1541,7 @@
 					if( td.eq(6).text() != '0'){
 						$('#newAffiliation').val(td.eq(6).text());
 					}
-					// ESS (BMS)
+				// ESS (BMS)
 					if( td.eq(7).text() != '0'){
 						$('#newAffiliation').val(td.eq(6).text());
 					}
@@ -1811,7 +1813,7 @@
 						"title": "",
 						"mData": "null",
 						"mRender": function ( data, type, row, rowIndex ) {
-							return `<button type="button" class="icon-edit" onclick="enableAlarmInput($(this))">수정</button>`;
+							return `<button type="button" class="icon-edit" onclick="onAlarmEdit($(this))">수정</button>`;
 						},
 						"className": "dt-body-center no-sorting",
 						// "width": "6%"
@@ -1820,7 +1822,7 @@
 						"sTitle": "",
 						"mData": "null",
 						"mRender": function ( data, type, row, row, rowIndex ) {
-							return `<button type="button" class="icon-delete" onclick="enableAlarmInput($(this), 'delete')">삭제</button>`;
+							return `<button type="button" class="icon-delete" onclick="onAlarmEdit($(this), 'delete')">삭제</button>`;
 						},
 						"className": "dt-body-center no-sorting",
 						// "width": "6%"
@@ -2015,7 +2017,7 @@
 		}
 	}
 
-	function enableAlarmInput(self, option){
+	function onAlarmEdit(self, option){
 		let tr = self.parents().closest("tr");
 		let input = tr.find("input[type='text']");
 		let dropdown = tr.find(".dropdown-toggle");
