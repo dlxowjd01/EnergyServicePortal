@@ -162,13 +162,11 @@
 					<li><a href="/spc/transactionCalendar.do">입출금 관리</a></li>
 					<li><a href="/spc/maintenanceSchedule.do">점검계획</a></li>
 					<li><a href="/spc/supplementaryDocuments.do">이관자료</a></li>
-
 				</ul>
 			</div>
 		</li>
 		</c:if>
 
-		<c:if test="${oid eq 'encored' or oid eq 'kpx'}">
 		<li class="smn8 menu-item">
 			<a href="javascript:void(0);">설정</a>
 			<div class="sub_layer">
@@ -192,8 +190,7 @@
 				</ul>
 			</div>
 		</li>
-		</c:if>
-		
+
 		<li class="smn9"><a href="/spc/notice.do">공지사항</a></li>
 		<li class="smn10"><a href="/logout.do">로그아웃</a></li>
 	</ul>
@@ -290,7 +287,7 @@
 				</ul>
 			</li>
 			</c:if>
-			<c:if test="${oid eq 'encored' or oid eq 'kpx'}">
+
 			<li class="gmn8 menu-item">
 				<a href="javascript:void(0);">설정</a>
 				<ul class="sub-menu-list">
@@ -312,7 +309,6 @@
 
 				</ul>
 			</li>
-			</c:if>
 
 			<li class="gmn9"><a href="/spc/notice.do">공지사항</a></li>
 			<li class="gmn10"><a href="/logout.do">로그아웃</a></li>
