@@ -288,7 +288,7 @@
 								}
 
 								$('#basicInfo input[type="file"]').eq(index).data('file', file);
-								let listItem = `<button type='button' class='btn_close icon-trash ' onclick='deleteFile($(this), "front")'></button>`;
+								let listItem = `<button type='button' class='btn_close icon-trash' onclick='deleteFile($(this), "front")'></button>`;
 								//$('#basicInfo input[type="file"]').eq(index).parent().find(".upload_text").next('.file_del_btn').remove();
 								$('#basicInfo input[type="file"]').eq(index).parent().find(".upload_text").html(file['originalname']).after(listItem);
 							});

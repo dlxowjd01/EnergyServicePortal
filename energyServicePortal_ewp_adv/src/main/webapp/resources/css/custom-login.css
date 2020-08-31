@@ -129,7 +129,7 @@ button:active {
 	background: var(--icon-eye) no-repeat center;
 }
 
-.clear-btn.close {
+.clear-btn.eye-close {
 	background: var(--icon-eye-close) no-repeat center;
 }
 
