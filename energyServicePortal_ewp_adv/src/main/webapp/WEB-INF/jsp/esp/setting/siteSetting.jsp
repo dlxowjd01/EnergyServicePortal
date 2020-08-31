@@ -1688,7 +1688,7 @@
 	function getAlarmTable(alarmData, userData){
 		let arr = [];
 		let deviceList = [];
-		// console.log("userData---", userData)
+		console.log("userData---", userData)
 		Promise.resolve(alarmData.map( (x, index) => {
 			let sendTo = x.alarm_to;
 			// console.log("x==", x);
