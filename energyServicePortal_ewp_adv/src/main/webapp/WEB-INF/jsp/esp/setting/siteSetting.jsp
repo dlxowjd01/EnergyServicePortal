@@ -503,7 +503,6 @@
 				async: true,
 			}
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
-				console.log("auth/me---", json)
 				readOnlyTable(json.user_sites ,siteList);
 			}).fail(function(){
 				return ;
@@ -918,24 +917,17 @@
 
 
 		function readOnlyTable(userSite, allSite) {
-			$('#siteTable').DataTable().clear().destroy();
-			if(siteList){
+			if(userSite){
 				let newArr = [];
-
 				Promise.resolve(userSite.map((item, index) => {
 					// console.log("item---", item)
 					let found = allSite.findIndex( x => x.sid == item.sid);
+					let matchedData = allSite[found];
+
+					console.log("matchedData===", matchedData);
 
 					if(found > -1){
 						// console.log("user---", userSite[found]);
-						console.log("item===", item);
-						item.userInfo = {
-							permission : ( userSite[found].role == 1) ? "수정/조회" : "조회",
-							role: userSite[found].role,
-							usid : userSite[found].usid,
-							uid : userSite[found].uid
-						}
-
 						let rawDataOpt = {
 							url: apiHost + "/status/raw/site",
 							type: 'get',
@@ -963,17 +955,25 @@
 								item.bmsCapacity = 0;
 							}
 
-							if(isEmpty(item.ess) || item.ess == 0){
+							if(isEmpty(matchedData.ess) || matchedData.ess == 0){
 								item.ess == "-"
 							} else {
-								if(item.ess == 1){
+								if(matchedData.ess == 1){
 									item.ess = "DemandESS"
-								} else if(item.ess == 2){
+								} else if(matchedData.ess == 2){
 									item.ess = "GenerationESS"
 								}
 							}
-	
-							if(item.resource_type === 0) {
+
+							item.name = matchedData.name;
+
+							if(!isEmpty(matchedData.location)){
+								item.location = matchedData.location;
+							} else {
+								item.location = "-";
+							}
+
+							if(matchedData.resource_type === 0) {
 								// Demand && ESS : pair
 								item.siteType = "수요자원 (Demand)"
 								item.powerSource = "부하"
@@ -988,19 +988,14 @@
 									item.powerSource = "소수력"
 								}
 							}
-if(!isEmpty(item.name)){
 
-} else {
-
-}
-
-							if(!isEmpty(item.dr_group_id)){
+							if(!isEmpty(matchedData.dr_group_id)){
 								item.drId = item.dr_group_id;
 							} else {
 								item.drId = "-"
 							}
 
-							if(!isEmpty(item.vpp_group_id)){
+							if(!isEmpty(matchedData.vpp_group_id)){
 								item.vppId = item.vpp_group_id;
 							} else {
 								item.vppId = "-"
@@ -1023,7 +1018,7 @@ if(!isEmpty(item.name)){
 					// 9. Vpp 자원 코드 ( virtual power plant )
 					// 10. 수정/조회 권한
 					// 11. 알람 설정
-
+					console.log("newArr--", newArr)
 					var siteReadOnlyTable = $('#siteTable').DataTable({
 						"aaData": newArr,
 						"table-layout": "fixed",
@@ -1085,10 +1080,6 @@ if(!isEmpty(item.name)){
 								"sTitle": "VPP 자원코드",
 								"mData": "vppId",
 							},
-							{
-								"sTitle": "알람 수신",
-								"mData": "null",
-							},
 						],
 						"language": {
 							"emptyTable": "조회된 데이터가 없습니다."
@@ -1113,10 +1104,13 @@ if(!isEmpty(item.name)){
 							filterColumn("1", "");
 						}
 					});
+					
 					$("#siteSearchBox").on( 'keyup search input paste cut', function(){
 						siteReadOnlyTable.columns(2).search( this.value ).draw();
 					});
+				
 				});
+			
 			} else {
 				drawEmptyTable($("#siteTable"))
 			}
