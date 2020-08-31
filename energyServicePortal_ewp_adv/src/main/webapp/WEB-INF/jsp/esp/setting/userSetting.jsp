@@ -332,7 +332,7 @@
 						$("#resultModal").modal("show");
 
 						setTimeout(function(){
-							$("#resultBtn").trigger("click");
+							$("#resultModal").modal("hide");
 						}, 1600);
 					}).fail(function (jqXHR, textStatus, errorThrown) {
 						$("#resultFailureMsg").removeClass("hidden");
@@ -509,7 +509,7 @@
 								$("#resultBtn").parent().addClass("hidden");
 								$("#resultModal").modal("show");
 								setTimeout(function(){
-									$("#resultBtn").trigger("click");
+									$("#resultModal").modal("hide");
 								}, 1000);
 							}).fail(function (jqXHR, textStatus, errorThrown) {
 								console.log("result1===", jqXHR)
@@ -527,9 +527,9 @@
 									$("#resultSuccessMsg").multiline("사용자 정보가\n성공적으로 변경 되었습니다.").removeClass("hidden");
 									$("#resultBtn").parent().addClass("hidden");
 									$("#resultModal").modal("show");
-									// setTimeout(function(){
-									// 	$("#resultBtn").trigger("click");
-									// }, 1800);
+									setTimeout(function(){
+										$("#resultModal").modal("hide");
+									}, 1800);
 									console.log("newUserPwd edit success===", json)
 								}).fail(function (jqXHR, textStatus, errorThrown) {
 									let errorMsg = "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText +"\n" + "에러: " + errorThrown;
@@ -537,9 +537,9 @@
 									$("#resultBtn").parent().removeClass("hidden");
 									$("#resultModal").modal("show");
 									console.log("newUserPwd edit error===", errorMsg);
-									// setTimeout(function(){
-									// 	$("#resultBtn").trigger("click");
-									// }, 1800);
+									setTimeout(function(){
+										$("#resultModal").modal("hide");
+									}, 1800);
 									return false;
 								});
 							}
@@ -554,7 +554,7 @@
 									console.log("editUserObj edit SUCCESS===");
 
 									setTimeout(function(){
-										$("#resultBtn").trigger("click");
+										$("#resultModal").modal("hide");
 									}, 1800);
 								}).fail(function (jqXHR, textStatus, errorThrown) {
 									let errorMsg = "에러코드:" + jqXHR.status + "\n" + "메세지: " + jqXHR.responseText +"\n" + "에러: " + errorThrown;
@@ -652,7 +652,7 @@
 										$("#resultBtn").parent().addClass("hidden");
 										$("#resultModal").modal("show");
 										setTimeout(function(){
-											$("#resultBtn").trigger("click");
+											$("#resultModal").modal("hide");
 										}, 1500);
 									});
 								}
@@ -675,7 +675,7 @@
 										$("#resultBtn").parent().addClass("hidden");
 										$("#resultModal").modal("show");
 										setTimeout(function(){
-											$("#resultBtn").trigger("click");
+											$("#resultModal").modal("hide");
 										}, 1500);
 									});
 								}
@@ -688,7 +688,7 @@
 												$("#resultBtn").parent().addClass("hidden");
 												$("#resultModal").modal("show");
 												setTimeout(function(){
-													$("#resultBtn").trigger("click");
+													$("#resultModal").modal("hide");
 												}, 1500);
 											});
 										} else {
@@ -696,7 +696,7 @@
 											$("#resultBtn").parent().addClass("hidden");
 											$("#resultModal").modal("show");
 											setTimeout(function(){
-												$("#resultBtn").trigger("click");
+												$("#resultModal").modal("hide");
 											}, 1500);
 										}
 									
@@ -711,7 +711,7 @@
 									});
 								}
 								if( !isEmpty(editUserObj) ){
-									console.log("editUserObj only + promise race")
+									// console.log("editUserObj only + nestedPromises")
 									$.ajax(option).done(function (json, textStatus, jqXHR) {
 										if(nestedPromises.length>0){
 											Promise.all(nestedPromises).then(res => {
@@ -719,7 +719,7 @@
 												$("#resultBtn").parent().addClass("hidden");
 												$("#resultModal").modal("show");
 												setTimeout(function(){
-													$("#resultBtn").trigger("click");
+													$("#resultModal").modal("hide");
 												}, 1500);
 											});
 										}
