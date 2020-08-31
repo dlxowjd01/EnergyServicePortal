@@ -10063,9 +10063,18 @@ th .btn_align {
 	text-align: right;
 }
 
-.spc-transaction .table-footer .sa_select,
+.spc-transaction .table-footer .sa_select {
+	width: 100%;
+	padding: 0 6px;
+}
+
+.spc-transaction .table-footer .sa_select .dropdown,
 .spc-transaction .table-footer .sa_select .dropdown-toggle {
-	width: 95%;
+	width: 100%;
+}
+
+.spc-transaction .table-footer td > .sa_select + .sa_select {
+	margin: 12px 0 5px;
 }
 
 .spc-transaction .table-footer .clear-input {

@@ -503,7 +503,8 @@
 				async: true,
 			}
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
-				readOnlyTable(json.user_sites);
+				console.log("auth/me---", json)
+				readOnlyTable(json.user_sites ,siteList);
 			}).fail(function(){
 				return ;
 			})
@@ -584,7 +585,9 @@
 								sid: item.sid
 							}
 						}
+
 						$.when(makeAjaxCall(deviceOpt)).done(function(res) {
+							console.log("deviceOpt===", res)
 							if(!isEmpty(res)) {
 								item.deviceAlarm = "1";
 								item.alarmData = res;
@@ -913,23 +916,26 @@
 			}
 		}
 
-// function addAlarmClickEvent(){
 
-// }
-		function readOnlyTable(siteList, callback) {
+		function readOnlyTable(userSite, allSite) {
+			$('#siteTable').DataTable().clear().destroy();
 			if(siteList){
 				let newArr = [];
-				Promise.resolve(siteList.map((item, index) => {
-					let found = userSite.findIndex( x => x.sid == item.sid);
+
+				Promise.resolve(userSite.map((item, index) => {
+					// console.log("item---", item)
+					let found = allSite.findIndex( x => x.sid == item.sid);
+
 					if(found > -1){
 						// console.log("user---", userSite[found]);
-						// console.log("item===", item);
+						console.log("item===", item);
 						item.userInfo = {
 							permission : ( userSite[found].role == 1) ? "수정/조회" : "조회",
 							role: userSite[found].role,
 							usid : userSite[found].usid,
 							uid : userSite[found].uid
 						}
+
 						let rawDataOpt = {
 							url: apiHost + "/status/raw/site",
 							type: 'get',
@@ -939,6 +945,7 @@
 								formId: 'v2'
 							}
 						}
+
 						$.ajax(rawDataOpt).done(function (json, textStatus, jqXHR) {
 							if(!isEmpty(json.INV_PV) && ( Object.keys("genCapacity").length === 0 ) ) {
 								item.genCapacity = json.INV_PV.capacity;
@@ -959,18 +966,20 @@
 							if(isEmpty(item.ess) || item.ess == 0){
 								item.ess == "-"
 							} else {
-								if(item.ess === 1){
+								if(item.ess == 1){
 									item.ess = "DemandESS"
-								} else if(item.ess === 2){
+								} else if(item.ess == 2){
 									item.ess = "GenerationESS"
 								}
 							}
+	
 							if(item.resource_type === 0) {
 								// Demand && ESS : pair
-								item.siteType = "Demand"
+								item.siteType = "수요자원 (Demand)"
 								item.powerSource = "부하"
 							} else {
-								item.siteType = "Generation"
+								item.siteType = "발전소 (Generation)"
+
 								if(item.resource_type === 1){
 									item.powerSource = "태양광"
 								} else if(item.resource_type === 2){
@@ -979,6 +988,12 @@
 									item.powerSource = "소수력"
 								}
 							}
+if(!isEmpty(item.name)){
+
+} else {
+
+}
+
 							if(!isEmpty(item.dr_group_id)){
 								item.drId = item.dr_group_id;
 							} else {
@@ -990,14 +1005,13 @@
 							} else {
 								item.vppId = "-"
 							}
-
 							newArr.push(item);
 						}).fail(function (jqXHR, textStatus, errorThrown) {
 							console.log("error====", jqXHR);
 							return;
 						});
 					}
-				})).then(function(){
+				})).then(() => {
 					// 1. 사업소 유형
 					// 2. 사업소명
 					// 3. 지역
@@ -1010,57 +1024,23 @@
 					// 10. 수정/조회 권한
 					// 11. 알람 설정
 
-					var siteTable = $('#siteTable').DataTable({
+					var siteReadOnlyTable = $('#siteTable').DataTable({
 						"aaData": newArr,
 						"table-layout": "fixed",
 						"fixedHeader": true,
-						// "bAutoWidth": true,
+						"bAutoWidth": true,
 						"bSearchable" : true,
-						// "ScrollX": true,
-						// "sScrollX": "110%",
-						// "sScrollXInner": "110%",
 						"sScrollY": true,
 						"scrollY": "720px",
 						"bScrollCollapse": true,
 						"pageLength": 100,
 						// "bFilter": false, disabling this option will prevent table.search()
 						"aaSorting": [[ 0, 'asc' ]],
-						// "order": [[ 1, 'asc' ]],
 						"aoColumnDefs": [
 							{
 								"aTargets": [ 0 ],
 								"bSortable": false,
 								"orderable": false
-							},
-							{
-								"aTargets": [ 1 ],
-								"createdCell":  function (td, cellData, rowData, row, col) {
-									// if(row.siteType == "Demand"){
-									// 	$(td).attr('data-value', 0); 
-									// } else {
-									// 	$(td).attr('data-value', 1); 
-									// }
-
-									if(rowData.resType == "Demand"){
-										$(td).attr('data-value', 0);
-									} else {
-										$(td).attr('data-value', 1);
-									}
-								}
-							},
-							{
-								"aTargets": [ 4 ],
-								"createdCell":  function (td, cellData, rowData, row, col) {
-									if(rowData.powerSource == "부하"){
-										$(td).attr('data-value', 0);
-									} else if(rowData.powerSource == "태양광"){
-										$(td).attr('data-value', 1);
-									} else if(rowData.powerSource == "풍력"){
-										$(td).attr('data-value', 2);
-									} else if(rowData.powerSource == "소수력"){
-										$(td).attr('data-value', 3);
-									}
-								}
 							},
 						],
 						"aoColumns": [
@@ -1107,92 +1087,24 @@
 							},
 							{
 								"sTitle": "알람 수신",
-								"mData":"null",
-								"mRender": function ( data, type, row )  {
-									return '<button type="button" class="btn-type-sm btn_type03">알람</button>'
-								},
+								"mData": "null",
 							},
 						],
 						"language": {
 							"emptyTable": "조회된 데이터가 없습니다."
 						},
 						"dom": 'tip',
-						"select": {
-							style: 'single',
-							// selector: 'td:first-child > a',
-						},
+						// "select": {
+						// 	style: 'single',
+						// selector: 'td:first-child > a',
+						// },
 						initComplete: function(){
 							this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
 								cell.innerHTML = i+1;
 								$(cell).data("id", i);
 							});
 						},
-						createdRow: function (row, data, dataIndex){
-						},
-						// every time DataTables performs a draw
-						drawCallback: function () {
-							selectRow(this);
-						},
 					}).columns.adjust().draw();
-					
-
-					siteTable.on( 'order.dt search.dt', function () {
-						siteTable.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-							cell.innerHTML = i+1;
-							$(cell).data("id", i)
-						});
-					}).draw();
-
-					siteTable.on( 'column-sizing.dt', function ( e, settings ) {
-						$(".dataTables_scrollHeadInner").css( "width", "100%" );
-					});
-
-					new $.fn.dataTable.Buttons( siteTable, {
-						name: 'commands',
-						"buttons": [
-							{
-								extend: 'excelHtml5',
-								className: "save_btn",
-								text: '엑셀 다운로드',
-								// exportOptions: {
-								// 	modifier: {
-								// 		page: 'current'
-								// 	}
-								// },
-								customize: function( xlsx ) {
-									var sheet = xlsx.xl.worksheets['sheet1.xml'];
-									$('row:first c', sheet).attr( 's', '42' );
-									var sheet = xlsx.xl.worksheets['sheet1.xml'];
-									// var lastCol = sheet.getElementsByTagName('col').length - 1;
-									// var colRange = createCellPos( lastCol ) + '1';
-									// //Has to be done this way to avoid creation of unwanted namespace atributes.
-									// var afSerializer = new XMLSerializer();
-									// var xmlString = afSerializer.serializeToString(sheet);
-									// var parser = new DOMParser();
-									// var xmlDoc = parser.parseFromString(xmlString,'text/xml');
-									// var xlsxFilter = xmlDoc.createElementNS('http://schemas.openxmlformats.org/spreadsheetml/2006/main','autoFilter');
-									// var filterAttr = xmlDoc.createAttribute('ref');
-									// filterAttr.value = 'A1:' + colRange;
-									// xlsxFilter.setAttributeNode(filterAttr);
-									// sheet.getElementsByTagName('worksheet')[0].appendChild(xlsxFilter);
-
-								}
-							},
-							// {
-							// 	extend: 'csvHtml5',
-							// 	className: "btn_type03",
-							// 	text: 'CSV'
-							// },
-							// {
-							// 	extend: 'pdfHtml5',
-							// 	className: "btn_type03",
-							// 	text: 'PDF',
-							// },
-						],
-					});
-
-					siteTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup");
-					// siteTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup").addClass("hidden inline");
 
 					$("#siteType").find("li").on( 'click', function(){
 						if(!isEmpty($(this).data("name"))){
@@ -1202,7 +1114,7 @@
 						}
 					});
 					$("#siteSearchBox").on( 'keyup search input paste cut', function(){
-						siteTable.columns(2).search( this.value ).draw();
+						siteReadOnlyTable.columns(2).search( this.value ).draw();
 					});
 				});
 			} else {
@@ -1945,6 +1857,11 @@
 			
 			}).columns.adjust().draw();
 			
+
+			alarmTable.on( 'column-sizing.dt', function ( e, settings ) {
+				$(".dataTables_scrollHeadInner").css( "width", "100%" );
+			});
+
 			$("#addAlarmModal").modal("show");
 		});
 

@@ -613,7 +613,7 @@
 									</div>
 								</div><!--
 							--><div class="tx_inp_type hidden"><!--
-								--><input type="text" id="accountNo" class="right" name="accountNo" placeholder="계좌번호" maxlength="18"><!--
+								--><input type="text" id="accountNo" class="center" name="accountNo" placeholder="계좌번호" maxlength="18"><!--
 							--></div><!--
 						--></td>
 							<td>
