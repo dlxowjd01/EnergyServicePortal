@@ -8,7 +8,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="user-scalable=yes, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width" />
 	<c:choose>
-		<c:when test="${pageContext.request.serverName eq 'spower.iderms.ai' or pageContext.request.serverName eq '13.114.199.169' or pageContext.request.serverName eq 'localhost'}">
+		<c:when test="${pageContext.request.serverName eq 'spower.iderms.ai'}">
 			<title>S-POWER iDERMS</title>
 		</c:when>
 		<c:otherwise>
@@ -102,14 +102,11 @@
 		</script>
 	</c:if>
 
-	<c:if test="${!fn:contains(pageContext.request.serverName, 'spower')}">
-		changeFavicon('/resources/favicon_encored.ico');
-	</c:if>
-
 	<script type="text/javascript">
 		$(document).ready(function () {
-			var changeFavicon = link => {
-				let $favicon = document.querySelector('link[rel="icon"]') || document.createElement('link');
+
+			const changeFavicon = link => {
+				let $favicon = document.querySelector('link[rel="icon"]');
 				if ($favicon !== null) {
 					$favicon.href = link
 				} else {
@@ -119,6 +116,10 @@
 					document.head.appendChild($favicon)
 				}
 			};
+
+			<c:if test="${!fn:contains(pageContext.request.serverName, 'spower')}">
+			changeFavicon('/resources/favicon_encored.ico');
+			</c:if>
 
 			var lan = location.search.substr(location.search.length - 2, 2);
 

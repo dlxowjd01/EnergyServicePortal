@@ -493,15 +493,6 @@
 					resolve(JSON.parse(v.job_info))
 				}).then(result => {
 					job_info = result;
-					if ($.inArray(job_type, checkType) === -1) {
-						hiddenClass = 'hidden';
-					} else {
-						if (!isEmpty(serachName)) {
-							if ((spcName.match(serachName) || job_Name(job_type).match(serachName)) == null) {
-								hiddenClass = 'hidden';
-							}
-						}
-					}
 
 					let spcName = '';
 					if(spcList.length>0){
@@ -514,6 +505,16 @@
 
 					if(isEmpty(spcName)){
 						spcName = "spc_no_name";
+					}
+
+					if ($.inArray(job_type, checkType) === -1) {
+						hiddenClass = 'hidden';
+					} else {
+						if (!isEmpty(serachName)) {
+							if ((spcName.toLowerCase().match(serachName) || job_Name(job_type).match(serachName)) == null) {
+								hiddenClass = 'hidden';
+							}
+						}
 					}
 
 					// console.log("job_type===", job_type);
@@ -581,7 +582,7 @@
 					hiddenClass = 'hidden';
 				} else {
 					if (!isEmpty(serachName)) {
-						if ((spcName.match(serachName) || (statusList[firstStatus].val).toLowerCase().match(serachName)) == null) {
+						if ((spcName.toLowerCase().match(serachName) || (statusList[firstStatus].val).toLowerCase().match(serachName)) == null) {
 							hiddenClass = 'hidden';
 						}
 					}

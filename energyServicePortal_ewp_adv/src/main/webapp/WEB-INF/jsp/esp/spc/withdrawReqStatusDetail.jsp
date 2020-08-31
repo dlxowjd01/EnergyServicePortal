@@ -656,7 +656,7 @@
 				--></div>
 						</c:when>
 						<c:otherwise>
-							<c:if test="${userInfo.task eq 2}">
+							<c:if test="${userInfo.task eq 2 and (param.req_detail_status_val ne 4 and param.req_detail_status_val ne 5)}">
 					<div class="spc-btn-group my-20"><!--
 					--><button type="button" id="reviewBtn" class="btn_type mr-16">검토대기로 변경</button><!--
 					--><button type="button" id="rejectBtn" class="btn_type03 w80">반송</button><!--

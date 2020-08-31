@@ -719,7 +719,7 @@
 						</td>
 						<th>상업 운전 개시일</th>
 						<td>
-							<span id="상업 운전 개시일_from"></span> ~ <span id="상업 운전 개시일_to"></span>
+							<span id="상업_운전_개시일"></span></span>
 						</td>
 					</tr>
 					<tr>
