@@ -1449,7 +1449,6 @@
 				let tr = $("#userTable").find("tbody tr.selected");
 				let td = tr.find("td");
 				let uid = dTable.row(tr).data().uid;
-
 				// EDIT!!!!!
 				if(option == "edit") {
 					let optSpc = {
