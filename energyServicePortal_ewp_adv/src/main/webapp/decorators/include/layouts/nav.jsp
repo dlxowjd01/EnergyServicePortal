@@ -306,7 +306,6 @@
 					<li><a href="/setting/comCodeSetting.do">공통 코드 관리</a></li>
 					<li><a href="/setting/batchSetting.do">배치 관리</a></li>
 					</c:if>
-
 				</ul>
 			</li>
 
