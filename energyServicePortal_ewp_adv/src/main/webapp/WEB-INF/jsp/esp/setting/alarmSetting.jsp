@@ -9,6 +9,150 @@
 	$(function () {
 		deviceProperties();
 		alermList();
+
+		// 엑셀 업로드 버튼
+		$('#excelUploadBtn').on('change', function(evt) {
+			var reader = new FileReader();
+			reader.onload = function(e){
+				if (reader.result)
+					reader.content = reader.result;
+
+				//In IE browser event object is null
+				var data = e ? e.target.result : reader.content;
+				var baseEncoded = btoa(data);
+				var wb = XLSX.read(baseEncoded, {type: 'base64'});
+
+				processWorkbook(wb);
+			};
+			reader.onerror = function(ex){
+				console.log(ex);
+			};
+			reader.readAsBinaryString(evt.target.files[0]);
+		});
+
+		$('#alarmTable').DataTable({
+			destroy: true,
+			'aaData': null,
+			'table-layout': 'fixed',
+			// "autoWidth": true,
+			'bAutoWidth': true,
+			'bSearchable' : true,
+			'sScrollX': '100%',
+			'sScrollXInner': '100%',
+			'sScrollY': false,
+			'bScrollCollapse': true,
+			'aaSorting': [[ 1, 'asc' ]],
+			'paging': false,
+			'aoColumns': [
+				{
+					sTitle: '',
+					mData: null,
+					mRender: function ( data, type, full, rowIndex ) {
+						return '<input type="checkbox" id="check' + rowIndex.row + '" name="table_checkbox"><label for="check' + rowIndex.row + '"></label>';
+					},
+					className: 'dt-center no-sorting'
+				},
+				{
+					sTitle: '순번',
+					mData: null,
+					mRender: function ( data, type, full, rowIndex ) {
+						return rowIndex.row + 1;
+					},
+					className: 'dt-center no-sorting'
+				},
+				{
+					sTitle: '설비타입',
+					mData: 'DEVICE_TYPE'
+				},
+				{
+					sTitle: '제조사',
+					mData: 'MANUFACTURER'
+				},
+				{
+					sTitle: '모델명',
+					mData: 'MODEL'
+				},
+				{
+					sTitle: '펌웨어 버전',
+					mData: 'VERSION'
+				},
+				{
+					sTitle: '에러 코드',
+					mData: 'CODE'
+				},
+				{
+					sTitle: '메세지',
+					mData: 'MESSAGE'
+				},
+				{
+					sTitle: '알람 레벨',
+					mData: 'LEVEL',
+					mRender: function ( data ) {
+						let levelText = '알수없음';
+						switch(data) {
+							case 0: levelText = '정보'; break;
+							case 1: levelText = '경고'; break;
+							case 2: levelText = '이상'; break;
+							case 3: levelText = '트립'; break;
+							case 4: levelText = '정상'; break;
+							default: levelText = '알수없음'; break;
+						}
+						return levelText;
+					}
+				},
+				{
+					sTitle: '추가 정보',
+					mData: 'DESCRIPTION'
+				},
+				{
+					sTitle: 'ID',
+					mData: 'SET_ID',
+					bSortable: false,
+					orderable: false,
+					bVisible: false
+				}
+			],
+			dom: 'Btip',
+			buttons:[
+				{
+					text: '적용',
+					className: 'btn_type fr mb-10',
+					action: function ( e, dt, node, config ) {
+
+					}
+				},
+				{
+					extend: 'excel',
+					text: '엑셀 내보내기',
+					className: 'btn_type03 fr mb-10 mr-8',
+					exportOptions: {
+						columns: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+					},
+					filename: '알람 메시지 레벨 설정'
+				},
+				{
+					text: '엑셀 업로드',
+					className: 'btn_type03 fr mb-10',
+					action: function ( e, dt, node, config ) {
+						document.getElementById('excelUploadBtn').click();
+					}
+				}
+			],
+			initComplete: function(settings, json) {
+				let str = `<div id="btnGroup" class="right-end"><!--
+							--><button type="button" disabled class="btn_type03" onclick="deleteRow()">선택 삭제</button><!--
+						--></div>`;
+				$('#alarmTable_wrapper').append($(str));
+			}
+		}).columns.adjust();
+	});
+
+	$(document).on('click', '[name="table_checkbox"]', function() {
+		if ($('[name="table_checkbox"]:checked').length > 0) {
+			$('#btnGroup button').attr('disabled', false);
+		} else {
+			$('#btnGroup button').attr('disabled', true);
+		}
 	});
 
 	<!-- 알람 코드 조회 -->
@@ -176,90 +320,28 @@
 					let manufacturer = x.manufacturer;
 					if (typeArray.includes(type) && manufArray.includes(manufacturer) && model == x.model) {
 						let alarmCodeSet = x.device_type + '_' + x.manufacturer + '_' + x.model + '_' + x.version;
-						newArr.push({
-							ALRAM_CODE_SET: alarmCodeSet,
-							DEVICE_TYPE: type,
-							MANUFACTURER: manufacturer,
-							MODEL: x.model,
-							VERSION: x.version,
-							SET_ID: x.set_id
-						});
+						const codes = x.codes;
+
+						if (!isEmpty(codes)) {
+							codes.forEach(cd => {
+								newArr.push({
+									ALARM_CODE_SET: alarmCodeSet,
+									DEVICE_TYPE: type,
+									MANUFACTURER: manufacturer,
+									MODEL: x.model,
+									VERSION: x.version,
+									CODE: cd.code,
+									LEVEL: cd.level,
+									MESSAGE: cd.message,
+									DESCRIPTION: cd.description,
+									SET_ID: x.set_id
+								});
+							});
+						}
 					}
 				})).then(result => {
-					let alramTable = $('#alramTable').DataTable({
-						destroy: true,
-						'aaData': newArr,
-						'table-layout': 'fixed',
-						// "autoWidth": true,
-						'bAutoWidth': true,
-						'bSearchable' : true,
-						'sScrollX': '100%',
-						'sScrollXInner': '100%',
-						'sScrollY': false,
-						'bScrollCollapse': true,
-						// "bFilter": false, disabling this option will prevent table.search()
-						'aaSorting': [[ 0, 'asc' ]],
-						'aoColumns': [
-							{
-								'sTitle': '순번',
-								'mData': null,
-								'className': 'dt-center idx no-sorting'
-							},
-							{
-								'sTitle': '알람 코드 셋',
-								'mData': 'ALRAM_CODE_SET',
-							},
-							{
-								'sTitle': '설비타입',
-								'mData': 'DEVICE_TYPE',
-							},
-							{
-								'sTitle': '제조사',
-								'mData': 'MANUFACTURER',
-							},
-							{
-								'sTitle': '추가 정보',
-								'mData': 'MODEL',
-							},
-							{
-								'sTitle': '펌웨어 버전',
-								'mData': 'VERSION',
-							},
-							{
-								'sTitle': 'ID',
-								'mData': 'SET_ID',
-							},
-						],
-						'aoColumnDefs': [
-							{
-								'aTargets': [ 6 ],
-								'bSortable': false,
-								'orderable': false,
-								'bVisible': false
-							}
-						],
-						"dom": 'tip',
-						"select": {
-							style: 'single',
-							items: 'row'
-						},
-						initComplete: function(){
-							this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-								cell.innerHTML = i + 1;
-								$(cell).data("id", i);
-							});
-						},
-						createdRow: function (row, data, dataIndex){
-							// console.log("row===", row);
-							$(row).attr({
-								'data-sid': data.sid,
-							});
-						},
-						drawCallback: function () {
-							selectRow(this);
-							$('#siteTable_wrapper').addClass('mb-28');
-						},
-					});
+					let alarmTable = $('#alarmTable').DataTable();
+					alarmTable.rows.add(newArr).draw();
 				})
 			},
 			error: function(result, status, error) {
@@ -268,19 +350,81 @@
 		});
 	};
 
-	const selectRow = (dataTable) => {
-		if ($(this).hasClass('selected')) {
-			$(this).removeClass('selected');
-		} else {
-			dataTable.$('tr.selected').removeClass('selected');
-			$(this).addClass('selected');
+	const processWorkbook = workbook => {
+		let excelArray = new Array();
+		let sheetLength = workbook.Sheets[workbook.SheetNames]['!ref'].split(":")[1];
+		const sheetNames = workbook.SheetNames;
+		sheetLength = parseInt(sheetLength.replace(/[^0-9]/g, ""));
+
+		for (let i = 3 ; i < sheetLength + 1; i++){
+			const DEV_TYPE = { v : workbook.Sheets[sheetNames]['B' + i] != undefined ? workbook.Sheets[sheetNames]['B' + i].v.trim() : '' };
+			const MANUFACTURER = { v : workbook.Sheets[sheetNames]['C' + i] != undefined ? workbook.Sheets[sheetNames]['C' + i].v.trim() : '' };
+			const VERSION = { v : workbook.Sheets[sheetNames]['D' + i] != undefined ? workbook.Sheets[sheetNames]['D' + i].v.trim() : '' };
+			const ALARM_CODE = { v : workbook.Sheets[sheetNames]['E' + i] != undefined ? workbook.Sheets[sheetNames]['E' + i].v.trim() : '' };
+			const ALARM_MSG = { v : workbook.Sheets[sheetNames]['F' + i] != undefined ? workbook.Sheets[sheetNames]['F' + i].v.trim() : '' };
+			const LEVEL = { v : workbook.Sheets[sheetNames]['G' + i] != undefined ? workbook.Sheets[sheetNames]['G' + i].v.trim() : '' };
+			const DESCRIPTION = { v : workbook.Sheets[sheetNames]['H' + i] != undefined ? workbook.Sheets[sheetNames]['H' + i].v.trim() : '' };
+
+			let levelText = '9';
+			if (isNaN(LEVEL.v)) {
+				switch(LEVEL.v) {
+					case '정보': levelText = 0; break;
+					case '경고': levelText = 1; break;
+					case '이상': levelText = 2; break;
+					case '트립': levelText = 3; break;
+					case '정상': levelText = 4; break;
+					default: levelText = 9; break;
+				}
+			}
+
+			excelArray.push({
+				DEVICE_TYPE: DEV_TYPE.v,
+				MANUFACTURER: MANUFACTURER.v,
+				VERSION: VERSION.v,
+				CODE: ALARM_CODE.v,
+				MESSAGE: ALARM_MSG.v,
+				LEVEL: levelText,
+				DESCRIPTION: DESCRIPTION.v,
+				SET_ID: null
+			})
 		}
-	};
+
+		console.log(excelArray);
+		let alarmTable = $('#alarmTable').DataTable();
+		alarmTable.rows.add(excelArray).draw();
+	}
+
+	/**
+	 * 에러 처리
+	 *
+	 * @param msg
+	 */
+	const errorMsg = msg => {
+		$("#warningMsg").text(msg);
+		$("#warningModal").modal("show");
+		setTimeout(function(){
+			$("#warningModal").modal("hide");
+		}, 1800);
+	}
 </script>
+
+<form id="excelForm" name="excelForm" method="post" class="hidden">
+	<input type="file" id="excelUploadBtn" class="stand_alone">
+</form>
+
+<div class="modal fade" id="warningModal" role="dialog" aria-labelledby="warningModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content collection_modal_content">
+			<div class="modal-body">
+				<h2 id="warningMsg" class="warning"></h2>
+			</div>
+		</div>
+	</div>
+</div>
 
 <div class="row header-wrapper">
 	<div class="col-12">
-		<h1 class="page-header">알람 설정</h1>
+		<h1 class="page-header">알람 메시지 레벨 설정</h1>
 	</div>
 </div>
 
@@ -328,33 +472,19 @@
 <div class="row content-wrapper">
 	<div class="col-12">
 		<div class="indiv">
-			<div class="flex_group">
-				<div class="dropdown">
-					<button type="button" class="dropdown-toggle" data-toggle="dropdown">선택<span class="caret"></span></button>
-					<ul class="dropdown-menu" id="pageLengthList">
-						<li data-value=""><a href="javascript:void(0);" tabindex="-1">전체</a></li>
-						<li data-value="10"><a href="javascript:void(0);" tabindex="-1">10</a></li>
-						<li data-value="30"><a href="javascript:void(0);" tabindex="-1">30</a></li>
-						<li data-value="50"><a href="javascript:void(0);" tabindex="-1">50</a></li>
-					</ul>
-				</div>
-				<span class="tx_tit pl-16">개 씩 보기&ensp;</span>
-			</div>
-			<button type="button" class="btn_type fr mb-20" onclick="updateModal('all')">삭제</button>
-			<button type="button" class="btn_type fr mb-20 mr-8" onclick="updateModal('all')">수정</button>
-			<button type="button" class="btn_type fr mb-20" onclick="updateModal('all')">추가</button>
-
-			<table id="alramTable">
+			<table id="alarmTable" class="chk_type">
 				<colgroup>
+					<col style="width:5%">
+					<col style="width:8%">
+					<col style="width:8%">
+					<col style="width:8%">
+					<col style="width:8%">
+					<col style="width:8%">
+					<col style="width:8%">
+					<col style="width:17%">
 					<col style="width:10%">
-					<col style="width:35%">
-					<col style="width:15%">
-					<col style="width:15%">
-					<col style="width:15%">
-					<col style="width:15%">
+					<col style="width:20%">
 				</colgroup>
-				<thead></thead>
-				<tbody></tbody>
 			</table>
 		</div>
 	</div>
