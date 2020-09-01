@@ -11806,7 +11806,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sZeroRecords": "No matching records found"
+			"sZeroRecords": "검색된 결과가 없습니다."
 		},
 	
 	

@@ -639,6 +639,16 @@ function makeAjaxCall(option){
 	});
 }
 
+function returnAjaxRes(option){
+	return $.ajax(option).done(function (json, textStatus, jqXHR) {
+		return json;
+	}).fail(function (jqXHR, textStatus, errorThrown) {
+		console.log("siteInfo/spcInfo Ajax Error:", jqXHR.responseJSON.error.message)
+		return false;
+	});
+}
+
+
 $.fn.multiline = function(text){
 	this.text(text);
 	this.html(this.html().replace(/\n/g,'<br/>'));

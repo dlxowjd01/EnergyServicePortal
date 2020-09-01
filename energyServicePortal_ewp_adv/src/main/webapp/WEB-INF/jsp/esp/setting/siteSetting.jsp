@@ -4,20 +4,40 @@
 <script src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
 	$(function () {
-		// let l = "${location}"
-		// console.log("location---", l);
-		let siteList = JSON.parse('${siteList}');
-
+		let optionList = [
+			{
+				url: apiHost + "/auth/me/sites",
+				type: "get",
+				async: true,
+			},
+			{
+				url: apiHost + "/auth/me/groups?includeSites=false&includeDevices=false",
+				type: 'get',
+				async: true
+			},
+			{
+				url: apiHost + "/auth/me",
+				type: "get",
+				async: true,
+			},
+			{
+				url: apiHost + "/config/sites?oid=" + oid,
+				type: "get",
+				async: true,
+			},
+		];
 		if(role == 1){
-			readWriteTable(siteList);
+			Promise.all([ Promise.resolve(returnAjaxRes(optionList[3])), Promise.resolve(returnAjaxRes(optionList[1])) ]).then( res => {
+				readWriteTable(res[0], res[1]);
+			});
 		} else {
-			getUserSites(siteList);
+			Promise.all([ Promise.resolve(returnAjaxRes(optionList[2])), Promise.resolve(returnAjaxRes(optionList[1])) ]).then( res => {
+				readOnlyTable(res[0].user_sites, res[1]);
+			});
 		}
 
-		getPropertyData();
-		getVppDrData();
-
-		// Validation
+		
+		// Validations
 		$("#newSiteName").on('keydown', function() {
 			$("#invalidSite").addClass("hidden");
 		});
@@ -62,14 +82,14 @@
 			}
 		});
 
-		$("#newCoord").on('input', function(e) {
-			var re = /^[0-9] + (?:\,[0-9]+)*$/;
-			var isvalid = re.test($(this).value);
-			if(isvalid == false){
-				console.log("no match---")
-			}
+		// $("#newCoord").on('input', function(e) {
+		// 	var re = /^[0-9] + (?:\,[0-9]+)*$/;
+		// 	var isvalid = re.test($(this).value);
+		// 	if(isvalid == false){
+		// 		// console.log("no match---")
+		// 	}
 			// $(this).val($(this).val().replace(/\s/g, ''));
-		});
+		// });
 
 		$("#updateSiteForm").on("change", function(){
 			if(!$(this).is(".edit")){
@@ -94,7 +114,7 @@
 
 		// Modal event
 		$("#addSiteModal").on("hide.bs.modal", function() {
-			console.log("addSiteModal===", $(this));
+			// console.log("addSiteModal===", $(this));
 			$(this).hasClass("edit") ? $(this).removeClass("edit") : null;
 		});
 
@@ -379,12 +399,16 @@
 
 				// Util JSON
 				if( !isEmpty(newUtilPlan)){
+					console.log("newUtilPlan===", newUtilPlan);
+					console.log("newVolRange===", newVolRange);
+
 					if(isEmpty(newVolRange)){
 						newUtilObj.utility_plan_id = newUtilPlan;
 					} else {
 						newUtilObj.utility_plan_id = newUtilPlan + ',' + newVolRange;
 					}
 				}
+
 				if( !isEmpty(newPeakDemand) ){
 					newUtilObj.peak_demand = newPeakDemand;
 				}
@@ -495,41 +519,32 @@
 
 		});
 
-		// Get Ajax Data
-		function getUserSites(){
-			let option = {
-				url: apiHost + "/auth/me",
-				type: "get",
-				async: true,
-			}
-			$.ajax(option).done(function (json, textStatus, jqXHR) {
-				readOnlyTable(json.user_sites ,siteList);
-			}).fail(function(){
-				return ;
-			})
-		}
-
 		function refreshSiteList(){
-			let option = {
-				url: apiHost + "/auth/me/sites",
-				type: "get",
-				async: true,
-			}
+			let optionList = [
+				{
+					url: apiHost + "/auth/me/sites",
+					type: "get",
+					async: true,
+				},
+				{
+					url: apiHost + "/auth/me/groups?includeSites=false&includeDevices=false",
+					type: 'get',
+					async: true
+				}
+			];
+
 			$('#siteTable').DataTable().clear().destroy();
-			$.ajax(option).done(function (json, textStatus, jqXHR) {
-				readWriteTable(json, updateModal);
-			}).fail(function(){
-				return;
-			})
+			Promise.all([ Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])) ]).then( res => {
+				readWriteTable(res[0], res[1], updateModal);
+			});
 		}
 
-		function readWriteTable(siteList, callback) {
-			// console.log("siteList===", siteList);
-			if(siteList) {
-				console.log("siteList---", siteList)
+		function readWriteTable(siteData, vppDr, callback) {
+			if(siteData) {
 				let newArr = [];
-				Promise.resolve(siteList.map((item, index) => {
-				
+				Promise.resolve(siteData.map((item, index) => {
+				// siteData.forEach((item, index) => {
+					// console.log("siteData===", item)
 					let rawDataOpt = {
 						url: apiHost + "/status/raw/site",
 						type: 'get',
@@ -537,10 +552,14 @@
 						data:{
 							sid: item.sid,
 							formId: 'v2'
+						},
+						beforeSend: function(){
+							$("#loadingCircle").show();
 						}
 					}
 
 					$.ajax(rawDataOpt).done(function (json, textStatus, jqXHR) {
+						$("#loadingCircle").show();
 						if(isEmpty(item.ess) || item.ess == 0){
 							item.ess == "-"
 						} else {
@@ -565,19 +584,25 @@
 								item.powerSource = "소수력"
 							}
 						}
+
 						if(!isEmpty(item.dr_group_id)){
-							item.drId = item.dr_group_id;
+							let found = vppDr.dr_group.findIndex( x => x.dgid == item.dr_group_id);
+							if(found > -1){
+								item.drId = vppDr.dr_group[found].name;
+							}
 						} else {
 							item.drId = "-"
 						}
 
 						if(!isEmpty(item.vpp_group_id)){
-							item.vppId = item.vpp_group_id;
+							let found = vppDr.vpp_group.findIndex( x => x.vgid == item.vpp_group_id);
+							if(found > -1){
+								item.vppId = vppDr.vpp_group[found].name;
+							}
 						} else {
 							item.vppId = "-"
 						}
-						// console.log("rawDataOpt---", rawDataOpt);
-					
+
 						let deviceOpt = {
 							url: apiHost + "/config/devices?"+'oid='+oid,
 							type: 'get',
@@ -586,39 +611,42 @@
 								sid: item.sid
 							}
 						}
-
-						$.when(makeAjaxCall(deviceOpt)).done(function(res) {
-							// console.log("deviceOpt===", res)
-							if(!isEmpty(res)) {
-								item.deviceAlarm = "1";
-								item.alarmData = res;
+						$.ajax(deviceOpt).done(function (json, textStatus, jqXHR) {
+							if(json.length > 0 ){
+								item.alarmFlag = 1;
+								item.alarmInfo = json;
 							} else {
-								item.deviceAlarm = "0";
-								item.alarmData = "no-device";
+								item.alarmFlag = 0;
 							}
+						}).fail(function (jqXHR, textStatus, errorThrown) {
+							console.log("optSite error===", jqXHR)
+							return false;
 						});
-						
-						if(!isEmpty(json.INV_PV) && ( Object.keys("genCapacity").length === 0 ) ) {
+
+						if(!isEmpty(json.INV_PV) ) {
 							item.genCapacity = json.INV_PV.capacity;
 						} else {
 							item.genCapacity = 0;
 						}
-						if(!isEmpty(json.PCS_ESS) && ( Object.keys("pcsCapacity").length === 0 ) ) {
+						if(!isEmpty(json.PCS_ESS) ) {
 							item.pcsCapacity = json.PCS_ESS.capacity;
 						} else {
 							item.pcsCapacity = 0;
 						}
-						if(!isEmpty(json.BMS_SYS) && ( Object.keys("bmsCapacity").length === 0 ) ) {
+						if(!isEmpty(json.BMS_SYS) ) {
 							item.bmsCapacity = json.BMS_SYS.capacity;
 						} else {
 							item.bmsCapacity = 0;
 						}
+						// console.log("obj===", obj)
 						newArr.push(item);
 					}).fail(function (jqXHR, textStatus, errorThrown) {
 						console.log("error====", jqXHR);
 						return;
 					});
-				})).then(() => {
+
+				})).then( res => {
+
 					// console.log("m===", newArr[14].alarmData)
 					// console.log("response===", response)
 					// 1. 사업소 유형
@@ -648,7 +676,7 @@
 						"pageLength": 100,
 						// "bFilter": false, disabling this option will prevent table.search()
 						"aaSorting": [[ 0, 'asc' ]],
-						// "order": [[ 1, 'asc' ]],
+						"order": [[ 1, 'asc' ]],
 						"aoColumnDefs": [
 							{
 								"aTargets": [ 0 ],
@@ -663,7 +691,7 @@
 									// } else {
 									// 	$(td).attr('data-value', 1); 
 									// }
-
+										// console.log("td===", td)
 									if(rowData.resType == "Demand"){
 										$(td).attr('data-value', 0);
 									} else {
@@ -685,15 +713,18 @@
 									}
 								}
 							},
+							// {
+							// 	"aTargets": [ 10 ],
+							// 	"createdCell":  function (td, cellData, rowData, row, col) {
+							// 		console.log('rowData---', rowData.deviceAlarm)
+							// 	}
+							// },
 						],
 						"aoColumns": [
 							{
 								"sTitle": "",
 								"mData": "null",
-								// "mRender": function ( data, type, row, rowIndex )  {
-									"mRender": function ( data, type, full, rowIndex )  {
-						
-									// console.log("DT_RowId---", full)
+								"mRender": function ( data, type, full, rowIndex )  {
 									return '<a class="chk_type" href="#"><input type="checkbox" id="' + rowIndex + '" name="table_checkbox"><label for="' + rowIndex + '"></label></a>'
 								},
 								"className": "dt-body-center no-sorting"
@@ -739,19 +770,24 @@
 								"sTitle": "VPP 자원코드",
 								"mData": "vppId",
 							},
-							{
-								"sTitle": "알람 수신",
-								"mData": "null",
-								"mRender": function ( data, type, row )  {
-									return '<button type="button" class="btn-type-sm btn_type03">알람</button>'
-								},
-							},
+							// {
+							// 	"sTitle": "알람 수신",
+							// 	"mData": "null",
+							// 	"mRender": function ( data, type, full, rowIndex )  {
+							// 		if(full.alarmFlag === 1){
+							// 			return '<button type="button" class="btn-type-sm btn_type03">알람</button>'
+							// 		} else {
+							// 			return '<button type="button" disabled class="btn-type-sm btn_type03">알람</button>'
+							// 		}
+							// 	},
+							// },
 						],
 						"dom": 'tip',
 						"select": {
 							style: 'single',
 							// selector: 'tr',
-							selector: 'td input[type="checkbox"], td:not(:last-of-type)',
+							selector: 'td input[type="checkbox"], tr',
+							// selector: 'td input[type="checkbox"], td:not(:last-of-type)',
 						},
 						initComplete: function(settings, json ){
 							let str = `<div id="btnGroup" class="right-end"><!--
@@ -763,23 +799,12 @@
 
 							$("#siteTable_wrapper").append($(str)).prepend($(addBtnStr));
 						},
-						createdRow: function (row, data, dataIndex){
-							// $(row).attr({
-							// 	'data-sid': data.sid,
-							// });
-		
-							if(data.deviceAlarm == "0"){
-								// console.log("data---", newArr[dataIndex].alarmData );
-								let btn = $(row).find(".btn-type-sm");
-								btn.prop("disabled", true);
-							}
-						},
 						// every time DataTables performs a draw
 						drawCallback: function (settings) {
-							selectRow(this);
 							$('#siteTable_wrapper').addClass('mb-28');
 						},
 						// rowCallback: function ( row, data ) {
+						// 	// console.log("data---", data.alarmFlag);
 						// }
 					}).on("select", function(e, dt, type, indexes) {
 						let btn = $("#btnGroup").find(".btn_type03");
@@ -803,6 +828,9 @@
 
 					if(callback) {
 						callback();
+					} else {
+						getVppDrData(vppDr);
+						getPropertyData();
 					}
 
 					// siteTable.on( 'order.dt search.dt', function () {
@@ -838,21 +866,23 @@
 					// });
 
 					siteTable.on( 'click', 'td .btn-type-sm', function () {
-						let idx = siteTable.row($(this).parents().closest("tr")).index();
-						let rowData = siteTable.row($(this).parents().closest("tr")).data().alarmData;
+						let tr = $(this).parents().closest("tr");
+						let idx = siteTable.row(tr).index();
 
-						let userOpt = {
-							url: apiHost + "/config/users",
-							type: 'get',
-							async: false,
-							data : {
-								oid: oid,
+						// if(!isEmpty(siteTable.row(tr).data().alarmData)){
+							let rowData = siteTable.row(tr).data().alarmInfo;
+							let userOpt = {
+								url: apiHost + "/config/users",
+								type: 'get',
+								async: false,
+								data : {
+									oid: oid,
+								}
 							}
-						}
-
-						Promise.resolve(makeAjaxCall(userOpt)).then(res => {
-							getAlarmTable(rowData, res)
-						});
+							Promise.resolve(makeAjaxCall(userOpt)).then(res => {
+								getAlarmTable(rowData, res)
+							});
+						// }
 					});
 
 					new $.fn.dataTable.Buttons( siteTable, {
@@ -900,6 +930,8 @@
 					});
 
 					siteTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup");
+					// siteTable.container().addClass( 'fit' );
+
 					// siteTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup").addClass("hidden inline");
 
 					$("#siteType").find("li").on( 'click', function(){
@@ -912,8 +944,10 @@
 					$("#siteSearchBox").on( 'keyup search input paste cut', function(){
 						siteTable.columns(2).search( this.value ).draw();
 					});
-				});
 
+					$("#loadingCircle").hide();
+
+				});
 			}
 		}
 
@@ -1084,7 +1118,8 @@
 							},
 						],
 						"language": {
-							"emptyTable": "조회된 데이터가 없습니다."
+							"emptyTable": "조회된 데이터가 없습니다.",
+							"zeroRecords":  "검색된 결과가 없습니다."
 						},
 						"dom": 'tip',
 						// "select": {
@@ -1179,7 +1214,8 @@
 				],
 				"dom": 'tip',
 				"language": {
-					"emptyTable": "조회된 데이터가 없습니다."
+					"emptyTable": "조회된 데이터가 없습니다.",
+					"zeroRecords":  "검색된 결과가 없습니다."
 				},
 				initComplete: function(){
 					console.log("this---", this)
@@ -1353,12 +1389,26 @@
 				console.log("site_type Error:", jqXHR)
 			});
 
+			// $("#countryList").on("change", 'input[type=checkbox]', function(){
+
+				console.log("click===:")
 			$("#countryList li").on("click", function(){
+				// filterColumn("#siteTable", "3", "");
+				filterColumn("#siteTable", "3", "");
+
 				if(!isEmpty($(this).data("id"))){
 					filterColumn( "#siteTable", "3", $(this).data("id"));
 				} else {
 					filterColumn("#siteTable", "3", "");
 				}
+			});
+
+			$("#countryList input[type=checkbox]").change(function() { 
+				console.log("something is checked on the page")
+			});
+
+			$("#countryList li input").on("change", function(){
+				console.log("on change----")
 			});
 
 			for(let i=0, length = 28; i<length; i++){
@@ -1371,73 +1421,50 @@
 		}
 
 
-		function getVppDrData() {
-			let drOption = {
-				url: apiHost + "/config/dr-groups?oid="+oid,
-				type: 'get',
-				async: true
-			};
+		function getVppDrData(res) {
+			let newDrResIdList = $("#newDrResIdList");
+			let newVppResIdList = $("#newVppResIdList");
+			// modal DR info!!!
+			if(!isEmpty(res.dr_group)){
+				newDrResIdList.empty();
+				let strDr = '';
+				$.each(res.dr_group, function(index, el){
+					strDr += '<li data-value="' + el.dgid + '"><a href="#" tabindex="-1">' +  el.resourceId + '</a></li>'
+				});
 
-			let vppOption = {
-				url: apiHost + "/config/vpp-groups?oid="+oid,
-				type:'get',
-				async: true
+				$("#newVppRevShare").prop('disabled', false);
+
+				newDrResIdList.append(strDr);
+				$("#sectionDRInfo input").each(function(){
+					$(this).prop('disabled', false);
+				});
+				$("#cblList").prev().prop("disabled", false);
+			} else {
+				newDrResIdList.empty();
+				newDrResIdList.prev().html("등록된 DR거래 자원 ID가 없습니다.<span class='caret'></span>").prop("disabled", true);
+				$("#sectionDRInfo input").each(function(){
+					$(this).prop('disabled', true);
+				})
+				$("#cblList").prev().prop("disabled", true);
 			}
 
-			$.when($.ajax(drOption), $.ajax(vppOption)).done(function (result1, result2) {
-				let newDrResIdList = $("#newDrResIdList");
-				let newVppResIdList = $("#newVppResIdList");
-				// 	$("#newDrResIdList").empty();
-				// $("#newVppResIdList").empty();
-
-				newDrResIdList.empty();
+			// modal VPP info!!!
+			if(!isEmpty(res.vpp_group)){
 				newVppResIdList.empty();
+				let strVpp = '';
+				$.each(res.vpp_group, function(index, el){
+					strVpp += '<li data-value="' + el.vgid + '"><a href="#" tabindex="-1">' + el.resourceId + '</a></li>'
+				});
+				// input field
+				$("#newVppRevShare").prop('disabled', false);
+				// dropdown
+				newVppResIdList.append(strVpp);
+			} else {
+				newVppResIdList.empty();
+				newVppResIdList.empty().prev().html("등록된 중개거래 자원 ID가 없습니다.<span class='caret'></span>");
+				$("#newVppRevShare").prop('disabled', true).val("-");
+			}
 
-				if(!isEmpty(result1[0])) {
-					console.log("1---", result1[0])
-					let str = '';
-					$.each(result1[0], function(index, element) {
-						if(!isEmpty(element.resourceId)) {
-							str += '<li data-value="' + element.dgid + '"><a href="#" tabindex="-1">' + element.resourceId + '<span class="res-name">' + element.name +  '</a></span></li>'
-						} else {
-							str += '<li data-value="' + element.dgid + '"><a href="#" tabindex="-1"><span class="res-name">' + element.name +  '</span></a></li>'
-						}
-					});
-					newDrResIdList.append(str);
-					$("#newDrResIdList").append(str);
-
-					$("#sectionDRInfo input").each(function(){
-						$(this).prop('disabled', false);
-					});
-					$("#cblList").prev().prop("disabled", false);
-				} else {
-					newDrResIdList.prev().html("등록된 DR거래 자원 ID가 없습니다.<span class='caret'></span>").prop("disabled", true);
-					$("#sectionDRInfo input").each(function(){
-						$(this).prop('disabled', true);
-					})
-					$("#cblList").prev().prop("disabled", true);
-				}
-
-
-				if(!isEmpty(result2[0])) {
-					let str = '';
-					$("#newVppRevShare").prop('disabled', false);
-					$.each(result2[0], function(index, element) {
-						if(!isEmpty(element.resourceId)) {
-							str += '<li data-value="' + element.vgid + '"><a href="#" tabindex="-1">' + element.resourceId + '<span class="res-name">' + element.name +  '</a></span></li>'
-						} else {
-							str += '<li data-value="' + element.vgid + '"><a href="#" tabindex="-1"><span class="res-name">' + element.name +  '</span></a></li>'
-						}
-					});
-
-					newVppResIdList.append(str);
-					$("#newVppResIdList").append(str);
-				} else {
-					newVppResIdList.prev().html("등록된 중개거래 자원 ID가 없습니다.<span class='caret'></span>").prop("disabled", true);
-					$("#newVppRevShare").prop('disabled', true);
-				}
-			});
-		
 			let dropdown = $("#addSiteModal").find(".dropdown-menu");
 			setDropdownValue(dropdown);
 		}
@@ -1500,9 +1527,26 @@
 				let tr = $("#siteTable").find("tbody tr.selected");
 				let td = tr.find("td");
 				let sid = dTable.row(tr).data().sid;
+				let detailInfo = dTable.row(tr).data().detail_info;
+				let utilityInfo = dTable.row(tr).data().utility;
+				let drInfo = dTable.row(tr).data().dr_info;
+				let vppInfo = dTable.row(tr).data().vpp_info;
+				let powerMarketInfo = dTable.row(tr).data().power_market;
 
-				console.log("sid---", sid );
-
+				// console.log("detailInfo---", detailInfo)
+				// console.log("utilityInfo---", utilityInfo)
+				// console.log("powerMarketInfo---", powerMarketInfo)
+				// console.log("vppInfo---", vppInfo)
+				// console.log("drInfo---", drInfo)
+				// if(!isEmpty(item.vpp_info)){
+				// 	let vppInfo = JSON.parse(vpp_info);
+				// 	console.log("vpp===", vppInfo)
+				// 	if(!isEmpty(item.profile_share)){
+				// 		item.profile_share = vppInfo.profile_share;
+				// 	} else {
+				// 		item.profile_share = "-";
+				// 	}
+				// }
 				$("#validSite").is(".hidden") ? null : $("#validSite").addClass("hidden");
 
 				// EDIT MODAL!!!
@@ -1513,7 +1557,6 @@
 						async: true,
 						contentType: 'application/json; charset=UTF-8',
 					}
-					let t = $("siteTable").DataTable();
 
 					addBtn.prop("disabled", false).text("수정");
 
@@ -1532,7 +1575,8 @@
 					$('#newSiteType').prev().data({"name": td.eq(1).text(), "value" : td.eq(1).data("value") }).html(td.eq(1).text() + "<span class='caret'></span>");
 					// 발전 자원
 					$("#newResList").prev().data({"name": td.eq(4).text(), "value" : td.eq(4).data("value") }).html(td.eq(4).text() + "<span class='caret'></span>");
-
+					// 추가 정보
+					$('#newSiteDetail').val(detailInfo);
 					// 발전 용량
 					if( td.eq(5).text() != '-' ) {
 						$('#newEmailAddr').val(td.eq(5).text())
@@ -1541,22 +1585,71 @@
 					if( td.eq(6).text() != '0'){
 						$('#newAffiliation').val(td.eq(6).text());
 					}
-				// ESS (BMS)
+					// ESS (BMS)
 					if( td.eq(7).text() != '0'){
 						$('#newAffiliation').val(td.eq(6).text());
 					}
+
+					// Utility info
+					if( !isEmpty(utilityInfo)) {
+						let util = JSON.parse(utilityInfo);
+
+						let item = $("#newContractList li");
+						let utilPlanName = "";
+						let planId = "";
+
+						item.each(function(index, item){
+							let id = String($(item).data("plan-id"));
+							if( id.indexOf(util.utility_plan_id) > -1 ){
+								match = $(item);
+								planId = $(item).data("plan-id");
+								utilPlanName = $(item).data("value");
+								$(item).click();
+							}
+						});
+						$("#newContractList").prev().data({"plan-id": planId, "value": utilPlanName }).html( utilPlanName + '<span class="caret">');
+						$("#newPeakDemand").val(util.peak_demand);
+						$("#newDrCharge").val(util.demand_charge);
+						// console.log('util.metering_day===', util.metering_day)
+						if(util.metering_day == 0){
+							$("#newInspection").prev().data("value", String(util.metering_day)).html( '말일<span class="caret">');
+						} else {
+							$("#newInspection").prev().data("value", String(util.metering_day)).html( String(util.metering_day) + '<span class="caret">');
+						}
+					
+						$("#newKepcoId").val(util.kepco_id);
+						$("#newISmartId").val(util.ismart_id);
+						$("#newISmartPwd").val(util.ismart_pass);
+					}
+
+					// PowerMarket??? (tariff?) info
+					if( !isEmpty(powerMarketInfo)) {
+						let priceModel = JSON.parse(powerMarketInfo);
+						// console.log("priceModel===", priceModel)
+						$("#newPriceModelList").prev().data("value", priceModel.price_type).html( priceModel.price_type + '<span class="caret">');
+		  				$("#newPrice").val(priceModel.price).html( priceModel.price + '<span class="caret">');
+					}
 					// DR info
-					if( td.eq(8).text() != '-') {
-						$('#newInspection').prev().data("value", td.eq(9).text()).html(td.eq(9).text() + '<span class="caret">');
-					} else {
-						$('#newInspection').prev().data("value", "").html('선택<span class="caret">');
+					if( !isEmpty(drInfo)) {
+						let dr = JSON.parse(drInfo);
+						// console.log("dr===", dr)
+						$("#drVol").val(dr.contract_capacity);
+						$("#cblList").prev().data("value", dr.contract_capacity).html( dr.contract_capacity + '<span class="caret">');
+						$("#newDrRevShare").val(dr.profile_share);
 					}
 					// VPP info
-					if( td.eq(9).text() != '-' ) {
-						$('#newContractList').prev().data("value", td.eq(9).text() ).html(td.eq(9).text() + '<span class="caret">');
-					} else {
-						$('#newContractList').prev().data("value", "").html('선택<span class="caret">');
+					if( !isEmpty(vppInfo)) {
+						let vpp = JSON.parse(vppInfo);
+						// console.log("vpp===", vpp)
+						$("#newVppRevShare").val(vpp.profile_share);
 					}
+					if( td.eq(9).text() != '-' ) {
+						$('#newVppResIdList').prev().data("value", td.eq(9).text() ).html(td.eq(9).text() + '<span class="caret">');
+					} else {
+						$('#newVppResIdList').prev().data("value", "").html('선택<span class="caret">');
+					}
+
+
 					$("#addSiteModal").addClass("edit").modal("show");
 				}
 				// DELETE MODAL!!!
@@ -1577,295 +1670,378 @@
 		}
 	}
 
-
-		// JSON.parse(dv.alarm_to);
-
-			
-		// smsUserCnt
-		// dv.device_type
-		// eviceProperties[dv.device_type].name.kr
-		// dv.did
-		// dv.name
-		// user.level
-		// levelTemplate[user.level]
-		// user.uid
-		// user.phone
-
-
-
 	function getAlarmTable(alarmData, userData){
 		let arr = [];
-		let deviceList = [];
-		console.log("userData---", userData)
-		Promise.resolve(alarmData.map( (x, index) => {
-			let sendTo = x.alarm_to;
-			// console.log("x==", x);
-			if(!isEmpty(sendTo)){
-				console.log("sendTo==", sendTo);
-				let userList = sendTo.user_id;
-				let	nonUserList = sendTo.non_user;
 
-				if(!isEmpty(userList)){
-					userList.map( x => {
-
-					});
-				}
-
-				if(!isEmpty(nonUserList)){
-					nonUserList.map( x => {
-
-					});
-				}
+		let newUserList = [];
+		let newNonUserList = [];
+		// console.log("userData---", userData)
+			if(isEmpty(alarmData)){
+				console.log("alarm null===", alarmData)
 			} else {
-				let obj = {};
-				obj.index = index + 1;
-				// device type
-				if(isEmpty(x.device_type)){
-					obj.device_type = "-";
-				} else {
-					obj.device_type = x.device_type;
-					deviceList.push(x.device_type);
-				}
-				// device name
-				if(isEmpty(x.name)){
-					obj.name = "-";
-				} else {
-					obj.name = x.name;
-				}
-				// alarm level
-				obj.level = 0;
-				// contact person User Id
-				obj.uid = "";
-				// contact person phone number
-				obj.phone = "";
+				Promise.resolve(alarmData.map((x, index) => {
+					// console.log("x==", x);
+					if(!isEmpty(x.alarm_to)){
+						let sendTo = JSON.parse(x.alarm_to);
+						let userList = sendTo.user;
+						let	nonUserList = sendTo.non_user;
+						let alarmTotalData = [];
 
-				obj.createdAt = x.createdAt;
-				obj.did = x.did;
+						if(!isEmpty(userList)){
+							console.log("userList==", userList);
+							var non = false;
+							var level = 0;
+							var name = '-';
+							var did = '-';
+							var type ='-';
+							var uid = '-';
+							var phone = '-';
+							
+							for(var i = 0 ; i < userList.length ; i++){
+								for(var j = 0 ; j < userList[i].level.length ; j++){
+									non = false;
+									did = x.did;
+									type = x.device_type;
+									name = x.name;
+									level = userList[i].level[j];
+									uid = userList[i].uid;
+									phone = ((isEmpty(userList[i].phone)) ? '-' : userList[i].phone );
+									newUserList.push({non : non, did : did, type : type, name : name, level : level, uid : uid, phone : phone });
+									alarmTotalData.push({non : non, did : did, type : type, name : name, level : level, uid : uid, phone : phone });
+								}
+							}
+						}
+						
+						if(!isEmpty(newNonUserList)){
+							console.log("newNonUserList==", newNonUserList);
+							var non = true;
+							var level = 0;
+							var name = '-';
+							var did = '-';
+							var type ='-';
+							var uid = '-';
+							var phone = '-';
+							
+							for(var i = 0 ; i < newNonUserList.length ; i++){
+								for(var j = 0 ; j < newNonUserList[i].level.length ; j++){
+									non = true;
+									did = x.did;
+									type = x.device_type;
+									name = x.name;
+									level = newNonUserList[i].level[j];
+									uid = newNonUserList[i].name;
+									phone = ((isEmpty(newNonUserList[i].phone)) ? '-' : newNonUserList[i].phone );
+									
+									newNonUserList.push({non : non, did : did, type : type, name : name, level : level, uid : uid, phone : phone });
+									alarmTotalData.push({non : non, did : did, type : type, name : name, level : level, uid : uid, phone : phone });
+								}
+							}
+						}
 
-				arr.push(obj);
-			}
-		})).then( () => {
-			var alarmTable = $('#alarmTable').DataTable({
-				"aaData": arr,
-				"retrieve": true,
-				// "fixedHeader": true,
-				"bAutoWidth": true,
-				// "ScrollX": true,
-				// "sScrollX": "110%",
-				// "sScrollXInner": "110%",
-				// "sScrollY": false,
-				// "scrollY": false,
-				// "bScrollCollapse": false,
-				"bSearchable" : true,
-				"pageLength": 10,
-				// "aoColumnDefs": [
-				// {
-				// 	"aTargets": [ 0 ],
-				// 	"bSortable": false,
-				// 	"orderable": false
-				// },
-				// 	{
-				// 		"aTargets": [ 0, 1, 2, 3, 4, 5, 6 ],
-				// 		"bSortable": false,
-				// 		"orderable": false
-				// 	},
-				// ],
-				"aoColumns": [
-					// {
-					// 	"sTitle": "순번",
-					// 	"mData": "null",
-					// 	"className": "dt-center idx no-sorting"
-					// },
-					{
-						"sTitle": "설비타입",
-						"mData": "null",
-						"mRender": function ( data, type, row, rowIndex ) {
-							let str1 = ``;
-							let filteredDvcList = deviceList.filter((a, b) => deviceList.indexOf(a) === b);
 
-							$.each(filteredDvcList, function(index, el){
-								str1 += `
-									<li data-value="${'${el}'}"><a href="#" tabindex="-1">${'${el}'}</a></li>
-								`
-							});
-							let dropdown1 = `
-								<div class="dropdown">
-									<button type="button" class="dropdown-toggle" disabled data-toggle="dropdown" data-value="${'${row.device_type}'}">${'${row.device_type}'}<span class="caret"></span></button>
-									<ul id="aDvcList${'${row.index}'}" class="dropdown-menu">${'${ str1 }'}</ul>
-								</div>
-							`;
-							return dropdown1;
+						
+
+
+						// if(!isEmpty(userList)){
+						// 	userList.map( x => {
+
+						// 	});
+						// }
+
+						// if(!isEmpty(nonUserList)){
+						// 	nonUserList.map( x => {
+
+						// 	});
+						// }
+					} else {
+						let nonUserObj = {};
+						nonUserObj.index = index + 1;
+						// device type
+						nonUserObj.did = x.did;
+						if(isEmpty(x.device_type)){
+							nonUserObj.device_type = "-";
+						} else {
+							nonUserObj.device_type = x.device_type;
+						}
+						// device name
+						if(isEmpty(x.name)){
+							nonUserObj.name = "-";
+						} else {
+							nonUserObj.name = x.name;
+						}
+						// alarm level
+						nonUserObj.level = 0;
+						// contact person User Id
+						nonUserObj.uid = "";
+						// contact person phone number
+						nonUserObj.phone = "";
+
+						nonUserObj.createdAt = x.createdAt;
+						arr.push(nonUserObj);
+					}
+				})).then( () => {
+					console.log("newUserList---", newUserList);
+					console.log("newNonUserList---", newNonUserList);
+					var deviceGroup = groupBy(arr, "device_type");
+					var alarmTable = $('#alarmTable').DataTable({
+						"aaData": arr,
+						"retrieve": true,
+						"table-layout": "fixed",
+						// "fixedHeader": true,
+						"bAutoWidth": true,
+						"bSortable": false,
+						"ordering": false,
+						"bSearchable" : true,
+						"pageLength": 10,
+						// "aoColumnDefs": [
+						// {
+						// 	"aTargets": [ 0 ],
+						// 	"bSortable": false,
+						// 	"orderable": false
+						// },
+						// 	{
+						// 		"aTargets": [ 0, 1, 2, 3, 4, 5, 6 ],
+						// 		"bSortable": false,
+						// 		"orderable": false
+						// 	},
+						// ],
+						"aoColumns": [
+							// {
+							// 	"sTitle": "순번",
+							// 	"mData": "null",
+							// 	"className": "dt-center idx no-sorting"
+							// },
+							{
+								"sTitle": "설비타입",
+								"mData": "null",
+								"mRender": function ( data, type, row, rowIndex ) {
+
+									let str1 = ``;
+									// const groupList = arr[rowIndex.row].filter((a, b) => arr.indexOf(a.device_type) === b.device_type);
+									let devName = '';
+
+									let subGroup = removeDuplicates(arr, item => item.name);
+									subGroup.forEach((item, index, arr) => {
+										devName += item.name + ","
+									});
+									devName = devName.replace(/,\s*$/, "");
+
+									let parentGroup = removeDuplicates(arr, item => item.device_type);
+									parentGroup.forEach((item, index, arr) => {
+										let target = "aDvcNameList" + row.index;
+										str1 += `
+											<li onclick="showSubgroup(this)" data-subgroup="${'${target}'}" data-device-name="${'${devName}'}" data-value="${'${row.device_type}'}"><a href="#" tabindex="-1">${'${row.device_type}'}</a></li>
+										`
+									});
+
+									// Object.entries(deviceGroup).forEach((item, index, arr) => {
+									// 	let newDeviceArr = item[1];
+									// 	return newDeviceArr.map( x => devName += ( x.name + "," ) );
+									// });
+
+									// const found = deviceGroup.findIndex( x => x[1] === row.device_type);
+
+									// $.each(deviceGroup, function(index, el){
+									// 	let target = "aDvcNameList" + row.index;
+									// 	str1 += `
+									// 		<li onclick="showSubgroup(this)" data-subgroup="${'${target}'}" data-device-name="${'${devName}'}" data-value="${'${row.device_type}'}"><a href="#" tabindex="-1">${'${row.device_type}'}</a></li>
+									// 	`
+									// });
+
+									let dropdown1 = `
+										<div class="dropdown">
+											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="${'${row.device_type}'}">${'${row.device_type}'}<span class="caret"></span></button>
+											<ul id="aDvcList${'${row.index}'}" class="dropdown-menu">${'${ str1 }'}</ul>
+										</div>
+									`;
+									return dropdown1;
+								},
+								"className": "no-sorting",
+								"width": "18%"
+							},
+							{
+								"sTitle": "설비명",
+								"mData": "null",
+								"mRender": function ( data, type, row, rowIndex ) {
+									let str2 = ``;
+									// const subGroup = copy.filter((v,i,a)=> a.findIndex(t=>(t.name === v.name))===i);
+									let subGroup = removeDuplicates(arr, item => item.name);
+
+									subGroup.forEach((item, index, arr) => {
+										str2 += `
+											<li class="hidden" data-device-type="${'${item.device_type}'}" data-did="${'${item.did}'}" data-value="${'${item.name}'}"><a href="#" tabindex="-1">${'${item.name}'}</a></li>
+										`
+									});
+									let subDropdown = `
+										<div class="dropdown">
+											<button type="button" class="dropdown-toggle" disabled data-toggle="dropdown" data-value="${'${row.name}'}">${'${row.name}'}<span class="caret"></span></button>
+											<ul id="aDvcNameList${'${row.index}'}" class="dropdown-menu">${'${ str2 }'}</ul>
+										</div>
+									`;
+									return subDropdown;
+								},
+								"className": "no-sorting",
+								"width": "18%"
+							},
+							{
+								"sTitle": "알람레벨",
+								"mData": "null",
+								"mRender": function ( data, type, row, rowIndex ) {
+									let str3 = ``;
+									let aLevelOpt = [
+										{  name : "정보", val: 0 },
+										{  name : "경고", val: 1 },
+										{  name : "이상", val: 2 },
+										{  name : "트립", val: 3 },
+										{  name : "긴급", val: 4 },
+										{  name : "알수 없음", val: 9 },
+									];
+
+									$.each(aLevelOpt, function(index, el){
+										str3 += `
+											<li data-name="${'${el.name}'}" data-value="${'${el.val}'}"><a href="#" tabindex="-1">${'${el.name}'}</a></li>
+										`
+									});
+
+									let dropdown3 = `
+										<div class="dropdown">
+											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="${'${row.level}'}" data-name="${'${aLevelOpt[row.level].name}}'}">${'${aLevelOpt[row.level].name}'}<span class="caret"></span></button>
+											<ul id="aDvcNameList${'${row.index}'}" class="dropdown-menu">${'${ str3 }'}</ul>
+										</div>
+									`;
+
+
+									return dropdown3;
+								},
+								"className": "no-sorting",
+								// "width": "18%"
+							},
+							{
+								"sTitle": "담당자",
+								"mData": "null",
+								"mRender": function ( data, type, row, rowIndex ) {
+									console.log("userList---", newUserList);
+									console.log("newNonUserList---", newNonUserList);
+
+									let tempUid = "";
+									let str4 = ``;
+
+									$.each(userData, function(index, el){
+										str4 += `
+											<li data-name="${'${ el.name }'}" data-uid="${'${ el.uid }'}"><a href="#" tabindex="-1">${'${ el.name }'}</a></li>
+										`
+									});
+									let targetInput = "aContactInput" + row.index;
+									let dropdownContact = "aContactInput" + row.index;
+									// str4 += `
+									// 	<li onclick="hideDropdown(${'${ targetInput }'})"><a href="#" tabindex="-1">직접입력</a></li>
+									// `;
+
+									let dropdown4 = ``;
+									let userName = userData[row.index].name;
+
+									if(!isEmpty(userData[row.index].uid)) {
+										tempUid = userData[row.index].uid;
+
+										dropdown4 = `
+											<div class="dropdown">
+												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="${'${ tempUid }'}">${'${ userName }'}<span class="caret"></span></button>
+												<ul id="aContactPersonList${'${ row.index }'}" class="dropdown-menu">${'${ str4 }'}</ul>
+											</div>
+											<div class="tx_inp_type ml-0 hidden"><input type="text" id="aContactInput${'${row.index}'}" name="a_contact_input${'${row.index}'}" /></div>
+										`;
+									} else {
+										tempUid = "";
+
+										dropdown4 = `
+											<div class="dropdown">
+												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="${'${ userName }'}" data-value="${'${ tempUid }'}" >${'${ userName }'}<span class="caret"></span></button>
+												<ul id="aContactPersonList${'${row.index}'}" class="dropdown-menu">${'${ str }'}</ul>
+											</div>
+											<div class="tx_inp_type hidden"><input type="text" id="aContactInput${'${row.index}'}" name="a_contact_input${'${row.index}'}" /></div>
+										`;
+									}
+
+									return dropdown4;
+								},
+								"className": "no-sorting",
+								// "width": "16%"
+							},
+							{
+								"sTitle": "전화번호",
+								"mData": "null",
+								"mRender": function ( data, type, row, rowIndex ) {
+									return `<div class="tx_inp_type disabled"><input type="text" id="aContactNum${'${row.index}'}" name="a_contact_num" disabled /></div>
+									`;
+								},
+								"className": "no-sorting",
+								// "width": "18%"
+							},
+							{
+								"title": "",
+								"mData": "null",
+								"mRender": function ( data, type, row, rowIndex ) {
+									return `<button type="button" class="icon-edit" onclick="onAlarmEdit($(this))">수정</button>`;
+								},
+								"className": "dt-body-center no-sorting",
+								// "width": "6%"
+							},
+							{
+								"sTitle": "",
+								"mData": "null",
+								"mRender": function ( data, type, row, row, rowIndex ) {
+									return `<button type="button" class="icon-delete" onclick="onAlarmEdit($(this), 'delete')">삭제</button>`;
+								},
+								"className": "dt-body-center no-sorting",
+								// "width": "6%"
+							},
+						],
+						"dom": 'ti',
+						initComplete: function(){
+							// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+							// 	cell.innerHTML = i+1;
+							// 	$(cell).data("id", i);
+							// });
 						},
-						"className": "no-sorting",
-						"width": "18%"
-					},
-					{
-						"sTitle": "설비명",
-						"mData": "null",
-						"mRender": function ( data, type, row, rowIndex ) {
-							let str2 = ``;
-							$.each(arr, function(index, el){
-								str2 += `
-									<li data-value="${'${el.name}'}"><a href="#" tabindex="-1">${'${el.name}'}</a></li>
-								`
-							});
-							let dropdown2 = `
-								<div class="dropdown">
-									<button type="button" class="dropdown-toggle" disabled data-toggle="dropdown" data-value="${'${row.name}'}">${'${row.name}'}<span class="caret"></span></button>
-									<ul id="aDvcNameList${'${row.index}'}" class="dropdown-menu">${'${ str2 }'}</ul>
-								</div>
-							`;
-							return dropdown2;
+						createdRow: function (row, data, dataIndex){
 						},
-						"className": "no-sorting",
-						"width": "18%"
-					},
-					{
-						"sTitle": "알람레벨",
-						"mData": "null",
-						"mRender": function ( data, type, row, rowIndex ) {
-							let str3 = ``;
-							let aLevelOpt = [
-								{  name : "정보", val: 0 },
-								{  name : "경고", val: 1 },
-								{  name : "이상", val: 2 },
-								{  name : "트립", val: 3 },
-								{  name : "긴급", val: 4 },
-								{  name : "알수 없음", val: 9 },
-							];
+						drawCallback: function(){
+							// this.api().columns().header().each ((el, i) => {
+							// 	if(i == 0){
+							// 		$(el).attr ('style', 'min-width: 12vw;');
+							// 	} else if(i < 2){
+							// 		$(el).attr ('style', 'min-width: 13vw;');
+							// 	} else if(i >= 2 && i < 5){
+							// 		$(el).attr ('style', 'min-width: 10vw;');
+							// 	} else {
+							// 		$(el).attr ('style', 'min-width: 5vw;');
+							// 	}
+							// });
+							$('#alarmTable_wrapper').addClass('fit');
+						}
+					
+					}).columns.adjust().draw();
 					
 
-							$.each(aLevelOpt, function(index, el){
-								str3 += `
-									<li data-name="${'${el.name}'}" data-value="${'${el.val}'}"><a href="#" tabindex="-1">${'${el.name}'}</a></li>
-								`
-							});
-
-							let dropdown3 = `
-								<div class="dropdown">
-									<button type="button" class="dropdown-toggle" disabled data-toggle="dropdown" data-value="${'${row.level}'}" data-name="${'${aLevelOpt[row.level].name}}'}">${'${aLevelOpt[row.level].name}'}<span class="caret"></span></button>
-									<ul id="aDvcNameList${'${row.index}'}" class="dropdown-menu">${'${ str3 }'}</ul>
-								</div>
-							`;
-
-
-							return dropdown3;
-						},
-						"className": "no-sorting",
-						// "width": "18%"
-					},
-					{
-						"sTitle": "담당자",
-						"mData": "null",
-						"mRender": function ( data, type, row, rowIndex ) {
-							// console.log("row--", row);
-							// console.log("row--", row);
-							// console.log("uData--", userData[row.index]);
-
-							let tempUid = "";
-							let str4 = ``;
-
-							$.each(userData, function(index, el){
-								str4 += `
-									<li data-name="${'${ el.name }'}" data-uid="${'${ el.uid }'}"><a href="#" tabindex="-1">${'${ el.name }'}</a></li>
-								`
-							});
-
-							let dropdown4 = ``;
-							let userName = userData[row.index].name;
-
-							if(!isEmpty(userData[row.index].uid)) {
-								tempUid = userData[row.index].uid;
-
-								dropdown4 = `
-									<div class="dropdown">
-										<button type="button" class="dropdown-toggle" disabled data-toggle="dropdown" data-value="${'${ tempUid }'}">${'${ userName }'}<span class="caret"></span></button>
-										<ul id="aContactPersonList${'${ row.index }'}" class="dropdown-menu">${'${ str4 }'}</ul>
-									</div>
-								`;
-							} else {
-								tempUid = "";
-
-								dropdown =4 `
-									<div class="dropdown">
-										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="${'${ userName }'}" data-value="${'${ tempUid }'}" >${'${ userName }'}<span class="caret"></span></button>
-										<ul id="aContactPersonList${'${row.index}'}" class="dropdown-menu">${'${ str }'}</ul>
-									</div>
-								`;
-							}
-
-							return dropdown4;
-						},
-						"className": "no-sorting",
-						// "width": "16%"
-					},
-					{
-						"sTitle": "전화번호",
-						"mData": "null",
-						"mRender": function ( data, type, row, rowIndex ) {
-							return `<div class="tx_inp_type disabled"><input type="text" id="aContactNum${'${row.index}'}" name="a_contact_num" disabled /></div>
-							`;
-						},
-						"className": "no-sorting",
-						// "width": "18%"
-					},
-					{
-						"title": "",
-						"mData": "null",
-						"mRender": function ( data, type, row, rowIndex ) {
-							return `<button type="button" class="icon-edit" onclick="onAlarmEdit($(this))">수정</button>`;
-						},
-						"className": "dt-body-center no-sorting",
-						// "width": "6%"
-					},
-					{
-						"sTitle": "",
-						"mData": "null",
-						"mRender": function ( data, type, row, row, rowIndex ) {
-							return `<button type="button" class="icon-delete" onclick="onAlarmEdit($(this), 'delete')">삭제</button>`;
-						},
-						"className": "dt-body-center no-sorting",
-						// "width": "6%"
-					},
-				],
-				"dom": 'ti',
-				initComplete: function(){
-					// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-					// 	cell.innerHTML = i+1;
-					// 	$(cell).data("id", i);
+					// alarmTable.on( 'column-sizing.dt', function ( e, settings ) {
+					// 	$(".dataTables_scrollHeadInner").css( "width", "100%" );
 					// });
-				},
-				createdRow: function (row, data, dataIndex){
-				},
-				drawCallback: function(){
-					this.api().columns().header().each ((el, i) => {
-						if(i == 0){
-							$(el).attr ('style', 'min-width: 12vw;');
-						} else if(i < 2){
-							$(el).attr ('style', 'min-width: 13vw;');
-						} else if(i >= 2 && i < 5){
-							$(el).attr ('style', 'min-width: 10vw;');
-						} else {
-							$(el).attr ('style', 'min-width: 5vw;');
-						}
-					});
-				}
-			
-			}).columns.adjust().draw();
-			
 
-			alarmTable.on( 'column-sizing.dt', function ( e, settings ) {
-				$(".dataTables_scrollHeadInner").css( "width", "100%" );
-			});
-
-			$("#addAlarmModal").modal("show");
-		});
+					// let td = $('#alarmTable td:first-of-type');
+					// console.log("td---", td)
+					// td.each(function(){
+					// 	td.find(".dropdown-menu li").on('click', function (e) {
+					// 		console.log("this---", $(this))
+					// 	});
+					// });
 
 
-		// non = false;
-		// did = dv.did;
-		// type = dv.device_type;
-		// name = dv.name;
+					$("#addAlarmModal").modal("show");
+
+				});
+			}
+
+
 		// level = userlist[i].level[j];
 		// uid = userlist[i].uid;
 		// phone = ((isEmpty(userlist[i].phone)) ? '-' : userlist[i].phone );
@@ -2008,55 +2184,97 @@
 
 	}
 
-	function selectRow(dataTable) {
-		if ($(this).hasClass("selected")) {
-			$(this).removeClass("selected");
-		} else {
-			dataTable.$("tr.selected").removeClass("selected");
-			$(this).addClass("selected");
-		}
+	// function selectRow(dataTable) {
+	// 	if ($(this).hasClass("selected")) {
+	// 		$(this).removeClass("selected");
+	// 	} else {
+	// 		dataTable.$("tr.selected").removeClass("selected");
+	// 		$(this).addClass("selected");
+	// 	}
+	// }
+
+	function hideDropdown(target){
+		let input = '#' + target;
+		console.log("target====", target);
+		// $(input).removeClass("hidden");
+
+
 	}
+
+	function showSubgroup (self){
+		let subGroup = '#' + $(self).data("subgroup");
+		let val = $(self).data("device-name");
+		let btn = $(subGroup).prev();
+		if(!isEmpty(val)){
+			let str = '';
+			let valArr = [...val.split(",")];
+			console.log("btn----", btn)
+			btn.html("선택<span class='caret'></span>");
+			if(btn.is(":disabled")){
+				btn.prop("disabled", false);
+			}
+			$(subGroup).find("li").each(function(i, item){
+				if($(item).data("value") != valArr[i]){
+					$(item).addClass("hidden");
+				} else {
+					$(item).removeClass("hidden");
+				}
+			});
+		}
+
+	}
+
 
 	function onAlarmEdit(self, option){
 		let tr = self.parents().closest("tr");
 		let input = tr.find("input[type='text']");
 		let dropdown = tr.find(".dropdown-toggle");
 
-		if(input.first().is(":disabled")) {
-			// $.each(input, function(index, el){
-			// 	$(this).prop("disabled", false);
-			// });
-			// $.each(dropdown, function(index, el){
-			// 	$(this).prop("disabled", false);
-			// });
-			tr.removeClass("disabled");
-			input.first().prop("disabled", false).parent().removeClass("disabled");
-			dropdown.prop("disabled", false);
-			flag = true;
-		} else {
-			tr.addClass("disabled");
-			input.first().prop("disabled", true).parent().addClass("disabled");
-			dropdown.prop("disabled", true);
-		}
+		// if(input.first().is(":disabled")) {
+		// 	tr.removeClass("disabled");
+		// 	input.first().prop("disabled", false).parent().removeClass("disabled");
+		// 	dropdown.prop("disabled", false);
+		// 	flag = true;
+		// } else {
+		// 	tr.addClass("disabled");
+		// 	input.first().prop("disabled", true).parent().addClass("disabled");
+		// 	dropdown.prop("disabled", true);
+		// }
+
 		if(option){
 			let arr = [];
 			$.each(tr, function(index, el){
-				if(!tr.hasClass("disabled")){
-					let obj = {};
-					let dropdown = el.find(".dropdown-toggle");
-					let input = el.find("input[type='text']");
 
-					obj.device_type = dropdown.eq(0).data("value");
-					obj.name = dropdown.eq(1).data("value");
-					obj.level = dropdown.eq(2).data("value");
-					obj.person = dropdown.eq(3).data("value");
-					obj.phone = input.val();
-				}
+				let obj = {};
+				let dropdown = el.find(".dropdown-toggle");
+				let input = el.find("input[type='text']");
+
+				obj.device_type = dropdown.eq(0).data("value");
+				obj.name = dropdown.eq(1).data("value");
+				obj.level = dropdown.eq(2).data("value");
+				obj.person = dropdown.eq(3).data("value");
+				obj.phone = input.val();
 
 			});
 		}
 
 	}
+
+	function groupBy (objectArray, property) {
+		return objectArray.reduce(function (acc, obj) {
+			var key = obj[property];
+			if (!acc[key]) {
+				acc[key] = [];
+			}
+			acc[key].push(obj);
+			return acc;
+		}, {});
+	}
+
+	function removeDuplicates(data, key) {
+		return [...new Map(data.map(item => [key(item), item])).values()];
+	};
+
 
 
 </script>
@@ -2083,15 +2301,15 @@
 			<span class="inline-title">지역</span>
 			<div class="dropdown">
 				<button type="button" class="dropdown-toggle" data-toggle="dropdown">선택<span class="caret"></span></button>
-				<ul id="countryList" class="dropdown-menu chk_type" role="menu">
+				<ul id="countryList" class="dropdown-menu unused chk_type" role="menu">
 					<li><a href="#">전체</a></li>
 					<c:forEach var="country" items="${location}">
 						<c:if test="${country.value.code eq 'kr'}">
 							<c:forEach var="city" items="${country.value.locations}" varStatus="cityName">
 								<li data-id="${city.value.code}" data-value="${city.value.name.kr}">
-									<a href="#" tabindex="-1">
-										<input type="checkbox" name="${city.value.name.en}" id="${city.value.code}" value="${city.value.name.kr}">
-										<label for="${city.value.code}" class="on"><c:out value="${city.value.code}"></c:out></label>
+									<a href="#" tabindex="-1"><c:out value="${city.value.code}"></c:out>
+										<!-- <input type="checkbox" name="${city.value.name.en}" id="${city.value.code}" value="${city.value.name.kr}">
+										<label for="${city.value.code}" class="on"><c:out value="${city.value.code}"></c:out></label> -->
 									</a>
 								</li>
 							</c:forEach>
@@ -2127,7 +2345,7 @@
 	<div class="col-12">
 		<div class="indiv">
 			<table id="siteTable">
-				<colgroup>
+				<!-- <colgroup>
 					<col style="width:6%">
 					<col style="width:10%">
 					<col style="width:16%">
@@ -2139,7 +2357,7 @@
 					<col style="width:8%">
 					<col style="width:8%">
 					<col style="width:7%">
-				</colgroup>
+				</colgroup> -->
 				<thead></thead>
 				<tbody></tbody>
 				<!-- <tfoot></tfoot> -->
@@ -2204,7 +2422,7 @@
 <div class="modal fade" id="addAlarmModal" tabindex="-1" role="dialog" aria-labelledby="addAlarmModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-xl">
 		<div class="modal-content site-modal-content">
-			<div class="modal-header flex_start"><h1>알람 추가</h1></div>
+			<div class="modal-header flex_start"><h1>알람 추가</h1><button type="button" class="btn-add ml-20" onclick="addAlarmRow()">추가</button></div>
 			<div class="modal-body mt10">
 				<form id="addAlarmForm">
 					<table id="alarmTable" class="no-stripe">
@@ -2223,7 +2441,7 @@
 				</div>
 				<div class="btn_wrap_type05"><!--
 				--><button type="button" class="btn_type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
-				--><button type="submit" class="btn_type w80 ml-12">수정</button><!--
+				--><button type="submit" class="btn_type w80 ml-12">추가</button><!--
 			--></div>
 			</form>
 		</div>
@@ -2233,7 +2451,7 @@
 
 
 <div class="modal fade" id="addSiteModal" tabindex="-1" role="dialog" aria-labelledby="addSiteModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
-	<div class="modal-dialog modal-xl">
+	<div class="modal-dialog modal-custom-xl">
 		<div class="modal-content site-modal-content">
 			<div id="titleAdd" class="modal-header mb-10"><h1>사업소 추가<span class="required px-4 fr">필수 입력 항목</span></h1></div>
 			<div id="titleEdit" class="modal-header"><h1>사업소 정보 수정</h1></div>

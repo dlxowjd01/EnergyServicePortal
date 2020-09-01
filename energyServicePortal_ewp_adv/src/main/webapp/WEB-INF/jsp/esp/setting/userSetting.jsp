@@ -557,7 +557,7 @@
 					if( (flagIndex < 0) ){
 						// if pwd && editUserObj values are present but no userSpc && userSite info
 						if( !isEmpty($("#newUserPwd").val()) && !isEmpty(editUserObj) ){
-							$.when($.ajax(optionPwd),$.ajax(option)).done(function (result1, result2) {
+							$.when($.ajax(optionPwd),$.ajax(option)).then(function (result1, result2) {
 								$("#addUserModal").modal("hide");
 								$("#resultSuccessMsg").text("사용자 정보가 성공적으로 변경 되었습니다.").removeClass("hidden");
 								$("#resultBtn").parent().addClass("hidden");
