@@ -85,7 +85,6 @@ public class WebInit extends AbstractAnnotationConfigDispatcherServletInitialize
 		characterEncoding.setInitParameter("forceEncoding", "true");
 		characterEncoding.addMappingForUrlPatterns(null, false, "*.do");
 		characterEncoding.addMappingForUrlPatterns(null, false, "*.json");
-		characterEncoding.addMappingForUrlPatterns(null, false, "*");
 		//characterEncoding.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "*.do");
 
 		//-------------------------------------------------------------
