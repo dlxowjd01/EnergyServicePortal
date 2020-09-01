@@ -209,11 +209,13 @@
 			let newStreetAddr= $("#newStreetAddr").val();
 			let newCoord = $("#newCoord").val();
 			let newSiteDetail = $("#newSiteDetail").val();
+
 			// Utility
 			let newUtilObj = {}
+
 			let newUtilPlan = $("#newContractList").prev().data("value");
 			let newVolRange = $("#newVoltList").prev().data("value");
-			let newPeakDemand = Number($("#newPeakDemand").prev().data("value"));
+			let newPeakDemand = Number($("#newPeakDemand").val());
 			let newDrCharge = Number($("#newDrCharge").val());
 			let newInspection = Number($("#newInspection").prev().data("value"));
 			let newKepcoId = $("#newKepcoId").val();
@@ -465,6 +467,7 @@
 					siteEditObj.vpp_info = JSON.stringify(newVppObj);
 				}
 
+				console.log('siteEditObj===', siteEditObj)
 				option = {
 					url: apiHost + "/config/sites/" + sid,
 					type: 'patch',
@@ -530,11 +533,16 @@
 					url: apiHost + "/auth/me/groups?includeSites=false&includeDevices=false",
 					type: 'get',
 					async: true
-				}
+				},
+				{
+					url: apiHost + "/config/sites?oid=" + oid,
+					type: "get",
+					async: true,
+				},
 			];
 
 			$('#siteTable').DataTable().clear().destroy();
-			Promise.all([ Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])) ]).then( res => {
+			Promise.all([ Promise.resolve(returnAjaxRes(optionList[2])), Promise.resolve(returnAjaxRes(optionList[1])) ]).then( res => {
 				readWriteTable(res[0], res[1], updateModal);
 			});
 		}
@@ -1533,6 +1541,7 @@
 				let tr = $("#siteTable").find("tbody tr.selected");
 				let td = tr.find("td");
 				let sid = dTable.row(tr).data().sid;
+				let newCoord = dTable.row(tr).data().latlng;
 				let detailInfo = dTable.row(tr).data().detail_info;
 				let utilityInfo = dTable.row(tr).data().utility;
 				let drInfo = dTable.row(tr).data().dr_info;
@@ -1582,6 +1591,10 @@
 					// 발전 자원
 					$("#newResList").prev().data({"name": td.eq(4).text(), "value" : td.eq(4).data("value") }).html(td.eq(4).text() + "<span class='caret'></span>");
 					// 추가 정보
+					if( !isEmpty(newCoord)) {
+						$('#newCoord').val(newCoord);
+					}
+					// 추가 정보
 					$('#newSiteDetail').val(detailInfo);
 					// 발전 용량
 					if( td.eq(5).text() != '-' ) {
@@ -1599,24 +1612,39 @@
 					// Utility info
 					if( !isEmpty(utilityInfo)) {
 						let util = JSON.parse(utilityInfo);
+						console.log('util===', util);
 
 						let item = $("#newContractList li");
 						let utilPlanName = "";
+						let utilVoltName = "";
 						let planId = "";
 
-						item.each(function(index, item){
-							let id = String($(item).data("plan-id"));
-							if( id.indexOf(util.utility_plan_id) > -1 ){
-								match = $(item);
-								planId = $(item).data("plan-id");
-								utilPlanName = $(item).data("value");
-								$(item).click();
+						// item.each(function(index, item){
+						// 	let id = String($(item).data("plan-id"));
+						// 	if( id.indexOf(util.utility_plan_id) > -1 ){
+						// 		match = $(item);
+						// 		planId = $(item).data("plan-id");
+						// 		utilPlanName = $(item).data("value");
+						// 		$(item).click();
+						// 	}
+						// });
+						if( !isEmpty(util.utility_plan_id)) {
+							if( util.utility_plan_id.indexOf(',') > -1) {
+								utilPlanName = util.utility_plan_id.split(',')[0];
+								utilVoltName = util.utility_plan_id.split(",")[1];
+								$("#newContractList").prev().data({"vol-type" : utilVoltName, "plan-id": util.utility_plan_id, "value": utilPlanName }).html( utilPlanName + '<span class="caret">');
+								$("#newVoltList").prev().data({"data-value" : utilVoltName }).html( utilVoltName + '<span class="caret">');
+								$("#newVoltList").prop("disabled", false);
+								
+							} else {
+								utilPlanName = util.utility_plan_id;
+								$("#newContractList").prev().data({"vol-type" : utilVoltName, "plan-id": util.utility_plan_id, "value": utilPlanName }).html( utilPlanName + '<span class="caret">');	
+								$("#newVoltList").prop("disabled", true);
 							}
-						});
-						$("#newContractList").prev().data({"plan-id": planId, "value": utilPlanName }).html( utilPlanName + '<span class="caret">');
+						}
 						$("#newPeakDemand").val(util.peak_demand);
 						$("#newDrCharge").val(util.demand_charge);
-						// console.log('util.metering_day===', util.metering_day)
+	
 						if(util.metering_day == 0){
 							$("#newInspection").prev().data("value", String(util.metering_day)).html( '말일<span class="caret">');
 						} else {
@@ -1631,14 +1659,14 @@
 					// PowerMarket??? (tariff?) info
 					if( !isEmpty(powerMarketInfo)) {
 						let priceModel = JSON.parse(powerMarketInfo);
-						// console.log("priceModel===", priceModel)
+						console.log("priceModel===", priceModel)
 						$("#newPriceModelList").prev().data("value", priceModel.price_type).html( priceModel.price_type + '<span class="caret">');
 		  				$("#newPrice").val(priceModel.price).html( priceModel.price + '<span class="caret">');
 					}
 					// DR info
 					if( !isEmpty(drInfo)) {
 						let dr = JSON.parse(drInfo);
-						// console.log("dr===", dr)
+						console.log("dr===", dr)
 						$("#drVol").val(dr.contract_capacity);
 						$("#cblList").prev().data("value", dr.contract_capacity).html( dr.contract_capacity + '<span class="caret">');
 						$("#newDrRevShare").val(dr.profile_share);
@@ -1646,7 +1674,7 @@
 					// VPP info
 					if( !isEmpty(vppInfo)) {
 						let vpp = JSON.parse(vppInfo);
-						// console.log("vpp===", vpp)
+						console.log("vpp===", vpp)
 						$("#newVppRevShare").val(vpp.profile_share);
 					}
 					if( td.eq(9).text() != '-' ) {
