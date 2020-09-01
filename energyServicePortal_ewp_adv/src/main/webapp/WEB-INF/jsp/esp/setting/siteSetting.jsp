@@ -611,6 +611,7 @@
 								sid: item.sid
 							}
 						}
+
 						$.ajax(deviceOpt).done(function (json, textStatus, jqXHR) {
 							if(json.length > 0 ){
 								item.alarmFlag = 1;
@@ -638,6 +639,8 @@
 						} else {
 							item.bmsCapacity = 0;
 						}
+
+						item.updatedAt = new Date(item.updatedAt).toLocaleDateString("en-CA").replace(/\//g, '-') + '&ensp;' + new Date(item.updatedAt).toLocaleTimeString();
 						// console.log("obj===", obj)
 						newArr.push(item);
 					}).fail(function (jqXHR, textStatus, errorThrown) {
@@ -769,6 +772,10 @@
 							{
 								"sTitle": "VPP 자원코드",
 								"mData": "vppId",
+							},
+							{
+								"sTitle": "업데이트 일자",
+								"mData": "updatedAt",
 							},
 							// {
 							// 	"sTitle": "알람 수신",
@@ -2345,19 +2352,19 @@
 	<div class="col-12">
 		<div class="indiv">
 			<table id="siteTable">
-				<!-- <colgroup>
+				<colgroup>
 					<col style="width:6%">
+					<col style="width:15%">
+					<col style="width:15%">
+					<col style="width:6%">
+					<col style="width:8%">
+					<col style="width:8%">
+					<col style="width:8%">
+					<col style="width:8%">
+					<col style="width:8%">
+					<col style="width:8%">
 					<col style="width:10%">
-					<col style="width:16%">
-					<col style="width:9%">
-					<col style="width:9%">
-					<col style="width:9%">
-					<col style="width:9%">
-					<col style="width:9%">
-					<col style="width:8%">
-					<col style="width:8%">
-					<col style="width:7%">
-				</colgroup> -->
+				</colgroup>
 				<thead></thead>
 				<tbody></tbody>
 				<!-- <tfoot></tfoot> -->
