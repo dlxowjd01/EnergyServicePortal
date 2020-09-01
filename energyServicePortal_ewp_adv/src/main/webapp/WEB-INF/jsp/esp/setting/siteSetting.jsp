@@ -611,7 +611,6 @@
 								sid: item.sid
 							}
 						}
-
 						$.ajax(deviceOpt).done(function (json, textStatus, jqXHR) {
 							if(json.length > 0 ){
 								item.alarmFlag = 1;
@@ -2352,7 +2351,7 @@
 	<div class="col-12">
 		<div class="indiv">
 			<table id="siteTable">
-				<colgroup>
+				<!-- <colgroup>
 					<col style="width:6%">
 					<col style="width:15%">
 					<col style="width:15%">

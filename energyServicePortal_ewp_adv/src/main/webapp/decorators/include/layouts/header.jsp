@@ -202,7 +202,7 @@
 
 			let token = '${sessionScope.userInfo.token}';
 			let option = {
-				url: 'https://iderms-api.iderms.ai/config/users/' + userInfoId,
+				url: apiHost + '/config/users/' + userInfoId,
 				dataType: 'json',
 				type: 'patch',
 				beforeSend: function (jqXHR, settings) {

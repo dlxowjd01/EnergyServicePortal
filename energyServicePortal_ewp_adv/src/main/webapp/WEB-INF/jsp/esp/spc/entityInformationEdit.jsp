@@ -248,7 +248,7 @@
 		var genId = "${param.gen_id}";
 
 		$.ajax({
-			url: "http://iderms.enertalk.com:8443/config/sites/" + genId,
+			url: apiHost + "/config/sites/" + genId,
 			type: "get",
 			async: false,
 			data: {},
