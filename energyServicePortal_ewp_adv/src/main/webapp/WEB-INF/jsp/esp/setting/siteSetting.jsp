@@ -213,8 +213,9 @@
 			// Utility
 			let newUtilObj = {}
 
-			let newUtilPlan = $("#newContractList").prev().data("value");
-			let newVolRange = $("#newVoltList").prev().data("value");
+			let newUtilPlan = $("#newContractList").prev().data("plan-id");
+			let newVoltPlanId = $("#newVoltList").prev().data("id");
+			// let newVolRange = $("#newVoltList").prev().data("value");
 			let newPeakDemand = Number($("#newPeakDemand").val());
 			let newDrCharge = Number($("#newDrCharge").val());
 			let newInspection = Number($("#newInspection").prev().data("value"));
@@ -273,12 +274,13 @@
 
 				// Util JSON
 				if( !isEmpty(newUtilPlan)){
-					if(isEmpty(newVolRange)){
-						newUtilObj.utility_plan_id = newUtilPlan;
+					if( newUtilPlan.indexOf(',') > -1) {
+						newUtilObj.utility_plan_id
 					} else {
-						newUtilObj.utility_plan_id = newUtilPlan + ',' + newVolRange;
+						newUtilObj.utility_plan_id = newVoltPlanId;
 					}
 				}
+				
 				if( !isEmpty(newPeakDemand) ){
 					newUtilObj.peak_demand = newPeakDemand;
 				}
@@ -401,13 +403,10 @@
 
 				// Util JSON
 				if( !isEmpty(newUtilPlan)){
-					console.log("newUtilPlan===", newUtilPlan);
-					console.log("newVolRange===", newVolRange);
-
-					if(isEmpty(newVolRange)){
-						newUtilObj.utility_plan_id = newUtilPlan;
+					if( newUtilPlan.indexOf(',') > -1) {
+						newUtilObj.utility_plan_id
 					} else {
-						newUtilObj.utility_plan_id = newUtilPlan + ',' + newVolRange;
+						newUtilObj.utility_plan_id = newVoltPlanId;
 					}
 				}
 
@@ -548,6 +547,9 @@
 		}
 
 		function readWriteTable(siteData, vppDr, callback) {
+			getVppDrData(vppDr);
+			getPropertyData();
+
 			if(siteData) {
 				let newArr = [];
 				Promise.resolve(siteData.map((item, index) => {
@@ -840,13 +842,12 @@
 						// console.log("dt---", siteTable[ type ]( indexes ).nodes())
 					}).columns.adjust();
 
-					if(callback) {
-						callback();
-					} else {
-						getVppDrData(vppDr);
-						getPropertyData();
-					}
 
+					if(callback) {
+						setTimeout(function(){
+							callback();
+						}, 300);
+					}
 					// siteTable.on( 'order.dt search.dt', function () {
 					// 	siteTable.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
 					// 		cell.innerHTML = i+1;
@@ -1615,40 +1616,38 @@
 						console.log('util===', util);
 
 						let item = $("#newContractList li");
+						let subItem = $("#newVoltList");
 						let utilPlanName = "";
 						let utilVoltName = "";
 						let planId = "";
+						let platStr = '';
+						let planArr = [];
+						let voltArr = [];
 
-						// item.each(function(index, item){
-						// 	let id = String($(item).data("plan-id"));
-						// 	if( id.indexOf(util.utility_plan_id) > -1 ){
-						// 		match = $(item);
-						// 		planId = $(item).data("plan-id");
-						// 		utilPlanName = $(item).data("value");
-						// 		$(item).click();
-						// 	}
-						// });
-						if( !isEmpty(util.utility_plan_id)) {
-							if( util.utility_plan_id.indexOf(',') > -1) {
-								utilPlanName = util.utility_plan_id.split(',')[0];
-								utilVoltName = util.utility_plan_id.split(",")[1];
-								$("#newContractList").prev().data({"vol-type" : utilVoltName, "plan-id": util.utility_plan_id, "value": utilPlanName }).html( utilPlanName + '<span class="caret">');
-								$("#newVoltList").prev().data({"data-value" : utilVoltName }).html( utilVoltName + '<span class="caret">');
-								$("#newVoltList").prop("disabled", false);
-								
-							} else {
-								utilPlanName = util.utility_plan_id;
-								$("#newContractList").prev().data({"vol-type" : utilVoltName, "plan-id": util.utility_plan_id, "value": utilPlanName }).html( utilPlanName + '<span class="caret">');	
-								$("#newVoltList").prop("disabled", true);
+						item.each(function(index, item){
+							let planId = String($(item).data("plan-id"));
+							let voltName = String($(item).data("vol-type"));
+
+							if(planId.includes(util.utility_plan_id)){
+								planArr = [...planId.split(",")];
+								voltArr = [...voltName.split(",")];
+								utilPlanName = $(item).data("value");
 							}
-						}
+						});
+						let target = String(util.utility_plan_id);
+						const found = planArr.indexOf(target);
+						utilVoltName = voltArr[found];
+
+						$("#newContractList").prev().data({"vol-type" : utilVoltName, "plan-id": util.utility_plan_id, "value": utilPlanName }).html( utilPlanName + '<span class="caret"></span>');
+						$("#newVoltList").prev().data({"id": util.utility_plan_id, "data-value" : utilVoltName }).html( utilVoltName + '<span class="caret"></span>');
+
 						$("#newPeakDemand").val(util.peak_demand);
 						$("#newDrCharge").val(util.demand_charge);
 	
 						if(util.metering_day == 0){
-							$("#newInspection").prev().data("value", String(util.metering_day)).html( '말일<span class="caret">');
+							$("#newInspection").prev().data("value", String(util.metering_day)).html( '말일<span class="caret"></span>');
 						} else {
-							$("#newInspection").prev().data("value", String(util.metering_day)).html( String(util.metering_day) + '<span class="caret">');
+							$("#newInspection").prev().data("value", String(util.metering_day)).html( String(util.metering_day) + '<span class="caret"></span>');
 						}
 					
 						$("#newKepcoId").val(util.kepco_id);
@@ -1660,15 +1659,15 @@
 					if( !isEmpty(powerMarketInfo)) {
 						let priceModel = JSON.parse(powerMarketInfo);
 						console.log("priceModel===", priceModel)
-						$("#newPriceModelList").prev().data("value", priceModel.price_type).html( priceModel.price_type + '<span class="caret">');
-		  				$("#newPrice").val(priceModel.price).html( priceModel.price + '<span class="caret">');
+						$("#newPriceModelList").prev().data("value", priceModel.price_type).html( priceModel.price_type + '<span class="caret"></span>');
+		  				$("#newPrice").val(priceModel.price).html( priceModel.price + '<span class="caret"></span>');
 					}
 					// DR info
 					if( !isEmpty(drInfo)) {
 						let dr = JSON.parse(drInfo);
 						console.log("dr===", dr)
 						$("#drVol").val(dr.contract_capacity);
-						$("#cblList").prev().data("value", dr.contract_capacity).html( dr.contract_capacity + '<span class="caret">');
+						$("#cblList").prev().data("value", dr.contract_capacity).html( dr.contract_capacity + '<span class="caret"></span>');
 						$("#newDrRevShare").val(dr.profile_share);
 					}
 					// VPP info
@@ -1678,9 +1677,9 @@
 						$("#newVppRevShare").val(vpp.profile_share);
 					}
 					if( td.eq(9).text() != '-' ) {
-						$('#newVppResIdList').prev().data("value", td.eq(9).text() ).html(td.eq(9).text() + '<span class="caret">');
+						$('#newVppResIdList').prev().data("value", td.eq(9).text() ).html(td.eq(9).text() + '<span class="caret"></span>');
 					} else {
-						$('#newVppResIdList').prev().data("value", "").html('선택<span class="caret">');
+						$('#newVppResIdList').prev().data("value", "").html('선택<span class="caret"></span>');
 					}
 
 
