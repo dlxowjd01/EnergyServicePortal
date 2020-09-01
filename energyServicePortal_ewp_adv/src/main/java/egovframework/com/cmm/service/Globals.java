@@ -1,5 +1,7 @@
 package egovframework.com.cmm.service;
 
+import kr.co.esp.common.service.EgovProperties;
+
 /**
  *  Class Name : Globals.java
  *  Description : 시스템 구동 시 프로퍼티를 통해 사용될 전역변수를 정의한다.

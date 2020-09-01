@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import egovframework.com.cmm.service.EgovProperties;
+import kr.co.esp.common.service.EgovProperties;
 import egovframework.com.cmm.service.Globals;
 import egovframework.com.cmm.util.EgovResourceCloseHelper;
 import egovframework.com.utl.fcc.service.EgovStringUtil;

@@ -59,7 +59,4 @@ public class EgovComponentChecker extends EgovAbstractServiceImpl implements App
 			return false;
 		}
 	}
-
-
-
 }

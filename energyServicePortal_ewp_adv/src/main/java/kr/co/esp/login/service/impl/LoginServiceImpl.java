@@ -1,8 +1,7 @@
 package kr.co.esp.login.service.impl;
 
-import egovframework.com.cmm.config.EgovWebApplicationInitializer;
-import egovframework.com.cmm.service.EgovProperties;
 import egovframework.rte.fdl.cmmn.EgovAbstractServiceImpl;
+import kr.co.esp.common.service.EgovProperties;
 import kr.co.esp.common.util.RestApiUtil;
 import kr.co.esp.login.service.LoginService;
 import org.codehaus.jettison.json.JSONObject;
