@@ -43,6 +43,10 @@
 			<artifactId>egovframework.rte.ptl.mvc</artifactId>
 			<version>${egovframework.rte.version}</version>
 			<exclusions>
+				<exclusion>	
+					<artifactId>slf4j-api</artifactId>	
+					<groupId>org.slf4j</groupId>	
+				</exclusion>
 				<exclusion>
 					<artifactId>commons-logging</artifactId>
 					<groupId>commons-logging</groupId>
