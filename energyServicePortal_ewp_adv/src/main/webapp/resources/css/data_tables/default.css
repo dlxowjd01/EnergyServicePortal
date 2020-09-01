@@ -267,6 +267,16 @@ html.darkmode:root {
 	zoom: 1;
 }
 
+/* .dataTables_wrapper.no-footer.fit {
+	overflow-x: hidden;
+	overflow-y: visible;
+}
+ */
+ 
+/* .dataTables_wrapper.no-footer.fit > .dataTable.no-stripe {
+	table-layout: fixed;
+} */
+
 .dataTables_wrapper label {
 	color: var(--white60);
 }
