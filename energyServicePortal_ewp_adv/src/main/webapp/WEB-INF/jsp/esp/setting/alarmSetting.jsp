@@ -126,6 +126,10 @@
 					className: 'btn_type fr mb-10',
 					action: function ( e, dt, node, config ) {
 						register();
+					},
+					attr: {
+						id: 'regist',
+						disabled: true
 					}
 				},
 				{
@@ -145,6 +149,10 @@
 					}
 				}
 			],
+			select: {
+				style: 'multi',
+				selector: 'td:first-child > :checkbox'
+			},
 			initComplete: function(settings, json) {
 				let str = `<div id="btnGroup" class="right-end"><!--
 							--><button type="button" disabled class="btn_type03" onclick="deleteRow()">선택 삭제</button><!--
@@ -300,7 +308,7 @@
 
 	// 알람메세지목록 조회
 	const schAlarmList = function (skip) {
-
+		$('#regist').prop('disabled', true);
 		/* validation check */
 		if ($(':checkbox[name="deviceType"]:checked').length == 0) {
 			alert('설비타입을 한개이상 선택해 주세요.');
@@ -448,6 +456,8 @@
 		let alarmTable = $('#alarmTable').DataTable();
 		alarmTable.clear();
 		alarmTable.rows.add(excelArray).draw();
+
+		$('#regist').prop('disabled', false);
 	}
 
 	//적용
@@ -539,50 +549,19 @@
 		let urls = new Array();
 		let deferreds = new Array();
 
-		checkedArray.forEach(chk => {
-			const setId = chk.dataset.setid;
-			const code = chk.dataset.code;
-			urls.push({
-				url: apiHost + '/alarms/code_sets/' + setId + '/codes/' + code,
-				type: 'delete',
-				dataType: 'json',
-			});
-		});
-
-		//코드 삭제 START
-		urls.forEach(function (url) {
-			let deferred = $.Deferred();
-			deferreds.push(deferred);
-
-			$.ajax(url).done(function (data) {
-				data['url'] = url['url'];
-				(function (deferred) {
-					return deferred.resolve(data);
-				})(deferred);
-			}).fail(function (error) {
-				console.log(error);
-			});
-		});
-
-		$.when.apply($, deferreds).then(function () {
-			let setIdArray = new Array();
-			let selectURL = new Array();
-			for (let index = 0; index < arguments.length; index++) {
-				let data = arguments[index];
-				let url = data.url.split('/');
-				setIdArray.push(url[url.length - 3]);
-			}
-
-			//codeSet 조회
-			setIdArray.forEach(setId => {
-				selectURL.push({
-					url: apiHost + '/alarms/code_sets/' + setId + '/codes',
-					type: 'get',
-					dataType: 'json'
+		if ($('#regist').prop('disabled')) {
+			checkedArray.forEach(chk => {
+				const setId = chk.dataset.setid;
+				const code = chk.dataset.code;
+				urls.push({
+					url: apiHost + '/alarms/code_sets/' + setId + '/codes/' + code,
+					type: 'delete',
+					dataType: 'json',
 				});
 			});
 
-			selectURL.forEach(function (url) {
+			//코드 삭제 START
+			urls.forEach(function (url) {
 				let deferred = $.Deferred();
 				deferreds.push(deferred);
 
@@ -597,28 +576,24 @@
 			});
 
 			$.when.apply($, deferreds).then(function () {
-				let deleteURL = new Array();
+				let setIdArray = new Array();
+				let selectURL = new Array();
 				for (let index = 0; index < arguments.length; index++) {
 					let data = arguments[index];
-
-					if (isEmpty(data.data)) {
-						setIdArray = new Array();
-
-						let url = data.url.split('/');
-						setIdArray.push(url[url.length - 2]);
-					}
+					let url = data.url.split('/');
+					setIdArray.push(url[url.length - 3]);
 				}
 
-				//codeSet 삭제
+				//codeSet 조회
 				setIdArray.forEach(setId => {
-					deleteURL.push({
-						url: apiHost + '/alarms/code_sets/' + setId,
-						type: 'delete',
+					selectURL.push({
+						url: apiHost + '/alarms/code_sets/' + setId + '/codes',
+						type: 'get',
 						dataType: 'json'
 					});
 				});
 
-				deleteURL.forEach(function (url) {
+				selectURL.forEach(function (url) {
 					let deferred = $.Deferred();
 					deferreds.push(deferred);
 
@@ -633,13 +608,52 @@
 				});
 
 				$.when.apply($, deferreds).then(function () {
-					alert('삭제가 완료되었습니다.');
+					let deleteURL = new Array();
+					for (let index = 0; index < arguments.length; index++) {
+						let data = arguments[index];
 
-					schAlarmList();
-					return false;
+						if (isEmpty(data.data)) {
+							setIdArray = new Array();
+
+							let url = data.url.split('/');
+							setIdArray.push(url[url.length - 2]);
+						}
+					}
+
+					//codeSet 삭제
+					setIdArray.forEach(setId => {
+						deleteURL.push({
+							url: apiHost + '/alarms/code_sets/' + setId,
+							type: 'delete',
+							dataType: 'json'
+						});
+					});
+
+					deleteURL.forEach(function (url) {
+						let deferred = $.Deferred();
+						deferreds.push(deferred);
+
+						$.ajax(url).done(function (data) {
+							data['url'] = url['url'];
+							(function (deferred) {
+								return deferred.resolve(data);
+							})(deferred);
+						}).fail(function (error) {
+							console.log(error);
+						});
+					});
+
+					$.when.apply($, deferreds).then(function () {
+						alert('삭제가 완료되었습니다.');
+
+						schAlarmList();
+						return false;
+					});
 				});
 			});
-		});
+		} else {
+			alarmTable.rows('.selected').remove().draw( false );
+		}
 	}
 
 	/**
