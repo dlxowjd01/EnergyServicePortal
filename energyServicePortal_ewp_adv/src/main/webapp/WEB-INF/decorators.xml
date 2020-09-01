@@ -2,12 +2,56 @@
 <!DOCTYPE configuration>
 <!-- default directory 설정 -->
 <decorators defaultdir="/decorators">
-	<decorator name="web_layout" page="layout.jsp">
-		<pattern>/</pattern>
+	<!-- 대시 보드 -->
+	<decorator name="dashboard_layout" page="./template/dashboard-layout.jsp">
+		<pattern>/dashboard/*</pattern>
 	</decorator>
+
+	<!-- 설비 현황 -->
+	<decorator name="device_layout" page="./template/device-layout.jsp">
+		<pattern>/device/*</pattern>
+	</decorator>
+
+	<!-- 설비 이력 -->
+	<decorator name="history_layout" page="./template/history-layout.jsp">
+		<pattern>/history/*</pattern>
+	</decorator>
+
+	<!-- 자원 분석 -->
+	<decorator name="energy_layout" page="./template/energy-layout.jsp">
+		<pattern>/energy/*</pattern>
+	</decorator>
+
+	<!-- 예측/진단 -->
+	<decorator name="diagnosis_layout" page="./template/diagnosis-layout.jsp">
+		<pattern>/diagnosis/*</pattern>
+	</decorator>
+
+	<!-- 보고서 -->
+	<decorator name="report_layout" page="./template/report-layout.jsp">
+		<pattern>/report/*</pattern>
+	</decorator>
+
+	<!-- SPC 관리 -->
+	<decorator name="spc_layout" page="./template/spc-layout.jsp">
+		<pattern>/spc/*</pattern>
+	</decorator>
+
+	<!-- 설정 -->
+	<decorator name="system_layout" page="./template/system-layout.jsp">
+		<pattern>/system/*</pattern>
+	</decorator>
+
+	<!-- 기본 레이아웃 -->
+	<decorator name="default_layout" page="./template/layout.jsp">
+		<pattern>/*</pattern>
+	</decorator>
+
 	<!-- decorators를 적용시키지 않을 url 패턴 -->
 	 <excludes>
-	 	<pattern>/login.do</pattern>
+		<pattern>/index.jsp</pattern>
+		<pattern>/index.do</pattern>
+		<pattern>/login.do</pattern>
 	 	<pattern>/login.do?**</pattern>
 	 	<pattern>/loginUser.do</pattern>
 	 	<pattern>/login.loginUser?**</pattern>

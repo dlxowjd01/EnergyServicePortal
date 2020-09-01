@@ -20,7 +20,7 @@ package egovframework.com.utl.sim.service;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-import egovframework.com.cmm.service.EgovProperties;
+import kr.co.esp.common.service.EgovProperties;
 import egovframework.com.cmm.service.Globals;
 import egovframework.com.cmm.util.EgovResourceCloseHelper;
 

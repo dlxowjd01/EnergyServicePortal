@@ -1,0 +1,175 @@
+package kr.co.esp.common.config;
+
+import com.opensymphony.sitemesh.webapp.SiteMeshFilter;
+import kr.co.esp.common.filter.HTMLTagFilter;
+import kr.co.esp.common.listener.SessionListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.context.ContextLoaderListener;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.request.RequestContextListener;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.filter.DelegatingFilterProxy;
+import org.springframework.web.multipart.support.MultipartFilter;
+import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+
+import javax.servlet.ServletContext;
+import javax.servlet.*;
+import java.util.EnumSet;
+
+
+/**
+ * WebInit 클래스
+ * <Notice>
+ * 	   사용자 인증 권한처리를 분리(session, spring security) 하기 위해서 web.xml의 기능을 
+ * 	   Servlet3.x WebInit 기능으로 처리
+ * <Disclaimer>
+ *		N/A
+ *
+ * @author 장동한
+ * @since 2016.06.23
+ * @version 1.0
+ * @see
+ *
+ * <pre>
+ * << 개정이력(Modification Information) >>
+ *
+ *   수정일        수정자           수정내용
+ *  -------      -------------  ----------------------
+ *   2016.06.23  장동한           최초 생성
+ *   2018.10.02  신용호           Facebook 관련 HiddenHttpMethodFilter 추가
+ *   2018.10.26  신용호           EgovLoginPolicyFilter 추가 (IP접근처리)
+ *   2018.12.03  신용호           springMultipartFilter,HTMLTagFilter 추가 (XSS방지처리)
+ *   2020.08.24  정재근           사용하지 않는 항목 삭제 사용하는 부분 추가 (JAVA CONFIG)
+ * </pre>
+ */
+public class WebInit extends AbstractAnnotationConfigDispatcherServletInitializer {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(WebInit.class);
+
+	@Override
+	public void onStartup(ServletContext servletContext) throws ServletException {
+		LOGGER.debug("EgovWebApplicationInitializer START-============================================");
+
+		//-------------------------------------------------------------
+		// Egov Web ServletContextListener 설정
+		//-------------------------------------------------------------
+		servletContext.addListener(new SessionListener()); //세션 설정
+//		servletContext.addListener(new EgovWebServletContextListener());
+
+		//-------------------------------------------------------------
+		// Spring Context-Common 설정
+		//-------------------------------------------------------------
+		AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
+		rootContext.register(RootContext.class);
+		servletContext.addListener(new ContextLoaderListener(rootContext));
+
+		//-------------------------------------------------------------
+		// Spring DispatcherServlet 설정
+		//-------------------------------------------------------------
+		AnnotationConfigWebApplicationContext webServlet = new AnnotationConfigWebApplicationContext();
+		webServlet.register(kr.co.esp.common.config.ServletContext.class);
+		ServletRegistration.Dynamic dispatcher = servletContext.addServlet("dispatcher", new DispatcherServlet(webServlet));
+		dispatcher.setLoadOnStartup(1);
+		dispatcher.addMapping("/");
+
+		//-------------------------------------------------------------
+		// Spring CharacterEncodingFilter 설정
+		//-------------------------------------------------------------
+		FilterRegistration.Dynamic characterEncoding = servletContext.addFilter("encodingFilter", new CharacterEncodingFilter());
+		characterEncoding.setInitParameter("encoding", "UTF-8");
+		characterEncoding.setInitParameter("forceEncoding", "true");
+		characterEncoding.addMappingForUrlPatterns(null, false, "*.do");
+		characterEncoding.addMappingForUrlPatterns(null, false, "*.json");
+		characterEncoding.addMappingForUrlPatterns(null, false, "*");
+		//characterEncoding.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "*.do");
+
+		//-------------------------------------------------------------
+		// springSecurityFilterChain 설정
+		//-------------------------------------------------------------
+		DelegatingFilterProxy springSecurityFilterChain = new DelegatingFilterProxy();
+		FilterRegistration.Dynamic springSecurity = servletContext.addFilter("springSecurityFilterChain", springSecurityFilterChain);
+		springSecurity.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
+
+		//-------------------------------------------------------------
+		// Tomcat의 경우 allowCasualMultipartParsing="true" 추가
+		// <Context docBase="" path="/" reloadable="true" allowCasualMultipartParsing="true">
+		//-------------------------------------------------------------
+		MultipartFilter springMultipartFilter = new MultipartFilter();
+		springMultipartFilter.setMultipartResolverBeanName("multipartResolver");
+		FilterRegistration.Dynamic multipartFilter = servletContext.addFilter("springMultipartFilter", springMultipartFilter);
+		multipartFilter.addMappingForUrlPatterns(null, false, "*.do");
+
+		//-------------------------------------------------------------
+	    // HTMLTagFilter의 경우는 파라미터에 대하여 XSS 오류 방지를 위한 변환을 처리합니다.
+		//-------------------------------------------------------------
+	    // HTMLTagFIlter의 경우는 JSP의 <c:out /> 등을 사용하지 못하는 특수한 상황에서 사용하시면 됩니다.
+	    // (<c:out />의 경우 뷰단에서 데이터 출력시 XSS 방지 처리가 됨)
+		FilterRegistration.Dynamic htmlTagFilter = servletContext.addFilter("htmlTagFilter", new HTMLTagFilter());
+		htmlTagFilter.addMappingForUrlPatterns(null, false, "*.do");
+
+		//-------------------------------------------------------------
+		// SiteMeshFilter 설정
+		//-------------------------------------------------------------
+		SiteMeshFilter siteMeshFilter = new SiteMeshFilter();
+		FilterRegistration.Dynamic siteMeshEncoding = servletContext.addFilter("siteMeshFilter", siteMeshFilter);
+		siteMeshEncoding.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD), true, "/*");
+
+		//-------------------------------------------------------------
+		// Spring RequestContextListener 설정
+		//-------------------------------------------------------------
+		servletContext.addListener(new RequestContextListener());
+	}
+
+	@Override
+	protected String[] getServletMappings() {
+		return new String[] {"/"};
+	}
+
+	@Override
+	protected Class<?>[] getRootConfigClasses() {
+		return new Class[] {RootContext.class, SecurityConfig.class};
+	}
+
+	@Override
+	protected Class<?>[] getServletConfigClasses() {
+		return new Class[] {kr.co.esp.common.config.ServletContext.class};
+	}
+
+	/**
+	 * Custom Exception
+	 *
+	 * @param servletContext
+	 */
+	@Override
+	protected void registerDispatcherServlet(ServletContext servletContext) {
+		String servletName = getServletName();
+		Assert.hasLength(servletName, "getServletNAme() may not return empty or null");
+
+		WebApplicationContext servletAppContext = createServletApplicationContext();
+		Assert.notNull(servletAppContext, "createServletApplicationContext() did not return an application context for servlet [" + servletName + "]");
+
+		DispatcherServlet dispatcherServlet = new DispatcherServlet();
+		dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);
+
+		ServletRegistration.Dynamic registration = servletContext.addServlet(servletName, dispatcherServlet);
+		Assert.notNull(registration, "Failed to register servlet with anme '" + servletName + "'." + "Check if there is another servlet registered under the same name.");
+
+		registration.setLoadOnStartup(1);
+		registration.addMapping(getServletMappings());
+		registration.setAsyncSupported(isAsyncSupported());
+
+		Filter[] filters = getServletFilters();
+		if (!ObjectUtils.isEmpty(filters)) {
+			for (Filter filter : filters) {
+				registerServletFilter(servletContext, filter);
+			}
+		}
+
+		customizeRegistration(registration);
+	}
+}
