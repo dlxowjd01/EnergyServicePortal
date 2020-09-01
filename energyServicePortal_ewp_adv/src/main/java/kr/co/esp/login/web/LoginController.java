@@ -51,7 +51,7 @@ public class LoginController {
 	public String loginSuccess(HttpSession session) {
 		Map<String, Object> userInfoMap = (Map<String, Object>) session.getAttribute(UserUtil.USER_SESSION_ID);
 
-		if (userInfoMap.get("task") != null && ((int) userInfoMap.get("task") == 1 || (int) userInfoMap.get("task") == 2)) {
+		if (userInfoMap.get("task") != null && ((int) userInfoMap.get("task") == 1 || (int) userInfoMap.get("task") == 2 || (int) userInfoMap.get("task") == 3)) {
 			return "redirect:/spc/transactionCalendar.do";
 		} else {
 			return "redirect:/dashboard/gmain.do";
