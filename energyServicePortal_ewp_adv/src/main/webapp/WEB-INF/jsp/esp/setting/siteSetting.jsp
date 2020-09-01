@@ -667,7 +667,7 @@
 						"aaData": newArr,
 						"table-layout": "fixed",
 						"fixedHeader": true,
-						// "bAutoWidth": true,
+						"bAutoWidth": true,
 						"bSearchable" : true,
 						// "ScrollX": true,
 						// "sScrollX": "110%",
@@ -830,7 +830,7 @@
 						});
 						siteTable.rows( indexes ).nodes().to$().find("input").prop("checked", false);
 						// console.log("dt---", siteTable[ type ]( indexes ).nodes())
-					}).columns.adjust().draw();
+					}).columns.adjust();
 
 					if(callback) {
 						callback();
@@ -2351,7 +2351,7 @@
 	<div class="col-12">
 		<div class="indiv">
 			<table id="siteTable">
-				<!-- <colgroup>
+				<colgroup>
 					<col style="width:6%">
 					<col style="width:15%">
 					<col style="width:15%">
@@ -2366,7 +2366,7 @@
 				</colgroup>
 				<thead></thead>
 				<tbody></tbody>
-				<!-- <tfoot></tfoot> -->
+			<!-- <tfoot></tfoot> -->
 			</table>
 		</div>
 	</div>
