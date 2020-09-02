@@ -140,7 +140,6 @@
 		});
 
 		$("#updateUserForm").on("change", function(e){
-			console.log("validation===")
 			if(!$("#addUserModal").hasClass("edit")){
 				if(validateAddForm() == 1) {
 					$("#addUserBtn").prop("disabled", false);
@@ -194,6 +193,7 @@
 				console.log("user delete success");
 				modalBody.addClass("hidden");
 				$("#deleteSuccessMsg").text("사용자가 삭제 되었습니다.").removeClass("hidden");
+				refreshUserList();
 				setTimeout(function(){
 					$("#deleteConfirmModal").modal("hide");
 				}, 1500);
@@ -329,13 +329,13 @@
 
 						if( (siteItemList.length > 0) && (spcItemList.length > 0 ) ) {
 
-							var muliPromises = [];
+							var multiPromises = [];
 
 							$.each(siteItemList, function(index, element){
 								siteObj.sid = $(element).data("sid");
 								siteObj.role = Number($(element).data("role"));
 								siteOption.data = JSON.stringify(siteObj);
-								muliPromises.push(Promise.resolve(makeAjaxCall(siteOption)));
+								multiPromises.push(Promise.resolve(makeAjaxCall(siteOption)));
 							});
 
 							$.each(spcItemList, function(index, element){
@@ -345,10 +345,10 @@
 								};
 								// console.log("opcObj===", spcObj)
 								spcOption.data = JSON.stringify(spcObj);
-								muliPromises.push(Promise.resolve(makeAjaxCall(spcOption)));
+								multiPromises.push(Promise.resolve(makeAjaxCall(spcOption)));
 							});
 
-							Promise.all(muliPromises).then(res => {
+							Promise.all(multiPromises).then(res => {
 								console.log("altogether---", res);
 								$("#addUserModal").modal("hide");
 								$("#resultSuccessMsg").text("SPC, 사이트 정보 모두 추가 되었습니다.").removeClass("hidden");
@@ -1438,8 +1438,6 @@
 			let tr = $("#userTable").find("tbody tr.selected");
 			let td = tr.find("td");
 			let uid = dTable.row(tr).data().uid;
-			console.log("dTable.row(tr).data()===", dTable.row(tr).data().uid);
-
 			// EDIT!!!!!
 			if(option == "edit") {
 				let optSpc = {
@@ -1595,7 +1593,6 @@
 				});
 
 				$("#confirmUserId").on("keyup", function() {
-					console.log("keyup----")
 					if($(this).val() !== userId) {
 						$("#deleteConfirmBtn").prop("disabled", true);
 						return false
@@ -1735,7 +1732,6 @@
 
 	function validateEditForm(){
 		if(!isEmpty($("#newUserPwd").val())) {
-			console.log("newUserPwd NOT empty===" )
 			if( ($("#updateUserForm .tick:not('.checked')").index() == -1) && ($(".warning:not(.hidden)").index() == -1) ) {
 				return 1;
 			}
