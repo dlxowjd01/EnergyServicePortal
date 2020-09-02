@@ -1662,24 +1662,16 @@
 				// Utility info
 				if( !isEmpty(rowData.utility)) {
 					Promise.resolve(JSON.parse(rowData.utility)).then( util => {
-						console.log('util===', util);
 						let utilPlanName = util.utility_plan_name;
 						let item = $("#newContractList li");
 						let subItem = $("#newVoltList");
 						let planArr = [];
 						let voltArr = [];
 
-						item.each(function(index, item){
-							let val = $(this).data("value");
-							if(val == utilPlanName) {
-								$(this).click();
-								console.log("this---", $(this))
-							}
-						});
 						console.log("util_plan_name==", utilPlanName)
 						$("#newContractList").prev().data({"plan-id": util.utility_plan_id, "value": utilPlanName }).html(utilPlanName + '<span class="caret"></span>');
 						$("#newVoltList").prev().prop("disabled", false);
-						if(planArr.length >= 1){
+						if(!isEmpty(util.volt_name) ){
 							$("#newVoltList").prev().data({"id": util.utility_plan_id, "data-value" : util.volt_name }).html( util.volt_name + '<span class="caret"></span>');
 						} else {
 							$("#newVoltList").prev().html('선택<span class="caret"></span>');
