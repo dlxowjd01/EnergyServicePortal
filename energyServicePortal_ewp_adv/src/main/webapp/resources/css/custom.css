@@ -262,8 +262,8 @@ html.darkmode:root {
 	--ico-sensor: url('/img/device_icons/ico_sensor.svg');
 	--ico-disconnect: url("/img/device_icons/ico_disconnector.svg");
 	--ico-connector: url('/img/device_icons/ico_connector.svg');
+	
 	--icon-pv: url("/img/icon_pv.png");
-
 	--ico-solar: url("/img/ico_solar.svg");
 	--icon-wind: url("/img/icon_wind.png");
 	--ico-water: url("/img/ico_water_dark.png");

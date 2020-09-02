@@ -291,7 +291,7 @@
 						$("#resultModal").modal("show");
 						refreshUserList();
 						setTimeout(function(){
-							$("#resultBtn").trigger("click");
+							$("#resultModal").modal("hide");
 						}, 1600);
 					}).fail(function (jqXHR, textStatus, errorThrown) {
 						$("#addUserModal").modal("hide");
@@ -299,7 +299,7 @@
 						$("#resultBtn").parent().removeClass("hidden");
 						$("#resultModal").modal("show");
 						setTimeout(function(){
-							$("#resultBtn").trigger("click");
+							$("#resultModal").modal("hide");
 						}, 1600);
 						console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
 						return false;
@@ -356,7 +356,7 @@
 								$("#resultModal").modal("show");
 								refreshUserList();
 								setTimeout(function(){
-									$("#resultBtn").trigger("click");
+									$("#resultModal").modal("show");
 								}, 1300);
 							});
 
@@ -377,7 +377,7 @@
 									$("#resultModal").modal("show");
 									refreshUserList();
 									setTimeout(function(){
-										$("#resultBtn").trigger("click");
+										$("#resultModal").modal("show");
 									}, 1300);
 								});
 							}
@@ -401,7 +401,7 @@
 									$("#resultModal").modal("show");
 									refreshUserList();
 									setTimeout(function(){
-										$("#resultBtn").trigger("click");
+										$("#resultModal").modal("show");
 									}, 1300);
 								});
 							}
@@ -512,7 +512,7 @@
 					$("#resultBtn").parent().addClass("hidden");
 					$("#resultModal").modal("show");
 					setTimeout(function(){
-						$("#resultBtn").trigger("click");
+						$("#resultModal").modal("show");
 					}, 1800);
 				} else {
 					if( (flagIndex < 0) ){
@@ -525,7 +525,7 @@
 								$("#resultModal").modal("show");
 								refreshUserList();
 								setTimeout(function(){
-									$("#resultBtn").trigger("click");
+									$("#resultModal").modal("hide");
 								}, 1200);
 							}).fail(function (jqXHR, textStatus, errorThrown) {
 								console.log("result1===", jqXHR);
@@ -534,7 +534,7 @@
 								$("#resultBtn").parent().removeClass("hidden");
 								$("#resultModal").modal("show");
 								setTimeout(function(){
-									$("#resultBtn").trigger("click");
+									$("#resultModal").modal("hide");
 								}, 1200);
 								return false;
 							});
@@ -551,7 +551,7 @@
 									$("#resultModal").modal("show");
 									refreshUserList();
 									setTimeout(function(){
-										$("#resultBtn").trigger("click");
+										$("#resultModal").modal("hide");
 									}, 1200);
 									console.log("newUserPwd edit success===", json)
 								}).fail(function (jqXHR, textStatus, errorThrown) {
@@ -574,7 +574,7 @@
 									$("#resultModal").modal("show");
 									refreshUserList();
 									setTimeout(function(){
-										$("#resultBtn").trigger("click");
+										$("#resultModal").modal("hide");
 									}, 1200);
 								}).fail(function (jqXHR, textStatus, errorThrown) {
 									let errorMsg = "에러코드:" + jqXHR.status + "\n" + "메세지: " + jqXHR.responseText +"\n" + "에러: " + errorThrown;
@@ -675,7 +675,7 @@
 										$("#resultModal").modal("show");
 										refreshUserList();
 										setTimeout(function(){
-											$("#resultBtn").trigger("click");
+											$("#resultModal").modal("hide");
 										}, 1500);
 									});
 								}
@@ -701,7 +701,7 @@
 										$("#resultModal").modal("show");
 										refreshUserList();
 										setTimeout(function(){
-											$("#resultBtn").trigger("click");
+											$("#resultModal").modal("hide");
 										}, 1500);
 									});
 								}
@@ -716,7 +716,7 @@
 												$("#resultModal").modal("show");
 												refreshUserList();
 												setTimeout(function(){
-													$("#resultBtn").trigger("click");
+													$("#resultModal").modal("hide");
 												}, 1500);
 											});
 										} else {
@@ -725,7 +725,7 @@
 											$("#resultBtn").parent().addClass("hidden");
 											$("#resultModal").modal("show");
 											setTimeout(function(){
-												$("#resultBtn").trigger("click");
+												$("#resultModal").modal("hide");
 											}, 1500);
 										}
 									
@@ -750,7 +750,7 @@
 												$("#resultModal").modal("show");
 												refreshUserList();
 												setTimeout(function(){
-													$("#resultBtn").trigger("click");
+													$("#resultModal").modal("hide");
 												}, 1500);
 											});
 										}
@@ -1218,7 +1218,6 @@
 							userTable.rows( indexes ).nodes().to$().find("input").prop("checked", false);
 						}).columns.adjust().draw();
 						// }).columns.adjust().responsive.recalc();
-						callback();
 					}
 					
 					$('#userTable').find("input:checkbox").on('click', function() {
@@ -1342,6 +1341,25 @@
 			let dropdown = $("#updateUserForm").find(".dropdown ul");
 			callback(dropdown);
 		}
+
+		function refreshUserList() {
+			let option = {
+				url: apiHost + "/config/users",
+				type: "get",
+				async: false,
+				data: {
+					uid: userInfoId,
+					oid: oid,
+					filter: JSON.stringify({
+						'include': [{ 'relation': 'user_spcs' }, {  'relation': 'user_sites' }]
+					})
+				}
+			}
+			getUserList(option, "destroy");
+		}
+
+
+
 	});
 
 
@@ -1599,23 +1617,6 @@
 
 			}
 		}
-
-	}
-
-	function refreshUserList() {
-		let option = {
-			url: apiHost + "/config/users",
-			type: "get",
-			async: false,
-			data: {
-				uid: userInfoId,
-				oid: oid,
-				filter: JSON.stringify({
-					'include': [{ 'relation': 'user_spcs' }, {  'relation': 'user_sites' }]
-				})
-			}
-		}
-		getUserList(option, "destroy");
 	}
 
 	function addToList(type) {
