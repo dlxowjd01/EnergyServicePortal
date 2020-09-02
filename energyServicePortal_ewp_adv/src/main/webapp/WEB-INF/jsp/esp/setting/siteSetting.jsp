@@ -16,7 +16,7 @@
 				async: true
 			},
 			{
-				url: apiHost + "/auth/me/sites",
+				url: apiHost + "/auth/me",
 				type: "get",
 				async: true,
 			},
@@ -34,9 +34,12 @@
 				readWriteTable(res[0], res[1], initModal);
 			});
 		} else {
-			Promise.all([ Promise.resolve(returnAjaxRes(optionList[2])), Promise.resolve(returnAjaxRes(optionList[1])) ]).then( res => {
+			console.log("readyonly table===")
+			Promise.all([ Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])), Promise.resolve(returnAjaxRes(optionList[2])) ]).then( res => {
 			// Promise.resolve(returnAjaxRes(optionList[2])).then( res => {
-				readOnlyTable( res[0], res[1].user_sites);
+				console.log(" re86757657-",  res[0])
+				console.log(" res[1----",  res[1])
+				readOnlyTable( res[0], res[1], res[2].user_sites);
 			});
 		}
 
@@ -987,18 +990,14 @@
 		}
 
 
-		function readOnlyTable(allSite, userSite) {
+		function readOnlyTable(allSites, vppNameData, userSite) {
 			if(userSite){
 				let newArr = [];
-				Promise.resolve(userSite.map((item, index) => {
-					console.log("item---", item)
+				Promise.resolve(allSites.map((item, index) => {
 					let found = allSites.findIndex( x => x.sid == item.sid);
 					let matchedData = allSites[found];
 
-					console.log("matchedData===", matchedData);
-
 					if(found > -1){
-						console.log("user---", userSite[found]);
 						let rawDataOpt = {
 							url: apiHost + "/status/raw/site",
 							type: 'get',
@@ -1006,10 +1005,14 @@
 							data:{
 								sid: item.sid,
 								formId: 'v2'
+							},
+							beforeSend: function(){
+								$("#loadingCircle").show();
 							}
 						}
 
 						$.ajax(rawDataOpt).done(function (json, textStatus, jqXHR) {
+							$("#loadingCircle").show();
 							if(!isEmpty(json.INV_PV) && ( Object.keys("genCapacity").length === 0 ) ) {
 								item.genCapacity = json.INV_PV.capacity;
 							} else {
@@ -1060,17 +1063,39 @@
 								}
 							}
 
-							if(!isEmpty(matchedData.dr_group_id)){
-								item.drId = item.dr_group_id;
+							// Match name with dr_group_id
+							if(!isEmpty(item.dr_group_id)){
+								let found = vppNameData.dr_group.findIndex( x => x.dgid == item.dr_group_id);
+								if(found > -1){
+									item.drName = vppNameData.dr_group[found].name;
+								}
 							} else {
-								item.drId = "-"
+								item.drName = "-"
 							}
 
-							if(!isEmpty(matchedData.vpp_group_id)){
-								item.vppId = item.vpp_group_id;
+							// Match name with vpp_group_id
+							if(!isEmpty(item.vpp_group_id)){
+								let found = vppNameData.vpp_group.findIndex( x => x.vgid == item.vpp_group_id);
+								if(found > -1){
+									item.vppName = vppNameData.vpp_group[found].name;
+								}
 							} else {
-								item.vppId = "-"
+								item.vppName = "-"
 							}
+
+							// if(!isEmpty(matchedData.dr_group_id)){
+							// 	item.drId = item.dr_group_id;
+							// } else {
+							// 	item.drId = "-"
+							// }
+
+							// if(!isEmpty(matchedData.vpp_group_id)){
+							// 	item.vppId = item.vpp_group_id;
+							// } else {
+							// 	item.vppId = "-"
+							// }
+
+							item.updatedAt = new Date(item.updatedAt).toLocaleDateString("en-CA").replace(/\//g, '-') + '&ensp;' + new Date(item.updatedAt).toLocaleTimeString();
 							newArr.push(item);
 						}).fail(function (jqXHR, textStatus, errorThrown) {
 							console.log("error====", jqXHR);
@@ -1089,7 +1114,6 @@
 					// 9. Vpp 자원 코드 ( virtual power plant )
 					// 10. 수정/조회 권한
 					// 11. 알람 설정
-					console.log("newArr--", newArr)
 					var siteReadOnlyTable = $('#siteTable').DataTable({
 						"aaData": newArr,
 						"table-layout": "fixed",
@@ -1146,11 +1170,15 @@
 							},
 							{
 								"sTitle": "DR 자원 코드",
-								"mData": "drId",
+								"mData": "drName",
 							},
 							{
 								"sTitle": "VPP 자원코드",
-								"mData": "vppId",
+								"mData": "vppName",
+							},
+							{
+								"sTitle": "업데이트 일자",
+								"mData": "updatedAt",
 							},
 						],
 						"language": {
@@ -1183,15 +1211,14 @@
 					});
 				
 				});
-			
 			} else {
 				drawEmptyTable($("#siteTable"))
 			}
+			$("#loadingCircle").hide();
 		}
 
 
 		function drawEmptyTable(target){
-			console.log("target---", target)
 			var t = target.DataTable({
 				"table-layout": "fixed",
 				"columnDefs": [
@@ -1254,7 +1281,6 @@
 					"zeroRecords":  "검색된 결과가 없습니다."
 				},
 				initComplete: function(){
-					console.log("this---", this)
 					this.addClass("stripe")
 				},
 			});
