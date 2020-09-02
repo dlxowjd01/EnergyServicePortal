@@ -51,7 +51,7 @@ public class LoginServiceImpl extends EgovAbstractServiceImpl implements LoginSe
 					rtnMap.put("oid", targetHost.split("-")[0]);
 					rtnMap.put("mode", "test");
 				} else {
-					if (targetHost.matches("[^0-9]")) {
+					if (targetHost.matches("^[0-9]")) {
 						rtnMap.put("oid", defualtOid);
 						rtnMap.put("mode", "test");
 					} else {

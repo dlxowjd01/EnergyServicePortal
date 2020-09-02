@@ -266,6 +266,8 @@
 				manufArray.push(el.value);
 			});
 
+			$('#model ul').empty();
+			$('#version ul').empty();
 			if (!isEmpty(almMsgList)) {
 				almMsgList.forEach(almMsg => {
 					const deviceType = almMsg.device_type;
@@ -390,14 +392,14 @@
 		sheetLength = parseInt(sheetLength.replace(/[^0-9]/g, ""));
 
 		for (let i = 3 ; i < sheetLength + 1; i++) {
-			const DEV_TYPE = { v : workbook.Sheets[sheetNames]['B' + i] != undefined ? workbook.Sheets[sheetNames]['B' + i].v.trim() : '' };
-			const MANUFACTURER = { v : workbook.Sheets[sheetNames]['C' + i] != undefined ? workbook.Sheets[sheetNames]['C' + i].v.trim() : '' };
-			const MODEL = { v : workbook.Sheets[sheetNames]['D' + i] != undefined ? workbook.Sheets[sheetNames]['D' + i].v.trim() : '' };
-			const VERSION = { v : workbook.Sheets[sheetNames]['E' + i] != undefined ? workbook.Sheets[sheetNames]['E' + i].v.trim() : '' };
-			const ALARM_CODE = { v : workbook.Sheets[sheetNames]['F' + i] != undefined ? workbook.Sheets[sheetNames]['F' + i].v.trim() : '' };
-			const ALARM_MSG = { v : workbook.Sheets[sheetNames]['G' + i] != undefined ? workbook.Sheets[sheetNames]['G' + i].v.trim() : '' };
-			const LEVEL = { v : workbook.Sheets[sheetNames]['H' + i] != undefined ? workbook.Sheets[sheetNames]['H' + i].v.trim() : '' };
-			const DESCRIPTION = { v : workbook.Sheets[sheetNames]['I' + i] != undefined ? workbook.Sheets[sheetNames]['I' + i].v.trim() : '' };
+			const DEV_TYPE = { v : workbook.Sheets[sheetNames]['B' + i] != undefined ? String(workbook.Sheets[sheetNames]['B' + i].v).trim() : '' };
+			const MANUFACTURER = { v : workbook.Sheets[sheetNames]['C' + i] != undefined ? String(workbook.Sheets[sheetNames]['C' + i].v).trim() : '' };
+			const MODEL = { v : workbook.Sheets[sheetNames]['D' + i] != undefined ? String(workbook.Sheets[sheetNames]['D' + i].v).trim() : '' };
+			const VERSION = { v : workbook.Sheets[sheetNames]['E' + i] != undefined ? String(workbook.Sheets[sheetNames]['E' + i].v).trim() : '' };
+			const ALARM_CODE = { v : workbook.Sheets[sheetNames]['F' + i] != undefined ? String(workbook.Sheets[sheetNames]['F' + i].v).trim() : '' };
+			const ALARM_MSG = { v : workbook.Sheets[sheetNames]['G' + i] != undefined ? String(workbook.Sheets[sheetNames]['G' + i].v).trim() : '' };
+			const LEVEL = { v : workbook.Sheets[sheetNames]['H' + i] != undefined ? String(workbook.Sheets[sheetNames]['H' + i].v).trim() : '' };
+			const DESCRIPTION = { v : workbook.Sheets[sheetNames]['I' + i] != undefined ? String(workbook.Sheets[sheetNames]['I' + i].v).trim() : '' };
 			const tempDataSet = DEV_TYPE.v + '_' + MANUFACTURER.v + '_' + MODEL.v  + '_' + VERSION.v;
 			if (i === 3) {
 				strDataSet = tempDataSet;

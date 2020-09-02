@@ -298,6 +298,7 @@
 						newUtilObj.volt_name = newVoltName;
 					}
 				}
+				
 				if( !isEmpty(newPeakDemand) ){
 					newUtilObj.peak_demand = newPeakDemand;
 				}

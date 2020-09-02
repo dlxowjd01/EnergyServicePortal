@@ -30,4 +30,7 @@ public class DeviceController {
 
 	@RequestMapping(value = "/device/certApplication.do")
 	public String certificateApplication(HttpServletRequest request, HttpSession session, Model model) { return "esp/device/certApplication"; }
+
+	@RequestMapping(value = "/device/certManageProc.do")
+	public String certificateManagementProc(HttpServletRequest request, HttpSession session, Model model) { return "esp/device/certManageProc"; }
 }
