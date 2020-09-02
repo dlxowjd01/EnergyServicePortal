@@ -140,7 +140,6 @@
 		});
 
 		$("#updateUserForm").on("change", function(e){
-			console.log("validation===")
 			if(!$("#addUserModal").hasClass("edit")){
 				if(validateAddForm() == 1) {
 					$("#addUserBtn").prop("disabled", false);
@@ -1438,8 +1437,6 @@
 			let tr = $("#userTable").find("tbody tr.selected");
 			let td = tr.find("td");
 			let uid = dTable.row(tr).data().uid;
-			console.log("dTable.row(tr).data()===", dTable.row(tr).data().uid);
-
 			// EDIT!!!!!
 			if(option == "edit") {
 				let optSpc = {
@@ -1735,7 +1732,6 @@
 
 	function validateEditForm(){
 		if(!isEmpty($("#newUserPwd").val())) {
-			console.log("newUserPwd NOT empty===" )
 			if( ($("#updateUserForm .tick:not('.checked')").index() == -1) && ($(".warning:not(.hidden)").index() == -1) ) {
 				return 1;
 			}
