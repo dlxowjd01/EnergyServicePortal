@@ -206,7 +206,7 @@
 			e.preventDefault();
 
 			let newSiteName = $("#newSiteName").val();
-			let newSiteType = Number($("#newSiteType").prev().data("value"));			
+			let newSiteType = Number($("#newSiteType").prev().data("value"));
 			let newResType = Number($("#newResList").prev().data("value"));
 
 			let newEss = Number($("#newEssList").prev().data("value"));
@@ -301,7 +301,6 @@
 						newUtilObj.volt_name = newVoltName;
 					}
 				}
-				
 				if( !isEmpty(newPeakDemand) ){
 					newUtilObj.peak_demand = newPeakDemand;
 				}
@@ -561,22 +560,22 @@
 					type: 'get',
 					async: true
 				},
-		
 			];
 
 			$('#siteTable').DataTable().clear().destroy();
 			Promise.all([ Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])) ]).then( res => {
 			// Promise.resolve(returnAjaxRes(optionList[0])).then( res => {
-				readWriteTable(res[0], res[1], initModal);
+				readWriteTable(res[0], res[1], initModal, "destroy");
 			});
 		}
 
-		function readWriteTable(siteData, vppNameData, callback) {
-			if(callback) {
-				callback();
+		function readWriteTable(siteData, vppNameData, callback, destroy) {
+			if(!destroy) {
 				getPropertyData();
+			} else {
+				getPropertyData("delete");
 			}
-
+			callback();
 			getVppDrData(vppNameData);
 			if(siteData) {
 					let newArr = [];
@@ -1286,7 +1285,8 @@
 			});
 		}
 
-		function getPropertyData() {
+		function getPropertyData(option) {
+			console.log("option---", option)
 			let optionContract = {
 				url: apiHost + "/bills/plans?country=kr",
 				type: "get",
@@ -1304,6 +1304,7 @@
 
 			$.ajax(optionContract).done(function (json, textStatus, jqXHR) {
 				const newContractList = $("#newContractList");
+				
 				const cArr = json.data.reduce((acc, val, index, array) => {
 					let key = val["planName"];
 					let vKey = val["voltageType"];
@@ -1354,8 +1355,10 @@
 						<li data-util-name="${'${util}'}" data-plan-id="${'${id}'}" data-vol-type="${'${v}'}" data-value="${'${item[0]}'}"><a href="#">${'${item[0]}'}</a></li>
 					`;
 				});
+				if(option){
+					newContractList.empty();
+				}
 				newContractList.append(cStr);
-
 				newContractList.find("li").on("click", function(){
 					console.log("contract list clicked====")
 					let val = $(this).data("value");
@@ -1405,6 +1408,12 @@
 					`
 				});
 
+				if(option){
+					$("#newResList").empty();
+					$("#resTypeList").empty();
+					$("#newSiteType").empty();
+					$("#siteType").empty();
+				}
 				$("#newResList").append(resStr);
 				$("#resTypeList").append(resStr).prepend(allStr);
 
@@ -1503,6 +1512,10 @@
 				`;
 			}
 			str += `<li data-value="0"><a href="#">말일</a></li>`
+
+			if(option){
+				$("#newInspection").empty();
+			}
 			$("#newInspection").append($(str));
 		}
 
@@ -1662,24 +1675,16 @@
 				// Utility info
 				if( !isEmpty(rowData.utility)) {
 					Promise.resolve(JSON.parse(rowData.utility)).then( util => {
-						console.log('util===', util);
 						let utilPlanName = util.utility_plan_name;
 						let item = $("#newContractList li");
 						let subItem = $("#newVoltList");
 						let planArr = [];
 						let voltArr = [];
 
-						item.each(function(index, item){
-							let val = $(this).data("value");
-							if(val == utilPlanName) {
-								$(this).click();
-								console.log("this---", $(this))
-							}
-						});
 						console.log("util_plan_name==", utilPlanName)
 						$("#newContractList").prev().data({"plan-id": util.utility_plan_id, "value": utilPlanName }).html(utilPlanName + '<span class="caret"></span>');
 						$("#newVoltList").prev().prop("disabled", false);
-						if(planArr.length >= 1){
+						if(!isEmpty(util.volt_name) ){
 							$("#newVoltList").prev().data({"id": util.utility_plan_id, "data-value" : util.volt_name }).html( util.volt_name + '<span class="caret"></span>');
 						} else {
 							$("#newVoltList").prev().html('선택<span class="caret"></span>');
