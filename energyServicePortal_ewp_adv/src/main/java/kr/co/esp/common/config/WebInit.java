@@ -3,12 +3,7 @@ package kr.co.esp.common.config;
 import com.opensymphony.sitemesh.webapp.SiteMeshFilter;
 import kr.co.esp.common.filter.HTMLTagFilter;
 import kr.co.esp.common.listener.SessionListener;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.context.ContextLoaderListener;
-import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestContextListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
@@ -49,12 +44,8 @@ import java.util.EnumSet;
  */
 public class WebInit extends AbstractAnnotationConfigDispatcherServletInitializer {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(WebInit.class);
-
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
-		LOGGER.debug("EgovWebApplicationInitializer START-============================================");
-
 		//-------------------------------------------------------------
 		// Egov Web ServletContextListener 설정
 		//-------------------------------------------------------------
@@ -138,37 +129,4 @@ public class WebInit extends AbstractAnnotationConfigDispatcherServletInitialize
 	protected Class<?>[] getServletConfigClasses() {
 		return new Class[] {kr.co.esp.common.config.ServletContext.class};
 	}
-
-//	/**
-//	 * Custom Exception
-//	 *
-//	 * @param servletContext
-//	 */
-//	@Override
-//	protected void registerDispatcherServlet(ServletContext servletContext) {
-//		String servletName = getServletName();
-//		Assert.hasLength(servletName, "getServletNAme() may not return empty or null");
-//
-//		WebApplicationContext servletAppContext = createServletApplicationContext();
-//		Assert.notNull(servletAppContext, "createServletApplicationContext() did not return an application context for servlet [" + servletName + "]");
-//
-//		DispatcherServlet dispatcherServlet = new DispatcherServlet();
-//		dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);
-//
-//		ServletRegistration.Dynamic registration = servletContext.addServlet(servletName, dispatcherServlet);
-//		Assert.notNull(registration, "Failed to register servlet with anme '" + servletName + "'." + "Check if there is another servlet registered under the same name.");
-//
-//		registration.setLoadOnStartup(1);
-//		registration.addMapping(getServletMappings());
-//		registration.setAsyncSupported(isAsyncSupported());
-//
-//		Filter[] filters = getServletFilters();
-//		if (!ObjectUtils.isEmpty(filters)) {
-//			for (Filter filter : filters) {
-//				registerServletFilter(servletContext, filter);
-//			}
-//		}
-//
-//		customizeRegistration(registration);
-//	}
 }
