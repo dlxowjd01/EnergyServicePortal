@@ -251,19 +251,20 @@ html.darkmode:root {
 	--btn-download: url("/img/btn_download.svg");
 
 	/* ********* Device icons ********* */
-	--ico-ami: url('/img/ico_inverter.svg');
-	--ico-bms-rack: url('/img/ico_bms_rack.svg');
-	--ico-meter: url('/img/ico_meter.svg');
-	--ico-inverter: url('/img/ico_inverter.svg');
-	--ico-pcs: url('/img/ico_power.svg');
-	--ico-battery: url("/img/ico_battery.svg");
-	--ico-bms-rack: url('/img/ico_bms_rack.svg');
-	--ico-sensor: url('/img/ico_sensor.svg');
-	--ico-disconnect: url("/img/ico_disconnector.svg");
-	--ico-connector: url('/img/ico_connector.svg');
-	--ico-solar: url("/img/ico_solar.svg");
-
+	--ico-ami: url('/img/device_icons/icon_ami.svg');
+	--ico-bms-rack: url('/img/device_icons/ico_bms_rack.svg');
+	--ico-meter: url('/img/device_icons/ico_meter.svg');
+	--ico-inverter: url('/img/device_icons/ico_inverter.svg');
+	--ico-pcs: url('/img/device_icons/ico_pcs_ess.svg');
+	--ico-battery: url("/img/device_icons/ico_battery.svg");
+	--ico-bms: url('/img/device_icons/ico_bms.svg');
+	--ico-bms-rack: url('/img/device_icons/ico_bms_rack.svg');
+	--ico-sensor: url('/img/device_icons/ico_sensor.svg');
+	--ico-disconnect: url("/img/device_icons/ico_disconnector.svg");
+	--ico-connector: url('/img/device_icons/ico_connector.svg');
 	--icon-pv: url("/img/icon_pv.png");
+
+	--ico-solar: url("/img/ico_solar.svg");
 	--icon-wind: url("/img/icon_wind.png");
 	--ico-water: url("/img/ico_water_dark.png");
 	--ico-wind: url("/img/ico_wind_dark.png");
@@ -1800,7 +1801,7 @@ footer .copyright {
 	left: 10px;
 	width: 0;
 	height: 0;
-	border-top: 5px solid var(--white87);
+	border-bottom: 5px solid var(--white87);
 	border-left: 5px solid transparent;
 	border-right: 5px solid transparent;
 	content: "";
@@ -4875,20 +4876,20 @@ input.inp[readonly]:focus {
 }
 
 .device li.pcs a {
-	background: url("/img/icon_pcs.png") no-repeat center 25%;
+	background: var(--ico-meter) no-repeat center 25%;
+	filter: invert(0.6)
 }
 
 .device li.bms a {
-	background: url("/img/icon_bms.png") no-repeat center 25%;
-}
-
-.device li.ioe a {
-	background: url("/img/icon_ioe.png") no-repeat center 25%;
+	background: var(--ico-bms) no-repeat center 25%;
+	filter: invert(0.6)
 }
 
 .device li.pv a {
 	background: var(--icon-pv) no-repeat center 25%;
+	filter: invert(0.6)
 }
+
 
 .device li span {
 	display: block;
@@ -6837,8 +6838,9 @@ div.di_wrap dl .link a {
 .scontrol dd ul li .cont .tfl span.ic_pcs {
 	width: 34px;
 	height: 31px;
-	background: url("/img/icon_pcs.png") no-repeat center;
+	background: var(--ico-pcs) no-repeat center;
 	background-size: 34px 31px;
+	filter: invert(0.6);
 }
 
 .scontrol dd ul li .cont .tfl span.ic_bms {
@@ -7423,7 +7425,7 @@ div.di_wrap dl .link a {
 }
 
 .device-list.list-bms-sys li.text-black:before {
-	background: var(--ico-battery) no-repeat 0 0;
+	background: var(--ico-bms) no-repeat 0 0;
 }
 
 .device-list.list-bms-rack li.text-black:before {
