@@ -4,9 +4,23 @@
 <script type="text/javascript">
 	const certApiHost = '${sessionScope.certApiHost}';
 	const apply_PKG_ID = '${param.apply_PKG_ID}';
+	const mode = '${param.mode}'
+	let table = null;
+
+	<c:choose>
+		<c:when test="${param.mode eq 'issue'}">
+	const modeName = '발급';
+		</c:when>
+		<c:when test="${param.mode eq 'reIssue'}">
+	const modeName = '갱신';
+		</c:when>
+		<c:otherwise>
+	const modeName = '폐지';
+		</c:otherwise>
+	</c:choose>
 
 	$(function () {
-		$('#deviceTable').DataTable({
+		table = $('#deviceTable').DataTable({
 			'table-layout': 'fixed',
 			'bAutoWidth': true,
 			'bSearchable': true,
@@ -20,7 +34,7 @@
 			'processing': true,
 			'ajax': {
 				type: 'GET',
-				url: certApiHost + '/certDetail/all',
+				url: certApiHost + '/certDetail/' + mode,
 				data: function(d) {
 					let param = new Object();
 					param.cpage = (d.start / 10) + 1;
@@ -53,9 +67,18 @@
 			},
 			'aoColumns': [
 				{
-					sTitle: '순번',
-					mData: 'num',
-					className: 'dt-center'
+					sTitle: '',
+					mData: null,
+					mRender: function ( data, type, full, rowIndex ) {
+						let check = '<input type="checkbox" id="check' + rowIndex.row + '" name="table_checkbox"><label for="check' + rowIndex.row + '"></label>';
+
+						if (data.status.match('가능')) {
+							return check;
+						} else {
+							return '';
+						}
+					},
+					className: 'dt-center no-sorting'
 				},
 				{
 					sTitle: 'MAC 주소',
@@ -72,26 +95,61 @@
 				{
 					sTitle: '상태',
 					mData: 'status'
+				},
+				{
+					sTitle: 'apply_ID',
+					mData: 'apply_ID',
+					bSortable: false,
+					orderable: false,
+					bVisible: false
 				}
 			],
 			dom: 'tip',
+			select: {
+				style: 'multi',
+				selector: 'td:first-child > :checkbox'
+			},
 		}).columns.adjust();
 	});
+
+	const goProc = () => {
+		const deviceTable = $('#deviceTable').DataTable();
+		let data = new Object();
+		let deviceArray = new Array();
+
+		data.applyPkgID = apply_PKG_ID;
+
+		if (deviceTable.rows('.selected')[0].length > 0) {
+			deviceTable.rows('.selected')[0].forEach(device => {
+				deviceArray.push(deviceTable.rows(device).data()[0].apply_ID);
+			});
+			data.devices = deviceArray;
+
+			let option = {
+				url : certApiHost + '/deviceCert/' + mode,
+				type : 'PUT',
+				contentType: 'application/json',
+				crossOrigin: true,
+				dataType: 'json',
+				data: JSON.stringify(data)
+			}
+			$.ajax(option).done(function (result) {
+				alert(modeName + '처리가 완료되었습니다.');
+				table.ajax().reload();
+				return false;
+			}).fail(function (error) {
+				console.log(error);
+			});
+		} else {
+
+		}
+	}
 
 	//기기 인증서 상세 조회
 	const goList = () => {
 		let form = $('#form1');
 		form.find('[name="apply_PKG_ID"]').val('');
-		form.find('[name="mode"]').val('');
 		form.attr('action', '/device/certManageList.do').submit();
-	}
-
-	//기기 인증서 상세 조회
-	const goPage = (mode) => {
-		let form = $('#form1');
-		form.find('[name="apply_PKG_ID"]').val(apply_PKG_ID);
-		form.find('[name="mode"]').val(mode);
-		form.attr('action', '/device/certManageProc.do').submit();
 	}
 </script>
 
@@ -102,7 +160,19 @@
 
 <div class="row">
 	<div class="col-lg-12">
-		<h1 class="page-header">상세 조회</h1>
+		<h1 class="page-header">기기인증서 신청(
+			<c:choose>
+				<c:when test="${param.mode eq 'issue'}">
+					발급
+				</c:when>
+				<c:when test="${param.mode eq 'reIssue'}">
+					갱신
+				</c:when>
+				<c:otherwise>
+					폐지
+				</c:otherwise>
+			</c:choose>
+			)</h1>
 	</div>
 </div>
 
@@ -180,9 +250,19 @@
 		</form>
 	</div>
 	<div class="btn_wrap_type_right">
-		<button type="button" class="btn_type03" onclick="goPage('issue');">발급</button>
-		<button type="button" class="btn_type03" onclick="goPage('reIssue');">갱신</button>
-		<button type="button" class="btn_type03" onclick="goPage('revoke');">폐기</button>
+		<button type="button" class="btn_type" onclick="goProc();">
+		<c:choose>
+			<c:when test="${param.mode eq 'issue'}">
+				발급
+			</c:when>
+			<c:when test="${param.mode eq 'reIssue'}">
+				갱신
+			</c:when>
+			<c:otherwise>
+				폐지
+			</c:otherwise>
+		</c:choose>
+		</button>
 		<button type="button" class="btn_type03" onclick="goList();">목록</button>
 	</div>
 </div>
