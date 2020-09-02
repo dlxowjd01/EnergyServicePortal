@@ -347,11 +347,12 @@
 				});
 
 				let model = $('#model button').data('value');
+				let version = $('#version button').data('value');
 
 				Promise.all(almMsgList.map((x, index) => {
 					let type = x.device_type;
 					let manufacturer = x.manufacturer;
-					if (typeArray.includes(type) && manufArray.includes(manufacturer) && model == x.model) {
+					if (typeArray.includes(type) && manufArray.includes(manufacturer) && model == x.model && version == x.version) {
 						let alarmCodeSet = x.device_type + '_' + x.manufacturer + '_' + x.model + '_' + x.version;
 						const codes = x.codes;
 

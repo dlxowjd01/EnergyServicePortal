@@ -189,32 +189,60 @@
 	<div class="col-lg-12">
 		<form id="form1" name="form1" method="get" enctype="multipart/form-data">
 			<div class="indiv">
-				<div class="flex_start">
-					<h2 class="tx_tit">기기인증서 발급 정책</h2>
-					<div class="sa_select">
-						<div class="dropdown" id="policy">
-							<button type="button" class="dropdown-toggle w5" data-toggle="dropdown" data-value="">
-								선택 <span class="caret"></span>
-							</button>
-							<ul class="dropdown-menu" role="menu"></ul>
-						</div>
-					</div>
+				<div class="flex_wrapper mb-20 mt30">
+					<h2 class="ntit">인증서 정보 입력</h2>
 				</div>
-				<div class="flex_start">
-					<h2 class="tx_tit">제조사명</h2>
-					<div class="tx_inp_type edit">
-						<label for="manuName" class="sr-only">제조사명</label>
-						<input type="text" id="manuName" name="manuName" placeholder="제조사명 입력">
-					</div>
+				<div class="spc_tbl_row st_edit">
+					<table>
+						<colgroup>
+							<col style="width:15%">
+							<col style="width:35%">
+							<col style="width:15%">
+							<col style="width:35%">
+							<col/>
+						</colgroup>
+						<tbody>
+						<tr>
+							<th><h2 class="tx_tit">기기인증서 발급 정책</h2></th>
+							<td>
+								<div class="sa_select">
+									<div class="dropdown" id="policy">
+										<button type="button" class="dropdown-toggle w5" data-toggle="dropdown" data-value="">
+											선택 <span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu" role="menu"></ul>
+									</div>
+								</div>
+							</td>
+							<th></th>
+							<td>
+							</td>
+						</tr>
+						<tr>
+							<th><h2 class="tx_tit">제조사명</h2></th>
+							<td>
+								<div class="tx_inp_type edit">
+									<label for="manuName" class="sr-only">제조사명</label>
+									<input type="text" id="manuName" name="manuName" placeholder="제조사명 입력">
+								</div>
+							</td>
+							<th></th>
+							<td></td>
+						</tr>
+						<tr>
+							<th><h2 class="tx_tit">발급정책</h2></th>
+							<td>
+								<div class="tx_inp_type edit">
+									<label for="modelName" class="sr-only">제품모델명 입력</label>
+									<input type="text" id="modelName" name="modelName" placeholder="제품모델명 입력">
+								</div>
+							</td>
+							<th></th>
+							<td></td>
+						</tr>
+						</tbody>
+					</table>
 				</div>
-				<div class="flex_start">
-					<h2 class="tx_tit">제품모델명</h2>
-					<div class="tx_inp_type edit">
-						<label for="modelName" class="sr-only">제품모델명 입력</label>
-						<input type="text" id="modelName" name="modelName" placeholder="제품모델명 입력">
-					</div>
-				</div>
-
 				<div class="flex_wrapper mb-20 mt30">
 					<h2 class="ntit">기기 정보 입력</h2>
 				</div>
@@ -271,7 +299,7 @@
 					</div>
 				</div>
 				<div class="btn_wrap_type_right">
-					<button type="button" class="btn_type03 big" onclick="sampleDownload();">샘플</button>
+					<button type="button" class="btn_type03 big" onclick="sampleDownload();">샘플 다운로드</button>
 					<button type="button" class="btn_type big">신청</button>
 				</div>
 			</div>

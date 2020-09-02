@@ -151,6 +151,10 @@
 		form.find('[name="apply_PKG_ID"]').val('');
 		form.attr('action', '/device/certManageList.do').submit();
 	}
+
+	const downloadCert = () => {
+		location.href = certApiHost + '/downCert?applyPkgID=' + apply_PKG_ID;
+	}
 </script>
 
 <form id="form1" name="form1" method="post">
@@ -263,6 +267,9 @@
 			</c:otherwise>
 		</c:choose>
 		</button>
+		<c:if test="${param.mode eq 'issue' or param.mode eq 'reIssue'}">
+		<button type="button" class="btn_type" onclick="downloadCert();">인증서 다운로드</button>
+		</c:if>
 		<button type="button" class="btn_type03" onclick="goList();">목록</button>
 	</div>
 </div>
