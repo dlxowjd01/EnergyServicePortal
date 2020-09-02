@@ -264,8 +264,7 @@ html.darkmode:root {
 	--ico-connector: url('/img/device_icons/ico_connector.svg');
 	--icon-pv: url("/img/icon_pv.png");
 
-	--ico-solar: url("/img/icons/ico_solar.svg");
-
+	--ico-solar: url("/img/ico_solar.svg");
 	--icon-wind: url("/img/icon_wind.png");
 	--ico-water: url("/img/ico_water_dark.png");
 	--ico-wind: url("/img/ico_wind_dark.png");
@@ -1802,7 +1801,7 @@ footer .copyright {
 	left: 10px;
 	width: 0;
 	height: 0;
-	border-top: 5px solid var(--white87);
+	border-bottom: 5px solid var(--white87);
 	border-left: 5px solid transparent;
 	border-right: 5px solid transparent;
 	content: "";
