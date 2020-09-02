@@ -786,6 +786,7 @@
 		// 	}
 		// });
 
+
 		// Get Ajax Data
 		function getUserList(opt, callback) {
 
@@ -1616,7 +1617,6 @@
 
 			}
 		}
-
 	}
 
 	function addToList(type) {

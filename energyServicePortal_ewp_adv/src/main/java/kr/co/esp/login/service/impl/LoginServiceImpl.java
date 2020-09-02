@@ -23,6 +23,7 @@ public class LoginServiceImpl extends EgovAbstractServiceImpl implements LoginSe
 	RestApiUtil restApiUtil;
 
 	private static final String defualtOid = EgovProperties.getProperty("default.oid");
+	private static final String fixedOid = EgovProperties.getProperty("fixed.oid");
 
 	/**
 	 * 도메인 기준으로 OID와 MODE 세팅
@@ -39,29 +40,34 @@ public class LoginServiceImpl extends EgovAbstractServiceImpl implements LoginSe
 		Map<String, Object> rtnMap = new HashMap<String, Object>();
 
 		try {
-			if (serverName != null && !"".equals(serverName) && !"localhost".equals(serverName)) {
-				Pattern p = Pattern.compile("^(.*?)(?=\\.)");
-				Matcher m = p.matcher(serverName);
-				String targetHost = "";
-				while (m.find()) {
-					targetHost = m.group();
-				}
+			if (fixedOid != null && !"".equals(fixedOid)) {
+				rtnMap.put("oid", fixedOid);
+				rtnMap.put("mode", "");
+			} else {
+				if (serverName != null && !"".equals(serverName) && !"localhost".equals(serverName)) {
+					Pattern p = Pattern.compile("^(.*?)(?=\\.)");
+					Matcher m = p.matcher(serverName);
+					String targetHost = "";
+					while (m.find()) {
+						targetHost = m.group();
+					}
 
-				if (targetHost.contains("-")) {
-					rtnMap.put("oid", targetHost.split("-")[0]);
-					rtnMap.put("mode", "test");
-				} else {
-					if (targetHost.matches("^[0-9]")) {
-						rtnMap.put("oid", defualtOid);
+					if (targetHost.contains("-")) {
+						rtnMap.put("oid", targetHost.split("-")[0]);
 						rtnMap.put("mode", "test");
 					} else {
-						rtnMap.put("oid", targetHost);
-						rtnMap.put("mode", "");
+						if (targetHost.matches("^[0-9]")) {
+							rtnMap.put("oid", defualtOid);
+							rtnMap.put("mode", "test");
+						} else {
+							rtnMap.put("oid", targetHost);
+							rtnMap.put("mode", "");
+						}
 					}
+				} else {
+					rtnMap.put("oid", defualtOid);
+					rtnMap.put("mode", "test");
 				}
-			} else {
-				rtnMap.put("oid", defualtOid);
-				rtnMap.put("mode", "test");
 			}
 		} catch (Exception e) {
 			LOGGER.error("LoginService - selectOid - Exception : " + e.getMessage());
