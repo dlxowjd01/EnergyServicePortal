@@ -74,6 +74,8 @@ const displayDropdown = ($selector) => {
 		}
 	}
 
+	$displayButton.eq(0).html($displayText + '<span class="caret"></span>').addClass("active");
+	
 	//data Setting
 	if (!isEmpty($displayData)) {
 		$.map($displayData, function (val, key) {
