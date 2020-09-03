@@ -1343,18 +1343,35 @@ const beforeTodayTotalPromise = (site) => {
 			let resolveObj = new Object();
 
 			$.map(data, function (val, key) {
-				if (key.match('INV')) {
-					if (!isEmpty(val.activePower)) {
-						acPowerSum += val.activePower;
-					}
+				if (oid.match('kpx')) {
+					if (key == 'KPX_EMS') {
+						if (!isEmpty(val.activePower)) {
+							acPowerSum += val.activePower;
+						}
 
-					if (!isEmpty(val.capacity)) {
-						capacity += val.capacity;
-					}
+						if (!isEmpty(val.capacity)) {
+							capacity += val.capacity;
+						}
 
-					if ($('.dbTime').data('timestamp') === undefined || ($('.dbTime').data('timestamp') != undefined && Number($('.dbTime').data('timestamp')) < val.timestamp)) {
-						const dbTime = new Date(val.timestamp);
-						$('.dbTime').data('timestamp', val.timestamp).text(dbTime.format('yyyy-MM-dd HH:mm:ss'));
+						if ($('.dbTime').data('timestamp') === undefined || ($('.dbTime').data('timestamp') != undefined && Number($('.dbTime').data('timestamp')) < val.timestamp)) {
+							const dbTime = new Date(val.timestamp);
+							$('.dbTime').data('timestamp', val.timestamp).text(dbTime.format('yyyy-MM-dd HH:mm:ss'));
+						}
+					}
+				} else {
+					if (key.match('INV')) {
+						if (!isEmpty(val.activePower)) {
+							acPowerSum += val.activePower;
+						}
+
+						if (!isEmpty(val.capacity)) {
+							capacity += val.capacity;
+						}
+
+						if ($('.dbTime').data('timestamp') === undefined || ($('.dbTime').data('timestamp') != undefined && Number($('.dbTime').data('timestamp')) < val.timestamp)) {
+							const dbTime = new Date(val.timestamp);
+							$('.dbTime').data('timestamp', val.timestamp).text(dbTime.format('yyyy-MM-dd HH:mm:ss'));
+						}
 					}
 				}
 			});
@@ -1383,6 +1400,21 @@ const getTodayTotalDetail = async function () {
 		$('#centerTbody tr td:nth-child(3)').text('');
 		$('#centerTbody tr td:nth-child(4)').text('');
 		$('#centerTbody tr td:nth-child(5)').text('');
+	} else {
+		$('#centerTbody tr:eq(0) td:nth-child(2)').text(' - ');
+		$('#centerTbody tr:eq(0) td:nth-child(3)').text(' - ');
+		$('#centerTbody tr:eq(0) td:nth-child(4)').text(' - ');
+		$('#centerTbody tr:eq(0) td:nth-child(5)').text(' - ');
+		$('#centerTbody tr:eq(0) td:nth-child(6)').text(' - ');
+		$('#centerTbody tr:eq(1) td:nth-child(2)').text(' - ');
+		$('#centerTbody tr:eq(1) td:nth-child(3)').text(' - ');
+		$('#centerTbody tr:eq(1) td:nth-child(4)').text(' - ');
+		$('#centerTbody tr:eq(1) td:nth-child(5)').text(' - ');
+		$('#centerTbody tr:eq(1) td:nth-child(6)').text(' - ');
+
+		$('.gmain_chart_kpx .chart_box .chart_info .ci_right ul li:nth-child(1) span').text('')
+		$('.gmain_chart_kpx .chart_box .chart_info .ci_right ul li:nth-child(2) span').text('')
+		$('.gmain_chart_kpx .chart_box .chart_info .ci_right ul li:nth-child(3) span').text('')
 	}
 
 	if (oid.match('kpx')) {
@@ -1957,11 +1989,80 @@ const searchSite = function () {
 	});
 
 	refineList.forEach((site, siteIdx) => {
-		if(typeof site.accumulate !== 'string') {
-			if (site.accumulate == 0) {
-				refineList[siteIdx].accumulate = '-';
-			} else {
-				refineList[siteIdx].accumulate = displayNumberFixedUnit(site.accumulate, 'Wh', 'kWh', 0)[0];
+		if (oid.match('kpx')) {
+			const devices = site.devices;
+			let deviceArray = new Array();
+			let activePower = 0;
+			let reactivePower = 0;
+			let essActivePower = 0;
+			let maxActivePower = 0;
+			let essMaxActivePower = 0;
+			let essMinActivePower = 0;
+			let essSoc = 0;
+			devices.forEach(device => {
+				if (device.device_type === 'KPX_EMS' || device.device_type === 'SENSOR_WEATHER') {
+					deviceArray.push(device.did);
+				}
+			});
+
+			$.ajax({
+				url: apiHost + '/status/raw',
+				type: 'get',
+				async: false,
+				data: {
+					dids: deviceArray.join(',')
+				},
+			}).done(function (data, textStatus, jqXHR) {
+				Object.entries(data).map(obj => {
+					let deviceData = obj[1].data;
+					let deviceType = obj[1].device_type;
+
+					if (deviceType == 'SENSOR_WEATHER') {
+						deviceData.forEach(di => {
+							let temperature = isEmpty(di.temperature) ? '-' : di.temperature;
+							let irradiationPoa = isEmpty(di.irradiationPoa) ? '-' : di.irradiationPoa;
+							let humidity = isEmpty(di.humidity) ? '-' : di.humidity;
+
+							siteList[siteIdx].temperature = temperature + ' °C';
+							siteList[siteIdx].irradiationPoa = irradiationPoa + ' W/㎡';
+							siteList[siteIdx].humidity = humidity + ' %';
+						});
+					} else {
+						deviceData.forEach(di => {
+							activePower += di.activePower;
+							reactivePower += di.reactivePower;
+							essActivePower += (di.essDActivePower - di.essCActivePower);
+							maxActivePower += di.maxActivePower;
+							essMaxActivePower += di.essMaxActivePower;
+							essMinActivePower += di.essMinActivePower;
+							essSoc += di.essSoc;
+						});
+					}
+				});
+
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				console.error(jqXHR);
+				console.error(textStatus);
+				console.error(errorThrown);
+
+				alert('처리 중 오류가 발생했습니다.');
+				return false;
+			});
+
+			refineList[siteIdx].activePower = numberComma(activePower / 1000);
+			refineList[siteIdx].reactivePower = numberComma(reactivePower / 1000);
+			refineList[siteIdx].essActivePower = numberComma(essActivePower / 1000);
+			refineList[siteIdx].maxActivePower = numberComma(maxActivePower / 1000);
+			refineList[siteIdx].essMaxActivePower = numberComma(essMaxActivePower / 1000);
+			refineList[siteIdx].essMinActivePower = numberComma(essMinActivePower / 1000);
+			refineList[siteIdx].essSoc = numberComma(essSoc / 1000);
+		} else {
+			if(typeof site.accumulate !== 'string') {
+				if (site.accumulate == 0) {
+					refineList[siteIdx].accumulate = '-';
+				} else {
+					refineList[siteIdx].accumulate = displayNumberFixedUnit(site.accumulate, 'Wh', 'kWh', 0)[0];
+				}
 			}
 		}
 	});

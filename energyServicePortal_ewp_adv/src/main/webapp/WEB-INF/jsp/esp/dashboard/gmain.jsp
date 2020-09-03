@@ -274,6 +274,31 @@
 								<caption>(단위: kWh)</caption>
 								<thead>
 								<tr>
+									<c:choose>
+										<c:when test="${fn:contains(sessionScope.userInfo.oid, 'kpx')}">
+									<th>
+										<button type="button" class="btn_align"><fmt:message key="gdash.7.status" /></button>
+									</th>
+									<th>
+										<button type="button" class="btn_align"><fmt:message key="gdash.7.err" /></button>
+									</th>
+									<th>
+										<button type="button" class="btn_align"><fmt:message key="gdash.7.medium" /></button>
+									</th>
+									<th>
+										<button type="button" class="btn_align">발전기</button>
+									</th>
+									<th>
+										<button type="button" class="btn_align">모선전압</button>
+									</th>
+									<th>
+										<button type="button" class="btn_align">설비용량</button>
+									</th>
+									<th>
+										<button type="button" class="btn_align">현재출력</button>
+									</th>
+										</c:when>
+										<c:otherwise>
 									<th>
 										<button type="button" class="btn_align"><fmt:message key="gdash.7.status" /></button>
 									</th>
@@ -301,13 +326,113 @@
 									<th class="ESS">
 										<button type="button" class="btn_align"><fmt:message key="gdash.7.discharge" /></button>
 									</th>
+										</c:otherwise>
+									</c:choose>
 								</tr>
 								</thead>
 								<tbody id="siteList">
 									<!-- [D] 상태별 배경 : 't1' or 't2' 클래스 추가 -->
+									<c:choose>
+										<c:when test="${fn:contains(sessionScope.userInfo.oid, 'kpx')}">
 									<tr class="dbclickopen flag[INDEX]" data-sid="[sid]">
 										<td class="first_td">
-											<%--<span class="status status_err" title="통신이상">통신이상</span>--%>
+												<%--<span class="status status_err" title="통신이상">통신이상</span>--%>
+											<span class="status status_drv" title="[status]">[status]</span>
+											<span class="st_bar"></span>
+										</td>
+										<td>[alarmError]</td>
+										<td>[alarmWarning]</td>
+										<td class="center">[name]</td>
+										<td class="right"></td>
+										<td class="right">[capacity]</td>
+										<td class="right">[activePower]</td>
+									</tr>
+									<tr class="detail_info list[INDEX] flag[INDEX]">
+										<td colspan="9">
+											<div class="di_wrap">
+												<div class="di_wrap_in">
+													<div class="di_top_sec">
+														<span class="ico solar"></span>
+														<div class="tx_area clear">
+															<div class="fl">
+																<span class="tx"><fmt:message key="gdash.7.irr" /></span>
+																<span class="tx2">[irradiationPoa]</span>
+															</div>
+															<div class="fr">
+																<span class="tx2"><fmt:message key="gdash.7.temp" /> [temperature]</span>
+																<span class="tx2"><fmt:message key="gdash.7.humid" /> [humidity]</span>
+															</div>
+														</div>
+													</div>
+													<div class="di_btm_sec clear">
+														<div class="sec_bx left">
+															<div class="bx_in">
+																<div class="bx_top">
+																	<div class="inchart" id="type_chart[INDEX]"></div>
+																</div>
+																<ul class="di_list">
+																	<li>
+																		<span class="di_li_tit">현재 유효출력 (kW)</span>
+																		<span class="di_li_tx">[activePower]</span>
+																	</li>
+																	<li>
+																		<span class="di_li_tit">현재 무효출력 (kWh)</span>
+																		<span class="di_li_tx">[reactivePower]</span>
+																	</li>
+																	<li>
+																		<span class="di_li_tit">ESS 유효출력 (kWh)</span>
+																		<span class="di_li_tx">[essActivePower]</span>
+																	</li>
+																	<li>
+																		<span class="di_li_tit">가용출력 (Var)</span>
+																		<span class="di_li_tx">[maxActivePower]</span>
+																	</li>
+																</ul>
+															</div>
+														</div>
+														<div class="sec_bx right">
+															<div class="bx_in">
+																<div class="bx_top">
+																	<div class="bx_top_inner"></div>
+																</div>
+																<ul class="di_list">
+																	<li>
+																		<span class="di_li_tit">설비용량 (kW)</span>
+																		<span class="di_li_tx">[capacity]</span>
+																	</li>
+																	<li>
+																		<span class="di_li_tit">ESS High/Low (kW)</span>
+																		<span class="di_li_tx">[essMaxActivePower] / [essMinActivePower]</span>
+																	</li>
+																	<li>
+																		<span class="di_li_tit">ESS SOC (%)</span>
+																		<span class="di_li_tx">[essSoc]</span>
+																	</li>
+																</ul>
+																<div class="di_tx_bx">
+																	<a href="javascript:void(0);"
+																	   onclick="pageMove('[sid]', 'alarm')">
+																		<p class="tx"><fmt:message key="gdash.7.num_no_ack" /> :
+																			<span>[alarmTotal] 건</span></p>
+																	</a>
+																		<%--<p class="tx">2020-02-10 12:00:01 데이터 disconnected</p>--%>
+																		<%--<p class="tx">2020-02-09 11:41:26 인버터#1 이상 감지</p>--%>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="btn_bx clear">
+														<a href="javascript:void(0);" onclick="pageMove('[sid]', 'siteMain')" class="btn_type02 fr"><fmt:message key="gdash.7.go_dashboard" /> <span class="ico_arrow"></span></a>
+													</div>
+												</div>
+											</div>
+										</td>
+									</tr>
+										</c:when>
+										<c:otherwise>
+									<tr class="dbclickopen flag[INDEX]" data-sid="[sid]">
+										<td class="first_td">
+												<%--<span class="status status_err" title="통신이상">통신이상</span>--%>
 											<span class="status status_drv" title="[status]">[status]</span>
 											<span class="st_bar"></span>
 										</td>
@@ -380,12 +505,12 @@
 																</ul>
 																<div class="di_tx_bx">
 																	<a href="javascript:void(0);"
-																		onclick="pageMove('[sid]', 'alarm')">
+																	   onclick="pageMove('[sid]', 'alarm')">
 																		<p class="tx"><fmt:message key="gdash.7.num_no_ack" /> :
 																			<span>[alarmTotal] 건</span></p>
 																	</a>
-																	<%--<p class="tx">2020-02-10 12:00:01 데이터 disconnected</p>--%>
-																	<%--<p class="tx">2020-02-09 11:41:26 인버터#1 이상 감지</p>--%>
+																		<%--<p class="tx">2020-02-10 12:00:01 데이터 disconnected</p>--%>
+																		<%--<p class="tx">2020-02-09 11:41:26 인버터#1 이상 감지</p>--%>
 																</div>
 															</div>
 														</div>
@@ -397,6 +522,9 @@
 											</div>
 										</td>
 									</tr>
+										</c:otherwise>
+									</c:choose>
+
 								</tbody>
 							</table>
 						</div>
@@ -414,6 +542,7 @@
 	const sgid = '<c:out value="${sgid}" escapeXml="false" />';
 	const today = new Date();
 
+<%--	<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'kpx')}">--%>
 	let makerObject = new Object();
 
 	let map = new google.maps.Map(document.getElementById('gMainMap'), {
@@ -426,7 +555,7 @@
 	});
 	let geocoder = new google.maps.Geocoder();
 	let infowindow = new google.maps.InfoWindow();
-
+<%--	</c:if>--%>
 	let first = true;
 
 	$(function () {
@@ -469,6 +598,7 @@
 		$('.dbTime').text(now.format('yyyy-MM-dd HH:mm:ss'));
 	}
 
+<%--	<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'kpx')}">--%>
 	const geocodeAddress = (siteAddr, siteId, siteName, siteLatlng, siteColor) => {
 		let latLng = new Object(),
 			dummy = siteLatlng.split(',');
@@ -560,6 +690,7 @@
 			}
 		}
 	}
+<%--	</c:if>--%>
 
 	const rtnDropdown = () => {
 		searchSite();
