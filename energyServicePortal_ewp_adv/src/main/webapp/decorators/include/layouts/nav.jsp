@@ -132,7 +132,7 @@
 						<li><a href="/setting/userSetting.do">사용자 관리</a></li>
 					</c:if>
 					<li><a href="/setting/siteSetting.do">사이트 관리</a></li>
-					<c:if test="${oid eq 'encored' and userRole eq '1'}">
+					<c:if test="${userRole eq '1'}">
 						<li><a href="/setting/groupSetting.do">그룹 관리</a></li>
 					</c:if>
 
@@ -295,7 +295,7 @@
 									<li><a href="/setting/userSetting.do">사용자 관리</a></li>
 								</c:if>
 								<li><a href="/setting/siteSetting.do">사이트 관리</a></li>
-								<c:if test="${oid eq 'encored' and userRole eq '1'}">
+								<c:if test="${userRole eq '1'}">
 									<li><a href="/setting/groupSetting.do">그룹 관리</a></li>
 								</c:if>
 

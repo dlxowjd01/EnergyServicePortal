@@ -226,6 +226,18 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 						request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
 
 						session.setAttribute("sessionSiteList", jsonArray);
+					} else if ("/dashboard/smain.do".equals(request.getRequestURI())) {
+						if (siteOriginList != null && siteOriginList.size() > 0) {
+							request.setAttribute("sid", siteOriginList.get(0).get("sid"));
+							request.setAttribute("siteName", siteOriginList.get(0).get("name"));
+							jsonArray = new JSONArray();
+							jsonArray.put(jsonParser(siteOriginList.get(0)));
+							request.setAttribute("siteList", new JSONArray()); //사이트 리스트 세팅
+						} else {
+							request.setAttribute("sid", "");
+							request.setAttribute("siteName", "");
+							request.setAttribute("siteList", new JSONArray()); //사이트 리스트 세팅
+						}
 					} else {
 						if (jsonArray == null) {
 							jsonArray = new JSONArray();
