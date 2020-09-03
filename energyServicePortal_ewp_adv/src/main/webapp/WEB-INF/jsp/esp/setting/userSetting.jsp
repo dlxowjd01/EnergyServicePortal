@@ -193,6 +193,7 @@
 				console.log("user delete success");
 				modalBody.addClass("hidden");
 				$("#deleteSuccessMsg").text("사용자가 삭제 되었습니다.").removeClass("hidden");
+				refreshUserList();
 				setTimeout(function(){
 					$("#deleteConfirmModal").modal("hide");
 				}, 1500);
@@ -328,13 +329,13 @@
 
 						if( (siteItemList.length > 0) && (spcItemList.length > 0 ) ) {
 
-							var muliPromises = [];
+							var multiPromises = [];
 
 							$.each(siteItemList, function(index, element){
 								siteObj.sid = $(element).data("sid");
 								siteObj.role = Number($(element).data("role"));
 								siteOption.data = JSON.stringify(siteObj);
-								muliPromises.push(Promise.resolve(makeAjaxCall(siteOption)));
+								multiPromises.push(Promise.resolve(makeAjaxCall(siteOption)));
 							});
 
 							$.each(spcItemList, function(index, element){
@@ -344,10 +345,10 @@
 								};
 								// console.log("opcObj===", spcObj)
 								spcOption.data = JSON.stringify(spcObj);
-								muliPromises.push(Promise.resolve(makeAjaxCall(spcOption)));
+								multiPromises.push(Promise.resolve(makeAjaxCall(spcOption)));
 							});
 
-							Promise.all(muliPromises).then(res => {
+							Promise.all(multiPromises).then(res => {
 								console.log("altogether---", res);
 								$("#addUserModal").modal("hide");
 								$("#resultSuccessMsg").text("SPC, 사이트 정보 모두 추가 되었습니다.").removeClass("hidden");

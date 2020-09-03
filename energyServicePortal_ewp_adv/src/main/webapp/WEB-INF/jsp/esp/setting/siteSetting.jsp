@@ -31,7 +31,7 @@
 		if(role == 1){
 			Promise.all([ Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])) ]).then( res => {
 			// Promise.resolve(returnAjaxRes(optionList[0])).then( res => {
-				readWriteTable(res[0], res[1], initModal);
+				readWriteTable(res[0], res[1]);
 			});
 		} else {
 			console.log("readyonly table===")
@@ -565,18 +565,19 @@
 			$('#siteTable').DataTable().clear().destroy();
 			Promise.all([ Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])) ]).then( res => {
 			// Promise.resolve(returnAjaxRes(optionList[0])).then( res => {
-				readWriteTable(res[0], res[1], initModal, "destroy");
+				readWriteTable(res[0], res[1], initModal);
 			});
 		}
 
-		function readWriteTable(siteData, vppNameData, callback, destroy) {
-			if(!destroy) {
+		function readWriteTable(siteData, vppNameData, callback) {
+			if(!callback) {
 				getPropertyData();
+				getVppDrData(vppNameData);
 			} else {
-				getPropertyData("delete");
+				callback();
 			}
-			callback();
-			getVppDrData(vppNameData);
+
+
 			if(siteData) {
 					let newArr = [];
 					Promise.resolve(siteData.map((item, index) => {
@@ -1286,7 +1287,6 @@
 		}
 
 		function getPropertyData(option) {
-			console.log("option---", option)
 			let optionContract = {
 				url: apiHost + "/bills/plans?country=kr",
 				type: "get",
@@ -1355,9 +1355,9 @@
 						<li data-util-name="${'${util}'}" data-plan-id="${'${id}'}" data-vol-type="${'${v}'}" data-value="${'${item[0]}'}"><a href="#">${'${item[0]}'}</a></li>
 					`;
 				});
-				if(option){
-					newContractList.empty();
-				}
+				// if(option){
+				// 	newContractList.empty();
+				// }
 				newContractList.append(cStr);
 				newContractList.find("li").on("click", function(){
 					console.log("contract list clicked====")
@@ -1408,12 +1408,12 @@
 					`
 				});
 
-				if(option){
-					$("#newResList").empty();
-					$("#resTypeList").empty();
-					$("#newSiteType").empty();
-					$("#siteType").empty();
-				}
+				// if(option){
+				// 	$("#newResList").empty();
+				// 	$("#resTypeList").empty();
+				// 	$("#newSiteType").empty();
+				// 	$("#siteType").empty();
+				// }
 				$("#newResList").append(resStr);
 				$("#resTypeList").append(resStr).prepend(allStr);
 
@@ -2842,6 +2842,3 @@
 		</div>
 	</div>
 </div>
-
-
-
