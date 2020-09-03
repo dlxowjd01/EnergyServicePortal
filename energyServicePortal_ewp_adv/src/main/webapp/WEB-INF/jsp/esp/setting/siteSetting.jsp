@@ -4,12 +4,17 @@
 <script src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
 	$(function () {
+		// let l = '${location}'
+		// console.log("location---", l);
+		// let siteList = JSON.parse('${siteList}');
+		// console.log("siteList---", siteList);
+
 		let optionList = [
 			{
 				url: apiHost + "/config/sites?oid=" + oid,
 				type: "get",
 				async: true,
-			},			
+			},
 			{
 				url: apiHost + "/auth/me/groups?includeSites=false&includeDevices=false",
 				type: 'get',
@@ -25,8 +30,6 @@
 			// 	type: "get",
 			// 	async: true,
 			// },
-
-
 		];
 		if(role == 1){
 			Promise.all([ Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])) ]).then( res => {
@@ -47,6 +50,7 @@
 		// Validations
 		$("#newSiteName").on('keydown', function() {
 			$("#invalidSite").addClass("hidden");
+			validateForm();
 		});
 
 		$("#newSiteName").on('keyup', function() {
@@ -109,41 +113,40 @@
 			console.log("newResList---",$("#newResList").prev().data("value"))
 			setTimeout(function(){
 				validateForm();
-			}, 300);
+			}, 600);
 		});
 
 		$("#newCityList li").on("click", function(){
-			console.log("newCityList---",$("#newCityList").prev().data("value"))
 			setTimeout(function(){
 				validateForm();
 			}, 300);
 		});
-
+		
 		// Modal event
 		$("#addSiteModal").on("hide.bs.modal", function() {
 			$(this).hasClass("edit") ? $(this).removeClass("edit") : null;
 		});
 
 		$("#deleteConfirmBtn").click(function(){
-			let modalBody = $("#deleteConfirmModal .modal-body");
-
 			let dTable = $("#siteTable").DataTable();
 			let tr = $("#siteTable").find("tbody tr.selected");
 			let sid = dTable.row(tr).data().sid;
+			let modalBody = $("#deleteConfirmModal .modal-body");
 
 			let optDelete = {
 				url: apiHost + "/config/sites/" + sid,
 				type: "delete",
 				async: true,
 			}
-			modalBody.addClass("hidden");
+
 			$.ajax(optDelete).done(function (json, textStatus, jqXHR) {
-				console.log("success==", json)
+				modalBody.addClass("hidden");
 				$("#deleteSuccessMsg").text("사이트가 삭제 되었습니다.").removeClass("hidden");
-				refreshSiteList();
+				dTable.row(tr).remove().draw();
+				// refreshSiteList();
 				setTimeout(function(){
 					$("#deleteConfirmModal").modal("hide");
-				}, 1500);
+				}, 1000);
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				modalBody.addClass("hidden");
 				$("#deleteSuccessMsg").text("사이트 삭제에 실패하였습니다.\n다시 시도해 주세요.").removeClass("hidden");
@@ -155,17 +158,19 @@
 		});
 
 		$("#deleteConfirmModal").on("hide.bs.modal", function() {
-			$(this).find(".modal-body").removeClass("hidden");
-			$("#deleteSuccessMsg").html('<h5 id="deleteSuccessMsg" class="ntit">사용자 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>');
-			$("#confirmSite").val("");
+			setTimeout(function(){
+				$(this).find(".modal-body").removeClass("hidden");
+				$("#deleteSuccessMsg").html('<h5 id="deleteSuccessMsg" class="ntit">사용자 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>');
+				$("#confirmSite").val("");
+				$("#deleteConfirmBtn").prop("disabled", true);
+			}, 2000);
 		});
 
 		$("#alarmDeleteConfirmBtn").click(function(){
-			let modalBody = $("#alarmDeleteConfirmModal .modal-body");
-
 			let dTable = $("#siteTable").DataTable();
 			let tr = $("#siteTable").find("tbody tr.selected");
 			let sid = dTable.row(tr).data().sid;
+			let modalBody = $("#alarmDeleteConfirmModal .modal-body");
 
 			let optDelete = {
 				url: apiHost + "/config/sites/" + sid,
@@ -223,13 +228,14 @@
 			let newUtilPlanName = $("#newContractList").prev().data("value");
 			let newVoltName = "";
 
-			if( $("#newVoltList").prev().is(":disabled")) {
+			if( isEmpty($("#newContractList").data("vol-type"))) {
 				newUtilPlanId = Number($("#newContractList").prev().data("plan-id"));
 				console.log("newPlanId 111---", newUtilPlanId)
 			} else {
-				newUtilPlanId = Number($("#newVoltList").prev().data("id"));
-				newVoltName = $("#newVoltList").prev().data("value");
-				console.log("newPlanId 222---", newUtilPlanId)
+				newUtilPlanId = Number($("#newVoltTypeList").prev().data("id"));
+				newVoltName = $("#newVoltTypeList").prev().data("value");
+				console.log("newPlanId 222---", newUtilPlanId);
+				console.log("data-opt---", $("#newContractList[data-opt]") );
 			}
 			let newPeakDemand = Number($("#newPeakDemand").val());
 			let newDrCharge = Number($("#newDrCharge").val());
@@ -550,16 +556,16 @@
 					type: "get",
 					async: true,
 				},
-				// {
-				// 	url: apiHost + "/auth/me/sites",
-				// 	type: "get",
-				// 	async: true,
-				// },
 				{
 					url: apiHost + "/auth/me/groups?includeSites=false&includeDevices=false",
 					type: 'get',
 					async: true
 				},
+				// {
+				// 	url: apiHost + "/auth/me/sites",
+				// 	type: "get",
+				// 	async: true,
+				// },				
 			];
 
 			$('#siteTable').DataTable().clear().destroy();
@@ -572,421 +578,418 @@
 		function readWriteTable(siteData, vppNameData, callback) {
 			if(!callback) {
 				getPropertyData();
-				getVppDrData(vppNameData);
 			} else {
 				callback();
 			}
-
-
 			if(siteData) {
-					let newArr = [];
-					Promise.resolve(siteData.map((item, index) => {
-					// siteData.forEach((item, index) => {
-						// console.log("siteData===", item)
-						let rawDataOpt = {
-							url: apiHost + "/status/raw/site",
-							type: 'get',
-							async: false,
-							data:{
-								sid: item.sid,
-								formId: 'v2'
-							},
-							beforeSend: function(){
-								$("#loadingCircle").show();
+				let newArr = [];
+				Promise.resolve(siteData.map((item, index) => {
+				// siteData.forEach((item, index) => {
+					// console.log("siteData===", item)
+					let rawDataOpt = {
+						url: apiHost + "/status/raw/site",
+						type: 'get',
+						async: false,
+						data:{
+							sid: item.sid,
+							formId: 'v2'
+						},
+						beforeSend: function(){
+							$("#loadingCircle").show();
+						}
+					}
+
+					$.ajax(rawDataOpt).done(function (json, textStatus, jqXHR) {
+						$("#loadingCircle").show();
+						if(isEmpty(item.ess) || item.ess == 0){
+							item.ess == "-"
+						} else {
+							if(item.ess === 1){
+								item.ess = "DemandESS"
+							} else if(item.ess === 2){
+								item.ess = "GenerationESS"
 							}
 						}
 
-						$.ajax(rawDataOpt).done(function (json, textStatus, jqXHR) {
-							$("#loadingCircle").show();
-							if(isEmpty(item.ess) || item.ess == 0){
-								item.ess == "-"
-							} else {
-								if(item.ess === 1){
-									item.ess = "DemandESS"
-								} else if(item.ess === 2){
-									item.ess = "GenerationESS"
-								}
+						if(item.resource_type === 0) {
+							// Demand && ESS : pair
+							item.siteType = "수요자원 (Demand)"
+							item.powerSource = "부하"
+						} else {
+							item.siteType = "발전소 (Generation)"
+							if(item.resource_type === 1){
+								item.powerSource = "태양광"
+							} else if(item.resource_type === 2){
+								item.powerSource = "풍력"
+							} else if(item.resource_type === 3){
+								item.powerSource = "소수력"
 							}
+						}
 
-							if(item.resource_type === 0) {
-								// Demand && ESS : pair
-								item.siteType = "수요자원 (Demand)"
-								item.powerSource = "부하"
-							} else {
-								item.siteType = "발전소 (Generation)"
-								if(item.resource_type === 1){
-									item.powerSource = "태양광"
-								} else if(item.resource_type === 2){
-									item.powerSource = "풍력"
-								} else if(item.resource_type === 3){
-									item.powerSource = "소수력"
-								}
+						// Match name with dr_group_id
+						if(!isEmpty(item.dr_group_id)){
+							let found = vppNameData.dr_group.findIndex( x => x.dgid == item.dr_group_id);
+							if(found > -1){
+								item.drName = vppNameData.dr_group[found].name;
 							}
+						} else {
+							item.drName = "-"
+						}
 
-							// Match name with dr_group_id
-							if(!isEmpty(item.dr_group_id)){
-								let found = vppNameData.dr_group.findIndex( x => x.dgid == item.dr_group_id);
-								if(found > -1){
-									item.drName = vppNameData.dr_group[found].name;
-								}
-							} else {
-								item.drName = "-"
+						// Match name with vpp_group_id
+						if(!isEmpty(item.vpp_group_id)){
+							let found = vppNameData.vpp_group.findIndex( x => x.vgid == item.vpp_group_id);
+							if(found > -1){
+								item.vppName = vppNameData.vpp_group[found].name;
 							}
+						} else {
+							item.vppName = "-"
+						}
 
-							// Match name with vpp_group_id
-							if(!isEmpty(item.vpp_group_id)){
-								let found = vppNameData.vpp_group.findIndex( x => x.vgid == item.vpp_group_id);
-								if(found > -1){
-									item.vppName = vppNameData.vpp_group[found].name;
-								}
-							} else {
-								item.vppName = "-"
+						let deviceOpt = {
+							url: apiHost + "/config/devices?"+'oid='+oid,
+							type: 'get',
+							async: false,
+							data:{
+								sid: item.sid
 							}
+						}
+						$.ajax(deviceOpt).done(function (json, textStatus, jqXHR) {
+							if(json.length > 0 ){
+								item.alarmFlag = 1;
+								item.alarmInfo = json;
+							} else {
+								item.alarmFlag = 0;
+							}
+						}).fail(function (jqXHR, textStatus, errorThrown) {
+							console.log("deviceOpt error===", jqXHR)
+							return false;
+						});
 
-							let deviceOpt = {
-								url: apiHost + "/config/devices?"+'oid='+oid,
+						if(!isEmpty(json.INV_PV) ) {
+							item.genCapacity = json.INV_PV.capacity;
+						} else {
+							item.genCapacity = 0;
+						}
+						if(!isEmpty(json.PCS_ESS) ) {
+							item.pcsCapacity = json.PCS_ESS.capacity;
+						} else {
+							item.pcsCapacity = 0;
+						}
+						if(!isEmpty(json.BMS_SYS) ) {
+							item.bmsCapacity = json.BMS_SYS.capacity;
+						} else {
+							item.bmsCapacity = 0;
+						}
+
+						item.updatedAt = new Date(item.updatedAt).toLocaleDateString("en-CA").replace(/\//g, '-') + '&ensp;' + new Date(item.updatedAt).toLocaleTimeString();
+						// console.log("obj===", obj)
+						newArr.push(item);
+					}).fail(function (jqXHR, textStatus, errorThrown) {
+						console.log("error====", jqXHR);
+						return;
+					});
+
+				})).then( res => {
+					// console.log("m===", newArr[14].alarmData)
+					// console.log("response===", response)
+					// 1. 사업소 유형
+					// 2. 사업소명
+					// 3. 지역
+					// 4. 발전원 => 0: MicroGrid, 1: photovoltaic, 2: wind, 3: SmallHydro (hydroelectric power for local community)
+					// 5. 발전 용량
+					// 6. ESS 용량 (PCS)
+					// 7. ESS 용량(BMS)
+					// 8. DR 자원 코드
+					// 9. Vpp 자원 코드 ( virtual power plant )
+					// 10. 수정/조회 권한
+					// 11. 알람 설정
+
+					var siteTable = $('#siteTable').DataTable({
+						"aaData": newArr,
+						"table-layout": "fixed",
+						"fixedHeader": true,
+						"bAutoWidth": true,
+						"bSearchable" : true,
+						// "ScrollX": true,
+						// "sScrollX": "110%",
+						// "sScrollXInner": "110%",
+						"sScrollY": true,
+						"scrollY": "720px",
+						"bScrollCollapse": true,
+						"pageLength": 100,
+						// "bFilter": false, disabling this option will prevent table.search()
+						"aaSorting": [[ 0, 'asc' ]],
+						"order": [[ 1, 'asc' ]],
+						"aoColumnDefs": [
+							{
+								"aTargets": [ 0 ],
+								"bSortable": false,
+								"orderable": false
+							},
+							{
+								"aTargets": [ 1 ],
+								"createdCell":  function (td, cellData, rowData, row, col) {
+									// if(row.siteType == "Demand"){
+									// 	$(td).attr('data-value', 0); 
+									// } else {
+									// 	$(td).attr('data-value', 1); 
+									// }
+										// console.log("td===", td)
+									if(rowData.resType == "Demand"){
+										$(td).attr('data-value', 0);
+									} else {
+										$(td).attr('data-value', 1);
+									}
+								}
+							},
+							{
+								"aTargets": [ 4 ],
+								"createdCell":  function (td, cellData, rowData, row, col) {
+									if(rowData.powerSource == "부하"){
+										$(td).attr('data-value', 0);
+									} else if(rowData.powerSource == "태양광"){
+										$(td).attr('data-value', 1);
+									} else if(rowData.powerSource == "풍력"){
+										$(td).attr('data-value', 2);
+									} else if(rowData.powerSource == "소수력"){
+										$(td).attr('data-value', 3);
+									}
+								}
+							},
+							// {
+							// 	"aTargets": [ 10 ],
+							// 	"createdCell":  function (td, cellData, rowData, row, col) {
+							// 		console.log('rowData---', rowData.deviceAlarm)
+							// 	}
+							// },
+						],
+						"aoColumns": [
+							{
+								"sTitle": "",
+								"mData": "null",
+								"mRender": function ( data, type, full, rowIndex )  {
+									return '<a class="chk_type" href="#"><input type="checkbox" id="' + rowIndex + '" name="table_checkbox"><label for="' + rowIndex + '"></label></a>'
+								},
+								"className": "dt-body-center no-sorting"
+							},
+							// {
+							// 	"sTitle": "순번",
+							// 	"mData": null,
+							// 	"className": "dt-center idx no-sorting"
+							// },
+							{
+								"sTitle": "사업소 유형",
+								"mData": "siteType",
+							},
+							{
+								"sTitle": "사업소 명",
+								"mData": "name"
+							},
+							{
+								"sTitle": "지역",
+								"mData": "location",
+							},
+							{
+								"sTitle": "발전 자원",
+								"mData": "powerSource",
+							},
+							{
+								"sTitle": "발전 용량",
+								"mData": "genCapacity",
+							},
+							{
+								"sTitle": "ESS 용량 (PCS)",
+								"mData": "pcsCapacity",
+							},
+							{
+								"sTitle": "ESS 용량 (BMS)",
+								"mData": "bmsCapacity",
+							},
+							{
+								"sTitle": "DR 자원 코드",
+								"mData": "drName",
+							},
+							{
+								"sTitle": "VPP 자원코드",
+								"mData": "vppName",
+							},
+							{
+								"sTitle": "업데이트 일자",
+								"mData": "updatedAt",
+							},
+							// {
+							// 	"sTitle": "알람 수신",
+							// 	"mData": "null",
+							// 	"mRender": function ( data, type, full, rowIndex )  {
+							// 		if(full.alarmFlag === 1){
+							// 			return '<button type="button" class="btn-type-sm btn_type03">알람</button>'
+							// 		} else {
+							// 			return '<button type="button" disabled class="btn-type-sm btn_type03">알람</button>'
+							// 		}
+							// 	},
+							// },
+						],
+						"dom": 'tip',
+						"select": {
+							style: 'single',
+							// selector: 'tr',
+							selector: 'td input[type="checkbox"], tr',
+							// selector: 'td input[type="checkbox"], td:not(:last-of-type)',
+						},
+						initComplete: function(settings, json ){
+							let str = `<div id="btnGroup" class="right-end"><!--
+								--><button type="button" disabled class="btn_type03" onclick="updateModal('edit')">선택 수정</button><!--
+								--><button type="button" disabled class="btn_type03" onclick="updateModal('delete')">선택 삭제</button><!--
+							--></div>`;
+
+							let addBtnStr = `<button type="button" class="btn_type fr mb-20" onclick="updateModal('add')">추가</button>`;
+
+							$("#siteTable_wrapper").append($(str)).prepend($(addBtnStr));
+						},
+						// every time DataTables performs a draw
+						drawCallback: function (settings) {
+							$('#siteTable_wrapper').addClass('mb-28');
+						},
+						// rowCallback: function ( row, data ) {
+						// 	// console.log("data---", data.alarmFlag);
+						// }
+					}).on("select", function(e, dt, type, indexes) {
+						let btn = $("#btnGroup").find(".btn_type03");
+						btn.each(function(index, element){
+							if($(this).is(":disabled")){
+								$(this).prop("disabled", false);
+							}
+						});
+						siteTable.rows( indexes ).nodes().to$().find("input").prop("checked", true);
+						// console.log("dt---", siteTable[ type ]( indexes ).nodes())
+					}).on("deselect", function(e, dt, type, indexes) {
+						let btn = $("#btnGroup").find(".btn_type03");
+						btn.each(function(index, element){
+							if(!$(this).is(":disabled")){
+								$(this).prop("disabled", true);
+							}
+						});
+						siteTable.rows( indexes ).nodes().to$().find("input").prop("checked", false);
+						// console.log("dt---", siteTable[ type ]( indexes ).nodes())
+					}).columns.adjust();
+					// siteTable.on( 'order.dt search.dt', function () {
+					// 	siteTable.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+					// 		cell.innerHTML = i+1;
+					// 		$(cell).data("id", i)
+					// 	});
+					// }).draw();
+
+					$('#siteTable').find("input:checkbox").on('click', function() {
+						var $box = $(this);
+						if ($box.is(":checked")) {
+							var group = "input:checkbox[name='" + $box.attr("name") + "']";
+							$(group).prop("checked", false);
+							$box.prop("checked", true);
+						} else {
+							$box.prop("checked", false);
+						}
+					});
+					
+					siteTable.on( 'column-sizing.dt', function ( e, settings ) {
+						$(".dataTables_scrollHeadInner").css( "width", "100%" );
+					});
+
+
+					// siteTable.rows( function ( idx, data, node ) {
+					// 	console.log("sid===", data.sid)
+					// }).data();
+
+					// $("#siteTable").on( 'click', 'tr', function (e, dt, data, row) {
+					// 	var id = siteTable.row( this ).id();
+					// 	console.log("this--", id);
+					// });
+
+					siteTable.on( 'click', 'td .btn-type-sm', function () {
+						let tr = $(this).parents().closest("tr");
+						let idx = siteTable.row(tr).index();
+
+						// if(!isEmpty(siteTable.row(tr).data().alarmData)){
+							let rowData = siteTable.row(tr).data().alarmInfo;
+							let userOpt = {
+								url: apiHost + "/config/users",
 								type: 'get',
 								async: false,
-								data:{
-									sid: item.sid
+								data : {
+									oid: oid,
 								}
 							}
-							$.ajax(deviceOpt).done(function (json, textStatus, jqXHR) {
-								if(json.length > 0 ){
-									item.alarmFlag = 1;
-									item.alarmInfo = json;
-								} else {
-									item.alarmFlag = 0;
-								}
-							}).fail(function (jqXHR, textStatus, errorThrown) {
-								console.log("deviceOpt error===", jqXHR)
-								return false;
+							Promise.resolve(makeAjaxCall(userOpt)).then(res => {
+								getAlarmTable(rowData, res)
 							});
+						// }
+					});
 
-							if(!isEmpty(json.INV_PV) ) {
-								item.genCapacity = json.INV_PV.capacity;
-							} else {
-								item.genCapacity = 0;
-							}
-							if(!isEmpty(json.PCS_ESS) ) {
-								item.pcsCapacity = json.PCS_ESS.capacity;
-							} else {
-								item.pcsCapacity = 0;
-							}
-							if(!isEmpty(json.BMS_SYS) ) {
-								item.bmsCapacity = json.BMS_SYS.capacity;
-							} else {
-								item.bmsCapacity = 0;
-							}
-
-							item.updatedAt = new Date(item.updatedAt).toLocaleDateString("en-CA").replace(/\//g, '-') + '&ensp;' + new Date(item.updatedAt).toLocaleTimeString();
-							// console.log("obj===", obj)
-							newArr.push(item);
-						}).fail(function (jqXHR, textStatus, errorThrown) {
-							console.log("error====", jqXHR);
-							return;
-						});
-
-					})).then( res => {
-
-						// console.log("m===", newArr[14].alarmData)
-						// console.log("response===", response)
-						// 1. 사업소 유형
-						// 2. 사업소명
-						// 3. 지역
-						// 4. 발전원 => 0: MicroGrid, 1: photovoltaic, 2: wind, 3: SmallHydro (hydroelectric power for local community)
-						// 5. 발전 용량
-						// 6. ESS 용량 (PCS)
-						// 7. ESS 용량(BMS)
-						// 8. DR 자원 코드
-						// 9. Vpp 자원 코드 ( virtual power plant )
-						// 10. 수정/조회 권한
-						// 11. 알람 설정
-
-						var siteTable = $('#siteTable').DataTable({
-							"aaData": newArr,
-							"table-layout": "fixed",
-							"fixedHeader": true,
-							"bAutoWidth": true,
-							"bSearchable" : true,
-							// "ScrollX": true,
-							// "sScrollX": "110%",
-							// "sScrollXInner": "110%",
-							"sScrollY": true,
-							"scrollY": "720px",
-							"bScrollCollapse": true,
-							"pageLength": 100,
-							// "bFilter": false, disabling this option will prevent table.search()
-							"aaSorting": [[ 0, 'asc' ]],
-							"order": [[ 1, 'asc' ]],
-							"aoColumnDefs": [
-								{
-									"aTargets": [ 0 ],
-									"bSortable": false,
-									"orderable": false
-								},
-								{
-									"aTargets": [ 1 ],
-									"createdCell":  function (td, cellData, rowData, row, col) {
-										// if(row.siteType == "Demand"){
-										// 	$(td).attr('data-value', 0); 
-										// } else {
-										// 	$(td).attr('data-value', 1); 
-										// }
-											// console.log("td===", td)
-										if(rowData.resType == "Demand"){
-											$(td).attr('data-value', 0);
-										} else {
-											$(td).attr('data-value', 1);
-										}
-									}
-								},
-								{
-									"aTargets": [ 4 ],
-									"createdCell":  function (td, cellData, rowData, row, col) {
-										if(rowData.powerSource == "부하"){
-											$(td).attr('data-value', 0);
-										} else if(rowData.powerSource == "태양광"){
-											$(td).attr('data-value', 1);
-										} else if(rowData.powerSource == "풍력"){
-											$(td).attr('data-value', 2);
-										} else if(rowData.powerSource == "소수력"){
-											$(td).attr('data-value', 3);
-										}
-									}
-								},
-								// {
-								// 	"aTargets": [ 10 ],
-								// 	"createdCell":  function (td, cellData, rowData, row, col) {
-								// 		console.log('rowData---', rowData.deviceAlarm)
+					new $.fn.dataTable.Buttons( siteTable, {
+						name: 'commands',
+						"buttons": [
+							{
+								extend: 'excelHtml5',
+								className: "save_btn",
+								text: '엑셀 다운로드',
+								// exportOptions: {
+								// 	modifier: {
+								// 		page: 'current'
 								// 	}
 								// },
-							],
-							"aoColumns": [
-								{
-									"sTitle": "",
-									"mData": "null",
-									"mRender": function ( data, type, full, rowIndex )  {
-										return '<a class="chk_type" href="#"><input type="checkbox" id="' + rowIndex + '" name="table_checkbox"><label for="' + rowIndex + '"></label></a>'
-									},
-									"className": "dt-body-center no-sorting"
-								},
-								// {
-								// 	"sTitle": "순번",
-								// 	"mData": null,
-								// 	"className": "dt-center idx no-sorting"
-								// },
-								{
-									"sTitle": "사업소 유형",
-									"mData": "siteType",
-								},
-								{
-									"sTitle": "사업소 명",
-									"mData": "name"
-								},
-								{
-									"sTitle": "지역",
-									"mData": "location",
-								},
-								{
-									"sTitle": "발전 자원",
-									"mData": "powerSource",
-								},
-								{
-									"sTitle": "발전 용량",
-									"mData": "genCapacity",
-								},
-								{
-									"sTitle": "ESS 용량 (PCS)",
-									"mData": "pcsCapacity",
-								},
-								{
-									"sTitle": "ESS 용량 (BMS)",
-									"mData": "bmsCapacity",
-								},
-								{
-									"sTitle": "DR 자원 코드",
-									"mData": "drName",
-								},
-								{
-									"sTitle": "VPP 자원코드",
-									"mData": "vppName",
-								},
-								{
-									"sTitle": "업데이트 일자",
-									"mData": "updatedAt",
-								},
-								// {
-								// 	"sTitle": "알람 수신",
-								// 	"mData": "null",
-								// 	"mRender": function ( data, type, full, rowIndex )  {
-								// 		if(full.alarmFlag === 1){
-								// 			return '<button type="button" class="btn-type-sm btn_type03">알람</button>'
-								// 		} else {
-								// 			return '<button type="button" disabled class="btn-type-sm btn_type03">알람</button>'
-								// 		}
-								// 	},
-								// },
-							],
-							"dom": 'tip',
-							"select": {
-								style: 'single',
-								// selector: 'tr',
-								selector: 'td input[type="checkbox"], tr',
-								// selector: 'td input[type="checkbox"], td:not(:last-of-type)',
-							},
-							initComplete: function(settings, json ){
-								let str = `<div id="btnGroup" class="right-end"><!--
-									--><button type="button" disabled class="btn_type03" onclick="updateModal('edit')">선택 수정</button><!--
-									--><button type="button" disabled class="btn_type03" onclick="updateModal('delete')">선택 삭제</button><!--
-								--></div>`;
+								customize: function( xlsx ) {
+									var sheet = xlsx.xl.worksheets['sheet1.xml'];
+									$('row:first c', sheet).attr( 's', '42' );
+									var sheet = xlsx.xl.worksheets['sheet1.xml'];
+									// var lastCol = sheet.getElementsByTagName('col').length - 1;
+									// var colRange = createCellPos( lastCol ) + '1';
+									// //Has to be done this way to avoid creation of unwanted namespace atributes.
+									// var afSerializer = new XMLSerializer();
+									// var xmlString = afSerializer.serializeToString(sheet);
+									// var parser = new DOMParser();
+									// var xmlDoc = parser.parseFromString(xmlString,'text/xml');
+									// var xlsxFilter = xmlDoc.createElementNS('http://schemas.openxmlformats.org/spreadsheetml/2006/main','autoFilter');
+									// var filterAttr = xmlDoc.createAttribute('ref');
+									// filterAttr.value = 'A1:' + colRange;
+									// xlsxFilter.setAttributeNode(filterAttr);
+									// sheet.getElementsByTagName('worksheet')[0].appendChild(xlsxFilter);
 
-								let addBtnStr = `<button type="button" class="btn_type fr mb-20" onclick="updateModal('add')">추가</button>`;
-
-								$("#siteTable_wrapper").append($(str)).prepend($(addBtnStr));
-							},
-							// every time DataTables performs a draw
-							drawCallback: function (settings) {
-								$('#siteTable_wrapper').addClass('mb-28');
-							},
-							// rowCallback: function ( row, data ) {
-							// 	// console.log("data---", data.alarmFlag);
-							// }
-						}).on("select", function(e, dt, type, indexes) {
-							let btn = $("#btnGroup").find(".btn_type03");
-							btn.each(function(index, element){
-								if($(this).is(":disabled")){
-									$(this).prop("disabled", false);
 								}
-							});
-							siteTable.rows( indexes ).nodes().to$().find("input").prop("checked", true);
-							// console.log("dt---", siteTable[ type ]( indexes ).nodes())
-						}).on("deselect", function(e, dt, type, indexes) {
-							let btn = $("#btnGroup").find(".btn_type03");
-							btn.each(function(index, element){
-								if(!$(this).is(":disabled")){
-									$(this).prop("disabled", true);
-								}
-							});
-							siteTable.rows( indexes ).nodes().to$().find("input").prop("checked", false);
-							// console.log("dt---", siteTable[ type ]( indexes ).nodes())
-						}).columns.adjust();
-						// siteTable.on( 'order.dt search.dt', function () {
-						// 	siteTable.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-						// 		cell.innerHTML = i+1;
-						// 		$(cell).data("id", i)
-						// 	});
-						// }).draw();
-
-						$('#siteTable').find("input:checkbox").on('click', function() {
-							var $box = $(this);
-							if ($box.is(":checked")) {
-								var group = "input:checkbox[name='" + $box.attr("name") + "']";
-								$(group).prop("checked", false);
-								$box.prop("checked", true);
-							} else {
-								$box.prop("checked", false);
-							}
-						});
-						
-						siteTable.on( 'column-sizing.dt', function ( e, settings ) {
-							$(".dataTables_scrollHeadInner").css( "width", "100%" );
-						});
-
-
-						// siteTable.rows( function ( idx, data, node ) {
-						// 	console.log("sid===", data.sid)
-						// }).data();
-
-						// $("#siteTable").on( 'click', 'tr', function (e, dt, data, row) {
-						// 	var id = siteTable.row( this ).id();
-						// 	console.log("this--", id);
-						// });
-
-						siteTable.on( 'click', 'td .btn-type-sm', function () {
-							let tr = $(this).parents().closest("tr");
-							let idx = siteTable.row(tr).index();
-
-							// if(!isEmpty(siteTable.row(tr).data().alarmData)){
-								let rowData = siteTable.row(tr).data().alarmInfo;
-								let userOpt = {
-									url: apiHost + "/config/users",
-									type: 'get',
-									async: false,
-									data : {
-										oid: oid,
-									}
-								}
-								Promise.resolve(makeAjaxCall(userOpt)).then(res => {
-									getAlarmTable(rowData, res)
-								});
-							// }
-						});
-
-						new $.fn.dataTable.Buttons( siteTable, {
-							name: 'commands',
-							"buttons": [
-								{
-									extend: 'excelHtml5',
-									className: "save_btn",
-									text: '엑셀 다운로드',
-									// exportOptions: {
-									// 	modifier: {
-									// 		page: 'current'
-									// 	}
-									// },
-									customize: function( xlsx ) {
-										var sheet = xlsx.xl.worksheets['sheet1.xml'];
-										$('row:first c', sheet).attr( 's', '42' );
-										var sheet = xlsx.xl.worksheets['sheet1.xml'];
-										// var lastCol = sheet.getElementsByTagName('col').length - 1;
-										// var colRange = createCellPos( lastCol ) + '1';
-										// //Has to be done this way to avoid creation of unwanted namespace atributes.
-										// var afSerializer = new XMLSerializer();
-										// var xmlString = afSerializer.serializeToString(sheet);
-										// var parser = new DOMParser();
-										// var xmlDoc = parser.parseFromString(xmlString,'text/xml');
-										// var xlsxFilter = xmlDoc.createElementNS('http://schemas.openxmlformats.org/spreadsheetml/2006/main','autoFilter');
-										// var filterAttr = xmlDoc.createAttribute('ref');
-										// filterAttr.value = 'A1:' + colRange;
-										// xlsxFilter.setAttributeNode(filterAttr);
-										// sheet.getElementsByTagName('worksheet')[0].appendChild(xlsxFilter);
-
-									}
-								},
-								// {
-								// 	extend: 'csvHtml5',
-								// 	className: "btn_type03",
-								// 	text: 'CSV'
-								// },
-								// {
-								// 	extend: 'pdfHtml5',
-								// 	className: "btn_type03",
-								// 	text: 'PDF',
-								// },
-							],
-						});
-
-						siteTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup");
-						// siteTable.container().addClass( 'fit' );
-
-						// siteTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup").addClass("hidden inline");
-
-						$("#siteType").find("li").on( 'click', function(){
-							if(!isEmpty($(this).data("name"))){
-								filterColumn("1", $(this).data("value"));
-							} else {
-								filterColumn("1", "");
-							}
-						});
-						$("#siteSearchBox").on( 'keyup search input paste cut', function(){
-							siteTable.columns(2).search( this.value ).draw();
-						});
-
-						$("#loadingCircle").hide();
-
+							},
+							// {
+							// 	extend: 'csvHtml5',
+							// 	className: "btn_type03",
+							// 	text: 'CSV'
+							// },
+							// {
+							// 	extend: 'pdfHtml5',
+							// 	className: "btn_type03",
+							// 	text: 'PDF',
+							// },
+						],
 					});
-				}
+
+					siteTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup");
+					// siteTable.container().addClass( 'fit' );
+
+					// siteTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup").addClass("hidden inline");
+
+					$("#siteType").find("li").on( 'click', function(){
+						if(!isEmpty($(this).data("name"))){
+							filterColumn("1", $(this).data("value"));
+						} else {
+							filterColumn("1", "");
+						}
+					});
+					$("#siteSearchBox").on( 'keyup search input paste cut', function(){
+						siteTable.columns(2).search( this.value ).draw();
+					});
+
+					getVppDrData(vppNameData);
+					$("#loadingCircle").hide();
+
+				});
+			}
 		}
 
 
@@ -1300,11 +1303,9 @@
 					$('#loadingCircle').show();
 				},
 			}
-			let str = ``;
 
 			$.ajax(optionContract).done(function (json, textStatus, jqXHR) {
 				const newContractList = $("#newContractList");
-				
 				const cArr = json.data.reduce((acc, val, index, array) => {
 					let key = val["planName"];
 					let vKey = val["voltageType"];
@@ -1342,17 +1343,18 @@
 
 				let cStr = '';
 				Object.entries(cArr).forEach((item, index, arr) => {
-					let v = '';
+					let vStr = '';
+					let opt = '';
 					if(!isEmpty(item[1].voltRange)){
-						v = item[1].voltRange.replace(/,\s*$/, "")
+						vStr = item[1].voltRange.replace(/,\s*$/, "");
 					} else {
-						v = item[1].voltRange
+						vStr = item[1].voltRange;
 					}
 					let id = item[1].planId.replace(/,\s*$/, "");
 					let util = item[1].utilName.replace(/,\s*$/, "");
 
 					cStr += `
-						<li data-util-name="${'${util}'}" data-plan-id="${'${id}'}" data-vol-type="${'${v}'}" data-value="${'${item[0]}'}"><a href="#">${'${item[0]}'}</a></li>
+						<li data-util-name="${'${util}'}" data-plan-id="${'${id}'}" data-vol-type="${'${vStr}'}" data-value="${'${item[0]}'}"><a href="#">${'${item[0]}'}</a></li>
 					`;
 				});
 				// if(option){
@@ -1363,10 +1365,11 @@
 					console.log("contract list clicked====")
 					let val = $(this).data("value");
 					let planId = $(this).data("plan-id");
-					let subOpt = $("#newVoltList");
+					let voltType = $(this).data("vol-type");
+					let subOpt = $("#newVoltTypeList");
 					let btn = subOpt.prev();
 
-					newContractList.prev().data("plan-id", planId);
+					newContractList.prev().data({ "plan-id": planId, "vol-type": voltType });
 					subOpt.empty().prev().data("value", "").html("선택<span class='caret'></span>");
 
 					if(!isEmpty($(this).data("vol-type"))){
@@ -1382,6 +1385,16 @@
 							str += `<li data-util-name="${'${utilArr[i]}'}" data-id="${'${idArr[i]}'}" data-value="${'${vArr[i]}'}"><a href="#">${'${vArr[i]}'}</a></li>`;
 						}
 						subOpt.append(str);
+						setTimeout(function(){
+							validateForm();
+						}, 600);
+						subOpt.find("li").click(function(){
+							$("#newVoltWarning").addClass("hidden");
+							setTimeout(function(){
+								validateForm();
+							}, 600);
+						});
+						$("#newVoltWarning").removeClass("hidden");
 					} else {
 						btn.html("<span class='caret'></span>")
 						if(btn.not(":disabled")){
@@ -1423,7 +1436,7 @@
 					let newRes = $("#newResList");
 					let newSiteType = $("#newSiteType");
 					let items = newSiteType.find("li");
-					console.log("items===", items);
+
 					items.removeClass("hidden");
 
 					if(val == "0") {
@@ -1480,6 +1493,8 @@
 					}
 				});
 
+				let dropdown = $("#propertyRow").find(".dropdown-menu");
+				setDropdownValue(dropdown);
 
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				console.log("site_type Error:", jqXHR)
@@ -1498,25 +1513,25 @@
 				}
 			});
 
-			$("#countryList input[type=checkbox]").change(function() { 
-				console.log("something is checked on the page")
-			});
+			// $("#countryList input[type=checkbox]").change(function() { 
+			// 	console.log("something is checked on the page")
+			// });
 
-			$("#countryList li input").on("change", function(){
-				console.log("on change----")
-			});
-
+			// $("#countryList li input").on("change", function(){
+			// 	console.log("on change----")
+			// });
+			let inspStr = ``
 			for(let i=0, length = 28; i<length; i++){
-				str += `
+				inspStr += `
 					<li data-value="${'${i+1}'}"><a href="#">${'${i+1}'}</a></li>
 				`;
 			}
-			str += `<li data-value="0"><a href="#">말일</a></li>`
+			inspStr += `<li data-value="0"><a href="#">말일</a></li>`
 
 			if(option){
 				$("#newInspection").empty();
 			}
-			$("#newInspection").append($(str));
+			$("#newInspection").append($(inspStr));
 		}
 
 
@@ -1559,8 +1574,9 @@
 				newVppResIdList.prev().prop('disabled', true).html("등록된 중개거래 자원 ID가 없습니다.<span class='caret'></span>");
 				$("#newVppRevShare").prop('disabled', true).val("-");
 			}
-
-			let dropdown = $("#addSiteModal").find(".dropdown-menu");
+			let propertyDropdown = $("#propertyRow").find(".dropdown-menu");
+			let dropdown = $("#updateSiteForm").find(".dropdown-menu");
+			setDropdownValue(propertyDropdown);
 			setDropdownValue(dropdown);
 		}
 
@@ -1581,16 +1597,16 @@
 	});
 
 	function initModal(){
-		console.log("initModal====")
 		let form = $("#updateSiteForm");
 		let input = form.find("input");
-		let dropdown = form.find(".dropdown-toggle");
+		let dropdownBtn = form.find(".dropdown-toggle");
 		let warning = form.find(".warning");
 
 		$("#validSite").addClass("hidden");
 		$("#newSiteName").parent().next().prop("disabled", true);
 		
 		$("#addSiteBtn").prop("disabled", true);
+
 		$("#newResList li").removeClass("hidden");
 		$("#newSiteDetail").val("");
 
@@ -1599,7 +1615,7 @@
 			$(this).val("");
 		});
 
-		$.each(dropdown, function(index, element){
+		$.each(dropdownBtn, function(index, element){
 			$(this).html('선택' + '<span class="caret"></span>');
 			$(this).data("value", "");
 			$(this).next().find("li").removeClass("hidden");
@@ -1625,6 +1641,7 @@
 			required.hasClass("no-symbol") ? required.removeClass("no-symbol") : null;
 			addBtn.text("등록");
 			$('#newSiteName').prop('disabled', false);
+			$("#newVoltTypeList").prev().prop("disabled", true).data("value", "").html("선택<span class='caret'></span>");
 			$("#addSiteModal").removeClass("edit").modal("show");
 		} else {
 			let dTable = $("#siteTable").DataTable();
@@ -1677,17 +1694,17 @@
 					Promise.resolve(JSON.parse(rowData.utility)).then( util => {
 						let utilPlanName = util.utility_plan_name;
 						let item = $("#newContractList li");
-						let subItem = $("#newVoltList");
+						let subItem = $("#newVoltTypeList");
 						let planArr = [];
 						let voltArr = [];
 
-						console.log("util_plan_name==", utilPlanName)
+						// console.log("util_plan_name==", utilPlanName)
 						$("#newContractList").prev().data({"plan-id": util.utility_plan_id, "value": utilPlanName }).html(utilPlanName + '<span class="caret"></span>');
-						$("#newVoltList").prev().prop("disabled", false);
+						$("#newVoltTypeList").prev().prop("disabled", false);
 						if(!isEmpty(util.volt_name) ){
-							$("#newVoltList").prev().data({"id": util.utility_plan_id, "data-value" : util.volt_name }).html( util.volt_name + '<span class="caret"></span>');
+							$("#newVoltTypeList").prev().data({"id": util.utility_plan_id, "data-value" : util.volt_name }).html( util.volt_name + '<span class="caret"></span>');
 						} else {
-							$("#newVoltList").prev().html('선택<span class="caret"></span>');
+							$("#newVoltTypeList").prev().html('선택<span class="caret"></span>');
 						}
 
 						$("#newPeakDemand").val(util.peak_demand);
@@ -1709,7 +1726,7 @@
 				// PowerMarket??? (tariff?) info
 				if( !isEmpty(rowData.power_market)) {
 					let priceModel = JSON.parse(rowData.power_market);
-					console.log("priceModel===", priceModel)
+					// console.log("priceModel===", priceModel)
 					if(priceModel.price_type == "SMP_mean") {
 						$("#newPriceModelList").prev().data("value", priceModel.price_type).html( "SMP평균" + '<span class="caret"></span>');
 					} else if(priceModel.price_type == "fixed") {
@@ -1727,7 +1744,7 @@
 				if( !isEmpty(rowData.dr_group_id)) {
 					$("#newDrResIdList").prev().data("value", rowData.dr_group_id).html(rowData.drName + "<span class='caret'></span>");
 					sectionDrDropdown.each(function(item, index){
-						console.log("index---", index)
+						// console.log("index---", index)
 						$(this).prop("disabled", false);
 					});
 					sectionDrInput.each(function(item, index){
@@ -1735,7 +1752,7 @@
 					});
 					if(!isEmpty(rowData.dr_info)){
 						let dr = JSON.parse(rowData.dr_info);
-						console.log("dr===", dr);
+						// console.log("dr===", dr);
 						if( !isEmpty(dr.contract_capacity)) {
 							$("#drVol").val(dr.contract_capacity);
 						}
@@ -1770,7 +1787,7 @@
 					});
 					if( !isEmpty(rowData.vpp_info)) {
 						let vpp = JSON.parse(rowData.vpp_info);
-						console.log("vpp===", vpp);
+						// console.log("vpp===", vpp);
 
 						if( !isEmpty(rowData.vpp_info)) {
 							console.log("vpp profile_share NOT empty")
@@ -2324,12 +2341,21 @@
 
 	function validateForm(){
 		if(!$("#addSiteModal").hasClass('edit')){
-			if( ($("#validSite:not('.hidden')").length > 0 ) && (!isEmpty($("#newCityList").prev().data("value"))) && (!isEmpty($("#newResList").prev().data("value"))) ){
-				$("#addSiteBtn").prop("disabled", false);
-				console.log("validated!!!!")
+			if(!isEmpty($("#newContractList").prev().data("vol-type"))){
+				if( ( !isEmpty($("#newVoltTypeList").prev().data("value")) ) &&  ($("#validSite:not('.hidden')").length > 0 ) && (!isEmpty($("#newCityList").prev().data("value"))) && (!isEmpty($("#newResList").prev().data("value"))) ){
+					$("#addSiteBtn").prop("disabled", false);
+					console.log("newVoltTypeList validated!!!!")
+				} else {
+					$("#newVoltWarning").removeClass("hidden");
+					$("#addSiteBtn").prop("disabled", true);
+				}
 			} else {
-				$("#addSiteBtn").prop("disabled", true);
-				console.log("NOT validated!!!!")
+				if( ($("#validSite:not('.hidden')").length > 0 ) && (!isEmpty($("#newCityList").prev().data("value"))) && (!isEmpty($("#newResList").prev().data("value"))) ){
+					$("#addSiteBtn").prop("disabled", false);
+					console.log("validated!!!!")
+				} else {
+					$("#addSiteBtn").prop("disabled", true);
+				}
 			}
 		} else {
 			$("#addSiteBtn").prop("disabled", false);
@@ -2440,7 +2466,7 @@
 
 <c:set var="siteList" value="${siteHeaderList}"/> <!-- 사이트 별 -->
 
-<div class="row">
+<div id="propertyRow" class="row">
 	<div class="col-10">
 		<div class="flex_group">
 			<span class="tx_tit">사업소 유형</span>
@@ -2707,9 +2733,10 @@
 										</div>
 										<div class="dropdown w-100">
 											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택" disabled>선택<span class="caret"></span></button>
-											<ul id="newVoltList" class="dropdown-menu"></ul>
+											<ul id="newVoltTypeList" class="dropdown-menu"></ul>
 										</div>
 									</div>
+									<small id="newVoltWarning" class="hidden warning">계약종별 상세 옵션을 선택해 주세요.</small>
 								</div>
 								
 								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">계약 전력</span></div>

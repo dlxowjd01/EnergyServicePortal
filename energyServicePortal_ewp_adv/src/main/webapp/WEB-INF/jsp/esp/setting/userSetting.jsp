@@ -179,10 +179,10 @@
 
 		$("#deleteConfirmBtn").click(function(){
 			let dTable = $("#userTable").DataTable();
-			let modalBody = $("#deleteConfirmModal .modal-body");
 			let tr = $("#userTable").find("tbody tr.selected");
 			let uid = dTable.row(tr).data().uid;
-
+			let modalBody = $("#deleteConfirmModal .modal-body");
+			
 			let optDelete = {
 				url: apiHost + "/config/users/" + uid,
 				type: 'delete',
@@ -190,14 +190,13 @@
 			}
 
 			$.ajax(optDelete).done(function (json, textStatus, jqXHR) {
-				console.log("user delete success");
 				modalBody.addClass("hidden");
 				$("#deleteSuccessMsg").text("사용자가 삭제 되었습니다.").removeClass("hidden");
-				refreshUserList();
+				// refreshUserList();
+				dTable.row(tr).remove().draw();
 				setTimeout(function(){
 					$("#deleteConfirmModal").modal("hide");
 				}, 1500);
-
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				console.log("fail==", jqXHR);
 				modalBody.addClass("hidden");
@@ -209,11 +208,12 @@
 		});
 
 		$("#deleteConfirmModal").on("hide.bs.modal", function() {
-			console.log("deleteConfirmModal closed===");
-			$(this).find(".modal-body").removeClass("hidden");
-			$("#deleteSuccessMsg").html('<h5 id="deleteSuccessMsg" class="ntit">사용자 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>');
-			$("#confirmUserId").val("");
-			$("#deleteConfirmBtn").prop("disabled", false);
+			setTimeout(function(){
+				$(this).find(".modal-body").removeClass("hidden");
+				$("#deleteSuccessMsg").html('<h5 id="deleteSuccessMsg" class="ntit">사용자 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>');
+				$("#confirmUserId").val("");
+				$("#deleteConfirmBtn").prop("disabled", true);
+			}, 2000);
 		});
 
 		$("#resultModal").on("hide.bs.modal", function() {
@@ -1819,9 +1819,9 @@
 				<h5 id="deleteSuccessMsg" class="ntit">사용자 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>
 			</div>
 			<div class="modal-body">
-			<div class="tx_inp_type"><input type="text" id="confirmUserId" name="confirm_user_id" placeholder="사용자 아이디 입력"/></div>
-			</div>
-			<div class="btn_wrap_type05"><!--
+				<div class="tx_inp_type"><input type="text" id="confirmUserId" name="confirm_user_id" placeholder="사용자 아이디 입력"/></div>
+				</div>
+				<div class="btn_wrap_type05"><!--
 				--><button type="button" class="btn_type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
 				--><button type="button" id="deleteConfirmBtn" class="btn_type w80 ml-12" disabled>확인</button><!--
 			--></div>
