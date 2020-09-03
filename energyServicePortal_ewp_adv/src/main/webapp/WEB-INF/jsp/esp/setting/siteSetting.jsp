@@ -37,11 +37,8 @@
 				readWriteTable(res[0], res[1]);
 			});
 		} else {
-			console.log("readyonly table===")
 			Promise.all([ Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])), Promise.resolve(returnAjaxRes(optionList[2])) ]).then( res => {
 			// Promise.resolve(returnAjaxRes(optionList[2])).then( res => {
-				console.log(" re86757657-",  res[0])
-				console.log(" res[1----",  res[1])
 				readOnlyTable( res[0], res[1], res[2].user_sites);
 			});
 		}
@@ -110,10 +107,9 @@
 
 		// Dropdown Click event
 		$("#newResList li").on("click", function(){
-			console.log("newResList---",$("#newResList").prev().data("value"))
 			setTimeout(function(){
 				validateForm();
-			}, 600);
+			}, 300);
 		});
 
 		$("#newCityList li").on("click", function(){
@@ -179,7 +175,6 @@
 			}
 			modalBody.addClass("hidden");
 			$.ajax(optDelete).done(function (json, textStatus, jqXHR) {
-				console.log("success==", json)
 				$("#deleteSuccessMsg").text("사이트가 삭제 되었습니다.").removeClass("hidden");
 				refreshAlarmList();
 				setTimeout(function(){
@@ -230,12 +225,9 @@
 
 			if( isEmpty($("#newContractList").data("vol-type"))) {
 				newUtilPlanId = Number($("#newContractList").prev().data("plan-id"));
-				console.log("newPlanId 111---", newUtilPlanId)
 			} else {
 				newUtilPlanId = Number($("#newVoltTypeList").prev().data("id"));
 				newVoltName = $("#newVoltTypeList").prev().data("value");
-				console.log("newPlanId 222---", newUtilPlanId);
-				console.log("data-opt---", $("#newContractList[data-opt]") );
 			}
 			let newPeakDemand = Number($("#newPeakDemand").val());
 			let newDrCharge = Number($("#newDrCharge").val());
@@ -531,7 +523,6 @@
 			e.preventDefault();
 			let arr = [];
 			let tr = $("#alarmTable tbody tr");
-			console.log("tr==", tr);
 			$.each(tr, function(index, el){
 				if(!tr.hasClass("disabled")){
 					let obj = {};
