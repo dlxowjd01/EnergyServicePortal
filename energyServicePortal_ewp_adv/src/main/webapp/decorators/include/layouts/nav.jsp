@@ -92,21 +92,64 @@
 			<div class="sub_layer">
 				<ul>
 					<li><a href="/dashboard/gmain.do">통합관리 대시보드</a></li>
-					<c:if test="${oid ne 'trust' and oid ne 'sundream' and oid ne 'kpx'}">
+					<c:if test="${oid ne 'trust' and oid ne 'sundream' and !fn:contains(oid, 'kpx')}">
 						<li><a href="/dashboard/jmain.do">중개거래 대시보드</a></li>
+					</c:if>
+					<c:if test="${fn:contains(oid, 'kpx')}">
+						<li><a href="/dashboard/gmain.do">사업소 대시보드</a></li>
 					</c:if>
 				</ul>
 			</div>
 		</li>
+		<c:choose>
+			<c:when test="${fn:contains(oid, 'kpx')}">
+		<li class="smn2 menu-item">
+			<a href="javascript:void(0);">RTU 관리</a>
+			<div class="sub_layer">
+				<ul>
+					<li><a href="/device/deviceState.do">설비구성</a></li>
+					<li><a href="/device/collectionState.do">RTU 관리</a></li>
+					<li><a href="/device/certManageList.do">인증서 관리</a></li>
+					<li><a href="/device/certApplication.do">인증서 신청</a></li>
+				</ul>
+			</div>
+		</li>
+		<li class="smn3 menu-item">
+			<a href="javascript:void(0);">이력 관리</a>
+			<div class="sub_layer">
+				<ul>
+					<li><a href="/energy/pvGen.do">발전이력</a></li>
+					<li><a href="/history/alarmHistory.do">알람이력</a></li>
+				</ul>
+			</div>
+		</li>
+		<li class="smn8 menu-item">
+			<a href="javascript:void(0);">설정</a>
+			<div class="sub_layer">
+				<ul>
+					<c:if test="${userRole ne '2'}">
+						<li><a href="/setting/alarmSetting.do">알람 설정</a></li>
+						<li><a href="/setting/userSetting.do">사용자 관리</a></li>
+					</c:if>
+					<li><a href="/setting/siteSetting.do">사이트 관리</a></li>
+					<c:if test="${oid eq 'encored' and userRole eq '1'}">
+						<li><a href="/setting/groupSetting.do">그룹 관리</a></li>
+					</c:if>
+
+				</ul>
+			</div>
+		</li>
+			</c:when>
+			<c:otherwise>
 		<li class="smn2 menu-item">
 			<a href="javascript:void(0);">설비 현황</a>
 			<div class="sub_layer">
 				<ul>
 					<li><a href="/device/deviceState.do">설비구성</a></li>
 					<li><a href="/device/collectionState.do">수집현황</a></li>
-					<c:if test="${oid eq 'encored' or oid eq 'kpx'}">
-					<li><a href="/device/certManageList.do">기기인증서 관리</a></li>
-					<li><a href="/device/certApplication.do">기기인증서 신청</a></li>
+					<c:if test="${oid eq 'encored'}">
+						<li><a href="/device/certManageList.do">기기인증서 관리</a></li>
+						<li><a href="/device/certApplication.do">기기인증서 신청</a></li>
 					</c:if>
 				</ul>
 			</div>
@@ -128,7 +171,7 @@
 				</ul>
 			</div>
 		</li>
-		<c:if test="${oid ne 'trust' and oid ne 'sundream' and oid ne 'kpx'}">
+				<c:if test="${oid ne 'trust' and oid ne 'sundream'}">
 		<li class="smn5 menu-item">
 			<a href="javascript:void(0);">예측/진단</a>
 			<div class="sub_layer">
@@ -138,9 +181,6 @@
 				</ul>
 			</div>
 		</li>
-		</c:if>
-
-		<c:if test="${oid ne 'trust' and oid ne 'sundream' and oid ne 'kpx'}">
 		<li class="smn6 menu-item">
 			<a href="javascript:void(0);">보고서</a>
 			<div class="sub_layer">
@@ -150,9 +190,7 @@
 				</ul>
 			</div>
 		</li>
-		</c:if>
-
-		<c:if test="${(oid ne 'trust' and oid ne 'sundream' and oid ne 'kpx') or (oid eq 'trust' and task ne 4) or (oid eq 'sundream' and task ne 4)}">
+					<c:if test="${(oid eq 'trust' and task ne 4) or (oid eq 'sundream' and task ne 4)}">
 		<li class="smn7 menu-item">
 			<a href="javascript:void(0);">SPC관리</a>
 			<div class="sub_layer">
@@ -165,32 +203,32 @@
 				</ul>
 			</div>
 		</li>
-		</c:if>
-
+					</c:if>
+				</c:if>
 		<li class="smn8 menu-item">
 			<a href="javascript:void(0);">설정</a>
 			<div class="sub_layer">
 				<ul>
 					<li><a href="/setting/siteSetting.do">사업소 관리</a></li>
-
 					<c:if test="${oid eq 'encored' and userRole eq '1'}">
-					<li><a href="/setting/groupSetting.do">그룹 관리</a></li>
+						<li><a href="/setting/groupSetting.do">그룹 관리</a></li>
 					</c:if>
 
 					<c:if test="${userRole ne '2'}">
-					<li><a href="/setting/alarmSetting.do">알람 설정</a></li>
-					<li><a href="/setting/userSetting.do">사용자 관리</a></li>
+						<li><a href="/setting/alarmSetting.do">알람 설정</a></li>
+						<li><a href="/setting/userSetting.do">사용자 관리</a></li>
 					</c:if>
 
 					<c:if test="${oid eq 'encored' and userRole eq '1'}">
-					<li><a href="/setting/comCodeSetting.do">공통 코드 관리</a></li>
-					<li><a href="/setting/batchSetting.do">배치 관리</a></li>
+						<li><a href="/setting/comCodeSetting.do">공통 코드 관리</a></li>
+						<li><a href="/setting/batchSetting.do">배치 관리</a></li>
 					</c:if>
 
 				</ul>
 			</div>
 		</li>
-
+			</c:otherwise>
+		</c:choose>
 		<li class="smn9"><a href="/spc/notice.do">공지사항</a></li>
 		<li class="smn10"><a href="/logout.do">로그아웃</a></li>
 	</ul>

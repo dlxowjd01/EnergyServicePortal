@@ -112,7 +112,15 @@
 
 	<div class="col-xl-8 col-md-12 col-sm-12">
 		<div class="gmain_row1">
-			<div class="indiv gmain_map gmain_chart gmain_chart4">
+			<c:choose>
+				<c:when test="${fn:contains(sessionScope.userInfo.oid, 'kpx')}">
+				<div class="indiv gmain_map gmain_chart gmain_chart_kpx">
+				</c:when>
+				<c:otherwise>
+				<div class="indiv gmain_map gmain_chart gmain_chart4 ">
+				</c:otherwise>
+			</c:choose>
+
 				<div class="chart_top clear">
 					<h2 class="ntit"><fmt:message key="gdash.4.current" /></h2>
 				</div>
@@ -129,10 +137,18 @@
 								<span class="bu4"><fmt:message key="gdash.4.idle" /></span>
 							</div>
 							<ul>
-								<li><strong><fmt:message key="gdash.4.today_gen" /></strong> <span> 0 </span><em>&nbsp;&nbsp;kWh</em></li>
-								<li><strong><fmt:message key="gdash.4.forecast" /></strong> <span> 0 </span><em>&nbsp;&nbsp;kWh</em></li>
-								<li><strong><fmt:message key="gdash.4.today_ess" /></strong> <span> - </span><em>&nbsp;&nbsp;Wh</em> /
-									<span> - </span><em>&nbsp;&nbsp;Wh</em></li>
+								<c:choose>
+									<c:when test="${fn:contains(sessionScope.userInfo.oid, 'kpx')}">
+										<li><strong><fmt:message key="gdash.4.active_power" /></strong> <span> 0 </span><em>&nbsp;&nbsp;kW</em></li>
+										<li><strong><fmt:message key="gdash.4.maxactive_power" /></strong> <span> 0 </span><em>&nbsp;&nbsp;Var</em></li>
+										<li><strong><fmt:message key="gdash.4.reactive_power" /></strong> <span> 0 </span><em>&nbsp;&nbsp;kW</em></li>
+									</c:when>
+									<c:otherwise>
+										<li><strong><fmt:message key="gdash.4.today_gen" /></strong> <span> 0 </span><em>&nbsp;&nbsp;kWh</em></li>
+										<li><strong><fmt:message key="gdash.4.forecast" /></strong> <span> 0 </span><em>&nbsp;&nbsp;kWh</em></li>
+										<li><strong><fmt:message key="gdash.4.today_ess" /></strong> <span> - </span><em>&nbsp;&nbsp;Wh</em> / <span> - </span><em>&nbsp;&nbsp;Wh</em></li>
+									</c:otherwise>
+								</c:choose>
 							</ul>
 						</div>
 					</div>
@@ -140,22 +156,55 @@
 				<div class="local_info s_center">
 					<table>
 						<thead>
-						<tr>
-							<th><fmt:message key="gdash.4.tot_num" /></th>
-							<th><fmt:message key="gdash.4.num_device" /></th>
-							<th><fmt:message key="gdash.4.tot_cap" /></th>
-							<th><fmt:message key="gdash.4.today_co2" /></th>
-							<th><fmt:message key="gdash.4.today_revenue" /></th>
-						</tr>
-						</thead>
-						<tbody id="centerTbody">
-						<tr>
-							<td><em>&nbsp;&nbsp;개소</em></td>
-							<td><em>&nbsp;&nbsp;대</em></td>
-							<td><em>&nbsp;&nbsp;kW</em></td>
-							<td><em>&nbsp;&nbsp;kg</em></td>
-							<td><em>&nbsp;&nbsp;천원</em></td>
-						</tr>
+						<c:choose>
+							<c:when test="${fn:contains(sessionScope.userInfo.oid, 'kpx')}">
+							<tr>
+								<th>구분</th>
+								<th>사업소</th>
+								<th>설비용량</th>
+								<th>유효전력</th>
+								<th>무효전력</th>
+								<th>가용전력</th>
+							</tr>
+							</thead>
+							<tbody id="centerTbody">
+							<tr>
+								<td>풍력</td>
+								<td> - </td>
+								<td> - </td>
+								<td> - </td>
+								<td> - </td>
+								<td> - </td>
+							</tr>
+							<tr>
+								<td>태양광</td>
+								<td> - </td>
+								<td> - </td>
+								<td> - </td>
+								<td> - </td>
+								<td> - </td>
+							</tr>
+							</c:when>
+							<c:otherwise>
+							<tr>
+								<th><fmt:message key="gdash.4.tot_num" /></th>
+								<th><fmt:message key="gdash.4.num_device" /></th>
+								<th><fmt:message key="gdash.4.tot_cap" /></th>
+								<th><fmt:message key="gdash.4.today_co2" /></th>
+								<th><fmt:message key="gdash.4.today_revenue" /></th>
+							</tr>
+							</thead>
+							<tbody id="centerTbody">
+							<tr>
+								<td><em>&nbsp;&nbsp;개소</em></td>
+								<td><em>&nbsp;&nbsp;대</em></td>
+								<td><em>&nbsp;&nbsp;kW</em></td>
+								<td><em>&nbsp;&nbsp;kg</em></td>
+								<td><em>&nbsp;&nbsp;천원</em></td>
+							</tr>
+							</c:otherwise>
+						</c:choose>
+
 						</tbody>
 					</table>
 				</div>

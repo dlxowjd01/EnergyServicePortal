@@ -6139,6 +6139,7 @@ div.di_wrap dl .link a {
 	height: 355px;
 }
 
+.gmain_chart.gmain_chart_kpx .chart_top .ntit
 .gmain_chart.gmain_chart1 .chart_top .ntit,
 .gmain_chart.gmain_chart2 .chart_top .ntit,
 .gmain_chart.gmain_chart3 .chart_top .ntit,
@@ -6154,6 +6155,15 @@ div.di_wrap dl .link a {
 }
 
 .gmain_map.gmain_chart.gmain_chart4 .chart_top {
+	margin-bottom: 0;
+}
+
+.gmain_map.gmain_chart.gmain_chart_kpx {
+	position: relative;
+	margin-right: 12px;
+}
+
+.gmain_map.gmain_chart.gmain_chart_kpx .chart_top {
 	margin-bottom: 0;
 }
 
