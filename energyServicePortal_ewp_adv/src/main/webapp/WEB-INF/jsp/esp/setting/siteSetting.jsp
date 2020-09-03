@@ -578,9 +578,15 @@
 		function readWriteTable(siteData, vppNameData, callback) {
 			if(!callback) {
 				getPropertyData();
+				getVppDrData(vppNameData);
 			} else {
 				callback();
 			}
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> ee802b62753e4be5932d7ad4a7cfd575c75ece03
 			if(siteData) {
 				let newArr = [];
 				Promise.resolve(siteData.map((item, index) => {

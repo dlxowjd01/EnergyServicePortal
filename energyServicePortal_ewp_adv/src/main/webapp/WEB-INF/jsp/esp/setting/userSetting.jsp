@@ -192,8 +192,12 @@
 			$.ajax(optDelete).done(function (json, textStatus, jqXHR) {
 				modalBody.addClass("hidden");
 				$("#deleteSuccessMsg").text("사용자가 삭제 되었습니다.").removeClass("hidden");
+<<<<<<< HEAD
 				// refreshUserList();
 				dTable.row(tr).remove().draw();
+=======
+				refreshUserList();
+>>>>>>> ee802b62753e4be5932d7ad4a7cfd575c75ece03
 				setTimeout(function(){
 					$("#deleteConfirmModal").modal("hide");
 				}, 1500);
