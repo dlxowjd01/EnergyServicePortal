@@ -115,7 +115,7 @@
 		$("#newCityList li").on("click", function(){
 			setTimeout(function(){
 				validateForm();
-			}, 300);
+			}, 600);
 		});
 		
 		// Modal event
@@ -219,16 +219,17 @@
 
 			// Utility
 			let newUtilObj = {}
-			let newUtilPlanId = "";
+			let newUtilPlanId = 0;
 			let newUtilPlanName = $("#newContractList").prev().data("value");
 			let newVoltName = "";
 
-			if( isEmpty($("#newContractList").data("vol-type"))) {
+			if( $("#newContractList").prev().data("vol-type") == null ) {
 				newUtilPlanId = Number($("#newContractList").prev().data("plan-id"));
 			} else {
 				newUtilPlanId = Number($("#newVoltTypeList").prev().data("id"));
 				newVoltName = $("#newVoltTypeList").prev().data("value");
 			}
+
 			let newPeakDemand = Number($("#newPeakDemand").val());
 			let newDrCharge = Number($("#newDrCharge").val());
 			let newInspection = Number($("#newInspection").prev().data("value"));
@@ -293,9 +294,11 @@
 
 				// Util JSON
 				if( !isEmpty(newUtilPlanId)){
+					console.log("newUtilPlanId===", newUtilPlanId)
 					newUtilObj.utility_plan_id = newUtilPlanId;
 					newUtilObj.utility_plan_name = newUtilPlanName;
 					if( !isEmpty(newVoltName)){
+						console.log("newVoltName===", newVoltName)
 						newUtilObj.volt_name = newVoltName;
 					}
 				}
@@ -425,7 +428,9 @@
 				if( !isEmpty(newUtilPlanId)){
 					newUtilObj.utility_plan_id = newUtilPlanId;
 					newUtilObj.utility_plan_name = newUtilPlanName;
+					console.log("newUtilPlanId===", newUtilPlanId)
 					if( !isEmpty(newVoltName)){
+						console.log("newVoltName===", newVoltName)
 						newUtilObj.volt_name = newVoltName;
 					}
 				}
@@ -556,13 +561,13 @@
 				// 	url: apiHost + "/auth/me/sites",
 				// 	type: "get",
 				// 	async: true,
-				// },				
+				// },
 			];
 
 			$('#siteTable').DataTable().clear().destroy();
 			Promise.all([ Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])) ]).then( res => {
 			// Promise.resolve(returnAjaxRes(optionList[0])).then( res => {
-				readWriteTable(res[0], res[1], initModal, "destroy");
+				readWriteTable(res[0], res[1], initModal);
 			});
 		}
 
@@ -575,6 +580,7 @@
 			}
 			if(siteData) {
 				let newArr = [];
+				console.log("dta----")
 				Promise.resolve(siteData.map((item, index) => {
 				// siteData.forEach((item, index) => {
 					// console.log("siteData===", item)
@@ -887,15 +893,9 @@
 						$(".dataTables_scrollHeadInner").css( "width", "100%" );
 					});
 
-
 					// siteTable.rows( function ( idx, data, node ) {
 					// 	console.log("sid===", data.sid)
 					// }).data();
-
-					// $("#siteTable").on( 'click', 'tr', function (e, dt, data, row) {
-					// 	var id = siteTable.row( this ).id();
-					// 	console.log("this--", id);
-					// });
 
 					siteTable.on( 'click', 'td .btn-type-sm', function () {
 						let tr = $(this).parents().closest("tr");
@@ -1353,22 +1353,25 @@
 				// 	newContractList.empty();
 				// }
 				newContractList.append(cStr);
+
 				newContractList.find("li").on("click", function(){
-					console.log("contract list clicked====")
 					let val = $(this).data("value");
 					let planId = $(this).data("plan-id");
 					let voltType = $(this).data("vol-type");
 					let subOpt = $("#newVoltTypeList");
 					let btn = subOpt.prev();
+					let idArr = [];
+					let vArr = [];
+					let utilArr = [];
 
 					newContractList.prev().data({ "plan-id": planId, "vol-type": voltType });
 					subOpt.empty().prev().data("value", "").html("선택<span class='caret'></span>");
 
 					if(!isEmpty($(this).data("vol-type"))){
 						let str = '';
-						let idArr = [...$(this).data("plan-id").split(",")];
-						let vArr = [...$(this).data("vol-type").split(",")];
-						let utilArr = [...$(this).data("util-name").split(",")];
+						idArr = [...$(this).data("plan-id").split(",")];
+						vArr = [...$(this).data("vol-type").split(",")];
+						utilArr = [...$(this).data("util-name").split(",")];
 
 						if(btn.is(":disabled")){
 							btn.prop("disabled", false)
@@ -1609,9 +1612,10 @@
 
 		$.each(dropdownBtn, function(index, element){
 			$(this).html('선택' + '<span class="caret"></span>');
-			$(this).data("value", "");
+			$(this).data({ "value": "", "vol-type": "", "plan-id" : "" });
 			$(this).next().find("li").removeClass("hidden");
 		});
+		// console.log("initModal----")
 	}
 
 	function updateModal(option, callback){
@@ -1685,18 +1689,16 @@
 				if( !isEmpty(rowData.utility)) {
 					Promise.resolve(JSON.parse(rowData.utility)).then( util => {
 						let utilPlanName = util.utility_plan_name;
-						let item = $("#newContractList li");
-						let subItem = $("#newVoltTypeList");
-						let planArr = [];
-						let voltArr = [];
+						// console.log("util==", util);
 
-						// console.log("util_plan_name==", utilPlanName)
 						$("#newContractList").prev().data({"plan-id": util.utility_plan_id, "value": utilPlanName }).html(utilPlanName + '<span class="caret"></span>');
 						$("#newVoltTypeList").prev().prop("disabled", false);
 						if(!isEmpty(util.volt_name) ){
+							// console.log("util.volt_name==", util.volt_name);
 							$("#newVoltTypeList").prev().data({"id": util.utility_plan_id, "data-value" : util.volt_name }).html( util.volt_name + '<span class="caret"></span>');
 						} else {
-							$("#newVoltTypeList").prev().html('선택<span class="caret"></span>');
+
+							$("#newVoltTypeList").prev().prop("disabled", true).html('선택<span class="caret"></span>');
 						}
 
 						$("#newPeakDemand").val(util.peak_demand);
@@ -1807,24 +1809,29 @@
 			// DELETE MODAL!!!
 			if(option == "delete") {
 				let siteName = td.eq(2).text();
-				$("#deleteSuccessMsg span").text(siteName);
-				$("#deleteConfirmModal").modal("show");
+				let modal = $("#deleteConfirmModal");
+				let deleteBtn = $("#deleteConfirmBtn");
+				let confirmSiteId = $("#confirmSite");
 
-				$("#confirmSite").on("input", function() {
+				$("#deleteSuccessMsg span").text(siteName);
+				modal.find(".modal-body").removeClass("hidden");
+				modal.modal("show");
+
+				confirmSiteId.on("input", function() {
 					if($(this).val() !== siteName) {
-						$("#deleteConfirmBtn").prop("disabled", true);
+						deleteBtn.prop("disabled", true);
 						return false
 					} else {
-						$("#deleteConfirmBtn").prop("disabled", false);
+						deleteBtn.prop("disabled", false);
 					}
 				});
 
-				$("#confirmSite").on("keyup", function() {
+				confirmSiteId.on("keyup", function() {
 					if($(this).val() !== siteName) {
-						$("#deleteConfirmBtn").prop("disabled", true);
+						deleteBtn.prop("disabled", true);
 						return false
 					} else {
-						$("#deleteConfirmBtn").prop("disabled", false);
+						deleteBtn.prop("disabled", false);
 					}
 				});
 			}
@@ -2336,7 +2343,6 @@
 			if(!isEmpty($("#newContractList").prev().data("vol-type"))){
 				if( ( !isEmpty($("#newVoltTypeList").prev().data("value")) ) &&  ($("#validSite:not('.hidden')").length > 0 ) && (!isEmpty($("#newCityList").prev().data("value"))) && (!isEmpty($("#newResList").prev().data("value"))) ){
 					$("#addSiteBtn").prop("disabled", false);
-					console.log("newVoltTypeList validated!!!!")
 				} else {
 					$("#newVoltWarning").removeClass("hidden");
 					$("#addSiteBtn").prop("disabled", true);
@@ -2344,7 +2350,6 @@
 			} else {
 				if( ($("#validSite:not('.hidden')").length > 0 ) && (!isEmpty($("#newCityList").prev().data("value"))) && (!isEmpty($("#newResList").prev().data("value"))) ){
 					$("#addSiteBtn").prop("disabled", false);
-					console.log("validated!!!!")
 				} else {
 					$("#addSiteBtn").prop("disabled", true);
 				}

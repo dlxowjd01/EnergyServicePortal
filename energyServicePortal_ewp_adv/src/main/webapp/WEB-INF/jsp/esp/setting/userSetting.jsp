@@ -1405,6 +1405,7 @@
 		siteDeleteList.length = 0;
 		spcDeleteList.length = 0;
 		$("#newUserDesc").val("");
+
 		$.each(dropdown, function(index, element){
 			$(this).html('선택' + '<span class="caret"></span>');
 			$(this).data("value", "");
@@ -1583,30 +1584,33 @@
 			if(option == "delete") {
 				let tr = $("#userTable").find("tbody tr.selected");
 				let userId = tr.find("td:nth-of-type(2)").text();
+				let modal = $("#deleteConfirmModal");
+				let deleteBtn = $("#deleteConfirmBtn");
+				let confirmId = $("#confirmUserId");
 
 				$("#deleteSuccessMsg span").text(userId);
-				$("#deleteConfirmModal").modal("show");
+				modal.find(".modal-body").removeClass("hidden");
+				modal.modal("show");
 
-				$("#confirmUserId").on('input', function() {
+				confirmId.on('input', function() {
 					$(this).val($(this).val().replace(/\s/g, ''));
 				});
 
-				$("#confirmUserId").on("keyup", function() {
+				confirmId.on("keyup", function() {
 					if($(this).val() !== userId) {
-						$("#deleteConfirmBtn").prop("disabled", true);
+						deleteBtn.prop("disabled", true);
 						return false
 					} else {
-						$("#deleteConfirmBtn").prop("disabled", false);
+						deleteBtn.prop("disabled", false);
 					}
 				});
 
-				$("#confirmUserId").on("input", function() {
-					console.log("input----")
+				confirmId.on("input", function() {
 					if($(this).val() !== userId) {
-						$("#deleteConfirmBtn").prop("disabled", true);
+						deleteBtn.prop("disabled", true);
 						return false
 					} else {
-						$("#deleteConfirmBtn").prop("disabled", false);
+						deleteBtn.prop("disabled", false);
 					}
 				});
 

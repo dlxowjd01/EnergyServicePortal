@@ -1801,7 +1801,8 @@ footer .copyright {
 	left: 10px;
 	width: 0;
 	height: 0;
-	border-bottom: 5px solid var(--white87);
+	/* border-bottom: 5px solid var(--white87); */
+	border-top: 5px solid var(--white87);
 	border-left: 5px solid transparent;
 	border-right: 5px solid transparent;
 	content: "";
