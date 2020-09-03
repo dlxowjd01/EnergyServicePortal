@@ -565,7 +565,7 @@
 			$('#siteTable').DataTable().clear().destroy();
 			Promise.all([ Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])) ]).then( res => {
 			// Promise.resolve(returnAjaxRes(optionList[0])).then( res => {
-				readWriteTable(res[0], res[1], initModal);
+				readWriteTable(res[0], res[1], initModal, "destroy");
 			});
 		}
 
