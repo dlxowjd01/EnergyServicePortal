@@ -356,23 +356,7 @@
 	let confirmstate = "";
 	const sidparam = "${param.sid}";
 	let sites = JSON.parse('${siteList}');
-
-	const deviceTemplate = {
-		'SM': '스마트미터',
-		'SM_ISMART': '한전 아이스마트',
-		'SM_KPX': '전력거래소 계량포털',
-		'SM_CRAWLING': '데이터 수집기',
-		'SM_MANUAL': '수기 입력',
-		'INV_PV': '태양광 인버터',
-		'INV_WIND': '풍력 인버터',
-		'PCS_ESS': 'ESS PCS',
-		'BMS_SYS': 'BMS 시스템',
-		'BMS_RACK': 'BMS 랙',
-		'SENSOR_SOLAR': '태양광 센서',
-		'SENSOR_FRAME': '불꽃 센서',
-		'SENSOR_TEMP_HUMIDITY': '온습도 센서',
-		'CCTV': 'CCTV'
-	};
+	const deviceTemplate = new Array();
 
 	const levelTemplate = {
 		9: '알수없음',
@@ -391,7 +375,25 @@
 		'pending': '처리 결과 확인',
 		'closed': '처리 완료',
 	};
+
+	<!-- properties 조회 -->
+	const deviceProperties = async () => {
+		$.ajax({
+			url: apiHost + '/config/view/device_properties',
+			type: 'get',
+			async: false,
+			data: {},
+			success: function (result) {
+				Object.entries(result).map(obj => {
+					deviceTemplate[obj[0]] = obj[1].name.kr;
+				});
+			},
+			dataType: 'json'
+		});
+	};
+
 	$(function() {
+		deviceProperties();
 		setInitList('siteList');
 		setInitList('device');
 		siteList(sidparam);
