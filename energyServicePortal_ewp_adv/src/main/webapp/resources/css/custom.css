@@ -143,6 +143,8 @@ bootstrap default
 	--circle-solar-power: #9363fd;
 	--mustard: #ffd954;
 	--cream-can: #edc249;
+
+	--booger-buster: #E7DD6C;
 	--orange-peel: #ffa100;
 	--sea-buckthorn: #f49e34;
 	--orange-soda: : #f75c4a;
@@ -2595,14 +2597,14 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 	white-space: nowrap;
 }
 
-/* 9: 미정의(undefined) : default, 0: 정보(info), 1: 경고(warning), 2: 이상(critical), 3: 트립(shutoff), 4: 긴급 */
+/* 9: 미정의(undefined) : default, 0: 정보(info), 1: 경고(warning), 2: 이상(critical), 3: 트립(shutoff), 4: 긴급 (urgent) */
 
 .alarm_notice li a:before {
 	display: inline-block;
 	margin-right: 13px;
 	margin-top: 5px;
 	content: "";
-	background: none;
+	background:var(--grey);
 	width: 8px;
 	height: 8px;
 	border-radius: 4px;
@@ -2621,7 +2623,7 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 }
 
 .alarm_notice li a.shutoff:before {
-	background: var(--white60);
+	background: var(--sunglow);
 }
 
 .alarm_notice li a.urgent:before {
@@ -3040,7 +3042,8 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 }
 
 .user-modal-content .input_label.asterisk.no-symbol:after,
-.site-modal-content .input_label.asterisk.no-symbol:after {
+.site-modal-content .input_label.asterisk.no-symbol:after,
+.group-modal-content .input_label.asterisk.no-symbol:after {
 	content: none;
 }
 
@@ -3102,9 +3105,6 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 }
 
 
-.site-modal-content .modal-body	table .no-stripe {
-	
-}
 
 .site-modal-content .row .pl-0 {
 	padding-left: 0;
@@ -3115,7 +3115,8 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 	padding-left: 0;
 }
 
-.site-modal-content .input_label.asterisk:after {
+.site-modal-content .input_label.asterisk:after,
+.group-modal-content .input_label.asterisk:after {
 	display: flex;
 	margin: -55% 0 0 110%;
 	height: 27px;
@@ -3123,12 +3124,14 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 	color: var(--vivid-blue);
 }
 
-.site-modal-content .tick {
+.site-modal-content .tick,
+.group-modal-content .tick {
 	font-size: 12px;
 	margin: 0 8px 0 0;
 }
 
-.site-modal-content .text-sm {
+.site-modal-content .text-sm,
+.group-modal-content .text-sm {
 	margin: 10px 0 0;
 }
 
@@ -3152,11 +3155,13 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 	background-position: left;
 }
 
-.site-modal-content .tick:last-of-type {
+.site-modal-content .tick:last-of-type,
+.group-modal-content .tick:last-of-type {
 	margin: 0;
 }
 
-.site-modal-content .unit {
+.site-modal-content .unit,
+.group-modal-content .unit {
 	position: absolute;
 	right: 23px;
 	top: 22px;
@@ -9511,7 +9516,8 @@ button.tx_file {
 	color: var(--white60);
 }
 
-.collect_box .w-50 {
+.collect_box .w-50,
+.collect_box .w-100 {
 	padding: 0 16px 0 8px;
 }
 
@@ -9519,13 +9525,14 @@ button.tx_file {
 	padding: 0 8px;
 }
 
-.collect_box ul.device_list {
+.collect_box .device_list,
+.collect_box .command-list  {
 	display: flex;
 	flex-wrap: wrap;
 	margin: 0px -29px 0 -15px;
 }
 
-.collect_box ul.device_list li {
+.collect_box .device_list li {
 	display: table;
 	margin: 0 0 0 16px;
 	padding: 16px 0 14px;
@@ -9536,11 +9543,41 @@ button.tx_file {
 	border-bottom: 1px solid var(--white20);
 }
 
-.collect_box ul.device_list li .data_val {
+.collect_box .command-list .flex_group .s_tit {
+	font-size: 13px;
+	color: var(--white60);
+	width: 6vw;
+}
+.collect_box .command-list .flex_group {
+	margin: 0 0 0 16px;
+	padding: 16px 0 14px;
+	width: calc(100%);
+	color: var(--white60);
+	font-size: 13px;
+	text-align: left;
+}
+
+.collect_box .command-list .flex_group .dropdown + .tx_inp_type {
+	margin-left: 28px;
+}
+
+.collect_box .command-list .flex_group .tx_inp_type + .btn_wrap_type02 {
+	margin-left: 16px;
+}
+
+.collect_box .command-list .flex_group .dropdown-toggle {
+	width: 17vw;
+}
+
+.collect_box .command-list .flex_group:last-of-type .tx_inp_type {
+	width: 12.5vw;
+}
+
+.collect_box .device_list li .data_val {
 	float: right;
 }
 
-.collect_box ul.device_list li .data_val.no_val {
+.collect_box .device_list li .data_val.no_val {
 	padding-right: 10px;
 }
 
@@ -9556,7 +9593,8 @@ button.tx_file {
 
 .collect_wrap.table_scroll {
 	overflow: auto;
-	height: 500px;
+	/* height: 500px; */
+	height: 200px;
 	margin-top: -20px;
 }
 

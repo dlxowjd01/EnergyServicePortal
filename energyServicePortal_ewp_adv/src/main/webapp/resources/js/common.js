@@ -654,3 +654,10 @@ $.fn.multiline = function(text){
 	this.html(this.html().replace(/\n/g,'<br/>'));
 	return this;
 }
+
+$.fn.extend({
+    toggleText: function(a, b){
+		console.log("text---", this.text() )
+        return this.text(this.text() == b ? a : b);
+    }
+});
