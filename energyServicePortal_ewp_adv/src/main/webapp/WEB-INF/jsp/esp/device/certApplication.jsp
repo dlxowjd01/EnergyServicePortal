@@ -300,7 +300,7 @@
 				</div>
 				<div class="btn_wrap_type_right">
 					<button type="button" class="btn_type03 big" onclick="sampleDownload();">샘플 다운로드</button>
-					<button type="button" class="btn_type big">신청</button>
+					<button type="button" class="btn_type big" onclick="register();">신청</button>
 				</div>
 			</div>
 		</form>
