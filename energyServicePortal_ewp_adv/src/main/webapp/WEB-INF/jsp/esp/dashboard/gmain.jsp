@@ -133,6 +133,7 @@
 						</div>
 						<div class="ci_right">
 							<div class="legend_wrap">
+								<span class="bu3">풍력</span>
 								<span class="bu1"><fmt:message key="gdash.4.gen" /></span>
 								<span class="bu4"><fmt:message key="gdash.4.idle" /></span>
 							</div>
@@ -140,8 +141,8 @@
 								<c:choose>
 									<c:when test="${fn:contains(sessionScope.userInfo.oid, 'kpx')}">
 										<li><strong><fmt:message key="gdash.4.active_power" /></strong> <span> 0 </span><em>&nbsp;&nbsp;kW</em></li>
-										<li><strong><fmt:message key="gdash.4.maxactive_power" /></strong> <span> 0 </span><em>&nbsp;&nbsp;Var</em></li>
-										<li><strong><fmt:message key="gdash.4.reactive_power" /></strong> <span> 0 </span><em>&nbsp;&nbsp;kW</em></li>
+										<li><strong>목표전력</strong> <span> 0 </span><em>&nbsp;&nbsp;kW</em></li>
+										<li><strong>설비용량</strong> <span> 0 </span><em>&nbsp;&nbsp;kW</em></li>
 									</c:when>
 									<c:otherwise>
 										<li><strong><fmt:message key="gdash.4.today_gen" /></strong> <span> 0 </span><em>&nbsp;&nbsp;kWh</em></li>
@@ -161,26 +162,18 @@
 							<tr>
 								<th>구분</th>
 								<th>사업소</th>
-								<th>설비용량</th>
 								<th>유효전력</th>
-								<th>무효전력</th>
-								<th>가용전력</th>
+								<th>구분</th>
+								<th>사업소</th>
+								<th>유효전력</th>
 							</tr>
 							</thead>
 							<tbody id="centerTbody">
 							<tr>
-								<td>풍력</td>
+								<td> 풍력 </td>
 								<td> - </td>
 								<td> - </td>
-								<td> - </td>
-								<td> - </td>
-								<td> - </td>
-							</tr>
-							<tr>
-								<td>태양광</td>
-								<td> - </td>
-								<td> - </td>
-								<td> - </td>
+								<td> 태양광 </td>
 								<td> - </td>
 								<td> - </td>
 							</tr>
@@ -289,13 +282,13 @@
 										<button type="button" class="btn_align">발전기</button>
 									</th>
 									<th>
-										<button type="button" class="btn_align">모선전압</button>
-									</th>
-									<th>
-										<button type="button" class="btn_align">설비용량</button>
-									</th>
-									<th>
 										<button type="button" class="btn_align">현재출력</button>
+									</th>
+									<th>
+										<button type="button" class="btn_align">목표출력</button>
+									</th>
+									<th>
+										<button type="button" class="btn_align">무효전력</button>
 									</th>
 										</c:when>
 										<c:otherwise>
@@ -343,9 +336,9 @@
 										<td>[alarmError]</td>
 										<td>[alarmWarning]</td>
 										<td class="center">[name]</td>
-										<td class="right"></td>
-										<td class="right">[capacity]</td>
 										<td class="right">[activePower]</td>
+										<td class="right">[targetActivePower]</td>
+										<td class="right">[reactivePower]</td>
 									</tr>
 									<tr class="detail_info list[INDEX] flag[INDEX]">
 										<td colspan="9">
@@ -397,16 +390,16 @@
 																</div>
 																<ul class="di_list">
 																	<li>
-																		<span class="di_li_tit">설비용량 (kW)</span>
+																		<span class="di_li_tit">목표출력 (kW)</span>
 																		<span class="di_li_tx">[capacity]</span>
 																	</li>
 																	<li>
-																		<span class="di_li_tit">ESS High/Low (kW)</span>
-																		<span class="di_li_tx">[essMaxActivePower] / [essMinActivePower]</span>
+																		<span class="di_li_tit">송신시간</span>
+																		<span class="di_li_tx">[lastTargetActivePowerReqDate]</span>
 																	</li>
 																	<li>
-																		<span class="di_li_tit">ESS SOC (%)</span>
-																		<span class="di_li_tx">[essSoc]</span>
+																		<span class="di_li_tit">수신시간</span>
+																		<span class="di_li_tx">[lastTargetActivePowerRecvDate]</span>
 																	</li>
 																</ul>
 																<div class="di_tx_bx">
@@ -560,6 +553,7 @@
 
 	$(function () {
 		setInitList('alarmNotice'); //알람 공지 세팅
+		//resourceProperties();
 
 		makeSiteList();
 		if (!isEmpty(siteList) && siteList.length > 0) {
@@ -579,9 +573,13 @@
 
 	function fn_cycle_1hour() {
 		if (!first) {
-			getYearGenData();
-			getDailyGenData();
-			getGenDataBySiteYesterday();
+			if (oid.match('kpx')) {
+				getYearGenDataKPX();
+			} else {
+				getYearGenData();
+				getDailyGenData();
+				getGenDataBySiteYesterday();
+			}
 			searchSiteList();
 		}
 

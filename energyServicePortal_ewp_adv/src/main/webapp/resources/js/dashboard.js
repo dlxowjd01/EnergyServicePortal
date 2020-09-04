@@ -1403,14 +1403,8 @@ const getTodayTotalDetail = async function () {
 	} else {
 		$('#centerTbody tr:eq(0) td:nth-child(2)').text(' - ');
 		$('#centerTbody tr:eq(0) td:nth-child(3)').text(' - ');
-		$('#centerTbody tr:eq(0) td:nth-child(4)').text(' - ');
 		$('#centerTbody tr:eq(0) td:nth-child(5)').text(' - ');
 		$('#centerTbody tr:eq(0) td:nth-child(6)').text(' - ');
-		$('#centerTbody tr:eq(1) td:nth-child(2)').text(' - ');
-		$('#centerTbody tr:eq(1) td:nth-child(3)').text(' - ');
-		$('#centerTbody tr:eq(1) td:nth-child(4)').text(' - ');
-		$('#centerTbody tr:eq(1) td:nth-child(5)').text(' - ');
-		$('#centerTbody tr:eq(1) td:nth-child(6)').text(' - ');
 
 		$('.gmain_chart_kpx .chart_box .chart_info .ci_right ul li:nth-child(1) span').text('')
 		$('.gmain_chart_kpx .chart_box .chart_info .ci_right ul li:nth-child(2) span').text('')
@@ -1440,21 +1434,18 @@ const getTodayTotalDetail = async function () {
 					let maxacPower = 0;
 					rtnData.forEach(di => {
 						let aPower = di.activePower;
-						let rPower = di.reactivePower;
-						let mPower = di.maxActivePower;
+						let tPower = di.targetActivePower;
 
 						let prevVal1 = Number($('.gmain_chart_kpx .chart_box .chart_info .ci_right ul li:nth-child(1) span').text().replace(/[^0-9]/g, ''));
 						$('.gmain_chart_kpx .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(numberComma(Math.floor(prevVal1 += (aPower / 1000))));
 
 						let prevVal2 = Number($('.gmain_chart_kpx .chart_box .chart_info .ci_right ul li:nth-child(2) span').text().replace(/[^0-9]/g, ''));
-						$('.gmain_chart_kpx .chart_box .chart_info .ci_right ul li:nth-child(2) span').text(numberComma(Math.floor(prevVal2 += (mPower / 1000))));
+						$('.gmain_chart_kpx .chart_box .chart_info .ci_right ul li:nth-child(2) span').text(numberComma(Math.floor(prevVal2 += (tPower / 1000))));
 
 						let prevVal3 = Number($('.gmain_chart_kpx .chart_box .chart_info .ci_right ul li:nth-child(3) span').text().replace(/[^0-9]/g, ''));
-						$('.gmain_chart_kpx .chart_box .chart_info .ci_right ul li:nth-child(3) span').text(numberComma(Math.floor(prevVal3 += (rPower / 1000))));
+						$('.gmain_chart_kpx .chart_box .chart_info .ci_right ul li:nth-child(3) span').text(numberComma(Math.floor(prevVal3 += (capacity / 1000))));
 
 						acPower += aPower;
-						reacPower += rPower;
-						maxacPower += mPower;
 					});
 					pieChart.setTitle({text: Math.floor(acPower / 1000) + 'kW'});
 
@@ -1473,28 +1464,18 @@ const getTodayTotalDetail = async function () {
 					pieChart.redraw();
 
 					if (resourceType == 1) {
-						let sitePreVal = Number($('#centerTbody tr:eq(1) td:nth-child(2)').text().replace(/[^0-9]/g, ''));
-						let capacityPreVal = Number($('#centerTbody tr:eq(1) td:nth-child(3)').text().replace(/[^0-9]/g, ''));
-						let activePreVal = Number($('#centerTbody tr:eq(1) td:nth-child(4)').text().replace(/[^0-9]/g, ''));
-						let reactivePreVal = Number($('#centerTbody tr:eq(1) td:nth-child(5)').text().replace(/[^0-9]/g, ''));
-						let maxactivePreVal = Number($('#centerTbody tr:eq(1) td:nth-child(6)').text().replace(/[^0-9]/g, ''));
+						let sitePreVal = Number($('#centerTbody tr:eq(0) td:nth-child(4)').text().replace(/[^0-9]/g, ''));
+						let capacityPreVal = Number($('#centerTbody tr:eq(0) td:nth-child(6)').text().replace(/[^0-9]/g, ''));
 
-						$('#centerTbody tr:eq(1) td:nth-child(2)').html(sitePreVal + 1 + '<em>&nbsp;&nbsp;개소</em>'); //사업소
-						$('#centerTbody tr:eq(1) td:nth-child(3)').html(numberComma(Math.floor(capacityPreVal += (capacity / 1000)) + '<em>&nbsp;&nbsp;kW</em>')); //설비용량
-						$('#centerTbody tr:eq(1) td:nth-child(4)').html(numberComma(Math.floor(activePreVal += (acPower / 1000)) + '<em>&nbsp;&nbsp;kW</em>')); //유효전력
-						$('#centerTbody tr:eq(1) td:nth-child(5)').html(numberComma(Math.floor(reactivePreVal += (reacPower / 1000)) + '<em>&nbsp;&nbsp;kW</em>')); //무효전력
-						$('#centerTbody tr:eq(1) td:nth-child(6)').html(numberComma(Math.floor(maxactivePreVal += (maxacPower / 1000)) + '<em>&nbsp;&nbsp;kW</em>')); //가용전력
-					} else {
+						$('#centerTbody tr:eq(0) td:nth-child(4)').html('태양광'); //구분
+						$('#centerTbody tr:eq(0) td:nth-child(5)').html(sitePreVal + 1 + '<em>&nbsp;&nbsp;개소</em>'); //사업소
+						$('#centerTbody tr:eq(0) td:nth-child(6)').html(numberComma(Math.floor(capacityPreVal += (capacity / 1000)) + '<em>&nbsp;&nbsp;kW</em>')); //설비용량
+					} else if (resourceType == 2) {
 						let sitePreVal = Number($('#centerTbody tr:eq(0) td:nth-child(2)').text().replace(/[^0-9]/g, ''));
 						let capacityPreVal = Number($('#centerTbody tr:eq(0) td:nth-child(3)').text().replace(/[^0-9]/g, ''));
-						let activePreVal = Number($('#centerTbody tr:eq(0) td:nth-child(4)').text().replace(/[^0-9]/g, ''));
-						let reactivePreVal = Number($('#centerTbody tr:eq(0) td:nth-child(5)').text().replace(/[^0-9]/g, ''));
-						let maxactivePreVal = Number($('#centerTbody tr:eq(0) td:nth-child(6)').text().replace(/[^0-9]/g, ''));
+						$('#centerTbody tr:eq(0) td:nth-child(1)').html('풍력'); //구분
 						$('#centerTbody tr:eq(0) td:nth-child(2)').html(sitePreVal + 1 + '<em>&nbsp;&nbsp;개소</em>'); //사업소
 						$('#centerTbody tr:eq(0) td:nth-child(3)').html(numberComma(Math.floor(capacityPreVal += (capacity / 1000)) + '<em>&nbsp;&nbsp;kW</em>')); //설비용량
-						$('#centerTbody tr:eq(0) td:nth-child(4)').html(numberComma(Math.floor(activePreVal += (acPower / 1000)) + '<em>&nbsp;&nbsp;kW</em>')); //유효전력
-						$('#centerTbody tr:eq(0) td:nth-child(5)').html(numberComma(Math.floor(reactivePreVal += (reacPower / 1000)) + '<em>&nbsp;&nbsp;kW</em>')); //무효전력
-						$('#centerTbody tr:eq(0) td:nth-child(6)').html(numberComma(Math.floor(maxactivePreVal += (maxacPower / 1000)) + '<em>&nbsp;&nbsp;kW</em>')); //가용전력
 					}
 				}).fail(function (jqXHR, textStatus, errorThrown) {
 					console.error(jqXHR);
@@ -1992,13 +1973,6 @@ const searchSite = function () {
 		if (oid.match('kpx')) {
 			const devices = site.devices;
 			let deviceArray = new Array();
-			let activePower = 0;
-			let reactivePower = 0;
-			let essActivePower = 0;
-			let maxActivePower = 0;
-			let essMaxActivePower = 0;
-			let essMinActivePower = 0;
-			let essSoc = 0;
 			devices.forEach(device => {
 				if (device.device_type === 'KPX_EMS' || device.device_type === 'SENSOR_WEATHER') {
 					deviceArray.push(device.did);
@@ -2029,13 +2003,16 @@ const searchSite = function () {
 						});
 					} else {
 						deviceData.forEach(di => {
-							activePower += di.activePower;
-							reactivePower += di.reactivePower;
-							essActivePower += (di.essDActivePower - di.essCActivePower);
-							maxActivePower += di.maxActivePower;
-							essMaxActivePower += di.essMaxActivePower;
-							essMinActivePower += di.essMinActivePower;
-							essSoc += di.essSoc;
+							refineList[siteIdx].activePower = numberComma(di.activePower / 1000);
+							refineList[siteIdx].reactivePower = numberComma(di.reactivePower / 1000);
+							refineList[siteIdx].targetActivePower = numberComma(di.targetActivePower / 1000);
+							refineList[siteIdx].essActivePower = numberComma(di.essDActivePower - di.essCActivePower / 1000);
+							refineList[siteIdx].maxActivePower = numberComma(di.maxActivePower / 1000);
+							refineList[siteIdx].essMaxActivePower = numberComma(di.essMaxActivePower / 1000);
+							refineList[siteIdx].essMinActivePower = numberComma(di.essMinActivePower / 1000);
+							refineList[siteIdx].essSoc = numberComma(di.essSoc / 1000);
+							refineList[siteIdx].lastTargetActivePowerRecvDate = String(di.lastTargetActivePowerRecvDate).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
+							refineList[siteIdx].lastTargetActivePowerReqDate = String(di.lastTargetActivePowerReqDate).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
 						});
 					}
 				});
@@ -2049,13 +2026,7 @@ const searchSite = function () {
 				return false;
 			});
 
-			refineList[siteIdx].activePower = numberComma(activePower / 1000);
-			refineList[siteIdx].reactivePower = numberComma(reactivePower / 1000);
-			refineList[siteIdx].essActivePower = numberComma(essActivePower / 1000);
-			refineList[siteIdx].maxActivePower = numberComma(maxActivePower / 1000);
-			refineList[siteIdx].essMaxActivePower = numberComma(essMaxActivePower / 1000);
-			refineList[siteIdx].essMinActivePower = numberComma(essMinActivePower / 1000);
-			refineList[siteIdx].essSoc = numberComma(essSoc / 1000);
+
 		} else {
 			if(typeof site.accumulate !== 'string') {
 				if (site.accumulate == 0) {

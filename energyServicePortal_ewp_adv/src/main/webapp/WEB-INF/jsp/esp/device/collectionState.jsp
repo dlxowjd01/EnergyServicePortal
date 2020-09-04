@@ -44,7 +44,7 @@
 					<div class="dropdown" id="rtuSite">
 						<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="사업소 선택">
 							사업소 선택<span class="caret"></span>
-						</button>
+						</button>g
 						<ul class="dropdown-menu chk_type" id="rtuSiteULList">
 							<li data-value="[sid]">
 								<a href="javascript:void(0);" tabindex="-1">[name]</a>
@@ -128,26 +128,65 @@
 				</div>
 			</div>
 
+			<c:choose>
+				<c:when test="${fn:contains(sessionScope.userInfo.oid, 'kpx')}">
+			<div class="row">
+				<div class="w-100">
+					<h2 class="list_title">커멘드 전달</h2>
+					<div id="rtuCommand" class="command-list">
+						<div class="flex_group">
+							<span class="s_tit">커멘드</span>
+							<div class="dropdown" id="command">
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+								<ul class="dropdown-menu" role="menu">
+									<li data-value="kpx_targetPower"><a href="javascript:void(0);" tabindex="-1">kpx_targetPower</a></li>
+								</ul>
+							</div>
+						</div>
+						<div class="flex_group">
+							<span class="s_tit">옵션</span>
+							<div class="dropdown" id="commandKey">
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+								<ul class="dropdown-menu" role="menu" id="selectCmdOptList">
+									<li data-value="targetActivePower"><a href="javascript:void(0);" tabindex="-1">목표출력</a></li>
+								</ul>
+							</div>
+							<div class="tx_inp_type">
+								<input type="text" id="optionVal" name="optionVal" placeholder="">
+							</div>
+							<div class="btn_wrap_type02 flex_start">
+<%--								<button type="button" class="btn_type03">삭제</button>--%>
+								<button type="button" class="btn_type" onclick="commandSend();">보내기</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+				</c:when>
+				<c:otherwise>
 			<div class="tbl_top clear"><h2 class="ntit fl">연결 설비</h2></div>
 			<div class="collect_wrap table_scroll">
 				<table id="detailInfoTable" class="his_tbl">
 					<thead>
-						<tr>
-							<th>설비 타입</th>
-							<th>설비 명</th>
-							<th>통신 유형</th>
-							<th>Baud Rate</th>
-							<th>설비 용량</th>
-							<th>상세 정보</th>
-						</tr>
+					<tr>
+						<th>설비 타입</th>
+						<th>설비 명</th>
+						<th>통신 유형</th>
+						<th>Baud Rate</th>
+						<th>설비 용량</th>
+						<th>상세 정보</th>
+					</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td colspan="6">왼쪽 표에서 조회하고자 하는 RTU를 클릭해 주세요.</td>
-						</tr>
+					<tr>
+						<td colspan="6">왼쪽 표에서 조회하고자 하는 RTU를 클릭해 주세요.</td>
+					</tr>
 					</tbody>
 				</table>
 			</div>
+				</c:otherwise>
+			</c:choose>
+
 		</div>
 	</div>
 </div>
@@ -509,6 +548,13 @@
 		status.eq(3).html('-');
 
 		const logTable = $('#logTable tbody');
+
+		if (oid.match('kpx')) {
+			dropDownInit($('#command'));
+			dropDownInit($('#commandKey'));
+			$('#optionVal').val('');
+		}
+
 		logTable.empty();
 	}
 
@@ -804,5 +850,51 @@
 		}
 
 		$('#logPaging').append(pageStr);
+	}
+
+	const commandSend = () => {
+		const rid = $('#selectedRTU').data('rid');
+		const command = $('#command button').data('value');
+		const commandKey = $('#commandKey button').data('value');
+		const optionVal = $('#optionVal').val();
+
+		let bodyCommand = new Object();
+
+		if (isEmpty(rid)) {
+			alert('RTU를 선택해주세요.');
+			return false;
+		}
+
+		if (isEmpty(command)) {
+			alert('커맨드를 선택해주세요.');
+			return false;
+		}
+
+		if (isEmpty(optionVal)) {
+			alert('옵션을 입력해주세요.');
+			return false;
+		}
+
+		if (command.match('target')) {
+			bodyCommand[commandKey] = optionVal;
+		}
+
+		$.ajax({
+			url: apiHost + '/control/send/' + rid + '?cmdType=' + command,
+			type: 'POST',
+			dataType: 'json',
+			contentType: 'application/json',
+			data: JSON.stringify({
+				cmdBody: bodyCommand
+			}),
+			success: function (data) {
+				console.log(data);
+			},
+			error: function (error) {
+				console.error(error);
+				alert('RTU ' + typeName + '에 실패했습니다. 값을 다시 확인해 주세요.');
+				return false;
+			}
+		});
 	}
 </script>
