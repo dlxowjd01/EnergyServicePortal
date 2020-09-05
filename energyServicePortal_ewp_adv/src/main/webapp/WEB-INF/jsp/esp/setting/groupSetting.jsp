@@ -6,6 +6,300 @@
 	$(function () {
 		// let s = JSON.parse('${siteList}');
 		// console.log("siteList---", s);
+		getGroupData();
+		// dropdown event
+		setDropdownValue($("#newGroupType"));
+		setDropdownValue($("#groupList"));
+		setDropdownValue($("#newGroupType"));
+
+		$("#newGroupType li").on("click", function(){
+			let groupType = $("#newGroupType");
+			let val = $(this).data("value");
+			let name = $(this).data("name");
+			let newGroupWarning = groupType.prev().parent().next();
+			let shareOpt = $("#shareOptGroup");
+			let resId = $("#resIdWrapper");
+			let newResId = $("#newResId");
+			let radioWarning = shareOpt.find(".warning");
+			let radioGroup = shareOpt.find('input[type=radio][name=share_option]');
+
+			groupType.prev().data({ "value" : val, "name" : name });
+			newGroupWarning.addClass("hidden");
+
+			$("#validGroup").addClass("hidden");
+
+			if(val === "tag_group"){
+				shareOpt.removeClass("hidden").prev().removeClass("hidden");
+				radioWarning.removeClass("hidden");
+				resId.addClass("hidden").prev().addClass("hidden");
+				newResId.val("");
+			} else {
+				shareOpt.addClass("hidden").prev().addClass("hidden");
+				radioGroup.prop("checked", false);
+				resId.removeClass("hidden").prev().removeClass("hidden");
+			}
+			if( !isEmpty($("#newGroupName").val()) ){
+				$("#checkGroupBtn").prop("disabled", false);
+			}		
+			setTimeout(function(){
+				validateForm();
+			}, 200);
+		});
+
+		$("#shareOptGroup input[type=radio][name=share_option]").on("change", function(){
+			$("#shareOptGroup").find(".warning").addClass("hidden");
+			setTimeout(function(){
+				validateForm();
+			}, 200);
+		});
+
+		$("#groupList li").on( 'click', function(){
+			if(!isEmpty($(this).data("name"))){
+				filterColumn( "#groupTable", "1", $(this).data("name"));
+			} else {
+				filterColumn("#groupTable", "1", "");
+			}
+		});
+
+		// Validations
+		$("#newGroupName").on('input', function() {
+			let newGroupType = $("#newGroupType");
+
+			$("#invalidGroup").addClass("hidden");
+			if(isEmpty(newGroupType.prev().data("value"))){
+				newGroupType.parent().next().removeClass("hidden");
+			} else {
+				newGroupType.parent().next().addClass("hidden");
+			}
+			validateForm();
+		});
+
+		$("#newGroupName").on('keyup', function() {
+			let warning = $("#validGroup").parent().find(".warning");
+
+			$("#validGroup").addClass("hidden")
+
+			if( $(this).val().match(/^[.!#$%&'*+/=?^`{|}~]/) ) {
+				warning.eq(2).removeClass("hidden");
+			} else {
+				warning.eq(2).addClass("hidden");
+			}
+
+			if( $(this).val().length <= 1 || $(this).val().length > 15) {
+				warning.eq(1).removeClass("hidden");
+			} else {
+				warning.eq(1).addClass("hidden");
+			}
+
+			if( warning.not(".hidden").index() == -1 && !isEmpty($("#newGroupType").prev().data("value")) ){
+				$("#newGroupName").parent().next().prop("disabled", false);
+			} else {
+				$("#newGroupName").parent().next().prop("disabled", true);
+			}
+		});
+
+		
+		// Modal event
+		$("#addGroupModal").on("hide.bs.modal", function(){
+			$(this).hasClass("edit") ? $(this).removeClass("edit") : null;
+
+			initModal();
+			$("#validGroup").addClass("hidden");
+		});
+	
+
+		// Form Submission
+		$("#updateGroupForm").on("submit", function(e){
+			e.preventDefault();
+
+			let option = {};
+
+			let obj = {};
+			let newGrpType = $("#newGroupType").prev().data("value");
+			let newGrpName = $("#newGroupName").val();
+			let newResId = $("#newResId").val();
+			let shareOption =  $("#shareOptGroup input[type=radio]:checked"); 
+			let siteNameStr = $("#newSiteList").find("input:checked");
+			let newGroupDetail = $("#newGroupDetail").val();
+
+
+			// 1. Add group info
+			if(!$("#addGroupModal").hasClass("edit")) {
+				option = {
+					type: 'post',
+					async: true,
+					dataType: 'json',
+					contentType: "application/json",
+				}
+				obj.name = newGrpName;
+
+				if(newGrpType === "tag_group"){
+					if(shareOption.data("value") == "1"){
+						obj.shared = true;
+					} else {
+						obj.shared = false;
+					}
+					if(!isEmpty(newGroupDetail)){
+						obj.description = newGroupDetail;
+					}
+					option.url =  apiHost + "/config/site_groups?uid=" + userInfoId;
+					option.data = JSON.stringify(obj);
+
+					option = {
+						url: apiHost + "/config/site_groups?uid=" + userInfoId,
+						type: 'post',
+						async: true,
+						data: JSON.stringify(obj),
+						contentType: 'application/json; charset=UTF-8',
+					}
+
+
+					Promise.resolve(returnAjaxRes(option)).then(res => {
+						let selectedSiteId = $("#newSiteList input:checked");
+						let sgid = res.sgid;
+						let siteArr = [];
+						$.each(selectedSiteId, function(index, el){
+							siteArr.push($(this).data("value") );
+							// siteStr += $(this).data("value") + ",";
+							// if(index === selectedSiteId.length -1 ){
+							// 	siteStr += $(this).data("value");
+							// }
+						});
+						let obj = {
+							sid: JSON.stringify(siteArr)
+						}
+						// let splitStr = siteStr.split(",");
+					
+					
+						let siteOpt = {
+							url: apiHost + "/config/group_sites?sgid=" + sgid,
+							type: 'post',
+							async: true,
+							data: JSON.stringify(obj),
+							contentType: 'application/json; charset=UTF-8',
+						};
+						return siteOpt;
+					}).then(newRes => {
+						$.ajax(newRes).done(function (json, textStatus, jqXHR) {
+							$("#addGroupModal").modal("hide");
+							$("#resultSuccessMsg").text("그룹이 추가 되었습니다.").removeClass("hidden");
+							$("#resultBtn").parent().addClass("hidden");
+							$("#resultModal").modal("show");
+							getGroupData(initModal);
+							setTimeout(function(){
+								$("#resultModal").modal("hide");
+							}, 1600);
+						}).fail(function (jqXHR, textStatus, errorThrown) {
+
+							console.log("fail==", jqXHR)
+						});
+					});
+					
+				} else if(newGrpType === "vpp_group"){
+
+
+					if(!isEmpty(newResId)){
+						obj.description = newResId;
+					}
+
+					option.url =  apiHost + "/config/vpp-groups?oid=" + oid;
+					option.data = JSON.stringify(obj);
+
+					// option = {
+					// 	url: apiHost + "/config/vpp-groups?oid=" + oid,
+					// 	type: 'post',
+					// 	async: true,
+					// 	dataType: 'json',
+					// 	contentType: "application/json",
+					// 	data: JSON.stringify(obj)
+					// }
+
+				} else if(newGrpType === "dr_group"){
+
+					if(!isEmpty(newResId)){
+						obj.description = newResId;
+					}
+
+					option.url =  apiHost + "/config/dr-groups?oid=" + oid;
+					option.data = JSON.stringify(obj);
+
+					// option = {
+					// 	url: apiHost + "/config/dr-groups?oid=" + oid,
+					// 	type: 'post',
+					// 	async: true,
+					// 	dataType: 'json',
+					// 	contentType: "application/json",
+					// 	data: JSON.stringify(obj)
+					// }
+				}
+			} else {
+				// 2. Edit existing user info
+				let dTable = $("#userTable").DataTable();
+				let tr = $("#userTable").find("tbody tr.selected");
+				let td = tr.find("td");
+
+				let rowData = dTable.row(tr).data();
+			}
+
+
+		});
+
+
+		// WORK IN PROGRESS!!!!!!!!!!!!!!!
+		$("#deleteConfirmBtn").click(function(){
+			let dTable = $("#groupTable").DataTable();
+			let tr = $("#groupTable").find("tbody tr.selected");
+			let rowData = dTable.row(tr).data();
+			let gsid = rowData.sid;
+			let modalBody = $("#deleteConfirmModal .modal-body");
+			console.log("rowData===", rowData)
+			if(rowData.sgid){
+				let optDelete = {
+					url: apiHost + "/config/group_sites/" + gsid,
+					type: "delete",
+					async: true,
+				}
+			} else if(rowData.vgid){
+				let optDelete = {
+					url: apiHost + "/config/group_sites/" + gsid,
+					type: "delete",
+					async: true,
+				} 
+			} else if(rowData.dgid){
+				let optDelete = {
+					url: apiHost + "/config/group_sites/" + gsid,
+					type: "delete",
+					async: true,
+				}
+			}
+
+			// $.ajax(optDelete).done(function (json, textStatus, jqXHR) {
+			// 	modalBody.addClass("hidden");
+			// 	$("#deleteSuccessMsg").text("사이트가 삭제 되었습니다.").removeClass("hidden");
+			// 	dTable.row(tr).remove().draw();
+			// 	// refreshSiteList();
+			// 	setTimeout(function(){
+			// 		$("#deleteConfirmModal").modal("hide");
+			// 	}, 1000);
+			// }).fail(function (jqXHR, textStatus, errorThrown) {
+			// 	modalBody.addClass("hidden");
+			// 	$("#deleteSuccessMsg").text("사이트 삭제에 실패하였습니다.\n다시 시도해 주세요.").removeClass("hidden");
+			// 	setTimeout(function(){
+			// 		$("#deleteConfirmModal").modal("hide");
+			// 	}, 1500);
+			// 	console.log("fail==", jqXHR)
+			// });
+		});
+
+
+	});
+
+
+	function getGroupData(callback){
+		if(callback){
+			callback();
+			$('#groupTable').DataTable().clear().destroy();
+		}
 		let optionList = [
 			{
 				url: apiHost + "/auth/me/groups?includeSites=true&includeDevices=false",
@@ -27,311 +321,90 @@
 						// { "order": [ "name ASC", "updatedAt DESC" ] }
 					),
 				}
-			},
-
-			// {
-			// 	url: apiHost + "/auth/me",
-			// 	type: "get",
-			// 	async: true,
-			// },
+			}
 		];
 
 		// 	Promise.all([ Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])) ]).then( res => {
 		Promise.resolve(returnAjaxRes(optionList[0])).then( res => {
-			console.log("res=---", res)
 			let flat = [];
+
 			flat = [...res.dr_group, ...res.vpp_group, ...res.tag_group];
-			console.log("flat---", isEmpty(flat))
-			// console.log("flat---", flat);
 			if(isEmpty(flat)) {
 				drawEmptyTable($("#groupTable"));
 			} else {
 				if(role == 1){
-					readWriteTable(flat);
+					adminTable(flat);		
 				} else {
-					readOnlyTable(res);
+					nonAdminTable(flat);
 				}
 			}
 
-		});
+			$("#checkGroupBtn").on("click", function(){
+				let name = $("#newGroupName").val();
+				let group = $("#newGroupType").prev().data("value");
 
-		function readWriteTable(groupData, callback) {
-			if(!callback) {
-				// getPropertyData();
-				// getVppDrData(vppNameData);
-			} else {
-				callback();
-			}
-			if(groupData) {
-				// 1. 그룹 유형
-				// 2. 그룹 명
-				// 3. 사업소
-				// 4. 최종 작업자
-				// 5. 비고
-				// 6. 업데이트 날짜
+				if(isEmpty(name)) return false;
+				$("#validGroup").addClass("hidden").parent().find(".warning").addClass("hidden");
 
-				var groupTable = $('#groupTable').DataTable({
-					"aaData": groupData,
-					"table-layout": "fixed",
-					"fixedHeader": true,
-					"bAutoWidth": true,
-					"bSearchable" : true,
-					// "ScrollX": true,
-					// "sScrollX": "110%",
-					// "sScrollXInner": "110%",
-					"sScrollY": true,
-					"scrollY": "720px",
-					"bScrollCollapse": true,
-					"pageLength": 100,
-					// "bFilter": false, disabling this option will prevent table.search()
-					"aaSorting": [[ 0, 'asc' ]],
-					"bSortable": true,
-					"order": [[ 1, 'asc' ]],
-					"aoColumnDefs": [
-						{
-							"aTargets": [ 0 ],
-							"bSortable": false,
-							"orderable": false
-						},
-					],
-					"aoColumns": [
-						{
-							"sTitle": "",
-							"mData": null,
-							"mRender": function ( data, type, full, rowIndex )  {
-								return '<a class="chk_type" href="#"><input type="checkbox" id="' + rowIndex + '" name="table_checkbox"><label for="' + rowIndex + '"></label></a>'
-							},
-							"className": "dt-body-center no-sorting"
-						},
-						// {
-						// 	"sTitle": "순번",
-						// 	"mData": null,
-						// 	"className": "dt-center no-sorting"
-						// },
-						{
-							"sTitle": "그룹 유형",
-							"mData": null,
-							"mRender": function ( data, type, full, rowIndex )  {
-								let groupType = "";
-								if(full.dgid){
-									return groupType = "DR 그룹";
-								} else if(full.vgid){
-									return groupType = "VPP 그룹";
-								} else if(full.sgid){
-									return groupType = "사업소 그룹";
-								}
-							}
-						},
-						{
-							"sTitle": "그룹 명",
-							"mData": "name"
-						},
-						{
-							"sTitle": "사업소",
-							"mData":  null,
-							"mRender": function ( data, type, full, rowIndex )  {
-								// console.log("full===", full)
-								if(!isEmpty(full.sites)){
-									let siteName = "";
-									// let siteArr = [];
-									$.each(full.sites, function(index, el){
-										// console.log("el===", el);
-										// siteArr.push(el.name);
-										siteName += el.name + ", ";
-									});
-									// console.log("siteName===", siteName);
-									// console.log("siteArr===", siteArr);
-									// siteName = [].concat(...siteArr);
-									// return siteName;
-									return siteName = siteName.replace(/,\s*$/, "");
-								} else {
-									return siteName = "-";
-								}
-
-							}
-						},
-						{
-							"sTitle": "최종작업자",
-							"mData": null,
-							"mRender": function ( data, type, full, rowIndex )  {
-								let updatedBy = "";
-								if(!isEmpty(full.updatedBy)){
-									updatedBy = full.updatedBy;
-								} else {
-									updatedBy = "-";
-								}
-								return updatedBy;
-								
-							}
-						},
-						{
-							"sTitle": "업데이트 일자",
-							"mData": null,
-							"mRender": function ( data, type, full, rowIndex )  {
-								let date = "";
-								if(!isEmpty(full.updatedAt)){
-									date = new Date(full.updatedAt).toLocaleDateString("en-CA").replace(/\//g, '-') + '&ensp;' + new Date(full.updatedAt).toLocaleTimeString();
-								} else {
-									date = "-";
-								}
-								return date;
-							}
-						},
-						{
-							"sTitle": "비고",
-							"mData": null,
-							"mRender": function ( data, type, full, rowIndex )  {
-								let desc = "";
-								if(!isEmpty(full.description)){
-									updatedBy = full.description;
-								} else {
-									desc = "-";
-								}
-								return desc;
-							}
-						}
-					],
-					"dom": 'tip',
-					"select": {
-						style: 'single',
-						// selector: 'tr',
-						selector: 'td input[type="checkbox"], tr',
-						// selector: 'td input[type="checkbox"], td:not(:last-of-type)',
-					},
-					initComplete: function(settings, json ){
-						let str = `<div id="btnGroup" class="right-end"><!--
-							--><button type="button" disabled class="btn_type03" onclick="updateModal('edit')">선택 수정</button><!--
-							--><button type="button" disabled class="btn_type03" onclick="updateModal('delete')">선택 삭제</button><!--
-						--></div>`;
-
-						let addBtnStr = `<button type="button" class="btn_type fr mb-20" onclick="updateModal('add')">추가</button>`;
-
-						$("#groupTable_wrapper").append($(str)).prepend($(addBtnStr));
-					},
-					// every time DataTables performs a draw
-					drawCallback: function (settings) {
-						$('#groupTable_wrapper').addClass('mb-28');
-					},
-					// rowCallback: function ( row, data ) {
-					// 	// console.log("data---", data.alarmFlag);
-					// }
-				}).on("select", function(e, dt, type, indexes) {
-					let btn = $("#btnGroup").find(".btn_type03");
-					btn.each(function(index, element){
-						if($(this).is(":disabled")){
-							$(this).prop("disabled", false);
-						}
-					});
-					groupTable.rows( indexes ).nodes().to$().find("input").prop("checked", true);
-					// console.log("dt---", groupTable[ type ]( indexes ).nodes())
-				}).on("deselect", function(e, dt, type, indexes) {
-					let btn = $("#btnGroup").find(".btn_type03");
-					btn.each(function(index, element){
-						if(!$(this).is(":disabled")){
-							$(this).prop("disabled", true);
-						}
-					});
-					groupTable.rows( indexes ).nodes().to$().find("input").prop("checked", false);
-					// console.log("dt---", groupTable[ type ]( indexes ).nodes())
-				}).columns.adjust();
-				// groupTable.on( 'order.dt search.dt', function () {
-				// 	groupTable.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-				// 		cell.innerHTML = i+1;
-				// 		$(cell).data("id", i)
-				// 	});
-				// }).draw();
-
-				$('#groupTable').find("input:checkbox").on('click', function() {
-					var $box = $(this);
-					if ($box.is(":checked")) {
-						var group = "input:checkbox[name='" + $box.attr("name") + "']";
-						$(group).prop("checked", false);
-						$box.prop("checked", true);
+				if(group === "tag_group"){
+					// console.log("tag_group===", res.tag_group )
+					if(res.tag_group.some(x => x.name == name)){
+						$("#invalidGroup").removeClass("hidden");
 					} else {
-						$box.prop("checked", false);
+						$("#validGroup").removeClass("hidden");
 					}
-				});
-				
-				groupTable.on( 'column-sizing.dt', function ( e, settings ) {
-					$(".dataTables_scrollHeadInner").css( "width", "100%" );
-				});
+				} else if(group === "vpp_group"){
+					// console.log("vpp_group===", res.vpp_group )
+					if(res.vpp_group.some(x => x.name == name)){
+						$("#invalidGroup").removeClass("hidden");
+					} else {
+						$("#validGroup").removeClass("hidden");
+					}
 
-				new $.fn.dataTable.Buttons( groupTable, {
-					name: 'commands',
-					"buttons": [
-						{
-							extend: 'excelHtml5',
-							className: "save_btn",
-							text: '엑셀 다운로드',
-							// exportOptions: {
-							// 	modifier: {
-							// 		page: 'current'
-							// 	}
-							// },
-							customize: function( xlsx ) {
-								var sheet = xlsx.xl.worksheets['sheet1.xml'];
-								$('row:first c', sheet).attr( 's', '42' );
-								var sheet = xlsx.xl.worksheets['sheet1.xml'];
-								// var lastCol = sheet.getElementsByTagName('col').length - 1;
-								// var colRange = createCellPos( lastCol ) + '1';
-								// //Has to be done this way to avoid creation of unwanted namespace atributes.
-								// var afSerializer = new XMLSerializer();
-								// var xmlString = afSerializer.serializeToString(sheet);
-								// var parser = new DOMParser();
-								// var xmlDoc = parser.parseFromString(xmlString,'text/xml');
-								// var xlsxFilter = xmlDoc.createElementNS('http://schemas.openxmlformats.org/spreadsheetml/2006/main','autoFilter');
-								// var filterAttr = xmlDoc.createAttribute('ref');
-								// filterAttr.value = 'A1:' + colRange;
-								// xlsxFilter.setAttributeNode(filterAttr);
-								// sheet.getElementsByTagName('worksheet')[0].appendChild(xlsxFilter);
+				} else if(group === "dr_group"){
+					// console.log("dr_group===", res.dr_group )
+					if(res.dr_group.some(x => x.name == name)){
+						$("#invalidGroup").removeClass("hidden");
+					} else {
+						$("#validGroup").removeClass("hidden");
+					}
+				}
+				validateForm();
+			});
+		
 
-							}
-						},
-						// {
-						// 	extend: 'csvHtml5',
-						// 	className: "btn_type03",
-						// 	text: 'CSV'
-						// },
-						// {
-						// 	extend: 'pdfHtml5',
-						// 	className: "btn_type03",
-						// 	text: 'PDF',
-						// },
-					],
-				});
-
-				groupTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup");
-				// groupTable.container().addClass( 'fit' );
-
-				// groupTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup").addClass("hidden inline");
-
-				$("#groupSearchBox").on( 'keyup search input paste cut', function(){
-					groupTable.columns(2).search( this.value ).draw();
-				});
-
-			}
+		});
+	}
+	
+	function adminTable(groupData, callback) {
+		if(callback){
+			callback();
 		}
-
-		function readOnlyTable(groupData) {
+		if(groupData) {
 			// 1. 그룹 유형
 			// 2. 그룹 명
 			// 3. 사업소
 			// 4. 최종 작업자
 			// 5. 비고
 			// 6. 업데이트 날짜
-			var groupReadOnlyTable = $('#groupTable').DataTable({
-				"aaData": newArr,
+			var groupTable = $('#groupTable').DataTable({
+				"aaData": groupData,
 				"table-layout": "fixed",
 				"fixedHeader": true,
 				"bAutoWidth": true,
 				"bSearchable" : true,
+				"retrieve": true,
+				// "ScrollX": true,
+				// "sScrollX": "110%",
+				// "sScrollXInner": "110%",
 				"sScrollY": true,
 				"scrollY": "720px",
 				"bScrollCollapse": true,
 				"pageLength": 100,
-				"aaSorting": [[ 0, 'asc' ]],
 				// "bFilter": false, disabling this option will prevent table.search()
-	
+				"aaSorting": [[ 0, 'asc' ]],
+				"bSortable": true,
+				"order": [[ 1, 'asc' ]],
 				"aoColumnDefs": [
 					{
 						"aTargets": [ 0 ],
@@ -344,7 +417,7 @@
 						"sTitle": "",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex )  {
-							return '<a class="chk_type" href="#"><input type="checkbox" id="' + rowIndex + '" name="table_checkbox"><label for="' + rowIndex + '"></label></a>'
+							return '<a class="chk_type" href="#"><input type="checkbox" id="' + rowIndex.row + '" name="table_checkbox"><label for="' + rowIndex.row + '"></label></a>'
 						},
 						"className": "dt-body-center no-sorting"
 					},
@@ -358,14 +431,14 @@
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex )  {
 							let groupType = "";
-							if(full){
-								groupType = "";
-							} else {
-								groupType = "";
+							if(full.dgid){
+								return groupType = "DR 그룹";
+							} else if(full.vgid){
+								return groupType = "VPP 그룹";
+							} else if(full.sgid){
+								return groupType = "사업소 그룹";
 							}
-
-							return groupType
-						},
+						}
 					},
 					{
 						"sTitle": "그룹 명",
@@ -373,120 +446,399 @@
 					},
 					{
 						"sTitle": "사업소",
-						"mData": "location",
+						"mData":  null,
+						"mRender": function ( data, type, full, rowIndex )  {
+							if(!isEmpty(full.sites)){
+								let siteName = "";
+								let length = full.sites.length-1;
+
+								$.each(full.sites, function(index, el){
+									if(length < 5){
+										if(index < length){
+											siteName += el.name + "," + '&ensp;';
+										} else {
+											siteName += el.name;
+										}
+									} else {
+										if(index < 4){
+											siteName += el.name + "," + '&ensp;';
+										} else {
+											if(index == 4){
+												siteName += el.name;
+											} else if(index >= 5) {
+												siteName += " ..."
+											}
+										}
+									}
+								});
+								// let nameLen =  byteLength(siteName);
+								// console.log("byteLength===", byteLength(siteName));
+								// if(nameLen > 70){
+								// 	siteName.substring()
+								// 	return siteName + '  <a href="#" onclick=updateModal("' + 'detail' + '"); class="text-link">more</a>'
+								// } else {
+								// 	return siteName;
+								// }
+
+								if(full.sites.length >= 5){
+									return siteName + '...<a href="#" onclick=updateModal("' + 'detail' + '"); class="text-link ml-6">more</a>'
+								} else {
+									return siteName;
+								}
+
+							} else {
+								return siteName = "-";
+							}
+
+						}
 					},
 					{
 						"sTitle": "최종작업자",
-						"mData": "powerSource",
+						"mData": null,
+						"mRender": function ( data, type, full, rowIndex )  {
+							let updatedBy = "";
+							if(!isEmpty(full.updatedBy)){
+								updatedBy = full.updatedBy;
+							} else {
+								updatedBy = "-";
+							}
+							return updatedBy;
+							
+						}
 					},
 					{
 						"sTitle": "업데이트 일자",
-						"mData": "pcsCapacity",
+						"mData": null,
+						"mRender": function ( data, type, full, rowIndex )  {
+							let date = "";
+							if(!isEmpty(full.updatedAt)){
+								date = new Date(full.updatedAt).toLocaleDateString("en-CA").replace(/\//g, '-') + '&ensp;' + new Date(full.updatedAt).toLocaleTimeString();
+							} else {
+								date = "-";
+							}
+							return date;
+						}
 					},
 					{
 						"sTitle": "비고",
-						"mData": "genCapacity",
+						"mData": null,
+						"mRender": function ( data, type, full, rowIndex )  {
+							let desc = "";
+							if(!isEmpty(full.description)){
+								updatedBy = full.description;
+							} else {
+								desc = "-";
+							}
+							return desc;
+						}
 					}
 				],
-				"language": {
-					"emptyTable": "조회된 데이터가 없습니다.",
-					"zeroRecords":  "검색된 결과가 없습니다."
-				},
 				"dom": 'tip',
-				// "select": {
-				// 	style: 'single',
-				// selector: 'td:first-child > a',
-				// },
-				initComplete: function(){
-					this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-						cell.innerHTML = i+1;
-						$(cell).data("id", i);
-					});
+				"select": {
+					style: 'single',
+					// selector: 'tr',
+					selector: 'td input[type="checkbox"], tr',
+					// selector: 'td input[type="checkbox"], td:not(:last-of-type)'
 				},
-			}).columns.adjust().draw();
+				initComplete: function(settings, json ){
+					// console.log("init settings---", settings)
+					let str = `<div id="btnGroup" class="right-end"><!--
+						--><button type="button" disabled class="btn_type03" onclick="updateModal('edit')">선택 수정</button><!--
+						--><button type="button" disabled class="btn_type03" onclick="updateModal('delete')">선택 삭제</button><!--
+					--></div>`;
+
+					let addBtnStr = `<button type="button" class="btn_type fr mb-20" onclick="updateModal('add')">추가</button>`;
+
+					$("#groupTable_wrapper").append($(str)).prepend($(addBtnStr));
+				},
+				// every time DataTables performs a draw
+				drawCallback: function (settings) {
+					$('#groupTable_wrapper').addClass('mb-28');
+				},
+				// rowCallback: function ( row, data ) {
+				// 	// console.log("data---", data.alarmFlag);
+				// }
+			}).on("select", function(e, dt, type, indexes) {
+				let btn = $("#btnGroup").find(".btn_type03");
+				btn.each(function(index, element){
+					if($(this).is(":disabled")){
+						$(this).prop("disabled", false);
+					}
+				});
+				groupTable.rows( indexes ).nodes().to$().find("input").prop("checked", true);
+				// console.log("dt---", groupTable[ type ]( indexes ).nodes())
+			}).on("deselect", function(e, dt, type, indexes) {
+				let btn = $("#btnGroup").find(".btn_type03");
+				btn.each(function(index, element){
+					if(!$(this).is(":disabled")){
+						$(this).prop("disabled", true);
+					}
+				});
+				groupTable.rows( indexes ).nodes().to$().find("input").prop("checked", false);
+				// console.log("dt---", groupTable[ type ]( indexes ).nodes())
+			}).columns.adjust();
+			// groupTable.on( 'order.dt search.dt', function () {
+			// 	groupTable.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+			// 		cell.innerHTML = i+1;
+			// 		$(cell).data("id", i)
+			// 	});
+			// }).draw();
+
+			$('#groupTable').find("input:checkbox").on('click', function() {
+				var $box = $(this);
+				if ($box.is(":checked")) {
+					var group = "input:checkbox[name='" + $box.attr("name") + "']";
+					$(group).prop("checked", false);
+					$box.prop("checked", true);
+				} else {
+					$box.prop("checked", false);
+				}
+			});
 			
+			groupTable.on( 'column-sizing.dt', function ( e, settings ) {
+				$(".dataTables_scrollHeadInner").css( "width", "100%" );
+			});
+
+			new $.fn.dataTable.Buttons( groupTable, {
+				name: 'commands',
+				"buttons": [
+					{
+						extend: 'excelHtml5',
+						className: "save_btn",
+						text: '엑셀 다운로드',
+						// exportOptions: {
+						// 	modifier: {
+						// 		page: 'current'
+						// 	}
+						// },
+						customize: function( xlsx ) {
+							var sheet = xlsx.xl.worksheets['sheet1.xml'];
+							$('row:first c', sheet).attr( 's', '42' );
+							var sheet = xlsx.xl.worksheets['sheet1.xml'];
+							// var lastCol = sheet.getElementsByTagName('col').length - 1;
+							// var colRange = createCellPos( lastCol ) + '1';
+							// //Has to be done this way to avoid creation of unwanted namespace atributes.
+							// var afSerializer = new XMLSerializer();
+							// var xmlString = afSerializer.serializeToString(sheet);
+							// var parser = new DOMParser();
+							// var xmlDoc = parser.parseFromString(xmlString,'text/xml');
+							// var xlsxFilter = xmlDoc.createElementNS('http://schemas.openxmlformats.org/spreadsheetml/2006/main','autoFilter');
+							// var filterAttr = xmlDoc.createAttribute('ref');
+							// filterAttr.value = 'A1:' + colRange;
+							// xlsxFilter.setAttributeNode(filterAttr);
+							// sheet.getElementsByTagName('worksheet')[0].appendChild(xlsxFilter);
+
+						}
+					},
+					// {
+					// 	extend: 'csvHtml5',
+					// 	className: "btn_type03",
+					// 	text: 'CSV'
+					// },
+					// {
+					// 	extend: 'pdfHtml5',
+					// 	className: "btn_type03",
+					// 	text: 'PDF',
+					// },
+				],
+			});
+
+			groupTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup");
+			// groupTable.container().addClass( 'fit' );
+
 			$("#groupSearchBox").on( 'keyup search input paste cut', function(){
-				siteReadOnlyTable.columns(2).search( this.value ).draw();
+				groupTable.search( this.value ).draw();
 			});
-		}
 
-		function drawEmptyTable(target){
-			var t = target.DataTable({
-				"table-layout": "fixed",
-				"columnDefs": [
-					{
-						"searchable": false,
-						"orderable": false,
-						// { targets: [0, 1], visible: true},
-						// { targets: '_all', visible: false },
-						"targets": "_all"
-					},
-				],
-				"columns": [
-					{
-						"title": "순번",
-						"data": null,
-						"className": "dt-center no-sorting",
-					},
-					{
-						"title": "그룹 유형",
-						"data": null,
-						"className": "dt-center no-sorting"
-					},
-					{
-						"title": "그룹 명",
-						"data": null,
-						"className": "dt-center no-sorting"
-					},
-					{
-						"title": "사업소",
-						"data": null,
-						"className": "dt-center no-sorting"
-					},
-					{
-						"title": "최종작업자",
-						"data": null,
-						"className": "dt-center no-sorting"
-					},
-					{
-						"title": "업데이트 일자",
-						"data": null,
-						"className": "dt-center no-sorting"
-					},
-					{
-						"sTitle": "비고",
-						"mData": "genCapacity",
-						"className": "dt-center no-sorting"
-					},
-				],
-				"dom": 'tip',
-				"language": {
-					"emptyTable": "조회된 데이터가 없습니다.",
-					"zeroRecords":  "검색된 결과가 없습니다."
-				},
-				initComplete: function(){
-					this.addClass("stripe")
-				},
-			});
 		}
+	}
 
-	});
+	function nonAdminTable(groupData) {
+		// 1. 그룹 유형
+		// 2. 그룹 명
+		// 3. 사업소
+		// 4. 최종 작업자
+		// 5. 비고
+		// 6. 업데이트 날짜
+		var groupTable = $('#groupTable').DataTable({
+			"aaData": newArr,
+			"table-layout": "fixed",
+			"fixedHeader": true,
+			"bAutoWidth": true,
+			"bSearchable" : true,
+			"retrieve": true,
+			"sScrollY": true,
+			"scrollY": "720px",
+			"bScrollCollapse": true,
+			"pageLength": 100,
+			"aaSorting": [[ 0, 'asc' ]],
+			// "bFilter": false, disabling this option will prevent table.search()
+
+			"aoColumnDefs": [
+				{
+					"aTargets": [ 0 ],
+					"bSortable": false,
+					"orderable": false
+				},
+			],
+			"aoColumns": [
+				{
+					"sTitle": "",
+					"mData": null,
+					"mRender": function ( data, type, full, rowIndex )  {
+						return '<a class="chk_type" href="#"><input type="checkbox" id="' + rowIndex + '" name="table_checkbox"><label for="' + rowIndex + '"></label></a>'
+					},
+					"className": "dt-body-center no-sorting"
+				},
+				// {
+				// 	"sTitle": "순번",
+				// 	"mData": null,
+				// 	"className": "dt-center no-sorting"
+				// },
+				{
+					"sTitle": "그룹 유형",
+					"mData": null,
+					"mRender": function ( data, type, full, rowIndex )  {
+						let groupType = "";
+						if(full){
+							groupType = "";
+						} else {
+							groupType = "";
+						}
+
+						return groupType
+					},
+				},
+				{
+					"sTitle": "그룹 명",
+					"mData": "name"
+				},
+				{
+					"sTitle": "사업소",
+					"mData": "location",
+				},
+				{
+					"sTitle": "최종작업자",
+					"mData": "powerSource",
+				},
+				{
+					"sTitle": "업데이트 일자",
+					"mData": "pcsCapacity",
+				},
+				{
+					"sTitle": "비고",
+					"mData": "genCapacity",
+				}
+			],
+			"language": {
+				"emptyTable": "조회된 데이터가 없습니다.",
+				"zeroRecords":  "검색된 결과가 없습니다."
+			},
+			"dom": 'tip',
+			// "select": {
+			// 	style: 'single',
+			// selector: 'td:first-child > a',
+			// },
+			initComplete: function(){
+				this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+					cell.innerHTML = i+1;
+					$(cell).data("id", i);
+				});
+			},
+		}).columns.adjust().draw();
+		
+		$("#groupSearchBox").on( 'keyup search input paste cut', function(){
+			groupTable.columns(2).search( this.value ).draw();
+		});
+	}
+
+	function drawEmptyTable(target){
+		var t = target.DataTable({
+			"table-layout": "fixed",
+			"columnDefs": [
+				{
+					"searchable": false,
+					"orderable": false,
+					// { targets: [0, 1], visible: true},
+					// { targets: '_all', visible: false },
+					"targets": "_all"
+				},
+			],
+			"columns": [
+				{
+					"title": "순번",
+					"data": null,
+					"className": "dt-center no-sorting",
+				},
+				{
+					"title": "그룹 유형",
+					"data": null,
+					"className": "dt-center no-sorting"
+				},
+				{
+					"title": "그룹 명",
+					"data": null,
+					"className": "dt-center no-sorting"
+				},
+				{
+					"title": "사업소",
+					"data": null,
+					"className": "dt-center no-sorting"
+				},
+				{
+					"title": "최종작업자",
+					"data": null,
+					"className": "dt-center no-sorting"
+				},
+				{
+					"title": "업데이트 일자",
+					"data": null,
+					"className": "dt-center no-sorting"
+				},
+				{
+					"sTitle": "비고",
+					"mData": "genCapacity",
+					"className": "dt-center no-sorting"
+				},
+			],
+			"dom": 'tip',
+			"language": {
+				"emptyTable": "조회된 데이터가 없습니다.",
+				"zeroRecords":  "검색된 결과가 없습니다."
+			},
+			initComplete: function(){
+				this.addClass("no-stripe");
+				if(role == 1){
+					let addBtnStr = `<button type="button" class="btn_type fr mb-20" onclick="updateModal('add')">추가</button>`;
+					$("#groupTable_wrapper").prepend($(addBtnStr));
+				}
+			}
+		});
+	}
 
 
 	function initModal(){
 		let form = $("#updateGroupForm");
 		let input = form.find("input");
 		let dropdownBtn = form.find(".dropdown-toggle");
+		let checkBox = form.find("input:checked");
 		let warning = form.find(".warning");
 
 		$("#validGroup").addClass("hidden");
 		$("#newGroupName").parent().next().prop("disabled", true);
-		
+		$("#shareOptGroup").addClass("hidden");
 		$("#addGroupBtn").prop("disabled", true);
+		$("#checkGroupBtn").prop("disabled", true); 	
+		$("#newGroupDetail").val("");
+
 		warning.addClass("hidden");
 
 		input.each(function(){
 			$(this).val("");
+		});
+
+		$.each(checkBox, function(index, element){
+			$(this).prop("checked", false);
 		});
 
 		$.each(dropdownBtn, function(index, element){
@@ -500,22 +852,22 @@
 	function updateModal(option, callback){
 		// RPS(Renewable Portfolio Standard), SMP(System Marginal Price), REC(Renewable Energy Certificate) => subsidies
 		let titleAdd = $('#titleAdd');
-		let newSiteName = $('#newSiteName');
+		let newGroupName = $('#newGroupName');
 		let form = $("#updateSiteForm");
 		let required = form.find(".asterisk");
-		let addBtn = $("#addSiteBtn");
+		let addBtn = $("#addGroupBtn");
 
 		// ADD MODAL!!!
 		if(option == "add"){
 			initModal();
-			if(newSiteName.parent().next().hasClass("hidden")) {
-				newSiteName.parent().next().removeClass("hidden");
-				newSiteName.parent().addClass("offset-width").removeClass("w-100");
+			if(newGroupName.parent().next().hasClass("hidden")) {
+				newGroupName.parent().next().removeClass("hidden");
+				newGroupName.parent().addClass("offset-width").removeClass("w-100");
 			}
 			titleAdd.removeClass("hidden").next().addClass("hidden");
 			required.hasClass("no-symbol") ? required.removeClass("no-symbol") : null;
 			addBtn.text("추가");
-			$('#newSiteName').prop('disabled', false);
+			$('#newGroupName').prop('disabled', false);
 			$("#newVoltTypeList").prev().prop("disabled", true).data("value", "").html("선택<span class='caret'></span>");
 			$("#addGroupModal").removeClass("edit").modal("show");
 		} else {
@@ -524,7 +876,7 @@
 			let td = tr.find("td");
 			let rowData = dTable.row(tr).data();
 
-			$("#validSite").is(".hidden") ? null : $("#validSite").addClass("hidden");
+			$("#validGroup").is(".hidden") ? null : $("#validGroup").addClass("hidden");
 
 			// EDIT MODAL!!!
 			if(option == "edit") {
@@ -533,171 +885,29 @@
 				titleAdd.addClass("hidden").next().removeClass("hidden");
 				required.hasClass("no-symbol") ? null : required.addClass("no-symbol");
 
-				if(!newSiteName.parent().next().hasClass("hidden")) {
-					newSiteName.parent().next().addClass("hidden");
-					newSiteName.parent().removeClass("offset-width").addClass("w-100");
-				}
-				// 사업소 명
-				newSiteName.val( td.eq(2).text() );
-				// 지역
-				$('#newCityList').prev().data({"name": td.eq(3).text(), "value" : td.eq(3).data("value") }).html(td.eq(3).text() + "<span class='caret'></span>");
-				// Address
-				if( !isEmpty(rowData.address)) {
-					$('#newStreetAddr').val(rowData.address);
-				}
-				// 사업소 유형
-				$('#newSiteType').prev().data({"name": td.eq(1).text(), "value" : td.eq(1).data("value") }).html(td.eq(1).text() + "<span class='caret'></span>");
-				// 발전원
-				$("#newResList").prev().data({"name": td.eq(4).text(), "value" : td.eq(4).data("value") }).html(td.eq(4).text() + "<span class='caret'></span>");
-				// ESS 유무
-				// console.log("es===", rowData.ess)
-				if( isEmpty(rowData.ess)) {
-					$('#newEssList').prev().data("value", "0").html("무<span class='caret'></span>");
-				} else {
-					$('#newEssList').prev().data("value", rowData.ess).html("유<span class='caret'></span>");
-				}
-				// 위경도
-				if( !isEmpty(rowData.latlng)) {
-					$('#newCoord').val(rowData.latlng);
-				}
-				// 추가 정보
-				$('#newSiteDetail').val(rowData.detail_info);
-				// 발전 용량
-
-				// Utility info
-				if( !isEmpty(rowData.utility)) {
-					Promise.resolve(JSON.parse(rowData.utility)).then( util => {
-						let utilPlanName = util.utility_plan_name;
-						// console.log("util==", util);
-
-						$("#newContractList").prev().data({"plan-id": util.utility_plan_id, "value": utilPlanName }).html(utilPlanName + '<span class="caret"></span>');
-						$("#newVoltTypeList").prev().prop("disabled", false);
-						if(!isEmpty(util.volt_name) ){
-							// console.log("util.volt_name==", util.volt_name);
-							$("#newVoltTypeList").prev().data({"id": util.utility_plan_id, "data-value" : util.volt_name }).html( util.volt_name + '<span class="caret"></span>');
-						} else {
-
-							$("#newVoltTypeList").prev().prop("disabled", true).html('선택<span class="caret"></span>');
-						}
-
-						$("#newPeakDemand").val(util.peak_demand);
-						$("#newDrCharge").val(util.demand_charge);
-
-						if(util.metering_day == 0){
-							$("#newInspection").prev().data("value", String(util.metering_day)).html( '말일<span class="caret"></span>');
-						} else {
-							$("#newInspection").prev().data("value", String(util.metering_day)).html( String(util.metering_day) + '<span class="caret"></span>');
-						}
-
-						$("#newKepcoId").val(util.kepco_id);
-						$("#newISmartId").val(util.ismart_id);
-						$("#newISmartPwd").val(util.ismart_pass);
-					});
-
+				if(!newGroupName.parent().next().hasClass("hidden")) {
+					newGroupName.parent().next().addClass("hidden");
+					newGroupName.parent().removeClass("offset-width").addClass("w-100");
 				}
 
-				// PowerMarket??? (tariff?) info
-				if( !isEmpty(rowData.power_market)) {
-					let priceModel = JSON.parse(rowData.power_market);
-					// console.log("priceModel===", priceModel)
-					if(priceModel.price_type == "SMP_mean") {
-						$("#newPriceModelList").prev().data("value", priceModel.price_type).html( "SMP평균" + '<span class="caret"></span>');
-					} else if(priceModel.price_type == "fixed") {
-						$("#newPriceModelList").prev().data("value", priceModel.price_type).html( "고정가" + '<span class="caret"></span>');
-					} else {
-						$("#newPriceModelList").prev().data("value", priceModel.price_type).html( priceModel.price_type + '<span class="caret"></span>');
-					}
-					$("#newPrice").val(priceModel.price).html( priceModel.price + '<span class="caret"></span>');
-				}
-				// DR info
-				let sectionDRInfo = $("#sectionDRInfo");
-				let sectionDrDropdown = sectionDRInfo.find(".dropdown-toggle");
-				let sectionDrInput = sectionDRInfo.find("input");
-
-				if( !isEmpty(rowData.dr_group_id)) {
-					$("#newDrResIdList").prev().data("value", rowData.dr_group_id).html(rowData.drName + "<span class='caret'></span>");
-					sectionDrDropdown.each(function(item, index){
-						// console.log("index---", index)
-						$(this).prop("disabled", false);
-					});
-					sectionDrInput.each(function(item, index){
-						$(this).prop("disabled", false);
-					});
-					if(!isEmpty(rowData.dr_info)){
-						let dr = JSON.parse(rowData.dr_info);
-						// console.log("dr===", dr);
-						if( !isEmpty(dr.contract_capacity)) {
-							$("#drVol").val(dr.contract_capacity);
-						}
-						if( !isEmpty(dr.cbl_method)) {
-							$("#cblList").prev().html(dr.cbl_method + "<span class='caret'></span>");
-						}
-						if( !isEmpty(dr.profile_share)) {
-							$("#newDrRevShare").val(dr.profile_share);
-						}
-					}
-				} else {
-					sectionDrDropdown.each(function(item, index){
-						$(this).prop("disabled", true).html("선택<span class='caret'></span>");
-					});
-					sectionDrInput.each(function(item, index){
-						$(this).prop("disabled", true).val("");
-					});
-				}
-
-				// VPP info
-				let sectionVppInfo = $("#sectionVppInfo");
-				let sectionVppDropdown = sectionVppInfo.find(".dropdown-toggle");
-				let sectionVppInput = sectionDRInfo.find("input");
-
-				if( !isEmpty(rowData.vpp_group_id)) {
-					$("#newVppResIdList").prev().data("value", rowData.vpp_group_id).html(rowData.vppName + "<span class='caret'></span>");
-					sectionVppDropdown.each(function(item, index){
-						$(this).prop("disabled", false);
-					});
-					sectionVppInput.each(function(item, index){
-						$(this).prop("disabled", false);
-					});
-					if( !isEmpty(rowData.vpp_info)) {
-						let vpp = JSON.parse(rowData.vpp_info);
-						// console.log("vpp===", vpp);
-
-						if( !isEmpty(rowData.vpp_info)) {
-							console.log("vpp profile_share NOT empty")
-							$("#newVppRevShare").val(vpp.profile_share);
-						}
-					}
-				} else {
-					sectionVppDropdown.each(function(item, index){
-						$(this).prop("disabled", true).html("선택<span class='caret'></span>");
-					});
-					sectionVppInput.each(function(item, index){
-						$(this).prop("disabled", true).val("");
-					});
-				}
-
-				if( td.eq(9).text() != '-' ) {
-					$('#newVppResIdList').prev().data("value", td.eq(9).text() ).html(td.eq(9).text() + '<span class="caret"></span>');
-				} else {
-					$('#newVppResIdList').prev().data("value", "").html('선택<span class="caret"></span>');
-				}
+				newGroupName.val( td.eq(2).text() );
 
 
 				$("#addGroupModal").addClass("edit").modal("show");
 			}
 			// DELETE MODAL!!!
 			if(option == "delete") {
-				let siteName = td.eq(2).text();
+				let groupName = td.eq(2).text();
 				let modal = $("#deleteConfirmModal");
 				let deleteBtn = $("#deleteConfirmBtn");
-				let confirmSiteId = $("#confirmSite");
+				let confirmGroupName = $("#confirmGroup");
 
-				$("#deleteSuccessMsg span").text(siteName);
+				$("#deleteSuccessMsg span").text(groupName);
 				modal.find(".modal-body").removeClass("hidden");
 				modal.modal("show");
 
-				confirmSiteId.on("input", function() {
-					if($(this).val() !== siteName) {
+				confirmGroupName.on("input", function() {
+					if($(this).val() !== groupName) {
 						deleteBtn.prop("disabled", true);
 						return false
 					} else {
@@ -705,8 +915,8 @@
 					}
 				});
 
-				confirmSiteId.on("keyup", function() {
-					if($(this).val() !== siteName) {
+				confirmGroupName.on("keyup", function() {
+					if($(this).val() !== groupName) {
 						deleteBtn.prop("disabled", true);
 						return false
 					} else {
@@ -714,13 +924,97 @@
 					}
 				});
 			}
+			
+			if(option == "detail") {
+				console.log("option---", tr)
+
+			}
+		
 		}
 
+	}
+
+	function validateForm(){
+		if(!$("#addGroupModal").hasClass('edit')){
+			let grpType = $("#newGroupType").prev();
+			let grpName = $("#newGroupName").val();
+			let checkBtn = $("#checkGroupBtn");
+			let submitBtn = $("#addGroupBtn");
+			let radioGroup = $("#shareOptGroup input[type=radio][name=share_option]:checked");
+
+			if(grpType === "tag_group") {
+				if(!isEmpty(grpType.data("value")) &&  ($("#validGroup:not('.hidden')").length > 0 ) && radioGroup.length > 0 ){
+					submitBtn.prop("disabled", false);
+				} else {
+					if(!isEmpty(grpType.data("value")) && !isEmpty(grpName)) {
+						checkBtn.prop("disabled", false);
+					} else {
+						checkBtn.prop("disabled", true);
+					}
+					submitBtn.prop("disabled", true);
+				}
+			} else {
+				if(!isEmpty(grpType.data("value")) &&  ($("#validGroup:not('.hidden')").length > 0 ) ){
+					submitBtn.prop("disabled", false);
+				} else {
+					if(!isEmpty(grpType.data("value")) && !isEmpty(grpName)) {
+						checkBtn.prop("disabled", false);
+					} else {
+						checkBtn.prop("disabled", true);
+					}
+					submitBtn.prop("disabled", true);
+				}
+			}
+		} else {
+			submitBtn.prop("disabled", false);
+		}
+	}
+
+	function checkSiteId(userInput){
+		if(isEmpty(userInput)) return false;
+		
+		$("#validGroup").addClass("hidden").parent().find(".warning").addClass("hidden");
+		let name = userInput.toString();
+
+		let groupList 
+		if(!isEmpty(siteList)) {
+			// console.log("siteList==", siteList)
+			if(siteList.some(x => x.name == name)){
+				$("#invalidGroup").removeClass("hidden");
+				// console.log("match==")
+			} else {
+				$("#validGroup").removeClass("hidden");
+				// console.log("no match==")
+			}
+		} else {
+			$("#validGroup").removeClass("hidden");
+		}
+		validateForm();
+
+	}
+
+	// function lengthInUtf8Bytes(str) {
+	// 	// Matches only the 10.. bytes that are non-initial characters in a multi-byte sequence.
+	// 	var m = encodeURIComponent(str).match(/%[89ABab]/g);
+	// 	return str.length + (m ? m.length : 0);
+	// }
+
+	function byteLength(str) {
+		// returns the byte length of an utf8 string
+		var s = str.length;
+		for (var i=str.length-1; i>=0; i--) {
+			var code = str.charCodeAt(i);
+			if (code > 0x7f && code <= 0x7ff) s++;
+			else if (code > 0x7ff && code <= 0xffff) s+=2;
+			if (code >= 0xDC00 && code <= 0xDFFF) i--; //trail surrogate
+		}
+		return s;
 	}
 
 
 </script>
 
+<c:set var="siteList" value="${siteHeaderList}"/>
 
 <div class="row header-wrapper">
 	<div class="col-12">
@@ -729,17 +1023,17 @@
 </div>
 
 <div class="row">
-	<div class="col-12">
+	<div class="col-10">
 		<div class="flex_group">
 			<span class="tx_tit">그룹 유형</span>
 			<div class="dropdown">
 				<button type="button" class="dropdown-toggle"
 					data-toggle="dropdown">선택<span class="caret"></span></button>
-				<ul class="dropdown-menu chk_type" role="menu" id="siteList">
+				<ul class="dropdown-menu chk_type" role="menu" id="groupList">
 					<li><a href="#">전체</a></li>
-					<li data-name="" data-value=""><a href="#">사업소 그룹</a></li>
-					<li data-name="" data-value=""><a href="#">VPP 그룹</a></li>
-					<li data-name="" data-value=""><a href="#">DR 그룹</a></li>
+					<li data-name="사업소 그룹" data-value=""><a href="#">사업소 그룹</a></li>
+					<li data-name="VPP 그룹" data-value=""><a href="#">VPP 그룹</a></li>
+					<li data-name="DR 그룹" data-value=""><a href="#">DR 그룹</a></li>
 				</ul>
 			</div>
 		</div>
@@ -748,6 +1042,10 @@
 				<input type="text" id="groupSearchBox" name="group_search_box" placeholder="키워드 검색">
 			</div>
 		</div>
+	</div>
+	<div class="col-2">
+		<div id="exportBtnGroup" class="fr"></div>
+		<!-- <button type="button" class="save_btn ml-16 fr" onclick="$(this).prev().toggleClass('hidden')">데이터 다운로드</button>--> 
 	</div>
 </div>
 
@@ -795,7 +1093,7 @@
 				<h5 id="deleteSuccessMsg" class="ntit">그룹 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>
 			</div>
 			<div class="modal-body">
-				<div class="tx_inp_type"><input type="text" name="confirm_site" id="confirmSite" placeholder="사이트 이름 입력"/></div>
+				<div class="tx_inp_type"><input type="text" name="confirm_group" id="confirmGroup" placeholder="사이트 이름 입력"/></div>
 			</div>
 			<div class="btn_wrap_type05"><!--
 				--><button type="button" class="btn_type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
@@ -805,9 +1103,6 @@
 	</div>
 </div>
 
-
-<c:set var="siteList" value="${siteHeaderList}"/>
-
 <div class="modal fade" id="addGroupModal" tabindex="-1" role="dialog" aria-labelledby="addGroupModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content group-modal-content">
@@ -815,77 +1110,83 @@
 			<div id="titleEdit" class="modal-header"><h1>사업소 정보 수정</h1></div>
 			<div class="modal-body">
 				<div class="container-fluid">
-					<form id="updateSiteForm" name="add_user_form">
+					<form name="add_group_form" id="updateGroupForm" class="setting-form">
 						<div class="row">
-							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-2"><span class="input_label asterisk">그룹 유형</span></div>
-							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-10">
+							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12"><span class="input_label asterisk">그룹 유형</span></div>
+							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
 								<div class="dropdown">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-									<ul id="newSiteType" class="dropdown-menu">
-										<li data-name="" data-value=""><a href="#">전체</a></li>
-										<li><a href="#">사업소 그룹</a></li>
-										<li><a href="#">VPP 그룹</a></li>
-					 					<li><a href="#">DR 그룹</a></li>
+									<ul id="newGroupType" class="dropdown-menu">
+										<li data-name="사업소 그룹" data-value="tag_group"><a href="#">사업소 그룹</a></li>
+										<li data-name="VPP 그룹" data-value="vpp_group"><a href="#">VPP 그룹</a></li>
+					 					<li data-name="DR 그룹" data-value="dr_group"><a href="#">DR 그룹</a></li>
 									</ul>
 								</div>
 								<small class="hidden warning">그룹 유형을 선택해 주세요</small>
 							</div>
 
-							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-2"><span class="input_label">거래 ID</span></div>
-							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-10">
-								<div class="tx_inp_type"><input type="text" id="newTradeId" name="new_trade_id" /></div>
-								<small class="hidden warning">거래 아이디를 입력해 주세요.</small>
+							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 pl-40 hidden"><span class="input_label">거래 ID</span></div>
+							<div id="resIdWrapper" class="col-xl-4 col-lg-4 col-md-4 col-sm-12 hidden">
+								<div class="tx_inp_type"><input type="text" id="newResId" name="new_res_id" /></div>
 							</div>
 						</div>
 
 						<div class="row">
-							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-2"><span class="input_label asterisk">그룹 명</span></div>
-							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-10">
+							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12"><span class="input_label asterisk">그룹 명</span></div>
+							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
 								<div class="flex_start">
-									<div class="tx_inp_type offset-73">
-										<input type="text" name="new_site_name" id="newSiteName" placeholder="입력" minlength="2" maxlength="15">
+									<div class="tx_inp_type offset-width">
+										<input type="text" name="new_group_name" id="newGroupName" placeholder="입력" minlength="2" maxlength="15">
 									</div>
-									<button type="button" class="btn_type fr" onclick="checkSiteId($('#newSiteName').val())" disabled>중복 체크</button>
+									<button type="button" id="checkGroupBtn" class="btn_type fr" disabled>중복 체크</button>
 								</div>
-								<small class="hidden warning">추가하실 사이트를 입력해 주세요</small>
+								<small class="hidden warning">추가하실 그룹을 입력해 주세요</small>
 								<small class="hidden warning">2~15 글자를 입력해 주세요.</small>
 								<small class="hidden warning">특수 문자는 포함될 수 없습니다.</small>
-								<small id="invalidSite" class="hidden warning">이미 등록되어 있는 그룹 입니다.</small>
-								<small id="validSite" class="text-blue text-sm hidden">추가 가능한 그룹 입니다.</small>
+								<small id="invalidGroup" class="hidden warning">이미 등록되어 있는 그룹 입니다.</small>
+								<small id="validGroup" class="text-blue text-sm hidden">추가 가능한 그룹 입니다.</small>
 							</div>
 
-							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 hidden"><span class="input_label">그룹 공유</span></div>
-							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-10 hidden">
-								<div class="flex_start">
-
+							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 pl-40 hidden"><span class="input_label asterisk">그룹 공유</span></div>
+							<div id="shareOptGroup" class="col-xl-4 col-lg-4 col-md-4 col-sm-12 hidden">
+								<div class="rdo_type flex_start">
+									<div class="radio-group">
+										<input type="radio" id="shareOpt1" name="share_option" data-value="1">
+										<label for="shareOpt1">예</label>
+									</div>
+									<div class="radio-group">
+										<input type="radio" id="shareOpt2" name="share_option" data-value="0">
+										<label for="shareOpt2">아니오</label>
+									</div>
 								</div>
+								<small class="hidden warning">그룹 공유 값을 선택해 주세요.</small>
 							</div>
 						</div>
 
 						<div class="row">
-							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-2"><span class="input_label asterisk">사업소 명</span></div>
-							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-10">
+							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12"><span class="input_label">사업소 명</span></div>
+							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
 								<div class="dropdown">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-									<ul id="newSiteList" class="dropdown-menu">
-										<!-- <c:forEach var="site" items="${siteList}" varStatus="siteName">
-											<li data-id="${site.name}" data-value="${site.name}">
-												<a href="#" tabindex="-1"><c:out value="${site.name}"></c:out>
-													<input type="checkbox" name="${site.name}" id="${site.name}" value="${site.name}">
-													<label for="${site.name}" class="on"><c:out value="${}"></c:out></label>
+									<ul id="newSiteList" class="dropdown-menu chk_type">
+										<c:forEach var="site" items="${siteList}" varStatus="siteName">
+											<li data-id="${site.name}" data-value="${site.sid}">
+												<a href="#" class="chk_type" tabindex="-1">
+													<input type="checkbox" name="${site.name}" id="${site.name}" data-value="${site.sid}"/>
+													<label for="${site.name}" class="on"><c:out value="${site.name}"></c:out></label>
 												</a>
 											</li>
-										</c:forEach> -->
+										</c:forEach>
 									</ul>
 								</div>
-								<small class="hidden warning">사업소를 선택해 주세요</small>
+								<!-- <small class="hidden warning">사업소를 선택해 주세요</small> -->
 							</div>
 						</div>
 
 						<div class="row">
-							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-2"><span class="input_label">추가 정보</span></div>
-							<div class="col-xl-10 col-lg-10 col-md-10 col-sm-10">
-								<textarea name="new_site_desc" id="newSiteDetail" class="textarea" placeholder="입력"></textarea>
+							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12"><span class="input_label">추가 정보</span></div>
+							<div class="col-xl-10 col-lg-10 col-md-10 col-sm-12">
+								<textarea name="new_site_desc" id="newGroupDetail" class="textarea" placeholder="입력"></textarea>
 							</div>
 						</div>
 
@@ -893,7 +1194,7 @@
 							<div class="col-12">
 								<div class="btn_wrap_type02">
 									<button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button>
-									<button type="submit" id="addSiteBtn" class="btn_type" disabled>추가</button>
+									<button type="submit" id="addGroupBtn" class="btn_type" disabled>추가</button>
 								</div>
 							</div>
 						</div>

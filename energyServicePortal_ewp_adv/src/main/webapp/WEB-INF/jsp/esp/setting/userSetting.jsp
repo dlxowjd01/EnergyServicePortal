@@ -158,6 +158,14 @@
 
 		// Dropdown Click event
 		$("#newAccLevel").find("li").on("click", function(){
+			let val = $("#newAccLevel").prev().data("value");
+			if(val == 2) {
+				$("#siteAccOpt").prev().data({"value": 2, "name": "조화"}).prop("disabled", true).html("조회 권한<span class='caret'></span>");
+				$("#spcAccOpt").prev().data({"value": 2, "name": "조화"}).prop("disabled", true).html("조회 권한<span class='caret'></span>");
+			} else {
+				$("#siteAccOpt").prev().prop("disabled", false).html("선택<span class='caret'></span>");
+				$("#spcAccOpt").prev().prop("disabled", false).html("선택<span class='caret'></span>");
+			}
 			if($("#addUserModal").hasClass("edit")){
 				if( !isEmpty($(this).data("value")) && validateEditForm() == 1) {
 					$("#addUserBtn").prop("disabled", false);
@@ -172,6 +180,8 @@
 		// Modal event
 		$("#addUserModal").on("hide.bs.modal", function(){
 			$(this).hasClass("edit") ? $(this).removeClass("edit") : null;
+
+			initModal();
 			$("#selectedSiteList").empty();
 			$("#selectedSpcList").empty();
 			$("#validId").addClass("hidden");
@@ -270,7 +280,7 @@
 					userObj.valid_yn = newUseOpt;
 				}
 				if( !isEmpty(newUserDesc) ){
-					userObj.description = JSON.stringify(newUserDesc);
+					userObj.description = newUserDesc;
 				}
 
 				option = {
@@ -418,6 +428,7 @@
 				let td = tr.find("td");
 
 				let newUid = dTable.row(tr).data().uid;
+				let prevDesc = dTable.row(tr).data().desc;
 
 				let role = $("#newAccLevel").prev().data("value");
 				let roleTitle = $("#newAccLevel").prev().data("name");
@@ -432,6 +443,8 @@
 
 				let pwd = { password : $("#newUserPwd").val() }
 				let editUserObj = {};
+
+				console.log("prevDesc===", prevDesc)
 
 				if( !isEmpty(newFullName) && ( newFullName != td.eq(2).text() ) ) {
 					editUserObj.name = newFullName;
@@ -456,10 +469,13 @@
 					console.log("newUseOpt===", newUseOpt, "newUswOptName===", newUswOptName)
 					editUserObj.valid_yn = newUseOpt;
 				}
-				if( !isEmpty(newUserDesc) && ( newUserDesc != tr.data("desc")) ) {
-					editUserObj.description = JSON.stringify(newUserDesc);
-				}
 
+				if( !isEmpty(prevDesc) ) {
+					if( newUserDesc.replace("\t", "") != prevDesc.replace("\t", "") ) {
+						editUserObj.description = newUserDesc;
+					}
+				}
+				
 				option = {
 					url: apiHost + '/config/users/' + newUid,
 					type: 'patch',
@@ -475,7 +491,7 @@
 				optionPwd = {
 					url: apiHost + '/config/users/' + newUid + '/password2',
 					type: 'patch',
-					async: true,
+					async: false,
 					data: JSON.stringify(pwd),
 					contentType: 'application/json; charset=UTF-8'
 				}
@@ -505,7 +521,6 @@
 				let flagIndex = flagArr.findIndex( x => x === 1);
 				// console.log("flagArr--", flagArr)
 				if( isEmpty($("#newUserPwd").val()) && isEmpty(editUserObj) && (flagIndex < 0) ) {
-					console.log("no changes====")
 					// if no changes have been made
 					$("#resultFailureMsg").text("변경하실 사용자, 사이트, SPC 정보를 입력해 주세요").removeClass("hidden");
 					$("#resultBtn").parent().addClass("hidden");
@@ -517,7 +532,9 @@
 					if( (flagIndex < 0) ){
 						// if pwd && editUserObj values are present but no userSpc && userSite info
 						if( !isEmpty($("#newUserPwd").val()) && !isEmpty(editUserObj) ){
-							$.when($.ajax(optionPwd),$.ajax(option)).then(function (result1, result2) {
+							$.when($.ajax(optionPwd),$.ajax(option)).done(function (result1, result2) {
+								console.log("editUserObj===", editUserObj, "newUser Pwd====", $("#newUserPwd").val() )
+								console.log("result1===", result1, "result2====", result2)
 								$("#addUserModal").modal("hide");
 								$("#resultSuccessMsg").text("사용자 정보가 성공적으로 변경 되었습니다.").removeClass("hidden");
 								$("#resultBtn").parent().addClass("hidden");
@@ -543,7 +560,7 @@
 							if( !isEmpty($("#newUserPwd").val()) ){
 								console.log("optionPwd===", optionPwd)
 								$.ajax(optionPwd).done(function (json, textStatus, jqXHR) {
-									console.log("only password has been changed=====");
+									console.log("only password has been changed=====", optionPwd);
 									$("#addUserModal").modal("hide");
 									$("#resultSuccessMsg").multiline("사용자 정보가\n성공적으로 변경 되었습니다.").removeClass("hidden");
 									$("#resultBtn").parent().addClass("hidden");
@@ -786,10 +803,13 @@
 		// });
 
 
-		// Get Ajax Data
-		function getUserList(opt, callback) {
+	});
 
-			$.ajax(opt).done(function (json, textStatus, jqXHR) {
+
+	// Get Ajax Data
+	function getUserList(opt, callback) {
+		$.ajax(opt).done(function (json, textStatus, jqXHR) {
+			if(!isEmpty(json)){
 				let data = json;
 				let newArr = [];
 				let affiliationList = [];
@@ -863,22 +883,7 @@
 					}
 
 					if(!isEmpty(item.description)){
-						let desc = "";
-						// if(typeof(item.description) === 'string' || item.description === ""){
-							desc = item.description;
-							obj.desc = desc;
-							// console.log("desc===", desc)
-						// } else {
-						// 	return Promise.resolve(JSON.parse(item.description)).then(res => {
-						// 		// console.log("res==", res)
-						// 		desc = res;
-						// 	}).catch(function(error) {
-						// 		console.log(error);
-						// 		if(error){
-						// 			return false;
-						// 		}
-						// 	});
-						// }
+						obj.desc = item.description;
 					}
 					obj.uid = item.uid;
 					obj.idx = index + 1;
@@ -915,8 +920,8 @@
 								{
 									"sTitle": "",
 									"mData": "null",
-									"mRender": function ( data, type, row )  {
-										return '<a class="chk_type" href="#"><input type="checkbox" id="' + row.idx + '" name="table_checkbox"><label for="' + row.idx + '"></label></a>'
+									"mRender": function ( data, type, full, rowIndex )  {
+										return '<a class="chk_type" href="#"><input type="checkbox" id="' + rowIndex.row + '" name="table_checkbox"><label for="' + rowIndex.row + '"></label></a>'
 									},
 									"className": "dt-body-center no-sorting"
 								},
@@ -966,7 +971,7 @@
 							"dom": 'tip',
 							"select": {
 								style: 'single',
-								selector: 'td input[type="checkbox"], tr',
+								selector: 'td input[type="checkbox"], tr'
 							},
 							initComplete: function(){
 								let str = `
@@ -975,10 +980,10 @@
 										--><button type="button" disabled class="btn_type03" onclick="updateModal('delete')">선택 삭제</button><!--
 								--></div>
 								`;
-								let btnStr = `
+								let addBtnStr = `
 									<button type="button" class="btn_type fr mb-20" onclick="updateModal('add')">추가</button>
 								`;
-								$("#userTable_wrapper").append($(str)).prepend($(btnStr));
+								$("#userTable_wrapper").append($(str)).prepend($(addBtnStr));
 
 								// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
 								// 	cell.innerHTML = i+1;
@@ -992,18 +997,10 @@
 								// });
 							},
 							createdRow: function ( row, data, index ){
-								if(!isEmpty(data.desc)){
-									$(row).attr({
-										'data-role': data.user_role,
-										'data-name': data.name,
-										'data-desc': data.desc
-									});
-								} else {
-									$(row).attr({
-										'data-role': data.user_role,
-										'data-name': data.name
-									});
-								}
+								$(row).attr({
+									'data-role': data.user_role,
+									'data-name': data.name
+								});
 
 								if(!isEmpty(data.userSiteList)){
 									$(row).attr({
@@ -1147,10 +1144,10 @@
 										--><button type="button" disabled class="btn_type03" onclick="updateModal('delete')">선택 삭제</button><!--
 								--></div>
 								`;
-								let btnStr = `
+								let addBtnStr = `
 									<button type="button" class="btn_type fr mb-20" onclick="updateModal('add')">추가</button>
 								`;
-								$("#userTable_wrapper").append($(str)).prepend($(btnStr));
+								$("#userTable_wrapper").append($(str)).prepend($(addBtnStr));
 
 								// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
 								// 	cell.innerHTML = i+1;
@@ -1164,18 +1161,10 @@
 								// });
 							},
 							createdRow: function ( row, data, index ){
-								if(!isEmpty(data.desc)){
-									$(row).attr({
-										'data-role': data.user_role,
-										'data-name': data.name,
-										'data-desc': data.desc
-									});
-								} else {
-									$(row).attr({
-										'data-role': data.user_role,
-										'data-name': data.name
-									});
-								}
+								$(row).attr({
+									'data-role': data.user_role,
+									'data-name': data.name
+								});
 
 								if(!isEmpty(data.userSiteList)){
 									$(row).attr({
@@ -1317,49 +1306,113 @@
 					// 	}
 					// });
 						
-				})
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				$("#userTable").DataTable().clear();
-				return false;
-			});
-		}
-
-		function getSpcList(opt, cloned, callback) {
-			$.ajax(opt).done(function (json, textStatus, jqXHR) {
-				let data = json.data;
-				data.map( x => {
-					let str = '';
-					str = cloned.replace(/\*spcId\*/g, x.spc_id)
-						.replace(/\*spcName\*/g, x.name)
-					$("#spcRow ul").first().append(str);
-				});
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				return false;
-			});
-
-			let dropdown = $("#updateUserForm").find(".dropdown ul");
-			callback(dropdown);
-		}
-
-		function refreshUserList() {
-			let option = {
-				url: apiHost + "/config/users",
-				type: "get",
-				async: false,
-				data: {
-					uid: userInfoId,
-					oid: oid,
-					filter: JSON.stringify({
-						'include': [{ 'relation': 'user_spcs' }, {  'relation': 'user_sites' }]
-					})
-				}
+				})	
+			} else {
+				drawEmptyTable($("#userTable"))
 			}
-			getUserList(option, "destroy");
+		
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			$("#userTable").DataTable().clear();
+			return false;
+		});
+	}
+
+	function getSpcList(opt, cloned, callback) {
+		$.ajax(opt).done(function (json, textStatus, jqXHR) {
+			let data = json.data;
+			data.map( x => {
+				let str = '';
+				str = cloned.replace(/\*spcId\*/g, x.spc_id)
+					.replace(/\*spcName\*/g, x.name)
+				$("#spcRow ul").first().append(str);
+			});
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			return false;
+		});
+
+		let dropdown = $("#updateUserForm").find(".dropdown ul");
+		callback(dropdown);
+	}
+
+	function refreshUserList() {
+		let option = {
+			url: apiHost + "/config/users",
+			type: "get",
+			async: false,
+			data: {
+				uid: userInfoId,
+				oid: oid,
+				filter: JSON.stringify({
+					'include': [{ 'relation': 'user_spcs' }, {  'relation': 'user_sites' }]
+				})
+			}
 		}
+		getUserList(option, "destroy");
+	}
 
-
-
-	});
+	function drawEmptyTable(target){
+		var t = target.DataTable({
+			"table-layout": "fixed",
+			"columnDefs": [
+				{
+					"searchable": false,
+					"orderable": false,
+					"targets": 0
+				},
+			],
+			"columns": [
+				{
+					"title": "순번",
+					"data": null,
+					"className": "dt-center no-sorting"
+				},
+				{
+					"title": "이름",
+					"data": null,
+				},
+				{
+					"title": "휴대폰",
+					"data": null
+				},
+				{
+					"title": "이메일",
+					"data": null,
+				},
+				{
+					"title": "소속",
+					"data": null,
+				},
+				{
+					"title": "권한 등급",
+					"data": null,
+				},
+				{
+					"title": "업무 구분",
+					"data": null,
+				},
+				{
+					"title": "등록일",
+					"data": null,
+				},
+				{
+					"title": "사용 여부",
+					"data": null,
+				}
+			],
+			"dom": 'tip',
+			"language": {
+				"emptyTable": "조회된 데이터가 없습니다.",
+				"zeroRecords":  "검색된 결과가 없습니다."
+			},
+			initComplete: function(){
+				this.addClass("no-stripe");
+				let addBtnStr = `
+					<button type="button" class="btn_type fr mb-20" onclick="updateModal('add')">추가</button>
+				`;
+				$("#userTable_wrapper").prepend($(addBtnStr));
+			},
+		});
+	}
 
 
 	function checkId(userInput){
@@ -1438,6 +1491,8 @@
 			let tr = $("#userTable").find("tbody tr.selected");
 			let td = tr.find("td");
 			let uid = dTable.row(tr).data().uid;
+			let prevDesc = dTable.row(tr).data().desc;
+
 			// EDIT!!!!!
 			if(option == "edit") {
 				let optSpc = {
@@ -1514,7 +1569,14 @@
 						$("#selectedSpcList").append(spcStr).prev().html("수정 리스트&emsp;<span class='fr'>(&nbsp;<strong class='text-orange'>삭제 예정</strong>&ensp;선택 시, 등록된 기존 정보 삭제)</span>").removeClass("hidden");;
 					}
 
-
+					let val = $("#newAccLevel").prev().data("value");
+					if(val == 2) {
+						$("#siteAccOpt").prev().data({"value": 2, "name": "조화"}).prop("disabled", true).html("조회 권한<span class='caret'></span>");
+						$("#spcAccOpt").prev().data({"value": 2, "name": "조화"}).prop("disabled", true).html("조회 권한<span class='caret'></span>");
+					} else {
+						$("#siteAccOpt").prev().prop("disabled", false).html("선택<span class='caret'></span>");
+						$("#spcAccOpt").prev().prop("disabled", false).html("선택<span class='caret'></span>");
+					}
 				}).fail(function (jqXHR, textStatus, errorThrown) {
 					console.log("optSite error===", jqXHR)
 					return false;
@@ -1572,10 +1634,8 @@
 					}
 				}
 
-				if(!isEmpty(tr.data("desc"))){
-					let str = tr.data("desc");
-					str = JSON.parse(str);
-					$('#newUserDesc').val(str);
+				if(!isEmpty(prevDesc)){
+					$('#newUserDesc').val(prevDesc);
 				}
 
 				$("#addUserModal").addClass("edit").modal("show");
@@ -1839,7 +1899,7 @@
 			<div id="titleEdit" class="modal-header"><h1>사용자 정보 수정</h1></div>
 			<div class="modal-body">
 				<div class="container-fluid">
-					<form id="updateUserForm" name="add_user_form">
+					<form name="add_user_form" id="updateUserForm" class="setting-form">
 						<div class="row">
 							<div class="col-lg-2 col-sm-3"><span class="input_label asterisk">ID</span></div>
 							<div class="col-lg-4 col-sm-9">
