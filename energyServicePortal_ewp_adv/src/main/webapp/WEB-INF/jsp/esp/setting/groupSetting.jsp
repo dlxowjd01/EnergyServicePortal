@@ -107,6 +107,19 @@
 			$("#validGroup").addClass("hidden");
 		});
 	
+		$("#deleteConfirmModal").on("hide.bs.modal", function() {
+			setTimeout(function(){
+				$(this).find(".modal-body").removeClass("hidden");
+				$("#deleteSuccessMsg").html('<h5 id="deleteSuccessMsg" class="ntit">사용자 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>');
+				$("#confirmGroup").val("");
+				$("#deleteConfirmBtn").prop("disabled", true);
+			}, 2000);
+		});
+
+		$("#resultModal").on("hide.bs.modal", function() {
+			// console.log("resultModal closed===");
+			$(this).find("h4").addClass("hidden");
+		});
 
 		// Form Submission
 		$("#updateGroupForm").on("submit", function(e){
@@ -121,17 +134,17 @@
 			let shareOption =  $("#shareOptGroup input[type=radio]:checked"); 
 			let siteNameStr = $("#newSiteList").find("input:checked");
 			let newGroupDetail = $("#newGroupDetail").val();
-
+			let selectedSiteId = $("#newSiteList input:checked");
+			let siteArr = [];
 
 			// 1. Add group info
 			if(!$("#addGroupModal").hasClass("edit")) {
-				option = {
-					type: 'post',
-					async: true,
-					dataType: 'json',
-					contentType: "application/json",
-				}
+				let option = {};
 				obj.name = newGrpName;
+				if(!isEmpty(newGroupDetail)){
+					obj.description = newGroupDetail;
+				}
+				obj.updatedBy = loginId + "(" + loginName + ")";
 
 				if(newGrpType === "tag_group"){
 					if(shareOption.data("value") == "1"){
@@ -139,72 +152,86 @@
 					} else {
 						obj.shared = false;
 					}
-					if(!isEmpty(newGroupDetail)){
-						obj.description = newGroupDetail;
-					}
-					option.url =  apiHost + "/config/site_groups?uid=" + userInfoId;
-					option.data = JSON.stringify(obj);
-
 					option = {
-						url: apiHost + "/config/site_groups?uid=" + userInfoId,
+						url:  apiHost + "/config/site_groups?uid=" + userInfoId,
 						type: 'post',
 						async: true,
-						data: JSON.stringify(obj),
+						dataType: 'json',
 						contentType: 'application/json; charset=UTF-8',
+						data: JSON.stringify(obj)
 					}
 
+					$.each(selectedSiteId, function(index, el){
+						siteArr.push($(this).data("value") );
+					});
 
 					Promise.resolve(returnAjaxRes(option)).then(res => {
-						let selectedSiteId = $("#newSiteList input:checked");
-						let sgid = res.sgid;
-						let siteArr = [];
-						$.each(selectedSiteId, function(index, el){
-							siteArr.push($(this).data("value") );
-							// siteStr += $(this).data("value") + ",";
-							// if(index === selectedSiteId.length -1 ){
-							// 	siteStr += $(this).data("value");
-							// }
-						});
-						let obj = {
-							sid: JSON.stringify(siteArr)
-						}
-						// let splitStr = siteStr.split(",");
-					
-					
-						let siteOpt = {
-							url: apiHost + "/config/group_sites?sgid=" + sgid,
-							type: 'post',
-							async: true,
-							data: JSON.stringify(obj),
-							contentType: 'application/json; charset=UTF-8',
-						};
-						return siteOpt;
-					}).then(newRes => {
-						$.ajax(newRes).done(function (json, textStatus, jqXHR) {
-							$("#addGroupModal").modal("hide");
-							$("#resultSuccessMsg").text("그룹이 추가 되었습니다.").removeClass("hidden");
-							$("#resultBtn").parent().addClass("hidden");
-							$("#resultModal").modal("show");
-							getGroupData(initModal);
-							setTimeout(function(){
-								$("#resultModal").modal("hide");
-							}, 1600);
-						}).fail(function (jqXHR, textStatus, errorThrown) {
+						if(!isEmpty(res)){
+							let siteObj = {
+								sid: JSON.stringify(siteArr)
+							};
+							let sgid = res.sgid;
+							let siteOpt = {
+								url: apiHost + "/config/group_sites?sgid=" + sgid,
+								type: 'post',
+								async: true,
+								data: JSON.stringify(siteObj),
+								contentType: 'application/json; charset=UTF-8'
+							};
 
-							console.log("fail==", jqXHR)
-						});
+							$.ajax(siteOpt).done(function (json, textStatus, jqXHR) {
+								$("#addGroupModal").modal("hide");
+								$("#resultSuccessMsg").text("그룹이 추가 되었습니다.").removeClass("hidden");
+								$("#resultBtn").parent().addClass("hidden");
+								$("#resultModal").modal("show");
+								getGroupData(initModal);
+								setTimeout(function(){
+									$("#resultModal").modal("hide");
+								}, 1600);
+							}).fail(function (jqXHR, textStatus, errorThrown) {
+								console.log("fail==", jqXHR);
+							});
+														
+						}
 					});
 					
 				} else if(newGrpType === "vpp_group"){
-
-
 					if(!isEmpty(newResId)){
-						obj.description = newResId;
+						obj.resourceId = newResId						
 					}
 
-					option.url =  apiHost + "/config/vpp-groups?oid=" + oid;
-					option.data = JSON.stringify(obj);
+					option = {
+						url:  apiHost + "/config/vpp-groups?oid=" + oid,
+						type: 'post',
+						async: true,
+						dataType: 'json',
+						contentType: 'application/json; charset=UTF-8',
+						data: JSON.stringify(obj)
+					}
 
+					Promise.resolve(returnAjaxRes(option)).then(res => {
+						console.log('res===', res)
+						let promises = [];
+						let vgid = res.vgid;
+
+					
+						$.each(selectedSiteId, function(index, el){
+							let sid = $(this).data("value");
+							let siteObj = {
+								vpp_group_id: vgid
+							};
+							let siteOpt = {
+								url: apiHost + "/config/sites/" + sid,
+								type: 'patch',
+								async: true,
+								data: JSON.stringify(siteObj),
+							};
+							promises.push(Promise.resolve(returnAjaxRes(siteOpt)));
+						});
+						return Promise.all(promises).then(finalRes => {
+							console.log("finalRes---", finalRes)
+						});
+					});
 					// option = {
 					// 	url: apiHost + "/config/vpp-groups?oid=" + oid,
 					// 	type: 'post',
@@ -215,11 +242,7 @@
 					// }
 
 				} else if(newGrpType === "dr_group"){
-
-					if(!isEmpty(newResId)){
-						obj.description = newResId;
-					}
-
+					obj.resourceId = newResId
 					option.url =  apiHost + "/config/dr-groups?oid=" + oid;
 					option.data = JSON.stringify(obj);
 
@@ -252,26 +275,36 @@
 			let rowData = dTable.row(tr).data();
 			let gsid = rowData.sid;
 			let modalBody = $("#deleteConfirmModal .modal-body");
+			let optDelete = {};
+			let promises = [];
 			console.log("rowData===", rowData)
 			if(rowData.sgid){
-				let optDelete = {
-					url: apiHost + "/config/group_sites/" + gsid,
+				optDelete = {
+					url: apiHost + "/config/group_sites/" + rowData.sgid,
 					type: "delete",
 					async: true,
 				}
 			} else if(rowData.vgid){
-				let optDelete = {
-					url: apiHost + "/config/group_sites/" + gsid,
+				optDelete = {
+					url: apiHost + "/config/group_sites/" + rowData.vgid,
 					type: "delete",
 					async: true,
 				} 
 			} else if(rowData.dgid){
-				let optDelete = {
-					url: apiHost + "/config/group_sites/" + gsid,
+				optDelete = {
+					url: apiHost + "/config/group_sites/" + rowData.dgid,
 					type: "delete",
 					async: true,
 				}
 			}
+
+			Promise.resolve(returnAjaxRes(optDelete)).then( res => {
+				console.log("res=-==", res)
+			})
+			$.each(rowData.sites, function(index, el){
+				console.log("el===", el);
+				// promises.push(Promise.resolve(returnAjaxRes(optDelete)))
+			});
 
 			// $.ajax(optDelete).done(function (json, textStatus, jqXHR) {
 			// 	modalBody.addClass("hidden");
@@ -327,8 +360,9 @@
 		// 	Promise.all([ Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])) ]).then( res => {
 		Promise.resolve(returnAjaxRes(optionList[0])).then( res => {
 			let flat = [];
-
 			flat = [...res.dr_group, ...res.vpp_group, ...res.tag_group];
+
+			console.log("flat---", flat)
 			if(isEmpty(flat)) {
 				drawEmptyTable($("#groupTable"));
 			} else {
@@ -481,7 +515,7 @@
 								// }
 
 								if(full.sites.length >= 5){
-									return siteName + '...<a href="#" onclick=updateModal("' + 'detail' + '"); class="text-link ml-6">more</a>'
+									return '<div class="flex_start">' + siteName + '...<a href="#" onclick=updateModal("' + 'detail' + '"); class="text-link">more</a></div>'
 								} else {
 									return siteName;
 								}
@@ -826,10 +860,11 @@
 
 		$("#validGroup").addClass("hidden");
 		$("#newGroupName").parent().next().prop("disabled", true);
+		$("#newGroupDetail").val("");
+		$("#confirmGroup").val("");
 		$("#shareOptGroup").addClass("hidden");
 		$("#addGroupBtn").prop("disabled", true);
 		$("#checkGroupBtn").prop("disabled", true); 	
-		$("#newGroupDetail").val("");
 
 		warning.addClass("hidden");
 
@@ -852,11 +887,12 @@
 	function updateModal(option, callback){
 		// RPS(Renewable Portfolio Standard), SMP(System Marginal Price), REC(Renewable Energy Certificate) => subsidies
 		let titleAdd = $('#titleAdd');
+		let newGroupType = $('#newGroupType');
 		let newGroupName = $('#newGroupName');
 		let form = $("#updateSiteForm");
 		let required = form.find(".asterisk");
 		let addBtn = $("#addGroupBtn");
-
+		
 		// ADD MODAL!!!
 		if(option == "add"){
 			initModal();
@@ -880,6 +916,7 @@
 
 			// EDIT MODAL!!!
 			if(option == "edit") {
+				console.log("edit modal opened===", rowData)
 				addBtn.prop("disabled", false).text("수정");
 
 				titleAdd.addClass("hidden").next().removeClass("hidden");
@@ -891,7 +928,33 @@
 				}
 
 				newGroupName.val( td.eq(2).text() );
+				if(rowData.sgid){
+					newGroupType.prev().data("value", "tag_group").html("사업소 그룹<span class='caret'></span>");
+				} else if(rowData.vgid){
+					newGroupType.prev().data("value", "vpp_group").html("VPP 그룹<span class='caret'></span>");
+				} else if(rowData.dgid){
+					newGroupType.prev().data("value", "dr_group").html("DR 그룹<span class='caret'></span>");
+				}
 
+				if(!isEmpty(td.eq(3).text())) {
+					let newSiteList = $("#newSiteList");
+					let siteItem = newSiteList.find("li");
+					let checkBoxList = siteItem.toArray();
+
+					let s = rowData.sites;
+					let str = ``;
+
+					$.each(s, function(index, el){ 
+
+						let selected = checkBoxList.some( x => $(x).data("value") === el.sid );
+						siteItem.find("input[data-value='" + el.sid + "']").prop("checked", true);
+						str += `<li>${'${el.name}'}</li>`
+						if(index === 0){
+							newSiteList.prev().html(el.name + "&nbsp;외" + String(s.length-1) + "<span class='caret'></span>")
+						}
+					});
+					$("#selectedSiteList").append(str);
+				}
 
 				$("#addGroupModal").addClass("edit").modal("show");
 			}
@@ -1180,6 +1243,10 @@
 									</ul>
 								</div>
 								<!-- <small class="hidden warning">사업소를 선택해 주세요</small> -->
+							</div>
+
+							<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+								<ul id="selectedSiteList" class="selected-list"></ul>
 							</div>
 						</div>
 
