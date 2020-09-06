@@ -128,6 +128,45 @@
 				</div>
 			</div>
 
+			<div class="row">
+				<div class="w-100">
+					<h2 class="list_title">커멘드 전달</h2>
+					<div id="rtuCommand" class="command-list">
+						<div class="flex_group">
+							<span class="s_tit">커멘드</span>
+							<div class="dropdown" id="selectCmdList">
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+								<ul class="dropdown-menu" role="menu" id="siteULList">
+									<li data-value="">
+										<a href="javascript:void(0);" tabindex="-1"></a>
+									</li>
+								</ul>
+							</div>
+						</div>
+
+						<div class="flex_group">
+							<span class="s_tit">옵션</span>
+							<div class="dropdown">
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+								<ul class="dropdown-menu" role="menu" id="selectCmdOptList">
+									<li data-value="">
+										<a href="javascript:void(0);" tabindex="-1"></a>
+									</li>
+								</ul>
+							</div>
+							<div class="tx_inp_type">
+								<input type="text" id="cmdSubOpt" name="cmd_option_2" placeholder="">
+							</div>
+							<div class="btn_wrap_type02 flex_start">
+								<button type="button" class="btn_type03">삭제</button>
+								<button type="button" class="btn_type">추가</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
 			<div class="tbl_top clear"><h2 class="ntit fl">연결 설비</h2></div>
 			<div class="collect_wrap table_scroll">
 				<table id="detailInfoTable" class="his_tbl">

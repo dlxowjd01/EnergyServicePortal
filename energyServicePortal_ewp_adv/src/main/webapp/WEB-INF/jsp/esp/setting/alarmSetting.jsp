@@ -406,8 +406,7 @@
 				strDataSet = tempDataSet;
 			} else {
 				if (isEmpty(DEV_TYPE.v)) {
-					errorMsg('설비타입은 필수값입니다.');
-					return false;
+					continue;
 				} else if (isEmpty(MANUFACTURER.v)) {
 					errorMsg('제조사는 필수값입니다.');
 					return false;
