@@ -289,10 +289,7 @@
 				<a href="javascript:void(0);">설정</a>
 				<ul class="sub-menu-list">
 					<li><a href="/setting/siteSetting.do">사업소 관리</a></li>
-
-					<c:if test="${oid eq 'encored' and userRole eq '1'}">
 					<li><a href="/setting/groupSetting.do">그룹 관리</a></li>
-					</c:if>
 
 					<c:if test="${userRole ne '2'}">
 					<li><a href="/setting/alarmSetting.do">알람 설정</a></li>
