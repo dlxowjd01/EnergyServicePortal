@@ -44,7 +44,11 @@ public class RestApiUtil {
 		if (mode != null && "test".equals(mode)) {
 			return basicGet(strUrl, parameters, null);
 		} else {
-			return secureGet(strUrl, toStringParameter(parameters), null);
+			if (apiHost.startsWith("http://")) {
+				return basicGet(strUrl, parameters, null);
+			} else {
+				return secureGet(strUrl, toStringParameter(parameters), null);
+			}
 		}
 	}
 
@@ -61,7 +65,11 @@ public class RestApiUtil {
 		if (mode != null && "test".equals(mode)) {
 			return basicGet(strUrl, parameters, token);
 		} else {
-			return secureGet(strUrl, toStringParameter(parameters), token);
+			if (apiHost.startsWith("http://")) {
+				return basicGet(strUrl, parameters, token);
+			} else {
+				return secureGet(strUrl, toStringParameter(parameters), token);
+			}
 		}
 	}
 
@@ -197,7 +205,11 @@ public class RestApiUtil {
 		if (mode != null && "test".equals(mode)) {
 			return basicPost(strUrl, jsonMessage, null);
 		} else {
-			return securePost(strUrl, mode, jsonMessage, null);
+			if (apiHost.startsWith("http://")) {
+				return basicPost(strUrl, jsonMessage, null);
+			} else {
+				return securePost(strUrl, mode, jsonMessage, null);
+			}
 		}
 	}
 

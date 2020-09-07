@@ -9,7 +9,14 @@
 <div id="outerWrapper" class="outer-wrapper">
 	<%@ include file="/decorators/include/layouts/header.jsp" %>
 	<div class="page-wrapper">
-		<%@ include file="/decorators/include/layouts/nav.jsp" %>
+		<c:choose>
+			<c:when test="${fn:contains(sessionScope.userInfo.oid, 'kpx')}">
+				<%@ include file="/decorators/include/layouts/nav-kpx.jsp" %>
+			</c:when>
+			<c:otherwise>
+				<%@ include file="/decorators/include/layouts/nav.jsp" %>
+			</c:otherwise>
+		</c:choose>
 		<div id="innerBody" class="container-fluid">
 			<decorator:body/>
 		</div>

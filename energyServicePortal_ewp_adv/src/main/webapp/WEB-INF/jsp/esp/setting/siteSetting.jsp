@@ -300,6 +300,7 @@
 					newUtilObj.utility_plan_id = newUtilPlanId;
 					newUtilObj.utility_plan_name = newUtilPlanName;
 					if( !isEmpty(newVoltName)){
+						console.log("newVoltName===", newVoltName)
 						newUtilObj.volt_name = newVoltName;
 					}
 				}
@@ -1439,6 +1440,8 @@
 			$("#newResList").append(resStr);
 			$("#resTypeList").append(resStr).prepend(allStr);
 
+				let dropdown = $("#propertyRow").find(".dropdown-menu");
+				setDropdownValue(dropdown);
 
 			$("#newResList li").on("click", function() {
 				let val = $(this).data("value");

@@ -208,7 +208,7 @@
 		</h1>
 		<a href="javascript:void(0);" class="category_close"><img src="/img/gnb_close.png" width="17" alt="닫기"></a>
 	</div>
-	
+
 	<div class="g_menu">
 		<ul class="menu-list">
 			<li class="gmn1 menu-item">

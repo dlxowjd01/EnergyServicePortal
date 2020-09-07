@@ -112,7 +112,15 @@
 
 	<div class="col-xl-8 col-md-12 col-sm-12">
 		<div class="gmain_row1">
-			<div class="indiv gmain_map gmain_chart gmain_chart4">
+			<c:choose>
+				<c:when test="${fn:contains(sessionScope.userInfo.oid, 'kpx')}">
+				<div class="indiv gmain_map gmain_chart gmain_chart_kpx">
+				</c:when>
+				<c:otherwise>
+				<div class="indiv gmain_map gmain_chart gmain_chart4 ">
+				</c:otherwise>
+			</c:choose>
+
 				<div class="chart_top clear">
 					<h2 class="ntit"><fmt:message key="gdash.4.current" /></h2>
 				</div>
@@ -125,14 +133,23 @@
 						</div>
 						<div class="ci_right">
 							<div class="legend_wrap">
+								<span class="bu3">풍력</span>
 								<span class="bu1"><fmt:message key="gdash.4.gen" /></span>
 								<span class="bu4"><fmt:message key="gdash.4.idle" /></span>
 							</div>
 							<ul>
-								<li><strong><fmt:message key="gdash.4.today_gen" /></strong> <span> 0 </span><em>&nbsp;&nbsp;kWh</em></li>
-								<li><strong><fmt:message key="gdash.4.forecast" /></strong> <span> 0 </span><em>&nbsp;&nbsp;kWh</em></li>
-								<li><strong><fmt:message key="gdash.4.today_ess" /></strong> <span> - </span><em>&nbsp;&nbsp;Wh</em> /
-									<span> - </span><em>&nbsp;&nbsp;Wh</em></li>
+								<c:choose>
+									<c:when test="${fn:contains(sessionScope.userInfo.oid, 'kpx')}">
+										<li><strong><fmt:message key="gdash.4.active_power" /></strong> <span> 0 </span><em>&nbsp;&nbsp;kW</em></li>
+										<li><strong>목표전력</strong> <span> 0 </span><em>&nbsp;&nbsp;kW</em></li>
+										<li><strong>설비용량</strong> <span> 0 </span><em>&nbsp;&nbsp;kW</em></li>
+									</c:when>
+									<c:otherwise>
+										<li><strong><fmt:message key="gdash.4.today_gen" /></strong> <span> 0 </span><em>&nbsp;&nbsp;kWh</em></li>
+										<li><strong><fmt:message key="gdash.4.forecast" /></strong> <span> 0 </span><em>&nbsp;&nbsp;kWh</em></li>
+										<li><strong><fmt:message key="gdash.4.today_ess" /></strong> <span> - </span><em>&nbsp;&nbsp;Wh</em> / <span> - </span><em>&nbsp;&nbsp;Wh</em></li>
+									</c:otherwise>
+								</c:choose>
 							</ul>
 						</div>
 					</div>
@@ -140,22 +157,47 @@
 				<div class="local_info s_center">
 					<table>
 						<thead>
-						<tr>
-							<th><fmt:message key="gdash.4.tot_num" /></th>
-							<th><fmt:message key="gdash.4.num_device" /></th>
-							<th><fmt:message key="gdash.4.tot_cap" /></th>
-							<th><fmt:message key="gdash.4.today_co2" /></th>
-							<th><fmt:message key="gdash.4.today_revenue" /></th>
-						</tr>
-						</thead>
-						<tbody id="centerTbody">
-						<tr>
-							<td><em>&nbsp;&nbsp;개소</em></td>
-							<td><em>&nbsp;&nbsp;대</em></td>
-							<td><em>&nbsp;&nbsp;kW</em></td>
-							<td><em>&nbsp;&nbsp;kg</em></td>
-							<td><em>&nbsp;&nbsp;천원</em></td>
-						</tr>
+						<c:choose>
+							<c:when test="${fn:contains(sessionScope.userInfo.oid, 'kpx')}">
+							<tr>
+								<th>구분</th>
+								<th>사업소</th>
+								<th>유효전력</th>
+								<th>구분</th>
+								<th>사업소</th>
+								<th>유효전력</th>
+							</tr>
+							</thead>
+							<tbody id="centerTbody">
+							<tr>
+								<td> 풍력 </td>
+								<td> - </td>
+								<td> - </td>
+								<td> 태양광 </td>
+								<td> - </td>
+								<td> - </td>
+							</tr>
+							</c:when>
+							<c:otherwise>
+							<tr>
+								<th><fmt:message key="gdash.4.tot_num" /></th>
+								<th><fmt:message key="gdash.4.num_device" /></th>
+								<th><fmt:message key="gdash.4.tot_cap" /></th>
+								<th><fmt:message key="gdash.4.today_co2" /></th>
+								<th><fmt:message key="gdash.4.today_revenue" /></th>
+							</tr>
+							</thead>
+							<tbody id="centerTbody">
+							<tr>
+								<td><em>&nbsp;&nbsp;개소</em></td>
+								<td><em>&nbsp;&nbsp;대</em></td>
+								<td><em>&nbsp;&nbsp;kW</em></td>
+								<td><em>&nbsp;&nbsp;kg</em></td>
+								<td><em>&nbsp;&nbsp;천원</em></td>
+							</tr>
+							</c:otherwise>
+						</c:choose>
+
 						</tbody>
 					</table>
 				</div>
@@ -225,6 +267,31 @@
 								<caption>(단위: kWh)</caption>
 								<thead>
 								<tr>
+									<c:choose>
+										<c:when test="${fn:contains(sessionScope.userInfo.oid, 'kpx')}">
+									<th>
+										<button type="button" class="btn_align"><fmt:message key="gdash.7.status" /></button>
+									</th>
+									<th>
+										<button type="button" class="btn_align"><fmt:message key="gdash.7.err" /></button>
+									</th>
+									<th>
+										<button type="button" class="btn_align"><fmt:message key="gdash.7.medium" /></button>
+									</th>
+									<th>
+										<button type="button" class="btn_align">발전기</button>
+									</th>
+									<th>
+										<button type="button" class="btn_align">현재출력</button>
+									</th>
+									<th>
+										<button type="button" class="btn_align">목표출력</button>
+									</th>
+									<th>
+										<button type="button" class="btn_align">무효전력</button>
+									</th>
+										</c:when>
+										<c:otherwise>
 									<th>
 										<button type="button" class="btn_align"><fmt:message key="gdash.7.status" /></button>
 									</th>
@@ -252,13 +319,113 @@
 									<th class="ESS">
 										<button type="button" class="btn_align"><fmt:message key="gdash.7.discharge" /></button>
 									</th>
+										</c:otherwise>
+									</c:choose>
 								</tr>
 								</thead>
 								<tbody id="siteList">
 									<!-- [D] 상태별 배경 : 't1' or 't2' 클래스 추가 -->
+									<c:choose>
+										<c:when test="${fn:contains(sessionScope.userInfo.oid, 'kpx')}">
 									<tr class="dbclickopen flag[INDEX]" data-sid="[sid]">
 										<td class="first_td">
-											<%--<span class="status status_err" title="통신이상">통신이상</span>--%>
+												<%--<span class="status status_err" title="통신이상">통신이상</span>--%>
+											<span class="status status_drv" title="[status]">[status]</span>
+											<span class="st_bar"></span>
+										</td>
+										<td>[alarmError]</td>
+										<td>[alarmWarning]</td>
+										<td class="center">[name]</td>
+										<td class="right">[activePower]</td>
+										<td class="right">[targetActivePower]</td>
+										<td class="right">[reactivePower]</td>
+									</tr>
+									<tr class="detail_info list[INDEX] flag[INDEX]">
+										<td colspan="9">
+											<div class="di_wrap">
+												<div class="di_wrap_in">
+													<div class="di_top_sec">
+														<span class="ico solar"></span>
+														<div class="tx_area clear">
+															<div class="fl">
+																<span class="tx"><fmt:message key="gdash.7.irr" /></span>
+																<span class="tx2">[irradiationPoa]</span>
+															</div>
+															<div class="fr">
+																<span class="tx2"><fmt:message key="gdash.7.temp" /> [temperature]</span>
+																<span class="tx2"><fmt:message key="gdash.7.humid" /> [humidity]</span>
+															</div>
+														</div>
+													</div>
+													<div class="di_btm_sec clear">
+														<div class="sec_bx left">
+															<div class="bx_in">
+																<div class="bx_top">
+																	<div class="inchart" id="type_chart[INDEX]"></div>
+																</div>
+																<ul class="di_list">
+																	<li>
+																		<span class="di_li_tit">현재 유효출력 (kW)</span>
+																		<span class="di_li_tx">[activePower]</span>
+																	</li>
+																	<li>
+																		<span class="di_li_tit">현재 무효출력 (kWh)</span>
+																		<span class="di_li_tx">[reactivePower]</span>
+																	</li>
+																	<li>
+																		<span class="di_li_tit">ESS 유효출력 (kWh)</span>
+																		<span class="di_li_tx">[essActivePower]</span>
+																	</li>
+																	<li>
+																		<span class="di_li_tit">가용출력 (Var)</span>
+																		<span class="di_li_tx">[maxActivePower]</span>
+																	</li>
+																</ul>
+															</div>
+														</div>
+														<div class="sec_bx right">
+															<div class="bx_in">
+																<div class="bx_top">
+																	<div class="bx_top_inner"></div>
+																</div>
+																<ul class="di_list">
+																	<li>
+																		<span class="di_li_tit">목표출력 (kW)</span>
+																		<span class="di_li_tx">[capacity]</span>
+																	</li>
+																	<li>
+																		<span class="di_li_tit">송신시간</span>
+																		<span class="di_li_tx">[lastTargetActivePowerReqDate]</span>
+																	</li>
+																	<li>
+																		<span class="di_li_tit">수신시간</span>
+																		<span class="di_li_tx">[lastTargetActivePowerRecvDate]</span>
+																	</li>
+																</ul>
+																<div class="di_tx_bx">
+																	<a href="javascript:void(0);"
+																	   onclick="pageMove('[sid]', 'alarm')">
+																		<p class="tx"><fmt:message key="gdash.7.num_no_ack" /> :
+																			<span>[alarmTotal] 건</span></p>
+																	</a>
+																		<%--<p class="tx">2020-02-10 12:00:01 데이터 disconnected</p>--%>
+																		<%--<p class="tx">2020-02-09 11:41:26 인버터#1 이상 감지</p>--%>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="btn_bx clear">
+														<a href="javascript:void(0);" onclick="pageMove('[sid]', 'siteMain')" class="btn_type02 fr"><fmt:message key="gdash.7.go_dashboard" /> <span class="ico_arrow"></span></a>
+													</div>
+												</div>
+											</div>
+										</td>
+									</tr>
+										</c:when>
+										<c:otherwise>
+									<tr class="dbclickopen flag[INDEX]" data-sid="[sid]">
+										<td class="first_td">
+												<%--<span class="status status_err" title="통신이상">통신이상</span>--%>
 											<span class="status status_drv" title="[status]">[status]</span>
 											<span class="st_bar"></span>
 										</td>
@@ -331,12 +498,12 @@
 																</ul>
 																<div class="di_tx_bx">
 																	<a href="javascript:void(0);"
-																		onclick="pageMove('[sid]', 'alarm')">
+																	   onclick="pageMove('[sid]', 'alarm')">
 																		<p class="tx"><fmt:message key="gdash.7.num_no_ack" /> :
 																			<span>[alarmTotal] 건</span></p>
 																	</a>
-																	<%--<p class="tx">2020-02-10 12:00:01 데이터 disconnected</p>--%>
-																	<%--<p class="tx">2020-02-09 11:41:26 인버터#1 이상 감지</p>--%>
+																		<%--<p class="tx">2020-02-10 12:00:01 데이터 disconnected</p>--%>
+																		<%--<p class="tx">2020-02-09 11:41:26 인버터#1 이상 감지</p>--%>
 																</div>
 															</div>
 														</div>
@@ -348,6 +515,9 @@
 											</div>
 										</td>
 									</tr>
+										</c:otherwise>
+									</c:choose>
+
 								</tbody>
 							</table>
 						</div>
@@ -365,6 +535,7 @@
 	const sgid = '<c:out value="${sgid}" escapeXml="false" />';
 	const today = new Date();
 
+<%--	<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'kpx')}">--%>
 	let makerObject = new Object();
 
 	let map = new google.maps.Map(document.getElementById('gMainMap'), {
@@ -377,11 +548,12 @@
 	});
 	let geocoder = new google.maps.Geocoder();
 	let infowindow = new google.maps.InfoWindow();
-
+<%--	</c:if>--%>
 	let first = true;
 
 	$(function () {
 		setInitList('alarmNotice'); //알람 공지 세팅
+		//resourceProperties();
 
 		makeSiteList();
 		if (!isEmpty(siteList) && siteList.length > 0) {
@@ -401,9 +573,13 @@
 
 	function fn_cycle_1hour() {
 		if (!first) {
-			getYearGenData();
-			getDailyGenData();
-			getGenDataBySiteYesterday();
+			if (oid.match('kpx')) {
+				getYearGenDataKPX();
+			} else {
+				getYearGenData();
+				getDailyGenData();
+				getGenDataBySiteYesterday();
+			}
 			searchSiteList();
 		}
 
@@ -420,6 +596,7 @@
 		$('.dbTime').text(now.format('yyyy-MM-dd HH:mm:ss'));
 	}
 
+<%--	<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'kpx')}">--%>
 	const geocodeAddress = (siteAddr, siteId, siteName, siteLatlng, siteColor) => {
 		let latLng = new Object(),
 			dummy = siteLatlng.split(',');
@@ -511,6 +688,7 @@
 			}
 		}
 	}
+<%--	</c:if>--%>
 
 	const rtnDropdown = () => {
 		searchSite();
