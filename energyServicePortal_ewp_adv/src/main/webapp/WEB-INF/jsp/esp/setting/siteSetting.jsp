@@ -14,12 +14,12 @@
 				url: apiHost + "/config/sites?oid=" + oid,
 				type: "get",
 				async: true,
-				data: {
-					filter: JSON.stringify(
-						{ "order": [ "updatedAt DESC" ] }
-						// { "order": [ "name ASC", "updatedAt DESC" ] }
-					),
-				}
+				// data: {
+				// 	filter: JSON.stringify(
+				// 		{ "order": [ "updatedAt DESC" ] }
+				// 		// { "order": [ "name ASC", "updatedAt DESC" ] }
+				// 	),
+				// }
 			},
 			{
 				url: apiHost + "/auth/me/groups?includeSites=false&includeDevices=false",
@@ -37,6 +37,7 @@
 			// 	async: true,
 			// },
 		];
+		initModal();
 
 		if(role == 1){
 			Promise.all([ Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])) ]).then( res => {
@@ -156,12 +157,12 @@
 		});
 
 		$("#deleteConfirmModal").on("hide.bs.modal", function() {
+			$("#deleteSuccessMsg").html('<h5 id="deleteSuccessMsg" class="ntit">사용자 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>');
+			$("#confirmSite").val("");
+			$("#deleteConfirmBtn").prop("disabled", true);
 			setTimeout(function(){
 				$(this).find(".modal-body").removeClass("hidden");
-				$("#deleteSuccessMsg").html('<h5 id="deleteSuccessMsg" class="ntit">사용자 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>');
-				$("#confirmSite").val("");
-				$("#deleteConfirmBtn").prop("disabled", true);
-			}, 2000);
+			}, 1600);
 		});
 
 		$("#alarmDeleteConfirmBtn").click(function(){
@@ -820,17 +821,17 @@
 							"sTitle": "VPP 자원코드",
 							"mData": "vppName",
 						},
-						{
-							"sTitle": "알람 수신",
-							"mData": null,
-							"mRender": function ( data, type, full, rowIndex )  {
-								if(full.alarmFlag === 1){
-									return '<button type="button" class="btn-type-sm btn_type03">알람</button>'
-								} else {
-									return '<button type="button" disabled class="btn-type-sm btn_type03">알람</button>'
-								}
-							},
-						},
+						// {
+						// 	"sTitle": "알람 수신",
+						// 	"mData": null,
+						// 	"mRender": function ( data, type, full, rowIndex )  {
+						// 		if(full.alarmFlag === 1){
+						// 			return '<button type="button" class="btn-type-sm btn_type03">알람</button>'
+						// 		} else {
+						// 			return '<button type="button" disabled class="btn-type-sm btn_type03">알람</button>'
+						// 		}
+						// 	},
+						// },
 						{
 							"sTitle": "업데이트 일자",
 							"mData": "updatedAt",
@@ -902,25 +903,25 @@
 				// 	console.log("sid===", data.sid)
 				// }).data();
 
-				siteTable.on( 'click', 'td .btn-type-sm', function () {
-					let tr = $(this).parents().closest("tr");
-					let idx = siteTable.row(tr).index();
+				// siteTable.on( 'click', 'td .btn-type-sm', function () {
+				// 	let tr = $(this).parents().closest("tr");
+				// 	let idx = siteTable.row(tr).index();
 
-					// if(!isEmpty(siteTable.row(tr).data().alarmData)){
-						let rowData = siteTable.row(tr).data().alarmInfo;
-						let userOpt = {
-							url: apiHost + "/config/users",
-							type: 'get',
-							async: false,
-							data : {
-								oid: oid,
-							}
-						}
-						Promise.resolve(makeAjaxCall(userOpt)).then(res => {
-							getAlarmTable(rowData, res)
-						});
-					// }
-				});
+				// 	// if(!isEmpty(siteTable.row(tr).data().alarmData)){
+				// 		let rowData = siteTable.row(tr).data().alarmInfo;
+				// 		let userOpt = {
+				// 			url: apiHost + "/config/users",
+				// 			type: 'get',
+				// 			async: false,
+				// 			data : {
+				// 				oid: oid,
+				// 			}
+				// 		}
+				// 		Promise.resolve(makeAjaxCall(userOpt)).then(res => {
+				// 			getAlarmTable(rowData, res)
+				// 		});
+				// 	// }
+				// });
 
 				new $.fn.dataTable.Buttons( siteTable, {
 					name: 'commands',
@@ -1601,6 +1602,7 @@
 
 		$("#newResList li").removeClass("hidden");
 		$("#newSiteDetail").val("");
+		$("#confirmSite").val("");
 
 		warning.addClass("hidden");
 		input.each(function(){
@@ -1839,7 +1841,7 @@
 	function getAlarmTable(alarmData, userData){
 		// console.log("alarmData===", alarmData)
 		let arr = [];
-
+		let userType = "";
 		let newUserList = [];
 		let newNonUserList = [];
 		// console.log("userData---", userData);
@@ -1851,10 +1853,13 @@
 					// console.log("x==", x);
 					if(!isEmpty(x.alarm_to)){
 						let sendTo = JSON.parse(x.alarm_to);
+						let userObj = {};
+
+
+						console.log("sendTo==", sendTo);
 						let userList = sendTo.user;
 						let	nonUserList = sendTo.non_user;
 						let alarmTotalData = [];
-
 						if(!isEmpty(userList)){
 							console.log("userList==", userList);
 							var non = false;
@@ -1906,35 +1911,17 @@
 							}
 						}
 
-
-						
-
-
-						// if(!isEmpty(userList)){
-						// 	userList.map( x => {
-
-						// 	});
-						// }
-
-						// if(!isEmpty(nonUserList)){
-						// 	nonUserList.map( x => {
-
-						// 	});
-						// }
 					} else {
 						let nonUserObj = {};
+						userType = "NA";
 						nonUserObj.index = index + 1;
 						// device type
 						nonUserObj.did = x.did;
-						if(isEmpty(x.device_type)){
-							nonUserObj.device_type = "-";
-						} else {
+						if(!isEmpty(x.device_type)) {
 							nonUserObj.device_type = x.device_type;
 						}
 						// device name
 						if(isEmpty(x.name)){
-							nonUserObj.name = "-";
-						} else {
 							nonUserObj.name = x.name;
 						}
 						// alarm level
@@ -1945,10 +1932,21 @@
 						nonUserObj.phone = "";
 
 						nonUserObj.createdAt = x.createdAt;
-
 						arr.push(nonUserObj);
+						if(index === alarmData.length-1) {
+							let emptyObj = {};
+							emptyObj.index = index + 2;
+							emptyObj.did = x.did;
+							emptyObj.device_type = "";
+							nonUserObj.name = "";
+							nonUserObj.level = 0;
+							nonUserObj.uid = "";
+							nonUserObj.phone = "";
+							nonUserObj.createdAt = "";
+							arr.push(nonUserObj);
+							arr.push(emptyObj);
+						}
 					}
-
 				})).then( () => {
 					// console.log("arr===]", arr)
 					// console.log("newUserList---", newUserList);
@@ -1967,8 +1965,8 @@
 						// "table-layout": "fixed",
 						// "fixedHeader": true,
 						// "bAutoWidth": true,
-						"aaSorting": [[ 0, 'asc' ]],
-						"order": [[ 1, 'asc' ]],
+						// "aaSorting": [[ 0, 'asc' ]],
+						"order": [[ 1, 'desc' ]],
 						"bSortable": true,
 						"pagingType": "full_numbers",
 						// "ordering": false,
@@ -2119,9 +2117,11 @@
 									// console.log("userList---", newUserList);
 									// console.log("newNonUserList---", newNonUserList);
 
-									let tempUid = "";
 									let str4 = ``;
 
+									str4 += `
+										<li id="aNewInput${'${ row.index }'}" onclick="addNewInput(aContactPersonList${'${ row.index }'}, aContactNum${'${ row.index }'}, this)"><a href="#">직접입력</a></li>
+									`
 									$.each(userData, function(index, el){
 										// str4 += `
 										// 	<li data-name="${'${ el.name }'}" data-uid="${'${ el.uid }'}"><a href="#" tabindex="-1">${'${ el.name }'}</a></li>
@@ -2137,12 +2137,9 @@
 										`
 									});
 
-									str4 += `
-										<li id="aNewInput${'${ row.index }'}" onclick="addNewInput(aContactPersonList${'${ row.index }'}, aContactNum${'${ row.index }'}, this)"><a href="#">직접입력</a></li>
-									`
 
-									let targetInput = "aContactInput" + row.index;
-									let dropdownContact = "aContactInput" + row.index;
+									// let targetInput = "aContactInput" + row.index;
+									// let dropdownContact = "aContactInput" + row.index;
 									// str4 += `
 									// 	<li onclick="hideDropdown(${'${ targetInput }'})"><a href="#" tabindex="-1">직접입력</a></li>
 									// `;
@@ -2154,17 +2151,24 @@
 									userId = userData[row.index].login_id;
 
 									displayText = userName + ' (' + userId + ')';
-
-									console.log("tempUid===", tempUid);
-
-									dropdown4 = `
+									if(userType == "NA"){
+										dropdown4 = `
+											<div class="dropdown">
+												<button type="button" class="dropdown-toggle" data-toggle="dropdown">직접 입력<span class="caret"></span></button>
+												<ul id="aContactPersonList${'${ row.index }'}" class="dropdown-menu">${'${ str4 }'}</ul>
+											</div>
+											<div class="tx_inp_type ml-0"><input type="text" name="a_contact_input${'${row.index}'}" id="aContactInput${'${row.index}'}" placeholder="예) 김강욱" /></div>
+										`;
+									} else {
+										dropdown4 = `
 										<div class="dropdown">
-											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="담당자 (아이디) 선택" data-value="${'${ userId }'}">${'${ displayText }'}<span class="caret"></span></button>
-											<ul id="aContactPersonList${'${ row.index }'}" class="dropdown-menu unused">${'${ str4 }'}</ul>
+											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="담당자" data-value="${'${ userId }'}">${'${ displayText }'}<span class="caret"></span></button>
+											<ul id="aContactPersonList${'${ row.index }'}" class="dropdown-menu">${'${ str4 }'}</ul>
 										</div>
-										<div class="tx_inp_type ml-0 hidden"><input type="text" id="aContactInput${'${row.index}'}" name="a_contact_input${'${row.index}'}" /></div>
+										<div class="tx_inp_type ml-0"><input type="text" name="a_contact_input${'${row.index}'}" id="aContactInput${'${row.index}'}" /></div>
 									`;
 
+									}
 
 									return dropdown4;
 								},
@@ -2175,8 +2179,13 @@
 								"sTitle": "전화번호",
 								"mData": null,
 								"mRender": function ( data, type, row, rowIndex ) {
-									return `<div class="tx_inp_type hidden"><input type="text" id="aContactNum${'${row.index}'}" name="a_contact_num${'${row.index}'}" /></div>
-									`;
+									if(userType == "NA"){
+										return `<div class="tx_inp_type"><input type="text" name="a_contact_num${'${row.index}'}" id="aContactNum${'${row.index}'}" placeholder="예) 010-1234-5678" /></div>
+										`;
+									} else {
+										return `<div class="tx_inp_type"><input type="text" name="a_contact_num${'${row.index}'}" id="aContactNum${'${row.index}'}" disabled/></div>
+										`;
+									}
 								},
 								// "className": "no-sorting",
 							},
@@ -2376,8 +2385,20 @@
 	function addAlarmRow(){
 		let almTable = $('#alarmTable').DataTable();
 		let table = $("#alarmTable");
-		let row = table.find("tbody tr:eq(0)").clone();
+		let length = table.find("tbody tr").length;
+		let td = table.find("tbody td");
 
+		almTable.row.add([
+			length + 1,
+			"",
+            "",
+			"",
+			"",
+			"",
+			"",
+			"",
+        ]).draw(true);
+ 
 		// dt.Columns.Add("Id");
 		// dt.Columns.Add("Name");
 		// dt.Columns.Add("Email");
@@ -2389,8 +2410,8 @@
 		// dt.Rows.Add("3", "Sayantani", "sayantani@gmail.com");
 
 
-		let copyRow = almTable.row(row).Copy().clone();
-		console.log("copyRow---", copyRow)
+		// let copyRow = almTable.row(row).Copy().clone();
+		console.log("copyRow---", row)
 	}
 
 	function checkSiteId(userInput){
@@ -2532,15 +2553,15 @@
 
 	function addNewInput(target, input, self){
 		let almTable = $("#alarmTable").DataTable();
-		let parent = $(target).parent();
+
 		let col = almTable.column(5);
 		$(self).siblings().toggleClass("hidden");
 		$(self).siblings().find("input:checked").prop("checked", false);
 
-		$(input).parent().toggleClass("hidden");
+		$(input).prop('disabled', function(i, v) { return !v; });
+
 
 		// console.log("self===", $(self).siblings().find("input:checked") );
-		parent.next().toggleClass("hidden");
 
 		$(target).prev().toggleText('선택', $(target).prev().text());
 		// col.visible( ! col.visible() );
@@ -2638,9 +2659,11 @@
 					<col style="width:8%">
 					<col style="width:8%">
 					<col style="width:8%">
-					<col style="width:8%">
-					<col style="width:6%">
 					<col style="width:10%">
+					<col style="width:14%">
+					<!-- <col style="width:8%"> -->
+					<!-- <col style="width:6%"> -->
+					<!-- <col style="width:10%"> -->
 				</colgroup>
 				<thead></thead>
 				<tbody></tbody>

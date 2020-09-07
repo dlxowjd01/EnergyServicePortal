@@ -35,7 +35,7 @@
 			},
 		];
 
-
+		initModal();
 		getUserList(optionList[0]);
 		getSpcList(optionList[1], copySpcList, setDropdownValue);
 
@@ -217,12 +217,12 @@
 		});
 
 		$("#deleteConfirmModal").on("hide.bs.modal", function() {
+			$("#deleteSuccessMsg").html('<h5 id="deleteSuccessMsg" class="ntit">사용자 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>');
+			$("#confirmUserId").val("");
+			$("#deleteConfirmBtn").prop("disabled", true);
 			setTimeout(function(){
 				$(this).find(".modal-body").removeClass("hidden");
-				$("#deleteSuccessMsg").html('<h5 id="deleteSuccessMsg" class="ntit">사용자 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>');
-				$("#confirmUserId").val("");
-				$("#deleteConfirmBtn").prop("disabled", true);
-			}, 2000);
+			}, 1600);
 		});
 
 		$("#resultModal").on("hide.bs.modal", function() {
@@ -1457,6 +1457,7 @@
 		addBtn.prop("disabled", true);
 		siteDeleteList.length = 0;
 		spcDeleteList.length = 0;
+		$("#confirmUserId").val("");
 		$("#newUserDesc").val("");
 
 		$.each(dropdown, function(index, element){

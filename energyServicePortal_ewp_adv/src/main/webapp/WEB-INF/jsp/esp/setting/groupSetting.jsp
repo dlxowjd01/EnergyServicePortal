@@ -6,6 +6,7 @@
 	$(function () {
 		// let s = JSON.parse('${siteList}');
 		// console.log("siteList---", s);
+		initModal();
 		getGroupData();
 		// dropdown event
 		setDropdownValue($("#newGroupType"));
@@ -18,7 +19,7 @@
 			let name = $(this).data("name");
 			let newGroupWarning = groupType.prev().parent().next();
 			let shareOpt = $("#shareOptGroup");
-			let resId = $("#resIdWrapper");
+			let resIdWrapper = $("#resIdWrapper");
 			let newResId = $("#newResId");
 			let radioWarning = shareOpt.find(".warning");
 			let radioGroup = shareOpt.find('input[type=radio][name=share_option]');
@@ -28,29 +29,33 @@
 
 			$("#validGroup").addClass("hidden");
 
-			if(val === "tag_group"){
+			if(val == "tag_group"){
 				shareOpt.removeClass("hidden").prev().removeClass("hidden");
-				radioWarning.removeClass("hidden");
-				resId.addClass("hidden").prev().addClass("hidden");
+				if( !$("#shareOpt1").is(":checked") && !$("#shareOpt2").is(":checked") ) {
+					radioWarning.removeClass("hidden");
+				}
+				resIdWrapper.addClass("hidden").prev().addClass("hidden");
 				newResId.val("");
 			} else {
 				shareOpt.addClass("hidden").prev().addClass("hidden");
 				radioGroup.prop("checked", false);
-				resId.removeClass("hidden").prev().removeClass("hidden");
+				resIdWrapper.removeClass("hidden").prev().removeClass("hidden");
+				if(val == "vpp_group"){
+					resIdWrapper.prev().find(".input_label").text("거래 ID");
+				} else {
+					resIdWrapper.prev().find(".input_label").text("자원 ID");
+				}
 			}
+
 			if( !isEmpty($("#newGroupName").val()) ){
 				$("#checkGroupBtn").prop("disabled", false);
 			}		
-			setTimeout(function(){
-				validateForm();
-			}, 200);
+			validateForm();
 		});
 
 		$("#shareOptGroup input[type=radio][name=share_option]").on("change", function(){
 			$("#shareOptGroup").find(".warning").addClass("hidden");
-			setTimeout(function(){
-				validateForm();
-			}, 200);
+			validateForm();
 		});
 
 		$("#groupList li").on( 'click', function(){
@@ -62,6 +67,16 @@
 		});
 
 		// Validations
+		$("#newResId").on('input', function() {
+			if($(this).val() == "") {
+				$("#resIdWrapper").find(".warning").removeClass("hidden");
+			} else {
+				$("#resIdWrapper").find(".warning").addClass("hidden");
+			}
+		});
+
+		$("#newResId").on('keyup', validateForm);	
+
 		$("#newGroupName").on('input', function() {
 			let newGroupType = $("#newGroupType");
 
@@ -101,19 +116,20 @@
 		
 		// Modal event
 		$("#addGroupModal").on("hide.bs.modal", function(){
-			$(this).hasClass("edit") ? $(this).removeClass("edit") : null;
-
-			initModal();
+			if($(this).hasClass("edit")){
+				$(this).removeClass("edit");
+			}
 			$("#validGroup").addClass("hidden");
+			initModal();
 		});
 	
 		$("#deleteConfirmModal").on("hide.bs.modal", function() {
+			$("#confirmGroupName").val("");
+			$("#deleteSuccessMsg").html('<h5 id="deleteSuccessMsg" class="ntit">그룹 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>');
+			$("#deleteConfirmBtn").prop("disabled", true);
 			setTimeout(function(){
 				$(this).find(".modal-body").removeClass("hidden");
-				$("#deleteSuccessMsg").html('<h5 id="deleteSuccessMsg" class="ntit">사용자 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>');
-				$("#confirmGroup").val("");
-				$("#deleteConfirmBtn").prop("disabled", true);
-			}, 2000);
+			}, 1600);
 		});
 
 		$("#resultModal").on("hide.bs.modal", function() {
@@ -121,38 +137,35 @@
 			$(this).find("h4").addClass("hidden");
 		});
 
+
 		// Form Submission
 		$("#updateGroupForm").on("submit", function(e){
 			e.preventDefault();
-
-			let option = {};
-
 			let obj = {};
-			let newGrpType = $("#newGroupType").prev().data("value");
-			let newGrpName = $("#newGroupName").val();
+			let newGroupType = $("#newGroupType").prev().data("value");
+			let newGroupName = $("#newGroupName").val();
 			let newResId = $("#newResId").val();
 			let shareOption =  $("#shareOptGroup input[type=radio]:checked"); 
 			let siteNameStr = $("#newSiteList").find("input:checked");
-			let newGroupDetail = $("#newGroupDetail").val();
+			let newGroupDesc = $("#newGroupDesc").val();
 			let selectedSiteId = $("#newSiteList input:checked");
 			let siteArr = [];
 
 			// 1. Add group info
 			if(!$("#addGroupModal").hasClass("edit")) {
-				let option = {};
-				obj.name = newGrpName;
-				if(!isEmpty(newGroupDetail)){
-					obj.description = newGroupDetail;
+				obj.name = newGroupName;
+				if(!isEmpty(newGroupDesc)){
+					obj.description = newGroupDesc;
 				}
-				obj.updatedBy = loginId + "(" + loginName + ")";
+				obj.updatedBy = loginId + ":" + loginName;
 
-				if(newGrpType === "tag_group"){
+				if(newGroupType == "tag_group"){
 					if(shareOption.data("value") == "1"){
 						obj.shared = true;
 					} else {
 						obj.shared = false;
 					}
-					option = {
+					let option = {
 						url:  apiHost + "/config/site_groups?uid=" + userInfoId,
 						type: 'post',
 						async: true,
@@ -161,12 +174,11 @@
 						data: JSON.stringify(obj)
 					}
 
-					$.each(selectedSiteId, function(index, el){
-						siteArr.push($(this).data("value") );
-					});
-
 					Promise.resolve(returnAjaxRes(option)).then(res => {
 						if(!isEmpty(res)){
+							$.each(selectedSiteId, function(index, el){
+								siteArr.push($(this).data("value") );
+							});
 							let siteObj = {
 								sid: JSON.stringify(siteArr)
 							};
@@ -181,7 +193,7 @@
 
 							$.ajax(siteOpt).done(function (json, textStatus, jqXHR) {
 								$("#addGroupModal").modal("hide");
-								$("#resultSuccessMsg").text("그룹이 추가 되었습니다.").removeClass("hidden");
+								$("#resultSuccessMsg").text("사이트 그룹이 추가 되었습니다.").removeClass("hidden");
 								$("#resultBtn").parent().addClass("hidden");
 								$("#resultModal").modal("show");
 								getGroupData(initModal);
@@ -194,14 +206,10 @@
 														
 						}
 					});
-
 				} else {
-					if(newGrpType === "vpp_group"){
-						if(!isEmpty(newResId)){
-							obj.resourceId = newResId
-						}
-
-						vppOpt = {
+					obj.resourceId = newResId;
+					if(newGroupType == "vpp_group"){
+						let option = {
 							url:  apiHost + "/config/vpp-groups?oid=" + oid,
 							type: 'post',
 							async: true,
@@ -210,76 +218,295 @@
 							data: JSON.stringify(obj)
 						}
 
-						Promise.resolve(returnAjaxRes(vppOpt)).then(res => {
-							console.log('res===', res)
-							let promises = [];
-							let vgid = res.vgid;
+						Promise.resolve(returnAjaxRes(option)).then(res => {
+							if(!isEmpty(res)){
+								let promises = [];
+								let vgid = res.vgid;
+								if(selectedSiteId.length > 0){
+									$.each(selectedSiteId, function(index, el){
+										// console.log("el---", $(this).data("value"))
+										let siteObj = {
+											vpp_group_id: vgid
+										};
 
-						
-							$.each(selectedSiteId, function(index, el){
-								let sid = $(this).data("value");
-								let siteObj = {
-									vpp_group_id: vgid
-								};
-								let siteOpt = {
-									url: apiHost + "/config/sites/" + sid,
-									type: 'patch',
-									async: true,
-									data: JSON.stringify(siteObj),
-								};
-								promises.push(Promise.resolve(returnAjaxRes(siteOpt)));
-							});
-							return Promise.all(promises).then(finalRes => {
-								console.log("finalRes---", finalRes)
-							});
+										let siteOpt = {
+											url: apiHost + "/config/sites/" + $(this).data("value"),
+											type: 'patch',
+											async: true,
+											contentType: 'application/json; charset=UTF-8',
+											data: JSON.stringify(siteObj),
+										};
+										promises.push(Promise.resolve(returnAjaxRes(siteOpt)));
+									});
+									return Promise.all(promises).then(finalRes => {
+										$("#addGroupModal").modal("hide");
+										$("#resultSuccessMsg").text("VPP(중개 거래) 그룹이 추가 되었습니다.").removeClass("hidden");
+										$("#resultBtn").parent().addClass("hidden");
+										$("#resultModal").modal("show");
+										getGroupData(initModal);
+										setTimeout(function(){
+											$("#resultModal").modal("hide");
+										}, 1600);
+									});								
+								}
+							}
 						});
-						// option = {
-						// 	url: apiHost + "/config/vpp-groups?oid=" + oid,
-						// 	type: 'post',
-						// 	async: true,
-						// 	dataType: 'json',
-						// 	contentType: "application/json",
-						// 	data: JSON.stringify(obj)
-						// }
-
 					}
 					
-					if (newGrpType === "dr_group"){
-						obj.resourceId = newResId
-						option.url =  apiHost + "/config/dr-groups?oid=" + oid;
-						option.data = JSON.stringify(obj);
+					if (newGroupType == "dr_group"){
+						let option = {
+							url: apiHost + "/config/dr-groups?oid=" + oid,
+							type: 'post',
+							async: true,
+							dataType: 'json',
+							contentType: "application/json",
+							data: JSON.stringify(obj)
+						}
 
-						// option = {
-						// 	url: apiHost + "/config/dr-groups?oid=" + oid,
-						// 	type: 'post',
-						// 	async: true,
-						// 	dataType: 'json',
-						// 	contentType: "application/json",
-						// 	data: JSON.stringify(obj)
-						// }
-					}
-				
+						Promise.resolve(returnAjaxRes(option)).then(res => {
+							if(!isEmpty(res)){
+								let promises = [];
+								let dgid = res.dgid;
+								if(selectedSiteId.length > 0){
+									$.each(selectedSiteId, function(index, el){
+										let siteObj = {
+											dr_group_id: dgid
+										};
+
+										let siteOpt = {
+											url: apiHost + "/config/sites/" + $(this).data("value"),
+											type: 'patch',
+											async: true,
+											contentType: 'application/json; charset=UTF-8',
+											data: JSON.stringify(siteObj),
+										};
+										promises.push(Promise.resolve(returnAjaxRes(siteOpt)));
+									});
+									return Promise.all(promises).then(finalRes => {
+										$("#addGroupModal").modal("hide");
+										$("#resultSuccessMsg").text("DR 그룹이 추가 되었습니다.").removeClass("hidden");
+										$("#resultBtn").parent().addClass("hidden");
+										$("#resultModal").modal("show");
+										getGroupData(initModal);
+										setTimeout(function(){
+											$("#resultModal").modal("hide");
+										}, 1600);
+									});								
+								}
+							}
+						});
+					}	
 				}
-			} else {
-				// 2. Edit existing user info
-				let dTable = $("#userTable").DataTable();
-				let tr = $("#userTable").find("tbody tr.selected");
+			// 2. Edit existing user info
+			} else {	
+				let dTable = $("#groupTable").DataTable();
+				let tr = $("#groupTable").find("tbody tr.selected");
 				let td = tr.find("td");
-
 				let rowData = dTable.row(tr).data();
-				if(option == "edit") {
-					obj.name = newGrpName;
-					if(!isEmpty(newGroupDetail)){
-						obj.description = newGroupDetail;
-					}
-					obj.updatedBy = loginId + "(" + loginName + ")";
+			
+				let updatedBy = "";
 
+				if(!isEmpty(rowData.updatedBy)){
+					updatedBy = rowData.updatedBy.split(":")[0];
 				}
-				if(option == "delete") {
+				if(newGroupName != td.eq(2).text() ){
+					obj.name = newGroupName;
+				}
+				if(rowData.description != newGroupDesc){
+					obj.description = newGroupDesc;
+				}
+				if( updatedBy != loginId ){
+					obj.updatedBy = loginId + ":" + loginName;
+				}
+
+				if(newGroupType === "tag_group"){
+					if(rowData.shared == true){
+						$("#shareOpt2").is(":checked");
+						obj.shared = false;
+					} else if(rowData.shared == false){
+						$("#shareOpt1").is(":checked");
+						obj.shared = true;
+					} else {
+						obj.shared = false;
+					}
+					let editOptionList = [
+						{
+							url:  apiHost + "/config/site_groups/" + rowData.sgid,
+							type: 'get',
+							async: true
+						},
+						{
+							url:  apiHost + "/config/site_groups/" + sgid,
+							type: 'patch',
+							async: true,
+							dataType: 'json',
+							contentType: 'application/json; charset=UTF-8',
+							data: JSON.stringify(obj)
+						}
+					];
+					Promise.all([ returnAjaxRes(editOptionList[0]), returnAjaxRes(editOptionList[1]) ]).then( res => {
+						if(!isEmpty(res[0].group_sites)){
+							let groupSites = res[0].group_sites;
+							let deletePromises = [];
+							$.each(groupSites, function(index, el) {
+								let gSidOption = {
+									url:  apiHost + "/config/group_sites/" + el.gsid,
+									type: 'delete',
+									async: true,
+								}
+								deletePromises.push(Promise.resolve(returnAjaxRes(gSidOption)));
+							});
+							Promise.all(deletePromises).then(res => {
+								let newSiteArr = [];
+								$.each(siteNameStr, function(index, el){
+									newSiteArr.push($(this).data("value"));
+								});
+								let siteObj = {
+									sid: JSON.stringify(newSiteArr)
+								};
+								let siteOpt = {
+									url: apiHost + "/config/group_sites?sgid=" + sgid,
+									type: 'post',
+									async: true,
+									data: JSON.stringify(siteObj),
+									contentType: 'application/json; charset=UTF-8'
+								};
+								Promise.resolve(returnAjaxRes(siteOpt)).then( finalRes => {
+									$("#addGroupModal").modal("hide");
+									$("#resultSuccessMsg").text("그룹 정보가 수정 되었습니다.").removeClass("hidden");
+									$("#resultBtn").parent().addClass("hidden");
+									$("#resultModal").modal("show");
+									getGroupData(initModal);
+									setTimeout(function(){
+										$("#resultModal").modal("hide");
+									}, 1600);
+								});
+							});
+						}
+					});
+				} else {
+					if(rowData.resourceId != newResId){
+						obj.resourceId = newResId;
+					}
+
+					if(newGroupType === "vpp_group"){
+						let editOption = {
+							url:  apiHost + "/config/vpp-groups/" + rowData.vgid,
+							type: 'patch',
+							async: true,
+							dataType: 'json',
+							contentType: 'application/json; charset=UTF-8',
+							data: JSON.stringify(obj)
+						}
+
+						Promise.resolve(returnAjaxRes(editOption)).then(res => {
+							let sitePromises = [];
+							$.each(rowData.sites, function(index, el){
+								// newSiteArr.push($(this).data("value"));
+								let emptyObj = {
+									vpp_group_id : null
+								}
+								let option = {
+									url: apiHost + "/config/sites/" + el.sid,
+									type: 'patch',
+									async: true,
+									contentType: 'application/json; charset=UTF-8',
+									data: JSON.stringify(emptyObj),
+								}
+								sitePromises.push(Promise.resolve(returnAjaxRes(option)));
+							});
+
+							Promise.all(sitePromises).then( res => {
+								let newSitePromises = [];
+								$.each(siteNameStr, function(index, el){
+									// newSiteArr.push($(this).data("value"));
+									let siteObj = {
+										vpp_group_id: rowData.vgid
+									}
+									let option = {
+										url: apiHost + "/config/sites/" + $(this).data("value"),
+										type: 'patch',
+										async: true,
+										contentType: 'application/json; charset=UTF-8',
+										data: JSON.stringify(siteObj),
+									}
+									newSitePromises.push(Promise.resolve(returnAjaxRes(option)));
+								});
+								Promise.all(newSitePromises).then( finalRes => {
+									$("#addGroupModal").modal("hide");
+									$("#resultSuccessMsg").text("그룹 정보가 수정 되었습니다.").removeClass("hidden");
+									$("#resultBtn").parent().addClass("hidden");
+									$("#resultModal").modal("show");
+									getGroupData(initModal);
+									setTimeout(function(){
+										$("#resultModal").modal("hide");
+									}, 1600);
+								});
+							});
+						});
+					}
+					
+					if(newGroupType === "dr_group"){
+						let editOption = {
+							url:  apiHost + "/config/dr-groups/" + rowData.dgid,
+							type: 'patch',
+							async: true,
+							dataType: 'json',
+							contentType: 'application/json; charset=UTF-8',
+							data: JSON.stringify(obj)
+						}
+
+						Promise.resolve(returnAjaxRes(editOption)).then(res => {
+							let sitePromises = [];
+							$.each(rowData.sites, function(index, el){
+								// newSiteArr.push($(this).data("value"));
+								let emptyObj = {
+									dr_group_id: null
+								}
+								let option = {
+									url: apiHost + "/config/sites/" + el.sid,
+									type: 'patch',
+									async: true,
+									contentType: 'application/json; charset=UTF-8',
+									data: JSON.stringify(emptyObj),
+								}
+								sitePromises.push(Promise.resolve(returnAjaxRes(option)));
+							});
+
+							Promise.all(sitePromises).then( res => {
+								let newSitePromises = [];
+								$.each(siteNameStr, function(index, el){
+									// newSiteArr.push($(this).data("value"));
+									let siteObj = {
+										dr_group_id: rowData.dgid
+									}
+									let option = {
+										url: apiHost + "/config/sites/" + $(this).data("value"),
+										type: 'patch',
+										async: true,
+										contentType: 'application/json; charset=UTF-8',
+										data: JSON.stringify(siteObj),
+									}
+									newSitePromises.push(Promise.resolve(returnAjaxRes(option)));
+								});
+								Promise.all(newSitePromises).then( finalRes => {
+									$("#addGroupModal").modal("hide");
+									$("#resultSuccessMsg").text("그룹 정보가 수정 되었습니다.").removeClass("hidden");
+									$("#resultBtn").parent().addClass("hidden");
+									$("#resultModal").modal("show");
+									getGroupData(initModal);
+									setTimeout(function(){
+										$("#resultModal").modal("hide");
+									}, 1600);
+								});
+							});
+						});
+
+
+					}
 				}
 
 			}
-
 
 		});
 
@@ -288,12 +515,14 @@
 		$("#deleteConfirmBtn").click(function(){
 			let dTable = $("#groupTable").DataTable();
 			let tr = $("#groupTable").find("tbody tr.selected");
+			let td = tr.find("td");
 			let rowData = dTable.row(tr).data();
 			let gsid = rowData.sid;
 			let modalBody = $("#deleteConfirmModal .modal-body");
 			let optDelete = {};
-			let promises = [];
-			console.log("rowData===", rowData)
+
+			if(	$("#confirmGroupName").val() != td.eq(2).text()) return false;
+
 			if(rowData.sgid){
 				optDelete = {
 					// url: apiHost + "/config/group_sites/" + rowData.sgid,
@@ -316,32 +545,17 @@
 			}
 
 			Promise.resolve(returnAjaxRes(optDelete)).then( res => {
-				console.log("res=-==", res)
-			})
-			$.each(rowData.sites, function(index, el){
-				console.log("el===", el);
-				// promises.push(Promise.resolve(returnAjaxRes(optDelete)))
+				Promise.resolve(dTable.row(tr).remove().draw()).then( res => {
+					modalBody.addClass("hidden");
+					$("#deleteSuccessMsg").text("사이트가 삭제 되었습니다.").removeClass("hidden");
+					// refreshSiteList();
+					setTimeout(function(){
+						$("#deleteConfirmModal").modal("hide");
+					}, 1000);
+				});
+
 			});
-
-			// $.ajax(optDelete).done(function (json, textStatus, jqXHR) {
-			// 	modalBody.addClass("hidden");
-			// 	$("#deleteSuccessMsg").text("사이트가 삭제 되었습니다.").removeClass("hidden");
-			// 	dTable.row(tr).remove().draw();
-			// 	// refreshSiteList();
-			// 	setTimeout(function(){
-			// 		$("#deleteConfirmModal").modal("hide");
-			// 	}, 1000);
-			// }).fail(function (jqXHR, textStatus, errorThrown) {
-			// 	modalBody.addClass("hidden");
-			// 	$("#deleteSuccessMsg").text("사이트 삭제에 실패하였습니다.\n다시 시도해 주세요.").removeClass("hidden");
-			// 	setTimeout(function(){
-			// 		$("#deleteConfirmModal").modal("hide");
-			// 	}, 1500);
-			// 	console.log("fail==", jqXHR)
-			// });
 		});
-
-
 	});
 
 
@@ -378,8 +592,6 @@
 		Promise.resolve(returnAjaxRes(optionList[0])).then( res => {
 			let flat = [];
 			flat = [...res.dr_group, ...res.vpp_group, ...res.tag_group];
-
-			console.log("flat---", flat)
 			if(isEmpty(flat)) {
 				drawEmptyTable($("#groupTable"));
 			} else {
@@ -420,7 +632,10 @@
 						$("#validGroup").removeClass("hidden");
 					}
 				}
-				validateForm();
+				setTimeout(function(){
+					validateForm();
+				}, 200);
+
 			});
 		
 
@@ -501,23 +716,21 @@
 						"mRender": function ( data, type, full, rowIndex )  {
 							if(!isEmpty(full.sites)){
 								let siteName = "";
-								let length = full.sites.length-1;
+								let length = full.sites.length;
 
 								$.each(full.sites, function(index, el){
-									if(length < 5){
-										if(index < length){
+									if(length <= 3){
+										if(index < (length-1) ){
 											siteName += el.name + "," + '&ensp;';
 										} else {
 											siteName += el.name;
 										}
 									} else {
-										if(index < 4){
+										if(index < 3 ){
 											siteName += el.name + "," + '&ensp;';
 										} else {
-											if(index == 4){
-												siteName += el.name;
-											} else if(index >= 5) {
-												siteName += " ..."
+											if(index == 3) {
+												siteName += el.name.slice(0, -3) + "..."
 											}
 										}
 									}
@@ -531,8 +744,9 @@
 								// 	return siteName;
 								// }
 
-								if(full.sites.length >= 5){
-									return '<div class="flex_start">' + siteName + '...<a href="#" onclick=updateModal("' + 'detail' + '"); class="text-link">more</a></div>'
+								if(full.sites.length > 3){
+									// onmouseover="updateModal('detail', this)" 
+									return `<div class="flex_start">${'${siteName}'}&ensp;<a href="#" role="button" data-toggle="popover" data- rel="popover" onmouseover="updateModal('detail', this)" class="text-link">more</a></div>`
 								} else {
 									return siteName;
 								}
@@ -549,7 +763,8 @@
 						"mRender": function ( data, type, full, rowIndex )  {
 							let updatedBy = "";
 							if(!isEmpty(full.updatedBy)){
-								updatedBy = full.updatedBy;
+								let str = full.updatedBy.split(":");
+								updatedBy = str[0] + " (" + str[1] + ")";
 							} else {
 								updatedBy = "-";
 							}
@@ -562,10 +777,14 @@
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex )  {
 							let date = "";
-							if(!isEmpty(full.updatedAt)){
-								date = new Date(full.updatedAt).toLocaleDateString("en-CA").replace(/\//g, '-') + '&ensp;' + new Date(full.updatedAt).toLocaleTimeString();
+							if(isEmpty(full.updatedAt)){
+								if(!isEmpty(full.createdAt)){
+									date = new Date(full.createdAt).toLocaleDateString("en-CA").replace(/\//g, '-') + '&ensp;' + new Date(full.createdAt).toLocaleTimeString();
+								} else {
+									date = "-";
+								}
 							} else {
-								date = "-";
+								date = new Date(full.updatedAt).toLocaleDateString("en-CA").replace(/\//g, '-') + '&ensp;' + new Date(full.updatedAt).toLocaleTimeString();
 							}
 							return date;
 						}
@@ -576,7 +795,7 @@
 						"mRender": function ( data, type, full, rowIndex )  {
 							let desc = "";
 							if(!isEmpty(full.description)){
-								updatedBy = full.description;
+								desc = full.description;
 							} else {
 								desc = "-";
 							}
@@ -587,7 +806,6 @@
 				"dom": 'tip',
 				"select": {
 					style: 'single',
-					// selector: 'tr',
 					selector: 'td input[type="checkbox"], tr',
 					// selector: 'td input[type="checkbox"], td:not(:last-of-type)'
 				},
@@ -877,9 +1095,11 @@
 
 		$("#validGroup").addClass("hidden");
 		$("#newGroupName").parent().next().prop("disabled", true);
-		$("#newGroupDetail").val("");
-		$("#confirmGroup").val("");
-		$("#shareOptGroup").addClass("hidden");
+		$("#newGroupDesc").val("");
+		$("#confirmGroupName").val("");
+		$("#shareOptGroup").addClass("hidden").prev().addClass("hidden");
+		$("#shareOptGroup").addClass("hidden").prev().addClass("hidden");
+
 		$("#addGroupBtn").prop("disabled", true);
 		$("#checkGroupBtn").prop("disabled", true); 	
 
@@ -889,27 +1109,28 @@
 			$(this).val("");
 		});
 
+		$("#selectedSiteList").empty().prev().remove();
+
 		$.each(checkBox, function(index, element){
 			$(this).prop("checked", false);
 		});
 
 		$.each(dropdownBtn, function(index, element){
-			$(this).html('선택' + '<span class="caret"></span>');
-			$(this).data({ "value": "", "vol-type": "", "plan-id" : "" });
-			$(this).next().find("li").removeClass("hidden");
+			$(this).prop("disabled", false).data({ "value": "", "vol-type": "", "plan-id" : "" }).html('선택' + '<span class="caret"></span>').next().find("li").removeClass("hidden");
 		});
 		// console.log("initModal----")
 	}
 
-	function updateModal(option, callback){
+	function updateModal(option, popOverLink){
 		// RPS(Renewable Portfolio Standard), SMP(System Marginal Price), REC(Renewable Energy Certificate) => subsidies
 		let titleAdd = $('#titleAdd');
+		let form = $("#updateGroupForm");
+		let required = form.find(".asterisk");
 		let newGroupType = $('#newGroupType');
 		let newGroupName = $('#newGroupName');
-		let form = $("#updateSiteForm");
-		let required = form.find(".asterisk");
-		let addBtn = $("#addGroupBtn");
-		
+		let newGroupDesc = $("#newGroupDesc");
+		let addBtn = $("#addGroupBtn");	
+
 		// ADD MODAL!!!
 		if(option == "add"){
 			initModal();
@@ -928,66 +1149,193 @@
 			let tr = $("#groupTable").find("tbody tr.selected");
 			let td = tr.find("td");
 			let rowData = dTable.row(tr).data();
-
+			let newSiteList = $("#newSiteList");
+			let siteItem = newSiteList.find("li input[type='checkbox']");
+			let resIdWrapper = $("#resIdWrapper");
 			$("#validGroup").is(".hidden") ? null : $("#validGroup").addClass("hidden");
 
-			// EDIT MODAL!!!
-			if(option == "edit") {
-				console.log("edit modal opened===", rowData)
-				addBtn.prop("disabled", false).text("수정");
-
-				titleAdd.addClass("hidden").next().removeClass("hidden");
-				required.hasClass("no-symbol") ? null : required.addClass("no-symbol");
-
-				if(!newGroupName.parent().next().hasClass("hidden")) {
-					newGroupName.parent().next().addClass("hidden");
-					newGroupName.parent().removeClass("offset-width").addClass("w-100");
-				}
-
-				newGroupName.val( td.eq(2).text() );
-				if(rowData.sgid){
-					newGroupType.prev().data("value", "tag_group").html("사업소 그룹<span class='caret'></span>");
-				} else if(rowData.vgid){
-					newGroupType.prev().data("value", "vpp_group").html("VPP 그룹<span class='caret'></span>");
-				} else if(rowData.dgid){
-					newGroupType.prev().data("value", "dr_group").html("DR 그룹<span class='caret'></span>");
-				}
-
-				if(!isEmpty(td.eq(3).text())) {
-					let newSiteList = $("#newSiteList");
-					let siteItem = newSiteList.find("li");
-					let checkBoxList = siteItem.toArray();
-
+			if(option != "delete") {
+				// EDIT MODAL!!!
+				if(option == "edit") {
 					let s = rowData.sites;
+					let checkBoxList = siteItem.toArray();	
 					let str = ``;
+					let sharedStr = ``;
+					let siteNameArr = [];
+					let siteValArr = [];
 
-					$.each(s, function(index, el){ 
+					addBtn.prop("disabled", false).text("수정");
+					titleAdd.addClass("hidden").next().removeClass("hidden");
+					required.hasClass("no-symbol") ? null : required.addClass("no-symbol");
+					if(rowData.description){
+						newGroupDesc.val(rowData.description);
+					}
+					
+					if(!newGroupName.parent().next().hasClass("hidden")) {
+						newGroupName.parent().next().addClass("hidden");
+						newGroupName.parent().removeClass("offset-width").addClass("w-100");
+					}
+					newGroupName.val( td.eq(2).text() );
 
-						let selected = checkBoxList.some( x => $(x).data("value") === el.sid );
-						siteItem.find("input[data-value='" + el.sid + "']").prop("checked", true);
-						str += `<li>${'${el.name}'}</li>`
-						if(index === 0){
-							newSiteList.prev().html(el.name + "&nbsp;외" + String(s.length-1) + "<span class='caret'></span>")
+					if(rowData.sgid){
+						let sharedOpt = '';
+						let shareOptGroup = $("#shareOptGroup");
+						newGroupType.prev().data("value", "tag_group").html("사업소 그룹<span class='caret'></span>").prop("disabled", true);
+						shareOptGroup.find(".warning").addClass("hidden");
+						shareOptGroup.removeClass("hidden").prev().removeClass("hidden");
+						resIdWrapper.addClass("hidden").prev().addClass("hidden");
+
+						if(!isEmpty(td.eq(3).text())) {
+							let checkBoxList = siteItem.toArray();
+
+							if(rowData.shared == true){
+								sharedOpt = "(공유)";
+								$("#shareOpt1").prop("checked", true);
+							} else {
+								sharedOpt = "(미공유)";
+								$("#shareOpt2").prop("checked", true);
+							}
+							sharedStr = `<span class="input_label list-label">등록된 사이트 리스트&ensp;${'${sharedOpt}'}</span>`;
+					
+
+							$.each(s, function(index, el){
+								let found = checkBoxList.findIndex( x => $(x)[0].id == el.name );
+								if(found > -1){
+									$(checkBoxList[found]).prop("checked", true);
+								}
+								str += `<li data-name="${'${el.name}'}">${'${el.name}'}</li>`
+								siteValArr.push(el.sid);
+								siteNameArr.push(el.name);
+
+								if(index === 0){
+									if( s.length > 1) {
+										newSiteList.prev().html(el.name + "&nbsp;외" + String(s.length-1) + "<span class='caret'></span>");
+									} else {
+										newSiteList.prev().html(el.name + "<span class='caret'></span>");
+									}
+									
+								}
+							});
+							newSiteList.prev().data({ "value" : siteValArr.join(","), "name" : siteNameArr.join(",") })
+							$("#selectedSiteList").append(str).parent().prepend(sharedStr);
 						}
-					});
-					$("#selectedSiteList").append(str);
-				}
+					} else {
+						if(!isEmpty(rowData.resourceId)) {
+							$("#newResId").val(rowData.resourceId);
+						}
+						if(!isEmpty(td.eq(3).text())) {
+							$.each(s, function(index, el){
+								let found = checkBoxList.findIndex( x => $(x)[0].id == el.name );
+								if(found > -1){
+									$(checkBoxList[found]).prop("checked", true);
+								}
+								str += `<li data-name="${'${el.name}'}">${'${el.name}'}</li>`
+								siteValArr.push(el.sid);
+								siteNameArr.push(el.name);
 
-				$("#addGroupModal").addClass("edit").modal("show");
-			}
-			// DELETE MODAL!!!
-			if(option == "delete") {
+								if(index === 0){
+									if( s.length > 1) {
+										newSiteList.prev().html(el.name + "&nbsp;외" + String(s.length-1) + "<span class='caret'></span>");
+									} else {
+										newSiteList.prev().html(el.name + "<span class='caret'></span>");
+									}
+									
+								}
+							});
+							newSiteList.prev().data({ "value" : siteValArr.join(","), "name" : siteNameArr.join(",") })
+							$("#selectedSiteList").append(str).parent().prepend(sharedStr);
+						}
+
+						if (rowData.vgid){
+							resIdWrapper.removeClass("hidden").prev().removeClass("hidden").find(".input_label").text("거래 ID");
+							newGroupType.prev().data("value", "vpp_group").html("VPP 그룹<span class='caret'></span>").prop("disabled", true);
+
+						} else if(rowData.dgid){
+							resIdWrapper.removeClass("hidden").prev().removeClass("hidden").find(".input_label").text("자원 ID");
+							newGroupType.prev().data("value", "dr_group").html("DR 그룹<span class='caret'></span>");
+						
+						}
+					}
+
+					$("#addGroupModal").addClass("edit").modal("show");
+				} else {
+					// PopOver content setup
+					let popOverRow = $(popOverLink).parents().closest("tr");
+					let popOverRowData = dTable.row(popOverRow).data();
+					let groupType = "";
+					let groupName = td.eq(2).text();
+					let checkBoxList = siteItem.toArray();
+					let popOverSites = popOverRowData.sites;
+					let desc = "";
+
+					if(popOverRowData.sgid){
+						groupType = "사업소 그룹";
+					} else if(popOverRowData.vgid){
+						groupType = "VPP 그룹";
+					} else if(popOverRowData.dgid){
+						groupType = "DR 그룹";
+					}
+					let title = '';
+					if(popOverRowData.shared == false){
+						title = "사업소 상세 정보 (공유)"
+					} else {
+						title = "사업소 상세 정보 (미공유)"
+					}
+					let popOverStr = '';
+					$.each(popOverSites, function(index, el){ 
+						let selected = checkBoxList.some( x => $(x).data("value") === el.sid );
+						popOverStr += '<li>' + el.name + '</li>';
+					});
+					let content = '<ul class="selected-list">' + popOverStr + '</ul>';
+				
+					// <h4 class="s_tit">그룹 유형 : ${'${groupType}'}</h4>
+					// 	<h4 class="s_tit">그룹 명 : ${'${groupName}'}</h4>	
+					// 	<h4 class="s_tit">사업소 명</h4>
+					// <h4 class="s_tit">추가 정보 : ${'${popOverRowData.description}'}</h4>	
+
+					// $(popOverLink).attr(template).popover('show');
+					// $(popOverLink).popover('show');
+
+					var popWindow = $(popOverLink).popover({
+						container: "body",
+						placement : 'right',
+						html: 'true',
+						trigger: "manual",
+						// "focus", "manual", "focus", "hover"
+						animation: false,
+						title: title,
+						content: content
+					}).on("mouseover", function () {
+						var _this = this;
+						$(this).popover("show");
+						$(this).siblings(".popover").on("mouseleave", function () {
+							$(_this).popover('hide');
+						});
+					}).on("mouseleave", function(){
+						var _this = this;
+						setTimeout(function() {
+							if (!$(".popover:hover").length) {
+							$(_this).popover("hide");
+							}
+						}, 300);
+					});
+
+					popWindow.popover("show");
+
+				}
+			} else {
+				// DELETE MODAL!!!
 				let groupName = td.eq(2).text();
 				let modal = $("#deleteConfirmModal");
 				let deleteBtn = $("#deleteConfirmBtn");
-				let confirmGroupName = $("#confirmGroup");
+				let confirmGroupName = $("#confirmGroupName");
 
 				$("#deleteSuccessMsg span").text(groupName);
 				modal.find(".modal-body").removeClass("hidden");
 				modal.modal("show");
 
 				confirmGroupName.on("input", function() {
-					if($(this).val() !== groupName) {
+					if($(this).val() != groupName) {
 						deleteBtn.prop("disabled", true);
 						return false
 					} else {
@@ -996,7 +1344,9 @@
 				});
 
 				confirmGroupName.on("keyup", function() {
-					if($(this).val() !== groupName) {
+					$(this).val().replace(/\s*$/,"");
+
+					if($(this).val() != groupName) {
 						deleteBtn.prop("disabled", true);
 						return false
 					} else {
@@ -1004,26 +1354,20 @@
 					}
 				});
 			}
-			
-			if(option == "detail") {
-				console.log("option---", tr)
-
-			}
-		
 		}
-
 	}
-
+	
 	function validateForm(){
-		if(!$("#addGroupModal").hasClass('edit')){
-			let grpType = $("#newGroupType").prev();
-			let grpName = $("#newGroupName").val();
-			let checkBtn = $("#checkGroupBtn");
-			let submitBtn = $("#addGroupBtn");
-			let radioGroup = $("#shareOptGroup input[type=radio][name=share_option]:checked");
+		let grpType = $("#newGroupType").prev();
+		let grpName = $("#newGroupName").val();
+		let newResId = $("#newResId").val();
+		let checkBtn = $("#checkGroupBtn");
+		let submitBtn = $("#addGroupBtn");
+		let radioGroup = $("#shareOptGroup input[type=radio][name=share_option]:checked");
 
-			if(grpType === "tag_group") {
-				if(!isEmpty(grpType.data("value")) &&  ($("#validGroup:not('.hidden')").length > 0 ) && radioGroup.length > 0 ){
+		if(!$("#addGroupModal").hasClass('edit')){
+			if(grpType.data("value") === "tag_group") {
+				if(!isEmpty(grpType.data("value")) && ( $("#validGroup:not('.hidden')").length > 0 ) && ( radioGroup.length > 0 ) ){
 					submitBtn.prop("disabled", false);
 				} else {
 					if(!isEmpty(grpType.data("value")) && !isEmpty(grpName)) {
@@ -1034,7 +1378,7 @@
 					submitBtn.prop("disabled", true);
 				}
 			} else {
-				if(!isEmpty(grpType.data("value")) &&  ($("#validGroup:not('.hidden')").length > 0 ) ){
+				if(!isEmpty(grpType.data("value")) && !isEmpty(newResId) && ($("#validGroup:not('.hidden')").length > 0 ) ){
 					submitBtn.prop("disabled", false);
 				} else {
 					if(!isEmpty(grpType.data("value")) && !isEmpty(grpName)) {
@@ -1089,6 +1433,27 @@
 			if (code >= 0xDC00 && code <= 0xDFFF) i--; //trail surrogate
 		}
 		return s;
+	}
+
+	function navigationType(){
+
+		var result;
+		var p;
+
+		if (window.performance.navigation) {
+			result=window.performance.navigation;
+			if (result==255){result=4} // 4 is my invention!
+		}
+
+		if (window.performance.getEntriesByType("navigation")){
+		p=window.performance.getEntriesByType("navigation")[0].type;
+
+		if (p=='navigate'){result=0}
+		if (p=='reload'){result=1}
+		if (p=='back_forward'){result=2}
+		if (p=='prerender'){result=3} //3 is my invention!
+		}
+		return result;
 	}
 
 
@@ -1173,7 +1538,7 @@
 				<h5 id="deleteSuccessMsg" class="ntit">그룹 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>
 			</div>
 			<div class="modal-body">
-				<div class="tx_inp_type"><input type="text" name="confirm_group" id="confirmGroup" placeholder="사이트 이름 입력"/></div>
+				<div class="tx_inp_type"><input type="text" name="confirm_group" id="confirmGroupName" placeholder="사이트 이름 입력"/></div>
 			</div>
 			<div class="btn_wrap_type05"><!--
 				--><button type="button" class="btn_type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
@@ -1205,9 +1570,10 @@
 								<small class="hidden warning">그룹 유형을 선택해 주세요</small>
 							</div>
 
-							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 pl-40 hidden"><span class="input_label">거래 ID</span></div>
+							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 pl-40 hidden"><span class="input_label asterisk">거래 ID</span></div>
 							<div id="resIdWrapper" class="col-xl-4 col-lg-4 col-md-4 col-sm-12 hidden">
 								<div class="tx_inp_type"><input type="text" id="newResId" name="new_res_id" /></div>
+								<small class="hidden warning">거래 ID를 입력해 주세요.</small>
 							</div>
 						</div>
 
@@ -1231,11 +1597,11 @@
 							<div id="shareOptGroup" class="col-xl-4 col-lg-4 col-md-4 col-sm-12 hidden">
 								<div class="rdo_type flex_start">
 									<div class="radio-group">
-										<input type="radio" id="shareOpt1" name="share_option" data-value="1">
+										<input type="radio" id="shareOpt1" name="share_option" data-value="1" data-option-val="true">
 										<label for="shareOpt1">예</label>
 									</div>
 									<div class="radio-group">
-										<input type="radio" id="shareOpt2" name="share_option" data-value="0">
+										<input type="radio" id="shareOpt2" name="share_option" data-value="0" data-option-val="false">
 										<label for="shareOpt2">아니오</label>
 									</div>
 								</div>
@@ -1250,7 +1616,7 @@
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 									<ul id="newSiteList" class="dropdown-menu chk_type">
 										<c:forEach var="site" items="${siteList}" varStatus="siteName">
-											<li data-id="${site.name}" data-value="${site.sid}">
+											<li data-id="${site.name}" data-name="${site.name}" data-value="${site.sid}">
 												<a href="#" class="chk_type" tabindex="-1">
 													<input type="checkbox" name="${site.name}" id="${site.name}" data-value="${site.sid}"/>
 													<label for="${site.name}" class="on"><c:out value="${site.name}"></c:out></label>
@@ -1270,7 +1636,7 @@
 						<div class="row">
 							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12"><span class="input_label">추가 정보</span></div>
 							<div class="col-xl-10 col-lg-10 col-md-10 col-sm-12">
-								<textarea name="new_site_desc" id="newGroupDetail" class="textarea" placeholder="입력"></textarea>
+								<textarea name="new_site_desc" id="newGroupDesc" class="textarea" placeholder="입력"></textarea>
 							</div>
 						</div>
 
