@@ -37,6 +37,7 @@
 			// 	async: true,
 			// },
 		];
+
 		initModal();
 
 		if(role == 1){
@@ -115,15 +116,25 @@
 			}, 300);
 		});
 
+		$("#newEssList li").on("click", function(){
+			let val = $(this).data("value");
+			if(val == "0"){
+				$("#newSiteType").prev().data({"value": "", "name" : ""}).html("해당 사항 없음<span class='caret'></span>").prop("disabled", true);
+			} else {
+				$("#newSiteType").prev().html("선택<span class='caret'></span>").prop("disabled", false);
+			}
+		});
+
 		$("#newCityList li").on("click", function(){
 			setTimeout(function(){
 				validateForm();
 			}, 600);
 		});
-		
+
 		// Modal event
 		$("#addSiteModal").on("hide.bs.modal", function() {
 			$(this).hasClass("edit") ? $(this).removeClass("edit") : null;
+			initModal();
 		});
 
 		$("#deleteConfirmBtn").click(function(){
@@ -277,11 +288,11 @@
 				siteObj.location = newCity;
 				siteObj.resource_type = newResType;
 
-				if( isEmpty(newEss) ){
-					siteObj.ess = 0;
-				} else {
-					siteObj.ess = Number(newEss);
-				}
+				// if( isEmpty(newEss) ){
+				// 	siteObj.ess = "0";
+				// } else {
+				// 	siteObj.ess = newEss;
+				// }
 
 				if( !isEmpty(newSiteType) ){
 					siteObj.ess = newSiteType;
@@ -383,6 +394,8 @@
 				if( !isEmpty(newVppObj) ){
 					siteObj.vpp_info = JSON.stringify(newVppObj);
 				}
+
+				console.log("siteObj===", siteObj);
 
 				option = {
 					url: apiHost + '/config/sites?oid=' + oid,
@@ -619,6 +632,7 @@
 			callback();
 		}
 		if(siteData) {
+			console.log("siteData---", siteData)
 			let newArr = [];
 			Promise.resolve(siteData.map((item, index) => {
 			// siteData.forEach((item, index) => {
@@ -637,7 +651,8 @@
 
 				$.ajax(rawDataOpt).done(function (json, textStatus, jqXHR) {
 					$("#loadingCircle").show();
-					if(isEmpty(item.ess) || item.ess == 0){
+
+					if(isEmpty(item.ess) || item.ess === 0){
 						item.ess == "-"
 					} else {
 						if(item.ess === 1){
@@ -652,7 +667,11 @@
 						item.siteType = "수요자원 (Demand)"
 						item.powerSource = "부하"
 					} else {
-						item.siteType = "발전소 (Generation)"
+						if(isEmpty(item.resource_type)){
+							item.siteType = "-"
+						} else {
+							item.siteType = "발전소 (Generation)"
+						}
 						if(item.resource_type === 1){
 							item.powerSource = "태양광"
 						} else if(item.resource_type === 2){
@@ -1071,7 +1090,7 @@
 							item.bmsCapacity = 0;
 						}
 
-						if(isEmpty(matchedData.ess) || matchedData.ess == 0){
+						if(isEmpty(matchedData.ess)){
 							item.ess == "-"
 						} else {
 							if(matchedData.ess == 1){
@@ -1094,13 +1113,16 @@
 							item.siteType = "수요자원 (Demand)"
 							item.powerSource = "부하"
 						} else {
-							item.siteType = "발전소 (Generation)"
-
-							if(item.resource_type === 1){
+							if(isEmpty(matchedData.resource_type)){
+								item.siteType = "-"
+							} else {
+								item.siteType = "발전소 (Generation)"
+							}
+							if(matchedData.resource_type === 1){
 								item.powerSource = "태양광"
-							} else if(item.resource_type === 2){
+							} else if(matchedData.resource_type === 2){
 								item.powerSource = "풍력"
-							} else if(item.resource_type === 3){
+							} else if(matchedData.resource_type === 3){
 								item.powerSource = "소수력"
 							}
 						}
@@ -1486,25 +1508,31 @@
 			$("#newResList").append(resStr);
 			$("#resTypeList").append(resStr).prepend(allStr);
 
-				let dropdown = $("#propertyRow").find(".dropdown-menu");
-				setDropdownValue(dropdown);
-
+			let dropdown = $("#propertyRow").find(".dropdown-menu");
+			setDropdownValue(dropdown);
+			
+			
 			$("#newResList li").on("click", function() {
-				let val = $(this).data("value");
-				let newRes = $("#newResList");
-				let newSiteType = $("#newSiteType");
-				let items = newSiteType.find("li");
-
-				items.removeClass("hidden");
-
-				if(val == "0") {
-					let target = items.eq(0);
-					newSiteType.prev().data({ "name" : target.data("name"), "value":  target.data("value") }).html(target.data("name") + "<span class='caret'></span>");
-				} else {
-					let target = items.eq(1);
-					newSiteType.prev().data({ "name" : target.data("name"), "value": target.data("value") }).html(target.data("name") + "<span class='caret'></span>");
-				}
+				setTimeout(function(){
+					validateForm();
+				}, 300);
 			});
+			// $("#newResList li").on("click", function() {
+			// 	let val = $(this).data("value");
+			// 	let newRes = $("#newResList");
+			// 	let newSiteType = $("#newSiteType");
+			// 	let items = newSiteType.find("li");
+
+			// 	items.removeClass("hidden");
+
+			// 	if(val == "0") {
+			// 		let target = items.eq(0);
+			// 		newSiteType.prev().data({ "name" : target.data("name"), "value":  target.data("value") }).html(target.data("name") + "<span class='caret'></span>");
+			// 	} else {
+			// 		let target = items.eq(1);
+			// 		newSiteType.prev().data({ "name" : target.data("name"), "value": target.data("value") }).html(target.data("name") + "<span class='caret'></span>");
+			// 	}
+			// });
 
 			$("#resTypeList li").on("click", function(){
 				if(!isEmpty($(this).data("value"))){
@@ -1513,20 +1541,22 @@
 					filterColumn("#siteTable", "4", "");
 				}
 			});
-
+			console.log("s===", s)
 			$.each(s, function(index, el){
 				let name = `${'${el.name.kr}'} (${'${el.name.en}'})`;
 				if(el.code == "gen"){
 					siteStr += `
-						<li data-name="${'${name}'}" data-value="1" class="on"><a href="#">${'${name}'}</a></li>
+						<li data-name="${'${name}'}" data-value="1"><a href="#">${'${name}'}</a></li>
 					`;
 				} else if(el.code == "demand"){
 					siteStr += `
-						<li data-name="${'${name}'}" data-value="0" class="on"><a href="#">${'${name}'}</a></li>
+						<li data-name="${'${name}'}" data-value="0"><a href="#">${'${name}'}</a></li>
 					`;
 				}
-
 			});
+			siteStr += `
+				<li><a href="#">해당 사항 없음</a></li>
+			`;
 			$("#newSiteType").append(siteStr);
 			$("#siteType").append(siteStr).prepend(allStr);
 
@@ -1538,8 +1568,10 @@
 				newRes.prev().data({ "name" : "", "value": "" }).html("선택<span class='caret'></span>");
 				if(val == "0") {
 					items.eq(0).removeClass("hidden").siblings().addClass("hidden");
-				} else {
+				} else if(val == "1"){
 					items.eq(0).addClass("hidden").siblings().removeClass("hidden");
+				} else {
+					items.removeClass("hidden");
 				}
 			});
 
@@ -1647,6 +1679,7 @@
 		$("#addSiteBtn").prop("disabled", true);
 
 		$("#newResList li").removeClass("hidden");
+		$("#newSiteType").prev().prop("disabled", false);
 		$("#newSiteDetail").val("");
 		$("#confirmSite").val("");
 
@@ -1716,8 +1749,7 @@
 				// 발전원
 				$("#newResList").prev().data({"name": td.eq(4).text(), "value" : td.eq(4).data("value") }).html(td.eq(4).text() + "<span class='caret'></span>");
 				// ESS 유무
-				// console.log("es===", rowData.ess)
-				if( isEmpty(rowData.ess) || rowData.ess == 0 ) {
+				if( isEmpty(rowData.ess) || rowData.ess === 0 ) {
 					$('#newEssList').prev().data("value", "0").html("무<span class='caret'></span>");
 				} else {
 					$('#newEssList').prev().data("value", rowData.ess).html("유<span class='caret'></span>");
@@ -2827,7 +2859,7 @@
 										<div class="tx_inp_type offset-73">
 											<input type="text" name="new_site_name" id="newSiteName" placeholder="입력" minlength="2" maxlength="15">
 										</div>
-										<button type="button" id="checkGroupBtn" class="btn_type fr" disabled>중복 체크</button>
+										<button type="button" class="btn_type fr" onclick="checkSiteId($('#newSiteName').val())" disabled>중복 체크</button>
 									</div>
 									<small class="hidden warning">추가하실 사이트를 입력해 주세요</small>
 									<small class="hidden warning">2~15 글자를 입력해 주세요.</small>
@@ -2998,82 +3030,82 @@
 									</div>
 								</div>
 							</section>
-						</c:if>
-						<section id="sectionPowerMarketInfo">
-							<h2 class="stit">매전 정보</h2>
-							<div class="row">
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">정상 단가</span></div>
-								<div class="col-xl-3 col-lg-6 col-md-4 col-sm-10 pl-0">
-									<div class="flex_start">
-										<div class="dropdown w-100">
+							<section id="sectionPowerMarketInfo">
+								<h2 class="stit">매전 정보</h2>
+								<div class="row">
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">정상 단가</span></div>
+									<div class="col-xl-3 col-lg-6 col-md-4 col-sm-10 pl-0">
+										<div class="flex_start">
+											<div class="dropdown w-100">
+												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+												<ul id="newPriceModelList" class="dropdown-menu">
+													<li data-name="고정가" data-value="fixed"><a href="#">고정가</a></li>
+													<li data-name="SMP평균" data-value="SMP_mean"><a href="#">SMP평균</a></li>
+													<li data-name="SMP" data-value="SMP"><a href="#">SMP</a></li>
+												</ul>
+											</div>
+											<div class="tx_inp_type hidden"><input type="text" name="Price" id="newPrice" placeholder="입력" maxlength="8"></div>
+										</div>
+									</div>
+								</div>
+							</section>
+
+							<section id="sectionDRInfo">
+								<h2 class="stit">DR 거래 정보</h2>
+								<div class="row">
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">자원 ID</span></div>
+									<div class="col-xl-3 col-lg-3 col-md-4 col-sm-10 pl-0">
+										<div class="dropdown">
 											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-											<ul id="newPriceModelList" class="dropdown-menu">
-												<li data-name="고정가" data-value="fixed"><a href="#">고정가</a></li>
-												<li data-name="SMP평균" data-value="SMP_mean"><a href="#">SMP평균</a></li>
-												<li data-name="SMP" data-value="SMP"><a href="#">SMP</a></li>
+											<ul id="newDrResIdList" class="dropdown-menu"></ul>
+										</div>
+									</div>
+
+									<div class="col-xl-1 col-lg-1 col-md-2 col-sm-2"><span class="input_label">계약용량</span></div>
+									<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
+										<div class="tx_inp_type">
+											<input type="text" name="dr_vol" id="drVol" class="pr-36" placeholder="입력" maxlength="8"><span class="unit">kW</span>
+										</div>
+									</div>
+
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">CBL 계산식</span></div>
+									<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
+										<div class="dropdown">
+											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+											<ul id="cblList" class="dropdown-menu">
+												<li data-value="max45"><a href="#">max45</a></li>
+												<li data-value="mid68"><a href="#">mid68</a></li>
 											</ul>
 										</div>
-										<div class="tx_inp_type hidden"><input type="text" name="Price" id="newPrice" placeholder="입력" maxlength="8"></div>
+									</div>
+
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">수익 분배율</span></div>
+									<div class="col-xl-1 col-lg-3 col-md-4 col-sm-10 pl-0">
+										<div class="tx_inp_type"><input type="text" name="dr_rev_share" id="newDrRevShare" class="pr-36" placeholder="입력" maxlength="3"><span class="unit">%</span></div>
 									</div>
 								</div>
-							</div>
-						</section>
+							</section>
 
-						<section id="sectionDRInfo">
-							<h2 class="stit">DR 거래 정보</h2>
-							<div class="row">
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">자원 ID</span></div>
-								<div class="col-xl-3 col-lg-3 col-md-4 col-sm-10 pl-0">
-									<div class="dropdown">
-										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-										<ul id="newDrResIdList" class="dropdown-menu"></ul>
+							<section id="sectionVppInfo">
+								<h2 class="stit">중개 거래 정보</h2>
+								<div class="row">
+									<div class="col-xl-1 col-lg-2 col-sm-2"><span class="input_label">자원 ID</span></div>
+									<div class="col-xl-3 col-lg-3 col-sm-4 pl-0">
+										<div class="dropdown">
+											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+											<ul id="newVppResIdList" class="dropdown-menu"></ul>
+										</div>
+									</div>
+
+									<div class="col-xl-1 col-lg-2 col-sm-2"><span class="input_label">수익 분배율</span></div>
+									<div class="col-xl-2 col-lg-2 col-sm-4 pl-0">
+										<div class="tx_inp_type">
+											<input type="text" name="vpp_rev_share" id="newVppRevShare" class="pr-36" placeholder="입력" maxlength="3"><span class="unit">%</span>
+										</div>
 									</div>
 								</div>
-
-								<div class="col-xl-1 col-lg-1 col-md-2 col-sm-2"><span class="input_label">계약용량</span></div>
-								<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
-									<div class="tx_inp_type">
-										<input type="text" name="dr_vol" id="drVol" class="pr-36" placeholder="입력" maxlength="8"><span class="unit">kW</span>
-									</div>
-								</div>
-
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">CBL 계산식</span></div>
-								<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
-									<div class="dropdown">
-										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-										<ul id="cblList" class="dropdown-menu">
-											<li data-value="max45"><a href="#">max45</a></li>
-											<li data-value="mid68"><a href="#">mid68</a></li>
-										</ul>
-									</div>
-								</div>
-
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">수익 분배율</span></div>
-								<div class="col-xl-1 col-lg-3 col-md-4 col-sm-10 pl-0">
-									<div class="tx_inp_type"><input type="text" name="dr_rev_share" id="newDrRevShare" class="pr-36" placeholder="입력" maxlength="3"><span class="unit">%</span></div>
-								</div>
-							</div>
-						</section>
-
-						<section id="sectionVppInfo">
-							<h2 class="stit">중개 거래 정보</h2>
-							<div class="row">
-								<div class="col-xl-1 col-lg-2 col-sm-2"><span class="input_label">자원 ID</span></div>
-								<div class="col-xl-3 col-lg-3 col-sm-4 pl-0">
-									<div class="dropdown">
-										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-										<ul id="newVppResIdList" class="dropdown-menu"></ul>
-									</div>
-								</div>
-
-								<div class="col-xl-1 col-lg-2 col-sm-2"><span class="input_label">수익 분배율</span></div>
-								<div class="col-xl-2 col-lg-2 col-sm-4 pl-0">
-									<div class="tx_inp_type">
-										<input type="text" name="vpp_rev_share" id="newVppRevShare" class="pr-36" placeholder="입력" maxlength="3"><span class="unit">%</span>
-									</div>
-								</div>
-							</div>
-						</section>
+							</section>
+						</c:if>
 
 						<div class="row">
 							<div class="col-12">
