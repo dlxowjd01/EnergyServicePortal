@@ -1440,8 +1440,8 @@
 			$("#newResList").append(resStr);
 			$("#resTypeList").append(resStr).prepend(allStr);
 
-				let dropdown = $("#propertyRow").find(".dropdown-menu");
-				setDropdownValue(dropdown);
+				let propertyDropdown = $("#propertyRow").find(".dropdown-menu");
+				setDropdownValue(propertyDropdown);
 
 			$("#newResList li").on("click", function() {
 				let val = $(this).data("value");
@@ -1504,9 +1504,6 @@
 					filterColumn("#siteTable", "1", "");
 				}
 			});
-
-			let dropdown = $("#propertyRow").find(".dropdown-menu");
-			setDropdownValue(dropdown);
 
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.log("site_type Error:", jqXHR)

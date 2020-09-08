@@ -44,7 +44,7 @@
 					<div class="dropdown" id="rtuSite">
 						<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="사업소 선택">
 							사업소 선택<span class="caret"></span>
-						</button>g
+						</button>
 						<ul class="dropdown-menu chk_type" id="rtuSiteULList">
 							<li data-value="[sid]">
 								<a href="javascript:void(0);" tabindex="-1">[name]</a>
