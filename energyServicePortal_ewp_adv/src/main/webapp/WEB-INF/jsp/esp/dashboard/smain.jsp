@@ -1078,46 +1078,48 @@
 
 		for (let i = 0; i < 12; i++) {
 			let matchMonth = false;
-			for (let d = 0; d < chargeChartItems1.length; d++) {
-				let dataMonth = parseInt(String(chargeChartItems1[d].basetime).substring(4, 6));
-				if (i + 1 == dataMonth) {
-					energyData[i] = [i, chargeChartItems1[d].energy / 1000];
+			if (!isEmpty(chargeChartItems1)) {
+				for (let d = 0; d < chargeChartItems1.length; d++) {
+					let dataMonth = parseInt(String(chargeChartItems1[d].basetime).substring(4, 6));
+					if (i + 1 == dataMonth) {
+						energyData[i] = [i, chargeChartItems1[d].energy / 1000];
 
-					if (!oid.match('kpx')) {
-						if ($(':radio[name="radio_t"]:checked').val() == 1) {
-							let energy = chargeChartItems1[d].energy / 1000;
-							let irradiationPoaSum = 0;
-							$.each(irradiationPoaArray, function (k, el) {
-								if (el.baseTime.slice(-2) == dataMonth) {
-									irradiationPoaSum = el.sumVal;
+						if (!oid.match('kpx')) {
+							if ($(':radio[name="radio_t"]:checked').val() == 1) {
+								let energy = chargeChartItems1[d].energy / 1000;
+								let irradiationPoaSum = 0;
+								$.each(irradiationPoaArray, function (k, el) {
+									if (el.baseTime.slice(-2) == dataMonth) {
+										irradiationPoaSum = el.sumVal;
+									}
+								});
+
+								let resultValue = 0;
+								if (irradiationPoaSum > 0) {
+									resultValue = parseFloat(((energy / itemChartCapacity / (irradiationPoaSum / 1000 * 24)) * 100).toFixed(2));
 								}
-							});
+								billingData[i] = [i, resultValue];
+							} else if ($(':radio[name="radio_t"]:checked').val() == 2) { //발전량
+								let today = new Date();
+								let lastDate = new Date(today.getFullYear(), dataMonth, 0).format('dd');
 
-							let resultValue = 0;
-							if (irradiationPoaSum > 0) {
-								resultValue = parseFloat(((energy / itemChartCapacity / (irradiationPoaSum / 1000 * 24)) * 100).toFixed(2));
+								if (today.getMonth() == (Number(dataMonth) - 1)) {
+									lastDate = today.getDate();
+								}
+								let energy = chargeChartItems1[d].energy / 1000;
+
+								billingData[i] = [i, parseFloat(((energy / itemChartCapacity) / lastDate).toFixed(2))];
+							} else { //매전량
+								billingData[i] = [i, chargeChartItems1[d].money];
 							}
-							billingData[i] = [i, resultValue];
-						} else if ($(':radio[name="radio_t"]:checked').val() == 2) { //발전량
-							let today = new Date();
-							let lastDate = new Date(today.getFullYear(), dataMonth, 0).format('dd');
-
-							if (today.getMonth() == (Number(dataMonth) - 1)) {
-								lastDate = today.getDate();
-							}
-							let energy = chargeChartItems1[d].energy / 1000;
-
-							billingData[i] = [i, parseFloat(((energy / itemChartCapacity) / lastDate).toFixed(2))];
-						} else { //매전량
-							billingData[i] = [i, chargeChartItems1[d].money];
 						}
-					}
 
-					totYearEnergy += chargeChartItems1[d].energy / 1000;
-					if (i + 1 == nowMonth) {
-						totMonthEnergy = chargeChartItems1[d].energy / 1000;
+						totYearEnergy += chargeChartItems1[d].energy / 1000;
+						if (i + 1 == nowMonth) {
+							totMonthEnergy = chargeChartItems1[d].energy / 1000;
+						}
+						matchMonth = true;
 					}
-					matchMonth = true;
 				}
 			}
 
@@ -1667,11 +1669,32 @@
 				$.map(item, function (value, key) {
 					if (oid.match('kpx')) {
 						if (value.device_type === 'kpx_ems') {
+							let lastTargetActivePowerReqDate = String(value.lastTargetActivePowerReqDate);
+							$.ajax({
+								url: apiHost + '/control/command_history',
+								type: 'get',
+								data: {
+									oid: oid,
+									isRecent: true
+								},
+							}).done(function (data, textStatus, jqXHR) {
+								if (!isEmpty(data.data)) {
+									if (isEmpty(lastTargetActivePowerReqDate)) {
+										lastTargetActivePowerReqDate = String(data.data[0].requested_at);
+									} else {
+										let statusDate = new Date(lastTargetActivePowerReqDate.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$3/$2/$1 $4:$5:$6'));
+										let hitoryDate = new Date(data.data[0].requested_at.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$3/$2/$1 $4:$5:$6'));
+										if (statusDate.getTime() < hitoryDate.getTime()) {
+											lastTargetActivePowerReqDate = hitoryDate.format('yyyyMMddHHmmss');
+										}
+									}
+								}
+							});
 							itemCapacity = value.capacity;
 							itemAcPower = value.activePower;
 							$('#siteCapacity').text(displayNumberFixedUnit(value.capacity, 'W', 'kW', 1)[0]);
-							$('#siteDcPower').text(String(value.lastTargetActivePowerRecvDate).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6'));
 							$('#siteAcPower').text(String(value.lastTargetActivePowerReqDate).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6'));
+							$('#siteDcPower').text(String(value.lastTargetActivePowerRecvDate).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6'));
 
 							let usage = Math.floor((value.activePower / value.capacity) * 100);
 							let other = 100 - usage;
@@ -2146,12 +2169,14 @@
 			let did = '';
 			siteList.forEach(site => {
 				const devices = site.devices;
-				devices.forEach(di => {
-					const deviceType = di.device_type;
-					if (deviceType === 'SENSOR_WEATHER') {
-						did = di.did;
-					}
-				});
+				if (!isEmpty(devices)) {
+					devices.forEach(di => {
+						const deviceType = di.device_type;
+						if (deviceType === 'SENSOR_WEATHER') {
+							did = di.did;
+						}
+					});
+				}
 			});
 
 			let weekWeatherTime = {

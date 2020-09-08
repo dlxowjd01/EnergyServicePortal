@@ -345,7 +345,7 @@
 											<div class="di_wrap">
 												<div class="di_wrap_in">
 													<div class="di_top_sec">
-														<span class="ico solar"></span>
+														<span class="ico [resourceClass]"></span>
 														<div class="tx_area clear">
 															<div class="fl">
 																<span class="tx"><fmt:message key="gdash.7.irr" /></span>
@@ -443,7 +443,7 @@
 											<div class="di_wrap">
 												<div class="di_wrap_in">
 													<div class="di_top_sec">
-														<span class="ico solar"></span>
+														<span class="ico [resourceClass]"></span>
 														<div class="tx_area clear">
 															<div class="fl">
 																<span class="tx"><fmt:message key="gdash.7.irr" /></span>
@@ -529,7 +529,16 @@
 </div>
 
 <script type="text/javascript" src="/js/commonDropdown.js"></script>
-<script type="text/javascript" src="/js/dashboard.js"></script>
+
+<c:choose>
+	<c:when test="${fn:contains(sessionScope.userInfo.oid, 'kpx')}">
+	<script type="text/javascript" src="/js/dashboard-kpx.js"></script>
+	</c:when>
+	<c:otherwise>
+	<script type="text/javascript" src="/js/dashboard.js"></script>
+	</c:otherwise>
+</c:choose>
+
 <script type="text/javascript">
 	const siteList = JSON.parse('${siteList}');
 	const sgid = '<c:out value="${sgid}" escapeXml="false" />';
@@ -552,6 +561,11 @@
 	let first = true;
 
 	$(function () {
+
+		if (oid.match('kpx')) {
+			resourceProperties();
+		}
+
 		setInitList('alarmNotice'); //알람 공지 세팅
 		//resourceProperties();
 

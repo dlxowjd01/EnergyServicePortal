@@ -884,15 +884,14 @@
 			type: 'POST',
 			dataType: 'json',
 			contentType: 'application/json',
-			data: JSON.stringify({
-				cmdBody: bodyCommand
-			}),
+			data: JSON.stringify(bodyCommand),
 			success: function (data) {
-				console.log(data);
+				alert('RTU 커맨드가 입력 됐습니다.');
+				return false;
 			},
 			error: function (error) {
 				console.error(error);
-				alert('RTU ' + typeName + '에 실패했습니다. 값을 다시 확인해 주세요.');
+				alert('RTU 커맨드 입력에 실패했습니다. 값을 다시 확인해 주세요.');
 				return false;
 			}
 		});

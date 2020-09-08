@@ -2,7 +2,6 @@
 <%@ include file="/decorators/include/taglibs.jsp" %>
 <script type="text/javascript" src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
-	const certApiHost = '${sessionScope.certApiHost}';
 	let table = null;
 	$(function() {
 		table = $('#certTable').DataTable({

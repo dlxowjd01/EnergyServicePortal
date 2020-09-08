@@ -281,7 +281,7 @@
 									<div class="di_wrap">
 										<div class="di_wrap_in">
 											<div class="di_top_sec">
-												<span class="ico solar"></span>
+												<span class="ico [resourceClass]"></span>
 												<div class="tx_area clear">
 													<div class="fl">
 														<span class="tx"><fmt:message key="vppdash.8.irr" /></span>

@@ -4,6 +4,9 @@
 <html class="darkmode">
 <head>
 	<%@ include file="/decorators/include/layouts/top.jsp" %>
+	<script type="text/javascript">
+		const certApiHost = '${certApiHost}';
+	</script>
 </head>
 <body class="dark">
 <div id="outerWrapper" class="outer-wrapper">

@@ -2,7 +2,6 @@
 <%@ include file="/decorators/include/taglibs.jsp" %>
 <script type="text/javascript" src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
-	const certApiHost = '${sessionScope.certApiHost}';
 	const apply_PKG_ID = '${param.apply_PKG_ID}';
 
 	$(function () {
@@ -53,6 +52,20 @@
 			},
 			'aoColumns': [
 				{
+					sTitle: '',
+					mData: null,
+					mRender: function ( data, type, full, rowIndex ) {
+						let check = '<input type="checkbox" id="check' + rowIndex.row + '" name="table_checkbox"><label for="check' + rowIndex.row + '"></label>';
+
+						if (data.status.match('가능')) {
+							return check;
+						} else {
+							return '';
+						}
+					},
+					className: 'dt-center no-sorting'
+				},
+				{
 					sTitle: '순번',
 					mData: 'num',
 					className: 'dt-center'
@@ -92,6 +105,10 @@
 		form.find('[name="apply_PKG_ID"]').val(apply_PKG_ID);
 		form.find('[name="mode"]').val(mode);
 		form.attr('action', '/device/certManageProc.do').submit();
+	}
+
+	const downloadCert = () => {
+		location.href = certApiHost + '/downCert?applyPkgID=' + apply_PKG_ID;
 	}
 </script>
 
@@ -180,8 +197,9 @@
 		</form>
 	</div>
 	<div class="btn_wrap_type_right">
+		<button type="button" class="btn_type03" onclick="downloadCert();">인증서 다운로드</button>
 		<button type="button" class="btn_type03" onclick="goPage('issue');">발급</button>
-		<button type="button" class="btn_type03" onclick="goPage('reIssue');">갱신</button>
+<%--		<button type="button" class="btn_type03" onclick="goPage('reIssue');">갱신</button>--%>
 		<button type="button" class="btn_type03" onclick="goPage('revoke');">폐기</button>
 		<button type="button" class="btn_type03" onclick="goList();">목록</button>
 	</div>
