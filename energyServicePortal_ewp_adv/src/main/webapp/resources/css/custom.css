@@ -2989,6 +2989,10 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 	width: 350px;
 }
 
+.collection_modal_content input {
+	text-indent: 12px;
+}
+
 .collection_modal_content .modal-body {
 	padding-top: 32px;
 }
