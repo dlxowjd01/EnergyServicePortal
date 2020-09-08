@@ -643,6 +643,7 @@ function returnAjaxRes(option){
 	return $.ajax(option).done(function (json, textStatus, jqXHR) {
 		return json;
 	}).fail(function (jqXHR, textStatus, errorThrown) {
+		console.log("err===", jqXHR)
 		console.log("siteInfo/spcInfo Ajax Error:", jqXHR.responseJSON.error.message)
 		return false;
 	});
@@ -654,3 +655,10 @@ $.fn.multiline = function(text){
 	this.html(this.html().replace(/\n/g,'<br/>'));
 	return this;
 }
+
+$.fn.extend({
+    toggleText: function(a, b){
+		console.log("text---", this.text() )
+        return this.text(this.text() == b ? a : b);
+    }
+});

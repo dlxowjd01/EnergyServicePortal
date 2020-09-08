@@ -1372,7 +1372,7 @@
 	}
 
 	/* *************************************************
-						scontrol
+					dmain, emain scontrol
 	************************************************* */
 	.scontrol {
 		margin-top: 15px;
@@ -1395,6 +1395,15 @@
 		padding-left: 5px;
 	}
 
+	.group-modal-content .col-sm-12:nth-child(even) {
+		padding: 0 12px 0;
+		margin-top: -12px;
+	}
+
+	.group-modal-content .pl-40,
+	.group-modal-content .share-label {
+		padding-left: 12px;
+	}
 }
 
 @media all and (max-width: 575px) {
