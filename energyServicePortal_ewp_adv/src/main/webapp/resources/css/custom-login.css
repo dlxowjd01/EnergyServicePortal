@@ -129,6 +129,17 @@ button:active {
 	background: var(--icon-eye) no-repeat center;
 }
 
+.setting-form .clear-btn {
+	position: absolute;
+	right: 15px;
+	top: 18px;
+	border: none;
+	outline: none;
+	font-size: 0;
+	width: 32px;
+	height: 24px;
+}
+
 .clear-btn.eye-close {
 	background: var(--icon-eye-close) no-repeat center;
 }
@@ -141,7 +152,12 @@ button:active {
 	text-align: center;
 }
 
-.dropdown {
+.right {
+	text-align: right;
+}
+
+
+nav .dropdown {
 	display: block;
 	top: 19px;
 	right: 20px;
@@ -306,6 +322,10 @@ button:active {
 	display: block;
 }
 
+input[type="text"] {
+	padding-right: 20px;
+}
+
 .input-field {
 	margin-top: 15px;
 	border-bottom: 1px solid var(--white40);
@@ -317,6 +337,31 @@ button:active {
 
 .input-field.no-border {
 	border: none;
+}
+
+input::placeholder,
+textarea::placeholder {
+	color: var(--white40);
+}
+
+input:focus,
+textarea:focus {
+	outline-offset: 0px !important;
+	outline: none !important;
+}
+
+.textarea {
+	background: var(--white20);
+	padding: 20px;
+	height: 150px;
+	line-height: 1.4;
+	color: var(--white87);
+	font-size: 13px;
+	border: 0;
+	border-color: transparent;
+	border-radius: 4px;
+	outline-style: none;
+	vertical-align: middle;
 }
 
 .clear-input {
@@ -413,6 +458,17 @@ button:active {
 	z-index: 200;
 }
 
+.modal-header,
+.modal-footer {
+	padding: 0;
+	border: none;
+}
+
+.modal-header h2 {
+	font-size: 20px;
+	color: var(--white87);
+}
+
 .modal-backdrop {
 	z-index: 180;
 }
@@ -434,8 +490,8 @@ button:active {
 	vertical-align: middle;
 }
 
-.modal-dialog.modal-sm {
-	max-width: 300px;
+.modal-dialog.modal-md {
+	max-width: 560px;
 }
 
 .modal-content {
@@ -447,7 +503,6 @@ button:active {
 }
 
 .modal-body {
-	margin-top: -20px;
 	padding: 0;
 	text-align: center;
 }
@@ -472,6 +527,242 @@ button:active {
 	background-size: 18px;
 }
 
+/* Sign up */
+.user-modal-content {
+	padding: 40px 48px 42px;
+}
+
+
+.tx_inp_type {
+	background: var(--white20);
+	padding: 0;
+	height: 36px;
+	border-radius: 2px;
+	border: 0;
+	color: var(--white87);
+}
+
+
+.tx_inp_type input {
+	position: relative;
+	padding: 0;
+	width: 100%;
+	height: 36px;
+	line-height: 36px;
+	border-color: transparent;
+	border-radius: 2px;
+	background: none;
+	color: var(--white87);
+	font-size: 13px;
+	white-space: normal;
+}
+
+.tx_inp_type>input[type="text"],
+.tx_inp_type>input[type="search"],
+.tx_inp_type>input[type="password"] {
+	text-indent: 12px;
+}
+
+
+.tx_inp_type.unit {
+	position: relative;
+	padding-right: 30px;
+}
+
+.btn_wrap_type02 button {
+	width: 109px;
+}
+.btn_wrap_type02 button + button {
+	margin-left: 16px;
+}
+
+.setting-form .btn_wrap_type02 {
+	margin-top: 0;
+	float: right;
+}
+
+.btn_type {
+	outline-style: none;
+	border: 0;
+	border-radius: 4px;
+	padding: 0 25px;
+	font-size: 12px;
+	height: 36px;
+	line-height: 36px;
+	background: var(--vivid-blue);
+	white-space: nowrap;
+}
+
+.btn_type03 {
+	outline-style: none;
+	border: 1px solid var(--white87);
+	padding: 0 12px;
+	color: var(--white87);
+	font-size: 12px;
+	background: var(--active);
+	height: 36px;
+	line-height: 36px;
+	border-radius: 4px;
+}
+
+
+.btn_type,
+.btn_type:link,
+.btn_type:visited,
+.btn_type:active {
+	color: var(--white);
+}
+
+.flex_start,
+.flex_start2,
+.flex_start3 {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.setting-form .flex_start .tx_inp_type.w-55 {
+	width: 55%;
+}
+
+.setting-form .input_label {
+	margin: auto;
+	padding: 10px 0;
+	white-space: nowrap;
+	width: auto;
+	color: var(--white60);
+	font-size: 13px;
+	vertical-align: middle;
+}
+
+.setting-form .input_label.asterisk:after {
+	display: flex;
+	margin: 0 0 5% 0;
+	height: 27px;
+	content: "*";
+	color: var(--vivid-blue);
+}
+
+.setting-form .input_label.asterisk.no-symbol:after {
+	content: none;
+}
+
+.setting-form .dropdown + .tx_inp_type,
+.setting-form .tx_inp_type + .dropdown {
+	margin-left: 12px;
+}
+
+.setting-form .dropdown-toggle {
+	width: 100%;
+	padding: 0 28px 0 15px;
+	height: 36px;
+	line-height: 36px;
+	border-radius: 2px;
+}
+
+.setting-form .dropdown {
+	width: 100%;
+}
+
+.setting-form .dropdown-toggle .caret {
+	top: 11px;
+}
+
+.setting-form .dropdown-menu {
+	top: 35px;
+}
+
+.setting-form .tx_inp_type+.btn_type {
+	padding: 0 10px;
+	margin-left: 12px;
+}
+
+.setting-form .textarea {
+	width: 100%;
+	max-height: 82px;
+}
+
+.user-modal-content .modal-header {
+	padding: 0 4px;
+}
+
+.setting-form .warning-text {
+	text-align: left;
+}
+
+.setting-form .row:not(:first-of-type):not(:last-of-type) {
+	padding: 4px 0;
+}
+
+.setting-form .dropdown-menu {
+	max-height: 180px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.setting-form .input_label {
+	display: flex;
+}
+
+.setting-form.input_label.asterisk:after {
+	display: block;
+	margin: -5% 0 0 5%;
+	height: auto;
+}
+
+.setting-form .flex_start .input_label:not(:first-of-type) {
+	margin-left: 30px;
+}
+
+.setting-form .input_label.offset {
+	padding-left: 24px;
+}
+
+.setting-form .warning {
+	margin-bottom: -3px;
+	line-height: 16px;
+}
+
+.user-modal-content .text-sm {
+	padding-top: 12px;
+	margin: 0 0 -12px 0;
+}
+
+.user-modal-content .warning-wrapper {
+	margin: 12px 0 0 0;
+	padding-left: 5px;
+}
+
+
+.tick {
+	opacity: 0.4;
+	margin: 0 14px 0 0;
+	font-size: 13px;
+	font-weight: 500;
+	color: var(--white87);
+}
+
+.tick:before {
+	opacity: 0.4;
+	display: block;
+	margin-right: 10px;
+	float: left;
+	content: '';
+	left: 6px;
+	top: 6px;
+	width: 6px;
+	height: 11px;
+	border: solid var(--white87);
+	border-width: 0 2px 2px 0;
+	transform: rotate(45deg);
+	-webkit-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+}
+
+.tick.checked,
+.tick.checked:before {
+	opacity: 1;
+}
 
 @media all and (max-width:768px) {
 	nav {
