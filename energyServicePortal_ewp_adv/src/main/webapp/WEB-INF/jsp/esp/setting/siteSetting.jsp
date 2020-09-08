@@ -261,6 +261,16 @@
 			let option = {};
 			let siteObj = {};
 
+
+			let newStationId, kpxGenId, kpxEmsId, kpxTransvol;
+			if (oid.match('kpx')) {
+				newStationId = $('#station_id').val();
+				kpxGenId = $('#kpx_genid').val();
+				kpxEmsId = $('#kpx_emsid').val();
+				kpxTransvol = $('#kpx_transvol').val();
+			}
+
+
 			// 1. ADD site info
 			if(!$("#addSiteModal").hasClass("edit")) {
 				siteObj.name = newSiteName;
@@ -293,6 +303,20 @@
 				}
 				if( !isEmpty(newVppResId) ){
 					siteObj.dr_group_id = newVppResId;
+				}
+				if (oid.match('kpx')) {
+					if ( !isEmpty(newStationId) ) {
+						siteObj.station_id = Number(newStationId);
+					}
+					if ( !isEmpty(kpxGenId) ) {
+						siteObj.kpx_genid = kpxGenId;
+					}
+					if ( !isEmpty(kpxEmsId) ) {
+						siteObj.kpx_emsid = kpxEmsId;
+					}
+					if ( !isEmpty(kpxTransvol) ) {
+						siteObj.kpx_transvol = kpxTransvol;
+					}
 				}
 
 				// Util JSON
@@ -425,7 +449,20 @@
 				if( !isEmpty(newVppResId) && td.eq(9).text() != newVppResId ){
 					siteEditObj.dr_group_id = newVppResId;
 				}
-
+				if (oid.match('kpx')) {
+					if ( !isEmpty(newStationId) ) {
+						siteEditObj.station_id = Number(newStationId);
+					}
+					if ( !isEmpty(kpxGenId) ) {
+						siteEditObj.kpx_genid = kpxGenId;
+					}
+					if ( !isEmpty(kpxEmsId) ) {
+						siteEditObj.kpx_emsid = kpxEmsId;
+					}
+					if ( !isEmpty(kpxTransvol) ) {
+						siteEditObj.kpx_transvol = kpxTransvol;
+					}
+				}
 				// Util JSON
 				if( !isEmpty(newUtilPlanId) ){
 					newUtilObj.utility_plan_id = newUtilPlanId;
@@ -851,6 +888,9 @@
 
 						let addBtnStr = `<button type="button" class="btn_type fr mb-20" onclick="updateModal('add')">추가</button>`;
 						$("#siteTable_wrapper").append($(str)).prepend($(addBtnStr));
+						if(oid == "kpx"){
+                            this.api().columns([8,9]).visible( false );
+                        }
 					},
 					// every time DataTables performs a draw
 					drawCallback: function (settings) {
@@ -1197,6 +1237,9 @@
 							cell.innerHTML = i+1;
 							$(cell).data("id", i);
 						});
+						if(oid == "kpx"){
+                            this.api().columns([8,9]).visible( false );
+                        }
 					},
 				}).columns.adjust().draw();
 
@@ -1291,7 +1334,10 @@
 				"zeroRecords":  "검색된 결과가 없습니다."
 			},
 			initComplete: function(){
-				this.addClass("no-stripe")
+				this.addClass("no-stripe");
+				if(oid == "kpx"){
+					this.api().columns([8,9]).visible( false );
+				}
 			},
 		});
 	}
@@ -1671,7 +1717,7 @@
 				$("#newResList").prev().data({"name": td.eq(4).text(), "value" : td.eq(4).data("value") }).html(td.eq(4).text() + "<span class='caret'></span>");
 				// ESS 유무
 				// console.log("es===", rowData.ess)
-				if( isEmpty(rowData.ess)) {
+				if( isEmpty(rowData.ess) || rowData.ess == 0 ) {
 					$('#newEssList').prev().data("value", "0").html("무<span class='caret'></span>");
 				} else {
 					$('#newEssList').prev().data("value", rowData.ess).html("유<span class='caret'></span>");
@@ -1682,8 +1728,13 @@
 				}
 				// 추가 정보
 				$('#newSiteDetail').val(rowData.detail_info);
-				// 발전 용량
-
+				// kpx
+				if (oid.match('kpx')) {
+					$('#station_id').val(rowData.station_id);
+					$('#kpx_genid').val(rowData.kpx_genid);
+					$('#kpx_emsid').val(rowData.kpx_emsid);
+					$('#kpx_transvol').val(rowData.kpx_transvol);
+				}
 				// Utility info
 				if( !isEmpty(rowData.utility)) {
 					Promise.resolve(JSON.parse(rowData.utility)).then( util => {
@@ -2850,66 +2901,104 @@
 									<textarea name="new_site_desc" id="newSiteDetail" class="textarea" placeholder="입력"></textarea>
 								</div>
 							</div>
+
+							<c:if test="${fn:contains(sessionScope.userInfo.oid, 'kpx')}">
+								<div class="row">
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">발전기 코드</span></div>
+									<div class="col-xl-3 col-lg-6 col-md-4 col-sm-10 pl-0">
+										<div class="flex_start">
+											<div class="tx_inp_type">
+												<input type="text" name="kpx_genid" id="kpx_genid" placeholder="입력" minlength="2" maxlength="15">
+											</div>
+										</div>
+									</div>
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">모선 전압</span></div>
+									<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
+										<div class="flex_start">
+											<div class="tx_inp_type">
+												<input type="text" name="kpx_transvol" id="kpx_transvol" placeholder="입력" minlength="2" maxlength="15">
+											</div>
+										</div>
+									</div>
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">EMS 코드</span></div>
+									<div class="col-xl-2 col-lg-6 col-md-4 col-sm-10 pl-0">
+										<div class="flex_start">
+											<div class="tx_inp_type">
+												<input type="text" name="kpx_emsid" id="kpx_emsid" placeholder="입력" minlength="2" maxlength="100">
+											</div>
+										</div>
+									</div>
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">기상 그리드</span></div>
+									<div class="col-xl-1 col-lg-2 col-md-4 col-sm-10 pl-0">
+										<div class="flex_start">
+											<div class="tx_inp_type">
+												<input type="text" name="station_id" id="station_id" placeholder="입력" minlength="2" maxlength="15">
+											</div>
+										</div>
+									</div>
+								</div>
+							</c:if>
 						</section>
 
-						<section id="sectionPowerBillInfo">
-							<h2 class="stit">전력 구매 정보</h2>
-							<div class="row">
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">계약 종별</span></div>
-								<div class="col-xl-3 col-lg-6 col-md-4 col-sm-10 pl-0">
-									<div class="flex_start">
-										<div class="dropdown w-100">
+						<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'kpx')}">
+							<section id="sectionPowerBillInfo">
+								<h2 class="stit">전력 구매 정보</h2>
+								<div class="row">
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">계약 종별</span></div>
+									<div class="col-xl-3 col-lg-6 col-md-4 col-sm-10 pl-0">
+										<div class="flex_start">
+											<div class="dropdown w-100">
+												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+												<ul id="newContractList" class="dropdown-menu"></ul>
+											</div>
+											<div class="dropdown w-100">
+												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택" disabled>선택<span class="caret"></span></button>
+												<ul id="newVoltTypeList" class="dropdown-menu"></ul>
+											</div>
+										</div>
+										<small id="newVoltWarning" class="hidden warning">계약종별 상세 옵션을 선택해 주세요.</small>
+									</div>
+									
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">계약 전력</span></div>
+									<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
+										<div class="tx_inp_type"><input type="text" name="new_peak_demand" id="newPeakDemand" class="pr-36" placeholder="입력" maxlength="10"><span class="unit">kW</span></div>
+									</div>
+
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label offset-top">요금 적용<br>전력</span></div>
+									<div class="col-xl-2 col-lg-6 col-md-4 col-sm-10 pl-0">
+										<div class="tx_inp_type"><input type="text" name="new_dr_charge" id="newDrCharge" class="pr-36" placeholder="입력" maxlength="10"><span class="unit">kW</span></div>
+									</div>
+
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">검침일</span></div>
+									<div class="col-xl-1 col-lg-2 col-md-4 col-sm-10 pl-0">
+										<div class="dropdown">
 											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-											<ul id="newContractList" class="dropdown-menu"></ul>
-										</div>
-										<div class="dropdown w-100">
-											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택" disabled>선택<span class="caret"></span></button>
-											<ul id="newVoltTypeList" class="dropdown-menu"></ul>
+											<ul id="newInspection" class="dropdown-menu"></ul>
 										</div>
 									</div>
-									<small id="newVoltWarning" class="hidden warning">계약종별 상세 옵션을 선택해 주세요.</small>
-								</div>
-								
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">계약 전력</span></div>
-								<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
-									<div class="tx_inp_type"><input type="text" name="new_peak_demand" id="newPeakDemand" class="pr-36" placeholder="입력" maxlength="10"><span class="unit">kW</span></div>
 								</div>
 
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label offset-top">요금 적용<br>전력</span></div>
-								<div class="col-xl-2 col-lg-6 col-md-4 col-sm-10 pl-0">
-									<div class="tx_inp_type"><input type="text" name="new_dr_charge" id="newDrCharge" class="pr-36" placeholder="입력" maxlength="10"><span class="unit">kW</span></div>
-								</div>
+								<div class="row">
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label offset-top">한전<br>고객번호</span></div>
+									<div class="col-xl-3 col-lg-3 col-md-4 col-sm-10 pl-0">
+										<div class="tx_inp_type"><input type="text" name="new_kepco_id" id="newKepcoId" placeholder="입력" maxlength="18"></div>
+									</div>
 
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">검침일</span></div>
-								<div class="col-xl-1 col-lg-2 col-md-4 col-sm-10 pl-0">
-									<div class="dropdown">
-										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-										<ul id="newInspection" class="dropdown-menu"></ul>
+									<div class="col-xl-1 col-lg-1 col-md-2 col-sm-2"><span class="input_label offset-top">iSMART<br>아이디</span></div>
+									<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
+										<div class="tx_inp_type"><input type="text" name="new_smart_id" id="newISmartId" placeholder="입력" maxlength="18"></div>
+									</div>
+
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label offset-top">iSMART<br>비밀번호</span></div>
+									<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
+										<div class="tx_inp_type"><!--
+										--><input type="password" name="new_smart_pwd" id="newISmartPwd" placeholder="입력" maxlength="18"><!--
+										--><button type="button" class="pwd-icon" onclick="showPwd('newISmartPwd', this)">show</button><!--
+									--></div>
 									</div>
 								</div>
-							</div>
-
-							<div class="row">
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label offset-top">한전<br>고객번호</span></div>
-								<div class="col-xl-3 col-lg-3 col-md-4 col-sm-10 pl-0">
-									<div class="tx_inp_type"><input type="text" name="new_kepco_id" id="newKepcoId" placeholder="입력" maxlength="18"></div>
-								</div>
-
-								<div class="col-xl-1 col-lg-1 col-md-2 col-sm-2"><span class="input_label offset-top">iSMART<br>아이디</span></div>
-								<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
-									<div class="tx_inp_type"><input type="text" name="new_smart_id" id="newISmartId" placeholder="입력" maxlength="18"></div>
-								</div>
-
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label offset-top">iSMART<br>비밀번호</span></div>
-								<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
-									<div class="tx_inp_type"><!--
-									--><input type="password" name="new_smart_pwd" id="newISmartPwd" placeholder="입력" maxlength="18"><!--
-									--><button type="button" class="pwd-icon" onclick="showPwd('newISmartPwd', this)">show</button><!--
-								--></div>
-								</div>
-							</div>
-						</section>
-
+							</section>
+						</c:if>
 						<section id="sectionPowerMarketInfo">
 							<h2 class="stit">매전 정보</h2>
 							<div class="row">
