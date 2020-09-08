@@ -61,6 +61,10 @@
 					<input type="text" name="rtuName" id="rtuName" class="tx_inp_type text_input">
 				</div>
 				<div class="input-group inline-flex">
+					<label for="rtuSecret" class="input_label">RTU 비밀키</label>
+					<input type="text" name="rtuSecret" id="rtuSecret" class="tx_inp_type text_input">
+				</div>
+				<div class="input-group inline-flex">
 					<label for="description" class="input_label">메모</label>
 					<textarea class="textarea" id="description" name="description"></textarea>
 				</div>
@@ -694,6 +698,7 @@
 			$('#rtuSite button').data('value', data.sid).html(siteName + '<span class="caret"></span>');
 			$('#rtuName').val(data.name);
 			$('#serialNumber').val(data.serialNumber);
+			$('#rtuSecret').val(data.rtu_secret);
 			$('#description').val(data.description);
 
 			const rid = $('#selectedRTU').data('rid');
@@ -711,6 +716,7 @@
 		let sid = $('#rtuSite button').data('value'),
 			name = $('#rtuName').val(),
 			serialNumber = $('#serialNumber').val(),
+			rtuSecret = $('#rtuSecret').val(),
 			description = $('#description').val(),
 			ajaxUrl = '',
 			typeName = '';
@@ -741,6 +747,7 @@
 			data: JSON.stringify({
 				name: name,
 				serialNumber: serialNumber,
+				rtu_secret: rtuSecret,
 				description: description
 			}),
 			success: function (data) {

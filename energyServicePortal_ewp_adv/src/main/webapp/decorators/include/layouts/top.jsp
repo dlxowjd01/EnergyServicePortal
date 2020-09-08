@@ -76,6 +76,7 @@
 		const loginMail = '${sessionScope.userInfo.contact_email}';
 		const contact_phone = '${sessionScope.userInfo.contact_phone}';
 		const apiHost = '${apiHost}';
+		const activateSPC = '${activateSPC}';
 		const navCount = 10; //한 화면당 네비게이션 갯수
 		let pagePerData = 15; //페이지당 게시글 갯수
 		let page = 1; //현재 페이지

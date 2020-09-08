@@ -397,12 +397,14 @@
 											<li data-value="0">
 												<a href="javascript:void(0)">전체</a>
 											</li>
+											<c:if test="${activateSPC eq true}">
 											<li data-value="1">
 												<a href="javascript:void(0)">자산 운용사</a>
 											</li>
 											<li data-value="2">
 												<a href="javascript:void(0)">SPC 담당 사무수탁사</a>
 											</li>
+											</c:if>
 										</ul>
 									</div>
 								</div>
