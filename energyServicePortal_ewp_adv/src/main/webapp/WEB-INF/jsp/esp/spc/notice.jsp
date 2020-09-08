@@ -432,7 +432,7 @@
 									<div class="file_list ml-16"><ul><li class="upload_text"></li></ul></div>
 									<div class="file_list ml-16" id="modi_attachement_info">
 										<p class="tx_file">
-											<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+											<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
 											<button type="button" class="btn_type07" onclick="setRemoveFileList('modi_attachement_info', [INDEX]);">삭제</button>
 										</p>
 									</div>
@@ -491,7 +491,7 @@
 							<h2 class="input_label">첨부 파일</h2>
 							<div class="file_list ml-16" id="view_attachement_info">
 								<p class="tx_file">
-									<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+									<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
 								</p>
 							</div>
 						</div>

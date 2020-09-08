@@ -605,7 +605,7 @@
 						<td id="SPC_법인_인감">
 							<p>
 								<span class="offset-label">[SPC_법인_인감_대표]</span>
-								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]" class="tx_file">[SPC_법인_인감_유형] - [originalname]</a>
+								<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]" class="tx_file">[SPC_법인_인감_유형] - [originalname]</a>
 							</p>
 						</td>
 						<th></th>
@@ -1518,7 +1518,7 @@
 						<th>현장 사진</th>
 						<td id="addFileList01">
 							<p class="tx_file">
-								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
+								<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
 						</td>
 						<td><button type="button" class="btn_file down"></button></td>
@@ -1527,7 +1527,7 @@
 						<th>수배전반</th>
 						<td id="addFileList02">
 							<p class="tx_file">
-								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
+								<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
 						</td>
 						<td><button type="button" class="btn_file down"></button></td>
@@ -1536,7 +1536,7 @@
 						<th>케이블</th>
 						<td id="addFileList03">
 							<p class="tx_file">
-								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
+								<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
 						</td>
 						<td><button type="button" class="btn_file down"></button></td>
@@ -1545,7 +1545,7 @@
 						<th>모듈</th>
 						<td id="addFileList04">
 							<p class="tx_file">
-								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
+								<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
 						</td>
 						<td><button type="button" class="btn_file down"></button></td>
@@ -1554,7 +1554,7 @@
 						<th>인버터</th>
 						<td id="addFileList05">
 							<p class="tx_file">
-								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
+								<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
 						</td>
 						<td><button type="button" class="btn_file down"></button></td>
@@ -1563,7 +1563,7 @@
 						<th>결선도</th>
 						<td id="addFileList06">
 							<p class="tx_file">
-								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
+								<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
 						</td>
 						<td><button type="button" class="btn_file down"></button></td>
@@ -1572,7 +1572,7 @@
 						<th>토목</th>
 						<td id="addFileList07">
 							<p class="tx_file">
-								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
+								<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
 						</td>
 						<td><button type="button" class="btn_file down"></button></td>
@@ -1581,7 +1581,7 @@
 						<th>구조물</th>
 						<td id="addFileList08">
 							<p class="tx_file">
-								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
+								<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
 						</td>
 						<td><button type="button" class="btn_file down"></button></td>
@@ -1590,7 +1590,7 @@
 						<th>접속반</th>
 						<td id="addFileList09">
 							<p class="tx_file">
-								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
+								<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
 						</td>
 						<td><button type="button" class="btn_file down"></button></td>
@@ -1599,7 +1599,7 @@
 						<th>기타설비</th>
 						<td id="addFileList10">
 							<p class="tx_file">
-								<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
+								<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
 						</td>
 						<td><button type="button" class="btn_file down"></button></td>

@@ -2,8 +2,6 @@
 <%@ include file="/decorators/include/taglibs.jsp" %>
 <script type="text/javascript" src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
-	const certApiHost = '${sessionScope.certApiHost}';
-
 	$(function() {
 		policy();
 	});
@@ -156,6 +154,37 @@
 		}
 	}
 
+	const goProc = () => {
+		const deviceTable = $('#deviceTable').DataTable();
+		let data = new Object();
+		let deviceArray = new Array();
+
+		data.applyPkgID = apply_PKG_ID;
+
+		if (deviceTable.rows('.selected')[0].length > 0) {
+			deviceTable.rows('.selected')[0].forEach(device => {
+				deviceArray.push(deviceTable.rows(device).data()[0].apply_ID);
+			});
+			data.devices = deviceArray;
+
+			let option = {
+				url : certApiHost + '/deviceCert/' + mode,
+				type : 'PUT',
+				contentType: 'application/json',
+				crossOrigin: true,
+				dataType: 'json',
+				data: JSON.stringify(data)
+			}
+			$.ajax(option).done(function (result) {
+				alert(modeName + '처리가 완료되었습니다.');
+				table.ajax().reload();
+				return false;
+			}).fail(function (error) {
+				console.log(error);
+			});
+		}
+	}
+
 	/**
 	 * 에러 처리
 	 *
@@ -195,6 +224,7 @@
 				<div class="spc_tbl_row st_edit">
 					<table>
 						<colgroup>
+							<col style="width:5%">
 							<col style="width:15%">
 							<col style="width:35%">
 							<col style="width:15%">

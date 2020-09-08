@@ -24,10 +24,6 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		System.out.println("++++++++++++++++PreLoadInterceptor start++++++++++++++++");
 
-		String apiHost = EgovProperties.getProperty("jsApiHost");
-		String apiHostTest = EgovProperties.getProperty("jsApiHostTest");
-		String certApiHost = EgovProperties.getProperty("certApiHost");
-
 		HttpSession session = request.getSession();
 		Map<String, Object> groupMap = new HashMap<String, Object>();
 		List<Map<String, Object>> refineList = new ArrayList<Map<String, Object>>();
@@ -48,15 +44,6 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 
 			Map<String, Object> parameters = new HashMap<String, Object>();
 			parameters.put("includeDevices", "true");
-
-			if (mode != null && "test".equals(mode)) {
-				session.setAttribute("apiHost", apiHostTest);
-			} else {
-				session.setAttribute("apiHost", apiHost);
-			}
-
-			//WebRa 서버 주소
-			session.setAttribute("certApiHost", certApiHost);
 
 			Map<String, Object> siteMap = get("/auth/me/sites", mode, parameters, token); //사이트 리스트 정보
 			if (200 == (int) siteMap.get("code")) {
@@ -286,7 +273,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView mav) throws Exception {
-		System.out.println("++++++++++++++++PreLoadInterceptor end++++++++++++++++");
+		HttpSession session = request.getSession();
 
 		// 상단 시간 초기값 -- 서울로 세팅
 		TimeZone timeZone = TimeZone.getTimeZone("Asia/Seoul");
@@ -294,6 +281,23 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 		sdf.setTimeZone(timeZone);
 
 		String gitVersion = EgovProperties.getGitProperty("git.commit.id.abbrev");
+		String apiHost = EgovProperties.getProperty("jsApiHost"); //API 기본 HOST
+		String apiHostTest = EgovProperties.getProperty("jsApiHostTest"); //API TEST HOST
+		String certApiHost = EgovProperties.getProperty("certApiHost"); //인증서 HOST
+		String activateSPC = EgovProperties.getProperty("activateSPC"); //activateSPC True/False
+		String mode = (String) session.getAttribute("mode"); // TEST 서버 여부
+
+		if (mode != null && "test".equals(mode)) {
+			mav.addObject("apiHost", apiHostTest);
+		} else {
+			mav.addObject("apiHost", apiHost);
+		}
+
+		//WebRa 서버 주소
+		mav.addObject("certApiHost", certApiHost);
+		//activateSPC
+		mav.addObject("activateSPC", activateSPC);
+
 		mav.addObject("nowTime", sdf.format(new Date()));
 		mav.addObject("gitVersion", gitVersion);
 		super.postHandle(request, response, handler, mav);

@@ -2748,7 +2748,7 @@
 							<td class="flex_start_td">
 								<div id="fileList01">
 									<p class="tx_file">
-										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
 										<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList01', [INDEX]);"></button>
 									</p>
 								</div>
@@ -2769,7 +2769,7 @@
 							<td class="flex_start_td">
 								<div id="fileList02">
 									<p class="tx_file">
-										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
 										<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList02', [INDEX]);"></button>
 									</p>
 								</div>
@@ -2790,7 +2790,7 @@
 							<td class="flex_start_td">
 								<div id="fileList03">
 									<p class="tx_file">
-										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
 										<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList03', [INDEX]);"></button>
 									</p>
 								</div>
@@ -2811,7 +2811,7 @@
 							<td class="flex_start_td">
 								<div id="fileList04">
 									<p class="tx_file">
-										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
 										<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList04', [INDEX]);"></button>
 									</p>
 								</div>
@@ -2832,7 +2832,7 @@
 							<td class="flex_start_td">
 								<div id="fileList05">
 									<p class="tx_file">
-										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
 										<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList05', [INDEX]);"></button>
 									</p>
 								</div>
@@ -2853,7 +2853,7 @@
 							<td class="flex_start_td">
 								<div id="fileList06">
 									<p class="tx_file">
-										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
 										<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList06', [INDEX]);"></button>
 									</p>
 								</div>
@@ -2874,7 +2874,7 @@
 							<td class="flex_start_td">
 								<div id="fileList07">
 									<p class="tx_file">
-										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
 										<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList07', [INDEX]);"></button>
 									</p>
 								</div>
@@ -2895,7 +2895,7 @@
 							<td class="flex_start_td">
 								<div id="fileList08">
 									<p class="tx_file">
-										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
 										<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList08', [INDEX]);"></button>
 									</p>
 								</div>
@@ -2916,7 +2916,7 @@
 							<td class="flex_start_td">
 								<div id="fileList09">
 									<p class="tx_file">
-										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
 										<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList09', [INDEX]);"></button>
 									</p>
 								</div>
@@ -2937,7 +2937,7 @@
 							<td class="flex_start_td">
 								<div id="fileList10">
 									<p class="tx_file">
-										<a href="${sessionScope.apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+										<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
 										<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList10', [INDEX]);"></button>
 									</p>
 								</div>

@@ -2,7 +2,6 @@
 <%@ include file="/decorators/include/taglibs.jsp" %>
 <script type="text/javascript" src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
-	const certApiHost = '${sessionScope.certApiHost}';
 	const apply_PKG_ID = '${param.apply_PKG_ID}';
 	const mode = '${param.mode}'
 	let table = null;
@@ -236,13 +235,6 @@
 					</div>
 					<div class="spc_tbl align_type">
 						<table class="chk_type" id="deviceTable">
-							<colgroup>
-								<col style="width:15%">
-								<col style="width:25%">
-								<col style="width:15%">
-								<col style="width:25%">
-								<col/>
-							</colgroup>
 							<thead>
 							</thead>
 							<tbody>
