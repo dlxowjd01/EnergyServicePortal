@@ -661,7 +661,6 @@
 		warning.addClass('hidden');
 
 		if (data == undefined) {
-			// console.log("modalPopInit register===");
 			unCheckAll(modalForm);
 			//팝업 오픈시 value 초기화
 			input.each(function () {
@@ -682,7 +681,6 @@
 				maintenance(spcIdArr, 'post');
 			});
 		} else {
-			// console.log("modalPopInit===", data[0]);
 			let targetDate;
 			data.forEach(temp => {
 				if (temp.id == jobId) {
@@ -691,8 +689,32 @@
 			});
 
 			title.text('주요 일정 알림 수정');
+			const jobInfo = JSON.parse(targetDate.job_info);
 			setJsonAutoMapping(targetDate, 'spcAlarmModal', 'dropdown');
-			setJsonAutoMapping(JSON.parse(targetDate.job_info), 'spcAlarmModal');
+			setJsonAutoMapping(jobInfo, 'spcAlarmModal');
+
+			if (jobInfo['alarmSetup'] == '직접 설정') {
+				$('#alarmDate').datepicker({
+					showOn: "both",
+					buttonImageOnly: true,
+					dateFormat: 'yy-mm-dd',
+					beforeShow: function () {
+						let minDate = $('#job_date').datepicker('getDate');
+						if (minDate != '') {
+							$('#alarmDate').datepicker('option', 'minDate', minDate);
+						}
+
+						let maxDate = $('#repeat_end').datepicker('getDate');
+						if (maxDate != '') {
+							$('#alarmDate').datepicker('option', 'maxDate', maxDate);
+						}
+					}
+				}).removeClass('disabled').attr('placeholder', '직접선택');
+			} else {
+				if ($('#alarmDate').hasClass('hasDatepicker')) {
+					$('#alarmDate').datepicker('destroy').removeClass('hasDatepicker').addClass('disabled').removeAttr('placeholder');
+				}
+			}
 
 			$("#spcList").addClass("hidden").prev().data({"value": spcNameList.spcId, "name" : spcNameList.spcName }).text(spcNameList.spcName);
 

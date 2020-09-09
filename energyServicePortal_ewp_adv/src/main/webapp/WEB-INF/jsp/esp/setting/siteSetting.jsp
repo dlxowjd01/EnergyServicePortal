@@ -2305,10 +2305,6 @@
 								}
 
 							});
-
-							if(oid.match("kpx")){
-								this.api().columns([8,9]).visible( false );
-							}
 						},
 						createdRow: function (row, data, dataIndex){
 						},
