@@ -285,8 +285,10 @@
 				$('#registerModal').modal('hide');
 			}
 		}).fail(function (jqXHR, textStatus, errorThrown) {
-			alert('처리 중 오류가 발생했습니다.');
-			return false;
+			if (textStatus !== 'canceled') {
+				alert('처리 중 오류가 발생했습니다.');
+				return false;
+			}
 		});
 	};
 
