@@ -151,13 +151,11 @@
 			}
 			$.ajax(option).done(function (result) {
 				alert(modeName + '처리가 완료되었습니다.');
-				table.ajax().reload();
+				table.ajax.reload();
 				return false;
 			}).fail(function (error) {
 				console.log(error);
 			});
-		} else {
-
 		}
 	}
 </script>

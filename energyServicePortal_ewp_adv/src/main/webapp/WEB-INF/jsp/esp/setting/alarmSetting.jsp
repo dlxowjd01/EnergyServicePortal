@@ -544,7 +544,9 @@
 
 			$.when.apply($, deferreds).then(function () {
 				alert('등록 되었습니다.');
-				alarmTable.clear();
+				alarmTable.clear().draw();
+
+				$('#regist').prop('disabled', true);
 			});
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			errorMsg('처리 중 오류가 발생했습니다.');

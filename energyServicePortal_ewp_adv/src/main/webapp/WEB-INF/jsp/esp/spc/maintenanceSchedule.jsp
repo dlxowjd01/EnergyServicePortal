@@ -495,7 +495,7 @@
 			$('#repeat_end').addClass('sel').parent().removeClass('tx_inp_type').addClass('sel_calendar');
 		}
 
-		if ($('#alarmSetup button').data('value') != '' && $('#alarmSetup button').data('value') != '직접 설정') {
+		if (!isEmpty($('#alarmSetup button').data('value')) && $('#alarmSetup button').data('value') != '직접 설정') {
 			selectedDate.setDate(selectedDate.getDate() - Number($('#alarmSetup button').data('value')));
 			$('#alarmDate').val(selectedDate.format('yyyy-MM-dd'));
 		}
@@ -697,7 +697,7 @@
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex_start2 px-0">
 							<div class="dropdown mr-12" id="alarmSetup">
-								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="일시"><span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="일시">일시<span class="caret"></span></button>
 								<ul class="dropdown-menu">
 									<li data-value="1"><a href="javascript:void(0);">1일 전</a></li>
 									<li data-value="3"><a href="javascript:void(0);">3일 전</a></li>
@@ -714,7 +714,7 @@
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex_start2 px-0">
 							<div class="dropdown placeholder mr-12" id="alarmTime">
-								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="시간"><span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="시간">시간<span class="caret"></span></button>
 								<ul class="dropdown-menu">
 									<c:forEach var="time" begin="0" end="23">
 										<li data-value="${time}"><a href="javascript:void(0);">${time}시</a></li>
