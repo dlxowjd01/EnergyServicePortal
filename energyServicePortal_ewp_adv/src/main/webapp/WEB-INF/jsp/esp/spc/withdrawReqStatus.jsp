@@ -126,48 +126,74 @@
 				}
 			});
 
-			let option = {
-				url: apiHost + '/spcs/transactions/data_send?oid=' + oid,
-				type: 'post',
-				async: false,
-				dataType: 'json',
-				contentType: "application/json",
-				data: JSON.stringify({
-					reqIds: finalArray
-				})
-			}
+			// let option = {
+			// 	url: apiHost + '/spcs/transactions/data_send?oid=' + oid,
+			// 	type: 'post',
+			// 	async: false,
+			// 	dataType: 'json',
+			// 	contentType: "application/json",
+			// 	data: JSON.stringify({
+			// 		reqIds: finalArray
+			// 	})
+			// }
+			//
+			// $.ajax(option).done(function (json, textStatus, jqXHR) {
+			// 	$('#approvalModal').modal('hide');
+			//
+			// 	let searchOpt = {};
+			// 	let checkbox = $("#reqStatus").find("input[type='checkbox']");
+			// 	var status= [];
+			//
+			// 	if (checkbox.first().is(':checked')) {
+			// 		checkbox.each(function(){
+			// 			status.push($(this).val())
+			// 		});
+			// 	} else {
+			// 		checkbox.each(function(){
+			// 			if($(this).is(":checked")){
+			// 				status.push($(this).val());
+			// 			}
+			// 		});
+			// 	}
+			// 	searchOpt.status = status;
+			// 	searchOpt.keyword = $("#keyword").val().trim().toLowerCase();
+			//
+			// 	if (isEmpty(searchOpt.status) && isEmpty(searchOpt.keyword)) {
+			// 		getDataList(1, null);
+			// 	} else {
+			// 		getDataList(1, searchOpt);
+			// 	}
+			// }).fail(function (jqXHR, textStatus, errorThrown) {
+			// 	finalArray.forEach(reqId => {
+			// 		updateStatus('4', reqId);
+			// 	});
+			// });
 
-			$.ajax(option).done(function (json, textStatus, jqXHR) {
-				$('#approvalModal').modal('hide');
+			$('#approvalModal').modal('hide');
 
-				let searchOpt = {};
-				let checkbox = $("#reqStatus").find("input[type='checkbox']");
-				var status= [];
+			let searchOpt = {};
+			let checkbox = $("#reqStatus").find("input[type='checkbox']");
+			var status= [];
 
-				if (checkbox.first().is(':checked')) {
-					checkbox.each(function(){
-						status.push($(this).val())
-					});
-				} else {
-					checkbox.each(function(){
-						if($(this).is(":checked")){
-							status.push($(this).val());
-						}
-					});
-				}
-				searchOpt.status = status;
-				searchOpt.keyword = $("#keyword").val().trim().toLowerCase();
-
-				if (isEmpty(searchOpt.status) && isEmpty(searchOpt.keyword)) {
-					getDataList(1, null);
-				} else {
-					getDataList(1, searchOpt);
-				}
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				finalArray.forEach(reqId => {
-					updateStatus('4', reqId);
+			if (checkbox.first().is(':checked')) {
+				checkbox.each(function(){
+					status.push($(this).val())
 				});
-			});
+			} else {
+				checkbox.each(function(){
+					if($(this).is(":checked")){
+						status.push($(this).val());
+					}
+				});
+			}
+			searchOpt.status = status;
+			searchOpt.keyword = $("#keyword").val().trim().toLowerCase();
+
+			if (isEmpty(searchOpt.status) && isEmpty(searchOpt.keyword)) {
+				getDataList(1, null);
+			} else {
+				getDataList(1, searchOpt);
+			}
 		});
 
 		function getSpcList() {
