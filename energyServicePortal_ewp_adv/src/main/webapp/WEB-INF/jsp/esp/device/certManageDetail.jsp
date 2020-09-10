@@ -3,9 +3,10 @@
 <script type="text/javascript" src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
 	const apply_PKG_ID = '${param.apply_PKG_ID}';
+	let table = null;
 
 	$(function () {
-		$('#deviceTable').DataTable({
+		table = $('#deviceTable').DataTable({
 			'table-layout': 'fixed',
 			'bAutoWidth': true,
 			'bSearchable': true,
@@ -85,9 +86,20 @@
 				{
 					sTitle: '상태',
 					mData: 'status'
+				},
+				{
+					sTitle: 'apply_ID',
+					mData: 'apply_ID',
+					bSortable: false,
+					orderable: false,
+					bVisible: false
 				}
 			],
 			dom: 'tip',
+			select: {
+				style: 'multi',
+				selector: 'td:first-child > :checkbox'
+			},
 		}).columns.adjust();
 	});
 
@@ -99,16 +111,52 @@
 		form.attr('action', '/device/certManageList.do').submit();
 	}
 
-	//기기 인증서 상세 조회
-	const goPage = (mode) => {
-		let form = $('#form1');
-		form.find('[name="apply_PKG_ID"]').val(apply_PKG_ID);
-		form.find('[name="mode"]').val(mode);
-		form.attr('action', '/device/certManageProc.do').submit();
-	}
-
 	const downloadCert = () => {
 		location.href = certApiHost + '/downCert?applyPkgID=' + apply_PKG_ID;
+	}
+
+	const goProc = (mode, modeName) => {
+		const deviceTable = $('#deviceTable').DataTable();
+		let data = new Object();
+		let deviceArray = new Array();
+
+		data.applyPkgID = apply_PKG_ID;
+
+		if (deviceTable.rows('.selected')[0].length > 0) {
+			let process = true;
+			deviceTable.rows('.selected')[0].forEach(device => {
+				const status = deviceTable.rows(device).data()[0].status;
+
+				if ((mode === 'issue' && status == '발급 가능') || (mode === 'revoke' && status == '폐지 가능')) {
+					deviceArray.push(deviceTable.rows(device).data()[0].apply_ID);
+				} else {
+					process = false;
+				}
+			});
+
+			if (!process) {
+				alert('처리가 불가능한 항목이 체크되어있습니다. 다시 확인 부탁드립니다.');
+				return false;
+			}
+
+			data.devices = deviceArray;
+
+			let option = {
+				url : certApiHost + '/deviceCert/' + mode,
+				type : 'PUT',
+				contentType: 'application/json',
+				crossOrigin: true,
+				dataType: 'json',
+				data: JSON.stringify(data)
+			}
+			$.ajax(option).done(function (result) {
+				alert(modeName + '처리가 완료되었습니다.');
+				table.ajax.reload();
+				return false;
+			}).fail(function (error) {
+				console.log(error);
+			});
+		}
 	}
 </script>
 
@@ -198,9 +246,9 @@
 	</div>
 	<div class="btn_wrap_type_right">
 		<button type="button" class="btn_type03" onclick="downloadCert();">인증서 다운로드</button>
-		<button type="button" class="btn_type03" onclick="goPage('issue');">발급</button>
-<%--		<button type="button" class="btn_type03" onclick="goPage('reIssue');">갱신</button>--%>
-		<button type="button" class="btn_type03" onclick="goPage('revoke');">폐기</button>
+		<button type="button" class="btn_type03" onclick="goProc('issue', '발급');">발급</button>
+<%--		<button type="button" class="btn_type03" onclick="goProc('reIssue');">갱신</button>--%>
+		<button type="button" class="btn_type03" onclick="goProc('revoke', '폐기');">폐기</button>
 		<button type="button" class="btn_type03" onclick="goList();">목록</button>
 	</div>
 </div>

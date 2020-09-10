@@ -907,7 +907,7 @@
 
 						let addBtnStr = `<button type="button" class="btn_type fr mb-20" onclick="updateModal('add')">추가</button>`;
 						$("#siteTable_wrapper").append($(str)).prepend($(addBtnStr));
-						if(oid == "kpx"){
+						if(oid.match("kpx")){
                             this.api().columns([8,9]).visible( false );
                         }
 					},
@@ -1259,7 +1259,7 @@
 							cell.innerHTML = i+1;
 							$(cell).data("id", i);
 						});
-						if(oid == "kpx"){
+						if(oid.match("kpx")){
                             this.api().columns([8,9]).visible( false );
                         }
 					},
@@ -1357,7 +1357,7 @@
 			},
 			initComplete: function(){
 				this.addClass("no-stripe");
-				if(oid == "kpx"){
+				if(oid.match("kpx")){
 					this.api().columns([8,9]).visible( false );
 				}
 			},
@@ -2305,7 +2305,6 @@
 								}
 
 							});
-
 						},
 						createdRow: function (row, data, dataIndex){
 						},

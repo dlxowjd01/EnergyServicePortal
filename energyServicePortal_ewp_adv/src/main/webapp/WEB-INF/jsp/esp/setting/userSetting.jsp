@@ -1968,6 +1968,7 @@
 								<div class="tx_inp_type"><input type="text" id="newEmailAddr" name="new_email_addr" placeholder="입력"></div>
 								<small class="hidden warning">올바른 이메일 형식을 입력해 주세요.</small>
 							</div>
+							<c:if test="${activateSPC eq true}">
 							<div class="col-lg-2 col-sm-3"><span class="input_label offset">업무 구분</span></div>
 							<div class="col-lg-4 col-sm-9">
 								<div class="dropdown">
@@ -1981,6 +1982,7 @@
 									</ul>
 								</div>
 							</div>
+							</c:if>
 						</div>
 
 						<div class="row">
@@ -2006,7 +2008,9 @@
 							<div class="col-12">
 								<ul class="nav nav-tabs">
 									<li class="active w-50"><a data-toggle="tab" href="#siteTab">사업소</a></li>
+									<c:if test="${activateSPC eq true}">
 									<li class="w-50"><a data-toggle="tab" href="#spcTab">SPC</a></li>
+									</c:if>
 								</ul>
 							</div>
 						</div>

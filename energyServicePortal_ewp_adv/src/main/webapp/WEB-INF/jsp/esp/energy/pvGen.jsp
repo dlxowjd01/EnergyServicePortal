@@ -9,7 +9,7 @@
 <div class="row content-wrapper">
 	<div class="col-lg-2 col-md-4 col-sm-6 header_drop_area">
 		<div class="dropdown" id="siteList">
-			<button type="button" class="dropdown-toggle w-100" data-toggle="dropdown"><fmt:message key="renewablesgen.1.select" /><span class="caret"></span></button>
+			<button type="button" class="dropdown-toggle w-100" data-toggle="dropdown" data-name="<fmt:message key="renewablesgen.3.multipleselection" />"><fmt:message key="renewablesgen.1.select" /><span class="caret"></span></button>
 			<ul class="dropdown-menu chk_type"></ul>
 		</div>
 	</div>
@@ -29,7 +29,7 @@
 						<span class="tx_tit"><fmt:message key="renewablesgen.3.measureddata" /></span>
 						<div class="sa_select">
 							<div class="dropdown">
-								<button type="button" class="dropdown-toggle w7" data-toggle="dropdown"><fmt:message key="renewablesgen.3.multipleselection" /><span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle w7" data-toggle="dropdown" data-name="<fmt:message key="renewablesgen.3.multipleselection" />"><fmt:message key="renewablesgen.3.multipleselection" /><span class="caret"></span></button>
 								<div class="dropdown-menu chk_type"><!--
 								--><ul class="dropdown_cov clear selectDevices"></ul><!--
 								 --><div class="li_btn_bx clear">
@@ -47,7 +47,7 @@
 						<span class="tx_tit">기간</span>
 						<div class="sa_select">
 							<div class="dropdown" id="period">
-								<button type="button" class="dropdown-toggle" data-toggle="dropdown"><fmt:message key="renewablesgen.3.today" /><span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key="renewablesgen.3.today" />"><fmt:message key="renewablesgen.3.today" /><span class="caret"></span></button>
 								<ul class="dropdown-menu">
 									<li data-value="today" class="on"><a href="#"><fmt:message key="renewablesgen.3.today" /></a></li>
 									<li data-value="week"><a href="#"><fmt:message key="renewablesgen.3.thisweek" /></a></li>
@@ -60,9 +60,9 @@
 					<div class="flex_group duration" id="dateArea">
 						<span class="tx_tit">날짜입력</span>
 						<div class="sel_calendar">
-							<input type="text" id="datepicker1" class="sel" value="" autocomplete="off" readonly>
+							<input type="text" id="fromDate" class="sel fromDate" value="" autocomplete="off" readonly>
 							<em></em>
-							<input type="text" id="datepicker2" class="sel" value="" autocomplete="off" readonly>
+							<input type="text" id="toDate" class="sel toDate" value="" autocomplete="off" readonly>
 						</div>
 					</div>
 					<div class="flex_group unit" id="cycle">
@@ -176,14 +176,14 @@
 			let period = $('#period button').data('value');
 			if (period == 'today') { //오늘
 				// $('#cycle').
-				$('#datepicker1').datepicker('setDate', 'today'); //데이트 피커 기본
-				$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
+				$('#fromDate').datepicker('setDate', 'today'); //데이트 피커 기본
+				$('#toDate').datepicker('setDate', 'today'); //데이트 피커 기본
 			} else if (period == 'week') { //이번주
-				$('#datepicker1').datepicker('setDate', '-6'); //데이트 피커 기본
-				$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
+				$('#fromDate').datepicker('setDate', '-6'); //데이트 피커 기본
+				$('#toDate').datepicker('setDate', 'today'); //데이트 피커 기본
 			} else { //이번달
-				$('#datepicker1').datepicker('setDate', '-30'); //데이트 피커 기본
-				$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
+				$('#fromDate').datepicker('setDate', '-30'); //데이트 피커 기본
+				$('#toDate').datepicker('setDate', 'today'); //데이트 피커 기본
 			}
 		} else if ($dropdownId == 'chartStyle') {
 			chartDataDraw();
@@ -223,8 +223,8 @@
 			}
 		});
 
-		$('#datepicker1').datepicker('setDate', 'today'); //데이트 피커 기본
-		$('#datepicker2').datepicker('setDate', 'today'); //데이트 피커 기본
+		$('#fromDate').datepicker('setDate', 'today'); //데이트 피커 기본
+		$('#toDate').datepicker('setDate', 'today'); //데이트 피커 기본
 	});
 
 	//사업소 호출
@@ -309,8 +309,8 @@
 
 	function fetchGenData() {
 		//기간 설정 확인
-		let startTime = $('#datepicker1').val().replace(/-/g, '') + "000000";
-		let endTime = $('#datepicker2').val().replace(/-/g, '') + "235959";
+		let startTime = $('#fromDate').val().replace(/-/g, '') + "000000";
+		let endTime = $('#toDate').val().replace(/-/g, '') + "235959";
 		//주기 확인
 		const interval = $('#interval button').data('value');
 
@@ -484,8 +484,8 @@
 	function drawPage() {
 		$('table.pc_use tbody').empty();
 		$('.no-data').addClass('hidden');
-		let sDate = $('#datepicker1').val().replace(/-/g, '');
-		let eDate = $('#datepicker2').val().replace(/-/g, '');
+		let sDate = $('#fromDate').val().replace(/-/g, '');
+		let eDate = $('#toDate').val().replace(/-/g, '');
 		let interval = $('#interval button').data('value');
 
 		standard = new Array();

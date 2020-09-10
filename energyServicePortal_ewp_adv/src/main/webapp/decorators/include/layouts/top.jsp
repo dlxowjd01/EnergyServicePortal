@@ -49,8 +49,8 @@
 	<script src="/js/html2canvas.js"></script>
 
 	<!-- 화면 엑셀 다운로드용 -->
-<%--	<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.3/xlsx.full.min.js"></script>--%>
-<%--	<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>--%>
+	<script type="text/javascript" src="/js/sheetJs/xlsx.full.min.js"></script>
+	<script type="text/javascript" src="/js/fileSaver/FileSaver.min.js"></script>
 
 	<!-- timepicker -->
 	<script type="text/javascript" src="/js/wickedpicker.js"></script>
@@ -76,6 +76,7 @@
 		const loginMail = '${sessionScope.userInfo.contact_email}';
 		const contact_phone = '${sessionScope.userInfo.contact_phone}';
 		const apiHost = '${apiHost}';
+		const activateSPC = '${activateSPC}';
 		const navCount = 10; //한 화면당 네비게이션 갯수
 		let pagePerData = 15; //페이지당 게시글 갯수
 		let page = 1; //현재 페이지

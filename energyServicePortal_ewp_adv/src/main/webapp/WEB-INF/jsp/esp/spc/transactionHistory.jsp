@@ -88,10 +88,12 @@
 				}
 			});
 
-			let selectedPurpose= [];
-			spcPurpose.each(function(){
-				selectedPurpose.push($(this).data("value"));
-			});
+			// let selectedPurpose= [];
+			// spcPurpose.each(function(){
+			// 	selectedPurpose.push($(this).data("value"));
+			// });
+			//
+			// console.log(selectedPurpose);
 
 			let selectedStatus = [];
 			selectedStatus.length == 0;
@@ -103,7 +105,8 @@
 
 			warning.addClass('hidden');
 			formArr.length == 0;
-			formArr.push(selectedSpc.toString(), newStartDate, newEndDate, selectedStatus.toString(), transactionType.data("value"), selectedPurpose.toString());
+			formArr.push(selectedSpc.toString(), newStartDate, newEndDate, selectedStatus.toString(), transactionType.data("value"));
+			// formArr.push(selectedSpc.toString(), newStartDate, newEndDate, selectedStatus.toString(), transactionType.data("value"), selectedPurpose.toString());
 
 			$.each(formArr, function(index, value){
 				if(value ==  undefined ||  value == "선택" || value == "" ) {
@@ -233,7 +236,6 @@
 		function ajaxCallback(currentPage, newData, arr) {
 			let totalAmount = 0;
 			var page = currentPage;
-			console.log("newData===", newData)
 			newData.map((item, index) => {
 				totalAmount += item.total_amount;
 				if(!isEmpty(arr)) {
@@ -288,17 +290,16 @@
 						const p = [];
 						let size = '';
 
-						for(let i=0, arrayLength =res.length; i<arrayLength; i++){
+						for(let i=0, arrayLength = res.length; i < arrayLength; i++){
 							p.push(res[i].purpose);
 						}
 
-						if(!isEmpty(item.opt)){
-							let acc = [...item.opt[5].split(',')];
-							res.filter(x => {
-								let match = acc.indexOf(x.purpose.toString()) > -1;
-								return acc.indexOf(x.purpose.toString()) > -1;
-							});
-						}
+						// if(!isEmpty(item.opt)){
+						// 	let acc = [...item.opt[5].split(',')];
+						// 	res.filter(x => {
+						// 		return acc.includes(String(x.purpose));
+						// 	});
+						// }
 
 						let uniqSet = new Set(p);
 						if( uniqSet.size === 0 ) {
@@ -716,52 +717,52 @@
 								</ul>
 								<small class="hidden warning">선택해 주세요.</small>
 							</div>
-							<div class='bx_align'>
-								<h2 class='comp_tit'>용도 구분</h2>
-								<div class='dropdown w-100'>
-									<button type='button' class='dropdown-toggle' data-toggle='dropdown' data-name="선택">전체<span class='caret'></span></button>
-									<ul id="spcPurposeList" class='dropdown-menu chk_type dropdown_offset' role='menu'>
-										<li>
-											<a href='javascript:void(0)'tabindex='-1'>
-												<input type='checkbox' id='recMargin' data-value='0' data-name="REC 수익" name='spcPurpose' checked>
-												<label for='recMargin'>REC 수익</label>
-											</a>
-										</li>
-										<li>
-											<a href='javascript:void(0)' tabindex='-1'>
-												<input type='checkbox' id='smpMargin' data-value='1' data-name="SMP 수익" name='spcPurpose' checked>
-												<label for='smpMargin'>SMP 수익</label>
-											</a>
-										</li>
-										<li>
-											<a href='javascript:void(0)' tabindex='-1'>
-												<input type='checkbox' id='dsraSaving' data-value='2' data-name="DSRA 적립" name='spcPurpose' checked>
-												<label for='dsraSaving'>DSRA 적립</label>
-											</a>
-										</li>
-										<li>
-											<a href='javascript:void(0)' tabindex='-1'>
-												<input type='checkbox' id='etc' data-value='3' data-name="기타" name='spcPurpose' checked>
-												<label for='etc'>기타</label>
-											</a>
-										</li>
-										<li>
-											<a href='javascript:void(0)' tabindex='-1'>
-												<input type='checkbox' id='pendingAccount' data-value='4' data-name="유보 계좌" name='spcPurpose' checked>
-												<label for='pendingAccount'>유보 계좌</label>
-											</a>
-										</li>
-										<li>
-											<a href='javascript:void(0)' tabindex='-1'>
-												<input type='checkbox' id='activeAccount' data-value='5' data-name="운영 계좌" name='spcPurpose' checked>
-												<label for='activeAccount'>운영 계좌</label>
-											</a>
-										</li>
-									</ul>
-									<small class="hidden warning">선택해 주세요.</small>
-								</div>
-							</div>
-						</div>
+<%--							<div class='bx_align'>--%>
+<%--								<h2 class='comp_tit'>용도 구분</h2>--%>
+<%--								<div class='dropdown w-100'>--%>
+<%--									<button type='button' class='dropdown-toggle' data-toggle='dropdown' data-name="선택">전체<span class='caret'></span></button>--%>
+<%--									<ul id="spcPurposeList" class='dropdown-menu chk_type dropdown_offset' role='menu'>--%>
+<%--										<li>--%>
+<%--											<a href='javascript:void(0)'tabindex='-1'>--%>
+<%--												<input type='checkbox' id='recMargin' data-value='0' data-name="REC 수익" name='spcPurpose' checked>--%>
+<%--												<label for='recMargin'>REC 수익</label>--%>
+<%--											</a>--%>
+<%--										</li>--%>
+<%--										<li>--%>
+<%--											<a href='javascript:void(0)' tabindex='-1'>--%>
+<%--												<input type='checkbox' id='smpMargin' data-value='1' data-name="SMP 수익" name='spcPurpose' checked>--%>
+<%--												<label for='smpMargin'>SMP 수익</label>--%>
+<%--											</a>--%>
+<%--										</li>--%>
+<%--										<li>--%>
+<%--											<a href='javascript:void(0)' tabindex='-1'>--%>
+<%--												<input type='checkbox' id='dsraSaving' data-value='2' data-name="DSRA 적립" name='spcPurpose' checked>--%>
+<%--												<label for='dsraSaving'>DSRA 적립</label>--%>
+<%--											</a>--%>
+<%--										</li>--%>
+<%--										<li>--%>
+<%--											<a href='javascript:void(0)' tabindex='-1'>--%>
+<%--												<input type='checkbox' id='etc' data-value='3' data-name="기타" name='spcPurpose' checked>--%>
+<%--												<label for='etc'>기타</label>--%>
+<%--											</a>--%>
+<%--										</li>--%>
+<%--										<li>--%>
+<%--											<a href='javascript:void(0)' tabindex='-1'>--%>
+<%--												<input type='checkbox' id='pendingAccount' data-value='4' data-name="유보 계좌" name='spcPurpose' checked>--%>
+<%--												<label for='pendingAccount'>유보 계좌</label>--%>
+<%--											</a>--%>
+<%--										</li>--%>
+<%--										<li>--%>
+<%--											<a href='javascript:void(0)' tabindex='-1'>--%>
+<%--												<input type='checkbox' id='activeAccount' data-value='5' data-name="운영 계좌" name='spcPurpose' checked>--%>
+<%--												<label for='activeAccount'>운영 계좌</label>--%>
+<%--											</a>--%>
+<%--										</li>--%>
+<%--									</ul>--%>
+<%--									<small class="hidden warning">선택해 주세요.</small>--%>
+<%--								</div>--%>
+<%--							</div>--%>
+<%--						</div>--%>
 					</li>
 					<li class='btn_wrap_type03 btn_wrap_border'>
 						<button type='button' data-toggle='collapse' data-target='#searchOption' class='btn_type03' id='closeDropdown'>취소</button>
