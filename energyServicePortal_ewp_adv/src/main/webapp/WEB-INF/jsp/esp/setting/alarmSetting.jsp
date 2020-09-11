@@ -12,15 +12,15 @@
 
 		// 엑셀 업로드 버튼
 		$('#excelUploadBtn').on('change', function(evt) {
-			var reader = new FileReader();
+			const reader = new FileReader();
 			reader.onload = function(e){
 				if (reader.result)
 					reader.content = reader.result;
 
 				//In IE browser event object is null
-				var data = e ? e.target.result : reader.content;
-				var baseEncoded = btoa(data);
-				var wb = XLSX.read(baseEncoded, {type: 'base64'});
+				const data = e ? e.target.result : reader.content;
+				const baseEncoded = btoa(data);
+				const wb = XLSX.read(baseEncoded, {type: 'base64'});
 
 				processWorkbook(wb);
 			};
@@ -251,6 +251,10 @@
 					}
 				});
 			}
+
+			dropDownInit($('#manufacturer'));
+			dropDownInit($('#model'));
+			dropDownInit($('#version'));
 		} else if ($selector == 'manufacturer') {
 			let typeArray = new Array();
 			let manufArray = new Array();
@@ -305,6 +309,11 @@
 					$('#version ul').append(liStr);
 				});
 			}
+
+			dropDownInit($('#model'));
+			dropDownInit($('#version'));
+		} else if ($selector == 'model') {
+			dropDownInit($('#version'));
 		}
 	}
 
@@ -535,7 +544,9 @@
 
 			$.when.apply($, deferreds).then(function () {
 				alert('등록 되었습니다.');
-				alarmTable.clear();
+				alarmTable.clear().draw();
+
+				$('#regist').prop('disabled', true);
 			});
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			errorMsg('처리 중 오류가 발생했습니다.');

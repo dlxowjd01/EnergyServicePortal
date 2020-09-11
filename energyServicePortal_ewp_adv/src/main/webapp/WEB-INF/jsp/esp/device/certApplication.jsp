@@ -102,7 +102,12 @@
 
 	const makeDeivceRow = () => {
 		const rowCount = $('#row').val();
+		const data = $('#policy > button').data('value');
+		let disp = '';
 		if (!isEmpty(rowCount) && rowCount > 0) {
+			if (data == 'P)KPXSVR') {
+				disp = 'hidden';
+			}
 			for(let i = 0; i < rowCount; i++) {
 				let trStr = `<tr class="device">
 								<th><h2 class="tx_tit">기기 MAC</h2></th>
@@ -111,8 +116,8 @@
 										<input type="text" id="macAdd${'${i}'}" name="macAdd" placeholder="기기 MAC 입력">
 									</div>
 								</td>
-								<th><h2 class="tx_tit">시리얼번호</h2></th>
-								<td>
+								<th class="${'${disp}'}"><h2 class="tx_tit">시리얼번호</h2></th>
+								<td class="${'${disp}'}">
 									<div class="tx_inp_type edit">
 										<input type="text" id="serialNum${'${i}'}" name="serialNum" placeholder="시리얼번호">
 									</div>
@@ -128,60 +133,25 @@
 
 	//후처리
 	const rtnDropdown = ($dropdownId) => {
-		if ($dropdownId == 'certType') {
-			const data = $('#' + $dropdownId).find('button').data('value');
-			if (data == '기기등록') {
-				$('#certType1').removeClass('hidden');
-				$('#certType2').addClass('hidden');
-				$('#certType3').addClass('hidden');
-				$('#certType4').addClass('hidden');
-			} else if (data == '발급') {
-				$('#certType1').addClass('hidden');
-				$('#certType2').removeClass('hidden');
-				$('#certType3').addClass('hidden');
-				$('#certType4').addClass('hidden');
-			} else if (data == '갱신') {
-				$('#certType1').addClass('hidden');
-				$('#certType2').addClass('hidden');
-				$('#certType3').removeClass('hidden');
-				$('#certType4').addClass('hidden');
-			} else {
-				$('#certType1').addClass('hidden');
-				$('#certType2').addClass('hidden');
-				$('#certType3').addClass('hidden');
-				$('#certType4').removeClass('hidden');
+		if ($dropdownId == 'policy') {
+			const data = $('#' + $dropdownId + ' > button').data('value');
+			const deviceList = document.querySelectorAll('.device');
+
+			if (!isEmpty(deviceList) && deviceList.length > 0) {
+				if (data == 'P)KPXSVR') {
+					deviceList.forEach(device => {
+						device.querySelector('th:nth-of-type(2)').className = 'hidden';
+						device.querySelector('td:nth-of-type(2)').className = 'hidden';
+						device.querySelector('td:nth-of-type(2) input').value = '';
+					});
+				} else {
+					deviceList.forEach(device => {
+						const check = new RegExp('(\\s|^)' + 'hidden' + '(\\s|$)');
+						device.querySelector('th:nth-of-type(2)').className = check;
+						device.querySelector('td:nth-of-type(2)').className = check;
+					});
+				}
 			}
-		}
-	}
-
-	const goProc = () => {
-		const deviceTable = $('#deviceTable').DataTable();
-		let data = new Object();
-		let deviceArray = new Array();
-
-		data.applyPkgID = apply_PKG_ID;
-
-		if (deviceTable.rows('.selected')[0].length > 0) {
-			deviceTable.rows('.selected')[0].forEach(device => {
-				deviceArray.push(deviceTable.rows(device).data()[0].apply_ID);
-			});
-			data.devices = deviceArray;
-
-			let option = {
-				url : certApiHost + '/deviceCert/' + mode,
-				type : 'PUT',
-				contentType: 'application/json',
-				crossOrigin: true,
-				dataType: 'json',
-				data: JSON.stringify(data)
-			}
-			$.ajax(option).done(function (result) {
-				alert(modeName + '처리가 완료되었습니다.');
-				table.ajax().reload();
-				return false;
-			}).fail(function (error) {
-				console.log(error);
-			});
 		}
 	}
 
@@ -260,7 +230,7 @@
 							<td></td>
 						</tr>
 						<tr>
-							<th><h2 class="tx_tit">발급정책</h2></th>
+							<th><h2 class="tx_tit">제품모델명 입력</h2></th>
 							<td>
 								<div class="tx_inp_type edit">
 									<label for="modelName" class="sr-only">제품모델명 입력</label>

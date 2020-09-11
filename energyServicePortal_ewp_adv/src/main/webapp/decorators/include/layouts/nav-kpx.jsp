@@ -76,11 +76,6 @@
 
 		
 		$('#sidebar:after').css('display', 'none') ? menuItemLink.removeClass('on') : null;
-
-		// document.getElementsByTagName('body')[0].onscroll = function() {
-		// 	console.log("scrolling");
-		// 	$("#sidebar").css({ "top" : "100px;"})
-		// };
 	});
 </script>
 
@@ -92,12 +87,6 @@
 			<div class="sub_layer">
 				<ul>
 					<li><a href="/dashboard/gmain.do">통합관리 대시보드</a></li>
-					<c:if test="${oid ne 'trust' and oid ne 'sundream' and !fn:contains(oid, 'kpx')}">
-						<li><a href="/dashboard/jmain.do">중개거래 대시보드</a></li>
-					</c:if>
-					<c:if test="${fn:contains(oid, 'kpx')}">
-						<li><a href="/dashboard/smain.do">사업소 대시보드</a></li>
-					</c:if>
 				</ul>
 			</div>
 		</li>
@@ -130,10 +119,6 @@
 						<li><a href="/setting/userSetting.do">사용자 관리</a></li>
 					</c:if>
 					<li><a href="/setting/siteSetting.do">사이트 관리</a></li>
-					<c:if test="${userRole eq '1'}">
-						<li><a href="/setting/groupSetting.do">그룹 관리</a></li>
-					</c:if>
-
 				</ul>
 			</div>
 		</li>
@@ -146,30 +131,18 @@
 <div id="mobileNav" class="mobile-nav">
 	<div class="logo-wrapper">
 		<h1 class="mobile-logo">
-			<c:choose>
-				<c:when test="${fn:contains(pageContext.request.serverName, 'spower')}">
-					<span class="spower mobile"></span>
-				</c:when>
-				<c:otherwise>
-					<span class="mobile"></span>
-				</c:otherwise>
-			</c:choose>
+			<span class="mobile"></span>
 		</h1>
 		<a href="javascript:void(0);" class="category_close"><img src="/img/gnb_close.png" width="17" alt="닫기"></a>
 	</div>
 	
 	<div class="g_menu">
+		<c:if test="${not empty userInfo}">
 		<ul class="menu-list">
 			<li class="gmn1 menu-item">
 				<a href="javascript:void(0);">대시보드</a>
 				<ul class="sub-menu-list">
 					<li><a href="/dashboard/gmain.do">통합관리 대시보드</a></li>
-					<c:if test="${oid ne 'trust' and oid ne 'sundream' and !fn:contains(oid, 'kpx')}">
-						<li><a href="/dashboard/jmain.do">중개거래 대시보드</a></li>
-					</c:if>
-					<c:if test="${fn:contains(oid, 'kpx')}">
-						<li><a href="/dashboard/smain.do">사업소 대시보드</a></li>
-					</c:if>
 				</ul>
 			</li>
 			<li class="gmn2 menu-item">
@@ -201,10 +174,6 @@
 							<li><a href="/setting/userSetting.do">사용자 관리</a></li>
 						</c:if>
 						<li><a href="/setting/siteSetting.do">사이트 관리</a></li>
-						<c:if test="${userRole eq '1'}">
-							<li><a href="/setting/groupSetting.do">그룹 관리</a></li>
-						</c:if>
-
 					</ul>
 				</div>
 			</li>
@@ -212,5 +181,6 @@
 			<li class="gmn9"><a href="/spc/notice.do">공지사항</a></li>
 			<li class="gmn10"><a href="/logout.do">로그아웃</a></li>
 		</ul>
+		</c:if>
 	</div>
 </div>

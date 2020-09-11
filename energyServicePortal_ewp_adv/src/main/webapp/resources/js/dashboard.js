@@ -1344,35 +1344,18 @@ const beforeTodayTotalPromise = (site) => {
 			let resolveObj = new Object();
 
 			$.map(data, function (val, key) {
-				if (oid.match('kpx')) {
-					if (key == 'KPX_EMS') {
-						if (!isEmpty(val.activePower)) {
-							acPowerSum += val.activePower;
-						}
-
-						if (!isEmpty(val.capacity)) {
-							capacity += val.capacity;
-						}
-
-						if ($('.dbTime').data('timestamp') === undefined || ($('.dbTime').data('timestamp') != undefined && Number($('.dbTime').data('timestamp')) < val.timestamp)) {
-							const dbTime = new Date(val.timestamp);
-							$('.dbTime').data('timestamp', val.timestamp).text(dbTime.format('yyyy-MM-dd HH:mm:ss'));
-						}
+				if (key.match('INV')) {
+					if (!isEmpty(val.activePower)) {
+						acPowerSum += val.activePower;
 					}
-				} else {
-					if (key.match('INV')) {
-						if (!isEmpty(val.activePower)) {
-							acPowerSum += val.activePower;
-						}
 
-						if (!isEmpty(val.capacity)) {
-							capacity += val.capacity;
-						}
+					if (!isEmpty(val.capacity)) {
+						capacity += val.capacity;
+					}
 
-						if ($('.dbTime').data('timestamp') === undefined || ($('.dbTime').data('timestamp') != undefined && Number($('.dbTime').data('timestamp')) < val.timestamp)) {
-							const dbTime = new Date(val.timestamp);
-							$('.dbTime').data('timestamp', val.timestamp).text(dbTime.format('yyyy-MM-dd HH:mm:ss'));
-						}
+					if ($('.dbTime').data('timestamp') === undefined || ($('.dbTime').data('timestamp') != undefined && Number($('.dbTime').data('timestamp')) < val.timestamp)) {
+						const dbTime = new Date(val.timestamp);
+						$('.dbTime').data('timestamp', val.timestamp).text(dbTime.format('yyyy-MM-dd HH:mm:ss'));
 					}
 				}
 			});
@@ -1395,197 +1378,108 @@ const getTodayTotalDetail = async function () {
 	$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text(0);
 
 	const formData = getSiteMainSchCollection('day');
-	if (!oid.match('kpx')) {
-		$('#centerTbody tr td:nth-child(1)').html(Math.floor(siteList.length) + '<em>&nbsp;&nbsp;개소</em>');
-		$('#centerTbody tr td:nth-child(2)').text('');
-		$('#centerTbody tr td:nth-child(3)').text('');
-		$('#centerTbody tr td:nth-child(4)').text('');
-		$('#centerTbody tr td:nth-child(5)').text('');
-	} else {
-		$('#centerTbody tr:eq(0) td:nth-child(2)').text(' - ');
-		$('#centerTbody tr:eq(0) td:nth-child(3)').text(' - ');
-		$('#centerTbody tr:eq(0) td:nth-child(5)').text(' - ');
-		$('#centerTbody tr:eq(0) td:nth-child(6)').text(' - ');
+	$('#centerTbody tr td:nth-child(1)').html(Math.floor(siteList.length) + '<em>&nbsp;&nbsp;개소</em>');
+	$('#centerTbody tr td:nth-child(2)').text('');
+	$('#centerTbody tr td:nth-child(3)').text('');
+	$('#centerTbody tr td:nth-child(4)').text('');
+	$('#centerTbody tr td:nth-child(5)').text('');
 
-		$('.gmain_chart_kpx .chart_box .chart_info .ci_right ul li:nth-child(1) span').text('')
-		$('.gmain_chart_kpx .chart_box .chart_info .ci_right ul li:nth-child(2) span').text('')
-		$('.gmain_chart_kpx .chart_box .chart_info .ci_right ul li:nth-child(3) span').text('')
-	}
+	let co2Sum = 0;
+	let acPowerSum = 0;
+	let capacity = 0;
+	siteList.forEach(site => {
+		let siteAcPowerSum = site.acPowerSum;
+		let siteCapacity = site.capacity;
 
-	if (oid.match('kpx')) {
-		siteList.forEach((site, siteIdx) => {
-			const devices = site.devices;
-			const capacity = site.capacity;
-			const resourceType = site.resource_type;
-			devices.forEach(device => {
-				let did = device.did;
-				if (device.device_type !== 'KPX_EMS') {
-					return false;
+		if(!isEmpty(siteAcPowerSum)) {
+			acPowerSum += siteAcPowerSum;
+		}
+
+		if(!isEmpty(siteCapacity)) {
+			capacity += siteCapacity;
+		}
+	});
+
+	pieChart.setTitle({text: Math.floor(acPowerSum / 1000) + 'kW'});
+
+	let usage = Math.floor((acPowerSum / capacity) * 100);
+	let other = 100 - usage;
+
+	pieChart.series[0].data.forEach((e, idx) => {
+		if (e.name === "태양광") {
+			e.update({y: usage});
+		} else if (e.name === "미사용량") {
+			e.update({y: other});
+		} else {
+			e.update({y: 0});
+		}
+	});
+	pieChart.redraw();
+
+	siteList.forEach((site, siteIdx) => {
+		$.ajax({
+			url: apiHost + '/energy/forecasting/sites',
+			type: 'get',
+			data: {
+				sid: site.sid,
+				startTime: formData.startTime,
+				endTime: formData.endTime,
+				interval: '15min'
+			},
+		}).done(function (data, textStatus, jqXHR) {
+			let generationForecastSum = 0;
+			data.data[0].generation.items.map((e, idx) => generationForecastSum += e.energy);
+			let prevVal = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text().replace(/[^0-9]/g, ''));
+			$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text(numberComma(Math.floor(prevVal += generationForecastSum / 1000)));
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			console.error(jqXHR);
+			console.error(textStatus);
+			console.error(errorThrown);
+
+			alert('처리 중 오류가 발생했습니다.');
+			return false;
+		});
+
+		$.ajax({
+			url: apiHost + '/energy/now/sites',
+			type: 'get',
+			data: {
+				sids: site.sid,
+				metering_type: 2,
+				interval: 'day'
+			},
+		}).done(function (data, textStatus, jqXHR) {
+			if (!isEmpty(data.data[site.sid])) {
+				co2Sum += Math.floor(data.data[site.sid].co2);
+				let prevVal = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text().replace(/[^0-9]/g, ''));
+				$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(numberComma(Math.floor(prevVal += (data.data[site.sid].energy / 1000))));
+				$('#centerTbody tr td:nth-child(4)').html(numberComma(Math.floor(co2Sum / 1000)) + '<em>&nbsp;&nbsp;kg</em>');
+
+				let prevPay = Number($('#centerTbody tr td:nth-child(5)').text().replace(/[^0-9]/g, ''));
+				let money = Math.floor(data.data[site.sid].money / 1000);
+				$('#centerTbody tr td:nth-child(5)').html(numberComma(prevPay + money) + '<em>&nbsp;&nbsp;천원</em>');
+			}
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			console.error(jqXHR);
+			console.error(textStatus);
+			console.error(errorThrown);
+		});
+
+		if (site.devices != undefined) {
+			site.devices.forEach(device => {
+				if (device.device_type.match('INV')) {
+					let inverterCount = Number($('#centerTbody tr td:nth-child(2)').text().replace(/[^0-9]/g, '')) + 1;
+					$('#centerTbody tr td:nth-child(2)').html(numberComma(inverterCount) + '<em>&nbsp;&nbsp;대</em>');
+				} else {
+					let inverterCount = Number($('#centerTbody tr td:nth-child(2)').text().replace(/[^0-9]/g, ''));
+					$('#centerTbody tr td:nth-child(2)').html(numberComma(inverterCount) + '<em>&nbsp;&nbsp;대</em>');
 				}
-				$.ajax({
-					url: apiHost + '/status/raw',
-					type: 'get',
-					data: {
-						dids: device.did
-					},
-				}).done(function (data, textStatus, jqXHR) {
-					const rtnData = data[did].data;
-					let acPower = 0;
-					let reacPower = 0;
-					let maxacPower = 0;
-					rtnData.forEach(di => {
-						let aPower = di.activePower;
-						let tPower = di.targetActivePower;
-
-						let prevVal1 = Number($('.gmain_chart_kpx .chart_box .chart_info .ci_right ul li:nth-child(1) span').text().replace(/[^0-9]/g, ''));
-						$('.gmain_chart_kpx .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(numberComma(Math.floor(prevVal1 += (aPower / 1000))));
-
-						let prevVal2 = Number($('.gmain_chart_kpx .chart_box .chart_info .ci_right ul li:nth-child(2) span').text().replace(/[^0-9]/g, ''));
-						$('.gmain_chart_kpx .chart_box .chart_info .ci_right ul li:nth-child(2) span').text(numberComma(Math.floor(prevVal2 += (tPower / 1000))));
-
-						let prevVal3 = Number($('.gmain_chart_kpx .chart_box .chart_info .ci_right ul li:nth-child(3) span').text().replace(/[^0-9]/g, ''));
-						$('.gmain_chart_kpx .chart_box .chart_info .ci_right ul li:nth-child(3) span').text(numberComma(Math.floor(prevVal3 += (capacity / 1000))));
-
-						acPower += aPower;
-					});
-					pieChart.setTitle({text: Math.floor(acPower / 1000) + 'kW'});
-
-					let usage = Math.floor((acPower / capacity) * 100);
-					let other = 100 - usage;
-
-					pieChart.series[0].data.forEach((e, idx) => {
-						if (e.name === "태양광") {
-							e.update({y: usage});
-						} else if (e.name === "미사용량") {
-							e.update({y: other});
-						} else {
-							e.update({y: 0});
-						}
-					});
-					pieChart.redraw();
-
-					if (resourceType == 1) {
-						let sitePreVal = Number($('#centerTbody tr:eq(0) td:nth-child(4)').text().replace(/[^0-9]/g, ''));
-						let capacityPreVal = Number($('#centerTbody tr:eq(0) td:nth-child(6)').text().replace(/[^0-9]/g, ''));
-
-						$('#centerTbody tr:eq(0) td:nth-child(4)').html('태양광'); //구분
-						$('#centerTbody tr:eq(0) td:nth-child(5)').html(sitePreVal + 1 + '<em>&nbsp;&nbsp;개소</em>'); //사업소
-						$('#centerTbody tr:eq(0) td:nth-child(6)').html(numberComma(Math.floor(capacityPreVal += (capacity / 1000)) + '<em>&nbsp;&nbsp;kW</em>')); //설비용량
-					} else if (resourceType == 2) {
-						let sitePreVal = Number($('#centerTbody tr:eq(0) td:nth-child(2)').text().replace(/[^0-9]/g, ''));
-						let capacityPreVal = Number($('#centerTbody tr:eq(0) td:nth-child(3)').text().replace(/[^0-9]/g, ''));
-						$('#centerTbody tr:eq(0) td:nth-child(1)').html('풍력'); //구분
-						$('#centerTbody tr:eq(0) td:nth-child(2)').html(sitePreVal + 1 + '<em>&nbsp;&nbsp;개소</em>'); //사업소
-						$('#centerTbody tr:eq(0) td:nth-child(3)').html(numberComma(Math.floor(capacityPreVal += (capacity / 1000)) + '<em>&nbsp;&nbsp;kW</em>')); //설비용량
-					}
-				}).fail(function (jqXHR, textStatus, errorThrown) {
-					console.error(jqXHR);
-					console.error(textStatus);
-					console.error(errorThrown);
-
-					alert('처리 중 오류가 발생했습니다.');
-					return false;
-				});
 			});
-		});
-	} else {
-		let co2Sum = 0;
-		let acPowerSum = 0;
-		let capacity = 0;
-		siteList.forEach(site => {
-			let siteAcPowerSum = site.acPowerSum;
-			let siteCapacity = site.capacity;
+		}
 
-			if(!isEmpty(siteAcPowerSum)) {
-				acPowerSum += siteAcPowerSum;
-			}
-
-			if(!isEmpty(siteCapacity)) {
-				capacity += siteCapacity;
-			}
-		});
-
-		pieChart.setTitle({text: Math.floor(acPowerSum / 1000) + 'kW'});
-
-		let usage = Math.floor((acPowerSum / capacity) * 100);
-		let other = 100 - usage;
-
-		pieChart.series[0].data.forEach((e, idx) => {
-			if (e.name === "태양광") {
-				e.update({y: usage});
-			} else if (e.name === "미사용량") {
-				e.update({y: other});
-			} else {
-				e.update({y: 0});
-			}
-		});
-		pieChart.redraw();
-
-		siteList.forEach((site, siteIdx) => {
-			$.ajax({
-				url: apiHost + '/energy/forecasting/sites',
-				type: 'get',
-				data: {
-					sid: site.sid,
-					startTime: formData.startTime,
-					endTime: formData.endTime,
-					interval: '15min'
-				},
-			}).done(function (data, textStatus, jqXHR) {
-				let generationForecastSum = 0;
-				data.data[0].generation.items.map((e, idx) => generationForecastSum += e.energy);
-				let prevVal = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text().replace(/[^0-9]/g, ''));
-				$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text(numberComma(Math.floor(prevVal += generationForecastSum / 1000)));
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				console.error(jqXHR);
-				console.error(textStatus);
-				console.error(errorThrown);
-
-				alert('처리 중 오류가 발생했습니다.');
-				return false;
-			});
-
-			$.ajax({
-				url: apiHost + '/energy/now/sites',
-				type: 'get',
-				data: {
-					sids: site.sid,
-					metering_type: 2,
-					interval: 'day'
-				},
-			}).done(function (data, textStatus, jqXHR) {
-				if (!isEmpty(data.data[site.sid])) {
-					co2Sum += Math.floor(data.data[site.sid].co2);
-					let prevVal = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text().replace(/[^0-9]/g, ''));
-					$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(numberComma(Math.floor(prevVal += (data.data[site.sid].energy / 1000))));
-					$('#centerTbody tr td:nth-child(4)').html(numberComma(Math.floor(co2Sum / 1000)) + '<em>&nbsp;&nbsp;kg</em>');
-
-					let prevPay = Number($('#centerTbody tr td:nth-child(5)').text().replace(/[^0-9]/g, ''));
-					let money = Math.floor(data.data[site.sid].money / 1000);
-					$('#centerTbody tr td:nth-child(5)').html(numberComma(prevPay + money) + '<em>&nbsp;&nbsp;천원</em>');
-				}
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				console.error(jqXHR);
-				console.error(textStatus);
-				console.error(errorThrown);
-			});
-
-			if (site.devices != undefined) {
-				site.devices.forEach(device => {
-					if (device.device_type.match('INV')) {
-						let inverterCount = Number($('#centerTbody tr td:nth-child(2)').text().replace(/[^0-9]/g, '')) + 1;
-						$('#centerTbody tr td:nth-child(2)').html(numberComma(inverterCount) + '<em>&nbsp;&nbsp;대</em>');
-					} else {
-						let inverterCount = Number($('#centerTbody tr td:nth-child(2)').text().replace(/[^0-9]/g, ''));
-						$('#centerTbody tr td:nth-child(2)').html(numberComma(inverterCount) + '<em>&nbsp;&nbsp;대</em>');
-					}
-				});
-			}
-
-			let capacity = Number($('#centerTbody tr td:nth-child(3)').text().replace(/[^0-9]/g, '')) + Math.round(site.capacity / 1000);
-			$('#centerTbody tr td:nth-child(3)').html(numberComma(capacity) + '<em>&nbsp;&nbsp;kW</em>');
-		});
-	}
+		let capacity = Number($('#centerTbody tr td:nth-child(3)').text().replace(/[^0-9]/g, '')) + Math.round(site.capacity / 1000);
+		$('#centerTbody tr td:nth-child(3)').html(numberComma(capacity) + '<em>&nbsp;&nbsp;kW</em>');
+	});
 }
 
 var pieChart = Highcharts.chart('pie_chart', {
@@ -1971,72 +1865,28 @@ const searchSite = function () {
 	});
 
 	refineList.forEach((site, siteIdx) => {
-		siteList[siteIdx].resourceClass = resourceIcon(site.resource_type);
-
-		if (oid.match('kpx')) {
-			const devices = site.devices;
-			let deviceArray = new Array();
-			devices.forEach(device => {
-				if (device.device_type === 'KPX_EMS' || device.device_type === 'SENSOR_WEATHER') {
-					deviceArray.push(device.did);
-				}
-			});
-
-			$.ajax({
-				url: apiHost + '/status/raw',
-				type: 'get',
-				async: false,
-				data: {
-					dids: deviceArray.join(',')
-				},
-			}).done(function (data, textStatus, jqXHR) {
-				Object.entries(data).map(obj => {
-					let deviceData = obj[1].data;
-					let deviceType = obj[1].device_type;
-
-					if (deviceType == 'SENSOR_WEATHER') {
-						deviceData.forEach(di => {
-							let temperature = isEmpty(di.temperature) ? '-' : di.temperature;
-							let irradiationPoa = isEmpty(di.irradiationPoa) ? '-' : di.irradiationPoa;
-							let humidity = isEmpty(di.humidity) ? '-' : di.humidity;
-
-							siteList[siteIdx].temperature = temperature + ' °C';
-							siteList[siteIdx].irradiationPoa = irradiationPoa + ' W/㎡';
-							siteList[siteIdx].humidity = humidity + ' %';
-						});
-					} else {
-						deviceData.forEach(di => {
-							refineList[siteIdx].activePower = numberComma(di.activePower / 1000);
-							refineList[siteIdx].reactivePower = numberComma(di.reactivePower / 1000);
-							refineList[siteIdx].targetActivePower = numberComma(di.targetActivePower / 1000);
-							refineList[siteIdx].essActivePower = numberComma(di.essDActivePower - di.essCActivePower / 1000);
-							refineList[siteIdx].maxActivePower = numberComma(di.maxActivePower / 1000);
-							refineList[siteIdx].essMaxActivePower = numberComma(di.essMaxActivePower / 1000);
-							refineList[siteIdx].essMinActivePower = numberComma(di.essMinActivePower / 1000);
-							refineList[siteIdx].essSoc = numberComma(di.essSoc / 1000);
-							refineList[siteIdx].lastTargetActivePowerRecvDate = String(di.lastTargetActivePowerRecvDate).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
-							refineList[siteIdx].lastTargetActivePowerReqDate = String(di.lastTargetActivePowerReqDate).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
-						});
-					}
-				});
-
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				console.error(jqXHR);
-				console.error(textStatus);
-				console.error(errorThrown);
-
-				alert('처리 중 오류가 발생했습니다.');
-				return false;
-			});
-
-
+		const operation = site.operation;
+		let statusClass = '';
+		if (operation.includes('0')) {
+			refineList[siteIdx].status = '중지';
+			statusClass = 'status_stp';
+		} else if (operation.includes('1')) {
+			refineList[siteIdx].status = '정상';
+			statusClass = 'status_drv';
+		} else if (operation.includes('2')) {
+			refineList[siteIdx].status = '트립';
+			statusClass = 'status_err';
 		} else {
-			if(typeof site.accumulate !== 'string') {
-				if (site.accumulate == 0) {
-					refineList[siteIdx].accumulate = '-';
-				} else {
-					refineList[siteIdx].accumulate = displayNumberFixedUnit(site.accumulate, 'Wh', 'kWh', 0)[0];
-				}
+			refineList[siteIdx].status = '에러';
+			statusClass = 'status_err';
+		}
+		refineList[siteIdx].statusClass = statusClass;
+
+		if(typeof site.accumulate !== 'string') {
+			if (site.accumulate == 0) {
+				refineList[siteIdx].accumulate = '-';
+			} else {
+				refineList[siteIdx].accumulate = displayNumberFixedUnit(site.accumulate, 'Wh', 'kWh', 0)[0];
 			}
 		}
 	});

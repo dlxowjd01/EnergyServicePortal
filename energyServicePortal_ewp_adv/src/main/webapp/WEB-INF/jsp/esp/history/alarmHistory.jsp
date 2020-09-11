@@ -254,7 +254,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="flex_start3">
+					<div class="flex_start3 dateField">
 						<div class="sa_select">
 							<h2 class="tx_tit"><fmt:message key="alertshistory.1.timeframe" /></h2>
 							<div class="dropdown short">
@@ -268,12 +268,12 @@
 							</div>
 						</div>
 						<div class="sa_select">
-							<label class="tx_tit" for="datepicker1"><fmt:message key="alertshistory.1.period" /></label>
-							<input type="text" id="datepicker1" name="fromDate" class="sel fromDate" value="" autocomplete="off">
+							<label class="tx_tit" for="fromDate"><fmt:message key="alertshistory.1.period" /></label>
+							<input type="text" id="fromDate" name="fromDate" class="sel fromDate" value="" autocomplete="off">
 						</div>
 						<div class="sa_select">
-							<label for="datepicker2" class="tx_tit"></label>
-							<input type="text" id="datepicker2" name="toDate" class="sel toDate" value="" autocomplete="off">
+							<label for="toDate" class="tx_tit"></label>
+							<input type="text" id="toDate" name="toDate" class="sel toDate" value="" autocomplete="off">
 						</div>
 						<div class="sa_select">
 							<h2 class="tx_tit">단위</h2>
@@ -401,8 +401,8 @@
 			deviceTypeList(sidparam);
 		}
 		//사이트 선택시
-		$('#datepicker1').datepicker('setDate', 'today');
-		$('#datepicker2').datepicker('setDate', 'today');
+		$('#fromDate').datepicker('setDate', 'today');
+		$('#toDate').datepicker('setDate', 'today');
 
 		$('.rdo_type').on('click', function () {
 			if ($(this).find('input').is(':checked')) { } else {
@@ -415,14 +415,14 @@
 				$('#dateArea').show();
 			} else {
 				if ($(this).data('value') == 'day') { //오늘
-					$('#datepicker1').datepicker('setDate', 'today');
-					$('#datepicker2').datepicker('setDate', 'today');
+					$('#fromDate').datepicker('setDate', 'today');
+					$('#toDate').datepicker('setDate', 'today');
 				} else if ($(this).data('value') == 'week') { //이번주
-					$('#datepicker1').datepicker('setDate', '-6');
-					$('#datepicker2').datepicker('setDate', 'today');
+					$('#fromDate').datepicker('setDate', '-6');
+					$('#toDate').datepicker('setDate', 'today');
 				} else if ($(this).data('value') == 'month') { //이번달
-					$('#datepicker1').datepicker('setDate', '-30');
-					$('#datepicker2').datepicker('setDate', 'today');
+					$('#fromDate').datepicker('setDate', '-30');
+					$('#toDate').datepicker('setDate', 'today');
 				}
 			}
 		});
@@ -594,8 +594,8 @@
 			alarmData = {
 				sids: dataList[1].join(','),
 				deviceTypes: deviceArray.join(','),
-				startTime: $('#datepicker1').datepicker('getDate').format('yyyyMMdd') + '000000',
-				endTime: $('#datepicker2').datepicker('getDate').format('yyyyMMdd') + '235959',
+				startTime: $('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000',
+				endTime: $('#toDate').datepicker('getDate').format('yyyyMMdd') + '235959',
 			}
 		} else {
 			let confirm = "";
@@ -608,8 +608,8 @@
 				sids: dataList[1].join(','),
 				deviceTypes: deviceArray.join(','),
 				confirm: confirm,
-				startTime: $('#datepicker1').datepicker('getDate').format('yyyyMMdd') + '000000',
-				endTime: $('#datepicker2').datepicker('getDate').format('yyyyMMdd') + '235959',
+				startTime: $('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000',
+				endTime: $('#toDate').datepicker('getDate').format('yyyyMMdd') + '235959',
 			}
 		}
 
@@ -1171,8 +1171,8 @@
 	var fetchCharts = function () {
 		dateArr = new Array();
 		let interval = $('#cycle button').data('value');
-		let sDate = $('#datepicker1').val().replace(/-/g, '');
-		let eDate = $('#datepicker2').val().replace(/-/g, '');
+		let sDate = $('#fromDate').val().replace(/-/g, '');
+		let eDate = $('#toDate').val().replace(/-/g, '');
 
 		if (interval == 'day') {
 			let diffDay = getDiff(eDate, sDate, 'day');

@@ -61,6 +61,10 @@
 					<input type="text" name="rtuName" id="rtuName" class="tx_inp_type text_input">
 				</div>
 				<div class="input-group inline-flex">
+					<label for="rtuSecret" class="input_label">RTU 비밀키</label>
+					<input type="text" name="rtuSecret" id="rtuSecret" class="tx_inp_type text_input">
+				</div>
+				<div class="input-group inline-flex">
 					<label for="description" class="input_label">메모</label>
 					<textarea class="textarea" id="description" name="description"></textarea>
 				</div>
@@ -128,65 +132,73 @@
 				</div>
 			</div>
 
-			<c:choose>
-				<c:when test="${fn:contains(sessionScope.userInfo.oid, 'kpx')}">
-			<div class="row">
-				<div class="w-100">
-					<h2 class="list_title">커멘드 전달</h2>
-					<div id="rtuCommand" class="command-list">
-						<div class="flex_group">
-							<span class="s_tit">커멘드</span>
-							<div class="dropdown" id="command">
-								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-								<ul class="dropdown-menu" role="menu">
-									<li data-value="kpx_targetPower"><a href="javascript:void(0);" tabindex="-1">kpx_targetPower</a></li>
-								</ul>
-							</div>
+			<div class="tbl_wrap_type collect_wrap">
+				<ul class="nav nav-tabs">
+					<li class="nav-item active">
+						<a class="nav-link" data-toggle="tab" href="#deviceList">연결 설비</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" data-toggle="tab" href="#commandSend">커맨드 전달</a>
+					</li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane fade active in spc_tbl_row st_edit panel-collapse collapse" id="deviceList">
+						<div class="tbl_top clear"></div>
+						<div class="collect_wrap table_scroll">
+							<table id="detailInfoTable" class="his_tbl">
+								<thead>
+								<tr>
+									<th>설비 타입</th>
+									<th>설비 명</th>
+									<th>통신 유형</th>
+									<th>Baud Rate</th>
+									<th>설비 용량</th>
+									<th>상세 정보</th>
+								</tr>
+								</thead>
+								<tbody>
+								<tr>
+									<td colspan="6">왼쪽 표에서 조회하고자 하는 RTU를 클릭해 주세요.</td>
+								</tr>
+								</tbody>
+							</table>
 						</div>
-						<div class="flex_group">
-							<span class="s_tit">옵션</span>
-							<div class="dropdown" id="commandKey">
-								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-								<ul class="dropdown-menu" role="menu" id="selectCmdOptList">
-									<li data-value="targetActivePower"><a href="javascript:void(0);" tabindex="-1">목표출력</a></li>
-								</ul>
-							</div>
-							<div class="tx_inp_type">
-								<input type="text" id="optionVal" name="optionVal" placeholder="">
-							</div>
-							<div class="btn_wrap_type02 flex_start">
-<%--								<button type="button" class="btn_type03">삭제</button>--%>
-								<button type="button" class="btn_type" onclick="commandSend();">보내기</button>
+					</div>
+					<div class="tab-pane fade spc_tbl_row st_edit panel-collapse collapse" id="commandSend">
+						<div class="row">
+							<div class="w-100">
+								<div id="rtuCommand" class="command-list">
+									<div class="flex_group">
+										<span class="s_tit">커멘드</span>
+										<div class="dropdown" id="command">
+											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+											<ul class="dropdown-menu" role="menu">
+												<li data-value="kpx_targetPower"><a href="javascript:void(0);" tabindex="-1">kpx_targetPower</a></li>
+											</ul>
+										</div>
+									</div>
+									<div class="flex_group">
+										<span class="s_tit">옵션</span>
+										<div class="dropdown" id="commandKey">
+											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+											<ul class="dropdown-menu" role="menu" id="selectCmdOptList">
+												<li data-value="targetPower"><a href="javascript:void(0);" tabindex="-1">목표출력</a></li>
+											</ul>
+										</div>
+										<div class="tx_inp_type">
+											<input type="text" id="optionVal" name="optionVal" placeholder="">
+										</div>
+										<div class="btn_wrap_type02 flex_start">
+											<%--								<button type="button" class="btn_type03">삭제</button>--%>
+											<button type="button" class="btn_type" onclick="commandSend();">보내기</button>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-				</c:when>
-				<c:otherwise>
-			<div class="tbl_top clear"><h2 class="ntit fl">연결 설비</h2></div>
-			<div class="collect_wrap table_scroll">
-				<table id="detailInfoTable" class="his_tbl">
-					<thead>
-					<tr>
-						<th>설비 타입</th>
-						<th>설비 명</th>
-						<th>통신 유형</th>
-						<th>Baud Rate</th>
-						<th>설비 용량</th>
-						<th>상세 정보</th>
-					</tr>
-					</thead>
-					<tbody>
-					<tr>
-						<td colspan="6">왼쪽 표에서 조회하고자 하는 RTU를 클릭해 주세요.</td>
-					</tr>
-					</tbody>
-				</table>
-			</div>
-				</c:otherwise>
-			</c:choose>
-
 		</div>
 	</div>
 </div>
@@ -199,6 +211,22 @@
 					<h2 class="ntit fl"><fmt:message key="datacolleciton.3.datacollectionlog" /></h2>
 				</div>
 				<div class="clear inp_align">
+					<div class="fl">
+						<span class="tx_tit">로그타입</span>
+						<div class="sel_calendar">
+							<div class="dropdown" id="logType">
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="상태">상태<span class="caret"></span></button>
+								<ul class="dropdown-menu" role="menu">
+									<li data-value="상태">
+										<a href="javascript:void(0);" tabindex="-1">상태</a>
+									</li>
+									<li data-value="제어">
+										<a href="javascript:void(0);" tabindex="-1">제어</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
 					<div class="fl">
 						<span class="tx_tit"><fmt:message key="datacolleciton.3.timeframe" /></span>
 						<div class="sel_calendar">
@@ -229,8 +257,8 @@
 						<thead>
 						<tr>
 							<th><fmt:message key="datacolleciton.3.siteid" /></th>
-							<th><fmt:message key="datacolleciton.3.collectiontypeid" /></th>
-							<th><fmt:message key="datacolleciton.3.collectorid" /></th>
+							<th>RTU명</th>
+							<th>설비명</th>
 							<th><fmt:message key="datacolleciton.3.trans.time" /></th>
 							<th><fmt:message key="datacolleciton.3.receptiontime" /></th>
 							<th><fmt:message key="datacolleciton.3.status" /></th>
@@ -385,6 +413,7 @@
 		limit = isEmpty(page) ? pagePerData : limit;
 		page = isEmpty(page) ? 1 : page;
 
+		const logType = isEmpty($('#logType button').data('value')) ? '상태' : $('#logType button').data('value');
 		if (isEmpty(startTime) || isEmpty(endTime)) {
 			const datePicker1 = $('#datepicker1').datepicker('getDate');
 			const datePicker2 = $('#datepicker2').datepicker('getDate');
@@ -401,6 +430,7 @@
 		const nowLocal = now.format('yyyyMMddHHmmss');
 		const beforeHour = new Date(now.getFullYear(), now.getMonth(), now.getDay(), now.getHours() - 1, now.getMinutes(), now.getSeconds()).format('yyyyMMddHHmmss');
 		// START: rtu Detail info setting
+
 		const rtuInfo = [
 			{
 				url: apiHost + '/config/rtus/' + rids,
@@ -488,27 +518,71 @@
 
 		if (isEmpty(startTime)) startTime = beforeHour;
 		if (isEmpty(endTime)) endTime = nowLocal;
-		$.ajax({
-			url: apiHost + '/log',
-			type: 'get',
-			async: false,
-			data: {
-				rids,
-				startTime,
-				endTime,
-				limit,
-				page
-			},
-			success: function (result) {
-				//데이터 세팅
-				let logTable = $('#logTable').find('tbody');
-				logTable.empty()
-				let totalPage = Math.round(result.count / 5);
-				collectionMakeNavigation(rids, page, totalPage);
-				result.logs.forEach(log => {
-					let dTimestamp = new Date(log.dTimestamp).format('yyyy-MM-dd HH:mm:ss');
-					let dLocaltime = String(log.dLocaltime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
-					let str = `
+
+		if (logType == '제어') {
+			$.ajax({
+				url: apiHost + '/control/command_history',
+				type: 'get',
+				async: false,
+				data: {
+					oid: oid,
+					rids: rids,
+					startTime: startTime,
+					endTime: endTime,
+					limit,
+					page
+				},
+				success: function (result) {
+					//데이터 세팅
+					const rName = $('#selectedRTU').data('rName');
+					const sName = $('#selectedRTU').data('sName');
+					let logTable = $('#logTable').find('tbody');
+					logTable.empty()
+					let totalPage = isEmpty(result.count) ? Math.round(result.data.length / 5) : Math.round(result.count / 5);
+					collectionMakeNavigation(rids, page, totalPage);
+
+					result.data.forEach(log => {
+						let dTimestamp = String(log.created_at).replace(/[^0-9]/g, '').substring(0, 14).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
+						let str = `
+									<tr>
+										<td>${'${sName}'}</td>
+										<td>${'${rName}'}</td>
+										<td>-</td>
+										<td>${'${dTimestamp}'}</td>
+										<td>-</td>
+										<td>-</td>
+										<td class="ellipsis">${'${JSON.stringify(log.cmd_body)}'}</td>
+									</tr>
+								`;
+						logTable.append(str);
+					})
+				},
+				error: function (error) {
+					console.error(error);
+				}
+			})
+		} else {
+			$.ajax({
+				url: apiHost + '/log',
+				type: 'get',
+				async: false,
+				data: {
+					rids,
+					startTime,
+					endTime,
+					limit,
+					page
+				},
+				success: function (result) {
+					//데이터 세팅
+					let logTable = $('#logTable').find('tbody');
+					logTable.empty()
+					let totalPage = Math.round(result.count / 5);
+					collectionMakeNavigation(rids, page, totalPage);
+					result.logs.forEach(log => {
+						let dTimestamp = new Date(log.dTimestamp).format('yyyy-MM-dd HH:mm:ss');
+						let dLocaltime = String(log.dLocaltime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
+						let str = `
 						<tr>
 							<td>${'${log.sName}'}</td>
 							<td>${'${log.rName}'}</td>
@@ -519,13 +593,14 @@
 							<td class="ellipsis">${'${log.log}'}</td>
 						</tr>
 					`;
-					logTable.append(str);
-				})
-			},
-			error: function (error) {
-				console.error(error);
-			}
-		})
+						logTable.append(str);
+					})
+				},
+				error: function (error) {
+					console.error(error);
+				}
+			})
+		}
 	};
 
 	/**
@@ -549,11 +624,9 @@
 
 		const logTable = $('#logTable tbody');
 
-		if (oid.match('kpx')) {
-			dropDownInit($('#command'));
-			dropDownInit($('#commandKey'));
-			$('#optionVal').val('');
-		}
+		dropDownInit($('#command'));
+		dropDownInit($('#commandKey'));
+		$('#optionVal').val('');
 
 		logTable.empty();
 	}
@@ -614,8 +687,8 @@
 						$(serialId).off('click');
 						$(serialId).on('click', () => {
 							const rtuName = $('#selectedRTU');
+							rtuName.text(rtu.name).data('rid', rtu.rid).data('rName', rtu.name).data('sName', siteName);
 							selectLog(rtu.rid);
-							rtuName.text(rtu.name).data('rid', rtu.rid);
 						});
 
 						dateFilter.off('click');
@@ -694,6 +767,7 @@
 			$('#rtuSite button').data('value', data.sid).html(siteName + '<span class="caret"></span>');
 			$('#rtuName').val(data.name);
 			$('#serialNumber').val(data.serialNumber);
+			$('#rtuSecret').val(data.rtu_secret);
 			$('#description').val(data.description);
 
 			const rid = $('#selectedRTU').data('rid');
@@ -711,6 +785,7 @@
 		let sid = $('#rtuSite button').data('value'),
 			name = $('#rtuName').val(),
 			serialNumber = $('#serialNumber').val(),
+			rtuSecret = $('#rtuSecret').val(),
 			description = $('#description').val(),
 			ajaxUrl = '',
 			typeName = '';
@@ -741,6 +816,7 @@
 			data: JSON.stringify({
 				name: name,
 				serialNumber: serialNumber,
+				rtu_secret: rtuSecret,
 				description: description
 			}),
 			success: function (data) {
@@ -795,8 +871,8 @@
 			$(serialId).off('click');
 			$(serialId).on('click', () => {
 				const rtuName = $('#selectedRTU');
+				rtuName.text(rtu.name).data('rid', rtu.rid).data('rName', rtu.name).data('sName', siteName);
 				selectLog(rtu.rid);
-				rtuName.text(rtu.name).data('rid', rtu.rid);
 			});
 
 			dateFilter.off('click');
@@ -876,7 +952,7 @@
 		}
 
 		if (command.match('target')) {
-			bodyCommand[commandKey] = optionVal;
+			bodyCommand[commandKey] = Number(optionVal);
 		}
 
 		$.ajax({

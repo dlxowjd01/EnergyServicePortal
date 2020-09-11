@@ -73,7 +73,6 @@ const displayDropdown = ($selector) => {
 			}
 		}
 	}
-	$displayButton.eq(0).html($displayText + '<span class="caret"></span>');
 
 	$displayButton.eq(0).html($displayText + '<span class="caret"></span>').addClass("active");
 	

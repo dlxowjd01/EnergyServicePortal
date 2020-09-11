@@ -45,12 +45,12 @@
 			// Promise.resolve(returnAjaxRes(optionList[0])).then( res => {
 				// console.log("res[0]===", res[0]);
 				// console.log("res[1]===", res[1]);
-				readWriteTable(res[0], res[1]);
+				adminTable(res[0], res[1]);
 			});
 		} else {
 			Promise.all([ Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])), Promise.resolve(returnAjaxRes(optionList[2])) ]).then( res => {
 			// Promise.resolve(returnAjaxRes(optionList[2])).then( res => {
-				readOnlyTable( res[0], res[1], res[2].user_sites);
+				nonAdminTable( res[0], res[1], res[2].user_sites);
 			});
 		}
 
@@ -620,11 +620,11 @@
 		$('#siteTable').DataTable().clear().destroy();
 		Promise.all([ Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])) ]).then( res => {
 		// Promise.resolve(returnAjaxRes(optionList[0])).then( res => {
-			readWriteTable(res[0], res[1], initModal);
+			adminTable(res[0], res[1], initModal);
 		});
 	}
 
-	function readWriteTable(siteData, vppNameData, callback) {
+	function adminTable(siteData, vppNameData, callback) {
 		if(!callback) {
 			getPropertyData();
 			getVppDrData(vppNameData);
@@ -664,13 +664,13 @@
 
 					if(item.resource_type === 0) {
 						// Demand && ESS : pair
-						item.siteType = "수요자원 (Demand)"
+						item.siteType = "수요자원"
 						item.powerSource = "부하"
 					} else {
 						if(isEmpty(item.resource_type)){
 							item.siteType = "-"
 						} else {
-							item.siteType = "발전소 (Generation)"
+							item.siteType = "발전소"
 						}
 						if(item.resource_type === 1){
 							item.powerSource = "태양광"
@@ -878,17 +878,17 @@
 							"sTitle": "VPP 자원코드",
 							"mData": "vppName",
 						},
-						// {
-						// 	"sTitle": "알람 수신",
-						// 	"mData": null,
-						// 	"mRender": function ( data, type, full, rowIndex )  {
-						// 		if(full.alarmFlag === 1){
-						// 			return '<button type="button" class="btn-type-sm btn_type03">알람</button>'
-						// 		} else {
-						// 			return '<button type="button" disabled class="btn-type-sm btn_type03">알람</button>'
-						// 		}
-						// 	},
-						// },
+						{
+							"sTitle": "알람 수신",
+							"mData": null,
+							"mRender": function ( data, type, full, rowIndex )  {
+								if(full.alarmFlag === 1){
+									return '<button type="button" class="btn-type-sm btn_type03">알람</button>'
+								} else {
+									return '<button type="button" disabled class="btn-type-sm btn_type03">알람</button>'
+								}
+							},
+						},
 						{
 							"sTitle": "업데이트 일자",
 							"mData": "updatedAt",
@@ -959,29 +959,29 @@
 					$(".dataTables_scrollHeadInner").css( "width", "100%" );
 				});
 
-				// siteTable.rows( function ( idx, data, node ) {
-				// 	console.log("sid===", data.sid)
-				// }).data();
+				siteTable.rows( function ( idx, data, node ) {
+					console.log("sid===", data.sid)
+				}).data();
 
-				// siteTable.on( 'click', 'td .btn-type-sm', function () {
-				// 	let tr = $(this).parents().closest("tr");
-				// 	let idx = siteTable.row(tr).index();
+				siteTable.on( 'click', 'td .btn-type-sm', function () {
+					let tr = $(this).parents().closest("tr");
+					let idx = siteTable.row(tr).index();
 
-				// 	// if(!isEmpty(siteTable.row(tr).data().alarmData)){
-				// 		let rowData = siteTable.row(tr).data().alarmInfo;
-				// 		let userOpt = {
-				// 			url: apiHost + "/config/users",
-				// 			type: 'get',
-				// 			async: false,
-				// 			data : {
-				// 				oid: oid,
-				// 			}
-				// 		}
-				// 		Promise.resolve(makeAjaxCall(userOpt)).then(res => {
-				// 			getAlarmTable(rowData, res)
-				// 		});
-				// 	// }
-				// });
+					// if(!isEmpty(siteTable.row(tr).data().alarmData)){
+						let rowData = siteTable.row(tr).data().alarmInfo;
+						let userOpt = {
+							url: apiHost + "/config/users",
+							type: 'get',
+							async: false,
+							data : {
+								oid: oid,
+							}
+						}
+						Promise.resolve(makeAjaxCall(userOpt)).then(res => {
+							getAlarmTable(rowData, res)
+						});
+					// }
+				});
 
 				new $.fn.dataTable.Buttons( siteTable, {
 					name: 'commands',
@@ -1051,11 +1051,12 @@
 	}
 
 
-	function readOnlyTable(allSites, vppNameData, userSite) {
+	function nonAdminTable(allSites, vppNameData, userSite) {
 		if(userSite){
 			let newArr = [];
 			Promise.resolve(allSites.map((item, index) => {
-				let found = allSites.findIndex( x => x.sid == item.sid);
+				let found = userSite.findIndex( x => x.sid == item.sid);
+
 				let matchedData = allSites[found];
 
 				if(found > -1){
@@ -1101,6 +1102,7 @@
 						}
 
 						item.name = matchedData.name;
+						item.role = userSite[found].role;
 
 						if(!isEmpty(matchedData.location)){
 							item.location = matchedData.location;
@@ -1110,13 +1112,13 @@
 
 						if(matchedData.resource_type === 0) {
 							// Demand && ESS : pair
-							item.siteType = "수요자원 (Demand)"
+							item.siteType = "수요자원"
 							item.powerSource = "부하"
 						} else {
 							if(isEmpty(matchedData.resource_type)){
 								item.siteType = "-"
 							} else {
-								item.siteType = "발전소 (Generation)"
+								item.siteType = "발전소"
 							}
 							if(matchedData.resource_type === 1){
 								item.powerSource = "태양광"
@@ -1189,6 +1191,8 @@
 					"bScrollCollapse": true,
 					"pageLength": 100,
 					"aaSorting": [[ 0, 'asc' ]],
+					"bSortable": true,
+					"order": [[ 1, 'asc' ]],
 					// "bFilter": false, disabling this option will prevent table.search()
 		
 					"aoColumnDefs": [
@@ -1199,10 +1203,18 @@
 						},
 					],
 					"aoColumns": [
+						// {
+						// 	"sTitle": "순번",
+						// 	"mData": null,
+						// 	"className": "dt-center no-sorting"
+						// },
 						{
-							"sTitle": "순번",
+							"sTitle": "",
 							"mData": null,
-							"className": "dt-center no-sorting"
+							"mRender": function ( data, type, full, rowIndex )  {
+								return '<a class="chk_type" href="#"><input type="checkbox" id="' + rowIndex.row + '" name="table_checkbox"><label for="' + rowIndex.row + '"></label></a>'
+							},
+							"className": "dt-body-center no-sorting"
 						},
 						{
 							"sTitle": "사업소 유형",
@@ -1250,28 +1262,80 @@
 						"zeroRecords":  "검색된 결과가 없습니다."
 					},
 					"dom": 'tip',
-					// "select": {
-					// 	style: 'single',
-					// selector: 'td:first-child > a',
-					// },
+					"select": {
+						style: 'single',
+						// selector: 'td:first-child > a',
+						selector: 'td input[type="checkbox"], tr'
+					},
 					initComplete: function(){
-						this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-							cell.innerHTML = i+1;
-							$(cell).data("id", i);
-						});
+						// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+						// 	cell.innerHTML = i+1;
+						// 	$(cell).data("id", i);
+						// });
+						let str = `<div id="btnGroup" class="right-end"><!--
+							--><button type="button" disabled class="btn_type03" onclick="updateModal('edit')">선택 수정</button><!--
+							--><button type="button" disabled class="btn_type03" onclick="updateModal('delete')">선택 삭제</button><!--
+						--></div>`;
+						$("#siteTable_wrapper").append($(str));
+
 						if(oid == "kpx"){
                             this.api().columns([8,9]).visible( false );
                         }
 					},
-				}).columns.adjust().draw();
+					drawCallback: function (settings) {
+						$('#siteTable_wrapper').addClass('mb-28');
+					},
+					// rowCallback: function ( row, data ) {
+					// 	// readWrite
+					// 	if(data.role == 1){
+							
+					// 	// readOnly
+					// 	} else {
 
-				// if (siteTable.data().length != 0) {
-				// 	siteTable.on('order.dt search.dt', function () {
-				// 		siteTable.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+					// 	}
+					// 	console.log("role---", data.role);
+
+					// }
+				}).on("select", function(e, dt, type, indexes) {
+					let btn = $("#btnGroup").find(".btn_type03");
+					btn.each(function(index, element){
+						if($(this).is(":disabled")){
+							$(this).prop("disabled", false);
+						}
+					});
+					siteReadOnlyTable.rows( indexes ).nodes().to$().find("input").prop("checked", true);
+					// console.log("dt---", siteReadOnlyTable[ type ]( indexes ).nodes())
+				}).on("deselect", function(e, dt, type, indexes) {
+					let btn = $("#btnGroup").find(".btn_type03");
+					btn.each(function(index, element){
+						if(!$(this).is(":disabled")){
+							$(this).prop("disabled", true);
+						}
+					});
+					siteReadOnlyTable.rows( indexes ).nodes().to$().find("input").prop("checked", false);
+					// console.log("dt---", siteReadOnlyTable[ type ]( indexes ).nodes())
+				}).columns.adjust();
+
+
+				// if (siteReadOnlyTable.data().length != 0) {
+				// 	siteReadOnlyTable.on('order.dt search.dt', function () {
+				// 		siteReadOnlyTable.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
 				// 			cell.innerHTML = i + 1;
-				// 			siteTable.cell(cell).invalidate('dom');
+				// 			siteReadOnlyTable.cell(cell).invalidate('dom');
 				// 		});
 				// }).draw();
+
+				$('#siteTable').find("input:checkbox").on('click', function() {
+					var $box = $(this);
+					if ($box.is(":checked")) {
+						var group = "input:checkbox[name='" + $box.attr("name") + "']";
+						$(group).prop("checked", false);
+						$box.prop("checked", true);
+					} else {
+						$box.prop("checked", false);
+					}
+				});
+				
 
 				$("#siteType").find("li").on( 'click', function(){
 					if(!isEmpty($(this).data("name"))){
@@ -1287,7 +1351,7 @@
 			
 			});
 		} else {
-			drawEmptyTable($("#siteTable"))
+			// drawEmptyTable($("#siteTable"))
 		}
 		$("#loadingCircle").hide();
 	}
@@ -1493,7 +1557,7 @@
 			let allStr = '<li><a href="#">전체</a></li>';
 
 			$.each(r, function(index, el){
-				let name = `${'${el.name.kr}'} (${'${el.name.en}'})`;
+				let name = `${'${el.name.kr}'}`;
 				resStr += `
 					<li data-name="${'${name}'}" data-value="${'${el.code}'}"><a href="#">${'${name}'}</a></li>
 				`
@@ -1541,9 +1605,9 @@
 					filterColumn("#siteTable", "4", "");
 				}
 			});
-			console.log("s===", s)
+
 			$.each(s, function(index, el){
-				let name = `${'${el.name.kr}'} (${'${el.name.en}'})`;
+				let name = `${'${el.name.kr}'}`;
 				if(el.code == "gen"){
 					siteStr += `
 						<li data-name="${'${name}'}" data-value="1"><a href="#">${'${name}'}</a></li>
@@ -1554,11 +1618,17 @@
 					`;
 				}
 			});
+
+
+			allStr += siteStr;
+			$("#siteType").append(allStr);
+
 			siteStr += `
 				<li><a href="#">해당 사항 없음</a></li>
 			`;
 			$("#newSiteType").append(siteStr);
-			$("#siteType").append(siteStr).prepend(allStr);
+
+
 
 			$("#newSiteType li").on("click", function() {
 				let val = $(this).data("value");
@@ -1676,7 +1746,7 @@
 		$("#validSite").addClass("hidden");
 		$("#newSiteName").parent().next().prop("disabled", true);
 		
-		$("#addSiteBtn").prop("disabled", true);
+		$("#addSiteBtn").prop("disabled", true).removeClass("hidden");
 
 		$("#newResList li").removeClass("hidden");
 		$("#newSiteType").prev().prop("disabled", false);
@@ -1685,13 +1755,13 @@
 
 		warning.addClass("hidden");
 		input.each(function(){
-			$(this).val("");
+			$(this).val("").prop("disabled", false);
 		});
 
 		$.each(dropdownBtn, function(index, element){
-			$(this).html('선택' + '<span class="caret"></span>');
-			$(this).data({ "value": "", "vol-type": "", "plan-id" : "" });
+			$(this).data({ "value": "", "vol-type": "", "plan-id" : "" }).html('선택' + '<span class="caret"></span>');
 			$(this).next().find("li").removeClass("hidden");
+			$(this).prop("disabled", false);
 		});
 		// console.log("initModal----")
 	}
@@ -1727,7 +1797,23 @@
 
 			// EDIT MODAL!!!
 			if(option == "edit") {
-				addBtn.prop("disabled", false).text("수정");
+				if(!isEmpty(rowData.role) && rowData.role == 2){
+					let input = form.find("input");
+					let dropdownBtn = form.find(".dropdown-toggle");
+
+					input.each(function(){
+						$(this).prop("disabled", true);
+					});
+
+					$.each(dropdownBtn, function(index, element){
+						$(this).prop("disabled", true);
+					});
+					
+					addBtn.addClass("hidden");
+
+				} else {
+					addBtn.prop("disabled", false).text("수정").removeClass("hidden");
+				}
 
 				titleAdd.addClass("hidden").next().removeClass("hidden");
 				required.hasClass("no-symbol") ? null : required.addClass("no-symbol");
@@ -1772,14 +1858,18 @@
 					Promise.resolve(JSON.parse(rowData.utility)).then( util => {
 						let utilPlanName = util.utility_plan_name;
 						// console.log("util==", util);
-
 						$("#newContractList").prev().data({"plan-id": util.utility_plan_id, "value": utilPlanName }).html(utilPlanName + '<span class="caret"></span>');
-						$("#newVoltTypeList").prev().prop("disabled", false);
+					
+						if(!isEmpty(rowData.role) && rowData.role == 2){
+							$("#newVoltTypeList").prev().prop("disabled", true);
+						} else {
+							$("#newVoltTypeList").prev().prop("disabled", false);
+						}
+
 						if(!isEmpty(util.volt_name) ){
 							// console.log("util.volt_name==", util.volt_name);
 							$("#newVoltTypeList").prev().data({"id": util.utility_plan_id, "data-value" : util.volt_name }).html( util.volt_name + '<span class="caret"></span>');
 						} else {
-
 							$("#newVoltTypeList").prev().prop("disabled", true).html('선택<span class="caret"></span>');
 						}
 
@@ -1931,10 +2021,12 @@
 			if(isEmpty(alarmData)){
 				console.log("alarm null===");
 			} else {
-				console.log("alarmData===", alarmData)
+				console.log("alarmData===", alarmData);
+
 				Promise.resolve(alarmData.map((x, index) => {
 					// console.log("x==", x);
 					if(!isEmpty(x.alarm_to)){
+						console.log("alarmTo exist=====")
 						let sendTo = JSON.parse(x.alarm_to);
 						let userObj = {};
 
@@ -1963,7 +2055,7 @@
 									uid = userList[i].uid;
 									phone = ((isEmpty(userList[i].phone)) ? '-' : userList[i].phone );
 									newUserList.push({non : non, did : did, type : type, name : name, level : level, uid : uid, phone : phone });
-									alarmTotalData.push({non : non, did : did, type : type, name : name, level : level, uid : uid, phone : phone });
+									// alarmTotalData.push({non : non, did : did, type : type, name : name, level : level, uid : uid, phone : phone });
 								}
 							}
 						}
@@ -1989,7 +2081,7 @@
 									phone = ((isEmpty(newNonUserList[i].phone)) ? '-' : newNonUserList[i].phone );
 									
 									newNonUserList.push({non : non, did : did, type : type, name : name, level : level, uid : uid, phone : phone });
-									alarmTotalData.push({non : non, did : did, type : type, name : name, level : level, uid : uid, phone : phone });
+									// alarmTotalData.push({non : non, did : did, type : type, name : name, level : level, uid : uid, phone : phone });
 								}
 							}
 						}
@@ -2305,7 +2397,6 @@
 								}
 
 							});
-
 						},
 						createdRow: function (row, data, dataIndex){
 						},
@@ -2827,9 +2918,7 @@
 							<col style="width:8%">
 						</colgroup>
 						<thead></thead>
-						<tbody>
-							<form id="addAlarmForm"></form>
-						</tbody>
+						<tbody></tbody>
 					</table>
 				
 			</div>
@@ -2964,7 +3053,7 @@
 									<div class="col-xl-1 col-lg-2 col-md-4 col-sm-10 pl-0">
 										<div class="flex_start">
 											<div class="tx_inp_type">
-												<input type="text" name="station_id" id="station_id" placeholder="입력" minlength="2" maxlength="15">
+												<input type="text" name="station_id" id="station_id" placeholder="입력" minlength="1" maxlength="15">
 											</div>
 										</div>
 									</div>
@@ -2972,7 +3061,7 @@
 							</c:if>
 						</section>
 
-						<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'kpx')}">
+						<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
 							<section id="sectionPowerBillInfo">
 								<h2 class="stit">전력 구매 정보</h2>
 								<div class="row">

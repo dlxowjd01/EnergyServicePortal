@@ -13,7 +13,7 @@
 	<%@ include file="/decorators/include/layouts/header.jsp" %>
 	<div class="page-wrapper">
 		<c:choose>
-			<c:when test="${fn:contains(sessionScope.userInfo.oid, 'kpx')}">
+			<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
 				<%@ include file="/decorators/include/layouts/nav-kpx.jsp" %>
 			</c:when>
 			<c:otherwise>

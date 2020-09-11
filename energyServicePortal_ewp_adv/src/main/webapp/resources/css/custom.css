@@ -154,7 +154,7 @@ bootstrap default
 	--sunglow: #e97373;
 	--salmon-pearl: #f3524f;
 	--alarm: #c41d27;
-	--error: #b61827;
+	--error: #b61927;
 	--rose-of-sharon: #bc5100;
 	--old-brick: #961f2a;
 	--powder-blue: #b0e9e8;
@@ -515,7 +515,7 @@ button:active {
 	transform: none;
 }
 
-button:not([disabled]):not([type="submit"]):hover {
+button:not(.dropdown-toggle):not([disabled]):not([type="submit"]):hover {
 	opacity: 0.8;
 }
 
@@ -2622,7 +2622,7 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 }
 
 .alarm_notice li a.critical:before {
-	background: var(--sunglow);
+	background: var(--mustard);
 }
 
 .alarm_notice li a.shutoff:before {
@@ -2630,7 +2630,7 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 }
 
 .alarm_notice li a.urgent:before {
-	background: var(--alarm);
+	background: var(--error);
 }
 
 
@@ -6646,7 +6646,7 @@ div.di_wrap dl .link a {
 }
 
 .gmain_table.smain .chart_top .alert_icon>span.inv_trip {
-	background: mustard#ffd954;
+	background: var(--mustard);
 }
 
 .gmain_table.smain .local_info.smain {

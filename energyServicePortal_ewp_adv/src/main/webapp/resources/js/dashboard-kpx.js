@@ -1235,7 +1235,7 @@ const getTodayTotalDetail = async function () {
 					pieChart.redraw();
 
 					if (resourceType == 1) {
-						let sitePreVal = Number($('#centerTbody tr:eq(0) td:nth-child(4)').text().replace(/[^0-9]/g, ''));
+						let sitePreVal = Number($('#centerTbody tr:eq(0) td:nth-child(5)').text().replace(/[^0-9]/g, ''));
 						let capacityPreVal = Number($('#centerTbody tr:eq(0) td:nth-child(6)').text().replace(/[^0-9]/g, ''));
 
 						$('#centerTbody tr:eq(0) td:nth-child(4)').html('태양광'); //구분
@@ -1764,28 +1764,102 @@ const searchSite = function () {
 					let deviceData = obj[1].data;
 					let deviceType = obj[1].device_type;
 
-					if (deviceType == 'SENSOR_WEATHER') {
-						deviceData.forEach(di => {
-							let temperature = isEmpty(di.temperature) ? '-' : di.temperature;
-							let irradiationPoa = isEmpty(di.irradiationPoa) ? '-' : di.irradiationPoa;
-							let humidity = isEmpty(di.humidity) ? '-' : di.humidity;
-
-							siteList[siteIdx].temperature = temperature + ' °C';
-							siteList[siteIdx].irradiationPoa = irradiationPoa + ' W/㎡';
-							siteList[siteIdx].humidity = humidity + ' %';
-						});
-					} else {
+					if (deviceType == 'KPX_EMS') {
 						deviceData.forEach(di => {
 							refineList[siteIdx].activePower = numberComma(di.activePower / 1000);
 							refineList[siteIdx].reactivePower = numberComma(di.reactivePower / 1000);
-							refineList[siteIdx].targetActivePower = numberComma(di.targetActivePower / 1000);
 							refineList[siteIdx].essActivePower = numberComma(di.essDActivePower - di.essCActivePower / 1000);
 							refineList[siteIdx].maxActivePower = numberComma(di.maxActivePower / 1000);
 							refineList[siteIdx].essMaxActivePower = numberComma(di.essMaxActivePower / 1000);
 							refineList[siteIdx].essMinActivePower = numberComma(di.essMinActivePower / 1000);
 							refineList[siteIdx].essSoc = numberComma(di.essSoc / 1000);
-							refineList[siteIdx].lastTargetActivePowerRecvDate = String(di.lastTargetActivePowerRecvDate).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
-							refineList[siteIdx].lastTargetActivePowerReqDate = String(di.lastTargetActivePowerReqDate).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
+
+							let temperature = isEmpty(di.temperature) ? '-' : di.temperature;
+							let irradiationPoa = isEmpty(di.irradiationPoa) ? '-' : di.irradiationPoa;
+							let humidity = isEmpty(di.humidity) ? '-' : di.humidity;
+
+							refineList[siteIdx].temperature = temperature + ' °C';
+							refineList[siteIdx].irradiationPoa = irradiationPoa + ' W/㎡';
+							refineList[siteIdx].humidity = humidity + ' %';
+
+							let lastTargetActivePowerReqDate = String(di.lastTargetActivePowerReqDate);
+							let lastTargetActivePowerRecvDate = String(di.lastTargetActivePowerReqDate);
+							let targetActivePower = di.targetActivePower;
+							let rtus = new Array();
+							siteList.forEach(siteRtu => {
+								if (site.sid == siteRtu.sid) {
+									if (!isEmpty(siteRtu.rtus)) {
+										siteRtu.rtus.forEach(rtu => {
+											rtus.push(rtu.rid);
+										})
+									}
+								}
+							});
+
+							let statusClass = 'status_drv';
+							$.ajax({
+								url: apiHost + '/control/command_history',
+								type: 'get',
+								async: false,
+								data: {
+									oid: oid,
+									rids: rtus.join(','),
+									cmdTypes: 'kpx_targetPower',
+									isRecent: true
+								},
+							}).done(function (data, textStatus, jqXHR) {
+								if (!isEmpty(data.data)) {
+									if (isEmpty(lastTargetActivePowerReqDate)) {
+										lastTargetActivePowerReqDate = String(data.data[0].requested_at);
+									} else {
+										let statusDate = new Date(lastTargetActivePowerReqDate.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$2/$3/$1 $4:$5:$6'));
+										let hitoryDate = new Date(data.data[0].requested_at.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$2/$3/$1 $4:$5:$6'));
+										if (statusDate.getTime() < hitoryDate.getTime()) {
+											lastTargetActivePowerReqDate = hitoryDate.format('yyyyMMddHHmmss');
+											lastTargetActivePowerRecvDate = '-'
+											const cmdBody = JSON.parse(data.data[0].cmd_body);
+											targetActivePower = cmdBody.targetPower;
+
+											let diffTime = Math.floor(((new Date() - hitoryDate) / 1000) / 60 / 60 % 24);
+											if (diffTime >= 1) {
+												statusClass = 'status_err';
+											}
+										}
+									}
+								}
+							});
+
+
+							const operation = site.operation;
+							let dateLocal = new Date(String(di.localtime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$2-$3-$3 $4:$5:$6'));
+							let diffTime = Math.floor(((new Date() - dateLocal) / 1000) / 60 / 60 % 24);
+							if (diffTime >= 1) {
+								statusClass = 'status_err';
+							} else {
+								if (operation.includes('0')) {
+									refineList[siteIdx].status = '중지';
+									statusClass = 'status_stp';
+								} else if (operation.includes('1')) {
+									refineList[siteIdx].status = '정상';
+									statusClass = 'status_drv';
+								} else if (operation.includes('2')) {
+									refineList[siteIdx].status = '트립';
+									statusClass = 'status_err';
+								} else {
+									refineList[siteIdx].status = '에러';
+									statusClass = 'status_err';
+								}
+							}
+
+							refineList[siteIdx].statusClass = statusClass;
+							refineList[siteIdx].statusLocalTime = String(di.localtime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
+							refineList[siteIdx].targetActivePower = numberComma(targetActivePower / 1000);
+							refineList[siteIdx].lastTargetActivePowerReqDate = String(lastTargetActivePowerReqDate).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
+							if (lastTargetActivePowerRecvDate != '-') {
+								refineList[siteIdx].lastTargetActivePowerRecvDate = String(lastTargetActivePowerRecvDate).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
+							} else {
+								refineList[siteIdx].lastTargetActivePowerRecvDate = lastTargetActivePowerRecvDate
+							}
 						});
 					}
 				});
@@ -1847,16 +1921,22 @@ const searchSite = function () {
 
 	setTimeout(function () {
 		refineList.forEach((site, siteIdx) => {
-			let capacity = (site.capacity == '-' || site.capacity == 0) ? 0 :site.capacity / 1000;
+			let capacity = (site.targetActivePower == '-' || site.targetActivePower == 0) ? 0 : site.targetActivePower * 1000;
 			let activePower = (site.activePower == '-' || site.activePower == 0) ? 0 : Number(site.activePower.replace(/[^0-9]/g, ''));
 
-			let activePercent = Math.floor((activePower / capacity) * 100);
-			let title = activePercent + '%';
-			if (isNaN(activePercent)) {
+			let activePercent = 0;
+			let title = '';
+			if (capacity == 0) {
 				title = '- %';
+			} else {
+				activePercent = Math.floor((activePower / capacity) * 100);
+				title = activePercent + '%';
+				if (isNaN(activePercent)) {
+					title = '- %';
+				}
 			}
 
-			let etc = capacity - activePower;
+			let etc = 100 - activePercent;
 			let series = [{
 				type: 'pie',
 				innerSize: '50%',
@@ -1864,14 +1944,14 @@ const searchSite = function () {
 				colorByPoint: true,
 				data: [{
 					color: 'var(--turquoise)',
-					name: '총 설비용량',
+					name: '유효전력',
 					dataLabels: {
 						enabled: false
 					},
-					y: activePower
+					y: activePercent
 				}, {
 					color: 'var(--grey)',
-					name: '미설비용량',
+					name: '목표전력',
 					dataLabels: {
 						enabled: false
 					},

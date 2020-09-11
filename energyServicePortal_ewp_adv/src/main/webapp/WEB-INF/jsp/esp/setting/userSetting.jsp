@@ -158,14 +158,6 @@
 
 		// Dropdown Click event
 		$("#newAccLevel").find("li").on("click", function(){
-			let val = $("#newAccLevel").prev().data("value");
-			if(val == 2) {
-				$("#siteAccOpt").prev().data({"value": 2, "name": "조화"}).prop("disabled", true).html("조회 권한<span class='caret'></span>");
-				$("#spcAccOpt").prev().data({"value": 2, "name": "조화"}).prop("disabled", true).html("조회 권한<span class='caret'></span>");
-			} else {
-				$("#siteAccOpt").prev().prop("disabled", false).html("선택<span class='caret'></span>");
-				$("#spcAccOpt").prev().prop("disabled", false).html("선택<span class='caret'></span>");
-			}
 			if($("#addUserModal").hasClass("edit")){
 				if( !isEmpty($(this).data("value")) && validateEditForm() == 1) {
 					$("#addUserBtn").prop("disabled", false);
@@ -1556,7 +1548,7 @@
 								if($(x).data("value") === item.spcid) {
 									let name = $(x).data("name");
 									let role = '';
-									item.role == "1" ? role = "수정/조회" : role = "조회";
+									item.role == "1" ? role = "관리 권한" : role = "조회 권한";
 
 									spcStr += `
 										<li class="delete" data-spc-id="${'${item.spcid}'}" data-role="${'${item.role}'}" data-spc-name="${'${name}'}">${'${name}'}&nbsp;(&nbsp;${'${role}'}&nbsp;)
@@ -1572,8 +1564,8 @@
 
 					let val = $("#newAccLevel").prev().data("value");
 					if(val == 2) {
-						$("#siteAccOpt").prev().data({"value": 2, "name": "조화"}).prop("disabled", true).html("조회 권한<span class='caret'></span>");
-						$("#spcAccOpt").prev().data({"value": 2, "name": "조화"}).prop("disabled", true).html("조회 권한<span class='caret'></span>");
+						$("#siteAccOpt").prev().data({"value": 2, "name": "조회 권한"}).prop("disabled", true).html("조회 권한<span class='caret'></span>");
+						$("#spcAccOpt").prev().data({"value": 2, "name": "조회 권한"}).prop("disabled", true).html("조회 권한<span class='caret'></span>");
 					} else {
 						$("#siteAccOpt").prev().prop("disabled", false).html("선택<span class='caret'></span>");
 						$("#spcAccOpt").prev().prop("disabled", false).html("선택<span class='caret'></span>");
@@ -1968,6 +1960,7 @@
 								<div class="tx_inp_type"><input type="text" id="newEmailAddr" name="new_email_addr" placeholder="입력"></div>
 								<small class="hidden warning">올바른 이메일 형식을 입력해 주세요.</small>
 							</div>
+							<c:if test="${activateSPC eq true}">
 							<div class="col-lg-2 col-sm-3"><span class="input_label offset">업무 구분</span></div>
 							<div class="col-lg-4 col-sm-9">
 								<div class="dropdown">
@@ -1981,6 +1974,7 @@
 									</ul>
 								</div>
 							</div>
+							</c:if>
 						</div>
 
 						<div class="row">
@@ -2006,7 +2000,9 @@
 							<div class="col-12">
 								<ul class="nav nav-tabs">
 									<li class="active w-50"><a data-toggle="tab" href="#siteTab">사업소</a></li>
+									<c:if test="${activateSPC eq true}">
 									<li class="w-50"><a data-toggle="tab" href="#spcTab">SPC</a></li>
+									</c:if>
 								</ul>
 							</div>
 						</div>
@@ -2031,8 +2027,8 @@
 											<div class="dropdown ml-16 w-25">
 												<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 												<ul id="siteAccOpt" class="dropdown-menu">
-													<li data-value="1" data-name="수정/조회"><a href="#">관리 권한</a></li>
-													<li data-value="2" data-name="조회"><a href="#">조회 권한</a></li>
+													<li data-value="1" data-name="관리 권한"><a href="#">관리 권한</a></li>
+													<li data-value="2" data-name="조회 권한"><a href="#">조회 권한</a></li>
 												</ul>
 											</div>
 											<button type="button" class="btn-add ml-16" onclick="addToList('site')">추가</button>
@@ -2058,8 +2054,8 @@
 											<div class="dropdown ml-16 w-25">
 												<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 												<ul id="spcAccOpt" class="dropdown-menu">
-													<li data-value="1" data-name="수정/조회"><a href="#">수정/조회</a></li>
-													<li data-value="2" data-name="조회"><a href="#">조회</a></li>
+													<li data-value="1" data-name="관리 권한"><a href="#">관리 권한</a></li>
+													<li data-value="2" data-name="조회 권한"><a href="#">조회 권한</a></li>
 												</ul>
 											</div>
 											<button type="button" class="btn-add ml-16" onclick="addToList('spc')">추가</button>

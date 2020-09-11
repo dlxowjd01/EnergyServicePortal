@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
+<%@ include file="/decorators/include/dashboardSchForm.jsp" %>
 <!DOCTYPE html>
 <html class="darkmode">
 <head>
@@ -10,7 +11,7 @@
 	<%@ include file="/decorators/include/layouts/header.jsp" %>
 	<div class="page-wrapper">
 		<c:choose>
-			<c:when test="${fn:contains(sessionScope.userInfo.oid, 'kpx')}">
+			<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
 				<%@ include file="/decorators/include/layouts/nav-kpx.jsp" %>
 			</c:when>
 			<c:otherwise>

@@ -1,13 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
-<%@ include file="/decorators/include/dashboardSchForm.jsp" %>
-<!-- 메인페이지용 스타일/스크립트 파일 -->
-<script type="text/javascript" src="/js/modules/rounded-corners.js"></script>
-<script type="text/javascript" src="/js/jquery.rwdImageMaps.min.js"></script>
-<script type="text/javascript"
-        src="http://maps.google.com/maps/api/js?key=AIzaSyAyGrAQC_675C34l2ZJ5JgEqeEV3gLuY9I"></script>
-<form id="linkSiteForm" name="linkSiteForm" method="post"></form>
 
+<form id="linkSiteForm" name="linkSiteForm" method="post"></form>
 <div class="row header-wrapper">
 	<div class="col-12">
 		<h1 class="page-header fl">${siteName}</h1>
@@ -260,11 +254,9 @@
 						</tr>
 						</thead>
 						<tbody id="siteList">
-							<!-- [D] 상태별 배경 : 't1' or 't2' 클래스 추가 -->
 							<tr class="dbclickopen flag[INDEX]">
 								<td class="first_td">
-									<%--<span class="status status_err" title="통신이상">통신이상</span>--%>
-									<span class="status status_drv" title="[status]">[status]</span>
+									<span class="status [statusClass]" title="[status]">[status]</span>
 									<span class="st_bar"></span>
 								</td>
 								<td>[alarmError]</td>
