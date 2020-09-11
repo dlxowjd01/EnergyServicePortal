@@ -57,6 +57,10 @@
 					<p class="center">회원 가입 및 회원 정보 문의<strong class="bold">070-4949-5500</strong></p>
 				</div>
 
+				<%-- KPX(전력 거래소 사용시 하단 내용 숨김) --%>
+				<%-- global.properties에서 기본 OID 기준 --%>
+				<fmt:message key="default.oid" var="defaultOid"/>
+				<c:if test="${defaultOid ne 'testkpx'}">
 				<div class="desc">
 					<div class="row center">
 						<div class="col-6">
@@ -75,6 +79,7 @@
 						</div>
 					</div>
 				</div>
+				</c:if>
 			</div>
 		
 		</form>
@@ -89,7 +94,6 @@
 			</div>
 		</div>
 	</div>
-
 
 	<c:if test="${not empty msg}">
 		<script type="text/javascript">

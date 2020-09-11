@@ -49,7 +49,11 @@
 				},
 				{
 					sTitle: '신청일',
-					mData: 'create_DATE'
+					mData: 'create_DATE',
+					render: function ( data, type, full, rowIndex ) {
+						const cDate = new Date(data);
+						return cDate === 'Invalid Date' ? '' : cDate.format('yyyy-MM-dd HH:mm:ss');
+					}
 				},
 				{
 					sTitle: '제품모델명',

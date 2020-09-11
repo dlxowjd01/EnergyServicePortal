@@ -1,17 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
-<%@ include file="/decorators/include/dashboardSchForm.jsp" %>
-<!-- 메인페이지용 스타일/스크립트 파일 -->
-<script type="text/javascript" src="/js/modules/rounded-corners.js"></script>
-<script type="text/javascript" src="/js/jquery.rwdImageMaps.min.js"></script>
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyAgEDjSwQWd_Q9RF_owO8WkMtf-6lmVSpc"></script>
-<form id="linkSiteForm" name="linkSiteForm" method="post"></form>
+<c:if test="${dashboardMap eq 'google'}">
+	<script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyAgEDjSwQWd_Q9RF_owO8WkMtf-6lmVSpc"></script>
+</c:if>
 
+<form id="linkSiteForm" name="linkSiteForm" method="post"></form>
 <div class="row header-wrapper">
 	<div class="col-12">
 		<h1 class="page-header fl">${siteName}</h1>
 		<div class="time fr">
-			<span>CURRENT TIME</span>
+			<span>CURRENT TIME ${dashboardMap}</span>
 			<em class="currTime">${nowTime}</em>
 			<span>DATA BASE TIME</span>
 			<em class="dbTime"></em>
@@ -112,15 +110,7 @@
 
 	<div class="col-xl-8 col-md-12 col-sm-12">
 		<div class="gmain_row1">
-			<c:choose>
-				<c:when test="${fn:contains(sessionScope.userInfo.oid, 'kpx')}">
-				<div class="indiv gmain_map gmain_chart gmain_chart_kpx">
-				</c:when>
-				<c:otherwise>
-				<div class="indiv gmain_map gmain_chart gmain_chart4 ">
-				</c:otherwise>
-			</c:choose>
-
+			<div class="indiv gmain_map gmain_chart gmain_chart4 ">
 				<div class="chart_top clear">
 					<h2 class="ntit"><fmt:message key="gdash.4.current" /></h2>
 				</div>
@@ -139,7 +129,7 @@
 							</div>
 							<ul>
 								<c:choose>
-									<c:when test="${fn:contains(sessionScope.userInfo.oid, 'kpx')}">
+									<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
 										<li><strong><fmt:message key="gdash.4.active_power" /></strong> <span> 0 </span><em>&nbsp;&nbsp;kW</em></li>
 										<li><strong>목표전력</strong> <span> 0 </span><em>&nbsp;&nbsp;kW</em></li>
 										<li><strong>설비용량</strong> <span> 0 </span><em>&nbsp;&nbsp;kW</em></li>
@@ -158,14 +148,14 @@
 					<table>
 						<thead>
 						<c:choose>
-							<c:when test="${fn:contains(sessionScope.userInfo.oid, 'kpx')}">
+							<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
 							<tr>
 								<th>구분</th>
 								<th>사업소</th>
-								<th>유효전력</th>
+								<th>설비용량</th>
 								<th>구분</th>
 								<th>사업소</th>
-								<th>유효전력</th>
+								<th>설비용량</th>
 							</tr>
 							</thead>
 							<tbody id="centerTbody">
@@ -268,7 +258,7 @@
 								<thead>
 								<tr>
 									<c:choose>
-										<c:when test="${fn:contains(sessionScope.userInfo.oid, 'kpx')}">
+										<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
 									<th>
 										<button type="button" class="btn_align"><fmt:message key="gdash.7.status" /></button>
 									</th>
@@ -326,11 +316,10 @@
 								<tbody id="siteList">
 									<!-- [D] 상태별 배경 : 't1' or 't2' 클래스 추가 -->
 									<c:choose>
-										<c:when test="${fn:contains(sessionScope.userInfo.oid, 'kpx')}">
+										<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
 									<tr class="dbclickopen flag[INDEX]" data-sid="[sid]">
 										<td class="first_td">
-												<%--<span class="status status_err" title="통신이상">통신이상</span>--%>
-											<span class="status status_drv" title="[status]">[status]</span>
+											<span class="status [statusClass]" title="[status]">[status]</span>
 											<span class="st_bar"></span>
 										</td>
 										<td>[alarmError]</td>
@@ -369,15 +358,15 @@
 																		<span class="di_li_tx">[activePower]</span>
 																	</li>
 																	<li>
-																		<span class="di_li_tit">현재 무효출력 (kWh)</span>
+																		<span class="di_li_tit">현재 무효출력 (kVar)</span>
 																		<span class="di_li_tx">[reactivePower]</span>
 																	</li>
 																	<li>
-																		<span class="di_li_tit">ESS 유효출력 (kWh)</span>
+																		<span class="di_li_tit">ESS 유효출력 (kW)</span>
 																		<span class="di_li_tx">[essActivePower]</span>
 																	</li>
 																	<li>
-																		<span class="di_li_tit">가용출력 (Var)</span>
+																		<span class="di_li_tit">가용출력 (kW)</span>
 																		<span class="di_li_tx">[maxActivePower]</span>
 																	</li>
 																</ul>
@@ -391,7 +380,7 @@
 																<ul class="di_list">
 																	<li>
 																		<span class="di_li_tit">목표출력 (kW)</span>
-																		<span class="di_li_tx">[capacity]</span>
+																		<span class="di_li_tx">[targetActivePower]</span>
 																	</li>
 																	<li>
 																		<span class="di_li_tit">송신시간</span>
@@ -400,6 +389,10 @@
 																	<li>
 																		<span class="di_li_tit">수신시간</span>
 																		<span class="di_li_tx">[lastTargetActivePowerRecvDate]</span>
+																	</li>
+																	<li>
+																		<span class="di_li_tit">갱신시간</span>
+																		<span class="di_li_tx">[statusLocalTime]</span>
 																	</li>
 																</ul>
 																<div class="di_tx_bx">
@@ -425,7 +418,6 @@
 										<c:otherwise>
 									<tr class="dbclickopen flag[INDEX]" data-sid="[sid]">
 										<td class="first_td">
-												<%--<span class="status status_err" title="통신이상">통신이상</span>--%>
 											<span class="status status_drv" title="[status]">[status]</span>
 											<span class="st_bar"></span>
 										</td>
@@ -531,7 +523,7 @@
 <script type="text/javascript" src="/js/commonDropdown.js"></script>
 
 <c:choose>
-	<c:when test="${fn:contains(sessionScope.userInfo.oid, 'kpx')}">
+	<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
 	<script type="text/javascript" src="/js/dashboard-kpx.js"></script>
 	</c:when>
 	<c:otherwise>
@@ -544,7 +536,7 @@
 	const sgid = '<c:out value="${sgid}" escapeXml="false" />';
 	const today = new Date();
 
-<%--	<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'kpx')}">--%>
+	<c:if test="${dashboardMap eq 'google'}">
 	let makerObject = new Object();
 
 	let map = new google.maps.Map(document.getElementById('gMainMap'), {
@@ -557,12 +549,11 @@
 	});
 	let geocoder = new google.maps.Geocoder();
 	let infowindow = new google.maps.InfoWindow();
-<%--	</c:if>--%>
+	</c:if>
 	let first = true;
 
 	$(function () {
-
-		if (oid.match('kpx')) {
+		if (oid.match('testkpx')) {
 			resourceProperties();
 		}
 
@@ -587,7 +578,7 @@
 
 	function fn_cycle_1hour() {
 		if (!first) {
-			if (oid.match('kpx')) {
+			if (oid.match('testkpx')) {
 				getYearGenDataKPX();
 			} else {
 				getYearGenData();
@@ -610,7 +601,7 @@
 		$('.dbTime').text(now.format('yyyy-MM-dd HH:mm:ss'));
 	}
 
-<%--	<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'kpx')}">--%>
+	<c:if test="${dashboardMap eq 'google'}">
 	const geocodeAddress = (siteAddr, siteId, siteName, siteLatlng, siteColor) => {
 		let latLng = new Object(),
 			dummy = siteLatlng.split(',');
@@ -702,7 +693,7 @@
 			}
 		}
 	}
-<%--	</c:if>--%>
+	</c:if>
 
 	const rtnDropdown = () => {
 		searchSite();

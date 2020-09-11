@@ -433,25 +433,27 @@
 								<ul>
 									<c:set var="systemLoc" value="${sessionScope.systemLoc}"/>
 									<c:forEach var="loc" items="${location}" varStatus="stat">
-										<li>
-											<a href="#">${loc.value.name.kr}</a>
-											<ul>
-												<c:forEach var="country" items="${loc.value.locations}" varStatus="countryStat">
-													<c:set var="choice" value="false" />
-													<c:if test="${fn:length(systemLoc) > 0}">
-														<c:forEach var="selLoc" items="${systemLoc}">
-															<c:if test="${country.value.code eq selLoc}">
-																<c:set var="choice" value="true" />
-															</c:if>
-														</c:forEach>
-													</c:if>
-													<li>
-														<input type="checkbox" name="systemLoc" id="lo${countryStat.index}" value="${country.value.code}" <c:if test="${choice eq 'true'}">checked</c:if>>
-														<label for="lo${countryStat.index}" <c:if test="${choice eq 'true'}">class="on"</c:if>>${country.value.name.kr}</label>
-													</li>
-												</c:forEach>
-											</ul>
-										</li>
+										<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx') or (fn:contains(sessionScope.userInfo.oid, 'testkpx') and loc.value.code eq 'kr')}">
+											<li>
+												<a href="#">${loc.value.name.kr}</a>
+												<ul>
+													<c:forEach var="country" items="${loc.value.locations}" varStatus="countryStat">
+														<c:set var="choice" value="false" />
+														<c:if test="${fn:length(systemLoc) > 0}">
+															<c:forEach var="selLoc" items="${systemLoc}">
+																<c:if test="${country.value.code eq selLoc}">
+																	<c:set var="choice" value="true" />
+																</c:if>
+															</c:forEach>
+														</c:if>
+														<li>
+															<input type="checkbox" name="systemLoc" id="lo${countryStat.index}" value="${country.value.code}" <c:if test="${choice eq 'true'}">checked</c:if>>
+															<label for="lo${countryStat.index}" <c:if test="${choice eq 'true'}">class="on"</c:if>>${country.value.name.kr}</label>
+														</li>
+													</c:forEach>
+												</ul>
+											</li>
+										</c:if>
 									</c:forEach>
 								</ul>
 							</dd>

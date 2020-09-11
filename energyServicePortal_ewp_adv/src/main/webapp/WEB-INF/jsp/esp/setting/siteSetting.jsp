@@ -273,8 +273,8 @@
 			let siteObj = {};
 
 
-			let newStationId, kpxGenId, kpxEmsId, kpxTransvol;
-			if (oid.match('kpx')) {
+			let newStationId, kpxGenId, kpxEmsId, testkpxTransvol;
+			if (oid.match('testkpx')) {
 				newStationId = $('#station_id').val();
 				kpxGenId = $('#kpx_genid').val();
 				kpxEmsId = $('#kpx_emsid').val();
@@ -315,7 +315,7 @@
 				if( !isEmpty(newVppResId) ){
 					siteObj.dr_group_id = newVppResId;
 				}
-				if (oid.match('kpx')) {
+				if (oid.match('testkpx')) {
 					if ( !isEmpty(newStationId) ) {
 						siteObj.station_id = Number(newStationId);
 					}
@@ -462,7 +462,7 @@
 				if( !isEmpty(newVppResId) && td.eq(9).text() != newVppResId ){
 					siteEditObj.dr_group_id = newVppResId;
 				}
-				if (oid.match('kpx')) {
+				if (oid.match('testkpx')) {
 					if ( !isEmpty(newStationId) ) {
 						siteEditObj.station_id = Number(newStationId);
 					}
@@ -907,7 +907,7 @@
 
 						let addBtnStr = `<button type="button" class="btn_type fr mb-20" onclick="updateModal('add')">추가</button>`;
 						$("#siteTable_wrapper").append($(str)).prepend($(addBtnStr));
-						if(oid.match("kpx")){
+						if(oid.match("testkpx")){
                             this.api().columns([8,9]).visible( false );
                         }
 					},
@@ -1259,7 +1259,7 @@
 							cell.innerHTML = i+1;
 							$(cell).data("id", i);
 						});
-						if(oid.match("kpx")){
+						if(oid.match("testkpx")){
                             this.api().columns([8,9]).visible( false );
                         }
 					},
@@ -1357,7 +1357,7 @@
 			},
 			initComplete: function(){
 				this.addClass("no-stripe");
-				if(oid.match("kpx")){
+				if(oid.match("testkpx")){
 					this.api().columns([8,9]).visible( false );
 				}
 			},
@@ -1760,8 +1760,8 @@
 				}
 				// 추가 정보
 				$('#newSiteDetail').val(rowData.detail_info);
-				// kpx
-				if (oid.match('kpx')) {
+				// testkpx
+				if (oid.match('testkpx')) {
 					$('#station_id').val(rowData.station_id);
 					$('#kpx_genid').val(rowData.kpx_genid);
 					$('#kpx_emsid').val(rowData.kpx_emsid);
@@ -2933,7 +2933,7 @@
 								</div>
 							</div>
 
-							<c:if test="${fn:contains(sessionScope.userInfo.oid, 'kpx')}">
+							<c:if test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
 								<div class="row">
 									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">발전기 코드</span></div>
 									<div class="col-xl-3 col-lg-6 col-md-4 col-sm-10 pl-0">
@@ -2963,7 +2963,7 @@
 									<div class="col-xl-1 col-lg-2 col-md-4 col-sm-10 pl-0">
 										<div class="flex_start">
 											<div class="tx_inp_type">
-												<input type="text" name="station_id" id="station_id" placeholder="입력" minlength="2" maxlength="15">
+												<input type="text" name="station_id" id="station_id" placeholder="입력" minlength="1" maxlength="15">
 											</div>
 										</div>
 									</div>
@@ -2971,7 +2971,7 @@
 							</c:if>
 						</section>
 
-						<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'kpx')}">
+						<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
 							<section id="sectionPowerBillInfo">
 								<h2 class="stit">전력 구매 정보</h2>
 								<div class="row">

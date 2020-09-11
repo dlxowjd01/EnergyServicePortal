@@ -1,5 +1,6 @@
 package kr.co.esp.dashboard.web;
 
+import kr.co.esp.common.service.EgovProperties;
 import kr.co.esp.common.util.UserUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,8 @@ public class DashboardController {
 
 	@RequestMapping(value = "/dashboard/gmain.do")
 	public String gmain(HttpServletRequest request, HttpSession session, Model model) {
+		String dashboardMap = (String) EgovProperties.getProperty("dashboard.map"); // TEST 서버 여부
+		model.addAttribute("dashboardMap", dashboardMap);
 		return "esp/dashboard/gmain";
 	}
 
