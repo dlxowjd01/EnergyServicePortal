@@ -298,7 +298,7 @@
 					}	
 				}
 			// 2. Edit existing user info
-			} else {	
+			} else {
 				let dTable = $("#groupTable").DataTable();
 				let tr = $("#groupTable").find("tbody tr.selected");
 				let td = tr.find("td");
@@ -336,7 +336,7 @@
 							async: true
 						},
 						{
-							url:  apiHost + "/config/site_groups/" + sgid,
+							url:  apiHost + "/config/site_groups/" + rowData.sgid,
 							type: 'patch',
 							async: true,
 							dataType: 'json',
@@ -344,10 +344,11 @@
 							data: JSON.stringify(obj)
 						}
 					];
-					Promise.all([ returnAjaxRes(editOptionList[0]), returnAjaxRes(editOptionList[1]) ]).then( res => {
+
+					Promise.all([ returnAjaxRes(editOptionList[0]), returnAjaxRes(editOptionList[1]) ]).then( res => {	
 						if(!isEmpty(res[0].group_sites)){
-							let groupSites = res[0].group_sites;
 							let deletePromises = [];
+							let groupSites = res[0].group_sites;
 							$.each(groupSites, function(index, el) {
 								let gSidOption = {
 									url:  apiHost + "/config/group_sites/" + el.gsid,
@@ -356,22 +357,37 @@
 								}
 								deletePromises.push(Promise.resolve(returnAjaxRes(gSidOption)));
 							});
+
 							Promise.all(deletePromises).then(res => {
-								let newSiteArr = [];
-								$.each(siteNameStr, function(index, el){
-									newSiteArr.push($(this).data("value"));
-								});
-								let siteObj = {
-									sid: JSON.stringify(newSiteArr)
-								};
-								let siteOpt = {
-									url: apiHost + "/config/group_sites?sgid=" + sgid,
-									type: 'post',
-									async: true,
-									data: JSON.stringify(siteObj),
-									contentType: 'application/json; charset=UTF-8'
-								};
-								Promise.resolve(returnAjaxRes(siteOpt)).then( finalRes => {
+								console.log("delete promise done===", res);
+								if(!isEmpty(siteNameStr)){
+									let newSiteArr = [];
+									$.each(siteNameStr, function(index, el){
+										newSiteArr.push($(this).data("value"));
+									});
+									let siteObj = {
+										sid: JSON.stringify(newSiteArr)
+									};
+									let siteOpt = {
+										url: apiHost + "/config/group_sites?sgid=" + rowData.sgid,
+										type: 'post',
+										async: true,
+										data: JSON.stringify(siteObj),
+										contentType: 'application/json; charset=UTF-8'
+									};
+									Promise.resolve(returnAjaxRes(siteOpt)).then( finalRes => {
+										console.log("finalRes===", finalRes);
+										$("#addGroupModal").modal("hide");
+										$("#resultSuccessMsg").text("그룹 정보가 수정 되었습니다.").removeClass("hidden");
+										$("#resultBtn").parent().addClass("hidden");
+										$("#resultModal").modal("show");
+										getGroupData(initModal);
+										setTimeout(function(){
+											$("#resultModal").modal("hide");
+										}, 1600);
+									});
+
+								} else {
 									$("#addGroupModal").modal("hide");
 									$("#resultSuccessMsg").text("그룹 정보가 수정 되었습니다.").removeClass("hidden");
 									$("#resultBtn").parent().addClass("hidden");
@@ -380,9 +396,47 @@
 									setTimeout(function(){
 										$("#resultModal").modal("hide");
 									}, 1600);
-								});
+								}
 							});
+						} else {
+							if(!isEmpty(siteNameStr)){
+								let newSiteArr = [];
+								$.each(siteNameStr, function(index, el){
+									newSiteArr.push($(this).data("value"));
+								});
+								let siteObj = {
+									sid: JSON.stringify(newSiteArr)
+								};
+								let siteOpt = {
+									url: apiHost + "/config/group_sites?sgid=" + rowData.sgid,
+									type: 'post',
+									async: true,
+									data: JSON.stringify(siteObj),
+									contentType: 'application/json; charset=UTF-8'
+								};
+								Promise.resolve(returnAjaxRes(siteOpt)).then( finalRes => {
+									console.log("finalRes===", finalRes);
+									$("#addGroupModal").modal("hide");
+									$("#resultSuccessMsg").text("그룹 정보가 수정 되었습니다.").removeClass("hidden");
+									$("#resultBtn").parent().addClass("hidden");
+									$("#resultModal").modal("show");
+									getGroupData(initModal);
+									setTimeout(function(){
+										$("#resultModal").modal("hide");
+									}, 1600);
+								});								
+							} else {
+								$("#addGroupModal").modal("hide");
+								$("#resultSuccessMsg").text("그룹 정보가 수정 되었습니다.").removeClass("hidden");
+								$("#resultBtn").parent().addClass("hidden");
+								$("#resultModal").modal("show");
+								getGroupData(initModal);
+								setTimeout(function(){
+									$("#resultModal").modal("hide");
+								}, 1600);
+							}
 						}
+					
 					});
 				} else {
 					if(rowData.resourceId != newResId){
@@ -647,6 +701,7 @@
 			callback();
 		}
 		if(groupData) {
+			console.log("groupData---", groupData);
 			// 1. 그룹 유형
 			// 2. 그룹 명
 			// 3. 사업소
@@ -659,7 +714,7 @@
 				"fixedHeader": true,
 				"bAutoWidth": true,
 				"bSearchable" : true,
-				"retrieve": true,
+				// "retrieve": true,
 				// "ScrollX": true,
 				// "sScrollX": "110%",
 				// "sScrollXInner": "110%",
@@ -935,7 +990,7 @@
 			"fixedHeader": true,
 			"bAutoWidth": true,
 			"bSearchable" : true,
-			"retrieve": true,
+			// "retrieve": true,
 			"sScrollY": true,
 			"scrollY": "720px",
 			"bScrollCollapse": true,

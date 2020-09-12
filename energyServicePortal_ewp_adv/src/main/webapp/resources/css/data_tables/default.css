@@ -42,7 +42,8 @@ html.darkmode:root {
 	font-weight: 500;
 }
 
-.dataTables_wrapper.fit .dataTables_scrollHead > .dataTables_scrollHeadInner {
+.dataTables_wrapper.fixed-width .dataTables_scrollHeadInner,
+.dataTables_wrapper.fixed-width .dataTables_scrollHeadInner > .dataTable.no-stripe {
 	width: 100% !important;
 }
 
@@ -58,13 +59,15 @@ html.darkmode:root {
 .dataTable.no-footer.no-stripe thead th:first-of-type,
 .dataTable.no-footer.no-stripe tbody tr td:first-of-type,
 .dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table.no-stripe>tbody>tr>td:first-of-type {
-	padding: 16px 10px 16px 28px;
+	/* padding: 14px 10px 14px 28px; */
+	padding-left: 28px;
 }
 
 .dataTable.no-footer.no-stripe thead th:last-of-type,
 .dataTable.no-footer.no-stripe tbody tr td:last-of-type,
 .dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table.no-stripe>tbody>tr>td:last-of-type {
-	padding: 16px 28px 16px 10px;
+	/* padding: 14px 10px 14px 28px; */
+	padding-right: 28px;
 }
 
 .dataTable.no-footer.no-stripe thead {
@@ -76,7 +79,7 @@ html.darkmode:root {
 .dataTables_scrollHeadInner > .dataTable td {
 	background: var(--box-darker);
 	height: auto;
-	padding: 14px 10px;
+	padding: 18px 10px;
 	font-size: 13px;
 	white-space: nowrap;
 }
@@ -350,6 +353,7 @@ html.darkmode:root {
 .dataTables_wrapper .dataTables_paginate .paginate_button {
 	display: inline-block;
 	min-width: 40px;
+	line-height: 12px;
 	height: 12px;
 	vertical-align: top;
 	box-sizing: border-box;
@@ -448,11 +452,15 @@ html.darkmode:root {
 
 
 .dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table>tbody>tr>th,
-.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table>tbody>tr>td {
+.dataTables_wrapper:not(.fixed-width) .dataTables_scroll div.dataTables_scrollBody>table>tbody>tr>td {
 	vertical-align: middle;
 	font-size: 13px;
 	font-weight: 500;
 	white-space: nowrap;
+}
+
+.dataTables_wrapper.fixed-width div.dataTables_scrollBody>table>tbody>tr>td {
+	vertical-align: top;
 }
 
 .dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table>thead>tr>th>div.dataTables_sizing,
