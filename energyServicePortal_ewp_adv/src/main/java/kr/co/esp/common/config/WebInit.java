@@ -1,6 +1,7 @@
 package kr.co.esp.common.config;
 
 import com.opensymphony.sitemesh.webapp.SiteMeshFilter;
+import kr.co.esp.common.filter.CookieLocaleFilter;
 import kr.co.esp.common.filter.HTMLTagFilter;
 import kr.co.esp.common.listener.SessionListener;
 import org.springframework.web.context.ContextLoaderListener;
@@ -77,6 +78,12 @@ public class WebInit extends AbstractAnnotationConfigDispatcherServletInitialize
 		characterEncoding.addMappingForUrlPatterns(null, false, "*.do");
 		characterEncoding.addMappingForUrlPatterns(null, false, "*.json");
 		//characterEncoding.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "*.do");
+
+		//-------------------------------------------------------------
+		// 언어 설정 Filter
+		//-------------------------------------------------------------
+		FilterRegistration.Dynamic cookieFilter = servletContext.addFilter("cookieLocaleFilter", new CookieLocaleFilter());
+		cookieFilter.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD), true, "/*");
 
 		//-------------------------------------------------------------
 		// springSecurityFilterChain 설정

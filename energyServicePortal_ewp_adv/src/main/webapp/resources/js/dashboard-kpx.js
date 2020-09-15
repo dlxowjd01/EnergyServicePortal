@@ -749,7 +749,7 @@ const getGenDataBySiteYesterday = async function () { //3번째 indiv 사업소�
 		siteList.forEach(site => {
 			const sid = site.sid;
 			siteGen = isEmpty(siteGenArray[sid]) ? 0 : siteGenArray[sid];
-			siteForeGen = isEmpty(siteForeGenArray[sid]) ? 0 : siteGenArray[sid];
+			siteForeGen = isEmpty(siteForeGenArray[sid]) ? 0 : siteForeGenArray[sid];
 			tempGenArray.push(siteGen);
 			tempForeArray.push(siteForeGen);
 		});

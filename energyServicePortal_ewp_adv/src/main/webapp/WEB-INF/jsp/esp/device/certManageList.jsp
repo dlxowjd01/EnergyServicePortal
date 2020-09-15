@@ -71,7 +71,7 @@
 					sTitle: '상태',
 					mData: null,
 					render: function ( data, type, full, rowIndex ) {
-						return `발급 : ${'${data.issue_CNT}'}<br>폐지 : ${'${data.revoke_CNT}'}`
+						return `발급 : ${'${data.issue_CNT}'}<br>폐기 : ${'${data.revoke_CNT}'}`
 					}
 				},
 				{

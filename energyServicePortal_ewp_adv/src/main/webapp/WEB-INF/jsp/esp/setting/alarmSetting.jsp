@@ -4,10 +4,11 @@
 <script src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
 	let deviceTemplate = new Object();
+	let alarmLevel = new Array();
 	let almMsgList = new Array();
 
 	$(function () {
-		deviceProperties();
+		properties();
 		alermList();
 
 		// 엑셀 업로드 버튼
@@ -88,16 +89,7 @@
 					sTitle: '알람 레벨',
 					mData: 'LEVEL',
 					mRender: function ( data ) {
-						let levelText = '알수없음';
-						switch(data) {
-							case 0: levelText = '정보'; break;
-							case 1: levelText = '경고'; break;
-							case 2: levelText = '이상'; break;
-							case 3: levelText = '트립'; break;
-							case 4: levelText = '정상'; break;
-							default: levelText = '알수없음'; break;
-						}
-						return levelText;
+						return alarmLevel[data];
 					}
 				},
 				{
@@ -188,20 +180,40 @@
 	}
 
 	<!-- properties 조회 -->
-	const deviceProperties = async () => {
-		$.ajax({
+	const properties = async () => {
+		const urlDeivceProp = {
 			url: apiHost + '/config/view/device_properties',
 			type: 'get',
-			async: false,
 			data: {},
-			success: function (result) {
-				Object.entries(result).map(obj => {
+			dataType: 'json'
+		};
+
+		const urlAlarmProp = {
+			url: apiHost + '/config/view/properties',
+			type: 'get',
+			data: {types: 'alarm_level'},
+			dataType: 'json'
+		};
+
+		$.when($.ajax(urlDeivceProp), $.ajax(urlAlarmProp)).done(function (rstDeviceProp, rstAlarmProp) {
+			if (rstDeviceProp[1] === 'success') {
+				const resultData = rstDeviceProp[0];
+				Object.entries(resultData).map(obj => {
 					deviceTemplate[obj[0]] = obj[1].name.kr;
 				});
+			}
 
-				deviceType();
-			},
-			dataType: 'json'
+			if (rstAlarmProp[1] === 'success') {
+				const resultData = rstAlarmProp[0].alarm_level;
+				Object.entries(resultData).map(arm => {
+					const data = arm[1];
+					alarmLevel[data.code] = data.name.kr;
+				});
+			}
+
+			deviceType();
+		}).fail(function () {
+			console.log('rejected');
 		});
 	};
 
@@ -399,6 +411,7 @@
 		let sheetLength = workbook.Sheets[workbook.SheetNames]['!ref'].split(":")[1];
 		let strDataSet = '';
 		const sheetNames = workbook.SheetNames;
+		const levelArray = ['0', '1', '2', '3', '4', '9'];
 		sheetLength = parseInt(sheetLength.replace(/[^0-9]/g, ""));
 
 		for (let i = 3 ; i < sheetLength + 1; i++) {
@@ -408,7 +421,7 @@
 			const VERSION = { v : workbook.Sheets[sheetNames]['E' + i] != undefined ? String(workbook.Sheets[sheetNames]['E' + i].v).trim() : '' };
 			const ALARM_CODE = { v : workbook.Sheets[sheetNames]['F' + i] != undefined ? String(workbook.Sheets[sheetNames]['F' + i].v).trim() : '' };
 			const ALARM_MSG = { v : workbook.Sheets[sheetNames]['G' + i] != undefined ? String(workbook.Sheets[sheetNames]['G' + i].v).trim() : '' };
-			const LEVEL = { v : workbook.Sheets[sheetNames]['H' + i] != undefined ? String(workbook.Sheets[sheetNames]['H' + i].v).trim() : '' };
+			const LEVEL = { v : workbook.Sheets[sheetNames]['H' + i] != undefined ? workbook.Sheets[sheetNames]['H' + i].v : '' };
 			const DESCRIPTION = { v : workbook.Sheets[sheetNames]['I' + i] != undefined ? String(workbook.Sheets[sheetNames]['I' + i].v).trim() : '' };
 			const tempDataSet = DEV_TYPE.v + '_' + MANUFACTURER.v + '_' + MODEL.v  + '_' + VERSION.v;
 			if (i === 3) {
@@ -439,16 +452,9 @@
 				}
 			}
 
-			let levelText = '9';
-			if (isNaN(LEVEL.v)) {
-				switch(LEVEL.v) {
-					case '정보': levelText = 0; break;
-					case '경고': levelText = 1; break;
-					case '이상': levelText = 2; break;
-					case '트립': levelText = 3; break;
-					case '정상': levelText = 4; break;
-					default: levelText = 9; break;
-				}
+			if (isEmpty(alarmLevel[LEVEL.v])) {
+				errorMsg('레벨은 정의된 코드만 입력가능합니다.');
+				return false;
 			}
 
 			excelArray.push({
@@ -458,7 +464,7 @@
 				VERSION: VERSION.v,
 				CODE: ALARM_CODE.v,
 				MESSAGE: ALARM_MSG.v,
-				LEVEL: levelText,
+				LEVEL: LEVEL.v,
 				DESCRIPTION: DESCRIPTION.v,
 				SET_ID: null
 			})
