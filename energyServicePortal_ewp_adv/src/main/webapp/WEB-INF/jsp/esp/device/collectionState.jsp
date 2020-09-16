@@ -190,7 +190,7 @@
 										</div>
 										<div class="btn_wrap_type02 flex_start">
 											<%--								<button type="button" class="btn_type03">삭제</button>--%>
-											<button type="button" class="btn_type" onclick="commandSend();">보내기</button>
+											<button type="button" class="btn_type" onclick="commandModal();">보내기</button>
 										</div>
 									</div>
 								</div>
@@ -278,6 +278,30 @@
 		</div>
 	</div>
 </div>
+
+<div class="modal fade in" id="certModal" role="dialog">
+	<form id="passForm" name="passForm" method="GET">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content device_modal_content">
+				<div class="modal-header stit">
+					<h2>비밀번호 확인</h2>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-12">
+							<input type="password" id="certPass" name="certPass" class="input tx_inp_type w-100" value="" placeholder="패스워드" autocomplete="off">
+						</div>
+					</div>
+					<div class="btn_wrap_type02">
+						<button type="button" class="btn_type" onclick="commandSend();">확인</button>
+						<button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+
 <script type="text/javascript">
 	const siteList = JSON.parse('${siteList}');
 	pagePerData = 5;
@@ -543,6 +567,7 @@
 
 					result.data.forEach(log => {
 						let dTimestamp = String(log.created_at).replace(/[^0-9]/g, '').substring(0, 14).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
+						let logToolTip = (JSON.stringify(log.cmd_body)).replace(/\"/g, '\'');
 						let str = `
 									<tr>
 										<td>${'${sName}'}</td>
@@ -551,7 +576,7 @@
 										<td>${'${dTimestamp}'}</td>
 										<td>-</td>
 										<td>-</td>
-										<td class="ellipsis">${'${JSON.stringify(log.cmd_body)}'}</td>
+										<td class="ellipsis" title="${'${logToolTip}'}">${'${JSON.stringify(log.cmd_body)}'}</td>
 									</tr>
 								`;
 						logTable.append(str);
@@ -582,6 +607,7 @@
 					result.logs.forEach(log => {
 						let dTimestamp = new Date(log.dTimestamp).format('yyyy-MM-dd HH:mm:ss');
 						let dLocaltime = String(log.dLocaltime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
+						let logToolTip = (log.log).replace(/\"/g, '\'');
 						let str = `
 						<tr>
 							<td>${'${log.sName}'}</td>
@@ -590,7 +616,7 @@
 							<td>${'${dTimestamp}'}</td>
 							<td>${'${dLocaltime}'}</td>
 							<td>${'${log.dOperation}'}</td>
-							<td class="ellipsis">${'${log.log}'}</td>
+							<td class="ellipsis" title="${'${logToolTip}'}">${'${log.log}'}</td>
 						</tr>
 					`;
 						logTable.append(str);
@@ -928,6 +954,32 @@
 		$('#logPaging').append(pageStr);
 	}
 
+	const commandModal = () => {
+		const rid = $('#selectedRTU').data('rid');
+		const command = $('#command button').data('value');
+		const commandKey = $('#commandKey button').data('value');
+		const optionVal = $('#optionVal').val();
+
+		let bodyCommand = new Object();
+
+		if (isEmpty(rid)) {
+			alert('RTU를 선택해주세요.');
+			return false;
+		}
+
+		if (isEmpty(command)) {
+			alert('커맨드를 선택해주세요.');
+			return false;
+		}
+
+		if (isEmpty(optionVal)) {
+			alert('옵션을 입력해주세요.');
+			return false;
+		}
+
+		$('#certModal').modal('show');
+	}
+
 	const commandSend = () => {
 		const rid = $('#selectedRTU').data('rid');
 		const command = $('#command button').data('value');
@@ -955,21 +1007,50 @@
 			bodyCommand[commandKey] = Number(optionVal);
 		}
 
-		$.ajax({
-			url: apiHost + '/control/send/' + rid + '?cmdType=' + command,
-			type: 'POST',
-			dataType: 'json',
-			contentType: 'application/json',
-			data: JSON.stringify(bodyCommand),
-			success: function (data) {
-				alert('RTU 커맨드가 입력 됐습니다.');
-				return false;
-			},
-			error: function (error) {
-				console.error(error);
-				alert('RTU 커맨드 입력에 실패했습니다. 값을 다시 확인해 주세요.');
+		new Promise((resolve, reject) => {
+			$.ajax({
+				url: apiHost + '/config/users/confirm_password?oid=' + oid,
+				type: 'POST',
+				dataType: 'json',
+				contentType: 'application/json',
+				data: JSON.stringify({
+					login_id: loginId,
+					password: $('#certPass').val()
+				})
+			}).done(function (result) {
+				resolve(result.passed)
+			}).fail(function (error) {
+				console.log(error);
+			});
+		}).then(rtnVal => {
+			if (rtnVal === true) {
+				$.ajax({
+					url: apiHost + '/control/send/' + rid + '?cmdType=' + command,
+					type: 'POST',
+					dataType: 'json',
+					contentType: 'application/json',
+					data: JSON.stringify(bodyCommand),
+					success: function (data) {
+						alert('RTU 커맨드가 입력 됐습니다.');
+						$('#certModal').modal('hide');
+						return false;
+					},
+					error: function (error) {
+						console.error(error);
+						alert('RTU 커맨드 입력에 실패했습니다. 값을 다시 확인해 주세요.');
+						$('#certModal').modal('hide');
+						return false;
+					}
+				});
+			} else {
+				alert('패스워드가 일치하지 않습니다.');
+				$('#certModal').modal('hide');
 				return false;
 			}
+		}).catch(error => {
+			alert('RTU 커맨드 입력에 실패했습니다. 값을 다시 확인해 주세요.');
+			$('#certModal').modal('hide');
+			return false;
 		});
 	}
 </script>

@@ -4,6 +4,27 @@
 <script type="text/javascript">
 	$(function() {
 		policy();
+
+		$('.nav-tabs li').on('click', function() {
+			const aTag = $(this).find('a');
+			const target = aTag.attr('href');
+
+			if (target == '#manual') {
+				$('#file1').val('');
+			} else {
+				$('#manual table tbody tr.device').remove();
+			}
+		});
+
+		$('#register').on('click', function() {
+			const activeId = $('.tab-content > div.active').attr('id');
+
+			if (activeId === 'manual') {
+				register();
+			} else {
+				doExcelUploadProcess();
+			}
+		});
 	});
 
 	/**
@@ -50,12 +71,12 @@
 				});
 			});
 		} else {
-			certDeviceArray = data;
+			certDeviceArray = data.devices;
 		}
 
 		let option = {
-			url : certApiHost + '/deviceReg/request',
-			type : 'POST',
+			url: certApiHost + '/deviceReg/request',
+			type: 'POST',
 			contentType: 'application/x-www-form-urlencoded',
 			crossOrigin: true,
 			data: {
@@ -70,12 +91,64 @@
 		}
 
 		$.ajax(option).done(function (result) {
-			alert('등록 되었습니다.');
-			location.href = '/device/certManageList.do';
+			const applyPkgID = result.applyPkgID;
+			certIssue(applyPkgID);
 		}).fail(function (error) {
 			console.log(error);
 		});
 	};
+
+	const certIssue = (apply_PKG_ID) => {
+		new Promise ((resolve, reject) => {
+			let option = {
+				url: certApiHost + '/certDetail/all',
+				type: 'GET',
+				contentType: 'application/x-www-form-urlencoded',
+				crossOrigin: true,
+				data: {
+					applyPkgID: apply_PKG_ID
+				}
+			}
+
+			$.ajax(option).done(function (result) {
+				let issueDevice = new Array();
+				const deviceList = result.deviceList;
+				deviceList.forEach(device => {
+					issueDevice.push(device.apply_ID);
+				});
+
+				//다음으로
+				resolve({
+					applyPkgID: apply_PKG_ID,
+					devices: issueDevice
+				});
+			}).fail(function (error) {
+				console.log(error);
+			});
+		}).then((issue) => {
+			const option = {
+				url : certApiHost + '/deviceCert/issue',
+				type : 'PUT',
+				contentType: 'application/json',
+				crossOrigin: true,
+				dataType: 'json',
+				data: JSON.stringify(issue)
+			}
+
+			$.ajax(option).done(function (result) {
+				alert('기기 인증서 발급처리가 완료되었습니다.');
+				location.href = '/device/certManageList.do';
+				return false;
+			}).fail(function (error) {
+				console.log(error);
+			});
+		}).catch(error => {
+			console.log(error);
+			alert('처리 중 오류가 발생했습니다.');
+			return false;
+		});
+	}
+
 
 	const sampleDownload = () => {
 		let f = document.form1;
@@ -300,7 +373,7 @@
 				</div>
 				<div class="btn_wrap_type_right">
 					<button type="button" class="btn_type03 big" onclick="sampleDownload();">샘플 다운로드</button>
-					<button type="button" class="btn_type big" onclick="register();">신청</button>
+					<button type="button" class="btn_type big" id="register">신청</button>
 				</div>
 			</div>
 		</form>
