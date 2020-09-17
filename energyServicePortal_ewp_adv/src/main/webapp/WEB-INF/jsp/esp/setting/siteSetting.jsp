@@ -567,7 +567,6 @@
 					async: true,
 					contentType: 'application/json; charset=UTF-8',
 				};
-				console.log("did===", did)
 				for(let i=0, length = alarmLvl.length; i<length; i++){
 					// if(!$(editItems[i]).is(":disabled")){
 					if(!alarmLvl.eq(i).is(":disabled")){
@@ -620,11 +619,9 @@
 				}
 	
 				let newObj = {
-					// alarm_to: alarmToObj
 					alarm_to: JSON.stringify(alarmToObj)
 				}
 				deviceOpt.data = JSON.stringify(newObj);
-				console.log("deviceOpt===", deviceOpt)
 				ajaxPromises.push(makeAjaxCall(deviceOpt));
 			});
 
