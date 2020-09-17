@@ -5,6 +5,7 @@
 <head>
 	<script type="text/javascript">
 		const langStatus = '${cookieLang}';
+		const certApiHost = '${certApiHost}';
 	</script>
 	<%@ include file="/decorators/include/layouts/top.jsp" %>
 </head>

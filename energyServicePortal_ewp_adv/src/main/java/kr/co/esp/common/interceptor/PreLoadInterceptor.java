@@ -5,6 +5,8 @@ import kr.co.esp.common.util.UserUtil;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
+import org.springframework.security.access.method.P;
+import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -35,6 +37,91 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			String token = (String) userInfo.get("token");
 			String mode = (String) session.getAttribute("mode");
 
+			String oid = (String) userInfo.get("oid");
+			int role = (int) userInfo.get("role");
+			int task = (int) userInfo.get("task");
+			String requestUri = request.getRequestURI();
+
+			//Menu조회
+			Map<String,Object> parameters = new HashMap<String, Object>();
+			parameters.put("types", "menu");
+			Map<String, Object> menuProperties = get("/config/view/properties", mode, parameters, null); //그룹화되어있는 사이트 리스트 정보
+			if (200 == (int) menuProperties.get("code")) {
+				Map<String, Object> menuMap = (Map<String, Object>) menuProperties.get("data");
+				Map<String, Object> menuList = (Map<String, Object>) menuMap.get("menu");
+
+				for( Map.Entry<String, Object> elem : menuList.entrySet() ){
+					Map<String, Object> mapDetail = (Map<String, Object>) elem.getValue();
+					String href = mapDetail.get("href") != null ? (String) mapDetail.get("href") : "";
+					if (requestUri.equals("/" + href)) {
+						Map<String, Object> access = (Map<String, Object>) mapDetail.get("access");
+
+						if(!access.isEmpty()) {
+							if (access.containsKey("deny")) {
+								Map<String, Object> denyMap = (Map<String, Object>) access.get("deny");
+
+								for (Map.Entry<String, Object> denyTemp : denyMap.entrySet()) {
+									List denyArray = (List) denyTemp.getValue();
+									if ("role".equals(denyTemp.getKey())) {
+										boolean contains = containsValue(denyArray, String.valueOf(role));
+										if (contains) {
+											response.sendError(HttpServletResponse.SC_FORBIDDEN);
+											return false;
+										}
+									} else if ("task".equals(denyTemp.getKey())) {
+										boolean contains = containsValue(denyArray, String.valueOf(task));
+										if (contains) {
+											response.sendError(HttpServletResponse.SC_FORBIDDEN);
+											return false;
+										}
+									} else if ("oid".equals(denyTemp.getKey())) {
+										boolean contains = containsValue(denyArray, oid);
+										if (contains) {
+											response.sendError(HttpServletResponse.SC_FORBIDDEN);
+											return false;
+										}
+									}
+								}
+							}
+
+							if (access.containsKey("allow")) {
+								Map<String, Object> allowMap = (Map<String, Object>) access.get("allow");
+								for (Map.Entry<String, Object> allowTemp : allowMap.entrySet()) {
+									List allowArray = (List) allowTemp.getValue();
+									if ("role".equals(allowTemp.getKey())) {
+										boolean contains = containsValue(allowArray, String.valueOf(role));
+										if (!contains) {
+											response.sendError(HttpServletResponse.SC_FORBIDDEN);
+											return false;
+										}
+									} else if ("task".equals(allowTemp.getKey())) {
+										boolean contains = containsValue(allowArray, String.valueOf(task));
+										if (!contains) {
+											response.sendError(HttpServletResponse.SC_FORBIDDEN);
+											return false;
+										}
+									} else if ("oid".equals(allowTemp.getKey())) {
+										boolean contains = containsValue(allowArray, oid);
+										if (!contains) {
+											response.sendError(HttpServletResponse.SC_FORBIDDEN);
+											return false;
+										}
+									}
+								}
+							}
+						} else {
+							continue;
+						}
+					} else {
+						continue;
+					}
+				}
+
+				request.setAttribute("menuList", menuList);
+			}
+			//Menu조회
+
+			//아래 소스 postHandler로 이동해야됨.
 			String[] systemLoc = request.getParameterValues("systemLoc");
 			String[] systemType = request.getParameterValues("systemType");
 			String systemValue = request.getParameter("systemValue");
@@ -42,7 +129,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			String vgid = request.getParameter("vgid");
 			String sid = request.getParameter("sid");
 
-			Map<String, Object> parameters = new HashMap<String, Object>();
+			parameters.clear();
 			parameters.put("includeDevices", "true");
 
 			Map<String, Object> siteMap = get("/auth/me/sites", mode, parameters, token); //사이트 리스트 정보
@@ -287,16 +374,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 		String activateSPC = EgovProperties.getProperty("activateSPC"); //activateSPC True/False
 		String mode = (String) session.getAttribute("mode"); // TEST 서버 여부
 
-		//Menu조회
-		Map<String,Object> parameters = new HashMap<String, Object>();
-		parameters.put("types", "menu");
-		Map<String, Object> menuProperties = get("/config/view/properties", mode, parameters, null); //그룹화되어있는 사이트 리스트 정보
-		if (200 == (int) menuProperties.get("code")) {
-			Map<String, Object> menuMap = (Map<String, Object>) menuProperties.get("data");
 
-			mav.addObject("menuList", menuMap.get("menu"));
-		}
-		//Menu조회
 
 		if (mode != null && "test".equals(mode)) {
 			mav.addObject("apiHost", apiHostTest);
@@ -313,6 +391,18 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 		mav.addObject("gitVersion", gitVersion);
 
 		super.postHandle(request, response, handler, mav);
+	}
+
+	/**
+	 * 배열안에 값이 특정값이 포함되어있는지 비교
+	 *
+	 * @param array
+	 * @param target
+	 * @return
+	 */
+	public boolean containsValue(List array, Object target) {
+		boolean contains = array.contains(target);
+		return contains;
 	}
 
 	/**
