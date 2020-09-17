@@ -518,7 +518,7 @@
 					$("#resultBtn").parent().addClass("hidden");
 					$("#resultModal").modal("show");
 					setTimeout(function(){
-						$("#resultModal").modal("show");
+						$("#resultModal").modal("hide");
 					}, 1800);
 				} else {
 					if( (flagIndex < 0) ){
