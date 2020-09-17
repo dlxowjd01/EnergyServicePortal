@@ -985,7 +985,7 @@
 		// 5. 비고
 		// 6. 업데이트 날짜
 		var groupTable = $('#groupTable').DataTable({
-			"aaData": newArr,
+			"aaData": groupData,
 			"table-layout": "fixed",
 			"fixedHeader": true,
 			"bAutoWidth": true,
@@ -1024,13 +1024,13 @@
 					"mData": null,
 					"mRender": function ( data, type, full, rowIndex )  {
 						let groupType = "";
-						if(full){
-							groupType = "";
-						} else {
-							groupType = "";
+						if(full.dgid){
+							return groupType = "DR 그룹";
+						} else if(full.vgid){
+							return groupType = "VPP 그룹";
+						} else if(full.sgid){
+							return groupType = "사업소 그룹";
 						}
-
-						return groupType
 					},
 				},
 				{
@@ -1039,19 +1039,74 @@
 				},
 				{
 					"sTitle": "사업소",
-					"mData": "location",
-				},
+					"mData":  null,
+						"mRender": function ( data, type, full, rowIndex )  {
+							if(!isEmpty(full.sites)){
+								let siteName = "";
+								let length = full.sites.length;
+
+								$.each(full.sites, function(index, el){
+									if(length <= 3){
+										if(index < (length-1) ){
+											siteName += el.name + "," + '&ensp;';
+										} else {
+											siteName += el.name;
+										}
+									} else {
+										if(index < 3 ){
+											siteName += el.name + "," + '&ensp;';
+										} else {
+											if(index == 3) {
+												siteName += el.name.slice(0, -3) + "..."
+											}
+										}
+									}
+								});
+								if(full.sites.length > 3){
+									return `<div class="flex_start">${'${siteName}'}&ensp;<a href="#" role="button" data-toggle="popover" data- rel="popover" onmouseover="updateModal('detail', this)" class="text-link">more</a></div>`
+								} else {
+									return siteName;
+								}
+
+							} else {
+								return siteName = "-";
+							}
+
+						}
+					},
 				{
 					"sTitle": "최종작업자",
 					"mData": "powerSource",
 				},
 				{
 					"sTitle": "업데이트 일자",
-					"mData": "pcsCapacity",
+					"mData": null,
+					"mRender": function ( data, type, full, rowIndex )  {
+						let date = "";
+						if(isEmpty(full.updatedAt)){
+							if(!isEmpty(full.createdAt)){
+								date = new Date(full.createdAt).toLocaleDateString("en-CA").replace(/\//g, '-') + '&ensp;' + new Date(full.createdAt).toLocaleTimeString();
+							} else {
+								date = "-";
+							}
+						} else {
+							date = new Date(full.updatedAt).toLocaleDateString("en-CA").replace(/\//g, '-') + '&ensp;' + new Date(full.updatedAt).toLocaleTimeString();
+						}
+						return date;
+					}
 				},
 				{
 					"sTitle": "비고",
-					"mData": "genCapacity",
+					"mData": null,
+					"mRender": function ( data, type, full, rowIndex )  {
+						let desc = "";
+						if(!isEmpty(full.description)){
+							desc = full.description;
+						} else {
+							desc = "-";
+						}
+						return desc;
+					}
 				}
 			],
 			"language": {
@@ -1063,12 +1118,12 @@
 			// 	style: 'single',
 			// selector: 'td:first-child > a',
 			// },
-			initComplete: function(){
-				this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-					cell.innerHTML = i+1;
-					$(cell).data("id", i);
-				});
-			},
+			// initComplete: function(){
+			// 	this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+			// 		cell.innerHTML = i+1;
+			// 		$(cell).data("id", i);
+			// 	});
+			// },
 		}).columns.adjust().draw();
 		
 		$("#groupSearchBox").on( 'keyup search input paste cut', function(){
@@ -1307,7 +1362,7 @@
 
 						} else if(rowData.dgid){
 							resIdWrapper.removeClass("hidden").prev().removeClass("hidden").find(".input_label").text("자원 ID");
-							newGroupType.prev().data("value", "dr_group").html("DR 그룹<span class='caret'></span>");
+							newGroupType.prev().data("value", "dr_group").html("DR 그룹<span class='caret'></span>").prop("disabled", true);
 						
 						}
 					}
