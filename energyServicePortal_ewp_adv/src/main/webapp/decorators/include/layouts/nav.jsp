@@ -89,40 +89,55 @@
 	<c:forEach var="menu" items="${menuList}" varStatus="status">
 		<c:set var="menuMap" value="${menu.value}"/>
 		<c:set var="allow" value="${menuMap.access.allow}"/>
-		<c:if test="${menuMap.parent eq null and (allow.oid eq null or fn:contains(allow.oid, oid)) and (allow.task eq null or fn:contains(allow.task, task)) and (allow.role eq null or fn:contains(allow.role, role))}">
-			<c:set var="thisCode" value="${menuMap.code}"/>
-			<c:choose>
-				<c:when test="${cookieLang eq 'KO'}">
-					<c:set var="menuName" value="${menuMap.name.kr}"/>
-				</c:when>
-				<c:otherwise>
-					<c:set var="menuName" value="${menuMap.name.en}"/>
-				</c:otherwise>
-			</c:choose>
+		<c:set var="deny" value="${menuMap.access.deny}"/>
+		<c:if test="${deny ne null or !fn:contains(deny, oid)}">
+			<c:if test="${menuMap.parent eq null and (allow.oid eq null or fn:contains(allow.oid, oid)) and (allow.task eq null or fn:contains(allow.task, task)) and (allow.role eq null or fn:contains(allow.role, role))}">
+				<c:set var="thisCode" value="${menuMap.code}"/>
+				<c:choose>
+					<c:when test="${cookieLang eq 'KO'}">
+						<c:set var="menuName" value="${menuMap.name.kr}"/>
+					</c:when>
+					<c:otherwise>
+						<c:set var="menuName" value="${menuMap.name.en}"/>
+					</c:otherwise>
+				</c:choose>
 
-			<li class="${menuMap.icon_class} menu-item">
-				<a href="javascript:void(0);">${menuName}</a>
-				<div class="sub_layer">
-					<ul>
-					<c:forEach var="menu" items="${menuList}">
-						<c:set var="subMenuMap" value="${menu.value}"/>
-						<c:set var="subAllow" value="${subMenuMap.access.allow}"/>
-						<c:if test="${subMenuMap.parent ne null and thisCode eq subMenuMap.parent and (subAllow.oid eq null or fn:contains(subAllow.oid, oid)) and (subAllow.task eq null or fn:contains(subAllow.task, task)) and (subAllow.role eq null or fn:contains(subAllow.role, role))}">
-							<c:choose>
-								<c:when test="${cookieLang eq 'KO'}">
-									<c:set var="subMenuName" value="${subMenuMap.name.kr}"/>
-								</c:when>
-								<c:otherwise>
-									<c:set var="subMenuName" value="${subMenuMap.name.en}"/>
-								</c:otherwise>
-							</c:choose>
+				<c:choose>
+					<c:when test="${menuMap.valign ne null and menuMap.valign eq 'bottom'}">
+						<li class="${menuMap.icon_class}">
+							<a href="/${menuMap.href}">${menuName}</a>
+						</li>
+					</c:when>
+					<c:otherwise>
+						<li class="${menuMap.icon_class} menu-item">
+							<a href="javascript:void(0);">${menuName}</a>
+							<div class="sub_layer">
+								<ul>
+									<c:forEach var="menu" items="${menuList}">
+										<c:set var="subMenuMap" value="${menu.value}"/>
+										<c:set var="subAllow" value="${subMenuMap.access.allow}"/>
+										<c:set var="subDeny" value="${subMenuMap.access.deny}"/>
+										<c:if test="${subDeny ne null or !fn:contains(subDeny, oid)}">
+											<c:if test="${subMenuMap.parent ne null and thisCode eq subMenuMap.parent and (subAllow.oid eq null or fn:contains(subAllow.oid, oid)) and (subAllow.task eq null or fn:contains(subAllow.task, task)) and (subAllow.role eq null or fn:contains(subAllow.role, role))}">
+												<c:choose>
+													<c:when test="${cookieLang eq 'KO'}">
+														<c:set var="subMenuName" value="${subMenuMap.name.kr}"/>
+													</c:when>
+													<c:otherwise>
+														<c:set var="subMenuName" value="${subMenuMap.name.en}"/>
+													</c:otherwise>
+												</c:choose>
 
-							<li><a href="/${subMenuMap.href}">${subMenuName}</a></li>
-						</c:if>
-					</c:forEach>
-					</ul>
-				</div>
-			</li>
+												<li><a href="/${subMenuMap.href}">${subMenuName}</a></li>
+											</c:if>
+										</c:if>
+									</c:forEach>
+								</ul>
+							</div>
+						</li>
+					</c:otherwise>
+				</c:choose>
+			</c:if>
 		</c:if>
 	</c:forEach>
 	</ul>
@@ -146,38 +161,60 @@
 			<c:forEach var="menu" items="${menuList}" varStatus="status">
 				<c:set var="menuMap" value="${menu.value}"/>
 				<c:set var="allow" value="${menuMap.access.allow}"/>
-				<c:if test="${menuMap.parent eq null and (allow.oid eq null or fn:contains(allow.oid, oid)) and (allow.task eq null or fn:contains(allow.task, task)) and (allow.role eq null or fn:contains(allow.role, role))}">
-					<c:set var="thisCode" value="${menuMap.code}"/>
-					<c:choose>
-						<c:when test="${cookieLang eq 'KO'}">
-							<c:set var="menuName" value="${menuMap.name.kr}"/>
-						</c:when>
-						<c:otherwise>
-							<c:set var="menuName" value="${menuMap.name.en}"/>
-						</c:otherwise>
-					</c:choose>
+				<c:set var="deny" value="${menuMap.access.deny}"/>
+				<c:if test="${deny ne null or !fn:contains(deny, oid)}">
+					<c:if test="${menuMap.parent eq null and (allow.oid eq null or fn:contains(allow.oid, oid)) and (allow.task eq null or fn:contains(allow.task, task)) and (allow.role eq null or fn:contains(allow.role, role))}">
+						<c:set var="thisCode" value="${menuMap.code}"/>
+						<c:choose>
+							<c:when test="${cookieLang eq 'KO'}">
+								<c:set var="menuName" value="${menuMap.name.kr}"/>
+							</c:when>
+							<c:otherwise>
+								<c:set var="menuName" value="${menuMap.name.en}"/>
+							</c:otherwise>
+						</c:choose>
 
-					<li class="${fn:replace(menuMap.icon_class, 'smn', 'gmn')} menu-item">
-						<a href="javascript:void(0);">${menuName}</a>
-						<ul class="sub-menu-list">
-							<c:forEach var="menu" items="${menuList}">
-								<c:set var="subMenuMap" value="${menu.value}"/>
-								<c:set var="subAllow" value="${subMenuMap.access.allow}"/>
-								<c:if test="${subMenuMap.parent ne null and thisCode eq subMenuMap.parent and (subAllow.oid eq null or fn:contains(subAllow.oid, oid)) and (subAllow.task eq null or fn:contains(subAllow.task, task)) and (subAllow.role eq null or fn:contains(subAllow.role, role))}">
+						<c:choose>
+							<c:when test="${menuMap.valign ne null and menuMap.valign eq 'bottom'}">
+								<li class="${fn:replace(menuMap.icon_class, 'smn', 'gmn')}">
+									<a href="/${menuMap.href}">${menuName}</a>
+								</li>
+							</c:when>
+							<c:otherwise>
+								<li class="${fn:replace(menuMap.icon_class, 'smn', 'gmn')} menu-item">
 									<c:choose>
-										<c:when test="${cookieLang eq 'KO'}">
-											<c:set var="subMenuName" value="${subMenuMap.name.kr}"/>
+										<c:when test="${menuMap.href ne null and !empty menuMap.href}">
+											<a href="${menuMap.href}">${menuName}</a>
 										</c:when>
 										<c:otherwise>
-											<c:set var="subMenuName" value="${subMenuMap.name.en}"/>
+											<a href="javascript:void(0);">${menuName}</a>
 										</c:otherwise>
 									</c:choose>
+									<ul class="sub-menu-list">
+										<c:forEach var="menu" items="${menuList}">
+											<c:set var="subMenuMap" value="${menu.value}"/>
+											<c:set var="subAllow" value="${subMenuMap.access.allow}"/>
+											<c:set var="subDeny" value="${subMenuMap.access.deny}"/>
+											<c:if test="${subDeny ne null or !fn:contains(subDeny, oid)}">
+												<c:if test="${subMenuMap.parent ne null and thisCode eq subMenuMap.parent and (subAllow.oid eq null or fn:contains(subAllow.oid, oid)) and (subAllow.task eq null or fn:contains(subAllow.task, task)) and (subAllow.role eq null or fn:contains(subAllow.role, role))}">
+													<c:choose>
+														<c:when test="${cookieLang eq 'KO'}">
+															<c:set var="subMenuName" value="${subMenuMap.name.kr}"/>
+														</c:when>
+														<c:otherwise>
+															<c:set var="subMenuName" value="${subMenuMap.name.en}"/>
+														</c:otherwise>
+													</c:choose>
 
-									<li><a href="/${subMenuMap.href}">${subMenuName}</a></li>
-								</c:if>
-							</c:forEach>
-						</ul>
-					</li>
+													<li><a href="/${subMenuMap.href}">${subMenuName}</a></li>
+												</c:if>
+											</c:if>
+										</c:forEach>
+									</ul>
+								</li>
+							</c:otherwise>
+						</c:choose>
+					</c:if>
 				</c:if>
 			</c:forEach>
 		</ul>
