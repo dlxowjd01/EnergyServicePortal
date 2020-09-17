@@ -243,6 +243,7 @@ html.darkmode:root {
 
 	--bg-battery-cover: url("/img/battary_cover_dark.png");
 
+	--btn-add: url("/img/icon_add_sm.svg");
 	--btn-edit: url("/img/icon_edit.svg");
 	--btn-circle-close: url("/img/icon_circle_close.svg");
 	--btn-close: url("/img/icon_delete.svg");
@@ -710,7 +711,7 @@ a.btn.btn_type03:hover {
 	margin: 2px 3px 0 0;
 	width: 18px;
 	height: 18px;
-	background: var(--ico-add) no-repeat;
+	background: var(--ico-add-svg) no-repeat;
 	vertical-align: top;
 	content: "";
 	cursor: pointer;
@@ -1269,9 +1270,9 @@ table tbody td .dropdown-menu {
 	margin-bottom: 28px;
 }
 
-.mx-12 {
-	margin-left: 12px;
-	margin-left: 12px;
+.mx-16 {
+	margin-left: 16px;
+	margin-right: 16px;
 }
 
 .my-20 {
@@ -1345,6 +1346,10 @@ table tbody td .dropdown-menu {
 
 .mb-24 {
 	margin-bottom: 24px;
+}
+
+.mb-52 {
+	margin-bottom: 52px !important;
 }
 
 .my-14 {
@@ -3165,6 +3170,11 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 	padding-left: 0;
 }
 
+.site-modal-content .modal-header {
+	line-height: 24px;
+	margin: 0 16px;
+}
+
 .site-modal-content .warning-wrapper {
 	margin: 12px 0 0 0;
 	padding-left: 0;
@@ -3178,24 +3188,29 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 	margin-top: 8px;
 }
 
-.site-modal-content .dataTables_wrapper td .icon-edit {
-	margin: 0;
-	width: 55px;
+.site-modal-content .dataTables_wrapper td .flex_start {
 	line-height: 36px;
 	height: 36px;
-	text-indent: 10px;
+}
+
+.site-modal-content .dataTables_wrapper td .icon-add {
+	margin: 0 10px;
 	background-size: 14px;
-	background-position: 0 11px;
+	fill-opacity: 0.6;
+}
+
+.site-modal-content .dataTables_wrapper td .icon-edit {
+	margin: 0 10px;
+	background-size: 14px;
 }
 
 .site-modal-content .dataTables_wrapper td .icon-delete {
-	margin: 0;
-	width: 55px;
-	line-height: 36px;
-	height: 36px;
-	text-indent: 10px;
-	background-size: 10px;
-	background-position: 0;
+	margin: 0 10px;
+	background-size: 12px;
+}
+
+.site-modal-content .dataTables_wrapper td .dropdown-menu {
+	max-height: 150px;
 }
 
 .site-modal-content .dataTables_wrapper td:nth-of-type(4) .dropdown-menu {
@@ -3224,6 +3239,11 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 .site-modal-content td .tx_inp_type + .dropdown,
 .site-modal-content td .tx_inp_type + .tx_inp_type {
 	margin: 8px 0 0;
+}
+
+.site-modal-content .modal-header .warning {
+	padding-top: 36px;
+	line-height: 13px;
 }
 
 .site-modal-content .flex_start .dropdown.offset-16 {
@@ -7453,6 +7473,7 @@ div.di_wrap dl .link a {
 	margin: 0 auto;
 	width: 48px;
 	height: 100%;
+	filter: invert(0.6);
 	background: var(--ico-add-svg) no-repeat center;
 }
 
@@ -9139,6 +9160,17 @@ div.di_wrap dl .link a {
 .alarm_modal_content .btn_close {
 	margin: 2px 0 0 0;
 	background-size: 8px;
+}
+
+.icon-add {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	border: 0;
+	text-indent: -9999px;
+	vertical-align: middle;
+	background: var(--btn-add) no-repeat center;
+	outline: none;
 }
 
 .icon-edit {

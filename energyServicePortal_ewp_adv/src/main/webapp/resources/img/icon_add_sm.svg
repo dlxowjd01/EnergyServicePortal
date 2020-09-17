@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>icon_delete</title>
+    <title>icon_add_sm</title>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" fill-opacity="0.87">
-        <polygon id="icon_delete" fill="#FFFFFF" fill-rule="nonzero" points="16 1.61142857 14.3885714 0 8 6.38857143 1.61142857 0 0 1.61142857 6.38857143 8 0 14.3885714 1.61142857 16 8 9.61142857 14.3885714 16 16 14.3885714 9.61142857 8"></polygon>
+        <path d="M9,0 L9,7 L16,7 L16,9 L9,9 L9,16 L7,16 L7,9 L0,9 L0,7 L7,7 L7,0 L9,0 Z" id="icon_add_sm" fill="#FFFFFF" fill-rule="nonzero"></path>
     </g>
 </svg>

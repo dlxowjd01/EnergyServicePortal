@@ -28,15 +28,6 @@ html.darkmode:root {
 	/* table-layout: fixed; */
 }
 
-.dataTable.no-stripe {
-	width: 100%;
-	margin: 0;
-	clear: both;
-	border-collapse: unset;
-	border-spacing: 0;
-}
-
-
 .dataTable thead th {
 	font-size: 13px;
 	font-weight: 500;
@@ -56,18 +47,24 @@ html.darkmode:root {
 	display: none;
 }
 
-.dataTable.no-footer.no-stripe thead th:first-of-type,
-.dataTable.no-footer.no-stripe tbody tr td:first-of-type,
-.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table.no-stripe>tbody>tr>td:first-of-type {
-	/* padding: 14px 10px 14px 28px; */
+.dataTable.no-footer.no-stripe thead th:first-of-type {
 	padding-left: 28px;
 }
 
-.dataTable.no-footer.no-stripe thead th:last-of-type,
+.dataTable.no-footer.no-stripe tbody tr td:first-of-type,
+.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table.no-stripe>tbody>tr>td:first-of-type {
+	/* padding: 14px 10px 14px 28px; */
+	/* padding-left: 28px; */
+}
+
+.dataTable.no-footer.no-stripe thead th:last-of-type {
+	padding-right: 28px;
+}
+
 .dataTable.no-footer.no-stripe tbody tr td:last-of-type,
 .dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table.no-stripe>tbody>tr>td:last-of-type {
 	/* padding: 14px 10px 14px 28px; */
-	padding-right: 28px;
+	/* padding-right: 28px; */
 }
 
 .dataTable.no-footer.no-stripe thead {
