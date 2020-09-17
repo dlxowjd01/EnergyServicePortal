@@ -7,7 +7,7 @@
 <form id="linkSiteForm" name="linkSiteForm" method="post"></form>
 <div class="row header-wrapper">
 	<div class="col-12">
-		<h1 class="page-header fl">${siteName}</h1><button type="button" class="btn_type03">테이블 보기</button>
+		<h1 class="page-header fl">${siteName}</h1><button type="button" class="btn_type03" onclick="showTableView()">테이블 보기</button>
 		<div class="time fr">
 			<span>CURRENT TIME</span>
 			<em class="currTime">${nowTime}</em>
