@@ -1,8 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
-<%@ include file="/decorators/include/taglibs.jsp"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:set var="cookieLang" value="${fn:toUpperCase(cookie['lang'].value)}"/>
+<c:if test="${cookieLang eq null or empty cookieLang}">
+	<c:set var="cookieLang" value="KO"/>
+</c:if>
+
+<fmt:setLocale value="${cookieLang}"/>
+<fmt:setBundle basename="kr.co.esp.message.com.message-common" />
 
 <!DOCTYPE html>
-<html lang="en" class="darkmode">
+<html lang="${cookieLang}" class="darkmode">
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -38,7 +47,7 @@
 			<%@ include file="/decorators/include/selectLang.jsp" %>
 		</nav>
 		<form action="/loginUser.do" method="post" name="loginForm" id="loginForm" class="login-form">
-			<input type="hidden" id="language" name="language"/>
+			<input type="hidden" id="language" name="language" value="${cookieLang}"/>
 			<div class="inner-wrapper">
 				<c:choose>
 					<c:when test="${fn:contains(pageContext.request.serverName, 'spower')}">
@@ -48,8 +57,8 @@
 						<img src="../img/logo_iderms.svg" alt="login modal iderms logo" class="login-logo center"/>
 					</c:otherwise>
 				</c:choose>
-				<div class="input-field"><input type="text" id="loginUserId" name="login_id" class="clear-input" placeholder=<spring:message code="ewp.login.ID"/>></div>
-				<div class="input-field"><input type="password" id="loginUserPw" name="password" class="clear-input" placeholder=<spring:message code="ewp.login.Password"/>><button type="button" class="clear-btn" onclick="showPwd( 'loginUserPw', this)">show</button></div>
+				<div class="input-field"><input type="text" id="loginUserId" name="login_id" class="clear-input" placeholder=<fmt:message key="ewp.login.ID"/>></div>
+				<div class="input-field"><input type="password" id="loginUserPw" name="password" class="clear-input" placeholder=<fmt:message key="ewp.login.Password"/>><button type="button" class="clear-btn" onclick="showPwd( 'loginUserPw', this)">show</button></div>
 				<div class="input-field no-border"><a class="chk_type"><input type="checkbox" id="saveLogin" name="save_login"><label for="saveLogin">로그인 유지</label></a></div>
 
 				<div class="btn-wrapper">
@@ -58,8 +67,6 @@
 				</div>
 
 				<%-- KPX(전력 거래소 사용시 하단 내용 숨김) --%>
-				<%-- global.properties에서 기본 OID 기준 --%>
-				<fmt:message key="default.oid" var="defaultOid"/>
 				<c:if test="${defaultOid ne 'testkpx'}">
 				<div class="desc">
 					<div class="row center">
@@ -266,14 +273,6 @@
 			changeFavicon('/resources/favicon_encored.ico');
 			</c:if>
 
-			var lan = location.search.substr(location.search.length - 2, 2);
-
-			if ( isEmpty(lan) ) {
-				$("#language").val("ko");
-			} else {
-				$("#language").val(lan);
-			}
-
 			$("#loginUserId").val("");
 			$("#loginUserPw").val("");
 
@@ -300,7 +299,7 @@
 			// let modal = $("#warningModal");
 
 			// if (isEmpty(id.value) ) {
-			// 	let msg = '<spring:message code="ewp.login.Singup_ID" />'
+			// 	let msg = '<fmt:message key="ewp.login.Singup_ID" />'
 			// 	$("#warningMsg").text(msg);
 			// 	modal.modal("show");
 			// 	setTimeout(function(){
@@ -311,7 +310,7 @@
 			// 	return false;
 			// }
 			// if ( isEmpty(pwd.value) ) {
-			// 	let msg = '<spring:message code="ewp.login.Singup_PW" />'
+			// 	let msg = '<fmt:message key="ewp.login.Singup_PW" />'
 			// 	$("#warningMsg").text(msg);
 			// 	modal.modal("show");
 			// 	setTimeout(function(){
@@ -335,15 +334,12 @@
 		}
 
 		function addParameterUrl(v) {
-			var f = document.loginForm;
+			document.cookie = 'lang' + '=' + v + '; path=/';
 
-			if (v === "english") {
-				f.action = "/login.do?lang=en";
-			} else {
-				f.action = "/login.do?lang=ko";
-			}
-
+			const f = document.loginForm;
+			document.getElementById('language').value = v;
 			f.method = "post";
+			f.action = "/login.do";
 			f.submit();
 		}
 

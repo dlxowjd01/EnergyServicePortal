@@ -483,7 +483,8 @@
 				if (bankList != null) {
 					Object.entries(bankList).map(bank => {
 						let bankObj = bank[1];
-						let temp = copyBankList.replace(/\*code\*/g, bankObj.name.kr).replace(/\*bankName\*/g, bankObj.name.kr);
+						let propName = (langStatus == 'KO') ? bankObj.name.kr : bankObj.name.en;
+						let temp = copyBankList.replace(/\*code\*/g, propName).replace(/\*bankName\*/g, propName);
 						$('.bank-list').append(temp);
 					});
 				} else {

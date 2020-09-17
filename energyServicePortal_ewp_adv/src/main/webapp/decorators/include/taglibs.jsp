@@ -5,3 +5,11 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="decorator" uri="http://www.opensymphony.com/sitemesh/decorator" %>
 <%@ taglib prefix="page" uri="http://www.opensymphony.com/sitemesh/page" %>
+
+<c:set var="cookieLang" value="${fn:toUpperCase(cookie['lang'].value)}"/>
+<c:if test="${cookieLang eq null or empty cookieLang}">
+	<c:set var="cookieLang" value="KO"/>
+</c:if>
+
+<fmt:setLocale value="${cookieLang}"/>
+<fmt:setBundle basename="kr.co.esp.message.com.message-common" />

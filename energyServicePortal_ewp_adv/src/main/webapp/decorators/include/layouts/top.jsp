@@ -116,7 +116,13 @@
 		//API 토큰 세팅
 		$.ajaxSetup({
 			headers: {'Authorization': 'Bearer <c:out value="${sessionScope.userInfo.token}" escapeXml="false" />'},
-			"timeout": 30000
+			"timeout": 30000,
+			beforeSend: function(xhr, settings) {
+				$('#loadingCircle').show();
+			},
+			ajaxComplete: function() {
+				$('#loadingCircle').hide();
+			}
 		});
 
 		$(document).ajaxSuccess(function() {

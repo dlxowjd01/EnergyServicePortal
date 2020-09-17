@@ -287,6 +287,17 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 		String activateSPC = EgovProperties.getProperty("activateSPC"); //activateSPC True/False
 		String mode = (String) session.getAttribute("mode"); // TEST 서버 여부
 
+		//Menu조회
+		Map<String,Object> parameters = new HashMap<String, Object>();
+		parameters.put("types", "menu");
+		Map<String, Object> menuProperties = get("/config/view/properties", mode, parameters, null); //그룹화되어있는 사이트 리스트 정보
+		if (200 == (int) menuProperties.get("code")) {
+			Map<String, Object> menuMap = (Map<String, Object>) menuProperties.get("data");
+
+			mav.addObject("menuList", menuMap.get("menu"));
+		}
+		//Menu조회
+
 		if (mode != null && "test".equals(mode)) {
 			mav.addObject("apiHost", apiHostTest);
 		} else {
@@ -300,6 +311,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 
 		mav.addObject("nowTime", sdf.format(new Date()));
 		mav.addObject("gitVersion", gitVersion);
+
 		super.postHandle(request, response, handler, mav);
 	}
 

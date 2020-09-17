@@ -2,14 +2,12 @@
 <%@ include file="/decorators/include/taglibs.jsp"%>
 <script src="/js/commonDropdown.js"></script>
 <script>
-	const countryList = [{'value': '대한민국'}];
-	const sidoList = [
-		{'value': '서울'}, {'value': '부산'}, {'value': '대구'}, {'value': '인천'}, {'value': '광주'},
-		{'value': '울산'}, {'value': '세종'}, {'value': '경기'}, {'value': '강원'}, {'value': '충북'}, {'value': '충남'},
-		{'value': '전북'}, {'value': '전남'}, {'value': '경북'}, {'value': '경남'}, {'value': '제주'}
-	];
+	const countryList = new Array();
+	const sidoList = new Array();
 
 	$(function () {
+		fnLocation();
+
 		$("#unitPriceList").on("click", "li", unitPriceListChange);
 
 		initRow('addList_registered_seal');
@@ -79,6 +77,38 @@
 
 		initProcess();
 	});
+
+	const fnLocation = () => {
+		$.ajax({
+			url: apiHost + '/config/view/properties',
+			type: 'get',
+			async: false,
+			data: {types: 'location'},
+			success: function (json) {
+				let rst = json.location;
+
+				Object.entries(rst).forEach(country => {
+					if (country[0] === 'kr') {
+						const locations = country[1].locations;
+						const countryPropName = (langStatus == 'KO') ? country[1].name.kr : country[1].name.en;
+						countryList.push({
+							code: country[1].code,
+							value: countryPropName
+						});
+
+						Object.entries(locations).forEach(loc => {
+							const locPropName = (langStatus == 'KO') ? loc[1].name.kr : loc[1].name.en;
+							sidoList.push({
+								code: loc[1].code,
+								value: locPropName
+							});
+						});
+					}
+				});
+			},
+			error: function (request, status, error) {}
+		});
+	}
 
 	const autoValArr = ['#관리_운영비', '#대수선비', '#사무_수탁비', '#임대료'];
 	$(document).on('keyup', '#전체_용량, #관리_운영비, #대수선비, #사무_수탁비, #임대료', function() {
@@ -1095,7 +1125,7 @@
 										국가 선택<span class="caret"></span>
 									</button>
 									<ul id="spcCountryList" class="dropdown-menu" role="menu">
-										<li data-value="[value]">
+										<li data-value="[code]">
 											<a href="javascript:void(0);">[value]</a>
 										</li>
 									</ul>
@@ -1105,7 +1135,7 @@
 										시/도 선택<span class="caret"></span>
 									</button>
 									<ul id="spcSidoList" class="dropdown-menu" role="menu">
-										<li data-value="[value]">
+										<li data-value="[code]">
 											<a href="javascript:void(0);">[value]</a>
 										</li>
 									</ul>
@@ -1274,8 +1304,8 @@
 									국가 선택<span class="caret"></span>
 								</button>
 								<ul id="countryList" class="dropdown-menu" role="menu">
-									<li data-value="대한민국">
-										<a href="javascript:void(0);">대한민국</a>
+									<li data-value="[code]">
+										<a href="javascript:void(0);">[value]</a>
 									</li>
 								</ul>
 							</div>
@@ -1284,7 +1314,7 @@
 									시/도 선택<span class="caret"></span>
 								</button>
 								<ul id="sidoList" class="dropdown-menu" role="menu">
-									<li data-value="[value]">
+									<li data-value="[code]">
 										<a href="javascript:void(0);">[value]</a>
 									</li>
 								</ul>

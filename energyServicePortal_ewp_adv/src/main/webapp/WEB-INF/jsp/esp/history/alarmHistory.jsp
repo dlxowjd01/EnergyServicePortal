@@ -385,7 +385,8 @@
 			data: {},
 			success: function (result) {
 				Object.entries(result).map(obj => {
-					deviceTemplate[obj[0]] = obj[1].name.kr;
+					let propName = (langStatus == 'KO') ? obj[1].name.kr : obj[1].name.en;
+					deviceTemplate[obj[0]] = propName;
 				});
 			},
 			dataType: 'json'

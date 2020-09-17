@@ -4,6 +4,9 @@
 <!DOCTYPE html>
 <html class="darkmode">
 <head>
+	<script type="text/javascript">
+		const langStatus = '${cookieLang}';
+	</script>
 	<%@ include file="/decorators/include/layouts/top.jsp" %>
 </head>
 <body class="dark">

@@ -61,8 +61,10 @@ public class EgovProperties {
 			
 			fis = new FileInputStream(EgovWebUtil.filePathBlackList(GLOBALS_PROPERTIES_FILE));
 			props.load(new BufferedInputStream(fis));
-			
-			value = props.getProperty(keyName);
+
+			String prefix = ("".equals(props.getProperty("prefix").trim())) ? "encored" : props.getProperty("prefix").trim() + ".";
+
+			value = props.getProperty(prefix + keyName);
 			value = (value == null) ? "" : value.trim();//KISA 보안약점 조치 (2018-10-29, 윤창원)
 			value = RELATIVE_PATH_PREFIX + "kr/co/esp/egovProps" + System.getProperty("file.separator") + value;
 		} catch (FileNotFoundException fne) {
@@ -96,10 +98,12 @@ public class EgovProperties {
 			fis = new FileInputStream(EgovWebUtil.filePathBlackList(GLOBALS_PROPERTIES_FILE));
 			
 			props.load(new BufferedInputStream(fis));
-			if (props.getProperty(keyName) == null) {
+
+			String prefix = ("".equals(props.getProperty("prefix").trim())) ? "encored" : props.getProperty("prefix").trim() + ".";
+			if (props.getProperty(prefix + keyName) == null) {
 				return "";
 			}
-			value = props.getProperty(keyName).trim();
+			value = props.getProperty(prefix + keyName).trim();
 		} catch (FileNotFoundException fne) {
 			LOGGER.debug("Property file not found.", fne);
 			throw new RuntimeException("Property file not found", fne);
@@ -128,7 +132,8 @@ public class EgovProperties {
 			props.load(new BufferedInputStream(fis));
 			fis.close();
 
-			String value = props.getProperty(key);
+			String prefix = ("".equals(props.getProperty("prefix").trim())) ? "encored" : props.getProperty("prefix").trim() + ".";
+			String value = props.getProperty(prefix + key);
 			value = RELATIVE_PATH_PREFIX + "kr/co/esp/egovProps" + System.getProperty("file.separator") + value;
 			
 			return value;
@@ -158,8 +163,8 @@ public class EgovProperties {
 			props.load(new BufferedInputStream(fis));
 			fis.close();
 
-			String value = props.getProperty(key);
-			
+			String prefix = ("".equals(props.getProperty("prefix").trim())) ? "encored" : props.getProperty("prefix").trim() + ".";
+			String value = props.getProperty(prefix + key);
 			return value;
 		} catch (FileNotFoundException fne) {
 			LOGGER.debug("Property file not found.", fne);

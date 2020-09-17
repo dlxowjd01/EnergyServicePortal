@@ -59,8 +59,7 @@ public class RootContext {
 		EgovWildcardReloadableResourceBundleMessageSource messageSource = new EgovWildcardReloadableResourceBundleMessageSource();
 		messageSource.setEgovBasenames(new String[]{
 				"classpath*:/kr/co/esp/message/com/**/*",
-				"classpath:/kr/co/esp/egovProps/globals",
-				"classpath:/kr/co/esp/message/esp/message-common"
+				"classpath:/kr/co/esp/egovProps/globals"
 		});
 		messageSource.setCacheSeconds(60);
 

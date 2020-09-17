@@ -38,8 +38,8 @@
 					json.certCntList.forEach(cert => {
 						if (cert.STATUS === '등록') {
 							$('#등록').text(cert.CNT + ' 건');
-						} else if (cert.STATUS === '폐지') {
-							$('#폐지').text(cert.CNT + ' 건');
+						} else if (cert.STATUS === '폐기') {
+							$('#폐기').text(cert.CNT + ' 건');
 						}
 					});
 
@@ -127,7 +127,7 @@
 			deviceTable.rows('.selected')[0].forEach(device => {
 				const status = deviceTable.rows(device).data()[0].status;
 
-				if ((mode === 'issue' && status == '발급 가능') || (mode === 'revoke' && status == '폐지 가능')) {
+				if ((mode === 'issue' && status == '발급 가능') || (mode === 'revoke' && status == '폐기 가능')) {
 					deviceArray.push(deviceTable.rows(device).data()[0].apply_ID);
 				} else {
 					process = false;
@@ -211,7 +211,7 @@
 								<th><h2 class="tx_tit">제조사명</h2></th>
 								<td id="PKG_MANUFACTURE_NAME"></td>
 								<th><h2 class="tx_tit">폐기</h2></th>
-								<td id="폐지"></td>
+								<td id="폐기"></td>
 							</tr>
 							<tr>
 								<th><h2 class="tx_tit">제품모델명</h2></th>

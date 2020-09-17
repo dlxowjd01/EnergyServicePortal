@@ -553,28 +553,33 @@
 					let propList = val.properties;
 					let tempTable = new Array();
 					let tempFeature = new Array();
+					let devicePropName = (langStatus == 'KO') ? val.name.kr : val.name.en;
+					let siteLocaleName = (langStatus == 'KO') ? '사이트명' : 'siteName';
 
-					deviceTemplate[deviceName] = val.name.kr;
+					deviceTemplate[deviceName] = devicePropName;
+
 
 					tempTable.push({
 						key: 'siteName',
-						value: '사이트명'
+						value: siteLocaleName
 					});
 
 					$.map(propList, function (v, k) {
 						if (v.analysis_table) {
 							let tempObj = new Object();
 							let unit = (v.unit != null && v.unit != '') ? '(' + v.unit + ')' : '';
+							let propName = (langStatus == 'KO') ? v.name.kr : v.name.en;
 							tempObj['key'] = k;
-							tempObj['value'] = v.name.kr + unit;
+							tempObj['value'] = propName + unit;
 							tempTable.push(tempObj);
 						}
 
 						if (v.analysis_feature) {
 							let tempObj = new Object();
 							let unit = (v.unit != null && v.unit != '') ? '(' + v.unit + ')' : '';
+							let propName = (langStatus == 'KO') ? v.name.kr : v.name.en;
 							tempObj['key'] = k;
-							tempObj['value'] = v.name.kr + unit;
+							tempObj['value'] = propName + unit;
 							tempFeature.push(tempObj);
 						}
 					});

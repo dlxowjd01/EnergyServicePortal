@@ -20,7 +20,7 @@
 	const deviceTemplate = new Array();
 
 	<!-- properties 조회 -->
-	const deviceProperties = async () => {
+	const deviceProperties2 = async () => {
 		$.ajax({
 			url: apiHost + '/config/view/device_properties',
 			type: 'get',
@@ -28,17 +28,16 @@
 			data: {},
 			success: function (result) {
 				Object.entries(result).map(obj => {
-					deviceTemplate[obj[0]] = obj[1].name.kr;
+					let propName = (langStatus == 'KO') ? obj[1].name.kr : obj[1].name.en;
+					deviceTemplate[obj[0]] = propName;
 				});
-
-				deviceType();
 			},
 			dataType: 'json'
 		});
 	};
 
 	$(function () {
-		deviceProperties();
+		deviceProperties2();
 		const compareArea = $('#siteList').next().find('.compare_area');
 		const dropdownArea = compareArea.find('.search_expand');
 		const compareSelectBox = compareArea.find('.btn.clear-btn');

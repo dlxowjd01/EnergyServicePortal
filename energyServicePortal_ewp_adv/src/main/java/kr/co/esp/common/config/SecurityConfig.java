@@ -58,9 +58,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.failureUrl("/loginFailure.do")
 			.defaultSuccessUrl("/loginSuccess.do", true)
 			.usernameParameter("login_id")
-			.passwordParameter("password");
-
-		http.logout()
+			.passwordParameter("password")
+			.and()
+			.logout()
 			.logoutRequestMatcher(new AntPathRequestMatcher("/logout.do"))
 			.logoutSuccessUrl("/login.do").permitAll()
 			.deleteCookies("JSESSIONID")
