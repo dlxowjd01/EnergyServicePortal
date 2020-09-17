@@ -45,12 +45,12 @@
 			// Promise.resolve(returnAjaxRes(optionList[0])).then( res => {
 				// console.log("res[0]===", res[0]);
 				// console.log("res[1]===", res[1]);
-				readWriteTable(res[0], res[1]);
+				adminTable(res[0], res[1]);
 			});
 		} else {
 			Promise.all([ Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])), Promise.resolve(returnAjaxRes(optionList[2])) ]).then( res => {
 			// Promise.resolve(returnAjaxRes(optionList[2])).then( res => {
-				readOnlyTable( res[0], res[1], res[2].user_sites);
+				nonAdminTable( res[0], res[1], res[2].user_sites);
 			});
 		}
 
@@ -137,6 +137,7 @@
 			initModal();
 		});
 
+
 		$("#deleteConfirmBtn").click(function(){
 			let dTable = $("#siteTable").DataTable();
 			let tr = $("#siteTable").find("tbody tr.selected");
@@ -176,44 +177,13 @@
 			}, 1600);
 		});
 
-		$("#alarmDeleteConfirmBtn").click(function(){
-			let dTable = $("#siteTable").DataTable();
-			let tr = $("#siteTable").find("tbody tr.selected");
-			let sid = dTable.row(tr).data().sid;
-			let modalBody = $("#alarmDeleteConfirmModal .modal-body");
-
-			let optDelete = {
-				url: apiHost + "/config/sites/" + sid,
-				type: "delete",
-				async: true,
-			}
-			modalBody.addClass("hidden");
-			$.ajax(optDelete).done(function (json, textStatus, jqXHR) {
-				$("#deleteSuccessMsg").text("사이트가 삭제 되었습니다.").removeClass("hidden");
-				refreshAlarmList();
-				setTimeout(function(){
-					$("#deleteConfirmModal").modal("hide");
-				}, 1500);
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				modalBody.addClass("hidden");
-				$("#deleteSuccessMsg").text("사이트 삭제에 실패하였습니다.\n다시 시도해 주세요.").removeClass("hidden");
-				setTimeout(function(){
-					$("#deleteConfirmModal").modal("hide");
-				}, 1500);
-				console.log("fail==", jqXHR)
-			});
-		});
-
-		$("#deleteConfirmModal").on("hide.bs.modal", function() {
-			$(this).find(".modal-body").removeClass("hidden");
-			$("#deleteSuccessMsg").html('<h5 id="deleteSuccessMsg" class="ntit">사용자 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>');
-			$("#confirmSite").val("");
+		$("#addAlarmModal").on("hide.bs.modal", function() {
+			$("#alarmTable").DataTable().clear().destroy();
 		});
 
 		$("#resultModal").on("hide.bs.modal", function() {
 			$(this).find("h4").addClass("hidden");
 		});
-
 
 		// Form Submission !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		$("#updateSiteForm").on("submit", function(e){
@@ -273,7 +243,7 @@
 			let siteObj = {};
 
 
-			let newStationId, kpxGenId, kpxEmsId, testkpxTransvol;
+			let newStationId, kpxGenId, kpxEmsId, kpxTransvol;
 			if (oid.match('testkpx')) {
 				newStationId = $('#station_id').val();
 				kpxGenId = $('#kpx_genid').val();
@@ -335,7 +305,6 @@
 					newUtilObj.utility_plan_id = newUtilPlanId;
 					newUtilObj.utility_plan_name = newUtilPlanName;
 					if( !isEmpty(newVoltName)){
-						console.log("newVoltName===", newVoltName)
 						newUtilObj.volt_name = newVoltName;
 					}
 				}
@@ -480,9 +449,7 @@
 				if( !isEmpty(newUtilPlanId) ){
 					newUtilObj.utility_plan_id = newUtilPlanId;
 					newUtilObj.utility_plan_name = newUtilPlanName;
-					console.log("newUtilPlanId===", newUtilPlanId)
 					if( !isEmpty(newVoltName) ){
-						console.log("newVoltName===", newVoltName)
 						newUtilObj.volt_name = newVoltName;
 					}
 				}
@@ -576,23 +543,100 @@
 			}
 		});
 
-		$("#addAlarmForm").on("submit", function(e){
+		$("#updateAlarmForm").on("submit", function(e){
 			e.preventDefault();
-			let arr = [];
-			let tr = $("#alarmTable tbody tr");
-			$.each(tr, function(index, el){
-				if(!tr.hasClass("disabled")){
-					let obj = {};
-					let dropdown = el.find(".dropdown-toggle");
-					let input = el.find("input[type='text']");
+			let aTable = $("#alarmTable").DataTable();
+			let ajaxPromises = [];
+			let tr = $("#alarmTable tbody tr:not(.hidden)");
 
-					obj.device_type = dropdown.eq(0).data("value");
-					obj.name = dropdown.eq(1).data("value");
-					obj.level = dropdown.eq(2).data("value");
-					obj.person = dropdown.eq(3).data("value");
-					obj.phone = input.val();
+			$.each(tr, function(index, el){
+				let td = $(this).find("td");
+				let did = td.eq(0).find(".dropdown-toggle").data("did");
+				let alarmLvl = td.eq(2).find(".dropdown-toggle");
+				let contactName = td.eq(3).find(".dropdown-toggle");
+				// let contactInput = td.eq(3).find(".dropdown + .tx_inp_type");
+				let contactNum = td.eq(4).find(".tx_inp_type");
+				let nonUserArr = [];
+				let registeredUserArr = [];
+
+				let alarmToObj = {};
+
+				let deviceOpt = {
+					url: apiHost + "/config/devices/" + did,
+					type: 'patch',
+					async: true,
+					contentType: 'application/json; charset=UTF-8',
+				};
+				console.log("did===", did)
+				for(let i=0, length = alarmLvl.length; i<length; i++){
+					// if(!$(editItems[i]).is(":disabled")){
+					if(!alarmLvl.eq(i).is(":disabled")){
+						let levelArr = [];
+						let contactNameArr = [];
+						let contactNumArr = [];
+
+						let selectedLevel = alarmLvl.eq(i).parent().find("input:checked");
+						let selectedContactName = contactName.eq(i).parent().find("input:checked");
+
+						$.each(selectedLevel, function(){
+							levelArr.push(Number($(this).val()));
+						});
+
+						if( !contactNum.eq(i).hasClass("disabled") ){
+							console.log()
+							let nonUserObj = {};
+							nonUserObj.level = levelArr;
+							nonUserObj.name = contactName.eq(i).parent().next().find("input[type='text']").val();
+							nonUserObj.phone = contactNum.eq(i).children().val();
+							nonUserArr.push(nonUserObj);
+						} else {
+							$.each(selectedContactName, function(){
+								let userObj = {};
+								userObj.uid = $(this).data("uid");
+								userObj.level = levelArr;
+								registeredUserArr.push(userObj);
+							});
+						}
+					}
+
 				}
 
+				if(!isEmpty(nonUserArr) && !isEmpty(registeredUserArr)) {
+					alarmToObj = {
+						non_user: nonUserArr,
+						user: registeredUserArr
+					}
+				} else {
+					if(!isEmpty(nonUserArr)){
+						alarmToObj = {
+							non_user: nonUserArr
+						}
+					}
+					if(!isEmpty(registeredUserArr)){
+						alarmToObj = {
+							user: registeredUserArr
+						}
+					}
+				}
+	
+				let newObj = {
+					// alarm_to: alarmToObj
+					alarm_to: JSON.stringify(alarmToObj)
+				}
+				deviceOpt.data = JSON.stringify(newObj);
+				console.log("deviceOpt===", deviceOpt)
+				ajaxPromises.push(makeAjaxCall(deviceOpt));
+			});
+
+			Promise.all(ajaxPromises).then(res => {
+				$("#addAlarmModal").modal("hide");
+				$("#resultSuccessMsg").text("알람 설정이 완료 되었습니다.").removeClass("hidden");
+				$("#resultBtn").parent().addClass("hidden");
+				$("#resultModal").modal("show");
+				refreshSiteList();
+				setTimeout(function(){
+					$("#resultModal").modal("hide");
+				}, 1600);
 			});
 		});
 		
@@ -620,11 +664,11 @@
 		$('#siteTable').DataTable().clear().destroy();
 		Promise.all([ Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])) ]).then( res => {
 		// Promise.resolve(returnAjaxRes(optionList[0])).then( res => {
-			readWriteTable(res[0], res[1], initModal);
+			adminTable(res[0], res[1], initModal);
 		});
 	}
 
-	function readWriteTable(siteData, vppNameData, callback) {
+	function adminTable(siteData, vppNameData, callback) {
 		if(!callback) {
 			getPropertyData();
 			getVppDrData(vppNameData);
@@ -632,7 +676,7 @@
 			callback();
 		}
 		if(siteData) {
-			console.log("siteData---", siteData)
+			// console.log("siteData---", siteData)
 			let newArr = [];
 			Promise.resolve(siteData.map((item, index) => {
 			// siteData.forEach((item, index) => {
@@ -664,13 +708,13 @@
 
 					if(item.resource_type === 0) {
 						// Demand && ESS : pair
-						item.siteType = "수요자원 (Demand)"
+						item.siteType = "수요자원"
 						item.powerSource = "부하"
 					} else {
 						if(isEmpty(item.resource_type)){
 							item.siteType = "-"
 						} else {
-							item.siteType = "발전소 (Generation)"
+							item.siteType = "발전소"
 						}
 						if(item.resource_type === 1){
 							item.powerSource = "태양광"
@@ -701,14 +745,6 @@
 						item.vppName = "-"
 					}
 					// console.log("sid-===", item.sid);
-					// let deviceOpt = {
-					// 	url: apiHost + "/config/devices?"+'oid='+oid,
-					// 	type: 'get',
-					// 	async: false,
-					// 	data:{
-					// 		sid: item.sid
-					// 	}
-					// }
 					let deviceOpt = {
 						url: apiHost + "/config/devices?"+'oid='+oid,
 						type: 'get',
@@ -720,10 +756,26 @@
 
 					$.ajax(deviceOpt).done(function (json, textStatus, jqXHR) {
 						if(json.length > 0 ){
-							item.alarmFlag = 1;
+							// let alarmArr = [];
+							let found = json.findIndex( x => x.alarm_to);
+							if( found > - 1) {
+								item.alarmFlag = true;
+								item.alarmLength = found;
+							} else {
+								alarmFlag = false;
+							}
 							item.alarmInfo = json;
-						} else {
-							item.alarmFlag = 0;
+							// Promise.resolve(json.map( x => {
+							// 	if(!isEmpty(x.alarm_to)){
+							// 		item.alarmFlag = true;
+							// 		// alarmArr.push(x);
+							// 	}
+							// })).then( res => {
+							// 	item.alarmInfo = json;
+							// 	// item.alarmInfo = alarmArr;
+							// 	// alarmArr.push(x);
+							// 	// console.log("item===", item)
+							// });
 						}
 					}).fail(function (jqXHR, textStatus, errorThrown) {
 						console.log("deviceOpt error===", jqXHR)
@@ -754,6 +806,7 @@
 				});
 
 			})).then( res => {
+				// console.log("newArr===", newArr);
 				// console.log("m===", newArr[14].alarmData)
 				// console.log("response===", response)
 				// 1. 사업소 유형
@@ -878,17 +931,18 @@
 							"sTitle": "VPP 자원코드",
 							"mData": "vppName",
 						},
-						// {
-						// 	"sTitle": "알람 수신",
-						// 	"mData": null,
-						// 	"mRender": function ( data, type, full, rowIndex )  {
-						// 		if(full.alarmFlag === 1){
-						// 			return '<button type="button" class="btn-type-sm btn_type03">알람</button>'
-						// 		} else {
-						// 			return '<button type="button" disabled class="btn-type-sm btn_type03">알람</button>'
-						// 		}
-						// 	},
-						// },
+						{
+							"sTitle": "알람 수신",
+							"mData": null,
+							"mRender": function ( data, type, full, rowIndex )  {
+								// return '<button type="button" class="btn-type-sm btn_type03">알람</button>'
+								if(!isEmpty(data.alarmInfo)){
+									return '<button type="button" class="btn-type-sm btn_type03">알람</button>'
+								} else {
+									return '<button type="button" disabled class="btn-type-sm btn_type03">알람</button>'
+								}
+							},
+						},
 						{
 							"sTitle": "업데이트 일자",
 							"mData": "updatedAt",
@@ -897,7 +951,8 @@
 					"dom": 'tip',
 					"select": {
 						style: 'single',
-						selector: 'td input[type="checkbox"], tr'
+						// selector: 'td input[type="checkbox"], tr'
+						selector: 'td input[type="checkbox"], td:not(:nth-of-type(11))'
 					},
 					initComplete: function(settings, json ){
 						let str = `<div id="btnGroup" class="right-end"><!--
@@ -908,16 +963,13 @@
 						let addBtnStr = `<button type="button" class="btn_type fr mb-20" onclick="updateModal('add')">추가</button>`;
 						$("#siteTable_wrapper").append($(str)).prepend($(addBtnStr));
 						if(oid.match("testkpx")){
-                            this.api().columns([8,9]).visible( false );
-                        }
+							this.api().columns([8,9]).visible( false );
+						}
 					},
 					// every time DataTables performs a draw
 					drawCallback: function (settings) {
 						$('#siteTable_wrapper').addClass('mb-28');
 					},
-					// rowCallback: function ( row, data ) {
-					// 	// console.log("data---", data.alarmFlag);
-					// }
 				}).on("select", function(e, dt, type, indexes) {
 					let btn = $("#btnGroup").find(".btn_type03");
 					btn.each(function(index, element){
@@ -963,25 +1015,26 @@
 				// 	console.log("sid===", data.sid)
 				// }).data();
 
-				// siteTable.on( 'click', 'td .btn-type-sm', function () {
-				// 	let tr = $(this).parents().closest("tr");
-				// 	let idx = siteTable.row(tr).index();
+				siteTable.on( 'click', 'td .btn-type-sm', function () {
+					let tr = $(this).parents().closest("tr");
+					let idx = siteTable.row(tr).index();
 
-				// 	// if(!isEmpty(siteTable.row(tr).data().alarmData)){
-				// 		let rowData = siteTable.row(tr).data().alarmInfo;
-				// 		let userOpt = {
-				// 			url: apiHost + "/config/users",
-				// 			type: 'get',
-				// 			async: false,
-				// 			data : {
-				// 				oid: oid,
-				// 			}
-				// 		}
-				// 		Promise.resolve(makeAjaxCall(userOpt)).then(res => {
-				// 			getAlarmTable(rowData, res)
-				// 		});
-				// 	// }
-				// });
+					// if(!isEmpty(siteTable.row(tr).data().alarmData)){
+						let rowData = siteTable.row(tr).data().alarmInfo;
+						let userOpt = {
+							url: apiHost + "/config/users",
+							type: 'get',
+							async: false,
+							data : {
+								oid: oid,
+							}
+						}
+
+						Promise.resolve(makeAjaxCall(userOpt)).then(res => {
+							getAlarmTable(rowData, res);
+						});
+					// }
+				});
 
 				new $.fn.dataTable.Buttons( siteTable, {
 					name: 'commands',
@@ -1051,11 +1104,12 @@
 	}
 
 
-	function readOnlyTable(allSites, vppNameData, userSite) {
+	function nonAdminTable(allSites, vppNameData, userSite) {
 		if(userSite){
 			let newArr = [];
 			Promise.resolve(allSites.map((item, index) => {
-				let found = allSites.findIndex( x => x.sid == item.sid);
+				let found = userSite.findIndex( x => x.sid == item.sid);
+
 				let matchedData = allSites[found];
 
 				if(found > -1){
@@ -1101,6 +1155,7 @@
 						}
 
 						item.name = matchedData.name;
+						item.role = userSite[found].role;
 
 						if(!isEmpty(matchedData.location)){
 							item.location = matchedData.location;
@@ -1110,13 +1165,13 @@
 
 						if(matchedData.resource_type === 0) {
 							// Demand && ESS : pair
-							item.siteType = "수요자원 (Demand)"
+							item.siteType = "수요자원"
 							item.powerSource = "부하"
 						} else {
 							if(isEmpty(matchedData.resource_type)){
 								item.siteType = "-"
 							} else {
-								item.siteType = "발전소 (Generation)"
+								item.siteType = "발전소"
 							}
 							if(matchedData.resource_type === 1){
 								item.powerSource = "태양광"
@@ -1189,6 +1244,8 @@
 					"bScrollCollapse": true,
 					"pageLength": 100,
 					"aaSorting": [[ 0, 'asc' ]],
+					"bSortable": true,
+					"order": [[ 1, 'asc' ]],
 					// "bFilter": false, disabling this option will prevent table.search()
 		
 					"aoColumnDefs": [
@@ -1199,10 +1256,18 @@
 						},
 					],
 					"aoColumns": [
+						// {
+						// 	"sTitle": "순번",
+						// 	"mData": null,
+						// 	"className": "dt-center no-sorting"
+						// },
 						{
-							"sTitle": "순번",
+							"sTitle": "",
 							"mData": null,
-							"className": "dt-center no-sorting"
+							"mRender": function ( data, type, full, rowIndex )  {
+								return '<a class="chk_type" href="#"><input type="checkbox" id="' + rowIndex.row + '" name="table_checkbox"><label for="' + rowIndex.row + '"></label></a>'
+							},
+							"className": "dt-body-center no-sorting"
 						},
 						{
 							"sTitle": "사업소 유형",
@@ -1250,28 +1315,85 @@
 						"zeroRecords":  "검색된 결과가 없습니다."
 					},
 					"dom": 'tip',
-					// "select": {
-					// 	style: 'single',
-					// selector: 'td:first-child > a',
-					// },
+					"select": {
+						style: 'single',
+						// selector: 'td:first-child > a',
+						// selector: 'td input[type="checkbox"], tr'
+						selector: 'td input[type="checkbox"], td:not(:nth-of-type(11))'
+					},
 					initComplete: function(){
+						// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+						// 	cell.innerHTML = i+1;
+						// 	$(cell).data("id", i);
+						// });
+						let str = `<div id="btnGroup" class="right-end"><!--
+							--><button type="button" disabled class="btn_type03" onclick="updateModal('edit')">선택 수정</button><!--
+							--><button type="button" disabled class="btn_type03" onclick="updateModal('delete')">선택 삭제</button><!--
+						--></div>`;
+						$("#siteTable_wrapper").append($(str));
+
 						this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
 							cell.innerHTML = i+1;
 							$(cell).data("id", i);
 						});
 						if(oid.match("testkpx")){
-                            this.api().columns([8,9]).visible( false );
-                        }
+							this.api().columns([8,9]).visible( false );
+						}
 					},
-				}).columns.adjust().draw();
+					drawCallback: function (settings) {
+						$('#siteTable_wrapper').addClass('mb-28');
+					},
+					// rowCallback: function ( row, data ) {
+					// 	// readWrite
+					// 	if(data.role == 1){
+							
+					// 	// readOnly
+					// 	} else {
 
-				// if (siteTable.data().length != 0) {
-				// 	siteTable.on('order.dt search.dt', function () {
-				// 		siteTable.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+					// 	}
+					// 	console.log("role---", data.role);
+
+					// }
+				}).on("select", function(e, dt, type, indexes) {
+					let btn = $("#btnGroup").find(".btn_type03");
+					btn.each(function(index, element){
+						if($(this).is(":disabled")){
+							$(this).prop("disabled", false);
+						}
+					});
+					siteReadOnlyTable.rows( indexes ).nodes().to$().find("input").prop("checked", true);
+					// console.log("dt---", siteReadOnlyTable[ type ]( indexes ).nodes())
+				}).on("deselect", function(e, dt, type, indexes) {
+					let btn = $("#btnGroup").find(".btn_type03");
+					btn.each(function(index, element){
+						if(!$(this).is(":disabled")){
+							$(this).prop("disabled", true);
+						}
+					});
+					siteReadOnlyTable.rows( indexes ).nodes().to$().find("input").prop("checked", false);
+					// console.log("dt---", siteReadOnlyTable[ type ]( indexes ).nodes())
+				}).columns.adjust();
+
+
+				// if (siteReadOnlyTable.data().length != 0) {
+				// 	siteReadOnlyTable.on('order.dt search.dt', function () {
+				// 		siteReadOnlyTable.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
 				// 			cell.innerHTML = i + 1;
-				// 			siteTable.cell(cell).invalidate('dom');
+				// 			siteReadOnlyTable.cell(cell).invalidate('dom');
 				// 		});
 				// }).draw();
+
+				$('#siteTable').find("input:checkbox").on('click', function() {
+					var $box = $(this);
+					if ($box.is(":checked")) {
+						var group = "input:checkbox[name='" + $box.attr("name") + "']";
+						$(group).prop("checked", false);
+						$box.prop("checked", true);
+					} else {
+						$box.prop("checked", false);
+					}
+				});
+				
 
 				$("#siteType").find("li").on( 'click', function(){
 					if(!isEmpty($(this).data("name"))){
@@ -1287,7 +1409,7 @@
 			
 			});
 		} else {
-			drawEmptyTable($("#siteTable"))
+			// drawEmptyTable($("#siteTable"))
 		}
 		$("#loadingCircle").hide();
 	}
@@ -1493,7 +1615,7 @@
 			let allStr = '<li><a href="#">전체</a></li>';
 
 			$.each(r, function(index, el){
-				let name = `${'${el.name.kr}'} (${'${el.name.en}'})`;
+				let name = `${'${el.name.kr}'}`;
 				resStr += `
 					<li data-name="${'${name}'}" data-value="${'${el.code}'}"><a href="#">${'${name}'}</a></li>
 				`
@@ -1541,9 +1663,9 @@
 					filterColumn("#siteTable", "4", "");
 				}
 			});
-			console.log("s===", s)
+
 			$.each(s, function(index, el){
-				let name = `${'${el.name.kr}'} (${'${el.name.en}'})`;
+				let name = `${'${el.name.kr}'}`;
 				if(el.code == "gen"){
 					siteStr += `
 						<li data-name="${'${name}'}" data-value="1"><a href="#">${'${name}'}</a></li>
@@ -1554,11 +1676,17 @@
 					`;
 				}
 			});
+
+
+			allStr += siteStr;
+			$("#siteType").append(allStr);
+
 			siteStr += `
 				<li><a href="#">해당 사항 없음</a></li>
 			`;
 			$("#newSiteType").append(siteStr);
-			$("#siteType").append(siteStr).prepend(allStr);
+
+
 
 			$("#newSiteType li").on("click", function() {
 				let val = $(this).data("value");
@@ -1676,7 +1804,7 @@
 		$("#validSite").addClass("hidden");
 		$("#newSiteName").parent().next().prop("disabled", true);
 		
-		$("#addSiteBtn").prop("disabled", true);
+		$("#addSiteBtn").prop("disabled", true).removeClass("hidden");
 
 		$("#newResList li").removeClass("hidden");
 		$("#newSiteType").prev().prop("disabled", false);
@@ -1685,13 +1813,13 @@
 
 		warning.addClass("hidden");
 		input.each(function(){
-			$(this).val("");
+			$(this).val("").prop("disabled", false);
 		});
 
 		$.each(dropdownBtn, function(index, element){
-			$(this).html('선택' + '<span class="caret"></span>');
-			$(this).data({ "value": "", "vol-type": "", "plan-id" : "" });
+			$(this).data({ "value": "", "vol-type": "", "plan-id" : "" }).html('선택' + '<span class="caret"></span>');
 			$(this).next().find("li").removeClass("hidden");
+			$(this).prop("disabled", false);
 		});
 		// console.log("initModal----")
 	}
@@ -1727,7 +1855,23 @@
 
 			// EDIT MODAL!!!
 			if(option == "edit") {
-				addBtn.prop("disabled", false).text("수정");
+				if(!isEmpty(rowData.role) && rowData.role == 2){
+					let input = form.find("input");
+					let dropdownBtn = form.find(".dropdown-toggle");
+
+					input.each(function(){
+						$(this).prop("disabled", true);
+					});
+
+					$.each(dropdownBtn, function(index, element){
+						$(this).prop("disabled", true);
+					});
+					
+					addBtn.addClass("hidden");
+
+				} else {
+					addBtn.prop("disabled", false).text("수정").removeClass("hidden");
+				}
 
 				titleAdd.addClass("hidden").next().removeClass("hidden");
 				required.hasClass("no-symbol") ? null : required.addClass("no-symbol");
@@ -1760,7 +1904,7 @@
 				}
 				// 추가 정보
 				$('#newSiteDetail').val(rowData.detail_info);
-				// testkpx
+				// kpx
 				if (oid.match('testkpx')) {
 					$('#station_id').val(rowData.station_id);
 					$('#kpx_genid').val(rowData.kpx_genid);
@@ -1772,14 +1916,18 @@
 					Promise.resolve(JSON.parse(rowData.utility)).then( util => {
 						let utilPlanName = util.utility_plan_name;
 						// console.log("util==", util);
-
 						$("#newContractList").prev().data({"plan-id": util.utility_plan_id, "value": utilPlanName }).html(utilPlanName + '<span class="caret"></span>');
-						$("#newVoltTypeList").prev().prop("disabled", false);
+					
+						if(!isEmpty(rowData.role) && rowData.role == 2){
+							$("#newVoltTypeList").prev().prop("disabled", true);
+						} else {
+							$("#newVoltTypeList").prev().prop("disabled", false);
+						}
+
 						if(!isEmpty(util.volt_name) ){
 							// console.log("util.volt_name==", util.volt_name);
 							$("#newVoltTypeList").prev().data({"id": util.utility_plan_id, "data-value" : util.volt_name }).html( util.volt_name + '<span class="caret"></span>');
 						} else {
-
 							$("#newVoltTypeList").prev().prop("disabled", true).html('선택<span class="caret"></span>');
 						}
 
@@ -1922,210 +2070,147 @@
 	}
 
 	function getAlarmTable(alarmData, userData){
-		// console.log("alarmData===", alarmData)
-		let arr = [];
+		let alarmList = [];
 		let userType = "";
-		let newUserList = [];
-		let newNonUserList = [];
-		// console.log("userData---", userData);
-			if(isEmpty(alarmData)){
-				console.log("alarm null===");
-			} else {
-				console.log("alarmData===", alarmData)
-				Promise.resolve(alarmData.map((x, index) => {
-					// console.log("x==", x);
-					if(!isEmpty(x.alarm_to)){
-						let sendTo = JSON.parse(x.alarm_to);
-						let userObj = {};
+		// let newUserList = [];
+		// let newNonUserList = [];
 
+			// Promise.resolve(alarmData.alarmInfo.map((x, index) => {
+			Promise.resolve(alarmData.map((x, index) => {
+				if(!isEmpty(x.alarm_to)){
+					Promise.resolve(JSON.parse(x.alarm_to)).then( res => {
+						x.alarmToUser = res;
+						alarmList.push(x);
+					});
+				} else {
+					alarmData;
+				}
+			})).then( () => {
+				let newDevType = [...new Map(alarmList.map(x => [x.device_type, x])).values()];
+				let subGroup = [...new Map(alarmList.map(x => [x.name, x])).values()];
+				// console.log("newDevType====", newDevType);
+				// console.log("subGroup====", subGroup);
 
-						console.log("sendTo==", sendTo);
-						let userList = sendTo.user;
-						let	nonUserList = sendTo.non_user;
-						let alarmTotalData = [];
-						if(!isEmpty(userList)){
-							console.log("userList==", userList);
-							var non = false;
-							var level = 0;
-							var name = '-';
-							var did = '-';
-							var type ='-';
-							var uid = '-';
-							var phone = '-';
-							
-							for(var i = 0 ; i < userList.length ; i++){
-								for(var j = 0 ; j < userList[i].level.length ; j++){
-									non = false;
-									did = x.did;
-									type = x.device_type;
-									name = x.name;
-									level = userList[i].level[j];
-									uid = userList[i].uid;
-									phone = ((isEmpty(userList[i].phone)) ? '-' : userList[i].phone );
-									newUserList.push({non : non, did : did, type : type, name : name, level : level, uid : uid, phone : phone });
-									alarmTotalData.push({non : non, did : did, type : type, name : name, level : level, uid : uid, phone : phone });
-								}
-							}
-						}
-						
-						if(!isEmpty(newNonUserList)){
-							console.log("newNonUserList==", newNonUserList);
-							var non = true;
-							var level = 0;
-							var name = '-';
-							var did = '-';
-							var type ='-';
-							var uid = '-';
-							var phone = '-';
-							
-							for(var i = 0 ; i < newNonUserList.length ; i++){
-								for(var j = 0 ; j < newNonUserList[i].level.length ; j++){
-									non = true;
-									did = x.did;
-									type = x.device_type;
-									name = x.name;
-									level = newNonUserList[i].level[j];
-									uid = newNonUserList[i].name;
-									phone = ((isEmpty(newNonUserList[i].phone)) ? '-' : newNonUserList[i].phone );
-									
-									newNonUserList.push({non : non, did : did, type : type, name : name, level : level, uid : uid, phone : phone });
-									alarmTotalData.push({non : non, did : did, type : type, name : name, level : level, uid : uid, phone : phone });
-								}
-							}
-						}
-
-					} else {
-						let nonUserObj = {};
-						userType = "NA";
-						nonUserObj.index = index + 1;
-						// device type
-						nonUserObj.did = x.did;
-						if(!isEmpty(x.device_type)) {
-							nonUserObj.device_type = x.device_type;
-						}
-						// device name
-						if(isEmpty(x.name)){
-							nonUserObj.name = x.name;
-						}
-						// alarm level
-						nonUserObj.level = 0;
-						// contact person User Id
-						nonUserObj.uid = "";
-						// contact person phone number
-						nonUserObj.phone = "";
-
-						nonUserObj.createdAt = x.createdAt;
-						arr.push(nonUserObj);
-						if(index === alarmData.length-1) {
-							let emptyObj = {};
-							emptyObj.index = index + 2;
-							emptyObj.did = x.did;
-							emptyObj.device_type = "";
-							nonUserObj.name = "";
-							nonUserObj.level = 0;
-							nonUserObj.uid = "";
-							nonUserObj.phone = "";
-							nonUserObj.createdAt = "";
-							arr.push(nonUserObj);
-							arr.push(emptyObj);
-						}
-					}
-				})).then( () => {
-					// console.log("arr===]", arr)
-					// console.log("newUserList---", newUserList);
-					// console.log("newNonUserList---", newNonUserList);
-					// let lastArr = arr[0];
-					// let last = arr.length;
-					// let copy = [...lastArr];
-					// console.log("lastArr===", lastArr);
-					
-					var deviceGroup = groupBy(arr, "device_type");
-
-					// console.log("deviceGroup===", deviceGroup)
-					var alarmTable = $('#alarmTable').DataTable({
-						"aaData": arr,
-						"retrieve": true,
+				// return false;
+				if(alarmList.length > 0) {
+					let alarmTable = $('#alarmTable').DataTable({
+						"aaData": alarmList,
 						// "table-layout": "fixed",
-						// "fixedHeader": true,
-						// "bAutoWidth": true,
-						// "aaSorting": [[ 0, 'asc' ]],
-						"order": [[ 1, 'desc' ]],
+						"fixedHeader": true,
+						"bAutoWidth": true,
 						"bSortable": true,
-						"pagingType": "full_numbers",
-						// "ordering": false,
-						// "ScrollX": true,
-						// "sScrollX": "100%",
-						// "sScrollXInner": "100%",
-						// "scrollY": "100%",
+						"bSearchable" : true,
+						// "retrieve": true,
+						"scrollX": true,
+						"sScrollXInner": "100%",
+						"sScrollY": true,	
+						"scrollY": "40vh",
+						// "scrollCollapse": false,
+						"pageLength": 4,
+						// "scrollY": "400px",
 						// "bScrollCollapse": true,
 						"bSearchable" : true,
-						"paging": true,
-						"dom": 'ti',
-						// "aoColumnDefs": [
-						// {
-						// 	"aTargets": [ 0 ],
-						// 	"bSortable": false,
-						// 	"orderable": false
-						// },
-						// 	{
-						// 		"aTargets": [ 0, 1, 2, 3, 4, 5, 6 ],
-						// 		"bSortable": false,
-						// 		"orderable": false
-						// 	},
-						// ],
-						"aoColumns": [
+						"dom": 'tip',
+						"aoColumnDefs": [
+							// {
+							// 	"aTargets": [ 0 ],
+							// 	"bSortable": false,
+							// 	"orderable": false
+							// },
+							// {
+							// 	"aTargets": [ 0, 1, 2, 3, 4, 5, 6 ],
+							// 	"bSortable": false,
+							// 	"orderable": false
+							// },
+
 							{
-								"sTitle": "순번",
-								"mData": null,
-								"className": "dt-center",
-								mRender: function ( data, type, full, rowIndex ) {
-									return rowIndex.row + 1;
-								},
+								"aTargets": [ 2 ],
+								"createdCell": function (td, cellData, rowData, row, col) {
+									let el = $(td).find(".dropdown");
+									let lvlStr = $(td).find(".dropdown-toggle");
+
+									$.each(el, function(index, chk){
+										let selected = $(this).find(".dropdown-toggle").data("value");
+										let input = $(this).find("input[type='checkbox']");
+
+										$.each(input, function(idx, checkbox){
+											if(!isEmpty(selected) && selected.length > 1){
+												let selectedVal = selected.split(",");
+												let found = selectedVal.findIndex( x => x == $(this).val() );
+												if(found > -1){
+													$(this).prop("checked", true);
+												}
+											} else {						
+												if(selected == $(this).val()){
+													$(this).prop("checked", true);
+												}
+											}
+										});
+									});
+								}
 							},
+							{
+								"aTargets": [ 3 ],
+								"createdCell": function (td, cellData, rowData, row, col) {
+									if (!isEmpty(rowData.alarmToUser)) {
+										// console.log("rowData---", rowData);
+										// console.log("cellData---", cellData);
+										let dropdown = $(td).find(".dropdown-toggle");
+										$.each(dropdown, function(index, el){
+											let target = $(this).next().find("input[type='checkbox']");
+											if(!isEmpty(target) && target.length > 0){
+												let targetArr = target.toArray();
+												// console.log("$(this).text()====", $(this).text())
+												let found = targetArr.findIndex( x => $(x).data("name") == $(this).text() );
+												if( found > -1 ){
+													$(target[found]).prop("checked", true);
+												}
+											}
+										});
+									}
+								}
+							},
+							{
+								"aTargets": [ 4 ],
+								"createdCell": function (td, cellData, rowData, row, col) {
+									if (!isEmpty(rowData.alarmToUser)) {
+										let input = $(td).find("input");
+										$.each(input, function(index, el){
+											$(this).val($(this).attr("value"));
+										});
+									}
+								}
+							},
+						],
+						"aoColumns": [
 							{
 								"sTitle": "설비타입",
 								"mData": null,
 								"mRender": function ( data, type, row, rowIndex ) {
-
 									let str1 = ``;
-									// const groupList = arr[rowIndex.row].filter((a, b) => arr.indexOf(a.device_type) === b.device_type);
 									let devName = '';
 
-									let subGroup = removeDuplicates(arr, item => item.name);
-									subGroup.forEach((item, index, arr) => {
-										devName += item.name + ","
+									subGroup.forEach((item, index) => {
+										if(item.device_type === data.device_type){
+											devName += item.name + ","
+										}
 									});
+
 									devName = devName.replace(/,\s*$/, "");
 
-									let parentGroup = removeDuplicates(arr, item => item.device_type);
-
-									parentGroup.forEach((item, index, arr) => {
-										let target = "aDvcTypeList" + row.index;
+									newDevType.forEach((item, index) => {
 										str1 += `
-											<li onclick="showSubgroup(this)" data-subgroup="${'${target}'}" data-device-name="${'${devName}'}" data-value="${'${row.device_type}'}"><a href="#" tabindex="-1">${'${row.device_type}'}</a></li>
+											<li onclick="setDropdownInput(this)" data-subgroup="${'${ devName }'}" data-did="${'${ item.did }'}" data-value="${'${ item.device_type }'}"><a href="#" tabindex="-1">${'${ item.device_type }'}</a></li>
 										`
 									});
 
-									// Object.entries(deviceGroup).forEach((item, index, arr) => {
-									// 	let newDeviceArr = item[1];
-									// 	return newDeviceArr.map( x => devName += ( x.name + "," ) );
-									// });
-
-									// const found = deviceGroup.findIndex( x => x[1] === row.device_type);
-
-									// $.each(deviceGroup, function(index, el){
-									// 	let target = "aDvcTypeList" + row.index;
-									// 	str1 += `
-									// 		<li onclick="showSubgroup(this)" data-subgroup="${'${target}'}" data-device-name="${'${devName}'}" data-value="${'${row.device_type}'}"><a href="#" tabindex="-1">${'${row.device_type}'}</a></li>
-									// 	`
-									// });
-	// <ul id="aDvcList${'${row.index}'}" class="dropdown-menu">${'${ str1 }'}</ul>
 									let dropdown1 = `
 										<div class="dropdown">
-											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="${'${row.device_type}'}">${'${row.device_type}'}<span class="caret"></span></button>
-											<ul id="aDvcTypeList${'${row.index}'}" class="dropdown-menu">${'${ str1 }'}</ul>
+											<button type="button" class="dropdown-toggle device-type" data-toggle="dropdown" data-did="${'${ data.did }'}" data-value="${'${ data.device_type }'}" disabled>${'${ data.device_type }'}<span class="caret"></span></button>
+											<ul id="aDvcTypeList${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str1 }'}</ul>
 										</div>
 									`;
+
 									return dropdown1;
 								},
 								// "className": "no-sorting",
@@ -2133,19 +2218,19 @@
 							{
 								"sTitle": "설비명",
 								"mData": null,
-								"mRender": function ( data, type, row, rowIndex ) {
+								"mRender": function ( data, type, row, rowIndex ) {	
 									let str2 = ``;
-									// const subGroup = copy.filter((v,i,a)=> a.findIndex(t=>(t.name === v.name))===i);
-									let subGroup = removeDuplicates(arr, item => item.name);
+						
 									subGroup.forEach((item, index, arr) => {
 										str2 += `
-											<li data-device-type="${'${item.device_type}'}" data-did="${'${item.did}'}" data-value="${'${item.name}'}"><a href="#" tabindex="-1">${'${item.name}'}</a></li>
+											<li data-device-type="${'${ item.device_type }'}" data-did="${'${ item.did }'}" data-value="${'${ item.name }'}"><a href="#" tabindex="-1">${'${ item.name }'}</a></li>
 										`
 									});
+
 									let subDropdown = `
 										<div class="dropdown">
-											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="${'${row.name}'}">${'${row.name}'}<span class="caret"></span></button>
-											<ul id="aDvcNameList${'${row.index}'}" class="dropdown-menu">${'${ str2 }'}</ul>
+											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="${'${ row.name }'}" disabled>${'${ row.name }'}<span class="caret"></span></button>
+											<ul id="aDvcNameList${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str2 }'}</ul>
 										</div>
 									`;
 									return subDropdown;
@@ -2164,93 +2249,178 @@
 										{  name : "이상", val: 2 },
 										{  name : "트립", val: 3 },
 										{  name : "긴급", val: 4 },
-										{  name : "알수 없음", val: 9 },
+										{  name : "미정", val: 9 },
 									];
+
+									// $.each(aLevelOpt, function(index, el){
+									// 	str3 += `
+									// 		<li data-name="${'${ el.name }'}" data-value="${'${ el.val }'}"><a href="#" tabindex="-1">${'${ el.name }'}</a></li>
+									// 	`
+									// });
 
 									$.each(aLevelOpt, function(index, el){
 										str3 += `
-											<li data-name="${'${el.name}'}" data-value="${'${el.val}'}"><a href="#" tabindex="-1">${'${el.name}'}</a></li>
+											<li>
+												<a class="chk_type" href="#">
+													<input type="checkbox" data-id="aDvcLevel${'${ el.val }'}" name="aDvcLevel${'${ el.val }'}" value="${'${ el.val }'}" />
+													<label>${'${ el.name }'}</label>
+												</a>
+											</li>
 										`
 									});
-									if(!isEmpty(row.level)){
-										dropdown3 = `
-											<div class="dropdown">
-												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="${'${row.level}'}" data-name="${'${aLevelOpt[row.level].name}}'}">${'${aLevelOpt[row.level].name}'}<span class="caret"></span></button>
-												<ul id="aDvcAlarmList${'${row.index}'}" class="dropdown-menu">${'${ str3 }'}</ul>
-											</div>
-										`;
-									} else {
-										dropdown3 = `
-											<div class="dropdown">
-												<button type="button" class="dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-												<ul id="aDvcAlarmList${'${row.index + 1}'}" class="dropdown-menu"></ul>
-											</div>
-										`;
 
-									}
+									// if(!isEmpty(data.alarmToUser)) {
+										let nonUser = data.alarmToUser.non_user;
+										let registeredUser = data.alarmToUser.user;
+
+										if(!isEmpty(nonUser) && nonUser.length > 0){
+											$.each(nonUser, function(index, el){
+												let levText = "";
+												let levVal = "";
+												let newIdx = String(rowIndex.row + "Non" + index);
+
+												if(!isEmpty(el.level)){
+													let val = el.level[0];
+													let joinedVal = el.level.join(",");
+
+													if(el.level.length> 1){
+														levText = aLevelOpt[val].name + ' 외 ' + String(el.level.length - 1) + "개";
+													} else {
+														levText = aLevelOpt[val].name 
+													}
+													dropdown3 += `
+														<div class="dropdown">
+															<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="${'${ joinedVal }'}" data-name="선택" disabled>${'${ levText }'}<span class="caret"></span></button>
+															<ul id="aDvcAlarmList${'${ newIdx }'}" class="dropdown-menu">${'${ str3 }'}</ul>
+														</div>
+													`
+												} else {
+													dropdown3 += `
+														<div class="dropdown">
+															<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="${'${ aLevelOpt[5].val }'}" data-name="선택" disabled>${'${ aLevelOpt[5].name }'}<span class="caret"></span></button>
+															<ul id="aDvcAlarmList${'${ newIdx }'}" class="dropdown-menu">${'${ str3 }'}</ul>
+														</div>
+													`
+												}
+											});																		
+										}
+
+										if(!isEmpty(registeredUser) && registeredUser.length > 0){
+											$.each(registeredUser, function(index, el){
+												let levText = "";
+												let levVal = "";
+												let newIdx = String(rowIndex.row + index);
+
+												if(!isEmpty(el.level)){
+													let joinedVal = el.level.join(",");
+													let val = el.level[0];
+
+													if(el.level.length> 1){
+														levText = aLevelOpt[val].name + ' 외 ' + String(el.level.length - 1) + "개";
+													} else {
+														levText = aLevelOpt[val].name 
+													}
+													dropdown3 += `
+														<div class="dropdown">
+															<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="${'${ joinedVal }'}" data-name="${'${ levText }'}" disabled>${'${ levText }'}<span class="caret"></span></button>
+															<ul id="aDvcAlarmList${'${ newIdx }'}" class="dropdown-menu">${'${ str3 }'}</ul>
+														</div>
+													`
+												}
+
+											});
+										}
+									// } else {
+									// 	// console.log("no alarmTO---", data)
+									// 	dropdown3 = `
+									// 		<div class="dropdown">
+									// 			<button type="button" class="dropdown-toggle" data-toggle="dropdown" >선택<span class="caret"></span></button>
+									// 			<ul id="aDvcAlarmList${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str3 }'}</ul>
+									// 		</div>
+									// 	`;
+
+									// }
 
 									return dropdown3;
 								},
 								// "className": "no-sorting",
 							},
 							{
-								"sTitle": "담당자&nbsp;(아이디)",
+								"sTitle": "담당자 (이름 / ID)",
 								"mData": null,
 								"mRender": function ( data, type, row, rowIndex ) {
-									// console.log("userList---", newUserList);
-									// console.log("newNonUserList---", newNonUserList);
-
 									let str4 = ``;
-
-									str4 += `
-										<li id="aNewInput${'${ row.index }'}" onclick="addNewInput(aContactPersonList${'${ row.index }'}, aContactNum${'${ row.index }'}, this)"><a href="#">직접입력</a></li>
-									`
-									$.each(userData, function(index, el){
-										// str4 += `
-										// 	<li data-name="${'${ el.name }'}" data-uid="${'${ el.uid }'}"><a href="#" tabindex="-1">${'${ el.name }'}</a></li>
-										// `
-										let nameId = `${'${ el.name }'}` + `(` + `${'${ el.login_id }'}` + `)`;
-										str4 += `
-											<li onclick="removeNewInput(aContactNum${'${ row.index }'}, aNewInput${'${ row.index }'}, aContactNum${'${ row.index }'},  this)">
-												<a class="chk_type" href="#">
-													<input type="checkbox" id="${'${ el.login_id }'}${'${ row.index }'}" name="contactPerson${'${ row.index }'}" value="${'${ el.uid }'}" />
-													<label for="${'${ el.login_id }'}${'${ row.index }'}">${'${ nameId }'}</label>
-												</a>
-											</li>
-										`
-									});
-
-
-									// let targetInput = "aContactInput" + row.index;
-									// let dropdownContact = "aContactInput" + row.index;
-									// str4 += `
-									// 	<li onclick="hideDropdown(${'${ targetInput }'})"><a href="#" tabindex="-1">직접입력</a></li>
-									// `;
-
 									let dropdown4 = ``;
-									let userName = ''
-									let userId = ''
-									userName = userData[row.index].name;
-									userId = userData[row.index].login_id;
+									let userIdx = '';
 
-									displayText = userName + ' (' + userId + ')';
-									if(userType == "NA"){
-										dropdown4 = `
-											<div class="dropdown">
-												<button type="button" class="dropdown-toggle" data-toggle="dropdown">직접 입력<span class="caret"></span></button>
-												<ul id="aContactPersonList${'${ row.index }'}" class="dropdown-menu">${'${ str4 }'}</ul>
-											</div>
-											<div class="tx_inp_type ml-0"><input type="text" name="a_contact_input${'${row.index}'}" id="aContactInput${'${row.index}'}" placeholder="예) 김강욱" /></div>
-										`;
-									} else {
-										dropdown4 = `
-										<div class="dropdown">
-											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="담당자" data-value="${'${ userId }'}">${'${ displayText }'}<span class="caret"></span></button>
-											<ul id="aContactPersonList${'${ row.index }'}" class="dropdown-menu">${'${ str4 }'}</ul>
-										</div>
-										<div class="tx_inp_type ml-0"><input type="text" name="a_contact_input${'${row.index}'}" id="aContactInput${'${row.index}'}" /></div>
-									`;
+									let nonUser = data.alarmToUser.non_user;
+									let registeredUser = data.alarmToUser.user;
 
+									if(!isEmpty(nonUser) && nonUser.length > 0){
+										nonUser.forEach((item, index) => {
+											let displayName = item.name;
+											newIdx = String(rowIndex.row + index);
+
+											str4 += `
+												<li onclick='addNewInput(this)'><a href="#">직접 입력</a></li>
+											`;
+											$.each(userData, function(idx, el){
+												let nameId = `${'${ el.name }'}` + ` / ` + `${'${ el.login_id }'}`;
+												let phoneNum = "";
+												el.contact_phone ? phoneNum = el.contact_phone : "";
+
+												str4 += `
+													<li onclick='removeNewInput(this)'>
+														<a class="chk_type" href="#">
+															<input type="checkbox" data-id="${'${ el.login_id }'}${'${ newIdx }'}" name="aDvcContactPerson${'${ newIdx }'}" value="${'${ el.uid }'}" data-uid="${'${ el.uid }'}" data-name="${'${ el.name }'}" data-contact-num="${'${ phoneNum }'}" />
+															<label>${'${ nameId }'}</label>
+														</a>
+													</li>
+												`;
+											});
+
+											dropdown4 += `
+												<div class="dropdown" data-user-type="non-user" data-user-index="${'${ newIdx }'}">
+													<button type="button" class="dropdown-toggle" data-value="${'${ displayName }'}" data-toggle="dropdown" data-name="선택" disabled>${'${ displayName }'}<span class="caret"></span></button>
+													<ul id="aDvcContactListNonUser${'${ newIdx }'}" class="dropdown-menu">${'${ str4 }'}</ul>
+												</div>
+												<div class="tx_inp_type ml-0 hidden"><input type="text" name="aDvcContactNonUser${'${ newIdx }'}" /></div>
+											`;
+
+										});
+									}
+
+									if(!isEmpty(registeredUser) && registeredUser.length > 0){
+										registeredUser.forEach((item, index) => {
+											let newIdx = String(rowIndex.row + index);
+											let displayName = item.uid;
+
+											str4 += `
+												<li onclick='addNewInput(this)'><a href="#">직접 입력</a></li>
+											`
+											$.each(userData, function(idx, el){
+												let nameId = `${'${ el.name }'}` + `(` + `${'${ el.login_id }'}` + `)`;
+												let phoneNum = "";
+												el.contact_phone ? phoneNum = el.contact_phone : "";
+
+												str4 += `
+													<li onclick='removeNewInput(this)'>
+														<a class="chk_type" href="#">
+															<input type="checkbox" data-id="${'${ el.login_id }'}${'${ newIdx }'}" name="aDvcContactPerson${'${ newIdx }'}" value="${'${ el.uid }'}" data-name="${'${ el.name }'}" data-contact-num="${'${ phoneNum }'}" />
+															<label>${'${ nameId }'}</label>
+														</a>
+													</li>
+												`
+											});
+											dropdown4 += `
+												<div class="dropdown" data-user-type="user" data-user-index="${'${ newIdx }'}">
+													<button type="button" class="dropdown-toggle" data-value="" data-toggle="dropdown" data-name="선택" disabled><span class="caret"></span></button>
+													<ul id="aDvcContactList${'${ newIdx }'}" class="dropdown-menu">${'${ str4 }'}</ul>
+												</div>
+												<div class="tx_inp_type ml-0 hidden"><input type="text" name="aDvcContact${'${ newIdx }'}" id="aDvcContact${'${ newIdx }'}" /></div>
+											`;
+
+										});
 									}
 
 									return dropdown4;
@@ -2262,239 +2432,350 @@
 								"sTitle": "전화번호",
 								"mData": null,
 								"mRender": function ( data, type, row, rowIndex ) {
-									if(userType == "NA"){
-										return `<div class="tx_inp_type"><input type="text" name="a_contact_num${'${row.index}'}" id="aContactNum${'${row.index}'}" placeholder="예) 010-1234-5678" /></div>
-										`;
-									} else {
-										return `<div class="tx_inp_type"><input type="text" name="a_contact_num${'${row.index}'}" id="aContactNum${'${row.index}'}" disabled/></div>
-										`;
+									let str5 = ``;
+									let nonUser = data.alarmToUser.non_user;
+									let registeredUser = data.alarmToUser.user;
+
+									if(!isEmpty(nonUser) && nonUser.length > 0){
+										nonUser.forEach((item, index) => {
+											let newIdx = String(rowIndex.row + index);
+											let displayName = item.name;
+											let phoneNum = "";
+											item.phone ? phoneNum = item.phone : "";
+
+											str5 += `<div class="tx_inp_type disabled" data-user-type="non-user"><input type="text" name="aDvcPhoneNonUser${'${ newIdx }'}" value="${'${ phoneNum }'}" disabled /></div>`;
+										});
 									}
+
+									if(!isEmpty(registeredUser) && registeredUser.length > 0){								
+										registeredUser.forEach((item, index) => {
+											let newIdx = String(rowIndex.row + index);
+											let displayName = item.name;
+											let phoneNum = "";
+											item.phone ? phoneNum = item.phone : "";
+
+											str5 += `<div class="tx_inp_type disabled" data-user-type="user"><input type="text" name="aDvcPhone${'${ newIdx }'}" value="${'${ phoneNum }'}" disabled /></div>`;
+										});
+									}
+
+									return str5;
 								},
 								// "className": "no-sorting",
 							},
 							{
-								"title": "",
-								"mData": null,
-								"mRender": function ( data, type, row, rowIndex ) {
-									return `<button type="button" class="icon-edit" onclick="onAlarmEdit($(this))">수정</button>`;
-								},
-								// "className": "dt-body-center no-sorting",
-								"className": "dt-body-center",
-							},
-							{
-								"sTitle": "",
+								"sTitle": "추가 / 수정 / 삭제",
 								"mData": null,
 								"mRender": function ( data, type, row, row, rowIndex ) {
-									return `<button type="button" class="icon-delete" onclick="onAlarmEdit($(this), 'delete')">삭제</button>`;
+									let deleteStr = ``;
+									let length = 0;
+
+									if(!isEmpty(data.alarmToUser.user)){
+										length += data.alarmToUser.user.length;
+									} 
+									if(!isEmpty(data.alarmToUser.non_user)){
+										length += data.alarmToUser.non_user.length;
+									}
+									for(let i = 0, arrLength = length; i < arrLength; i++ ){
+										deleteStr += `
+											<div class="flex_start">
+												<button type="button" class="icon-add" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'add')">추가</button>
+												<button type="button" class="icon-edit" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'edit')">수정</button>
+												<button type="button" class="icon-delete" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'delete')">삭제</button>
+											</div>
+										`;
+									}
+
+									return deleteStr;
 								},
-								// "className": "dt-body-center no-sorting",
-								"className": "dt-body-center",
+								"className": "dt-body-center no-sorting",
 							},
 						],
 						initComplete: function(){
+							this.api().columns().header().each ((el, i) => {
+								if(i == 0){
+									$(el).attr ('style', 'min-width: 16%;');
+								} else if(i == 1){
+									$(el).attr ('style', 'min-width: 20%;');
+								} else if(i == 2){
+									$(el).attr ('style', 'min-width: 12%;');
+								} else if(i == 3){
+									$(el).attr ('style', 'min-width: 20%;');
+								} else if(i == 4){
+									$(el).attr ('style', 'min-width: 20%;');
+								}
+							});
 							// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
 							// 	cell.innerHTML = i+1;
 							// 	$(cell).data("id", i);
 							// });
 							// this.api().column(5).visible( false );
-							this.api().columns().header().each ((el, i) => {
-								if(i == 5){
-									$(el).attr ('style', 'min-width: 100px;');
-								} else if(i > 5){
-									$(el).attr ('style', 'min-width: 80px;');
-								}
-
-							});
 						},
-						createdRow: function (row, data, dataIndex){
+						rowCallback: function(row, data) {
+							let length = 0;
+							if(!isEmpty(data.alarmToUser) && !isEmpty(data.alarmToUser.user)){
+								length += data.alarmToUser.user.length;
+							}
+							if(!isEmpty(data.alarmToUser) && !isEmpty(data.alarmToUser.non_user)){
+								length += data.alarmToUser.non_user.length;
+							}
+							if(length === 1 ){
+								$(row).addClass('single');
+							}
 						},
 						drawCallback: function(){
+							$('#alarmTable_wrapper').addClass('fixed-width');
+							$('#alarmTable').css("width", "100%");
+						}
+					}).columns.adjust();					
+				} else {
+					// console.log("alarmData===", alarmData)
+
+					let newDevType = [...new Map(alarmData.map(x => [x.device_type, x])).values()];
+					let subGroup = [...new Map(alarmData.map(x => [x.name, x])).values()];
+
+					let alarmTable = $('#alarmTable').DataTable({
+						"aaData": newDevType,
+						// "table-layout": "fixed",
+						"fixedHeader": true,
+						"bAutoWidth": true,
+						"bSortable": true,
+						"bSearchable" : true,
+						// "retrieve": true,
+						"scrollX": true,
+						"sScrollXInner": "100%",
+						"sScrollY": true,	
+						"scrollY": "40vh",
+						"pageLength": 4,
+						"bSearchable" : true,
+						"dom": 'tip',
+						"aoColumns": [
+							{
+								"sTitle": "설비타입",
+								"mData": null,
+								"mRender": function ( data, type, row, rowIndex ) {
+									let str1 = ``;
+									let devName = '';
+
+									subGroup.forEach((item, index, arr) => {
+										if(item.name === data.name){
+											devName += item.name + ","
+										}
+									});
+
+									devName = devName.replace(/,\s*$/, "");
+
+									newDevType.forEach((item, index) => {
+										str1 += `
+											<li onclick="setDropdownInput(this)" data-subgroup="${'${ devName }'}" data-did="${'${ item.did }'}" data-value="${'${ item.device_type }'}"><a href="#" tabindex="-1">${'${ item.device_type }'}</a></li>
+										`
+									});
+
+									let dropdown1 = `
+										<div class="dropdown">
+											<button type="button" class="dropdown-toggle device-type" data-toggle="dropdown" data-did="${'${ data.did }'}" data-value="${'${ data.device_type }'}">선택<span class="caret"></span></button>
+											<ul id="aDvcTypeList${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str1 }'}</ul>
+										</div>
+									`;
+
+									return dropdown1;
+								},
+								// "className": "no-sorting",
+							},
+							{
+								"sTitle": "설비명",
+								"mData": null,
+								"mRender": function ( data, type, row, rowIndex ) {	
+									let str2 = ``;
+
+									subGroup.forEach((item, index) => {
+										str2 += `
+											<li data-device-type="${'${ item.device_type }'}" data-did="${'${ item.did }'}" data-value="${'${ item.name }'}"><a href="#" tabindex="-1">${'${ item.name }'}</a></li>
+										`
+									});
+
+									let subDropdown = `
+										<div class="dropdown">
+											<button type="button" class="dropdown-toggle" data-toggle="dropdown">선택<span class="caret"></span></button>
+											<ul id="aDvcNameList${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str2 }'}</ul>
+										</div>
+									`;
+									return subDropdown;
+								},
+								// "className": "no-sorting",
+							},
+							{
+								"sTitle": "알람레벨",
+								"mData": null,
+								"mRender": function ( data, type, row, rowIndex ) {
+									let str3 = ``;
+									let dropdown3 = ``;
+									let aLevelOpt = [
+										{  name : "정보", val: 0 },
+										{  name : "경고", val: 1 },
+										{  name : "이상", val: 2 },
+										{  name : "트립", val: 3 },
+										{  name : "긴급", val: 4 },
+										{  name : "미정", val: 9 },
+									];
+
+									// $.each(aLevelOpt, function(index, el){
+									// 	str3 += `
+									// 		<li data-name="${'${ el.name }'}" data-value="${'${ el.val }'}"><a href="#" tabindex="-1">${'${ el.name }'}</a></li>
+									// 	`
+									// });
+
+									$.each(aLevelOpt, function(index, el){
+										str3 += `
+											<li>
+												<a class="chk_type" href="#">
+													<input type="checkbox" data-id="aDvcLevel${'${ el.val }'}" name="aDvcLevel${'${ el.val }'}" value="${'${ el.val }'}" />
+													<label>${'${ el.name }'}</label>
+												</a>
+											</li>
+										`
+									});
+
+									dropdown3 = `
+										<div class="dropdown">
+											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="" data-name="선택">선택<span class="caret"></span></button>
+											<ul id="aDvcAlarmList${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str3 }'}</ul>
+										</div>
+									`;
+									return dropdown3;
+								},
+								// "className": "no-sorting",
+							},
+							{
+								"sTitle": "담당자 (이름 / ID)",
+								"mData": null,
+								"mRender": function ( data, type, row, rowIndex ) {
+									let str4 = ``;
+									let dropdown4 = ``;
+									let userIdx = '';
+
+									str4 += `
+										<li onclick='addNewInput(this)'><a href="#">직접 입력</a></li>
+									`;
+									$.each(userData, function(idx, el){
+										newIdx = String(rowIndex.row + idx);
+
+										let nameId = `${'${ el.name }'}` + ` / ` + `${'${ el.login_id }'}`;
+										let phoneNum = "";
+										
+										el.contact_phone ? phoneNum = el.contact_phone : "";
+
+										str4 += `
+											<li onclick='removeNewInput(this)'>
+												<a class="chk_type" href="#">
+													<input type="checkbox" data-id="${'${ el.login_id }'}${'${ newIdx }'}" name="aDvcContactPerson${'${ newIdx }'}" data-uid="${'${ el.uid }'}" value="${'${ el.uid }'}" data-name="${'${ el.name }'}" data-contact-num="${'${ phoneNum }'}" />
+													<label>${'${ nameId }'}</label>
+												</a>
+											</li>
+										`;
+									});
+
+									dropdown4 = `
+										<div class="dropdown" data-user-type="non-user" data-user-index="${'${ rowIndex.row }'}">
+											<button type="button" class="dropdown-toggle" data-value="" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+											<ul id="aDvcContactListNonUser${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str4 }'}</ul>
+										</div>
+										<div class="tx_inp_type ml-0 hidden"><input type="text" name="aDvcContactNonUser${'${ rowIndex.row }'}" /></div>
+									`;
+
+									return dropdown4;
+								},
+								// "className": "no-sorting",
+								// "width": "16%"
+							},
+							{
+								"sTitle": "전화번호",
+								"mData": null,
+								"mRender": function ( data, type, row, rowIndex ) {
+									let str5 = ``;
+									
+									str5 = `<div class="tx_inp_type" data-user-type="non-user"><input type="text" name="aDvcPhoneNonUser${'${ rowIndex.row }'}" value="" /></div>`;
+
+									return str5;
+								},
+								// "className": "no-sorting",
+							},
+							{
+								"sTitle": "추가 / 수정 / 삭제",
+								"mData": null,
+								"mRender": function ( data, type, row, row, rowIndex ) {
+									let deleteStr = ``;
+									let i = 0;
+
+									deleteStr = `
+										<div class="flex_start">
+											<button type="button" class="icon-add" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'add')">추가</button>
+											<button type="button" class="icon-edit" disabled data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'edit')">수정</button>
+											<button type="button" class="icon-delete" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'delete')">삭제</button>
+										</div>
+									`;
+
+									return deleteStr;
+								},
+								"className": "dt-body-center no-sorting",
+							},
+						],
+						initComplete: function(){
+							this.api().columns().header().each ((el, i) => {
+								if(i == 0){
+									$(el).attr ('style', 'min-width: 16%;');
+								} else if(i == 1){
+									$(el).attr ('style', 'min-width: 20%;');
+								} else if(i == 2){
+									$(el).attr ('style', 'min-width: 12%;');
+								} else if(i == 3){
+									$(el).attr ('style', 'min-width: 20%;');
+								} else if(i == 4){
+									$(el).attr ('style', 'min-width: 20%;');
+								}
+							});
+							// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+							// 	cell.innerHTML = i+1;
+							// 	$(cell).data("id", i);
+							// });
+							// this.api().column(5).visible( false );
+						},
+						rowCallback: function(row, data) {
+							let length = 0;
+
+							if(!isEmpty(data.alarmToUser) && !isEmpty(data.alarmToUser.user)){
+								length += data.alarmToUser.user.length;
+							}
+							if(!isEmpty(data.alarmToUser) && !isEmpty(data.alarmToUser.non_user)){
+								length += data.alarmToUser.non_user.length;
+							}
+
+							if(length === 1 ){
+								$(row).addClass('single');
+							}
+						},
+						drawCallback: function(){
+							$('#alarmTable_wrapper').addClass('fixed-width');
+							$('#alarmTable').css("width", "100%");
+
 							// this.api().columns().header().each ((el, i) => {
 							// 	if(i == 0){
-							// 		$(el).attr ('style', 'min-width: 12vw;');
-							// 	} else if(i < 2){
-							// 		$(el).attr ('style', 'min-width: 13vw;');
-							// 	} else if(i >= 2 && i < 5){
-							// 		$(el).attr ('style', 'min-width: 10vw;');
-							// 	} else {
-							// 		$(el).attr ('style', 'min-width: 5vw;');
+							// 		$(el).attr ('style', 'width: 4%;');
+							// 	}
+							// 	if(i == 5){
+							// 		$(el).attr ('style', 'min-width: 180px;');
 							// 	}
 							// });
-							$('#alarmTable_wrapper').addClass('fit');
 						}
-					}).columns.adjust().responsive.recalc();
-					// }).columns.adjust().draw();
+					}).columns.adjust();
+				}
+			$("#addAlarmModal").modal("show");
+
+		});
 
 
-					// new $.fn.dataTable.Buttons( alarmTable, {
-					// 	name: 'commands',
-					// 	"buttons": [
-					// 		{
-					// 		 extend: "selected",
-					// 			className: "btn_type03",
-					// 			text: 'Duplicate',
-					// 			action: function ( e, dt, node, config ) {
-					// 				let tr = $("#alarmTable .tbody tr:first-of-type");
-					// 				alarmTable.rows().indexes(0).clone().addRow().draw( 'false' );
-					// 			}
-					// 		},
-					// 		// {
-					// 		// 	extend: 'remove',
-					// 		// 	className: "btn_type03",
-					// 		// 	text: 'editor',
-					// 		// },
-					// 	],
-					// });
-
-					// alarmTable.buttons( 0, null ).containers().appendTo("#addAlarmModal .modal-header");
-
-					// alarmTable.on( 'column-sizing.dt', function ( e, settings ) {
-					// 	$(".dataTables_scrollHeadInner").css( "width", "100%" );
-					// });
-
-					// let td = $('#alarmTable td:first-of-type');
-					// console.log("td---", td)
-					// td.each(function(){
-					// 	td.find(".dropdown-menu li").on('click', function (e) {
-					// 		console.log("this---", $(this))
-					// 	});
-					// });
-
-
-					$("#addAlarmModal").modal("show");
-
-				});
-			}
-
-
-		// level = userlist[i].level[j];
-		// uid = userlist[i].uid;
-		// phone = ((isEmpty(userlist[i].phone)) ? '-' : userlist[i].phone );
-		// newUserList.push({non : non, did : did, type : type, name : name, level : level, uid : uid, phone : phone });
-		// alarmTotalData.push({non : non, did : did, type : type, name : name, level : level, uid : uid, phone : phone });
-		// var alarmTable = $('#alarmTable').DataTable({
-		// 	"fixedHeader": true,
-		// 	"table-layout": "fixed",
-		// 	"retrieve": true,
-		// 	// "scrollX": false,
-		// 	"scrollY": "300px",
-		// 	"order": [[ 1, 'asc' ]],
-		// 	"aoColumnDefs": [
-		// 		{
-		// 			"aTargets": [ 0 ],
-		// 			"bSortable": false,
-		// 			"orderable": false
-		// 		},
-		// 	],
-		// 	"aaData": data,
-		// 	"aoColumns": [
-		// 		{
-		// 			"sTitle": "설비타입",
-		// 			"mData": null,
-		// 			"render": function ( data, type, row ) {
-		// 				// BMS_RACK,
-		// 				// BMS_SYS,
-		// 				// CCTV,
-		// 				// CIRCUIT_BREAKER,
-		// 				// COMBINER_BOX,
-		// 				// INV_PV, INV_WIND, 
-		// 				// KPX_EMS,
-		// 				// PCS_ESS,
-		// 				// SENSOR_FLAME, SENSOR_SOLAR, SENSOR_TEMPHUMID, SENSOR_WEATHER,
-		// 				// SM, SM_CRAWLING, SM_DR, SM_ISMART, SM_KPX, SM_MANUAL
-		// 				return '<div class="tx_inp_type"><input type="text" id="deviceType" name="device_type"/>' + data.device_type +'</div>';
-		// 			},
-		// 		},
-		// 		{
-		// 			"sTitle": "설비명",
-		// 			"render": function ( data, type, row ) {
-		// 				return '<div class="tx_inp_type"><input type="text" id="deviceType" name="device_type" placeholder=""/></div>';
-		// 			},
-		// 		},
-		// 		{
-		// 			"sTitle": "알람레벨",
-		// 			"render": function ( data, type, row ) {
-		// 				return '<div class="tx_inp_type"><input type="text" id="deviceType" name="device_type" placeholder=""/></div>';
-		// 			},
-		// 		},
-		// 		{
-		// 			"sTitle": "담당자",
-		// 			"render": function ( data, type, row ) {
-		// 				return '<div class="tx_inp_type"><input type="text" id="deviceType" name="device_type" placeholder=""/></div>';
-		// 			},
-		// 		},
-		// 		{
-		// 			"sTitle": "",
-		// 			"className": ""
-		// 		},
-		// 		{
-		// 			"sTitle": "",
-		// 			"className": "",
-		// 		},
-		// 	],
-		// 	"fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
-		// 		if (aiDisplay.length > 0) {
-		// 			$('body').removeClass('no-record');
-		// 		}
-		// 		else {
-		// 			$('body').addClass('no-record');
-		// 		}
-		// 	},
-		// 	"dom": 'ti',
-		// 	"select": {
-		// 		style: 'single',
-		// 	},
-		// 	initComplete: function(){
-		// 		let str = `
-		// 			<button type="button" class="btn-text-blue ml-24" onclick="addAlarmRow()">추가</button>
-		// 		`
-		// 		$("#addAlarmModal").find(".modal-header").append($(str));
-
-		// 		// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-		// 		// 	cell.innerHTML = i+1;
-		// 		// 	$(cell).data("id", i);
-		// 		// });
-		// 	},
-		// });
-
-		// alarmTable.on( 'order.dt search.dt', function () {
-		// 	alarmTable.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-		// 		cell.innerHTML = i+1;
-		// 	} );
-		// }).draw();
+	
 	}
 
-	function addAlarmRow(){
-		let almTable = $('#alarmTable').DataTable();
-		let table = $("#alarmTable");
-		let length = table.find("tbody tr").length;
-		let td = table.find("tbody td");
-
-		almTable.row.add([
-			length + 1,
-			"",
-            "",
-			"",
-			"",
-			"",
-			"",
-			"",
-        ]).draw(true);
- 
-		// dt.Columns.Add("Id");
-		// dt.Columns.Add("Name");
-		// dt.Columns.Add("Email");
-		// dt.TableName = "MasterTable";
-
-		// //insert into DataTable
-		// dt.Rows.Add("1", "Arka", "arka@gmail.com");
-		// dt.Rows.Add("2", "Anusua", "anu@gmail.com");
-		// dt.Rows.Add("3", "Sayantani", "sayantani@gmail.com");
-
-
-		// let copyRow = almTable.row(row).Copy().clone();
-		console.log("copyRow---", row)
-	}
 
 	function checkSiteId(userInput){
 		if(isEmpty(userInput)) return false;
@@ -2551,72 +2832,50 @@
 	// 	}
 	// }
 
-	function hideDropdown(target){
-		let input = '#' + target;
-		console.log("target====", target);
-		// $(input).removeClass("hidden");
-
-
-	}
 
 	function showSubgroup (self){
-		let subGroup = '#' + $(self).data("subgroup");
-		let val = $(self).data("device-name");
-		let btn = $(subGroup).prev();
-		if(!isEmpty(val)){
-			let str = '';
-			let valArr = [...val.split(",")];
-			console.log("btn----", btn)
-			btn.html("선택<span class='caret'></span>");
-			if(btn.is(":disabled")){
-				btn.prop("disabled", false);
-			}
-			$(subGroup).find("li").each(function(i, item){
-				if($(item).data("value") != valArr[i]){
-					$(item).addClass("hidden");
-				} else {
-					$(item).removeClass("hidden");
+		let target = $(self).parent().prev();
+		let upperGroup = $("#alarmTable .device-type").not(parent).toArray();
+		let tr = $(self).parents().closest("tr");
+		let subGroup = $(self).data("subgroup");
+		let menuItem = tr.find("td:nth-of-type(2) .dropdown-menu li");
+		menuItem.removeClass("hidden");
+
+		console.log("target===", target);
+		let found = upperGroup.findIndex( x => $(x).text() == target.text() );
+		if(found > -1) {	
+			$("#duplicatedGroup").removeClass("hidden");
+			setTimeout(function(){
+				target.data({"value": "", "did" : "" }).html('선택<span class="caret"></span>');
+				$("#duplicatedGroup").addClass("hidden");
+			}, 1600);
+		}
+		// $.each(menuItem, function(index, el){
+		if (subGroup.indexOf(',') > -1) {
+			let searchArr = [...subGroup.split(",")];
+			let val = menuItem.data("value");
+			let arr = [];
+			menuItem.addClass("hidden");
+			console.log("searchArr===", searchArr)
+			$.each(menuItem, function(index, el){
+				let found = searchArr.findIndex ( x => x == $(this).data("value"));
+				if(found > -1){
+					$(this).removeClass("hidden");
+					arr.push($(this).data("value"))
+				}
+			});
+
+			console.log("arr---", arr)
+
+		} else {
+			$.each(menuItem, function(index, el){
+				if(subGroup == $(this).data("value")){
+					$(this).removeClass("hidden").siblings().addClass("hidden");
 				}
 			});
 		}
-
 	}
 
-
-	function onAlarmEdit(self, option){
-		let tr = self.parents().closest("tr");
-		let input = tr.find("input[type='text']");
-		let dropdown = tr.find(".dropdown-toggle");
-
-		if(input.first().is(":disabled")) {
-			tr.removeClass("disabled");
-			input.first().prop("disabled", false).parent().removeClass("disabled");
-			dropdown.prop("disabled", false);
-			flag = true;
-		} else {
-			tr.addClass("disabled");
-			input.first().prop("disabled", true).parent().addClass("disabled");
-			dropdown.prop("disabled", true);
-		}
-
-		if(option){
-			let arr = [];
-			$.each(tr, function(index, el){
-
-				let obj = {};
-				let dropdown = el.find(".dropdown-toggle");
-				let input = el.find("input[type='text']");
-
-				obj.device_type = dropdown.eq(0).data("value");
-				obj.name = dropdown.eq(1).data("value");
-				obj.level = dropdown.eq(2).data("value");
-				obj.person = dropdown.eq(3).data("value");
-				obj.phone = input.val();
-
-			});
-		}
-
-	}
 
 	function groupBy (objectArray, property) {
 		return objectArray.reduce(function (acc, obj) {
@@ -2630,38 +2889,392 @@
 	}
 
 	function removeDuplicates(data, key) {
-		return [...new Map(data.map(item => [key(item), item])).values()];
+		return [ ...new Map( data.map(x => [key(x), x]) ).values() ];
 	};
 
-	function addNewInput(target, input, self){
-		let almTable = $("#alarmTable").DataTable();
+	//  using object mutation
+	// const uniqByProp = prop => arr =>
+	// 	Object.values(
+	// 		arr.reduce(
+	// 			(acc, item) => (
+	// 				item && item[prop] && (acc[item[prop]] = item), acc
+	// 			), // using object mutation (faster)
+	// 		{}
+	// 	)
+	// );
 
-		let col = almTable.column(5);
-		$(self).siblings().toggleClass("hidden");
-		$(self).siblings().find("input:checked").prop("checked", false);
-
-		$(input).prop('disabled', function(i, v) { return !v; });
+	// const subGroup = copy.filter((v,i,a)=> a.findIndex(t=>(t.name === v.name))===i);
 
 
-		// console.log("self===", $(self).siblings().find("input:checked") );
-
-		$(target).prev().toggleText('선택', $(target).prev().text());
-		// col.visible( ! col.visible() );
-
-	}
-
-	function removeNewInput(target, input, phone, self){
+	function addNewInput(self){
 		// let almTable = $("#alarmTable").DataTable();
-		// let parent = $(target).parent();
-		// // let col = almTable.column(5);
-		// // $(input).addClass("hidden").siblings().removeClass("hidden");
-
-		// console.log("parent===", parent)
-		// // parent.next().addClass("hidden");
-		// $(phone).parent().addClass("hidden");
+		// let col = almTable.column(5);
 		// col.visible( ! col.visible() );
+		let parent = $(self).parent().parent();
+		let num = $(self).parent().attr("id").match(/\d+/)[0];
+		let input = parent.next();
+		let alarmLvl = $(self).parents().closest("tr").find("td:nth-of-type(3) .dropdown");
+		let phone = $(self).parents().closest("tr").find("td:nth-of-type(5) input[type='text']");
+		let btnGroup = $(self).parents().closest("tr").find("td:nth-of-type(6) .flex_start");
+
+		$(self).siblings().find("input:checked").prop("checked", false);
+		input.toggleClass("hidden");
+
+		$.each(phone, function(index, el){
+			if($(this).attr("name").match(/\d+/)[0] == num){
+				$(this).prop("disabled", false).val("").parent().removeClass("disabled").addClass("mb-52");
+				alarmLvl.eq(index).addClass("mb-52");
+				btnGroup.eq(index).addClass("mb-52");
+			}
+		});
 
 	}
+
+	function removeNewInput(self){
+		let parent = $(self).parent().parent().next();
+		let num = $(self).parent().attr("id").match(/\d+/)[0];
+		let alarmLvl = $(self).parents().closest("tr").find("td:nth-of-type(3) .dropdown");
+
+		let phone = $(self).parents().closest("tr").find("td:nth-of-type(5) input[type='text']");
+		let btnGroup = $(self).parents().closest("tr").find("td:nth-of-type(6) .flex_start");
+
+		$(self).siblings().removeClass("hidden");
+		parent.addClass("hidden");
+
+		$.each(phone, function(index, el){
+			if($(this).attr("name").match(/\d+/)[0] == num){
+				let displayText = "";
+				let matchedNum = $(self).find("input[type='checkbox']").data("contact-num");
+				let selected = $(self).parent().text();
+
+				if(selected != "선택"){
+					if($(self).siblings().find("input:checked").length>0){
+						if(isEmpty(matchedNum)){
+							displayText = "번호 없음" + " 외 " + String($(self).siblings().find("input:checked").length) + "개";
+						} else {
+							displayText = matchedNum + " 외 " + String($(self).siblings().find("input:checked").length) + "개";
+						}
+					} else {
+						displayText = matchedNum;
+					}
+				} else {
+					displayText = "";
+				}
+
+				$(this).prop("disabled", true).val(displayText).parent().addClass("disabled").removeClass("mb-52");
+				alarmLvl.eq(index).removeClass("mb-52");
+				btnGroup.eq(index).removeClass("mb-52");
+			}
+		});
+
+	}
+
+
+
+	function updateAlarmTable(self, option){		
+		let tr = self.parents().closest("tr");
+		let td = tr.find("td");
+		let alarmTable = $("#alarmTable").DataTable();	
+		let rowData = alarmTable.row(tr).data();	
+		let dataIdx = self.data("index");
+		
+		let directInput = tr.find("td:nth-of-type(4) input[type='text']").eq(dataIdx);
+		let input = tr.find("td:nth-of-type(5) input[type='text']").eq(dataIdx);
+
+		if(option == "add"){
+			let copy = tr.clone();
+			let idAttr = copy.find('[id^="aDvc"]');
+			let nameAttr = copy.find('[name^="aDvc"]');
+			
+			copy.find("td:nth-of-type(1)").empty();
+			copy.find("td:nth-of-type(2)").empty();
+
+			copy.find("td:nth-of-type(3) .dropdown:not(:last-of-type)").remove();
+			copy.find("td:nth-of-type(4) div:lt(-2)").remove();
+			copy.find("td:nth-of-type(5) .tx_inp_type:not(:last-of-type)").remove();
+			copy.find("td:nth-of-type(6) .flex_start:not(:last-of-type)").remove();
+
+			copy.find("input[type='checkbox']").prop("checked", false);
+			copy.find("td .dropdown-toggle").prop("disabled", false).html('선택<span class="caret"></span>');
+			copy.find("input[type='checkbox']").prop("checked", false);
+			copy.find("td input[type='text']").prop("disabled", false).val("").parent().removeClass("disabled");
+			
+			let tempIdx = tr.find("td:nth-of-type(6) .flex_start:last-of-type .icon-edit").data("index") + 1;
+
+			copy.find("td:nth-of-type(4) .dropdown").attr("data-user-index", tempIdx);
+			copy.find("td:nth-of-type(6) .icon-add").attr("data-index", tempIdx);
+			copy.find("td:nth-of-type(6) .icon-edit").attr("data-index", tempIdx ).prop("disabled", true);
+			copy.find("td:nth-of-type(6) .icon-delete").attr("data-index", tempIdx ).attr("onclick", "removeInnerTd(this)");
+	
+			$.each(idAttr, function(index, el){
+				let oldId = $(this).attr("id");
+				let num = (Number(oldId.match(/\d+/)[0]) + 999 );
+				let newId = oldId + String(num);
+
+				$(this).attr("id", newId);
+			});
+
+			$.each(nameAttr, function(index, el){
+				let oldName = $(this).attr("name");
+				let num = (Number(oldName.match(/\d+/)[0]) + 999 );
+				let newName = oldName + String(num);
+
+				$(this).attr("name", newName);
+
+			});
+			let newTd = copy.find("td");
+
+			td.eq(2).append(newTd.eq(2).children());
+			td.eq(3).append(newTd.eq(3).children());
+			td.eq(4).append(newTd.eq(4).children());
+			td.eq(5).append(newTd.eq(5).children());
+		}
+
+		if(option == "edit"){
+			$.each(td, function(index, el){
+				if(index >= 2) {
+					if(index <= 3){
+						let target = $(this).find(".dropdown-toggle").eq(dataIdx);
+						if(target.is(":disabled")) {
+							target.prop("disabled", false);
+							if(!directInput.hasClass("hidden")){
+								directInput.prop("disabled", false).parent().removeClass("disabled");
+							}
+							if(index == 3){
+								input.prop("disabled", false).parent().removeClass("disabled");
+							}
+						} else {
+							target.prop("disabled", true);
+							directInput.prop("disabled", true).parent().addClass("disabled");
+							if(index == 3){
+								input.prop("disabled", true).parent().addClass("disabled");
+							}
+						}
+					}
+				}
+			});
+		}
+
+		if(option == "delete"){
+			console.log("deleteAlarm==", tr.siblings() ) ;
+
+			if(tr.siblings().length == 0) {
+				if($(self).parent().siblings().length === 0){
+					tr.addClass("hidden");
+				} else {
+					$.each(td, function(index, el){
+						if(index >= 2) {
+							if(index <= 3){
+								let target = $(this).find(".dropdown-toggle").eq(dataIdx);
+								target.parent().remove();
+								directInput.parent().remove();
+								if(index == 3){
+									input.parent().remove();
+								}
+							}
+							if(index == 5){
+								$(self).parent().remove();
+							}
+						}
+					});
+				}
+			} else {
+				if($(self).parent().siblings().length === 0){
+					tr.remove();
+				} else {
+					$.each(td, function(index, el){
+						if(index >= 2) {
+							if(index <= 3){
+								let target = $(this).find(".dropdown-toggle").eq(dataIdx);
+								target.parent().remove();
+								directInput.parent().remove();
+								if(index == 3){
+									input.parent().remove();
+								}
+							}
+							if(index == 5){
+								$(self).parent().remove();
+							}
+						}
+					});
+				}
+			}
+
+			// let alarmName = rowData.name + "/" + tr.find("td:nth-of-type(3) .dropdown-toggle").eq(dataIdx).text();
+			// let modal = $("#alarmDeleteConfirmModal");
+			// let confirmAlarmName = $("#confirmAlarm");
+			// let deleteBtn = $("#alarmDeleteConfirmBtn");
+
+			// let userType = tr.find("td:nth-of-type(4) .dropdown").eq(dataIdx);
+			// let userIdx = userType.data("user-index");
+			// let newAlarmTo = rowData.alarmToUser;
+			
+			// $("#alarmDeleteSuccessMsg span").text(alarmName);
+			// modal.find(".modal-body").removeClass("hidden");
+			// modal.modal("show");
+
+			// confirmAlarmName.on("input", function() {
+			// 	if($(this).val() !== alarmName) {
+			// 		deleteBtn.prop("disabled", true);
+			// 		return false
+			// 	} else {
+			// 		deleteBtn.prop("disabled", false);
+			// 	}
+			// });
+
+			// confirmAlarmName.on("keyup", function() {
+			// 	if($(this).val() !== alarmName) {
+			// 		deleteBtn.prop("disabled", true);
+			// 		return false
+			// 	} else {
+			// 		deleteBtn.prop("disabled", false);
+			// 	}
+			// });
+
+			// if( userType.data("user-type") == "non-user"){
+			// 	newAlarmTo.non_user.splice(userIdx, 1);
+			// } else {
+			// 	newAlarmTo.user.splice(userIdx, 1);
+			// }
+
+			// $("#alarmDeleteConfirmBtn").click(function(){
+			// 	if(confirmAlarmName != alarmName) return false;
+
+			// 	$.ajax(deviceOpt).done(function (json, textStatus, jqXHR) {
+			// 		$("#alarmDeleteSuccessMsg").text("해당 알람 정보가 삭제 되었습니다.").removeClass("hidden");
+			// 		refreshSiteList();
+			// 		setTimeout(function(){
+			// 			modal.modal("hide");
+			// 		}, 1500);
+			// 	}).fail(function (jqXHR, textStatus, errorThrown) {
+			// 		modal.find(".modal-body").addClass("hidden");
+			// 		$("#alarmDeleteSuccessMsg").text("해당 알람 삭제에 실패하였습니다.\n다시 시도해 주세요.").removeClass("hidden");
+			// 		setTimeout(function(){
+			// 			modal.modal("hide");
+			// 		}, 1500);
+			// 		console.log("fail==", jqXHR)
+			// 	});
+			// });
+
+		}
+
+			// $.ajax(deviceOpt).done(function (json, textStatus, jqXHR) {
+			// 	$("#deleteSuccessMsg").text("선택하신 알람 정보가 삭제 되었습니다.").removeClass("hidden");
+			// 	refreshAlarmList();
+			// 	setTimeout(function(){
+			// 		$("#deleteConfirmModal").modal("hide");
+			// 	}, 1500);
+			// }).fail(function (jqXHR, textStatus, errorThrown) {
+			// 	modalBody.addClass("hidden");
+			// 	$("#deleteSuccessMsg").text("사이트 삭제에 실패하였습니다.\n다시 시도해 주세요.").removeClass("hidden");
+			// 	setTimeout(function(){
+			// 		$("#deleteConfirmModal").modal("hide");
+			// 	}, 1500);
+			// 	console.log("fail==", jqXHR)
+			// });
+	
+			// did
+			// localtime
+			// code
+
+			// let arr = [];
+			// $.each(tr, function(index, el){
+
+			// 	let obj = {};
+			// 	let dropdown = el.find(".dropdown-toggle");
+			// 	let input = el.find("input[type='text']");
+
+			// 	obj.device_type = dropdown.eq(0).data("value");
+			// 	obj.name = dropdown.eq(1).data("value");
+			// 	obj.level = dropdown.eq(2).data("value");
+			// 	obj.person = dropdown.eq(3).data("value");
+			// 	obj.phone = input.val();
+
+			// });
+
+
+	}
+
+	function insertRowCopy(){
+		let aTable = $("#alarmTable").DataTable();
+		let copy = $("#alarmTable tbody tr:last-of-type").clone();
+		let idAttr = copy.find('[id^="aDvc"]');
+		let nameAttr = copy.find('[name^="aDvc"]');
+
+		if(copy.hasClass("hidden")){
+			$("#alarmTable tbody").empty();
+			copy.removeClass("hidden");
+		}
+
+		if(!copy.hasClass("single")){
+			copy.find("td .dropdown:not(:first-of-type)").remove();
+			copy.find("td:nth-of-type(4) .tx_inp_type:not(:nth-of-type(2))").remove();
+			copy.find("td:nth-of-type(5) .tx_inp_type:not(:first-of-type)").remove();
+			copy.find("td .flex_start:not(:first-of-type)").remove();
+		}
+		
+		copy.find("td:nth-of-type(1) .dropdown-menu li").attr( "onclick", "showSubgroup(this)");
+		copy.find("td:nth-of-type(2) .dropdown-menu li").removeClass( "hidden");
+		copy.find("td .dropdown-toggle").prop("disabled", false).html('선택<span class="caret"></span>').attr("data-value", "");
+		copy.find("input[type='checkbox']").prop("checked", false);
+		copy.find("td input[type='text']").prop("disabled", false).val("").parent().removeClass("disabled");
+		copy.find("td:nth-of-type(6) .icon-edit").prop("disabled", true);
+		copy.find("td:nth-of-type(6) .icon-delete").attr( "onclick", "$(this).parents().closest('tr').remove()");
+
+		$.each(idAttr, function(index, el){
+			let oldId = $(this).attr("id");
+			let num = (Number(oldId.match(/\d+/)[0]) + 9999 );
+			let newId = oldId + String(num);
+			// let num = Number(oldId.match(/\d+/)[0]) + 1;
+			// let text = oldId.match(/[^\d]+/) + String(num);
+
+			$(this).attr("id", newId);
+		});
+
+		$.each(nameAttr, function(index, el){
+			let oldName = $(this).attr("name");
+			let num = (Number(oldName.match(/\d+/)[0]) + 9999 );
+			let newName = oldName + String(num);
+
+			$(this).attr("name", newName);
+
+		});
+
+		// aTable.rows().add(copy).draw(false);
+
+		$("#alarmTable tbody").append(copy);
+
+	}
+
+	function removeInnerTd(self){
+		let td = $(self).parents().closest("tr").find("td");
+		$.each(td, function(index, el){
+			if(index>=2){
+				if(index != 3){
+					$(this).find(".dropdown:last-of-type").remove();
+					$(this).find(".tx_inp_type:last-of-type").remove();
+				}
+
+				if(index == 3){
+					$(this).find("div:gt(-3)").remove();
+				}
+
+				if(index == 5){
+					$(this).find(".flex_start:last-of-type").remove();
+				}
+			}
+		});
+	}
+
+	function setDropdownInput(self){
+		$(self).parent().prev().data("did", $(self).data("did"));
+	}
+
+	// function removeRow(self){
+	// 	$(self).parents().closest("tr").remove();
+	// 	console.log("removeRow===");
+	// }
+		
 
 </script>
 
@@ -2793,10 +3406,10 @@
 	<div class="modal-dialog modal-sm">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 id="alarmDeleteSuccessMsg" class="ntit">알람 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>
+				<h5 id="alarmDeleteSuccessMsg" class="ntit">알람 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;을 입력해 주세요.</h5>
 			</div>
 			<div class="modal-body">
-				<div class="tx_inp_type"><input type="text" name="confirm_alarm" id="confirmAlarm" placeholder="장치명 이름 입력"/></div>
+				<div class="tx_inp_type"><input type="text" name="confirm_alarm" id="confirmAlarm" placeholder="장치명 입력"/></div>
 			</div>
 			<div class="btn_wrap_type05"><!--
 				--><button type="button" class="btn_type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
@@ -2811,35 +3424,36 @@
 <div class="modal fade" id="addAlarmModal" tabindex="-1" role="dialog" aria-labelledby="addAlarmModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-xl">
 		<div class="modal-content site-modal-content">
-			<div class="modal-header flex_start"><h1>알람 등록/수정</h1><button type="button" class="btn-add ml-20" onclick="addAlarmRow()">추가</button></div>
+			<div class="modal-header">
+				알람 설정<button type="button" class="btn-add fr" onclick="insertRowCopy()">열 추가</button><!--
+				--><small id="duplicatedGroup" class="warning hidden">해당 설비는 이미 선택 되었습니다.</small><!--
+			--></div>
 			<div class="modal-body mt10">
-			
+				<form name="add_alarm_form" id="updateAlarmForm">
 					<table id="alarmTable" class="no-stripe">
 						<colgroup>
-							<col style="width:4%">
-							<col style="width:18%">
-							<col style="width:18%">
-							<col style="width:8%">
-							<col style="width:16%">
+							<!-- <col style="width:4%"> -->
+							<col style="width:14%">
 							<col style="width:20%">
-							<col style="width:8%">
-							<col style="width:8%">
+							<col style="width:12%">
+							<col style="width:20%">
+							<col style="width:20%">
+							<col style="width:14%">
+							<!-- <col style="width:5%">
+							<col style="width:5%"> -->
 						</colgroup>
 						<thead></thead>
-						<tbody>
-							<form id="addAlarmForm"></form>
-						</tbody>
+						<tbody></tbody>
 					</table>
-				
+					<div class="btn_wrap_type05"><!--
+					--><button type="button" class="btn_type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
+					--><button type="submit" class="btn_type w80 ml-12">추가</button><!--
+				--></div>
+				</form>
 			</div>
-			<div class="btn_wrap_type05"><!--
-			--><button type="button" class="btn_type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
-			--><button type="submit" class="btn_type w80 ml-12">추가</button><!--
-		--></div>
 		</div>
 	</div>
 </div>
-
 
 
 <div class="modal fade" id="addSiteModal" tabindex="-1" role="dialog" aria-labelledby="addSiteModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
@@ -3023,7 +3637,7 @@
 									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label offset-top">iSMART<br>비밀번호</span></div>
 									<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
 										<div class="tx_inp_type"><!--
-										--><input type="password" name="new_smart_pwd" id="newISmartPwd" placeholder="입력" maxlength="18"><!--
+										--><input type="password" name="new_smart_pwd" id="newISmartPwd" placeholder="입력" maxlength="18" autocomplete><!--
 										--><button type="button" class="pwd-icon" onclick="showPwd('newISmartPwd', this)">show</button><!--
 									--></div>
 									</div>

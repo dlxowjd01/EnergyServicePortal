@@ -63,7 +63,7 @@
 
 				<div class="btn-wrapper">
 					<input type="submit" id="loginBtn" name="login" value="<fmt:message key="ewp.login.Signin" />">
-					<p class="center">회원 가입 및 회원 정보 문의<strong class="bold">070-4949-5500</strong></p>
+					<p class="center"><a href="#" onclick="openSignUpModal()">회원 가입</a> 및 회원 정보 문의<strong class="bold">070-4949-5500</strong></p>
 				</div>
 
 				<%-- KPX(전력 거래소 사용시 하단 내용 숨김) --%>
@@ -101,6 +101,147 @@
 			</div>
 		</div>
 	</div>
+	<!-- <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModal" aria-hidden="true" data-keyboard="false" data-backdrop="static"></div> -->
+	<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModal" aria-hidden="true">
+		<div class="modal-dialog modal-md">
+			<div class="modal-content user-modal-content">
+				<div id="titleEdit" class="modal-header"><h2>회원 가입</h2></div>
+				<div class="modal-body">
+					<div class="container-fluid">
+						<form name="add_user_form" id="signUpForm" class="setting-form">
+							<section id="userInfo">
+								<div class="row">
+									<div class="col-3"><span class="input_label asterisk">ID</span></div>
+									<div class="col-9">
+										<div class="flex_start">
+											<div class="tx_inp_type offset-width">
+												<input type="text" name="new_id" id="newId" placeholder="입력" minlength="5" maxlength="15">
+											</div>
+											<button type="button" class="btn_type fr" onclick="checkId($('#newId').val())" disabled>중복 체크</button>
+										</div>
+										<small class="hidden warning">사용자 아이디를 입력해 주세요</small>
+										<small class="hidden warning">5~15 글자를 입력해 주세요.</small>
+										<small class="hidden warning">한글, 특수 문자는 포함될 수 없습니다.</small>
+										<small id="invalidId" class="hidden warning">동일한 아이디가 존재합니다.</small>
+										<small id="validId" class="text-blue text-sm hidden">사용 가능한 아이디 입니다.</small>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-3"><span class="input_label asterisk">비밀번호</span></div>
+									<div class="col-9">
+										<div class="tx_inp_type"><!--
+											--><input type="password" id="newUserPwd" name="new_pwd" placeholder="입력" minlength="6" maxlength="32"><!--
+											--><button type="button" class="clear-btn" onclick="showPwd('newUserPwd', this)">show</button><!--
+										--></div>
+										<div class="flex_start warning-wrapper">
+											<small id="hasLet" class="tick">영문</small>
+											<small id="hasNum" class="tick">숫자</small>
+											<small id="sixCharLong" class="tick">6자리 이상</small>
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-3"><span class="input_label asterisk">비밀번호 확인</span></div>
+									<div class="col-9">
+										<div class="tx_inp_type"><!--
+											--><input type="password" id="confirmNewPwd" name="confirm_new_pwd" placeholder="입력" minlength="6" maxlength="32"><!--
+										--></div>
+										<div class="flex_start warning-wrapper">
+											<small id="pwdMatched" class="warning-text hidden">비밀번호가 일치하지 않습니다.</small>
+										</div>
+									</div>
+								</div>
+
+		
+								<div class="row">
+									<div class="col-3"><span class="input_label asterisk">이름</span></div>
+									<div class="col-9">
+										<div class="tx_inp_type"><input type="text" id="newFullName" name="new_full_name" placeholder="입력" minlength="3" maxlength="28"></div>
+										<small class="hidden warning">영문/한글(3~28 글자) 조합의 이름을 입력해 주세요</small>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-3"><span class="input_label asterisk">이메일 주소</span></div>
+									<div class="col-9">
+										<div class="flex_start">
+											<div class="tx_inp_type"><input type="text" id="newEmailAddr" name="new_email_addr" placeholder="입력" minlength="3" maxlength="28"></div>
+											<div class="dropdown">
+												<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+												<ul id="newEmailHost" class="dropdown-menu"></ul>
+											</div>										
+										</div>
+										<div class="flex_start">
+											<small class="hidden warning">올바른 이메일 형식을 입력해 주세요.</small>
+										</div>
+									</div>
+								</div>
+		
+								<div class="row">
+									<div class="col-3"><span class="input_label">휴대폰</span></div>
+									<div class="col-9">
+										<div class="flex_start">
+											<div class="dropdown">
+												<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+												<ul id="newMobilePrefix" class="dropdown-menu"></ul>
+											</div>
+											<div class="tx_inp_type"><input type="text" id="newMobileNum" name="new_mobil_num" placeholder="입력" maxlength="13"></div>
+											<button type="button" class="btn_type fr">인증</button>
+										</div>
+										<div class="flex_start">
+											<small id="isValidNewMobileNum" class=" warning hidden">10자리 이상의 휴대폰 번호를 입력해 주세요.</small>
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-3"><span class="input_label">인증 번호</span></div>
+									<div class="col-9">
+										<div class="tx_inp_type"><input type="text" id="verificationCode" name="verification_code" placeholder="입력">
+										</div>
+									</div>
+								</div>
+							</section>
+
+							<section id="termsCondition">
+								<div class="row">
+									<div class="col-12">
+										<h3 class="input_label">이용 약관</h3>
+										<textarea name="new_user_desc" id="newUserDesc" class="textarea w-100" placeholder="입력">
+
+										</textarea>
+										<div class="input-field no-border right"><a class="chk_type"><input type="checkbox" id="termsInput" name="terms_input"><label for="termsInput"></label></a></div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-12">
+										<h3 class="input_label">개인 정보 수집 및 제공 동의</h3>
+										<textarea name="new_user_desc" id="newUserDesc" class="textarea w-100" placeholder="입력"></textarea>
+										<div class="input-field no-border right"><a class="chk_type"><input type="checkbox" id="termsInput" name="terms_input"><label for="termsInput"></label></a></div>
+									</div>
+								</div>
+							</section>
+
+							<div class="row">
+								<div class="col-12">
+									<div class="btn_wrap_type02"><!--
+									--><button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button><!--
+										--><button type="submit" id="addUserBtn" class="btn_type" disabled>등록</button><!--
+									--></div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	
 
 	<c:if test="${not empty msg}">
 		<script type="text/javascript">
@@ -212,6 +353,11 @@
 				btn.classList.remove("eye-close");
 			}
 		}
+
+		function openSignUpModal() {
+			$("#addUserModal").modal("show");
+		}
+
 	</script>
 </body>
 </html>
