@@ -9,7 +9,7 @@
 	<div class="col-6">
 		<h1 class="page-header fl">${siteName}</h1>
 		<label class="switch switch-slide fl">
-			<input class="switch-input" type="checkbox" />
+			<input type="checkbox" id="switchBtn" class="switch-input" />
 			<span class="switch-label" data-on="테이블" data-off="대시보드"></span> 
 			<span class="switch-handle"></span>
 		</label>
@@ -527,6 +527,31 @@
 	</div>
 </div>
 
+<div class="row content-wrapper">
+	<div class="col-12">
+		<div class="indiv">
+			<table id="gmainTable">
+				<colgroup>
+					<col style="width:5%">
+					<col style="width:12%">
+					<col style="width:16%">
+					<col style="width:5%">
+					<col style="width:6%">
+					<col style="width:8%">
+					<col style="width:8%">
+					<col style="width:8%">
+					<col style="width:8%">
+					<col style="width:10%">
+					<col style="width:14%">
+				</colgroup>
+				<thead></thead>
+				<tbody></tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+
 <script type="text/javascript" src="/js/commonDropdown.js"></script>
 
 <c:choose>
@@ -581,7 +606,14 @@
 			}, 2000);
 			return false;
 		}
+		$("#switchBtn").on("change", function(){
+
+		});
 	});
+
+	function switchView(){
+		
+	}
 
 	function fn_cycle_1hour() {
 		if (!first) {
