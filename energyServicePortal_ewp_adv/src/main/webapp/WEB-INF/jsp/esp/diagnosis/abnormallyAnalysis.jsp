@@ -665,10 +665,8 @@
 							} else {
 								if ($(':radio[name="compAttr"]:checked').val() == 'metering' || $(':radio[name="compAttr"]:checked').val() == 'forecasting') {
 									compareObj[stnd] += Number(el.energy) / 1000;
-									compareObj[stnd] = compareObj[stnd] / $(':checkbox[name="compDevice"]:checked').length;
 								} else {
 									compareObj[stnd] += Number(eval('el.mean.' + $('[name="compAttr"]:checked').val())) / 1000;
-									compareObj[stnd] = (compareObj[stnd] / $(':checkbox[name="compDevice"]:checked').length);
 								}
 							}
 						}
@@ -696,6 +694,12 @@
 				//합계 만들기
 				verifyTotal += verifyObj[stnd] == '-' ? 0 : parseFloat(verifyObj[stnd]);
 				compareTotal += compareObj[stnd] == '-' ? 0 : parseFloat(compareObj[stnd]);
+			});
+
+			Object.entries(compareObj).forEach(comp => {
+				if (comp[0] != 'name' && comp[0] != 'color' && comp[1] != '-') {
+					compareObj[comp[0]] = (Number(comp[1]) / $(':checkbox[name="compDevice"]:checked').length).toFixed(2);
+				}
 			});
 
 			if (verifyList.length > 0) {
