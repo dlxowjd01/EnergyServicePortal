@@ -62,7 +62,7 @@
 				<div class="input-field no-border"><a class="chk_type"><input type="checkbox" id="saveLogin" name="save_login"><label for="saveLogin">로그인 유지</label></a></div>
 
 				<div class="btn-wrapper">
-					<input type="submit" id="loginBtn" name="login" value="<spring:message code="ewp.login.Signin" />">
+					<input type="submit" id="loginBtn" name="login" value="<fmt:message key="ewp.login.Signin" />">
 					<p class="center"><a href="#" onclick="openSignUpModal()">회원 가입</a> 및 회원 정보 문의<strong class="bold">070-4949-5500</strong></p>
 				</div>
 

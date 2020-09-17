@@ -244,7 +244,7 @@
 
 
 			let newStationId, kpxGenId, kpxEmsId, kpxTransvol;
-			if (oid.match('kpx')) {
+			if (oid.match('testkpx')) {
 				newStationId = $('#station_id').val();
 				kpxGenId = $('#kpx_genid').val();
 				kpxEmsId = $('#kpx_emsid').val();
@@ -285,7 +285,7 @@
 				if( !isEmpty(newVppResId) ){
 					siteObj.dr_group_id = newVppResId;
 				}
-				if (oid.match('kpx')) {
+				if (oid.match('testkpx')) {
 					if ( !isEmpty(newStationId) ) {
 						siteObj.station_id = Number(newStationId);
 					}
@@ -305,7 +305,6 @@
 					newUtilObj.utility_plan_id = newUtilPlanId;
 					newUtilObj.utility_plan_name = newUtilPlanName;
 					if( !isEmpty(newVoltName)){
-						console.log("newVoltName===", newVoltName)
 						newUtilObj.volt_name = newVoltName;
 					}
 				}
@@ -432,7 +431,7 @@
 				if( !isEmpty(newVppResId) && td.eq(9).text() != newVppResId ){
 					siteEditObj.dr_group_id = newVppResId;
 				}
-				if (oid.match('kpx')) {
+				if (oid.match('testkpx')) {
 					if ( !isEmpty(newStationId) ) {
 						siteEditObj.station_id = Number(newStationId);
 					}
@@ -450,9 +449,7 @@
 				if( !isEmpty(newUtilPlanId) ){
 					newUtilObj.utility_plan_id = newUtilPlanId;
 					newUtilObj.utility_plan_name = newUtilPlanName;
-					console.log("newUtilPlanId===", newUtilPlanId)
 					if( !isEmpty(newVoltName) ){
-						console.log("newVoltName===", newVoltName)
 						newUtilObj.volt_name = newVoltName;
 					}
 				}
@@ -965,8 +962,8 @@
 
 						let addBtnStr = `<button type="button" class="btn_type fr mb-20" onclick="updateModal('add')">추가</button>`;
 						$("#siteTable_wrapper").append($(str)).prepend($(addBtnStr));
-						if(oid.match("kpx")){
-							this.api().columns([8,9,10]).visible( false );
+						if(oid.match("testkpx")){
+							this.api().columns([8,9]).visible( false );
 						}
 					},
 					// every time DataTables performs a draw
@@ -1339,8 +1336,8 @@
 							cell.innerHTML = i+1;
 							$(cell).data("id", i);
 						});
-						if(oid.match("kpx")){
-							this.api().columns([8,9,10]).visible( false );
+						if(oid.match("testkpx")){
+							this.api().columns([8,9]).visible( false );
 						}
 					},
 					drawCallback: function (settings) {
@@ -1482,8 +1479,8 @@
 			},
 			initComplete: function(){
 				this.addClass("no-stripe");
-				if(oid.match("kpx")){
-					this.api().columns([8,9,10]).visible( false );
+				if(oid.match("testkpx")){
+					this.api().columns([8,9]).visible( false );
 				}
 			},
 		});
@@ -1908,7 +1905,7 @@
 				// 추가 정보
 				$('#newSiteDetail').val(rowData.detail_info);
 				// kpx
-				if (oid.match('kpx')) {
+				if (oid.match('testkpx')) {
 					$('#station_id').val(rowData.station_id);
 					$('#kpx_genid').val(rowData.kpx_genid);
 					$('#kpx_emsid').val(rowData.kpx_emsid);
@@ -3550,7 +3547,7 @@
 								</div>
 							</div>
 
-							<c:if test="${fn:contains(sessionScope.userInfo.oid, 'kpx')}">
+							<c:if test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
 								<div class="row">
 									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">발전기 코드</span></div>
 									<div class="col-xl-3 col-lg-6 col-md-4 col-sm-10 pl-0">
