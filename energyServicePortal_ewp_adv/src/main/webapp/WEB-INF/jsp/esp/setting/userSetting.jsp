@@ -1563,13 +1563,8 @@
 					}
 
 					let val = $("#newAccLevel").prev().data("value");
-					if(val == 2) {
-						$("#siteAccOpt").prev().data({"value": 2, "name": "조회 권한"}).prop("disabled", true).html("조회 권한<span class='caret'></span>");
-						$("#spcAccOpt").prev().data({"value": 2, "name": "조회 권한"}).prop("disabled", true).html("조회 권한<span class='caret'></span>");
-					} else {
-						$("#siteAccOpt").prev().prop("disabled", false).html("선택<span class='caret'></span>");
-						$("#spcAccOpt").prev().prop("disabled", false).html("선택<span class='caret'></span>");
-					}
+					$("#siteAccOpt").prev().prop("disabled", false).html("선택<span class='caret'></span>");
+					$("#spcAccOpt").prev().prop("disabled", false).html("선택<span class='caret'></span>");
 				}).fail(function (jqXHR, textStatus, errorThrown) {
 					console.log("optSite error===", jqXHR)
 					return false;
