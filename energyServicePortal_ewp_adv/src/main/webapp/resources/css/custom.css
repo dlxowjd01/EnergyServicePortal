@@ -240,6 +240,7 @@ html.darkmode:root {
 	--ico-next-active: url("/img/btn-next-active.svg");
 	--ico-prev-page: url("/img/btn-prev.svg");
 	--ico-next-page: url("/img/btn-next.svg");
+	--ico-table: url("/img/icon_table.svg");
 
 	--bg-battery-cover: url("/img/battary_cover_dark.png");
 
@@ -2022,6 +2023,14 @@ nav .nav_right li.member {
 	background: var(--active);
 }
 
+.page-header + .btn_type03 {
+	margin: 8px 0 0 24px;
+	height: 28px;
+	line-height: 27px;
+	border: 1px solid var(--white60);
+	background: none;
+}
+
 nav .nav_right li.member .fl img {
 	vertical-align: middle;
 }
@@ -2060,16 +2069,21 @@ nav .all-menu:before {
 
 nav .all-menu>a {
 	display: inline-block;
-	width: 85px;
-	height: 38px;
-	line-height: 38px;
 	color: var(--white87);
 	font-size: 16px;
-	background: var(--box-color) var(--expand-arrow-down) no-repeat right 15px center;
 }
 
-nav .all-menu>a.on {
-	background: var(--active) var(--expand-arrow-up) no-repeat right 15px center;
+nav .all-menu>a:after {
+	display: inline-block;
+	content: "";
+	width: 36px;
+	height: 12px;
+	color: var(--white87);
+	background: var(--expand-arrow-down) no-repeat center;
+}
+
+nav .all-menu>a.on:after {
+	transform: rotate(180deg);
 }
 
 nav .all-menu .menu-group {

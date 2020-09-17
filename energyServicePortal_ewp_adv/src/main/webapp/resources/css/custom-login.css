@@ -490,6 +490,10 @@ textarea:focus {
 	vertical-align: middle;
 }
 
+.modal-dialog.modal-sm {
+	max-width: 360px;
+}
+
 .modal-dialog.modal-md {
 	max-width: 560px;
 }
