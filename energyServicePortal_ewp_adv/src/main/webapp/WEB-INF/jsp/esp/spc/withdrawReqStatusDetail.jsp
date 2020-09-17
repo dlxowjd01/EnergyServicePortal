@@ -470,9 +470,12 @@
 			},
 			success: function(data) {
 				let account = $("#tableBody").find("tr:first-child td:nth-child(2)").text().replace(/^\s+|\s+$|\s+(?=\s)/g, "");
-				let d = new Date();
-				d = d.toISOString().substring(0, 10).replace(/-/g, "");
+
+				let d = $("#tableBody").find("tr:first-child td:nth-child(1)").text().replace(/[^0-9]/g, "");
+				// let d = new Date();
+				// d = d.toISOString().substring(0, 10).replace(/-/g, "");
 				let name = d + '_' + spcName + '_' + account + '.pdf';
+
 				var a = document.createElement('a');
 				var url = window.URL.createObjectURL(data);
 				a.href = url;
