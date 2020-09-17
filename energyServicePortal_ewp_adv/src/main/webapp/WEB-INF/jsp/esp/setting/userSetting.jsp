@@ -365,13 +365,13 @@
 							if(siteItemList.length > 0) {
 								var sitePromises = [];
 								$.each(siteItemList, function(index, element){
+									console.log("element====", element)
 									siteObj.sid = $(element).data("sid");
 									siteObj.role = Number($(element).data("role"));
 									siteOption.data = JSON.stringify(siteObj);
 									sitePromises.push(Promise.resolve(makeAjaxCall(siteOption)));
 								});
 								Promise.all(sitePromises).then(res => {
-									console.log("res---", res);
 									$("#addUserModal").modal("hide");
 									$("#resultSuccessMsg").text("사이트 정보가 추가 되었습니다.").removeClass("hidden");
 									$("#resultBtn").parent().addClass("hidden");
@@ -462,10 +462,10 @@
 					editUserObj.valid_yn = newUseOpt;
 				}
 
-				if( !isEmpty(prevDesc) ) {
-					if( newUserDesc.replace("\t", "") != prevDesc.replace("\t", "") ) {
+				if( !isEmpty(newUserDesc) ) {
+					// if( newUserDesc.replace("\t", "") != prevDesc.replace("\t", "") ) {
 						editUserObj.description = newUserDesc;
-					}
+					// }
 				}
 				
 				option = {
@@ -676,7 +676,6 @@
 							$.when($.ajax(optionPwd),$.ajax(option)).done(function (result1, result2) {
 								if(nestedPromises.length>0){
 									Promise.all(nestedPromises).then(res => {
-										console.log("res---", res);
 										$("#addUserModal").modal("hide");
 										$("#resultSuccessMsg").text("사용자 정보가 성공적으로 변경 되었습니다.").removeClass("hidden");
 										$("#resultBtn").parent().addClass("hidden");
@@ -1520,8 +1519,12 @@
 								if($(x).data("value") === item.sid) {
 									// console.log("item---", item.sid)
 									let name = $(x).data("name");
-									let role = '';
-									item.role == "1" ? role = "조회 권한" : role = "관리 권한";
+									let role = "";
+									if(item.role == 1){
+										role = "관리 권한";
+									} else {
+										role = "조회 권한";
+									}
 
 									siteStr += `
 									<li class="delete" data-sid="${'${item.sid}'}" data-role="${'${item.role}'}" data-site-name="${'${name}'}">${'${name}'}&nbsp;(&nbsp;${'${role}'}&nbsp;)

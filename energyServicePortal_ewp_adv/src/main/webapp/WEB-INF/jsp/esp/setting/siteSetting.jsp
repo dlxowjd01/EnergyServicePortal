@@ -27,15 +27,15 @@
 				async: true
 			},
 			{
+				url: apiHost + "/auth/me/sites",
+				type: "get",
+				async: true,
+			},
+			{
 				url: apiHost + "/auth/me",
 				type: "get",
 				async: true,
-			}
-			// {
-			// 	url: apiHost + "/auth/me",
-			// 	type: "get",
-			// 	async: true,
-			// },
+			},
 		];
 
 		initModal();
@@ -48,9 +48,10 @@
 				adminTable(res[0], res[1]);
 			});
 		} else {
-			Promise.all([ Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])), Promise.resolve(returnAjaxRes(optionList[2])) ]).then( res => {
-			// Promise.resolve(returnAjaxRes(optionList[2])).then( res => {
-				nonAdminTable( res[0], res[1], res[2].user_sites);
+			// Promise.all([ Promise.resolve(returnAjaxRes(optionList[2])), Promise.resolve(returnAjaxRes(optionList[1])) ]).then( res => {
+			Promise.all([ Promise.resolve(returnAjaxRes(optionList[2])), Promise.resolve(returnAjaxRes(optionList[1])), Promise.resolve(returnAjaxRes(optionList[3])) ]).then( res => {
+				// console.log("user_sites===", res[2].user_sites)
+				nonAdminTable( res[0], res[1], res[2].user_sites );
 			});
 		}
 
@@ -1101,124 +1102,131 @@
 	}
 
 
-	function nonAdminTable(allSites, vppNameData, userSite) {
-		if(userSite){
-			let newArr = [];
-			Promise.resolve(allSites.map((item, index) => {
-				let found = userSite.findIndex( x => x.sid == item.sid);
+	function nonAdminTable(mySites, vppNameData, userSites) {
+		let newArr = [];
+		
+		Promise.resolve(mySites.map((item, index) => {
+			let found = userSites.findIndex( x => x.sid === item.sid);
 
-				let matchedData = allSites[found];
+			if(found > -1){
+				let matchedData = mySites[found];
+				let rawDataOpt = {
+					url: apiHost + "/status/raw/site",
+					type: 'get',
+					async: false,
+					data:{
+						sid: item.sid,
+						formId: 'v2'
+					},
+					beforeSend: function(){
+						$("#loadingCircle").show();
+					}
+				}
+				console.log("matchedData===", matchedData)
+				console.log("userSites[found]===", userSites[found])
 
-				if(found > -1){
-					let rawDataOpt = {
-						url: apiHost + "/status/raw/site",
-						type: 'get',
-						async: false,
-						data:{
-							sid: item.sid,
-							formId: 'v2'
-						},
-						beforeSend: function(){
-							$("#loadingCircle").show();
+
+				$.ajax(rawDataOpt).done(function (json, textStatus, jqXHR) {
+					$("#loadingCircle").show();
+					if(!isEmpty(json.INV_PV) && ( Object.keys("genCapacity").length === 0 ) ) {
+						item.genCapacity = json.INV_PV.capacity;
+					} else {
+						item.genCapacity = 0;
+					}
+					if(!isEmpty(json.PCS_ESS) && ( Object.keys("pcsCapacity").length === 0 ) ) {
+						item.pcsCapacity = json.PCS_ESS.capacity;
+					} else {
+						item.pcsCapacity = 0;
+					}
+					if(!isEmpty(json.BMS_SYS) && ( Object.keys("bmsCapacity").length === 0 ) ) {
+						item.bmsCapacity = json.BMS_SYS.capacity;
+					} else {
+						item.bmsCapacity = 0;
+					}
+
+					if(isEmpty(matchedData.ess)){
+						item.ess == "-"
+					} else {
+						if(matchedData.ess == 1){
+							item.ess = "DemandESS"
+						} else if(matchedData.ess == 2){
+							item.ess = "GenerationESS"
 						}
 					}
 
-					$.ajax(rawDataOpt).done(function (json, textStatus, jqXHR) {
-						$("#loadingCircle").show();
-						if(!isEmpty(json.INV_PV) && ( Object.keys("genCapacity").length === 0 ) ) {
-							item.genCapacity = json.INV_PV.capacity;
+					item.name = matchedData.name;
+					item.role = userSites[found].role;
+
+					if(!isEmpty(matchedData.location)){
+						item.location = matchedData.location;
+					} else {
+						item.location = "-";
+					}
+
+					if(matchedData.resource_type === 0) {
+						// Demand && ESS : pair
+						item.siteType = "수요자원"
+						item.powerSource = "부하"
+					} else {
+						if(isEmpty(matchedData.resource_type)){
+							item.siteType = "-"
 						} else {
-							item.genCapacity = 0;
+							item.siteType = "발전소"
 						}
-						if(!isEmpty(json.PCS_ESS) && ( Object.keys("pcsCapacity").length === 0 ) ) {
-							item.pcsCapacity = json.PCS_ESS.capacity;
-						} else {
-							item.pcsCapacity = 0;
+						if(matchedData.resource_type === 1){
+							item.powerSource = "태양광"
+						} else if(matchedData.resource_type === 2){
+							item.powerSource = "풍력"
+						} else if(matchedData.resource_type === 3){
+							item.powerSource = "소수력"
 						}
-						if(!isEmpty(json.BMS_SYS) && ( Object.keys("bmsCapacity").length === 0 ) ) {
-							item.bmsCapacity = json.BMS_SYS.capacity;
-						} else {
-							item.bmsCapacity = 0;
+					}
+
+					// Match name with dr_group_id
+					if(!isEmpty(item.dr_group_id)){
+						let found = vppNameData.dr_group.findIndex( x => x.dgid == item.dr_group_id);
+						if(found > -1){
+							item.drName = vppNameData.dr_group[found].name;
 						}
+					} else {
+						item.drName = "-"
+					}
 
-						if(isEmpty(matchedData.ess)){
-							item.ess == "-"
-						} else {
-							if(matchedData.ess == 1){
-								item.ess = "DemandESS"
-							} else if(matchedData.ess == 2){
-								item.ess = "GenerationESS"
-							}
+					// Match name with vpp_group_id
+					if(!isEmpty(item.vpp_group_id)){
+						let found = vppNameData.vpp_group.findIndex( x => x.vgid == item.vpp_group_id);
+						if(found > -1){
+							item.vppName = vppNameData.vpp_group[found].name;
 						}
+					} else {
+						item.vppName = "-"
+					}
 
-						item.name = matchedData.name;
-						item.role = userSite[found].role;
+					// if(!isEmpty(matchedData.dr_group_id)){
+					// 	item.drId = item.dr_group_id;
+					// } else {
+					// 	item.drId = "-"
+					// }
 
-						if(!isEmpty(matchedData.location)){
-							item.location = matchedData.location;
-						} else {
-							item.location = "-";
-						}
+					// if(!isEmpty(matchedData.vpp_group_id)){
+					// 	item.vppId = item.vpp_group_id;
+					// } else {
+					// 	item.vppId = "-"
+					// }
 
-						if(matchedData.resource_type === 0) {
-							// Demand && ESS : pair
-							item.siteType = "수요자원"
-							item.powerSource = "부하"
-						} else {
-							if(isEmpty(matchedData.resource_type)){
-								item.siteType = "-"
-							} else {
-								item.siteType = "발전소"
-							}
-							if(matchedData.resource_type === 1){
-								item.powerSource = "태양광"
-							} else if(matchedData.resource_type === 2){
-								item.powerSource = "풍력"
-							} else if(matchedData.resource_type === 3){
-								item.powerSource = "소수력"
-							}
-						}
-
-						// Match name with dr_group_id
-						if(!isEmpty(item.dr_group_id)){
-							let found = vppNameData.dr_group.findIndex( x => x.dgid == item.dr_group_id);
-							if(found > -1){
-								item.drName = vppNameData.dr_group[found].name;
-							}
-						} else {
-							item.drName = "-"
-						}
-
-						// Match name with vpp_group_id
-						if(!isEmpty(item.vpp_group_id)){
-							let found = vppNameData.vpp_group.findIndex( x => x.vgid == item.vpp_group_id);
-							if(found > -1){
-								item.vppName = vppNameData.vpp_group[found].name;
-							}
-						} else {
-							item.vppName = "-"
-						}
-
-						// if(!isEmpty(matchedData.dr_group_id)){
-						// 	item.drId = item.dr_group_id;
-						// } else {
-						// 	item.drId = "-"
-						// }
-
-						// if(!isEmpty(matchedData.vpp_group_id)){
-						// 	item.vppId = item.vpp_group_id;
-						// } else {
-						// 	item.vppId = "-"
-						// }
-
-						item.updatedAt = new Date(item.updatedAt).toLocaleDateString("en-CA").replace(/\//g, '-') + '&ensp;' + new Date(item.updatedAt).toLocaleTimeString();
-						newArr.push(item);
-					}).fail(function (jqXHR, textStatus, errorThrown) {
-						console.log("error====", jqXHR);
-						return;
-					});
-				}
-			})).then(() => {
+					item.updatedAt = new Date(item.updatedAt).toLocaleDateString("en-CA").replace(/\//g, '-') + '&ensp;' + new Date(item.updatedAt).toLocaleTimeString();
+					newArr.push(item);
+				}).fail(function (jqXHR, textStatus, errorThrown) {
+					console.log("error====", jqXHR);
+					return;
+				});
+			} else {
+				newArr = [];
+			}
+		})).then(() => {
+			if(newArr.length === 0 ){
+				drawEmptyTable($("#siteTable"));
+			} else {
 				// 1. 사업소 유형
 				// 2. 사업소명
 				// 3. 지역
@@ -1315,10 +1323,10 @@
 					"select": {
 						style: 'single',
 						// selector: 'td:first-child > a',
-						// selector: 'td input[type="checkbox"], tr'
-						selector: 'td input[type="checkbox"], td:not(:nth-of-type(11))'
+						selector: 'td input[type="checkbox"], tr'
+						// selector: 'td input[type="checkbox"], td:not(:nth-of-type(11))'
 					},
-					initComplete: function(){
+					initComplete: function(settings, json ){
 						// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
 						// 	cell.innerHTML = i+1;
 						// 	$(cell).data("id", i);
@@ -1329,10 +1337,10 @@
 						--></div>`;
 						$("#siteTable_wrapper").append($(str));
 
-						this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-							cell.innerHTML = i+1;
-							$(cell).data("id", i);
-						});
+						// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+						// 	cell.innerHTML = i+1;
+						// 	$(cell).data("id", i);
+						// });
 						if(oid.match("testkpx")){
 							this.api().columns([8,9]).visible( false );
 						}
@@ -1340,45 +1348,58 @@
 					drawCallback: function (settings) {
 						$('#siteTable_wrapper').addClass('mb-28');
 					},
-					// rowCallback: function ( row, data ) {
-					// 	// readWrite
-					// 	if(data.role == 1){
-							
-					// 	// readOnly
-					// 	} else {
-
-					// 	}
-					// 	console.log("role---", data.role);
-
-					// }
 				}).on("select", function(e, dt, type, indexes) {
+					let role = siteReadOnlyTable.rows( indexes ).data().toArray()[0].role;
 					let btn = $("#btnGroup").find(".btn_type03");
-					btn.each(function(index, element){
-						if($(this).is(":disabled")){
-							$(this).prop("disabled", false);
-						}
-					});
+					// console.log("role---", siteReadOnlyTable.rows( indexes ).data().toArray()[0] );
+
+					if(role === 1){
+						btn.each(function(index, element){
+							if($(this).is(":disabled")){
+								$(this).prop("disabled", false);
+							}
+						});
+					} else {	
+						btn.each(function(index, element){
+							if(index == 0){
+								if($(this).is(":disabled")){
+									$(this).prop("disabled", false);
+								}
+							} else {
+								$(this).prop("disabled", true);
+							}
+
+						});
+					}
+
 					siteReadOnlyTable.rows( indexes ).nodes().to$().find("input").prop("checked", true);
 					// console.log("dt---", siteReadOnlyTable[ type ]( indexes ).nodes())
 				}).on("deselect", function(e, dt, type, indexes) {
+					let role = siteReadOnlyTable.rows( indexes ).data().toArray()[0].role;
 					let btn = $("#btnGroup").find(".btn_type03");
 					btn.each(function(index, element){
 						if(!$(this).is(":disabled")){
 							$(this).prop("disabled", true);
 						}
 					});
+					if(role === 1){
+						btn.each(function(index, element){
+							if(!$(this).is(":disabled")){
+								$(this).prop("disabled", true);
+							}
+						});
+					} else {	
+						btn.each(function(index, element){
+							if(index == 0){
+								if(!$(this).is(":disabled")){
+									$(this).prop("disabled", true);
+								}
+							}
+						});
+					}
 					siteReadOnlyTable.rows( indexes ).nodes().to$().find("input").prop("checked", false);
 					// console.log("dt---", siteReadOnlyTable[ type ]( indexes ).nodes())
 				}).columns.adjust();
-
-
-				// if (siteReadOnlyTable.data().length != 0) {
-				// 	siteReadOnlyTable.on('order.dt search.dt', function () {
-				// 		siteReadOnlyTable.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
-				// 			cell.innerHTML = i + 1;
-				// 			siteReadOnlyTable.cell(cell).invalidate('dom');
-				// 		});
-				// }).draw();
 
 				$('#siteTable').find("input:checkbox").on('click', function() {
 					var $box = $(this);
@@ -1403,12 +1424,10 @@
 				$("#siteSearchBox").on( 'keyup search input paste cut', function(){
 					siteReadOnlyTable.columns(2).search( this.value ).draw();
 				});
-			
-			});
-		} else {
-			// drawEmptyTable($("#siteTable"))
-		}
-		$("#loadingCircle").hide();
+			}
+
+			$("#loadingCircle").hide();
+		});
 	}
 
 
@@ -1417,7 +1436,7 @@
 			"table-layout": "fixed",
 			"columnDefs": [
 				{
-					"searchable": false,
+					"searchable": false, 
 					"orderable": false,
 					"targets": 0
 				},
@@ -1852,7 +1871,8 @@
 
 			// EDIT MODAL!!!
 			if(option == "edit") {
-				if(!isEmpty(rowData.role) && rowData.role == 2){
+				console.log("rowData.role===", rowData.role)
+				if(!isEmpty(rowData.role) && rowData.role != 1){
 					let input = form.find("input");
 					let dropdownBtn = form.find(".dropdown-toggle");
 
