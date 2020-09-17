@@ -28,7 +28,11 @@ const resourceProperties = async () => {
 		dataType: 'json',
 		success: function (result) {
 			Object.entries(result.resource).map(obj => {
-				resourceTemplate[obj[1].code] = obj[1].name.kr;
+				if (langStatus == 'KO') {
+					resourceTemplate[obj[1].code] = obj[1].name.kr;
+				} else {
+					resourceTemplate[obj[1].code] = obj[1].name.en;
+				}
 			});
 		}
 	});

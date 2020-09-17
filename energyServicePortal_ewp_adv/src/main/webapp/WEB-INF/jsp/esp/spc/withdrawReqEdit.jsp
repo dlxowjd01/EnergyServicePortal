@@ -588,7 +588,8 @@
 				if (bankList != null) {
 					Object.entries(bankList).map(bank => {
 						let bankObj = bank[1];
-						let temp = `<li data-value="${'${bankObj.name.kr}'}"><a href="#" tabindex="-1">${'${bankObj.name.kr}'}</a></li>`
+						let propName = (langStatus == 'KO') ? bankObj.name.kr : bankObj.name.en;
+						let temp = `<li data-value="${'${propName}'}"><a href="#" tabindex="-1">${'${propName}'}</a></li>`
 						$('.bank-list').append(temp);
 					});
 				} else {

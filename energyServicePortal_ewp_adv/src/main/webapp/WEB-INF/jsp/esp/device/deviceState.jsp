@@ -580,9 +580,10 @@
 				let propList = val.properties;
 				let tempFeature = new Array();
 				let tempFeature2 = new Array();
+				let devicePropName = (langStatus == 'KO') ? val.name.kr : val.name.en;
 
 				featureProperties[key] = {
-					name: val.name.kr,
+					name: devicePropName,
 					headerProp: null,
 					bodyProp: null
 				}
@@ -591,8 +592,9 @@
 					if (v.status_head) {
 						let tempObj = new Object();
 						let unit = (v.unit != null && v.unit != '') ? '' + v.unit + '' : '';
+						let propName = (langStatus == 'KO') ? v.name.kr : v.name.en;
 						tempObj['key'] = k;
-						tempObj['value'] = v.name.kr;
+						tempObj['value'] = propName;
 						tempObj['suffix'] = unit;
 						tempObj['reducer'] = v.dashboard_head_reducer;
 						tempFeature.push(tempObj);
@@ -603,8 +605,9 @@
 					if (v.status_detail) {
 						let tempObj2 = new Object();
 						let unit = (v.unit != null && v.unit != '') ? '' + v.unit + '' : '';
+						let propName = (langStatus == 'KO') ? v.name.kr : v.name.en;
 						tempObj2['key'] = k;
-						tempObj2['value'] = v.name.kr;
+						tempObj2['value'] = propName;
 						tempObj2['suffix'] = unit;
 						tempFeature2.push(tempObj2);
 

@@ -525,14 +525,16 @@
 					if (v.dashboard_head) {
 						let tempObj = new Object();
 						let unit = (v.unit != null && v.unit != '') ? '' + v.unit + '' : '';
+						let propName = (langStatus == 'KO') ? v.name.kr : v.name.en;
+
 						tempObj['key'] = k;
-						tempObj['value'] = v.name.kr;
+						tempObj['value'] = propName;
 						tempObj['suffix'] = unit;
 						tempObj['reducer'] = v.dashboard_head_reducer;
 						tempFeature.push(tempObj);
 
 						featureProperties[deviceName] = {
-							name: val.name.kr,
+							name: propName,
 							prop: tempFeature
 						};
 					}
@@ -540,13 +542,15 @@
 					if (v.dashboard_detail) {
 						let tempObj2 = new Object();
 						let unit = (v.unit != null && v.unit != '') ? '' + v.unit + '' : '';
+						let propName = (langStatus == 'KO') ? v.name.kr : v.name.en;
+
 						tempObj2['key'] = k;
-						tempObj2['value'] = v.name.kr;
+						tempObj2['value'] = propName;
 						tempObj2['suffix'] = unit;
 						tempFeature2.push(tempObj2);
 
 						featurePropertiesSub[deviceName] = {
-							name: val.name.kr,
+							name: propName,
 							prop: tempFeature2
 						};
 					}

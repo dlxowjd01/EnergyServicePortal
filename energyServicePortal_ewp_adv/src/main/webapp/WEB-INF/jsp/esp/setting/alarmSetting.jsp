@@ -199,7 +199,8 @@
 			if (rstDeviceProp[1] === 'success') {
 				const resultData = rstDeviceProp[0];
 				Object.entries(resultData).map(obj => {
-					deviceTemplate[obj[0]] = obj[1].name.kr;
+					let propName = (langStatus == 'KO') ? obj[1].name.kr : obj[1].name.en;
+					deviceTemplate[obj[0]] = propName;
 				});
 			}
 
@@ -207,7 +208,8 @@
 				const resultData = rstAlarmProp[0].alarm_level;
 				Object.entries(resultData).map(arm => {
 					const data = arm[1];
-					alarmLevel[data.code] = data.name.kr;
+					let propName = (langStatus == 'KO') ? data.name.kr : data.name.en;
+					alarmLevel[data.code] = propName;
 				});
 			}
 

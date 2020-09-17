@@ -89,34 +89,20 @@
 
 				Object.entries(rst).forEach(country => {
 					if (country[0] === 'kr') {
-						//const lang = isEmpty($('html').attr('lang')) ? 'KO' : $('html').attr('lang');
 						const locations = country[1].locations;
-
-						// if (lang === 'KO') {
+						const countryPropName = (langStatus == 'KO') ? country[1].name.kr : country[1].name.en;
 						countryList.push({
 							code: country[1].code,
-							value: country[1].name.kr
+							value: countryPropName
 						});
 
 						Object.entries(locations).forEach(loc => {
+							const locPropName = (langStatus == 'KO') ? loc[1].name.kr : loc[1].name.en;
 							sidoList.push({
 								code: loc[1].code,
-								value: loc[1].name.kr
+								value: locPropName
 							});
 						});
-						// } else {
-						// 	countryList.push({
-						// 		code: country[1].code,
-						// 		value: country[1].name.kr
-						// 	});
-						//
-						// 	Object.entries(locations).forEach(loc => {
-						// 		sidoList.push({
-						// 			code: loc[1].code,
-						// 			value: loc[1].name.kr
-						// 		});
-						// 	});
-						// }
 					}
 				});
 			},

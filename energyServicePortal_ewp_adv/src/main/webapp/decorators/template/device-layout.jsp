@@ -3,10 +3,10 @@
 <!DOCTYPE html>
 <html class="darkmode">
 <head>
-	<%@ include file="/decorators/include/layouts/top.jsp" %>
 	<script type="text/javascript">
-		const certApiHost = '${certApiHost}';
+		const langStatus = '${cookieLang}';
 	</script>
+	<%@ include file="/decorators/include/layouts/top.jsp" %>
 </head>
 <body class="dark">
 <div id="outerWrapper" class="outer-wrapper">
