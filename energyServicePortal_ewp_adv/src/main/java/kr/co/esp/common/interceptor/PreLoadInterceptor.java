@@ -5,8 +5,6 @@ import kr.co.esp.common.util.UserUtil;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import org.springframework.security.access.method.P;
-import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -52,8 +50,9 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 
 				for( Map.Entry<String, Object> elem : menuList.entrySet() ){
 					Map<String, Object> mapDetail = (Map<String, Object>) elem.getValue();
+					String menuCode = (String) mapDetail.get("code");
 					String href = mapDetail.get("href") != null ? (String) mapDetail.get("href") : "";
-					if (requestUri.equals("/" + href)) {
+					if (requestUri.equals("/" + href) && ((oid.equals("testkpx") && menuCode.contains("kpx")) || (!oid.equals("testkpx") && !menuCode.contains("kpx")))) {
 						Map<String, Object> access = (Map<String, Object>) mapDetail.get("access");
 
 						if(!access.isEmpty()) {

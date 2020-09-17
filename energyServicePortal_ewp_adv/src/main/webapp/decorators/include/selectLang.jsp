@@ -18,8 +18,30 @@
 		inp.name = 'language';
 		inp.value = v;
 		inp.type = 'hidden';
-
 		f.append(inp);
+		if (typeof(sgid) != 'undefined') {
+			let inp = document.createElement('input');
+			inp.id = 'sgid';
+			inp.name = 'sgid';
+			inp.value = sgid;
+			inp.type = 'hidden';
+			f.append(inp);
+		} else if (typeof(vgid) != 'undefined') {
+			let inp = document.createElement('input');
+			inp.id = 'vgid';
+			inp.name = 'vgid';
+			inp.value = vgid;
+			inp.type = 'hidden';
+			f.append(inp);
+		} else if (typeof(siteId) != 'undefined') {
+			let inp = document.createElement('input');
+			inp.id = 'sid';
+			inp.name = 'sid';
+			inp.value = siteId;
+			inp.type = 'hidden';
+			f.append(inp);
+		}
+
 		f.method = "post";
 		f.action = "${pageContext.request.requestURL}";
 		f.submit();

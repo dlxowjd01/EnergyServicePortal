@@ -356,6 +356,8 @@
 <script type="text/javascript" src="/js/commonDropdown.js"></script>
 <script type="text/javascript" src="/js/dashboard.js"></script>
 <script type="text/javascript">
+	const siteList = JSON.parse('${siteList}');
+	const vgid = '<c:out value="${vgid}" escapeXml="false" />';
 	const today = new Date();
 
 	let actualCount = 0;
