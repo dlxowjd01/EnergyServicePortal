@@ -3441,8 +3441,8 @@
 <div class="modal fade" id="addAlarmModal" tabindex="-1" role="dialog" aria-labelledby="addAlarmModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-xl">
 		<div class="modal-content site-modal-content">
-			<div class="modal-header">
-				알람 설정<button type="button" class="btn-add fr" onclick="insertRowCopy()">열 추가</button><!--
+			<div class="modal-header flex_start">
+				알람 설정<button type="button" class="btn-add ml-24" onclick="insertRowCopy()">열 추가</button><!--
 				--><small id="duplicatedGroup" class="warning hidden">해당 설비는 이미 선택 되었습니다.</small><!--
 			--></div>
 			<div class="modal-body mt10">

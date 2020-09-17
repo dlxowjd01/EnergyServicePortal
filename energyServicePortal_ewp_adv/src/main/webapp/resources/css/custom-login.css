@@ -248,11 +248,11 @@ nav .dropdown {
 
 .chk_type input[type="checkbox"]+label {
 	position: relative;
-	padding: 0;
+	margin-top: 8px;
 	vertical-align: middle;
 	color: var(--white60);
 	font-size: 13px;
-	line-height: 23px;
+	line-height: 21px;
 	cursor: pointer;
 }
 

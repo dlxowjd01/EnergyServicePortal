@@ -342,11 +342,11 @@
 							<dd>
 								<a href="#">사업소별</a>
 								<ul class="overflow-list">
-									<li><a href="#"  onclick="dashboardMove('group', '', ''); return false">전체</a></li>
+									<li><a href="#" class="group-title" onclick="dashboardMove('group', '', ''); return false">전체</a></li>
 									<c:if test="${fn:length(siteList) > 0}">
 										<c:forEach var="site" items="${siteList}">
 											<li>
-												<a href="#" onclick="dashboardMove('site', 'sid', '${site.sid}'); return false">${site.name}</a>
+												<a href="#" class="group-title" onclick="dashboardMove('site', 'sid', '${site.sid}'); return false">${site.name}</a>
 											</li>
 										</c:forEach>
 									</c:if>
@@ -363,7 +363,7 @@
 									<ul class="overflow-list">
 										<c:forEach var="group" items="${tagList}">
 											<li>
-												<a href="#" onclick="dashboardMove('group', 'sgid', '${group.sgid}'); return false">${group.name}</a>
+												<a href="#" class="group-title" onclick="dashboardMove('group', 'sgid', '${group.sgid}'); return false">${group.name}</a>
 												<ul>
 													<c:set var="groupSites" value="${group.sites}"/>
 													<c:forEach var="groupSiteList" items="${groupSites}">
@@ -391,7 +391,7 @@
 										<ul class="overflow-list">
 											<c:forEach var="vpp" items="${vppList}">
 												<li>
-													<a href="#" onclick="dashboardMove('vpp', 'vgid', '${vpp.vgid}'); return false">${vpp.name}</a>
+													<a href="#" class="group-title" onclick="dashboardMove('vpp', 'vgid', '${vpp.vgid}'); return false">${vpp.name}</a>
 													<ul>
 														<c:set var="groupSites" value="${vpp.sites}"/>
 														<c:forEach var="groupSiteList" items="${groupSites}">
@@ -415,7 +415,7 @@
 										<a href="#">DR 거래</a>
 										<ul>
 											<c:forEach var="dr" items="${drList}">
-												<li><a href="#">${dr.name}</a></li>
+												<li><a class="group-title" href="#">${dr.name}</a></li>
 											</c:forEach>
 										</ul>
 									</dd>
@@ -430,7 +430,7 @@
 							<dt>지역 및 유형 선택</dt>
 							<dd>
 								<a href="#">지역별</a>
-								<ul>
+								<ul class="overflow-list">
 									<c:set var="systemLoc" value="${sessionScope.systemLoc}"/>
 									<c:forEach var="loc" items="${location}" varStatus="stat">
 										<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx') or (fn:contains(sessionScope.userInfo.oid, 'testkpx') and loc.value.code eq 'kr')}">
