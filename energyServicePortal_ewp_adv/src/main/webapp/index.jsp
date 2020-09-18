@@ -10,7 +10,14 @@
 				location.href = '/login.do';
 			</c:when>
 			<c:otherwise>
+				<c:choose>
+					<c:when test="${userInfo.task eq 1 or userInfo.task eq 2}">
+				location.href = '/spc/transactionCalendar.do';
+					</c:when>
+					<c:otherwise>
 				location.href = '/dashboard/gmain.do';
+					</c:otherwise>
+				</c:choose>
 			</c:otherwise>
 		</c:choose>
 	</script>

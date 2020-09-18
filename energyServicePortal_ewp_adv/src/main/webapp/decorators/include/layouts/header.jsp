@@ -305,10 +305,10 @@
 	<button type="button" id="mobileNavBtn" class="category">카테고리</button>
 	<c:choose>
 		<c:when test="${fn:contains(pageContext.request.serverName, 'spower')}">
-			<div class="nav-brand spower"><a href="/dashboard/gmain.do">${sessionScope.userInfo.login_id}</a></div>
+			<div class="nav-brand spower"><a href="/">${sessionScope.userInfo.oid}</a></div>
 		</c:when>
 		<c:otherwise>
-			<div class="nav-brand"><a href="/dashboard/gmain.do">${sessionScope.userInfo.login_id}</a></div>
+			<div class="nav-brand"><a href="/">${sessionScope.userInfo.oid}</a></div>
 		</c:otherwise>
 	</c:choose>
 
