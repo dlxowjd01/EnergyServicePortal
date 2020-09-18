@@ -10,7 +10,7 @@
 </head>
 <body class="dark">
 <div id="outerWrapper" class="outer-wrapper">
-	<<page:applyDecorator name="header"/>
+	<page:applyDecorator name="header"/>
 	<div class="page-wrapper">
 		<c:choose>
 			<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
