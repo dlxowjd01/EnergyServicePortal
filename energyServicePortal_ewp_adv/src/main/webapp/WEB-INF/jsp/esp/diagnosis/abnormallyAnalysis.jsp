@@ -788,6 +788,7 @@
 					});
 				}
 
+				capacity = capacity / $(':checkbox[name="compDevice"]:checked').length;
 				data = data == '-' ? 0 : data;
 				let benchmarkValue = (data / (capacity /1000)) * 100;
 

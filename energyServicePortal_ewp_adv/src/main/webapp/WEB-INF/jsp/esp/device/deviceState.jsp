@@ -5,7 +5,7 @@
 		<h1 class="page-header fl">설비 구성</h1>
 		<div class="time fr">
 			<span>CURRENT TIME</span>
-			<em class="currTime">${nowTime}</em>
+			<em class="currTime"></em>
 			<span>DATA BASE TIME</span>
 			<em class="dbTime"></em>
 		</div>

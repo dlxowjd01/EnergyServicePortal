@@ -33,6 +33,7 @@
 						<span class="input_label">조치 이력</span>
 						<textarea id="ticket_log" name="ticket_log" class="textarea" readonly></textarea>
 					</div>
+					<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
 					<div class="flex_wrap">
 						<span class="input_label">사진 올리기</span>
 						<div class="tx_inp_type">
@@ -45,6 +46,7 @@
 							<span class="upload_text ml-16 hidden"></span>
 						</div>
 					</div>
+					</c:if>
 
 					<div class="photo_load_wrap">
 						<hr>
