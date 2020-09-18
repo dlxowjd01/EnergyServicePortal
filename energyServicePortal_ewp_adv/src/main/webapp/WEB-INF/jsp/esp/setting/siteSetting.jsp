@@ -110,6 +110,9 @@
 			let val = $(this).data("value");
 			if(val == "0"){
 				$("#newSiteType").prev().data({"value": "", "name" : ""}).html("해당 사항 없음<span class='caret'></span>").prop("disabled", true);
+				$("#newResList li").removeClass("hidden");
+			} else {
+				$("#newSiteType").prev().prop("disabled", false);
 			}
 			
 			// else {
