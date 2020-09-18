@@ -888,7 +888,7 @@
 						$(this).prop("disabled", false);
 					}
 				});
-				groupTable.rows( indexes ).nodes().to$().find("input").prop("checked", true);
+				groupTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
 				// console.log("dt---", groupTable[ type ]( indexes ).nodes())
 			}).on("deselect", function(e, dt, type, indexes) {
 				let btn = $("#btnGroup").find(".btn_type03");
@@ -897,7 +897,7 @@
 						$(this).prop("disabled", true);
 					}
 				});
-				groupTable.rows( indexes ).nodes().to$().find("input").prop("checked", false);
+				groupTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", false);
 				// console.log("dt---", groupTable[ type ]( indexes ).nodes())
 			}).columns.adjust();
 			// groupTable.on( 'order.dt search.dt', function () {
@@ -1636,7 +1636,7 @@
 </div>
 
 
-<div class="modal fade stack" id="deleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="resultModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+<div class="modal fade stack" id="deleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-sm">
 		<div class="modal-content">
 			<div class="modal-header">

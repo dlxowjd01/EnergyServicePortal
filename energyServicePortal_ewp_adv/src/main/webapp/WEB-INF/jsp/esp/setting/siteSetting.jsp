@@ -967,7 +967,7 @@
 					// every time DataTables performs a draw
 					drawCallback: function (settings) {
 						$('#siteTable_wrapper').addClass('mb-28');
-					},
+					}
 				}).on("select", function(e, dt, type, indexes) {
 					let btn = $("#btnGroup").find(".btn_type03");
 					btn.each(function(index, element){
@@ -975,7 +975,7 @@
 							$(this).prop("disabled", false);
 						}
 					});
-					siteTable.rows( indexes ).nodes().to$().find("input").prop("checked", true);
+					siteTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
 					// console.log("dt---", siteTable[ type ]( indexes ).nodes())
 				}).on("deselect", function(e, dt, type, indexes) {
 					let btn = $("#btnGroup").find(".btn_type03");
@@ -984,7 +984,7 @@
 							$(this).prop("disabled", true);
 						}
 					});
-					siteTable.rows( indexes ).nodes().to$().find("input").prop("checked", false);
+					siteTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", false);
 					// console.log("dt---", siteTable[ type ]( indexes ).nodes())
 				}).columns.adjust();
 				// siteTable.on( 'order.dt search.dt', function () {
@@ -1372,7 +1372,7 @@
 						});
 					}
 
-					siteReadOnlyTable.rows( indexes ).nodes().to$().find("input").prop("checked", true);
+					siteReadOnlyTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
 					// console.log("dt---", siteReadOnlyTable[ type ]( indexes ).nodes())
 				}).on("deselect", function(e, dt, type, indexes) {
 					let role = siteReadOnlyTable.rows( indexes ).data().toArray()[0].role;
@@ -1397,7 +1397,7 @@
 							}
 						});
 					}
-					siteReadOnlyTable.rows( indexes ).nodes().to$().find("input").prop("checked", false);
+					siteReadOnlyTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", false);
 					// console.log("dt---", siteReadOnlyTable[ type ]( indexes ).nodes())
 				}).columns.adjust();
 
@@ -3401,7 +3401,7 @@
 </div>
 
 
-<div class="modal fade stack" id="deleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="resultModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+<div class="modal fade stack" id="deleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-sm">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -3419,7 +3419,7 @@
 </div>
 
 
-<div class="modal fade stack" id="alarmDeleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="resultModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+<div class="modal fade stack" id="alarmDeleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="alarmDeleteConfirmModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-sm">
 		<div class="modal-content">
 			<div class="modal-header">

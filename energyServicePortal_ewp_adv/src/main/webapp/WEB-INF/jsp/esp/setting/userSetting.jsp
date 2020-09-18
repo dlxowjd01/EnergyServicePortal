@@ -1022,7 +1022,7 @@
 									$(this).prop("disabled", false);
 								}
 							});
-							userTable.rows( indexes ).nodes().to$().find("input").prop("checked", true);
+							userTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
 							// console.log("dt---", userTable[ type ]( indexes ).nodes())
 						}).on("deselect", function(e, dt, type, indexes) {
 							let btn = $("#btnGroup").find(".btn_type03");
@@ -1031,7 +1031,7 @@
 									$(this).prop("disabled", true);
 								}
 							});
-							userTable.rows( indexes ).nodes().to$().find("input").prop("checked", false);
+							userTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", false);
 						}).columns.adjust().draw();
 						
 						// }).columns.adjust().responsive.recalc();
@@ -1186,7 +1186,7 @@
 									$(this).prop("disabled", false);
 								}
 							});
-							userTable.rows( indexes ).nodes().to$().find("input").prop("checked", true);
+							userTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
 						}).on("deselect", function(e, dt, type, indexes) {
 							let btn = $("#btnGroup").find(".btn_type03");
 							btn.each(function(index, element){
@@ -1194,7 +1194,7 @@
 									$(this).prop("disabled", true);
 								}
 							});
-							userTable.rows( indexes ).nodes().to$().find("input").prop("checked", false);
+							userTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", false);
 						}).columns.adjust().draw();
 						// }).columns.adjust().responsive.recalc();
 					}

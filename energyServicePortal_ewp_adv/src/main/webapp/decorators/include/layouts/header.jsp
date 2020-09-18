@@ -545,6 +545,26 @@
 </div>
 
 
+<div class="modal fade stack" id="comDeleteModal" tabindex="-1" role="dialog" aria-labelledby="comDeleteModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 id="comDeleteSuccessMsg" class="ntit">삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>
+			</div>
+			<div class="modal-body">
+				<div class="tx_inp_type"><input type="text" name="confirm_title" id="confirmTitle" placeholder="사이트 이름 입력"/></div>
+			</div>
+			<div class="btn_wrap_type05"><!--
+				--><button type="button" class="btn_type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
+				--><button type="submit" id="comDeleteBtn" class="btn_type w80 ml-12" disabled>확인</button><!--
+			--></div>
+		</div>
+	</div>
+</div>
+
+
+
+
 <div class="modal fade" id="updateUserInfoModal" tabindex="-1" role="dialog" aria-labelledby="updateUserInfoModal" aria-hidden="true">
 	<div class="modal-dialog modal-md">
 		<div class="modal-content settings-modal-content">

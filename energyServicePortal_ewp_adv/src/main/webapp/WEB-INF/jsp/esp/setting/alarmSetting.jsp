@@ -31,19 +31,23 @@
 			reader.readAsBinaryString(evt.target.files[0]);
 		});
 
-		$('#alarmTable').DataTable({
+		var alarmTable = $('#alarmTable').DataTable({
 			destroy: true,
 			'aaData': null,
 			'table-layout': 'fixed',
+			"fixedHeader": true,
 			// "autoWidth": true,
 			'bAutoWidth': true,
 			'bSearchable' : true,
-			'sScrollX': '100%',
-			'sScrollXInner': '100%',
-			'sScrollY': false,
+			"scrollX": true,
+			"sScrollXInner": "100%",
+			"sScrollY": true,
+			"scrollY": "720px",
+			"pageLength": 100,
+			// 'sScrollY': false,
 			'bScrollCollapse': true,
 			'aaSorting': [[ 1, 'asc' ]],
-			'paging': false,
+			// 'paging': false,
 			'aoColumns': [
 				{
 					sTitle: '',
@@ -111,11 +115,11 @@
 					bVisible: false
 				}
 			],
-			dom: 'Btip',
-			buttons:[
+			'dom': 'Btip',
+			'buttons':[
 				{
 					text: '적용',
-					className: 'btn_type fr mb-10',
+					className: 'btn_type fr my-offset-28',
 					action: function ( e, dt, node, config ) {
 						register();
 					},
@@ -127,7 +131,7 @@
 				{
 					extend: 'excel',
 					text: '엑셀 내보내기',
-					className: 'btn_type03 fr mb-10 mr-8',
+					className: 'btn_type03 fr my-offset-28 mr-8',
 					exportOptions: {
 						columns: [1, 2, 3, 4, 5, 6, 7, 8, 9]
 					},
@@ -135,32 +139,168 @@
 				},
 				{
 					text: '엑셀 업로드',
-					className: 'btn_type03 fr mb-10',
+					className: 'btn_type03 fr my-offset-28',
 					action: function ( e, dt, node, config ) {
 						document.getElementById('excelUploadBtn').click();
 					}
 				}
 			],
-			select: {
+			'select': {
 				style: 'multi',
-				selector: 'td:first-child > :checkbox'
+				selector: 'td:first-child > :checkbox, tr'
+			},
+			'language': {
+				"emptyTable": "조회된 데이터가 없습니다.",
+				"zeroRecords":  "검색된 결과가 없습니다."
 			},
 			initComplete: function(settings, json) {
 				let str = `<div id="btnGroup" class="right-end"><!--
 							--><button type="button" disabled class="btn_type03" onclick="deleteRow()">선택 삭제</button><!--
 						--></div>`;
 				$('#alarmTable_wrapper').append($(str));
+			},
+			drawCallback: function (settings) {
+				$('#alarmTable_wrapper').addClass('mb-28');
 			}
+		}).on("select", function(e, dt, type, indexes) {
+			alarmTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
+			$('#btnGroup button').attr('disabled', false);
+		}).on("deselect", function(e, dt, type, indexes) {
+			alarmTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", false);
+			$('#btnGroup button').attr('disabled', true);
 		}).columns.adjust();
+
+		$("#comDeleteBtn").click(function(){
+			const alarmTable = $('#alarmTable').DataTable();
+			const checkedArray = document.querySelectorAll('[name="table_checkbox"]:checked');
+			let modal = $("#comDeleteModal");
+			let modalBody = $("#deleteConfirmModal .modal-body");
+			let urls = new Array();
+			let deferreds = new Array();
+
+			if ($('#regist').prop('disabled')) {
+				checkedArray.forEach(chk => {
+					const setId = chk.dataset.setid;
+					const code = chk.dataset.code;
+					urls.push({
+						url: apiHost + '/alarms/code_sets/' + setId + '/codes/' + code,
+						type: 'delete',
+						dataType: 'json',
+					});
+				});
+
+				//코드 삭제 START
+				urls.forEach(function (url) {
+					let deferred = $.Deferred();
+					deferreds.push(deferred);
+
+					$.ajax(url).done(function (data) {
+						data['url'] = url['url'];
+						(function (deferred) {
+							return deferred.resolve(data);
+						})(deferred);
+					}).fail(function (error) {
+						console.log(error);
+					});
+				});
+
+				$.when.apply($, deferreds).then(function () {
+					let setIdArray = new Array();
+					let selectURL = new Array();
+					for (let index = 0; index < arguments.length; index++) {
+						let data = arguments[index];
+						let url = data.url.split('/');
+						setIdArray.push(url[url.length - 3]);
+					}
+
+					//codeSet 조회
+					setIdArray.forEach(setId => {
+						selectURL.push({
+							url: apiHost + '/alarms/code_sets/' + setId + '/codes',
+							type: 'get',
+							dataType: 'json'
+						});
+					});
+
+					selectURL.forEach(function (url) {
+						let deferred = $.Deferred();
+						deferreds.push(deferred);
+
+						$.ajax(url).done(function (data) {
+							data['url'] = url['url'];
+							(function (deferred) {
+								return deferred.resolve(data);
+							})(deferred);
+						}).fail(function (error) {
+							console.log(error);
+						});
+					});
+
+					$.when.apply($, deferreds).then(function () {
+						let deleteURL = new Array();
+						for (let index = 0; index < arguments.length; index++) {
+							let data = arguments[index];
+
+							if (isEmpty(data.data)) {
+								setIdArray = new Array();
+
+								let url = data.url.split('/');
+								setIdArray.push(url[url.length - 2]);
+							}
+						}
+
+						//codeSet 삭제
+						setIdArray.forEach(setId => {
+							deleteURL.push({
+								url: apiHost + '/alarms/code_sets/' + setId,
+								type: 'delete',
+								dataType: 'json'
+							});
+						});
+
+						deleteURL.forEach(function (url) {
+							let deferred = $.Deferred();
+							deferreds.push(deferred);
+
+							$.ajax(url).done(function (data) {
+								data['url'] = url['url'];
+								(function (deferred) {
+									return deferred.resolve(data);
+								})(deferred);
+							}).fail(function (error) {
+								console.log(error);
+							});
+						});
+
+						$.when.apply($, deferreds).then(function () {
+							modalBody.addClass("hidden");
+							$("#comDeleteSuccessMsg").text("알람 메세지가 삭제 되었습니다.").removeClass("hidden");
+							schAlarmList();
+							setTimeout(function(){
+								modal.modal("hide");
+							}, 1000);
+
+							return false;
+						});
+					});
+				});
+			} else {
+				alarmTable.rows('.selected').remove().draw( false );
+			}
+		});
+		
+		$("#comDeleteModal").on("hide.bs.modal", function() {
+			$("#comDeleteSuccessMsg").html('<h5 id="deleteSuccessMsg" class="ntit">삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>');
+			$("#confirmTitle").val("");
+			$("#comDeleteBtn").prop("disabled", true);
+			setTimeout(function(){
+				$(this).find(".modal-body").removeClass("hidden");
+			}, 1600);
+		});
+
+
 	});
 
-	$(document).on('click', '[name="table_checkbox"]', function() {
-		if ($('[name="table_checkbox"]:checked').length > 0) {
-			$('#btnGroup button').attr('disabled', false);
-		} else {
-			$('#btnGroup button').attr('disabled', true);
-		}
-	});
 
 	<!-- 알람 코드 조회 -->
 	const alermList = async ()  => {
@@ -565,116 +705,34 @@
 
 	//항목 삭제
 	const deleteRow = () => {
-		const alarmTable = $('#alarmTable').DataTable();
-		const checkedArray = document.querySelectorAll('[name="table_checkbox"]:checked');
-		let urls = new Array();
-		let deferreds = new Array();
+		let tr = $("#alarmTable").find("tbody tr.selected");
+		let alarmMsg = tr.eq(0).find("td:nth-of-type(8)").text();
+		let modal = $("#comDeleteModal");
+		let deleteBtn = $("#comDeleteBtn");
+		let confirmTitle = $("#confirmTitle");
 
-		if ($('#regist').prop('disabled')) {
-			checkedArray.forEach(chk => {
-				const setId = chk.dataset.setid;
-				const code = chk.dataset.code;
-				urls.push({
-					url: apiHost + '/alarms/code_sets/' + setId + '/codes/' + code,
-					type: 'delete',
-					dataType: 'json',
-				});
-			});
+		$("#comDeleteSuccessMsg span").text(alarmMsg);
+		modal.find(".modal-body").removeClass("hidden");
+		modal.modal("show");
 
-			//코드 삭제 START
-			urls.forEach(function (url) {
-				let deferred = $.Deferred();
-				deferreds.push(deferred);
+		confirmTitle.on("input", function() {
+			if($(this).val() !== alarmMsg) {
+				deleteBtn.prop("disabled", true);
+				return false
+			} else {
+				deleteBtn.prop("disabled", false);
+			}
+		});
 
-				$.ajax(url).done(function (data) {
-					data['url'] = url['url'];
-					(function (deferred) {
-						return deferred.resolve(data);
-					})(deferred);
-				}).fail(function (error) {
-					console.log(error);
-				});
-			});
-
-			$.when.apply($, deferreds).then(function () {
-				let setIdArray = new Array();
-				let selectURL = new Array();
-				for (let index = 0; index < arguments.length; index++) {
-					let data = arguments[index];
-					let url = data.url.split('/');
-					setIdArray.push(url[url.length - 3]);
-				}
-
-				//codeSet 조회
-				setIdArray.forEach(setId => {
-					selectURL.push({
-						url: apiHost + '/alarms/code_sets/' + setId + '/codes',
-						type: 'get',
-						dataType: 'json'
-					});
-				});
-
-				selectURL.forEach(function (url) {
-					let deferred = $.Deferred();
-					deferreds.push(deferred);
-
-					$.ajax(url).done(function (data) {
-						data['url'] = url['url'];
-						(function (deferred) {
-							return deferred.resolve(data);
-						})(deferred);
-					}).fail(function (error) {
-						console.log(error);
-					});
-				});
-
-				$.when.apply($, deferreds).then(function () {
-					let deleteURL = new Array();
-					for (let index = 0; index < arguments.length; index++) {
-						let data = arguments[index];
-
-						if (isEmpty(data.data)) {
-							setIdArray = new Array();
-
-							let url = data.url.split('/');
-							setIdArray.push(url[url.length - 2]);
-						}
-					}
-
-					//codeSet 삭제
-					setIdArray.forEach(setId => {
-						deleteURL.push({
-							url: apiHost + '/alarms/code_sets/' + setId,
-							type: 'delete',
-							dataType: 'json'
-						});
-					});
-
-					deleteURL.forEach(function (url) {
-						let deferred = $.Deferred();
-						deferreds.push(deferred);
-
-						$.ajax(url).done(function (data) {
-							data['url'] = url['url'];
-							(function (deferred) {
-								return deferred.resolve(data);
-							})(deferred);
-						}).fail(function (error) {
-							console.log(error);
-						});
-					});
-
-					$.when.apply($, deferreds).then(function () {
-						alert('삭제가 완료되었습니다.');
-
-						schAlarmList();
-						return false;
-					});
-				});
-			});
-		} else {
-			alarmTable.rows('.selected').remove().draw( false );
-		}
+		confirmTitle.on("keyup", function() {
+			if($(this).val() !== alarmMsg) {
+				deleteBtn.prop("disabled", true);
+				return false
+			} else {
+				deleteBtn.prop("disabled", false);
+			}
+		});
+		
 	}
 
 	/**
@@ -696,11 +754,9 @@
 </form>
 
 <div class="modal fade" id="warningModal" role="dialog" aria-labelledby="warningModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
-	<div class="modal-dialog modal-sm">
-		<div class="modal-content collection_modal_content">
-			<div class="modal-body">
-				<h2 id="warningMsg" class="warning"></h2>
-			</div>
+	<div class="modal-dialog modal-xs">
+		<div class="modal-content warning-modal-content">
+			<h2 id="warningMsg" class="warning"></h2>
 		</div>
 	</div>
 </div>
@@ -759,15 +815,15 @@
 			<table id="alarmTable" class="chk_type">
 				<colgroup>
 					<col style="width:5%">
+					<col style="width:5%">
 					<col style="width:8%">
-					<col style="width:8%">
-					<col style="width:8%">
-					<col style="width:8%">
-					<col style="width:8%">
-					<col style="width:8%">
-					<col style="width:17%">
+					<col style="width:10%">
+					<col style="width:10%">
+					<col style="width:10%">
 					<col style="width:10%">
 					<col style="width:20%">
+					<col style="width:10%">
+					<col style="width:12%">
 				</colgroup>
 			</table>
 		</div>
