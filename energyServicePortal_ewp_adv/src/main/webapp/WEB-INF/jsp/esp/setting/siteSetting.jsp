@@ -110,9 +110,11 @@
 			let val = $(this).data("value");
 			if(val == "0"){
 				$("#newSiteType").prev().data({"value": "", "name" : ""}).html("해당 사항 없음<span class='caret'></span>").prop("disabled", true);
-			} else {
-				$("#newSiteType").prev().html("선택<span class='caret'></span>").prop("disabled", false);
 			}
+			
+			// else {
+			// 	$("#newSiteType").prev().html("선택<span class='caret'></span>").prop("disabled", false);
+			// }
 		});
 
 		$("#newCityList li").on("click", function(){
