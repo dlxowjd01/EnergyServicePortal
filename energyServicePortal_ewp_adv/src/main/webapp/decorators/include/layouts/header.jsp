@@ -47,16 +47,6 @@
 			$("#mobileNum").val(mobileNum);
 		}
 
-		$("#newPwd").on('keyup', validatePassword);
-
-
-		// $("#fullName").on('keyup', function(evt, limit) {
-		// 	if(!isEmpty($(this).val())){
-		// 		$("#updateProfileBtn").prop("disabled", false);
-		// 		$("#updateProfileBtn").removeClass("disabled");
-		// 	}
-		// });
-
 		$(".nav-brand a").each(function(index, element) {
 			// console.log("window.href===", window.location.pathname)
 			let current = window.location.pathname;
@@ -65,6 +55,8 @@
 				$(this).on('click', false);
 			}
 		});
+
+		$("#newPwd").on('keyup', validatePassword);
 
 		$("#fullName").on('keyup', function(evt) {
 			if(!isEmpty($(this).val())){
@@ -123,6 +115,7 @@
 				$("#updateProfileBtn").removeClass("disabled");
 			}
 		});
+		
 		$("#closeBtn").on("click", function(){
 			$("#closeModal").modal("show");
 		});
@@ -232,19 +225,12 @@
 			});
 		});
 
-		function validateName(name){
-			let re = /\S+@\S+\.\S+/;
-			return re.test(email);
-		}
-
 		function validateEmail(email){
 			let re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
 			// let re = \b[\w.!#$%&’*+\/=?^`{|}~-]+@[\w-]+(?:\.[\w-]+)*\b
 
 			return re.test(email);
 		}
-
-
 
 		function validatePassword() {
 			const rules = [
@@ -435,7 +421,7 @@
 									<c:forEach var="loc" items="${location}" varStatus="stat">
 										<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx') or (fn:contains(sessionScope.userInfo.oid, 'testkpx') and loc.value.code eq 'kr')}">
 											<li>
-												<a href="#">${loc.value.name.kr}</a>
+												<a href="#" class="group-title">${loc.value.name.kr}</a>
 												<ul>
 													<c:forEach var="country" items="${loc.value.locations}" varStatus="countryStat">
 														<c:set var="choice" value="false" />

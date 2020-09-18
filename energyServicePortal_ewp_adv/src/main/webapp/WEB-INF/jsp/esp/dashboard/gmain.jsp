@@ -8,11 +8,18 @@
 <div class="row header-wrapper">
 	<div class="col-6">
 		<h1 class="page-header fl">${siteName}</h1>
+		<%--
+		<c:if test="${fn:contains(sessionScope.userInfo.oid, 'spower') || fn:contains(sessionScope.userInfo.oid, 'encored')}">
+
+		<c:if test="${fn:contains(sessionScope.userInfo.oid, 'spower')}">
+
 		<label class="switch switch-slide fl">
-			<input type="checkbox" id="switchBtn" class="switch-input" />
+			<input type="checkbox" value="showTable" id="switchBtn" class="switch-input" />
 			<span class="switch-label" data-on="테이블" data-off="대시보드"></span> 
 			<span class="switch-handle"></span>
 		</label>
+		</c:if>
+		--%>
 	</div>
 	<div class="col-6">
 		<div class="time fr">
@@ -527,30 +534,7 @@
 	</div>
 </div>
 
-<div class="row content-wrapper">
-	<div class="col-12">
-		<div class="indiv">
-			<table id="gmainTable">
-				<colgroup>
-					<col style="width:5%">
-					<col style="width:12%">
-					<col style="width:16%">
-					<col style="width:5%">
-					<col style="width:6%">
-					<col style="width:8%">
-					<col style="width:8%">
-					<col style="width:8%">
-					<col style="width:8%">
-					<col style="width:10%">
-					<col style="width:14%">
-				</colgroup>
-				<thead></thead>
-				<tbody></tbody>
-			</table>
-		</div>
-	</div>
-</div>
-
+<%@ include file="/decorators/include/dashboardTableView.jsp" %>
 
 <script type="text/javascript" src="/js/commonDropdown.js"></script>
 
@@ -585,14 +569,14 @@
 	let first = true;
 
 	$(function () {
+		let target = $("#innerBody").find(".content-wrapper");
 		if (oid.match('testkpx')) {
 			resourceProperties();
 		}
 
-		setInitList('alarmNotice'); //알람 공지 세팅
-		//resourceProperties();
-
 		makeSiteList();
+		// destroyDashboardTable('gmainTable');
+
 		if (!isEmpty(siteList) && siteList.length > 0) {
 			fn_cycle_1hour();
 			fn_cycle_1min();
@@ -606,14 +590,43 @@
 			}, 2000);
 			return false;
 		}
-		$("#switchBtn").on("change", function(){
-
-		});
-	});
-
-	function switchView(){
 		
-	}
+		// if($("#switchBtn").is(":checked")){
+		// 	target.eq(0).addClass("hidden").next().removeClass("hidden");
+		// 	getDashboardTable('gmainTable');
+		// } else {
+		// 	target.eq(0).removeClass("hidden").next().addClass("hidden");
+		// 	setInitList('alarmNotice'); //알람 공지 세팅
+		// 	//resourceProperties();
+		// 	makeSiteList();
+		// 	// destroyDashboardTable('gmainTable');
+
+		// 	if (!isEmpty(siteList) && siteList.length > 0) {
+		// 		fn_cycle_1hour();
+		// 		fn_cycle_1min();
+		// 		setInterval(() => fn_cycle_1hour(), 60 * 60 * 1000);
+		// 		setInterval(() => fn_cycle_1min(), 60 * 1000);
+		// 	} else {
+		// 		$("#errMsg").text("해당 그룹에 등록 된 사이트가 존재하지 않습니다.");
+		// 		$("#errorModal").modal("show");
+		// 		setTimeout(function(){
+		// 			$("#errorModal").modal("hide");
+		// 		}, 2000);
+		// 		return false;
+		// 	}
+		// }
+		
+		// $("#switchBtn").on("click", function(){
+		// 	if($(this).is(":checked")){
+		// 		target.eq(0).addClass("hidden").next().removeClass("hidden");
+		// 		getDashboardTable('gmainTable');
+		// 	} else {
+		// 		target.eq(0).removeClass("hidden").next().addClass("hidden");
+		// 		// destroyDashboardTable('gmainTable');
+		// 	}	
+		// });
+
+	});
 
 	function fn_cycle_1hour() {
 		if (!first) {

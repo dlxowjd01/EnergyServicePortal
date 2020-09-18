@@ -2110,13 +2110,13 @@ nav .all-menu .menu-group>ul>li {
 }
 
 nav .all-menu .menu-group>ul>li a {
-    /* color: var(--white87); */
-    color: var(--white60);
-    font-size: 12px;
-    line-height: 28px;
-    white-space: nowrap;
     display: block;
     padding-left: 10px;
+    color: var(--white60);
+	font-size: 12px;
+	font-weight: 400;
+    line-height: 28px;
+    white-space: nowrap;
 }
 
 /* nav .all-menu .menu-group>ul>li>a {
@@ -2133,6 +2133,11 @@ nav .all-menu .menu-group>ul>li>dl>dd {
 nav .all-menu .menu-group>ul>li>dl>dd>a {
     color: var(--white);
     margin-bottom: 10px;
+}
+
+nav .all-menu .menu-group>ul>li>dl>dd>a:hover {
+	opacity: 1;
+	cursor: unset;
 }
 
 nav .all-menu .menu-group>ul>li ul li ul a,
@@ -2177,11 +2182,11 @@ nav .all-menu .menu-group>ul>li>dl>dd ul label {
     cursor: pointer;
 }
 
-nav .all-menu .menu-group>ul>li>dl>dd ul a:hover,
+nav .all-menu .menu-group>ul>li>dl>dd ul a:not(.group-title):hover,
 nav .all-menu .menu-group>ul>li>dl>dd ul label:hover {
-    color: var(--white);
-    background: var(--bg-color2);
-    border-radius: 3px;
+	color: var(--white);
+    /* background: var(--bg-color2);
+    border-radius: 3px; */
 }
 
 nav .all-menu .menu-group>ul>li>dl>dd ul label.on {
@@ -2191,7 +2196,13 @@ nav .all-menu .menu-group>ul>li>dl>dd ul label.on {
 nav .all-menu .menu-group>ul>li>dl>dd ul li a.group-title {
     color: var(--white87);
     text-transform: uppercase;
-    font-weight: 500;
+    font-weight: 550;
+}
+
+nav .all-menu .menu-group>ul>li>dl>dd ul li a.group-title:hover {
+	color: var(--vivid-blue);
+	/* background: var(--bg-color2);
+    border-radius: 3px; */
 }
 
 nav .all-menu .menu-group>ul>li>dl>dd ul li a.group-title+ul {
@@ -2207,6 +2218,10 @@ nav .all-menu .menu-group>ul>li>dl>dd ul li a.group-title+ul li a:before {
     border-radius: 3px;
     border: solid 1px var(--white60);
     border-radius: 3px;
+}
+
+nav .all-menu .menu-group>ul>li>dl>dd ul li a.group-title+ul li a:hover:before {
+	border: 1px solid var(--white);
 }
 
 nav .all-menu .menu-group .btn-group {
@@ -4907,9 +4922,10 @@ input.inp[readonly]:focus {
 
 
 .switch-slide {
-	margin: 9px 0 0 24px;
+	margin: 6px 0 0 20px;
 	width: 70px;
 	height: 30px;
+	cursor: pointer;
 }
 
 .switch-slide .switch-label:after,

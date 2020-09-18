@@ -701,13 +701,12 @@
 			callback();
 		}
 		if(groupData) {
-			console.log("groupData---", groupData);
 			// 1. 그룹 유형
 			// 2. 그룹 명
 			// 3. 사업소
 			// 4. 최종 작업자
-			// 5. 비고
-			// 6. 업데이트 날짜
+			// 5. 업데이트 날짜
+			// 6. 비고
 			var groupTable = $('#groupTable').DataTable({
 				"aaData": groupData,
 				"table-layout": "fixed",
@@ -982,8 +981,8 @@
 		// 2. 그룹 명
 		// 3. 사업소
 		// 4. 최종 작업자
-		// 5. 비고
-		// 6. 업데이트 날짜
+		// 5. 업데이트 날짜
+		// 6. 비고
 		var groupTable = $('#groupTable').DataTable({
 			"aaData": groupData,
 			"table-layout": "fixed",
@@ -1040,43 +1039,39 @@
 				{
 					"sTitle": "사업소",
 					"mData":  null,
-						"mRender": function ( data, type, full, rowIndex )  {
-							if(!isEmpty(full.sites)){
-								let siteName = "";
-								let length = full.sites.length;
+					"mRender": function ( data, type, full, rowIndex )  {
+						if(!isEmpty(full.sites)){
+							let siteName = "";
+							let length = full.sites.length;
 
-								$.each(full.sites, function(index, el){
-									if(length <= 3){
-										if(index < (length-1) ){
-											siteName += el.name + "," + '&ensp;';
-										} else {
-											siteName += el.name;
-										}
+							$.each(full.sites, function(index, el){
+								if(length <= 3){
+									if(index < (length-1) ){
+										siteName += el.name + "," + '&ensp;';
 									} else {
-										if(index < 3 ){
-											siteName += el.name + "," + '&ensp;';
-										} else {
-											if(index == 3) {
-												siteName += el.name.slice(0, -3) + "..."
-											}
+										siteName += el.name;
+									}
+								} else {
+									if(index < 3 ){
+										siteName += el.name + "," + '&ensp;';
+									} else {
+										if(index == 3) {
+											siteName += el.name.slice(0, -3) + "..."
 										}
 									}
-								});
-								if(full.sites.length > 3){
-									return `<div class="flex_start">${'${siteName}'}&ensp;<a href="#" role="button" data-toggle="popover" data- rel="popover" onmouseover="updateModal('detail', this)" class="text-link">more</a></div>`
-								} else {
-									return siteName;
 								}
-
+							});
+							if(full.sites.length > 3){
+								return `<div class="flex_start">${'${siteName}'}&ensp;<a href="#" role="button" data-toggle="popover" data- rel="popover" onmouseover="updateModal('detail', this)" class="text-link">more</a></div>`
 							} else {
-								return siteName = "-";
+								return siteName;
 							}
 
+						} else {
+							return siteName = "-";
 						}
-					},
-				{
-					"sTitle": "최종작업자",
-					"mData": "powerSource",
+
+					}
 				},
 				{
 					"sTitle": "업데이트 일자",
