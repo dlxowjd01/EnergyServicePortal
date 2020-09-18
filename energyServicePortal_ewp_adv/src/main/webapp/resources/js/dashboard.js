@@ -2179,3 +2179,181 @@ const makeSiteList = () => {
 
 	setInitList('siteList'); //사이트 리스트
 }
+
+const getDashboardTable = (table) => {
+	let id = "#" + table;
+	let newArr = [];
+	var gmainTable = $('#gmainTable').DataTable({
+		"aaData": newArr,
+		"table-layout": "fixed",
+		"fixedHeader": true,
+		"bAutoWidth": true,
+		"bSearchable" : true,
+		"retrieve": true,
+		// "ScrollX": true,
+		// "sScrollX": "110%",
+		// "sScrollXInner": "110%",
+		"sScrollY": true,
+		"scrollY": "720px",
+		"bScrollCollapse": true,
+		"pageLength": 100,
+		// "bFilter": false, disabling this option will prevent table.search()
+		"aaSorting": [[ 0, 'asc' ]],
+		"bSortable": true,
+		"order": [[ 1, 'asc' ]],
+		"aoColumnDefs": [
+			{
+				"aTargets": [ 0 ],
+				"bSortable": false,
+				"orderable": false
+			},
+		],
+		"aoColumns": [
+			{
+				"title": "순번",
+				"data": null,
+				"className": "dt-center no-sorting"
+			},
+			{
+				"sTitle": "발전소 명",
+				"mData": "null",
+				"mRender": function ( data, type, full, rowIndex )  {
+					return ''
+				},
+			},
+			{
+				"sTitle": "인버터 가동 상태",
+				"mData": null,
+				"mRender": function ( data, type, full, rowIndex )  {
+					return ''
+				},
+			},
+			{
+				"sTitle": "경고 알람",
+				"mData": "null",
+				"mRender": function ( data, type, full, rowIndex )  {
+					return ''
+				},
+			},
+			{
+				"sTitle": "현재 발전량(kW)",
+				"mData": "null",
+				"mRender": function ( data, type, full, rowIndex )  {
+					return ''
+				},
+			},
+			{
+				"sTitle": "현재 날씨",
+				"mData": null,
+				"mRender": function ( data, type, full, rowIndex )  {
+					return ''
+				},
+			},
+			{
+				"sTitle": "전일 발전",
+				"mData": "null",
+				"mRender": function ( data, type, full, rowIndex )  {
+					return ''
+				},
+			},
+			{
+				"sTitle": "전일 날씨",
+				"mData": null,
+				"mRender": function ( data, type, full, rowIndex )  {
+					return ''
+				},
+			},
+			{
+				"sTitle": "월간 발전량(MWh)",
+				"mData": "null",
+				"mRender": function ( data, type, full, rowIndex )  {
+					return ''
+				},
+			},
+			{
+				"sTitle": "전년 동월 발전량(MWh)",
+				"mData": "null",
+				"mRender": function ( data, type, full, rowIndex )  {
+					return ''
+				},
+			},
+			{
+				"sTitle": "전년 동월 대비 발전 비율(%)",
+				"mData": null,
+				"mRender": function ( data, type, full, rowIndex )  {
+					return ''
+				},
+			},
+		],
+		"language": {
+			"emptyTable": "조회된 데이터가 없습니다.",
+			"zeroRecords":  "검색된 결과가 없습니다."
+		},
+		"dom": 'tip',
+		initComplete: function(settings, json ){
+			this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+				cell.innerHTML = i+1;
+				$(cell).data("id", i);
+			});
+		},
+		// every time DataTables performs a draw
+		drawCallback: function (settings) {
+
+		},
+	}).columns.adjust();
+
+	gmainTable.on( 'column-sizing.dt', function ( e, settings ) {
+		$(".dataTables_scrollHeadInner").css( "width", "100%" );
+	});
+
+	// new $.fn.dataTable.Buttons( gmainTable, {
+	// 	name: 'commands',
+	// 	"buttons": [
+	// 		{
+	// 			extend: 'excelHtml5',
+	// 			className: "save_btn",
+	// 			text: '엑셀 다운로드',
+	// 			// exportOptions: {
+	// 			// 	modifier: {
+	// 			// 		page: 'current'
+	// 			// 	}
+	// 			// },
+	// 			customize: function( xlsx ) {
+	// 				var sheet = xlsx.xl.worksheets['sheet1.xml'];
+	// 				$('row:first c', sheet).attr( 's', '42' );
+	// 				var sheet = xlsx.xl.worksheets['sheet1.xml'];
+	// 				// var lastCol = sheet.getElementsByTagName('col').length - 1;
+	// 				// var colRange = createCellPos( lastCol ) + '1';
+	// 				// //Has to be done this way to avoid creation of unwanted namespace atributes.
+	// 				// var afSerializer = new XMLSerializer();
+	// 				// var xmlString = afSerializer.serializeToString(sheet);
+	// 				// var parser = new DOMParser();
+	// 				// var xmlDoc = parser.parseFromString(xmlString,'text/xml');
+	// 				// var xlsxFilter = xmlDoc.createElementNS('http://schemas.openxmlformats.org/spreadsheetml/2006/main','autoFilter');
+	// 				// var filterAttr = xmlDoc.createAttribute('ref');
+	// 				// filterAttr.value = 'A1:' + colRange;
+	// 				// xlsxFilter.setAttributeNode(filterAttr);
+	// 				// sheet.getElementsByTagName('worksheet')[0].appendChild(xlsxFilter);
+
+	// 			}
+	// 		},
+	// 		// {
+	// 		// 	extend: 'csvHtml5',
+	// 		// 	className: "btn_type03",
+	// 		// 	text: 'CSV'
+	// 		// },
+	// 		// {
+	// 		// 	extend: 'pdfHtml5',
+	// 		// 	className: "btn_type03",
+	// 		// 	text: 'PDF',
+	// 		// },
+	// 	],
+	// });
+
+	// gmainTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup");
+}
+
+const destroyDashboardTable = (table) => {
+	let id = "#" + table;
+	$("#gmainTable").DataTable().clear().destroy();
+}

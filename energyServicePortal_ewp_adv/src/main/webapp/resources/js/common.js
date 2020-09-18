@@ -154,22 +154,6 @@ function list_detail_open(list_number) {
     $("."+target+"").find(".di_wrap").slideToggle();
 }
 
-/* FAQ slideToggle */
-$(function(){
-    $(".faq_list .question").click(function() {
-        $(this).next(".answer").slideToggle();
-        $(this).toggleClass("on");
-        return false;
-    });
-});
-
-/* 선택이동 ToggleClass */
-$(function(){
-    $(".multi_select a").click(function() {
-        $(this).toggleClass("on");
-        return false;
-    });
-});
 
 /* 장치 그룹 현황 ToggleClass */
 $(function(){
@@ -431,7 +415,7 @@ $(document).ready(function(e){
 });
 
 
-/* 상단 전체메뉴 */
+/* 상단 전체메뉴 (구분 dropdown) */
 $(function() {
     $("nav .all-menu > a").click(function(){
         $(this).toggleClass("on");
@@ -447,6 +431,9 @@ $(function() {
 /* toggle */
 $(function() {
     $("nav .all-menu .menu-group > ul > li > dl > dd ul label").click(function(){
+        $(this).toggleClass("on");
+	});
+	$("nav .all-menu .menu-group > ul > li > dl > dd ul a").click(function(){
         $(this).toggleClass("on");
     });
 });
