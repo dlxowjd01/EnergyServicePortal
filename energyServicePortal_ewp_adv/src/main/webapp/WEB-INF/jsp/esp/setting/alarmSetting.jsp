@@ -716,7 +716,7 @@
 		modal.modal("show");
 
 		confirmTitle.on("input", function() {
-			if($(this).val() !== siteName) {
+			if($(this).val() !== alarmMsg) {
 				deleteBtn.prop("disabled", true);
 				return false
 			} else {
@@ -725,7 +725,7 @@
 		});
 
 		confirmTitle.on("keyup", function() {
-			if($(this).val() !== siteName) {
+			if($(this).val() !== alarmMsg) {
 				deleteBtn.prop("disabled", true);
 				return false
 			} else {
