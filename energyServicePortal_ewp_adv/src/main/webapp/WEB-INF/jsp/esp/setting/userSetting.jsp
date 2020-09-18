@@ -436,8 +436,6 @@
 				let pwd = { password : $("#newUserPwd").val() }
 				let editUserObj = {};
 
-				console.log("prevDesc===", prevDesc)
-
 				if( !isEmpty(newFullName) && ( newFullName != td.eq(2).text() ) ) {
 					editUserObj.name = newFullName;
 				}
@@ -1508,12 +1506,14 @@
 
 				$.when($.ajax(optSite), $.ajax(optSpc)).done(function (result1, result2) {
 					let siteData = result1[0].data;
+					console.log("siteData===", siteData);
 
 					if(siteData.length > 0){
 
 						let siteOptList = $("#siteOptList li").toArray();
 						let siteStr = ``;
 
+						console.log("siteOptList===", siteOptList);
 						$.each(siteData, function( index, item ) {
 							siteOptList.some( x => {
 								if($(x).data("value") === item.sid) {
@@ -1535,6 +1535,8 @@
 								}
 							});
 						});
+
+						console.log("siteDeleteList===", siteDeleteList)
 						$("#selectedSiteList").append(siteStr).prev().html("수정 리스트&emsp;<span class='fr'>(&nbsp;<strong class='text-orange'>삭제 예정</strong>&ensp;선택 시, 등록된 기존 정보 삭제)</span>").removeClass("hidden");
 					}
 

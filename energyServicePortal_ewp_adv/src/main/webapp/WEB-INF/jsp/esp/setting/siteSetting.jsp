@@ -192,6 +192,7 @@
 
 			let newSiteName = $("#newSiteName").val();
 			let newSiteType = Number($("#newSiteType").prev().data("value"));
+			let newResTypeName = $("#newResList").prev().data("name");			
 			let newResType = Number($("#newResList").prev().data("value"));
 
 			let newEss = Number($("#newEssList").prev().data("value"));
@@ -243,15 +244,14 @@
 			let option = {};
 			let siteObj = {};
 
-
 			let newStationId, kpxGenId, kpxEmsId, kpxTransvol;
+
 			if (oid.match('testkpx')) {
 				newStationId = $('#station_id').val();
 				kpxGenId = $('#kpx_genid').val();
 				kpxEmsId = $('#kpx_emsid').val();
 				kpxTransvol = $('#kpx_transvol').val();
 			}
-
 
 			// 1. ADD site info
 			if(!$("#addSiteModal").hasClass("edit")) {
@@ -406,11 +406,14 @@
 	
 				let siteEditObj = {};
 
-				if( !isEmpty(newSiteName) && td.eq(2).text() != newSiteName ){
+				if( !isEmpty(newSiteName) && ( td.eq(2).text() != newSiteName ) ){
 					siteEditObj.name = newSiteName;
 				}
-				if( !isEmpty(newSiteType) && td.eq(1).text() != newSiteTypeName ){
+				if( !isEmpty(newSiteType) && ( td.eq(1).text() != newSiteTypeName ) ){
 					siteEditObj.ess = newSiteType;
+				}
+				if( !isEmpty(newResType) && ( td.eq(4).text() != newResTypeName ) ){
+					siteEditObj.resource_type = newResType;
 				}
 				if( !isEmpty(newCoord) ){
 					siteEditObj.latlng = newCoord;

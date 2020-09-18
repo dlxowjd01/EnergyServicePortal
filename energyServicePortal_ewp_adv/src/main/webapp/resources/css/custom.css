@@ -1817,14 +1817,14 @@ footer .copyright {
 /* .side-nav>ul>li>a:before { */
 .side-nav:hover>ul>li.menu-item>a:before {
     position: absolute;
-    top: 24px;
+    top: 20px;
     left: 10px;
     width: 0;
     height: 0;
     /* border-bottom: 5px solid var(--white87); */
-    border-top: 5px solid var(--white87);
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 5px solid var(--white87);
     content: "";
 }
 
@@ -1833,7 +1833,7 @@ footer .copyright {
 }
 
 .side-nav:hover>ul>li.on>a:before {
-    transform: rotate(180deg);
+    transform: rotate(90deg);
 }
 
 .side-nav>ul>li.smn1>a:after {
