@@ -573,9 +573,8 @@
 		if (oid.match('testkpx')) {
 			resourceProperties();
 		}
-
+		setInitList('alarmNotice'); //알람 공지 세팅
 		makeSiteList();
-		// destroyDashboardTable('gmainTable');
 
 		if (!isEmpty(siteList) && siteList.length > 0) {
 			fn_cycle_1hour();
