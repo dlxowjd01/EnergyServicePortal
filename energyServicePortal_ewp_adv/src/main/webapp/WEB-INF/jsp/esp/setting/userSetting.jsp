@@ -158,6 +158,16 @@
 
 		// Dropdown Click event
 		$("#newAccLevel").find("li").on("click", function(){
+			if ($(this).data('value') == '1') {
+				if ($('.nav-tabs > li').eq(0).find('a').attr('href') == '#siteTab') {
+					$('.nav-tabs > li').eq(0).addClass('hidden').removeClass('active').siblings().addClass('active');
+				}
+
+				$('#siteTab').removeClass('active').siblings().addClass('active in');
+			} else {
+				$('.nav-tabs > li').eq(0).removeClass('hidden');
+			}
+
 			if($("#addUserModal").hasClass("edit")){
 				if( !isEmpty($(this).data("value")) && validateEditForm() == 1) {
 					$("#addUserBtn").prop("disabled", false);
@@ -1464,6 +1474,10 @@
 		let accLevBtn = $('#newAccLevel').prev();
 		let newTaskBtn =$('#newTaskList').prev();
 		let required = $("#updateUserForm").find(".asterisk");
+
+		$('.nav-tabs > li').eq(0).removeClass('hidden').addClass('active').siblings().removeClass('active');
+		$('div.tab-content > div.tab-pane').eq(0).addClass('active in').siblings().removeClass('active in');
+
 		id.parent().next().prop("disabled", true);
 		// ADD !!!!!
 		if(option == 'add'){

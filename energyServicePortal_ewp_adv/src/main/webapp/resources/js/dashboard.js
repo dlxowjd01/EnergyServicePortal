@@ -2181,129 +2181,236 @@ const makeSiteList = () => {
 }
 
 const getDashboardTable = (table) => {
-	let id = "#" + table;
-	let newArr = [];
-	var gmainTable = $('#gmainTable').DataTable({
-		"aaData": newArr,
-		"table-layout": "fixed",
-		"fixedHeader": true,
-		"bAutoWidth": true,
-		"bSearchable" : true,
-		"retrieve": true,
-		// "ScrollX": true,
-		// "sScrollX": "110%",
-		// "sScrollXInner": "110%",
-		"sScrollY": true,
-		"scrollY": "720px",
-		"bScrollCollapse": true,
-		"pageLength": 100,
-		// "bFilter": false, disabling this option will prevent table.search()
-		"aaSorting": [[ 0, 'asc' ]],
-		"bSortable": true,
-		"order": [[ 1, 'asc' ]],
-		"aoColumnDefs": [
-			{
-				"aTargets": [ 0 ],
-				"bSortable": false,
-				"orderable": false
-			},
-		],
-		"aoColumns": [
-			{
-				"title": "순번",
-				"data": null,
-				"className": "dt-center no-sorting"
-			},
-			{
-				"sTitle": "발전소 명",
-				"mData": "null",
-				"mRender": function ( data, type, full, rowIndex )  {
-					return ''
-				},
-			},
-			{
-				"sTitle": "인버터 가동 상태",
-				"mData": null,
-				"mRender": function ( data, type, full, rowIndex )  {
-					return ''
-				},
-			},
-			{
-				"sTitle": "경고 알람",
-				"mData": "null",
-				"mRender": function ( data, type, full, rowIndex )  {
-					return ''
-				},
-			},
-			{
-				"sTitle": "현재 발전량(kW)",
-				"mData": "null",
-				"mRender": function ( data, type, full, rowIndex )  {
-					return ''
-				},
-			},
-			{
-				"sTitle": "현재 날씨",
-				"mData": null,
-				"mRender": function ( data, type, full, rowIndex )  {
-					return ''
-				},
-			},
-			{
-				"sTitle": "전일 발전",
-				"mData": "null",
-				"mRender": function ( data, type, full, rowIndex )  {
-					return ''
-				},
-			},
-			{
-				"sTitle": "전일 날씨",
-				"mData": null,
-				"mRender": function ( data, type, full, rowIndex )  {
-					return ''
-				},
-			},
-			{
-				"sTitle": "월간 발전량(MWh)",
-				"mData": "null",
-				"mRender": function ( data, type, full, rowIndex )  {
-					return ''
-				},
-			},
-			{
-				"sTitle": "전년 동월 발전량(MWh)",
-				"mData": "null",
-				"mRender": function ( data, type, full, rowIndex )  {
-					return ''
-				},
-			},
-			{
-				"sTitle": "전년 동월 대비 발전 비율(%)",
-				"mData": null,
-				"mRender": function ( data, type, full, rowIndex )  {
-					return ''
-				},
-			},
-		],
-		"language": {
-			"emptyTable": "조회된 데이터가 없습니다.",
-			"zeroRecords":  "검색된 결과가 없습니다."
-		},
-		"dom": 'tip',
-		initComplete: function(settings, json ){
-			this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-				cell.innerHTML = i+1;
-				$(cell).data("id", i);
-			});
-		},
-		// every time DataTables performs a draw
-		drawCallback: function (settings) {
+	const dayFormData = getSiteMainSchCollection('day');
+	const yesterDayFormData = getSiteMainSchCollection('yesterday');
+	const monthFormData = getSiteMainSchCollection('month');
+	const yearFormData = getSiteMainSchCollection('beforeYearSameMonth');
 
-		},
-	}).columns.adjust();
+	let tableData = new Array();
+	let urls = new Array();
+	let deferreds = new Array();
+	let siteArray = new Array();
 
-	gmainTable.on( 'column-sizing.dt', function ( e, settings ) {
-		$(".dataTables_scrollHeadInner").css( "width", "100%" );
+	siteList.forEach(site => {
+		//사이트정보
+		urls.push({
+			url: apiHost + '/status/raw/site',
+				type: 'get',
+				data: {
+				sid: site.sid,
+					formId: 'v2'
+			}
+		});
+
+		//기상 정보 오늘
+		urls.push({
+			url: apiHost + '/weather/site?sid=' + site.sid + '&interval=hour',
+			type: 'get',
+			data: {
+				startTime: yesterDayFormData.startTime,
+				endTime: dayFormData.endTime,
+			}
+		});
+
+		//기상 정보 어제
+		urls.push({
+			url: apiHost + '/weather/site?sid=' + site.sid + '&interval=day',
+			type: 'get',
+			data: {
+				startTime: yesterDayFormData.startTime,
+				endTime: yesterDayFormData.endTime,
+			}
+		});
+
+		//어제 발전
+		urls.push({
+			url: apiHost + '/energy/sites?sid=' + site.sid,
+				type: 'get',
+			data: {
+				startTime: yesterDayFormData.startTime,
+				endTime: yesterDayFormData.endTime,
+				interval: 'day'
+			}
+		});
+
+		//전월 발전
+		urls.push({
+			url: apiHost + '/energy/sites?sid=' + site.sid,
+			type: 'get',
+			data: {
+				startTime: monthFormData.startTime,
+				endTime: monthFormData.endTime,
+				interval: 'month'
+			}
+		});
+
+		//작년 동월 발전
+		urls.push({
+			url: apiHost + '/energy/sites?sid=' + site.sid,
+			type: 'get',
+			data: {
+				startTime: yearFormData.startTime,
+				endTime: yearFormData.endTime,
+				interval: 'month'
+			}
+		});
+
+		siteArray.push(site.sid);
+		tableData.push({
+			sid: site.sid,
+			siteName: site.name
+		});
+	});
+
+	//오늘 발전
+	if (siteArray.length > 0) {
+		urls.push({
+			url: apiHost + '/energy/now/sites',
+			type: 'get',
+			data: {
+				sids: siteArray.join(','),
+				metering_type: 2,
+				interval: 'day'
+			}
+		});
+	}
+
+	//ajax 한번에 실행
+	deferreds = new Array();
+	urls.forEach(function (url) {
+		let deferred = $.Deferred();
+		deferreds.push(deferred);
+
+		$.ajax(url).done(function (data) {
+			data['url'] = url['url'];
+			(function (deferred) {
+				return deferred.resolve(data);
+			})(deferred);
+		}).fail(function (error) {
+			console.log(error);
+		});
+	});
+
+	$.when.apply($, deferreds).then(function () {
+		Object.entries(arguments).forEach(arg => {
+			const result = arg[1];
+			if (!isEmpty(result)) {
+				const targetUrl = result.url;
+				if (targetUrl.match('/status/raw/site')) {
+					let totalCount = 0;
+					let runCount = 0;
+					let stopCount = 0;
+					let capacity = 0;
+					let targetSid = '';
+					let deviceFault = '';
+					Object.entries(result).forEach(detail => {
+						const deviceType = detail[0]
+							, deviceData = detail[1];
+						if (deviceType !== 'url' && deviceType.match('INV')) {
+							targetSid = deviceData.sid;
+							capacity += deviceData.capacity;
+							if (!isEmpty(deviceData.faultDesc)) {
+								deviceFault = deviceData.dname;
+								Object.entries(deviceData.faultDesc).forEach(fault => {
+									deviceFault += '[' + deviceData.fault[0] + ']';
+								});
+							}
+
+							if (!isEmpty(deviceData.devices)) {
+								deviceData.devices.forEach(db => {
+									totalCount++;
+									if (db.operation == 1) {
+										runCount++;
+									} else {
+										stopCount++;
+									}
+								});
+							}
+						}
+					});
+
+					tableData.forEach((site, index) => {
+						if (site.sid === targetSid) {
+							if (totalCount == 0) {
+								tableData[index]['invCount'] = '-';
+							} else {
+								if (totalCount != stopCount) {
+									tableData[index]['invCount'] = 'RUN (' + runCount + '/' + stopCount + '/' + totalCount + ')';
+								} else {
+									tableData[index]['invCount'] = 'INV (' + runCount + '/' + stopCount + '/' + totalCount + ')';;
+								}
+							}
+
+							tableData[index]['capacity'] = (capacity / 1000).toFixed(2);
+							tableData[index]['deviceFault'] = deviceFault;
+						}
+					});
+				} else if (targetUrl.match('/energy/now/sites')) {
+					tableData.forEach((site, index) => {
+						let targetData = result.data[site.sid];
+						if (isEmpty(targetData)) {
+							tableData[index]['nowEnergy'] = '-';
+						} else {
+							tableData[index]['nowEnergy'] = targetData.energy > 0 ? displayNumberFixedUnit(targetData.energy, 'W', 'kW', 2) : (targetData.energy / 1000).toFixed(2);
+						}
+					});
+				} else if (targetUrl.match('/weather/site')) {
+					if (result.length > 0) {
+						tableData.forEach((site, index) => {
+							if (targetUrl.match(site.sid)) {
+								if (targetUrl.match('day')) { //전일
+									tableData[index]['yesterDaySky'] = result[0].sky;
+								} else { //당일
+									result.reverse();
+									result.forEach(rst => {
+										if (rst.observed) {
+											tableData[index]['toDaySky'] = rst.sky;
+											return false;
+										}
+									});
+								}
+							}
+						});
+					}
+				} else if (targetUrl.match('/energy/sites')) {
+					const interval = result.interval;
+					const nowDate = new Date();
+					const genData = result.data[0].generation.items;
+					tableData.forEach((site, index) => {
+						if (targetUrl.match(site.sid)) {
+							if (interval === 'day') { //어제 발전
+								if (!isEmpty(genData) && genData.length > 0) {
+									tableData[index]['yesterEnergy'] = (genData[0].energy / 1000).toFixed(2);
+								}
+							} else {
+								if (result.start == monthFormData.startTime) { //월간 발전
+									console.log(result);
+									console.log(genData);
+									if (!isEmpty(genData) && genData.length > 0) {
+										tableData[index]['beforeYearGen'] = (genData[0].energy / 1000000).toFixed(2);
+									}
+								} else { //작년 동월 발전
+									if (!isEmpty(genData) && genData.length > 0) {
+										tableData[index]['monthGen'] = (genData[0].energy / 1000000).toFixed(2);
+									}
+								}
+							}
+						}
+					});
+				}
+			}
+		});
+
+		tableData.forEach((data, index) => {
+			if (isEmpty(data.beforeYearGen) || isEmpty(data.monthGen) ) {
+				tableData[index]['proportion'] = '-'
+			} else {
+				tableData[index]['proportion'] = ((data.monthGen / data.beforeYearGen) * 100).toFixed(2);
+			}
+		});
+
+		gmainTable.clear();
+		gmainTable.rows.add(tableData).draw();
 	});
 
 	// new $.fn.dataTable.Buttons( gmainTable, {
@@ -2353,7 +2460,58 @@ const getDashboardTable = (table) => {
 	// gmainTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup");
 }
 
+const getWeatherIconClass = (weatherId) => {
+	let weatherIconClass = 'w1';
+	switch (weatherId) {
+		case 1 :
+			weatherIconClass = 'w1';
+			break;
+		case 7 :
+			weatherIconClass = 'w4';
+			break;
+		case 11 :
+			weatherIconClass = 'w8';
+			break;
+		case 12 :
+			weatherIconClass = 'w10';
+			break;
+		case 13 :
+			weatherIconClass = 'w6';
+			break;
+		case 17 :
+			weatherIconClass = 'w9';
+			break;
+		case 20 :
+			weatherIconClass = 'w3';
+			break;
+		default :
+			weatherIconClass = 'w1';
+			break;
+	}
+	return weatherIconClass
+}
 const destroyDashboardTable = (table) => {
 	let id = "#" + table;
 	$("#gmainTable").DataTable().clear().destroy();
 }
+
+// 특수문자 정규식 변수(공백 미포함)
+const replaceChar = /[~!@\#$%^&*\()\-=+_'\;<>\/.\`:\"\\,\[\]?|{}]/gi;
+
+// 완성형 아닌 한글 정규식
+const replaceNotFullKorean = /[ㄱ-ㅎㅏ-ㅣ]/gi;
+
+$(document).ready(function(){
+	$("#searchName").on('focusout', function() {
+		var x = $(this).val();
+		if (x.length > 0) {
+			if (x.match(replaceChar) || x.match(replaceNotFullKorean)) {
+				x = x.replace(replaceChar, '').replace(replaceNotFullKorean, '');
+			}
+			$(this).val(x);
+		}
+	}).on('keyup', function() {
+		$(this).val($(this).val().replace(replaceChar, ''));
+
+	});
+});

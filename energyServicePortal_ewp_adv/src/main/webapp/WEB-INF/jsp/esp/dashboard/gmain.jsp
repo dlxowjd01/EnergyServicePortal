@@ -564,6 +564,133 @@
 	</c:if>
 	let first = true;
 
+	let gmainTable = $('#gmainTable').DataTable({
+		"table-layout": "fixed",
+		"fixedHeader": true,
+		"bAutoWidth": true,
+		"bSearchable" : true,
+		"retrieve": true,
+		"sScrollY": true,
+		"scrollY": "720px",
+		"bScrollCollapse": true,
+		paging: false,
+		"aaSorting": [[ 0, 'asc' ]],
+		"bSortable": true,
+		"order": [[ 1, 'asc' ]],
+		"aoColumnDefs": [
+			{
+				"aTargets": [ 0 ],
+				"bSortable": false,
+				"orderable": false
+			},
+		],
+		"aoColumns": [
+			{
+				sTitle: '순번',
+				mData: null,
+				mRender: function ( data, type, full, rowIndex ) {
+					return rowIndex.row + 1;
+				},
+				className: 'dt-center no-sorting'
+			},
+			{
+				sTitle: '발전소 명',
+				mData: 'siteName',
+			},
+			{
+				sTitle: '발전용량 (kWh)',
+				mData: 'capacity',
+				mRender: function (data, type, full, rowIndex) {
+					return isEmpty(data) ? '-' : data;
+				},
+			},
+			{
+				sTitle: '인버터 가동 상태',
+				mData: 'invCount',
+				mRender: function (data, type, full, rowIndex) {
+					return isEmpty(data) ? '-' : data;
+				},
+			},
+			{
+				sTitle: '경고 알람',
+				mData: 'deviceFault',
+				mRender: function (data, type, full, rowIndex) {
+					return isEmpty(data) ? '-' : data;
+				},
+			},
+			{
+				sTitle: '현재 발전량(kW)',
+				mData: 'nowEnergy',
+				mRender: function (data, type, full, rowIndex) {
+					if (data == '-') {
+						return data;
+					} else {
+						return data[0];
+					}
+				},
+			},
+			{
+				sTitle: "현재 날씨",
+				mData: 'toDaySky',
+				mRender: function (data, type, full, rowIndex) {
+					const weather = getWeatherIconClass(data);
+					return '<i class="ico_weather ' + weather + '"></i>';
+				},
+			},
+			{
+				sTitle: '전일 발전',
+				mData: 'yesterEnergy',
+				mRender: function (data, type, full, rowIndex) {
+					return isEmpty(data) ? '-' : data;
+				},
+			},
+			{
+				sTitle: '전일 날씨',
+				mData: 'yesterDaySky',
+				mRender: function (data, type, full, rowIndex) {
+					const weather = getWeatherIconClass(data);
+					return '<i class="ico_weather ' + weather + '"></i>';
+				},
+			},
+			{
+				sTitle: '월간 발전량(MWh)',
+				mData: 'monthGen',
+				mRender: function (data, type, full, rowIndex) {
+					return isEmpty(data) ? '-' : data;
+				},
+			},
+			{
+				sTitle: '전년 동월 발전량(MWh)',
+				mData: 'beforeYearGen',
+				mRender: function (data, type, full, rowIndex) {
+					return isEmpty(data) ? '-' : data;
+				},
+			},
+			{
+				sTitle: '전년 동월 대비 발전 비율(%)',
+				mData: 'proportion',
+				mRender: function (data, type, full, rowIndex) {
+					return data;
+				},
+			},
+		],
+		"language": {
+			"emptyTable": "조회된 데이터가 없습니다.",
+			"zeroRecords":  "검색된 결과가 없습니다."
+		},
+		"dom": 'tip',
+		initComplete: function(settings, json ){
+			this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+				cell.innerHTML = i+1;
+				$(cell).data("id", i);
+			});
+		},
+		// every time DataTables performs a draw
+		drawCallback: function (settings) {
+
+		},
+	}).columns.adjust();
+
 	$(function () {
 		let target = $("#innerBody").find(".content-wrapper");
 		if (oid.match('testkpx')) {
@@ -572,6 +699,7 @@
 
 		if($("#switchBtn").is(":checked")){
 			target.eq(0).addClass("hidden").next().removeClass("hidden");
+
 			getDashboardTable('gmainTable');
 		} else {
 			target.eq(0).removeClass("hidden").next().addClass("hidden");
