@@ -1309,7 +1309,7 @@
 						} else if (key == 'capacity') {
 							let unit = data['capacity_unit'];
 							if (unit == 'W') {
-								let capacity = Math.floor(val / 1000)
+								let capacity =(val / 1000).toFixed(2);
 								$('#' + key).val(capacity);
 							}  else {
 								$('#' + key).val(val);

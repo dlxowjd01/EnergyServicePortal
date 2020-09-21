@@ -72,8 +72,13 @@
 						// console.log("item.attachement_info===", item.attachement_info)
 						$("#total").text(item.total_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원');
 
-						if (item.status == 3 || item.status == 0) {
-							$('#rejectBtn').parent().addClass('hidden');
+						if (role == 2) {
+							if (item.status == 0) {
+								$('#rejectBtn').parent().addClass('hidden');
+							} else if(item.status == 3) {
+								$('#rejectBtn').parent().find('button').addClass('hidden');
+								$('#reviewBtn').removeClass('hidden');
+							}
 						}
 
 						const attachmentInfo = Promise.resolve(JSON.parse(item.attachement_info));
@@ -659,7 +664,7 @@
 				--></div>
 						</c:when>
 						<c:otherwise>
-							<c:if test="${userInfo.task eq 2 and (param.req_detail_status_val ne 4 and param.req_detail_status_val ne 5)}">
+							<c:if test="${((userInfo.task eq 2 and userInfo.role eq 2) or userInfo.role eq 1) and (param.req_detail_status_val ne 4 and param.req_detail_status_val ne 5)}">
 					<div class="spc-btn-group my-20"><!--
 					--><button type="button" id="reviewBtn" class="btn_type mr-16">검토대기로 변경</button><!--
 					--><button type="button" id="rejectBtn" class="btn_type03 w80">반송</button><!--

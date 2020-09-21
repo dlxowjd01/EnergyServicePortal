@@ -27,8 +27,8 @@
 		$('#allSelect').prop('checked', true);
 		$('#allPurpose').prop('checked', true);
 
-		$('#fromDate').datepicker('setDate', '-30' );
-		$('#toDate').datepicker('setDate', 'today');
+		$('#fromDate').datepicker('setDate', '-15' );
+		$('#toDate').datepicker('setDate', '+15');
 		// $('#toDate').datepicker( "option", "maxDate", new Date());
 
 		$('#unitOpt').find("li").on('click', function () {
