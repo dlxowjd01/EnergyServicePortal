@@ -649,7 +649,7 @@ const showClock = () => {
 	const currentDate = new Date();
 	const divClock = document.querySelector('.currTime');
 
-	if (!isEmpty(divClock)) {
+	if (divClock != undefined) {
 		divClock.innerText = currentDate.format('yyyy-MM-dd HH:mm:ss');
 		setTimeout(showClock,1000);
 	}

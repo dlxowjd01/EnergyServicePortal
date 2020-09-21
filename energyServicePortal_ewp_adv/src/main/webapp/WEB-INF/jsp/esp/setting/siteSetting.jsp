@@ -240,8 +240,8 @@
 
 			let newStationId, kpxGenId, kpxEmsId, kpxTransvol;
 
+			newStationId = $('#station_id').val();
 			if (oid.match('testkpx')) {
-				newStationId = $('#station_id').val();
 				kpxGenId = $('#kpx_genid').val();
 				kpxEmsId = $('#kpx_emsid').val();
 				kpxTransvol = $('#kpx_transvol').val();
@@ -280,10 +280,10 @@
 				if( !isEmpty(newVppResId) ){
 					siteObj.dr_group_id = newVppResId;
 				}
+				if ( !isEmpty(newStationId) ) {
+					siteObj.station_id = Number(newStationId);
+				}
 				if (oid.match('testkpx')) {
-					if ( !isEmpty(newStationId) ) {
-						siteObj.station_id = Number(newStationId);
-					}
 					if ( !isEmpty(kpxGenId) ) {
 						siteObj.kpx_genid = kpxGenId;
 					}
@@ -429,10 +429,10 @@
 				if( !isEmpty(newVppResId) && td.eq(9).text() != newVppResId ){
 					siteEditObj.dr_group_id = newVppResId;
 				}
+				if ( !isEmpty(newStationId) ) {
+					siteEditObj.station_id = Number(newStationId);
+				}
 				if (oid.match('testkpx')) {
-					if ( !isEmpty(newStationId) ) {
-						siteEditObj.station_id = Number(newStationId);
-					}
 					if ( !isEmpty(kpxGenId) ) {
 						siteEditObj.kpx_genid = kpxGenId;
 					}
@@ -1940,9 +1940,9 @@
 				}
 				// 추가 정보
 				$('#newSiteDetail').val(rowData.detail_info);
+				$('#station_id').val(rowData.station_id);
 				// kpx
 				if (oid.match('testkpx')) {
-					$('#station_id').val(rowData.station_id);
 					$('#kpx_genid').val(rowData.kpx_genid);
 					$('#kpx_emsid').val(rowData.kpx_emsid);
 					$('#kpx_transvol').val(rowData.kpx_transvol);
@@ -3581,6 +3581,14 @@
 								<div class="col-xl-6 col-lg-6 col-md-10 col-sm-10 pl-0">
 									<textarea name="new_site_desc" id="newSiteDetail" class="textarea" placeholder="입력"></textarea>
 								</div>
+								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">기상 그리드</span></div>
+								<div class="col-xl-1 col-lg-2 col-md-4 col-sm-10 pl-0">
+									<div class="flex_start">
+										<div class="tx_inp_type">
+											<input type="text" name="station_id" id="station_id" placeholder="입력" minlength="1" maxlength="15">
+										</div>
+									</div>
+								</div>
 							</div>
 
 							<c:if test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
@@ -3606,14 +3614,6 @@
 										<div class="flex_start">
 											<div class="tx_inp_type">
 												<input type="text" name="kpx_emsid" id="kpx_emsid" placeholder="입력" minlength="2" maxlength="100">
-											</div>
-										</div>
-									</div>
-									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">기상 그리드</span></div>
-									<div class="col-xl-1 col-lg-2 col-md-4 col-sm-10 pl-0">
-										<div class="flex_start">
-											<div class="tx_inp_type">
-												<input type="text" name="station_id" id="station_id" placeholder="입력" minlength="1" maxlength="15">
 											</div>
 										</div>
 									</div>

@@ -1604,6 +1604,11 @@
 				let accName = td.eq(6).text();
 				if(td.eq(6).text() == "시스템 관리자"){
 					accLevBtn.data( { "name" : accName, "value" : "1"}).html(accName+ '<span class="caret">');
+					if ($('.nav-tabs > li').eq(0).find('a').attr('href') == '#siteTab') {
+						$('.nav-tabs > li').eq(0).addClass('hidden').removeClass('active').siblings().addClass('active');
+					}
+
+					$('#siteTab').removeClass('active').siblings().addClass('active in');
 				} else if(td.eq(6).text() == "일반 사용자"){
 					accLevBtn.data( { "name" : accName, "value" : "2"}).html(accName + '<span class="caret">');
 				}
