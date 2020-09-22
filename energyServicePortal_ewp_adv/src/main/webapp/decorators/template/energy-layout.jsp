@@ -8,7 +8,7 @@
 	</script>
 	<page:applyDecorator name="top"/>
 </head>
-<body class="dark">
+<body>
 <div id="outerWrapper" class="outer-wrapper">
 	<page:applyDecorator name="header"/>
 	<div class="page-wrapper">

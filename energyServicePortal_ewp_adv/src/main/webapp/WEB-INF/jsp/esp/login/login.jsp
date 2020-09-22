@@ -63,7 +63,11 @@
 
 				<div class="btn-wrapper">
 					<input type="submit" id="loginBtn" name="login" value="<fmt:message key="ewp.login.Signin" />">
-					<p class="center"><a href="#" onclick="openSignUpModal()">회원 가입</a> 및 회원 정보 문의<strong class="bold">070-4949-5500</strong></p>
+					<p class="center"><!--
+					--><a href="#" onclick="openUserModal('addUserModal')">회원 가입</a><!--
+					--><a href="#" onclick="openUserModal('findIdModal')">아이디 찾기</a><!--
+					--><a href="#" onclick="openUserModal('findPwdModal')">비밀번호 찾기</a><!--
+				--></p>
 				</div>
 
 				<%-- KPX(전력 거래소 사용시 하단 내용 숨김) --%>
@@ -101,23 +105,23 @@
 			</div>
 		</div>
 	</div>
-	<!-- <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModal" aria-hidden="true" data-keyboard="false" data-backdrop="static"></div> -->
-	<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModal" aria-hidden="true">
+
+	<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 		<div class="modal-dialog modal-md">
 			<div class="modal-content user-modal-content">
-				<div id="titleEdit" class="modal-header"><h2>회원 가입</h2></div>
+				<div class="modal-header"><h2>회원 가입</h2></div>
 				<div class="modal-body">
 					<div class="container-fluid">
-						<form name="add_user_form" id="signUpForm" class="setting-form">
+						<form name="add_user_form" id="signUpForm" class="user-form">
 							<section id="userInfo">
 								<div class="row">
-									<div class="col-3"><span class="input_label asterisk">ID</span></div>
+									<div class="col-3"><span class="input_label asterisk">아이디</span></div>
 									<div class="col-9">
 										<div class="flex_start">
 											<div class="tx_inp_type offset-width">
 												<input type="text" name="new_id" id="newId" placeholder="입력" minlength="5" maxlength="15">
 											</div>
-											<button type="button" class="btn_type fr" onclick="checkId($('#newId').val())" disabled>중복 체크</button>
+											<button type="button" class="btn_type03 fr" onclick="checkId($('#newId').val())" disabled>중복 확인</button>
 										</div>
 										<small class="hidden warning">사용자 아이디를 입력해 주세요</small>
 										<small class="hidden warning">5~15 글자를 입력해 주세요.</small>
@@ -168,7 +172,7 @@
 									<div class="col-9">
 										<div class="flex_start">
 											<div class="tx_inp_type"><input type="text" id="newEmailAddr" name="new_email_addr" placeholder="입력" minlength="3" maxlength="28"></div>
-											<div class="dropdown">
+											<div class="dropdown w-174">
 												<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 												<ul id="newEmailHost" class="dropdown-menu"></ul>
 											</div>										
@@ -180,10 +184,10 @@
 								</div>
 		
 								<div class="row">
-									<div class="col-3"><span class="input_label">휴대폰</span></div>
+									<div class="col-3"><span class="input_label">휴대폰 번호</span></div>
 									<div class="col-9">
 										<div class="flex_start">
-											<div class="dropdown">
+											<div class="dropdown w-134">
 												<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 												<ul id="newMobilePrefix" class="dropdown-menu"></ul>
 											</div>
@@ -191,7 +195,7 @@
 											<button type="button" class="btn_type fr">인증</button>
 										</div>
 										<div class="flex_start">
-											<small id="isValidNewMobileNum" class=" warning hidden">10자리 이상의 휴대폰 번호를 입력해 주세요.</small>
+											<small id="isValidNumC" class=" warning hidden">10자리 이상의 휴대폰 번호를 입력해 주세요.</small>
 										</div>
 									</div>
 								</div>
@@ -199,7 +203,7 @@
 								<div class="row">
 									<div class="col-3"><span class="input_label">인증 번호</span></div>
 									<div class="col-9">
-										<div class="tx_inp_type"><input type="text" id="verificationCode" name="verification_code" placeholder="입력">
+										<div class="tx_inp_type"><input type="text" id="code" name="code" placeholder="입력">
 										</div>
 									</div>
 								</div>
@@ -209,7 +213,7 @@
 								<div class="row">
 									<div class="col-12">
 										<h3 class="input_label">이용 약관</h3>
-										<textarea name="new_user_desc" id="newUserDesc" class="textarea w-100" placeholder="입력">
+										<textarea name="new_terms" id="newTerms" class="textarea">
 
 										</textarea>
 										<div class="input-field no-border right"><a class="chk_type"><input type="checkbox" id="termsInput" name="terms_input"><label for="termsInput"></label></a></div>
@@ -219,7 +223,7 @@
 								<div class="row">
 									<div class="col-12">
 										<h3 class="input_label">개인 정보 수집 및 제공 동의</h3>
-										<textarea name="new_user_desc" id="newUserDesc" class="textarea w-100" placeholder="입력"></textarea>
+										<textarea name="new_consent" id="newConsent" class="textarea"></textarea>
 										<div class="input-field no-border right"><a class="chk_type"><input type="checkbox" id="termsInput" name="terms_input"><label for="termsInput"></label></a></div>
 									</div>
 								</div>
@@ -241,8 +245,173 @@
 	</div>
 
 
-	
+	<div class="modal fade" id="findIdModal" tabindex="-1" role="dialog" aria-labelledby="findIdModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+		<div class="modal-dialog modal-md">
+			<div class="modal-content user-modal-content">
+				<div class="modal-header"><h2>아이디 찾기</h2></div>
+				<div class="modal-body">
+					<div class="container-fluid">
+						<form name="find_id_form" id="findIdForm" class="user-form">
+							<div class="row">
+								<div class="col-3"><span class="input_label asterisk">이름</span></div>
+								<div class="col-9">
+									<div class="tx_inp_type"><input type="text" id="findIdlName" name="find_id_name" placeholder="입력" minlength="3" maxlength="28"></div>
+									<small class="hidden warning">영문/한글(3~28 글자) 조합의 이름을 입력해 주세요</small>
+								</div>
+							</div>
 
+							<div class="row">
+								<div class="col-3"><span class="input_label asterisk">이동 통신사</span></div>
+								<div class="col-9">
+									<div class="rdo_type flex_start">
+										<div class="radio-group">
+											<input type="radio" id="carrierA" name="carrier_opt" data-value="sk" data-option-val="true">
+											<label for="carrierA">SKT</label>
+										</div>
+										<div class="radio-group">
+											<input type="radio" id="carrierB" name="carrier_opt" data-value="kt" data-option-val="false">
+											<label for="carrierB">KT</label>
+										</div>
+										<div class="radio-group">
+											<input type="radio" id="carrierC" name="carrier_opt" data-value="lg" data-option-val="false">
+											<label for="carrierC">LG U+</label>
+										</div>
+									</div>
+									<div class="flex_start">
+										<small class="hidden warning">이동 통신사를 선택해 주세요.</small>
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-3"><span class="input_label">휴대폰 번호</span></div>
+								<div class="col-9">
+									<div class="flex_start">
+										<div class="dropdown w-90">
+											<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+											<ul id="findIdMobilePrefix" class="dropdown-menu"></ul>
+										</div>
+										<div class="tx_inp_type offset-176"><input type="text" id="findIdMobileNum" name="find_id_mobil_num" placeholder="입력" maxlength="13"></div>
+										<button type="button" class="btn_type fr">인증</button>
+									</div>
+									<div class="flex_start">
+										<small id="isValidNumA" class=" warning hidden">10자리 이상의 휴대폰 번호를 입력해 주세요.</small>
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-3"><span class="input_label">인증 번호</span></div>
+								<div class="col-9">
+									<div class="tx_inp_type"><input type="text" id="findIdCode" name="find_id_code" placeholder="입력">
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-12">
+									<div class="btn_wrap_type02"><!--
+									--><button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button><!--
+										--><button type="submit" id="findIdBtn" class="btn_type" disabled>등록</button><!--
+									--></div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="modal fade" id="findPwdModal" tabindex="-1" role="dialog" aria-labelledby="findPwdModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+		<div class="modal-dialog modal-md">
+			<div class="modal-content user-modal-content">
+				<div class="modal-header"><h2>아이디 찾기</h2></div>
+				<div class="modal-body">
+					<div class="container-fluid">
+						<form name="find_pwd_form" id="findPwdForm" class="user-form">
+
+							<div class="row">
+								<div class="col-3"><span class="input_label asterisk">이름</span></div>
+								<div class="col-9">
+									<div class="tx_inp_type"><input type="text" id="findPwdFullName" name="find_pwd_full_name" placeholder="입력" minlength="3" maxlength="28"></div>
+									<small class="hidden warning">영문/한글(3~28 글자) 조합의 이름을 입력해 주세요</small>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-3"><span class="input_label asterisk">ID</span></div>
+								<div class="col-9">
+									<div class="tx_inp_type"><input type="text" id="findPwdId" name="find_pwd_id" placeholder="입력" minlength="3" maxlength="28"></div>
+									<small class="hidden warning">ID를 입력해 주세요</small>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-3"><span class="input_label asterisk">이동 통신사</span></div>
+								<div class="col-9">
+									<div class="rdo_type flex_start">
+										<div class="radio-group">
+											<input type="radio" id="carrierSk" name="carrier_opt2" data-value="sk" data-option-val="true">
+											<label for="carrierA">SKT</label>
+										</div>
+										<div class="radio-group">
+											<input type="radio" id="carrierKt" name="carrier_opt2" data-value="kt" data-option-val="false">
+											<label for="carrierB">KT</label>
+										</div>
+										<div class="radio-group">
+											<input type="radio" id="carrierLg" name="carrier_opt2" data-value="lg" data-option-val="false">
+											<label for="carrierC">LG U+</label>
+										</div>
+									</div>
+									<div class="flex_start">
+										<small class="hidden warning">이동 통신사를 선택해 주세요.</small>
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-3"><span class="input_label">휴대폰 번호</span></div>
+								<div class="col-9">
+									<div class="flex_start">
+										<div class="dropdown w-90">
+											<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+											<ul id="findPwdMobilePrefix" class="dropdown-menu"></ul>
+										</div>
+										<div class="tx_inp_type offset-176"><input type="text" id="findPwdMobileNum" name="find_pwd_mobil_num" placeholder="입력" maxlength="13"></div>
+										<button type="button" class="btn_type fr">인증</button>
+									</div>
+									<div class="flex_start">
+										<small id="isValidNumB" class="warning hidden">10자리 이상의 휴대폰 번호를 입력해 주세요.</small>
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-3"><span class="input_label">인증 번호</span></div>
+								<div class="col-9">
+									<div class="tx_inp_type"><input type="text" id="findPwdCode" name="find_pwd_code" placeholder="입력">
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-12">
+									<div class="btn_wrap_type02"><!--
+									--><button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button><!--
+										--><button type="submit" id="findPwdBtn" class="btn_type" disabled>등록</button><!--
+									--></div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
 	<c:if test="${not empty msg}">
 		<script type="text/javascript">
 			let message = '${msg}'
@@ -354,10 +523,10 @@
 			}
 		}
 
-		function openSignUpModal() {
-			$("#addUserModal").modal("show");
+		function openUserModal(option) {
+			let modal = "#" + option;
+			$(modal).modal("show");
 		}
-
 	</script>
 </body>
 </html>
