@@ -1191,9 +1191,6 @@
 					}
 				}
 
-		mySites.map((item, index) => {
-		let found = userSites.findIndex( x => x.sid === item.sid);
-
 				item.role = userSites[found].role;
 		
 				if(!isEmpty(item.location)){
@@ -1264,8 +1261,8 @@
 		} else {
 			newArr = [];
 		}
-		// return newArr;
-	});
+			// return newArr;
+		});
 
 		if(newArr.length === 0 ){
 			drawEmptyTable($("#siteTable"));
