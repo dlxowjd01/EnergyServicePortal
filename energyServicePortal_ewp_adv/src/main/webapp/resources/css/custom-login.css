@@ -64,8 +64,20 @@ body {
 	height: 100%;
 	background: none !important;
 	overflow: hidden;
+	font-family: "AppleSDGothicNeo", Helvetica, Arial, sans-serif;
 }
 
+a {
+	color: var(--white60);
+}
+
+a:hover,
+a:focus,
+a:active {
+	color: var(--white87);
+	border: none;
+	text-decoration: none;
+}
 
 nav {
     position: relative;
@@ -129,7 +141,7 @@ button:active {
 	background: var(--icon-eye) no-repeat center;
 }
 
-.setting-form .clear-btn {
+.user-form .clear-btn {
 	position: absolute;
 	right: 15px;
 	top: 18px;
@@ -286,6 +298,83 @@ nav .dropdown {
 	-ms-transform: rotate(45deg);
 }
 
+.rdo_type {
+    height: 38px;
+}
+
+
+.rdo_type [type="radio"] {
+    display: none;
+    position: absolute;
+    left: -9999px;
+}
+
+.rdo_type [type="radio"]+label {
+    display: inline-block;
+    position: relative;
+	padding-left: 38px;
+	margin-bottom: 0;
+    cursor: pointer;
+    line-height: 21px;
+	height: 20px;
+	font-weight: 500;
+}
+
+.rdo_type [type="radio"]:not(:checked)+label {
+    color: var(--white60);
+}
+
+.rdo_type [type="radio"]:disabled+label {
+    cursor: not-allowed;
+}
+
+.rdo_type [type="radio"]+label:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--white60);
+    border-radius: 100%;
+    background: none;
+}
+
+.rdo_type [type="radio"]:checked+label:before {
+    border: 2px solid var(--white87);
+}
+
+.rdo_type [type="radio"]:disabled+label:before {
+    border: 2px solid var(--white60);
+}
+
+.rdo_type [type="radio"]+label:after {
+    opacity: 0;
+    -webkit-transform: scale(0);
+    transform: scale(0);
+}
+
+.rdo_type [type="radio"]:checked+label:after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    background: var(--white87);
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    border-radius: 100%;
+    opacity: 1;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    -webkit-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+}
+
+.radio-group+.radio-group {
+    margin-left: 36px;
+}
+
+
 .login {
 	position: absolute; 
 	top: 0; 
@@ -403,15 +492,25 @@ textarea:focus {
 	vertical-align: top;
 }
 
-.btn-wrapper .center:not(.bold) {
-	color: var(--white40);
-	font-weight: normal;
+.btn-wrapper .center:not(.copy-right){
+	padding-left: 20px;
 }
 
-.btn-wrapper .bold {
-	padding-left: 8px;
-	color: var(--white87);
-	font-weight: 500;
+.btn-wrapper .center a {
+	display: inline-block;
+	min-width: 78px;
+	padding: 0 16px;
+	line-height: 14px;
+}
+
+.btn-wrapper .center a + a {
+	display: inline-block;
+	border-left: 1px solid var(--white60);
+}
+
+.btn-wrapper .center.copy-right {
+	color: var(--white40);
+	font-weight: normal;
 }
 
 .desc {
@@ -421,7 +520,7 @@ textarea:focus {
 }
 
 .desc .col-6 {
-	padding: 0 10px;
+	padding: 0 4px;
 }
 
 .desc .divider {
@@ -429,10 +528,11 @@ textarea:focus {
 }
 
 .desc a {
-	color: var(--white40);
+	color: var(--white87);
 }
 
 .desc h3 {
+	margin-top: 0;
 	font-size: 16px;
 	color: var(--white40);
 }
@@ -546,6 +646,13 @@ textarea:focus {
 	color: var(--white87);
 }
 
+.tx_inp_type.offset-width {
+	width: calc(100% - 91px);
+}
+
+.tx_inp_type.offset-176 {
+	width: calc(100% - 176px);
+}
 
 .tx_inp_type input {
 	position: relative;
@@ -580,7 +687,7 @@ textarea:focus {
 	margin-left: 16px;
 }
 
-.setting-form .btn_wrap_type02 {
+.user-form .btn_wrap_type02 {
 	margin-top: 0;
 	float: right;
 }
@@ -625,11 +732,11 @@ textarea:focus {
 	align-items: center;
 }
 
-.setting-form .flex_start .tx_inp_type.w-55 {
+.user-form .flex_start .tx_inp_type.w-55 {
 	width: 55%;
 }
 
-.setting-form .input_label {
+.user-form .input_label {
 	margin: auto;
 	padding: 10px 0;
 	white-space: nowrap;
@@ -639,24 +746,24 @@ textarea:focus {
 	vertical-align: middle;
 }
 
-.setting-form .input_label.asterisk:after {
+.user-form .input_label.asterisk:after {
 	display: flex;
-	margin: 0 0 5% 0;
+	margin: 0 0 5% 4%;
 	height: 27px;
 	content: "*";
 	color: var(--vivid-blue);
 }
 
-.setting-form .input_label.asterisk.no-symbol:after {
+.user-form .input_label.asterisk.no-symbol:after {
 	content: none;
 }
 
-.setting-form .dropdown + .tx_inp_type,
-.setting-form .tx_inp_type + .dropdown {
+.user-form .dropdown + .tx_inp_type,
+.user-form .tx_inp_type + .dropdown {
 	margin-left: 12px;
 }
 
-.setting-form .dropdown-toggle {
+.user-form .dropdown-toggle {
 	width: 100%;
 	padding: 0 28px 0 15px;
 	height: 36px;
@@ -664,24 +771,37 @@ textarea:focus {
 	border-radius: 2px;
 }
 
-.setting-form .dropdown {
+.user-form .dropdown {
 	width: 100%;
 }
 
-.setting-form .dropdown-toggle .caret {
+.user-form .dropdown.w-90 {
+	width: 90px;
+}
+
+.user-form .dropdown.w-134 {
+	width: 134px;
+}
+
+.user-form .dropdown.w-174 {
+	width: 174px;
+}
+
+.user-form .dropdown-toggle .caret {
 	top: 11px;
 }
 
-.setting-form .dropdown-menu {
+.user-form .dropdown-menu {
 	top: 35px;
 }
 
-.setting-form .tx_inp_type+.btn_type {
-	padding: 0 10px;
+.user-form .tx_inp_type + button {
+	min-width: 62px;
+	padding: 0 16px;
 	margin-left: 12px;
 }
 
-.setting-form .textarea {
+.user-form .textarea {
 	width: 100%;
 	max-height: 82px;
 }
@@ -690,39 +810,39 @@ textarea:focus {
 	padding: 0 4px;
 }
 
-.setting-form .warning-text {
+.user-form .warning-text {
 	text-align: left;
 }
 
-.setting-form .row:not(:first-of-type):not(:last-of-type) {
+.user-form .row:not(:first-of-type):not(:last-of-type) {
 	padding: 4px 0;
 }
 
-.setting-form .dropdown-menu {
+.user-form .dropdown-menu {
 	max-height: 180px;
 	overflow-y: auto;
 	overflow-x: hidden;
 }
 
-.setting-form .input_label {
+.user-form .input_label {
 	display: flex;
 }
 
-.setting-form.input_label.asterisk:after {
+.user-form.input_label.asterisk:after {
 	display: block;
 	margin: -5% 0 0 5%;
 	height: auto;
 }
 
-.setting-form .flex_start .input_label:not(:first-of-type) {
+.user-form .flex_start .input_label:not(:first-of-type) {
 	margin-left: 30px;
 }
 
-.setting-form .input_label.offset {
+.user-form .input_label.offset {
 	padding-left: 24px;
 }
 
-.setting-form .warning {
+.user-form .warning {
 	margin-bottom: -3px;
 	line-height: 16px;
 }
