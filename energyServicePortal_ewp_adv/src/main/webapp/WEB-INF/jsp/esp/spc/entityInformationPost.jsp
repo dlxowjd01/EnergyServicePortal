@@ -296,50 +296,49 @@
 			data: {user_ids: userInfoId}
 		};
 
-		$.when($.ajax(spcSearch), $.ajax(spcAuthority)).done(function(result1, result2) {
-			if (result1[1] === 'success' && result2[1] === 'success') {
-				const spcList = result1[0].data;
-				const spcAuth = result2[0].data;
-				let refineSpcList = new Array();
+		if (role != 1) {
+			$.when($.ajax(spcSearch), $.ajax(spcAuthority)).done(function(result1, result2) {
+				if (result1[1] === 'success' && result2[1] === 'success') {
+					const spcList = result1[0].data;
+					const spcAuth = result2[0].data;
+					let refineSpcList = new Array();
 
-				if (!isEmpty(spcAuth) && !isEmpty(spcList)) {
-					spcList.forEach(spc => {
-						const spcListId = spc.spc_id;
-						spcAuth.forEach(auth => {
-							if (spcListId == auth.spcid) {
-								if (auth.role == 1) {
-									refineSpcList.push(spc);
-								} else {
-									return false;
+					if (!isEmpty(spcAuth) && !isEmpty(spcList)) {
+						spcList.forEach(spc => {
+							const spcListId = spc.spc_id;
+							spcAuth.forEach(auth => {
+								if (spcListId == auth.spcid) {
+									if (auth.role == 1) {
+										refineSpcList.push(spc);
+									} else {
+										return false;
+									}
 								}
-							}
+							});
 						});
-					});
+					}
+
+					refineSpcList.push({spc_id: '', name: '직접입력'});
+					setMakeList(refineSpcList, 'spcList', {'dataFunction': {}});
 				}
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				console.log("optSite error===", jqXHR)
+				return false;
+			});
+		} else {
+			$.ajax(spcSearch).done(function (data, textStatus, jqXHR) {
+				data.data.push({spc_id: '', name: '직접입력'});
 
-				refineSpcList.push({spc_id: '', name: '직접입력'});
-				setMakeList(refineSpcList, 'spcList', {'dataFunction': {}});
-			}
-		}).fail(function (jqXHR, textStatus, errorThrown) {
-			console.log("optSite error===", jqXHR)
-			return false;
-		});
+				setMakeList(data.data, 'spcList', {'dataFunction': {}});
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				console.error(jqXHR);
+				console.error(textStatus);
+				console.error(errorThrown);
 
-		// $.ajax({
-		// 	url: apiHost + '/config/user_spcs?oid=' + oid,
-		// 	type: 'get',
-		// 	async: false,
-		// 	data: {user_ids: userInfoId},
-		// 	success: function (json) {
-		// 		setInitList('spcList');
-		// 		json.data.push({spc_id: '', name: '직접입력'});
-		//
-		// 		setMakeList(json.data, 'spcList', {'dataFunction': {}});
-		// 	},
-		// 	error: function (request, status, error) {
-		//
-		// 	}
-		// });
+				alert('처리 중 오류가 발생했습니다.');
+				return false;
+			});
+		}
 	}
 
 	function getgenIdData() {
@@ -941,7 +940,7 @@
 										국가 선택<span class="caret"></span>
 									</button>
 									<ul id="spcCountryList" class="dropdown-menu" role="menu">
-										<li data-value="[code]">
+										<li data-value="[value]">
 											<a href="javascript:void(0);">[value]</a>
 										</li>
 									</ul>
@@ -1128,7 +1127,7 @@
 									국가 선택<span class="caret"></span>
 								</button>
 								<ul id="countryList" class="dropdown-menu" role="menu">
-									<li data-value="[code]">
+									<li data-value="[value]">
 										<a href="javascript:void(0);">[value]</a>
 									</li>
 								</ul>

@@ -277,32 +277,40 @@
 		}
 
 		return new Promise((resolve, reject) => {
-			$.ajax({
-				url: apiHost + '/config/user_spcs?oid=' + oid,
-				type: 'get',
-				async: false,
-				data: {user_ids: userInfoId}
-			}).done(function (data, textStatus, jqXHR) {
-				const result = data.data;
-				let acceptList = new Array();
+			if (role != 1) {
+				$.ajax({
+					url: apiHost + '/config/user_spcs?oid=' + oid,
+					type: 'get',
+					async: false,
+					data: {user_ids: userInfoId}
+				}).done(function (data, textStatus, jqXHR) {
+					const result = data.data;
+					let acceptList = new Array();
 
-				result.forEach(spc => {
-					if (spc.role == '1') {
-						acceptList.push(spc.spcid);
+					result.forEach(spc => {
+						if (spc.role == '1') {
+							acceptList.push(spc.spcid);
+						}
+					});
+
+
+					if (acceptList.length > 0) {
+						resolve(acceptList);
+					} else {
+						reject('');
 					}
+				}).fail(function (jqXHR, textStatus, errorThrown) {
+					console.error(jqXHR);
+					console.error(textStatus);
+					console.error(errorThrown);
 				});
-
-
-				if (acceptList.length > 0) {
-					resolve(acceptList);
-				} else {
-					reject('');
-				}
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				console.error(jqXHR);
-				console.error(textStatus);
-				console.error(errorThrown);
-			});
+			} else {
+				let acceptList = new Array();
+				checkDataList.forEach(chk => {
+					acceptList.push(chk.spc_id);
+				});
+				resolve(acceptList);
+			}
 		}).then(acceptList => {
 			let accept = true;
 			checkDataList.forEach(chk => {

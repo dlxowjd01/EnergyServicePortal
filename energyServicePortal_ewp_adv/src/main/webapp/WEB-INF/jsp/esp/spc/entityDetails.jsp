@@ -11,34 +11,35 @@
 
 	function init() {
 
-		$.ajax({
-			url: apiHost + '/config/user_spcs?oid=' + oid,
-			type: 'get',
-			async: false,
-			data: {user_ids: userInfoId}
-		}).done(function (data, textStatus, jqXHR) {
-			const result = data.data;
-			let acceptList = new Array();
+		if (role != 1) {
+			$.ajax({
+				url: apiHost + '/config/user_spcs?oid=' + oid,
+				type: 'get',
+				async: false,
+				data: {user_ids: userInfoId}
+			}).done(function (data, textStatus, jqXHR) {
+				const result = data.data;
+				let acceptList = new Array();
 
-			result.forEach(spc => {
-				if (spc.role == '1') {
-					acceptList.push(spc.spcid);
-				}
-			});
+				result.forEach(spc => {
+					if (spc.role == '1') {
+						acceptList.push(spc.spcid);
+					}
+				});
 
-			if (acceptList.length > 0) {
-				if (!acceptList.includes(Number(spcId))) {
+				if (acceptList.length > 0) {
+					if (!acceptList.includes(Number(spcId))) {
+						$('#modifyButton').remove();
+					}
+				} else {
 					$('#modifyButton').remove();
 				}
-			} else {
-				$('#modifyButton').remove();
-			}
-		}).fail(function (jqXHR, textStatus, errorThrown) {
-			console.error(jqXHR);
-			console.error(textStatus);
-			console.error(errorThrown);
-		});
-
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				console.error(jqXHR);
+				console.error(textStatus);
+				console.error(errorThrown);
+			});
+		}
 
 		setInitList('SPC_법인_인감');
 		setInitList('공인인증서');
@@ -169,6 +170,11 @@
 					if (!isEmpty(json.data[0].spc_info)) {
 						const spc_info = JSON.parse(json.data[0].spc_info);
 						if (!isEmpty(spc_info)) {
+
+							if (spc_info.spcCountry == 'kr') {
+								spc_info.spcCountry = '대한민국';
+							}
+
 							setJsonAutoMapping(spc_info, 'basicInfo');
 							const fileList = spc_info['SPC_법인_인감'];
 							let spcSealSelected = '';
