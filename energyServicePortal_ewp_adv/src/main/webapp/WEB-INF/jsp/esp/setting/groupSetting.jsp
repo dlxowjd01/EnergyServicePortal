@@ -42,9 +42,10 @@
 				resIdWrapper.removeClass("hidden").prev().removeClass("hidden");
 				if(val == "vpp_group"){
 					resIdWrapper.prev().find(".input_label").text("거래 ID");
-				} else {
-					resIdWrapper.prev().find(".input_label").text("자원 ID");
 				}
+				// else {
+					// resIdWrapper.prev().find(".input_label").text("자원 ID");
+				// }
 			}
 
 			if( !isEmpty($("#newGroupName").val()) ){
@@ -253,49 +254,51 @@
 						});
 					}
 					
-					if (newGroupType == "dr_group"){
-						let option = {
-							url: apiHost + "/config/dr-groups?oid=" + oid,
-							type: 'post',
-							async: true,
-							dataType: 'json',
-							contentType: "application/json",
-							data: JSON.stringify(obj)
-						}
+					// if (newGroupType == "dr_group"){
+					// 	let option = {
+					// 		url: apiHost + "/config/dr-groups?oid=" + oid,
+					// 		type: 'post',
+					// 		async: true,
+					// 		dataType: 'json',
+					// 		contentType: "application/json",
+					// 		data: JSON.stringify(obj)
+					// 	}
 
-						Promise.resolve(returnAjaxRes(option)).then(res => {
-							if(!isEmpty(res)){
-								let promises = [];
-								let dgid = res.dgid;
-								if(selectedSiteId.length > 0){
-									$.each(selectedSiteId, function(index, el){
-										let siteObj = {
-											dr_group_id: dgid
-										};
+					// 	Promise.resolve(returnAjaxRes(option)).then(res => {
+					// 		if(!isEmpty(res)){
+					// 			let promises = [];
+					// 			let dgid = res.dgid;
+					// 			if(selectedSiteId.length > 0){
+					// 				$.each(selectedSiteId, function(index, el){
+					// 					let siteObj = {
+					// 						dr_group_id: dgid
+					// 					};
 
-										let siteOpt = {
-											url: apiHost + "/config/sites/" + $(this).data("value"),
-											type: 'patch',
-											async: true,
-											contentType: 'application/json; charset=UTF-8',
-											data: JSON.stringify(siteObj),
-										};
-										promises.push(Promise.resolve(returnAjaxRes(siteOpt)));
-									});
-									return Promise.all(promises).then(finalRes => {
-										$("#addGroupModal").modal("hide");
-										$("#resultSuccessMsg").text("DR 그룹이 추가 되었습니다.").removeClass("hidden");
-										$("#resultBtn").parent().addClass("hidden");
-										$("#resultModal").modal("show");
-										getGroupData(initModal);
-										setTimeout(function(){
-											$("#resultModal").modal("hide");
-										}, 1600);
-									});								
-								}
-							}
-						});
-					}	
+					// 					let siteOpt = {
+					// 						url: apiHost + "/config/sites/" + $(this).data("value"),
+					// 						type: 'patch',
+					// 						async: true,
+					// 						contentType: 'application/json; charset=UTF-8',
+					// 						data: JSON.stringify(siteObj),
+					// 					};
+					// 					promises.push(Promise.resolve(returnAjaxRes(siteOpt)));
+					// 				});
+					// 				return Promise.all(promises).then(finalRes => {
+					// 					$("#addGroupModal").modal("hide");
+					// 					$("#resultSuccessMsg").text("DR 그룹이 추가 되었습니다.").removeClass("hidden");
+					// 					$("#resultBtn").parent().addClass("hidden");
+					// 					$("#resultModal").modal("show");
+					// 					getGroupData(initModal);
+					// 					setTimeout(function(){
+					// 						$("#resultModal").modal("hide");
+					// 					}, 1600);
+					// 				});								
+					// 			}
+					// 		}
+					// 	});
+					// }	
+				
+				
 				}
 			// 2. Edit existing user info
 			} else {
@@ -500,64 +503,66 @@
 						});
 					}
 					
-					if(newGroupType === "dr_group"){
-						let editOption = {
-							url:  apiHost + "/config/dr-groups/" + rowData.dgid,
-							type: 'patch',
-							async: true,
-							dataType: 'json',
-							contentType: 'application/json; charset=UTF-8',
-							data: JSON.stringify(obj)
-						}
+					// if(newGroupType === "dr_group"){
+					// 	let editOption = {
+					// 		url:  apiHost + "/config/dr-groups/" + rowData.dgid,
+					// 		type: 'patch',
+					// 		async: true,
+					// 		dataType: 'json',
+					// 		contentType: 'application/json; charset=UTF-8',
+					// 		data: JSON.stringify(obj)
+					// 	}
 
-						Promise.resolve(returnAjaxRes(editOption)).then(res => {
-							let sitePromises = [];
-							$.each(rowData.sites, function(index, el){
-								// newSiteArr.push($(this).data("value"));
-								let emptyObj = {
-									dr_group_id: null
-								}
-								let option = {
-									url: apiHost + "/config/sites/" + el.sid,
-									type: 'patch',
-									async: true,
-									contentType: 'application/json; charset=UTF-8',
-									data: JSON.stringify(emptyObj),
-								}
-								sitePromises.push(Promise.resolve(returnAjaxRes(option)));
-							});
+					// 	Promise.resolve(returnAjaxRes(editOption)).then(res => {
+					// 		let sitePromises = [];
+					// 		$.each(rowData.sites, function(index, el){
+					// 			// newSiteArr.push($(this).data("value"));
+					// 			let emptyObj = {
+					// 				dr_group_id: null
+					// 			}
+					// 			let option = {
+					// 				url: apiHost + "/config/sites/" + el.sid,
+					// 				type: 'patch',
+					// 				async: true,
+					// 				contentType: 'application/json; charset=UTF-8',
+					// 				data: JSON.stringify(emptyObj),
+					// 			}
+					// 			sitePromises.push(Promise.resolve(returnAjaxRes(option)));
+					// 		});
 
-							Promise.all(sitePromises).then( res => {
-								let newSitePromises = [];
-								$.each(siteNameStr, function(index, el){
-									// newSiteArr.push($(this).data("value"));
-									let siteObj = {
-										dr_group_id: rowData.dgid
-									}
-									let option = {
-										url: apiHost + "/config/sites/" + $(this).data("value"),
-										type: 'patch',
-										async: true,
-										contentType: 'application/json; charset=UTF-8',
-										data: JSON.stringify(siteObj),
-									}
-									newSitePromises.push(Promise.resolve(returnAjaxRes(option)));
-								});
-								Promise.all(newSitePromises).then( finalRes => {
-									$("#addGroupModal").modal("hide");
-									$("#resultSuccessMsg").text("그룹 정보가 수정 되었습니다.").removeClass("hidden");
-									$("#resultBtn").parent().addClass("hidden");
-									$("#resultModal").modal("show");
-									getGroupData(initModal);
-									setTimeout(function(){
-										$("#resultModal").modal("hide");
-									}, 1600);
-								});
-							});
-						});
+					// 		Promise.all(sitePromises).then( res => {
+					// 			let newSitePromises = [];
+					// 			$.each(siteNameStr, function(index, el){
+					// 				// newSiteArr.push($(this).data("value"));
+					// 				let siteObj = {
+					// 					dr_group_id: rowData.dgid
+					// 				}
+					// 				let option = {
+					// 					url: apiHost + "/config/sites/" + $(this).data("value"),
+					// 					type: 'patch',
+					// 					async: true,
+					// 					contentType: 'application/json; charset=UTF-8',
+					// 					data: JSON.stringify(siteObj),
+					// 				}
+					// 				newSitePromises.push(Promise.resolve(returnAjaxRes(option)));
+					// 			});
+					// 			Promise.all(newSitePromises).then( finalRes => {
+					// 				$("#addGroupModal").modal("hide");
+					// 				$("#resultSuccessMsg").text("그룹 정보가 수정 되었습니다.").removeClass("hidden");
+					// 				$("#resultBtn").parent().addClass("hidden");
+					// 				$("#resultModal").modal("show");
+					// 				getGroupData(initModal);
+					// 				setTimeout(function(){
+					// 					$("#resultModal").modal("hide");
+					// 				}, 1600);
+					// 			});
+					// 		});
+					// 	});
 
 
-					}
+					// }
+				
+				
 				}
 
 			}
@@ -645,7 +650,8 @@
 		// 	Promise.all([ Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])) ]).then( res => {
 		Promise.resolve(returnAjaxRes(optionList[0])).then( res => {
 			let flat = [];
-			flat = [...res.dr_group, ...res.vpp_group, ...res.tag_group];
+			// flat = [...res.dr_group, ...res.vpp_group, ...res.tag_group];
+			flat = [...res.vpp_group, ...res.tag_group];
 			if(isEmpty(flat)) {
 				drawEmptyTable($("#groupTable"));
 			} else {
@@ -678,14 +684,16 @@
 						$("#validGroup").removeClass("hidden");
 					}
 
-				} else if(group === "dr_group"){
-					// console.log("dr_group===", res.dr_group )
-					if(res.dr_group.some(x => x.name == name)){
-						$("#invalidGroup").removeClass("hidden");
-					} else {
-						$("#validGroup").removeClass("hidden");
-					}
 				}
+				
+				// else if(group === "dr_group"){
+				// 	// console.log("dr_group===", res.dr_group )
+				// 	if(res.dr_group.some(x => x.name == name)){
+				// 		$("#invalidGroup").removeClass("hidden");
+				// 	} else {
+				// 		$("#validGroup").removeClass("hidden");
+				// 	}
+				// }
 				setTimeout(function(){
 					validateForm();
 				}, 200);
@@ -751,9 +759,14 @@
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex )  {
 							let groupType = "";
-							if(full.dgid){
-								return groupType = "DR 그룹";
-							} else if(full.vgid){
+							// if(full.dgid){
+							// 	return groupType = "DR 그룹";
+							// } else if(full.vgid){
+							// 	return groupType = "VPP 그룹";
+							// } else if(full.sgid){
+							// 	return groupType = "사업소 그룹";
+							// }
+							if(full.vgid){
 								return groupType = "VPP 그룹";
 							} else if(full.sgid){
 								return groupType = "사업소 그룹";
@@ -1023,9 +1036,15 @@
 					"mData": null,
 					"mRender": function ( data, type, full, rowIndex )  {
 						let groupType = "";
-						if(full.dgid){
-							return groupType = "DR 그룹";
-						} else if(full.vgid){
+						// if(full.dgid){
+						// 	return groupType = "DR 그룹";
+						// } else if(full.vgid){
+						// 	return groupType = "VPP 그룹";
+						// } else if(full.sgid){
+						// 	return groupType = "사업소 그룹";
+						// }
+
+						if (full.vgid){
 							return groupType = "VPP 그룹";
 						} else if(full.sgid){
 							return groupType = "사업소 그룹";
@@ -1355,11 +1374,12 @@
 							resIdWrapper.removeClass("hidden").prev().removeClass("hidden").find(".input_label").text("거래 ID");
 							newGroupType.prev().data("value", "vpp_group").html("VPP 그룹<span class='caret'></span>").prop("disabled", true);
 
-						} else if(rowData.dgid){
-							resIdWrapper.removeClass("hidden").prev().removeClass("hidden").find(".input_label").text("자원 ID");
-							newGroupType.prev().data("value", "dr_group").html("DR 그룹<span class='caret'></span>").prop("disabled", true);
-						
 						}
+						// else if(rowData.dgid){
+						// 	resIdWrapper.removeClass("hidden").prev().removeClass("hidden").find(".input_label").text("자원 ID");
+						// 	newGroupType.prev().data("value", "dr_group").html("DR 그룹<span class='caret'></span>").prop("disabled", true);
+						
+						// }
 					}
 
 					$("#addGroupModal").addClass("edit").modal("show");
@@ -1377,9 +1397,11 @@
 						groupType = "사업소 그룹";
 					} else if(popOverRowData.vgid){
 						groupType = "VPP 그룹";
-					} else if(popOverRowData.dgid){
-						groupType = "DR 그룹";
 					}
+					
+					// else if(popOverRowData.dgid){
+					// 	groupType = "DR 그룹";
+					// }
 					let title = '';
 					if(popOverRowData.shared == false){
 						title = "사업소 상세 정보 (공유)"
@@ -1583,7 +1605,7 @@
 					<li><a href="#">전체</a></li>
 					<li data-name="사업소 그룹" data-value=""><a href="#">사업소 그룹</a></li>
 					<li data-name="VPP 그룹" data-value=""><a href="#">VPP 그룹</a></li>
-					<li data-name="DR 그룹" data-value=""><a href="#">DR 그룹</a></li>
+					<!-- <li data-name="DR 그룹" data-value=""><a href="#">DR 그룹</a></li> -->
 				</ul>
 			</div>
 		</div>
@@ -1669,7 +1691,7 @@
 									<ul id="newGroupType" class="dropdown-menu">
 										<li data-name="사업소 그룹" data-value="tag_group"><a href="#">사업소 그룹</a></li>
 										<li data-name="VPP 그룹" data-value="vpp_group"><a href="#">VPP 그룹</a></li>
-					 					<li data-name="DR 그룹" data-value="dr_group"><a href="#">DR 그룹</a></li>
+					 					<!-- <li data-name="DR 그룹" data-value="dr_group"><a href="#">DR 그룹</a></li> -->
 									</ul>
 								</div>
 								<small class="hidden warning">그룹 유형을 선택해 주세요</small>

@@ -12,9 +12,9 @@
 		let accLevel = "";
 		let taskCategory = "";
 
-		// role: 1: 시스템관리자, 2: 일반
+		// [ role ]	1: 시스템관리자, 2: 일반
 		role == 1 ? accLevel = "시스템관리자" : accLevel = "일반";
-		// task : 0: 일반, 1:사무수탁, 2:자산운용, 3: 사업주
+		// [ task ] 0: 일반, 1:사무수탁, 2:자산운용, 3: 사업주
 		if(task == 0){
 			taskCategory = "일반"
 		} else if(task == 1){
@@ -393,21 +393,35 @@
 								</dl>
 							</li>
 						</c:if>
+
+						<%--
 						<c:if test="${fn:length(drList) > 0}">
 							<li>
 								<dl>
 									<dt></dt>
 									<dd>
 										<a href="#">DR 거래</a>
-										<ul>
+										<ul class="overflow-list">
 											<c:forEach var="dr" items="${drList}">
-												<li><a class="group-title" href="#">${dr.name}</a></li>
+												<li>
+													<a class="group-title" href="#">${dr.name}</a>
+													<ul>
+														<c:set var="groupSites" value="${dr.sites}"/>
+														<c:forEach var="groupSiteList" items="${groupSites}">
+															<li>
+																<a href="#" class="disabled">${groupSiteList.name}</a>
+																<!-- <a href="#" onclick="dashboardMove('site', 'sid', '${groupSiteList.sid}'); return false">${groupSiteList.name}</a> -->
+															</li>
+														</c:forEach>
+													</ul>
+												</li>
 											</c:forEach>
 										</ul>
 									</dd>
 								</dl>
 							</li>
 						</c:if>
+					--%>
 					</ul>
 				</c:if>
 				<ul>
@@ -501,12 +515,12 @@
 			<div class="nav_theme">
 				<div class="switcher">
 					<input type="radio" name="balance" value="light" id="light"
-					       class="switcher__input switcher__input--light"
-					       checked="" onClick="userTheme('light');">
+						   class="switcher__input switcher__input--light"
+						   checked="" onClick="userTheme('light');">
 					<label for="light" class="switcher__label">Light</label>
 					<input type="radio" name="balance" value="dark" id="dark"
-					       class="switcher__input switcher__input--dark"
-					       onClick="userTheme('dark');">
+						   class="switcher__input switcher__input--dark"
+						   onClick="userTheme('dark');">
 					<label for="dark" class="switcher__label">Dark</label>
 					<span class="switcher__toggle"></span>
 				</div>

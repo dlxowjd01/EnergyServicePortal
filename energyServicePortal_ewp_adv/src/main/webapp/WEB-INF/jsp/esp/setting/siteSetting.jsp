@@ -46,12 +46,12 @@
 
 		
 		// Validations
-		$("#newSiteName").on('keydown', function() {
+		$("#newSiteName").on("keydown", function() {
 			$("#invalidSite").addClass("hidden");
 			validateForm();
 		});
 
-		$("#newSiteName").on('keyup', function() {
+		$("#newSiteName").on("keyup", function() {
 			let warning = $("#validSite").parent().find(".warning");
 
 			$("#validSite").addClass("hidden")
@@ -85,13 +85,24 @@
 			}
 		});
 
-		$("#newCoord").on('keyup', function(e) {
+		$("#newCoord").on("keyup", function(e) {
 			// 	var re = /^[0-9] + (?:\,[0-9]+)*$/;
 			if( $(this).val().match(/[^\x00-\x80]/) ){
 				$(this).val("");
 			}
 		});
 
+
+
+		$("#newDrVol").on("input", function() {
+			let val = $(this).val();
+			if(isNaN(val)){
+				val = val.replace(/[^0-9\.\,]/g,'');
+				if(val.split('.').length>2) 
+					val =val.replace(/\.+$/,"");
+			}
+			$(this).val(val); 
+		});
 
 		$("#updateSiteForm").on("change", function(){
 			if(!$(this).is(".edit")){
@@ -210,8 +221,19 @@
 				newVoltName = $("#newVoltTypeList").prev().data("value");
 			}
 
-			let newPeakDemand = Number($("#newPeakDemand").val());
-			let newDrCharge = Number($("#newDrCharge").val());
+			let newPeakDemand = "";
+			if ($("#newPeakDemand").val().indexOf(',') > -1) {
+				newPeakDemand = $("#newPeakDemand").val().replace(/,/g, "");
+			} else {
+				newPeakDemand = $("#newPeakDemand").val();
+			}
+
+			let newDrCharge = "";
+			if ($("#newDrCharge").val().indexOf(',') > -1) {
+				newDrCharge = $("#newDrCharge").val().replace(/,/g, "");
+			} else {
+				newDrCharge = $("#newDrCharge").val();
+			}
 			let newInspection = Number($("#newInspection").prev().data("value"));
 			let newKepcoId = $("#newKepcoId").val();
 			let newISmartId = $("#newISmartId").val();
@@ -223,10 +245,16 @@
 			let newPrice = Number($("#newPrice").val());
 
 			// DR
-			let newDrObj = {}
-			let newDrResId = $("#newDrResIdList").prev().data("value");
-			let newDrVol = Number($("#drVol").val());
-			let newCblMethod = $("#cblList").prev().data("value");
+			// let newDrObj = {}
+			// let newDrResId = $("#newDrResIdList").prev().data("value");
+			// let newDrVol = "";
+			// if ($("#newDrVol").val().indexOf(',') > -1) {
+			// 	newDrVol = $("#newDrVol").val().replace(/,/g, "");
+			// } else {
+			// 	newDrVol = $("#newDrVol").val();
+			// }
+
+			let newCblMethod = $("#newCblList").prev().data("value");
 			let newDrRevShare = $("#newDrRevShare").val();
 
 			// VPP
@@ -274,11 +302,11 @@
 				if( !isEmpty(newSiteDetail) ){
 					siteObj.detail_info = newSiteDetail;
 				}
-				if( !isEmpty(newDrResId) ){
-					siteObj.dr_group_id = newDrResId;
-				}
+				// if( !isEmpty(newDrResId) ){
+				// 	siteObj.dr_group_id = newDrResId;
+				// }
 				if( !isEmpty(newVppResId) ){
-					siteObj.dr_group_id = newVppResId;
+					siteObj.vpp_group_id = newVppResId;
 				}
 				if ( !isEmpty(newStationId) ) {
 					siteObj.station_id = Number(newStationId);
@@ -337,18 +365,18 @@
 				}
 
 				// DR JSON
-				if( !isEmpty(newDrVol) ){
-					newDrObj.contract_capacity = newDrVol;
-				}
-				if( !isEmpty(newCblMethod) ){
-					newDrObj.cbl_method = newCblMethod;
-				}
-				if( !isEmpty(newDrRevShare) ){
-					newDrObj.cbl_method = newDrRevShare;
-				}
-				if( !isEmpty(newDrObj) ){
-					siteObj.dr_info = JSON.stringify(newDrObj);
-				}
+				// if( !isEmpty(newDrVol) ){
+				// 	newDrObj.contract_capacity = newDrVol;
+				// }
+				// if( !isEmpty(newCblMethod) ){
+				// 	newDrObj.cbl_method = newCblMethod;
+				// }
+				// if( !isEmpty(newDrRevShare) ){
+				// 	newDrObj.cbl_method = newDrRevShare;
+				// }
+				// if( !isEmpty(newDrObj) ){
+				// 	siteObj.dr_info = JSON.stringify(newDrObj);
+				// }
 
 				// VPP JSON
 
@@ -358,8 +386,6 @@
 				if( !isEmpty(newVppObj) ){
 					siteObj.vpp_info = JSON.stringify(newVppObj);
 				}
-
-				console.log("siteObj===", siteObj);
 
 				option = {
 					url: apiHost + '/config/sites?oid=' + oid,
@@ -423,11 +449,11 @@
 				if( !isEmpty(newSiteDetail)){
 					siteEditObj.detail_info = newSiteDetail;
 				}
-				if( !isEmpty(newDrResId) && td.eq(8).text() != newDrResId ){
-					siteEditObj.dr_group_id = newDrResId;
-				}
+				// if( !isEmpty(newDrResId) && td.eq(8).text() != newDrResId ){
+				// 	siteEditObj.dr_group_id = newDrResId;
+				// }
 				if( !isEmpty(newVppResId) && td.eq(9).text() != newVppResId ){
-					siteEditObj.dr_group_id = newVppResId;
+					siteEditObj.vpp_group_id = newVppResId;
 				}
 				if ( !isEmpty(newStationId) ) {
 					siteEditObj.station_id = Number(newStationId);
@@ -486,18 +512,18 @@
 				}
 
 				// DR JSON
-				if( !isEmpty(newDrVol) ){
-					newDrObj.contract_capacity = newDrVol;
-				}
-				if( !isEmpty(newCblMethod) ){
-					newDrObj.cbl_method = newCblMethod;
-				}
-				if( !isEmpty(newDrRevShare) ){
-					newDrObj.cbl_method = newDrRevShare;
-				}
-				if( !isEmpty(newDrObj) ){
-					siteEditObj.dr_info = JSON.stringify(newDrObj);
-				}
+				// if( !isEmpty(newDrVol) ){
+				// 	newDrObj.contract_capacity = newDrVol;
+				// }
+				// if( !isEmpty(newCblMethod) ){
+				// 	newDrObj.cbl_method = newCblMethod;
+				// }
+				// if( !isEmpty(newDrRevShare) ){
+				// 	newDrObj.cbl_method = newDrRevShare;
+				// }
+				// if( !isEmpty(newDrObj) ){
+				// 	siteEditObj.dr_info = JSON.stringify(newDrObj);
+				// }
 
 				// VPP JSON
 
@@ -571,7 +597,6 @@
 						let levelArr = [];
 						let contactNameArr = [];
 						let contactNumArr = [];
-
 						let selectedLevel = alarmLvl.eq(i).parent().find("input:checked");
 						let selectedContactName = contactName.eq(i).parent().find("input:checked");
 
@@ -580,7 +605,6 @@
 						});
 
 						if( !contactNum.eq(i).hasClass("disabled") ){
-							console.log()
 							let nonUserObj = {};
 							nonUserObj.level = levelArr;
 							nonUserObj.name = contactName.eq(i).parent().next().find("input[type='text']").val();
@@ -823,8 +847,8 @@
 				// 5. 발전 용량
 				// 6. ESS 용량 (PCS)
 				// 7. ESS 용량(BMS)
-				// 8. DR 자원 코드
-				// 9. Vpp 자원 코드 ( virtual power plant )
+				// 8. DR 자원 코드 => 이름
+				// 9. Vpp 자원 코드 ( virtual power plant )  => 이름
 				// 10. 수정/조회 권한
 				// 11. 알람 설정
 
@@ -931,11 +955,11 @@
 							"mData": "bmsCapacity",
 						},
 						{
-							"sTitle": "DR 자원 코드",
+							"sTitle": "DR 자원 ID",
 							"mData": "drName",
 						},
 						{
-							"sTitle": "VPP 자원코드",
+							"sTitle": "VPP 자원 ID",
 							"mData": "vppName",
 						},
 						{
@@ -1111,7 +1135,6 @@
 		}
 	}
 
-
 	function nonAdminTable(mySites, vppNameData, userSites, callback) {
 		let newArr = [];
 
@@ -1168,6 +1191,8 @@
 					}
 				}
 
+		mySites.map((item, index) => {
+		let found = userSites.findIndex( x => x.sid === item.sid);
 
 				item.role = userSites[found].role;
 		
@@ -1252,8 +1277,8 @@
 			// 5. 발전 용량
 			// 6. ESS 용량 (PCS)
 			// 7. ESS 용량(BMS)
-			// 8. DR 자원 코드
-			// 9. Vpp 자원 코드 ( virtual power plant )
+			// 8. DR 자원 코드 => 이름
+			// 9. Vpp 자원 코드 ( virtual power plant ) => 이름
 			// 10. 수정/조회 권한
 			// 11. 알람 설정
 			var siteReadOnlyTable = $('#siteTable').DataTable({
@@ -1321,11 +1346,11 @@
 						"mData": "bmsCapacity",
 					},
 					{
-						"sTitle": "DR 자원 코드",
+						"sTitle": "DR 자원 ID",
 						"mData": "drName",
 					},
 					{
-						"sTitle": "VPP 자원코드",
+						"sTitle": "VPP 자원 ID",
 						"mData": "vppName",
 					},
 					{
@@ -1449,7 +1474,6 @@
 
 	}
 
-
 	function drawEmptyTable(target){
 		var t = target.DataTable({
 			"table-layout": "fixed",
@@ -1495,11 +1519,11 @@
 					"data": null,
 				},
 				{
-					"title": "DR 자원 코드",
+					"title": "DR 자원 ID",
 					"data": null,
 				},
 				{
-					"title": "VPP 자원코드",
+					"title": "VPP 자원 ID",
 					"data": null,
 				},
 				{
@@ -1612,7 +1636,7 @@
 					idArr = [...$(this).data("plan-id").split(",")];
 					vArr = [...$(this).data("vol-type").split(",")];
 					utilArr = [...$(this).data("util-name").split(",")];
-
+					$("#newVoltWarning").removeClass("hidden");
 					if(btn.is(":disabled")){
 						btn.prop("disabled", false)
 					}
@@ -1629,7 +1653,6 @@
 							validateForm();
 						}, 600);
 					});
-					$("#newVoltWarning").removeClass("hidden");
 				} else {
 					btn.html("<span class='caret'></span>")
 					if(btn.not(":disabled")){
@@ -1788,34 +1811,35 @@
 		let newDrResIdList = $("#newDrResIdList");
 		let newVppResIdList = $("#newVppResIdList");
 		// modal DR info!!!
-		if(!isEmpty(res.dr_group)){
-			newDrResIdList.empty();
-			let strDr = '';
-			$.each(res.dr_group, function(index, el){
-				strDr += '<li data-value="' + el.dgid + '"><a href="#" tabindex="-1">' +  el.resourceId + '</a></li>'
-			});
 
-			$("#newVppRevShare").prop('disabled', false).val("-");
+		// if(!isEmpty(res.dr_group)){
+		// 	newDrResIdList.empty();
+		// 	let strDr = '';
+		// 	$.each(res.dr_group, function(index, el){
+		// 		strDr += '<li data-value="' + el.dgid + '" data-dr-res-id="' + el.resourceId + '"><a href="#" tabindex="-1">' +  el.name + '</a></li>'
+		// 	});
 
-			newDrResIdList.append(strDr);
-			$("#sectionDRInfo input").each(function(){
-				$(this).prop('disabled', false);
-			});
-			$("#cblList").prev().prop("disabled", false);
-		} else {
-			newDrResIdList.prev().prop("disabled", true).html("등록된 DR거래 자원 ID가 없습니다.<span class='caret'></span>");
-			$("#sectionDRInfo input").each(function(){
-				$(this).prop('disabled', true).val("-");
-			})
-			$("#cblList").prev().prop("disabled", true).html("-<span class='caret'></span>");
-		}
+		// 	$("#newVppRevShare").prop('disabled', false).val("-");
+
+		// 	newDrResIdList.append(strDr);
+		// 	$("#sectionDRInfo input").each(function(){
+		// 		$(this).prop('disabled', false);
+		// 	});
+		// 	$("#newCblList").prev().prop("disabled", false);
+		// } else {
+		// 	newDrResIdList.prev().prop("disabled", true).html("등록된 DR거래 자원 ID가 없습니다.<span class='caret'></span>");
+		// 	$("#sectionDRInfo input").each(function(){
+		// 		$(this).prop('disabled', true).val("-");
+		// 	})
+		// 	$("#newCblList").prev().prop("disabled", true).html("-<span class='caret'></span>");
+		// }
 
 		// modal VPP info!!!
 		if(!isEmpty(res.vpp_group)){
 			newVppResIdList.empty();
 			let strVpp = '';
 			$.each(res.vpp_group, function(index, el){
-				strVpp += '<li data-value="' + el.vgid + '"><a href="#" tabindex="-1">' + el.resourceId + '</a></li>'
+				strVpp += '<li data-value="' + el.vgid + '" data-vpp-res-id="' + el.resourceId + '"><a href="#" tabindex="-1">' + el.name + '</a></li>'
 			});
 			// dropdown
 			newVppResIdList.append(strVpp);
@@ -1828,7 +1852,6 @@
 		setDropdownValue(propertyDropdown);
 		setDropdownValue(dropdown);
 	}
-
 
 	function initModal(){
 		let form = $("#updateSiteForm");
@@ -1877,7 +1900,7 @@
 			titleAdd.removeClass("hidden").next().addClass("hidden");
 			required.hasClass("no-symbol") ? required.removeClass("no-symbol") : null;
 			addBtn.text("추가");
-			$('#newSiteName').prop('disabled', false);
+			newSiteName.prop('disabled', false).parent().removeClass("disabled");
 			$("#newVoltTypeList").prev().prop("disabled", true).data("value", "").html("선택<span class='caret'></span>");
 			$("#addSiteModal").removeClass("edit").modal("show");
 		} else {
@@ -1890,13 +1913,13 @@
 
 			// EDIT MODAL!!!
 			if(option == "edit") {
-				console.log("rowData.role===", rowData.role)
+
 				if(!isEmpty(rowData.role) && rowData.role != 1){
 					let input = form.find("input");
 					let dropdownBtn = form.find(".dropdown-toggle");
 
 					input.each(function(){
-						$(this).prop("disabled", true);
+						$(this).prop("disabled", true).parent().addClass("disabled");
 					});
 
 					$.each(dropdownBtn, function(index, element){
@@ -1950,14 +1973,27 @@
 				// Utility info
 				if( !isEmpty(rowData.utility)) {
 					Promise.resolve(JSON.parse(rowData.utility)).then( util => {
+						let sectionPowerMarketInfo = $("#sectionPowerMarketInfo");
+						let newPeakDemand = $("#newPeakDemand");
+						let newDrCharge = $("#newDrCharge");
 						let utilPlanName = util.utility_plan_name;
-						// console.log("util==", util);
-						$("#newContractList").prev().data({"plan-id": util.utility_plan_id, "value": utilPlanName }).html(utilPlanName + '<span class="caret"></span>');
-					
+
+						console.log("util==", util);
+						if(!isEmpty(util.utility_plan_id)){
+							$("#newContractList").prev().data({"plan-id": util.utility_plan_id, "value": utilPlanName }).html(utilPlanName + '<span class="caret"></span>');
+						} else {
+							$("#newContractList").prev().html('선택<span class="caret"></span>');
+						}
+
 						if(!isEmpty(rowData.role) && rowData.role == 2){
 							$("#newVoltTypeList").prev().prop("disabled", true);
 						} else {
-							$("#newVoltTypeList").prev().prop("disabled", false);
+							sectionPowerMarketInfo.find(".dropdown-toggle:not(.optional)").each(function(index, el){
+								$(this).prop("disabled", false);
+							});
+							sectionPowerMarketInfo.find("input[type='text']").each(function(index, el){
+								$(this).prop("disabled", false).parent().removeClass("disabled");
+							});
 						}
 
 						if(!isEmpty(util.volt_name) ){
@@ -1967,8 +2003,13 @@
 							$("#newVoltTypeList").prev().prop("disabled", true).html('선택<span class="caret"></span>');
 						}
 
-						$("#newPeakDemand").val(util.peak_demand);
-						$("#newDrCharge").val(util.demand_charge);
+						if(!isEmpty(util.peak_demand) ){
+							formatUnit(newPeakDemand, util.peak_demand);
+						}
+
+						if(!isEmpty(util.demand_charge) ){
+							formatUnit(newDrCharge, util.demand_charge);
+						}
 
 						if(util.metering_day == 0){
 							$("#newInspection").prev().data("value", String(util.metering_day)).html( '말일<span class="caret"></span>');
@@ -1997,45 +2038,47 @@
 					$("#newPrice").val(priceModel.price).html( priceModel.price + '<span class="caret"></span>');
 				}
 				// DR info
-				let sectionDRInfo = $("#sectionDRInfo");
-				let sectionDrDropdown = sectionDRInfo.find(".dropdown-toggle");
-				let sectionDrInput = sectionDRInfo.find("input");
+// 				let sectionDRInfo = $("#sectionDRInfo");
+// 				let sectionDrDropdown = sectionDRInfo.find(".dropdown-toggle");
+// 				let sectionDrInput = sectionDRInfo.find("input[type='text']");
 
-				if( !isEmpty(rowData.dr_group_id)) {
-					$("#newDrResIdList").prev().data("value", rowData.dr_group_id).html(rowData.drName + "<span class='caret'></span>");
-					sectionDrDropdown.each(function(item, index){
-						// console.log("index---", index)
-						$(this).prop("disabled", false);
-					});
-					sectionDrInput.each(function(item, index){
-						$(this).prop("disabled", false);
-					});
-					if(!isEmpty(rowData.dr_info)){
-						let dr = JSON.parse(rowData.dr_info);
-						// console.log("dr===", dr);
-						if( !isEmpty(dr.contract_capacity)) {
-							$("#drVol").val(dr.contract_capacity);
-						}
-						if( !isEmpty(dr.cbl_method)) {
-							$("#cblList").prev().html(dr.cbl_method + "<span class='caret'></span>");
-						}
-						if( !isEmpty(dr.profile_share)) {
-							$("#newDrRevShare").val(dr.profile_share);
-						}
-					}
-				} else {
-					sectionDrDropdown.each(function(item, index){
-						$(this).prop("disabled", true).html("선택<span class='caret'></span>");
-					});
-					sectionDrInput.each(function(item, index){
-						$(this).prop("disabled", true).val("");
-					});
-				}
+// 				if( !isEmpty(rowData.dr_group_id)) {
+// 					$("#newDrResIdList").prev().data("value", rowData.dr_group_id).html(rowData.drName + "<span class='caret'></span>");
+// 					sectionDrDropdown.each(function(item, index){
+// 						$(this).prop("disabled", false);
+// 					});
+
+// 					setTimeout(function(){
+// 						sectionDrInput.prop('disabled', false)
+// 					}, 400);
+// ;
+// 					if(!isEmpty(rowData.dr_info)){
+// 						let dr = JSON.parse(rowData.dr_info);
+// 						// console.log("dr===", dr);
+// 						if( !isEmpty(dr.contract_capacity)) {
+// 							$("#newDrVol").val(dr.contract_capacity);
+// 						}
+// 						if( !isEmpty(dr.cbl_method)) {
+// 							$("#newCblList").prev().html(dr.cbl_method + "<span class='caret'></span>");
+// 						}
+// 						if( !isEmpty(dr.profile_share)) {
+// 							$("#newDrRevShare").val(dr.profile_share);
+// 						}
+// 					}
+// 				} else {
+// 					console.log("no dr grou id---")
+// 					sectionDrDropdown.each(function(item, index){
+// 						$(this).prop("disabled", true).html("선택<span class='caret'></span>");
+// 					});
+// 					sectionDrInput.each(function(item, index){
+// 						$(this).prop("disabled", true).val("");
+// 					});
+// 				}
 
 				// VPP info
 				let sectionVppInfo = $("#sectionVppInfo");
 				let sectionVppDropdown = sectionVppInfo.find(".dropdown-toggle");
-				let sectionVppInput = sectionDRInfo.find("input");
+				let sectionVppInput = sectionVppInfo.find("input");
 
 				if( !isEmpty(rowData.vpp_group_id)) {
 					$("#newVppResIdList").prev().data("value", rowData.vpp_group_id).html(rowData.vppName + "<span class='caret'></span>");
@@ -2050,7 +2093,6 @@
 						// console.log("vpp===", vpp);
 
 						if( !isEmpty(rowData.vpp_info)) {
-							console.log("vpp profile_share NOT empty")
 							$("#newVppRevShare").val(vpp.profile_share);
 						}
 					}
@@ -2059,7 +2101,7 @@
 						$(this).prop("disabled", true).html("선택<span class='caret'></span>");
 					});
 					sectionVppInput.each(function(item, index){
-						$(this).prop("disabled", true).val("");
+						$(this).prop("disabled", true).val("").parent().addClass("disabled");
 					});
 				}
 
@@ -2105,6 +2147,197 @@
 
 	}
 
+
+	function checkSiteId(userInput){
+		if(isEmpty(userInput)) return false;
+		
+		$("#validSite").addClass("hidden").parent().find(".warning").addClass("hidden");
+		let id = userInput.toString();
+
+		let siteList = '${siteList}';
+		siteList = JSON.parse(siteList);
+		if(!isEmpty(siteList)) {
+			// console.log("siteList==", siteList)
+			if(siteList.some(x => x.name == id)){
+				$("#invalidSite").removeClass("hidden");
+				// console.log("match==")
+			} else {
+				$("#validSite").removeClass("hidden");
+				// console.log("no match==")
+			}
+		} else {
+			$("#validSite").removeClass("hidden");
+		}
+		validateForm();
+
+	}
+
+	function validateForm(){
+		if(!$("#addSiteModal").hasClass('edit')){
+			if(!isEmpty($("#newContractList").prev().data("vol-type"))){
+				if( ( !isEmpty($("#newVoltTypeList").prev().data("value")) ) &&  ($("#validSite:not('.hidden')").length > 0 ) && (!isEmpty($("#newCityList").prev().data("value"))) && (!isEmpty($("#newResList").prev().data("value"))) ){
+					$("#addSiteBtn").prop("disabled", false);
+				} else {
+					$("#newVoltWarning").removeClass("hidden");
+					$("#addSiteBtn").prop("disabled", true);
+				}
+			} else {
+				if( ($("#validSite:not('.hidden')").length > 0 ) && (!isEmpty($("#newCityList").prev().data("value"))) && (!isEmpty($("#newResList").prev().data("value"))) ){
+					$("#addSiteBtn").prop("disabled", false);
+				} else {
+					$("#addSiteBtn").prop("disabled", true);
+				}
+			}
+		} else {
+			$("#addSiteBtn").prop("disabled", false);
+		}
+
+	}
+
+	// function selectRow(dataTable) {
+	// 	if ($(this).hasClass("selected")) {
+	// 		$(this).removeClass("selected");
+	// 	} else {
+	// 		dataTable.$("tr.selected").removeClass("selected");
+	// 		$(this).addClass("selected");
+	// 	}
+	// }
+
+
+	function showSubgroup (self){
+		let target = $(self).parent().prev();
+		let upperGroup = $("#alarmTable .device-type").not(parent).toArray();
+		let tr = $(self).parents().closest("tr");
+		let subGroup = $(self).data("subgroup");
+		let menuItem = tr.find("td:nth-of-type(2) .dropdown-menu li");
+		menuItem.removeClass("hidden");
+
+		let found = upperGroup.findIndex( x => $(x).text() == target.text() );
+		if(found > -1) {	
+			$("#duplicatedGroup").removeClass("hidden");
+			setTimeout(function(){
+				target.data({"value": "", "did" : "" }).html('선택<span class="caret"></span>');
+				$("#duplicatedGroup").addClass("hidden");
+			}, 1600);
+		}
+		// $.each(menuItem, function(index, el){
+		if (subGroup.indexOf(',') > -1) {
+			let searchArr = [...subGroup.split(",")];
+			let val = menuItem.data("value");
+			let arr = [];
+			menuItem.addClass("hidden");
+			console.log("searchArr===", searchArr)
+			$.each(menuItem, function(index, el){
+				let found = searchArr.findIndex ( x => x == $(this).data("value"));
+				if(found > -1){
+					$(this).removeClass("hidden");
+					arr.push($(this).data("value"))
+				}
+			});
+
+			console.log("arr---", arr)
+
+		} else {
+			$.each(menuItem, function(index, el){
+				if(subGroup == $(this).data("value")){
+					$(this).removeClass("hidden").siblings().addClass("hidden");
+				}
+			});
+		}
+	}
+
+	function groupBy (objectArray, property) {
+		return objectArray.reduce(function (acc, obj) {
+			var key = obj[property];
+			if (!acc[key]) {
+				acc[key] = [];
+			}
+			acc[key].push(obj);
+			return acc;
+		}, {});
+	}
+
+	function removeDuplicates(data, key) {
+		return [ ...new Map( data.map(x => [key(x), x]) ).values() ];
+	};
+
+	//  using object mutation
+	// const uniqByProp = prop => arr =>
+	// 	Object.values(
+	// 		arr.reduce(
+	// 			(acc, item) => (
+	// 				item && item[prop] && (acc[item[prop]] = item), acc
+	// 			), // using object mutation (faster)
+	// 		{}
+	// 	)
+	// );
+
+	// const subGroup = copy.filter((v,i,a)=> a.findIndex(t=>(t.name === v.name))===i);
+
+
+	function addNewInput(self){
+		// let almTable = $("#alarmTable").DataTable();
+		// let col = almTable.column(5);
+		// col.visible( ! col.visible() );
+		let parent = $(self).parent().parent();
+		let num = $(self).parent().attr("id").match(/\d+/)[0];
+		let input = parent.next();
+		let alarmLvl = $(self).parents().closest("tr").find("td:nth-of-type(3) .dropdown");
+		let phone = $(self).parents().closest("tr").find("td:nth-of-type(5) input[type='text']");
+		let btnGroup = $(self).parents().closest("tr").find("td:nth-of-type(6) .flex_start");
+
+		$(self).siblings().find("input:checked").prop("checked", false);
+		input.toggleClass("hidden");
+
+		$.each(phone, function(index, el){
+			if($(this).attr("name").match(/\d+/)[0] == num){
+				$(this).prop("disabled", false).val("").parent().removeClass("disabled").addClass("mb-52");
+				alarmLvl.eq(index).addClass("mb-52");
+				btnGroup.eq(index).addClass("mb-52");
+			}
+		});
+
+	}
+
+	function removeNewInput(self){
+		let parent = $(self).parent().parent().next();
+		let num = $(self).parent().attr("id").match(/\d+/)[0];
+		let alarmLvl = $(self).parents().closest("tr").find("td:nth-of-type(3) .dropdown");
+
+		let phone = $(self).parents().closest("tr").find("td:nth-of-type(5) input[type='text']");
+		let btnGroup = $(self).parents().closest("tr").find("td:nth-of-type(6) .flex_start");
+
+		$(self).siblings().removeClass("hidden");
+		parent.addClass("hidden");
+
+		$.each(phone, function(index, el){
+			if($(this).attr("name").match(/\d+/)[0] == num){
+				let displayText = "";
+				let matchedNum = $(self).find("input[type='checkbox']").data("contact-num");
+				let selected = $(self).parent().text();
+
+				if(selected != "선택"){
+					if($(self).siblings().find("input:checked").length>0){
+						if(isEmpty(matchedNum)){
+							displayText = "번호 없음" + " 외 " + String($(self).siblings().find("input:checked").length) + "개";
+						} else {
+							displayText = matchedNum + " 외 " + String($(self).siblings().find("input:checked").length) + "개";
+						}
+					} else {
+						displayText = matchedNum;
+					}
+				} else {
+					displayText = "";
+				}
+
+				$(this).prop("disabled", true).val(displayText).parent().addClass("disabled").removeClass("mb-52");
+				alarmLvl.eq(index).removeClass("mb-52");
+				btnGroup.eq(index).removeClass("mb-52");
+			}
+		});
+
+	}
+	
 	function getAlarmTable(alarmData, userData){
 		let alarmList = [];
 		let userType = "";
@@ -2812,201 +3045,6 @@
 	
 	}
 
-
-	function checkSiteId(userInput){
-		if(isEmpty(userInput)) return false;
-		
-		$("#validSite").addClass("hidden").parent().find(".warning").addClass("hidden");
-		let id = userInput.toString();
-
-		let siteList = '${siteList}';
-		siteList = JSON.parse(siteList);
-		if(!isEmpty(siteList)) {
-			// console.log("siteList==", siteList)
-			if(siteList.some(x => x.name == id)){
-				$("#invalidSite").removeClass("hidden");
-				// console.log("match==")
-			} else {
-				$("#validSite").removeClass("hidden");
-				// console.log("no match==")
-			}
-		} else {
-			$("#validSite").removeClass("hidden");
-		}
-		validateForm();
-
-	}
-
-	function validateForm(){
-		if(!$("#addSiteModal").hasClass('edit')){
-			if(!isEmpty($("#newContractList").prev().data("vol-type"))){
-				if( ( !isEmpty($("#newVoltTypeList").prev().data("value")) ) &&  ($("#validSite:not('.hidden')").length > 0 ) && (!isEmpty($("#newCityList").prev().data("value"))) && (!isEmpty($("#newResList").prev().data("value"))) ){
-					$("#addSiteBtn").prop("disabled", false);
-				} else {
-					$("#newVoltWarning").removeClass("hidden");
-					$("#addSiteBtn").prop("disabled", true);
-				}
-			} else {
-				if( ($("#validSite:not('.hidden')").length > 0 ) && (!isEmpty($("#newCityList").prev().data("value"))) && (!isEmpty($("#newResList").prev().data("value"))) ){
-					$("#addSiteBtn").prop("disabled", false);
-				} else {
-					$("#addSiteBtn").prop("disabled", true);
-				}
-			}
-		} else {
-			$("#addSiteBtn").prop("disabled", false);
-		}
-
-	}
-
-	// function selectRow(dataTable) {
-	// 	if ($(this).hasClass("selected")) {
-	// 		$(this).removeClass("selected");
-	// 	} else {
-	// 		dataTable.$("tr.selected").removeClass("selected");
-	// 		$(this).addClass("selected");
-	// 	}
-	// }
-
-
-	function showSubgroup (self){
-		let target = $(self).parent().prev();
-		let upperGroup = $("#alarmTable .device-type").not(parent).toArray();
-		let tr = $(self).parents().closest("tr");
-		let subGroup = $(self).data("subgroup");
-		let menuItem = tr.find("td:nth-of-type(2) .dropdown-menu li");
-		menuItem.removeClass("hidden");
-
-		console.log("target===", target);
-		let found = upperGroup.findIndex( x => $(x).text() == target.text() );
-		if(found > -1) {	
-			$("#duplicatedGroup").removeClass("hidden");
-			setTimeout(function(){
-				target.data({"value": "", "did" : "" }).html('선택<span class="caret"></span>');
-				$("#duplicatedGroup").addClass("hidden");
-			}, 1600);
-		}
-		// $.each(menuItem, function(index, el){
-		if (subGroup.indexOf(',') > -1) {
-			let searchArr = [...subGroup.split(",")];
-			let val = menuItem.data("value");
-			let arr = [];
-			menuItem.addClass("hidden");
-			console.log("searchArr===", searchArr)
-			$.each(menuItem, function(index, el){
-				let found = searchArr.findIndex ( x => x == $(this).data("value"));
-				if(found > -1){
-					$(this).removeClass("hidden");
-					arr.push($(this).data("value"))
-				}
-			});
-
-			console.log("arr---", arr)
-
-		} else {
-			$.each(menuItem, function(index, el){
-				if(subGroup == $(this).data("value")){
-					$(this).removeClass("hidden").siblings().addClass("hidden");
-				}
-			});
-		}
-	}
-
-
-	function groupBy (objectArray, property) {
-		return objectArray.reduce(function (acc, obj) {
-			var key = obj[property];
-			if (!acc[key]) {
-				acc[key] = [];
-			}
-			acc[key].push(obj);
-			return acc;
-		}, {});
-	}
-
-	function removeDuplicates(data, key) {
-		return [ ...new Map( data.map(x => [key(x), x]) ).values() ];
-	};
-
-	//  using object mutation
-	// const uniqByProp = prop => arr =>
-	// 	Object.values(
-	// 		arr.reduce(
-	// 			(acc, item) => (
-	// 				item && item[prop] && (acc[item[prop]] = item), acc
-	// 			), // using object mutation (faster)
-	// 		{}
-	// 	)
-	// );
-
-	// const subGroup = copy.filter((v,i,a)=> a.findIndex(t=>(t.name === v.name))===i);
-
-
-	function addNewInput(self){
-		// let almTable = $("#alarmTable").DataTable();
-		// let col = almTable.column(5);
-		// col.visible( ! col.visible() );
-		let parent = $(self).parent().parent();
-		let num = $(self).parent().attr("id").match(/\d+/)[0];
-		let input = parent.next();
-		let alarmLvl = $(self).parents().closest("tr").find("td:nth-of-type(3) .dropdown");
-		let phone = $(self).parents().closest("tr").find("td:nth-of-type(5) input[type='text']");
-		let btnGroup = $(self).parents().closest("tr").find("td:nth-of-type(6) .flex_start");
-
-		$(self).siblings().find("input:checked").prop("checked", false);
-		input.toggleClass("hidden");
-
-		$.each(phone, function(index, el){
-			if($(this).attr("name").match(/\d+/)[0] == num){
-				$(this).prop("disabled", false).val("").parent().removeClass("disabled").addClass("mb-52");
-				alarmLvl.eq(index).addClass("mb-52");
-				btnGroup.eq(index).addClass("mb-52");
-			}
-		});
-
-	}
-
-	function removeNewInput(self){
-		let parent = $(self).parent().parent().next();
-		let num = $(self).parent().attr("id").match(/\d+/)[0];
-		let alarmLvl = $(self).parents().closest("tr").find("td:nth-of-type(3) .dropdown");
-
-		let phone = $(self).parents().closest("tr").find("td:nth-of-type(5) input[type='text']");
-		let btnGroup = $(self).parents().closest("tr").find("td:nth-of-type(6) .flex_start");
-
-		$(self).siblings().removeClass("hidden");
-		parent.addClass("hidden");
-
-		$.each(phone, function(index, el){
-			if($(this).attr("name").match(/\d+/)[0] == num){
-				let displayText = "";
-				let matchedNum = $(self).find("input[type='checkbox']").data("contact-num");
-				let selected = $(self).parent().text();
-
-				if(selected != "선택"){
-					if($(self).siblings().find("input:checked").length>0){
-						if(isEmpty(matchedNum)){
-							displayText = "번호 없음" + " 외 " + String($(self).siblings().find("input:checked").length) + "개";
-						} else {
-							displayText = matchedNum + " 외 " + String($(self).siblings().find("input:checked").length) + "개";
-						}
-					} else {
-						displayText = matchedNum;
-					}
-				} else {
-					displayText = "";
-				}
-
-				$(this).prop("disabled", true).val(displayText).parent().addClass("disabled").removeClass("mb-52");
-				alarmLvl.eq(index).removeClass("mb-52");
-				btnGroup.eq(index).removeClass("mb-52");
-			}
-		});
-
-	}
-
-
-
 	function updateAlarmTable(self, option){		
 		let tr = self.parents().closest("tr");
 		let td = tr.find("td");
@@ -3306,11 +3344,72 @@
 		$(self).parent().prev().data("did", $(self).data("did"));
 	}
 
-	// function removeRow(self){
-	// 	$(self).parents().closest("tr").remove();
-	// 	console.log("removeRow===");
-	// }
-		
+
+	function truncateNonDigit (evt, self, option){
+		let val = $(self).val();
+		if(option) {
+			$(self).val(val.replace(/[^0-9\.]/g,''));
+		} else {
+			$(self).val(val.replace(/[^0-9\.\,]/g,''));
+		}
+	}
+
+	function formatUnit(self, data){
+		let val = "";
+		if(isEmpty(data)){
+			val = $(self).val();
+			if(typeof val == "number"){
+				val = String(val);
+			}
+		} else {
+			val = data;
+			if(typeof val == "number"){
+				val = String(val);
+			}
+		}
+		if(!isEmpty(val)){
+			if(val.indexOf('.') > -1){
+				let temp = val.split(".");
+				if (temp[0].length >= 5) {
+					if(temp[0].indexOf(',') > -1){
+						temp[0] = temp[0].replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+					// temp[0] = temp[0].replace(/(\d)(?=(\d{3})+$)/g, '$1,');
+					} else {
+						temp[0] = temp[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+					}
+
+				}
+				if (temp[1] && temp[1].length > 3) {
+					temp[1] = temp[1].replace(/(\d)(?=(\d{3})+$)/g, '');
+				}
+				temp = temp.join('.');
+				$(self).val(temp);
+			} else {
+				if (val.length >= 5) {
+					if(val.indexOf(',') > -1){
+						val = val.replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+					} else {
+						val = val.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+					}
+					$(self).val(val);
+				}
+			}
+		}
+	}
+
+	function formatRatio(self) {
+		let val = $(self).val();
+		if(val.indexOf('.') > -1){
+			let temp = val.split(".");
+			if(Number(temp[0]) > 100 ) {
+				$(self).val("100");
+			}
+		} else {
+			if(Number(val) > 100 ) {
+				$(self).val("100");
+			}
+		}
+	}
 
 </script>
 
@@ -3495,7 +3594,7 @@
 <div class="modal fade" id="addSiteModal" tabindex="-1" role="dialog" aria-labelledby="addSiteModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-custom-xl">
 		<div class="modal-content site-modal-content">
-			<div id="titleAdd" class="modal-header mb-10"><h1>사업소 추가<span class="required px-4 fr">필수 입력 항목</span></h1></div>
+			<div id="titleAdd" class="modal-header mb-10"><h1>사업소 추가<span class="required fr">필수 입력 항목</span></h1></div>
 			<div id="titleEdit" class="modal-header"><h1>사업소 정보 수정</h1></div>
 			<div class="modal-body">
 				<div class="container-fluid">
@@ -3622,7 +3721,7 @@
 						</section>
 
 						<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-							<section id="sectionPowerBillInfo">
+							<section id="sectionPowerMarketInfo">
 								<h2 class="stit">전력 구매 정보</h2>
 								<div class="row">
 									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">계약 종별</span></div>
@@ -3633,7 +3732,7 @@
 												<ul id="newContractList" class="dropdown-menu"></ul>
 											</div>
 											<div class="dropdown w-100">
-												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택" disabled>선택<span class="caret"></span></button>
+												<button type="button" class="dropdown-toggle optional" data-toggle="dropdown" data-name="선택" disabled>선택<span class="caret"></span></button>
 												<ul id="newVoltTypeList" class="dropdown-menu"></ul>
 											</div>
 										</div>
@@ -3642,12 +3741,12 @@
 									
 									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">계약 전력</span></div>
 									<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
-										<div class="tx_inp_type"><input type="text" name="new_peak_demand" id="newPeakDemand" class="pr-36" placeholder="입력" maxlength="10"><span class="unit">kW</span></div>
+										<div class="tx_inp_type"><input type="text" name="new_peak_demand" id="newPeakDemand" class="pr-36" oninput="truncateNonDigit(event, this)" onkeyup="formatUnit(this)" placeholder="입력" maxlength="10"><span class="unit">kW</span></div>
 									</div>
 
 									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label offset-top">요금 적용<br>전력</span></div>
 									<div class="col-xl-2 col-lg-6 col-md-4 col-sm-10 pl-0">
-										<div class="tx_inp_type"><input type="text" name="new_dr_charge" id="newDrCharge" class="pr-36" placeholder="입력" maxlength="10"><span class="unit">kW</span></div>
+										<div class="tx_inp_type"><input type="text" name="new_dr_charge" id="newDrCharge" class="pr-36" oninput="truncateNonDigit(event, this)" onkeyup="formatUnit(this)" placeholder="입력" maxlength="10"><span class="unit">kW</span></div>
 									</div>
 
 									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">검침일</span></div>
@@ -3693,13 +3792,13 @@
 													<li data-name="SMP" data-value="SMP"><a href="#">SMP</a></li>
 												</ul>
 											</div>
-											<div class="tx_inp_type hidden"><input type="text" name="Price" id="newPrice" placeholder="입력" maxlength="8"></div>
+											<div class="tx_inp_type hidden"><input type="text" name="Price" id="newPrice" oninput="truncateNonDigit(event, this)" placeholder="입력" maxlength="8"></div>
 										</div>
 									</div>
 								</div>
 							</section>
 
-							<section id="sectionDRInfo">
+							<!-- <section id="sectionDRInfo">
 								<h2 class="stit">DR 거래 정보</h2>
 								<div class="row">
 									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">자원 ID</span></div>
@@ -3713,7 +3812,7 @@
 									<div class="col-xl-1 col-lg-1 col-md-2 col-sm-2"><span class="input_label">계약용량</span></div>
 									<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
 										<div class="tx_inp_type">
-											<input type="text" name="dr_vol" id="drVol" class="pr-36" placeholder="입력" maxlength="8"><span class="unit">kW</span>
+											<input type="text" name="new_dr_vol" id="newDrVol" class="pr-36" oninput="truncateNonDigit(event, this)" onkeyup="formatUnit(this)" placeholder="입력" maxlength="10"><span class="unit">kW</span>
 										</div>
 									</div>
 
@@ -3721,7 +3820,7 @@
 									<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
 										<div class="dropdown">
 											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-											<ul id="cblList" class="dropdown-menu">
+											<ul id="newCblList" class="dropdown-menu">
 												<li data-value="max45"><a href="#">max45</a></li>
 												<li data-value="mid68"><a href="#">mid68</a></li>
 											</ul>
@@ -3730,10 +3829,10 @@
 
 									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">수익 분배율</span></div>
 									<div class="col-xl-1 col-lg-3 col-md-4 col-sm-10 pl-0">
-										<div class="tx_inp_type"><input type="text" name="dr_rev_share" id="newDrRevShare" class="pr-36" placeholder="입력" maxlength="3"><span class="unit">%</span></div>
+										<div class="tx_inp_type"><input type="text" name="new_dr_rev_share" id="newDrRevShare" class="pr-36" oninput="truncateNonDigit(event, this, 'percentage')" onkeyup="formatRatio(this)" placeholder="입력" maxlength="5"><span class="unit">%</span></div>
 									</div>
 								</div>
-							</section>
+							</section> -->
 
 							<section id="sectionVppInfo">
 								<h2 class="stit">중개 거래 정보</h2>
@@ -3746,11 +3845,9 @@
 										</div>
 									</div>
 
-									<div class="col-xl-1 col-lg-2 col-sm-2"><span class="input_label">수익 분배율</span></div>
+									<div class="col-xl-1 col-lg-2 col-md-1 col-sm-2"><span class="input_label">수익 분배율</span></div>
 									<div class="col-xl-2 col-lg-2 col-sm-4 pl-0">
-										<div class="tx_inp_type">
-											<input type="text" name="vpp_rev_share" id="newVppRevShare" class="pr-36" placeholder="입력" maxlength="3"><span class="unit">%</span>
-										</div>
+										<div class="tx_inp_type"><input type="text" name="vpp_rev_share" id="newVppRevShare" class="pr-36" onkeyup="formatRatio(this)" placeholder="입력" maxlength="5"><span class="unit">%</span></div>
 									</div>
 								</div>
 							</section>
