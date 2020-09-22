@@ -2131,6 +2131,12 @@ nav .all-menu .menu-group>ul>li a {
 	margin-bottom: 10px;
 } */
 
+nav .all-menu .menu-group>ul>li ul li ul a,
+nav .all-menu .menu-group>ul>li ul li ul label {
+	padding: 0 8px 0 0;
+	margin-right: 8px;
+}
+
 nav .all-menu .menu-group>ul>li>dl>dd {
     margin: 10px 20px 0 0;
 }
@@ -2145,16 +2151,6 @@ nav .all-menu .menu-group>ul>li>dl>dd>a {
 nav .all-menu .menu-group>ul>li>dl>dd>a:hover {
 	opacity: 1;
 	cursor: unset;
-}
-
-nav .all-menu .menu-group>ul>li ul li ul a,
-nav .all-menu .menu-group>ul>li ul li ul label {
-	padding: 0 8px 0 0;
-	margin-right: 8px;
-}
-
-nav .all-menu .menu-group>ul>li>dl>dd ul label {
-    padding: 0 10px;
 }
 
 nav .all-menu .menu-group .overflow-list {
@@ -2182,6 +2178,8 @@ nav .all-menu .menu-group>ul>li>dl>dd ul input[type="checkbox"] {
 }
 
 nav .all-menu .menu-group>ul>li>dl>dd ul label {
+	margin: 0 4px;
+	padding: 0 6px;
     color: var(--white60);
     font-size: 12px;
     line-height: 2.2;
@@ -3250,7 +3248,7 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 
 .site-modal-content .modal-header {
     line-height: 24px;
-    margin: 0 16px;
+    margin: 0 4px;
 }
 
 .site-modal-content .modal-header .btn-add {
