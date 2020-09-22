@@ -1,5 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <script type="text/javascript">
+	const spcId = "${param.spc_id}";
+	const genId = "${param.gen_id}";
+
 	$(function () {
 		init();
 		getDataSpcBasic();
@@ -7,6 +10,35 @@
 	});
 
 	function init() {
+
+		$.ajax({
+			url: apiHost + '/config/user_spcs?oid=' + oid,
+			type: 'get',
+			async: false,
+			data: {user_ids: userInfoId}
+		}).done(function (data, textStatus, jqXHR) {
+			const result = data.data;
+			let acceptList = new Array();
+
+			result.forEach(spc => {
+				if (spc.role == '1') {
+					acceptList.push(spc.spcid);
+				}
+			});
+
+			if (acceptList.length > 0) {
+				if (!acceptList.includes(Number(spcId))) {
+					$('#modifyButton').remove();
+				}
+			} else {
+				$('#modifyButton').remove();
+			}
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			console.error(jqXHR);
+			console.error(textStatus);
+			console.error(errorThrown);
+		});
+
 
 		setInitList('SPC_법인_인감');
 		setInitList('공인인증서');
@@ -1621,7 +1653,7 @@
 
 		<div class="btn_wrap_type_right"><!--
 			--><button type="button" class="btn_type03" onclick="getExcelDown();">엑셀 다운로드</button><!--
-			--><button type="button" class="btn_type03" onclick="setCheckedDataEdit();">수정</button><!--
+			--><button type="button" id="modifyButton" class="btn_type03" onclick="setCheckedDataEdit();">수정</button><!--
 			--><button type="button" class="btn_type03" onclick="goMoveList();">목록</button><!--
 		--></div>
 		<div id="excelList" style="display:none;">

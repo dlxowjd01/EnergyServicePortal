@@ -676,7 +676,7 @@
 				if (verifyObj[stnd] == undefined || compareObj[stnd] == '-') {
 					verifyObj[stnd] = '-';
 				} else {
-					verifyObj[stnd] = benchmarkProcess(verifyObj[stnd], 'verify');
+					verifyObj[stnd] = benchmarkProcess(verifyObj[stnd], 'verify', stnd);
 					if (verifyObj[stnd] == '-') {
 						compareObj[stnd] = '-';
 					}
@@ -685,7 +685,7 @@
 				if (compareObj[stnd] == undefined || compareObj[stnd] == '-') {
 					compareObj[stnd] = '-';
 				} else {
-					compareObj[stnd] = benchmarkProcess(compareObj[stnd], 'compare');
+					compareObj[stnd] = benchmarkProcess(compareObj[stnd], 'compare', stnd);
 					if (compareObj[stnd] == '-') {
 						verifyObj[stnd] = '-';
 					}
@@ -741,8 +741,8 @@
 				}
 			}
 
-			tableData.push(verifyObj); //
-			tableData.push(compareObj); //
+			tableData.push(verifyObj);
+			tableData.push(compareObj);
 			$('[id^="table_"]').each(function () {
 				setMakeList(tableData, $(this).prop('id'), {'dataFunction': {}});
 			});
@@ -758,10 +758,23 @@
 		}
 	}
 
-	const benchmarkProcess = (data, type) => {
+	const benchmarkProcess = (data, type, date) => {
 		const benchmark = $(':radio[name="benchmark"]:checked').val();
 		const unit = $(':radio[name="unit"]:checked').val();
 		const reference = $('[name="reference"]').val();
+		const interval = $('#interval button').data('value');
+		let newDate = new Date(date.substring(0, 4), date.substring(4, 6), 0); //마지막 날짜를 구하기 위한 세팅.
+		let time = 1;
+
+		if (interval == '15min') {
+			time = 0.25;
+		} else if (interval == 'day') {
+			time = 24;
+		} else if (interval == 'month') {
+			time = 24 * Number(newDate.getDate());
+		} else {
+			time = 1;
+		}
 
 		let compDeviceArray = new Array();
 		// 비교설비
@@ -790,7 +803,7 @@
 
 				capacity = capacity / $(':checkbox[name="compDevice"]:checked').length;
 				data = data == '-' ? 0 : data;
-				let benchmarkValue = (data / (capacity /1000)) * 100;
+				let benchmarkValue = (data / ((capacity /1000) * time)) * 100;
 
 				if (benchmark == 'up') {
 					if (benchmarkValue >= Number(reference)) {

@@ -8,6 +8,8 @@
 	let templateList = '', cnt = 0, sectionId = [];
 
 	$(function () {
+		setInitList('spcList');
+
 		fnLocation();
 		initProcess();
 		cloneHtml();
@@ -280,21 +282,64 @@
 	}
 
 	function getSpcData() {
-		$.ajax({
+		const spcSearch = {
 			url: apiHost + '/spcs',
 			type: 'get',
 			async: false,
-			data: {oid: oid},
-			success: function (json) {
-				setInitList('spcList');
-				json.data.push({spc_id: '', name: '직접입력'});
+			data: {oid: oid}
+		}
 
-				setMakeList(json.data, 'spcList', {'dataFunction': {}});
-			},
-			error: function (request, status, error) {
+		const spcAuthority = {
+			url: apiHost + '/config/user_spcs?oid=' + oid,
+			type: 'get',
+			async: false,
+			data: {user_ids: userInfoId}
+		};
 
+		$.when($.ajax(spcSearch), $.ajax(spcAuthority)).done(function(result1, result2) {
+			if (result1[1] === 'success' && result2[1] === 'success') {
+				const spcList = result1[0].data;
+				const spcAuth = result2[0].data;
+				let refineSpcList = new Array();
+
+				if (!isEmpty(spcAuth) && !isEmpty(spcList)) {
+					spcList.forEach(spc => {
+						const spcListId = spc.spc_id;
+						spcAuth.forEach(auth => {
+							if (spcListId == auth.spcid) {
+								if (auth.role == 1) {
+									refineSpcList.push(spc);
+								} else {
+									return false;
+								}
+							}
+						});
+					});
+				}
+
+				refineSpcList.push({spc_id: '', name: '직접입력'});
+				setMakeList(refineSpcList, 'spcList', {'dataFunction': {}});
 			}
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			console.log("optSite error===", jqXHR)
+			return false;
 		});
+
+		// $.ajax({
+		// 	url: apiHost + '/config/user_spcs?oid=' + oid,
+		// 	type: 'get',
+		// 	async: false,
+		// 	data: {user_ids: userInfoId},
+		// 	success: function (json) {
+		// 		setInitList('spcList');
+		// 		json.data.push({spc_id: '', name: '직접입력'});
+		//
+		// 		setMakeList(json.data, 'spcList', {'dataFunction': {}});
+		// 	},
+		// 	error: function (request, status, error) {
+		//
+		// 	}
+		// });
 	}
 
 	function getgenIdData() {
