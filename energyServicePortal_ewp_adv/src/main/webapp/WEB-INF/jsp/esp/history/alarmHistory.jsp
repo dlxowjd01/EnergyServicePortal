@@ -37,16 +37,14 @@
 					<div class="flex_wrap">
 						<span class="input_label">사진 올리기</span>
 						<div class="tx_inp_type">
-							<input type="text" id="photoFile" name="photoFile" placeholder="사진 파일 이름" readonly=""
-								autocomplete="off">
+							<input type="text" id="photoFile" name="photoFile" placeholder="사진 파일 이름" readonly="" autocomplete="off">
 						</div>
 						<div class="type">
-							<button type="button" id="fileUpload" class="btn_type">업로드</button>
+							<button type="button" id="fileUpload" class="btn_type" accept="image/*">업로드</button>
 							<input type="file" id="picture" name="filename" class="uploadBtn hidden"/>
 							<span class="upload_text ml-16 hidden"></span>
 						</div>
 					</div>
-					</c:if>
 
 					<div class="photo_load_wrap">
 						<hr>
@@ -54,6 +52,7 @@
 						</ul>
 						<hr>
 					</div>
+					</c:if>
 
 					<div class="flex_wrap">
 						<span class="input_label">조치 여부</span>

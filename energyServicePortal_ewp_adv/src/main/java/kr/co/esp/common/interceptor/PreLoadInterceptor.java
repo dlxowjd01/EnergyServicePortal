@@ -23,8 +23,6 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 	// controller보다 먼저 수행
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-		System.out.println("++++++++++++++++PreLoadInterceptor start++++++++++++++++");
-
 		HttpSession session = request.getSession();
 		Map<String, Object> groupMap = new HashMap<String, Object>();
 		List<Map<String, Object>> refineList = new ArrayList<Map<String, Object>>();

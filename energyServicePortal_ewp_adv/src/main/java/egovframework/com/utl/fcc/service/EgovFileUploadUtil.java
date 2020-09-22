@@ -38,7 +38,7 @@ public class EgovFileUploadUtil extends EgovFormBasedFileUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	public static List<EgovFormBasedFileVo> uploadFiles(HttpServletRequest request, String where, long maxFileSize) throws Exception {
+	public static List<EgovFormBasedFileVo> uploadFiles(HttpServletRequest request, String where) throws Exception {
 		List<EgovFormBasedFileVo> list = new ArrayList<EgovFormBasedFileVo>();
 
 		MultipartHttpServletRequest mptRequest = (MultipartHttpServletRequest) request;
@@ -92,7 +92,7 @@ public class EgovFileUploadUtil extends EgovFormBasedFileUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	public static List<EgovFormBasedFileVo> uploadFilesExt(HttpServletRequest request, String where, long maxFileSize, String extensionWhiteList) throws Exception {
+	public static List<EgovFormBasedFileVo> uploadFilesExt(HttpServletRequest request, String where, String extensionWhiteList) throws Exception {
 		List<EgovFormBasedFileVo> list = new ArrayList<EgovFormBasedFileVo>();
 
 		MultipartHttpServletRequest mptRequest = (MultipartHttpServletRequest) request;

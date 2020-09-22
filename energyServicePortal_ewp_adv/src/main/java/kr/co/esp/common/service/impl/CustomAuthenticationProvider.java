@@ -40,7 +40,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 				mode = (String) oidMap.get("mode");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
 			oid = "encroed";
 			mode = "test";
 		}
@@ -61,10 +60,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 				return null;
 			}
 		} catch (JSONException e) {
-			e.printStackTrace();
 			return null;
 		} catch (Exception e) {
-			e.printStackTrace();
 			return null;
 		}
 	}

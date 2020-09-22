@@ -352,7 +352,7 @@ public final class DateUtil {
 	 * @param week 몇 주
 	 * @return
 	 */
-	public static Date getAfterWeeks(Date date, int week) {
+	public static Date getAfterWeeks(Date date) {
 		Calendar now = Calendar.getInstance(timeZone, Locale.KOREAN);
 		now.setTime(date);
 		now.add(Calendar.WEEK_OF_MONTH, 1);

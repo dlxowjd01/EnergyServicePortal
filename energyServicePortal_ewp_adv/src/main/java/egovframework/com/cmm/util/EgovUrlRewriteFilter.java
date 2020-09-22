@@ -70,7 +70,7 @@ public class EgovUrlRewriteFilter implements Filter {
 
 			if (pm.match(uriPattern.trim(), uri)) {
 
-				 if (getProtocol.toLowerCase().equals("http")) {
+				 if (getProtocol.equalsIgnoreCase("http")) {
 
 					 response.setContentType("text/html");
 
@@ -81,7 +81,7 @@ public class EgovUrlRewriteFilter implements Filter {
 
 				 }
 
-			}else if(getProtocol.toLowerCase().equals("https")){
+			}else if(getProtocol.equalsIgnoreCase("https")){
 
 				response.setContentType("text/html");
 
