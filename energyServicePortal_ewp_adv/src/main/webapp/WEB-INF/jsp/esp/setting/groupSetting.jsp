@@ -1627,12 +1627,11 @@
 			<table id="groupTable">
 				<colgroup>
 					<col style="width:5%">
-					<col style="width:9%">
-					<col style="width:12%">
-					<col style="width:20%">
+					<col style="width:13%">
+					<col style="width:16%">
+					<col style="width:24%">
 					<col style="width:18%">
-					<col style="width:18%">
-					<col style="width:18%">		
+					<col style="width:24%">	
 				</colgroup>
 				<thead></thead>
 				<tbody></tbody>
