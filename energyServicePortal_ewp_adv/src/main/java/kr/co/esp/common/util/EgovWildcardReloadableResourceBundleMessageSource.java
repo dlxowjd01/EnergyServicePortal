@@ -55,7 +55,7 @@ public class EgovWildcardReloadableResourceBundleMessageSource extends Reloadabl
 								baseName = "classpath:" + StringUtils.substringBetween(uri, "/classes/", ".properties");
 								baseName = baseName.substring(0,baseName.indexOf("_"));
 								baseName = baseName.replaceAll("classpath:", "classpath:/");
-								if(baseNames.indexOf(baseName) > -1){continue;};
+								if(baseNames.indexOf(baseName) > -1){continue;}
 								
 							} else if (resource instanceof ClassPathResource) {
 								baseName = StringUtils.substringBefore(uri, ".properties");

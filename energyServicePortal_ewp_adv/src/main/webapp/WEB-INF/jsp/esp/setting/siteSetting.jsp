@@ -268,8 +268,8 @@
 
 			let newStationId, kpxGenId, kpxEmsId, kpxTransvol;
 
+			newStationId = $('#station_id').val();
 			if (oid.match('testkpx')) {
-				newStationId = $('#station_id').val();
 				kpxGenId = $('#kpx_genid').val();
 				kpxEmsId = $('#kpx_emsid').val();
 				kpxTransvol = $('#kpx_transvol').val();
@@ -308,10 +308,10 @@
 				if( !isEmpty(newVppResId) ){
 					siteObj.vpp_group_id = newVppResId;
 				}
+				if ( !isEmpty(newStationId) ) {
+					siteObj.station_id = Number(newStationId);
+				}
 				if (oid.match('testkpx')) {
-					if ( !isEmpty(newStationId) ) {
-						siteObj.station_id = Number(newStationId);
-					}
 					if ( !isEmpty(kpxGenId) ) {
 						siteObj.kpx_genid = kpxGenId;
 					}
@@ -455,10 +455,10 @@
 				if( !isEmpty(newVppResId) && td.eq(9).text() != newVppResId ){
 					siteEditObj.vpp_group_id = newVppResId;
 				}
+				if ( !isEmpty(newStationId) ) {
+					siteEditObj.station_id = Number(newStationId);
+				}
 				if (oid.match('testkpx')) {
-					if ( !isEmpty(newStationId) ) {
-						siteEditObj.station_id = Number(newStationId);
-					}
 					if ( !isEmpty(kpxGenId) ) {
 						siteEditObj.kpx_genid = kpxGenId;
 					}
@@ -690,16 +690,10 @@
 			Promise.all([ Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])) ]).then( res => {
 			// Promise.resolve(returnAjaxRes(optionList[0])).then( res => {
 				adminTable(res[0], res[1], initModal);
-			}).catch(error => {
-				console.log("err in promises", error);
-				reject(error);
 			});
 		} else {
 			Promise.all( [ Promise.resolve(returnAjaxRes(optionList[2])), Promise.resolve(returnAjaxRes(optionList[1])), Promise.resolve(returnAjaxRes(optionList[3])) ] ).then( res => {
 				nonAdminTable( res[0], res[1], res[2].user_sites, initModal);
-			}).catch(error => {
-				console.log("err in promises", error);
-				reject(error);
 			});
 		}
 
@@ -1080,6 +1074,7 @@
 							extend: 'excelHtml5',
 							className: "save_btn",
 							text: '엑셀 다운로드',
+							filename: '사용자관리_' + new Date().format('yyyyMMddHHmmss'),
 							// exportOptions: {
 							// 	modifier: {
 							// 		page: 'current'
@@ -1196,6 +1191,8 @@
 					}
 				}
 
+		mySites.map((item, index) => {
+		let found = userSites.findIndex( x => x.sid === item.sid);
 
 				item.role = userSites[found].role;
 		
@@ -1966,9 +1963,9 @@
 				}
 				// 추가 정보
 				$('#newSiteDetail').val(rowData.detail_info);
+				$('#station_id').val(rowData.station_id);
 				// kpx
 				if (oid.match('testkpx')) {
-					$('#station_id').val(rowData.station_id);
 					$('#kpx_genid').val(rowData.kpx_genid);
 					$('#kpx_emsid').val(rowData.kpx_emsid);
 					$('#kpx_transvol').val(rowData.kpx_transvol);
@@ -3683,6 +3680,14 @@
 								<div class="col-xl-6 col-lg-6 col-md-10 col-sm-10 pl-0">
 									<textarea name="new_site_desc" id="newSiteDetail" class="textarea" placeholder="입력"></textarea>
 								</div>
+								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">기상 그리드</span></div>
+								<div class="col-xl-1 col-lg-2 col-md-4 col-sm-10 pl-0">
+									<div class="flex_start">
+										<div class="tx_inp_type">
+											<input type="text" name="station_id" id="station_id" placeholder="입력" minlength="1" maxlength="15">
+										</div>
+									</div>
+								</div>
 							</div>
 
 							<c:if test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
@@ -3708,14 +3713,6 @@
 										<div class="flex_start">
 											<div class="tx_inp_type">
 												<input type="text" name="kpx_emsid" id="kpx_emsid" placeholder="입력" minlength="2" maxlength="100">
-											</div>
-										</div>
-									</div>
-									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">기상 그리드</span></div>
-									<div class="col-xl-1 col-lg-2 col-md-4 col-sm-10 pl-0">
-										<div class="flex_start">
-											<div class="tx_inp_type">
-												<input type="text" name="station_id" id="station_id" placeholder="입력" minlength="1" maxlength="15">
 											</div>
 										</div>
 									</div>

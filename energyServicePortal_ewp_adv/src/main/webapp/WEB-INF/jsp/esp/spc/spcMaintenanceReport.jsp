@@ -12,7 +12,7 @@
 			<h1 class="page-header">보고서</h1>
 			<div class="time fr">
 				<span>CURRENT TIME</span>
-				<em class="currTime">${nowTime}</em>
+				<em class="currTime"></em>
 				<span>DATA BASE TIME</span>
 				<em class="dbTime">2018-07-27 17:01:02</em>
 			</div>

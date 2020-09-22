@@ -19,7 +19,7 @@ public class StringUtil {
 
 	private static final Logger logger = LoggerFactory.getLogger(StringUtil.class);
 
-	public static String concat(String s1, String s2) throws UnsupportedEncodingException {
+	public static String concat(String s1, String s2) {
 		return s1 + s2;
 	}
 

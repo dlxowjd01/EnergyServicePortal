@@ -5,7 +5,6 @@ import kr.co.esp.common.util.UserUtil;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -24,8 +23,6 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 	// controller보다 먼저 수행
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-		System.out.println("++++++++++++++++PreLoadInterceptor start++++++++++++++++");
-
 		HttpSession session = request.getSession();
 		Map<String, Object> groupMap = new HashMap<String, Object>();
 		List<Map<String, Object>> refineList = new ArrayList<Map<String, Object>>();
@@ -50,117 +47,122 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 				Map<String, Object> menuMap = (Map<String, Object>) menuProperties.get("data");
 				Map<String, Object> menuList = (Map<String, Object>) menuMap.get("menu");
 
-				for( Map.Entry<String, Object> elem : menuList.entrySet() ){
-					Map<String, Object> mapDetail = (Map<String, Object>) elem.getValue();
-					String menuCode = (String) mapDetail.get("code");
-					String href = mapDetail.get("href") != null ? (String) mapDetail.get("href") : "";
-					if (requestUri.equals("/" + href) && ((oid.equals("testkpx") && menuCode.contains("kpx")) || (!oid.equals("testkpx") && !menuCode.contains("kpx")))) {
-						Map<String, Object> access = (Map<String, Object>) mapDetail.get("access");
-						Map<String, Object> name = (Map<String, Object>) mapDetail.get("name");
+				if (menuList != null && !menuList.isEmpty()) {
+					for( Map.Entry<String, Object> elem : menuList.entrySet() ){
+						Map<String, Object> mapDetail = (Map<String, Object>) elem.getValue();
+						String menuCode = (String) mapDetail.get("code");
+						String href = mapDetail.get("href") != null ? (String) mapDetail.get("href") : "";
+						if ((int) userInfo.get("role") != 1) {
+							if (requestUri.equals("/" + href) && ((oid.equals("testkpx") && menuCode.contains("kpx")) || (!oid.equals("testkpx") && !menuCode.contains("kpx")))) {
+								Map<String, Object> access = (Map<String, Object>) mapDetail.get("access");
+								Map<String, Object> name = (Map<String, Object>) mapDetail.get("name");
 
-						if(!access.isEmpty()) {
-							if (access.containsKey("deny")) {
-								Map<String, Object> denyMap = (Map<String, Object>) access.get("deny");
+								if(!access.isEmpty()) {
+									if (access.containsKey("deny")) {
+										Map<String, Object> denyMap = (Map<String, Object>) access.get("deny");
 
-								for (Map.Entry<String, Object> denyTemp : denyMap.entrySet()) {
-									List denyArray = (List) denyTemp.getValue();
-									if ("role".equals(denyTemp.getKey())) {
-										boolean contains = containsValue(denyArray, String.valueOf(role));
-										if (contains) {
-											if ("/dashboard/gmain.do".equals(requestUri)) {
-												response.sendRedirect("/spc/transactionCalendar.do");
-												return false;
-											} else {
-												response.sendError(HttpServletResponse.SC_FORBIDDEN);
-												return false;
-											}
-										}
-									} else if ("task".equals(denyTemp.getKey())) {
-										boolean contains = containsValue(denyArray, String.valueOf(task));
-										if (contains) {
-											if ("/dashboard/gmain.do".equals(requestUri)) {
-												response.sendRedirect("/spc/transactionCalendar.do");
-												return false;
-											} else {
-												response.sendError(HttpServletResponse.SC_FORBIDDEN);
-												return false;
-											}
-										}
-									} else if ("oid".equals(denyTemp.getKey())) {
-										boolean contains = containsValue(denyArray, oid);
-										if (contains) {
-											if ("/dashboard/gmain.do".equals(requestUri)) {
-												response.sendRedirect("/spc/transactionCalendar.do");
-												return false;
-											} else {
-												response.sendError(HttpServletResponse.SC_FORBIDDEN);
-												return false;
+										for (Map.Entry<String, Object> denyTemp : denyMap.entrySet()) {
+											List denyArray = (List) denyTemp.getValue();
+											if ("role".equals(denyTemp.getKey())) {
+												boolean contains = containsValue(denyArray, String.valueOf(role));
+												if (contains) {
+													if ("/dashboard/gmain.do".equals(requestUri)) {
+														response.sendRedirect("/spc/transactionCalendar.do");
+														return false;
+													} else {
+														response.sendError(HttpServletResponse.SC_FORBIDDEN);
+														return false;
+													}
+												}
+											} else if ("task".equals(denyTemp.getKey())) {
+												boolean contains = containsValue(denyArray, String.valueOf(task));
+												if (contains) {
+													if ("/dashboard/gmain.do".equals(requestUri)) {
+														response.sendRedirect("/spc/transactionCalendar.do");
+														return false;
+													} else {
+														response.sendError(HttpServletResponse.SC_FORBIDDEN);
+														return false;
+													}
+												}
+											} else if ("oid".equals(denyTemp.getKey())) {
+												boolean contains = containsValue(denyArray, oid);
+												if (contains) {
+													if ("/dashboard/gmain.do".equals(requestUri)) {
+														response.sendRedirect("/spc/transactionCalendar.do");
+														return false;
+													} else {
+														response.sendError(HttpServletResponse.SC_FORBIDDEN);
+														return false;
+													}
+												}
 											}
 										}
 									}
-								}
-							}
 
-							if (access.containsKey("allow")) {
-								Map<String, Object> allowMap = (Map<String, Object>) access.get("allow");
-								for (Map.Entry<String, Object> allowTemp : allowMap.entrySet()) {
-									List allowArray = (List) allowTemp.getValue();
-									if ("role".equals(allowTemp.getKey())) {
-										boolean contains = containsValue(allowArray, String.valueOf(role));
-										if (!contains) {
-											if ("/dashboard/gmain.do".equals(requestUri)) {
-												response.sendRedirect("/spc/transactionCalendar.do");
-												return false;
-											} else {
-												response.sendError(HttpServletResponse.SC_FORBIDDEN);
-												return false;
-											}
-										}
-									} else if ("task".equals(allowTemp.getKey())) {
-										boolean contains = containsValue(allowArray, String.valueOf(task));
-										if (!contains) {
-											if ("/dashboard/gmain.do".equals(requestUri)) {
-												response.sendRedirect("/spc/transactionCalendar.do");
-												return false;
-											} else {
-												response.sendError(HttpServletResponse.SC_FORBIDDEN);
-												return false;
-											}
-										}
-									} else if ("oid".equals(allowTemp.getKey())) {
-										boolean contains = containsValue(allowArray, oid);
-										if (!contains) {
-											if ("/dashboard/gmain.do".equals(requestUri)) {
-												response.sendRedirect("/spc/transactionCalendar.do");
-												return false;
-											} else {
-												response.sendError(HttpServletResponse.SC_FORBIDDEN);
-												return false;
+									if (access.containsKey("allow")) {
+										Map<String, Object> allowMap = (Map<String, Object>) access.get("allow");
+										for (Map.Entry<String, Object> allowTemp : allowMap.entrySet()) {
+											List allowArray = (List) allowTemp.getValue();
+											if ("role".equals(allowTemp.getKey())) {
+												boolean contains = containsValue(allowArray, String.valueOf(role));
+												if (!contains) {
+													if ("/dashboard/gmain.do".equals(requestUri)) {
+														response.sendRedirect("/spc/transactionCalendar.do");
+														return false;
+													} else {
+														response.sendError(HttpServletResponse.SC_FORBIDDEN);
+														return false;
+													}
+												}
+											} else if ("task".equals(allowTemp.getKey())) {
+												boolean contains = containsValue(allowArray, String.valueOf(task));
+												if (!contains) {
+													if ("/dashboard/gmain.do".equals(requestUri)) {
+														response.sendRedirect("/spc/transactionCalendar.do");
+														return false;
+													} else {
+														response.sendError(HttpServletResponse.SC_FORBIDDEN);
+														return false;
+													}
+												}
+											} else if ("oid".equals(allowTemp.getKey())) {
+												boolean contains = containsValue(allowArray, oid);
+												if (!contains) {
+													if ("/dashboard/gmain.do".equals(requestUri)) {
+														response.sendRedirect("/spc/transactionCalendar.do");
+														return false;
+													} else {
+														response.sendError(HttpServletResponse.SC_FORBIDDEN);
+														return false;
+													}
+												}
 											}
 										}
 									}
+								} else {
+									continue;
 								}
-							}
 
-							Cookie[] cookie = request.getCookies();
-							for (Cookie ck : cookie) {
-								if ("lang".equals(ck.getName())) {
-									if ("EN".equals(ck.getValue())) {
-										request.setAttribute("menuName", name.get("en"));
-									} else {
-										request.setAttribute("menuName", name.get("kr"));
+								Cookie[] cookie = request.getCookies();
+								for (Cookie ck : cookie) {
+									if ("lang".equals(ck.getName())) {
+										if ("EN".equals(ck.getValue())) {
+											request.setAttribute("menuName", name.get("en"));
+										} else {
+											request.setAttribute("menuName", name.get("kr"));
+										}
 									}
 								}
+							} else {
+								continue;
 							}
 						} else {
 							continue;
 						}
-					} else {
-						continue;
 					}
+					request.setAttribute("menuList", menuList);
 				}
-
-				request.setAttribute("menuList", menuList);
 			}
 			//Menu조회
 
@@ -405,11 +407,6 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView mav) throws Exception {
 		HttpSession session = request.getSession();
 
-		// 상단 시간 초기값 -- 서울로 세팅
-		TimeZone timeZone = TimeZone.getTimeZone("Asia/Seoul");
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		sdf.setTimeZone(timeZone);
-
 		String gitVersion = EgovProperties.getGitProperty("git.commit.id.abbrev");
 		String apiHost = EgovProperties.getProperty("jsApiHost"); //API 기본 HOST
 		String apiHostTest = EgovProperties.getProperty("jsApiHostTest"); //API TEST HOST
@@ -417,20 +414,14 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 		String activateSPC = EgovProperties.getProperty("activateSPC"); //activateSPC True/False
 		String mode = (String) session.getAttribute("mode"); // TEST 서버 여부
 
-
-
 		if (mode != null && "test".equals(mode)) {
 			mav.addObject("apiHost", apiHostTest);
 		} else {
 			mav.addObject("apiHost", apiHost);
 		}
 
-		//WebRa 서버 주소
-		mav.addObject("certApiHost", certApiHost);
-		//activateSPC
-		mav.addObject("activateSPC", activateSPC);
-
-		mav.addObject("nowTime", sdf.format(new Date()));
+		mav.addObject("certApiHost", certApiHost); //WebRa 서버 주소
+		mav.addObject("activateSPC", activateSPC); //activateSPC
 		mav.addObject("gitVersion", gitVersion);
 
 		super.postHandle(request, response, handler, mav);

@@ -38,20 +38,20 @@ public class EgovXssChecker {
 	 * @return boolean
 	 * @exception IllegalArgumentException
 	 */
-	public static boolean checkerUserXss(HttpServletRequest request, String sUniqId) throws Exception {
+	public static boolean checkerUserXss(String sUniqId) throws Exception {
 		
-		boolean bLog = false;
+		//boolean bLog = false;
 		
 		try {
 			//@ 공통모듈을 이용한 권한체크
 			LoginVO	loginVO = (LoginVO)EgovUserDetailsHelper.getAuthenticatedUser();
 
-	    	if(bLog){
-	    		LOGGER.debug("@Step1. XSS Check uniqId  : {}", sUniqId);
-	    		LOGGER.debug("Step2. XSS Session uniqId  : {}", loginVO.getId());
-	    		LOGGER.debug("Step3. XSS Session getUniqId  : {}", loginVO.getUniqId());
-	    		LOGGER.debug("Step4. XSS Session getAuthorities  : {}", EgovUserDetailsHelper.getAuthorities());
-	    	}
+//	    	if(bLog){
+//	    		LOGGER.debug("@Step1. XSS Check uniqId  : {}", sUniqId);
+//	    		LOGGER.debug("Step2. XSS Session uniqId  : {}", loginVO.getId());
+//	    		LOGGER.debug("Step3. XSS Session getUniqId  : {}", loginVO.getUniqId());
+//	    		LOGGER.debug("Step4. XSS Session getAuthorities  : {}", EgovUserDetailsHelper.getAuthorities());
+//	    	}
 
 			//체크 값에 대한 무결성 체크
 			if(sUniqId == null || loginVO.getUniqId() == null){

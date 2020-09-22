@@ -7,11 +7,11 @@
 	<script type="text/javascript">
 		const langStatus = '${cookieLang}';
 	</script>
-	<%@ include file="/decorators/include/layouts/top.jsp" %>
+	<page:applyDecorator name="top"/>
 </head>
 <body class="dark">
 <div id="outerWrapper" class="outer-wrapper">
-	<%@ include file="/decorators/include/layouts/header.jsp" %>
+	<page:applyDecorator name="header"/>
 	<div class="page-wrapper">
 		<c:choose>
 			<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
@@ -25,7 +25,7 @@
 		<div id="innerBody" class="container-fluid">
 			<decorator:body/>
 		</div>
-		<%@ include file="/decorators/include/layouts/footer.jsp" %>
+		<page:applyDecorator name="footer"/>
 	</div>
 </div>
 

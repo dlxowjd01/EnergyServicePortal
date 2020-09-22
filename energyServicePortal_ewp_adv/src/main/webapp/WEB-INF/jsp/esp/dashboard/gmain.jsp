@@ -8,18 +8,14 @@
 <div class="row header-wrapper">
 	<div class="col-6">
 		<h1 class="page-header fl">${siteName}</h1>
-		<%--
-		<c:if test="${fn:contains(sessionScope.userInfo.oid, 'spower') || fn:contains(sessionScope.userInfo.oid, 'encored')}">
 
 		<c:if test="${fn:contains(sessionScope.userInfo.oid, 'spower')}">
-
 		<label class="switch switch-slide fl">
 			<input type="checkbox" value="showTable" id="switchBtn" class="switch-input" />
-			<span class="switch-label" data-on="테이블" data-off="대시보드"></span> 
+			<span class="switch-label" data-on="테이블" data-off="대시보드"></span>
 			<span class="switch-handle"></span>
 		</label>
 		</c:if>
-		--%>
 	</div>
 	<div class="col-6">
 		<div class="time fr">
@@ -568,62 +564,173 @@
 	</c:if>
 	let first = true;
 
+	let gmainTable = $('#gmainTable').DataTable({
+		"table-layout": "fixed",
+		"fixedHeader": true,
+		"bAutoWidth": true,
+		"bSearchable" : true,
+		"retrieve": true,
+		"sScrollY": true,
+		"scrollY": "720px",
+		"bScrollCollapse": true,
+		paging: false,
+		"aaSorting": [[ 0, 'asc' ]],
+		"bSortable": true,
+		"order": [[ 1, 'asc' ]],
+		"aoColumnDefs": [
+			{
+				"aTargets": [ 0 ],
+				"bSortable": false,
+				"orderable": false
+			},
+		],
+		"aoColumns": [
+			{
+				sTitle: '순번',
+				mData: null,
+				mRender: function ( data, type, full, rowIndex ) {
+					return rowIndex.row + 1;
+				},
+				className: 'dt-center no-sorting'
+			},
+			{
+				sTitle: '발전소 명',
+				mData: 'siteName',
+			},
+			{
+				sTitle: '발전용량 (kWh)',
+				mData: 'capacity',
+				mRender: function (data, type, full, rowIndex) {
+					return isEmpty(data) ? '-' : data;
+				},
+			},
+			{
+				sTitle: '인버터 가동 상태',
+				mData: 'invCount',
+				mRender: function (data, type, full, rowIndex) {
+					return isEmpty(data) ? '-' : data;
+				},
+			},
+			{
+				sTitle: '경고 알람',
+				mData: 'deviceFault',
+				mRender: function (data, type, full, rowIndex) {
+					return isEmpty(data) ? '-' : data;
+				},
+			},
+			{
+				sTitle: '현재 발전량(kW)',
+				mData: 'nowEnergy',
+				mRender: function (data, type, full, rowIndex) {
+					if (data == '-') {
+						return data;
+					} else {
+						return data[0];
+					}
+				},
+			},
+			{
+				sTitle: "현재 날씨",
+				mData: 'toDaySky',
+				mRender: function (data, type, full, rowIndex) {
+					const weather = getWeatherIconClass(data);
+					return '<i class="ico_weather ' + weather + '"></i>';
+				},
+			},
+			{
+				sTitle: '전일 발전',
+				mData: 'yesterEnergy',
+				mRender: function (data, type, full, rowIndex) {
+					return isEmpty(data) ? '-' : data;
+				},
+			},
+			{
+				sTitle: '전일 날씨',
+				mData: 'yesterDaySky',
+				mRender: function (data, type, full, rowIndex) {
+					const weather = getWeatherIconClass(data);
+					return '<i class="ico_weather ' + weather + '"></i>';
+				},
+			},
+			{
+				sTitle: '월간 발전량(MWh)',
+				mData: 'monthGen',
+				mRender: function (data, type, full, rowIndex) {
+					return isEmpty(data) ? '-' : data;
+				},
+			},
+			{
+				sTitle: '전년 동월 발전량(MWh)',
+				mData: 'beforeYearGen',
+				mRender: function (data, type, full, rowIndex) {
+					return isEmpty(data) ? '-' : data;
+				},
+			},
+			{
+				sTitle: '전년 동월 대비 발전 비율(%)',
+				mData: 'proportion',
+				mRender: function (data, type, full, rowIndex) {
+					return data;
+				},
+			},
+		],
+		"language": {
+			"emptyTable": "조회된 데이터가 없습니다.",
+			"zeroRecords":  "검색된 결과가 없습니다."
+		},
+		"dom": 'tip',
+		initComplete: function(settings, json ){
+			this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+				cell.innerHTML = i+1;
+				$(cell).data("id", i);
+			});
+		},
+		// every time DataTables performs a draw
+		drawCallback: function (settings) {
+
+		},
+	}).columns.adjust();
+
 	$(function () {
 		let target = $("#innerBody").find(".content-wrapper");
 		if (oid.match('testkpx')) {
 			resourceProperties();
 		}
-		setInitList('alarmNotice'); //알람 공지 세팅
-		makeSiteList();
 
-		if (!isEmpty(siteList) && siteList.length > 0) {
-			fn_cycle_1hour();
-			fn_cycle_1min();
-			setInterval(() => fn_cycle_1hour(), 60 * 60 * 1000);
-			setInterval(() => fn_cycle_1min(), 60 * 1000);
+		if($("#switchBtn").is(":checked")){
+			target.eq(0).addClass("hidden").next().removeClass("hidden");
+
+			getDashboardTable('gmainTable');
 		} else {
-			$("#errMsg").text("해당 그룹에 등록 된 사이트가 존재하지 않습니다.");
-			$("#errorModal").modal("show");
-			setTimeout(function(){
-				$("#errorModal").modal("hide");
-			}, 2000);
-			return false;
+			target.eq(0).removeClass("hidden").next().addClass("hidden");
+
+			setInitList('alarmNotice'); //알람 공지 세팅
+			makeSiteList();
+
+			if (!isEmpty(siteList) && siteList.length > 0) {
+				fn_cycle_1hour();
+				fn_cycle_1min();
+				setInterval(() => fn_cycle_1hour(), 60 * 60 * 1000);
+				setInterval(() => fn_cycle_1min(), 60 * 1000);
+			} else {
+				$("#errMsg").text("해당 그룹에 등록 된 사이트가 존재하지 않습니다.");
+				$("#errorModal").modal("show");
+				setTimeout(function(){
+					$("#errorModal").modal("hide");
+				}, 2000);
+				return false;
+			}
 		}
 		
-		// if($("#switchBtn").is(":checked")){
-		// 	target.eq(0).addClass("hidden").next().removeClass("hidden");
-		// 	getDashboardTable('gmainTable');
-		// } else {
-		// 	target.eq(0).removeClass("hidden").next().addClass("hidden");
-		// 	setInitList('alarmNotice'); //알람 공지 세팅
-		// 	//resourceProperties();
-		// 	makeSiteList();
-		// 	// destroyDashboardTable('gmainTable');
-
-		// 	if (!isEmpty(siteList) && siteList.length > 0) {
-		// 		fn_cycle_1hour();
-		// 		fn_cycle_1min();
-		// 		setInterval(() => fn_cycle_1hour(), 60 * 60 * 1000);
-		// 		setInterval(() => fn_cycle_1min(), 60 * 1000);
-		// 	} else {
-		// 		$("#errMsg").text("해당 그룹에 등록 된 사이트가 존재하지 않습니다.");
-		// 		$("#errorModal").modal("show");
-		// 		setTimeout(function(){
-		// 			$("#errorModal").modal("hide");
-		// 		}, 2000);
-		// 		return false;
-		// 	}
-		// }
-		
-		// $("#switchBtn").on("click", function(){
-		// 	if($(this).is(":checked")){
-		// 		target.eq(0).addClass("hidden").next().removeClass("hidden");
-		// 		getDashboardTable('gmainTable');
-		// 	} else {
-		// 		target.eq(0).removeClass("hidden").next().addClass("hidden");
-		// 		// destroyDashboardTable('gmainTable');
-		// 	}	
-		// });
+		$("#switchBtn").on("click", function(){
+			if($(this).is(":checked")){
+				target.eq(0).addClass("hidden").next().removeClass("hidden");
+				getDashboardTable('gmainTable');
+			} else {
+				target.eq(0).removeClass("hidden").next().addClass("hidden");
+				// destroyDashboardTable('gmainTable');
+			}
+		});
 
 	});
 

@@ -76,7 +76,7 @@ public class EgovFormBasedFileUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	protected static String convert(String filename) throws Exception {
+	protected static String convert(String filename) {
 		//return java.net.URLEncoder.encode(filename, "utf-8");
 		return filename;
 	}

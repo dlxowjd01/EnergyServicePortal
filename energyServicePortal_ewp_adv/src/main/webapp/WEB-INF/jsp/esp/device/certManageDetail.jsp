@@ -58,10 +58,10 @@
 					mRender: function ( data, type, full, rowIndex ) {
 						let check = '<input type="checkbox" id="check' + rowIndex.row + '" name="table_checkbox"><label for="check' + rowIndex.row + '"></label>';
 
-						if (data.status.match('가능')) {
-							return check;
+						if (data.status == '폐기') {
+							return null
 						} else {
-							return '';
+							return check
 						}
 					},
 					className: 'dt-center no-sorting'
@@ -127,7 +127,7 @@
 			deviceTable.rows('.selected')[0].forEach(device => {
 				const status = deviceTable.rows(device).data()[0].status;
 
-				if ((mode === 'issue' && status == '발급 가능') || (mode === 'revoke' && status == '폐기 가능')) {
+				if ((mode === 'issue' && status == '발급 가능') || (mode === 'revoke' && status == '폐기 가능') || (mode === 'revoke' && status == '발급')) {
 					deviceArray.push(deviceTable.rows(device).data()[0].apply_ID);
 				} else {
 					process = false;
@@ -156,6 +156,9 @@
 			}).fail(function (error) {
 				console.log(error);
 			});
+		} else {
+			alert('선택된 항목이 존재하지 않습니다.');
+			return false;
 		}
 	}
 </script>

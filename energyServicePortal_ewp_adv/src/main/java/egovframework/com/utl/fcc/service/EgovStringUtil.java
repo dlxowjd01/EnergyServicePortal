@@ -534,7 +534,7 @@ public class EgovStringUtil {
 	 * @param separator 분리자
 	 * @return result 분리자로 나뉘어진 문자열 배열
 	 */
-	public static String[] split(String source, String separator) throws NullPointerException {
+	public static String[] split(String source, String separator) {
 		String[] returnVal = null;
 		int cnt = 1;
 
@@ -711,7 +711,7 @@ public class EgovStringUtil {
 	 * @param arraylength 배열 길이
 	 * @return 분리자로 나뉘어진 문자열 배열
 	 */
-	public static String[] split(String source, String separator, int arraylength) throws NullPointerException {
+	public static String[] split(String source, String separator, int arraylength) {
 		String[] returnVal = new String[arraylength];
 		int cnt = 0;
 		int index0 = 0;

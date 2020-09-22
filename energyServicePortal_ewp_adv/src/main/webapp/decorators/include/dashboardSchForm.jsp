@@ -64,6 +64,11 @@
       startDate = new Date(today.getFullYear() - 1, 0, 1);
       endDate = new Date(today.getFullYear() - 1, 11, 31, 23, 59, 59);
       $("#selTerm").val("beforeYear");
+    } else if (termType === 'beforeYearSameMonth') {
+      // 이번년 1일 000000 부터
+      startDate = new Date(today.getFullYear() - 1, today.getMonth(), 1);
+      endDate = new Date(today.getFullYear() - 1, today.getMonth(), 31, 23, 59, 59);
+      $("#selTerm").val("beforeYearSameMonth");
     }
     
     startDate = startDate.format("yyyyMMddHHmmss");

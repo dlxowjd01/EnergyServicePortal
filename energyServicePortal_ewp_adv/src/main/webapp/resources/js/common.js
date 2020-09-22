@@ -63,6 +63,8 @@ $(function() {
             }
         }
     });
+
+	showClock();
 });
 
 
@@ -641,4 +643,14 @@ $.fn.multiline = function(text){
 	this.text(text);
 	this.html(this.html().replace(/\n/g,'<br/>'));
 	return this;
+}
+
+const showClock = () => {
+	const currentDate = new Date();
+	const divClock = document.querySelector('.currTime');
+
+	if (divClock != undefined) {
+		divClock.innerText = currentDate.format('yyyy-MM-dd HH:mm:ss');
+		setTimeout(showClock,1000);
+	}
 }

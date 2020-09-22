@@ -191,8 +191,7 @@ public class EgovComCrossSiteHndlr extends BodyTagSupport {
 		}
 
 	}
-	public static void out2(PageContext pageContext, boolean escapeXml,
-			Object obj) throws IOException {
+	public static void out2(PageContext pageContext, Object obj) throws IOException {
 		JspWriter w = pageContext.getOut();
 
 		w.write(obj.toString());
@@ -237,7 +236,7 @@ public class EgovComCrossSiteHndlr extends BodyTagSupport {
 	 *
 	 */
 	@SuppressWarnings("unused")
-	private String getWriteEscapedXml() throws IOException {
+	private String getWriteEscapedXml() {
 		String sRtn = "";
 
 		Object obj = this.value;
@@ -302,7 +301,7 @@ public class EgovComCrossSiteHndlr extends BodyTagSupport {
 	 *
 	 */
 	@SuppressWarnings("unused")
-	private String getWriteEscapedXml(String sWriteString) throws IOException {
+	private String getWriteEscapedXml(String sWriteString) {
 
 		String sRtn = "";
 

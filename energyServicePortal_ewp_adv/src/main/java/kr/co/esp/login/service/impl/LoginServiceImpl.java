@@ -71,7 +71,6 @@ public class LoginServiceImpl extends EgovAbstractServiceImpl implements LoginSe
 			}
 		} catch (Exception e) {
 			LOGGER.error("LoginService - selectOid - Exception : " + e.getMessage());
-			e.printStackTrace();
 			rtnMap.put("oid", defualtOid);
 			rtnMap.put("mode", "test");
 		}
@@ -101,7 +100,6 @@ public class LoginServiceImpl extends EgovAbstractServiceImpl implements LoginSe
 			}
 		} catch (Exception e) {
 			LOGGER.error("LoginService - selectAuthLogin - Exception : " + e.getMessage());
-			e.printStackTrace();
 		}
 		return rtnMap;
 	}

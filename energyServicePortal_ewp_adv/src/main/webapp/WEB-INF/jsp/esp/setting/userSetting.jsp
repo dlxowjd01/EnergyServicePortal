@@ -158,6 +158,16 @@
 
 		// Dropdown Click event
 		$("#newAccLevel").find("li").on("click", function(){
+			if ($(this).data('value') == '1') {
+				if ($('.nav-tabs > li').eq(0).find('a').attr('href') == '#siteTab') {
+					$('.nav-tabs > li').eq(0).addClass('hidden').removeClass('active').siblings().addClass('active');
+				}
+
+				$('#siteTab').removeClass('active').siblings().addClass('active in');
+			} else {
+				$('.nav-tabs > li').eq(0).removeClass('hidden');
+			}
+
 			if($("#addUserModal").hasClass("edit")){
 				if( !isEmpty($(this).data("value")) && validateEditForm() == 1) {
 					$("#addUserBtn").prop("disabled", false);
@@ -1225,6 +1235,7 @@
 								extend: 'excelHtml5',
 								className: "save_btn",
 								text: '엑셀 다운로드',
+								filename: '사용자관리_' + new Date().format('yyyyMMddHHmmss'),
 								// exportOptions: {
 								// 	modifier: {
 								// 		page: 'current'
@@ -1463,6 +1474,10 @@
 		let accLevBtn = $('#newAccLevel').prev();
 		let newTaskBtn =$('#newTaskList').prev();
 		let required = $("#updateUserForm").find(".asterisk");
+
+		$('.nav-tabs > li').eq(0).removeClass('hidden').addClass('active').siblings().removeClass('active');
+		$('div.tab-content > div.tab-pane').eq(0).addClass('active in').siblings().removeClass('active in');
+
 		id.parent().next().prop("disabled", true);
 		// ADD !!!!!
 		if(option == 'add'){
@@ -1589,6 +1604,11 @@
 				let accName = td.eq(6).text();
 				if(td.eq(6).text() == "시스템 관리자"){
 					accLevBtn.data( { "name" : accName, "value" : "1"}).html(accName+ '<span class="caret">');
+					if ($('.nav-tabs > li').eq(0).find('a').attr('href') == '#siteTab') {
+						$('.nav-tabs > li').eq(0).addClass('hidden').removeClass('active').siblings().addClass('active');
+					}
+
+					$('#siteTab').removeClass('active').siblings().addClass('active in');
 				} else if(td.eq(6).text() == "일반 사용자"){
 					accLevBtn.data( { "name" : accName, "value" : "2"}).html(accName + '<span class="caret">');
 				}

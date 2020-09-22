@@ -2183,3 +2183,26 @@ const makeSiteList = () => {
 
 	setInitList('siteList'); //사이트 리스트
 }
+
+// 특수문자 정규식 변수(공백 미포함)
+const replaceChar = /[~!@\#$%^&*\()\-=+_'\;<>\/.\`:\"\\,\[\]?|{}]/gi;
+
+// 완성형 아닌 한글 정규식
+const replaceNotFullKorean = /[ㄱ-ㅎㅏ-ㅣ]/gi;
+
+$(document).ready(function(){
+
+	$("#searchName").on('focusout', function() {
+		var x = $(this).val();
+		if (x.length > 0) {
+			if (x.match(replaceChar) || x.match(replaceNotFullKorean)) {
+				x = x.replace(replaceChar, '').replace(replaceNotFullKorean, '');
+			}
+			$(this).val(x);
+		}
+	}).on('keyup', function() {
+		$(this).val($(this).val().replace(replaceChar, ''));
+
+	});
+
+});

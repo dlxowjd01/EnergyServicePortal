@@ -261,6 +261,11 @@
 		return checkList;
 	}
 
+	function moveModifyPage(spcId, genId) {
+		location.href = '/spc/entityDetails.do?spc_id=' + spcId + '&gen_id=' + genId + '&oid=' + oid;
+	}
+
+
 	function setCheckedDataRemove() {
 		var checkDataList = getCheckList("rowCheck"),
 			count = checkDataList.length,
@@ -271,34 +276,80 @@
 			return;
 		}
 
-		let delPrompt = prompt(count + '건을 삭제하시겠습니까? \n삭제를 원하시면 아래 "삭제"라고 입력하고 확인을 눌러 주세요.', '');
-
-		if (delPrompt != '삭제') {
-			return;
-		}
-
-		for (var i = 0; i < count; i++) {
-			var rowData = checkDataList[i];
+		return new Promise((resolve, reject) => {
 			$.ajax({
-				url: apiHost + '/spcs/' + rowData.spc_id + "/gens/" + rowData.gen_id + "?oid=" + oid,
-				type: "delete",
-				dataType: 'json',
+				url: apiHost + '/config/user_spcs?oid=' + oid,
+				type: 'get',
 				async: false,
-				contentType: "application/json",
-				data: {
-					"oid": oid
-				},
-				success: function (json) {
-					sucessCnt++;
-				},
-				error: function (request, status, error) {
+				data: {user_ids: userInfoId}
+			}).done(function (data, textStatus, jqXHR) {
+				const result = data.data;
+				let acceptList = new Array();
 
+				result.forEach(spc => {
+					if (spc.role == '1') {
+						acceptList.push(spc.spcid);
+					}
+				});
+
+
+				if (acceptList.length > 0) {
+					resolve(acceptList);
+				} else {
+					reject('');
+				}
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				console.error(jqXHR);
+				console.error(textStatus);
+				console.error(errorThrown);
+			});
+		}).then(acceptList => {
+			let accept = true;
+			checkDataList.forEach(chk => {
+				if (!acceptList.includes(chk.spc_id)) {
+					accept = false;
 				}
 			});
-		}
 
-		alert(sucessCnt + "건 삭제처리되었습니다.");
-		getDataList(page);
+			if (!accept) {
+				alert('삭제 권한이 없습니다.');
+				return false;
+			}
+
+			let delPrompt = prompt(count + '건을 삭제하시겠습니까? \n삭제를 원하시면 아래 "삭제"라고 입력하고 확인을 눌러 주세요.', '');
+
+			if (delPrompt != '삭제') {
+				return;
+			}
+
+			for (var i = 0; i < count; i++) {
+				var rowData = checkDataList[i];
+				$.ajax({
+					url: apiHost + '/spcs/' + rowData.spc_id + "/gens/" + rowData.gen_id + "?oid=" + oid,
+					type: "delete",
+					dataType: 'json',
+					async: false,
+					contentType: "application/json",
+					data: {
+						"oid": oid
+					},
+					success: function (json) {
+						sucessCnt++;
+					},
+					error: function (request, status, error) {
+
+					}
+				});
+			}
+
+			alert(sucessCnt + "건 삭제처리되었습니다.");
+			getDataList(page);
+		}).catch(error => {
+			if (error == '') {
+				alert('삭제 권한이 없습니다.');
+				return;
+			}
+		});
 	}
 
 	function setCheckedDataEdit() {
@@ -493,12 +544,12 @@
 							<label for="chk_op[INDEX]">[INDEX]</label>
 						</td>
 						<td name="aTagTd01">
-							<a href="/spc/entityDetails.do?spc_id=[spc_id]&gen_id=[gen_id]&oid=[oid]" class="tbl_link">
+							<a href="javascript:moveModifyPage('[spc_id]', '[gen_id]');" class="tbl_link">
 								[name]
 							</a>
 						</td>
 						<td name="aTagTd02">
-							<a href="/spc/entityDetails.do?spc_id=[spc_id]&gen_id=[gen_id]&oid=[oid]" class="tbl_link">
+							<a href="javascript:moveModifyPage('[spc_id]', '[gen_id]');" class="tbl_link">
 								[발전소_명]
 							</a>
 						</td>

@@ -122,7 +122,7 @@ public class RestApiUtil {
 				rtnMap.put("msg", con.getResponseMessage());
 			}
 		} catch (Exception e) {
-			System.err.println(e.toString());
+			logger.error(e.toString());
 			rtnMap.put("data", null);
 			rtnMap.put("code", "");
 			rtnMap.put("msg", e.toString());
@@ -185,7 +185,7 @@ public class RestApiUtil {
 				rtnMap.put("msg", con.getResponseMessage());
 			}
 		} catch (Exception e) {
-			System.err.println(e.toString());
+			logger.error(e.toString());
 			rtnMap.put("data", null);
 			rtnMap.put("code", "");
 			rtnMap.put("msg", e.toString());
@@ -275,7 +275,7 @@ public class RestApiUtil {
 				rtnMap.put("msg", con.getResponseMessage());
 			}
 		} catch (Exception e) {
-			System.err.println(e.toString());
+			logger.error(e.toString());
 			rtnMap.put("data", null);
 			rtnMap.put("code", "");
 			rtnMap.put("msg", e.toString());
@@ -345,7 +345,7 @@ public class RestApiUtil {
 				rtnMap.put("msg", con.getResponseMessage());
 			}
 		} catch (Exception e) {
-			System.err.println(e.toString());
+			logger.error(e.toString());
 			rtnMap.put("data", null);
 			rtnMap.put("code", "");
 			rtnMap.put("msg", e.toString());

@@ -53,9 +53,8 @@ public class EgovNetInfo {
 			//프로세스 에러시 종료
 			if (p.exitValue() != 0) {
 				b_err = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-				while (b_err.ready()) {
-				}
 			}
+
 			//프로세스 실행 성공시 결과 확인
 			else {
 				b_out = new BufferedReader(new InputStreamReader(p.getInputStream()));

@@ -32,9 +32,9 @@ public class AES256Util {
 			len = keyBytes.length;
 		}
 		System.arraycopy(b, 0, keyBytes, 0, len);
-		SecretKeySpec keySpec = new SecretKeySpec(keyBytes, "AES");
+		SecretKeySpec secretKeySpec = new SecretKeySpec(keyBytes, "AES");
 
-		this.keySpec = keySpec;
+		this.keySpec = secretKeySpec;
 	}
 
 	// 암호화

@@ -7,7 +7,7 @@
 		<h1 class="page-header fl">수집 현황</h1>
 		<div class="time fr">
 			<span>CURRENT TIME</span>
-			<em class="currTime">${nowTime}</em>
+			<em class="currTime"></em>
 			<span>DATA BASE TIME</span>
 			<em class="dbTime"></em>
 		</div>
@@ -553,8 +553,8 @@
 					rids: rids,
 					startTime: startTime,
 					endTime: endTime,
-					limit,
-					page
+					limit: limit,
+					page: page
 				},
 				success: function (result) {
 					//데이터 세팅

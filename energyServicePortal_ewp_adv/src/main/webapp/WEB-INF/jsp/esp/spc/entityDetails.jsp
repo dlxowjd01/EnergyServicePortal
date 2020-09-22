@@ -1,5 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <script type="text/javascript">
+	const spcId = "${param.spc_id}";
+	const genId = "${param.gen_id}";
+
 	$(function () {
 		init();
 		getDataSpcBasic();
@@ -7,6 +10,35 @@
 	});
 
 	function init() {
+
+		$.ajax({
+			url: apiHost + '/config/user_spcs?oid=' + oid,
+			type: 'get',
+			async: false,
+			data: {user_ids: userInfoId}
+		}).done(function (data, textStatus, jqXHR) {
+			const result = data.data;
+			let acceptList = new Array();
+
+			result.forEach(spc => {
+				if (spc.role == '1') {
+					acceptList.push(spc.spcid);
+				}
+			});
+
+			if (acceptList.length > 0) {
+				if (!acceptList.includes(Number(spcId))) {
+					$('#modifyButton').remove();
+				}
+			} else {
+				$('#modifyButton').remove();
+			}
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			console.error(jqXHR);
+			console.error(textStatus);
+			console.error(errorThrown);
+		});
+
 
 		setInitList('SPC_법인_인감');
 		setInitList('공인인증서');
@@ -1520,8 +1552,9 @@
 							<p class="tx_file">
 								<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
+							<button type="button" class="btn_file down" onclick="location.href='${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]'"></button>
 						</td>
-						<td><button type="button" class="btn_file down"></button></td>
+						<td></td>
 					</tr>
 					<tr>
 						<th>수배전반</th>
@@ -1529,8 +1562,9 @@
 							<p class="tx_file">
 								<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
+							<button type="button" class="btn_file down" onclick="location.href='${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]'"></button>
 						</td>
-						<td><button type="button" class="btn_file down"></button></td>
+						<td></td>
 					</tr>
 					<tr>
 						<th>케이블</th>
@@ -1538,8 +1572,9 @@
 							<p class="tx_file">
 								<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
+							<button type="button" class="btn_file down" onclick="location.href='${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]'"></button>
 						</td>
-						<td><button type="button" class="btn_file down"></button></td>
+						<td></td>
 					</tr>
 					<tr>
 						<th>모듈</th>
@@ -1547,8 +1582,9 @@
 							<p class="tx_file">
 								<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
+							<button type="button" class="btn_file down" onclick="location.href='${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]'"></button>
 						</td>
-						<td><button type="button" class="btn_file down"></button></td>
+						<td></td>
 					</tr>
 					<tr>
 						<th>인버터</th>
@@ -1556,8 +1592,9 @@
 							<p class="tx_file">
 								<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
+							<button type="button" class="btn_file down" onclick="location.href='${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]'"></button>
 						</td>
-						<td><button type="button" class="btn_file down"></button></td>
+						<td></td>
 					</tr>
 					<tr>
 						<th>결선도</th>
@@ -1565,8 +1602,9 @@
 							<p class="tx_file">
 								<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
+							<button type="button" class="btn_file down" onclick="location.href='${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]'"></button>
 						</td>
-						<td><button type="button" class="btn_file down"></button></td>
+						<td></td>
 					</tr>
 					<tr>
 						<th>토목</th>
@@ -1574,8 +1612,9 @@
 							<p class="tx_file">
 								<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
+							<button type="button" class="btn_file down" onclick="location.href='${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]'"></button>
 						</td>
-						<td><button type="button" class="btn_file down"></button></td>
+						<td></td>
 					</tr>
 					<tr>
 						<th>구조물</th>
@@ -1583,8 +1622,9 @@
 							<p class="tx_file">
 								<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
+							<button type="button" class="btn_file down" onclick="location.href='${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]'"></button>
 						</td>
-						<td><button type="button" class="btn_file down"></button></td>
+						<td></td>
 					</tr>
 					<tr>
 						<th>접속반</th>
@@ -1592,8 +1632,9 @@
 							<p class="tx_file">
 								<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
+							<button type="button" class="btn_file down" onclick="location.href='${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]'"></button>
 						</td>
-						<td><button type="button" class="btn_file down"></button></td>
+						<td></td>
 					</tr>
 					<tr>
 						<th>기타설비</th>
@@ -1601,8 +1642,9 @@
 							<p class="tx_file">
 								<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
+							<button type="button" class="btn_file down" onclick="location.href='${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]'"></button>
 						</td>
-						<td><button type="button" class="btn_file down"></button></td>
+						<td></td>
 					</tr>
 				</table>
 				</div>
@@ -1611,7 +1653,7 @@
 
 		<div class="btn_wrap_type_right"><!--
 			--><button type="button" class="btn_type03" onclick="getExcelDown();">엑셀 다운로드</button><!--
-			--><button type="button" class="btn_type03" onclick="setCheckedDataEdit();">수정</button><!--
+			--><button type="button" id="modifyButton" class="btn_type03" onclick="setCheckedDataEdit();">수정</button><!--
 			--><button type="button" class="btn_type03" onclick="goMoveList();">목록</button><!--
 		--></div>
 		<div id="excelList" style="display:none;">

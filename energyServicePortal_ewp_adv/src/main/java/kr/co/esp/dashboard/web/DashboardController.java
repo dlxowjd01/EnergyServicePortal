@@ -38,22 +38,22 @@ public class DashboardController {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 		sdf.setTimeZone(timeZone);
 		
-		Calendar rangeCal = Calendar.getInstance(timeZone); /* TODO : 테스트용 일자조정  rangeCal.set(Calendar.DATE, 2); */
+		Calendar rangeCal = Calendar.getInstance(timeZone);
 
 		int nowYear = rangeCal.get(Calendar.YEAR);
 		int nowMonth = rangeCal.get(Calendar.MONTH);
 		int nowWeek = rangeCal.get(Calendar.DAY_OF_WEEK);
 		int nowDay = rangeCal.get(Calendar.DAY_OF_MONTH);
 
-		Calendar startDate = Calendar.getInstance(timeZone, Locale.KOREAN); /* TODO : 테스트 일자조정  startDate.set(Calendar.DATE, 2); */
-		Calendar endDate = Calendar.getInstance(timeZone, Locale.KOREAN); /* TODO : 테스트 일자조정  endDate.set(Calendar.DATE, 2); */
-		Calendar beforeDate = Calendar.getInstance(timeZone, Locale.KOREAN); /* TODO : 테스트 일자조정  endDate.set(Calendar.DATE, 2); */
+		Calendar startDate = Calendar.getInstance(timeZone, Locale.KOREAN);
+		Calendar endDate = Calendar.getInstance(timeZone, Locale.KOREAN);
+		Calendar beforeDate = Calendar.getInstance(timeZone, Locale.KOREAN);
 
 		//2020.04.12 000000 ~ 2020.04.12 000000
 		startDate.set(nowYear, nowMonth, nowDay, 0, 0, 0);
 		endDate.set(nowYear, nowMonth, nowDay, 0, 0, 0);
 		beforeDate.set(nowYear, nowMonth, nowDay, 0, 0, 0);
-		endDate.add(Calendar.DATE, 1); //FIXME e.g. 2020.04.12 000000 ~ 2020.04.13 000000 일단위 데이터
+		endDate.add(Calendar.DATE, 1);
 		beforeDate.add(Calendar.DATE, -1);
 
 		model.addAttribute("startTime", sdf.format(startDate.getTime()));
@@ -68,14 +68,14 @@ public class DashboardController {
 		if( endDate.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)  endDate.add(Calendar.DATE, -7);
 		endDate.add(Calendar.DATE, 7);
 		endDate.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-		endDate.add(Calendar.DATE, 1); //FIXME e.g. 2020.03.30 000000 ~ 2020.04.06 000000 일단위 데이터
+		endDate.add(Calendar.DATE, 1);
 		model.addAttribute("startWeek", sdf.format(startDate.getTime()));
 		model.addAttribute("endWeek", sdf.format(endDate.getTime()));
 
 		//e.g. 2020.04.01 000000 ~ 2020.04.30 000000
 		startDate.set(nowYear, nowMonth, 1, 0, 0, 0);
 		endDate.set(nowYear, nowMonth, startDate.getActualMaximum(Calendar.DATE), 0, 0, 0);
-		endDate.add(Calendar.DATE, 1); //FIXME e.g. 2020.04.01 000000 ~ 2020.05.01 000000 일단위 데이터
+		endDate.add(Calendar.DATE, 1);
 		model.addAttribute("startDate", sdf.format(startDate.getTime()));
 		model.addAttribute("endDate", sdf.format(endDate.getTime()));
 
@@ -92,7 +92,7 @@ public class DashboardController {
 		model.addAttribute("beforeEndMonth", sdf.format(endDate.getTime()));
 
 		// display calendar
-		Calendar c = Calendar.getInstance(timeZone, Locale.KOREAN); /* TODO : 테스트 일자조정 c.set(Calendar.DATE, 2); */
+		Calendar c = Calendar.getInstance(timeZone, Locale.KOREAN);
 		c.set(Calendar.DATE, 1);
 		int weekDay = c.get(Calendar.DAY_OF_WEEK) - 1;
 		int lastDay = c.getActualMaximum(Calendar.DAY_OF_MONTH);
