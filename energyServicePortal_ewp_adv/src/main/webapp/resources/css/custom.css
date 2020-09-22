@@ -8221,10 +8221,6 @@ div.di_wrap dl .link a {
     transition: all 0.2s ease;
 }
 
-.rdo_type [type="radio"]:checked+label:after {
-    background: var(--white60);
-}
-
 .rdo_type.align_type td,
 .rdo_type.align_type th {
     padding: 0 10px;
