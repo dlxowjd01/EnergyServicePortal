@@ -611,8 +611,12 @@ function showPwd(inputId, btn) {
 	}
 }
 
-function filterColumn ( id, idx, val, arr ) {
-	$(id).DataTable().column(idx).search(val).draw();
+function filterColumn ( id, idx, val, option ) {
+	if(option){;
+		$(id).DataTable().column(idx).search(val, true, false).draw();
+	} else {
+		$(id).DataTable().column(idx).search(val).draw();
+	}
 }
 
 

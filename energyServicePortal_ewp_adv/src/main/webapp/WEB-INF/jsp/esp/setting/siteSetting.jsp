@@ -4,10 +4,6 @@
 <script src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
 	$(function () {
-		// let l = '${location}'
-		// console.log("location---", l);
-		// let siteList = '${siteHeaderList}';
-		// console.log("siteList---", siteList);
 
 		let optionList = [
 			{
@@ -184,6 +180,7 @@
 		});
 
 		$("#addAlarmModal").on("hide.bs.modal", function() {
+			initAlarmTable();
 			$("#alarmTable").DataTable().clear().destroy();
 		});
 
@@ -1779,13 +1776,24 @@
 		// $("#countryList").on("change", 'input[type=checkbox]', function(){
 
 		$("#countryList li").on("click", function(){
-			// filterColumn("#siteTable", "3", "");
-			filterColumn("#siteTable", "3", "");
+			let val = $(this).data("id");
+			let selected = "";
+			let checked = $("#countryList").find("input:checked");
 
-			if(!isEmpty($(this).data("id"))){
-				filterColumn( "#siteTable", "3", $(this).data("id"));
+			if(!isEmpty(val)){
+				checked.each(function(index, el){
+					selected += $(this).attr("id") + ('|');
+				});
+				selected += $(this).data("id");
+
+				if(checked.length>0){
+					filterColumn("#siteTable", "3", selected, "multi");
+				} else {
+					console.log("selected==", selected);
+				}
 			} else {
 				filterColumn("#siteTable", "3", "");
+				checked.prop("checked", false);
 			}
 		});
 
@@ -1858,6 +1866,7 @@
 
 	function initModal(){
 		let form = $("#updateSiteForm");
+		let checkBox = $("#propertyRow").find("input[type='checkbox']");
 		let input = form.find("input:not(#newSiteName)");
 		let dropdownBtn = form.find(".dropdown-toggle");
 		let warning = form.find(".warning");
@@ -1877,11 +1886,18 @@
 			$(this).val("").prop("disabled", false).parent().removeClass("disabled");
 		});
 
+		checkBox.prop("checked", false);
+
 		$.each(dropdownBtn, function(index, element){
 			$(this).data({ "value": "", "vol-type": "", "plan-id" : "" }).html('선택' + '<span class="caret"></span>').prop("disabled", false);
 			$(this).next().find("li").removeClass("hidden");
 		});
 		// console.log("initModal----")
+	}
+	
+	function initAlarmTable(){
+		let checkBox = $("#alarmTable").find("input[type='checkbox']");
+		checkBox.prop("checked", false);
 	}
 
 	function updateModal(option, callback){
@@ -3436,16 +3452,17 @@
 		<div class="flex_group">
 			<span class="inline-title">지역</span>
 			<div class="dropdown">
-				<button type="button" class="dropdown-toggle" data-toggle="dropdown">선택<span class="caret"></span></button>
-				<ul id="countryList" class="dropdown-menu unused chk_type" role="menu">
+				<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+				<ul id="countryList" class="dropdown-menu chk_type" role="menu">
 					<li><a href="#">전체</a></li>
 					<c:forEach var="country" items="${location}">
 						<c:if test="${country.value.code eq 'kr'}">
 							<c:forEach var="city" items="${country.value.locations}" varStatus="cityName">
 								<li data-id="${city.value.code}" data-value="${city.value.name.kr}">
-									<a href="#" tabindex="-1"><c:out value="${city.value.code}"></c:out>
-										<!-- <input type="checkbox" name="${city.value.name.en}" id="${city.value.code}" value="${city.value.name.kr}">
-										<label for="${city.value.code}" class="on"><c:out value="${city.value.code}"></c:out></label> -->
+									<!-- <a href="#" tabindex="-1"><c:out value="${city.value.code}"></c:out> -->
+									<a href="#" tabindex="-1">
+										<input type="checkbox" name="${city.value.name.en}" id="${city.value.code}" value="${city.value.name.kr}">
+										<label for="${city.value.code}" class="on"><c:out value="${city.value.code}"></c:out></label>
 									</a>
 								</li>
 							</c:forEach>
