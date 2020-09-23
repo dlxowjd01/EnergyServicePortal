@@ -8,7 +8,7 @@
 <div class="row header-wrapper">
 	<div class="col-6">
 		<h1 class="page-header fl">${siteName}</h1>
-
+		<%--
 		<c:if test="${fn:contains(sessionScope.userInfo.oid, 'spower')}">
 		<label class="switch switch-slide fl">
 			<input type="checkbox" value="showTable" id="switchBtn" class="switch-input" />
@@ -16,6 +16,7 @@
 			<span class="switch-handle"></span>
 		</label>
 		</c:if>
+		--%>
 	</div>
 	<div class="col-6">
 		<div class="time fr">

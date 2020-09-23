@@ -223,16 +223,16 @@
 
 			let newPeakDemand = "";
 			if ($("#newPeakDemand").val().indexOf(',') > -1) {
-				newPeakDemand = $("#newPeakDemand").val().replace(/,/g, "");
+				newPeakDemand = ( parseFloat($("#newPeakDemand").val().replace(/,/g, "")) * 1000 );
 			} else {
-				newPeakDemand = $("#newPeakDemand").val();
+				newPeakDemand = ( parseFloat($("#newPeakDemand").val()) * 1000 );
 			}
 
 			let newDrCharge = "";
 			if ($("#newDrCharge").val().indexOf(',') > -1) {
-				newDrCharge = $("#newDrCharge").val().replace(/,/g, "");
+				newDrCharge = ( parseFloat($("#newDrCharge").val().replace(/,/g, "")) * 1000 );
 			} else {
-				newDrCharge = $("#newDrCharge").val();
+				newDrCharge = ( parseFloat($("#newDrCharge").val()) * 1000 );
 			}
 			let newInspection = Number($("#newInspection").prev().data("value"));
 			let newKepcoId = $("#newKepcoId").val();
@@ -249,7 +249,7 @@
 			// let newDrResId = $("#newDrResIdList").prev().data("value");
 			// let newDrVol = "";
 			// if ($("#newDrVol").val().indexOf(',') > -1) {
-			// 	newDrVol = $("#newDrVol").val().replace(/,/g, "");
+			// 	newDrVol = parseFloat($("#newDrVol").val().replace(/,/g, "")) * 1000;
 			// } else {
 			// 	newDrVol = $("#newDrVol").val();
 			// }
@@ -260,7 +260,7 @@
 			// VPP
 			let newVppObj = {}
 			let newVppResId = $("#newVppResIdList").val();
-			let newVppRevShare =$("#newVppRevShare").val();
+			let newVppRevShare = $("#newVppRevShare").val();
 
 			// AJAX callOption && FormData Obj
 			let option = {};
@@ -380,7 +380,7 @@
 
 				// VPP JSON
 
-				if( !isEmpty(newVppRevShare) ){
+				if( !isEmpty(newVppRevShare) && newVppRevShare != "-"){
 					newVppObj.profile_share = newVppRevShare;
 				}
 				if( !isEmpty(newVppObj) ){
@@ -1146,122 +1146,122 @@
 		}
 
 		mySites.map((item, index) => {
-		let found = userSites.findIndex( x => x.sid === item.sid);
+			let found = userSites.findIndex( x => x.sid === item.sid);
 
-		if(found > -1){
-			// let matchedData = item;
-			let rawDataOpt = {
-				url: apiHost + "/status/raw/site",
-				type: 'get',
-				async: false,
-				data:{
-					sid: item.sid,
-					formId: 'v2'
-				},
-				beforeSend: function(){
+			if(found > -1){
+				// let matchedData = item;
+				let rawDataOpt = {
+					url: apiHost + "/status/raw/site",
+					type: 'get',
+					async: false,
+					data:{
+						sid: item.sid,
+						formId: 'v2'
+					},
+					beforeSend: function(){
+						$("#loadingCircle").show();
+					}
+				}
+
+				$.ajax(rawDataOpt).done(function (json, textStatus, jqXHR) {
 					$("#loadingCircle").show();
-				}
-			}
-
-			$.ajax(rawDataOpt).done(function (json, textStatus, jqXHR) {
-				$("#loadingCircle").show();
-				if(!isEmpty(json.INV_PV) && ( Object.keys("genCapacity").length === 0 ) ) {
-					item.genCapacity = json.INV_PV.capacity;
-				} else {
-					item.genCapacity = 0;
-				}
-				if(!isEmpty(json.PCS_ESS) && ( Object.keys("pcsCapacity").length === 0 ) ) {
-					item.pcsCapacity = json.PCS_ESS.capacity;
-				} else {
-					item.pcsCapacity = 0;
-				}
-				if(!isEmpty(json.BMS_SYS) && ( Object.keys("bmsCapacity").length === 0 ) ) {
-					item.bmsCapacity = json.BMS_SYS.capacity;
-				} else {
-					item.bmsCapacity = 0;
-				}
-
-				if(isEmpty(item.ess)){
-					item.ess == "-"
-				} else {
-					if(item.ess == 1){
-						item.ess = "DemandESS"
-					} else if(item.ess == 2){
-						item.ess = "GenerationESS"
-					}
-				}
-
-				item.role = userSites[found].role;
-		
-				if(!isEmpty(item.location)){
-					item.location = item.location;
-				} else {
-					item.location = "-";
-				}
-
-				if(item.resource_type === 0) {
-					// Demand && ESS : pair
-					item.siteType = "수요자원"
-					item.powerSource = "부하"
-				} else {
-					if(isEmpty(item.resource_type)){
-						item.siteType = "-"
+					if(!isEmpty(json.INV_PV) && ( Object.keys("genCapacity").length === 0 ) ) {
+						item.genCapacity = json.INV_PV.capacity;
 					} else {
-						item.siteType = "발전소"
+						item.genCapacity = 0;
 					}
-					if(item.resource_type === 1){
-						item.powerSource = "태양광"
-					} else if(item.resource_type === 2){
-						item.powerSource = "풍력"
-					} else if(item.resource_type === 3){
-						item.powerSource = "소수력"
+					if(!isEmpty(json.PCS_ESS) && ( Object.keys("pcsCapacity").length === 0 ) ) {
+						item.pcsCapacity = json.PCS_ESS.capacity;
+					} else {
+						item.pcsCapacity = 0;
 					}
-				}
-
-				// Match name with dr_group_id
-				if(!isEmpty(item.dr_group_id)){
-					let found = vppNameData.dr_group.findIndex( x => x.dgid == item.dr_group_id);
-					if(found > -1){
-						item.drName = vppNameData.dr_group[found].name;
+					if(!isEmpty(json.BMS_SYS) && ( Object.keys("bmsCapacity").length === 0 ) ) {
+						item.bmsCapacity = json.BMS_SYS.capacity;
+					} else {
+						item.bmsCapacity = 0;
 					}
-				} else {
-					item.drName = "-"
-				}
 
-				// Match name with vpp_group_id
-				if(!isEmpty(item.vpp_group_id)){
-					let found = vppNameData.vpp_group.findIndex( x => x.vgid == item.vpp_group_id);
-					if(found > -1){
-						item.vppName = vppNameData.vpp_group[found].name;
+					if(isEmpty(item.ess)){
+						item.ess == "-"
+					} else {
+						if(item.ess == 1){
+							item.ess = "DemandESS"
+						} else if(item.ess == 2){
+							item.ess = "GenerationESS"
+						}
 					}
-				} else {
-					item.vppName = "-"
-				}
 
-				// if(!isEmpty(matchedData.dr_group_id)){
-				// 	item.drId = item.dr_group_id;
-				// } else {
-				// 	item.drId = "-"
-				// }
+					item.role = userSites[found].role;
 
-				// if(!isEmpty(matchedData.vpp_group_id)){
-				// 	item.vppId = item.vpp_group_id;
-				// } else {
-				// 	item.vppId = "-"
-				// }
+					if(!isEmpty(item.location)){
+						item.location = item.location;
+					} else {
+						item.location = "-";
+					}
 
-				item.updatedAt = new Date(item.updatedAt).toLocaleDateString("en-CA").replace(/\//g, '-') + '&ensp;' + new Date(item.updatedAt).toLocaleTimeString();
-				// newArr.push(item);
+					if(item.resource_type === 0) {
+						// Demand && ESS : pair
+						item.siteType = "수요자원"
+						item.powerSource = "부하"
+					} else {
+						if(isEmpty(item.resource_type)){
+							item.siteType = "-"
+						} else {
+							item.siteType = "발전소"
+						}
+						if(item.resource_type === 1){
+							item.powerSource = "태양광"
+						} else if(item.resource_type === 2){
+							item.powerSource = "풍력"
+						} else if(item.resource_type === 3){
+							item.powerSource = "소수력"
+						}
+					}
 
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				console.log("error====", jqXHR);
-				return false;
-			});
-			newArr.push(item);
-		} else {
-			newArr = [];
-		}
-			// return newArr;
+					// Match name with dr_group_id
+					if(!isEmpty(item.dr_group_id)){
+						let found = vppNameData.dr_group.findIndex( x => x.dgid == item.dr_group_id);
+						if(found > -1){
+							item.drName = vppNameData.dr_group[found].name;
+						}
+					} else {
+						item.drName = "-"
+					}
+
+					// Match name with vpp_group_id
+					if(!isEmpty(item.vpp_group_id)){
+						let found = vppNameData.vpp_group.findIndex( x => x.vgid == item.vpp_group_id);
+						if(found > -1){
+							item.vppName = vppNameData.vpp_group[found].name;
+						}
+					} else {
+						item.vppName = "-"
+					}
+
+					// if(!isEmpty(matchedData.dr_group_id)){
+					// 	item.drId = item.dr_group_id;
+					// } else {
+					// 	item.drId = "-"
+					// }
+
+					// if(!isEmpty(matchedData.vpp_group_id)){
+					// 	item.vppId = item.vpp_group_id;
+					// } else {
+					// 	item.vppId = "-"
+					// }
+
+					item.updatedAt = new Date(item.updatedAt).toLocaleDateString("en-CA").replace(/\//g, '-') + '&ensp;' + new Date(item.updatedAt).toLocaleTimeString();
+					// newArr.push(item);
+
+				}).fail(function (jqXHR, textStatus, errorThrown) {
+					console.log("error====", jqXHR);
+					return false;
+				});
+				newArr.push(item);
+			} else {
+				newArr = [];
+			}
+				// return newArr;
 		});
 
 		if(newArr.length === 0 ){
@@ -1389,9 +1389,11 @@
 					$('#siteTable_wrapper').addClass('mb-28');
 				},
 			}).on("select", function(e, dt, type, indexes) {
-				let role = siteReadOnlyTable.rows( indexes ).data().toArray()[0].role;
 				let btn = $("#btnGroup").find(".btn_type03");
-				// console.log("role---", siteReadOnlyTable.rows( indexes ).data().toArray()[0] );
+				let role = null;
+				if(!isEmpty(siteReadOnlyTable.row( indexes ).data())){
+					role = siteReadOnlyTable.row( indexes ).data().role;
+				}
 
 				if(role === 1){
 					btn.each(function(index, element){
@@ -1415,8 +1417,13 @@
 				siteReadOnlyTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
 				// console.log("dt---", siteReadOnlyTable[ type ]( indexes ).nodes())
 			}).on("deselect", function(e, dt, type, indexes) {
-				let role = siteReadOnlyTable.rows( indexes ).data().toArray()[0].role;
 				let btn = $("#btnGroup").find(".btn_type03");
+				let role = null;
+
+				if(!isEmpty(siteReadOnlyTable.row( indexes ).data())){
+					role = siteReadOnlyTable.row( indexes ).data().role;
+				}
+
 				btn.each(function(index, element){
 					if(!$(this).is(":disabled")){
 						$(this).prop("disabled", true);
@@ -1467,9 +1474,8 @@
 				siteReadOnlyTable.columns(2).search( this.value ).draw();
 			});
 		}
-
-
 	}
+
 
 	function drawEmptyTable(target){
 		var t = target.DataTable({
@@ -1852,29 +1858,28 @@
 
 	function initModal(){
 		let form = $("#updateSiteForm");
-		let input = form.find("input");
+		let input = form.find("input:not(#newSiteName)");
 		let dropdownBtn = form.find(".dropdown-toggle");
 		let warning = form.find(".warning");
 
 		$("#validSite").addClass("hidden");
-		$("#newSiteName").parent().next().prop("disabled", true);
+		$("#newSiteName").val("").prop("disabled", false).parent().removeClass("disabled").next().prop("disabled", true);
 		
 		$("#addSiteBtn").prop("disabled", true).removeClass("hidden");
 
 		$("#newResList li").removeClass("hidden");
 		$("#newSiteType").prev().prop("disabled", false);
-		$("#newSiteDetail").val("");
+		$("#newSiteDetail").val("").prop("disabled", false);
 		$("#confirmSite").val("");
 
 		warning.addClass("hidden");
 		input.each(function(){
-			$(this).val("").prop("disabled", false);
+			$(this).val("").prop("disabled", false).parent().removeClass("disabled");
 		});
 
 		$.each(dropdownBtn, function(index, element){
-			$(this).data({ "value": "", "vol-type": "", "plan-id" : "" }).html('선택' + '<span class="caret"></span>');
+			$(this).data({ "value": "", "vol-type": "", "plan-id" : "" }).html('선택' + '<span class="caret"></span>').prop("disabled", false);
 			$(this).next().find("li").removeClass("hidden");
-			$(this).prop("disabled", false);
 		});
 		// console.log("initModal----")
 	}
@@ -1910,7 +1915,6 @@
 
 			// EDIT MODAL!!!
 			if(option == "edit") {
-
 				if(!isEmpty(rowData.role) && rowData.role != 1){
 					let input = form.find("input");
 					let dropdownBtn = form.find(".dropdown-toggle");
@@ -1922,10 +1926,14 @@
 					$.each(dropdownBtn, function(index, element){
 						$(this).prop("disabled", true);
 					});
-					
+					// 추가 정보
+					$('#newSiteDetail').val(rowData.detail_info).prop("disabled", true);
+
 					addBtn.addClass("hidden");
 
 				} else {
+					// 추가 정보
+					$('#newSiteDetail').val(rowData.detail_info).prop("disabled", false);
 					addBtn.prop("disabled", false).text("수정").removeClass("hidden");
 				}
 
@@ -1937,7 +1945,7 @@
 					newSiteName.parent().removeClass("offset-width").addClass("w-100");
 				}
 				// 사업소 명
-				newSiteName.val( td.eq(2).text() );
+				newSiteName.val( td.eq(2).text() ).prop("disabled", true).parent().addClass("disabled");
 				// 지역
 				$('#newCityList').prev().data({"name": td.eq(3).text(), "value" : td.eq(3).data("value") }).html(td.eq(3).text() + "<span class='caret'></span>");
 				// Address
@@ -1958,8 +1966,6 @@
 				if( !isEmpty(rowData.latlng)) {
 					$('#newCoord').val(rowData.latlng);
 				}
-				// 추가 정보
-				$('#newSiteDetail').val(rowData.detail_info);
 				$('#station_id').val(rowData.station_id);
 				// kpx
 				if (oid.match('testkpx')) {
@@ -1975,20 +1981,17 @@
 						let newDrCharge = $("#newDrCharge");
 						let utilPlanName = util.utility_plan_name;
 
-						console.log("util==", util);
 						if(!isEmpty(util.utility_plan_id)){
 							$("#newContractList").prev().data({"plan-id": util.utility_plan_id, "value": utilPlanName }).html(utilPlanName + '<span class="caret"></span>');
 						} else {
 							$("#newContractList").prev().html('선택<span class="caret"></span>');
 						}
 
-						if(!isEmpty(rowData.role) && rowData.role == 2){
-							$("#newVoltTypeList").prev().prop("disabled", true);
-						} else {
+						if(isEmpty(rowData.role)) {
 							sectionPowerMarketInfo.find(".dropdown-toggle:not(.optional)").each(function(index, el){
 								$(this).prop("disabled", false);
 							});
-							sectionPowerMarketInfo.find("input[type='text']").each(function(index, el){
+							sectionPowerMarketInfo.find("input[type='text'][type='password']").each(function(index, el){
 								$(this).prop("disabled", false).parent().removeClass("disabled");
 							});
 						}
@@ -2001,11 +2004,11 @@
 						}
 
 						if(!isEmpty(util.peak_demand) ){
-							formatUnit(newPeakDemand, util.peak_demand);
+							formatUnit(newPeakDemand, String(util.peak_demand / 1000));
 						}
 
 						if(!isEmpty(util.demand_charge) ){
-							formatUnit(newDrCharge, util.demand_charge);
+							formatUnit(newDrCharge, String(util.demand_charge / 1000));
 						}
 
 						if(util.metering_day == 0){
@@ -2034,11 +2037,12 @@
 					}
 					$("#newPrice").val(priceModel.price).html( priceModel.price + '<span class="caret"></span>');
 				}
+
 				// DR info
 // 				let sectionDRInfo = $("#sectionDRInfo");
 // 				let sectionDrDropdown = sectionDRInfo.find(".dropdown-toggle");
 // 				let sectionDrInput = sectionDRInfo.find("input[type='text']");
-
+//				let newDrVol = $("#newDrVol");
 // 				if( !isEmpty(rowData.dr_group_id)) {
 // 					$("#newDrResIdList").prev().data("value", rowData.dr_group_id).html(rowData.drName + "<span class='caret'></span>");
 // 					sectionDrDropdown.each(function(item, index){
@@ -2052,9 +2056,11 @@
 // 					if(!isEmpty(rowData.dr_info)){
 // 						let dr = JSON.parse(rowData.dr_info);
 // 						// console.log("dr===", dr);
-// 						if( !isEmpty(dr.contract_capacity)) {
-// 							$("#newDrVol").val(dr.contract_capacity);
-// 						}
+
+						// if(!isEmpty(dr.contract_capacity) ){
+						// 	formatUnit(newDrVol, String(dr.contract_capacity / 1000));
+						// }
+
 // 						if( !isEmpty(dr.cbl_method)) {
 // 							$("#newCblList").prev().html(dr.cbl_method + "<span class='caret'></span>");
 // 						}
@@ -2075,7 +2081,7 @@
 				// VPP info
 				let sectionVppInfo = $("#sectionVppInfo");
 				let sectionVppDropdown = sectionVppInfo.find(".dropdown-toggle");
-				let sectionVppInput = sectionVppInfo.find("input");
+				let sectionVppInput = sectionVppInfo.find("input[type='text']");
 
 				if( !isEmpty(rowData.vpp_group_id)) {
 					$("#newVppResIdList").prev().data("value", rowData.vpp_group_id).html(rowData.vppName + "<span class='caret'></span>");
@@ -2083,13 +2089,12 @@
 						$(this).prop("disabled", false);
 					});
 					sectionVppInput.each(function(item, index){
-						$(this).prop("disabled", false);
+						$(this).prop("disabled", false).parent().removeClass("disabled");
 					});
 					if( !isEmpty(rowData.vpp_info)) {
 						let vpp = JSON.parse(rowData.vpp_info);
-						// console.log("vpp===", vpp);
 
-						if( !isEmpty(rowData.vpp_info)) {
+						if( !isEmpty(rowData.profile_share) && rowData.profile_share != "-" ) {
 							$("#newVppRevShare").val(vpp.profile_share);
 						}
 					}
@@ -3844,7 +3849,7 @@
 
 									<div class="col-xl-1 col-lg-2 col-md-1 col-sm-2"><span class="input_label">수익 분배율</span></div>
 									<div class="col-xl-2 col-lg-2 col-sm-4 pl-0">
-										<div class="tx_inp_type"><input type="text" name="vpp_rev_share" id="newVppRevShare" class="pr-36" onkeyup="formatRatio(this)" placeholder="입력" maxlength="5"><span class="unit">%</span></div>
+										<div class="tx_inp_type"><input type="text" name="vpp_rev_share" id="newVppRevShare" class="pr-36" oninput="truncateNonDigit(event, this, 'percentage')" onkeyup="formatRatio(this)" placeholder="입력" maxlength="5"><span class="unit">%</span></div>
 									</div>
 								</div>
 							</section>
