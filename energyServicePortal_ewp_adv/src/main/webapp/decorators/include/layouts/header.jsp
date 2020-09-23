@@ -305,10 +305,10 @@
 	<button type="button" id="mobileNavBtn" class="category">카테고리</button>
 	<c:choose>
 		<c:when test="${fn:contains(pageContext.request.serverName, 'spower')}">
-			<div class="nav-brand spower"><a href="/">${sessionScope.userInfo.oid}</a></div>
+			<div class="nav-brand spower"><a href="/dashboard/gmain.do">${sessionScope.userInfo.oid}</a></div>
 		</c:when>
 		<c:otherwise>
-			<div class="nav-brand"><a href="/">${sessionScope.userInfo.oid}</a></div>
+			<div class="nav-brand"><a href="/dashboard/gmain.do">${sessionScope.userInfo.oid}</a></div>
 		</c:otherwise>
 	</c:choose>
 
@@ -507,27 +507,36 @@
 		</form>
 	</div>
 	<ul class="nav_right">
-		<li class="member clear">
-			<div class="fr"><button type="button" data-toggle="modal" data-target="#updateUserInfoModal" data-backdrop="static" data-keyboard="false" id="userInfoBtn" class="btn_type03">${sessionScope.userInfo.name}<span class="light">&emsp;${sessionScope.userInfo.login_id}</span></button></div>
-		</li>
-		<%--
-		<li>
-			<div class="nav_theme">
-				<div class="switcher">
-					<input type="radio" name="balance" value="light" id="light"
-						   class="switcher__input switcher__input--light"
-						   checked="" onClick="userTheme('light');">
-					<label for="light" class="switcher__label">Light</label>
-					<input type="radio" name="balance" value="dark" id="dark"
-						   class="switcher__input switcher__input--dark"
-						   onClick="userTheme('dark');">
-					<label for="dark" class="switcher__label">Dark</label>
-					<span class="switcher__toggle"></span>
-				</div>
-			</div>
-		</li>
-		--%>
-		<li><%@ include file="/decorators/include/selectLang.jsp" %></li>
+		<c:choose>
+			<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
+				<li class="member clear">
+					<div><button type="button" data-toggle="modal" data-target="#updateUserInfoModal" data-backdrop="static" data-keyboard="false" id="userInfoBtn" class="btn_type03">${sessionScope.userInfo.name}<span class="light">&emsp;${sessionScope.userInfo.login_id}</span></button></div>
+				</li>
+			</c:when>
+			<c:otherwise>
+				<li class="member clear">
+					<div class="fr"><button type="button" data-toggle="modal" data-target="#updateUserInfoModal" data-backdrop="static" data-keyboard="false" id="userInfoBtn" class="btn_type03">${sessionScope.userInfo.name}<span class="light">&emsp;${sessionScope.userInfo.login_id}</span></button></div>
+				</li>
+				<%--
+				<li>
+					<div class="nav_theme">
+						<div class="switcher">
+							<input type="radio" name="balance" value="light" id="light"
+								   class="switcher__input switcher__input--light"
+								   checked="" onClick="userTheme('light');">
+							<label for="light" class="switcher__label">Light</label>
+							<input type="radio" name="balance" value="dark" id="dark"
+								   class="switcher__input switcher__input--dark"
+								   onClick="userTheme('dark');">
+							<label for="dark" class="switcher__label">Dark</label>
+							<span class="switcher__toggle"></span>
+						</div>
+					</div>
+				</li>
+				--%>
+				<li><%@ include file="/decorators/include/selectLang.jsp" %></li>
+			</c:otherwise>
+		</c:choose>
 	</ul>
 </nav>
 

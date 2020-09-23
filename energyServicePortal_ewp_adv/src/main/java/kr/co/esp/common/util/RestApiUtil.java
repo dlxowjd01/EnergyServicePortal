@@ -104,13 +104,11 @@ public class RestApiUtil {
 				ObjectMapper mapper = new ObjectMapper();
 				if (sb.toString().startsWith("[")) {
 					List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-					list = mapper.readValue(sb.toString(), new TypeReference<List<Map<String, Object>>>() {
-					});
+					list = mapper.readValue(sb.toString(), new TypeReference<List<Map<String, Object>>>() {});
 					rtnMap.put("data", list);
 				} else {
 					Map<String, Object> map = new HashMap<String, Object>();
-					map = mapper.readValue(sb.toString(), new TypeReference<Map<String, Object>>() {
-					});
+					map = mapper.readValue(sb.toString(), new TypeReference<Map<String, Object>>() {});
 					rtnMap.put("data", map);
 				}
 
@@ -167,13 +165,11 @@ public class RestApiUtil {
 				ObjectMapper mapper = new ObjectMapper();
 				if (sb.toString().startsWith("[")) {
 					List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-					list = mapper.readValue(sb.toString(), new TypeReference<List<Map<String, Object>>>() {
-					});
+					list = mapper.readValue(sb.toString(), new TypeReference<List<Map<String, Object>>>() {});
 					rtnMap.put("data", list);
 				} else {
 					Map<String, Object> map = new HashMap<String, Object>();
-					map = mapper.readValue(sb.toString(), new TypeReference<Map<String, Object>>() {
-					});
+					map = mapper.readValue(sb.toString(), new TypeReference<Map<String, Object>>() {});
 					rtnMap.put("data", map);
 				}
 
@@ -257,13 +253,11 @@ public class RestApiUtil {
 				ObjectMapper mapper = new ObjectMapper();
 				if (sb.toString().startsWith("[")) {
 					List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-					list = mapper.readValue(sb.toString(), new TypeReference<List<Map<String, Object>>>() {
-					});
+					list = mapper.readValue(sb.toString(), new TypeReference<List<Map<String, Object>>>() {});
 					rtnMap.put("data", list);
 				} else {
 					Map<String, Object> map = new HashMap<String, Object>();
-					map = mapper.readValue(sb.toString(), new TypeReference<Map<String, Object>>() {
-					});
+					map = mapper.readValue(sb.toString(), new TypeReference<Map<String, Object>>() {});
 					rtnMap.put("data", map);
 				}
 

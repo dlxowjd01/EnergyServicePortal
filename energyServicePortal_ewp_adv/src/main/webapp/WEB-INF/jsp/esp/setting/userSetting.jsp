@@ -2059,6 +2059,7 @@
 									<div class="col-lg-5 col-md-5 col-sm-12"><h2 class="stit hidden">추가 리스트</h2><ol id="selectedSiteList" class="selected-list"></ol></div>
 								</div>
 							</div>
+							<c:if test="${activateSPC eq true}">
 							<div id="spcTab" class="tab-pane fade">
 								<div id="spcRow" class="row user-row">
 									<div class="col-lg-7 col-md-7 col-sm-12">
@@ -2087,6 +2088,7 @@
 
 								</div>
 							</div>
+							</c:if>
 						</div>
 
 						<div class="row">

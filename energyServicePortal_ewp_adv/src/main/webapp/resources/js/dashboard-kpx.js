@@ -242,7 +242,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 		formatter: function () {
 			return this.points.reduce(function (s, point) {
 				let suffix = point.series.userOptions.tooltip.valueSuffix;
-				return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + numberComma(point.y) + suffix;
+				return s + ' 월 <br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + numberComma(point.y) + suffix;
 			}, '<b>' + this.x + '</b>');
 		},
 		shared: true, /* 툴팁 공유 */
@@ -589,7 +589,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		formatter: function () {
 			return this.points.reduce(function (s, point) {
 				let suffix = point.series.userOptions.tooltip.valueSuffix;
-				return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + numberComma(point.y) + suffix;
+				return s + ' 일 <br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + numberComma(point.y) + suffix;
 			}, '<b>' + this.x + '</b>');
 		},
 		shared: true,
@@ -929,7 +929,7 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 			dataLabels: {
 				enabled: true,
 				// inside: true, /* 막대 안으로 라벨 수치 넣기 */
-				format: '{y} kWh', /* 단위 넣기 */
+				// format: '{y} kWh', /* 단위 넣기 */
 				style: {
 					color: 'var(--white87)',
 					fontSize: '12px',
@@ -937,6 +937,13 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 					textOutline: 0,
 					textShadow: true,
 					
+				},
+				formatter: function () {
+					if (String(this.y).length > 3) {
+						return numberComma((this.y / 1000).toFixed(2)) + 'MWh';
+					} else {
+						return numberComma(this.y) + 'kWh';
+					}
 				}
 			},
 		},
@@ -1118,7 +1125,7 @@ const beforeTodayTotalPromise = (site) => {
 			let resolveObj = new Object();
 
 			$.map(data, function (val, key) {
-				if (oid.match('kpx')) {
+				if (oid.match('testkpx')) {
 					if (key == 'KPX_EMS') {
 						if (!isEmpty(val.activePower)) {
 							acPowerSum += val.activePower;
@@ -1169,7 +1176,7 @@ const getTodayTotalDetail = async function () {
 	$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text(0);
 
 	const formData = getSiteMainSchCollection('day');
-	if (!oid.match('kpx')) {
+	if (!oid.match('testkpx')) {
 		$('#centerTbody tr td:nth-child(1)').html(Math.floor(siteList.length) + '<em>&nbsp;&nbsp;개소</em>');
 		$('#centerTbody tr td:nth-child(2)').text('');
 		$('#centerTbody tr td:nth-child(3)').text('');
@@ -1186,130 +1193,80 @@ const getTodayTotalDetail = async function () {
 		$('.gmain_chart_kpx .chart_box .chart_info .ci_right ul li:nth-child(3) span').text('')
 	}
 
-	if (oid.match('kpx')) {
-		siteList.forEach((site, siteIdx) => {
-			const devices = site.devices;
-			const capacity = site.capacity;
-			const resourceType = site.resource_type;
-			devices.forEach(device => {
-				let did = device.did;
-				if (device.device_type !== 'KPX_EMS') {
-					return false;
-				}
-				$.ajax({
-					url: apiHost + '/status/raw',
-					type: 'get',
-					data: {
-						dids: device.did
-					},
-				}).done(function (data, textStatus, jqXHR) {
-					const rtnData = data[did].data;
-					let acPower = 0;
-					let reacPower = 0;
-					let maxacPower = 0;
-					rtnData.forEach(di => {
-						let aPower = di.activePower;
-						let tPower = di.targetActivePower;
+	let deviceArray = new Array();
+	let capacity = 0;
+	let acPower = 0;
+	siteList.forEach((site, siteIdx) => {
+		capacity += site.capacity;
+	});
 
-						let prevVal1 = Number($('.gmain_chart_kpx .chart_box .chart_info .ci_right ul li:nth-child(1) span').text().replace(/[^0-9]/g, ''));
-						$('.gmain_chart_kpx .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(numberComma(Math.floor(prevVal1 += (aPower / 1000))));
-
-						let prevVal2 = Number($('.gmain_chart_kpx .chart_box .chart_info .ci_right ul li:nth-child(2) span').text().replace(/[^0-9]/g, ''));
-						$('.gmain_chart_kpx .chart_box .chart_info .ci_right ul li:nth-child(2) span').text(numberComma(Math.floor(prevVal2 += (tPower / 1000))));
-
-						let prevVal3 = Number($('.gmain_chart_kpx .chart_box .chart_info .ci_right ul li:nth-child(3) span').text().replace(/[^0-9]/g, ''));
-						$('.gmain_chart_kpx .chart_box .chart_info .ci_right ul li:nth-child(3) span').text(numberComma(Math.floor(prevVal3 += (capacity / 1000))));
-
-						acPower += aPower;
-					});
-					pieChart.setTitle({text: Math.floor(acPower / 1000) + 'kW'});
-
-					let usage = Math.floor((acPower / capacity) * 100);
-					let other = 100 - usage;
-
-					pieChart.series[0].data.forEach((e, idx) => {
-						if (e.name === "태양광") {
-							e.update({y: usage});
-						} else if (e.name === "미사용량") {
-							e.update({y: other});
-						} else {
-							e.update({y: 0});
-						}
-					});
-					pieChart.redraw();
-
-					if (resourceType == 1) {
-						let sitePreVal = Number($('#centerTbody tr:eq(0) td:nth-child(5)').text().replace(/[^0-9]/g, ''));
-						let capacityPreVal = Number($('#centerTbody tr:eq(0) td:nth-child(6)').text().replace(/[^0-9]/g, ''));
-
-						$('#centerTbody tr:eq(0) td:nth-child(4)').html('태양광'); //구분
-						$('#centerTbody tr:eq(0) td:nth-child(5)').html(sitePreVal + 1 + '<em>&nbsp;&nbsp;개소</em>'); //사업소
-						$('#centerTbody tr:eq(0) td:nth-child(6)').html(numberComma(Math.floor(capacityPreVal += (capacity / 1000)) + '<em>&nbsp;&nbsp;kW</em>')); //설비용량
-					} else if (resourceType == 2) {
-						let sitePreVal = Number($('#centerTbody tr:eq(0) td:nth-child(2)').text().replace(/[^0-9]/g, ''));
-						let capacityPreVal = Number($('#centerTbody tr:eq(0) td:nth-child(3)').text().replace(/[^0-9]/g, ''));
-						$('#centerTbody tr:eq(0) td:nth-child(1)').html('풍력'); //구분
-						$('#centerTbody tr:eq(0) td:nth-child(2)').html(sitePreVal + 1 + '<em>&nbsp;&nbsp;개소</em>'); //사업소
-						$('#centerTbody tr:eq(0) td:nth-child(3)').html(numberComma(Math.floor(capacityPreVal += (capacity / 1000)) + '<em>&nbsp;&nbsp;kW</em>')); //설비용량
-					}
-				}).fail(function (jqXHR, textStatus, errorThrown) {
-					console.error(jqXHR);
-					console.error(textStatus);
-					console.error(errorThrown);
-
-					alert('처리 중 오류가 발생했습니다.');
-					return false;
-				});
-			});
-		});
-	} else {
-		let co2Sum = 0;
-		let acPowerSum = 0;
-		let capacity = 0;
-		siteList.forEach(site => {
-			let siteAcPowerSum = site.acPowerSum;
-			let siteCapacity = site.capacity;
-
-			if(!isEmpty(siteAcPowerSum)) {
-				acPowerSum += siteAcPowerSum;
+	siteList.forEach((site, siteIdx) => {
+		const devices = site.devices;
+		const resourceType = site.resource_type;
+		devices.forEach(device => {
+			let did = device.did;
+			if (device.device_type !== 'KPX_EMS') {
+				return false;
 			}
-
-			if(!isEmpty(siteCapacity)) {
-				capacity += siteCapacity;
-			}
-		});
-
-		pieChart.setTitle({text: Math.floor(acPowerSum / 1000) + 'kW'});
-
-		let usage = Math.floor((acPowerSum / capacity) * 100);
-		let other = 100 - usage;
-
-		pieChart.series[0].data.forEach((e, idx) => {
-			if (e.name === "태양광") {
-				e.update({y: usage});
-			} else if (e.name === "미사용량") {
-				e.update({y: other});
-			} else {
-				e.update({y: 0});
-			}
-		});
-		pieChart.redraw();
-
-		siteList.forEach((site, siteIdx) => {
 			$.ajax({
-				url: apiHost + '/energy/forecasting/sites',
+				url: apiHost + '/status/raw',
 				type: 'get',
+				async: false,
 				data: {
-					sid: site.sid,
-					startTime: formData.startTime,
-					endTime: formData.endTime,
-					interval: '15min'
+					dids: device.did
 				},
 			}).done(function (data, textStatus, jqXHR) {
-				let generationForecastSum = 0;
-				data.data[0].generation.items.map((e, idx) => generationForecastSum += e.energy);
-				let prevVal = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text().replace(/[^0-9]/g, ''));
-				$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text(numberComma(Math.floor(prevVal += generationForecastSum / 1000)));
+				const rtnData = data[did].data;
+
+				let reacPower = 0;
+				let maxacPower = 0;
+				rtnData.forEach(di => {
+					let aPower = di.activePower;
+					let tPower = di.targetActivePower;
+					let prevVal1 = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text().replace(/[^0-9]/g, ''));
+					$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(numberComma(Math.floor(prevVal1 += (aPower / 1000))));
+					let prevVal2 = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text().replace(/[^0-9]/g, ''));
+					$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text(numberComma(Math.floor(prevVal2 += (tPower / 1000))));
+
+					let prevVal3 = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(3) span').text().replace(/[^0-9]/g, ''));
+					$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(3) span').text(numberComma(Math.floor(prevVal3 += (capacity / 1000))));
+
+					if (resourceType == 1) {
+						deviceArray.push({
+							color: 'var(--circle-solar-power)',
+							name: '태양광',
+							dataLabels: {
+								enabled: false
+							},
+							y: Math.floor((aPower / capacity) * 100)
+						})
+					} else {
+						deviceArray.push({
+							color: 'var(--summer-sky)',
+							name: '풍력',
+							dataLabels: {
+								enabled: false
+							},
+							y: Math.floor((aPower / capacity) * 100)
+						})
+					}
+					acPower += aPower;
+				});
+
+				if (resourceType == 1) {
+					let sitePreVal = Number($('#centerTbody tr:eq(0) td:nth-child(5)').text().replace(/[^0-9]/g, ''));
+					let capacityPreVal = Number($('#centerTbody tr:eq(0) td:nth-child(6)').text().replace(/[^0-9]/g, ''));
+
+					$('#centerTbody tr:eq(0) td:nth-child(4)').html('태양광'); //구분
+					$('#centerTbody tr:eq(0) td:nth-child(5)').html(sitePreVal + 1 + '<em>&nbsp;&nbsp;개소</em>'); //사업소
+					$('#centerTbody tr:eq(0) td:nth-child(6)').html(numberComma(Math.floor(capacityPreVal += (site.capacity / 1000)) + '<em>&nbsp;&nbsp;kW</em>')); //설비용량
+				} else if (resourceType == 2) {
+					let sitePreVal = Number($('#centerTbody tr:eq(0) td:nth-child(2)').text().replace(/[^0-9]/g, ''));
+					let capacityPreVal = Number($('#centerTbody tr:eq(0) td:nth-child(3)').text().replace(/[^0-9]/g, ''));
+					$('#centerTbody tr:eq(0) td:nth-child(1)').html('풍력'); //구분
+					$('#centerTbody tr:eq(0) td:nth-child(2)').html(sitePreVal + 1 + '<em>&nbsp;&nbsp;개소</em>'); //사업소
+					$('#centerTbody tr:eq(0) td:nth-child(3)').html(numberComma(Math.floor(capacityPreVal += (site.capacity / 1000)) + '<em>&nbsp;&nbsp;kW</em>')); //설비용량
+				}
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				console.error(jqXHR);
 				console.error(textStatus);
@@ -1318,48 +1275,37 @@ const getTodayTotalDetail = async function () {
 				alert('처리 중 오류가 발생했습니다.');
 				return false;
 			});
-
-			$.ajax({
-				url: apiHost + '/energy/now/sites',
-				type: 'get',
-				data: {
-					sids: site.sid,
-					metering_type: 2,
-					interval: 'day'
-				},
-			}).done(function (data, textStatus, jqXHR) {
-				if (!isEmpty(data.data[site.sid])) {
-					co2Sum += Math.floor(data.data[site.sid].co2);
-					let prevVal = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text().replace(/[^0-9]/g, ''));
-					$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(numberComma(Math.floor(prevVal += (data.data[site.sid].energy / 1000))));
-					$('#centerTbody tr td:nth-child(4)').html(numberComma(Math.floor(co2Sum / 1000)) + '<em>&nbsp;&nbsp;kg</em>');
-
-					let prevPay = Number($('#centerTbody tr td:nth-child(5)').text().replace(/[^0-9]/g, ''));
-					let money = Math.floor(data.data[site.sid].money / 1000);
-					$('#centerTbody tr td:nth-child(5)').html(numberComma(prevPay + money) + '<em>&nbsp;&nbsp;천원</em>');
-				}
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				console.error(jqXHR);
-				console.error(textStatus);
-				console.error(errorThrown);
-			});
-
-			if (site.devices != undefined) {
-				site.devices.forEach(device => {
-					if (device.device_type.match('INV')) {
-						let inverterCount = Number($('#centerTbody tr td:nth-child(2)').text().replace(/[^0-9]/g, '')) + 1;
-						$('#centerTbody tr td:nth-child(2)').html(numberComma(inverterCount) + '<em>&nbsp;&nbsp;대</em>');
-					} else {
-						let inverterCount = Number($('#centerTbody tr td:nth-child(2)').text().replace(/[^0-9]/g, ''));
-						$('#centerTbody tr td:nth-child(2)').html(numberComma(inverterCount) + '<em>&nbsp;&nbsp;대</em>');
-					}
-				});
-			}
-
-			let capacity = Number($('#centerTbody tr td:nth-child(3)').text().replace(/[^0-9]/g, '')) + Math.round(site.capacity / 1000);
-			$('#centerTbody tr td:nth-child(3)').html(numberComma(capacity) + '<em>&nbsp;&nbsp;kW</em>');
 		});
+	});
+
+	pieChart.setTitle({text: Math.floor(acPower / 1000) + 'kW'});
+	let usage = Math.floor((acPower / capacity) * 100);
+	let other = 100 - usage;
+
+	deviceArray.push({
+		color: 'var(--grey)',
+		name: '미사용량',
+		dataLabels: {
+			enabled: false
+		},
+		y: other
+	});
+
+	let seriesData = {
+		type: 'pie',
+		innerSize: '70%',
+		name: '발전량',
+		colorByPoint: true,
+		data: deviceArray
+	};
+
+	let seriesLength = pieChart.series.length;
+	for (let i = seriesLength - 1; i > -1; i--) {
+		pieChart.series[i].remove();
 	}
+
+	pieChart.addSeries(seriesData, false);
+	pieChart.redraw();
 }
 
 var pieChart = Highcharts.chart('pie_chart', {
@@ -1747,7 +1693,7 @@ const searchSite = function () {
 	refineList.forEach((site, siteIdx) => {
 		siteList[siteIdx].resourceClass = resourceIcon(site.resource_type);
 
-		if (oid.match('kpx')) {
+		if (oid.match('testkpx')) {
 			const devices = site.devices;
 			let deviceArray = new Array();
 			devices.forEach(device => {

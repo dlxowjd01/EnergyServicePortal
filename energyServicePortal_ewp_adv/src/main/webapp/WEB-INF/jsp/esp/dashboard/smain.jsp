@@ -2364,9 +2364,9 @@
 								let windDirection = isEmpty(di.windDirection) ? '-' : di.windDirection;
 								let windSpeed = isEmpty(di.windSpeed) ? '-' : di.windSpeed;
 								let wind_velocity = isEmpty(di.wind_velocity) ? '-' : di.wind_velocity;
-								let temperature = isEmpty(di.temperature) ? '-' : di.temperature;
+								let temperature = isEmpty(di.temperature) ? '-' : (di.temperature).toFixed(1);
 
-								$('#weekTemp').text((temperature).toFixed(1) + '℃');
+								$('#weekTemp').text(temperature + '℃');
 								$('#weekIcon').next('strong').html(' (' + siteList[0].location + ') ');
 								$('#weekWindspeed').text((windSpeed).toFixed(1) + ' km/h');
 								$('#weekWindvelocity').text(windDirection);

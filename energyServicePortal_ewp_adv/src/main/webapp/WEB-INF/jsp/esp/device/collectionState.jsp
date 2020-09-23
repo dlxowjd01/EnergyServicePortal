@@ -240,7 +240,7 @@
 						</div>
 					</div>
 					<div class="fl">
-						<button type="submit" class="btn_type" id="selectLogByDate"><fmt:message key="datacolleciton.3.search" /></button>
+						<button type="button" class="btn_type" id="selectLogByDate"><fmt:message key="datacolleciton.3.search" /></button>
 					</div>
 				</div>
 				<div id="logTableDiv">
