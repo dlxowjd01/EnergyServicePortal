@@ -613,7 +613,6 @@ function showPwd(inputId, btn) {
 
 function filterColumn ( id, idx, val, option ) {
 	if(option){;
-		console.log("mulr====", val)
 		$(id).DataTable().column(idx).search(val, true, false).draw();
 	} else {
 		$(id).DataTable().column(idx).search(val).draw();
