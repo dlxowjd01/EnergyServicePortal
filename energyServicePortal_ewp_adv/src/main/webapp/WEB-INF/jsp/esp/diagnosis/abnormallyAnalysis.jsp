@@ -435,157 +435,186 @@
 		let standard = makeStandard(interval);
 		makeTableTemplate(standard, interval);
 
-		//검증 설비 사용량
-		if ($(':radio[name="attr"]:checked').val() == 'metering') {
-			// 검증설비 그리기
-			let statusSummaryData = {
-				dids: deviceArray.join(','),
-				startTime: $('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000',
-				endTime: $('#toDate').datepicker('getDate').format('yyyyMMdd') + '235959',
-				interval: interval
-			};
+		let devices = deviceArray.concat(compDeviceArray);
 
+		new Promise((resolve, reject) => {
 			$.ajax({
-				url: apiHost + energyDevice,
+				url: apiHost + '/status/raw',
 				type: 'get',
-				data: statusSummaryData,
+				data: {
+					dids: devices.join(',')
+				}
 			}).done(function (data, textStatus, jqXHR) {
-				gridDataMake(data, 'verify', standard);
+				deviceList.forEach((di, index) => {
+					const did = di.did;
+					if (!isEmpty(data[did])) {
+						deviceList[index]['capacity'] = data[did]['data'][0].capacity;
+					}
+				});
+				resolve();
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				console.error(jqXHR);
 				console.error(textStatus);
 				console.error(errorThrown);
 
-				alert('처리 중 오류가 발생했습니다.');
-				return false;
+				reject('처리 중 오류가 발생했습니다.');
 			});
-		} else if ($(':radio[name="attr"]:checked').val() == 'forecasting') {
-			// 검증설비 그리기
-			let statusSummaryData = {
-				dids: deviceArray.join(','),
-				startTime: $('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000',
-				endTime: $('#toDate').datepicker('getDate').format('yyyyMMdd') + '235959',
-				interval: interval
-			};
+		}).then(() => {
+			//검증 설비 사용량
+			if ($(':radio[name="attr"]:checked').val() == 'metering') {
+				// 검증설비 그리기
+				let statusSummaryData = {
+					dids: deviceArray.join(','),
+					startTime: $('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000',
+					endTime: $('#toDate').datepicker('getDate').format('yyyyMMdd') + '235959',
+					interval: interval
+				};
 
-			$.ajax({
-				url: apiHost + forecast,
-				type: 'get',
-				data: statusSummaryData,
-			}).done(function (data, textStatus, jqXHR) {
-				gridDataMake(data, 'verify', standard);
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				console.error(jqXHR);
-				console.error(textStatus);
-				console.error(errorThrown);
+				$.ajax({
+					url: apiHost + energyDevice,
+					type: 'get',
+					data: statusSummaryData,
+				}).done(function (data, textStatus, jqXHR) {
+					gridDataMake(data, 'verify', standard);
+				}).fail(function (jqXHR, textStatus, errorThrown) {
+					console.error(jqXHR);
+					console.error(textStatus);
+					console.error(errorThrown);
 
-				alert('처리 중 오류가 발생했습니다.');
-				return false;
-			});
-		} else {
-			// 검증설비 그리기
-			let statusSummaryData = {
-				sids: siteArray.join(','),
-				dids: deviceArray.join(','),
-				startTime: $('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000',
-				endTime: $('#toDate').datepicker('getDate').format('yyyyMMdd') + '235959',
-				interval: interval,
-				formId: 'v2'
-			};
+					alert('처리 중 오류가 발생했습니다.');
+					return false;
+				});
+			} else if ($(':radio[name="attr"]:checked').val() == 'forecasting') {
+				// 검증설비 그리기
+				let statusSummaryData = {
+					dids: deviceArray.join(','),
+					startTime: $('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000',
+					endTime: $('#toDate').datepicker('getDate').format('yyyyMMdd') + '235959',
+					interval: interval
+				};
 
-			$.ajax({
-				url: apiHost + statusSummary,
-				type: 'get',
-				data: statusSummaryData,
-			}).done(function (data, textStatus, jqXHR) {
-				gridDataMake(data, 'verify', standard);
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				console.error(jqXHR);
-				console.error(textStatus);
-				console.error(errorThrown);
+				$.ajax({
+					url: apiHost + forecast,
+					type: 'get',
+					data: statusSummaryData,
+				}).done(function (data, textStatus, jqXHR) {
+					gridDataMake(data, 'verify', standard);
+				}).fail(function (jqXHR, textStatus, errorThrown) {
+					console.error(jqXHR);
+					console.error(textStatus);
+					console.error(errorThrown);
 
-				alert('처리 중 오류가 발생했습니다.');
-				return false;
-			});
-		}
+					alert('처리 중 오류가 발생했습니다.');
+					return false;
+				});
+			} else {
+				// 검증설비 그리기
+				let statusSummaryData = {
+					sids: siteArray.join(','),
+					dids: deviceArray.join(','),
+					startTime: $('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000',
+					endTime: $('#toDate').datepicker('getDate').format('yyyyMMdd') + '235959',
+					interval: interval,
+					formId: 'v2'
+				};
 
-		//비교 설비
-		let option = new Object();
-		if ($(':radio[name="compAttr"]:checked').val() == 'metering') {
-			let statusSummaryData = {
-				dids: compDeviceArray.join(','),
-				startTime: $('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000',
-				endTime: $('#toDate').datepicker('getDate').format('yyyyMMdd') + '235959',
-				interval: interval
-			};
+				$.ajax({
+					url: apiHost + statusSummary,
+					type: 'get',
+					data: statusSummaryData,
+				}).done(function (data, textStatus, jqXHR) {
+					gridDataMake(data, 'verify', standard);
+				}).fail(function (jqXHR, textStatus, errorThrown) {
+					console.error(jqXHR);
+					console.error(textStatus);
+					console.error(errorThrown);
 
-			option = {
-				url: apiHost + energyDevice,
-				type: 'get',
-				data: statusSummaryData
+					alert('처리 중 오류가 발생했습니다.');
+					return false;
+				});
 			}
 
-			$.ajax(option).done(function (data, textStatus, jqXHR) {
-				gridDataMake(data, 'compare', standard);
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				console.error(jqXHR);
-				console.error(textStatus);
-				console.error(errorThrown);
+			//비교 설비
+			let option = new Object();
+			if ($(':radio[name="compAttr"]:checked').val() == 'metering') {
+				let statusSummaryData = {
+					dids: compDeviceArray.join(','),
+					startTime: $('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000',
+					endTime: $('#toDate').datepicker('getDate').format('yyyyMMdd') + '235959',
+					interval: interval
+				};
 
-				alert('처리 중 오류가 발생했습니다.');
-				return false;
-			});
-		} else if ($(':radio[name="compAttr"]:checked').val() == 'forecasting') {
-			let statusSummaryData = {
-				dids: compDeviceArray.join(','),
-				startTime: $('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000',
-				endTime: $('#toDate').datepicker('getDate').format('yyyyMMdd') + '235959',
-				interval: interval
-			};
+				option = {
+					url: apiHost + energyDevice,
+					type: 'get',
+					data: statusSummaryData
+				}
 
-			option = {
-				url: apiHost + forecast,
-				type: 'get',
-				data: statusSummaryData
+				$.ajax(option).done(function (data, textStatus, jqXHR) {
+					gridDataMake(data, 'compare', standard);
+				}).fail(function (jqXHR, textStatus, errorThrown) {
+					console.error(jqXHR);
+					console.error(textStatus);
+					console.error(errorThrown);
+
+					alert('처리 중 오류가 발생했습니다.');
+					return false;
+				});
+			} else if ($(':radio[name="compAttr"]:checked').val() == 'forecasting') {
+				let statusSummaryData = {
+					dids: compDeviceArray.join(','),
+					startTime: $('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000',
+					endTime: $('#toDate').datepicker('getDate').format('yyyyMMdd') + '235959',
+					interval: interval
+				};
+
+				option = {
+					url: apiHost + forecast,
+					type: 'get',
+					data: statusSummaryData
+				}
+
+				$.ajax(option).done(function (data, textStatus, jqXHR) {
+					gridDataMake(data, 'compare', standard);
+				}).fail(function (jqXHR, textStatus, errorThrown) {
+					console.error(jqXHR);
+					console.error(textStatus);
+					console.error(errorThrown);
+
+					alert('처리 중 오류가 발생했습니다.');
+					return false;
+				});
+			} else {
+				let statusSummaryData = {
+					sids: siteArray.join(','),
+					dids: compDeviceArray.join(','),
+					startTime: $('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000',
+					endTime: $('#toDate').datepicker('getDate').format('yyyyMMdd') + '235959',
+					interval: interval,
+					formId: 'v2'
+				};
+
+				option = {
+					url: apiHost + statusSummary,
+					type: 'get',
+					data: statusSummaryData,
+				}
+
+				$.ajax(option).done(function (data, textStatus, jqXHR) {
+					gridDataMake(data, 'compare', standard);
+				}).fail(function (jqXHR, textStatus, errorThrown) {
+					console.error(jqXHR);
+					console.error(textStatus);
+					console.error(errorThrown);
+
+					alert('처리 중 오류가 발생했습니다.');
+					return false;
+				});
 			}
-
-			$.ajax(option).done(function (data, textStatus, jqXHR) {
-				gridDataMake(data, 'compare', standard);
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				console.error(jqXHR);
-				console.error(textStatus);
-				console.error(errorThrown);
-
-				alert('처리 중 오류가 발생했습니다.');
-				return false;
-			});
-		} else {
-			let statusSummaryData = {
-				sids: siteArray.join(','),
-				dids: compDeviceArray.join(','),
-				startTime: $('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000',
-				endTime: $('#toDate').datepicker('getDate').format('yyyyMMdd') + '235959',
-				interval: interval,
-				formId: 'v2'
-			};
-
-			option = {
-				url: apiHost + statusSummary,
-				type: 'get',
-				data: statusSummaryData,
-			}
-
-			$.ajax(option).done(function (data, textStatus, jqXHR) {
-				gridDataMake(data, 'compare', standard);
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				console.error(jqXHR);
-				console.error(textStatus);
-				console.error(errorThrown);
-
-				alert('처리 중 오류가 발생했습니다.');
-				return false;
-			});
-		}
+		}).catch(error => {
+			alert('처리 중 에러가 발생했습니다.');
+			return false;
+		});
 	}
 
 	let verifyBoolean = false;
@@ -799,9 +828,9 @@
 							capacity += el.capacity;
 						}
 					});
+					capacity = capacity / $(':checkbox[name="compDevice"]:checked').length;
 				}
 
-				capacity = capacity / $(':checkbox[name="compDevice"]:checked').length;
 				data = data == '-' ? 0 : data;
 				let benchmarkValue = (data / ((capacity /1000) * time)) * 100;
 

@@ -65,6 +65,12 @@
 					<input type="submit" id="loginBtn" name="login" value="<fmt:message key="ewp.login.Signin" />">
 					<%--
 					<p class="center"><!--
+					--><a href="#">회원 가입</a><!--
+					--><a href="#">아이디 찾기</a><!--
+					--><a href="#">비밀번호 찾기</a><!--
+					--></p>
+					<%--
+					<p class="center"><!--
 					--><a href="#" onclick="openUserModal('addUserModal')">회원 가입</a><!--
 					--><a href="#" onclick="openUserModal('findIdModal')">아이디 찾기</a><!--
 					--><a href="#" onclick="openUserModal('findPwdModal')">비밀번호 찾기</a><!--

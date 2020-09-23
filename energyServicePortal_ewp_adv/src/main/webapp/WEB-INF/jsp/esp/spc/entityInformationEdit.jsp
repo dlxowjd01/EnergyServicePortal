@@ -323,6 +323,9 @@
 								$('#basicInfo input[type="file"]').eq(index).parent().find(".upload_text").html(file['originalname']).after(listItem);
 							});
 						}
+						if (spc_info.spcCountry == 'kr') {
+							spc_info.spcCountry = '대한민국';
+						}
 						setJsonAutoMapping(spc_info, 'basicInfo');
 
 						if (spc_info['spcSealSelected'] != undefined) {
@@ -1125,7 +1128,7 @@
 										국가 선택<span class="caret"></span>
 									</button>
 									<ul id="spcCountryList" class="dropdown-menu" role="menu">
-										<li data-value="[code]">
+										<li data-value="[value]">
 											<a href="javascript:void(0);">[value]</a>
 										</li>
 									</ul>
@@ -1304,7 +1307,7 @@
 									국가 선택<span class="caret"></span>
 								</button>
 								<ul id="countryList" class="dropdown-menu" role="menu">
-									<li data-value="[code]">
+									<li data-value="[value]">
 										<a href="javascript:void(0);">[value]</a>
 									</li>
 								</ul>
