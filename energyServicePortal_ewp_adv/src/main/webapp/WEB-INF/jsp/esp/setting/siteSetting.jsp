@@ -1777,19 +1777,25 @@
 
 		$("#countryList li").on("click", function(){
 			let val = $(this).data("id");
-			let selected = "";
+			let joined = "";
+			let selected = [];
 			let checked = $("#countryList").find("input:checked");
 
 			if(!isEmpty(val)){
 				checked.each(function(index, el){
-					selected += $(this).attr("id") + ('|');
+					selected.push($(this).attr("id"));
 				});
-				selected += $(this).data("id");
 
-				if(checked.length>0){
+				if(!$(this).find("input").is(":checked")){
+					selected.push(val);
+					if(selected.length>1){
+						selected = selected.join("|");
+					}
 					filterColumn("#siteTable", "3", selected, "multi");
 				} else {
-					console.log("selected==", selected);
+					selected.splice(selected.indexOf(val), 1);
+					joined = selected.join("|");
+					filterColumn("#siteTable", "3", joined, "multi");
 				}
 			} else {
 				filterColumn("#siteTable", "3", "");
