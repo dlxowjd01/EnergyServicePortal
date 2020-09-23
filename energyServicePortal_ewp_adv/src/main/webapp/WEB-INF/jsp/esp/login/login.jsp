@@ -105,7 +105,7 @@
 	</div>
 
 	<div class="modal fade" id="warningModal" role="dialog" aria-labelledby="warningModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
-		<div class="modal-dialog modal-xs">
+		<div class="modal-dialog modal-sm">
 			<div class="modal-content collection_modal_content">
 				<div class="modal-body">
 					<h2 id="warningMsg" class="warning"></h2>
