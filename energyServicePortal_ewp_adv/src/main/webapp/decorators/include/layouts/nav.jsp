@@ -15,19 +15,19 @@
 			mobileMenu = $("#mobileNav").find(".menu-item"),
 			path = $(location).attr("pathname");
 
-		subMenuLink.each(function (e) {
+		subMenuLink.each(function (index, el) {
 			if ($(this).attr("href") === path) {
 				$(this).parents(".menu-item").addClass("active").siblings().removeClass("active");
 			}
 		});
 
-		subMenuLink.on("click", function(event){
+		subMenuLink.on("click", function(e){
 			let current = window.location.pathname;
 			let link = $(this).attr("href");
-
+			
 			if (current == link) {
 				$(this).on('click', false);
-				event.preventDefault();
+				e.preventDefault();
 			} else {
 				$(this).on('click', true);
 			}

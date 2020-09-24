@@ -15,7 +15,7 @@
 			<span class="switch-label" data-on="테이블" data-off="대시보드"></span>
 			<span class="switch-handle"></span>
 		</label>
-		</c:if>
+		</c:if>	
 		--%>
 	</div>
 	<div class="col-6">

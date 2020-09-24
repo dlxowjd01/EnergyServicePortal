@@ -332,7 +332,7 @@
 									<c:if test="${fn:length(siteList) > 0}">
 										<c:forEach var="site" items="${siteList}">
 											<li>
-												<a href="#" class="group-title" onclick="dashboardMove('site', 'sid', '${site.sid}'); return false">${site.name}</a>
+												<a href="#" class="sub-item" onclick="dashboardMove('site', 'sid', '${site.sid}'); return false">${site.name}</a>
 											</li>
 										</c:forEach>
 									</c:if>
@@ -354,7 +354,7 @@
 													<c:set var="groupSites" value="${group.sites}"/>
 													<c:forEach var="groupSiteList" items="${groupSites}">
 														<li>
-															<a href="#" onclick="dashboardMove('site', 'sid', '${groupSiteList.sid}'); return false">${groupSiteList.name}</a>
+															<a href="#" class="sub-item" onclick="dashboardMove('site', 'sid', '${groupSiteList.sid}'); return false">${groupSiteList.name}</a>
 														</li>
 													</c:forEach>
 												</ul>
@@ -382,7 +382,7 @@
 														<c:set var="groupSites" value="${vpp.sites}"/>
 														<c:forEach var="groupSiteList" items="${groupSites}">
 															<li>
-																<a href="#" onclick="dashboardMove('site', 'sid', '${groupSiteList.sid}'); return false">${groupSiteList.name}</a>
+																<a href="#" class="sub-item" onclick="dashboardMove('site', 'sid', '${groupSiteList.sid}'); return false">${groupSiteList.name}</a>
 															</li>
 														</c:forEach>
 													</ul>
@@ -409,7 +409,7 @@
 														<c:set var="groupSites" value="${dr.sites}"/>
 														<c:forEach var="groupSiteList" items="${groupSites}">
 															<li>
-																<a href="#" class="disabled">${groupSiteList.name}</a>
+																<a href="#" class="sub-item">${groupSiteList.name}</a>
 																<!-- <a href="#" onclick="dashboardMove('site', 'sid', '${groupSiteList.sid}'); return false">${groupSiteList.name}</a> -->
 															</li>
 														</c:forEach>
