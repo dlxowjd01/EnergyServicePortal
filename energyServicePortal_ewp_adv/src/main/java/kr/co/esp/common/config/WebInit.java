@@ -51,7 +51,6 @@ public class WebInit extends AbstractAnnotationConfigDispatcherServletInitialize
 		// Egov Web ServletContextListener 설정
 		//-------------------------------------------------------------
 		servletContext.addListener(new SessionListener()); //세션 설정
-//		servletContext.addListener(new EgovWebServletContextListener());
 
 		//-------------------------------------------------------------
 		// Spring Context-Common 설정
