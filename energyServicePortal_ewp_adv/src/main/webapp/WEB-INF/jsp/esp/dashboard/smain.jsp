@@ -13,7 +13,23 @@
 			</div>
 		</div>
 	</div>
+
 	<div class="row content-wrapper">
+		<div class="col-12">
+			<div class="flex_start">
+				<div class="dropdown">
+					<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="2">태양광 대시보드 #2<span class="caret"></span></button>
+					<!-- <button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="1">사이트 대시보드 #1<span class="caret"></span></button> -->
+					<ul id="dashboardList" class="dropdown-menu">
+						<li data-value="1"><a href="#" tabindex="-1">사이트 대시보드 #1</a></li>
+						<li data-value="2"><a href="#" tabindex="-1">태양광 대시보드 #2</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="defaultDashboard" class="row">
 		<div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
 			<div class="indiv smain_pv clear">
 				<div class="chart_top clear">
@@ -363,14 +379,131 @@
 			</div>
 		</div>
 	</div>
+
+	<div id="solarDashboard" class="hidden">
+		<div class="row">
+			<div class="col-xl-2 col-lg-2 col-md-3 col-sm-4">
+				<div class="indiv mini">
+					<h3 class="ntit">현재 발전</h3>
+					<span class="data-num">2342432</span><span class="data-unit">kW</span>
+				</div>
+			</div>
+			<div class="col-xl-2 col-lg-2 col-md-3 col-sm-4">
+				<div class="indiv mini">
+					<h3 class="ntit">현재 발전 효율</h3>
+					<span class="data-num"></span><span class="data-unit"></span>
+				</div>
+			</div>
+			<div class="col-xl-2 col-lg-2 col-md-3 col-sm-4">
+				<div class="indiv mini">
+					<h3 class="ntit">금일 발전량</h3>
+					<span class="data-num"></span><span class="data-unit"></span>
+				</div>
+			</div>
+			<div class="col-xl-2 col-lg-2 col-md-3 col-sm-4">
+				<div class="indiv mini">
+					<h3 class="ntit">전일 발전량</h3>
+					<span class="data-num"></span><span class="data-unit"></span>
+				</div>
+			</div>
+			<div class="col-xl-2 col-lg-2 col-md-3 col-sm-4">
+				<div class="indiv mini">
+					<h3 class="ntit">월간 발전량</h3>
+					<span class="data-num"></span><span class="data-unit"></span>
+				</div>
+			</div>
+			<div class="col-xl-2 col-lg-2 col-md-3 col-sm-4">
+				<div class="indiv mini">
+					<h3 class="ntit">누적 발전량</h3>
+					<span class="data-num"></span><span class="data-unit"></span>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xl-3 col-lg-3 col-md-5 col-sm-12">
+				<div class="indiv">
+					<h2 class="ntit">금일 발전현황</h2>
+					<div id="dailySolarChart"></div>
+				</div>
+			</div>
+
+			<div class="col-xl-4 col-lg-4 col-md-7 col-sm-12">
+				<div class="indiv">
+					<h2 class="ntit">인버터별 출력 현황</h2>
+					<div id="dailySolarChart"></div>
+				</div>
+			</div>
+
+			<div class="col-xl-5 col-lg-5 col-md-12 col-sm-12">
+				<div class="indiv">
+					<h2 class="ntit">인버터 상태</h2>
+					<div id="dailySolarChart"></div>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="row">
+			<div class="col-xl-3 col-lg-3 col-md-5 col-sm-12">
+				<div class="indiv smain-tab-box">
+					<ul class="nav nav-tabs">
+						<li class="nav-item active">
+							<a class="nav-link border-top" data-toggle="tab" href="#deviceList">연결 설비</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link border-top" data-toggle="tab" href="#commandSend">커맨드 전달</a>
+						</li>
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane fade active" id="deviceList">
+							<h2>1</h2>
+						</div>
+						<div class="tab-pane fade" id="commandSend">
+							<h2>2</h2>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-xl-9 col-lg-9 col-md-7 col-sm-12">
+				<div class="indiv">
+					<h2 class="ntit">일별 발전량</h2>
+					<div id="dailySolarChart"></div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
 </div>
 <script type="text/javascript" src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
 	$(function () {
+		let dashboardList = $('#dashboardList');
 		<%-- 키워드 검색 --%>
 		$('input[name="keyword"]').on('keyup', function(e) {
 			if (e.which == '13') {
 				deviceInfoList();
+			}
+		});
+		console.log("value---", dashboardList.prev().data("value"))
+		if(dashboardList.prev().data("value") == "1"){
+			$('#defaultDashboard').removeClass("hidden");
+			$('#solarDashboard').addClass("hidden");
+		} else {
+			$('#defaultDashboard').addClass("hidden");
+			$('#solarDashboard').removeClass("hidden");
+		}
+
+		dashboardList.find('li').on('click', function(){
+			let val = $(this).data("value");
+			if(val == "1"){
+				$('#defaultDashboard').removeClass("hidden");
+				$('#solarDashboard').addClass("hidden");
+			} else {
+				$('#defaultDashboard').addClass("hidden");
+				$('#solarDashboard').removeClass("hidden");
 			}
 		});
 

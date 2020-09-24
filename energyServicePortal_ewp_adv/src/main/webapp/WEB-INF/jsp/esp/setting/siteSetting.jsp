@@ -219,18 +219,25 @@
 			}
 
 			let newPeakDemand = "";
-			if ($("#newPeakDemand").val().indexOf(',') > -1) {
-				newPeakDemand = ( parseFloat($("#newPeakDemand").val().replace(/,/g, "")) * 1000 );
-			} else {
-				newPeakDemand = ( parseFloat($("#newPeakDemand").val()) * 1000 );
+			
+			if(!isEmpty($("#newPeakDemand").val())){
+				if ($("#newPeakDemand").val().indexOf(',') > -1) {
+					newPeakDemand = ( parseFloat($("#newPeakDemand").val().replace(/,/g, "")) * 1000 );
+				} else {
+					newPeakDemand = ( parseFloat($("#newPeakDemand").val()) * 1000 );
+				}
 			}
 
 			let newDrCharge = "";
-			if ($("#newDrCharge").val().indexOf(',') > -1) {
-				newDrCharge = ( parseFloat($("#newDrCharge").val().replace(/,/g, "")) * 1000 );
-			} else {
-				newDrCharge = ( parseFloat($("#newDrCharge").val()) * 1000 );
+
+			if(!isEmpty($("#newDrCharge").val())){
+				if ($("#newDrCharge").val().indexOf(',') > -1) {
+					newDrCharge = ( parseFloat($("#newDrCharge").val().replace(/,/g, "")) * 1000 );
+				} else {
+					newDrCharge = ( parseFloat($("#newDrCharge").val()) * 1000 );
+				}
 			}
+			
 			let newInspection = Number($("#newInspection").prev().data("value"));
 			let newKepcoId = $("#newKepcoId").val();
 			let newISmartId = $("#newISmartId").val();
@@ -707,21 +714,6 @@
 			// console.log("siteData---", siteData)
 			let newArr = [];
 			Promise.resolve(siteData.map((item, index) => {
-			// siteData.forEach((item, index) => {
-				let rawDataOpt = {
-					url: apiHost + "/status/raw/site",
-					type: 'get',
-					async: false,
-					data:{
-						sid: item.sid,
-						formId: 'v2'
-					},
-					beforeSend: function(){
-						$("#loadingCircle").show();
-					}
-				}
-
-				$.ajax(rawDataOpt).done(function (json, textStatus, jqXHR) {
 					$("#loadingCircle").show();
 
 					if(isEmpty(item.ess) || item.ess === 0){
@@ -793,45 +785,43 @@
 								alarmFlag = false;
 							}
 							item.alarmInfo = json;
-							// Promise.resolve(json.map( x => {
-							// 	if(!isEmpty(x.alarm_to)){
-							// 		item.alarmFlag = true;
-							// 		// alarmArr.push(x);
-							// 	}
-							// })).then( res => {
-							// 	item.alarmInfo = json;
-							// 	// item.alarmInfo = alarmArr;
-							// 	// alarmArr.push(x);
-							// 	// console.log("item===", item)
-							// });
+							json.map( devData => {
+								let devTypeList = ["INV_PV", "PCS_ESS", "INV_PV" ];
+								let hasDevType = devTypeList.some( x => x.includes(devData.device_type));
+
+								if(hasDevType == true){
+									if( devData.device_type == "INV_PV" ) {
+										let val = displayNumberFixedDecimal(devData.capacity, 'Wh', 3, 2, "noComma");
+										item.genCapacity = val[0] + " " + val[1];
+									} else {
+										item.genCapacity = "0";
+									}
+									if( devData.device_type == "PCS_ESS" ) {
+										let val = displayNumberFixedDecimal(devData.capacity, 'Wh', 3, 2, "noComma");
+										item.pcsCapacity = val[0] + " " + val[1];
+									} else {
+										item.pcsCapacity = "0";
+									}
+									if( devData.device_type == "BMS_SYS" ) {
+										let val = displayNumberFixedDecimal(devData.capacity, 'Wh', 3, 2, "noComma");
+										item.bmsCapacity = val[0] + " " + val[1];
+									} else {
+										item.bmsCapacity = "0";
+									}
+								} else {
+									item.genCapacity = "0";
+									item.pcsCapacity = "0";
+									item.bmsCapacity = "0";
+								}
+								
+								item.updatedAt = new Date(item.updatedAt).toLocaleDateString("en-CA").replace(/\//g, '-') + '&ensp;' + new Date(item.updatedAt).toLocaleTimeString();
+								newArr.push(item);
+							});
 						}
 					}).fail(function (jqXHR, textStatus, errorThrown) {
 						console.log("deviceOpt error===", jqXHR)
 						return false;
 					});
-
-					if(!isEmpty(json.INV_PV) ) {
-						item.genCapacity = json.INV_PV.capacity;
-					} else {
-						item.genCapacity = 0;
-					}
-					if(!isEmpty(json.PCS_ESS) ) {
-						item.pcsCapacity = json.PCS_ESS.capacity;
-					} else {
-						item.pcsCapacity = 0;
-					}
-					if(!isEmpty(json.BMS_SYS) ) {
-						item.bmsCapacity = json.BMS_SYS.capacity;
-					} else {
-						item.bmsCapacity = 0;
-					}
-					item.updatedAt = new Date(item.updatedAt).toLocaleDateString("en-CA").replace(/\//g, '-') + '&ensp;' + new Date(item.updatedAt).toLocaleTimeString();
-					// console.log("obj===", obj)
-					newArr.push(item);
-				}).fail(function (jqXHR, textStatus, errorThrown) {
-					console.log("error====", jqXHR);
-					return;
-				});
 
 			})).then( res => {
 				// console.log("newArr===", newArr);
@@ -855,8 +845,8 @@
 					"fixedHeader": true,
 					"bAutoWidth": true,
 					"bSearchable" : true,
-					// "ScrollX": true,
-					// "sScrollX": "110%",
+					// "scrollX": true,
+					// "sScrollX": "100%",
 					// "sScrollXInner": "110%",
 					"sScrollY": true,
 					"scrollY": "720px",
@@ -991,8 +981,17 @@
 						let addBtnStr = `<button type="button" class="btn_type fr mb-20" onclick="updateModal('add')">추가</button>`;
 						$("#siteTable_wrapper").append($(str)).prepend($(addBtnStr));
 						if(oid.match("testkpx")){
+							let colGroup = $("#siteTable").find("colgroup col");
 							this.api().columns([8,9]).visible( false );
+							colGroup.eq(8).addClass("hidden");
+							colGroup.eq(9).addClass("hidden");
 						}
+						this.api().columns().header().each ((el, i) => {
+							if(i == 0){
+								$(el).attr ('style', 'min-width: 50px');
+							}
+						});
+
 					},
 					// every time DataTables performs a draw
 					drawCallback: function (settings) {
@@ -1016,7 +1015,7 @@
 					});
 					siteTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", false);
 					// console.log("dt---", siteTable[ type ]( indexes ).nodes())
-				}).columns.adjust();
+				}).columns.adjust().draw();
 				// siteTable.on( 'order.dt search.dt', function () {
 				// 	siteTable.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
 				// 		cell.innerHTML = i+1;
@@ -1367,7 +1366,7 @@
 					// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
 					// 	cell.innerHTML = i+1;
 					// 	$(cell).data("id", i);
-					// });
+					// });		
 					let str = `<div id="btnGroup" class="right-end"><!--
 						--><button type="button" disabled class="btn_type03" onclick="updateModal('edit')">선택 수정</button><!--
 						--><button type="button" disabled class="btn_type03" onclick="updateModal('delete')">선택 삭제</button><!--
@@ -1379,8 +1378,17 @@
 					// 	$(cell).data("id", i);
 					// });
 					if(oid.match("testkpx")){
+						let colGroup = $("#siteTable").find("colgroup col");
 						this.api().columns([8,9]).visible( false );
+						colGroup.eq(8).addClass("hidden");
+						colGroup.eq(9).addClass("hidden");
 					}
+
+					this.api().columns().header().each ((el, i) => {
+						if(i == 0){
+							$(el).attr ('style', 'min-width: 50px');
+						}
+					});
 				},
 				drawCallback: function (settings) {
 					$('#siteTable_wrapper').addClass('mb-28');
@@ -1539,13 +1547,17 @@
 			initComplete: function(){
 				this.addClass("no-stripe");
 				if(oid.match("testkpx")){
+					let colGroup = $("#siteTable").find("colgroup col");
 					this.api().columns([8,9]).visible( false );
+					colGroup.eq(8).addClass("hidden");
+					colGroup.eq(9).addClass("hidden");
 				}
 			},
 		});
 	}
 
 	function getPropertyData(option) {
+		let checkBox = $("#propertyRow").find("input[type='checkbox']");
 		let optionContract = {
 			url: apiHost + "/bills/plans?country=kr",
 			type: "get",
@@ -1559,6 +1571,8 @@
 				$('#loadingCircle').show();
 			},
 		}
+		
+		checkBox.prop("checked", false);
 
 		$.ajax(optionContract).done(function (json, textStatus, jqXHR) {
 			const newContractList = $("#newContractList");
@@ -1872,7 +1886,6 @@
 
 	function initModal(){
 		let form = $("#updateSiteForm");
-		let checkBox = $("#propertyRow").find("input[type='checkbox']");
 		let input = form.find("input:not(#newSiteName)");
 		let dropdownBtn = form.find(".dropdown-toggle");
 		let warning = form.find(".warning");
@@ -1891,8 +1904,6 @@
 		input.each(function(){
 			$(this).val("").prop("disabled", false).parent().removeClass("disabled");
 		});
-
-		checkBox.prop("checked", false);
 
 		$.each(dropdownBtn, function(index, element){
 			$(this).data({ "value": "", "vol-type": "", "plan-id" : "" }).html('선택' + '<span class="caret"></span>').prop("disabled", false);
@@ -3516,9 +3527,6 @@
 					<col style="width:8%">
 					<col style="width:10%">
 					<col style="width:14%">
-					<!-- <col style="width:8%"> -->
-					<!-- <col style="width:6%"> -->
-					<!-- <col style="width:10%"> -->
 				</colgroup>
 				<thead></thead>
 				<tbody></tbody>
@@ -3591,17 +3599,14 @@
 			<div class="modal-body mt10">
 				<form name="add_alarm_form" id="updateAlarmForm">
 					<table id="alarmTable" class="no-stripe">
-						<colgroup>
-							<!-- <col style="width:4%"> -->
+						<!-- <colgroup>
 							<col style="width:14%">
 							<col style="width:20%">
 							<col style="width:12%">
 							<col style="width:20%">
 							<col style="width:20%">
 							<col style="width:14%">
-							<!-- <col style="width:5%">
-							<col style="width:5%"> -->
-						</colgroup>
+						</colgroup> -->
 						<thead></thead>
 						<tbody></tbody>
 					</table>

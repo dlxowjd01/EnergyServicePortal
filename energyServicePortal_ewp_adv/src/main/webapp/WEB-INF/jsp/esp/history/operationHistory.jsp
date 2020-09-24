@@ -1113,7 +1113,11 @@
 	}
 </script>
 
-<div class="row header-wrapper"><div class="col-12"><h1 class="page-header">상태 이력</h1></div></div>
+<div class="row header-wrapper">
+	<div class="col-12">
+		<h1 class="page-header">상태 이력</h1>
+	</div>
+</div>
 
 <div class="row">
 	<div class="col-12">

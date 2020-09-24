@@ -220,62 +220,67 @@
 	</div>
 </div>
 
-<div class="row">
-	<div class="col-12">
-		<div class="flex_group">
-			<span class="tx_tit">사업소</span>
-			<div class="dropdown">
-				<button type="button" class="dropdown-toggle"
-					data-toggle="dropdown">선택<span class="caret"></span></button>
-				<ul class="dropdown-menu chk_type" role="menu" id="siteList">
-					<li>
-						<a href="#" tabindex="-1">
-							<input type="checkbox" name="allSites" id="allSites" value="all">
-							<label for="allSites">전체</label>
-						</a>
-					</li>
-
-				</ul>
-			</div>
-		</div>
-		<div class="flex_group">
-			<span class="tx_tit">지역</span>
-			<div class="dropdown">
-				<button type="button" class="dropdown-toggle"
-					data-toggle="dropdown">선택<span class="caret"></span></button>
-				<ul class="dropdown-menu chk_type" role="menu">
-					<li><a href="#"></a></li>
-				</ul>
-			</div>
-		</div>
-		<div class="flex_group">
-			<span class="tx_tit">발전 자원</span>
-			<div class="dropdown">
-				<button type="button" class="dropdown-toggle"
-					data-toggle="dropdown">선택<span class="caret"></span></button>
-				<ul class="dropdown-menu">
-					<li data-value="solar" class="on"><a href="#">태양광</a></li>
-					<li data-value="wind"><a href="#">풍력</a></li>
-					<li data-value="wind"><a href="#">소수력</a></li>
-					<li data-value="wind"><a href="#">부하</a></li>
-				</ul>
-			</div>
-		</div>
-		<div class="flex_group">
-			<span class="tx_tit">발전소명</span>
-			<div class="flex_start">
-				<div class="tx_inp_type">
-					<input type="text" id="key_word" placeholder="입력">
-				</div>
-				<button type="button" class="btn_type ml-16" onclick="getDataList();">검색</button>
-			</div>
-		</div>
+<div class="row content-wrapper">
+	<div class="col-7">
+		<div class="indiv"></div>
+	</div>
+	<div class="col-5">
+		<div class="indiv"></div>
 	</div>
 </div>
 
 <div class="row content-wrapper">
 	<div class="col-12">
 		<div class="indiv">
+			<div class="flex_group">
+				<span class="tx_tit">사업소</span>
+				<div class="dropdown">
+					<button type="button" class="dropdown-toggle"
+						data-toggle="dropdown">선택<span class="caret"></span></button>
+					<ul class="dropdown-menu chk_type" role="menu" id="siteList">
+						<li>
+							<a href="#" tabindex="-1">
+								<input type="checkbox" name="allSites" id="allSites" value="all">
+								<label for="allSites">전체</label>
+							</a>
+						</li>
+
+					</ul>
+				</div>
+			</div>
+			<div class="flex_group">
+				<span class="tx_tit">지역</span>
+				<div class="dropdown">
+					<button type="button" class="dropdown-toggle"
+						data-toggle="dropdown">선택<span class="caret"></span></button>
+					<ul class="dropdown-menu chk_type" role="menu">
+						<li><a href="#"></a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="flex_group">
+				<span class="tx_tit">발전 자원</span>
+				<div class="dropdown">
+					<button type="button" class="dropdown-toggle"
+						data-toggle="dropdown">선택<span class="caret"></span></button>
+					<ul class="dropdown-menu">
+						<li data-value="solar" class="on"><a href="#">태양광</a></li>
+						<li data-value="wind"><a href="#">풍력</a></li>
+						<li data-value="wind"><a href="#">소수력</a></li>
+						<li data-value="wind"><a href="#">부하</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="flex_group">
+				<span class="tx_tit">발전소명</span>
+				<div class="flex_start">
+					<div class="tx_inp_type">
+						<input type="text" id="key_word" placeholder="입력">
+					</div>
+					<button type="button" class="btn_type ml-16" onclick="getDataList();">검색</button>
+				</div>
+			</div>
+
 			<table id="example" class="stripe">
 				<thead>
 					<!-- <tr>

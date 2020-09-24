@@ -25,13 +25,17 @@ html.darkmode:root {
 	clear: both;
 	border-collapse: separate;
 	border-spacing: 0;
-	/* table-layout: fixed; */
 }
 
 .dataTable thead th {
 	font-size: 13px;
 	font-weight: 500;
 }
+
+.dataTables_scroll {
+    overflow:auto;
+}
+
 
 .dataTables_wrapper.fixed-width .dataTables_scrollHeadInner,
 .dataTables_wrapper.fixed-width .dataTables_scrollHeadInner > .dataTable.no-stripe {
