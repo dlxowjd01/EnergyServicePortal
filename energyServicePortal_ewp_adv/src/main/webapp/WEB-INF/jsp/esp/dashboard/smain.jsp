@@ -14,6 +14,7 @@
 		</div>
 	</div>
 
+	<%--
 	<div class="row content-wrapper">
 		<div class="col-12">
 			<div class="flex_start">
@@ -28,6 +29,7 @@
 			</div>
 		</div>
 	</div>
+	--%>
 
 	<div id="defaultDashboard" class="row">
 		<div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
@@ -380,6 +382,7 @@
 		</div>
 	</div>
 
+	<%--
 	<div id="solarDashboard" class="hidden">
 		<div class="row">
 			<div class="col-xl-2 col-lg-2 col-md-3 col-sm-4">
@@ -473,8 +476,8 @@
 				</div>
 			</div>
 		</div>
-
 	</div>
+--%>
 
 </div>
 <script type="text/javascript" src="/js/commonDropdown.js"></script>
@@ -487,25 +490,44 @@
 				deviceInfoList();
 			}
 		});
-		console.log("value---", dashboardList.prev().data("value"))
-		if(dashboardList.prev().data("value") == "1"){
-			$('#defaultDashboard').removeClass("hidden");
-			$('#solarDashboard').addClass("hidden");
-		} else {
-			$('#defaultDashboard').addClass("hidden");
-			$('#solarDashboard').removeClass("hidden");
-		}
 
-		dashboardList.find('li').on('click', function(){
-			let val = $(this).data("value");
-			if(val == "1"){
-				$('#defaultDashboard').removeClass("hidden");
-				$('#solarDashboard').addClass("hidden");
-			} else {
-				$('#defaultDashboard').addClass("hidden");
-				$('#solarDashboard').removeClass("hidden");
-			}
-		});
+		// if(dashboardList.prev().data("value") == "1"){
+		// 	$('#defaultDashboard').removeClass("hidden");
+		// 	$('#solarDashboard').addClass("hidden");
+		// } else {
+		// 	$('#defaultDashboard').addClass("hidden");
+		// 	$('#solarDashboard').removeClass("hidden");
+		// }
+
+		// dashboardList.find('li').on('click', function(){
+		// 	let val = $(this).data("value");
+		// 	if(val == "1"){
+		// 		$('#defaultDashboard').removeClass("hidden");
+		// 		$('#solarDashboard').addClass("hidden");
+		// 	} else {
+		// 		$('#defaultDashboard').addClass("hidden");
+		// 		$('#solarDashboard').removeClass("hidden");
+		// 	}
+		// });
+
+		// if(dashboardList.prev().data("value") == "1"){
+		// 	$('#defaultDashboard').removeClass("hidden");
+		// 	$('#solarDashboard').addClass("hidden");
+		// } else {
+		// 	$('#defaultDashboard').addClass("hidden");
+		// 	$('#solarDashboard').removeClass("hidden");
+		// }
+
+		// dashboardList.find('li').on('click', function(){
+		// 	let val = $(this).data("value");
+		// 	if(val == "1"){
+		// 		$('#defaultDashboard').removeClass("hidden");
+		// 		$('#solarDashboard').addClass("hidden");
+		// 	} else {
+		// 		$('#defaultDashboard').addClass("hidden");
+		// 		$('#solarDashboard').removeClass("hidden");
+		// 	}
+		// });
 
 		setInitList('alarmNotice'); //알람 공지 세팅
 		setInitList('typeList'); //설비 리스트 세팅
