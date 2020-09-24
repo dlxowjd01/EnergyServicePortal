@@ -490,25 +490,25 @@
 				deviceInfoList();
 			}
 		});
-		console.log("value---", dashboardList.prev().data("value"))
-		if(dashboardList.prev().data("value") == "1"){
-			$('#defaultDashboard').removeClass("hidden");
-			$('#solarDashboard').addClass("hidden");
-		} else {
-			$('#defaultDashboard').addClass("hidden");
-			$('#solarDashboard').removeClass("hidden");
-		}
 
-		dashboardList.find('li').on('click', function(){
-			let val = $(this).data("value");
-			if(val == "1"){
-				$('#defaultDashboard').removeClass("hidden");
-				$('#solarDashboard').addClass("hidden");
-			} else {
-				$('#defaultDashboard').addClass("hidden");
-				$('#solarDashboard').removeClass("hidden");
-			}
-		});
+		// if(dashboardList.prev().data("value") == "1"){
+		// 	$('#defaultDashboard').removeClass("hidden");
+		// 	$('#solarDashboard').addClass("hidden");
+		// } else {
+		// 	$('#defaultDashboard').addClass("hidden");
+		// 	$('#solarDashboard').removeClass("hidden");
+		// }
+
+		// dashboardList.find('li').on('click', function(){
+		// 	let val = $(this).data("value");
+		// 	if(val == "1"){
+		// 		$('#defaultDashboard').removeClass("hidden");
+		// 		$('#solarDashboard').addClass("hidden");
+		// 	} else {
+		// 		$('#defaultDashboard').addClass("hidden");
+		// 		$('#solarDashboard').removeClass("hidden");
+		// 	}
+		// });
 
 		// if(dashboardList.prev().data("value") == "1"){
 		// 	$('#defaultDashboard').removeClass("hidden");
