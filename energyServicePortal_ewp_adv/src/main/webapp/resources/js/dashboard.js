@@ -322,7 +322,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 		formatter: function () {
 			return this.points.reduce(function (s, point) {
 				let suffix = point.series.userOptions.tooltip.valueSuffix;
-				return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + numberComma(point.y) + suffix;
+				return s + ' 월 <br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + numberComma(point.y) + suffix;
 			}, '<b>' + this.x + '</b>');
 		},
 		shared: true, /* 툴팁 공유 */
@@ -768,7 +768,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		formatter: function () {
 			return this.points.reduce(function (s, point) {
 				let suffix = point.series.userOptions.tooltip.valueSuffix;
-				return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + numberComma(point.y) + suffix;
+				return s + ' 일 <br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + numberComma(point.y) + suffix;
 			}, '<b>' + this.x + '</b>');
 		},
 		shared: true,
@@ -1149,13 +1149,16 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 				connectorAllowed: true
 			},
 			borderWidth: 0,
-        	borderColor: 'transparent'
+        	borderColor: 'transparent',
+			formatter: function () {
+				return 'test';
+			},
 		},
 		bar: {
 			dataLabels: {
 				enabled: true,
-				// inside: true, /* 막대 안으로 라벨 수치 넣기 */
-				format: '{y} kWh', /* 단위 넣기 */
+				inside: true, /* 막대 안으로 라벨 수치 넣기 */
+				//format: '{y} kWh', /* 단위 넣기 */
 				style: {
 					color: 'var(--white87)',
 					fontSize: '12px',
@@ -1163,6 +1166,13 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 					textOutline: 0,
 					textShadow: true,
 					
+				},
+				formatter: function () {
+					if (String(this.y).length > 3) {
+						return numberComma((this.y / 1000).toFixed(2)) + 'MWh';
+					} else {
+						return numberComma(this.y) + 'kWh';
+					}
 				}
 			},
 		},

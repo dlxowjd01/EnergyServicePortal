@@ -934,14 +934,14 @@
 			$('#' + dType + ' .eq_card .eq_btn_bx button').eq(0).attr('onclick', 'addDeviceForm("' + dType + '", "' + did + '")'); //설비 수정
 			
 			self.addClass("active").siblings().removeClass("active");
+
+			const now = new Date(resultData['timestamp']);
+			$('.dbTime').text(now.format('yyyy-MM-dd HH:mm:ss'));
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);
 			console.error(textStatus);
 			console.error(errorThrown);
 		});
-
-		const now = new Date();
-		$('.dbTime').text(now.format('yyyy-MM-dd HH:mm:ss'));
 	}
 
 	const addManualForm = (did) => {

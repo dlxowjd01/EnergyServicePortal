@@ -49,7 +49,7 @@
 
 	<decorator name="top" page="./include/layouts/top.jsp" />
 	<decorator name="header" page="./include/layouts/header.jsp" />
-<!--	<decorator name="nav" page="./include/layouts/nav.jsp" />-->
+	<decorator name="nav" page="./include/layouts/nav.jsp" />
 	<decorator name="footer" page="./include/layouts/footer.jsp" />
 
 	<!-- decorators를 적용시키지 않을 url 패턴 -->

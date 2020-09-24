@@ -746,18 +746,12 @@
 			}
 			searchSiteList();
 		}
-
-		const now = new Date();
-		$('.dbTime').text(now.format('yyyy-MM-dd HH:mm:ss'));
 	}
 
 	function fn_cycle_1min() {
 		// getTodayTotalDetail();
 		beforeTodayTotal();
 		getAlarmInfo();
-
-		const now = new Date();
-		$('.dbTime').text(now.format('yyyy-MM-dd HH:mm:ss'));
 	}
 
 	<c:if test="${dashboardMap eq 'google'}">

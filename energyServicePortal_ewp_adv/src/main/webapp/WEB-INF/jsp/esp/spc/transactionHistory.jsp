@@ -2,34 +2,17 @@
 <%@ include file='/decorators/include/taglibs.jsp'%>
 <script src='/js/commonDropdown.js'></script>
 <script type="text/javascript">
+	const pathName = location.pathname;
+
 	$(function() {
 		const tableBody = $('#tableBody');
 		const tableFooter = $('#tableFooter')
 		const tbodyClone = tableBody.find("template.table-body").clone().html();
 		const tfootClone = tableFooter.find("template.table-footer").clone().html();
-		const searchBar = $('.spc-search-bar');
 		const searchForm = $('#transactionForm');
-		const dropdownOpt = $('#searchOption').find('.dropdown-menu:not(.chk_type) li');
 		const sumOptList = $('#sumOptList');
 
-		var spcInfoArr = [];
-		tableBody.find("template").remove();
-		tableFooter.find("template").remove();
-
-		//unCheckAll(searchBar);
-		getSpcList();
-		// selectAll($("#spcList"));
-		// selectAll($("#spcStatus"));
-		//selectAllGroup($("#searchOption"));
-		setSingleSelectDropdown($("#searchOption"))
-		setSingleSelectDropdown(sumOptList);
-
-		$('#allSelect').prop('checked', true);
-		$('#allPurpose').prop('checked', true);
-
-		$('#fromDate').datepicker('setDate', '-15' );
-		$('#toDate').datepicker('setDate', '+15');
-		// $('#toDate').datepicker( "option", "maxDate", new Date());
+		let spcInfoArr = [];
 
 		$('#unitOpt').find("li").on('click', function () {
 			$('#toDate').datepicker('setDate', 'today')
@@ -44,7 +27,6 @@
 
 		$('.sort_table th').click(function(){
 			if ($(this).find('button').length > 0) {
-				var table = $(this).parents("table");
 				var rows = tableBody.find('tr').toArray().sort(comparer($('.sort_table th').index(this)))
 				this.asc = !this.asc;
 				if (!this.asc){
@@ -63,59 +45,46 @@
 		searchForm.on('submit', function(e){
 			e.preventDefault();
 			let page = 1;
-			let formArr = [];
-
-			let spcOpts = $('#spcList').find("input:checked");
-			let spcStatus = $('#spcStatus').find("input:checked");
-			let spcPurpose = $('#spcPurposeList').find("input:checked");
-
-			let fromDate = $('#fromDate');
-			let toDate = $('#toDate');
-
+			let formArr = new Array();
 			let transactionType = $('#transactionType').parent().find('.dropdown-toggle');
-
 			let warning = $('.warning');
 
-			let selectedSpc = [];
+			const newStartDate = $('#fromDate').val().replace(/-/g, '');
+			const newEndDate = $('#toDate').val().replace(/-/g, '');
 
-			spcOpts.each(function(){
-				if($(this).is("#전체")){
-					$('#spcList').find("input").each(function(){
-						selectedSpc.push($(this).data("value"));
-					});
-				} else {
-					selectedSpc.push($(this).data("value"));
-				}
+			let selectedSpc = new Array();
+			let selectedStatus = new Array();
+			//let selectedPurpose= new Array();
+
+			document.querySelectorAll('#spcList input:checked').forEach(inp => {
+				selectedSpc.push(inp.dataset.value);
 			});
-
-			// let selectedPurpose= [];
-			// spcPurpose.each(function(){
-			// 	selectedPurpose.push($(this).data("value"));
+			document.querySelectorAll('#spcStatus input:checked').forEach(inp => {
+				selectedStatus.push(inp.dataset.value);
+			});
+			// document.querySelectorAll('#spcPurposeList input:checked').forEach(inp => {
+			// 	selectedPurpose.push(inp.dataset.value);
 			// });
-			//
-			// console.log(selectedPurpose);
-
-			let selectedStatus = [];
-			selectedStatus.length == 0;
-			spcStatus.each(function(){
-				selectedStatus.push($(this).data("value"));
-			});
-			let newStartDate = fromDate.val().replace(/-/g, '');
-			let newEndDate = toDate.val().replace(/-/g, '');
 
 			warning.addClass('hidden');
-			formArr.length == 0;
 			formArr.push(selectedSpc.toString(), newStartDate, newEndDate, selectedStatus.toString(), transactionType.data("value"));
-			// formArr.push(selectedSpc.toString(), newStartDate, newEndDate, selectedStatus.toString(), transactionType.data("value"), selectedPurpose.toString());
+			//formArr.push(selectedSpc.toString(), newStartDate, newEndDate, selectedStatus.toString(), transactionType.data("value"), selectedPurpose.toString());
 
-			$.each(formArr, function(index, value){
-				if(value ==  undefined ||  value == "선택" || value == "" ) {
+			Object.entries(formArr).forEach((target, index) => {
+				const tVal = target[1];
+				if(isEmpty(tVal) ||  tVal == '선택') {
 					warning.eq(index).removeClass('hidden');
 				} else {
 					warning.eq(index).addClass('hidden');
 				}
 			});
 
+			window.sessionStorage.setItem(pathName + '_spc', selectedSpc); //세션스토리지에 저장한다.
+			window.sessionStorage.setItem(pathName + '_status', selectedStatus); //세션스토리지에 저장한다.
+			// window.sessionStorage.setItem(pathName + '_purpose', selectedPurpose); //세션스토리지에 저장한다.
+			window.sessionStorage.setItem(pathName + '_start', newStartDate); //세션스토리지에 저장한다.
+			window.sessionStorage.setItem(pathName + '_end', newEndDate); //세션스토리지에 저장한다.
+			window.sessionStorage.setItem(pathName + '_type', transactionType.data("value")); //세션스토리지에 저장한다.
 			if(searchForm.find('.warning.hidden').length == formArr.length){
 				getDataList(page, formArr);
 			} else {
@@ -123,53 +92,117 @@
 			}
 		});
 
-		function getSpcList() {
-			const spcList = $('#spcList');
-			const cloned = spcList.clone().html();
-			let page = 1;
-			let action = 'get';
-			let syncOpt = true;
-			let option = {
-				url: apiHost + "/spcs?oid=" + oid,
-				type: action,
-				async: syncOpt
-			}
-			$.ajax(option).done(function (json) {
-				let spcArr = [];
-				let searchArr = [];
-				spcList.empty();
-				// json.data.unshift({"spc_id": "allSelect", "name": "전체"});
-				json.data.forEach((item, index) => {
-					let listItem = '';
-					let uniq = item.spc_id + '_' + index;
-					let spcObj = {
-						spc_id: item.spc_id,
-						spc_name: item.name
-					}
-					spcInfoArr.push(spcObj);
-					if(isEmpty(item.name)){
-						listItem = cloned.replace(/\*spcId\*/g, item.spc_id).replace(/\*spcName\*/g, "spc_no_name"+ index).replace(/\*uniqName\*/g, uniq);
-					} else {
-						listItem = cloned.replace(/\*spcId\*/g, item.spc_id).replace(/\*spcName\*/g, item.name).replace(/\*uniqName\*/g, uniq);
-					}
-					spcList.append($(listItem));
-					spcArr.push(item.spc_id);
-					// console.log("spcname---", item)
+		pageInit();
+
+		function pageInit () {
+			tableBody.find("template").remove();
+			tableFooter.find("template").remove();
+			$('#fromDate').datepicker('setDate', '-15');
+			$('#toDate').datepicker('setDate', '+15');
+
+			return new Promise((resolve, reject) => {
+				const spcList = $('#spcList');
+				const cloned = spcList.clone().html();
+				$.ajax({
+					url: apiHost + '/spcs?oid=' + oid,
+					type: 'get',
+				}).done(function (json) {
+					spcList.empty();
+					(json.data).forEach((item, index) => {
+						let listItem = '';
+						let uniq = item.spc_id + '_' + index;
+						let spcObj = {
+							spc_id: item.spc_id,
+							spc_name: item.name
+						}
+						spcInfoArr.push(spcObj);
+
+						if(isEmpty(item.name)){
+							listItem = cloned.replace(/\*spcId\*/g, item.spc_id).replace(/\*spcName\*/g, "spc_no_name"+ index).replace(/\*uniqName\*/g, uniq);
+						} else {
+							listItem = cloned.replace(/\*spcId\*/g, item.spc_id).replace(/\*spcName\*/g, item.name).replace(/\*uniqName\*/g, uniq);
+						}
+						spcList.append($(listItem));
+					});
+					spcList.append(`<li class="btn_wrap_type03 btn_wrap_border"><button type="button" class="btn_type mr-16">적용</button></li>`);
+					resolve('');
+				}).fail(function (jqXHR, textStatus, errorThrown) {
+					reject('');
 				});
-				spcArr.shift();
-				// selectAll($("#spcList"));
-				searchArr.push(spcArr.toString())
-				spcList.append(`<li class="btn_wrap_type03 btn_wrap_border"><button type="button" class="btn_type mr-16">적용</button></li>`);
+			}).then(() => {
+				const spcList = window.sessionStorage.getItem(pathName + '_spc');
+				const statusList = window.sessionStorage.getItem(pathName + '_status');
+				// const purposeList = window.sessionStorage.getItem(pathName + '_purpose');
+				const start = window.sessionStorage.getItem(pathName + '_start');
+				const end = window.sessionStorage.getItem(pathName + '_end');
+				const type = window.sessionStorage.getItem(pathName + '_type');
+
+				if (!isEmpty(spcList)) {
+					document.querySelectorAll('#spcList input').forEach(inp => {
+						if (spcList.match(inp.dataset.value)) {
+							inp.checked = true;
+						} else {
+							inp.checked = false;
+						}
+					});
+
+					displayDropdown($('#spcList').parents('div.dropdown'));
+				}
+
+				if (!isEmpty(start)) {
+					const targetDate = new Date(start.replace(/(\d{4})(\d{2})(\d{2})/, '$1,$2,$3'));
+					$('#fromDate').datepicker('setDate', targetDate);
+				}
+
+				if (!isEmpty(end)) {
+					console.log(end);
+					const targetDate = new Date(end.replace(/(\d{4})(\d{2})(\d{2})/, '$1,$2,$3'));
+					console.log(targetDate);
+					$('#toDate').datepicker('setDate', targetDate);
+				}
+
+				if (!isEmpty(statusList)) {
+					document.querySelectorAll('#spcStatus input').forEach(inp => {
+						if (statusList.match(inp.dataset.value)) {
+							inp.checked = true;
+						} else {
+							inp.checked = false;
+						}
+					});
+					displayDropdown($('#spcStatus').parents('div.dropdown.bx_align'));
+				}
+
+				if (!isEmpty(type)) {
+					let displayText = '전체';
+					if (type === 'deposit') {
+						displayText = '입금';
+					} else if (type === 'withdraw') {
+						displayText = '출금';
+					}
+
+					$('#transactionType').parent().find('.dropdown-toggle').data('value', type).html(displayText + '<span class="caret"></span>');
+				}
+
+				// if (!isEmpty(purposeList)) {
+				// 	document.querySelectorAll('#spcPurposeList input').forEach(inp => {
+				// 		if (purposeList.match(inp.dataset.value)) {
+				// 			inp.checked = true;
+				// 		} else {
+				// 			inp.checked = false;
+				// 		}
+				// 	});
+				//  displayDropdown($('#spcPurposeList').parents('div.dropdown.bx_align'));
+				// }
 
 				searchForm.submit();
-			}).fail(function (jqXHR, textStatus, errorThrown) {
+			}).catch(() => {
 				alert('처리 중 오류가 발생했습니다.');
 				return false;
-			});
+			})
 		}
 
 		function getDataList(page, searchOptArr) {
-			var currentPage = '';
+			let currentPage = '';
 			page == undefined ? currentPage = "1" : currentPage = page;
 			if(!isEmpty(searchOptArr)) {
 				let action = 'get';
@@ -203,13 +236,10 @@
 					$('#searchOption').removeClass('in');
 					$('#tableBody').empty();
 					$('#tableFooter').empty();
-					// console.log("json---", json.data)
 					if (json.data.length > 0) {
-						// console.log("json.data---", json.data)
 						let perPage = 14;
 						let startNum = (Number(currentPage) - 1) * perPage;
 						let endNum = Number(currentPage) * perPage + 1;
-						// console.log("start---", startNum, "end===", endNum)
 
 						if(searchOptArr.length > 1) {
 							if (searchOptArr[4] != 'deposit') {
@@ -265,7 +295,6 @@
 						} else {
 							withdraw_acc_num = '-'
 						}
-						// console.log("withdraw_acc_num==", withdraw_acc_num, "withdraw_bank_name====", withdraw_bank_name)
 						let transaction_type = '';
 						res.length > 0 ? ( res.length ==1 ? ( transaction_type = '출금' ) : ( transaction_type = '출금 '+ (res.length) + '건' ) ): ( transaction_type = '-' );
 						let amount = '';
@@ -354,8 +383,6 @@
 
 						( ( item.requested_by !== undefined ) && ( item.requested_by != "string" ) ) ? ( requested_by = item.requested_by ) : ( requested_by = '-' );
 
-						// console.log("()===", item.status_changed_at )
-
 						item.status_changed_at ? ( updated_at = ( new Date(item.status_changed_at).toLocaleDateString("en-CA").replace(/\//g, '-') + '&emsp;&emsp;' + new Date(item.status_changed_at).toLocaleTimeString()) ) : ( updated_at = '-' );
 
 						item.status_changed_by ? ( approved_by = item.status_changed_by ) : ( approved_by = '-' );
@@ -380,7 +407,6 @@
 							.replace(/\*statusChangedBy\*/g, status_changed_by);
 						tableBody.append($(tbodyStr));
 					}).then(result => {
-						// console.log('result==', result); // 3
 					}, function(error){
 						if(error){
 							console.log("error", error);
@@ -391,7 +417,6 @@
 			// let sum = totalAmount.toLocaleString('kr-KO');
 			let str = totalAmount.toString();
 			// str = sum.replace(/\d(?=(\d{3})+\.)/g, '$&,')
-			// console.log("total---", sum)
 			let tfootStr = '';
 			tfootStr = tfootClone.replace(/\*total\*/g, totalAmount.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
 			tableFooter.append($(tfootStr));
@@ -426,7 +451,6 @@
 		}
 
 		$.ajax(option).done(function (json, textStatus, jqXHR) {
-			// console.log("success===", json)
 			document.location.reload(true);
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			alert('처리 중 오류가 발생했습니다.');
@@ -434,7 +458,6 @@
 			return false;
 		});
 		// $(selector).parents().closest("tr").css("border", "none");
-		// console.log("tr===", $(selector).parents().closest("tr"))
 	}
 
 
@@ -541,7 +564,6 @@
 				});
 
 				Promise.all(promises).then(res => {
-					// console.log("x===")
 					res.map(x => {
 		
 						Object.entries(x).map((item, index) => {
@@ -563,7 +585,6 @@
 							if(itemAcc == num.toString()){
 								let txt = item[0];
 								let newTxt = txt.replace(/계좌_번호/g, '');
-								console.log("accountInfo===", accountInfo)
 								let name = accountInfo + '  (' + x[accHolder+newTxt] + ')';
 
 								$("#reqDetailAccountInfo").val(name);

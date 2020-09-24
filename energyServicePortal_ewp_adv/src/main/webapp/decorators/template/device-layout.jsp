@@ -13,14 +13,8 @@
 <div id="outerWrapper" class="outer-wrapper">
 	<page:applyDecorator name="header"/>
 	<div class="page-wrapper">
-		<c:choose>
-			<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-				<%@ include file="/decorators/include/layouts/nav-kpx.jsp" %>
-			</c:when>
-			<c:otherwise>
-				<%@ include file="/decorators/include/layouts/nav.jsp" %>
-			</c:otherwise>
-		</c:choose>
+		<page:applyDecorator name="nav"/>
+
 		<div id="innerBody" class="container-fluid">
 			<decorator:body/>
 		</div>
