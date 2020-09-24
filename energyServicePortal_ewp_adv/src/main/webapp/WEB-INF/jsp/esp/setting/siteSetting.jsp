@@ -791,24 +791,27 @@
 
 								if(hasDevType == true){
 									if( devData.device_type == "INV_PV" ) {
-										item.genCapacity = devData.capacity;
+										let val = displayNumberFixedDecimal(devData.capacity, 'Wh', 3, 2, "noComma");
+										item.genCapacity = val[0] + " " + val[1];
 									} else {
-										item.genCapacity = 0;
+										item.genCapacity = "0";
 									}
 									if( devData.device_type == "PCS_ESS" ) {
-										item.pcsCapacity = devData.capacity;
+										let val = displayNumberFixedDecimal(devData.capacity, 'Wh', 3, 2, "noComma");
+										item.pcsCapacity = val[0] + " " + val[1];
 									} else {
-										item.pcsCapacity = 0;
+										item.pcsCapacity = "0";
 									}
 									if( devData.device_type == "BMS_SYS" ) {
-										item.bmsCapacity = devData.capacity;
+										let val = displayNumberFixedDecimal(devData.capacity, 'Wh', 3, 2, "noComma");
+										item.bmsCapacity = val[0] + " " + val[1];
 									} else {
-										item.bmsCapacity = 0;
+										item.bmsCapacity = "0";
 									}
 								} else {
-									item.genCapacity = 0;
-									item.pcsCapacity = 0;
-									item.bmsCapacity = 0;
+									item.genCapacity = "0";
+									item.pcsCapacity = "0";
+									item.bmsCapacity = "0";
 								}
 								
 								item.updatedAt = new Date(item.updatedAt).toLocaleDateString("en-CA").replace(/\//g, '-') + '&ensp;' + new Date(item.updatedAt).toLocaleTimeString();
@@ -978,8 +981,8 @@
 						let addBtnStr = `<button type="button" class="btn_type fr mb-20" onclick="updateModal('add')">추가</button>`;
 						$("#siteTable_wrapper").append($(str)).prepend($(addBtnStr));
 						if(oid.match("testkpx")){
-							this.api().columns([8,9]).visible( false );
 							let colGroup = $("#siteTable").find("colgroup col");
+							this.api().columns([8,9]).visible( false );
 							colGroup.eq(8).addClass("hidden");
 							colGroup.eq(9).addClass("hidden");
 						}
@@ -1375,6 +1378,7 @@
 					// 	$(cell).data("id", i);
 					// });
 					if(oid.match("testkpx")){
+						let colGroup = $("#siteTable").find("colgroup col");
 						this.api().columns([8,9]).visible( false );
 						colGroup.eq(8).addClass("hidden");
 						colGroup.eq(9).addClass("hidden");
@@ -1543,7 +1547,10 @@
 			initComplete: function(){
 				this.addClass("no-stripe");
 				if(oid.match("testkpx")){
+					let colGroup = $("#siteTable").find("colgroup col");
 					this.api().columns([8,9]).visible( false );
+					colGroup.eq(8).addClass("hidden");
+					colGroup.eq(9).addClass("hidden");
 				}
 			},
 		});
