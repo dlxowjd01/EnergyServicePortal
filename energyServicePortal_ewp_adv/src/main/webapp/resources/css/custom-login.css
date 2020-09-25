@@ -292,9 +292,9 @@ nav .dropdown {
 	content: '';
 	position: absolute;
 	left: 6px;
-	top: 6px;
+	top: 5px;
 	width: 6px;
-	height: 12px;
+	height: 10px;
 	border: solid var(--box-color);
 	border-width: 0 2px 2px 0;
 	transform: rotate(45deg);
@@ -624,8 +624,7 @@ textarea:focus {
 	color: var(--sandy-brown);
 }
 
-.warning:before,
-.warning-text:before {
+.warning:before {
 	display: block;
 	float: left;
 	margin-right: 6px;
@@ -634,6 +633,26 @@ textarea:focus {
 	content: '';
 	background: var(--ico-warning) center no-repeat;
 	background-size: 18px;
+}
+
+
+.warning-text {
+	display: inline-block;
+	font-size: 12px;
+	line-height: 12px;
+	font-weight: 500;
+	color: var(--sandy-brown);
+}
+
+.warning-text:before {
+	display: block;
+	float: left;
+	margin-right: 6px;
+	width: 12px;
+	height: 12px;
+	content: '';
+	background: var(--ico-warning) center no-repeat;
+	background-size: 12px;
 }
 
 /* Sign up */
