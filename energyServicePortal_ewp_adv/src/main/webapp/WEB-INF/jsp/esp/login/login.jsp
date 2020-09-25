@@ -63,15 +63,10 @@
 
 				<div class="btn-wrapper">
 					<input type="submit" id="loginBtn" name="login" value="<fmt:message key="ewp.login.Signin" />">
-					<%--
+				<%--
+
 					<p class="center"><!--
-					--><a href="#">회원 가입</a><!--
-					--><a href="#">아이디 찾기</a><!--
-					--><a href="#">비밀번호 찾기</a><!--
-					--></p>
-					<%--
-					<p class="center"><!--
-					--><a href="#" onclick="openUserModal('addUserModal')">회원 가입</a><!--
+					--><a href="#" onclick="openUserModal('signUpModal')">회원 가입</a><!--
 					--><a href="#" onclick="openUserModal('findIdModal')">아이디 찾기</a><!--
 					--><a href="#" onclick="openUserModal('findPwdModal')">비밀번호 찾기</a><!--
 					--></p>
@@ -114,13 +109,13 @@
 		</div>
 	</div>
 
-	<div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+	<div class="modal fade" id="signUpModal" tabindex="-1" role="dialog" aria-labelledby="signUpModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 		<div class="modal-dialog modal-md">
 			<div class="modal-content user-modal-content">
 				<div class="modal-header"><h2>회원 가입</h2></div>
 				<div class="modal-body">
 					<div class="container-fluid">
-						<form name="add_user_form" id="signUpForm" class="user-form">
+						<form name="sign_up_form" id="signUpForm" class="user-form">
 							<section id="userInfo">
 								<div class="row">
 									<div class="col-3"><span class="input_label asterisk">아이디</span></div>
@@ -147,9 +142,9 @@
 											--><button type="button" class="clear-btn" onclick="showPwd('newUserPwd', this)">show</button><!--
 										--></div>
 										<div class="flex_start warning-wrapper">
-											<small id="hasLet" class="tick">영문</small>
-											<small id="hasNum" class="tick">숫자</small>
-											<small id="sixCharLong" class="tick">6자리 이상</small>
+											<small id="hasLetter" class="tick">영문</small>
+											<small id="hasNumber" class="tick">숫자</small>
+											<small id="isSixCharLong" class="tick">6자리 이상</small>
 										</div>
 									</div>
 								</div>
@@ -241,7 +236,7 @@
 								<div class="col-12">
 									<div class="btn_wrap_type02"><!--
 									--><button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button><!--
-										--><button type="submit" id="addUserBtn" class="btn_type" disabled>등록</button><!--
+										--><button type="submit" id="signUpBtn" class="btn_type" disabled>등록</button><!--
 									--></div>
 								</div>
 							</div>
@@ -273,7 +268,7 @@
 								<div class="col-9">
 									<div class="rdo_type flex_start">
 										<div class="radio-group">
-											<input type="radio" id="carrierA" name="carrier_opt" data-value="sk" data-option-val="true">
+											<input type="radio" id="carrierA" name="carrier_opt" data-value="sk" data-option-val="false">
 											<label for="carrierA">SKT</label>
 										</div>
 										<div class="radio-group">
@@ -467,7 +462,32 @@
 				}
 			});
 
-		})
+
+			// validation
+			$("#newUserPwd").on('keyup', validatePassword);
+
+			$("#confirmNewPwd").keyup(function() {
+				let password = $("#newUserPwd").val();
+				password == $(this).val() ? $("#pwdMatched").addClass("hidden") : $("#pwdMatched").removeClass("hidden");
+				let validated = $("#pwdMatched").hasClass("hidden");
+				if( $(".tick:not(.checked)").index() == -1 && validated){
+
+				}
+			});
+
+			$("#signUpForm").on("submit", function(e){
+				e.preventDefault();
+
+			});
+
+			// Modal event
+			$("#signUpModal").on("hide.bs.modal", function(){
+				console.log("this---", this);
+				initModal($("#signUpModal"));
+			});
+
+
+		});
 
 		// TO KEEP!!! (signUP)
 		// function checkLogin(self){
@@ -534,6 +554,82 @@
 		function openUserModal(option) {
 			let modal = "#" + option;
 			$(modal).modal("show");
+		}
+
+		function validatePassword() {
+			const rules = [
+				{
+					Pattern: "[a-zA-Z]",
+					Target: "hasLetter"
+				},
+				{
+					Pattern: "[0-9]",
+					Target: "hasNumber"
+				},
+				// {
+				// Pattern: "[!@@#$%^&*]",
+				// Target: "Symbols"
+				// }
+			];
+
+			let password = $(this).val();
+			password.length >= 6 ? $("#isSixCharLong").addClass("checked") : $("#isSixCharLong").removeClass("checked");
+
+			for (var i = 0; i < rules.length; i++) {
+				if( new RegExp(rules[i].Pattern).test(password) ) {
+					$("#" + rules[i].Target).addClass("checked")
+				} else {
+					$("#" + rules[i].Target).removeClass("checked")
+				}
+			}
+
+		}
+
+		function initModal(self) {
+			console.log("self===", self);
+
+			let txtInput = $(self).find("input[type='text']");
+			let checkBox = $(self).find("input[type='checkbox']");
+			let tick = $(self).find(".tick");
+
+			txtInput.val("");
+			checkBox.prop("checked", false);
+
+			tick.each(function(){
+				if($(this).is(".checked")){
+					$(this).removeClass("checked");
+				}
+			});
+
+		}
+
+
+		function checkId(userInput){
+			if(isEmpty(userInput)) return false;
+			let id = userInput.toString();
+			let checkIdOpt = {
+				url: apiHost + "/config/users/exist?oid=" + oid + '&login_id=' + id,
+				type: "get",
+				beforeSend: function (jqXHR, settings) {
+					$('#loadingCircle').show();
+					$("#invalidId").addClass("hidden");
+					$("#validId").addClass("hidden");
+				},
+			}
+			$.ajax(checkIdOpt).done(function (json, textStatus, jqXHR) {
+				$("#validId").removeClass("hidden");
+				validateAddForm();
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				console.log(jqXHR)
+				if(jqXHR.status == 409){
+					console.log(jqXHR);
+					$("#invalidId").removeClass("hidden");
+					setTimeout(function(){
+						$("#invalidId").addClass("hidden");
+					}, 2000);
+				}
+				return false;
+			});
 		}
 	</script>
 </body>
