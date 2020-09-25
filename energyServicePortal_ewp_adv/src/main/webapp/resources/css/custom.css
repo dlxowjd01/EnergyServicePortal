@@ -4246,7 +4246,7 @@ input.inp[readonly]:focus {
 }
 
 .nav-tabs>li+li>a {
-	padding: 12px 24px 12px 36px;
+	padding: 12px 24px 20px;
 }
 
 .nav-tabs>li>a:focus,
