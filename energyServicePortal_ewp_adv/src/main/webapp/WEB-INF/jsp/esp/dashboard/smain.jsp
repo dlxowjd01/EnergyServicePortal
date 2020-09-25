@@ -1080,16 +1080,16 @@
 								el.money = Math.floor(el.money / 1000);
 							}
 						});
-
-						if (nowMonthData[1] == 'success') {
-							let resultNow = nowMonthData[0].data[siteId];
-							chargeChartItems1.push({
-								basetime: monthFormData.startTime,
-								energy: resultNow.energy,
-								money: Math.floor(resultNow.money / 1000)
-							});
-						}
 					}
+				}
+
+				if (nowMonthData[1] == 'success') {
+					let resultNow = nowMonthData[0].data[siteId];
+					chargeChartItems1.push({
+						basetime: monthFormData.startTime,
+						energy: resultNow.energy,
+						money: Math.floor(resultNow.money / 1000)
+					});
 				}
 
 				if (beforeYearData[1] == 'success') {
@@ -1119,16 +1119,16 @@
 									el.money = Math.floor(el.money / 1000);
 								}
 							});
-
-							if (nowMonthData[1] == 'success') {
-								let resultNow = nowMonthData[0].data[siteId];
-								chargeChartItems1.push({
-									basetime: monthFormData.startTime,
-									energy: resultNow.energy,
-									money: Math.floor(resultNow.money / 1000)
-								});
-							}
 						}
+					}
+
+					if (nowMonthData[1] == 'success') {
+						let resultNow = nowMonthData[0].data[siteId];
+						chargeChartItems1.push({
+							basetime: monthFormData.startTime,
+							energy: resultNow.energy,
+							money: Math.floor(resultNow.money / 1000)
+						});
 					}
 
 					if (beforeYearData[1] == 'success') {
@@ -1181,16 +1181,16 @@
 									el.money = Math.floor(el.money / 1000);
 								}
 							});
-
-							if (nowMonthData[1] == 'success') {
-								let resultNow = nowMonthData[0].data[siteId];
-								chargeChartItems1.push({
-									basetime: monthFormData.startTime,
-									energy: resultNow.energy,
-									money: Math.floor(resultNow.money / 1000)
-								});
-							}
 						}
+					}
+
+					if (nowMonthData[1] == 'success') {
+						let resultNow = nowMonthData[0].data[siteId];
+						chargeChartItems1.push({
+							basetime: monthFormData.startTime,
+							energy: resultNow.energy,
+							money: Math.floor(resultNow.money / 1000)
+						});
 					}
 
 					if (beforeYearData[1] == 'success') {
