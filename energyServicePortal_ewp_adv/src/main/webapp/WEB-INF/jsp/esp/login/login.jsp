@@ -461,6 +461,8 @@
 				}
 			});
 
+
+
 			// User input event 
 			$("#newId").on('keydown', function() {
 				$(this).val($(this).val().replace(/\s/g, ''));
@@ -526,7 +528,6 @@
 			$("#findPwdModal").on("hide.bs.modal", function(){
 				initModal(this);
 			});
-
 		});
 
 		// TO KEEP!!! (signUP)
@@ -676,7 +677,7 @@
 		}
 
 		function validateForm(){
-			if( !$("#validId").hasClass("hidden") && ( $("#updateUserForm .tick:not('.checked')").index() == -1 ) && ( $(".warning:not(.hidden)").index() == -1 ) && ( !isEmpty($("#newFullName").val() ) ) && ( !isEmpty($("#newAccLevel").prev().data("value")) )){
+			if( !$("#validId").hasClass("hidden") && ( $("#updateUserForm .tick:not('.checked')").index() == -1 ) && ( $(".warning:not(.hidden)").index() == -1 ) && ( !isEmpty($("#newFullName").val() ) ) && ( !isEmpty($("#newEmailAddr").val()) )){
 				$("#addUserBtn").prop("disabled", false);
 				return 1;
 			}
