@@ -64,12 +64,13 @@
 				<div class="btn-wrapper">
 					<input type="submit" id="loginBtn" name="login" value="<fmt:message key="ewp.login.Signin" />">
 				<%--
+				--%>
 					<p class="center"><!--
 					--><a href="#" onclick="openUserModal('signUpModal')">회원 가입</a><!--
 					--><a href="#" onclick="openUserModal('findIdModal')">아이디 찾기</a><!--
 					--><a href="#" onclick="openUserModal('findPwdModal')">비밀번호 찾기</a><!--
 					--></p>
-				--%>
+			
 				</div>
 
 				<%-- KPX(전력 거래소 사용시 하단 내용 숨김) --%>
@@ -205,7 +206,9 @@
 								<div class="row">
 									<div class="col-3"><span class="input_label">인증 번호</span></div>
 									<div class="col-9">
-										<div class="tx_inp_type"><input type="text" id="code" name="code" placeholder="입력">
+										<div class="flex_start">
+											<div class="tx_inp_type w-100"><input type="text" id="code" name="code" placeholder="입력"></div>
+											<span class="desc-text"></span>
 										</div>
 									</div>
 								</div>

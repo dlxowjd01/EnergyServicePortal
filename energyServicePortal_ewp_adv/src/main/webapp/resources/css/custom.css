@@ -1493,6 +1493,10 @@ table tbody td .dropdown-menu {
 	width: 50% !important;
 }
 
+.w-55 {
+	width: 55% !important;
+}
+
 .w-60 {
 	width: 60% !important;
 }
@@ -2083,22 +2087,27 @@ nav .all-menu:before {
 
 nav .all-menu>a {
 	display: inline-block;
+	margin-top: 9px;
 	color: var(--white87);
 	font-size: 16px;
 }
 
 nav .all-menu>a:after {
 	display: inline-block;
-	margin-top: 13px;
+	position: relative;
+	margin: -11px 0 0 25px;
+	width: 9px;
+	height: 9px;
+	border: 2px solid var(--white87);
+	border-left: 0;
+	border-top: 0;
 	content: "";
-	width: 36px;
-	height: 12px;
-	color: var(--white87);
-	background: var(--expand-arrow-down) no-repeat center;
+	transform: rotate(45deg);
 }
 
 nav .all-menu>a.on:after {
-	transform: rotate(180deg);
+	margin-top: 7px;
+	transform: rotate(225deg);
 }
 
 nav .all-menu .menu-group {
@@ -2135,13 +2144,6 @@ nav .all-menu .menu-group>ul>li a {
 nav .all-menu .menu-group>ul>li a:not(.sub-item) {
 	padding-left: 10px;
 }
-
-/* nav .all-menu .menu-group>ul>li>a {
-	display: block;
-	font-size: 14px;
-	color: var(--white87);
-	margin-bottom: 10px;
-} */
 
 nav .all-menu .menu-group>ul>li ul li ul a,
 nav .all-menu .menu-group>ul>li ul li ul label {
@@ -3598,16 +3600,19 @@ input.inp[readonly]:focus {
 }
 
 .data-num {
+	margin-right: 8px;
 	color: var(--white87);
 	font-size: 28px;
 }
 
 .data-unit {
-	margin-left: 8px;
 	font-size: 16px;
 	color: var(--white60);
 }
 
+.word-wrap {
+	word-wrap: break-word;
+}
 /* 기본 => 피크 전력 */
 
 .indiv.peak_chart_table {
@@ -4268,12 +4273,12 @@ input.inp[readonly]:focus {
 
 .smain-tab-box .nav-tabs {
 	border: 0;
-	margin-bottom: 0;
+	margin: 0 0 0 16px;
 }
 
 .smain-tab-box .nav-tabs>li {
 	min-width: 88px;
-	margin: -1px 16px 0;
+	margin: -1px 0 0;
 	text-align: center;
 }
 
@@ -4295,7 +4300,12 @@ input.inp[readonly]:focus {
 .smain-tab-box .nav-tabs + .stit {
 	position: absolute;
     right: 24px;
-    top: 25px;
+	top: 27px;
+	max-width: 120px;
+}
+
+.smain-tab-box .tab-content {
+	padding: 0 30px;
 }
 
 /* 차트 테이블 */
@@ -5822,8 +5832,12 @@ input.inp[readonly]:focus {
 .gmain_table.smain {
 	display: block;
 	width: 100%;
-	height: 864px;
 	padding-top: 0;
+}
+
+
+.gmain_table.smain.unset {
+	height: auto;
 }
 
 .gmain_table.smain .type_list {
@@ -6632,10 +6646,6 @@ div.di_wrap dl .link a {
 	font-weight: 500;
 }
 
-.smain_cal {
-	height: 772px;
-}
-
 .smain_cal .chart_top .real_time {
 	float: right;
 	font-size: 12px;
@@ -6644,86 +6654,83 @@ div.di_wrap dl .link a {
 
 .smain_cal .calendar_wrap {
 	display: flex;
+	margin: 12px 0 3px;
+	overflow: auto;
 }
 
 .smain_cal .calendar {
 	width: 100%;
-	margin-top: 20px;
 }
 
 .smain_cal .calendar tr {
 	border-bottom: solid 1px rgba(36, 36, 36, 0.25);
 }
 
-.smain_cal .calendar tr th {
+.smain_cal .calendar tr:not(:first-child){
+	height: 92px;
+}
+
+.smain_cal .calendar thead th {
+	height: 34px;
+	line-height: 34px;
 	font-size: 12px;
 	text-align: center;
-	padding: 14px;
 }
 
-.smain_cal .calendar tr td {
-	position: relative;
-	width: 14.2857%;
-	padding: 8px;
-	height: 95px;
+.smain_cal .calendar tbody td.today{
+	background-color: var(--white10);
+	border-radius: 4px;
 }
 
-.smain_cal .calendar tr td div {
-	display: inline-block;
-	top: 13px;
-	right: 10px;
+.smain_cal .calendar tbody td {
+	padding: 8px 12px;
+}
+
+.smain_cal .calendar tbody td > div {
+	margin-bottom: 8px;
+	color: var(--white);
 	text-align: right;
 	font-size: 11px;
-	width: 100%;
-	color: var(--white);
 }
 
-.smain_cal .calendar tr td div em .day {
+.smain_cal .calendar tbody td div em .day {
 	font-weight: bold;
 	color: var(--white);
 }
 
-.smain_cal .calendar tr td div .wicon {
+.smain_cal .calendar tbody td div .wicon {
 	padding: 15px 0px 10px;
 	color: var(--white);
 }
 
-.smain_cal .calendar tr td span {
-	display: block;
-	position: absolute;
-	bottom: 10px;
-	right: 10px;
+.smain_cal .calendar tbody td span {
 	font-size: 11px;
 	color: var(--white);
 }
 
-.smain_cal .calendar tr td span strong {
-	font-size: 12px;
+.smain_cal .calendar tbody td span strong {
 	color: var(--white);
-	margin-right: 3px;
+	font-size: 12px;
+	font-weight: 500;
 }
 
-.smain_cal .calendar tr td span em {
-	font-size: 10px;
+.smain_cal .calendar tbody td span em {
+	float: right;
 	color: var(--white60);
+	line-height: 16px;
+	font-size: 10px;
 }
 
-.smain_cal .calendar tr td.today {
-	background-color: var(--white10);
-}
-
-.smain_cal .calendar tr td.disabled {}
-
-.smain_cal .calendar tr td.disabled em {
+.smain_cal .calendar tbody td.disabled em {
 	display: none;
 	color: var(--grey);
 }
 
-.smain_cal .calendar tr td.disabled span {
+.smain_cal .calendar tbody td.disabled span {
 	display: none;
 }
 
-.smain-tab-box {
+.indiv.smain-tab-box {
 	padding: 0 0 24px;
 }
 
@@ -6740,72 +6747,68 @@ div.di_wrap dl .link a {
 
 /* 기상 정보 */
 
-.smain.weather {
-	height: 453px;
-}
-
 .smain.weather .chart_top .real_time {
 	float: right;
 	font-size: 12px;
 	color: #ddd;
 }
 
-.weater_wrap {
+.weather-wrap {
 	margin-top: 10px;
 }
 
-.weater_wrap .fl dl dt {
+.weather-wrap .fl dl dt {
 	font-size: 30px;
 	color: var(--white);
 }
 
-.weater_wrap .fl dl dt>* {
+.weather-wrap .fl dl dt>* {
 	display: inline-block;
 	vertical-align: middle;
 }
 
-.weater_wrap .fl dl dt span {
+.weather-wrap .fl dl dt span {
 	display: inline-block;
 	content: " ";
 }
 
-.weater_wrap .fl dl dt em {
+.weather-wrap .fl dl dt em {
 	font-size: 24px;
 }
 
-.weater_wrap .fl dl dd {
+.weather-wrap .fl dl dd {
 	margin-top: 15px;
 }
 
-.weater_wrap .fl dl dd table th,
-.weater_wrap .fl dl dd table td {
+.weather-wrap .fl dl dd table th,
+.weather-wrap .fl dl dd table td {
 	padding: 5px 10px;
 	font-size: 14px;
 	color: var(--grey);
 	text-align: center;
 }
 
-.weater_wrap .fl dl dd table td span {
+.weather-wrap .fl dl dd table td span {
 	font-size: 20px;
 	color: var(--white);
 }
 
-.weater_wrap .fr {
+.weather-wrap .fr {
 	margin-top: 10px;
 }
 
-.weater_wrap .fr table th,
-.weater_wrap .fr table td {
+.weather-wrap .fr table th,
+.weather-wrap .fr table td {
 	padding: 5px 0;
 }
 
-.weater_wrap .fr table th {
+.weather-wrap .fr table th {
 	text-align: right;
 	font-size: 14px;
 	color: var(--grey);
 }
 
-.weater_wrap .fr table td {
+.weather-wrap .fr table td {
 	text-align: right;
 	color: var(--white);
 	font-size: 14px;
@@ -6813,7 +6816,7 @@ div.di_wrap dl .link a {
 	padding-left: 10px;
 }
 
-.smain .weater_wrap .fr table td {
+.smain .weather-wrap .fr table td {
 	color: #6b6b6b;
 }
 
@@ -8050,16 +8053,16 @@ div.di_wrap dl .link a {
 	background-color: var(--grey);
 }
 
-.wt_table_wrap,
+.weather-table-box,
 .wt_list_wrap {
 	width: 50%;
 }
 
-.weater_wrap .wt_table_wrap .wt_table {
+.weather-wrap .weather-table-box .weather-table {
 	margin-right: 10px;
 }
 
-.weater_wrap .wt_table_wrap .wt_table dt {
+.weather-wrap .weather-table-box .weather-table dt {
 	padding: 8px 15px;
 	font-size: 14px;
 	color: initial;
@@ -8067,26 +8070,26 @@ div.di_wrap dl .link a {
 	border-radius: 4px;
 }
 
-.weater_wrap .wt_table_wrap .wt_table dt em {
+.weather-wrap .weather-table-box .weather-table dt em {
 	float: right;
 	font-size: 14px;
 	line-height: 26px;
 }
 
-.weater_wrap .wt_table .dd_tbl table {
+.weather-wrap .weather-table .dd_tbl table {
 	width: 100%;
 	color: var(--white60);
 }
 
-.weater_wrap .wt_table .dd_tbl table th,
-.weater_wrap .wt_table .dd_tbl table td {
+.weather-wrap .weather-table .dd_tbl table th,
+.weather-wrap .weather-table .dd_tbl table td {
 	padding: 10px 0;
 	color: var(--white60);
 }
 
 
-.weater_wrap .wt_table_wrap .wt_table dt strong,
-.weater_wrap .wt_table_wrap .wt_table dt em {
+.weather-wrap .weather-table-box .weather-table dt strong,
+.weather-wrap .weather-table-box .weather-table dt em {
 	color: var(--white60);
 }
 
@@ -8130,7 +8133,7 @@ div.di_wrap dl .link a {
 	color: var(--light-grey)
 }
 
-.weater_wrap .fr.wt_list_wrap {
+.weather-wrap .fr.wt_list_wrap {
 	margin-top: 0;
 }
 

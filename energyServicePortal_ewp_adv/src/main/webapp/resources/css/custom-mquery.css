@@ -776,16 +776,16 @@
 		max-height: 186px;
 	}
 
-	.wt_table_wrap,
+	.weather-table-box,
 	.wt_list_wrap {
 		width: 100%
 	}
 
-	.weater_wrap .wt_table_wrap .wt_table {
+	.weather-wrap .weather-table-box .weather-table {
 		margin-right: 0
 	}
 
-	.weater_wrap .wt_list_wrap {
+	.weather-wrap .wt_list_wrap {
 		margin-left: 0
 	}
 
@@ -1345,29 +1345,29 @@
 		font-size: 12px;
 	}
 
-	.smain.weather .weater_wrap .fl {
+	.smain.weather .weather-wrap .fl {
 		float: none;
 		display: block;
 		width: auto
 	}
 
-	.smain.weather .weater_wrap .fl table {
+	.smain.weather .weather-wrap .fl table {
 		width: 100%;
 	}
 
-	.smain.weather .weater_wrap .fl dl dd table th,
-	.smain.weather .weater_wrap .fl dl dd table td {
+	.smain.weather .weather-wrap .fl dl dd table th,
+	.smain.weather .weather-wrap .fl dl dd table td {
 		padding: 5px 5px;
 		text-align: center;
 	}
 
-	.smain.weather .weater_wrap .fr {
+	.smain.weather .weather-wrap .fr {
 		float: none;
 		display: block;
 		width: auto
 	}
 
-	.smain.weather .weater_wrap .fr table {
+	.smain.weather .weather-wrap .fr table {
 		width: 100%;
 	}
 

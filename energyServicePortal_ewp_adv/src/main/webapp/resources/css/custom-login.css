@@ -670,6 +670,10 @@ textarea:focus {
 	color: var(--white87);
 }
 
+.tx_inp_type.w-100 {
+	width: 100%;
+}
+
 .tx_inp_type.offset-width {
 	width: calc(100% - 91px);
 }
@@ -702,6 +706,13 @@ textarea:focus {
 .tx_inp_type.unit {
 	position: relative;
 	padding-right: 30px;
+}
+
+.desc-text {
+	margin-left: 16px;
+	color: var(--white87);
+	font-size: 12px;
+	text-align: right;
 }
 
 .btn_wrap_type02 button {
