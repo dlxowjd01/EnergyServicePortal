@@ -382,7 +382,6 @@
 		</div>
 	</div>
 
-	<%--
 	<div id="solarDashboard" class="hidden">
 		<div class="row">
 			<div class="col-xl-2 col-lg-2 col-md-3 col-sm-4">
@@ -450,14 +449,15 @@
 		<div class="row">
 			<div class="col-xl-3 col-lg-3 col-md-5 col-sm-12">
 				<div class="indiv smain-tab-box">
-					<ul class="nav nav-tabs">
+					<ul class="nav nav-tabs w-75">
 						<li class="nav-item active">
-							<a class="nav-link border-top" data-toggle="tab" href="#deviceList">연결 설비</a>
+							<a class="nav-link" data-toggle="tab" href="#deviceList">기상 정보</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link border-top" data-toggle="tab" href="#commandSend">커맨드 전달</a>
+							<a class="nav-link" data-toggle="tab" href="#commandSend">접속반</a>
 						</li>
 					</ul>
+					<span id="upToDate" class="stit"></span>
 					<div class="tab-content">
 						<div class="tab-pane fade active" id="deviceList">
 							<h2>1</h2>
@@ -477,12 +477,12 @@
 			</div>
 		</div>
 	</div>
---%>
 
 </div>
 <script type="text/javascript" src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
 	$(function () {
+		let today = new Date().format('yyyyMMddHHmmss');
 		let dashboardList = $('#dashboardList');
 		<%-- 키워드 검색 --%>
 		$('input[name="keyword"]').on('keyup', function(e) {
@@ -491,24 +491,7 @@
 			}
 		});
 
-		// if(dashboardList.prev().data("value") == "1"){
-		// 	$('#defaultDashboard').removeClass("hidden");
-		// 	$('#solarDashboard').addClass("hidden");
-		// } else {
-		// 	$('#defaultDashboard').addClass("hidden");
-		// 	$('#solarDashboard').removeClass("hidden");
-		// }
-
-		// dashboardList.find('li').on('click', function(){
-		// 	let val = $(this).data("value");
-		// 	if(val == "1"){
-		// 		$('#defaultDashboard').removeClass("hidden");
-		// 		$('#solarDashboard').addClass("hidden");
-		// 	} else {
-		// 		$('#defaultDashboard').addClass("hidden");
-		// 		$('#solarDashboard').removeClass("hidden");
-		// 	}
-		// });
+		// $("#upToDate").text(today);
 
 		// if(dashboardList.prev().data("value") == "1"){
 		// 	$('#defaultDashboard').removeClass("hidden");
