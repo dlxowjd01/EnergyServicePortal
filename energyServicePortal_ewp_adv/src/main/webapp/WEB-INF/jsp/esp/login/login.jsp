@@ -64,13 +64,12 @@
 				<div class="btn-wrapper">
 					<input type="submit" id="loginBtn" name="login" value="<fmt:message key="ewp.login.Signin" />">
 				<%--
-
 					<p class="center"><!--
 					--><a href="#" onclick="openUserModal('signUpModal')">회원 가입</a><!--
 					--><a href="#" onclick="openUserModal('findIdModal')">아이디 찾기</a><!--
 					--><a href="#" onclick="openUserModal('findPwdModal')">비밀번호 찾기</a><!--
 					--></p>
-				--%>	
+				--%>
 				</div>
 
 				<%-- KPX(전력 거래소 사용시 하단 내용 숨김) --%>
@@ -126,10 +125,10 @@
 											</div>
 											<button type="button" class="btn_type03 fr" onclick="checkId($('#newId').val())" disabled>중복 확인</button>
 										</div>
-										<small class="hidden warning">사용자 아이디를 입력해 주세요</small>
-										<small class="hidden warning">5~15 글자를 입력해 주세요.</small>
-										<small class="hidden warning">한글, 특수 문자는 포함될 수 없습니다.</small>
-										<small id="invalidId" class="hidden warning">동일한 아이디가 존재합니다.</small>
+										<small class="hidden warning-text">사용자 아이디를 입력해 주세요</small>
+										<small class="hidden warning-text">5~15 글자를 입력해 주세요.</small>
+										<small class="hidden warning-text">한글, 특수 문자는 포함될 수 없습니다.</small>
+										<small id="invalidId" class="hidden warning-text">동일한 아이디가 존재합니다.</small>
 										<small id="validId" class="text-blue text-sm hidden">사용 가능한 아이디 입니다.</small>
 									</div>
 								</div>
@@ -166,7 +165,7 @@
 									<div class="col-3"><span class="input_label asterisk">이름</span></div>
 									<div class="col-9">
 										<div class="tx_inp_type"><input type="text" id="newFullName" name="new_full_name" placeholder="입력" minlength="3" maxlength="28"></div>
-										<small class="hidden warning">영문/한글(3~28 글자) 조합의 이름을 입력해 주세요</small>
+										<small class="hidden warning-text">영문/한글(3~28 글자) 조합의 이름을 입력해 주세요</small>
 									</div>
 								</div>
 
@@ -181,7 +180,7 @@
 											</div>										
 										</div>
 										<div class="flex_start">
-											<small class="hidden warning">올바른 이메일 형식을 입력해 주세요.</small>
+											<small class="hidden warning-text">올바른 이메일 형식을 입력해 주세요.</small>
 										</div>
 									</div>
 								</div>
@@ -227,7 +226,7 @@
 									<div class="col-12">
 										<h3 class="input_label">개인 정보 수집 및 제공 동의</h3>
 										<textarea name="new_consent" id="newConsent" class="textarea"></textarea>
-										<div class="input-field no-border right"><a class="chk_type"><input type="checkbox" id="termsInput" name="terms_input"><label for="termsInput"></label></a></div>
+										<div class="input-field no-border right"><a class="chk_type"><input type="checkbox" id="consentInput" name="consent_input"><label for="consentInput"></label></a></div>
 									</div>
 								</div>
 							</section>
@@ -259,7 +258,7 @@
 								<div class="col-3"><span class="input_label asterisk">이름</span></div>
 								<div class="col-9">
 									<div class="tx_inp_type"><input type="text" id="findIdlName" name="find_id_name" placeholder="입력" minlength="3" maxlength="28"></div>
-									<small class="hidden warning">영문/한글(3~28 글자) 조합의 이름을 입력해 주세요</small>
+									<small class="hidden warning-text">영문/한글(3~28 글자) 조합의 이름을 입력해 주세요</small>
 								</div>
 							</div>
 
@@ -268,20 +267,20 @@
 								<div class="col-9">
 									<div class="rdo_type flex_start">
 										<div class="radio-group">
-											<input type="radio" id="carrierA" name="carrier_opt" data-value="sk" data-option-val="false">
-											<label for="carrierA">SKT</label>
+											<input type="radio" id="carrierSk1" name="carrier_opt1" data-value="sk1" data-option-val="false">
+											<label for="carrierSk1">SKT</label>
 										</div>
 										<div class="radio-group">
-											<input type="radio" id="carrierB" name="carrier_opt" data-value="kt" data-option-val="false">
-											<label for="carrierB">KT</label>
+											<input type="radio" id="carrierKt1" name="carrier_opt1" data-value="kt1" data-option-val="false">
+											<label for="carrierKt1">KT</label>
 										</div>
 										<div class="radio-group">
-											<input type="radio" id="carrierC" name="carrier_opt" data-value="lg" data-option-val="false">
-											<label for="carrierC">LG U+</label>
+											<input type="radio" id="carrierLg1" name="carrier_opt1" data-value="lg1" data-option-val="false">
+											<label for="carrierLg1">LG U+</label>
 										</div>
 									</div>
 									<div class="flex_start">
-										<small class="hidden warning">이동 통신사를 선택해 주세요.</small>
+										<small class="hidden warning-text">이동 통신사를 선택해 주세요.</small>
 									</div>
 								</div>
 							</div>
@@ -330,7 +329,7 @@
 	<div class="modal fade" id="findPwdModal" tabindex="-1" role="dialog" aria-labelledby="findPwdModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 		<div class="modal-dialog modal-md">
 			<div class="modal-content user-modal-content">
-				<div class="modal-header"><h2>아이디 찾기</h2></div>
+				<div class="modal-header"><h2>비밀번호 찾기</h2></div>
 				<div class="modal-body">
 					<div class="container-fluid">
 						<form name="find_pwd_form" id="findPwdForm" class="user-form">
@@ -339,7 +338,7 @@
 								<div class="col-3"><span class="input_label asterisk">이름</span></div>
 								<div class="col-9">
 									<div class="tx_inp_type"><input type="text" id="findPwdFullName" name="find_pwd_full_name" placeholder="입력" minlength="3" maxlength="28"></div>
-									<small class="hidden warning">영문/한글(3~28 글자) 조합의 이름을 입력해 주세요</small>
+									<small class="hidden warning-text">영문/한글(3~28 글자) 조합의 이름을 입력해 주세요</small>
 								</div>
 							</div>
 
@@ -347,7 +346,7 @@
 								<div class="col-3"><span class="input_label asterisk">ID</span></div>
 								<div class="col-9">
 									<div class="tx_inp_type"><input type="text" id="findPwdId" name="find_pwd_id" placeholder="입력" minlength="3" maxlength="28"></div>
-									<small class="hidden warning">ID를 입력해 주세요</small>
+									<small class="hidden warning-text">ID를 입력해 주세요</small>
 								</div>
 							</div>
 
@@ -356,20 +355,20 @@
 								<div class="col-9">
 									<div class="rdo_type flex_start">
 										<div class="radio-group">
-											<input type="radio" id="carrierSk" name="carrier_opt2" data-value="sk" data-option-val="true">
-											<label for="carrierA">SKT</label>
+											<input type="radio" id="carrierSk2" name="carrier_opt2" data-value="sk" data-option-val="true">
+											<label for="carrierSk2">SKT</label>
 										</div>
 										<div class="radio-group">
-											<input type="radio" id="carrierKt" name="carrier_opt2" data-value="kt" data-option-val="false">
-											<label for="carrierB">KT</label>
+											<input type="radio" id="carrierKt2" name="carrier_opt2" data-value="kt" data-option-val="false">
+											<label for="carrierKt2">KT</label>
 										</div>
 										<div class="radio-group">
-											<input type="radio" id="carrierLg" name="carrier_opt2" data-value="lg" data-option-val="false">
-											<label for="carrierC">LG U+</label>
+											<input type="radio" id="carrierLg2" name="carrier_opt2" data-value="lg" data-option-val="false">
+											<label for="carrierLg2">LG U+</label>
 										</div>
 									</div>
 									<div class="flex_start">
-										<small class="hidden warning">이동 통신사를 선택해 주세요.</small>
+										<small class="hidden warning-text">이동 통신사를 선택해 주세요.</small>
 									</div>
 								</div>
 							</div>
@@ -463,6 +462,43 @@
 			});
 
 
+
+			// User input event 
+			$("#newId").on('keydown', function() {
+				$(this).val($(this).val().replace(/\s/g, ''));
+			});
+
+			$("#newId").on('input', function() {
+				$("#validId").addClass("hidden");
+			});
+
+			$("#newId").on('keyup', function() {
+				let warning = $("#newId").parents().closest(".row").find(".warning");
+
+				if( $(this).val().match(/[^\x00-\x80]/) ){
+					$(this).val("");
+				}
+
+				if( $(this).val().match(/[^\w-_]/) ) {
+					warning.eq(2).removeClass("hidden");
+				} else {
+					warning.eq(2).addClass("hidden");
+				}
+
+				if( $(this).val().length <= 4 || $(this).val().length > 15) {
+					warning.eq(1).removeClass("hidden");
+				} else {
+					warning.eq(1).addClass("hidden");
+				}
+
+				if( warning.not(".hidden").index() == -1 ){
+					$("#newId").parent().next().prop("disabled", false);
+				} else {
+					$("#newId").parent().next().prop("disabled", true);
+				}
+
+			});
+
 			// validation
 			$("#newUserPwd").on('keyup', validatePassword);
 
@@ -482,11 +518,16 @@
 
 			// Modal event
 			$("#signUpModal").on("hide.bs.modal", function(){
-				console.log("this---", this);
-				initModal($("#signUpModal"));
+				initModal(this);
 			});
 
+			$("#findIdModal").on("hide.bs.modal", function(){
+				initModal(this);
+			});
 
+			$("#findPwdModal").on("hide.bs.modal", function(){
+				initModal(this);
+			});
 		});
 
 		// TO KEEP!!! (signUP)
@@ -586,21 +627,23 @@
 		}
 
 		function initModal(self) {
-			console.log("self===", self);
-
 			let txtInput = $(self).find("input[type='text']");
-			let checkBox = $(self).find("input[type='checkbox']");
-			let tick = $(self).find(".tick");
-
+			let btn = $(self).find(".btn_wrap_type02 button");
 			txtInput.val("");
-			checkBox.prop("checked", false);
+			btn.prop("disabled", false);
 
-			tick.each(function(){
-				if($(this).is(".checked")){
-					$(this).removeClass("checked");
-				}
-			});
-
+			if($(self).is('#signUpModal')){
+				let checkBox = $(self).find("input[type='checkbox']");
+				let tick = $(self).find(".tick");
+				let txtArea = $(self).find("textarea");
+				txtArea.val("");
+				checkBox.prop("checked", false);
+				tick.each(function(){
+					if($(this).is(".checked")){
+						$(this).removeClass("checked");
+					}
+				});
+			}
 		}
 
 
@@ -608,6 +651,7 @@
 			if(isEmpty(userInput)) return false;
 			let id = userInput.toString();
 			let checkIdOpt = {
+				// apiHost 직접 입력???
 				url: apiHost + "/config/users/exist?oid=" + oid + '&login_id=' + id,
 				type: "get",
 				beforeSend: function (jqXHR, settings) {
@@ -618,7 +662,7 @@
 			}
 			$.ajax(checkIdOpt).done(function (json, textStatus, jqXHR) {
 				$("#validId").removeClass("hidden");
-				validateAddForm();
+				validateForm();
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				console.log(jqXHR)
 				if(jqXHR.status == 409){
@@ -631,6 +675,14 @@
 				return false;
 			});
 		}
+
+		function validateForm(){
+			if( !$("#validId").hasClass("hidden") && ( $("#updateUserForm .tick:not('.checked')").index() == -1 ) && ( $(".warning:not(.hidden)").index() == -1 ) && ( !isEmpty($("#newFullName").val() ) ) && ( !isEmpty($("#newEmailAddr").val()) )){
+				$("#addUserBtn").prop("disabled", false);
+				return 1;
+			}
+		}
+
 	</script>
 </body>
 </html>
