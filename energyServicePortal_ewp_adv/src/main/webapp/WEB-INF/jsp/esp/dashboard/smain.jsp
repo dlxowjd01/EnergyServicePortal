@@ -382,6 +382,7 @@
 		</div>
 	</div>
 
+	<%--
 	<div id="solarDashboard" class="hidden">
 		<div class="row">
 			<div class="col-xl-2 col-lg-2 col-md-3 col-sm-4">
@@ -477,6 +478,7 @@
 			</div>
 		</div>
 	</div>
+--%>
 
 </div>
 <script type="text/javascript" src="/js/commonDropdown.js"></script>
