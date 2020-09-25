@@ -205,7 +205,9 @@
 								<div class="row">
 									<div class="col-3"><span class="input_label">인증 번호</span></div>
 									<div class="col-9">
-										<div class="tx_inp_type"><input type="text" id="code" name="code" placeholder="입력">
+										<div class="flex_start">
+											<div class="tx_inp_type w-100"><input type="text" id="code" name="code" placeholder="입력"></div>
+											<span class="desc-text"></span>
 										</div>
 									</div>
 								</div>
