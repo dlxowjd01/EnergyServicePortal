@@ -120,6 +120,10 @@ button:active {
 	transform: none;
 }
 
+button:disabled {
+	opacity: 0.6;
+}
+
 .open > .dropdown-toggle,
 .open > .dropdown-toggle:hover,
 .open > .dropdown-toggle:focus,
@@ -314,6 +318,7 @@ nav .dropdown {
     position: relative;
 	padding-left: 38px;
 	margin-bottom: 0;
+	color: var(--white87);
     cursor: pointer;
     line-height: 21px;
 	height: 20px;
