@@ -91,7 +91,7 @@
 					</c:if>
 				</div>
 				<div class="smain inchart">
-					<div id="schart1"></div>
+					<div id="dailyChart"></div>
 				</div>
 			</div>
 			<div class="indiv smain_cal">
@@ -125,14 +125,12 @@
 										<c:choose>
 											<c:when test="${day ne 0 }">
 												<td <c:if test="${nowDay eq day }">class="today"</c:if>>
-													<div class="td-wrapper">
-														<div class="flex_wrapper">
-															<em class="calWeatherDay day">${day }</em>
-															<em id="calWeatherValue_${day }"></em>
-														</div>
-														<div id="calWeatherIcon_${day }" class="wicon"></div>
-														<span id="calEnergyValue_${day }"></span>
+													<div class="flex_wrapper">
+														<em class="calWeatherDay day">${day }</em>
+														<em id="calWeatherValue_${day }"></em>
 													</div>
+													<div id="calWeatherIcon_${day }" class="wicon"></div>
+													<span id="calEnergyValue_${day }"></span>
 												</td>
 											</c:when>
 											<c:otherwise>
@@ -165,7 +163,7 @@
 		<div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
 			<div class="indiv gmain_map smain_circle">
 				<div class="chart_top clear">
-					<h2 class="ntit">${siteName } <c:if test="${empty siteName }">사업소 현황</c:if></h2>
+					<h2 class="ntit">${siteName} <c:if test="${empty siteName }">사업소 현황</c:if></h2>
 					<div class="btn_bx_type">
 						<a href="javascript:void(0);" class="btn cancel_btn" id="cctv">CCTV 보기</a>
 					</div>
@@ -249,7 +247,7 @@
 				</div>
 				<div class="sa_wrap">
 					<div class="inchart">
-						<div id="schart2"></div>
+						<div id="hourlyChart"></div>
 					</div>
 				</div>
 			</div>
@@ -549,10 +547,1024 @@
 </div>
 <script type="text/javascript" src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
+	const siteId = '${sid}';
+	const siteList = JSON.parse('${siteList}');
+	const apiEnergySite = '/energy/sites';
+	const apiEnergyNowSite = '/energy/now/sites';
+	const apiWeather = '/weather/site';
+	const apiForecastingSite = '/energy/forecasting/sites';
+	const apiStatusRawSite = '/status/raw/site';
+	const apiStatusRaw = '/status/raw';
+	const apiConfigDeivce = '​/config/devices';
+	const apiGetDvcProperties = '/config/view/device_properties';
+	const featureProperties = new Object();
+	const featurePropertiesSub = new Object();
+	const pollingTerm = 1000 * 60 * 15;
+
+	let sList = JSON.parse('${siteList}');
+	let first = true;
+	let toDayEnergy = 0;
+	let toDayRaw = 0;
+
+	var pieChart = Highcharts.chart('pie_chart', {
+		chart: {
+			marginTop: 0,
+			marginLeft: 0,
+			marginRight: 0,
+			backgroundColor: 'transparent',
+			zoomType: 'xy',
+			plotBorderWidth: 0,
+			plotShadow: false,
+			height: 180
+		},
+		navigation: {
+			buttonOptions: {
+				enabled: false
+			}
+		},
+		title: {
+			text: '- Wh',
+			align: 'center',
+			verticalAlign: 'middle',
+			y: 10,
+			x: 0,
+			style: {
+				fontSize: '14px',
+				color: 'var(--white60)'
+			}
+		},
+		subtitle: {
+			text: ''
+		},
+		credits: {
+			enabled: false
+		},
+		tooltip: {
+			shared: true,
+			borderColor: 'none',
+			backgroundColor: 'var(--bg-color)',
+			padding: 16,
+			style: {
+				color: 'var(--white)'
+			},
+			valueSuffix: ' kwh',
+			pointFormat: '<b>{point.percentage:.0f}%</b>'
+		},
+		plotOptions: {
+			pie: {
+				dataLabels: {
+					enabled: false,
+					style: {
+						fontWeight: 'bold',
+						color: 'var(--white)'
+					}
+				},
+				center: ['40%', '50%'],
+				borderWidth: 0,
+				size: '100%'
+			}
+		},
+		series: [{
+			type: 'pie',
+			innerSize: '70%',
+			name: '발전량',
+			colorByPoint: true,
+			data: [{
+				color: 'var(--circle-solar-power)',
+				name: '태양광',
+				dataLabels: {
+					enabled: false
+				},
+				y: 60
+			}, {
+				color: 'var(--grey)',
+				name: '미사용량',
+				dataLabels: {
+					enabled: false
+				},
+				y: 20
+			}]
+		}],
+		responsive: {
+			rules: [{
+				condition: {
+					maxWidth: 768
+				},
+				chartOptions: {
+					plotOptions: {
+						pie: {
+							center: ['50%', '50%']
+						}
+					}
+				}
+			}]
+		}
+	});
+
+	var dailyChart = Highcharts.chart('dailyChart', {
+		chart: {
+			marginTop: 40,
+			marginLeft: 50,
+			marginRight: 50,
+			height: 280,
+			backgroundColor: 'transparent',
+			zoomType: 'xy'
+		},
+		navigation: {
+			buttonOptions: {
+				enabled: false
+			}
+		},
+		title: {
+			text: ''
+		},
+		subtitle: {
+			text: ''
+		},
+		xAxis: [{
+			lineColor: 'var(--white60)',
+			tickColor: 'var(--white60)',
+			gridLineColor: 'var(--white25)',
+			plotLines: [{
+				color: 'var(--white60)',
+				width: 1
+			}],
+			labels: {
+				align: 'center',
+				y: 27,
+				style: {
+					color: 'var(--grey)',
+					fontSize: '12px'
+				}
+			},
+			tickInterval: 1,
+			title: {
+				text: null
+			},
+			categories: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+			crosshair: true
+		}],
+		yAxis: [
+			{
+				lineColor: 'var(--white60)',
+				tickColor: 'var(--white60)',
+				gridLineColor: 'var(--white25)',
+				gridLineWidth: 1,
+				plotLines: [{
+					color: 'var(--white60)',
+					width: 1
+				}
+			],
+			gridLineWidth: 1,
+			title: {
+				text: 'kWh',
+				align: 'low',
+				rotation: 0,
+				y: 25,
+				x: 15,
+				style: {
+					color: 'var(--white)',
+					fontSize: '12px'
+				}
+			},
+			labels: {
+				formatter: function () {
+					if (String(this.value).length  >= 7) {
+						return numberComma(this.value / 1000000) + ' G';
+					} else if (String(this.value).length  >= 5) {
+						return numberComma(this.value / 1000) + ' M';
+					} else {
+						return this.value;
+					}
+				},
+				style: {
+					color: 'var(--grey)',
+					fontSize: '12px'
+				}
+			}
+		},
+		<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
+		{
+			lineColor: 'var(--white60)',
+			tickColor: 'var(--white60)',
+			gridLineColor: 'var(--white25)',
+			gridLineWidth: 1,
+			plotLines: [
+				{
+					color: 'var(--white60)',
+					width: 1
+				}
+			],
+			gridLineWidth: 1,
+			title: {
+				text: '천원',
+				align: 'low',
+				rotation: 0,
+				y: 25,
+				x: -12,
+				style: {
+					color: 'var(--white)',
+					fontSize: '12px'
+				}
+			},
+			labels: {
+				formatter: function () {
+					if (String(this.value).length  >= 7) {
+						return numberComma(this.value / 1000000) + ' G';
+					} else if (String(this.value).length  >= 5) {
+						return numberComma(this.value / 1000) + ' M';
+					} else {
+						return this.value;
+					}
+				},
+				style: {
+					color: 'var(--grey)',
+					fontSize: '12px'
+				}
+			},
+			opposite: true
+		}
+		</c:if>
+		],
+		tooltip: {
+			formatter: function () {
+				return this.points.reduce(function (s, point) {
+					let suffix = point.series.userOptions.tooltip.valueSuffix;
+					return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + numberComma(point.y) + suffix;
+				}, '<b>' + this.x + '</b>');
+			},
+			shared: true,
+			borderColor: 'none',
+			backgroundColor: 'var(--bg-color)',
+			padding: 16,
+			style: {
+				color: 'var(--white)'
+			}
+		},
+		legend: {
+			enabled: true,
+			align: 'right',
+			verticalAlign: 'top',
+			x: -10,
+			y: -10,
+			itemStyle: {
+				color: 'var(--grey)',
+				fontSize: '12px',
+				fontWeight: 400
+			},
+			itemHoverStyle: {
+				color: ''
+			},
+			symbolPadding: 3,
+			symbolHeight: 7
+		},
+		plotOptions: {
+			series: {
+				label: {
+					connectorAllowed: false
+				},
+				borderColor: 'var(--grey)',
+				borderWidth: 0
+			},
+			line: {
+				marker: {
+					enabled: false
+				}
+			},
+			column: {
+				stacking: 'normal'
+			}
+		},
+		series: [
+			{
+				<c:choose>
+					<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
+				name: '발전 실적',
+					</c:when>
+					<c:otherwise>
+				name: 'PV발전량',
+					</c:otherwise>
+				</c:choose>
+				type: 'column',
+				color: 'var(--turquoise)',
+				data: [],
+				tooltip: {
+					valueSuffix: 'kWh'
+				}
+
+			},
+			<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
+			{
+				name: '일사량',
+				type: 'spline',
+				color: 'var(--white60)',
+				dashStyle: 'ShortDash',
+				yAxis: 1,
+				data: [],
+				tooltip: {
+					valueSuffix: '천원'
+				}
+			}
+			</c:if>
+		],
+		credits: {
+			enabled: false
+		},
+		responsive: {
+			rules: [{
+				condition: {
+					minWidth: 870
+				},
+				chartOptions: {
+					chart: {
+						marginTop: 50,
+						marginLeft: 75,
+						marginRight: 75
+					},
+					xAxis: {
+						labels: {
+							style: {
+								fontSize: '18px'
+							}
+						}
+					},
+					yAxis: [{
+						title: {
+							y: 30,
+							x: 20,
+							style: {
+								fontSize: '18px'
+							}
+						},
+						labels: {
+							style: {
+								fontSize: '18px'
+							}
+						}
+					},
+					{
+						title: {
+							y: 30,
+							x: -15,
+							style: {
+								fontSize: '18px'
+							}
+						},
+						labels: {
+							style: {
+								fontSize: '18px'
+							}
+						}
+					}],
+					legend: {
+						itemStyle: {
+							fontSize: '18px'
+						},
+						symbolPadding: 5,
+						symbolHeight: 10
+					}
+				}
+			}]
+		}
+	});
+
+	var dailySolarChart = Highcharts.chart('dailySolarChart', {
+		chart: {
+			marginTop: 40,
+			marginLeft: 50,
+			marginRight: 50,
+			height: 280,
+			backgroundColor: 'transparent',
+			zoomType: 'xy'
+		},
+		navigation: {
+			buttonOptions: {
+				enabled: false
+			}
+		},
+		title: {
+			text: ''
+		},
+		subtitle: {
+			text: ''
+		},
+		xAxis: [{
+			lineColor: 'var(--white60)',
+			tickColor: 'var(--white60)',
+			gridLineColor: 'var(--white25)',
+			plotLines: [{
+				color: 'var(--white60)',
+				width: 1
+			}],
+			labels: {
+				align: 'center',
+				y: 27,
+				style: {
+					color: 'var(--grey)',
+					fontSize: '12px'
+				}
+			},
+			tickInterval: 1,
+			title: {
+				text: null
+			},
+			categories: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+			crosshair: true
+		}],
+		yAxis: [
+			{
+				lineColor: 'var(--white60)',
+				tickColor: 'var(--white60)',
+				gridLineColor: 'var(--white25)',
+				gridLineWidth: 1,
+				plotLines: [
+					{
+						color: 'var(--white60)',
+						width: 1
+					}
+				],
+				gridLineWidth: 1,
+				title: {
+					text: 'kWh',
+					align: 'low',
+					rotation: 0,
+					y: 25,
+					x: 15,
+					style: {
+						color: 'var(--white)',
+						fontSize: '12px'
+					}
+				},
+				labels: {
+					formatter: function () {
+						if (String(this.value).length  >= 7) {
+							return numberComma(this.value / 1000000) + ' G';
+						} else if (String(this.value).length  >= 5) {
+							return numberComma(this.value / 1000) + ' M';
+						} else {
+							return this.value;
+						}
+					},
+					style: {
+						color: 'var(--grey)',
+						fontSize: '12px'
+					}
+				}
+			},
+		],
+		tooltip: {
+			formatter: function () {
+				return this.points.reduce(function (s, point) {
+					let suffix = point.series.userOptions.tooltip.valueSuffix;
+					return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + numberComma(point.y) + suffix;
+				}, '<b>' + this.x + '</b>');
+			},
+			shared: true,
+			borderColor: 'none',
+			backgroundColor: 'var(--bg-color)',
+			padding: 16,
+			style: {
+				color: 'var(--white)'
+			}
+		},
+
+		legend: {
+			enabled: true,
+			align: 'right',
+			verticalAlign: 'top',
+			x: -10,
+			y: -10,
+			itemStyle: {
+				color: 'var(--grey)',
+				fontSize: '12px',
+				fontWeight: 400
+			},
+			itemHoverStyle: {
+				color: ''
+			},
+			symbolPadding: 3,
+			symbolHeight: 7
+		},
+
+		plotOptions: {
+			series: {
+				label: {
+					connectorAllowed: false
+				},
+				borderColor: 'var(--grey)',
+				borderWidth: 0
+			},
+			line: {
+				marker: {
+					enabled: false
+				}
+			},
+			column: {
+				stacking: 'normal'
+			}
+		},
+		series: [
+			{
+				name: '대시보드',
+				type: 'column',
+				color: 'var(--turquoise)',
+				data: [],
+				tooltip: {
+					valueSuffix: 'MWh'
+				}
+
+			},
+			// {
+			// 	name: '일사량',
+			// 	type: 'spline',
+			// 	color: 'var(--white60)',
+			// 	dashStyle: 'ShortDash',
+			// 	yAxis: 1,
+			// 	data: [],
+			// 	tooltip: {
+			// 		valueSuffix: 'MWh'
+			// 	}
+			// },
+		
+		],
+		credits: {
+			enabled: false
+		},
+
+		responsive: {
+			rules: [{
+				condition: {
+					minWidth: 870
+				},
+				chartOptions: {
+					chart: {
+						marginTop: 50,
+						marginLeft: 75,
+						marginRight: 75
+					},
+					xAxis: {
+						labels: {
+							style: {
+								fontSize: '18px'
+							}
+						}
+					},
+					yAxis: [{
+						title: {
+							y: 30,
+							x: 20,
+							style: {
+								fontSize: '18px'
+							}
+						},
+						labels: {
+							style: {
+								fontSize: '18px'
+							}
+						}
+					},
+						{
+							title: {
+								y: 30,
+								x: -15,
+								style: {
+									fontSize: '18px'
+								}
+							},
+							labels: {
+								style: {
+									fontSize: '18px'
+								}
+							}
+						}],
+					legend: {
+						itemStyle: {
+							fontSize: '18px'
+						},
+						symbolPadding: 5,
+						symbolHeight: 10
+					}
+				}
+			}]
+		}
+	});
+
+	var hourlyChart = Highcharts.chart('hourlyChart', {
+		chart: {
+			marginTop: 40,
+			marginLeft: 50,
+			marginRight: 0,
+			height: 301,
+			backgroundColor: 'transparent',
+			type: 'column'
+		},
+		navigation: {
+			buttonOptions: {
+				enabled: false
+			}
+		},
+		title: {
+			text: ''
+		},
+		subtitle: {
+			text: ''
+		},
+		xAxis: {
+			lineColor: 'var(--white60)',
+			tickColor: 'var(--white60)',
+			gridLineColor: 'var(--white25)',
+			plotLines: [{
+				color: 'var(--white60)',
+				width: 1
+			}],
+			labels: {
+				align: 'center',
+				y: 27,
+				style: {
+					color: 'var(--grey)',
+					fontSize: '12px'
+				}
+			},
+			tickInterval: 1,
+			title: {
+				text: null
+			},
+			categories: [
+				'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
+				'13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24'
+			],
+			crosshair: true
+		},
+		yAxis: {
+			lineColor: 'var(--white60)',
+			tickColor: 'var(--white60)',
+			gridLineColor: 'var(--white25)',
+			plotLines: [{
+				color: 'var(--white60)',
+				width: 1
+			}],
+			gridLineWidth: 1,
+			min: 0,
+			title: {
+				text: 'kWh',
+				align: 'low',
+			rotation: 0,
+				y: 25,
+				x: 10,
+				style: {
+					color: 'var(--grey)',
+					fontSize: '12px'
+				}
+			},
+			labels: {
+				overflow: 'justify',
+				x: -10,
+				style: {
+					color: 'var(--grey)',
+					fontSize: '12px'
+				}
+			}
+		},
+		tooltip: {
+			shared: true,
+			borderColor: 'none',
+			backgroundColor: 'var(--bg-color)',
+			padding: 16,
+			style: {
+				color: 'var(--white87)'
+			},
+		},
+
+		legend: {
+			enabled: true,
+			align: 'right',
+			verticalAlign: 'top',
+			x: 5,
+			y: -10,
+			itemStyle: {
+				color: 'var(--grey)',
+				fontSize: '12px',
+				fontWeight: 400
+			},
+			itemHoverStyle: {
+				color: ''
+			},
+			symbolPadding: 3,
+			symbolHeight: 7
+		},
+
+		plotOptions: {
+			series: {
+				label: {
+					connectorAllowed: false
+				},
+				borderColor: 'var(--grey)',
+				borderWidth: 0
+			},
+			line: {
+				marker: {
+					enabled: false
+				}
+			},
+			column: {
+				//stacking: 'normal'
+			}
+		},
+
+		credits: {
+			enabled: false
+		},
+
+		series: [{
+			type: 'column',
+			<c:choose>
+				<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
+			name: '발전 실적',
+				</c:when>
+				<c:otherwise>
+			name: 'PV발전량',
+				</c:otherwise>
+			</c:choose>
+			color: 'var(--turquoise)', /* PV발전량 */
+			tooltip: {valueSuffix: 'kWh'},
+			data: []
+		}, {
+			type: 'column',
+			<c:choose>
+				<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
+			name: '전일 발전량',
+				</c:when>
+				<c:otherwise>
+			name: '발전 예측',
+				</c:otherwise>
+			</c:choose>
+
+			color: 'var(--grey)',
+			tooltip: {valueSuffix: 'kWh'},
+			data: []
+		}],
+		responsive: {
+			rules: [{
+				condition: {
+					minWidth: 870
+				},
+				chartOptions: {
+					chart: {
+						marginLeft: 75
+					},
+					xAxis: {
+						labels: {
+							style: {
+								fontSize: '18px'
+							}
+						}
+					},
+					yAxis: {
+						title: {
+							style: {
+								fontSize: '18px'
+							}
+						},
+						labels: {
+							style: {
+								fontSize: '18px'
+							}
+						}
+					},
+					legend: {
+						itemStyle: {
+							fontSize: '18px'
+						},
+						symbolPadding: 5,
+						symbolHeight: 10
+					}
+				}
+			}]
+		}
+	});
+
+
+	var hourlySolarChart = Highcharts.chart('hourlySolarChart', {
+		chart: {
+			marginTop: 40,
+			marginLeft: 50,
+			marginRight: 0,
+			height: 301,
+			backgroundColor: 'transparent',
+			zoomType: 'xy'
+		},
+		navigation: {
+			buttonOptions: {
+				enabled: false
+			}
+		},
+		title: {
+			text: ''
+		},
+		subtitle: {
+			text: ''
+		},
+		xAxis: {
+			lineColor: 'var(--white60)',
+			tickColor: 'var(--white60)',
+			gridLineColor: 'var(--white25)',
+			plotLines: [{
+				color: 'var(--white60)',
+				width: 1
+			}],
+			labels: {
+				align: 'center',
+				y: 27,
+				style: {
+					color: 'var(--grey)',
+					fontSize: '12px'
+				}
+			},
+			tickInterval: 1,
+			title: {
+				text: null
+			},
+			categories: [
+				'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
+				'13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24'
+			],
+			crosshair: true
+		},
+		yAxis: {
+			lineColor: 'var(--white60)',
+			tickColor: 'var(--white60)',
+			gridLineColor: 'var(--white25)',
+			plotLines: [
+				{
+					color: 'var(--white60)',
+					width: 1
+				}
+			],
+			gridLineWidth: 1,
+			min: 0,
+			title: {
+				text: 'kWh',
+				align: 'low',
+				rotation: 0,
+				y: 25,
+				x: 10,
+				style: {
+					color: 'var(--grey)',
+					fontSize: '12px'
+				}
+			},
+			labels: {
+				overflow: 'justify',
+				x: -10,
+				style: {
+					color: 'var(--grey)',
+					fontSize: '12px'
+				}
+			}
+		},
+		tooltip: {
+			shared: true,
+			borderColor: 'none',
+			backgroundColor: 'var(--bg-color)',
+			padding: 16,
+			style: {
+				color: 'var(--white87)'
+			}
+		},
+		legend: {
+			enabled: true,
+			align: 'right',
+			verticalAlign: 'top',
+			x: 5,
+			y: -10,
+			itemStyle: {
+				color: 'var(--grey)',
+				fontSize: '12px',
+				fontWeight: 400
+			},
+			itemHoverStyle: {
+				color: ''
+			},
+			symbolPadding: 3,
+			symbolHeight: 7
+		},
+		plotOptions: {
+			series: {
+				label: {
+					connectorAllowed: false
+				},
+				borderColor: 'var(--grey)',
+				borderWidth: 0
+			},
+			line: {
+				marker: {
+					enabled: false
+				}
+			},
+			column: {
+			}
+		},
+		credits: {
+			enabled: false
+		},
+		<%--
+		series: [{}
+
+			{
+				<c:choose>
+				<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
+					name: '발전 실적',
+					</c:when>
+					<c:otherwise>
+					name: 'PV발전량',
+					</c:otherwise>
+				</c:choose>
+				type: 'column',
+				color: 'var(--turquoise)',
+				tooltip: {
+					valueSuffix: 'kWh'
+				},
+				data: []
+			},
+			{
+				type: 'column',
+				<c:choose>
+					<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
+					name: '전일 발전량',
+					</c:when>
+					<c:otherwise>
+					name: '발전 예측',
+					</c:otherwise>
+				</c:choose>
+
+				color: 'var(--grey)',
+				tooltip: {
+					valueSuffix: 'MWh'
+				},
+				data: []
+			},
+			<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
+				{
+					name: '일사량',
+					type: 'spline',
+					color: 'var(--white60)',
+					dashStyle: 'ShortDash',
+					yAxis: 1,
+					data: [],
+					tooltip: {
+						valueSuffix: '천원'
+					}
+				}
+			</c:if>
+		],
+		--%>
+		responsive: {
+			rules: [{
+				condition: {
+					minWidth: 870
+				},
+				chartOptions: {
+					chart: {
+						marginLeft: 75
+					},
+					xAxis: {
+						labels: {
+							style: {
+								fontSize: '18px'
+							}
+						}
+					},
+					yAxis: {
+						title: {
+							style: {
+								fontSize: '18px'
+							}
+						},
+						labels: {
+							style: {
+								fontSize: '18px'
+							}
+						}
+					},
+					legend: {
+						itemStyle: {
+							fontSize: '18px'
+						},
+						symbolPadding: 5,
+						symbolHeight: 10
+					}
+				}
+			}]
+		}
+	});
+
+
 	$(function () {
-		let sList = JSON.parse('${siteList}');
 		let viewOptList = $('#viewOptList');
 		let switchFlag = false;
+		let refreshMinInterval = setInterval(getMinuteData, 60 * 1000);
+		let refreshQuarterInterval = setInterval(getQuarterData, 15 * 60 * 1000);
+
 		// let today = new Date().format('yyyy-MM-dd HH:mm:ss');
 
 		$('input[name="keyword"]').on('keyup', function(e) {
@@ -603,9 +1615,6 @@
 		getMinuteData();
 		getQuarterData();
 
-		var refreshMinInterval = setInterval(getMinuteData, 60 * 1000);
-		var refreshQuarterInterval = setInterval(getQuarterData, 15 * 60 * 1000);
-
 		viewOptList.find('li').on('click', function(){
 			let val = $(this).data("value");
 
@@ -649,59 +1658,261 @@
 			viewOptList.prev().data("value", val);
 
 		});
-
-
 	});
 
-	const pollingTerm = 1000 * 60 * 15;
-	const siteId = '${sid}';
-	const siteList = JSON.parse('${siteList}');
 
-	const apiEnergySite = '/energy/sites';
-	const apiEnergyNowSite = '/energy/now/sites';
-	const apiWeather = '/weather/site';
-	const apiForecastingSite = '/energy/forecasting/sites';
-	const apiStatusRawSite = '/status/raw/site';
-	const apiStatusRaw = '/status/raw';
-	const apiConfigDeivce = '​/config/devices';
-	const apigetDvcProperties = '/config/view/device_properties';
-	let first = true;
+	// noRepeatCycle => 1hr too long
+	function getWeatherData(option) {
+		const fromDate = new Date();
+		const toDate = new Date(fromDate.getFullYear(), fromDate.getMonth(), fromDate.getDate() + 3);
 
-	const getMinuteData = (option) => {
+		const timeFromDate = new Date(fromDate.getFullYear(), fromDate.getMonth(), fromDate.getDate() - 2);
+		const formData = getSiteMainSchCollection('day');
+
+		let weekWeather = {
+			url: apiHost + apiWeather,
+			type: 'get',
+			dataType: 'json',
+			data: {
+				sid: siteId,
+				startTime: fromDate.format('yyyyMMdd') + '000000',
+				endTime: toDate.format('yyyyMMdd') + '235959',
+				interval: 'day'
+			}
+		}
+
+		let weekWeatherTime = new Object();
+
+		if (oid.match('testkpx')) {
+			let did = '';
+
+			siteList.forEach(site => {
+				const devices = site.devices;
+				if (!isEmpty(devices)) {
+					devices.forEach(di => {
+						const deviceType = di.device_type;
+						if (deviceType === 'KPX_EMS') {
+							did = di.did;
+						}
+					});
+				}
+			});
+
+			let weekWeatherTime = {
+				url: apiHost + apiWeather,
+				type: 'get',
+				dataType: 'json',
+				data: {
+					sid: siteId,
+					startTime: timeFromDate.format('yyyyMMdd') + '000000',
+					endTime: fromDate.format('yyyyMMdd') + '235959',
+					interval: 'hour'
+				}
+			}
+
+			let statusRaw = {
+				url: apiHost + apiStatusRaw,
+				type: 'get',
+				dataType: 'json',
+				data: {
+					dids: did
+				}
+			}
+			$.when($.ajax(weekWeather), $.ajax(weekWeatherTime), $.ajax(statusRaw)).done(function (weekWeatherData, weekWeatherTimeData, statusRawData) {
+				
+				if (weekWeatherData[1] == 'success') {
+					let weekWeather = weekWeatherData[0];
+
+					if($('#viewOptList').prev().data("value") == "2"){
+						console.log("weekWeather---", weekWeather);
+
+						weekWeather.forEach((el, index) => {
+							$('#sTemp' + (index + 1)).text((el.temperature).toFixed(1));
+							let weatherIconClass = getWeatherIcons(el.sky);
+							$('#sWeatherIcon' + (index + 1)).html('<i class="ico_weather ' + weatherIconClass + '"></i>');
+						});
+					} else {
+						weekWeather.forEach((el, index) => {
+							console.log("el.temperature==", el.temperature)
+							$('#weekTemp' + (index + 1)).text((el.temperature).toFixed(1));
+							let weatherIconClass = getWeatherIcons(el.sky);
+							$('#weekIcon' + (index + 1)).html('<i class="ico_weather ' + weatherIconClass + '"></i>');
+						});
+					}
+				}
+
+				if (weekWeatherTimeData[1] == 'success') {
+					let items = weekWeatherTimeData[0];
+					if (items.length > 0) {
+						let tempArray = new Array();
+						$.each(items, function (i, el) {
+							if (el.observed != undefined && el.observed) {
+								tempArray.push(el);
+							}
+						});
+
+						if (tempArray.length > 0) {
+							let weatherIconClass = getWeatherIcons(tempArray[tempArray.length - 1].sky);
+							console.log("weatherIconClass==")
+							if($('#viewOptList').prev().data("value") == "2"){
+								$('#sTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + ' ' + '&#8451;');
+								$('#weekSolarIcon').html('<i class="ico_weather ' + weatherIconClass + '"></i>').next('strong').html(' (' + siteList[0].location + ') ');
+							} else {
+								$('#weekTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + ' ' + '&#8451;');
+								$('#weekIcon').html('<i class="ico_weather ' + weatherIconClass + '"></i>').next('strong').html(' (' + siteList[0].location + ') ');
+							}
+						}
+					}
+				}
+
+				if (statusRawData[1] == 'success') {
+					let items = statusRawData[0];
+					if (!isEmpty(items)) {
+						Object.entries(items).map(obj => {
+							let deviceData = obj[1].data;
+
+							deviceData.forEach(di => {
+								let humidity = isEmpty(di.humidity) ? '-' : di.humidity;
+								let windDirection = isEmpty(di.windDirection) ? '-' : di.windDirection;
+								let windSpeed = isEmpty(di.windSpeed) ? '-' : di.windSpeed;
+								let wind_velocity = isEmpty(di.wind_velocity) ? '-' : di.wind_velocity;
+								let temperature = isEmpty(di.temperature) ? '-' : (di.temperature).toFixed(1);
+								if($('#viewOptList').prev().data("value") == "2"){
+									$('#sTemp').html(temperature + '&#8451;');
+									$('#weekSolarIcon').next('strong').html(' (' + siteList[0].location + ') ');
+									$('#sWindVelocity').text((windSpeed).toFixed(1) + ' km/h');
+									$('#sWindDirection').text(windDirection);
+									$('#sHumidity').html(humidity + ' ' + '&#37;');
+
+									$('.weather .stit').html(new Date(di.timestamp).format('yyyy-MM-dd HH:mm:ss'));
+
+								} else {
+									$('#weekTemp').text(temperature + '&#8451;');
+									$('#weekIcon').next('strong').html(' (' + siteList[0].location + ') ');
+									$('#weekWindVelocity').text((windSpeed).toFixed(1) + ' km/h');
+									$('#weekWindDirection').text(windDirection);
+									$('#weekHum').html(humidity + ' ' + '&#37;');
+
+									$('.weather .stit').html(new Date(di.timestamp).format('yyyy-MM-dd HH:mm:ss'));
+								}
+							});
+						});
+					}
+				}
+			}).fail(function () {
+				console.log('rejected');
+			});
+		} else {
+			let weekWeatherTime = {
+				url: apiHost + apiWeather,
+				type: 'get',
+				dataType: 'json',
+				data: {
+					sid: siteId,
+					startTime: timeFromDate.format('yyyyMMdd') + '000000',
+					endTime: fromDate.format('yyyyMMdd') + '235959',
+					interval: 'hour'
+				}
+			}
+
+			$.when($.ajax(weekWeather), $.ajax(weekWeatherTime)).done(function (weekWeatherData, weekWeatherTimeData) {
+				let weekWeather = weekWeatherData[0];
+
+				if (weekWeatherData[1] == 'success') {
+
+					if($('#viewOptList').prev().data("value") == "2"){
+						weekWeather.forEach((el, index) => {
+							$('#sTemp' + (index + 1)).text((el.temperature).toFixed(1));
+							let weatherIconClass = getWeatherIcons(el.sky);
+							$('#sWeatherIcon' + (index + 1)).html('<i class="ico_weather ' + weatherIconClass + '"></i>');
+						});
+					} else {
+
+						weekWeather.forEach((el, index) => {
+							$('#weekTemp' + (index + 1)).text((el.temperature).toFixed(1));
+							let weatherIconClass = getWeatherIcons(el.sky);
+							$('#weekIcon' + (index + 1)).html('<i class="ico_weather ' + weatherIconClass + '"></i>');
+						});
+					}
+				}
+
+				if (weekWeatherTimeData[1] == 'success') {
+					let items = weekWeatherTimeData[0];
+					
+					if (items.length > 0) {
+						let tempArray = new Array();
+						$.each(items, function (i, el) {
+							if (el.observed != undefined && el.observed) {
+								tempArray.push(el);
+							}
+						});
+
+						if (tempArray.length > 0) {
+							let weatherIconClass = getWeatherIcons(tempArray[tempArray.length - 1].sky);
+
+							if($('#viewOptList').prev().data("value") == "2") {
+								$('#sTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + '&#8451;');
+								$('#weekSolarIcon').html('<i class="ico_weather ' + weatherIconClass + '"></i>');
+								$('#weekSolarIcon').next('strong').html(' (' + siteList[0].location + ') ');
+								$('#sWindVelocity').text((tempArray[tempArray.length - 1].wind_speed).toFixed(1) + ' km/h');
+								$('#sWindDirection').text(tempArray[tempArray.length - 1].wind_velocity);
+								$('#sHumidity').html((tempArray[tempArray.length - 1].humidity).toFixed(1) + ' ' + '&#37;');
+								$('#currentTimeB').html(String(tempArray[tempArray.length - 1].basetime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6'));
+							} else {
+								$('#weekTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + '&#8451;');
+								$('#weekIcon').html('<i class="ico_weather ' + weatherIconClass + '"></i>');
+								$('#weekIcon').next('strong').html(' (' + siteList[0].location + ') ');
+								$('#weekWindVelocity').text((tempArray[tempArray.length - 1].wind_speed).toFixed(1) + ' km/h');
+								$('#weekWindDirection').text(tempArray[tempArray.length - 1].wind_velocity);
+								$('#weekHum').html((tempArray[tempArray.length - 1].humidity).toFixed(1) + ' ' + '&#37;');
+								$('#currentTimeA').html(String(tempArray[tempArray.length - 1].basetime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6'));
+							}
+						}
+					}
+				}
+			}).fail(function () {
+				console.log('rejected');
+			});
+
+		}
+	
+	}
+
+	function getMinuteData(option) {
 		if(isEmpty(option)){
 			getAlarmInfo(); //금일발생오류
-			getTodayTotalDetail(); //현재 출력
-			toDayGeneration(); //금일 발전현황
+			getTodayTotal(); //현재 출력
+			todayGeneration(); //금일 발전현황
 
 			if (!first) {
 				deviceInfoList();
-				toDayGeneration(); //금일 발전현황
+				todayGeneration(); //금일 발전현황
 			}
 		} else {
-			getTodayTotalDetail("solarDashboard");
-			toDayGeneration("solarDashboard"); //금일 발전현황
+			getTodayTotal("solarDashboard");
+			todayGeneration("solarDashboard"); //금일 발전현황
 		}
 	}
 
-	// TODO!!!! 반복 15분 너무 긴건 아닌지 체크;
-	const getQuarterData = (option) => {
+	// TODO!!!! => 15min cycle is too long...
+	function getQuarterData(option) {
 		if(isEmpty(option)){
 			chargeChartPoll(); //월별 발전량 종합
-			getWCalendarEnergyData(); //이 달의 발전 달력
+			getWeatherCalendarEnergyData(); //이 달의 발전 달력
 		} else {
 			chargeChartPoll("solarDashboard"); //월별 발전량 종합
 		}
 	}
 
-	// const rtnDropdown = ($selectId) => {
-	// 	if ($selectId == 'chartType') {
-	// 		chargeChartPoll();
-	// 	} else if ($selectId == 'statusDevice') {
-	// 		deviceInfoList();
-	// 	}
-	// }
+	function rtnDropdown($selectId) {
+		if ($selectId == 'chartType') {
+			chargeChartPoll();
+		} else if ($selectId == 'statusDevice') {
+			deviceInfoList();
+		}
+	}
 
-	const getNowEnergy = () => {
+	function getNowEnergy() {
 		let getNowEnergyDay = {
 			url: apiHost + apiEnergyNowSite,
 				type: 'get',
@@ -769,13 +1980,9 @@
 		});
 	}
 
-
-	//설비 속성 템플릿
-	const featureProperties = new Object();
-	const featurePropertiesSub = new Object();
-	const getDvcProperties = () => {
+	function getDvcProperties() {
 		$.ajax({
-			url: apiHost + apigetDvcProperties,
+			url: apiHost + apiGetDvcProperties,
 			type: 'get',
 			dataType: 'json',
 			data: {},
@@ -837,7 +2044,7 @@
 		});
 	};
 
-	const deviceSearch = (dname, operation) => {
+	function deviceSearch(dname, operation) {
 		let searchBoolean = true,
 			keyoard = $('input[name="keyword"]').val().trim();
 
@@ -870,7 +2077,7 @@
 		return searchBoolean;
 	}
 
-	const deviceInfoList = () => {
+	function deviceInfoList() {
 		let deviceArray = new Array();
 		if (!isEmpty(siteList[0].devices)) {
 			siteList[0].devices.forEach(el => {
@@ -1063,7 +2270,7 @@
 		}
 	}
 
-	const setOperation = (operation) => {
+	function setOperation(operation) {
 		let rtnText = '';
 		if (operation == '1') {
 			rtnText = '정상';
@@ -1076,7 +2283,7 @@
 		return rtnText;
 	}
 
-	const makeHeadTable = (obj) => {
+	function makeHeadTable(obj) {
 		let targetTable = document.createElement('table');
 		let colgroup = document.createElement('colgroup');
 		let colLength = obj.length;
@@ -1108,7 +2315,7 @@
 		return targetTable.outerHTML;
 	}
 
-	const makeBodyTable = (obj) => {
+	function makeBodyTable (obj) {
 		let targetTable = document.createElement('table');
 		let colgroup = document.createElement('colgroup');
 		let colLength = obj.prop.length;
@@ -1137,12 +2344,12 @@
 		return targetTable.outerHTML;
 	}
 
-	const chargeChartPoll = function (option) {
-
-		console.log("chargeChartPoll==", option)
-		const formData = getSiteMainSchCollection('year');//api에 맞게 수정 필요
-		const monthFormData = getSiteMainSchCollection('month');//api에 맞게 수정 필요
-		const beforeYearFormData = getSiteMainSchCollection('beforeYear');//api에 맞게 수정 필요
+	function chargeChartPoll(option) {
+		const formData = getSiteMainSchCollection('year');
+		const monthFormData = getSiteMainSchCollection('month');
+		const beforeYearFormData = getSiteMainSchCollection('beforeYear');
+		const fromDate = new Date();
+		const toDate = new Date(fromDate.getFullYear(), fromDate.getMonth(), fromDate.getDate() + 3);
 
 		const monthEnergy = {
 			url: apiHost + apiEnergySite,
@@ -1189,8 +2396,8 @@
 			dataType: 'json',
 			data: {
 				sid: siteId,
-				startTime: formData.startTime,
-				endTime: formData.endTime,
+				startTime: fromDate.format('yyyyMMdd') + '000000',
+				endTime: toDate.format('yyyyMMdd') + '235959',
 				interval: 'day'
 			}
 		}
@@ -1233,16 +2440,36 @@
 								
 			} else {
 				console.log("kpx but dropdown val==2")
-				$.when($.ajax(monthEnergy), $.ajax(nowMonth)).done(function (result1, result2) {
+				$.when($.ajax(monthEnergy), $.ajax(nowMonth), $.ajax(weather)).done(function (result1, result2, result2) {
 					let el = $("#solarDashboard .mini .data-num");
 					let monthGen = "";
 					let chargeChartItems1;
 					let chargeChartItems2;
-					if (!isEmpty(result1[0])) {
-						console.log("result1---", result1[1]);
+
+					if (!isEmpty(result1[1] == 'success')) {
+						let resultData = monthEnergyData[0].data[0];
 						monthGen = displayNumberFixedDecimal(Object.entries(result1[0].data)[0][1].generation.items[0].energy, 'Wh', 3, 2, "noComma");
 						el.eq(4).text(monthGen[0]);
 						el.eq(4).next().text(monthGen[1]);
+						console.log("result1[0].data)[0][1]-===", Object.entries(result1[0].data)[0][1]) 
+						// if (result1[0].data)[0][1].length > 0) {
+							// chargeChartItems1 = resultData.generation.items;
+							// chargeChartItems1.forEach(el => {
+							// 	if (!isEmpty(el.money)) {
+							// 		el.money = Math.floor(el.money / 1000);
+							// 	}
+							// });
+
+							// if (nowMonthData[1] == 'success') {
+							// 	let resultNow = nowMonthData[0].data[siteId];
+							// 	chargeChartItems1.push({
+							// 		basetime: monthFormData.startTime,
+							// 		energy: resultNow.energy,
+							// 		money: Math.floor(resultNow.money / 1000)
+							// 	});
+							// }
+						// }
+
 						// let resultData = monthEnergyData[0].data[0];
 						// if (resultData.generation.items.length > 0) {
 						// 	chargeChartItems1 = resultData.generation.items;
@@ -1270,7 +2497,7 @@
 					} else {
 
 					}
-					// setChargeChartData(chargeChartItems1);
+					setChargeChartData(chargeChartItems1);
 
 				}).fail(function () {
 					console.log('rejected');
@@ -1411,7 +2638,7 @@
 									money: Math.floor(resultNow.money / 1000)
 								});
 							}
-							setChargeChartData(chargeChartItems1, chargeChartItems2, null, "solarDashboard");
+							setChargeChartData(chargeChartItems1, null, null, "solarDashboard");
 						} else {
 							el.eq(4).text("-");
 						}
@@ -1483,7 +2710,8 @@
 								let energy = chargeChartItems1[d].energy / 1000;
 
 								billingData[i] = [i, parseFloat(((energy / itemChartCapacity) / lastDate).toFixed(2))];
-							} else { //매전량
+							} else {
+								// 매전량
 								billingData[i] = [i, chargeChartItems1[d].money];
 							}
 						}
@@ -1502,37 +2730,23 @@
 				billingData[i] = [i, null];
 			}
 			
-			for (var d = 0; d < chargeChartItems2.length; d++) {
-				var dataMonth = parseInt(("" + chargeChartItems2[d].basetime).substring(4, 6));
-				if (i + 1 == dataMonth) {
-					totBeforeYearEnergy += chargeChartItems2[d].energy / 1000;
-					if (i + 1 == nowMonth) {
-						totBeforeMonthEnergy = chargeChartItems2[d].energy / 1000;
+			if(!isEmpty(chargeChartItems2)) {
+				for (var d = 0; d < chargeChartItems2.length; d++) {
+					var dataMonth = parseInt(("" + chargeChartItems2[d].basetime).substring(4, 6));
+					if (i + 1 == dataMonth) {
+						totBeforeYearEnergy += chargeChartItems2[d].energy / 1000;
+						if (i + 1 == nowMonth) {
+							totBeforeMonthEnergy = chargeChartItems2[d].energy / 1000;
+						}
 					}
 				}
 			}
 		}
 
-		// for (var i = 0; i < 12; i++) {
-		// 	for (var d = 0; d < chargeChartItems2.length; d++) {
-		// 		var dataMonth = parseInt(("" + chargeChartItems2[d].basetime).substring(4, 6));
-		// 		if (i + 1 == dataMonth) {
-		// 			totBeforeYearEnergy += chargeChartItems2[d].energy / 1000;
-		// 			if (i + 1 == nowMonth) {
-		// 				totBeforeMonthEnergy = chargeChartItems2[d].energy / 1000;
-		// 			}
-		// 		}
-		// 	}
-		// }
-
-		console.log("option===", option)
-
 		if(isEmpty(option)){
-			console.log("no option===", option)
-			chargeChart.series[0].setData(energyData);
+			dailyChart.series[0].setData(energyData);
 			if (!oid.match('testkpx')) {
-				chargeChart.series[1].setData(billingData);
-
+				dailyChart.series[1].setData(billingData);
 				let seriesName = '';
 				let suffix = '';
 				if ($(':radio[name="radio_t"]:checked').val() == 1) {
@@ -1546,48 +2760,61 @@
 					suffix = '천원';
 				}
 
-				chargeChart.series[1].name = seriesName;
-				chargeChart.series[1].tooltipOptions.valueSuffix = suffix;
-				chargeChart.series[1].legendItem.element.firstElementChild.innerHTML = seriesName;
-				chargeChart.yAxis[1].setTitle({
+				dailyChart.series[1].name = seriesName;
+				dailyChart.series[1].tooltipOptions.valueSuffix = suffix;
+				dailyChart.series[1].legendItem.element.firstElementChild.innerHTML = seriesName;
+				dailyChart.yAxis[1].setTitle({
 					text: suffix,
 					align: 'low',
-					rotation: 0, /* 타이틀 기울기 */
-					y: 25, /* 타이틀 위치 조정 */
+					rotation: 0,
+					y: 25,
 					x: -12,
 					style: {
-						color: '#ffffff',
+						color: 'var(--white)',
 						fontSize: '12px'
 					}
 				});
 			}
 		} else {
-			dailySolarChart.series[0].setData(energyData);
-			dailySolarChart.series[1].setData(billingData);
-
-			let seriesName = '';
-			let suffix = '';
-			seriesName = '발전 에측';
-			suffix = 'kWh';
-
-			dailySolarChart.series[1].name = seriesName;
-			dailySolarChart.series[1].tooltipOptions.valueSuffix = suffix;
-			dailySolarChart.series[1].legendItem.element.firstElementChild.innerHTML = seriesName;
-			dailySolarChart.yAxis[1].setTitle({
-				text: suffix,
-				align: 'low',
-				rotation: 0, /* 타이틀 기울기 */
-				y: 25, /* 타이틀 위치 조정 */
-				x: -12,
-				style: {
-					color: '#ffffff',
-					fontSize: '12px'
+			seriesName = [
+				{
+					label : '${siteName}' + '대시보드'
+				},
+				{
+					label : '${siteName}' + '일사량'
 				}
-			});
+			];
+			suffix = 'MWh';
+
+			dailySolarChart.series[0].setData(energyData);
+			dailySolarChart.series[0].name = seriesName[0].name;
+
+			dailySolarChart.series[0].setData(energyData);
+			// dailySolarChart.series[1].setData(billingData);
+
+			// let seriesName = '';
+			// let suffix = '';
+			// seriesName = '발전 에측';
+			// suffix = 'kWh';
+
+			// dailySolarChart.series[1].name = seriesName;
+			// dailySolarChart.series[1].tooltipOptions.valueSuffix = suffix;
+			// dailySolarChart.series[1].legendItem.element.firstElementChild.innerHTML = seriesName;
+			// dailySolarChart.yAxis[1].setTitle({
+			// 	text: suffix,
+			// 	align: 'low',
+			// 	rotation: 0,
+			// 	y: 25,
+			// 	x: -12,
+			// 	style: {
+			// 		color: 'var(--white)',
+			// 		fontSize: '12px'
+			// 	}
+			// });
 		}			
 	}
 
-	const flattenObject = (obj) => {
+	function flattenObject (obj) {
 		let flat = {};
 		for (const [key, value] of Object.entries(obj)) {
 			if (typeof value === 'object' && value !== null) {
@@ -1606,520 +2833,8 @@
 		return flat;
 	}
 
-	const chargeChart = Highcharts.chart('schart1', {
-		chart: {
-			marginTop: 40,
-			marginLeft: 50,
-			marginRight: 50,
-			height: 280,
-			backgroundColor: 'transparent',
-			zoomType: 'xy'
-		},
-		navigation: {
-			buttonOptions: {
-				enabled: false /* 메뉴 안보이기 */
-			}
-		},
-		title: {
-			text: ''
-		},
-		subtitle: {
-			text: ''
-		},
-		xAxis: [{
-			lineColor: '#515562', /* 눈금선색 */
-			tickColor: '#515562',
-			gridLineColor: '#515562',
-			plotLines: [{
-				color: '#515562',
-				width: 1
-			}],
-			labels: {
-				align: 'center',
-				y: 27, /* 그래프와 거리 */
-				style: {
-					color: '#a4aebf',
-					fontSize: '12px'
-				}
-			},
-			tickInterval: 1, /* 눈금의 픽셀 간격 조정 */
-			title: {
-				text: null
-			},
-			categories: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
-			crosshair: true
-		}],
-		yAxis: [{ // Primary yAxis
-			lineColor: '#515562', /* 눈금선색 */
-			tickColor: '#515562',
-			gridLineColor: '#515562',
-			gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
-			plotLines: [{
-				color: '#515562',
-				width: 1
-			}],
-			gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
-			title: {
-				text: 'kWh',
-				align: 'low',
-				rotation: 0, /* 타이틀 기울기 */
-				y: 25, /* 타이틀 위치 조정 */
-				x: 15,
-				style: {
-					color: '#ffffff',
-					fontSize: '12px'
-				}
-			},
-			labels: {
-				formatter: function () {
-					if (String(this.value).length  >= 7) {
-						return numberComma(this.value / 1000000) + ' G';
-					} else if (String(this.value).length  >= 5) {
-						return numberComma(this.value / 1000) + ' M';
-					} else {
-						return this.value;
-					}
-				},
-				style: {
-					color: '#a4aebf',
-					fontSize: '12px'
-				}
-			}
-		},
-	<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-		{ // Secondary yAxis
-		lineColor: '#515562', /* 눈금선색 */
-		tickColor: '#515562',
-		gridLineColor: '#515562',
-		gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
-		plotLines: [{
-			color: '#515562',
-			width: 1
-		}],
-			gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
-			title: {
-				text: '천원',
-				align: 'low',
-				rotation: 0, /* 타이틀 기울기 */
-				y: 25, /* 타이틀 위치 조정 */
-				x: -12,
-				style: {
-					color: '#ffffff',
-					fontSize: '12px'
-				}
-			},
-			labels: {
-				formatter: function () {
-					if (String(this.value).length  >= 7) {
-						return numberComma(this.value / 1000000) + ' G';
-					} else if (String(this.value).length  >= 5) {
-						return numberComma(this.value / 1000) + ' M';
-					} else {
-						return this.value;
-					}
-				},
-				style: {
-					color: '#a4aebf',
-					fontSize: '12px'
-				}
-			},
-			opposite: true
-		}
-	</c:if>
-		],
-		tooltip: {
-			formatter: function () {
-				return this.points.reduce(function (s, point) {
-					let suffix = point.series.userOptions.tooltip.valueSuffix;
-					return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + numberComma(point.y) + suffix;
-				}, '<b>' + this.x + '</b>');
-			},
-			shared: true, /* 툴팁 공유 */
-			borderColor: 'none',
-			backgroundColor: 'var(--bg-color)',
-			padding: 16,
-			style: {
-				color: 'var(--white)'
-			}
-		},
-		/* 범례 */
-		legend: {
-			enabled: true,
-			align: 'right',
-			verticalAlign: 'top',
-			x: -10,
-			y: -10,
-			itemStyle: {
-				color: '#a4aebf',
-				fontSize: '12px',
-				fontWeight: 400
-			},
-			itemHoverStyle: {
-				color: '' /* 마우스 오버시 색 */
-			},
-			symbolPadding: 3, /* 심볼 - 텍스트간 거리 */
-			symbolHeight: 7 /* 심볼 크기 */
-		},
-		/* 옵션 */
-		plotOptions: {
-			series: {
-				label: {
-					connectorAllowed: false
-				},
-				borderColor: '#a4aebf',
-				borderWidth: 0 /* 보더 0 */
-			},
-			line: {
-				marker: {
-					enabled: false /* 마커 안보이기 */
-				}
-			},
-			column: {
-				stacking: 'normal' /*위로 쌓이는 막대  ,normal */
-			}
-		},
-		series: [{
-			<c:choose>
-				<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-			name: '발전 실적',
-				</c:when>
-				<c:otherwise>
-			name: 'PV발전량',
-				</c:otherwise>
-			</c:choose>
-			type: 'column',
-			color: '#26ccc8',
-			data: [],
-			tooltip: {
-				valueSuffix: 'kWh'
-			}
-
-		},
-	<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-		{
-			name: 'PR',
-			type: 'spline',
-			color: 'var(--white60)',
-			dashStyle: 'ShortDash',
-			yAxis: 1,
-			data: [],
-			tooltip: {
-				valueSuffix: '천원'
-			}
-		}
-	</c:if>
-		],
-		/* 출처 */
-		credits: {
-			enabled: false
-		},
-		/* 반응형 */
-		responsive: {
-			rules: [{
-				condition: {
-					minWidth: 870 /* 차트 사이즈 */
-				},
-				chartOptions: {
-					chart: {
-						marginTop: 50,
-						marginLeft: 75,
-						marginRight: 75
-					},
-					xAxis: {
-						labels: {
-							style: {
-								fontSize: '18px'
-							}
-						}
-					},
-					yAxis: [{
-						title: {
-							y: 30,
-							x: 20,
-							style: {
-								fontSize: '18px'
-							}
-						},
-						labels: {
-							style: {
-								fontSize: '18px'
-							}
-						}
-					},
-						{
-							title: {
-								y: 30,
-								x: -15,
-								style: {
-									fontSize: '18px'
-								}
-							},
-							labels: {
-								style: {
-									fontSize: '18px'
-								}
-							}
-						}],
-					legend: {
-						itemStyle: {
-							fontSize: '18px'
-						},
-						symbolPadding: 5,
-						symbolHeight: 10
-					}
-				}
-			}]
-		}
-	});
-
-	const dailySolarChart = Highcharts.chart('dailySolarChart', {
-		chart: {
-			marginTop: 40,
-			marginLeft: 50,
-			marginRight: 50,
-			height: 280,
-			backgroundColor: 'transparent',
-			zoomType: 'xy'
-		},
-		navigation: {
-			buttonOptions: {
-				enabled: false /* 메뉴 안보이기 */
-			}
-		},
-		title: {
-			text: ''
-		},
-		subtitle: {
-			text: ''
-		},
-		xAxis: [{
-			lineColor: '#515562', /* 눈금선색 */
-			tickColor: '#515562',
-			gridLineColor: '#515562',
-			plotLines: [{
-				color: '#515562',
-				width: 1
-			}],
-			labels: {
-				align: 'center',
-				y: 27, /* 그래프와 거리 */
-				style: {
-					color: '#a4aebf',
-					fontSize: '12px'
-				}
-			},
-			tickInterval: 1, /* 눈금의 픽셀 간격 조정 */
-			title: {
-				text: null
-			},
-			categories: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
-			crosshair: true
-		}],
-		yAxis: [{ // Primary yAxis
-			lineColor: '#515562', /* 눈금선색 */
-			tickColor: '#515562',
-			gridLineColor: '#515562',
-			gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
-			plotLines: [{
-				color: '#515562',
-				width: 1
-			}],
-			gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
-			title: {
-				text: 'kWh',
-				align: 'low',
-				rotation: 0, /* 타이틀 기울기 */
-				y: 25, /* 타이틀 위치 조정 */
-				x: 15,
-				style: {
-					color: '#ffffff',
-					fontSize: '12px'
-				}
-			},
-			labels: {
-				formatter: function () {
-					if (String(this.value).length  >= 7) {
-						return numberComma(this.value / 1000000) + ' G';
-					} else if (String(this.value).length  >= 5) {
-						return numberComma(this.value / 1000) + ' M';
-					} else {
-						return this.value;
-					}
-				},
-				style: {
-					color: '#a4aebf',
-					fontSize: '12px'
-				}
-			}
-		},
-	<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-		{ // Secondary yAxis
-		lineColor: '#515562', /* 눈금선색 */
-		tickColor: '#515562',
-		gridLineColor: '#515562',
-		gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
-		plotLines: [{
-			color: '#515562',
-			width: 1
-		}],
-			gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
-			title: {
-				text: '천원',
-				align: 'low',
-				rotation: 0, /* 타이틀 기울기 */
-				y: 25, /* 타이틀 위치 조정 */
-				x: -12,
-				style: {
-					color: '#ffffff',
-					fontSize: '12px'
-				}
-			},
-			labels: {
-				formatter: function () {
-					if (String(this.value).length  >= 7) {
-						return numberComma(this.value / 1000000) + ' G';
-					} else if (String(this.value).length  >= 5) {
-						return numberComma(this.value / 1000) + ' M';
-					} else {
-						return this.value;
-					}
-				},
-				style: {
-					color: '#a4aebf',
-					fontSize: '12px'
-				}
-			},
-			opposite: true
-		}
-	</c:if>
-		],
-		tooltip: {
-			formatter: function () {
-				return this.points.reduce(function (s, point) {
-					let suffix = point.series.userOptions.tooltip.valueSuffix;
-					return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + numberComma(point.y) + suffix;
-				}, '<b>' + this.x + '</b>');
-			},
-			shared: true, /* 툴팁 공유 */
-			borderColor: 'none',
-			backgroundColor: 'var(--bg-color)',
-			padding: 16,
-			style: {
-				color: 'var(--white)'
-			}
-		},
-		/* 범례 */
-		legend: {
-			enabled: true,
-			align: 'right',
-			verticalAlign: 'top',
-			x: -10,
-			y: -10,
-			itemStyle: {
-				color: '#a4aebf',
-				fontSize: '12px',
-				fontWeight: 400
-			},
-			itemHoverStyle: {
-				color: '' /* 마우스 오버시 색 */
-			},
-			symbolPadding: 3, /* 심볼 - 텍스트간 거리 */
-			symbolHeight: 7 /* 심볼 크기 */
-		},
-		/* 옵션 */
-		plotOptions: {
-			series: {
-				label: {
-					connectorAllowed: false
-				},
-				borderColor: '#a4aebf',
-				borderWidth: 0 /* 보더 0 */
-			},
-			line: {
-				marker: {
-					enabled: false /* 마커 안보이기 */
-				}
-			},
-			column: {
-				stacking: 'normal' /*위로 쌓이는 막대  ,normal */
-			}
-		},
-		series: [{
-			name: '일사량',
-			type: 'column',
-			color: '#26ccc8',
-			data: [],
-			tooltip: {
-				valueSuffix: 'kWh'
-			}
-
-		},
-		],
-		/* 출처 */
-		credits: {
-			enabled: false
-		},
-		/* 반응형 */
-		responsive: {
-			rules: [{
-				condition: {
-					minWidth: 870 /* 차트 사이즈 */
-				},
-				chartOptions: {
-					chart: {
-						marginTop: 50,
-						marginLeft: 75,
-						marginRight: 75
-					},
-					xAxis: {
-						labels: {
-							style: {
-								fontSize: '18px'
-							}
-						}
-					},
-					yAxis: [{
-						title: {
-							y: 30,
-							x: 20,
-							style: {
-								fontSize: '18px'
-							}
-						},
-						labels: {
-							style: {
-								fontSize: '18px'
-							}
-						}
-					},
-						{
-							title: {
-								y: 30,
-								x: -15,
-								style: {
-									fontSize: '18px'
-								}
-							},
-							labels: {
-								style: {
-									fontSize: '18px'
-								}
-							}
-						}],
-					legend: {
-						itemStyle: {
-							fontSize: '18px'
-						},
-						symbolPadding: 5,
-						symbolHeight: 10
-					}
-				}
-			}]
-		}
-	});
-
-	const getWCalendarEnergyData = () => {
-		const formData = getSiteMainSchCollection('month');//api에 맞게 수정 필요
+	function getWeatherCalendarEnergyData() {
+		const formData = getSiteMainSchCollection('month');
 
 		const dailyEnergy = {
 			url: apiHost + apiEnergySite,
@@ -2169,7 +2884,7 @@
 						if (i == dataDay) {
 							$('#calWeatherValue_' + i).text((el.temperature).toFixed(1) + '℃');
 
-							let weatherIconClass = getWeatherIconClass(el.sky);
+							let weatherIconClass = getWeatherIcons(el.sky);
 							$('#calWeatherIcon_' + i).html('<i class="ico_weather ' + weatherIconClass + '"></i>');
 						}
 					});
@@ -2178,11 +2893,11 @@
 		}).fail(function () {
 			console.log('rejected');
 		}).always(function () {
-			getWCalendargetNowEnergyData();
+			getWeatherCalendar();
 		});
 	}
 
-	const getWCalendargetNowEnergyData = () => {
+	function getWeatherCalendar() {
 		$.ajax({
 			url: apiHost + apiEnergyNowSite,
 			type: 'get',
@@ -2205,16 +2920,16 @@
 		});
 	}
 
-	/*
-	 weather value 1 	> css w1
-	 weather value 20	> css w3
-	 weather value 7	> css w4
-	 weather value 13	> css w6
-	 weather value 11	> css w8
-	 weather value 17	> css w9
-	 weather value 12	> css w10
-	*/
-	const getWeatherIconClass = (weatherId) => {
+	function getWeatherIcons(weatherId) {
+		/*
+			weather value 1 	> css w1
+			weather value 20	> css w3
+			weather value 7	> css w4
+			weather value 13	> css w6
+			weather value 11	> css w8
+			weather value 17	> css w9
+			weather value 12	> css w10
+		*/
 		let weatherIconClass = 'w1';
 		switch (weatherId) {
 			case 1 :
@@ -2245,10 +2960,7 @@
 		return weatherIconClass
 	}
 
-	let toDayEnergy = 0;
-	let toDayRaw = 0;
-
-	const getTodayTotalDetail = function (option) {
+	function getTodayTotal(option) {
 		const formData = getSiteMainSchCollection('day');
 		const formYesterData = getSiteMainSchCollection('yesterday');
 		let capacity = 0;
@@ -2266,8 +2978,6 @@
 			$('#centerTbody tr td:nth-child(3)').html('<em>&nbsp;&nbsp;kWh</em>');
 			$('#centerTbody tr td:nth-child(4)').html('<em>&nbsp;&nbsp;천원</em>');
 		}
-
-		// TOTAL !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 		if(isEmpty(option)){
 			if (oid.match('testkpx')) {
@@ -2615,126 +3325,57 @@
 		}
 	}
 
-	var pieChart = Highcharts.chart('pie_chart', {
-		chart: {
-			marginTop: 0,
-			marginLeft: 0,
-			marginRight: 0,
-			backgroundColor: 'transparent',
-			zoomType: 'xy',
-			plotBorderWidth: 0,
-			plotShadow: false,
-			height: 180
-		},
-		navigation: {
-			buttonOptions: {
-				enabled: false /* 메뉴 안보이기 */
-			}
-		},
-		title: {
-			text: '- Wh', // 총용량 표기
-			align: 'center',
-			verticalAlign: 'middle',
-			y: 10,
-			x: 0,
-			style: {
-				fontSize: '14px',
-				color: 'var(--white60)'
-			}
-		},
-		subtitle: {
-			text: ''
-		},
-		credits: {
-			enabled: false
-		},
-		tooltip: {
-			shared: true,
-			borderColor: 'none',
-			backgroundColor: 'var(--bg-color)',
-			padding: 16,
-			style: {
-				color: 'var(--white)'
-			},
-			valueSuffix: ' kwh',
-			pointFormat: '<b>{point.percentage:.0f}%</b>'
-		},
-		plotOptions: {
-			pie: {
-				dataLabels: {
-					enabled: false,
-					style: {
-						fontWeight: 'bold',
-						color: 'var(--white)'
-					}
-				},
-				center: ['40%', '50%'],
-				borderWidth: 0,
-				size: '100%'
-			}
-		},
-		series: [{
-			type: 'pie',
-			innerSize: '70%',
-			name: '발전량',
-			colorByPoint: true,
-			data: [{
-				color: '#9363FD',
-				name: '태양광',
-				dataLabels: {
-					enabled: false
-				},
-				y: 60 //60% -- 아래로 총합 100%
-			}, {
-				color: '#878787',
-				name: '미사용량',
-				dataLabels: {
-					enabled: false
-				},
-				y: 20 //20% 나머지
-			}]
-		}],
-		responsive: { // 반응형
-			rules: [{
-				condition: {
-					maxWidth: 768
-				},
-				chartOptions: {
-					plotOptions: {
-						pie: {
-							center: ['50%', '50%']
-						}
-					}
-				}
-			}]
-		}
-	});
-
-
-	//금일 발전 현
-	const toDayGeneration = (option) => {
+	function todayGeneration(option) {
 		const formData = getSiteMainSchCollection('day');
 		const formYesterData = getSiteMainSchCollection('yesterday');
-
+		let foreGen = new Object();
+		let gen = {
+			url: apiHost + apiEnergySite,
+			type: 'get',
+			data: {
+				sid: siteId,
+				startTime: formData.startTime,
+				endTime: formData.endTime,
+				interval: 'hour',
+				displayType: 'dashboard',
+				formId: 'v2'
+			}
+		};
+		let nowMonth = {
+			url: apiHost + apiEnergyNowSite,
+			type: 'get',
+			dataType: 'json',
+			data: {
+				sids: siteId,
+				metering_type: '2',
+				interval: 'month'
+			}
+		}
+		let nowGen = {
+			url: apiHost + apiEnergyNowSite,
+			type: 'get',
+			data: {
+				sids: siteId,
+				metering_type: '2',
+				interval: 'hour'
+			}
+		};
+		let hourlyInsolation = {
+			url: apiHost + apiWeather,
+			type: 'get',
+			dataType: 'json',
+			data: {
+				sid: siteId,
+				startTime: formData.startTime,
+				endTime: formData.endTime,
+				interval: 'hour'
+			}
+		}
 		let energyData1 = new Array(24).fill(0);
 		let energyData2 = new Array(24).fill(0);
+		let energyData3= new Array(24).fill(0);
 
 		if(isEmpty(option)){
-			let gen = {
-				url: apiHost + apiEnergySite,
-				type: 'get',
-				data: {
-					sid: siteId,
-					startTime: formData.startTime,
-					endTime: formData.endTime,
-					interval: 'hour',
-					displayType: 'dashboard',
-					formId: 'v2'
-				}
-			};
-
-			let foreGen = new Object();
-
 			if (oid.match('testkpx')) { //KPX 조회시에는 전일 데이터로 변경.
 				foreGen = {
 					url: apiHost + apiEnergySite,
@@ -2762,27 +3403,6 @@
 					}
 				};
 			}
-
-			const nowMonth = {
-				url: apiHost + apiEnergyNowSite,
-				type: 'get',
-				dataType: 'json',
-				data: {
-					sids: siteId,
-					metering_type: '2',
-					interval: 'month'
-				}
-			}
-
-			let nowGen = {
-				url: apiHost + apiEnergyNowSite,
-				type: 'get',
-				data: {
-					sids: siteId,
-					metering_type: '2',
-					interval: 'hour'
-				}
-			};
 
 			$.when($.ajax(gen), $.ajax(foreGen), $.ajax(nowGen)).done(function (genData, foreGenData, nowGenData) {
 				if (genData[1] == 'success') {
@@ -2825,76 +3445,15 @@
 					energyData2[index] = Number((el / 1000).toFixed(2));
 				});
 
-				saChart2.series[0].setData(energyData1);
-				saChart2.series[1].setData(energyData2)
+				hourlyChart.series[0].setData(energyData1);
+				hourlyChart.series[1].setData(energyData2);
 			}).fail(function () {
 				console.log('rejected');
 			});
 		} else {
-			let gen = {
-				url: apiHost + apiEnergySite,
-				type: 'get',
-				data: {
-					sid: siteId,
-					startTime: formData.startTime,
-					endTime: formData.endTime,
-					interval: 'hour',
-					formId: 'v2'
-				}
-			};
+			let seriesArr = [];
 
-
-			let foreGen = new Object();
-
-			if (oid.match('testkpx')) { //KPX 조회시에는 전일 데이터로 변경.
-				foreGen = {
-					url: apiHost + apiEnergySite,
-					type: 'get',
-					data: {
-						sid: siteId,
-						startTime: formYesterData.startTime,
-						endTime: formYesterData.endTime,
-						interval: 'hour',
-						formId: 'v2'
-					}
-				};
-			} else {
-				foreGen = {
-					url: apiHost + apiForecastingSite,
-					type: 'get',
-					data: {
-						sid: siteId,
-						startTime: formData.startTime,
-						endTime: formData.endTime,
-						interval: 'hour',
-						// displayType: 'dashboard',
-						formId: 'v2'
-					}
-				};
-			}
-
-			const nowMonth = {
-				url: apiHost + apiEnergyNowSite,
-				type: 'get',
-				dataType: 'json',
-				data: {
-					sids: siteId,
-					metering_type: '2',
-					interval: 'month',
-				}
-			}
-
-			let nowGen = {
-				url: apiHost + apiEnergyNowSite,
-				type: 'get',
-				data: {
-					sids: siteId,
-					metering_type: '2',
-					interval: 'hour'
-				}
-			};
-
-			$.when($.ajax(gen), $.ajax(foreGen), $.ajax(nowGen)).done(function (genData, foreGenData, nowGenData) {
+			$.when($.ajax(gen), $.ajax(foreGen), $.ajax(nowGen), $.ajax(hourlyInsolation)).done(function (genData, foreGenData, nowGenData, insolationData) {
 				if (genData[1] == 'success') {
 					if (!isEmpty(genData[0].data) &&  Object.values(genData[0].data).flat()[0]["items"].length > 0) {
 						let v = Object.values(genData[0].data);
@@ -2909,12 +3468,11 @@
 				}
 
 				if (foreGenData[1] == 'success') {
-
 					if (!isEmpty(foreGenData[0].data) && Object.values(foreGenData[0].data).flat()[0]["items"].length > 0) {
 						let v = Object.values(foreGenData[0].data).flat()[0]["items"];
 
 						v.forEach((el, index) => {
-							energyData2[index] = el.energy;
+							energyData1[index] =  Number((el.energy / 1000).toFixed(2)); ;
 						});
 					}
 				}
@@ -2924,641 +3482,68 @@
 					let hour = toDate.getHours();
 
 					if(!isEmpty(nowGenData[0].data[siteId])) {
-						energyData1[hour] = nowGenData[0].data[siteId].energy;
+						energyData1[hour] =  Number( (nowGenData[0].data[siteId].energy / 1000).toFixed(2) );
 					} else {
 						energyData1[hour] = 0;
 					}
 				}
+				if (insolationData[1] == 'success') {
+					// console.log("insolationData---", insolationData);
+					let standard = String(insolationData[0][0].basetime).substring(0, 6);
+					let sumVal = 0;
 
-				energyData1.forEach((el, index) => {
-					energyData1[index] = Number((el / 1000).toFixed(2));
-				});
+					if (!isEmpty(insolationData)) {
+						for(let i=0, arrLength = insolationData.length; i<arrLength; i++){
+							energyData3[i] = parseFloat(insolationData[0][i].sensor_solar.irradiationPoa / 1000).toFixed(2);
+						}
+					} else {
+						energyData3[i] = "0";
+					}
+				}
+			
+				if(energyData1.length>0){
+					hourlySolarChart.addSeries({
+						name: '발전 실적',
+						type: 'column',
+						color: 'var(--turquoise)',
+						tooltip: {
+							valueSuffix: 'MWh'
+						},
+						data: energyData1
+					})
+				}
 
-				energyData2.forEach((el, index) => {
-					energyData2[index] = Number((el / 1000).toFixed(2));
-				});
+				if(energyData2.length>0){
+					hourlySolarChart.addSeries({
+						name: '발전 에측',
+						type: 'column',
+						color: 'var(--white25)',
+						tooltip: {
+							valueSuffix: 'MWh'
+						},
+						data: energyData2
+					})
+				}
 
-				hourlySolarChart.series[0].setData(energyData1);
-				hourlySolarChart.series[1].setData(energyData2)
+				if(energyData3.length>0){
+					hourlySolarChart.addSeries({
+						name: '일사량',
+						type: 'spline',
+						color: 'var(--white60)',
+						tooltip: {
+							valueSuffix: '%'
+						},
+						data: energyData3
+					})
+				}
+
 			}).fail(function () {
 				console.log('rejected');
 			});
 		}
 	}
 
-	const hourlySolarChart = Highcharts.chart('hourlySolarChart', {
-		chart: {
-			marginTop: 40,
-			marginLeft: 50,
-			marginRight: 0,
-			height: 301,
-			backgroundColor: 'transparent',
-			type: 'column'
-		},
-		navigation: {
-			buttonOptions: {
-				enabled: false /* 메뉴 안보이기 */
-			}
-		},
-		title: {
-			text: ''
-		},
-		subtitle: {
-			text: ''
-		},
-		xAxis: {
-			lineColor: '#515562', /* 눈금선색 */
-			tickColor: '#515562',
-			gridLineColor: '#515562',
-			plotLines: [{
-				color: '#515562',
-				width: 1
-			}],
-			labels: {
-				align: 'center',
-				y: 27, /* 그래프와 거리 */
-				style: {
-					color: '#a4aebf',
-					fontSize: '12px'
-				}
-			},
-			tickInterval: 1, /* 눈금의 픽셀 간격 조정 */
-			title: {
-				text: null
-			},
-			categories: [
-				'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
-				'13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24'
-			],
-			crosshair: true
-		},
-		yAxis: {
-			lineColor: '#515562', /* 눈금선색 */
-			tickColor: '#515562',
-			gridLineColor: '#515562',
-			plotLines: [{
-				color: '#515562',
-				width: 1
-			}],
-			gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
-			min: 0, /* 최소값 지정 하면 + 만 나옴 */
-			title: {
-				text: 'kWh',
-				align: 'low',
-				rotation: 0, /* 타이틀 기울기 */
-				y: 25, /* 타이틀 위치 조정 */
-				x: 10,
-				style: {
-					color: '#a4aebf',
-					fontSize: '12px'
-				}
-			},
-			labels: {
-				overflow: 'justify',
-				x: -10, /* 그래프와의 거리 조정 */
-				style: {
-					color: '#a4aebf',
-					fontSize: '12px'
-				}
-			}
-		},
-		tooltip: {
-			shared: true,
-			borderColor: 'none',
-			backgroundColor: 'var(--bg-color)',
-			padding: 16,
-			style: {
-				color: 'var(--white87)'
-			}
-		},
-		/* 범례 */
-		legend: {
-			enabled: true,
-			align: 'right',
-			verticalAlign: 'top',
-			x: 5,
-			y: -10,
-			itemStyle: {
-				color: '#a4aebf',
-				fontSize: '12px',
-				fontWeight: 400
-			},
-			itemHoverStyle: {
-				color: '' /* 마우스 오버시 색 */
-			},
-			symbolPadding: 3, /* 심볼 - 텍스트간 거리 */
-			symbolHeight: 7 /* 심볼 크기 */
-		},
-		/* 옵션 */
-		plotOptions: {
-			series: {
-				label: {
-					connectorAllowed: false
-				},
-				borderColor: '#a4aebf',
-				borderWidth: 0 /* 보더 0 */
-			},
-			line: {
-				marker: {
-					enabled: false /* 마커 안보이기 */
-				}
-			},
-			column: {
-				//stacking: 'normal' /*위로 쌓이는 막대  ,normal */
-			}
-		},
-		/* 출처 */
-		credits: {
-			enabled: false
-		},
-		/* 그래프 스타일 */
-		series: [
-			{
-				type: 'column',
-				name: '발전 실적',
-				color: '#26ccc8', /* PV발전량 */
-				tooltip: {valueSuffix: 'kWh'},
-				data: []
-			},
-			{
-				type: 'column',
-				<c:choose>
-					<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-				name: '전일 발전량',
-					</c:when>
-					<c:otherwise>
-				name: '발전 예측',
-					</c:otherwise>
-				</c:choose>
-
-				color: '#878787', /* 발전 예측 */
-				tooltip: {valueSuffix: 'kWh'},
-				data: []
-			},
-			// {
-			// 	type: 'spline',
-			// 	name: '일사량',
-			// 	color: 'var(--white60)',
-			// 	dashStyle: 'ShortDash',
-			// 	yAxis: 1,
-			// 	data: [],
-			// 	tooltip: {
-			// 		valueSuffix: '천원'
-			// 	}
-			// },
-		],
-		/* 반응형 */
-		responsive: {
-			rules: [{
-				condition: {
-					minWidth: 870 /* 차트 사이즈 */
-				},
-				chartOptions: {
-					chart: {
-						marginLeft: 75
-					},
-					xAxis: {
-						labels: {
-							style: {
-								fontSize: '18px'
-							}
-						}
-					},
-					yAxis: {
-						title: {
-							style: {
-								fontSize: '18px'
-							}
-						},
-						labels: {
-							style: {
-								fontSize: '18px'
-							}
-						}
-					},
-					legend: {
-						itemStyle: {
-							fontSize: '18px'
-						},
-						symbolPadding: 5,
-						symbolHeight: 10
-					}
-				}
-			}]
-		}
-	});
-
-
-	const saChart2 = Highcharts.chart('schart2', {
-		chart: {
-			marginTop: 40,
-			marginLeft: 50,
-			marginRight: 0,
-			height: 301,
-			backgroundColor: 'transparent',
-			type: 'column'
-		},
-		navigation: {
-			buttonOptions: {
-				enabled: false /* 메뉴 안보이기 */
-			}
-		},
-		title: {
-			text: ''
-		},
-		subtitle: {
-			text: ''
-		},
-		xAxis: {
-			lineColor: '#515562', /* 눈금선색 */
-			tickColor: '#515562',
-			gridLineColor: '#515562',
-			plotLines: [{
-				color: '#515562',
-				width: 1
-			}],
-			labels: {
-				align: 'center',
-				y: 27, /* 그래프와 거리 */
-				style: {
-					color: '#a4aebf',
-					fontSize: '12px'
-				}
-			},
-			tickInterval: 1, /* 눈금의 픽셀 간격 조정 */
-			title: {
-				text: null
-			},
-			categories: [
-				'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
-				'13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24'
-			],
-			crosshair: true
-		},
-		yAxis: {
-			lineColor: '#515562', /* 눈금선색 */
-			tickColor: '#515562',
-			gridLineColor: '#515562',
-			plotLines: [{
-				color: '#515562',
-				width: 1
-			}],
-			gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
-			min: 0, /* 최소값 지정 하면 + 만 나옴 */
-			title: {
-				text: 'kWh',
-				align: 'low',
-				rotation: 0, /* 타이틀 기울기 */
-				y: 25, /* 타이틀 위치 조정 */
-				x: 10,
-				style: {
-					color: '#a4aebf',
-					fontSize: '12px'
-				}
-			},
-			labels: {
-				overflow: 'justify',
-				x: -10, /* 그래프와의 거리 조정 */
-				style: {
-					color: '#a4aebf',
-					fontSize: '12px'
-				}
-			}
-		},
-		tooltip: {
-			shared: true,
-			borderColor: 'none',
-			backgroundColor: 'var(--bg-color)',
-			padding: 16,
-			style: {
-				color: 'var(--white87)'
-			},
-		},
-		/* 범례 */
-		legend: {
-			enabled: true,
-			align: 'right',
-			verticalAlign: 'top',
-			x: 5,
-			y: -10,
-			itemStyle: {
-				color: '#a4aebf',
-				fontSize: '12px',
-				fontWeight: 400
-			},
-			itemHoverStyle: {
-				color: '' /* 마우스 오버시 색 */
-			},
-			symbolPadding: 3, /* 심볼 - 텍스트간 거리 */
-			symbolHeight: 7 /* 심볼 크기 */
-		},
-		/* 옵션 */
-		plotOptions: {
-			series: {
-				label: {
-					connectorAllowed: false
-				},
-				borderColor: '#a4aebf',
-				borderWidth: 0 /* 보더 0 */
-			},
-			line: {
-				marker: {
-					enabled: false /* 마커 안보이기 */
-				}
-			},
-			column: {
-				//stacking: 'normal' /*위로 쌓이는 막대  ,normal */
-			}
-		},
-		/* 출처 */
-		credits: {
-			enabled: false
-		},
-		/* 그래프 스타일 */
-		series: [{
-			type: 'column',
-			<c:choose>
-				<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-			name: '발전 실적',
-				</c:when>
-				<c:otherwise>
-			name: 'PV발전량',
-				</c:otherwise>
-			</c:choose>
-			color: '#26ccc8', /* PV발전량 */
-			tooltip: {valueSuffix: 'kWh'},
-			data: []
-		}, {
-			type: 'column',
-			<c:choose>
-				<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-			name: '전일 발전량',
-				</c:when>
-				<c:otherwise>
-			name: '발전 예측',
-				</c:otherwise>
-			</c:choose>
-
-			color: '#878787', /* 발전 예측 */
-			tooltip: {valueSuffix: 'kWh'},
-			data: []
-		}],
-		/* 반응형 */
-		responsive: {
-			rules: [{
-				condition: {
-					minWidth: 870 /* 차트 사이즈 */
-				},
-				chartOptions: {
-					chart: {
-						marginLeft: 75
-					},
-					xAxis: {
-						labels: {
-							style: {
-								fontSize: '18px'
-							}
-						}
-					},
-					yAxis: {
-						title: {
-							style: {
-								fontSize: '18px'
-							}
-						},
-						labels: {
-							style: {
-								fontSize: '18px'
-							}
-						}
-					},
-					legend: {
-						itemStyle: {
-							fontSize: '18px'
-						},
-						symbolPadding: 5,
-						symbolHeight: 10
-					}
-				}
-			}]
-		}
-	});
-
-	// 반복 없음 : 기상정보 (반복 주기 1시간이 길어서);
-	const getWeatherData = (option) => {
-		const fromDate = new Date();
-		const toDate = new Date(fromDate.getFullYear(), fromDate.getMonth(), fromDate.getDate() + 3);
-
-		const timeFromDate = new Date(fromDate.getFullYear(), fromDate.getMonth(), fromDate.getDate() - 2);
-		const formData = getSiteMainSchCollection('day');
-
-		let weekWeather = {
-			url: apiHost + apiWeather,
-			type: 'get',
-			dataType: 'json',
-			data: {
-				sid: siteId,
-				startTime: fromDate.format('yyyyMMdd') + '000000',
-				endTime: toDate.format('yyyyMMdd') + '235959',
-				interval: 'day'
-			}
-		}
-
-		let weekWeatherTime = new Object();
-		if (oid.match('testkpx')) {
-			let did = '';
-			siteList.forEach(site => {
-				const devices = site.devices;
-				if (!isEmpty(devices)) {
-					devices.forEach(di => {
-						const deviceType = di.device_type;
-						if (deviceType === 'KPX_EMS') {
-							did = di.did;
-						}
-					});
-				}
-			});
-
-			let weekWeatherTime = {
-				url: apiHost + apiWeather,
-				type: 'get',
-				dataType: 'json',
-				data: {
-					sid: siteId,
-					startTime: timeFromDate.format('yyyyMMdd') + '000000',
-					endTime: fromDate.format('yyyyMMdd') + '235959',
-					interval: 'hour'
-				}
-			}
-
-			let statusRaw = {
-				url: apiHost + apiStatusRaw,
-				type: 'get',
-				dataType: 'json',
-				data: {
-					dids: did
-				}
-			}
-			$.when($.ajax(weekWeather), $.ajax(weekWeatherTime), $.ajax(statusRaw)).done(function (weekWeatherData, weekWeatherTimeData, statusRawData) {
-				
-				if (weekWeatherData[1] == 'success') {
-					let weekWeather = weekWeatherData[0];
-
-					if($('#viewOptList').prev().data("value") == "2"){
-						console.log("weekWeather---", weekWeather);
-
-						weekWeather.forEach((el, index) => {
-							$('#sTemp' + (index + 1)).text((el.temperature).toFixed(1));
-							let weatherIconClass = getWeatherIconClass(el.sky);
-							$('#sWeatherIcon' + (index + 1)).html('<i class="ico_weather ' + weatherIconClass + '"></i>');
-						});
-					} else {
-						weekWeather.forEach((el, index) => {
-							console.log("el.temperature==", el.temperature)
-							$('#weekTemp' + (index + 1)).text((el.temperature).toFixed(1));
-							let weatherIconClass = getWeatherIconClass(el.sky);
-							$('#weekIcon' + (index + 1)).html('<i class="ico_weather ' + weatherIconClass + '"></i>');
-						});
-					}
-				}
-
-				if (weekWeatherTimeData[1] == 'success') {
-					let items = weekWeatherTimeData[0];
-					if (items.length > 0) {
-						let tempArray = new Array();
-						$.each(items, function (i, el) {
-							if (el.observed != undefined && el.observed) {
-								tempArray.push(el);
-							}
-						});
-
-						if (tempArray.length > 0) {
-							let weatherIconClass = getWeatherIconClass(tempArray[tempArray.length - 1].sky);
-							console.log("weatherIconClass==")
-							if($('#viewOptList').prev().data("value") == "2"){
-								$('#sTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + ' ' + '&#8451;');
-								$('#weekSolarIcon').html('<i class="ico_weather ' + weatherIconClass + '"></i>').next('strong').html(' (' + siteList[0].location + ') ');
-							} else {
-								$('#weekTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + ' ' + '&#8451;');
-								$('#weekIcon').html('<i class="ico_weather ' + weatherIconClass + '"></i>').next('strong').html(' (' + siteList[0].location + ') ');
-							}
-						}
-					}
-				}
-
-				if (statusRawData[1] == 'success') {
-					let items = statusRawData[0];
-					if (!isEmpty(items)) {
-						Object.entries(items).map(obj => {
-							let deviceData = obj[1].data;
-
-							deviceData.forEach(di => {
-								let humidity = isEmpty(di.humidity) ? '-' : di.humidity;
-								let windDirection = isEmpty(di.windDirection) ? '-' : di.windDirection;
-								let windSpeed = isEmpty(di.windSpeed) ? '-' : di.windSpeed;
-								let wind_velocity = isEmpty(di.wind_velocity) ? '-' : di.wind_velocity;
-								let temperature = isEmpty(di.temperature) ? '-' : (di.temperature).toFixed(1);
-								if($('#viewOptList').prev().data("value") == "2"){
-									$('#sTemp').html(temperature + '&#8451;');
-									$('#weekSolarIcon').next('strong').html(' (' + siteList[0].location + ') ');
-									$('#sWindVelocity').text((windSpeed).toFixed(1) + ' km/h');
-									$('#sWindDirection').text(windDirection);
-									$('#sHumidity').html(humidity + ' ' + '&#37;');
-
-									$('.weather .stit').html(new Date(di.timestamp).format('yyyy-MM-dd HH:mm:ss'));
-
-								} else {
-									$('#weekTemp').text(temperature + '&#8451;');
-									$('#weekIcon').next('strong').html(' (' + siteList[0].location + ') ');
-									$('#weekWindVelocity').text((windSpeed).toFixed(1) + ' km/h');
-									$('#weekWindDirection').text(windDirection);
-									$('#weekHum').html(humidity + ' ' + '&#37;');
-
-									$('.weather .stit').html(new Date(di.timestamp).format('yyyy-MM-dd HH:mm:ss'));
-								}
-							});
-						});
-					}
-				}
-			}).fail(function () {
-				console.log('rejected');
-			});
-		} else {
-			let weekWeatherTime = {
-				url: apiHost + apiWeather,
-				type: 'get',
-				dataType: 'json',
-				data: {
-					sid: siteId,
-					startTime: timeFromDate.format('yyyyMMdd') + '000000',
-					endTime: fromDate.format('yyyyMMdd') + '235959',
-					interval: 'hour'
-				}
-			}
-
-			$.when($.ajax(weekWeather), $.ajax(weekWeatherTime)).done(function (weekWeatherData, weekWeatherTimeData) {
-				let weekWeather = weekWeatherData[0];
-				
-				if (weekWeatherData[1] == 'success') {
-
-					if($('#viewOptList').prev().data("value") == "2"){
-						weekWeather.forEach((el, index) => {
-							$('#sTemp' + (index + 1)).text((el.temperature).toFixed(1));
-							let weatherIconClass = getWeatherIconClass(el.sky);
-							$('#sWeatherIcon' + (index + 1)).html('<i class="ico_weather ' + weatherIconClass + '"></i>');
-						});
-					} else {
-
-						weekWeather.forEach((el, index) => {
-							$('#weekTemp' + (index + 1)).text((el.temperature).toFixed(1));
-							let weatherIconClass = getWeatherIconClass(el.sky);
-							$('#weekIcon' + (index + 1)).html('<i class="ico_weather ' + weatherIconClass + '"></i>');
-						});
-					}
-				}
-
-				if (weekWeatherTimeData[1] == 'success') {
-					let items = weekWeatherTimeData[0];
-					
-					if (items.length > 0) {
-						let tempArray = new Array();
-						$.each(items, function (i, el) {
-							if (el.observed != undefined && el.observed) {
-								tempArray.push(el);
-							}
-						});
-
-						if (tempArray.length > 0) {
-							let weatherIconClass = getWeatherIconClass(tempArray[tempArray.length - 1].sky);
-
-							if($('#viewOptList').prev().data("value") == "2") {
-								$('#sTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + '&#8451;');
-								$('#weekSolarIcon').html('<i class="ico_weather ' + weatherIconClass + '"></i>');
-								$('#weekSolarIcon').next('strong').html(' (' + siteList[0].location + ') ');
-								$('#sWindVelocity').text((tempArray[tempArray.length - 1].wind_speed).toFixed(1) + ' km/h');
-								$('#sWindDirection').text(tempArray[tempArray.length - 1].wind_velocity);
-								$('#sHumidity').html((tempArray[tempArray.length - 1].humidity).toFixed(1) + ' ' + '&#37;');
-								$('#currentTimeB').html(String(tempArray[tempArray.length - 1].basetime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6'));
-							} else {
-								$('#weekTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + '&#8451;');
-								$('#weekIcon').html('<i class="ico_weather ' + weatherIconClass + '"></i>');
-								$('#weekIcon').next('strong').html(' (' + siteList[0].location + ') ');
-								$('#weekWindVelocity').text((tempArray[tempArray.length - 1].wind_speed).toFixed(1) + ' km/h');
-								$('#weekWindDirection').text(tempArray[tempArray.length - 1].wind_velocity);
-								$('#weekHum').html((tempArray[tempArray.length - 1].humidity).toFixed(1) + ' ' + '&#37;');
-								$('#currentTimeA').html(String(tempArray[tempArray.length - 1].basetime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6'));
-							}
-						}
-					}
-				}
-			}).fail(function () {
-				console.log('rejected');
-			});
-		}
-	}
-
-	//알람이력
-	const getAlarmInfo = function () {
+	function getAlarmInfo () {
 		const formData = getSiteMainSchCollection('day');
 		let siteArray = new Array();
 
@@ -3599,7 +3584,7 @@
 		})
 	}
 
-	const levelClass = (level) => {
+	function levelClass(level) {
 		let rtnClass = '';
 		switch (level) {
 			case 1 :
@@ -3624,7 +3609,7 @@
 		return rtnClass;
 	}
 
-	const pageMove = (id, action) => {
+	function pageMove (id, action) {
 		let $form = $('#linkSiteForm');
 
 		id = id == '' ? siteId : id;
@@ -3637,4 +3622,5 @@
 			$form.attr('action', '/dashboard/smain.do').submit();
 		}
 	}
+
 </script>

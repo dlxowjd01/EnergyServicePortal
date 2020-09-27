@@ -109,7 +109,12 @@ bootstrap default
 	--white40: rgba(255, 255, 255, 0.4);
 	--white50: rgba(255, 255, 255, 0.5);
 	--white60: rgba(255, 255, 255, 0.6);
-	/* -#aeaeae; */
+	/*
+		#aeaeae;
+		#a4aebf;
+		#9e9e9e;
+	*/
+
 	--white87: rgba(255, 255, 255, 0.87);
 	/* #c8c8c8; */
 	--white: #fff;
@@ -128,8 +133,9 @@ bootstrap default
 	--dark-grey: #3c3c3c;
 	--river-bed: #444a59;
 	--border: #5e5e5e;
-	--grey: #878787;
 	--dove-gray: #6b6b6b;
+	--grey: #878787;
+	--quick-silver: #9e9e9e;
 
 	/* Scroll */
 	--scroll-track: #ebedf2;
@@ -6694,6 +6700,7 @@ div.di_wrap dl .link a {
 }
 
 .smain_cal .calendar tbody td div em .day {
+	margin-right: 16px;
 	font-weight: bold;
 	color: var(--white);
 }
@@ -6704,8 +6711,9 @@ div.di_wrap dl .link a {
 }
 
 .smain_cal .calendar tbody td span {
-	font-size: 11px;
+	white-space: nowrap;
 	color: var(--white);
+	font-size: 11px;
 }
 
 .smain_cal .calendar tbody td span strong {
