@@ -15,6 +15,7 @@
 	</div>
 
 	<%--
+	--%>
 	<div class="row content-wrapper">
 		<div class="col-12">
 			<div class="flex_start">
@@ -29,7 +30,7 @@
 			</div>
 		</div>
 	</div>
-	--%>
+
 
 	<div id="defaultDashboard" class="row">
 		<div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
@@ -378,6 +379,8 @@
 	</div>
 
 	<%--
+	--%>
+
 	<div id="solarDashboard" class="hidden">
 		<div class="row">
 			<div class="col-xl-2 col-lg-2 col-md-3 col-sm-4">
@@ -540,7 +543,6 @@
 			</div>
 		</div>
 	</div>
-	--%>
 
 </div>
 <script type="text/javascript" src="/js/commonDropdown.js"></script>
@@ -925,7 +927,13 @@
 		}
 	});
 
-<%--
+	var monthNum = 31;
+	var monthNumList = [];
+	for(let i=0; i<31; i++){
+		monthNumList.push(i);
+	}
+
+	monthNumList.push
 	var dailySolarChart = Highcharts.chart('dailySolarChart', {
 		chart: {
 			marginTop: 40,
@@ -966,7 +974,7 @@
 			title: {
 				text: null
 			},
-			categories: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+			categories: monthNumList,
 			crosshair: true
 		}],
 		yAxis: [
@@ -989,20 +997,11 @@
 					y: 25,
 					x: 15,
 					style: {
-						color: 'var(--white)',
+						color: 'var(--grey)',
 						fontSize: '12px'
 					}
 				},
 				labels: {
-					formatter: function () {
-						if (String(this.value).length  >= 7) {
-							return numberComma(this.value / 1000000) + ' GWh';
-						} else if (String(this.value).length  >= 5) {
-							return numberComma(this.value / 1000) + ' MWh';
-						} else {
-							return this.value + ' kWh';
-						}
-					},
 					style: {
 						color: 'var(--grey)',
 						fontSize: '12px'
@@ -1114,7 +1113,7 @@
 			}]
 		}
 	});
---%>
+
 
 	var hourlyChart = Highcharts.chart('hourlyChart', {
 		chart: {
@@ -1306,7 +1305,7 @@
 		}
 	});
 
-	<%--
+
 	var hourlySolarChart = Highcharts.chart('hourlySolarChart', {
 		chart: {
 			marginTop: 40,
@@ -1521,7 +1520,7 @@
 		// }
 	
 	});
---%>
+
 
 	$(function () {
 		let viewOptList = $('#viewOptList');
@@ -1550,14 +1549,14 @@
 		}
 
 
-		// if(viewOptList.prev().data("value") == "1"){
-		// 	$('#defaultDashboard').removeClass("hidden");
-		// 	$('#solarDashboard').addClass("hidden");
-		// } else {
-		// 	// $("#currentTimeB").text(today);
-		// 	$('#defaultDashboard').addClass("hidden");
-		// 	$('#solarDashboard').removeClass("hidden");
-		// }
+		if(viewOptList.prev().data("value") == "1"){
+			$('#defaultDashboard').removeClass("hidden");
+			$('#solarDashboard').addClass("hidden");
+		} else {
+			// $("#currentTimeB").text(today);
+			$('#defaultDashboard').addClass("hidden");
+			$('#solarDashboard').removeClass("hidden");
+		}
 
 		setInitList('alarmNotice'); //알람 공지 세팅
 		setInitList('typeList'); //설비 리스트 세팅
@@ -1580,48 +1579,48 @@
 		getQuarterData();
 
 
-		// viewOptList.find('li').on('click', function(){
-		// 	let val = $(this).data("value");
+		viewOptList.find('li').on('click', function(){
+			let val = $(this).data("value");
 
-		// 	if(switchFlag == false) {
-		// 		if(viewOptList.prev().data("value") != val) {
-		// 			if(val == "1"){
-		// 				$('#defaultDashboard').removeClass("hidden");
-		// 				$('#solarDashboard').addClass("hidden");
-		// 			} else {
-		// 				// $("#currentTimeB").text(today);
-		// 				getMinuteData(val);
-		// 				getQuarterData(val);
-		// 				getWeatherData(val);
-		// 				$('#defaultDashboard').addClass("hidden");
-		// 				$('#solarDashboard').removeClass("hidden");
-		// 			}
-		// 		}
+			if(switchFlag == false) {
+				if(viewOptList.prev().data("value") != val) {
+					if(val == "1"){
+						$('#defaultDashboard').removeClass("hidden");
+						$('#solarDashboard').addClass("hidden");
+					} else {
+						// $("#currentTimeB").text(today);
+						getMinuteData(val);
+						getQuarterData(val);
+						getWeatherData(val);
+						$('#defaultDashboard').addClass("hidden");
+						$('#solarDashboard').removeClass("hidden");
+					}
+				}
 
-		// 	} else {
-		// 		if(viewOptList.prev().data("value") != val) {
-		// 			if(val == "1"){
-		// 				$('#defaultDashboard').removeClass("hidden");
-		// 				$('#solarDashboard').addClass("hidden");
-		// 			} else {
-		// 				// $("#currentTimeB").text(today);
-		// 				getMinuteData(val);
-		// 				getQuarterData(val);
-		// 				getWeatherData(val);
-		// 				$('#defaultDashboard').addClass("hidden");
-		// 				$('#solarDashboard').removeClass("hidden");
-		// 			}
-		// 			clearInterval(refreshMinInterval);
-		// 			clearInterval(refreshQuarterInterval);
-		// 			setTimeout(function(){
-		// 				refreshMinInterval = setInterval(getMinuteData, 60 * 1000);
-		// 				refreshQuarterInterval = setInterval(getQuarterData, 15 * 60 * 1000);
-		// 			}, 300);
-		// 		}
-		// 	}
-		// 	switchFlag = true;
-		// 	viewOptList.prev().data("value", val);
-		// });
+			} else {
+				if(viewOptList.prev().data("value") != val) {
+					if(val == "1"){
+						$('#defaultDashboard').removeClass("hidden");
+						$('#solarDashboard').addClass("hidden");
+					} else {
+						// $("#currentTimeB").text(today);
+						getMinuteData(val);
+						getQuarterData(val);
+						getWeatherData(val);
+						$('#defaultDashboard').addClass("hidden");
+						$('#solarDashboard').removeClass("hidden");
+					}
+					clearInterval(refreshMinInterval);
+					clearInterval(refreshQuarterInterval);
+					setTimeout(function(){
+						refreshMinInterval = setInterval(getMinuteData, 60 * 1000);
+						refreshQuarterInterval = setInterval(getQuarterData, 15 * 60 * 1000);
+					}, 300);
+				}
+			}
+			switchFlag = true;
+			viewOptList.prev().data("value", val);
+		});
 
 	});
 
@@ -2505,14 +2504,11 @@
 				}
 			}
 		} else {
-			let today = new Date();
-			let days = 10;
-			let last = new Date(today.getTime() - (days * 24 * 60 * 60 * 1000));
-			let day =last.getDate();
-			let month=last.getMonth()+1;
-			let year=last.getFullYear();
-
-			console.log("last===", last);
+			let d = new Date();
+			let tenDaysAgo = new Date(d.getTime() - (10 * 24 * 60 * 60 * 1000));
+			let monthAgo = new Date(d.getTime() - (30 * 24 * 60 * 60 * 1000));
+			tenDaysAgo.setHours(0, 0, 0, 0);
+			monthAgo.setHours(0, 0, 0, 0);
 
 			const dailyEnergy = {
 				url: apiHost + apiEnergySite,
@@ -2520,20 +2516,23 @@
 				dataType: 'json',
 				data: {
 					sid: siteId,
-					startTime: formData.startTime,
-					endTime: formData.endTime,
+					startTime: monthAgo.format("yyyyMMddHHmmss"),
+					endTime: new Date().format("yyyyMMddHHmmss"),
 					interval: 'day',
 					// displayType: 'dashboard',
 					formId: 'v2'
 				}
 			}
 
-			console.log("dailyEnergy===", dailyEnergy.data);
-			$.when($.ajax(dailyEnergy), $.ajax(nowMonth),  $.ajax(weather)).done(function (result1, result2, result3) {
+			// console.log("dailyEnergy===", dailyEnergy.data)
+
+			$.when($.ajax(monthEnergy), $.ajax(nowMonth), $.ajax(weather), $.ajax(dailyEnergy)).done(function (result1, result2, result3, result4) {
 				let el = $("#solarDashboard .mini .data-num");
 				let chartItems1;
+				let chartItems2;
+				let chartItems3;
 
-				if (!isEmpty(result1[0])) {
+				if (result1[1] == 'success') {
 					let v = Object.values(result1[0].data);
 					if (!isEmpty(v) &&  v.flat()[0]["items"].length > 0) {
 						let chartData1 = v.flat()[0]["items"];
@@ -2549,15 +2548,6 @@
 
 						el.eq(4).text(monthGen[0]);
 						el.eq(4).next().text(monthGen[1]);
-
-						if (result2[1] == 'success') {
-							let resultNow = result2[0].data[siteId];
-							chartItems1.push({
-								basetime: monthFormData.startTime,
-								energy: resultNow.energy,
-								money: Math.floor(resultNow.money / 1000)
-							});
-						}
 					} else {
 						el.eq(4).text("-");
 					}
@@ -2565,11 +2555,27 @@
 					el.eq(4).text("-");
 				}
 
+				if (result2[1] == 'success') {
+					let resultNow = result2[0].data[siteId];
+					chartItems1.push({
+						basetime: monthFormData.startTime,
+						energy: resultNow.energy,
+						money: Math.floor(resultNow.money / 1000)
+					});
+				}
+
 				if (result3[1] == 'success') {
 					chartItems2 = result3[0];
 				}
 
-				setChargeChartData(chartItems1, null, chartItems2, "solarDashboard");
+				if (result4[1] == 'success') {
+					let v = Object.values(result4[0].data);
+					if (!isEmpty(v) &&  v.flat()[0]["items"].length > 0) {
+						let val = v.flat()[0]["items"];
+						chartData3 = mapDateIndex(d, 30, val);
+					}
+				}
+				setChargeChartData(chartItems1, chartItems2, chartData3, "solarDashboard");
 			}).fail(function () {
 				console.log('rejected');
 			});
@@ -2577,10 +2583,9 @@
 	}
 
 	function setChargeChartData(chartItems1, chartItems2, chartItems3, option) {
-		// console.log("chartItems1---", chartItems1, "chartItems2---", chartItems2,  "chartItems3---", chartItems3)
 		const today = new Date();
 		const nowMonth = today.getMonth() + 1;
-		const daysInMonth = new Date(today.getFullYear(), nowMonth, 0).getDate();
+		// console.log("chartItems1---", chartItems1, "chartItems2---", chartItems2,  "chartItems3---", chartItems3)
 
 		let itemChartCapacity = 0;
 		let totalYearEnergy = 0;
@@ -2682,7 +2687,17 @@
 					seriesName = '매전량';
 					suffix = '천원';
 				}
-
+				// dailyChart.series[1].setOptions({
+				// 	name: seriesName,
+				// 	tooltip: {
+				// 		valueSuffix: suffix
+				// 	},
+				// 	legend: {
+				// 		title: {
+				// 			text: seriesName,
+				// 		},
+				// 	}
+				// })
 				dailyChart.series[1].name = seriesName;
 				dailyChart.series[1].tooltipOptions.valueSuffix = suffix;
 				dailyChart.series[1].legendItem.element.firstElementChild.innerHTML = seriesName;
@@ -2699,36 +2714,30 @@
 				});
 			}
 		} else {
-			for (let i = 0, daysLength = daysInMonth; i < daysLength; i++) {
 
-				for(let k = 0, arrLength = chartItems3.length; k<arrLength; k++){
-					if(!isEmpty(chartItems3[k].sensor_solar.irradiationPoa)){
-						irradiationData[i] = [i, parseFloat(chartItems3[k].sensor_solar.irradiationPoa / 1000).toFixed(2) ];
-					} else {
-						irradiationData[i] = [i,  0];
-					}
-				}
-			}
+			// for (let i = 0; i < chartItems3.length; i++) {
+			// 	// irradiationData[i] = [i, parseFloat(chartItems3[k].sensor_solar.irradiationPoa / 1000).toFixed(2) ];
+			// }
 
 			let seriesName = [
 				{
-					label : '${siteName}' + '대시보드'
+					label : '${siteName}' + ' 대시보드'
 				},
 				{
 					label : '일사량'
 				}
 			];
 			// suffix = 'MWh';
-
-			// dailySolarChart.addSeries({
-			// 	name: seriesName[0].name,
-			// 	type: 'column',
-			// 	color: 'var(--turquoise)',
-			// 	tooltip: {
-			// 		valueSuffix: 'MWh'
-			// 	},
-			// 	data: energyData,
-			// });
+			console.log("chartItems3", chartItems3)
+			dailySolarChart.addSeries({
+				name: seriesName[0].label,
+				type: 'column',
+				color: 'var(--turquoise)',
+				tooltip: {
+					valueSuffix: 'MWh'
+				},
+				data: chartItems3,
+			});
 
 			// dailySolarChart.addSeries({
 			// 	name: seriesName[1].name,
@@ -2744,25 +2753,6 @@
 
 
 		}
-	}
-
-	function flattenObject (obj) {
-		let flat = {};
-		for (const [key, value] of Object.entries(obj)) {
-			if (typeof value === 'object' && value !== null) {
-			for (const [subkey, subvalue] of Object.entries(value)) {
-				// avoid overwriting duplicate keys: merge instead into array
-				typeof flat[subkey] === 'undefined' ?
-				flat[subkey] = subvalue :
-				Array.isArray(flat[subkey]) ?
-					flat[subkey].push(subvalue) :
-					flat[subkey] = [flat[subkey], subvalue]
-			}
-			} else {
-			flat = {...flat, ...{[key]: value}};
-			}
-		}
-		return flat;
 	}
 
 	function getWeatherCalendarEnergyData() {
@@ -3582,6 +3572,52 @@
 		} else {
 			$form.attr('action', '/dashboard/smain.do').submit();
 		}
+	}
+
+	function flattenObject (obj) {
+		let flat = {};
+		for (const [key, value] of Object.entries(obj)) {
+			if (typeof value === 'object' && value !== null) {
+			for (const [subkey, subvalue] of Object.entries(value)) {
+				// avoid overwriting duplicate keys: merge instead into array
+				typeof flat[subkey] === 'undefined' ?
+				flat[subkey] = subvalue :
+				Array.isArray(flat[subkey]) ?
+					flat[subkey].push(subvalue) :
+					flat[subkey] = [flat[subkey], subvalue]
+			}
+			} else {
+			flat = {...flat, ...{[key]: value}};
+			}
+		}
+		return flat;
+	}
+
+	function mapDateIndex(today, idx, data){
+		let now = today || new Date();
+		let dates = [now.getDate()];
+		let length = idx;
+
+		while(idx--){
+			now.setDate(now.getDate()-1);
+			let num = now.format("yyyyMMdd").substring(4, 8);
+			let val;
+
+			if(length != data.length){
+				let found = data.findIndex( x => ( parseInt(String(x.basetime).substring(4, 8)) == num) );
+				if(found > -1 ){
+					val = data[found].energy;
+				} else {
+					val = null;
+				}
+				dates.push(val);
+			} else {
+				val = data[idx].energy;
+				dates.push(val);
+			}
+			// dates.push(now.getDate());
+		}
+		return dates.reverse();
 	}
 
 </script>
