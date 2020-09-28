@@ -117,20 +117,26 @@
 		$.ajaxSetup({
 			headers: {'Authorization': 'Bearer <c:out value="${sessionScope.userInfo.token}" escapeXml="false" />'},
 			"timeout": 30000,
-			beforeSend: function(xhr, settings) {
-				$('#loadingCircle').show();
-			},
-			ajaxComplete: function() {
+			// beforeSend: function(xhr, settings) {
+			// 	$('#loadingCircle').show();
+			// },
+			// ajaxComplete: function() {
+			// 	if(!$('#loadingCircle').is(":hidden")){
+			// 		$('#loadingCircle').hide();
+			// 	}
+			// }
+		});
+
+		$(document).ajaxSuccess(function() {
+			if(!$('#loadingCircle').is(":hidden")){
 				$('#loadingCircle').hide();
 			}
 		});
 
-		$(document).ajaxSuccess(function() {
-			$('#loadingCircle').hide();
-		});
-
 		$(document).ajaxError(function(event, jqxhr, settings, thrownError) {
-			$('#loadingCircle').hide();
+			if(!$('#loadingCircle').is(":hidden")){
+				$('#loadingCircle').hide();
+			}
 			// test 용 주석 유지 (~ 9월 말까지)
 			// let r = JSON.parse(jqxhr.responseText);
 			// console.log("에러코드:" + jqxhr.status + "\n" + "메세지: " + r);

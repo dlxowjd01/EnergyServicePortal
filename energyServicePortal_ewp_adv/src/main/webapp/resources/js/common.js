@@ -403,7 +403,7 @@ function popupClose(target) {
 
 
 $(document).ready(function(e){
-    // input dorpdown
+    // input dropdown
     $( document ).on( 'click', '.bs-dropdown-to-select-group .dropdown-menu li', function( event ) {
         var $target = $( event.currentTarget );
         $target.closest('.bs-dropdown-to-select-group')
@@ -558,7 +558,6 @@ function unCheckAll(data){
 	} else {
 		return false;
 	}
-
 }
 
 function showPwd(inputId, btn) {
@@ -579,7 +578,6 @@ function filterColumn ( id, idx, val, option ) {
 		$(id).DataTable().column(idx).search(val).draw();
 	}
 }
-
 
 function getUniqueListBy(arr, key) {
 	return [...new Map(arr.map(item => [item[key], item] )).values()]

@@ -33,6 +33,7 @@ const getYearGenData = async function () {
 	};
 
 	$(`.gmain_chart1 span.term`).text(today.getFullYear() + '.1.1 ~ ' + today.getFullYear() + '.' + (Number(today.getMonth()) + 1) + '.' + today.getDate());
+	
 	siteList.forEach(site => {
 		$.ajax({
 			url: apiHost + '/energy/sites',
@@ -226,7 +227,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 		tickWidth: 1,
 		tickColor: 'var(--white60)',
 		tickInterval: 1,
-		gridLineColor: 'var(--white60)',
+		gridLineColor: 'var(--white25)',
 		plotLines: [{
 			color: 'var(--white60)',
 			width: 1
@@ -260,7 +261,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 	yAxis: [{ // Primary yAxis
 		lineColor: 'var(--white60)', /* 눈금선색 */
 		tickColor: 'var(--white60)',
-		gridLineColor: 'var(--white60)',
+		gridLineColor: 'var(--white25)',
 		gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
 		plotLines: [{
 			color: 'var(--white60)',
@@ -706,7 +707,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 	yAxis: [{ // Primary yAxis
 		lineColor: 'var(--white87)', /* 눈금선색 */
 		tickColor: 'var(--white87)',
-		gridLineColor: 'var(--white87)',
+		gridLineColor: 'var(--white25)',
 		gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
 		plotLines: [{
 			color: 'var(--white87)',
@@ -1048,7 +1049,7 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 	chart: {
 		renderTo: 'typeSiteCurrent',
 		// height: series.length * 20 + 30,
-		marginTop: 0,
+		marginTop: 36,
 		marginRight: 16,
 		backgroundColor: 'transparent',
 		type: 'bar'
@@ -1065,9 +1066,9 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 		text: ''
 	},
 	xAxis: {
-		lineColor: 'var(--white60)', /* 눈금선색 */
-		tickColor: 'var(--white60)',
-		gridLineColor: 'var(--white60)',
+		lineColor: 'var(--white25)',
+		// tickColor: 'var(--white60)',
+		gridLineColor: 'var(--white25)',
 		plotLines: [{
 			color: 'var(--white60)',
 			width: 1
@@ -1087,8 +1088,8 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 	},
 	yAxis: {
 		lineColor: 'var(--white60)', /* 눈금선색 */
-		tickColor: 'var(--white60)',
-		gridLineColor: 'var(--white60)',
+		// tickColor: 'var(--white60)',
+		gridLineColor: 'var(--white25)',
 		plotLines: [{
 			color: 'var(--white60)',
 			width: 1
