@@ -8078,10 +8078,15 @@ div.di_wrap dl .link a {
 	border-radius: 4px;
 }
 
+.weather-wrap .weather-table-box .weather-table dt strong,
+.weather-wrap .weather-table-box .weather-table dt em {
+	color: var(--white60);
+	line-height: 24px;
+}
+
 .weather-wrap .weather-table-box .weather-table dt em {
 	float: right;
 	font-size: 14px;
-	line-height: 26px;
 }
 
 .weather-wrap .weather-table .dd_tbl table {
@@ -8096,10 +8101,6 @@ div.di_wrap dl .link a {
 }
 
 
-.weather-wrap .weather-table-box .weather-table dt strong,
-.weather-wrap .weather-table-box .weather-table dt em {
-	color: var(--white60);
-}
 
 .wt_list_wrap .list_type {
 	margin-left: 10px;

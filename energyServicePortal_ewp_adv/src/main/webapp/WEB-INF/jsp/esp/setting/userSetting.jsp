@@ -388,7 +388,7 @@
 									$("#resultModal").modal("show");
 									refreshUserList();
 									setTimeout(function(){
-										$("#resultModal").modal("show");
+										$("#resultModal").modal("hide");
 									}, 1300);
 								});
 							}
@@ -412,7 +412,7 @@
 									$("#resultModal").modal("show");
 									refreshUserList();
 									setTimeout(function(){
-										$("#resultModal").modal("show");
+										$("#resultModal").modal("hide");
 									}, 1300);
 								});
 							}
