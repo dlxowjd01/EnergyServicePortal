@@ -669,8 +669,6 @@ const getGenDataBySiteYesterday = async function () { //3번째 indiv 사업소�
 		pvSum: 0,
 	};
 
-	yesterday.setDate(Number(today.getDate()) - 1);
-
 	$(`.gmain_chart3 span.term`).text(yesterday.getFullYear() + '.' + (Number(yesterday.getMonth()) + 1) + '.' + yesterday.getDate());
 	
 	siteList.forEach((site, siteIdx) => {

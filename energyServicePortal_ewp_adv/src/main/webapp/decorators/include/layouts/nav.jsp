@@ -93,8 +93,8 @@
 		<c:if test="${deny ne null or !fn:contains(deny, oid)}">
 			<c:if test="${menuMap.parent eq null
 						and (((allow.task eq null or fn:contains(allow.task, task)) and (allow.role eq null or fn:contains(allow.role, userRole)))
-							and ((deny.task eq null and !fn:contains(deny.task, task)) and (deny.role eq null and !fn:contains(deny.role, userRole))) or userRole eq '1')
-						and ((allow.oid eq null or fn:contains(allow.oid, oid)) and (deny.oid eq null and !fn:contains(deny.oid, oid)))
+							and ((deny.task eq null or !fn:contains(deny.task, task)) and (deny.role eq null or !fn:contains(deny.role, userRole))) or userRole eq '1')
+						and ((allow.oid eq null or fn:contains(allow.oid, oid)) and (deny.oid eq null or !fn:contains(deny.oid, oid)))
 			}">
 				<c:set var="thisCode" value="${menuMap.code}"/>
 				<c:choose>
@@ -125,8 +125,8 @@
 											<c:if test="${subMenuMap.parent ne null
 														and thisCode eq subMenuMap.parent
 														and (((subAllow.task eq null or fn:contains(subAllow.task, task)) and (subAllow.role eq null or fn:contains(subAllow.role, userRole)))
-															and ((subDeny.task eq null and !fn:contains(subDeny.task, task)) and (subDeny.role eq null and !fn:contains(subDeny.role, userRole))) or userRole eq '1')
-														and ((subAllow.oid eq null or fn:contains(subAllow.oid, oid)) and (subDeny.oid eq null and !fn:contains(subDeny.oid, oid)))
+															and ((subDeny.task eq null or !fn:contains(subDeny.task, task)) and (subDeny.role eq null or !fn:contains(subDeny.role, userRole))) or userRole eq '1')
+														and ((subAllow.oid eq null or fn:contains(subAllow.oid, oid)) and (subDeny.oid eq null or !fn:contains(subDeny.oid, oid)))
 											}">
 												<c:choose>
 													<c:when test="${cookieLang eq 'KO'}">
