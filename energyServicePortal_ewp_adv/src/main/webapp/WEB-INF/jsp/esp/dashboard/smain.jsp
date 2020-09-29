@@ -543,7 +543,6 @@
 	--%>
 
 </div>
-<script type="text/javascript" src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
 	const siteId = '${sid}';
 	const siteList = JSON.parse('${siteList}');

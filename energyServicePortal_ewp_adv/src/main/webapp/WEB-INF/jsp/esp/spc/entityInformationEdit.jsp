@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/decorators/include/taglibs.jsp"%>
-<script src="/js/commonDropdown.js"></script>
-<script>
+<script type="text/javascript">
 	const countryList = new Array();
 	const sidoList = new Array();
 

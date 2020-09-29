@@ -1,7 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
-
-<script src="/js/commonDropdown.js"></script>
 <div class="row header-wrapper">
 	<div class="col-12">
 		<h1 class="page-header fl">수집 현황</h1>

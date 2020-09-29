@@ -25,6 +25,7 @@
 <!-- 레이어 팝업 배경 -->
 <div id="mask"></div>
 <div id="loadingCircle" class="loading"><img class="loading-image" src="/img/loading_icon.gif" alt="Loading..."/></div>
+<div id="loadingCircleDashboard" class="loading" style="display:none;"><img class="loading-image" src="/img/loading_icon.gif" alt="Loading..."/></div>
 
 </body>
 </html>

@@ -353,7 +353,6 @@
 	</div>
 </div>
 
-<script type="text/javascript" src="/js/commonDropdown.js"></script>
 <script type="text/javascript" src="/js/dashboard.js"></script>
 <script type="text/javascript">
 	const siteList = JSON.parse('${siteList}');

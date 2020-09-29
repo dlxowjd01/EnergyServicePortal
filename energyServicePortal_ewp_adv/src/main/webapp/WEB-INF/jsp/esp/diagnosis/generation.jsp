@@ -191,7 +191,6 @@
 	<input type="hidden" name="ignore_tolerance" />
 	<input type="hidden" name="interval" />
 </form>
-<script type="text/javascript" src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
 	let standard = new Array();
 	let deferreds = new Array();

@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
-<script type="text/javascript" src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
 	let table = null;
 	$(function() {

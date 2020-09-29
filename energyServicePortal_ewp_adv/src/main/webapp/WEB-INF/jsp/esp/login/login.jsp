@@ -29,9 +29,363 @@
 	<link rel="stylesheet" href="/css/custom-grid.min.css">
 	<link rel="stylesheet" href="/css/custom-login.css">
 
-	<script src="/js/jquery.min.js"></script>
-	<script src="/js/bootstrap.min.js"></script>
-	<script src="/js/jquery-ui-1.12.1.min.js"></script>
+	<script type="text/javascript" src="/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/js/jquery-ui-1.12.1.min.js"></script>
+	<script type="text/javascript" src="/js/commonDropdown.js"></script>
+
+	<c:if test="${not empty msg}">
+		<script type="text/javascript">
+			let message = '${msg}'
+			$("#warningMsg").text(message);
+			$("#warningModal").modal("show");
+			setTimeout(function(){
+				$("#warningModal").modal("hide");
+			}, 1800);
+		</script>
+	</c:if>
+
+	<script type="text/javascript">
+		const oid = '${oid}';
+		const apiHost = '${apiHost}';
+		const replaceChar = /[^0-9]/gi;
+		const replaceNotFullKorean = /[ㄱ-ㅎㅏ-ㅣ0-9a-z]/gi;
+
+		$(document).ready(function () {
+			//핸드폰 번호
+			$("#findIdMobileNum, #findIdCode, #findPwdMobileNum, #findPwdCode").on('focusout', function() {
+				let x = $(this).val();
+				if (x.length > 0) {
+					if (x.match(replaceChar)) {
+						x = x.replace(replaceChar, '');
+					}
+					$(this).val(x);
+				}
+			}).on('keyup', function() {
+				$(this).val($(this).val().replace(replaceChar, ''));
+			});
+
+			//회원명 이름
+			$('#findIdlName, #findPwdCode').on('focusout', function() {
+				let x = $(this).val();
+				if (x.length > 0) {
+					if (x.match(replaceNotFullKorean)) {
+						x = x.replace(replaceNotFullKorean, '');
+					}
+					$(this).val(x);
+				}
+			}).on('keyup', function() {
+				$(this).val($(this).val().replace(replaceNotFullKorean, ''));
+			});
+
+
+			const changeFavicon = link => {
+				let $favicon = document.querySelector('link[rel="icon"]');
+				if ($favicon !== null) {
+					$favicon.href = link
+				} else {
+					$favicon = document.createElement("link")
+					$favicon.rel = "icon"
+					$favicon.href = link
+					document.head.appendChild($favicon)
+				}
+			};
+
+			<c:if test="${!fn:contains(pageContext.request.serverName, 'spower')}">
+			changeFavicon('/resources/favicon_encored.ico');
+			</c:if>
+
+			$("#loginUserId").val("");
+			$("#loginUserPw").val("");
+
+			$("#loginBtn").prop("disabled", true);
+
+			$("#loginUserId").bind("change keypress", function(){
+				if(!isEmpty($("#loginUserPw").val())){
+					$("#loginBtn").prop("disabled", false);
+				}
+			});
+
+			$("#loginUserPw").bind("change keypress", function(){
+				if(!isEmpty($("#loginUserId").val())){
+					$("#loginBtn").prop("disabled", false);
+				}
+			});
+
+			// User input event
+			$("#newId").on('keydown', function() {
+				$(this).val($(this).val().replace(/\s/g, ''));
+			});
+
+			$("#newId").on('input', function() {
+				$("#validId").addClass("hidden");
+			});
+
+			$("#newId").on('keyup', function() {
+				let warning = $("#newId").parents().closest(".row").find(".warning");
+
+				if( $(this).val().match(/[^\x00-\x80]/) ){
+					$(this).val("");
+				}
+
+				if( $(this).val().match(/[^\w-_]/) ) {
+					warning.eq(2).removeClass("hidden");
+				} else {
+					warning.eq(2).addClass("hidden");
+				}
+
+				if( $(this).val().length <= 4 || $(this).val().length > 15) {
+					warning.eq(1).removeClass("hidden");
+				} else {
+					warning.eq(1).addClass("hidden");
+				}
+
+				if( warning.not(".hidden").index() == -1 ){
+					$("#newId").parent().next().prop("disabled", false);
+				} else {
+					$("#newId").parent().next().prop("disabled", true);
+				}
+
+			});
+
+			// validation
+			$("#newUserPwd").on('keyup', validatePassword);
+
+			$("#confirmNewPwd").keyup(function() {
+				let password = $("#newUserPwd").val();
+				password == $(this).val() ? $("#pwdMatched").addClass("hidden") : $("#pwdMatched").removeClass("hidden");
+				let validated = $("#pwdMatched").hasClass("hidden");
+				if( $(".tick:not(.checked)").index() == -1 && validated){
+
+				}
+			});
+
+			$('#findPwdId, #newPwd, #verifyNewPwd, #rtuSecretKey').on('focusout', function() {
+				let validated = $('#newPwdMatched').hasClass('hidden');
+				if(!isEmpty($('#findPwdId')) && !isEmpty($('#newPwd'))
+					&& !isEmpty($('#verifyNewPwd')) && !isEmpty($('#rtuSecretKey'))
+					&& $('#changePwdModal').find(".tick:not(.checked)").index() == -1 && validated) {
+					$("#updatePwdBtn").removeClass("disabled");
+					$("#updatePwdBtn").prop("disabled", false);
+				} else {
+					$("#updatePwdBtn").addClass("disabled");
+					$("#updatePwdBtn").prop("disabled", true);
+				}
+			});
+
+			$("#newPwd").on('keyup', function() {
+				const rules = [
+					{
+						Pattern: "[a-zA-Z]",
+						Target: "newPwdHasLetter"
+					},
+					{
+						Pattern: "[0-9]",
+						Target: "newPwdHasNumber"
+					},
+					// {
+					// Pattern: "[!@@#$%^&*]",
+					// Target: "Symbols"
+					// }
+				];
+
+				let password = $(this).val();
+				password.length >= 6 ? $("#newPwdIsSixCharLong").addClass("checked") : $("#newPwdIsSixCharLong").removeClass("checked");
+
+				for (var i = 0; i < rules.length; i++) {
+					if( new RegExp(rules[i].Pattern).test(password) ) {
+						$("#" + rules[i].Target).addClass("checked")
+					} else {
+						$("#" + rules[i].Target).removeClass("checked")
+					}
+				}
+
+			});
+
+			$("#verifyNewPwd").keyup(function() {
+				let password = $("#newPwd").val();
+				password == $(this).val() ? $("#newPwdMatched").addClass("hidden") : $("#newPwdMatched").removeClass("hidden");
+				let validated = $("#newPwdMatched").hasClass("hidden");
+				if( $('#changePwdModal').find(".tick:not(.checked)").index() == -1 && validated) {
+					$("#updatePwdBtn").removeClass("disabled");
+					$("#updatePwdBtn").prop("disabled", false);
+				}
+			});
+
+			$("#signUpForm").on("submit", function(e){
+				e.preventDefault();
+			});
+
+			// Modal event
+			$("#signUpModal").on("hide.bs.modal", function(){
+				initModal(this);
+			});
+
+			$("#findIdModal").on("hide.bs.modal", function(){
+				initModal(this);
+			});
+
+			$("#changePwdModal").on("hide.bs.modal", function(){
+				initModal(this);
+			});
+		});
+
+		// TO KEEP!!! (signUP)
+		// function checkLogin(self){
+		// let id = document.getElementById('loginUserId');
+		// let pwd = document.getElementById('loginUserPw');
+		// let modal = $("#warningModal");
+
+		// if (isEmpty(id.value) ) {
+		// 	let msg = '<fmt:message key="ewp.login.Singup_ID" />'
+		// 	$("#warningMsg").text(msg);
+		// 	modal.modal("show");
+		// 	setTimeout(function(){
+		// 		modal.modal("hide");
+		// 	}, 1800);
+		// 	id.focus();
+		// 	loading.hide();
+		// 	return false;
+		// }
+		// if ( isEmpty(pwd.value) ) {
+		// 	let msg = '<fmt:message key="ewp.login.Singup_PW" />'
+		// 	$("#warningMsg").text(msg);
+		// 	modal.modal("show");
+		// 	setTimeout(function(){
+		// 		modal.modal("hide");
+		// 	}, 1800);
+
+		// 	pwd.focus();
+		// 	loading.hide();
+		// 	return false;
+		// }
+
+		// 	return true;
+		// }
+
+		function isEmpty (value) {
+			if (value === "" || value === null || value === undefined || (value !== null && typeof value === "object" && !Object.keys(value).length)) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		function addParameterUrl(v) {
+			document.cookie = 'lang' + '=' + v + '; path=/';
+
+			const f = document.loginForm;
+			document.getElementById('language').value = v;
+			f.method = "post";
+			f.action = "/login.do";
+			f.submit();
+		}
+
+		function showPwd(inputId, btn) {
+			var target = document.getElementById(inputId);
+			if (target.type === "password") {
+				target.type = "text";
+				btn.classList.add("eye-close");
+			} else {
+				target.type = "password";
+				btn.classList.remove("eye-close");
+			}
+		}
+
+		function openUserModal(option) {
+			const modal = $('#' + option);
+			modal.modal("show");
+		}
+
+		function validatePassword() {
+			const rules = [
+				{
+					Pattern: "[a-zA-Z]",
+					Target: "hasLetter"
+				},
+				{
+					Pattern: "[0-9]",
+					Target: "hasNumber"
+				},
+				// {
+				// Pattern: "[!@@#$%^&*]",
+				// Target: "Symbols"
+				// }
+			];
+
+			let password = $(this).val();
+			password.length >= 6 ? $("#isSixCharLong").addClass("checked") : $("#isSixCharLong").removeClass("checked");
+
+			for (var i = 0; i < rules.length; i++) {
+				if( new RegExp(rules[i].Pattern).test(password) ) {
+					$("#" + rules[i].Target).addClass("checked")
+				} else {
+					$("#" + rules[i].Target).removeClass("checked")
+				}
+			}
+
+		}
+
+		function initModal(self) {
+			let txtInput = $(self).find("input:text");
+			let radioInput = $(self).find("input:radio");
+			let btn = $(self).find(".btn_wrap_type02 button");
+			txtInput.val("");
+			radioInput.prop("checked", false);
+			btn.prop("disabled", false);
+
+			if($(self).is('#signUpModal')){
+				let checkBox = $(self).find("input:checkbox");
+				let tick = $(self).find(".tick");
+				let txtArea = $(self).find("textarea");
+				txtArea.val("");
+				checkBox.prop("checked", false);
+				tick.each(function(){
+					if($(this).is(".checked")){
+						$(this).removeClass("checked");
+					}
+				});
+			}
+		}
+
+
+		function checkId(userInput){
+			if(isEmpty(userInput)) return false;
+			let id = userInput.toString();
+			let checkIdOpt = {
+				// apiHost 직접 입력???
+				url: apiHost + "/config/users/exist?oid=" + oid + '&login_id=' + id,
+				type: "get",
+				beforeSend: function (jqXHR, settings) {
+					$('#loadingCircle').show();
+					$("#invalidId").addClass("hidden");
+					$("#validId").addClass("hidden");
+				},
+			}
+			$.ajax(checkIdOpt).done(function (json, textStatus, jqXHR) {
+				$("#validId").removeClass("hidden");
+				validateForm();
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				console.log(jqXHR)
+				if(jqXHR.status == 409){
+					console.log(jqXHR);
+					$("#invalidId").removeClass("hidden");
+					setTimeout(function(){
+						$("#invalidId").addClass("hidden");
+					}, 2000);
+				}
+				return false;
+			});
+		}
+
+		function validateForm(){
+			if( !$("#validId").hasClass("hidden") && ( $("#updateUserForm .tick:not('.checked')").index() == -1 ) && ( $(".warning:not(.hidden)").index() == -1 ) && ( !isEmpty($("#newFullName").val() ) ) && ( !isEmpty($("#newEmailAddr").val()) )){
+				$("#addUserBtn").prop("disabled", false);
+				return 1;
+			}
+		}
+
+	</script>
 </head>
 <body>
 	<div class="container-fluid login">
@@ -63,13 +417,11 @@
 
 				<div class="btn-wrapper">
 					<input type="submit" id="loginBtn" name="login" value="<fmt:message key="ewp.login.Signin" />">
-				<%--
-					<p class="center"><!--
-					--><a href="#" onclick="openUserModal('signUpModal')">회원 가입</a><!--
-					--><a href="#" onclick="openUserModal('findIdModal')">아이디 찾기</a><!--
-					--><a href="#" onclick="openUserModal('findPwdModal')">비밀번호 찾기</a><!--
-					--></p>
-				--%>
+<%--					<p class="center"><!----%>
+<%--					--><a href="#" onclick="openUserModal('signUpModal'); return false;">회원 가입</a><!----%>
+<%--					--><a href="#" onclick="openUserModal('findIdModal'); return false;">아이디 찾기</a><!----%>
+<%--					--><a href="#" onclick="openUserModal('changePwdModal'); return false;">비밀번호 변경</a><!----%>
+<%--				--></p>--%>
 				</div>
 
 				<%-- KPX(전력 거래소 사용시 하단 내용 숨김) --%>
@@ -177,7 +529,7 @@
 											<div class="dropdown w-174">
 												<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 												<ul id="newEmailHost" class="dropdown-menu"></ul>
-											</div>										
+											</div>
 										</div>
 										<div class="flex_start">
 											<small class="hidden warning-text">올바른 이메일 형식을 입력해 주세요.</small>
@@ -269,16 +621,16 @@
 								<div class="col-9">
 									<div class="rdo_type flex_start">
 										<div class="radio-group">
-											<input type="radio" id="carrierSk1" name="carrier_opt1" data-value="sk1" data-option-val="false">
-											<label for="carrierSk1">SKT</label>
+											<input type="radio" id="carrierA" name="carrier_opt" data-value="sk">
+											<label for="carrierA">SKT</label>
 										</div>
 										<div class="radio-group">
-											<input type="radio" id="carrierKt1" name="carrier_opt1" data-value="kt1" data-option-val="false">
-											<label for="carrierKt1">KT</label>
+											<input type="radio" id="carrierB" name="carrier_opt" data-value="kt">
+											<label for="carrierB">KT</label>
 										</div>
 										<div class="radio-group">
-											<input type="radio" id="carrierLg1" name="carrier_opt1" data-value="lg1" data-option-val="false">
-											<label for="carrierLg1">LG U+</label>
+											<input type="radio" id="carrierC" name="carrier_opt" data-value="lg">
+											<label for="carrierC">LG U+</label>
 										</div>
 									</div>
 									<div class="flex_start">
@@ -291,9 +643,15 @@
 								<div class="col-3"><span class="input_label">휴대폰 번호</span></div>
 								<div class="col-9">
 									<div class="flex_start">
-										<div class="dropdown w-90">
+										<div class="dropdown w-90" id="findIdMobilePrefix">
 											<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-											<ul id="findIdMobilePrefix" class="dropdown-menu"></ul>
+											<ul class="dropdown-menu">
+												<li data-value="010"><a href="javascript:void(0);">010</a></li>
+												<li data-value="011"><a href="javascript:void(0);">011</a></li>
+												<li data-value="016"><a href="javascript:void(0);">016</a></li>
+												<li data-value="017"><a href="javascript:void(0);">017</a></li>
+												<li data-value="019"><a href="javascript:void(0);">019</a></li>
+											</ul>
 										</div>
 										<div class="tx_inp_type offset-176"><input type="text" id="findIdMobileNum" name="find_id_mobil_num" placeholder="입력" maxlength="13"></div>
 										<button type="button" class="btn_type fr">인증</button>
@@ -328,363 +686,157 @@
 	</div>
 
 
-	<div class="modal fade" id="findPwdModal" tabindex="-1" role="dialog" aria-labelledby="findPwdModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+	<div class="modal fade" id="changePwdModal" tabindex="-1" role="dialog" aria-labelledby="changePwdModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 		<div class="modal-dialog modal-md">
 			<div class="modal-content user-modal-content">
-				<div class="modal-header"><h2>비밀번호 찾기</h2></div>
+				<div class="modal-header"><h2>비밀번호 변경</h2></div>
 				<div class="modal-body">
 					<div class="container-fluid">
-						<form name="find_pwd_form" id="findPwdForm" class="user-form">
-
-							<div class="row">
-								<div class="col-3"><span class="input_label asterisk">이름</span></div>
-								<div class="col-9">
-									<div class="tx_inp_type"><input type="text" id="findPwdFullName" name="find_pwd_full_name" placeholder="입력" minlength="3" maxlength="28"></div>
-									<small class="hidden warning-text">영문/한글(3~28 글자) 조합의 이름을 입력해 주세요</small>
+						<c:choose>
+							<c:when test="${defaultOid ne 'testkpx'}">
+								<div class="row">
+									<div class="col-3"><span class="input_label asterisk">ID</span></div>
+									<div class="col-9">
+										<div class="tx_inp_type"><input type="text" id="findPwdId" name="find_pwd_id" placeholder="입력" minlength="3" maxlength="28"></div>
+										<small class="hidden warning-text">ID를 입력해 주세요</small>
+									</div>
 								</div>
-							</div>
 
-							<div class="row">
-								<div class="col-3"><span class="input_label asterisk">ID</span></div>
-								<div class="col-9">
-									<div class="tx_inp_type"><input type="text" id="findPwdId" name="find_pwd_id" placeholder="입력" minlength="3" maxlength="28"></div>
-									<small class="hidden warning-text">ID를 입력해 주세요</small>
+								<div class="row">
+									<div class="col-3"><span class="input_label asterisk">RTU 비밀키</span></div>
+									<div class="col-9">
+										<div class="tx_inp_type"><input type="text" id="rtuSecretKey" name="rtuSecretKey" placeholder="입력" minlength="3" maxlength="28" autocomplete="off"></div>
+										<small class="hidden warning-text">RTU 비밀키를 입력해 주세요</small>
+									</div>
 								</div>
-							</div>
 
-							<div class="row">
-								<div class="col-3"><span class="input_label asterisk">이동 통신사</span></div>
-								<div class="col-9">
-									<div class="rdo_type flex_start">
-										<div class="radio-group">
-											<input type="radio" id="carrierSk2" name="carrier_opt2" data-value="sk" data-option-val="true">
-											<label for="carrierSk2">SKT</label>
-										</div>
-										<div class="radio-group">
-											<input type="radio" id="carrierKt2" name="carrier_opt2" data-value="kt" data-option-val="false">
-											<label for="carrierKt2">KT</label>
-										</div>
-										<div class="radio-group">
-											<input type="radio" id="carrierLg2" name="carrier_opt2" data-value="lg" data-option-val="false">
-											<label for="carrierLg2">LG U+</label>
+								<div class="row">
+									<div class="col-3"><span class="input_label asterisk">신규 비밀번호</span></div>
+									<div class="col-9">
+										<div class="flex_start">
+											<div class="tx_inp_type">
+												<input type="password" id="newPwd" name="newPwd" placeholder="입력" minlength="6" maxlength="32" autocomplete="off">
+												<div class="flex_start warning-wrapper">
+													<small class="tick" id="newPwdHasLetter">영문</small>
+													<small class="tick" id="newPwdHasNumber">숫자</small>
+													<small class="tick" id="newPwdIsSixCharLong">6자리 이상</small>
+												</div>
+											</div>
 										</div>
 									</div>
-									<div class="flex_start">
-										<small class="hidden warning-text">이동 통신사를 선택해 주세요.</small>
-									</div>
 								</div>
-							</div>
 
-							<div class="row">
-								<div class="col-3"><span class="input_label">휴대폰 번호</span></div>
-								<div class="col-9">
-									<div class="flex_start">
-										<div class="dropdown w-90">
-											<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-											<ul id="findPwdMobilePrefix" class="dropdown-menu"></ul>
+								<div class="row">
+									<div class="col-3"><span class="input_label asterisk">신규 비밀번호 확인</span></div>
+									<div class="col-9">
+										<div class="flex_start">
+											<div class="tx_inp_type">
+												<input type="password" id="verifyNewPwd" name="verifyNewPwd" placeholder="입력" minlength="6" maxlength="32" autocomplete="off">
+												<div class="flex_start warning-wrapper">
+													<small id="newPwdMatched" class="warning-text hidden">비밀번호가 일치하지 않습니다.</small>
+												</div>
+											</div>
 										</div>
-										<div class="tx_inp_type offset-176"><input type="text" id="findPwdMobileNum" name="find_pwd_mobil_num" placeholder="입력" maxlength="13"></div>
-										<button type="button" class="btn_type fr">인증</button>
-									</div>
-									<div class="flex_start">
-										<small id="isValidNumB" class="warning hidden">10자리 이상의 휴대폰 번호를 입력해 주세요.</small>
 									</div>
 								</div>
-							</div>
 
-							<div class="row">
-								<div class="col-3"><span class="input_label">인증 번호</span></div>
-								<div class="col-9">
-									<div class="tx_inp_type"><input type="text" id="findPwdCode" name="find_pwd_code" placeholder="입력">
-									</div>
-								</div>
-							</div>
-
-							<div class="row">
-								<div class="col-12">
-									<div class="btn_wrap_type02"><!--
-									--><button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button><!--
-										--><button type="submit" id="findPwdBtn" class="btn_type" disabled>등록</button><!--
+								<div class="row">
+									<div class="col-12">
+										<div class="btn_wrap_type02"><!--
+										--><button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button><!--
+										--><button type="button" class="btn_type" id="updatePwdBtn" disabled>등록</button><!--
 									--></div>
+									</div>
 								</div>
-							</div>
-						</form>
+							</c:when>
+							<c:otherwise>
+								<div class="row">
+									<div class="col-3"><span class="input_label asterisk">이름</span></div>
+									<div class="col-9">
+										<div class="tx_inp_type"><input type="text" id="findPwdFullName" name="find_pwd_full_name" placeholder="입력" minlength="3" maxlength="28"></div>
+										<small class="hidden warning-text">영문/한글(3~28 글자) 조합의 이름을 입력해 주세요</small>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-3"><span class="input_label asterisk">ID</span></div>
+									<div class="col-9">
+										<div class="tx_inp_type"><input type="text" id="findPwdId" name="find_pwd_id" placeholder="입력" minlength="3" maxlength="28"></div>
+										<small class="hidden warning-text">ID를 입력해 주세요</small>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-3"><span class="input_label asterisk">이동 통신사</span></div>
+									<div class="col-9">
+										<div class="rdo_type flex_start">
+											<div class="radio-group">
+												<input type="radio" id="carrierSk" name="carrier_opt2" data-value="sk">
+												<label for="carrierSk">SKT</label>
+											</div>
+											<div class="radio-group">
+												<input type="radio" id="carrierKt" name="carrier_opt2" data-value="kt">
+												<label for="carrierKt">KT</label>
+											</div>
+											<div class="radio-group">
+												<input type="radio" id="carrierLg" name="carrier_opt2" data-value="lg">
+												<label for="carrierLg">LG U+</label>
+											</div>
+										</div>
+										<div class="flex_start">
+											<small class="hidden warning-text">이동 통신사를 선택해 주세요.</small>
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-3"><span class="input_label">휴대폰 번호</span></div>
+									<div class="col-9">
+										<div class="flex_start">
+											<div class="dropdown w-90" id="findPwdMobilePrefix">
+												<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+												<ul class="dropdown-menu">
+													<li data-value="010"><a href="javascript:void(0);">010</a></li>
+													<li data-value="011"><a href="javascript:void(0);">011</a></li>
+													<li data-value="016"><a href="javascript:void(0);">016</a></li>
+													<li data-value="017"><a href="javascript:void(0);">017</a></li>
+													<li data-value="019"><a href="javascript:void(0);">019</a></li>
+												</ul>
+											</div>
+											<div class="tx_inp_type offset-176"><input type="text" id="findPwdMobileNum" name="find_pwd_mobil_num" placeholder="입력" maxlength="13"></div>
+											<button type="button" class="btn_type fr">인증</button>
+										</div>
+										<div class="flex_start">
+											<small id="isValidNumB" class="warning hidden">10자리 이상의 휴대폰 번호를 입력해 주세요.</small>
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-3"><span class="input_label">인증 번호</span></div>
+									<div class="col-9">
+										<div class="flex_start">
+											<div class="tx_inp_type">
+												<input type="text" id="findPwdCode" name="find_pwd_code" placeholder="입력" minlength="6" maxlength="6">
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-12">
+										<div class="btn_wrap_type02"><!--
+										--><button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button><!--
+										--><button type="button" class="btn_type" id="updatePwdBtn" disabled>등록</button><!--
+									--></div>
+									</div>
+								</div>
+							</c:otherwise>
+						</c:choose>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	
-	
-	<c:if test="${not empty msg}">
-		<script type="text/javascript">
-			let message = '${msg}'
-			$("#warningMsg").text(message);
-			$("#warningModal").modal("show");
-			setTimeout(function(){
-				$("#warningModal").modal("hide");
-			}, 1800);
-		</script>
-	</c:if>
-
-	<script type="text/javascript">
-		$(document).ready(function () {
-
-			const changeFavicon = link => {
-				let $favicon = document.querySelector('link[rel="icon"]');
-				if ($favicon !== null) {
-					$favicon.href = link
-				} else {
-					$favicon = document.createElement("link")
-					$favicon.rel = "icon"
-					$favicon.href = link
-					document.head.appendChild($favicon)
-				}
-			};
-
-			<c:if test="${!fn:contains(pageContext.request.serverName, 'spower')}">
-			changeFavicon('/resources/favicon_encored.ico');
-			</c:if>
-
-			$("#loginUserId").val("");
-			$("#loginUserPw").val("");
-
-			$("#loginBtn").prop("disabled", true);
-
-			$("#loginUserId").bind("change keypress", function(){
-				if(!isEmpty($("#loginUserPw").val())){
-					$("#loginBtn").prop("disabled", false);
-				}
-			});
-
-			$("#loginUserPw").bind("change keypress", function(){
-				if(!isEmpty($("#loginUserId").val())){
-					$("#loginBtn").prop("disabled", false);
-				}
-			});
-
-
-
-			// User input event 
-			$("#newId").on('keydown', function() {
-				$(this).val($(this).val().replace(/\s/g, ''));
-			});
-
-			$("#newId").on('input', function() {
-				$("#validId").addClass("hidden");
-			});
-
-			$("#newId").on('keyup', function() {
-				let warning = $("#newId").parents().closest(".row").find(".warning");
-
-				if( $(this).val().match(/[^\x00-\x80]/) ){
-					$(this).val("");
-				}
-
-				if( $(this).val().match(/[^\w-_]/) ) {
-					warning.eq(2).removeClass("hidden");
-				} else {
-					warning.eq(2).addClass("hidden");
-				}
-
-				if( $(this).val().length <= 4 || $(this).val().length > 15) {
-					warning.eq(1).removeClass("hidden");
-				} else {
-					warning.eq(1).addClass("hidden");
-				}
-
-				if( warning.not(".hidden").index() == -1 ){
-					$("#newId").parent().next().prop("disabled", false);
-				} else {
-					$("#newId").parent().next().prop("disabled", true);
-				}
-
-			});
-
-			// validation
-			$("#newUserPwd").on('keyup', validatePassword);
-
-			$("#confirmNewPwd").keyup(function() {
-				let password = $("#newUserPwd").val();
-				password == $(this).val() ? $("#pwdMatched").addClass("hidden") : $("#pwdMatched").removeClass("hidden");
-				let validated = $("#pwdMatched").hasClass("hidden");
-				if( $(".tick:not(.checked)").index() == -1 && validated){
-
-				}
-			});
-
-			$("#signUpForm").on("submit", function(e){
-				e.preventDefault();
-
-			});
-
-			// Modal event
-			$("#signUpModal").on("hide.bs.modal", function(){
-				initModal(this);
-			});
-
-			$("#findIdModal").on("hide.bs.modal", function(){
-				initModal(this);
-			});
-
-			$("#findPwdModal").on("hide.bs.modal", function(){
-				initModal(this);
-			});
-		});
-
-		// TO KEEP!!! (signUP)
-		// function checkLogin(self){
-			// let id = document.getElementById('loginUserId');
-			// let pwd = document.getElementById('loginUserPw');
-			// let modal = $("#warningModal");
-
-			// if (isEmpty(id.value) ) {
-			// 	let msg = '<fmt:message key="ewp.login.Singup_ID" />'
-			// 	$("#warningMsg").text(msg);
-			// 	modal.modal("show");
-			// 	setTimeout(function(){
-			// 		modal.modal("hide");
-			// 	}, 1800);
-			// 	id.focus();
-			// 	loading.hide();
-			// 	return false;
-			// }
-			// if ( isEmpty(pwd.value) ) {
-			// 	let msg = '<fmt:message key="ewp.login.Singup_PW" />'
-			// 	$("#warningMsg").text(msg);
-			// 	modal.modal("show");
-			// 	setTimeout(function(){
-			// 		modal.modal("hide");
-			// 	}, 1800);
-
-			// 	pwd.focus();
-			// 	loading.hide();
-			// 	return false;
-			// }
-
-		// 	return true;
-		// }
-
-		function isEmpty (value) {
-			if (value === "" || value === null || value === undefined || (value !== null && typeof value === "object" && !Object.keys(value).length)) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-
-		function addParameterUrl(v) {
-			document.cookie = 'lang' + '=' + v + '; path=/';
-
-			const f = document.loginForm;
-			document.getElementById('language').value = v;
-			f.method = "post";
-			f.action = "/login.do";
-			f.submit();
-		}
-
-		function showPwd(inputId, btn) {
-			var target = document.getElementById(inputId);
-			if (target.type === "password") {
-				target.type = "text";
-				btn.classList.add("eye-close");
-			} else {
-				target.type = "password";
-				btn.classList.remove("eye-close");
-			}
-		}
-
-		function openUserModal(option) {
-			let modal = "#" + option;
-			$(modal).modal("show");
-		}
-
-		function validatePassword() {
-			const rules = [
-				{
-					Pattern: "[a-zA-Z]",
-					Target: "hasLetter"
-				},
-				{
-					Pattern: "[0-9]",
-					Target: "hasNumber"
-				},
-				// {
-				// Pattern: "[!@@#$%^&*]",
-				// Target: "Symbols"
-				// }
-			];
-
-			let password = $(this).val();
-			password.length >= 6 ? $("#isSixCharLong").addClass("checked") : $("#isSixCharLong").removeClass("checked");
-
-			for (var i = 0; i < rules.length; i++) {
-				if( new RegExp(rules[i].Pattern).test(password) ) {
-					$("#" + rules[i].Target).addClass("checked")
-				} else {
-					$("#" + rules[i].Target).removeClass("checked")
-				}
-			}
-
-		}
-
-		function initModal(self) {
-			let txtInput = $(self).find("input[type='text']");
-			let btn = $(self).find(".btn_wrap_type02 button");
-			txtInput.val("");
-			btn.prop("disabled", false);
-
-			if($(self).is('#signUpModal')){
-				let checkBox = $(self).find("input[type='checkbox']");
-				let tick = $(self).find(".tick");
-				let txtArea = $(self).find("textarea");
-				txtArea.val("");
-				checkBox.prop("checked", false);
-				tick.each(function(){
-					if($(this).is(".checked")){
-						$(this).removeClass("checked");
-					}
-				});
-			}
-		}
-
-
-		function checkId(userInput){
-			if(isEmpty(userInput)) return false;
-			let id = userInput.toString();
-			let checkIdOpt = {
-				// apiHost 직접 입력???
-				url: apiHost + "/config/users/exist?oid=" + oid + '&login_id=' + id,
-				type: "get",
-				beforeSend: function (jqXHR, settings) {
-					$('#loadingCircle').show();
-					$("#invalidId").addClass("hidden");
-					$("#validId").addClass("hidden");
-				},
-			}
-			$.ajax(checkIdOpt).done(function (json, textStatus, jqXHR) {
-				$("#validId").removeClass("hidden");
-				validateForm();
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				console.log(jqXHR)
-				if(jqXHR.status == 409){
-					console.log(jqXHR);
-					$("#invalidId").removeClass("hidden");
-					setTimeout(function(){
-						$("#invalidId").addClass("hidden");
-					}, 2000);
-				}
-				return false;
-			});
-		}
-
-		function validateForm(){
-			if( !$("#validId").hasClass("hidden") && ( $("#updateUserForm .tick:not('.checked')").index() == -1 ) && ( $(".warning:not(.hidden)").index() == -1 ) && ( !isEmpty($("#newFullName").val() ) ) && ( !isEmpty($("#newEmailAddr").val()) )){
-				$("#addUserBtn").prop("disabled", false);
-				return 1;
-			}
-		}
-
-	</script>
 </body>
 </html>

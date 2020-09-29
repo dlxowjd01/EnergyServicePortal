@@ -2,10 +2,7 @@
 <%@ include file="/decorators/include/taglibs.jsp" %>
 
 <!-- 파일 업로드 폼 -->
-<script src="/js/commonDropdown.js"></script>
-<form id="picupload" name="upload" method="multipart/form-data">
-</form>
-
+<form id="picupload" name="upload" method="multipart/form-data"></form>
 <div id="alarmConfirm" class="modal fade" role="dialog">
 	<div class="modal-dialog his_alarm">
 		<div class="modal-content">
