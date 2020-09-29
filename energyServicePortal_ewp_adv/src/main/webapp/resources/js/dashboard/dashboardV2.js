@@ -1206,7 +1206,7 @@ const searchSite = async function () {
 		}
 
 		refineList.sort(
-			firstBy(function(a, b) {return Number(b['accumulate'].replace(/[^0-9]/g, '')) - Number(a['accumulate'].replace(/[^0-9]/g, ''));})
+			firstBy(function(a, b) {return Number(String(b['accumulate']).replace(/[^0-9]/g, '')) - Number(String(a['accumulate']).replace(/[^0-9]/g, ''));})
 			.thenBy(function(a, b) {return Number(String(b['capacity']).replace(/[^0-9]/g, '')) - Number(String(a['capacity']).replace(/[^0-9]/g, ''));})
 		);
 
