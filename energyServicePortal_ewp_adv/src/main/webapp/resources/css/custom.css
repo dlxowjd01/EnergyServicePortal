@@ -2128,17 +2128,23 @@ nav .all-menu .menu-group {
 	z-index: 180;
 }
 
-nav .all-menu .menu-group>ul {
-	float: left;
+nav .all-menu .menu-wrapper {
+	display: flex;
+	flex-wrap: wrap;
+	overflow: auto;
+	max-height: 500px;
+}
+
+nav .all-menu .menu-wrapper>ul {
 	margin: 0 10px 40px 0;
 }
 
-nav .all-menu .menu-group>ul>li {
+nav .all-menu .menu-wrapper>ul>li {
 	display: table-cell;
 	vertical-align: top;
 }
 
-nav .all-menu .menu-group>ul>li a {
+nav .all-menu .menu-wrapper>ul>li a {
 	display: block;
 	color: var(--white60);
 	font-size: 12px;
@@ -2147,28 +2153,28 @@ nav .all-menu .menu-group>ul>li a {
 	white-space: nowrap;
 }
 
-nav .all-menu .menu-group>ul>li a:not(.sub-item) {
+nav .all-menu .menu-wrapper>ul>li a:not(.sub-item) {
 	padding-left: 10px;
 }
 
-nav .all-menu .menu-group>ul>li ul li ul a,
-nav .all-menu .menu-group>ul>li ul li ul label {
+nav .all-menu .menu-wrapper>ul>li ul li ul a,
+nav .all-menu .menu-wrapper>ul>li ul li ul label {
 	padding: 0 8px 0 0;
 	margin-right: 8px;
 }
 
-nav .all-menu .menu-group>ul>li>dl>dd {
+nav .all-menu .menu-wrapper>ul>li>dl>dd {
 	margin: 10px 20px 0 0;
 }
 
-nav .all-menu .menu-group>ul>li>dl>dd>a {
+nav .all-menu .menu-wrapper>ul>li>dl>dd>a {
 	color: var(--white);
 	text-decoration: underline var(--white60);
 	text-underline-offset: 6px;
 	margin-bottom: 10px;
 }
 
-nav .all-menu .menu-group>ul>li>dl>dd>a:hover {
+nav .all-menu .menu-wrapper>ul>li>dl>dd>a:hover {
 	opacity: 1;
 	cursor: unset;
 }
@@ -2179,11 +2185,11 @@ nav .all-menu .menu-group .overflow-list {
 	overflow-x: hidden;
 }
 
-nav .all-menu .menu-group>ul:not(:last-of-type) .overflow-list {
+nav .all-menu .menu-wrapper>ul:not(:last-of-type) .overflow-list {
 	min-width: 150px;
 }
 
-nav .all-menu .menu-group>ul>li>dl>dt {
+nav .all-menu .menu-wrapper>ul>li>dl>dt {
 	height: 36px;
 	line-height: 36px;
 	color: var(--white);
@@ -2193,11 +2199,11 @@ nav .all-menu .menu-group>ul>li>dl>dt {
 }
 
 
-nav .all-menu .menu-group>ul>li>dl>dd ul input[type="checkbox"] {
+nav .all-menu .menu-wrapper>ul>li>dl>dd ul input[type="checkbox"] {
 	display: none;
 }
 
-nav .all-menu .menu-group>ul>li>dl>dd ul label {
+nav .all-menu .menu-wrapper>ul>li>dl>dd ul label {
 	margin: 0 4px;
 	padding: 0 6px;
 	color: var(--white60);
@@ -2207,34 +2213,34 @@ nav .all-menu .menu-group>ul>li>dl>dd ul label {
 	cursor: pointer;
 }
 
-nav .all-menu .menu-group>ul>li>dl>dd ul a:not(.group-title):hover,
-nav .all-menu .menu-group>ul>li>dl>dd ul label:hover {
+nav .all-menu .menu-wrapper>ul>li>dl>dd ul a:not(.group-title):hover,
+nav .all-menu .menu-wrapper>ul>li>dl>dd ul label:hover {
 	color: var(--white87);
 	background: var(--bg-color2);
 	border-radius: 3px;
 }
 
-nav .all-menu .menu-group>ul>li>dl>dd ul label.on {
+nav .all-menu .menu-wrapper>ul>li>dl>dd ul label.on {
 	color: var(--vivid-blue);
 }
 
-nav .all-menu .menu-group>ul>li>dl>dd ul li a.group-title {
+nav .all-menu .menu-wrapper>ul>li>dl>dd ul li a.group-title {
 	color: var(--white87);
 	text-transform: uppercase;
 	font-weight: 550;
 }
 
-nav .all-menu .menu-group>ul>li>dl>dd ul li a.group-title:hover {
+nav .all-menu .menu-wrapper>ul>li>dl>dd ul li a.group-title:hover {
 	color: var(--vivid-blue);
 	/* background: var(--bg-color2);
 	border-radius: 3px; */
 }
 
-nav .all-menu .menu-group>ul>li>dl>dd ul li a.group-title+ul {
+nav .all-menu .menu-wrapper>ul>li>dl>dd ul li a.group-title+ul {
 	margin-bottom: 16px;
 }
 
-nav .all-menu .menu-group>ul>li>dl>dd ul a.sub-item:before {
+nav .all-menu .menu-wrapper>ul>li>dl>dd ul a.sub-item:before {
 	display: inline-block;
 	margin: 0 8px 2px 10px;
 	content: "";
@@ -2245,7 +2251,7 @@ nav .all-menu .menu-group>ul>li>dl>dd ul a.sub-item:before {
 	border-radius: 3px;
 }
 
-nav .all-menu .menu-group>ul>li>dl>dd ul li a.group-title+ul li a:hover:before {
+nav .all-menu .menu-wrapper>ul>li>dl>dd ul li a.group-title+ul li a:hover:before {
 	border: 1px solid var(--white);
 }
 
@@ -6740,6 +6746,7 @@ div.di_wrap dl .link a {
 
 .indiv.smain-tab-box {
 	padding: 0 0 24px;
+	min-height: 486px;
 }
 
 /* 사업소 현황 */
@@ -9059,11 +9066,11 @@ div.di_wrap dl .link a {
 	text-align: left;
 }
 
-.menu_btm_bx {
+.menu-btn-wrapper {
 	text-align: right;
 }
 
-.menu_btm_bx .btn_type03 {
+.menu-btn-wrapper .btn_type03 {
 	min-width: 74px;
 }
 

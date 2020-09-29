@@ -321,65 +321,38 @@
 		<a href="#">구분</a>
 		<form name="menuform" method="post">
 			<div class="menu-group">
-				<ul>
-					<li>
-						<dl>
-							<dt>사업소 분석</dt>
-							<dd>
-								<a href="#">사업소별</a>
-								<ul class="overflow-list">
-									<li><a href="#" class="group-title" onclick="dashboardMove('group', '', ''); return false">전체</a></li>
-									<c:if test="${fn:length(siteList) > 0}">
-										<c:forEach var="site" items="${siteList}">
-											<li>
-												<a href="#" class="sub-item" onclick="dashboardMove('site', 'sid', '${site.sid}'); return false">${site.name}</a>
-											</li>
-										</c:forEach>
-									</c:if>
-								</ul>
-							</dd>
-						</dl>
-					</li>
-					<c:if test="${fn:length(tagList) > 0}">
+				<div class="menu-wrapper">
+					<ul>
 						<li>
 							<dl>
-								<dt></dt>
+								<dt>사업소 분석</dt>
 								<dd>
-									<a href="#">그룹별</a>
+									<a href="#">사업소별</a>
 									<ul class="overflow-list">
-										<c:forEach var="group" items="${tagList}">
-											<li>
-												<a href="#" class="group-title" onclick="dashboardMove('group', 'sgid', '${group.sgid}'); return false">${group.name}</a>
-												<ul>
-													<c:set var="groupSites" value="${group.sites}"/>
-													<c:forEach var="groupSiteList" items="${groupSites}">
-														<li>
-															<a href="#" class="sub-item" onclick="dashboardMove('site', 'sid', '${groupSiteList.sid}'); return false">${groupSiteList.name}</a>
-														</li>
-													</c:forEach>
-												</ul>
-											</li>
-										</c:forEach>
+										<li><a href="#" class="group-title" onclick="dashboardMove('group', '', ''); return false">전체</a></li>
+										<c:if test="${fn:length(siteList) > 0}">
+											<c:forEach var="site" items="${siteList}">
+												<li>
+													<a href="#" class="sub-item" onclick="dashboardMove('site', 'sid', '${site.sid}'); return false">${site.name}</a>
+												</li>
+											</c:forEach>
+										</c:if>
 									</ul>
 								</dd>
 							</dl>
 						</li>
-					</c:if>
-				</ul>
-				<c:if test="${fn:length(vppList) > 0 || fn:length(drList) > 0}">
-					<ul>
-						<c:if test="${oid ne 'trust' and fn:length(vppList) > 0}">
+						<c:if test="${fn:length(tagList) > 0}">
 							<li>
 								<dl>
-									<dt>에너지 거래</dt>
+									<dt></dt>
 									<dd>
-										<a href="#">중개거래</a>
+										<a href="#">그룹별</a>
 										<ul class="overflow-list">
-											<c:forEach var="vpp" items="${vppList}">
+											<c:forEach var="group" items="${tagList}">
 												<li>
-													<a href="#" class="group-title" onclick="dashboardMove('vpp', 'vgid', '${vpp.vgid}'); return false">${vpp.name}</a>
+													<a href="#" class="group-title" onclick="dashboardMove('group', 'sgid', '${group.sgid}'); return false">${group.name}</a>
 													<ul>
-														<c:set var="groupSites" value="${vpp.sites}"/>
+														<c:set var="groupSites" value="${group.sites}"/>
 														<c:forEach var="groupSiteList" items="${groupSites}">
 															<li>
 																<a href="#" class="sub-item" onclick="dashboardMove('site', 'sid', '${groupSiteList.sid}'); return false">${groupSiteList.name}</a>
@@ -393,99 +366,129 @@
 								</dl>
 							</li>
 						</c:if>
+					</ul>
+					<c:if test="${fn:length(vppList) > 0 || fn:length(drList) > 0}">
+						<ul>
+							<c:if test="${oid ne 'trust' and fn:length(vppList) > 0}">
+								<li>
+									<dl>
+										<dt>에너지 거래</dt>
+										<dd>
+											<a href="#">중개거래</a>
+											<ul class="overflow-list">
+												<c:forEach var="vpp" items="${vppList}">
+													<li>
+														<a href="#" class="group-title" onclick="dashboardMove('vpp', 'vgid', '${vpp.vgid}'); return false">${vpp.name}</a>
+														<ul>
+															<c:set var="groupSites" value="${vpp.sites}"/>
+															<c:forEach var="groupSiteList" items="${groupSites}">
+																<li>
+																	<a href="#" class="sub-item" onclick="dashboardMove('site', 'sid', '${groupSiteList.sid}'); return false">${groupSiteList.name}</a>
+																</li>
+															</c:forEach>
+														</ul>
+													</li>
+												</c:forEach>
+											</ul>
+										</dd>
+									</dl>
+								</li>
+							</c:if>
 
-						<%--
-						<c:if test="${fn:length(drList) > 0}">
-							<li>
-								<dl>
-									<dt></dt>
-									<dd>
-										<a href="#">DR 거래</a>
-										<ul class="overflow-list">
-											<c:forEach var="dr" items="${drList}">
+							<%--
+							<c:if test="${fn:length(drList) > 0}">
+								<li>
+									<dl>
+										<dt></dt>
+										<dd>
+											<a href="#">DR 거래</a>
+											<ul class="overflow-list">
+												<c:forEach var="dr" items="${drList}">
+													<li>
+														<a class="group-title" href="#">${dr.name}</a>
+														<ul>
+															<c:set var="groupSites" value="${dr.sites}"/>
+															<c:forEach var="groupSiteList" items="${groupSites}">
+																<li>
+																	<a href="#" class="sub-item">${groupSiteList.name}</a>
+																	<!-- <a href="#" onclick="dashboardMove('site', 'sid', '${groupSiteList.sid}'); return false">${groupSiteList.name}</a> -->
+																</li>
+															</c:forEach>
+														</ul>
+													</li>
+												</c:forEach>
+											</ul>
+										</dd>
+									</dl>
+								</li>
+							</c:if>
+						--%>
+						</ul>
+					</c:if>
+					<ul>
+						<li class="lo-type lo">
+							<dl>
+								<dt>지역 및 유형 선택</dt>
+								<dd>
+									<a href="#">지역별</a>
+									<ul class="overflow-list">
+										<c:set var="systemLoc" value="${sessionScope.systemLoc}"/>
+										<c:forEach var="loc" items="${location}" varStatus="stat">
+											<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx') or (fn:contains(sessionScope.userInfo.oid, 'testkpx') and loc.value.code eq 'kr')}">
 												<li>
-													<a class="group-title" href="#">${dr.name}</a>
+													<a href="#" class="group-title">${loc.value.name.kr}</a>
 													<ul>
-														<c:set var="groupSites" value="${dr.sites}"/>
-														<c:forEach var="groupSiteList" items="${groupSites}">
+														<c:forEach var="country" items="${loc.value.locations}" varStatus="countryStat">
+															<c:set var="choice" value="false" />
+															<c:if test="${fn:length(systemLoc) > 0}">
+																<c:forEach var="selLoc" items="${systemLoc}">
+																	<c:if test="${country.value.code eq selLoc}">
+																		<c:set var="choice" value="true" />
+																	</c:if>
+																</c:forEach>
+															</c:if>
 															<li>
-																<a href="#" class="sub-item">${groupSiteList.name}</a>
-																<!-- <a href="#" onclick="dashboardMove('site', 'sid', '${groupSiteList.sid}'); return false">${groupSiteList.name}</a> -->
+																<input type="checkbox" name="systemLoc" id="lo${countryStat.index}" value="${country.value.code}" <c:if test="${choice eq 'true'}">checked</c:if>>
+																<label for="lo${countryStat.index}" <c:if test="${choice eq 'true'}">class="on"</c:if>>${country.value.name.kr}</label>
 															</li>
 														</c:forEach>
 													</ul>
 												</li>
-											</c:forEach>
-										</ul>
-									</dd>
-								</dl>
-							</li>
-						</c:if>
-					--%>
-					</ul>
-				</c:if>
-				<ul>
-					<li class="lo-type lo">
-						<dl>
-							<dt>지역 및 유형 선택</dt>
-							<dd>
-								<a href="#">지역별</a>
-								<ul class="overflow-list">
-									<c:set var="systemLoc" value="${sessionScope.systemLoc}"/>
-									<c:forEach var="loc" items="${location}" varStatus="stat">
-										<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx') or (fn:contains(sessionScope.userInfo.oid, 'testkpx') and loc.value.code eq 'kr')}">
+											</c:if>
+										</c:forEach>
+									</ul>
+								</dd>
+							</dl>
+						</li>
+						<li class="lo-type type">
+							<dl>
+								<dt></dt>
+								<dd>
+									<a href="#">유형별</a>
+									<ul>
+										<c:set var="systemTp" value="${sessionScope.systemTp}"/>
+										<c:forEach var="type" items="${resource}" varStatus="stat">
+											<c:set var="choice" value="false" />
+											<c:if test="${fn:length(systemTp) > 0}">
+												<c:forEach var="selType" items="${systemTp}">
+													<c:if test="${type.value.code eq selType}">
+														<c:set var="choice" value="true" />
+													</c:if>
+												</c:forEach>
+											</c:if>
 											<li>
-												<a href="#" class="group-title">${loc.value.name.kr}</a>
-												<ul>
-													<c:forEach var="country" items="${loc.value.locations}" varStatus="countryStat">
-														<c:set var="choice" value="false" />
-														<c:if test="${fn:length(systemLoc) > 0}">
-															<c:forEach var="selLoc" items="${systemLoc}">
-																<c:if test="${country.value.code eq selLoc}">
-																	<c:set var="choice" value="true" />
-																</c:if>
-															</c:forEach>
-														</c:if>
-														<li>
-															<input type="checkbox" name="systemLoc" id="lo${countryStat.index}" value="${country.value.code}" <c:if test="${choice eq 'true'}">checked</c:if>>
-															<label for="lo${countryStat.index}" <c:if test="${choice eq 'true'}">class="on"</c:if>>${country.value.name.kr}</label>
-														</li>
-													</c:forEach>
-												</ul>
+												<input type="checkbox" name="systemType" id="tp${stat.index}" value="${type.value.code}" <c:if test="${choice eq 'true'}">checked</c:if>>
+												<label for="tp${stat.index}" <c:if test="${choice eq 'true'}">class="on"</c:if>>${type.value.name.kr}</label>
 											</li>
-										</c:if>
-									</c:forEach>
-								</ul>
-							</dd>
-						</dl>
-					</li>
-					<li class="lo-type type">
-						<dl>
-							<dt></dt>
-							<dd>
-								<a href="#">유형별</a>
-								<ul>
-									<c:set var="systemTp" value="${sessionScope.systemTp}"/>
-									<c:forEach var="type" items="${resource}" varStatus="stat">
-										<c:set var="choice" value="false" />
-										<c:if test="${fn:length(systemTp) > 0}">
-											<c:forEach var="selType" items="${systemTp}">
-												<c:if test="${type.value.code eq selType}">
-													<c:set var="choice" value="true" />
-												</c:if>
-											</c:forEach>
-										</c:if>
-										<li>
-											<input type="checkbox" name="systemType" id="tp${stat.index}" value="${type.value.code}" <c:if test="${choice eq 'true'}">checked</c:if>>
-											<label for="tp${stat.index}" <c:if test="${choice eq 'true'}">class="on"</c:if>>${type.value.name.kr}</label>
-										</li>
-									</c:forEach>
-								</ul>
-							</dd>
-						</dl>
-					</li>
-				</ul>
-				<div class="menu_btm_bx">
+										</c:forEach>
+									</ul>
+								</dd>
+							</dl>
+						</li>
+					</ul>
+				</div>
+
+				<div class="menu-btn-wrapper">
 					<button type="button" class="btn_type03" id="systemInit">초기화</button><!--
 					--><button type="button" class="btn_type ml-12" id="systemApply">적용</button>
 				</div>
@@ -506,6 +509,8 @@
 			</div>
 		</form>
 	</div>
+
+
 	<ul class="nav_right">
 		<c:choose>
 			<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">

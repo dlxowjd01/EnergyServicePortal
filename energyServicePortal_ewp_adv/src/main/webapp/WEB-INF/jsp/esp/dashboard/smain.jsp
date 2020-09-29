@@ -15,6 +15,7 @@
 	</div>
 
 	<%--
+	--%>
 	<div class="row content-wrapper">
 		<div class="col-12">
 			<div class="flex_start">
@@ -22,14 +23,14 @@
 					<!-- <button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="2" disabled>태양광 대시보드 #2<span class="caret"></span></button> -->
 					<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="1" disabled>사이트 대시보드 #1<span class="caret"></span></button>
 					<ul id="viewOptList" class="dropdown-menu">
-						<li data-value="1"><a href="#" tabindex="-1">사이트 대시보드 #1</a></li>
-						<li data-value="2"><a href="#" tabindex="-1">태양광 대시보드 #2</a></li>
+						<li data-value="1" data-name="사이트 대시보드 #1"><a href="#" tabindex="-1">사이트 대시보드 #1</a></li>
+						<li data-value="2" data-name="태양광 대시보드 #1"><a href="#" tabindex="-1">태양광 대시보드 #2</a></li>
 					</ul>
 				</div>
 			</div>
 		</div>
 	</div>
-	--%>
+
 
 	<div id="defaultDashboard" class="row">
 		<div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
@@ -378,6 +379,8 @@
 	</div>
 
 	<%--
+	--%>
+
 	<div id="solarDashboard" class="hidden">
 		<div class="row">
 			<div class="col-xl-2 col-lg-2 col-md-3 col-sm-4">
@@ -429,7 +432,7 @@
 			<div class="col-xl-4 col-lg-7 col-md-6 col-sm-12">
 				<div class="indiv">
 					<h2 class="ntit">인버터별 출력 현황</h2>
-					<div id="hourlySolarChart"></div>
+					<div id="hourlyINVChart"></div>
 				</div>
 			</div>
 
@@ -438,31 +441,28 @@
 					<div class="gtbl_top clear">
 						<h2 class="tx_tit">인버터 상태</h2>
 					</div>
-					<div id="hourlySolarChart">
-						<ul class="type_list" id="typeList">
-							<li class="[type]">
-								<div class="chart_top clear">
-									<h2 class="ntit">[name] (<span>0</span>)</h2>
-									<div class="alert_icon fr">
-										<span class="inv_normal">정상 (<span>0</span>)</span>
-										<span class="inv_error">트립 (<span>0</span>)</span>
-										<span class="inv_alert">중지 (<span>0</span>)</span>
+					<ul class="inverter_list" id="inverterList">
+						<li class="[type]">
+							<div class="chart_top clear">
+								<h2 class="ntit">[name] (<span>0</span>)</h2>
+								<div class="alert_icon fr">
+									<span class="inv_normal">정상 (<span>0</span>)</span>
+									<span class="inv_error">트립 (<span>0</span>)</span>
+									<span class="inv_alert">중지 (<span>0</span>)</span>
+								</div>
+							</div>
+							<div class="type_list_detail">
+								<div class="tbl_type">
+									[head]
+								</div>
+								<div class="gtbl_wrap type">
+									<div class="intable">
+										[body]
 									</div>
 								</div>
-								<div class="type_list_detail">
-									<div class="tbl_type">
-										[head]
-									</div>
-									<div class="gtbl_wrap type">
-										<div class="intable">
-											[body]
-										</div>
-									</div>
-								</div>
-							</li>
-						</ul>
-						
-					</div>
+							</div>
+						</li>
+					</ul>
 				</div>
 			</div>
 
@@ -536,23 +536,138 @@
 				<div class="indiv">
 					<h2 class="ntit">일별 발전량</h2>
 					<div id="dailySolarChart"></div>
+					<div id="dailySolarTrendChart"></div>
 				</div>
 			</div>
 		</div>
 	</div>
-	--%>
 
 </div>
+<script type="text/javascript" src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
+	$(function () {
+		let viewOptList = $('#viewOptList');
+		let switchFlag = false;
+		let refreshMinInterval = setInterval(getMinuteData, 60 * 1000);
+		let refreshQuarterInterval = setInterval(getQuarterData, 15 * 60 * 1000);
+
+		// let today = new Date().format('yyyy-MM-dd HH:mm:ss');
+
+		$('input[name="keyword"]').on('keyup', function(e) {
+			if (e.which == '13') {
+				getDvcInfo();
+			}
+		});
+
+		if(!isEmpty(sList[0].devices) && sList[0].devices.length>0){
+			let dList = sList[0].devices;
+			for(let i=0, arrLength = dList.length; i<arrLength; i++){
+				if(dList[i].device_type == "INV_PV"){
+					viewOptList.prev().prop("disabled", false);
+					break;
+				}
+			};
+		} else {
+			viewOptList.prev().prop("disabled", true);
+		}
+
+
+		if(viewOptList.prev().data("value") == "2"){
+			// $("#currentTimeB").text(today);
+			$('#defaultDashboard').addClass("hidden");
+			$('#solarDashboard').removeClass("hidden");
+			setInitList('inverterList');
+		} else {
+			$('#defaultDashboard').removeClass("hidden");
+			$('#solarDashboard').addClass("hidden");
+			setInitList('typeList');
+			setInitList('alarmNotice');
+		}
+
+
+		if (!isEmpty(siteList)) {
+			siteList.forEach(site => {
+				if (isEmpty(site.cctv)) {
+					$('#cctv').addClass('hidden');
+				} else {
+					$('#cctv').attr('href', site.cctv);
+				}
+			});
+		}
+
+
+		getDvcProperties();
+		getWeatherData();
+		getNowEnergy();
+
+		getMinuteData();
+		getQuarterData();
+
+		Highcharts.setOptions({
+			lang : {
+				resetZoom : '확대/축소 초기화'
+			}
+		});
+
+		viewOptList.find('li').on('click', function(){
+			let val = $(this).data("value");
+			let name = $(this).data("name");
+
+			if(switchFlag == false) {
+				if(viewOptList.prev().text() != name) {
+					if(val == "1"){
+						$('#defaultDashboard').removeClass("hidden");
+						$('#solarDashboard').addClass("hidden");
+					} else {
+						// $("#currentTimeB").text(today);
+						getMinuteData(val);
+						getQuarterData(val);
+						getWeatherData(val);
+						setInitList('inverterList');
+						$('#defaultDashboard').addClass("hidden");
+						$('#solarDashboard').removeClass("hidden");
+					}
+				}
+
+			} else {
+				console.log("btnText2===", viewOptList.prev().text(), "name===", name);
+				if(viewOptList.prev().text() != name) {
+					if(val == "1"){
+						$('#defaultDashboard').removeClass("hidden");
+						$('#solarDashboard').addClass("hidden");
+					} else {
+						// $("#currentTimeB").text(today);
+						getMinuteData(val);
+						getQuarterData(val);
+						getWeatherData(val);
+						setInitList('inverterList');
+						$('#defaultDashboard').addClass("hidden");
+						$('#solarDashboard').removeClass("hidden");
+					}
+					clearInterval(refreshMinInterval);
+					clearInterval(refreshQuarterInterval);
+					setTimeout(function(){
+						refreshMinInterval = setInterval(getMinuteData, 60 * 1000);
+						refreshQuarterInterval = setInterval(getQuarterData, 15 * 60 * 1000);
+					}, 300);
+				}
+			}
+			switchFlag = true;
+			viewOptList.prev().data("value", val);
+		});
+
+	});
+
 	const siteId = '${sid}';
 	const siteList = JSON.parse('${siteList}');
 	const apiEnergySite = '/energy/sites';
 	const apiEnergyNowSite = '/energy/now/sites';
+	const apiEnergyDvc = '/energy/devices';
 	const apiWeather = '/weather/site';
 	const apiForecastingSite = '/energy/forecasting/sites';
 	const apiStatusRawSite = '/status/raw/site';
 	const apiStatusRaw = '/status/raw';
-	const apiConfigDeivce = '​/config/devices';
+	const apiConfigDevice = '​/config/devices';
 	const apiGetDvcProperties = '/config/view/device_properties';
 	const featureProperties = new Object();
 	const featurePropertiesSub = new Object();
@@ -698,7 +813,7 @@
 			title: {
 				text: null
 			},
-			categories: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+			categories: num12List,
 			crosshair: true
 		}],
 		yAxis: [
@@ -924,15 +1039,37 @@
 		}
 	});
 
-<%--
+
+	var num12List = [];
+	var num24List = [];
+	var num31List = [];
+
+	for(let i=0; i<12; i++){
+		num12List.push(String(i+1));
+	}
+	for(let i=0; i<24; i++){
+		num24List.push(String(i+1));
+	}
+	for(let i=0; i<31; i++){
+		num31List.push(String(i+1));
+	}
+
 	var dailySolarChart = Highcharts.chart('dailySolarChart', {
 		chart: {
-			marginTop: 40,
-			marginLeft: 50,
-			marginRight: 50,
+			marginTop: 80,
+			marginLeft: 0,
+			marginRight: 60,
 			height: 280,
 			backgroundColor: 'transparent',
-			zoomType: 'xy'
+			zoomType: 'xy',
+			events: {
+				selection: function(e) {
+					// if (mouseMovedBy < 0) {
+					// 	e.target.xAxis[0].setExtremes();
+					// 	return false;
+					// }
+				}
+			}
 		},
 		navigation: {
 			buttonOptions: {
@@ -965,11 +1102,13 @@
 			title: {
 				text: null
 			},
-			categories: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+			categories: num12List,
+			// categories: num31List,
 			crosshair: true
 		}],
 		yAxis: [
 			{
+				opposite: true,
 				lineColor: 'var(--white60)',
 				tickColor: 'var(--white60)',
 				gridLineColor: 'var(--white25)',
@@ -980,32 +1119,25 @@
 						width: 1
 					}
 				],
-				gridLineWidth: 1,
+				// offset: -40,
 				title: {
 					text: 'kWh',
 					align: 'low',
 					rotation: 0,
-					y: 25,
-					x: 15,
+					y: 30,
+					x: -13,
 					style: {
-						color: 'var(--white)',
-						fontSize: '12px'
+						color: 'var(--grey)',
+						fontSize: '12px',
 					}
 				},
 				labels: {
-					formatter: function () {
-						if (String(this.value).length  >= 7) {
-							return numberComma(this.value / 1000000) + ' GWh';
-						} else if (String(this.value).length  >= 5) {
-							return numberComma(this.value / 1000) + ' MWh';
-						} else {
-							return this.value + ' kWh';
-						}
-					},
+					// y: -8,
+					overflow: 'justify',
 					style: {
 						color: 'var(--grey)',
-						fontSize: '12px'
-					}
+						fontSize: '12px',
+					},
 				}
 			},
 		],
@@ -1032,10 +1164,10 @@
 			itemHoverStyle: {
 				color: ''
 			},
-			symbolPadding: 3,
-			symbolHeight: 7
+			symbolPadding: 0,
+			symbolHeight: 7,
+			lineHeight: 12
 		},
-
 		plotOptions: {
 			series: {
 				label: {
@@ -1046,7 +1178,7 @@
 			},
 			line: {
 				marker: {
-					enabled: false
+					enabled: true
 				}
 			},
 			column: {
@@ -1059,61 +1191,236 @@
 		responsive: {
 			rules: [{
 				condition: {
-					minWidth: 870
+					minWidth: 787
 				},
 				chartOptions: {
-					chart: {
-						marginTop: 50,
-						marginLeft: 75,
-						marginRight: 75
-					},
 					xAxis: {
 						labels: {
 							style: {
-								fontSize: '18px'
+								fontSize: '12px'
 							}
 						}
 					},
 					yAxis: [{
 						title: {
-							y: 30,
-							x: 20,
 							style: {
-								fontSize: '18px'
+								fontSize: '12px'
 							}
 						},
 						labels: {
 							style: {
-								fontSize: '18px'
+								fontSize: '12px'
 							}
 						}
 					},
-						{
-							title: {
-								y: 30,
-								x: -15,
-								style: {
-									fontSize: '18px'
-								}
-							},
-							labels: {
-								style: {
-									fontSize: '18px'
-								}
+					{
+						title: {
+							style: {
+								fontSize: '12px'
 							}
-						}],
-					legend: {
-						itemStyle: {
-							fontSize: '18px'
 						},
-						symbolPadding: 5,
-						symbolHeight: 10
-					}
+						labels: {
+							style: {
+								fontSize: '12px'
+							}
+						}
+					}],
 				}
 			}]
 		}
 	});
---%>
+
+	var dailySolarTrendChart = Highcharts.chart('dailySolarTrendChart', {
+		chart: {
+			// marginTop: 70,
+			// marginLeft: 0,
+			// marginRight: 20,
+			marginTop: 0,
+			marginLeft: 0,
+			marginRight: 60,
+			height: 120,
+			backgroundColor: 'transparent',
+			zoomType: 'xy',
+			// resetZoom: '확대/축소 초기화'
+			// type: 'line'
+		},
+		navigation: {
+			buttonOptions: {
+				enabled: false
+			}
+		},
+		title: {
+			text: ''
+		},
+		subtitle: {
+			text: ''
+		},
+		xAxis: [{
+			lineColor: 'var(--white60)',
+			tickColor: 'var(--white60)',
+			gridLineColor: 'var(--white25)',
+			plotLines: [{
+				color: 'var(--white60)',
+				width: 1
+			}],
+			labels: {
+				align: 'center',
+				y: 27,
+				style: {
+					color: 'var(--grey)',
+					fontSize: '12px'
+				}
+			},
+			tickInterval: 1,
+			title: {
+				text: null
+			},
+			categories: num31List,
+			// categories: num31List,
+			crosshair: true
+		}],
+		yAxis: {
+				visible: false,
+				// lineColor: 'var(--white60)',
+				// tickColor: 'var(--white60)',
+				// gridLineColor: 'var(--white25)',
+				// gridLineWidth: 1,
+				// plotLines: [
+				// 	{
+				// 		color: 'var(--white60)',
+				// 		width: 1
+				// 	}
+				// ],
+				// // offset: -40,
+				// title: {
+				// 	text: 'kWh',
+				// 	align: 'low',
+				// 	rotation: 0,
+				// 	y: 30,
+				// 	x: -13,
+				// 	style: {
+				// 		// color: 'var(--white60)',
+				// 		color: 'var(--alarm)',
+				// 		fontSize: '12px'
+				// 	}
+				// },
+				// labels: {
+				// 	// y: -8,
+				// 	overflow: 'justify',
+				// 	style: {
+				// 		color: 'var(--grey)',
+				// 		fontSize: '12px'
+				// 	}
+				// }
+			},
+		
+		tooltip: {
+			// shared: true,
+			shared: false,
+			borderColor: 'none',
+			backgroundColor: 'var(--bg-color)',
+			padding: 16,
+			style: {
+				color: 'var(--white)'
+			},
+			valueSuffix: ' kwh',
+		},
+		legend: {
+			enabled: false,
+			// enabled: true,
+			// align: 'right',
+			// verticalAlign: 'top',
+			// x: -10,
+			// y: -10,
+			// itemStyle: {
+			// 	color: 'var(--grey)',
+			// 	fontSize: '12px',
+			// 	fontWeight: 400
+			// },
+			// itemHoverStyle: {
+			// 	color: ''
+			// },
+			// symbolPadding: 0,
+			// symbolHeight: 7,
+			// lineHeight: 12
+		},
+		plotOptions: {
+			// cursor: 'pointer',
+			series: {
+				label: {
+					connectorAllowed: false
+				},
+				// !!!!!!!!!!!!!!!!IMPORTANT
+				borderColor: 'var(--grey)',
+				borderWidth: 0
+			},
+			borderColor: 'var(--grey)',
+			borderWidth: 0,
+			// series: {
+			// 	label: {
+			// 		connectorAllowed: false
+			// 	},
+			// 	borderColor: 'var(--grey)',
+			// 	borderWidth: 0
+			// },
+			marker: {
+                lineWidth: 1
+            }
+		},
+		credits: {
+			enabled: false
+		},
+		responsive: {
+			rules: [
+				{
+					condition: {
+						minWidth: 787
+					},
+					chartOptions: {
+						xAxis: {
+							labels: {
+								style: {
+									fontSize: '12px'
+								}
+							}
+						},
+						yAxis: [{
+							title: {
+								style: {
+									fontSize: '12px'
+								}
+							},
+							labels: {
+								style: {
+									fontSize: '12px'
+								}
+							}
+						},
+						{
+							title: {
+								style: {
+									fontSize: '12px'
+								}
+							},
+							labels: {
+								style: {
+									fontSize: '12px'
+								}
+							}
+						}],
+					}
+				},
+				{
+					condition: {
+						minWidth: 991
+					},
+					chartOptions: {
+						marginRight: 30,
+					}
+				}
+			]
+		}
+	});
 
 	var hourlyChart = Highcharts.chart('hourlyChart', {
 		chart: {
@@ -1155,10 +1462,7 @@
 			title: {
 				text: null
 			},
-			categories: [
-				'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
-				'13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24'
-			],
+			categories: num24List,
 			crosshair: true
 		},
 		yAxis: {
@@ -1305,13 +1609,13 @@
 		}
 	});
 
-	<%--
+
 	var hourlySolarChart = Highcharts.chart('hourlySolarChart', {
 		chart: {
-			marginTop: 40,
-			marginLeft: 50,
-			marginRight: 0,
-			height: 301,
+			marginTop: 80,
+			marginLeft: 0,
+			marginRight: 60,
+			height: 320,
 			backgroundColor: 'transparent',
 			zoomType: 'xy',
 			// events: {
@@ -1357,14 +1661,12 @@
 			title: {
 				text: null
 			},
-			categories: [
-				'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
-				'13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24'
-			],
+			categories: num24List,
 			crosshair: true
 		},
 		yAxis: [
 			{
+				opposite: true,
 				lineColor: 'var(--white60)',
 				tickColor: 'var(--white60)',
 				gridLineColor: 'var(--white25)',
@@ -1378,8 +1680,8 @@
 					text: 'kWh',
 					align: 'low',
 					rotation: 0,
-					y: 25,
-					x: 10,
+					y: 30,
+					x: -13,
 					style: {
 						color: 'var(--grey)',
 						fontSize: '12px'
@@ -1509,118 +1811,208 @@
 				}
 			}]
 		},
-	    // lang: {
-		// 	noData: "데이터가 없습니다."
-		// },
-		// noData: {
-		// 	style: {
-		// 		fontSize: '12px',
-		// 		color: 'var(--white87)'
-		// 	}
-		// }
-	
 	});
---%>
 
-	$(function () {
-		let viewOptList = $('#viewOptList');
-		let switchFlag = false;
-		let refreshMinInterval = setInterval(getMinuteData, 60 * 1000);
-		let refreshQuarterInterval = setInterval(getQuarterData, 15 * 60 * 1000);
 
-		// let today = new Date().format('yyyy-MM-dd HH:mm:ss');
-
-		$('input[name="keyword"]').on('keyup', function(e) {
-			if (e.which == '13') {
-				deviceInfoList();
+	var hourlyINVChart = Highcharts.chart('hourlyINVChart', {
+		chart: {
+			marginTop: 40,
+			marginLeft: 0,
+			marginRight: 60,
+			height: 320,
+			backgroundColor: 'transparent',
+			zoomType: 'xy',
+			lang: {
+				noData: "데이터가 없습니다."
+			},
+			noData: {
+				style: {
+					fontSize: '12px',
+					color: 'var(--white87)'
+				}
 			}
-		});
-
-		if(!isEmpty(sList[0].devices) && sList[0].devices.length>0){
-			let dList = sList[0].devices;
-			for(let i=0, arrLength = dList.length; i<arrLength; i++){
-				if(dList[i].device_type == "INV_PV"){
-					viewOptList.prev().prop("disabled", false);
-					break;
+		},
+		navigation: {
+			buttonOptions: {
+				enabled: false
+			}
+		},
+		title: {
+			text: ''
+		},
+		subtitle: {
+			text: ''
+		},
+		xAxis: {
+			lineColor: 'var(--white60)',
+			tickColor: 'var(--white60)',
+			gridLineColor: 'var(--white25)',
+			plotLines: [{
+				color: 'var(--white60)',
+				width: 1
+			}],
+			labels: {
+				align: 'center',
+				y: 27,
+				style: {
+					color: 'var(--grey)',
+					fontSize: '12px'
 				}
-			};
-		} else {
-			viewOptList.prev().prop("disabled", true);
-		}
-
-
-		// if(viewOptList.prev().data("value") == "1"){
-		// 	$('#defaultDashboard').removeClass("hidden");
-		// 	$('#solarDashboard').addClass("hidden");
-		// } else {
-		// 	// $("#currentTimeB").text(today);
-		// 	$('#defaultDashboard').addClass("hidden");
-		// 	$('#solarDashboard').removeClass("hidden");
-		// }
-
-		setInitList('alarmNotice'); //알람 공지 세팅
-		setInitList('typeList'); //설비 리스트 세팅
-
-		if (!isEmpty(siteList)) {
-			siteList.forEach(site => {
-				if (isEmpty(site.cctv)) {
-					$('#cctv').addClass('hidden');
-				} else {
-					$('#cctv').attr('href', site.cctv);
+			},
+			tickInterval: 1,
+			title: {
+				text: null
+			},
+			categories: num24List,
+			crosshair: true
+		},
+		yAxis: [
+			{
+				opposite: true,
+				lineColor: 'var(--white60)',
+				tickColor: 'var(--white60)',
+				gridLineColor: 'var(--white25)',
+				plotLines: [{
+					color: 'var(--white60)',
+					width: 1
+				}],
+				gridLineWidth: 1,
+				min: 0,
+				title: {
+					text: 'kWh',
+					align: 'low',
+					rotation: 0,
+					y: 30,
+					x: -13,
+					style: {
+						color: 'var(--grey)',
+						fontSize: '12px'
+					}
+				},
+				labels: {
+					style: {
+						color: 'var(--grey)',
+						fontSize: '12px'
+					}
 				}
-			});
-		}
-
-		getDvcProperties();
-		getWeatherData();
-		getNowEnergy();
-
-		getMinuteData();
-		getQuarterData();
-
-
-		// viewOptList.find('li').on('click', function(){
-		// 	let val = $(this).data("value");
-
-		// 	if(switchFlag == false) {
-		// 		if(viewOptList.prev().data("value") != val) {
-		// 			if(val == "1"){
-		// 				$('#defaultDashboard').removeClass("hidden");
-		// 				$('#solarDashboard').addClass("hidden");
-		// 			} else {
-		// 				// $("#currentTimeB").text(today);
-		// 				getMinuteData(val);
-		// 				getQuarterData(val);
-		// 				getWeatherData(val);
-		// 				$('#defaultDashboard').addClass("hidden");
-		// 				$('#solarDashboard').removeClass("hidden");
-		// 			}
-		// 		}
-
-		// 	} else {
-		// 		if(viewOptList.prev().data("value") != val) {
-		// 			if(val == "1"){
-		// 				$('#defaultDashboard').removeClass("hidden");
-		// 				$('#solarDashboard').addClass("hidden");
-		// 			} else {
-		// 				// $("#currentTimeB").text(today);
-		// 				getMinuteData(val);
-		// 				getQuarterData(val);
-		// 				getWeatherData(val);
-		// 				$('#defaultDashboard').addClass("hidden");
-		// 				$('#solarDashboard').removeClass("hidden");
-		// 			}
-		// 			clearInterval(refreshMinInterval);
-		// 			clearInterval(refreshQuarterInterval);
-		// 			setTimeout(function(){
-		// 				refreshMinInterval = setInterval(getMinuteData, 60 * 1000);
-		// 				refreshQuarterInterval = setInterval(getQuarterData, 15 * 60 * 1000);
-		// 			}, 300);
-		// 		}
-		// 	}
-		// 	switchFlag = true;
-		// 	viewOptList.prev().data("value", val);
-		// });
+			},
+			{
+				lineColor: 'var(--white60)',
+				tickColor: 'var(--white60)',
+				gridLineColor: 'var(--white25)',
+				gridLineWidth: 1,
+				plotLines: [
+					{
+						color: 'var(--white60)',
+						width: 1
+					}
+				],
+				gridLineWidth: 1,
+				title: {
+					text: 'kWh',
+					align: 'low',
+					rotation: 0,
+					y: 25,
+					x: -12,
+					style: {
+						color: 'var(--white)',
+						fontSize: '12px'
+					}
+				},
+				labels: {
+					style: {
+						color: 'var(--grey)',
+						fontSize: '12px'
+					}
+				},
+				opposite: true
+			}
+		],
+		tooltip: {
+			shared: true,
+			borderColor: 'none',
+			backgroundColor: 'var(--bg-color)',
+			padding: 16,
+			valueSuffix: 'kWh',
+			style: {
+				color: 'var(--white87)'
+			}
+		},
+		legend: {
+			enabled: true,
+			align: 'right',
+			verticalAlign: 'top',
+			x: 5,
+			y: -10,
+			itemStyle: {
+				color: 'var(--grey)',
+				fontSize: '12px',
+				fontWeight: 400
+			},
+			itemHoverStyle: {
+				color: ''
+			},
+			symbolPadding: 3,
+			symbolHeight: 7
+		},
+		plotOptions: {
+			series: {
+				label: {
+					connectorAllowed: false
+				},
+				borderColor: 'var(--grey)',
+				borderWidth: 0
+			},
+			line: {
+				marker: {
+					enabled: false
+				}
+			},
+			column: {
+				// stacking: 'normal'
+			}
+		},
+		credits: {
+			enabled: false
+		},
+		responsive: {
+			rules: [{
+				condition: {
+					minWidth: 870
+				},
+				chartOptions: {
+					chart: {
+						marginLeft: 75
+					},
+					xAxis: {
+						labels: {
+							style: {
+								fontSize: '18px'
+							}
+						}
+					},
+					yAxis: {
+						title: {
+							style: {
+								fontSize: '18px'
+							}
+						},
+						labels: {
+							style: {
+								fontSize: '18px'
+							}
+						}
+					},
+					legend: {
+						itemStyle: {
+							fontSize: '18px'
+						},
+						symbolPadding: 5,
+						symbolHeight: 10
+					}
+				}
+			}]
+		},
 
 	});
 
@@ -1645,7 +2037,6 @@
 			}
 		}
 		let weekWeatherTime = new Object();
-
 
 		if (oid.match('testkpx')) {
 			let did = '';
@@ -1839,21 +2230,21 @@
 			});
 
 		}
-	
 	}
 
 	function getMinuteData(option) {
 		if(isEmpty(option)){
-			getAlarmInfo(); //금일발생오류
-			getTodayTotal(); //현재 출력
-			todayGeneration(); //금일 발전현황
+			getAlarmInfo();
+			getTodayTotal();
+			todayGeneration();
 			if (!first) {
-				deviceInfoList();
-				todayGeneration(); //금일 발전현황
+				getDvcInfo();
+				todayGeneration();
 			}
 		} else {
 			getTodayTotal("solarDashboard");
-			todayGeneration("solarDashboard"); //금일 발전현황
+			todayGeneration("solarDashboard");
+			getDvcInfo("solarDashboard");
 		}
 	}
 
@@ -1871,7 +2262,7 @@
 		if ($selectId == 'chartType') {
 			chargeChartPoll();
 		} else if ($selectId == 'statusDevice') {
-			deviceInfoList();
+			getDvcInfo();
 		}
 	}
 
@@ -2001,7 +2392,7 @@
 			// alert('처리 중 오류가 발생했습니다.');
 			return false;
 		}).always(function(jqXHR, textStatus) {
-			deviceInfoList();
+			getDvcInfo();
 			first = false;
 		});
 	};
@@ -2035,12 +2426,12 @@
 				searchBoolean = false;
 			}
 		}
-
 		return searchBoolean;
 	}
 
-	function deviceInfoList() {
+	function getDvcInfo(option) {
 		let deviceArray = new Array();
+
 		if (!isEmpty(siteList[0].devices)) {
 			siteList[0].devices.forEach(el => {
 				deviceArray.push(el.did);
@@ -2056,171 +2447,433 @@
 					dids: deviceArray.toString()
 				}
 			}).done(function (data, textStatus, jqXHR) {
-				let deviceType = new Array();
-				$.map(data, function(val, key) {
-					if ($.inArray(val.device_type, deviceType) === -1) {
-						if (val.device_type == 'SM_MANUAL') return false;
-						deviceType.push(val.device_type);
-					}
-				});
-
-				deviceType.sort();
-				$.each(deviceType, function (i, el) {
-					if (el == 'SM_MANUAL') return false;
-					deviceType[i] = {
-						name: featurePropertiesSub[el].name,
-						type: el,
-						head: featureProperties[el].prop,
-						body: {
-							type: el,
-							prop: featurePropertiesSub[el].prop
-						}
-					}
-				});
-
-				setMakeList(deviceType, 'typeList', {'dataFunction': {'head': makeHeadTable, 'body': makeBodyTable}});
-
-				$.each(deviceType, function (i, el) {
-					let deviceType = el.type, operationNormal = 0,
-						operationError = 0, operationAlert = 0,
-						headerDataObject = new Object();
-					if (el.type == 'SM_MANUAL') return false;
-					setInitList('table_' + deviceType);
-
-					let tableArray = new Array();
-
+				let devLength = data.length;
+				if (!isEmpty(option)){
+					let inverterArray = new Array();
 					$.map(data, function(val, key) {
-						let dname = val.dname;
-						if (val.device_type == deviceType) {
-							let rowData = val.data;
-							if(!isEmpty(rowData)) {
-								let operation = rowData[0]['operation'];
-								if(operation == '1') {
-									operationNormal++;
-								} else if(operation == '2') {
-									operationError++;
-								} else {
-									operationAlert++;
+						if ( val.device_type == "INV_PV"){
+
+							const formData = getSiteMainSchCollection('day');
+
+							let hourlyINV = {
+								url: apiHost + apiEnergyDvc,
+								type: 'get',
+								dataType: 'json',
+								data: {
+									dids: val.did,
+									startTime: formData.startTime,
+									endTime: formData.endTime,
+									interval: 'hour'
+								}
+							}
+
+							if ( $.inArray(val.device_type, inverterArray) === -1){
+								inverterArray.push(val.device_type);
+							}
+
+							$.ajax(hourlyINV).done(function (json, textStatus, jqXHR) {
+								let result = flattenObject(json.data);
+								let temp = Object.entries(result)[0][1];
+								
+								if(temp.items.length>0){
+									let hourList = [];
+									let colorArr = [
+										"var(--powder-blue)",
+										"var(--turquoise)",
+										"var(--teal)",
+										"var(--light-blue)",
+										"var(--blueberry)",
+										"var(--royal-blue)",
+									];
+									if(!isEmpty(hourlyINVChart.series.length>0)){
+										hourlyINVChart.series.length = 0;
+									}
+									
+									// let suffixArr = [];
+									// let suffix = "";
+									for(let i=0, arrLength = temp.items.length; i<arrLength; i++){
+										// let l = String(temp.items[i].energy).length;
+										console.log("temp===", temp.items[i].energy)
+										// if(l<=3){
+										// 	hourList.push(temp.items[i].energy);
+										// 	suffixArr.push("Wh");
+										// } else if(l>3 && l<=6){
+											let tempData = parseFloat((temp.items[i].energy / 1000).toFixed(2));
+											hourList.push(tempData);
+											// console.log("tempData===", tempData)
+											// suffixArr.push("kWh");
+										// }
+									}
+									// if(suffixArr.indexOf("kWh") > -1){
+									// 	suffix = "wh"
+									// } else {
+									// 	suffix = "kWh"	
+									// }
+
+									hourlyINVChart.addSeries({
+										name: val.dname,
+										type: 'column',
+										color: colorArr[devLength-1],
+										tooltip: {
+											valueSuffix: "kWh"
+										},
+										marker: {
+											symbol: "circle"
+										},
+										data: hourList,
+										// plotOptions: {
+										// 	pointStart: 10,
+										// }
+									});
+
 								}
 
-								rowData[0]['dname'] = dname;
+							}).fail(function (jqXHR, textStatus, errorThrown) {
+								console.log("fail==", jqXHR)
+							});
+						}
+					});
 
-								$.map(featureProperties, function(val, key) {
-									let headerData = new Object();
-									if(!isEmpty(headerDataObject[key])) {
-										headerData = headerDataObject[key];
-									}
-									if (key == deviceType) {
-										$.each(val.prop, function(i, el) {
-											let value = rowData[0][el.key],
-												tmpObj = new Object();
-											if(isEmpty(headerData[el.key])) {
-												tmpObj['reducer'] = el.reducer;
-											} else {
-												tmpObj = headerData[el.key];
-											}
+					inverterArray.sort();
 
-											if(isEmpty(value)) {
-												value = '-';
-											} else {
-												if((el.suffix.match('W') || el.suffix.match('Wh')) && !el.suffix.match('W/㎡')) {
-													value = Number(value);
-												} else if(el.suffix.match('%') || el.suffix.match('℃') || el.suffix.match('W/㎡')) {
-													value = Number(value);
-												}
-											}
-
-											if(value == '-') {
-												if(!isEmpty(headerData[el.key])) {
-													tmpObj['cnt'] = Number(tmpObj['cnt']) + 1;
-												} else {
-													tmpObj['value'] = '-';
-													tmpObj['cnt'] = 1;
-												}
-											} else {
-												if(!isEmpty(headerData[el.key])) {
-													tmpObj['value'] = Number(value) + Number(tmpObj['value']);
-													tmpObj['cnt'] = Number(tmpObj['cnt']) + 1;
-												} else {
-													tmpObj['value'] = Number(value);
-													tmpObj['cnt'] = 1;
-												}
-
-												tmpObj['suffix'] = el.suffix;
-											}
-
-											headerData[el.key] = tmpObj;
-										});
-										headerDataObject[key] = headerData;
-									}
-								});
-
-								$.map(featurePropertiesSub, function(val, key) {
-									if (key == deviceType) {
-										$.each(val.prop, function(i, el) {
-											let value = rowData[0][el.key];
-
-											if(isEmpty(value)) {
-												rowData[0][el.key] = '-';
-											} else {
-												if((el.suffix.match('W') || el.suffix.match('Wh')) && !el.suffix.match('W/㎡')) {
-													let dummy = displayNumberFixedUnit(value, 'W', 'kW', 2);
-													rowData[0][el.key] = dummy[0];
-												} else if(el.suffix.match('%') || el.suffix.match('℃') || el.suffix.match('W/㎡')) {
-													rowData[0][el.key] = value.toFixed(2);
-												} else if(el.suffix.match('V')) {
-													rowData[0][el.key] = value.toFixed(2);
-												}
-											}
-										});
-									}
-								});
-
-								if (deviceSearch(dname, operation)) {
-									if(isEmpty(tableArray)) {
-										let rowData = val.data;
-										rowData[0]['dname'] = dname;
-										tableArray = rowData;
-									} else {
-										let rowData = val.data;
-										rowData[0]['dname'] = dname;
-										tableArray = tableArray.concat(rowData);
-									}
-								}
+					$.each(inverterArray, function (i, el) {
+						inverterArray[i] = {
+							name: featurePropertiesSub[el].name,
+							type: el,
+							head: featureProperties[el].prop,
+							body: {
+								type: el,
+								prop: featurePropertiesSub[el].prop
 							}
 						}
 					});
 
-					$.map(headerDataObject, function(el, device) {
-						let deviceType = device;
+					setMakeList(inverterArray, 'inverterList', {'dataFunction': {'head': makeHeadTable, 'body': makeBodyTable}});
 
-						$.map(el, function(element, key) {
-							let textValue = element.value,
-								suffix = element.suffix;
-							if(textValue != '-') {
-								if(element.reducer == 'avg') {
-									textValue =  textValue / element.cnt;
+					$.each(inverterArray, function (i, el) {
+						let deviceType = el.type;
+						let operationNormal = 0;
+						let operationError = 0;
+						let operationAlert = 0;
+						let headerDataObject = new Object();
+						let tableArray = new Array();
+						let tableName = 'table_' + deviceType;
+
+						setInitList(tableName);
+
+						$.map(data, function(val, key) {
+							let dname = val.dname;
+
+							if (val.device_type == deviceType) {
+								let rowData = val.data;
+								if(!isEmpty(rowData)) {
+									let operation = rowData[0]['operation'];
+									if(operation == '1') {
+										operationNormal++;
+									} else if(operation == '2') {
+										operationError++;
+									} else {
+										operationAlert++;
+									}
+
+									rowData[0]['dname'] = dname;
+
+									$.map(featureProperties, function(val, key) {
+										let headerData = new Object();
+										if(!isEmpty(headerDataObject[key])) {
+											headerData = headerDataObject[key];
+										}
+										if (key == deviceType) {
+											$.each(val.prop, function(i, el) {
+												let value = rowData[0][el.key],
+													tmpObj = new Object();
+												if(isEmpty(headerData[el.key])) {
+													tmpObj['reducer'] = el.reducer;
+												} else {
+													tmpObj = headerData[el.key];
+												}
+
+												if(isEmpty(value)) {
+													value = '-';
+												} else {
+													if((el.suffix.match('W') || el.suffix.match('Wh')) && !el.suffix.match('W/㎡')) {
+														value = Number(value);
+													} else if(el.suffix.match('%') || el.suffix.match('℃') || el.suffix.match('W/㎡')) {
+														value = Number(value);
+													}
+												}
+
+												if(value == '-') {
+													if(!isEmpty(headerData[el.key])) {
+														tmpObj['cnt'] = Number(tmpObj['cnt']) + 1;
+													} else {
+														tmpObj['value'] = '-';
+														tmpObj['cnt'] = 1;
+													}
+												} else {
+													if(!isEmpty(headerData[el.key])) {
+														tmpObj['value'] = Number(value) + Number(tmpObj['value']);
+														tmpObj['cnt'] = Number(tmpObj['cnt']) + 1;
+													} else {
+														tmpObj['value'] = Number(value);
+														tmpObj['cnt'] = 1;
+													}
+
+													tmpObj['suffix'] = el.suffix;
+												}
+
+												headerData[el.key] = tmpObj;
+											});
+											headerDataObject[key] = headerData;
+										}
+									});
+
+									$.map(featurePropertiesSub, function(val, key) {
+										if (key == deviceType) {
+											$.each(val.prop, function(i, el) {
+												let value = rowData[0][el.key];
+												if(isEmpty(value)) {
+													rowData[0][el.key] = '-';
+												} else {
+													if((el.suffix.match('W') || el.suffix.match('Wh')) && !el.suffix.match('W/㎡')) {
+														let dummy = displayNumberFixedUnit(value, 'W', 'kW', 2);
+														rowData[0][el.key] = dummy[0];
+													} else if(el.suffix.match('V')) {
+														console.log("rowData[0][el.key]===", rowData[0]);
+														rowData[0][el.key] = value
+														// rowData[0][el.key] = value.toFixed(2);
+													}
+												}
+											});
+										}
+									});
+
+									if (deviceSearch(dname, operation)) {
+										if(isEmpty(tableArray)) {
+											let rowData = val.data;
+											rowData[0]['dname'] = dname;
+											tableArray = rowData;
+										} else {
+											let rowData = val.data;
+											rowData[0]['dname'] = dname;
+											tableArray = tableArray.concat(rowData);
+										}
+									}
 								}
-
-								textValue = displayNumberFixedDecimal(textValue, suffix, 3, 2);
-
-								$('#typeList').find('.' + deviceType).find('.tbl_type td.' + key + ' span:nth-child(1)').html(textValue[0]);
-								if(suffix == 'W' || suffix == 'Wh' || suffix == 'V' || suffix == 'A') {
-									$('#typeList').find('.' + deviceType).find('.tbl_type td.' + key + ' span:nth-child(2)').html(textValue[1]);
-								}
-							} else {
-								$('#typeList').find('.' + deviceType).find('.tbl_type td.' + key + ' span:nth-child(1)').html(textValue);
 							}
-
 						});
+
+						let invEl = $('#inverterList .gtbl_wrap table');
+						let invItem = $('#inverterList .INV_PV');
+
+						$.map(headerDataObject, function(el, device) {
+							let deviceType = device;
+
+							$.map(el, function(element, key) {
+								let textValue = element.value,
+									suffix = element.suffix;
+								if(textValue != '-') {
+									if(element.reducer == 'avg') {
+										textValue =  textValue / element.cnt;
+									}
+
+									textValue = displayNumberFixedDecimal(textValue, suffix, 3, 2);
+
+									invItem.find('.tbl_type td.' + key + ' span:nth-child(1)').html(textValue[0]);
+									if(suffix == 'W' || suffix == 'Wh' || suffix == 'V' || suffix == 'A') {
+										invItem.find('.tbl_type td.' + key + ' span:nth-child(2)').html(textValue[1]);
+									}
+								} else {
+									invItem.find('.tbl_type td.' + key + ' span:nth-child(1)').html(textValue);
+								}
+
+							});
+						});
+						let deviceCnt = tableArray.length;
+						
+						invItem.find('.ntit span').html(deviceCnt);
+						invItem.find('.alert_icon .inv_normal span').html(operationNormal);
+						invItem.find('.alert_icon .inv_error span').html(operationError);
+						invItem.find('.alert_icon .inv_alert span').html(operationAlert);
+
+						setMakeList(tableArray, 'table_' + deviceType, {'dataFunction': {'operation': setOperation}}, invEl);
+
 					});
-					let deviceCnt = tableArray.length;
-					$('#typeList').find('.' + deviceType).find('.ntit span').html(deviceCnt);
-					$('#typeList').find('.' + deviceType).find('.alert_icon .inv_normal span').html(operationNormal);
-					$('#typeList').find('.' + deviceType).find('.alert_icon .inv_error span').html(operationError);
-					$('#typeList').find('.' + deviceType).find('.alert_icon .inv_alert span').html(operationAlert);
-					setMakeList(tableArray, 'table_' + deviceType, {'dataFunction': {'operation': setOperation}});
-				});
+
+				} else {
+					let deviceType = new Array();
+					$.map(data, function(val, key) {
+						if ($.inArray(val.device_type, deviceType) === -1) {
+							if (val.device_type == 'SM_MANUAL') return false;
+							deviceType.push(val.device_type);
+						}
+					});
+
+					deviceType.sort();
+
+					$.each(deviceType, function (i, el) {
+						if (el == 'SM_MANUAL') return false;
+						deviceType[i] = {
+							name: featurePropertiesSub[el].name,
+							type: el,
+							head: featureProperties[el].prop,
+							body: {
+								type: el,
+								prop: featurePropertiesSub[el].prop
+							}
+						}
+					});
+
+					setMakeList(deviceType, 'typeList', {'dataFunction': {'head': makeHeadTable, 'body': makeBodyTable}});
+					
+					$.each(deviceType, function (i, el) {
+						let deviceType = el.type,
+							operationNormal = 0,
+							operationError = 0,
+							operationAlert = 0,
+							headerDataObject = new Object();
+							
+						if (el.type == 'SM_MANUAL') return false;
+						setInitList('table_' + deviceType);
+	
+						let tableArray = new Array();
+
+						$.map(data, function(val, key) {
+							let dname = val.dname;
+							if (val.device_type == deviceType) {
+								let rowData = val.data;
+								if(!isEmpty(rowData)) {
+									let operation = rowData[0]['operation'];
+									if(operation == '1') {
+										operationNormal++;
+									} else if(operation == '2') {
+										operationError++;
+									} else {
+										operationAlert++;
+									}
+
+									rowData[0]['dname'] = dname;
+
+									$.map(featureProperties, function(val, key) {
+										let headerData = new Object();
+										if(!isEmpty(headerDataObject[key])) {
+											headerData = headerDataObject[key];
+										}
+										if (key == deviceType) {
+											$.each(val.prop, function(i, el) {
+												let value = rowData[0][el.key],
+													tmpObj = new Object();
+												if(isEmpty(headerData[el.key])) {
+													tmpObj['reducer'] = el.reducer;
+												} else {
+													tmpObj = headerData[el.key];
+												}
+
+												if(isEmpty(value)) {
+													value = '-';
+												} else {
+													if((el.suffix.match('W') || el.suffix.match('Wh')) && !el.suffix.match('W/㎡')) {
+														value = Number(value);
+													} else if(el.suffix.match('%') || el.suffix.match('℃') || el.suffix.match('W/㎡')) {
+														value = Number(value);
+													}
+												}
+
+												if(value == '-') {
+													if(!isEmpty(headerData[el.key])) {
+														tmpObj['cnt'] = Number(tmpObj['cnt']) + 1;
+													} else {
+														tmpObj['value'] = '-';
+														tmpObj['cnt'] = 1;
+													}
+												} else {
+													if(!isEmpty(headerData[el.key])) {
+														tmpObj['value'] = Number(value) + Number(tmpObj['value']);
+														tmpObj['cnt'] = Number(tmpObj['cnt']) + 1;
+													} else {
+														tmpObj['value'] = Number(value);
+														tmpObj['cnt'] = 1;
+													}
+
+													tmpObj['suffix'] = el.suffix;
+												}
+
+												headerData[el.key] = tmpObj;
+											});
+											headerDataObject[key] = headerData;
+										}
+									});
+
+									$.map(featurePropertiesSub, function(val, key) {
+										if (key == deviceType) {
+											$.each(val.prop, function(i, el) {
+												let value = rowData[0][el.key];
+
+												if(isEmpty(value)) {
+													rowData[0][el.key] = '-';
+												} else {
+													if((el.suffix.match('W') || el.suffix.match('Wh')) && !el.suffix.match('W/㎡')) {
+														let dummy = displayNumberFixedUnit(value, 'W', 'kW', 2);
+														rowData[0][el.key] = dummy[0];
+													} else if(el.suffix.match('%') || el.suffix.match('℃') || el.suffix.match('W/㎡')) {
+														rowData[0][el.key] = value.toFixed(2);
+													} else if(el.suffix.match('V')) {
+														rowData[0][el.key] = value.toFixed(2);
+													}
+												}
+											});
+										}
+									});
+
+									if (deviceSearch(dname, operation)) {
+										if(isEmpty(tableArray)) {
+											let rowData = val.data;
+											rowData[0]['dname'] = dname;
+											tableArray = rowData;
+										} else {
+											let rowData = val.data;
+											rowData[0]['dname'] = dname;
+											tableArray = tableArray.concat(rowData);
+										}
+									}
+								}
+							}
+						});
+
+						$.map(headerDataObject, function(el, device) {
+							let deviceType = device;
+
+							$.map(el, function(element, key) {
+								let textValue = element.value,
+									suffix = element.suffix;
+								if(textValue != '-') {
+									if(element.reducer == 'avg') {
+										textValue =  textValue / element.cnt;
+									}
+
+									textValue = displayNumberFixedDecimal(textValue, suffix, 3, 2);
+
+									$('#typeList').find('.' + deviceType).find('.tbl_type td.' + key + ' span:nth-child(1)').html(textValue[0]);
+									if(suffix == 'W' || suffix == 'Wh' || suffix == 'V' || suffix == 'A') {
+										$('#typeList').find('.' + deviceType).find('.tbl_type td.' + key + ' span:nth-child(2)').html(textValue[1]);
+									}
+								} else {
+									$('#typeList').find('.' + deviceType).find('.tbl_type td.' + key + ' span:nth-child(1)').html(textValue);
+								}
+
+							});
+						});
+						let deviceCnt = tableArray.length;
+
+						$('#typeList').find('.' + deviceType).find('.ntit span').html(deviceCnt);
+						$('#typeList').find('.' + deviceType).find('.alert_icon .inv_normal span').html(operationNormal);
+						$('#typeList').find('.' + deviceType).find('.alert_icon .inv_error span').html(operationError);
+						$('#typeList').find('.' + deviceType).find('.alert_icon .inv_alert span').html(operationAlert);
+						setMakeList(tableArray, 'table_' + deviceType, {'dataFunction': {'operation': setOperation}});
+					});
+
+				}
+
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				console.error(jqXHR);
 				console.error(textStatus);
@@ -2241,7 +2894,6 @@
 		} else {
 			rtnText = '중지';
 		}
-
 		return rtnText;
 	}
 
@@ -2504,14 +3156,11 @@
 				}
 			}
 		} else {
-			let today = new Date();
-			let days = 10;
-			let last = new Date(today.getTime() - (days * 24 * 60 * 60 * 1000));
-			let day =last.getDate();
-			let month=last.getMonth()+1;
-			let year=last.getFullYear();
-
-			console.log("last===", last);
+			let d = new Date();
+			let tenDaysAgo = new Date(d.getTime() - (10 * 24 * 60 * 60 * 1000));
+			let monthAgo = new Date(d.getTime() - (30 * 24 * 60 * 60 * 1000));
+			tenDaysAgo.setHours(0, 0, 0, 0);
+			monthAgo.setHours(0, 0, 0, 0);
 
 			const dailyEnergy = {
 				url: apiHost + apiEnergySite,
@@ -2519,21 +3168,36 @@
 				dataType: 'json',
 				data: {
 					sid: siteId,
-					startTime: formData.startTime,
-					endTime: formData.endTime,
+					startTime: monthAgo.format("yyyyMMddHHmmss"),
+					endTime: new Date().format("yyyyMMddHHmmss"),
 					interval: 'day',
 					// displayType: 'dashboard',
 					formId: 'v2'
 				}
 			}
 
-			console.log("dailyEnergy===", dailyEnergy.data);
-			$.when($.ajax(dailyEnergy), $.ajax(nowMonth),  $.ajax(weather)).done(function (result1, result2, result3) {
+			const dailyWeather = {
+				url: apiHost + apiWeather,
+				type: 'get',
+				dataType: 'json',
+				data: {
+					sid: siteId,
+					startTime: monthAgo.format("yyyyMMddHHmmss"),
+					endTime: new Date().format("yyyyMMddHHmmss"),
+					interval: 'day',
+				}
+			}
+
+			// console.log("dailyEnergy===", dailyEnergy.data)
+
+			$.when($.ajax(monthEnergy), $.ajax(nowMonth), $.ajax(dailyWeather), $.ajax(dailyEnergy)).done(function (result1A, result1B, result2, result3) {
 				let el = $("#solarDashboard .mini .data-num");
 				let chartItems1;
+				let chartItems2;
+				let chartItems3;
 
-				if (!isEmpty(result1[0])) {
-					let v = Object.values(result1[0].data);
+				if (result1A[1] == 'success') {
+					let v = Object.values(result1A[0].data);
 					if (!isEmpty(v) &&  v.flat()[0]["items"].length > 0) {
 						let chartData1 = v.flat()[0]["items"];
 						let initData = 0;
@@ -2544,31 +3208,74 @@
 							chartItems1[index].money = Math.floor(item.money / 1000);
 						});
 
-						monthGen = displayNumberFixedDecimal(initData, 'Wh', 3, 2, "noComma");
+						monthGen = displayNumberFixedUnit(initData, 'Wh', 'kWh', 0);
 
 						el.eq(4).text(monthGen[0]);
-						el.eq(4).next().text(monthGen[1]);
-
-						if (result2[1] == 'success') {
-							let resultNow = result2[0].data[siteId];
-							chartItems1.push({
-								basetime: monthFormData.startTime,
-								energy: resultNow.energy,
-								money: Math.floor(resultNow.money / 1000)
-							});
-						}
+						el.eq(4).next().text("kWh");
 					} else {
 						el.eq(4).text("-");
+						chartItems1 = null;
 					}
 				} else {
 					el.eq(4).text("-");
 				}
 
-				if (result3[1] == 'success') {
-					chartItems2 = result3[0];
+				if (result1B[1] == 'success') {
+					let resultNow = result1B[0].data[siteId];
+					if(!isEmpty(chartItems1)){
+						chartItems1.push({
+							basetime: monthFormData.startTime,
+							energy: resultNow.energy,
+							money: Math.floor(resultNow.money / 1000)
+						});
+					}
 				}
 
-				setChargeChartData(chartItems1, null, chartItems2, "solarDashboard");
+				// if ( (result2[1] == 'success') && (result3[1] == 'success') ) {
+				// 	let tempIrrList = [];
+				// 	let data = result2[0];
+				// 	let v = Object.values(result3[0].data);
+
+				// 	$.each(data, function(index, el){
+				// 		if(!isEmpty(el.sensor_solar.irradiationPoa)){
+				// 			tempIrrList.push(el);
+				// 		}
+				// 	});
+				// 	chartItems2 = addToDateList(d, 30, tempIrrList, "irradiationPoa");
+
+				// 	if (!isEmpty(v) &&  v.flat()[0]["items"].length > 0) {
+				// 		let val = v.flat()[0]["items"];
+				// 		chartItems3 = addToDateList(d, 30, val, "energy");
+				// 		// chartItems3 = addToDateList(d, 11, val);
+				// 	}
+					
+				// } else {
+					if (result2[1] == 'success') {
+						let tempIrrList = [];
+						let data = result2[0];
+						let v = Object.values(result3[0].data);
+
+						$.each(data, function(index, el){
+							if(!isEmpty(el.sensor_solar.irradiationPoa)){
+								tempIrrList.push(el);
+							}
+						});
+						chartItems2 = addToDateList(d, 30, tempIrrList, "irradiationPoa");
+					}
+
+					if (result3[1] == 'success') {
+						let v = Object.values(result3[0].data);
+						
+						if (!isEmpty(v) &&  v.flat()[0]["items"].length > 0) {
+							let val = v.flat()[0]["items"];
+							chartItems3 = addToDateList(d, 30, val, "energy");
+							// chartItems3 = addToDateList(d, 11, val);
+						}
+					}
+
+				// }
+
+				setChargeChartData(chartItems1, chartItems2, chartItems3, "solarDashboard");
 			}).fail(function () {
 				console.log('rejected');
 			});
@@ -2576,10 +3283,9 @@
 	}
 
 	function setChargeChartData(chartItems1, chartItems2, chartItems3, option) {
-		// console.log("chartItems1---", chartItems1, "chartItems2---", chartItems2,  "chartItems3---", chartItems3)
 		const today = new Date();
 		const nowMonth = today.getMonth() + 1;
-		const daysInMonth = new Date(today.getFullYear(), nowMonth, 0).getDate();
+		// console.log("chartItems1---", chartItems1, "chartItems2---", chartItems2,  "chartItems3---", chartItems3)
 
 		let itemChartCapacity = 0;
 		let totalYearEnergy = 0;
@@ -2681,7 +3387,17 @@
 					seriesName = '매전량';
 					suffix = '천원';
 				}
-
+				// dailyChart.series[1].setOptions({
+				// 	name: seriesName,
+				// 	tooltip: {
+				// 		valueSuffix: suffix
+				// 	},
+				// 	legend: {
+				// 		title: {
+				// 			text: seriesName,
+				// 		},
+				// 	}
+				// })
 				dailyChart.series[1].name = seriesName;
 				dailyChart.series[1].tooltipOptions.valueSuffix = suffix;
 				dailyChart.series[1].legendItem.element.firstElementChild.innerHTML = seriesName;
@@ -2698,70 +3414,71 @@
 				});
 			}
 		} else {
-			for (let i = 0, daysLength = daysInMonth; i < daysLength; i++) {
-
-				for(let k = 0, arrLength = chartItems3.length; k<arrLength; k++){
-					if(!isEmpty(chartItems3[k].sensor_solar.irradiationPoa)){
-						irradiationData[i] = [i, parseFloat(chartItems3[k].sensor_solar.irradiationPoa / 1000).toFixed(2) ];
-					} else {
-						irradiationData[i] = [i,  0];
-					}
-				}
-			}
-
 			let seriesName = [
 				{
-					label : '${siteName}' + '대시보드'
+					label : '${siteName}' + ' 대시보드'
 				},
 				{
 					label : '일사량'
 				}
 			];
-			// suffix = 'MWh';
+			if(!isEmpty(dailySolarChart.series.length>0)){
+				dailySolarChart.series.length = 0;
+				dailySolarTrendChart.series.length = 0;
+			}
 
-			// dailySolarChart.addSeries({
-			// 	name: seriesName[0].name,
-			// 	type: 'column',
-			// 	color: 'var(--turquoise)',
-			// 	tooltip: {
-			// 		valueSuffix: 'MWh'
-			// 	},
-			// 	data: energyData,
-			// });
+			dailySolarTrendChart.addSeries({
+				name: seriesName[0].label,
+				// type: 'line',
+				color: 'var(--turquoise)',
+				tooltip: {
+					valueSuffix: 'kWh'
+				},
+				marker: {
+					symbol: "circle"
+				},
+				data: chartItems3,
+			});
 
-			// dailySolarChart.addSeries({
-			// 	name: seriesName[1].name,
-			// 	type: 'spline',
-			// 	color: 'var(--white60)',
-			// 	dashStyle: 'ShortDash',
-			// 	yAxis: 1,
-			// 	tooltip: {
-			// 		valueSuffix: '%'
-			// 	},
-			// 	data: irradiationData,
-			// });
+			dailySolarTrendChart.addSeries({
+				name: seriesName[1].label,
+				type: 'line',
+				dashStyle: 'ShortDash',
+				color: 'var(--white60)',
+				tooltip: {
+					valueSuffix: 'kWh'
+				},
+				marker: {
+					symbol: "circle"
+				},
+				data: chartItems2,
+				// plotOptions: {
+				// 	pointStart: 10,
+				// }
+			});
 
+			dailySolarChart.addSeries({
+				name: seriesName[0].label,
+				type: 'column',
+				color: 'var(--turquoise)',
+				tooltip: {
+					valueSuffix: 'kWh'
+				},
+				data: chartItems3.slice(20, 31),
+			});
+
+			dailySolarChart.addSeries({
+				name: seriesName[1].label,
+				type: 'line',
+				dashStyle: 'ShortDash',
+				color: 'var(--white60)',
+				tooltip: {
+					valueSuffix: 'kWh'
+				},
+				data: chartItems2.slice(20, 31),
+			});
 
 		}
-	}
-
-	function flattenObject (obj) {
-		let flat = {};
-		for (const [key, value] of Object.entries(obj)) {
-			if (typeof value === 'object' && value !== null) {
-			for (const [subkey, subvalue] of Object.entries(value)) {
-				// avoid overwriting duplicate keys: merge instead into array
-				typeof flat[subkey] === 'undefined' ?
-				flat[subkey] = subvalue :
-				Array.isArray(flat[subkey]) ?
-					flat[subkey].push(subvalue) :
-					flat[subkey] = [flat[subkey], subvalue]
-			}
-			} else {
-			flat = {...flat, ...{[key]: value}};
-			}
-		}
-		return flat;
 	}
 
 	function getWeatherCalendarEnergyData() {
@@ -2855,7 +3572,7 @@
 		/*
 			weather value 1 	> css w1
 			weather value 20	> css w3
-			weather value 7	> css w4
+			weather value 7		> css w4
 			weather value 13	> css w6
 			weather value 11	> css w8
 			weather value 17	> css w9
@@ -3226,32 +3943,32 @@
 
 			Promise.all(promises).then(res => {
 				let el = $("#solarDashboard .mini .data-num");
-				let accumVal = displayNumberFixedDecimal(res[0].INV_PV.accumActiveEnergy, 'Wh', 3, 2, "noComma");
-				let activePower = displayNumberFixedDecimal(res[0].INV_PV.activePower, 'Wh', 3, 2, "noComma");
+				let accumVal = displayNumberFixedUnit(res[0].INV_PV.accumActiveEnergy, 'Wh', 'kWh', 0);
+				let activePower = displayNumberFixedUnit(res[0].INV_PV.activePower, 'Wh', 'kWh', 0);
 				let efficiency = toFixedNum(res[0].INV_PV.efficiency, 2);
-				let dailyGen = displayNumberFixedDecimal( Object.entries(res[1].data)[0][1].energy, 'Wh', 3, 2, "noComma");
+				let dailyGen = displayNumberFixedUnit( Object.entries(res[1].data)[0][1].energy, 'Wh', 'kWh', 0);
 				let yesterDayGen = [];
 				let v = Object.values(res[2].data);
 
 				if(!isEmpty(res[2].data) && v.flat()[0]["items"].length > 0 ){
 					let data = v.flat()[0]["items"];
-					yesterDayGen = displayNumberFixedDecimal(data[0].energy, 'Wh', 3, 2, "noComma");
+					yesterDayGen = displayNumberFixedUnit(data[0].energy,'Wh', 'kWh', 0);
 				}
 
 				el.eq(0).text(activePower[0]);
-				el.eq(0).next().text(activePower[1]);
+				el.eq(0).next().text("kWh");
 
 				el.eq(1).text(efficiency);
 				el.eq(1).next().text("%");
 
 				el.eq(2).text(dailyGen[0]);
-				el.eq(2).next().text(dailyGen[1]);
+				el.eq(2).next().text("kWh");
 
 				el.eq(3).text(yesterDayGen[0]);
-				el.eq(3).next().text(yesterDayGen[1]);
+				el.eq(3).next().text("kWh");
 
 				el.eq(5).text(accumVal[0]);
-				el.eq(5).next().text(accumVal[1]);
+				el.eq(5).next().text("kWh");
 			});
 		}
 	}
@@ -3303,10 +4020,10 @@
 				interval: 'hour'
 			}
 		}
+
 		let energyData1 = new Array(24).fill(0);
 		let energyData2 = new Array(24).fill(0);
 		let energyData3 = new Array(24).fill(0);
-
 
 		if (oid.match('testkpx')) { //KPX 조회시에는 전일 데이터로 변경.
 			foreGen = {
@@ -3418,7 +4135,7 @@
 					if(!isEmpty(nowGenData[0].data[siteId])) {
 						// energyData1[hour] = parseFloat((nowGenData[0].data[siteId].energy / 1000).toFixed(2));
 						energyData1[hour] = nowGenData[0].data[siteId].energy;
-						console.log("nowGenData[0].data[siteId].energy===", nowGenData[0].data[siteId].energy)
+						console.log("nowGenData[0].data[siteId].energy===", nowGenData[0].data[siteId])
 					}
 				}
 
@@ -3429,16 +4146,16 @@
 
 				if (insolationData[1] == 'success') {
 					// console.log("insolationData---", insolationData);
-					let standard = String(insolationData[0][0].basetime).substring(0, 6);
-					let sumVal = 0;
+					if (!isEmpty(insolationData[0]) && insolationData[0].length>0) {
+						let standard = String(insolationData[0][0].basetime).substring(0, 6);
+						let sumVal = 0;
 
-					if (!isEmpty(insolationData)) {
 						for(let i=0, arrLength = insolationData.length; i<arrLength; i++){
 							energyData3[i] = parseFloat(insolationData[0][i].sensor_solar.irradiationPoa / 1000).toFixed(2);
 						}
 					}
 				}
-
+				
 				if(!isEmpty(hourlySolarChart.series.length>0)){
 					hourlySolarChart.series.length = 0;
 				}
@@ -3484,7 +4201,7 @@
 					// if (first) {
 						hourlySolarChart.addSeries({
 							name: '일사량',
-							type: 'spline',
+							type: 'line',
 							dashStyle: 'ShortDash',
 							yAxis: 1,
 							color: 'var(--white60)',
@@ -3524,16 +4241,17 @@
 
 			//데이터 세팅
 			let alarmList = new Array();
-			data.forEach((element, index) => {
-				if(element.level != 0) {
-					let localTime = (element.localtime != null && element.localtime != '') ? String(element.localtime) : '';
+			
+			data.forEach((el, index) => {
+				if(el.level != 0) {
+					let localTime = (el.localtime != null && el.localtime != '') ? String(el.localtime) : '';
 					data[index].standardTime = localTime.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
-					alarmList.push(element);
+					alarmList.push(el);
 				}
 			});
-
 			$('.a_alert').find('em').text(alarmList.length);
-			setMakeList(alarmList, 'alarmNotice', {'dataFunction': {'level': levelClass}}); //list생성
+			setMakeList(alarmList, 'alarmNotice', {'dataFunction': {'level': levelClass}});
+
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);
 			console.error(textStatus);
@@ -3581,6 +4299,73 @@
 		} else {
 			$form.attr('action', '/dashboard/smain.do').submit();
 		}
+	}
+
+	function flattenObject (obj) {
+		let flat = {};
+		for (const [key, value] of Object.entries(obj)) {
+			if (typeof value === 'object' && value !== null) {
+			for (const [subkey, subvalue] of Object.entries(value)) {
+				// avoid overwriting duplicate keys: merge instead into array
+				typeof flat[subkey] === 'undefined' ?
+				flat[subkey] = subvalue :
+				Array.isArray(flat[subkey]) ?
+					flat[subkey].push(subvalue) :
+					flat[subkey] = [flat[subkey], subvalue]
+				}
+			} else {
+				flat = {...flat, ...{[key]: value}};
+			}
+		}
+		return flat;
+	}
+
+	function addToDateList(today, idx, data, option){
+		let now = today || new Date();
+		let dates = [now.getDate()];
+		let length = idx;
+
+		while(idx--){
+			now.setDate(now.getDate()-1);
+			let num = now.format("yyyyMMdd").substring(4, 8);
+			let val;
+
+
+			if(length != data.length){
+				let found = data.findIndex( x => ( parseInt(String(x.basetime).substring(4, 8)) == num) );
+				if(found > -1 ){
+					if(option == "energy"){
+						val =  parseFloat((data[found].energy / 1000).toFixed(2));
+					} else if(option == "irradiationPoa"){
+						val = parseFloat((data[found].sensor_solar.irradiationPoa).toFixed(2));
+					}
+				
+					// if(String(data[found].energy).length <= 5){
+					// 	val =  parseFloat((data[found].energy/1000).toFixed(2));
+					// } else {
+					// 	val =  numberComma(data[found].energy/1000000);
+					// }
+				} else {
+					val = null;
+				}
+				dates.push(val);
+			} else {
+				if(option == "energy"){
+					val = parseFloat((data[idx].energy / 1000).toFixed(2));
+				} else if(option == "irradiationPoa"){
+					val = parseFloat((data[idx].sensor_solar.irradiationPoa).toFixed(2));
+				}
+				// if(String(data[idx].energy).length <= 5){
+				// 	val = parseFloat((data[idx].energy/1000).toFixed(2));
+				// } else {
+				// 	val = parseFloat((data[idx].energy/1000000).toFixed(2));
+				// }
+				dates.push(val);
+			}
+			// dates.push(now.getDate());
+		}
+		// console.log("dates---", dates)
+		return dates.reverse();
 	}
 
 </script>

@@ -1013,7 +1013,8 @@ function setInitList(listId) {
 //작성일 : 2020-05-08
 //작성자 : lee sang o
 //기능 : json list값  공통 화면그리기 처리
-function setMakeList(jsonData, listId, opts) {
+
+function setMakeList(jsonData, listId, opts, tableName) {
 	var $selecter = $("#" + listId),
 		col_left = "[",
 		col_right = "]",
@@ -1068,7 +1069,11 @@ function setMakeList(jsonData, listId, opts) {
 		arrTagInfo.push(tmpHtml);
 	}
 
-	$selecter.html(arrTagInfo.join(""));
+	if(!isEmpty(tableName)){
+		tableName.html(arrTagInfo.join(""));
+	} else {
+		$selecter.html(arrTagInfo.join(""));
+	}
 }
 
 function alignFunc(tmpHtml) {
