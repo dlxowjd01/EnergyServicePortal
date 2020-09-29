@@ -451,7 +451,6 @@
 <form id="pageMove" name="pageMove" method="post">
 	<input type="hidden" id="did" name="did" value="">
 </form>
-<script type="text/javascript" src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
 	const siteList = JSON.parse('${siteList}');
 	const apiDeviceProperties = '/config/view/device_properties';

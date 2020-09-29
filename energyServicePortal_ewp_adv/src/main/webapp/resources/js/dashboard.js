@@ -32,7 +32,7 @@ const getYearGenData = async function () {
 		pvSum: 0,
 	};
 
-	$('.gmain_chart1 span.term').text(today.getFullYear() + '.1.1 ~ ' + today.getFullYear() + '.' + (Number(today.getMonth()) + 1) + '.' + today.getDate());
+	$(`.gmain_chart1 span.term`).text(today.getFullYear() + '.1.1 ~ ' + today.getFullYear() + '.' + (Number(today.getMonth()) + 1) + '.' + today.getDate());
 	
 	siteList.forEach(site => {
 		$.ajax({

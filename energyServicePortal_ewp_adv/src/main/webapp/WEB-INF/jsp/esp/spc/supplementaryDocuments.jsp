@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
 
-<script>
+<script type="text/javascript">
 	$(function() {
 		setInitList("listData"); //리스트초기화
 

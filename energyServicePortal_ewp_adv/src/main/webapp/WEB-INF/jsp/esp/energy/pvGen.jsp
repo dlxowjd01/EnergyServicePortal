@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/decorators/include/taglibs.jsp"%>
-
 <div class="row header-wrapper">
 	<div class="col-12">
 		<h1 class="page-header">발전 이력</h1>
@@ -161,8 +160,6 @@
 	</div>
 </div>
 
-
-<script type="text/javascript" src="/js/commonDropdown.js"></script>
 <script type="text/javascript">
 	let standard = new Array(); //기준일
 	let accociation = new Map(); //응답 데이터

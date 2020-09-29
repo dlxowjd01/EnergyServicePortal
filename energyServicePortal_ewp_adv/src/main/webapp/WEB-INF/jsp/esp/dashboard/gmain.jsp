@@ -8,15 +8,13 @@
 <div class="row header-wrapper">
 	<div class="col-6">
 		<h1 class="page-header fl">${siteName}</h1>
-		<%--
 		<c:if test="${fn:contains(sessionScope.userInfo.oid, 'spower')}">
 		<label class="switch switch-slide fl">
 			<input type="checkbox" value="showTable" id="switchBtn" class="switch-input" />
 			<span class="switch-label" data-on="테이블" data-off="대시보드"></span>
 			<span class="switch-handle"></span>
 		</label>
-		</c:if>	
-		--%>
+		</c:if>
 	</div>
 	<div class="col-6">
 		<div class="time fr">
@@ -134,7 +132,9 @@
 						</div>
 						<div class="ci_right">
 							<div class="legend_wrap">
-								<span class="bu3">풍력</span>
+								<c:if test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
+									<span class="bu3">풍력</span>
+								</c:if>
 								<span class="bu1"><fmt:message key="gdash.4.gen" /></span>
 								<span class="bu4"><fmt:message key="gdash.4.idle" /></span>
 							</div>
@@ -227,17 +227,14 @@
 				<div class="gmain_map2_content">
 					<div class="gtbl_top clear">
 						<div class="input_group1">
-							<input type="text" class="input" id="searchName" name="searchName" value="" placeholder="사업소 검색" onkeyup="if (event.keyCode == 13) searchSiteList();">
+							<input type="text" class="input" id="searchName" name="searchName" value="" placeholder="사업소 검색" onkeyup="if (event.keyCode == 13) searchSite();">
 							<button type="button" onclick="searchSite();"><fmt:message key="gdash.7.apply" /></button>
 						</div>
 						<div class="input_group2">
 							<span class="tx_tit"><fmt:message key="gdash.7.status" /></span>
 							<div class="sa_select">
 								<div class="dropdown" id="deviceStatus">
-									<button type="button" class="dropdown-toggle w8"
-											data-toggle="dropdown" data-name="설비 상태">
-										전체<span class="caret"></span>
-									</button>
+									<button type="button" class="dropdown-toggle w8" data-toggle="dropdown" data-name="설비 상태">전체<span class="caret"></span></button>
 									<ul class="dropdown-menu chk_type" role="menu">
 										<li data-value="0">
 											<a href="javascript:void(0);" tabindex="-1">
@@ -264,7 +261,7 @@
 					</div>
 					<div class="gtbl_wrap">
 						<div class="intable" id="statusSiteList">
-							<table>
+							<table class="dashboard-sort">
 								<caption>(단위: kWh)</caption>
 								<thead>
 								<tr>
@@ -435,7 +432,7 @@
 										<td>[alarmError]</td>
 										<td>[alarmWarning]</td>
 										<td class="center">[name]</td>
-										<td class="right">[capacity]</td>
+										<td class="right">[capacityView]</td>
 										<td class="right">[forecast]</td>
 										<td class="right">[accumulate]</td>
 										<td class="ESS">-</td>
@@ -467,7 +464,7 @@
 																<ul class="di_list">
 																	<li>
 																		<span class="di_li_tit"><fmt:message key="gdash.7.production" /> (kW)</span>
-																		<span class="di_li_tx">[activePower]</span>
+																		<span class="di_li_tx">[activePowerView]</span>
 																	</li>
 																	<li>
 																		<span class="di_li_tit"><fmt:message key="gdash.7.gen_today" /> (kWh)</span>
@@ -492,7 +489,7 @@
 																<ul class="di_list">
 																	<li>
 																		<span class="di_li_tit"><fmt:message key="gdash.7.tot_cap" /> (kW)</span>
-																		<span class="di_li_tx">[capacity]</span>
+																		<span class="di_li_tx">[capacityView]</span>
 																	</li>
 																	<li>
 																		<span class="di_li_tit"><fmt:message key="gdash.7.num_inv" /> (EA)</span>
@@ -520,7 +517,6 @@
 									</tr>
 										</c:otherwise>
 									</c:choose>
-
 								</tbody>
 							</table>
 						</div>
@@ -533,20 +529,19 @@
 
 <%@ include file="/decorators/include/dashboardTableView.jsp" %>
 
-<script type="text/javascript" src="/js/commonDropdown.js"></script>
-
 <c:choose>
 	<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-	<script type="text/javascript" src="/js/dashboard-kpx.js"></script>
+	<script type="text/javascript" src="/js/dashboard/dashboardKpxV2.js"></script>
 	</c:when>
 	<c:otherwise>
-	<script type="text/javascript" src="/js/dashboard.js"></script>
+	<script type="text/javascript" src="/js/dashboard/dashboardV2.js"></script>
 	</c:otherwise>
 </c:choose>
 
+<script type="text/javascript" src="/js/dashboard/dashboardChart.js"></script>
 <script type="text/javascript">
 	const siteList = JSON.parse('${siteList}');
-	const sgid = '<c:out value="${sgid}" escapeXml="false" />';
+	const sgid = '${sgid}';
 	const today = new Date();
 
 	<c:if test="${dashboardMap eq 'google'}">
@@ -563,196 +558,48 @@
 	let geocoder = new google.maps.Geocoder();
 	let infowindow = new google.maps.InfoWindow();
 	</c:if>
-	let first = true;
-
-	let gmainTable = $('#gmainTable').DataTable({
-		"table-layout": "fixed",
-		"fixedHeader": true,
-		"bAutoWidth": true,
-		"bSearchable" : true,
-		"retrieve": true,
-		"sScrollY": true,
-		"scrollY": "720px",
-		"bScrollCollapse": true,
-		paging: false,
-		"aaSorting": [[ 0, 'asc' ]],
-		"bSortable": true,
-		"order": [[ 1, 'asc' ]],
-		"aoColumnDefs": [
-			{
-				"aTargets": [ 0 ],
-				"bSortable": false,
-				"orderable": false
-			},
-		],
-		"aoColumns": [
-			{
-				sTitle: '순번',
-				mData: null,
-				mRender: function ( data, type, full, rowIndex ) {
-					return rowIndex.row + 1;
-				},
-				className: 'dt-center no-sorting'
-			},
-			{
-				sTitle: '발전소 명',
-				mData: 'siteName',
-			},
-			{
-				sTitle: '발전용량 (kWh)',
-				mData: 'capacity',
-				mRender: function (data, type, full, rowIndex) {
-					return isEmpty(data) ? '-' : data;
-				},
-			},
-			{
-				sTitle: '인버터 가동 상태',
-				mData: 'invCount',
-				mRender: function (data, type, full, rowIndex) {
-					return isEmpty(data) ? '-' : data;
-				},
-			},
-			{
-				sTitle: '경고 알람',
-				mData: 'deviceFault',
-				mRender: function (data, type, full, rowIndex) {
-					return isEmpty(data) ? '-' : data;
-				},
-			},
-			{
-				sTitle: '현재 발전량(kW)',
-				mData: 'nowEnergy',
-				mRender: function (data, type, full, rowIndex) {
-					if (data == '-') {
-						return data;
-					} else {
-						return data[0];
-					}
-				},
-			},
-			{
-				sTitle: "현재 날씨",
-				mData: 'toDaySky',
-				mRender: function (data, type, full, rowIndex) {
-					const weather = getWeatherIconClass(data);
-					return '<i class="ico_weather ' + weather + '"></i>';
-				},
-			},
-			{
-				sTitle: '전일 발전',
-				mData: 'yesterEnergy',
-				mRender: function (data, type, full, rowIndex) {
-					return isEmpty(data) ? '-' : data;
-				},
-			},
-			{
-				sTitle: '전일 날씨',
-				mData: 'yesterDaySky',
-				mRender: function (data, type, full, rowIndex) {
-					const weather = getWeatherIconClass(data);
-					return '<i class="ico_weather ' + weather + '"></i>';
-				},
-			},
-			{
-				sTitle: '월간 발전량(MWh)',
-				mData: 'monthGen',
-				mRender: function (data, type, full, rowIndex) {
-					return isEmpty(data) ? '-' : data;
-				},
-			},
-			{
-				sTitle: '전년 동월 발전량(MWh)',
-				mData: 'beforeYearGen',
-				mRender: function (data, type, full, rowIndex) {
-					return isEmpty(data) ? '-' : data;
-				},
-			},
-			{
-				sTitle: '전년 동월 대비 발전 비율(%)',
-				mData: 'proportion',
-				mRender: function (data, type, full, rowIndex) {
-					return data;
-				},
-			},
-		],
-		"language": {
-			"emptyTable": "조회된 데이터가 없습니다.",
-			"zeroRecords":  "검색된 결과가 없습니다."
-		},
-		"dom": 'tip',
-		initComplete: function(settings, json ){
-			this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-				cell.innerHTML = i+1;
-				$(cell).data("id", i);
-			});
-		},
-		// every time DataTables performs a draw
-		drawCallback: function (settings) {
-
-		},
-	}).columns.adjust();
 
 	$(function () {
 		let target = $("#innerBody").find(".content-wrapper");
-		if (oid.match('testkpx')) {
-			resourceProperties();
-		}
 
 		if($("#switchBtn").is(":checked")){
 			target.eq(0).addClass("hidden").next().removeClass("hidden");
-
+			$($.fn.dataTable.tables(true)).DataTable().columns.adjust();
 			getDashboardTable('gmainTable');
 		} else {
 			target.eq(0).removeClass("hidden").next().addClass("hidden");
 
-			setInitList('alarmNotice'); //알람 공지 세팅
-			makeSiteList();
-
 			if (!isEmpty(siteList) && siteList.length > 0) {
-				fn_cycle_1hour();
-				fn_cycle_1min();
-				setInterval(() => fn_cycle_1hour(), 60 * 60 * 1000);
-				setInterval(() => fn_cycle_1min(), 60 * 1000);
+				firstAjax();
+
+				setInterval(() => firstAjax(), 60 * 60 * 1000); // 한시간에 한번 화면갱신
+				setInterval(() => {
+					minIntervalCount ++;
+					if ((minIntervalCount % 60) !== 0) {
+						minAjax();
+					}
+				}, 60 * 1000); //1분에 한번 현재혆황 & 알림 갱신
 			} else {
-				$("#errMsg").text("해당 그룹에 등록 된 사이트가 존재하지 않습니다.");
-				$("#errorModal").modal("show");
+				$('#errMsg').text("해당 그룹에 등록 된 사이트가 존재하지 않습니다.");
+				$('#errorModal').modal('show');
 				setTimeout(function(){
-					$("#errorModal").modal("hide");
+					$('#errorModal').modal('hide');
 				}, 2000);
 				return false;
 			}
 		}
 		
-		$("#switchBtn").on("click", function(){
-			if($(this).is(":checked")){
-				target.eq(0).addClass("hidden").next().removeClass("hidden");
+		$('#switchBtn').on('click', function(){
+			if($(this).is(':checked')){
+				target.eq(0).addClass('hidden').next().removeClass('hidden');
+				$($.fn.dataTable.tables(true)).DataTable().columns.adjust();
 				getDashboardTable('gmainTable');
 			} else {
-				target.eq(0).removeClass("hidden").next().addClass("hidden");
+				target.eq(0).removeClass('hidden').next().addClass('hidden');
 				// destroyDashboardTable('gmainTable');
 			}
 		});
-
 	});
-
-	function fn_cycle_1hour() {
-		if (!first) {
-			if (oid.match('testkpx')) {
-				getYearGenDataKPX();
-			} else {
-				getYearGenData();
-				getDailyGenData();
-				getGenDataBySiteYesterday();
-			}
-			searchSiteList();
-		}
-	}
-
-	function fn_cycle_1min() {
-		// getTodayTotalDetail();
-		beforeTodayTotal();
-		getAlarmInfo();
-	}
 
 	<c:if test="${dashboardMap eq 'google'}">
 	const geocodeAddress = (siteAddr, siteId, siteName, siteLatlng, siteColor) => {
