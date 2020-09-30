@@ -1211,6 +1211,157 @@
 								fontSize: '12px'
 							}
 						}
+					}],
+				}
+			}]
+		}
+	});
+
+	var dailySolarTrendChart = Highcharts.chart('dailySolarTrendChart', {
+		chart: {
+			// marginTop: 70,
+			// marginLeft: 0,
+			// marginRight: 20,
+			marginTop: 0,
+			marginLeft: 0,
+			marginRight: 60,
+			height: 120,
+			backgroundColor: 'transparent',
+			zoomType: 'xy',
+			// resetZoom: '확대/축소 초기화'
+			// type: 'line'
+		},
+		navigation: {
+			buttonOptions: {
+				enabled: false
+			}
+		},
+		title: {
+			text: ''
+		},
+		subtitle: {
+			text: ''
+		},
+		xAxis: [{
+			lineColor: 'var(--white60)',
+			tickColor: 'var(--white60)',
+			gridLineColor: 'var(--white25)',
+			plotLines: [{
+				color: 'var(--white60)',
+				width: 1
+			}],
+			labels: {
+				align: 'center',
+				y: 27,
+				style: {
+					color: 'var(--grey)',
+					fontSize: '12px'
+				}
+			},
+			tickInterval: 1,
+			title: {
+				text: null
+			},
+			categories: num31List,
+			// categories: num31List,
+			crosshair: true
+		}],
+		yAxis: {
+				visible: false,
+				// lineColor: 'var(--white60)',
+				// tickColor: 'var(--white60)',
+				// gridLineColor: 'var(--white25)',
+				// gridLineWidth: 1,
+				// plotLines: [
+				// 	{
+				// 		color: 'var(--white60)',
+				// 		width: 1
+				// 	}
+				// ],
+				// // offset: -40,
+				// title: {
+				// 	text: 'kWh',
+				// 	align: 'low',
+				// 	rotation: 0,
+				// 	y: 30,
+				// 	x: -13,
+				// 	style: {
+				// 		// color: 'var(--white60)',
+				// 		color: 'var(--alarm)',
+				// 		fontSize: '12px'
+				// 	}
+				// },
+				// labels: {
+				// 	// y: -8,
+				// 	overflow: 'justify',
+				// 	style: {
+				// 		color: 'var(--grey)',
+				// 		fontSize: '12px'
+				// 	}
+				// }
+			},
+		
+		tooltip: {
+			// shared: true,
+			shared: false,
+			borderColor: 'none',
+			backgroundColor: 'var(--bg-color)',
+			padding: 16,
+			style: {
+				color: 'var(--white)'
+			},
+			valueSuffix: ' kwh',
+		},
+		legend: {
+			enabled: false,
+			// enabled: true,
+			// align: 'right',
+			// verticalAlign: 'top',
+			// x: -10,
+			// y: -10,
+			// itemStyle: {
+			// 	color: 'var(--grey)',
+			// 	fontSize: '12px',
+			// 	fontWeight: 400
+			// },
+			// itemHoverStyle: {
+			// 	color: ''
+			// },
+			// symbolPadding: 0,
+			// symbolHeight: 7,
+			// lineHeight: 12
+		},
+		plotOptions: {
+			// cursor: 'pointer',
+			series: {
+				label: {
+					connectorAllowed: false
+				},
+				// !!!!!!!!!!!!!!!!IMPORTANT
+				borderColor: 'var(--grey)',
+				borderWidth: 0
+			},
+			borderColor: 'var(--grey)',
+			borderWidth: 0,
+			// series: {
+			// 	label: {
+			// 		connectorAllowed: false
+			// 	},
+			// 	borderColor: 'var(--grey)',
+			// 	borderWidth: 0
+			// },
+			marker: {
+                lineWidth: 1
+            }
+		},
+		credits: {
+			enabled: false
+		},
+		responsive: {
+			rules: [
+				{
+					condition: {
+						minWidth: 787
 					},
 					{
 						title: {
