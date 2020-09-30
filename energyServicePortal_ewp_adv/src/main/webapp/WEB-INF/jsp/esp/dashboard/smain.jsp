@@ -672,6 +672,13 @@
 	const featureProperties = new Object();
 	const featurePropertiesSub = new Object();
 	const pollingTerm = 1000 * 60 * 15;
+	const rtnDropdown = ($selectId) => {
+		if ($selectId == 'chartType') {
+			chargeChartPoll();
+		} else if ($selectId == 'statusDevice') {
+			getDvcInfo();
+		}
+	}
 
 	let sList = JSON.parse('${siteList}');
 	let first = true;
@@ -2430,14 +2437,6 @@
 			getWeatherCalendarEnergyData(); //이 달의 발전 달력
 		} else {
 			chargeChartPoll("solarDashboard"); //월별 발전량 종합
-		}
-	}
-
-	function rtnDropdown($selectId) {
-		if ($selectId == 'chartType') {
-			chargeChartPoll();
-		} else if ($selectId == 'statusDevice') {
-			getDvcInfo();
 		}
 	}
 
