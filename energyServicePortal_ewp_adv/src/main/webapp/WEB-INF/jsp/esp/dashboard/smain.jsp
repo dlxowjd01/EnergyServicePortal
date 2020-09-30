@@ -1267,40 +1267,39 @@
 			crosshair: true
 		}],
 		yAxis: {
-				visible: false,
-				// lineColor: 'var(--white60)',
-				// tickColor: 'var(--white60)',
-				// gridLineColor: 'var(--white25)',
-				// gridLineWidth: 1,
-				// plotLines: [
-				// 	{
-				// 		color: 'var(--white60)',
-				// 		width: 1
-				// 	}
-				// ],
-				// // offset: -40,
-				// title: {
-				// 	text: 'kWh',
-				// 	align: 'low',
-				// 	rotation: 0,
-				// 	y: 30,
-				// 	x: -13,
-				// 	style: {
-				// 		// color: 'var(--white60)',
-				// 		color: 'var(--alarm)',
-				// 		fontSize: '12px'
-				// 	}
-				// },
-				// labels: {
-				// 	// y: -8,
-				// 	overflow: 'justify',
-				// 	style: {
-				// 		color: 'var(--grey)',
-				// 		fontSize: '12px'
-				// 	}
-				// }
-			},
-		
+			visible: false,
+			// lineColor: 'var(--white60)',
+			// tickColor: 'var(--white60)',
+			// gridLineColor: 'var(--white25)',
+			// gridLineWidth: 1,
+			// plotLines: [
+			// 	{
+			// 		color: 'var(--white60)',
+			// 		width: 1
+			// 	}
+			// ],
+			// // offset: -40,
+			// title: {
+			// 	text: 'kWh',
+			// 	align: 'low',
+			// 	rotation: 0,
+			// 	y: 30,
+			// 	x: -13,
+			// 	style: {
+			// 		// color: 'var(--white60)',
+			// 		color: 'var(--alarm)',
+			// 		fontSize: '12px'
+			// 	}
+			// },
+			// labels: {
+			// 	// y: -8,
+			// 	overflow: 'justify',
+			// 	style: {
+			// 		color: 'var(--grey)',
+			// 		fontSize: '12px'
+			// 	}
+			// }
+		},
 		tooltip: {
 			// shared: true,
 			shared: false,
@@ -1363,20 +1362,41 @@
 					condition: {
 						minWidth: 787
 					},
-					{
-						title: {
-							style: {
-								fontSize: '12px'
+					chartOptions: {
+						xAxis: {
+							labels: {
+								style: {
+									fontSize: '12px'
+								}
 							}
 						},
-						labels: {
-							style: {
-								fontSize: '12px'
+						yAxis: [{
+							title: {
+								style: {
+									fontSize: '12px'
+								}
+							},
+							labels: {
+								style: {
+									fontSize: '12px'
+								}
 							}
-						}
-					}],
+						},
+						{
+							title: {
+								style: {
+									fontSize: '12px'
+								}
+							},
+							labels: {
+								style: {
+									fontSize: '12px'
+								}
+							}
+						}],
+					}
 				}
-			}]
+			]
 		}
 	});
 
@@ -1691,71 +1711,76 @@
 		credits: {
 			enabled: false
 		},
-		series: [{
-			type: 'column',
-			<c:choose>
-				<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-			name: '발전 실적',
-				</c:when>
-				<c:otherwise>
-			name: 'PV발전량',
-				</c:otherwise>
-			</c:choose>
-			color: 'var(--turquoise)', /* PV발전량 */
-			tooltip: {valueSuffix: 'kWh'},
-			data: []
-		}, {
-			type: 'column',
-			<c:choose>
-				<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-			name: '전일 발전량',
-				</c:when>
-				<c:otherwise>
-			name: '발전 예측',
-				</c:otherwise>
-			</c:choose>
+		series: [
+			{
+				type: 'column',
+				<c:choose>
+					<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
+				name: '발전 실적',
+					</c:when>
+					<c:otherwise>
+				name: 'PV발전량',
+					</c:otherwise>
+				</c:choose>
+				color: 'var(--turquoise)', /* PV발전량 */
+				tooltip: {valueSuffix: 'kWh'},
+				data: []
+			},
+			{
+				type: 'column',
+				<c:choose>
+					<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
+				name: '전일 발전량',
+					</c:when>
+					<c:otherwise>
+				name: '발전 예측',
+					</c:otherwise>
+				</c:choose>
 
-			color: 'var(--grey)',
-			tooltip: {valueSuffix: 'kWh'},
-			data: []
-		}],
+				color: 'var(--grey)',
+				tooltip: {valueSuffix: 'kWh'},
+				data: []
+			}
+		],
 		responsive: {
-			rules: [{
-				condition: {
-					minWidth: 870
-				},
-				chartOptions: {
-					chart: {
-						marginLeft: 75
+			rules: [
+				{
+					condition: {
+						minWidth: 870
 					},
-					xAxis: {
-						labels: {
-							style: {
-								fontSize: '18px'
-							}
-						}
-					},
-					yAxis: {
-						title: {
-							style: {
-								fontSize: '18px'
+					chartOptions: {
+						chart: {
+							marginLeft: 75
+						},
+						xAxis: {
+							labels: {
+								style: {
+									fontSize: '18px'
+								}
 							}
 						},
-						labels: {
-							style: {
-								fontSize: '18px'
+						yAxis: {
+							title: {
+								style: {
+									fontSize: '18px'
+								}
+							},
+							labels: {
+								style: {
+									fontSize: '18px'
+								}
 							}
-						}
-					},
-					legend: {
-						itemStyle: {
-							fontSize: '18px'
 						},
-						symbolPadding: 5,
-						symbolHeight: 10
+						legend: {
+							itemStyle: {
+								fontSize: '18px'
+							},
+							symbolPadding: 5,
+							symbolHeight: 10
+						}
 					}
 				}
-			}]
+			]
 		}
 	});
 
