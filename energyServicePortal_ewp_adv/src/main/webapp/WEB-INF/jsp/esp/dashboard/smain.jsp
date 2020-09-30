@@ -678,6 +678,20 @@
 	let toDayEnergy = 0;
 	let toDayRaw = 0;
 
+	var num12List = [];
+	var num24List = [];
+	var num31List = [];
+
+	for(let i=0; i<12; i++){
+		num12List.push(String(i+1));
+	}
+	for(let i=0; i<24; i++){
+		num24List.push(String(i+1));
+	}
+	for(let i=0; i<31; i++){
+		num31List.push(String(i+1));
+	}
+
 	var pieChart = Highcharts.chart('pie_chart', {
 		chart: {
 			marginTop: 0,
@@ -1038,21 +1052,6 @@
 			}]
 		}
 	});
-
-
-	var num12List = [];
-	var num24List = [];
-	var num31List = [];
-
-	for(let i=0; i<12; i++){
-		num12List.push(String(i+1));
-	}
-	for(let i=0; i<24; i++){
-		num24List.push(String(i+1));
-	}
-	for(let i=0; i<31; i++){
-		num31List.push(String(i+1));
-	}
 
 	var dailySolarChart = Highcharts.chart('dailySolarChart', {
 		chart: {
