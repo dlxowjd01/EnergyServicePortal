@@ -694,4 +694,26 @@ this.pointValKey||"y"));for(c=0;c<n-g;c++){var p=l[c]&&-1<f?l[c][f]:l[c];if(v(p)
 c=c.replace("{point.change}",(0<this.change?"+":"")+e(this.change,g(this.series.tooltipOptions.changeDecimals,2)));return a.apply(this,[c])};H(B,"render",function(){var a=this.chart;if(!(a.is3d&&a.is3d()||a.polar)&&this.xAxis&&!this.xAxis.isRadial){var c=this.yAxis.len;if(this.xAxis.axisLine){var e=a.plotTop+a.plotHeight-this.yAxis.pos-this.yAxis.len,f=Math.floor(this.xAxis.axisLine.strokeWidth()/2);0<=e&&(c-=Math.max(f-e,0))}!this.clipBox&&this.animate?(this.clipBox=t(a.clipBox),this.clipBox.width=
 this.xAxis.len,this.clipBox.height=c):a[this.sharedClipKey]&&(a[this.sharedClipKey].animate({width:this.xAxis.len,height:c}),a[this.sharedClipKey+"m"]&&a[this.sharedClipKey+"m"].animate({width:this.xAxis.len}))}});H(f,"update",function(a){a=a.options;"scrollbar"in a&&this.navigator&&(t(!0,this.options.scrollbar,a.scrollbar),this.navigator.update({},!1),delete a.scrollbar)})});N(r,"masters/modules/stock.src.js",[],function(){});N(r,"masters/highstock.src.js",[r["masters/highcharts.src.js"]],function(q){q.product=
 "Highstock";return q});r["masters/highstock.src.js"]._modules=r;return r["masters/highstock.src.js"]});
+<<<<<<< HEAD
 //# sourceMappingURL=highstock.js.map
+
+
+
+
+/*
+ Highcharts JS v8.2.0 (2020-08-20)
+
+ Plugin for displaying a message when there is no data visible in chart.
+
+ (c) 2010-2019 Highsoft AS
+ Author: Oystein Moseng
+
+ License: www.highcharts.com/license
+*/
+(function(a){"object"===typeof module&&module.exports?(a["default"]=a,module.exports=a):"function"===typeof define&&define.amd?define("highcharts/modules/no-data-to-display",["highcharts"],function(d){a(d);a.Highcharts=d;return a}):a("undefined"!==typeof Highcharts?Highcharts:void 0)})(function(a){function d(a,c,d,e){a.hasOwnProperty(c)||(a[c]=e.apply(null,d))}a=a?a._modules:{};d(a,"Extensions/NoDataToDisplay.js",[a["Core/Globals.js"],a["Core/Utilities.js"]],function(a,c){var d=c.addEvent,e=c.extend,
+f=c.getOptions;c=a.Chart.prototype;f=f();e(f.lang,{noData:"No data to display"});f.noData={attr:{zIndex:1},position:{x:0,y:0,align:"center",verticalAlign:"middle"},style:{fontWeight:"bold",fontSize:"12px",color:"#666666"}};c.showNoData=function(a){var b=this.options;a=a||b&&b.lang.noData;b=b&&b.noData;!this.noDataLabel&&this.renderer&&(this.noDataLabel=this.renderer.label(a,0,0,null,null,null,b.useHTML,null,"no-data"),this.styledMode||this.noDataLabel.attr(b.attr).css(b.style),this.noDataLabel.add(),
+this.noDataLabel.align(e(this.noDataLabel.getBBox(),b.position),!1,"plotBox"))};c.hideNoData=function(){this.noDataLabel&&(this.noDataLabel=this.noDataLabel.destroy())};c.hasData=function(){for(var a=this.series||[],b=a.length;b--;)if(a[b].hasData()&&!a[b].options.isInternal)return!0;return this.loadingShown};d(a.Chart,"render",function(){this.hasData()?this.hideNoData():this.showNoData()})});d(a,"masters/modules/no-data-to-display.src.js",[],function(){})});
+//# sourceMappingURL=no-data-to-display.js.map
+=======
+//# sourceMappingURL=highstock.js.map
+>>>>>>> 7443055152a481c4b4a11a1fdb0e3fa4fedad4ad

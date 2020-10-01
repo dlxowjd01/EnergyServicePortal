@@ -15,7 +15,11 @@ function fncGoAfterErrorPage(){
 </head>
 <body>
 
+<<<<<<< HEAD
+	<div style="width: 100%; margin: margin: 200px auto 0; text-align: center;">
+=======
 	<div style="width: 100%; margin: 50px auto 50px; text-align: center;">
+>>>>>>> 7443055152a481c4b4a11a1fdb0e3fa4fedad4ad
 
 		<!-- <p style="font-size: 18px; color: #000; margin-bottom: 10px; "><img src="<c:url value='/img/logo_encored_wh' />" width="379" height="57" /></p>
 		 -->
