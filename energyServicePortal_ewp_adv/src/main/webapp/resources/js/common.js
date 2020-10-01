@@ -572,7 +572,7 @@ function showPwd(inputId, btn) {
 }
 
 function filterColumn ( id, idx, val, option ) {
-	if(option){;
+	if(option){
 		$(id).DataTable().column(idx).search(val, true, false).draw();
 	} else {
 		$(id).DataTable().column(idx).search(val).draw();
@@ -581,6 +581,11 @@ function filterColumn ( id, idx, val, option ) {
 
 function getUniqueListBy(arr, key) {
 	return [...new Map(arr.map(item => [item[key], item] )).values()]
+}
+
+function getNestedObject (nestedObj, pathArr) {
+    return pathArr.reduce((obj, key) =>
+        (obj && obj[key] !== 'undefined') ? obj[key] : undefined, nestedObj);
 }
 
 function makeAjaxCall(option){

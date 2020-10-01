@@ -34,7 +34,9 @@
 <script type="text/javascript" src="/js/jquery-ui-1.12.1.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.min.js"></script>
 <!-- high-chart -->
-<script type="text/javascript" src="/js/highcharts.js"></script>
+<!-- <script type="text/javascript" src="/js/highcharts.js"></script> -->
+<script type="text/javascript" src="/js/highstock.js"></script>
+<script type="text/javascript" src="/js/highcharts-no-data.js"></script>
 <script type="text/javascript" src="/js/modules/variwide.js"></script>
 <script type="text/javascript" src="/js/modules/data.js"></script>
 <script type="text/javascript" src="/js/modules/exporting.js"></script>
@@ -111,14 +113,6 @@
 		$.ajaxSetup({
 			headers: {'Authorization': 'Bearer <c:out value="${sessionScope.userInfo.token}" escapeXml="false" />'},
 			"timeout": 30000,
-			// beforeSend: function(xhr, settings) {
-			// 	$('#loadingCircle').show();
-			// },
-			// ajaxComplete: function() {
-			// 	if(!$('#loadingCircle').is(":hidden")){
-			// 		$('#loadingCircle').hide();
-			// 	}
-			// }
 		});
 
 		$(document).ajaxSuccess(function() {
@@ -131,9 +125,6 @@
 			if(!$('#loadingCircle').is(":hidden")){
 				$('#loadingCircle').hide();
 			}
-			// test 용 주석 유지 (~ 9월 말까지)
-			// let r = JSON.parse(jqxhr.responseText);
-			// console.log("에러코드:" + jqxhr.status + "\n" + "메세지: " + r);
 		});
 
 	$(document).ajaxSuccess(function() {
@@ -142,9 +133,6 @@
 
 	$(document).ajaxError(function(event, jqxhr, settings, thrownError) {
 		$('#loadingCircle').hide();
-		// test 용 주석 유지 (~ 9월 말까지)
-		// let r = JSON.parse(jqxhr.responseText);
-		// console.log("에러코드:" + jqxhr.status + "\n" + "메세지: " + r);
 	});
 
 	function formatErrorMessage(jqXHR, exception) {
