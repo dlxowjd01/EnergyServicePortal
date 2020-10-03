@@ -1194,7 +1194,6 @@
 			height: 300,
 			backgroundColor: 'transparent',
 			zoomType: 'xy',
-<<<<<<< HEAD
 		},
 		lang: {
 			contextButtonTitle: "다운로드",
@@ -1221,29 +1220,6 @@
 				}
 			}
 		},
-=======
-		},
-		exporting: {
-			buttons: {
-				contextButton: {
-					x: -10,
-					y: 0,
-					symbol: 'download',
-					symbolStroke: "var(--vivid-blue)",
-					symbolStrokeWidth: 2,
-					theme: {
-						fill: "none"
-					},
-					// menuItems: [
-					// 	'JPEG 다운로드',
-					// 	'PDF 다운로드',
-					// 	'SVG 다운로드'
-					// ],
-					align: 'right',
-				}
-			}
-		},
->>>>>>> 7443055152a481c4b4a11a1fdb0e3fa4fedad4ad
 		rangeSelector: {
 			enabled: false,
 			// buttons: [
@@ -1327,7 +1303,6 @@
             trackBorderWidth: 0,
             trackBorderRadius: 2,
             trackBorderColor: 'none'
-<<<<<<< HEAD
 		},
 		navigator: {
 			xAxis: {
@@ -1350,30 +1325,6 @@
 		subtitle: {
 			text: ''
 		},
-=======
-		},
-		navigator: {
-			xAxis: {
-				labels: {
-					enabled: false
-					// formatter: function () {
-					// 	return date31List[this.value];
-					// },
-				}
-			}
-		},
-		plotOptions: {
-            series: {
-                showInLegend: true
-            }
-        },
-		title: {
-			text: ''
-		},
-		subtitle: {
-			text: ''
-		},
->>>>>>> 7443055152a481c4b4a11a1fdb0e3fa4fedad4ad
 		xAxis: [
 			{
 				lineColor: 'var(--white60)',
@@ -1480,10 +1431,6 @@
 		],
 		tooltip: {
 			shared: true,
-<<<<<<< HEAD
-			split: true,
-=======
->>>>>>> 7443055152a481c4b4a11a1fdb0e3fa4fedad4ad
 			borderColor: 'none',
 			backgroundColor: 'var(--bg-color)',
 			padding: 16,
@@ -2536,11 +2483,7 @@
 
 							$.ajax(hourlyINV).done(function (json, textStatus, jqXHR) {
 								let result = flattenObject(json.data);
-<<<<<<< HEAD
 								let temp;
-=======
-								let temp = Object.entries(result)[0][1];
->>>>>>> 7443055152a481c4b4a11a1fdb0e3fa4fedad4ad
 								let dvcIndex = data[key].data[0].INDEX;
 
 								// data.some((o, i) => {
@@ -2555,11 +2498,8 @@
 								// });
 
 								// const city = getNestedObject(user, ['personalInfo', 'addresses', 0, 'city']);
-<<<<<<< HEAD
 								if(!isEmpty(result) && Object.entries(result)[0][1].length>0){
-=======
-								if(temp.items.length>0){
->>>>>>> 7443055152a481c4b4a11a1fdb0e3fa4fedad4ad
+									temp = Object.entries(result)[0][1];
 									let hourList = [];
 									let colorArr = [
 										"var(--powder-blue)",
