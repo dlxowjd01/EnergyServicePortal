@@ -39,6 +39,8 @@
 <script type="text/javascript" src="/js/highcharts-no-data.js"></script>
 <script type="text/javascript" src="/js/modules/variwide.js"></script>
 <script type="text/javascript" src="/js/modules/data.js"></script>
+
+<script type="text/javascript" src="/js/modules/highstock-exporting.js"></script>
 <script type="text/javascript" src="/js/modules/exporting.js"></script>
 <script type="text/javascript" src="/js/modules/export-data.js"></script>
 <!-- 텝메뉴 용 -->
