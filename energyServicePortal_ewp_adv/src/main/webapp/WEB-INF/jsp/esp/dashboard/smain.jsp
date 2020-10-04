@@ -2442,6 +2442,9 @@
 										"var(--light-blue)",
 										"var(--blueberry)",
 										"var(--royal-blue)",
+										"var(--jordy-blue)",
+										"var(--deep-lilac)",
+										"var(--mustard)",
 									];
 
 									
