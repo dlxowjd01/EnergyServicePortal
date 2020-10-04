@@ -621,7 +621,8 @@
 			],
 			lang : {
 				resetZoom : '확대/축소 초기화',
-				loading : '로딩 중...'
+				loading : '로딩 중...',
+				noData: '조회된 데이터가 없습니다.'
 			}
 		});
 
@@ -1041,7 +1042,7 @@
 		chart: {
 			marginTop: 80,
 			marginLeft: 20,
-			marginRight: 50,
+			marginRight: 60,
 			marginBottom: 80,
 			height: 280,
 			backgroundColor: 'transparent',
@@ -1076,6 +1077,7 @@
 			}],
 			labels: {
 				align: 'center',
+				overflow: 'justify',
 				y: 27,
 				style: {
 					color: 'var(--grey)',
@@ -1190,19 +1192,20 @@
 		chart: {
 			marginTop: 30,
 			marginLeft: 20,
-			marginRight: 20,
+			marginRight: 30,
 			height: 300,
 			backgroundColor: 'transparent',
 			zoomType: 'xy',
 		},
 		lang: {
 			contextButtonTitle: "다운로드",
-			downloadTitle: "다운로드"
+			downloadTitle: "다운로드",
+			noData: "조회된 데이터가 없습니다."
 		},
 		exporting: {
 			buttons: {
 				contextButton: {
-					x: -10,
+					x: -15,
 					y: 0,
 					symbol: 'download',
 					symbolStroke: "var(--vivid-blue)",
@@ -1230,9 +1233,9 @@
 			// 		events: {
 			// 			click: function() {
 			// 				chart.xAxis[0].update({
-			// 					labels: {
-			// 						format: '{value:%Y-%m-%d}' // change format on click
-			// 					}
+								// labels: {
+								// 	format: '{value:%Y-%m-%d}' // change format on click
+								// }
 			// 				});
 			// 			}
 			// 		}
@@ -1256,61 +1259,29 @@
 			// 		text: '전체'
 			// 	}
 			// ],
-			// buttonTheme: { // styles for the buttons
-			// 	fill: 'none',
-			// 	stroke: 'none',
-			// 	'stroke-width': 0,
-			// 	r: 8,
-			// 	style: {
-			// 		color: 'var(--white60)',
-			// 		fontWeight: 'normal'
-			// 	},
-			// 	states: {
-			// 		hover: {
-			// 		},
-			// 		select: {
-			// 			fill: 'var(--white60)',
-			// 			style: {
-			// 				color: 'var(--box-color)'
-			// 			}
-			// 		}
-			// 		// disabled: { ... }
-			// 	},
-			// 	// inputBoxBorderColor: 'var(--white60)',
-			// 	// inputBoxWidth: 120,
-			// 	// inputBoxHeight: 18,
-			// 	// inputStyle: {
-			// 	// 	color: '#039',
-			// 	// 	fontWeight: 'bold'
-			// 	// },
-			// 	// labelStyle: {
-			// 	// 	color: 'silver',
-			// 	// 	fontWeight: 'bold'
-			// 	// },
-			// },
-			// inputEnabled: false,
+			inputEnabled: false,
 		},
 		scrollbar: {
-			enabled: true,
-			barBackgroundColor: 'var(--white40)',
-			// barBackgroundColor: 'var(--scroll-track)',
-            barBorderRadius: 7,
-            barBorderWidth: 0,
-            buttonBackgroundColor: 'var(--white40)',
-            buttonBorderWidth: 0,
-            buttonBorderRadius: 2,
-            trackBackgroundColor: 'none',
-            trackBorderWidth: 0,
-            trackBorderRadius: 2,
-            trackBorderColor: 'none'
+			enabled: false,
+			// barBackgroundColor: 'var(--white40)',
+			// // barBackgroundColor: 'var(--scroll-track)',
+            // barBorderRadius: 7,
+            // barBorderWidth: 0,
+            // buttonBackgroundColor: 'var(--white40)',
+            // buttonBorderWidth: 0,
+            // buttonBorderRadius: 2,
+            // trackBackgroundColor: 'none',
+            // trackBorderWidth: 0,
+            // trackBorderRadius: 2,
+            // trackBorderColor: 'none'
 		},
 		navigator: {
 			xAxis: {
 				labels: {
-					enabled: false
-					// formatter: function () {
-					// 	return date31List[this.value];
-					// },
+					// enabled: false,
+					formatter: function () {
+						return date31List[this.value];
+					},
 				}
 			}
 		},
@@ -1457,22 +1428,6 @@
 		},
 		legend: {
 			enabled: false,
-			// enabled: true,
-			// align: 'right',
-			// verticalAlign: 'top',
-			// x: -10,
-			// y: -10,
-			// itemStyle: {
-			// 	color: 'var(--grey)',
-			// 	fontSize: '12px',
-			// 	fontWeight: 400
-			// },
-			// itemHoverStyle: {
-			// 	color: ''
-			// },
-			// symbolPadding: 0,
-			// symbolHeight: 7,
-			// lineHeight: 12
 		},
 		plotOptions: {
 			// cursor: 'pointer',
@@ -1486,13 +1441,6 @@
 			},
 			borderColor: 'var(--grey)',
 			borderWidth: 0,
-			// series: {
-			// 	label: {
-			// 		connectorAllowed: false
-			// 	},
-			// 	borderColor: 'var(--grey)',
-			// 	borderWidth: 0
-			// },
 			marker: {
                 lineWidth: 1
             }
@@ -2436,7 +2384,6 @@
 
 	function getDvcInfo(option) {
 		let deviceArray = new Array();
-
 		if (!isEmpty(sList[0].devices)) {
 			sList[0].devices.forEach(el => {
 				deviceArray.push(el.did);
@@ -2452,19 +2399,17 @@
 					dids: deviceArray.toString()
 				}
 			}).done(function (data, textStatus, jqXHR) {
+
 				if (!isEmpty(option)){
 					let inverterArray = new Array();
-					
-
+				
 					if(!isEmpty(hourlyINVChart.series.length>0)){
 						hourlyINVChart.series.length = 0;
 					}
-
+			
 					$.map(data, function(val, key) {
 						if ( val.device_type == "INV_PV"){
-
 							const formData = getSiteMainSchCollection('day');
-
 							let hourlyINV = {
 								url: apiHost + apiEnergyDvc,
 								type: 'get',
@@ -2496,10 +2441,10 @@
 								// let found = dvcObj.findIndex ( x => {
 								// 	console.log("x===", x)
 								// });
-
+								console.log("result==", Object.values(result)[0].items)
 								// const city = getNestedObject(user, ['personalInfo', 'addresses', 0, 'city']);
-								if(!isEmpty(result) && Object.entries(result)[0][1].length>0){
-									temp = Object.entries(result)[0][1];
+								if(!isEmpty(result) && Object.values(result)[0].items.length>0){
+									temp = Object.values(result)[0].items;
 									let hourList = [];
 									let colorArr = [
 										"var(--powder-blue)",
@@ -2513,13 +2458,13 @@
 									
 									// let suffixArr = [];
 									// let suffix = "";
-									for(let i=0, arrLength = temp.items.length; i<arrLength; i++){
-										// let l = String(temp.items[i].energy).length;
+									for(let i=0, arrLength = temp.length; i<arrLength; i++){
+										// let l = String(temp[i].energy).length;
 										// if(l<=3){
-										// 	hourList.push(temp.items[i].energy);
+										// 	hourList.push(temp[i].energy);
 										// 	suffixArr.push("Wh");
 										// } else if(l>3 && l<=6){
-											let tempData = parseFloat((temp.items[i].energy / 1000).toFixed(2));
+											let tempData = parseFloat((temp[i].energy / 1000).toFixed(2));
 											hourList.push(tempData);
 											// console.log("tempData===", tempData)
 											// suffixArr.push("kWh");
@@ -3416,17 +3361,7 @@
 					seriesName = '매전량';
 					suffix = '천원';
 				}
-				// dailyChart.series[1].setOptions({
-				// 	name: seriesName,
-				// 	tooltip: {
-				// 		valueSuffix: suffix
-				// 	},
-				// 	legend: {
-				// 		title: {
-				// 			text: seriesName,
-				// 		},
-				// 	}
-				// })
+
 				dailyChart.series[1].name = seriesName;
 				dailyChart.series[1].tooltipOptions.valueSuffix = suffix;
 				dailyChart.series[1].legendItem.element.firstElementChild.innerHTML = seriesName;
