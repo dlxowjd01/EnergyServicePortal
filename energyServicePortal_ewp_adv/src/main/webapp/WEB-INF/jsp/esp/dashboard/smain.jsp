@@ -2431,17 +2431,6 @@
 								let temp;
 								let dvcIndex = data[key].data[0].INDEX;
 
-								// data.some((o, i) => {
-								// 	var temp;
-								// 	console.log("o==", o)
-								// 	// if (o.id === id) return result = `${i + 1}`;
-								// 	// if (temp = getPath(o.children || [], id)) return result = `${i + 1}-${temp}`;
-								// });
-								
-								// let found = dvcObj.findIndex ( x => {
-								// 	console.log("x===", x)
-								// });
-								console.log("result==", Object.values(result)[0].items)
 								// const city = getNestedObject(user, ['personalInfo', 'addresses', 0, 'city']);
 								if(!isEmpty(result) && Object.values(result)[0].items.length>0){
 									temp = Object.values(result)[0].items;
