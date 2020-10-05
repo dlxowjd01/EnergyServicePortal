@@ -582,7 +582,14 @@
 				let contactNum = td.eq(4).find(".tx_inp_type");
 				let nonUserArr = [];
 				let registeredUserArr = [];
-
+				if(isEmpty(did)){
+					$("#duplicatedGroup").removeClass("hidden");
+					setTimeout(function(){
+						target.data({"value": "", "did" : "" }).html('선택<span class="caret"></span>');
+						$("#duplicatedGroup").addClass("hidden");
+					}, 1600);
+					return false;
+				}
 				let alarmToObj = {};
 
 				let deviceOpt = {
@@ -715,7 +722,7 @@
 
 		if(siteData) {
 			let newArr = [];
-			let essDvcArr = ["INV_PV", "PCS_ESS", "BMS_SYS"];
+			let essDvcArr = ["KPX_EMS", "INV_PV", "PCS_ESS", "BMS_SYS"];
 
 			// Promise.resolve(siteData.map((item, index) => {
 			siteData.map((item, index) => {
@@ -797,12 +804,11 @@
 						}
 
 						item.alarmInfo = json;
-
 						$.each(json, function( index, el ){
 							let hasDevType = essDvcArr.some( x => x.includes(el.device_type));
 
 							if(hasDevType == true){
-								if( el.device_type == "INV_PV" ) {
+								if( (el.device_type == "INV_PV") || (el.device_type == "KPX_EMS") ) {
 									genCapacity += el.capacity;
 								}
 								if( el.device_type == "PCS_ESS" ) {
@@ -818,13 +824,13 @@
 							}
 						});
 
-						genCapacity = displayNumberFixedDecimal(genCapacity, 'Wh', 3, 2, "noComma");
+						genCapacity = displayNumberFixedDecimal(genCapacity, 'W', 3, 2, "noComma");
 						item.genCapacity = genCapacity[0] + " " + genCapacity[1];
 					
-						pcsCapacity = displayNumberFixedDecimal(pcsCapacity, 'Wh', 3, 2, "noComma");
+						pcsCapacity = displayNumberFixedDecimal(pcsCapacity, 'W', 3, 2, "noComma");
 						item.pcsCapacity = pcsCapacity[0] + " " + pcsCapacity[1];
 						
-						bmsCapacity = displayNumberFixedDecimal(bmsCapacity, 'Wh', 3, 2, "noComma");
+						bmsCapacity = displayNumberFixedDecimal(bmsCapacity, 'W', 3, 2, "noComma");
 						item.bmsCapacity = bmsCapacity[0] + " " + bmsCapacity[1];
 
 					} else {
@@ -1157,7 +1163,7 @@
 			callback();
 		}
 		let newArr = [];
-		let essDvcArr = ["INV_PV", "PCS_ESS", "BMS_SYS"];
+		let essDvcArr = ["KPX_EMS", "INV_PV", "PCS_ESS", "BMS_SYS"];
 
 		// Promise.resolve(mySites.map((item, index) => {
 		mySites.map((item, index) => {
@@ -1187,7 +1193,7 @@
 							let hasDevType = essDvcArr.some( x => x.includes(el.device_type));
 
 							if(hasDevType == true){
-								if( el.device_type == "INV_PV" ) {
+								if( (el.device_type == "INV_PV") || (el.device_type == "KPX_EMS") ) {
 									genCapacity += el.capacity;
 								}
 								if( el.device_type == "PCS_ESS" ) {
@@ -1203,13 +1209,13 @@
 							}
 						});
 
-						genCapacity = displayNumberFixedDecimal(genCapacity, 'Wh', 3, 2, "noComma");
+						genCapacity = displayNumberFixedDecimal(genCapacity, 'W', 3, 2, "noComma");
 						item.genCapacity = genCapacity[0] + " " + genCapacity[1];
 					
-						pcsCapacity = displayNumberFixedDecimal(pcsCapacity, 'Wh', 3, 2, "noComma");
+						pcsCapacity = displayNumberFixedDecimal(pcsCapacity, 'W', 3, 2, "noComma");
 						item.pcsCapacity = pcsCapacity[0] + " " + pcsCapacity[1];
 						
-						bmsCapacity = displayNumberFixedDecimal(bmsCapacity, 'Wh', 3, 2, "noComma");
+						bmsCapacity = displayNumberFixedDecimal(bmsCapacity, 'W', 3, 2, "noComma");
 						item.bmsCapacity = bmsCapacity[0] + " " + bmsCapacity[1];
 					} else {
 						item.genCapacity = "-";
@@ -2431,7 +2437,7 @@
 						alarmList.push(x);
 					});
 				} else {
-					alarmData;
+					console.log("no alarmTO===")
 				}
 			})).then( () => {
 				let newDevType = [...new Map(alarmList.map(x => [x.device_type, x])).values()];
@@ -2502,15 +2508,29 @@
 								"aTargets": [ 3 ],
 								"createdCell": function (td, cellData, rowData, row, col) {
 									if (!isEmpty(rowData.alarmToUser)) {
-										// console.log("rowData---", rowData);
+										if(!isEmpty(rowData.alarmToUser.non_user) && !isEmpty(rowData.alarmToUser.user) ){
+											let user = rowData.alarmToUser.user;
+											let nonUser = rowData.alarmToUser.non_user;
+
+										} else {
+											if(!isEmpty(rowData.alarmToUser.user)){
+												let user = rowData.alarmToUser.user;
+											} 
+											if(!isEmpty(rowData.alarmToUser.non_user)){
+												let nonUser = rowData.alarmToUser.non_user;
+											}
+										}
+
+										console.log("rowData---", rowData, "row===", row);
 										// console.log("cellData---", cellData);
 										let dropdown = $(td).find(".dropdown-toggle");
 										$.each(dropdown, function(index, el){
 											let target = $(this).next().find("input[type='checkbox']");
+											console.log("target===", target, "$(this)===", $(this))
 											if(!isEmpty(target) && target.length > 0){
 												let targetArr = target.toArray();
 												// console.log("$(this).text()====", $(this).text())
-												let found = targetArr.findIndex( x => $(x).data("name") == $(this).text() );
+												let found = targetArr.findIndex( x => ( $(x).data("name") == $(this).text() ) );
 												if( found > -1 ){
 													$(target[found]).prop("checked", true);
 												}
@@ -2629,13 +2649,16 @@
 												let newIdx = String(rowIndex.row + "Non" + index);
 
 												if(!isEmpty(el.level)){
-													let val = el.level[0];
+													let val;
 													let joinedVal = el.level.join(",");
 
-													if(el.level.length> 1){
+													if(!isEmpty(el.level)){
+														console.log("el.level==", el.level)
+														val = el.level[0];
 														levText = aLevelOpt[val].name + ' 외 ' + String(el.level.length - 1) + "개";
 													} else {
-														levText = aLevelOpt[val].name 
+														joinedVal = ""
+														levText = "선택";
 													}
 													dropdown3 += `
 														<div class="dropdown">
@@ -2662,13 +2685,17 @@
 
 												if(!isEmpty(el.level)){
 													let joinedVal = el.level.join(",");
-													let val = el.level[0];
+													let val;
 
-													if(el.level.length> 1){
+													if(!isEmpty(el.level) && el.level[0].length>0){
+														console.log("el.level==", el.level)
+														val = el.level[0];
 														levText = aLevelOpt[val].name + ' 외 ' + String(el.level.length - 1) + "개";
 													} else {
-														levText = aLevelOpt[val].name 
+														joinedVal = ""
+														levText = "선택";
 													}
+
 													dropdown3 += `
 														<div class="dropdown">
 															<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="${'${ joinedVal }'}" data-name="${'${ levText }'}" disabled>${'${ levText }'}<span class="caret"></span></button>
@@ -3638,6 +3665,7 @@
 			<div class="modal-header flex_start">
 				알람 설정<button type="button" class="btn-add ml-24" onclick="insertRowCopy()">열 추가</button><!--
 				--><small id="duplicatedGroup" class="warning hidden">해당 설비는 이미 선택 되었습니다.</small><!--
+				--><small id="noIdWarning" class="warning hidden">중복되지 않는 설비 타입/ 설비명은 필수입니다.</small><!--
 			--></div>
 			<div class="modal-body mt10">
 				<form name="add_alarm_form" id="updateAlarmForm">
