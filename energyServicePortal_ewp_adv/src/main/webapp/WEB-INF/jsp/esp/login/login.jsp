@@ -238,10 +238,10 @@
 						Pattern: "[0-9]",
 						Target: "newPwdHasNumber"
 					},
-					{
-					Pattern: "[!@@#$%^&*]",
-					Target: "newPwdHasSymbols"
-					}
+					// {
+					// Pattern: "[!@@#$%^&*]",
+					// Target: "newPwdHasSymbols"
+					// }
 				];
 
 				let password = $(this).val();

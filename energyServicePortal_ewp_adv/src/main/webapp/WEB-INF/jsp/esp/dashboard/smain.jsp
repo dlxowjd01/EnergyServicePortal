@@ -583,8 +583,6 @@
 			setInitList('alarmNotice');
 		}
 
-
-
 		getWeatherData();
 		getNowEnergy();
 		getDvcProperties();
@@ -956,7 +954,7 @@
 			formatter: function () {
 				return this.points.reduce(function (s, point) {
 					let suffix = point.series.userOptions.tooltip.valueSuffix;
-					return s + '<br/><span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + numberComma(point.y) + suffix;
+					return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + numberComma(point.y) + suffix;
 				}, '<b>' + this.x + '일 </b>');
 			},
 			shared: true,
@@ -1443,7 +1441,7 @@
 				return ['<b>' + newVal + '</b>'].concat(
 					this.points ?
 						this.points.map(function (point) {
-							return "<br/><span style='color:" + point.series.color + "'>\u25CF</span> " + point.series.name + point.y  + "<br/>";
+							return "<span style='color:" + point.series.color + "'>\u25CF</span> " + point.series.name;
 						}) : []
 				);
 			},
@@ -2082,7 +2080,6 @@
 					let weekWeather = weekWeatherData[0];
 
 					if($('#viewOptList').prev().data("value") == "2"){
-						console.log("weekWeather---", weekWeather);
 
 						weekWeather.forEach((el, index) => {
 							$('#sTemp' + (index + 1)).text((el.temperature).toFixed(1));
@@ -2091,7 +2088,6 @@
 						});
 					} else {
 						weekWeather.forEach((el, index) => {
-							console.log("el.temperature==", el.temperature)
 							$('#weekTemp' + (index + 1)).text((el.temperature).toFixed(1));
 							let weatherIconClass = getWeatherIcons(el.sky);
 							$('#weekIcon' + (index + 1)).html('<i class="ico_weather ' + weatherIconClass + '"></i>');
@@ -2111,7 +2107,6 @@
 
 						if (tempArray.length > 0) {
 							let weatherIconClass = getWeatherIcons(tempArray[tempArray.length - 1].sky);
-							console.log("weatherIconClass==")
 							if($('#viewOptList').prev().data("value") == "2"){
 								$('#sTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + ' ' + '&#8451;');
 								$('#weekSolarIcon').html('<i class="ico_weather ' + weatherIconClass + '"></i>').next('strong').html(sList[0].location);
@@ -2145,7 +2140,7 @@
 									$('.weather .stit').html(new Date(di.timestamp).format('yyyy-MM-dd HH:mm:ss'));
 
 								} else {
-									$('#weekTemp').text(temperature + '&#8451;');
+									$('#weekTemp').html(temperature + '&#8451;');
 									$('#weekIcon').next('strong').html(sList[0].location);
 									$('#weekWindVelocity').text((windSpeed).toFixed(1) + ' km/h');
 									$('#weekWindDirection').text(windDirection);
@@ -2158,7 +2153,7 @@
 					}
 				}
 			}).fail(function () {
-				console.log('rejected');
+				console.error('rejected');
 			});
 		} else {
 			let weekWeatherTime = {
@@ -2229,7 +2224,7 @@
 					}
 				}
 			}).fail(function () {
-				console.log('rejected');
+				console.error('rejected');
 			});
 
 		}
@@ -2379,7 +2374,6 @@
 
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			let r = JSON.parse(jqXHR.responseText);
-			console.log("에러코드:" + jqXHR.status + "\n" + "메세지: " + r);
 			$("#errMsg").text("처리 중 오류가 발생했습니다.");
 			$("#errorModal").modal("show");
 			setTimeout(function(){
@@ -2513,7 +2507,7 @@
 								}
 
 							}).fail(function (jqXHR, textStatus, errorThrown) {
-								console.log("fail==", jqXHR)
+								console.error("fail==", jqXHR)
 							});
 						}
 					});
@@ -3047,12 +3041,17 @@
 					let chartItems2;
 
 					if (monthlyData[1] == 'success') {
-						let resultData = monthlyData[0].data[0];
-						if (resultData.generation.items.length > 0) {
-							chartItems1 = resultData.generation.items;
-							chartItems1.forEach(el => {
-								if (!isEmpty(el.money)) {
-									el.money = Math.floor(el.money / 1000);
+						let resultData = monthlyData[0].data;
+
+						if (!isEmpty(resultData)) {
+							Object.entries(resultData).forEach(([rstKey, rstVal]) => {
+								if (rstVal[0].items.length > 0) {
+									chartItems1 = rstVal[0].items;
+									chartItems1.forEach(el => {
+										if (!isEmpty(el.money)) {
+											el.money = Math.floor(el.money / 1000);
+										}
+									});
 								}
 							});
 						}
@@ -3068,13 +3067,12 @@
 					}
 					
 					if (prevYearData[1] == 'success') {
-						let resultData = prevYearData[0].data[0];
-						chartItems2 = resultData.generation.items
+						chartItems2 = prevYearData[0];
 					}
 					setChargeChartData(chartItems1, chartItems2);
 
 				}).fail(function (jqXHR, textStatus, errorThrown) {
-					console.log('error');
+					console.error('error');
 				});
 			} else {
 				// A. radio option
@@ -3140,7 +3138,7 @@
 
 						setChargeChartData(chartItems1, chartItems2, chartItems3);
 					}).fail(function () {
-						console.log('rejected');
+						console.error('rejected');
 					});
 				} else {
 				// B.C. radio option
@@ -3177,7 +3175,7 @@
 
 						setChargeChartData(chartItems1, chartItems2);
 					}).fail(function () {
-						console.log('rejected');
+						console.error('rejected');
 					});
 				
 				}
@@ -3214,8 +3212,6 @@
 					interval: 'day',
 				}
 			}
-
-			// console.log("dailyEnergy===", dailyEnergy.data)
 
 			$.when($.ajax(monthEnergy), $.ajax(nowMonth), $.ajax(dailyWeather), $.ajax(dailyEnergy)).done(function (result1A, result1B, result2, result3) {
 				let el = $("#solarDashboard .mini .data-num");
@@ -3273,7 +3269,7 @@
 
 				if (result3[1] == 'success') {
 					let v = Object.values(result3[0].data);
-					
+
 					if (!isEmpty(v) &&  v.flat()[0]["items"].length > 0) {
 						let val = v.flat()[0]["items"];
 						chartItems3 = addToDateList(30, val, "energy");
@@ -3283,7 +3279,7 @@
 
 				setChargeChartData(chartItems1, chartItems2, chartItems3, "solarDashboard");
 			}).fail(function () {
-				console.log('rejected');
+				console.error('rejected');
 			});
 		}
 	}
@@ -3320,7 +3316,6 @@
 						if (i + 1 == dataMonth) {
 							energyData[i] = [i, chartItems1[d].energy / 1000];
 
-							// console.log("chartItems1[d]==",chartItems1[d])
 							if (!oid.match('testkpx')) {
 								if ($(':radio[name="radio_t"]:checked').val() == 1) {
 									let energy = chartItems1[d].energy / 1000;
@@ -3438,7 +3433,6 @@
 				data: chartItems3,
 			});
 
-	
 			dailySolarTrendChart.addSeries({
 				name: seriesName[1].label,
 				type: 'line',
@@ -3516,8 +3510,6 @@
 			let weatherItems = dailyWeatherData[0];
 			let calendarDays = $('.calWeatherDay');
 
-			// console.log("dailyEnergyData===", dailyEnergyData[0].data[0])
-
 			for (let i = 1; i <= calendarDays.length; i++) {
 				if (energyItems.length > 0) {
 					energyItems.forEach(el => {
@@ -3542,7 +3534,7 @@
 				}
 			}
 		}).fail(function () {
-			console.log('rejected');
+			console.error('rejected');
 		}).always(function () {
 			getWeatherCalendar();
 		});
@@ -3722,7 +3714,7 @@
 						return deferred.resolve(data);
 					})(deferred);
 				}).fail(function (error) {
-					console.log(error);
+					console.error(error);
 				});
 			});
 
@@ -4074,7 +4066,6 @@
 				if (foreGenData[1] == 'success') {
 					if (!isEmpty(foreGenData[0].data) && Object.values(foreGenData[0].data).flat()[0]["items"].length > 0) {
 						let v = Object.values(foreGenData[0].data).flat()[0]["items"];
-						// console.log("foreGenData===", foreGenData[0].data)
 						v.forEach((el, index) => {
 							energyData2[index] =  parseFloat((el.energy / 1000).toFixed(2));
 						});
@@ -4101,7 +4092,7 @@
 				hourlyChart.series[0].setData(energyData1);
 				hourlyChart.series[1].setData(energyData2);
 			}).fail(function () {
-				console.log('rejected');
+				console.error('rejected');
 			});
 		} else {
 			$.when($.ajax(gen), $.ajax(foreGen), $.ajax(nowGen), $.ajax(hourlyInsolation)).done(function (genData, foreGenData, nowGenData, insolationData) {
@@ -4125,7 +4116,6 @@
 						v.forEach((el, index) => {
 							// energyData2[index] = parseFloat((el.energy / 1000).toFixed(2));
 							// energyData2[index] = numberComma(el.energy / 1000000);
-							// console.log("energyData2===", el)
 							energyData2[index] = parseFloat((el.energy / 1000).toFixed(2));
 						});
 					}
@@ -4138,7 +4128,6 @@
 					if(!isEmpty(nowGenData[0].data[siteId])) {
 						// energyData1[hour] = parseFloat((nowGenData[0].data[siteId].energy / 1000).toFixed(2));
 						energyData1[hour] = nowGenData[0].data[siteId].energy;
-						// console.log("nowGenData[0].data[siteId].energy===", nowGenData[0].data[siteId])
 					}
 				}
 
@@ -4148,7 +4137,6 @@
 				});
 
 				if (insolationData[1] == 'success') {
-					// console.log("insolationData---", insolationData);
 					if (!isEmpty(insolationData[0]) && insolationData[0].length>0) {
 						let standard = String(insolationData[0][0].basetime).substring(0, 6);
 						let sumVal = 0;
@@ -4223,7 +4211,7 @@
 					// }
 				}
 			}).fail(function () {
-				console.log('rejected');
+				console.error('rejected');
 			});
 		}
 	}

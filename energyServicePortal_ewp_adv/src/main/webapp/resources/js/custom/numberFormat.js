@@ -1,3 +1,41 @@
+
+/**
+ * 더 큰 단위를 채크 하기 위한 비교 문
+ *
+ * @param experimental
+ * @param control
+ * @returns {*}
+ */
+const compareUnit = (experimental, control) => {
+	let rtnValue = '';
+	const whUnit = ['', 'k', 'M', 'G', 'T'];
+	const moneyUnit = [
+		{ unit: '', chipher: 1 },
+		{ unit: '십', chipher: 10 },
+		{ unit: '백', chipher: 100 },
+		{ unit: '천', chipher: 1000 },
+		{ unit: '만', chipher: 10000 },
+		{ unit: '십만', chipher: 100000 },
+		{ unit: '백만', chipher: 1000000 },
+		{ unit: '천만', chipher: 10000000 },
+		{ unit: '억', chipher: 100000000 },
+	];
+
+	experimental = (experimental.substr(0, 1)).replace(/W/i, '');
+	control = (control.substr(0, 1)).replace(/W/i, '');
+
+	const experimentalIndex = whUnit.some((x, i) => {if (x == experimental) return i;});
+	const controlIndex = whUnit.some((x, i) => {if (x == control) return i;});
+
+	if (experimentalIndex > controlIndex) {
+		rtnValue = experimental;
+	} else {
+		rtnValue = control;
+	}
+
+	return rtnValue;
+}
+
 /**
  * 숫자표현 함수
  *

@@ -1,4 +1,5 @@
-const standardSuffix = 'kWh';
+const standardSuffix = 'MWh';
+
 /**
  * 월간차트 선언부
  */
@@ -67,7 +68,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 			width: 1
 		}],
 		title: {
-			text: 'Wh',
+			text: 'MWh',
 			align: 'low',
 			rotation: 0, /* 타이틀 기울기 */
 			y: 25, /* 타이틀 위치 조정 */
@@ -79,7 +80,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 		},
 		labels: {
 			formatter: function () {
-				return (displayNumberFixedDecimal(this.value, standardSuffix, 4, 0).join(' ')).replace('Wh', '');
+				return numberComma(this.value);
 			},
 			style: {
 				color: 'var(--white60)',
@@ -101,13 +102,14 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 		},
 		labels: {
 			formatter: function () {
-				return  (displayNumberFixedDecimal(this.value, '천원', 4, 0).join(' ')).replace('원', '');
+				return  (displayNumberFixedDecimal(this.value, '천원', 3, 0).join(' ')).replace('원', '');
 			},
 			style: {
 				color: 'var(--white60)',
 				fontSize: '12px'
 			}
 		},
+		visible: false,
 		opposite: true
 	}],
 	tooltip: {
@@ -160,40 +162,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 			stacking: 'normal' /*위로 쌓이는 막대  ,normal */
 		}
 	},
-	series: [{
-		name: '충전',
-		type: 'column',
-		color: 'var(--circle-charge)',
-		tooltip: {
-			valueSuffix: 'kWh'
-		}
-
-	}, {
-		name: '방전',
-		type: 'column',
-		color: 'var(--grey)',
-		tooltip: {
-			valueSuffix: 'kWh'
-		}
-
-	}, {
-		name: '태양광',
-		type: 'column',
-		color: 'var(--circle-solar-power)',
-		tooltip: {
-			valueSuffix: 'kWh'
-		}
-
-	}, {
-		name: '정산금',
-		type: 'spline',
-		color: 'var(--white87)',
-		dashStyle: 'ShortDash',
-		yAxis: 1,
-		tooltip: {
-			valueSuffix: '천원'
-		}
-	}],
+	series: [],
 	/* 출처 */
 	credits: {
 		enabled: false
@@ -328,7 +297,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 			width: 1
 		}],
 		title: {
-			text: 'Wh',
+			text: 'MWh',
 			align: 'low',
 			rotation: 0, /* 타이틀 기울기 */
 			y: 25, /* 타이틀 위치 조정 */
@@ -339,9 +308,9 @@ const dailyChart = Highcharts.chart('dailyChart', {
 			}
 		},
 		labels: {
-			formatter: function () {
-				return  (displayNumberFixedDecimal(this.value, standardSuffix, 4, 0).join(' ')).replace('Wh', '');
-			},
+			// formatter: function () {
+			// 	return  (displayNumberFixedDecimal(this.value, standardSuffix, 3, 0).join(' ')).replace('Wh', '');
+			// },
 			style: {
 				color: 'var(--white60)',
 				fontSize: '12px'
@@ -362,13 +331,14 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		},
 		labels: {
 			formatter: function () {
-				return  (displayNumberFixedDecimal(this.value, '천원', 4, 0).join(' ')).replace('원', '');
+				return  numberComma(this.value);
 			},
 			style: {
 				color: 'var(--white60)',
 				fontSize: '12px'
 			}
 		},
+		visible: false,
 		opposite: true
 	}],
 	tooltip: {
@@ -429,40 +399,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 			stacking: 'normal' /*위로 쌓이는 막대  ,normal */
 		}
 	},
-	series: [{
-		name: '충전',
-		type: 'column',
-		color: 'var(--circle-charge)',
-		tooltip: {
-			valueSuffix: 'kWh'
-		}
-
-	}, {
-		name: '방전',
-		type: 'column',
-		color: 'var(--grey)',
-		tooltip: {
-			valueSuffix: 'kWh'
-		}
-
-	}, {
-		name: '태양광',
-		type: 'column',
-		color: 'var(--circle-solar-power)',
-		tooltip: {
-			valueSuffix: 'kWh'
-		}
-
-	}, {
-		name: '정산금',
-		type: 'spline',
-		color: 'var(--white87)',
-		dashStyle: 'ShortDash',
-		yAxis: 1,
-		tooltip: {
-			valueSuffix: '천원'
-		}
-	}],
+	series: [],
 	/* 출처 */
 	credits: {
 		enabled: false
@@ -594,11 +531,7 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 
 				},
 				formatter: function () {
-					if (String(this.y).length > 3) {
-						return numberComma((this.y / 1000).toFixed(2)) + 'MWh';
-					} else {
-						return numberComma(this.y) + 'kWh';
-					}
+					return this.y + this.series.yAxis.userOptions.title.text;
 				}
 			},
 		},

@@ -518,8 +518,8 @@ const monthlyChartDraw = async () => {
 										sumObj[siteData['resource_type']] = 0;
 									}
 
-									pvList[siteData['resource_type']][index] += Math.floor(item.energy / 1000);
-									sumObj[siteData['resource_type']] += Math.floor(item.energy / 1000);
+									pvList[siteData['resource_type']][index] += Math.floor(item.energy);
+									sumObj[siteData['resource_type']] += Math.floor(item.energy);
 								});
 							}
 						});
@@ -537,8 +537,8 @@ const monthlyChartDraw = async () => {
 							sumObj[siteData['resource_type']] = 0;
 						}
 
-						pvList[siteData['resource_type']][index] += Math.floor(nowEnergy['energy'] / 1000);
-						sumObj[siteData['resource_type']] += Math.floor(nowEnergy['energy'] / 1000);
+						pvList[siteData['resource_type']][index] += Math.floor(nowEnergy['energy']);
+						sumObj[siteData['resource_type']] += Math.floor(nowEnergy['energy']);
 					});
 				}
 			}
@@ -553,25 +553,55 @@ const monthlyChartDraw = async () => {
 		const pvList = resolveData['pvList']
 			, sumObj = resolveData['sumObj'];
 
+		let maxValue = 0;
+		Object.entries(pvList).forEach(([type, dataArray]) => {
+			dataArray.forEach(data => {
+				if (data > maxValue) {
+					maxValue = data;
+				}
+			});
+		});
+
+		const refineMaxValue = displayNumberFixedDecimal(maxValue, 'Wh', 3, 2);
+		const rtnUnit = refineMaxValue[1];
+		Object.entries(pvList).forEach(([type, dataArray]) => {
+			dataArray.forEach((data, index) => {
+				const refineValue = displayNumberFixedUnit(data, 'Wh', rtnUnit, 2);
+				pvList[type][index] = (refineValue[0] == '-' || refineValue[0] == 0) ? 0 : Number((refineValue[0]).replace(/[^0-9 \.]/, ''));
+			});
+		});
+
 		let str = '';
 		let seriesLength = monthlyChart.series.length;
 		for (let i = seriesLength - 1; i > -1; i--) {
 			monthlyChart.series[i].remove();
 		}
 
-		Object.entries(resourceTemplate).forEach(resource => {
-			if (!isEmpty(pvList[resource[0]])) {
+		Object.entries(resourceTemplate).forEach(([code, txt]) => {
+			if (!isEmpty(pvList[code])) {
 				let chartSeries = new Object();
-				chartSeries['name'] = resource[1];
+				chartSeries['name'] = txt;
 				chartSeries['type'] = 'column';
-				chartSeries['color'] = chartColorArray[resource[0]];
-				chartSeries['data'] = pvList[resource[0]];
-				chartSeries['tooltip'] = {valueSuffix: 'kWh'}
+				chartSeries['color'] = chartColorArray[code];
+				chartSeries['data'] = pvList[code];
+				chartSeries['tooltip'] = {valueSuffix: rtnUnit}
 				monthlyChart.addSeries(chartSeries, false);
 			}
 
-			if (!isEmpty(sumObj[resource[0]])) {
-				str += '<li class="pv">' + resource[1] + ' : ' + displayNumberFixedDecimal(sumObj[resource[0]], 'Wh', 3, 2).join(' ') + '</li>';
+			if (!isEmpty(sumObj[code])) {
+				const refineValue = displayNumberFixedUnit(sumObj[code], 'Wh', rtnUnit, 2);
+				str += '<li class="pv">' + txt + ' : ' + refineValue[0] + ' ' + rtnUnit + '</li>';
+			}
+		});
+		monthlyChart.yAxis[0].setTitle({
+			text: rtnUnit,
+			align: 'low',
+			rotation: 0, /* 타이틀 기울기 */
+			y: 25, /* 타이틀 위치 조정 */
+			x: 15,
+			style: {
+				color: 'var(--white60)',
+				fontSize: '12px'
 			}
 		});
 		monthlyChart.redraw();
@@ -625,8 +655,8 @@ const dailyChartDraw = async () => {
 										sumObj[siteData['resource_type']] = 0;
 									}
 
-									pvList[siteData['resource_type']][index] += Math.floor(item['energy'] / 1000);
-									sumObj[siteData['resource_type']] += Math.floor(item['energy'] / 1000);
+									pvList[siteData['resource_type']][index] += Math.floor(item['energy']);
+									sumObj[siteData['resource_type']] += Math.floor(item['energy']);
 								});
 							}
 						});
@@ -639,13 +669,15 @@ const dailyChartDraw = async () => {
 						const siteData = siteList.find(site => site.sid === siteKey)
 							, index = Number(String(nowEnergy['start']).slice(6, 8)) - 1;
 
-						if (isEmpty(pvList[siteData['resource_type']])) {
-							pvList[siteData['resource_type']] = new Array(lastDay.getDate()).fill(0);
-							sumObj[siteData['resource_type']] = 0;
-						}
+						if (!isEmpty(nowEnergy['energy'])) {
+							if (isEmpty(pvList[siteData['resource_type']])) {
+								pvList[siteData['resource_type']] = new Array(lastDay.getDate()).fill(0);
+								sumObj[siteData['resource_type']] = 0;
+							}
 
-						pvList[siteData['resource_type']][index] += Math.floor(nowEnergy['energy'] / 1000);
-						sumObj[siteData['resource_type']] += Math.floor(nowEnergy['energy'] / 1000);
+							pvList[siteData['resource_type']][index] += Math.floor(nowEnergy['energy']);
+							sumObj[siteData['resource_type']] += Math.floor(nowEnergy['energy']);
+						}
 					});
 				}
 			}
@@ -660,28 +692,60 @@ const dailyChartDraw = async () => {
 		const pvList = resolveData['pvList']
 			, sumObj = resolveData['sumObj'];
 
+		let maxValue = 0;
+		Object.entries(pvList).forEach(([type, dataArray]) => {
+			dataArray.forEach(data => {
+				if (data > maxValue) {
+					maxValue = data;
+				}
+			});
+		});
+
+		const refineMaxValue = displayNumberFixedDecimal(maxValue, 'Wh', 3, 2);
+		const rtnUnit = refineMaxValue[1];
+		Object.entries(pvList).forEach(([type, dataArray]) => {
+			dataArray.forEach((data, index) => {
+				const refineValue = displayNumberFixedUnit(data, 'Wh', rtnUnit, 2);
+				pvList[type][index] = (refineValue[0] == '-' || refineValue[0] == 0) ? 0 : Number((refineValue[0]).replace(/[^0-9 \.]/, ''));
+			});
+		});
+
 		let str = '';
 		let seriesLength = dailyChart.series.length;
 		for (let i = seriesLength - 1; i > -1; i--) {
 			dailyChart.series[i].remove();
 		}
 
-		Object.entries(resourceTemplate).forEach(resource => {
-			if (!isEmpty(pvList[resource[0]])) {
+		Object.entries(resourceTemplate).forEach(([code, txt]) => {
+			if (!isEmpty(pvList[code])) {
 				let chartSeries = new Object();
-				chartSeries['name'] = resource[1];
+				chartSeries['name'] = txt;
 				chartSeries['type'] = 'column';
-				chartSeries['color'] = chartColorArray[resource[0]];
-				chartSeries['data'] = pvList[resource[0]];
-				chartSeries['tooltip'] = {valueSuffix: 'kWh'}
+				chartSeries['color'] = chartColorArray[code];
+				chartSeries['data'] = pvList[code];
+				chartSeries['tooltip'] = {valueSuffix: rtnUnit}
 				dailyChart.addSeries(chartSeries, false);
 
-				if (!isEmpty(sumObj[resource[0]])) {
-					str += '<li class="pv">' + resource[1] + ' : ' + displayNumberFixedDecimal(sumObj[resource[0]], 'Wh', 3, 2).join(' ') + '</li>';
+				if (!isEmpty(sumObj[code])) {
+					if (!isEmpty(sumObj[code])) {
+						const refineValue = displayNumberFixedUnit(sumObj[code], 'Wh', rtnUnit, 2);
+						str += '<li class="pv">' + txt + ' : ' + refineValue[0] + ' ' + rtnUnit + '</li>';
+					}
 				}
 			}
 		});
 		dailyChart.xAxis[0].setCategories(categories);
+		dailyChart.yAxis[0].setTitle({
+			text: rtnUnit,
+			align: 'low',
+			rotation: 0, /* 타이틀 기울기 */
+			y: 25, /* 타이틀 위치 조정 */
+			x: 15,
+			style: {
+				color: 'var(--white60)',
+				fontSize: '12px'
+			}
+		});
 		dailyChart.redraw(); // 차트 데이터를 다시 그린다
 		$('#dailySum').append(str);
 	}).catch((error) => {
@@ -701,31 +765,35 @@ const typeSiteDraw = async () => {
 		const siteGenArray = new Array(siteList.length).fill(0);
 		const siteForeGenArray = new Array(siteList.length).fill(0);
 
-		targetApi.forEach((apiUrl, index) => {
-			Object.entries(apiDatas).forEach(([apiKey, apiValue]) => {
-				if (apiUrl === apiKey && !isEmpty(apiValue)) {
-					Object.entries(apiValue.data).forEach(result => {
-						if (result[0] === 'generation') {
-							const rtnData = refineEnergy(result[1], 'day');
-							if (!isEmpty(rtnData)) {
-								const index = rtnData['index']
-									, energy = rtnData['energy'];
+		targetApi.forEach((targetApiUrl, index) => {
+			const apiData = apiDatas[targetApiUrl];
+			if (!isEmpty(apiData)) {
+				const energyData = apiData['data'];
 
-								if (isEmpty(siteGenArray[siteId])) {
-									siteGenArray[siteId] = 0;
-									siteForeGenArray[siteId] = 0;
-								}
+				energyData.forEach(energySiteData => {
+					const generation = energySiteData['generation']
+						, siteId = energySiteData['sid'];
 
+					if (isEmpty(siteGenArray[siteId])) {
+						siteGenArray[siteId] = 0;
+						siteForeGenArray[siteId] = 0;
+					}
+
+					if (!isEmpty(generation.items)) {
+						(generation.items).forEach(items => {
+							const energy = items['energy'];
+
+							if (!isEmpty(energy)) {
 								if (index === 0) {
-									siteGenArray[siteId] += Math.floor(energy / 1000);;
+									siteGenArray[siteId] += energy;
 								} else {
-									siteForeGenArray[siteId] += Math.floor(energy / 1000);
+									siteForeGenArray[siteId] += energy;
 								}
 							}
-						}
-					});
-				}
-			});
+						});
+					}
+				});
+			}
 		});
 
 		const resolveData = {
@@ -737,6 +805,33 @@ const typeSiteDraw = async () => {
 		const siteGenArray = resolveData['siteGenArray']
 			, siteForeGenArray = resolveData['siteForeGenArray']
 			, categories = new Array();
+
+		let maxValue = 0;
+		Object.entries(siteGenArray).forEach(([siteId, data]) => {
+			if (data > maxValue) {
+				maxValue = data;
+			}
+		});
+
+		Object.entries(siteForeGenArray).forEach(([siteId, data]) => {
+			if (data > maxValue) {
+				maxValue = data;
+			}
+		});
+
+		const refineMaxValue = displayNumberFixedDecimal(maxValue, 'Wh', 3, 2);
+		const rtnUnit = refineMaxValue[1];
+		Object.entries(siteGenArray).forEach(([siteId, data]) => {
+			const refineValue = displayNumberFixedUnit(data, 'Wh', rtnUnit, 2);
+			siteGenArray[siteId] = (refineValue[0] == '-' || refineValue[0] == 0) ? 0 : Number((refineValue[0]).replace(/[^0-9 \.]/, ''));
+			maxValue = data;
+		});
+
+		Object.entries(siteForeGenArray).forEach(([siteId, data]) => {
+			const refineValue = displayNumberFixedUnit(data, 'Wh', rtnUnit, 2);
+			siteForeGenArray[siteId] = (refineValue[0] == '-' || refineValue[0] == 0) ? 0 : Number((refineValue[0]).replace(/[^0-9 \.]/, ''));
+			maxValue = data;
+		});
 
 		let tempGenArray = new Array()
 		  , tempForeArray = new Array();
@@ -762,7 +857,7 @@ const typeSiteDraw = async () => {
 			color: 'var(--turquoise)',
 			data: tempGenArray,
 			tooltip: {
-				valueSuffix: 'kWh'
+				valueSuffix: rtnUnit
 			}
 		});
 
@@ -771,10 +866,17 @@ const typeSiteDraw = async () => {
 			color: 'var(--grey)',
 			data: tempForeArray,
 			tooltip: {
-				valueSuffix: 'kWh'
+				valueSuffix: rtnUnit
 			}
 		});
 		typeSiteCurrent.xAxis[0].setCategories(categories);
+		typeSiteCurrent.yAxis[0].setTitle({
+			text: rtnUnit,
+			style: {
+				color: 'var(--white60)',
+				fontSize: '12px'
+			}
+		});
 		typeSiteCurrent.redraw(); // 차트 데이터를 다시 그린다
 
 		let str = '';
@@ -784,28 +886,15 @@ const typeSiteDraw = async () => {
 		if(!isEmpty(tempGenArray)){
 			let newValue = '';
 			genSum = tempGenArray.reduce((acc, val) => { return acc + val } , 0);
-			if ( ( String(genSum).length  >= 3 ) && ( String(genSum).length  < 5 ) ) {
-				newValue = String(genSum).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " kWh";
-			} else if (String(genSum).length  >= 5) {
-				newValue = String(numberComma(genSum / 1000))  + ' M';
-			} else {
-				newValue = String(genSum) + "kWh";
-			}
-			str += '<li class="charge">발전 : ' + newValue + '</li>';
+			str += '<li class="charge">전일 발전 : ' + genSum + ' ' + rtnUnit + '</li>';
 		}
+
 		if(!isEmpty(tempForeArray)){
 			let newValue = '';
 			genForecastSum = tempForeArray.reduce((acc, val) => { return acc + val } , 0);
-
-			if ( ( String(genForecastSum).length  >= 3 ) && ( String(genForecastSum).length  < 5 ) ) {
-				newValue = String(genForecastSum).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " kWh";
-			} else if (String(genForecastSum).length  >= 5) {
-				newValue = String(numberComma(genForecastSum / 1000)) + ' M';
-			} else {
-				newValue = String(genForecastSum) + "kWh";
-			}
-			str += '<li class="discharge">발전 예측 : ' + newValue + '</li>';
+			str += '<li class="discharge">그제 발전 : ' + genForecastSum + ' ' + rtnUnit + '</li>';
 		}
+
 		$("#yesterdaySum").append(str);
 
 	}).catch((error) => {
@@ -841,6 +930,7 @@ const getTodayTotalDetail = async function () {
 			if (!isEmpty(apiDatas[apiUrl])) {
 				if (index === 0) {
 					Object.entries(apiDatas[apiUrl]).forEach(([apiKey, apiData]) => {
+						if (isEmpty(apiKey)) return false;
 						const siteData = siteList.find(site => site.sid === apiKey);
 						let acPowerSum = 0
 							, capacitySum = 0
@@ -1148,11 +1238,11 @@ const searchSite = async function () {
 				}
 
 				site['capacity'] = capacity;
-				site['activePower'] = displayNumberFixedUnit(activePower, 'Wh', 'kWh', 0)[0];
-				site['reactivePower'] = displayNumberFixedUnit(reactivePower, 'Wh', 'kWh', 0)[0];
-				site['essActivePower'] = displayNumberFixedUnit(essActivePower, 'Wh', 'kWh', 0)[0];
-				site['maxActivePower'] = displayNumberFixedUnit(maxActivePower, 'Wh', 'kWh', 0)[0];
-				site['targetActivePower'] = displayNumberFixedUnit(targetActivePower, 'Wh', 'kWh', 0)[0];
+				site['activePower'] = isNaN(activePower) ? '-' : displayNumberFixedUnit(activePower, 'Wh', 'kWh', 0)[0];
+				site['reactivePower'] = isNaN(reactivePower) ? '-' :  displayNumberFixedUnit(reactivePower, 'Wh', 'kWh', 0)[0];
+				site['essActivePower'] = isNaN(essActivePower) ? '-' :  displayNumberFixedUnit(essActivePower, 'Wh', 'kWh', 0)[0];
+				site['maxActivePower'] = isNaN(maxActivePower) ? '-' :  displayNumberFixedUnit(maxActivePower, 'Wh', 'kWh', 0)[0];
+				site['targetActivePower'] = isNaN(targetActivePower) ? '-' :   displayNumberFixedUnit(targetActivePower, 'Wh', 'kWh', 0)[0];
 				site['temperature'] = temperature;
 				site['irradiationPoa'] = irradiationPoa;
 				site['humidity'] = humidity;
@@ -1270,8 +1360,8 @@ const searchSite = async function () {
 
 		setTimeout(function () {
 			refineList.forEach((site, siteIdx) => {
-				let capacity = (site.capacity == '-') ? 0 :site.capacity / 1000;
-				let activePower = (site.activePower == '-') ? 0 : Number(site.activePower.replace(/[^0-9]/g, ''));
+				let capacity = (site.capacity == '-' || site.activePower == 0) ? 0 :site.capacity / 1000;
+				let activePower = (site.activePower == '-' || site.activePower == 0) ? 0 : Number(site.activePower.replace(/[^0-9]/g, ''));
 
 				let activePercent = Math.floor((activePower / capacity) * 100);
 				let title = activePercent + '%';
