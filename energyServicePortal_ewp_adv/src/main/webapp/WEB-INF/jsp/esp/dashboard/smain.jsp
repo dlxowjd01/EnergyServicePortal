@@ -18,10 +18,11 @@
 		<div class="col-12">
 			<div class="flex_start">
 				<div class="dropdown">
+					<!-- <button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="2" disabled>태양광 #2<span class="caret"></span></button> -->
 					<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="1" disabled>사이트 대시보드 #1<span class="caret"></span></button>
 					<ul id="viewOptList" class="dropdown-menu" role="menu">
 						<li data-value="1" data-name="사이트 대시보드 #1"><a href="#" tabindex="-1">사이트 대시보드 #1</a></li>
-						<li data-value="2" data-name="태양광 대시보드 #1"><a href="#" tabindex="-1">태양광 대시보드 #2</a></li>
+						<li data-value="2" data-name="태양광 대시보드 #2"><a href="#" tabindex="-1">태양광 대시보드 #2</a></li>
 					</ul>
 				</div>
 			</div>
@@ -198,22 +199,22 @@
 					<table>
 						<c:choose>
 							<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-						<thead>
-						<tr>
-							<th>설비 용량</th>
-							<th>금일 누적 발전량</th>
-							<th>전일 누적 발전량</th>
-							<th>금일 발전 시간</th>
-						</tr>
-						</thead>
-						<tbody id="centerTbody">
-						<tr>
-							<td><em>&nbsp;&nbsp;kW</em></td>
-							<td><em>&nbsp;&nbsp;kWh</em></td>
-							<td><em>&nbsp;&nbsp;kWh</em></td>
-							<td><em>&nbsp;&nbsp;H</em></td>
-						</tr>
-						</tbody>
+								<thead>
+								<tr>
+									<th>설비 용량</th>
+									<th>금일 누적 발전량</th>
+									<th>전일 누적 발전량</th>
+									<th>금일 발전 시간</th>
+								</tr>
+								</thead>
+								<tbody id="centerTbody">
+								<tr>
+									<td><em>&nbsp;&nbsp;kW</em></td>
+									<td><em>&nbsp;&nbsp;kWh</em></td>
+									<td><em>&nbsp;&nbsp;kWh</em></td>
+									<td><em>&nbsp;&nbsp;H</em></td>
+								</tr>
+								</tbody>
 							</c:when>
 							<c:otherwise>
 						<thead>
@@ -434,7 +435,7 @@
 					<div class="gtbl_top clear">
 						<h2 class="tx_tit">인버터 상태</h2>
 					</div>
-					<ul class="inverter_list" id="inverterList">
+					<ul class="inverter_list" id="invList">
 						<li class="[type]">
 							<div class="chart_top clear">
 								<h2 class="ntit">[name] (<span>0</span>)</h2>
@@ -458,7 +459,6 @@
 					</ul>
 				</div>
 			</div>
-
 		</div>
 
 		<div class="row">
@@ -573,12 +573,9 @@
 			}
 		}
 
-
 		if(viewOptList.prev().data("value") == "2"){
-			// $("#currentTimeB").text(today);
 			$('#defaultDashboard').addClass("hidden");
 			$('#solarDashboard').removeClass("hidden");
-			setInitList('inverterList');
 		} else {
 			$('#defaultDashboard').removeClass("hidden");
 			$('#solarDashboard').addClass("hidden");
@@ -586,12 +583,56 @@
 			setInitList('alarmNotice');
 		}
 
-		getDvcProperties();
+
+
 		getWeatherData();
 		getNowEnergy();
+		getDvcProperties();
 
 		getMinuteData();
 		getQuarterData();
+
+		viewOptList.find('li').on('click', function(){
+			let val = $(this).data("value");
+			let name = $(this).data("name");
+
+			if(switchFlag == false) {
+				if(viewOptList.prev().text() != name) {
+					if(val == "1"){
+						$('#defaultDashboard').removeClass("hidden");
+						$('#solarDashboard').addClass("hidden");
+					} else {
+						getMinuteData(val);
+						getQuarterData(val);
+						getWeatherData(val);
+						$('#defaultDashboard').addClass("hidden");
+						$('#solarDashboard').removeClass("hidden");
+					}
+				}
+			} else {
+				if(viewOptList.prev().text() != name) {
+					if(val == "1"){
+						$('#defaultDashboard').removeClass("hidden");
+						$('#solarDashboard').addClass("hidden");
+					} else {
+						getMinuteData(val);
+						getQuarterData(val);
+						getWeatherData(val);
+						$('#defaultDashboard').addClass("hidden");
+						$('#solarDashboard').removeClass("hidden");
+					}
+					clearInterval(refreshMinInterval);
+					clearInterval(refreshQuarterInterval);
+					setTimeout(function(){
+						refreshMinInterval = setInterval(getMinuteData, 60 * 1000);
+						refreshQuarterInterval = setInterval(getQuarterData, 15 * 60 * 1000);
+					}, 300);
+				}
+			}
+			switchFlag = true;
+			viewOptList.prev().data("value", val);
+		});
+
 
 		Highcharts.setOptions({
 			xAxis: {
@@ -625,52 +666,6 @@
 				noData: '조회된 데이터가 없습니다.'
 			}
 		});
-
-		viewOptList.find('li').on('click', function(){
-			let val = $(this).data("value");
-			let name = $(this).data("name");
-
-			if(switchFlag == false) {
-				if(viewOptList.prev().text() != name) {
-					if(val == "1"){
-						$('#defaultDashboard').removeClass("hidden");
-						$('#solarDashboard').addClass("hidden");
-					} else {
-						// $("#currentTimeB").text(today);
-						getMinuteData(val);
-						getQuarterData(val);
-						getWeatherData(val);
-						setInitList('inverterList');
-						$('#defaultDashboard').addClass("hidden");
-						$('#solarDashboard').removeClass("hidden");
-					}
-				}
-			} else {
-				if(viewOptList.prev().text() != name) {
-					if(val == "1"){
-						$('#defaultDashboard').removeClass("hidden");
-						$('#solarDashboard').addClass("hidden");
-					} else {
-						// $("#currentTimeB").text(today);
-						getMinuteData(val);
-						getQuarterData(val);
-						getWeatherData(val);
-						setInitList('inverterList');
-						$('#defaultDashboard').addClass("hidden");
-						$('#solarDashboard').removeClass("hidden");
-					}
-					clearInterval(refreshMinInterval);
-					clearInterval(refreshQuarterInterval);
-					setTimeout(function(){
-						refreshMinInterval = setInterval(getMinuteData, 60 * 1000);
-						refreshQuarterInterval = setInterval(getQuarterData, 15 * 60 * 1000);
-					}, 300);
-				}
-			}
-			switchFlag = true;
-			viewOptList.prev().data("value", val);
-		});
-
 	});
 
 	const siteId = '${sid}';
@@ -687,7 +682,9 @@
 	const apiGetDvcProperties = '/config/view/device_properties';
 	const featureProperties = new Object();
 	const featurePropertiesSub = new Object();
+
 	let first = true;
+	// let invFlag = true;
 
 	var num12List = [];
 	var num24List = [];
@@ -704,19 +701,18 @@
 		num31List.push(String(i+1));
 	}
 
-	// console.log("date31List---", date31List);
-	var groupingUnits = [
-		[
-			'minute', // unit name
-		[60] // allowed multiples
-		],
-		[
-			'day', [1]],
-		[
-			'week', [1]],
-		[
-			'month', [1]]
-	];
+	// var groupingUnits = [
+	// 	[
+	// 		'minute', // unit name
+	// 	[60] // allowed multiples
+	// 	],
+	// 	[
+	// 		'day', [1]],
+	// 	[
+	// 		'week', [1]],
+	// 	[
+	// 		'month', [1]]
+	// ];
 
 	Highcharts.SVGRenderer.prototype.symbols.download = function (x, y, w, h, z) {
 		var path = [
@@ -1259,7 +1255,7 @@
 			// 		text: '전체'
 			// 	}
 			// ],
-			inputEnabled: false,
+			// inputEnabled: false,
 		},
 		scrollbar: {
 			enabled: false,
@@ -2212,7 +2208,7 @@
 			getTodayTotal("solarDashboard");
 			todayGeneration("solarDashboard");
 			getDvcInfo("solarDashboard");
-		}
+		} 
 	}
 
 	// TODO!!!! => 15min cycle is too long...
@@ -2316,7 +2312,6 @@
 						tempObj['suffix'] = unit;
 						tempObj['reducer'] = v.dashboard_head_reducer;
 						tempFeature.push(tempObj);
-
 						featureProperties[deviceName] = {
 							name: propName,
 							prop: tempFeature
@@ -2339,7 +2334,9 @@
 						};
 					}
 				});
+
 			});
+
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			let r = JSON.parse(jqXHR.responseText);
 			console.log("에러코드:" + jqXHR.status + "\n" + "메세지: " + r);
@@ -2356,40 +2353,9 @@
 		});
 	};
 
-	function deviceSearch(dname, operation) {
-		let searchBoolean = true,
-			keyoard = $('input[name="keyword"]').val().trim();
-
-		const deviceStatusArray = $.makeArray(
-			$(':checkbox[name="deviceStatus"]:checked').map(
-				function () {
-					return $(this).val();
-				}
-			)
-		);
-
-		if (keyoard != '') {
-			if(dname.toUpperCase().match(keyoard.toUpperCase())) {
-				if ($.inArray(String(operation), deviceStatusArray) >= 0) {
-					searchBoolean = true;
-				} else {
-					searchBoolean = false;
-				}
-			} else {
-				searchBoolean = false;
-			}
-		} else {
-			if ($.inArray(String(operation), deviceStatusArray) >= 0) {
-				searchBoolean = true;
-			} else {
-				searchBoolean = false;
-			}
-		}
-		return searchBoolean;
-	}
-
 	function getDvcInfo(option) {
 		let deviceArray = new Array();
+
 		if (!isEmpty(sList[0].devices)) {
 			sList[0].devices.forEach(el => {
 				deviceArray.push(el.did);
@@ -2407,15 +2373,24 @@
 			}).done(function (data, textStatus, jqXHR) {
 
 				if (!isEmpty(option)){
-					let inverterArray = new Array();
-				
+					let invType = new Array();
+					let sortedData;
+
+					setInitList('invList');
+					
 					if(!isEmpty(hourlyINVChart.series.length>0)){
 						hourlyINVChart.series.length = 0;
+					} 
+
+					if(!isEmpty(data) && Object.values(data)){
+						sortedData = Object.values(data);
+						sortedData.sortOn("dname");
 					}
-			
-					$.map(data, function(val, key) {
+
+					$.map(sortedData, function(val, index) {
 						if ( val.device_type == "INV_PV"){
 							const formData = getSiteMainSchCollection('day');
+
 							let hourlyINV = {
 								url: apiHost + apiEnergyDvc,
 								type: 'get',
@@ -2427,19 +2402,19 @@
 									interval: 'hour'
 								}
 							}
-						
-							if ( $.inArray(val.device_type, inverterArray) === -1){
-								inverterArray.push(val.device_type);
-							}
 
+							if ($.inArray(val.device_type, invType) === -1) {
+								invType.push(val.device_type);
+							}
+							
 							$.ajax(hourlyINV).done(function (json, textStatus, jqXHR) {
 								let result = flattenObject(json.data);
 								let temp;
-								let dvcIndex = data[key].data[0].INDEX;
 
 								// const city = getNestedObject(user, ['personalInfo', 'addresses', 0, 'city']);
 								if(!isEmpty(result) && Object.values(result)[0].items.length>0){
 									temp = Object.values(result)[0].items;
+
 									let hourList = [];
 									let colorArr = [
 										"var(--powder-blue)",
@@ -2453,31 +2428,19 @@
 										"var(--mustard)",
 									];
 
-									
-									// let suffixArr = [];
-									// let suffix = "";
 									for(let i=0, arrLength = temp.length; i<arrLength; i++){
-										// let l = String(temp[i].energy).length;
-										// if(l<=3){
-										// 	hourList.push(temp[i].energy);
-										// 	suffixArr.push("Wh");
-										// } else if(l>3 && l<=6){
-											let tempData = parseFloat((temp[i].energy / 1000).toFixed(2));
-											hourList.push(tempData);
-											// console.log("tempData===", tempData)
-											// suffixArr.push("kWh");
-										// }
+										let tempData = parseFloat((temp[i].energy / 1000).toFixed(2));
+										hourList.push(tempData);
 									}
-									// if(suffixArr.indexOf("kWh") > -1){
-									// 	suffix = "wh"
-									// } else {
-									// 	suffix = "kWh"	
-									// }
 
+									if(temp.length > 6 ){				
+										hourlyINVChart.optionsMarginTop += 50;
+									}
 									hourlyINVChart.addSeries({
 										name: val.dname,
+										index: index,
 										type: 'column',
-										color: colorArr[dvcIndex],
+										color: colorArr[index],
 										tooltip: {
 											valueSuffix: "kWh"
 										},
@@ -2505,37 +2468,36 @@
 						}
 					});
 
-					inverterArray.sort();
-
-					$.each(inverterArray, function (i, el) {
-						inverterArray[i] = {
+					$.each(invType, function (i, el) {
+						invType[i] = {
 							name: featurePropertiesSub[el].name,
 							type: el,
 							head: featureProperties[el].prop,
 							body: {
-								type: el,
+								type: el + '2',
 								prop: featurePropertiesSub[el].prop
 							}
 						}
 					});
 
-					setMakeList(inverterArray, 'inverterList', {'dataFunction': {'head': makeHeadTable, 'body': makeBodyTable}});
+					setMakeList(invType, 'invList', { 'dataFunction': { 'head': makeHeadTable, 'body': makeBodyTable } });
 
-					$.each(inverterArray, function (i, el) {
-						let deviceType = el.type;
-						let operationNormal = 0;
-						let operationError = 0;
-						let operationAlert = 0;
-						let headerDataObject = new Object();
+					$.each(invType, function (i, el) {
+						let newInvType = el.type,
+							operationNormal = 0,
+							operationError = 0,
+							operationAlert = 0,
+							headerDataObject = new Object();
+							
+						if (el.type == 'SM_MANUAL') return false;
+
+						setInitList('table_' + newInvType + '2');
+
 						let tableArray = new Array();
-						let tableName = 'table_' + deviceType;
 
-						setInitList(tableName);
-
-						$.map(data, function(val, key) {
+						$.map(sortedData, function(val, key) {
 							let dname = val.dname;
-
-							if (val.device_type == deviceType) {
+							if (val.device_type == newInvType) {
 								let rowData = val.data;
 								if(!isEmpty(rowData)) {
 									let operation = rowData[0]['operation'];
@@ -2554,7 +2516,7 @@
 										if(!isEmpty(headerDataObject[key])) {
 											headerData = headerDataObject[key];
 										}
-										if (key == deviceType) {
+										if (key == newInvType) {
 											$.each(val.prop, function(i, el) {
 												let value = rowData[0][el.key],
 													tmpObj = new Object();
@@ -2600,19 +2562,20 @@
 									});
 
 									$.map(featurePropertiesSub, function(val, key) {
-										if (key == deviceType) {
+										if (key == newInvType) {
 											$.each(val.prop, function(i, el) {
 												let value = rowData[0][el.key];
+
 												if(isEmpty(value)) {
 													rowData[0][el.key] = '-';
 												} else {
 													if((el.suffix.match('W') || el.suffix.match('Wh')) && !el.suffix.match('W/㎡')) {
 														let dummy = displayNumberFixedUnit(value, 'W', 'kW', 2);
 														rowData[0][el.key] = dummy[0];
+													} else if(el.suffix.match('%') || el.suffix.match('℃') || el.suffix.match('W/㎡')) {
+														rowData[0][el.key] = value.toFixed(2);
 													} else if(el.suffix.match('V')) {
-														console.log("rowData[0][el.key]===", rowData[0]);
-														rowData[0][el.key] = value
-														// rowData[0][el.key] = value.toFixed(2);
+														rowData[0][el.key] = value.toFixed(2);
 													}
 												}
 											});
@@ -2634,12 +2597,9 @@
 							}
 						});
 
-						let invEl = $('#inverterList .gtbl_wrap table');
-						let invItem = $('#inverterList .INV_PV');
+						let invItem = $('#invList .INV_PV');
 
 						$.map(headerDataObject, function(el, device) {
-							let deviceType = device;
-
 							$.map(el, function(element, key) {
 								let textValue = element.value,
 									suffix = element.suffix;
@@ -2660,20 +2620,31 @@
 
 							});
 						});
+
 						let deviceCnt = tableArray.length;
-						
+						let tableName = 'table_' + newInvType + '2';
+
 						invItem.find('.ntit span').html(deviceCnt);
 						invItem.find('.alert_icon .inv_normal span').html(operationNormal);
 						invItem.find('.alert_icon .inv_error span').html(operationError);
 						invItem.find('.alert_icon .inv_alert span').html(operationAlert);
 
-						setMakeList(tableArray, 'table_' + deviceType, {'dataFunction': {'operation': setOperation}}, invEl);
+						setMakeList(tableArray, tableName , {'dataFunction': {'operation': setOperation}});
+
 
 					});
 
+
 				} else {
 					let deviceType = new Array();
-					$.map(data, function(val, key) {
+					let sortedData;
+					
+					if(!isEmpty(data) && Object.values(data)){
+						sortedData = Object.values(data);
+						sortedData.sortOn("dname");
+					}
+
+					$.map(sortedData, function(val, key) {
 						if ($.inArray(val.device_type, deviceType) === -1) {
 							if (val.device_type == 'SM_MANUAL') return false;
 							deviceType.push(val.device_type);
@@ -2694,24 +2665,27 @@
 							}
 						}
 					});
-
-					setMakeList(deviceType, 'typeList', {'dataFunction': {'head': makeHeadTable, 'body': makeBodyTable}});
-					
+					setMakeList(deviceType, 'typeList', { 'dataFunction': { 'head': makeHeadTable, 'body': makeBodyTable } });
+				
 					$.each(deviceType, function (i, el) {
-						let deviceType = el.type,
+						let dvcType = el.type,
 							operationNormal = 0,
 							operationError = 0,
 							operationAlert = 0,
 							headerDataObject = new Object();
 							
 						if (el.type == 'SM_MANUAL') return false;
-						setInitList('table_' + deviceType);
-	
+						// if (el.type == 'INV_PV'){
+						// 	setInitList('table_' + invType + '2');
+						// }
+
+						setInitList('table_' + dvcType);
+
 						let tableArray = new Array();
 
-						$.map(data, function(val, key) {
+						$.map(sortedData, function(val, key) {
 							let dname = val.dname;
-							if (val.device_type == deviceType) {
+							if (val.device_type == dvcType) {
 								let rowData = val.data;
 								if(!isEmpty(rowData)) {
 									let operation = rowData[0]['operation'];
@@ -2730,7 +2704,7 @@
 										if(!isEmpty(headerDataObject[key])) {
 											headerData = headerDataObject[key];
 										}
-										if (key == deviceType) {
+										if (key == dvcType) {
 											$.each(val.prop, function(i, el) {
 												let value = rowData[0][el.key],
 													tmpObj = new Object();
@@ -2776,7 +2750,7 @@
 									});
 
 									$.map(featurePropertiesSub, function(val, key) {
-										if (key == deviceType) {
+										if (key == dvcType) {
 											$.each(val.prop, function(i, el) {
 												let value = rowData[0][el.key];
 
@@ -2812,8 +2786,6 @@
 						});
 
 						$.map(headerDataObject, function(el, device) {
-							let deviceType = device;
-
 							$.map(el, function(element, key) {
 								let textValue = element.value,
 									suffix = element.suffix;
@@ -2824,23 +2796,23 @@
 
 									textValue = displayNumberFixedDecimal(textValue, suffix, 3, 2);
 
-									$('#typeList').find('.' + deviceType).find('.tbl_type td.' + key + ' span:nth-child(1)').html(textValue[0]);
+									$('#typeList').find('.' + device).find('.tbl_type td.' + key + ' span:nth-child(1)').html(textValue[0]);
 									if(suffix == 'W' || suffix == 'Wh' || suffix == 'V' || suffix == 'A') {
-										$('#typeList').find('.' + deviceType).find('.tbl_type td.' + key + ' span:nth-child(2)').html(textValue[1]);
+										$('#typeList').find('.' + device).find('.tbl_type td.' + key + ' span:nth-child(2)').html(textValue[1]);
 									}
 								} else {
-									$('#typeList').find('.' + deviceType).find('.tbl_type td.' + key + ' span:nth-child(1)').html(textValue);
+									$('#typeList').find('.' + device).find('.tbl_type td.' + key + ' span:nth-child(1)').html(textValue);
 								}
 
 							});
 						});
 						let deviceCnt = tableArray.length;
 
-						$('#typeList').find('.' + deviceType).find('.ntit span').html(deviceCnt);
-						$('#typeList').find('.' + deviceType).find('.alert_icon .inv_normal span').html(operationNormal);
-						$('#typeList').find('.' + deviceType).find('.alert_icon .inv_error span').html(operationError);
-						$('#typeList').find('.' + deviceType).find('.alert_icon .inv_alert span').html(operationAlert);
-						setMakeList(tableArray, 'table_' + deviceType, {'dataFunction': {'operation': setOperation}});
+						$('#typeList').find('.' + dvcType).find('.ntit span').html(deviceCnt);
+						$('#typeList').find('.' + dvcType).find('.alert_icon .inv_normal span').html(operationNormal);
+						$('#typeList').find('.' + dvcType).find('.alert_icon .inv_error span').html(operationError);
+						$('#typeList').find('.' + dvcType).find('.alert_icon .inv_alert span').html(operationAlert);
+						setMakeList(tableArray, 'table_' + dvcType, {'dataFunction': {'operation': setOperation}});
 					});
 
 				}
@@ -2854,6 +2826,39 @@
 				return false;
 			});
 		}
+	}
+
+
+	function deviceSearch(dname, operation) {
+		let searchBoolean = true;
+		let	keyboard = $('input[name="keyword"]').val().trim();
+
+		const deviceStatusArray = $.makeArray(
+			$(':checkbox[name="deviceStatus"]:checked').map(
+				function () {
+					return $(this).val();
+				}
+			)
+		);
+
+		if (keyboard != '') {
+			if(dname.toUpperCase().match(keyboard.toUpperCase())) {
+				if ($.inArray(String(operation), deviceStatusArray) >= 0) {
+					searchBoolean = true;
+				} else {
+					searchBoolean = false;
+				}
+			} else {
+				searchBoolean = false;
+			}
+		} else {
+			if ($.inArray(String(operation), deviceStatusArray) >= 0) {
+				searchBoolean = true;
+			} else {
+				searchBoolean = false;
+			}
+		}
+		return searchBoolean;
 	}
 
 	function setOperation(operation) {
@@ -2912,6 +2917,7 @@
 			colgroup.appendChild(col);
 
 		}
+
 		targetTable.appendChild(colgroup);
 
 		let thead = targetTable.createTHead();

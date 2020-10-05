@@ -588,6 +588,19 @@ function getNestedObject (nestedObj, pathArr) {
         (obj && obj[key] !== 'undefined') ? obj[key] : undefined, nestedObj);
 }
 
+Array.prototype.sortOn = function(key){
+    this.sort(function(a, b){
+        if(a[key] < b[key]){
+            return -1;
+        }else if(a[key] > b[key]){
+            return 1;
+        }
+        return 0;
+    });
+}
+
+
+
 function makeAjaxCall(option){
 	return $.ajax(option).done(function (json, textStatus, jqXHR) {
 	}).fail(function (jqXHR, textStatus, errorThrown) {

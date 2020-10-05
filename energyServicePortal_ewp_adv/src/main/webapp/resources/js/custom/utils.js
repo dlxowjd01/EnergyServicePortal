@@ -1014,7 +1014,7 @@ function setInitList(listId) {
 //작성자 : lee sang o
 //기능 : json list값  공통 화면그리기 처리
 
-function setMakeList(jsonData, listId, opts, tableName) {
+function setMakeList(jsonData, listId, opts) {
 	var $selecter = $("#" + listId),
 		col_left = "[",
 		col_right = "]",
@@ -1069,11 +1069,7 @@ function setMakeList(jsonData, listId, opts, tableName) {
 		arrTagInfo.push(tmpHtml);
 	}
 
-	if(!isEmpty(tableName)){
-		tableName.html(arrTagInfo.join(""));
-	} else {
-		$selecter.html(arrTagInfo.join(""));
-	}
+	$selecter.html(arrTagInfo.join(""));
 }
 
 function alignFunc(tmpHtml) {

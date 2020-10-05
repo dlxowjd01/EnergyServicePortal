@@ -2096,9 +2096,9 @@ nav .all-menu>a {
 }
 
 nav .all-menu>a:after {
-	display: inline-block;
+	display: block;
 	position: relative;
-	margin: -11px 0 0 25px;
+	margin: -17px 0 0 55px;
 	width: 9px;
 	height: 9px;
 	border: 2px solid var(--white87);
@@ -2109,7 +2109,7 @@ nav .all-menu>a:after {
 }
 
 nav .all-menu>a.on:after {
-	margin-top: 7px;
+	margin-top: -14px;
 	transform: rotate(225deg);
 }
 
@@ -5854,8 +5854,13 @@ input.inp[readonly]:focus {
 	padding-top: 0;
 }
 
+.gmain_table.smain.wrap_type {
+	height: auto
+}
+
 
 .gmain_table.smain.unset {
+	min-height: 406px;
 	height: auto;
 }
 
