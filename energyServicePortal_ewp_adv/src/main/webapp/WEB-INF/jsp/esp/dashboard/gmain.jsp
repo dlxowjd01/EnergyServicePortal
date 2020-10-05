@@ -594,7 +594,6 @@
 				target.eq(0).addClass('hidden').next().removeClass('hidden');
 				$($.fn.dataTable.tables(true)).DataTable().columns.adjust();
 				getDashboardTable('gmainTable');
-			} else {
 				target.eq(0).removeClass('hidden').next().addClass('hidden');
 				// destroyDashboardTable('gmainTable');
 			}

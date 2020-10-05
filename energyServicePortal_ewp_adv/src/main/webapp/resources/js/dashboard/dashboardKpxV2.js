@@ -499,45 +499,49 @@ const monthlyChartDraw = async () => {
 		const pvList = new Object()
 			, sumObj = new Object();
 
-		targetApi.forEach((target, index) => {
-			Object.entries(apiDatas).forEach(([apiKey, apiValue]) => {
-				if(target === apiKey) {
-					if (index === 0) {
-						apiValue['data'].forEach(apiData => {
-							const siteId = apiData['sid'];
-							const rtnData = refineEnergy(apiData, 'month');
-							if (!isEmpty(rtnData) && rtnData['type'] === 'generation') {
-								const siteData = siteList.find(site => site.sid === siteId);
-								const index = rtnData['index']
-									, energy = rtnData['energy'];
-								if (isEmpty(pvList[siteData['resource_type']])) {
-									pvList[siteData['resource_type']] = new Array(12).fill(0);
-									sumObj[siteData['resource_type']] = 0;
-								}
-								pvList[siteData['resource_type']][index] += Math.floor(energy / 1000);
-								sumObj[siteData['resource_type']] += Math.floor(energy / 1000);
-							}
-						});
-					} else {
-						Object.entries(apiValue['data']).forEach(([apiDataKey, apiDataValue]) => {
-							const siteId = apiDataKey;
-							if (!isEmpty(apiDataValue)) {
-								const siteData = siteList.find(site => site.sid === siteId)
-									, index = Number(String(apiDataValue['start']).slice(4, 6)) - 1
-									, energy = apiDataValue['energy'];
+		targetApi.forEach((targetUrl, index) => {
+			const apiData = apiDatas[targetUrl];
+			if (index === 0) {
+				if (!isEmpty(apiData)) {
+					const siteEnergyData = apiData['data'];
+					if (!isEmpty(siteEnergyData)) {
+						siteEnergyData.forEach(siteEnergy => {
+							const siteData = siteList.find(site => site.sid === siteEnergy.sid)
+								, generation = siteEnergy['generation'];
 
-								if (isEmpty(pvList[siteData['resource_type']])) {
-									pvList[siteData['resource_type']] = new Array(12).fill(0);
-									sumObj[siteData['resource_type']] = 0;
-								}
+							if (!isEmpty(generation)) { //태양광
+								const items = generation.items;
+								items.forEach(item => {
+									const index = Number(String(item.basetime).slice(4, 6)) - 1;
+									if (isEmpty(pvList[siteData['resource_type']])) {
+										pvList[siteData['resource_type']] = new Array(12).fill(0);
+										sumObj[siteData['resource_type']] = 0;
+									}
 
-								pvList[siteData['resource_type']][index] += Math.floor(energy / 1000);
-								sumObj[siteData['resource_type']] += Math.floor(energy / 1000);
+									pvList[siteData['resource_type']][index] += Math.floor(item.energy / 1000);
+									sumObj[siteData['resource_type']] += Math.floor(item.energy / 1000);
+								});
 							}
 						});
 					}
 				}
-			});
+			} else {
+				if (!isEmpty(apiData)) {
+					const siteNowEnergyData = apiData['data'];
+					Object.entries(siteNowEnergyData).forEach(([siteKey, nowEnergy]) => {
+						const siteData = siteList.find(site => site.sid === siteKey)
+							, index = Number(String(nowEnergy['start']).slice(4, 6)) - 1;
+
+						if (isEmpty(pvList[siteData['resource_type']])) {
+							pvList[siteData['resource_type']] = new Array(12).fill(0);
+							sumObj[siteData['resource_type']] = 0;
+						}
+
+						pvList[siteData['resource_type']][index] += Math.floor(nowEnergy['energy'] / 1000);
+						sumObj[siteData['resource_type']] += Math.floor(nowEnergy['energy'] / 1000);
+					});
+				}
+			}
 		});
 
 		const resolveData = {
@@ -600,50 +604,51 @@ const dailyChartDraw = async () => {
 		const pvList = new Object()
 			, sumObj = new Object();
 
-		targetApi.forEach((target, index) => {
-			Object.entries(apiDatas).forEach(([apiKey, apiValue]) => {
-				if(target === apiKey) {
-					if (index === 0) {
-						apiValue['data'].forEach(apiData => {
-							const siteId = apiData['sid']
-								, siteData = siteList.find(site => site.sid === siteId);
-							Object.entries(apiData).forEach(([siteEnergyKey, siteEnergyValue]) => {
-								if (siteEnergyKey === 'generation') {
-									(siteEnergyValue.items).forEach(item => {
-										const index = Number(String(item['basetime']).slice(6, 8)) - 1
-											, energy = item['energy'];
+		targetApi.forEach((targetUrl, index) => {
+			const apiData = apiDatas[targetUrl];
+			if (index === 0) {
+				if (!isEmpty(apiData)) {
+					const siteEnergyData = apiData['data'];
+					if (!isEmpty(siteEnergyData)) {
+						siteEnergyData.forEach(siteEnergy => {
+							const siteId = siteEnergy['sid']
+								, siteData = siteList.find(site => site.sid === siteId)
+								, generation = siteEnergy['generation'];
 
-										if (isEmpty(pvList[siteData['resource_type']])) {
-											pvList[siteData['resource_type']] = new Array(lastDay.getDate()).fill(0);
-											sumObj[siteData['resource_type']] = 0;
-										}
+							if (!isEmpty(generation)) { //태양광
+								const items = generation.items;
+								items.forEach(item => {
+									const index = Number(String(item['basetime']).slice(6, 8)) - 1;
 
-										pvList[siteData['resource_type']][index] += Math.floor(energy / 1000);
-										sumObj[siteData['resource_type']] += Math.floor(energy / 1000);
-									});
-								}
-							});
-						});
-					} else {
-						Object.entries(apiValue['data']).forEach(([apiDataKey, apiDataValue]) => {
-							const siteId = apiDataKey;
-							if (!isEmpty(apiDataValue)) {
-								// const siteData = siteList.find(site => site.sid === siteId)
-								// 	, index = Number(String(apiDataValue['start']).slice(6, 8)) - 1
-								// 	, energy = apiDataValue['energy'];
-								//
-								// if (isEmpty(pvList[siteData['resource_type']])) {
-								// 	pvList[siteData['resource_type']] = new Array(lastDay.getDate()).fill(0);
-								// 	sumObj[siteData['resource_type']] = 0;
-								// }
-								//
-								// pvList[siteData['resource_type']][index] += Math.floor(energy / 1000);
-								// sumObj[siteData['resource_type']] += Math.floor(energy / 1000);
+									if (isEmpty(pvList[siteData['resource_type']])) {
+										pvList[siteData['resource_type']] = new Array(lastDay.getDate()).fill(0);
+										sumObj[siteData['resource_type']] = 0;
+									}
+
+									pvList[siteData['resource_type']][index] += Math.floor(item['energy'] / 1000);
+									sumObj[siteData['resource_type']] += Math.floor(item['energy'] / 1000);
+								});
 							}
 						});
 					}
 				}
-			});
+			} else {
+				if (!isEmpty(apiData)) {
+					const siteNowEnergyData = apiData['data'];
+					Object.entries(siteNowEnergyData).forEach(([siteKey, nowEnergy]) => {
+						const siteData = siteList.find(site => site.sid === siteKey)
+							, index = Number(String(nowEnergy['start']).slice(6, 8)) - 1;
+
+						if (isEmpty(pvList[siteData['resource_type']])) {
+							pvList[siteData['resource_type']] = new Array(lastDay.getDate()).fill(0);
+							sumObj[siteData['resource_type']] = 0;
+						}
+
+						pvList[siteData['resource_type']][index] += Math.floor(nowEnergy['energy'] / 1000);
+						sumObj[siteData['resource_type']] += Math.floor(nowEnergy['energy'] / 1000);
+					});
+				}
+			}
 		});
 
 		const resolveData = {
@@ -908,7 +913,6 @@ const getTodayTotalDetail = async function () {
 					y: Math.floor((aPower / capacitySum) * 100)
 				});
 
-				console.log('태양광 :', aPower);
 				$('#centerTbody tr:eq(0) td:nth-child(4)').html('태양광'); //구분
 				$('#centerTbody tr:eq(0) td:nth-child(5)').html(siteCount + '<em>&nbsp;&nbsp;개소</em>'); //사업소
 				$('#centerTbody tr:eq(0) td:nth-child(6)').html(numberComma(Math.floor((capacity / 1000)) + '<em>&nbsp;&nbsp;kW</em>')); //설비용량
@@ -922,7 +926,6 @@ const getTodayTotalDetail = async function () {
 					y: Math.floor((aPower / capacitySum) * 100)
 				});
 
-				console.log('풍력 :', aPower);
 				$('#centerTbody tr:eq(0) td:nth-child(1)').html('풍력'); //구분
 				$('#centerTbody tr:eq(0) td:nth-child(2)').html(siteCount + '<em>&nbsp;&nbsp;개소</em>'); //사업소
 				$('#centerTbody tr:eq(0) td:nth-child(3)').html(numberComma(Math.floor((capacity / 1000)) + '<em>&nbsp;&nbsp;kW</em>')); //설비용량
@@ -941,8 +944,6 @@ const getTodayTotalDetail = async function () {
 			},
 			y: other
 		});
-
-		console.log('deviceArray', deviceArray);
 
 		let seriesData = {
 			type: 'pie',

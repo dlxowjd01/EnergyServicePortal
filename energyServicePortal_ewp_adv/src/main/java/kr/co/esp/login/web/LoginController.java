@@ -75,7 +75,7 @@ public class LoginController {
 	@RequestMapping("/loginFailure.do")
 	public String loginFailure(HttpSession session, RedirectAttributes redirect) throws Exception {
 		Locale locale = (Locale) session.getAttribute("sessionLocale");
-		redirect.addFlashAttribute("msg", egovMessageSource.getMessage("ewp.error.login_no_user", locale));
+		redirect.addFlashAttribute("msg", egovMessageSource.getMessage("ewp.error.login_no_correct", locale));
 		return "redirect:/login.do";
 	}
 

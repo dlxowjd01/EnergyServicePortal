@@ -31,18 +31,25 @@
 				contentType: 'application/x-www-form-urlencoded',
 				dataFilter: function (json) {
 					json = JSON.parse(json);
+					console.log(json);
 					let rtnData = new Object();
 					rtnData.recordsTotal = json.paging.totalCount;
 					rtnData.recordsFiltered = json.paging.totalCount;
 					rtnData.data = json.deviceList;
 
+					let revokeCnt = '-';
 					json.certCntList.forEach(cert => {
-						if (cert.STATUS === '등록') {
-							$('#등록').text(cert.CNT + ' 건');
-						} else if (cert.STATUS === '폐기') {
-							$('#폐기').text(cert.CNT + ' 건');
+						if (cert.STATUS === '폐기') {
+							revokeCnt = cert.CNT + ' 건';
 						}
 					});
+
+					if (!isEmpty(json.deviceList) && json.deviceList.length > 0) {
+						$('#registerDevice').text(json.deviceList.length + ' 건');
+					} else {
+						$('#registerDevice').text('-');
+					}
+					$('#revokeDevice').text(revokeCnt);
 
 					$('#CERT_POLICY_VALID').text((json.deviceInfo[0].CERT_POLICY_VALID / 12) + ' 년');
 					$('#CERT_POLICY_ID').text(json.deviceInfo[0].CERT_POLICY_ID);
@@ -197,7 +204,7 @@
 								<td id="CREATE_DATE">
 								</td>
 								<th><h2 class="tx_tit">기기등록</h2></th>
-								<td id="등록">
+								<td id="registerDevice">
 								</td>
 							</tr>
 							<tr>
@@ -217,7 +224,7 @@
 								<th><h2 class="tx_tit">제조사명</h2></th>
 								<td id="PKG_MANUFACTURE_NAME"></td>
 								<th><h2 class="tx_tit">폐기</h2></th>
-								<td id="폐기"></td>
+								<td id="revokeDevice"></td>
 							</tr>
 							<tr>
 								<th><h2 class="tx_tit">제품모델명</h2></th>

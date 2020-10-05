@@ -41,10 +41,6 @@
 		const replaceNotFullKorean = /[ㄱ-ㅎㅏ-ㅣ0-9]/gi;
 		const message = '${msg}';
 
-		<c:if test="${not empty msg}">
-			alertMsg(message);
-		</c:if>
-
 		$(document).ready(function () {
 			//핸드폰 번호
 			$("#findIdMobileNum, #findIdCode, #findPwdMobileNum, #findPwdCode").on('focusout', function() {
@@ -274,6 +270,10 @@
 			$("#signUpModal, #findIdModal, #changePwdModal").on("hide.bs.modal", function(){
 				initModal(this);
 			});
+
+			<c:if test="${not empty msg}">
+			alertMsg(message);
+			</c:if>
 		});
 
 		// TO KEEP!!! (signUP)
@@ -327,16 +327,16 @@
 			f.submit();
 		}
 
-		function showPwd(inputId, btn) {
-			var target = document.getElementById(inputId);
-			if (target.type === "password") {
-				target.type = "text";
-				btn.classList.add("eye-close");
-			} else {
-				target.type = "password";
-				btn.classList.remove("eye-close");
-			}
-		}
+		// function showPwd(inputId, btn) {
+		// 	var target = document.getElementById(inputId);
+		// 	if (target.type === "password") {
+		// 		target.type = "text";
+		// 		btn.classList.add("eye-close");
+		// 	} else {
+		// 		target.type = "password";
+		// 		btn.classList.remove("eye-close");
+		// 	}
+		// }
 
 		function openUserModal(option) {
 			const modal = $('#' + option);
@@ -466,7 +466,9 @@
 					</c:otherwise>
 				</c:choose>
 				<div class="input-field"><input type="text" id="loginUserId" name="login_id" class="clear-input" placeholder=<fmt:message key="ewp.login.ID"/>></div>
-				<div class="input-field"><input type="password" id="loginUserPw" name="password" class="clear-input" placeholder=<fmt:message key="ewp.login.Password"/>><button type="button" class="clear-btn" onclick="showPwd( 'loginUserPw', this)">show</button></div>
+				<div class="input-field"><input type="password" id="loginUserPw" name="password" class="clear-input" placeholder=<fmt:message key="ewp.login.Password"/>>
+<%--					<button type="button" class="clear-btn" onclick="showPwd( 'loginUserPw', this)">show</button>--%> <%-- 일부 브라우져 오작동으로 주석 --%>
+				</div>
 				<div class="input-field no-border"><a class="chk_type"><input type="checkbox" id="saveLogin" name="save_login"><label for="saveLogin">로그인 유지</label></a></div>
 
 				<div class="btn-wrapper">
