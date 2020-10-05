@@ -693,6 +693,9 @@
 	var date12List = addToDateList(12);
 	var date31List = addToDateList(30);
 
+	// console.log("date12List===", date12List);
+	// console.log("date31List===", date31List);
+	
 	for(let i=0; i<12; i++){
 		num12List.push(String(i+1));
 	}
@@ -1040,7 +1043,6 @@
 
 
 	var dailySolarChart = Highcharts.chart('dailySolarChart', {
-	// var dailySolarChart = Highcharts.chart('dailySolarChart', {
 		chart: {
 			marginTop: 80,
 			marginLeft: 20,
@@ -1086,7 +1088,9 @@
 					fontSize: '12px'
 				},
 				formatter: function () {
-					return date12List[this.value];
+					let temp = date12List[ ( this.value - 1)];
+					let newVal = temp.substring(0,2) + "/" + temp.substring(2,4)
+					return newVal;
 				},
 			},
 			tickInterval: 1,
@@ -1152,7 +1156,18 @@
 			style: {
 				color: 'var(--white)',
 				lineHeight: '18px'
-			}
+			},
+			formatter: function () {
+				let temp = date12List[(this.x-1)];
+				let newVal = temp.substring(0,2) + "/" + temp.substring(2,4);
+
+				return ['<b>' + newVal + '</b>'].concat(
+					this.points ?
+						this.points.map(function (point) {
+							return "<br/><span style='color:" + point.series.color + "'>\u25CF</span> " + point.series.name + point.y  + "<br/>";
+						}) : []
+				);
+			},
 		},
 		legend: {
 			enabled: true,
@@ -1286,7 +1301,10 @@
 				labels: {
 					// enabled: false,
 					formatter: function () {
-						return date31List[this.value];
+						let temp = date31List[this.value];
+						let newVal = temp.substring(0,2) + "/" + temp.substring(2,4);
+
+						return newVal;
 					},
 				}
 			}
@@ -1334,7 +1352,11 @@
 					align: 'center',
 					y: 27,
 					formatter: function () {
-						return date31List[this.value];
+						let temp = date31List[this.value];
+						let newVal = temp.substring(0,2) + "/" + temp.substring(2,4);
+						return newVal;
+
+						// return date31List[this.value];
 					},
 					style: {
 						color: 'var(--grey)',
@@ -1412,8 +1434,13 @@
             //         (this.points[0].point.high-this.points[0].point.low)+"s";
             //  },
 			// useHTML: true
+				// let temp = date31List[this.x+1];
+				// let newVal = temp.substring(0,2) + "/" + temp.substring(2,4);
+				// console.log("temp==", this.value);
+				let temp = date31List[this.x];
+				let newVal = temp.substring(0,2) + "/" + temp.substring(2,4);
 
-				return ['<b>' + this.x + '</b>'].concat(
+				return ['<b>' + newVal + '</b>'].concat(
 					this.points ?
 						this.points.map(function (point) {
 							return "<br/><span style='color:" + point.series.color + "'>\u25CF</span> " + point.series.name + point.y  + "<br/>";
@@ -3411,7 +3438,7 @@
 				data: chartItems3,
 			});
 
-			// console.log("chartItems2==", chartItems2)
+	
 			dailySolarTrendChart.addSeries({
 				name: seriesName[1].label,
 				type: 'line',
@@ -3428,6 +3455,9 @@
 				// 	pointStart: 10,
 				// }
 			});
+			
+			let trimChartItems3 = chartItems3.slice(18, 30);
+			let trimChartItems2 = chartItems2.slice(18, 30);
 
 
 			dailySolarChart.addSeries({
@@ -3437,7 +3467,7 @@
 				tooltip: {
 					valueSuffix: 'kWh',
 				},
-				data: chartItems3.slice(18, 30),
+				data: trimChartItems3,
 			});
 
 			dailySolarChart.addSeries({
@@ -3448,7 +3478,7 @@
 				tooltip: {
 					valueSuffix: 'kWh',
 				},
-				data: chartItems2.slice(18, 30),
+				data: trimChartItems2,
 			});
 
 		}
@@ -4351,7 +4381,9 @@
 			} else {
 				dates.push(num);
 			}
+
 		}
+
 		return dates.reverse();
 	}
 

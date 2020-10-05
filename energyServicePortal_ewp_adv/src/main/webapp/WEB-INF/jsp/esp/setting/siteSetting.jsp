@@ -176,8 +176,8 @@
 		});
 
 		$("#addAlarmModal").on("hide.bs.modal", function() {
+			$("#alarmTable").DataTable().destroy();
 			initAlarmTable();
-			$("#alarmTable").DataTable().clear().destroy();
 		});
 
 		$("#resultModal").on("hide.bs.modal", function() {
@@ -652,7 +652,14 @@
 				$("#resultSuccessMsg").text("알람 설정이 완료 되었습니다.").removeClass("hidden");
 				$("#resultBtn").parent().addClass("hidden");
 				$("#resultModal").modal("show");
-				refreshSiteList();
+
+				$("#siteTable").DataTable().destroy();
+				$("#alarmTable").DataTable().destroy();
+
+				setTimeout(function(){
+					refreshSiteList();
+				}, 200);
+
 				setTimeout(function(){
 					$("#resultModal").modal("hide");
 				}, 1600);
@@ -685,7 +692,6 @@
 			},
 		];
 
-		$('#siteTable').DataTable().clear().destroy();
 		if(role == 1){
 			Promise.all([ Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])) ]).then( res => {
 			// Promise.resolve(returnAjaxRes(optionList[0])).then( res => {
@@ -850,6 +856,7 @@
 
 				var siteTable = $('#siteTable').DataTable({
 					"aaData": newArr,
+					"destroy": true,
 					"table-layout": "fixed",
 					"fixedHeader": true,
 					"bAutoWidth": true,
@@ -1051,12 +1058,13 @@
 				// 	console.log("sid===", data.sid)
 				// }).data();
 
-				siteTable.on( 'click', 'td .btn-type-sm', function () {
+				$('#siteTable').on( 'click', 'td .btn-type-sm', function () {
+					let dTable = $('#siteTable').DataTable();
 					let tr = $(this).parents().closest("tr");
-					let idx = siteTable.row(tr).index();
+					let idx = dTable.row(tr).index();
 
 					// if(!isEmpty(siteTable.row(tr).data().alarmData)){
-						let rowData = siteTable.row(tr).data().alarmInfo;
+						let rowData = dTable.row(tr).data().alarmInfo;
 						let userOpt = {
 							url: apiHost + "/config/users",
 							type: 'get',
@@ -1065,7 +1073,6 @@
 								oid: oid,
 							}
 						}
-
 						Promise.resolve(makeAjaxCall(userOpt)).then(res => {
 							getAlarmTable(rowData, res);
 						});
@@ -2434,8 +2441,9 @@
 
 				// return false;
 				if(alarmList.length > 0) {
-					let alarmTable = $('#alarmTable').DataTable({
+					var alarmTable = $('#alarmTable').DataTable({
 						"aaData": alarmList,
+						"destroy": true,
 						// "table-layout": "fixed",
 						"fixedHeader": true,
 						"bAutoWidth": true,
@@ -2806,7 +2814,7 @@
 							{
 								"sTitle": "추가 / 수정 / 삭제",
 								"mData": null,
-								"mRender": function ( data, type, row, row, rowIndex ) {
+								"mRender": function ( data, type, row, rowIndex ) {
 									let deleteStr = ``;
 									let length = 0;
 
@@ -2819,7 +2827,7 @@
 									for(let i = 0, arrLength = length; i < arrLength; i++ ){
 										deleteStr += `
 											<div class="flex_start">
-												<button type="button" class="icon-add" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'add')">추가</button>
+												<button type="button" class="icon-add" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'add' )">추가</button>
 												<button type="button" class="icon-edit" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'edit')">수정</button>
 												<button type="button" class="icon-delete" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'delete')">삭제</button>
 											</div>
@@ -2869,13 +2877,12 @@
 						}
 					}).columns.adjust();					
 				} else {
-					// console.log("alarmData===", alarmData)
-
 					let newDevType = [...new Map(alarmData.map(x => [x.device_type, x])).values()];
 					let subGroup = [...new Map(alarmData.map(x => [x.name, x])).values()];
 
-					let alarmTable = $('#alarmTable').DataTable({
+					var alarmTable = $('#alarmTable').DataTable({
 						"aaData": newDevType,
+						"destroy": true,
 						// "table-layout": "fixed",
 						"fixedHeader": true,
 						"bAutoWidth": true,
@@ -3113,15 +3120,14 @@
 
 		});
 
-
-	
 	}
 
-	function updateAlarmTable(self, option){		
+	function updateAlarmTable(self, option){
+
 		let tr = self.parents().closest("tr");
 		let td = tr.find("td");
-		let alarmTable = $("#alarmTable").DataTable();	
-		let rowData = alarmTable.row(tr).data();	
+		let dTable = $("#alarmTable").DataTable();	
+		let rowData = dTable.row(tr).data();	
 		let dataIdx = self.data("index");
 		
 		let directInput = tr.find("td:nth-of-type(4) input[type='text']").eq(dataIdx);
