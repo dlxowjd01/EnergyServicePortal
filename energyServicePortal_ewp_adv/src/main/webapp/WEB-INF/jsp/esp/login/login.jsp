@@ -34,22 +34,16 @@
 	<script type="text/javascript" src="/js/jquery-ui-1.12.1.min.js"></script>
 	<script type="text/javascript" src="/js/commonDropdown.js"></script>
 
-	<c:if test="${not empty msg}">
-		<script type="text/javascript">
-			let message = '${msg}'
-			$("#warningMsg").text(message);
-			$("#warningModal").modal("show");
-			setTimeout(function(){
-				$("#warningModal").modal("hide");
-			}, 1800);
-		</script>
-	</c:if>
-
 	<script type="text/javascript">
 		const oid = '${oid}';
 		const apiHost = '${apiHost}';
 		const replaceChar = /[^0-9]/gi;
-		const replaceNotFullKorean = /[ㄱ-ㅎㅏ-ㅣ0-9a-z]/gi;
+		const replaceNotFullKorean = /[ㄱ-ㅎㅏ-ㅣ0-9]/gi;
+		const message = '${msg}';
+
+		<c:if test="${not empty msg}">
+			alertMsg(message);
+		</c:if>
 
 		$(document).ready(function () {
 			//핸드폰 번호
@@ -145,7 +139,6 @@
 				} else {
 					$("#newId").parent().next().prop("disabled", true);
 				}
-
 			});
 
 			// validation
@@ -160,10 +153,10 @@
 				}
 			});
 
-			$('#findPwdId, #newPwd, #verifyNewPwd, #rtuSecretKey').on('focusout', function() {
+			$('#findPwdId, #newPwd, #verifyNewPwd, #rtuSecretKey').on('focusout keyup', function() {
 				let validated = $('#newPwdMatched').hasClass('hidden');
-				if(!isEmpty($('#findPwdId')) && !isEmpty($('#newPwd'))
-					&& !isEmpty($('#verifyNewPwd')) && !isEmpty($('#rtuSecretKey'))
+				if(!isEmpty($('#findPwdId').val()) && !isEmpty($('#newPwd').val())
+					&& !isEmpty($('#verifyNewPwd').val()) && !isEmpty($('#rtuSecretKey').val())
 					&& $('#changePwdModal').find(".tick:not(.checked)").index() == -1 && validated) {
 					$("#updatePwdBtn").removeClass("disabled");
 					$("#updatePwdBtn").prop("disabled", false);
@@ -171,6 +164,72 @@
 					$("#updatePwdBtn").addClass("disabled");
 					$("#updatePwdBtn").prop("disabled", true);
 				}
+			});
+
+			//아이디 찾기
+			$('#findIdName, #findIdSecret').on('focusout keyup', function() {
+				if (!isEmpty($('#findIdName').val()) && !isEmpty($('#findIdSecret').val())) {
+					$("#findIdBtn").removeClass("disabled").prop("disabled", false);
+				} else {
+					$("#findIdBtn").addClass("disabled").prop("disabled", true)
+				}
+			});
+
+			//비밀번호 변경 팝업
+			$('#updatePwdBtn').on('click', function(){
+				$.ajax({
+					url: apiHost + '/config/users/change_password',
+					type: 'patch',
+					dataType: 'json',
+					contentType: 'application/json',
+					data: JSON.stringify({
+						oid: oid,
+						login_id: $('#findPwdId').val(),
+						verify_code: $('#rtuSecretKey').val(),
+						new_password: $('#newPwd').val(),
+					})
+				}).done((json, textStatus, jqXHR) => {
+					$('#changePwdModal').modal('hide');
+					let showText = '';
+					if (json.count == 1) {
+						showText = '변경이 완료되었습니다.';
+					} else {
+						showText = '변경된 내역이 없습니다.';
+					}
+					alertMsg(showText);
+				}).fail((jqXHR, textStatus, errorThrown) => {
+					$('#changePwdModal').modal('hide');
+					alertMsg(textStatus);
+				});
+			});
+
+			//아이디 찾기
+			$('#findIdBtn').on('click', function(){
+				$.ajax({
+					url: apiHost + '/config/users/find/login_id',
+					type: 'get',
+					data: {
+						oid: oid,
+						name: $('#findIdName').val(),
+						verify_code: $('#findIdSecret').val()
+					}
+				}).done((json, textStatus, jqXHR) => {
+					$('#findIdModal').modal('hide');
+					let showText = '';
+					if (json.length > 0) {
+						if (json.length > 1) {
+							showText = json.join('<br/>');
+						} else {
+							showText = json[0];
+						}
+					} else {
+						showText = '검색 된 아이디가 없습니다.';
+					}
+					alertMsg(showText);
+				}).fail((jqXHR, textStatus, errorThrown) => {
+					$('#findIdModal').modal('hide');
+					alertMsg(textStatus);
+				});
 			});
 
 			$("#newPwd").on('keyup', function() {
@@ -183,14 +242,14 @@
 						Pattern: "[0-9]",
 						Target: "newPwdHasNumber"
 					},
-					// {
-					// Pattern: "[!@@#$%^&*]",
-					// Target: "Symbols"
-					// }
+					{
+					Pattern: "[!@@#$%^&*]",
+					Target: "newPwdHasSymbols"
+					}
 				];
 
 				let password = $(this).val();
-				password.length >= 6 ? $("#newPwdIsSixCharLong").addClass("checked") : $("#newPwdIsSixCharLong").removeClass("checked");
+				password.length >= 8 ? $("#newPwdIsEightCharLong").addClass("checked") : $("#newPwdIsEightCharLong").removeClass("checked");
 
 				for (var i = 0; i < rules.length; i++) {
 					if( new RegExp(rules[i].Pattern).test(password) ) {
@@ -212,20 +271,8 @@
 				}
 			});
 
-			$("#signUpForm").on("submit", function(e){
-				e.preventDefault();
-			});
-
 			// Modal event
-			$("#signUpModal").on("hide.bs.modal", function(){
-				initModal(this);
-			});
-
-			$("#findIdModal").on("hide.bs.modal", function(){
-				initModal(this);
-			});
-
-			$("#changePwdModal").on("hide.bs.modal", function(){
+			$("#signUpModal, #findIdModal, #changePwdModal").on("hide.bs.modal", function(){
 				initModal(this);
 			});
 		});
@@ -308,15 +355,15 @@
 					Target: "hasNumber"
 				},
 				// {
-				// Pattern: "[!@@#$%^&*]",
-				// Target: "Symbols"
+				// 	Pattern: "[!@@#$%^&*]",
+				// 	Target: "Symbols"
 				// }
 			];
 
 			let password = $(this).val();
 			password.length >= 6 ? $("#isSixCharLong").addClass("checked") : $("#isSixCharLong").removeClass("checked");
 
-			for (var i = 0; i < rules.length; i++) {
+			for (let i = 0; i < rules.length; i++) {
 				if( new RegExp(rules[i].Pattern).test(password) ) {
 					$("#" + rules[i].Target).addClass("checked")
 				} else {
@@ -328,9 +375,11 @@
 
 		function initModal(self) {
 			let txtInput = $(self).find("input:text");
+			let txtInputPs = $(self).find("input:password");
 			let radioInput = $(self).find("input:radio");
 			let btn = $(self).find(".btn_wrap_type02 button");
-			txtInput.val("");
+			txtInput.val('');
+			txtInputPs.val('');
 			radioInput.prop("checked", false);
 			btn.prop("disabled", false);
 
@@ -366,7 +415,6 @@
 				$("#validId").removeClass("hidden");
 				validateForm();
 			}).fail(function (jqXHR, textStatus, errorThrown) {
-				console.log(jqXHR)
 				if(jqXHR.status == 409){
 					console.log(jqXHR);
 					$("#invalidId").removeClass("hidden");
@@ -385,6 +433,13 @@
 			}
 		}
 
+		function alertMsg(showText) {
+			$("#warningMsg").text(showText);
+			$("#warningModal").modal("show");
+			setTimeout(function(){
+				$("#warningModal").modal("hide");
+			}, 1800);
+		}
 	</script>
 </head>
 <body>
@@ -417,11 +472,22 @@
 
 				<div class="btn-wrapper">
 					<input type="submit" id="loginBtn" name="login" value="<fmt:message key="ewp.login.Signin" />">
-<%--					<p class="center"><!----%>
-<%--					--><a href="#" onclick="openUserModal('signUpModal'); return false;">회원 가입</a><!----%>
-<%--					--><a href="#" onclick="openUserModal('findIdModal'); return false;">아이디 찾기</a><!----%>
-<%--					--><a href="#" onclick="openUserModal('changePwdModal'); return false;">비밀번호 변경</a><!----%>
-<%--				--></p>--%>
+					<c:choose>
+						<c:when test="${defaultOid eq 'testkpx'}">
+							<p class="center"><!--
+							--><a href="#" onclick="openUserModal('findIdModal'); return false;">아이디 찾기</a><!--
+							--><a href="#" onclick="openUserModal('changePwdModal'); return false;">비밀번호 변경</a><!--
+						--></p>
+						</c:when>
+						<c:otherwise>
+<%--							<p class="center"><!----%>
+<%--							--><a href="#" onclick="openUserModal('signUpModal'); return false;">회원 가입</a><!----%>
+<%--							--><a href="#" onclick="openUserModal('findIdModal'); return false;">아이디 찾기</a><!----%>
+<%--							--><a href="#" onclick="openUserModal('changePwdModal'); return false;">비밀번호 변경</a><!----%>
+<%--						--></p>--%>
+						</c:otherwise>
+					</c:choose>
+
 				</div>
 
 				<%-- KPX(전력 거래소 사용시 하단 내용 숨김) --%>
@@ -608,73 +674,92 @@
 				<div class="modal-body">
 					<div class="container-fluid">
 						<form name="find_id_form" id="findIdForm" class="user-form">
-							<div class="row">
-								<div class="col-3"><span class="input_label asterisk">이름</span></div>
-								<div class="col-9">
-									<div class="tx_inp_type"><input type="text" id="findIdlName" name="find_id_name" placeholder="입력" minlength="3" maxlength="28"></div>
-									<small class="hidden warning-text">영문/한글(3~28 글자) 조합의 이름을 입력해 주세요</small>
-								</div>
-							</div>
-
-							<div class="row">
-								<div class="col-3"><span class="input_label asterisk">이동 통신사</span></div>
-								<div class="col-9">
-									<div class="rdo_type flex_start">
-										<div class="radio-group">
-											<input type="radio" id="carrierA" name="carrier_opt" data-value="sk">
-											<label for="carrierA">SKT</label>
-										</div>
-										<div class="radio-group">
-											<input type="radio" id="carrierB" name="carrier_opt" data-value="kt">
-											<label for="carrierB">KT</label>
-										</div>
-										<div class="radio-group">
-											<input type="radio" id="carrierC" name="carrier_opt" data-value="lg">
-											<label for="carrierC">LG U+</label>
+							<c:choose>
+								<c:when test="${defaultOid eq 'testkpx'}">
+									<div class="row">
+										<div class="col-3"><span class="input_label asterisk">이름</span></div>
+										<div class="col-9">
+											<div class="tx_inp_type"><input type="text" id="findIdName" name="find_id_name" placeholder="입력" minlength="3" maxlength="28" autocomplete="off"></div>
+											<small class="hidden warning-text">영문/한글(3~28 글자) 조합의 이름을 입력해 주세요</small>
 										</div>
 									</div>
-									<div class="flex_start">
-										<small class="hidden warning-text">이동 통신사를 선택해 주세요.</small>
-									</div>
-								</div>
-							</div>
-
-							<div class="row">
-								<div class="col-3"><span class="input_label">휴대폰 번호</span></div>
-								<div class="col-9">
-									<div class="flex_start">
-										<div class="dropdown w-90" id="findIdMobilePrefix">
-											<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-											<ul class="dropdown-menu">
-												<li data-value="010"><a href="javascript:void(0);">010</a></li>
-												<li data-value="011"><a href="javascript:void(0);">011</a></li>
-												<li data-value="016"><a href="javascript:void(0);">016</a></li>
-												<li data-value="017"><a href="javascript:void(0);">017</a></li>
-												<li data-value="019"><a href="javascript:void(0);">019</a></li>
-											</ul>
+									<div class="row">
+										<div class="col-3"><span class="input_label asterisk">RTU 비밀키</span></div>
+										<div class="col-9">
+											<div class="tx_inp_type"><input type="text" id="findIdSecret" name="find_id_secret" placeholder="입력" minlength="3" maxlength="28" autocomplete="off"></div>
+											<small class="hidden warning-text">RTU 비밀키를 입력해 주세요</small>
 										</div>
-										<div class="tx_inp_type offset-176"><input type="text" id="findIdMobileNum" name="find_id_mobil_num" placeholder="입력" maxlength="13"></div>
-										<button type="button" class="btn_type fr">인증</button>
 									</div>
-									<div class="flex_start">
-										<small id="isValidNumA" class=" warning hidden">10자리 이상의 휴대폰 번호를 입력해 주세요.</small>
+								</c:when>
+								<c:otherwise>
+									<div class="row">
+										<div class="col-3"><span class="input_label asterisk">이름</span></div>
+										<div class="col-9">
+											<div class="tx_inp_type"><input type="text" id="findIdName" name="find_id_name" placeholder="입력" minlength="3" maxlength="28" autocomplete="off"></div>
+											<small class="hidden warning-text">영문/한글(3~28 글자) 조합의 이름을 입력해 주세요</small>
+										</div>
 									</div>
-								</div>
-							</div>
 
-							<div class="row">
-								<div class="col-3"><span class="input_label">인증 번호</span></div>
-								<div class="col-9">
-									<div class="tx_inp_type"><input type="text" id="findIdCode" name="find_id_code" placeholder="입력">
+									<div class="row">
+										<div class="col-3"><span class="input_label asterisk">이동 통신사</span></div>
+										<div class="col-9">
+											<div class="rdo_type flex_start">
+												<div class="radio-group">
+													<input type="radio" id="carrierA" name="carrier_opt" data-value="sk">
+													<label for="carrierA">SKT</label>
+												</div>
+												<div class="radio-group">
+													<input type="radio" id="carrierB" name="carrier_opt" data-value="kt">
+													<label for="carrierB">KT</label>
+												</div>
+												<div class="radio-group">
+													<input type="radio" id="carrierC" name="carrier_opt" data-value="lg">
+													<label for="carrierC">LG U+</label>
+												</div>
+											</div>
+											<div class="flex_start">
+												<small class="hidden warning-text">이동 통신사를 선택해 주세요.</small>
+											</div>
+										</div>
 									</div>
-								</div>
-							</div>
 
+									<div class="row">
+										<div class="col-3"><span class="input_label">휴대폰 번호</span></div>
+										<div class="col-9">
+											<div class="flex_start">
+												<div class="dropdown w-90" id="findIdMobilePrefix">
+													<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+													<ul class="dropdown-menu">
+														<li data-value="010"><a href="javascript:void(0);">010</a></li>
+														<li data-value="011"><a href="javascript:void(0);">011</a></li>
+														<li data-value="016"><a href="javascript:void(0);">016</a></li>
+														<li data-value="017"><a href="javascript:void(0);">017</a></li>
+														<li data-value="019"><a href="javascript:void(0);">019</a></li>
+													</ul>
+												</div>
+												<div class="tx_inp_type offset-176"><input type="text" id="findIdMobileNum" name="find_id_mobil_num" placeholder="입력" maxlength="13"></div>
+												<button type="button" class="btn_type fr">인증</button>
+											</div>
+											<div class="flex_start">
+												<small id="isValidNumA" class=" warning hidden">10자리 이상의 휴대폰 번호를 입력해 주세요.</small>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-3"><span class="input_label">인증 번호</span></div>
+										<div class="col-9">
+											<div class="tx_inp_type"><input type="text" id="findIdCode" name="find_id_code" placeholder="입력">
+											</div>
+										</div>
+									</div>
+								</c:otherwise>
+							</c:choose>
 							<div class="row">
 								<div class="col-12">
 									<div class="btn_wrap_type02"><!--
 									--><button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button><!--
-										--><button type="submit" id="findIdBtn" class="btn_type" disabled>등록</button><!--
+										--><button type="button" id="findIdBtn" class="btn_type" disabled>찾기</button><!--
 									--></div>
 								</div>
 							</div>
@@ -692,12 +777,13 @@
 				<div class="modal-header"><h2>비밀번호 변경</h2></div>
 				<div class="modal-body">
 					<div class="container-fluid">
+						<form name="find_pwd_form" id="findPwdForm" class="user-form">
 						<c:choose>
-							<c:when test="${defaultOid ne 'testkpx'}">
+							<c:when test="${defaultOid eq 'testkpx'}">
 								<div class="row">
 									<div class="col-3"><span class="input_label asterisk">ID</span></div>
 									<div class="col-9">
-										<div class="tx_inp_type"><input type="text" id="findPwdId" name="find_pwd_id" placeholder="입력" minlength="3" maxlength="28"></div>
+										<div class="tx_inp_type"><input type="text" id="findPwdId" name="find_pwd_id" placeholder="입력" minlength="3" maxlength="28" autocomplete="off"></div>
 										<small class="hidden warning-text">ID를 입력해 주세요</small>
 									</div>
 								</div>
@@ -715,11 +801,12 @@
 									<div class="col-9">
 										<div class="flex_start">
 											<div class="tx_inp_type">
-												<input type="password" id="newPwd" name="newPwd" placeholder="입력" minlength="6" maxlength="32" autocomplete="off">
+												<input type="password" id="newPwd" name="newPwd" placeholder="입력" minlength="8" maxlength="32" autocomplete="off">
 												<div class="flex_start warning-wrapper">
 													<small class="tick" id="newPwdHasLetter">영문</small>
 													<small class="tick" id="newPwdHasNumber">숫자</small>
-													<small class="tick" id="newPwdIsSixCharLong">6자리 이상</small>
+													<small class="tick" id="newPwdHasSymbol">특수문자</small>
+													<small class="tick" id="newPwdIsEightCharLong">8자리 이상</small>
 												</div>
 											</div>
 										</div>
@@ -731,7 +818,7 @@
 									<div class="col-9">
 										<div class="flex_start">
 											<div class="tx_inp_type">
-												<input type="password" id="verifyNewPwd" name="verifyNewPwd" placeholder="입력" minlength="6" maxlength="32" autocomplete="off">
+												<input type="password" id="verifyNewPwd" name="verifyNewPwd" placeholder="입력" minlength="8" maxlength="32" autocomplete="off">
 												<div class="flex_start warning-wrapper">
 													<small id="newPwdMatched" class="warning-text hidden">비밀번호가 일치하지 않습니다.</small>
 												</div>
@@ -827,12 +914,13 @@
 									<div class="col-12">
 										<div class="btn_wrap_type02"><!--
 										--><button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button><!--
-										--><button type="button" class="btn_type" id="updatePwdBtn" disabled>등록</button><!--
+										--><button type="button" class="btn_type" id="updatePwdBtn" disabled>변경</button><!--
 									--></div>
 									</div>
 								</div>
 							</c:otherwise>
 						</c:choose>
+						</form>
 					</div>
 				</div>
 			</div>

@@ -9,15 +9,28 @@
  */
 const displayNumberFixedDecimal = function(number, unit, intChipher, decimalChipher) {
 	let rtnValue = []
-	let whUnit = ['', 'k', 'M', 'G'];
+	let whUnit = ['', 'k', 'M', 'G', 'T'];
+	let suffix = '';
 
 	if(isEmpty(number)) {
 		return ['-', unit];
 	} else {
-		if(unit != '원') {
+		if(unit.match('W')) {
 
 			if(isEmpty(decimalChipher)) {
 				decimalChipher = 2;
+			}
+
+			/* 시작 unit 단위가 w보다 클경우 */
+			const standardUnit = (unit.substr(0, 1)).replace(/W/i, '');
+			const findIndex = whUnit.findIndex(targetUnit => targetUnit.match(standardUnit));
+			if (findIndex > 0) {
+				whUnit = whUnit.splice(findIndex, whUnit.length);
+			}
+			/* 시작 unit 단위가 w보다 클경우 */
+
+			if (unit.match('h')) {
+				suffix = 'h';
 			}
 
 			whUnit.some(function(v, k) {
@@ -26,14 +39,14 @@ const displayNumberFixedDecimal = function(number, unit, intChipher, decimalChip
 					if(str.length > 3 && v != 'GW') {
 						number = number / 1000;
 					} else {
-						rtnValue = [numberComma((number).toFixed(decimalChipher)), v + unit];
+						rtnValue = [numberComma((number).toFixed(decimalChipher)), v + 'W' + suffix];
 						return rtnValue;
 					}
 				} else {
 					if(str.length > intChipher && v != 'GW') {
 						number = number / 1000;
 					} else {
-						rtnValue = [numberComma((number).toFixed(decimalChipher)), v + unit];
+						rtnValue = [numberComma((number).toFixed(decimalChipher)), v + 'W' + suffix];
 						return rtnValue;
 					}
 				}

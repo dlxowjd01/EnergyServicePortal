@@ -1,3 +1,4 @@
+const standardSuffix = 'kWh';
 /**
  * 월간차트 선언부
  */
@@ -78,11 +79,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 		},
 		labels: {
 			formatter: function () {
-				if (String(this.value).length  >= 5) {
-					return numberComma(this.value / 1000) + ' M';
-				} else {
-					return this.value;
-				}
+				return displayNumberFixedDecimal(this.value, standardSuffix, 4, 0).join(' ');
 			},
 			style: {
 				color: 'var(--white60)',
@@ -104,11 +101,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 		},
 		labels: {
 			formatter: function () {
-				if (String(this.value).length  >= 5) {
-					return numberComma(this.value / 1000) + ' M';
-				} else {
-					return this.value;
-				}
+				return displayNumberFixedDecimal(this.value, standardSuffix, 4, 0).join(' ');
 			},
 			style: {
 				color: 'var(--white60)',
@@ -121,8 +114,8 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 		formatter: function () {
 			return this.points.reduce(function (s, point) {
 				let suffix = point.series.userOptions.tooltip.valueSuffix;
-				return s + ' 월 <br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + numberComma(point.y) + suffix;
-			}, '<b>' + this.x + '</b>');
+				return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + numberComma(Math.round(point.y)) + suffix;
+			}, '<b>' + this.x + '월 </b>');
 		},
 		shared: true, /* 툴팁 공유 */
 		borderColor: 'none',
@@ -347,11 +340,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		},
 		labels: {
 			formatter: function () {
-				if (String(this.value).length  >= 5) {
-					return numberComma(this.value / 1000) + ' M';
-				} else {
-					return this.value;
-				}
+				return displayNumberFixedDecimal(this.value, standardSuffix, 4, 0).join(' ');
 			},
 			style: {
 				color: 'var(--white60)',
@@ -373,11 +362,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		},
 		labels: {
 			formatter: function () {
-				if (String(this.value).length  >= 5) {
-					return numberComma(this.value / 1000) + ' M';
-				} else {
-					return this.value;
-				}
+				return displayNumberFixedDecimal(this.value, standardSuffix, 4, 0).join(' ');
 			},
 			style: {
 				color: 'var(--white60)',
@@ -390,8 +375,8 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		formatter: function () {
 			return this.points.reduce(function (s, point) {
 				let suffix = point.series.userOptions.tooltip.valueSuffix;
-				return s + ' 일 <br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + numberComma(point.y) + suffix;
-			}, '<b>' + this.x + '</b>');
+				return s + ' <br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + numberComma(Math.round(point.y)) + suffix;
+			}, '<b>' + this.x + '일 </b>');
 		},
 		shared: true,
 		borderColor: 'none',

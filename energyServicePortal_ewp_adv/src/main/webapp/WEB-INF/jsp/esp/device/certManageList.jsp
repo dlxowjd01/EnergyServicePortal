@@ -14,7 +14,7 @@
 			'sScrollXInner': '100%',
 			'sScrollY': false,
 			'bScrollCollapse': true,
-			'aaSorting': [[ 1, 'asc' ]],
+			'aaSorting': [[ 1, 'desc' ]],
 			'paging': true,
 			'serverSide': true,
 			'processing': true,
@@ -28,6 +28,8 @@
 					param.dateTo = $('#write_date_to').val();
 					param.deviceSearchType = $('#deviceSearchType button').data('value');
 					param.deviceSearchText = $('#deviceSearchText').val();
+					param.targetColumn = (d.columns[d.order[0].column].data).toUpperCase();
+					param.orderType = (d.order[0].dir).toUpperCase();
 					return param;
 				},
 				contentType: 'application/x-www-form-urlencoded',
@@ -44,7 +46,8 @@
 				{
 					sTitle: '순번',
 					mData: 'num',
-					className: 'dt-center'
+					className: 'dt-center',
+					orderable: false
 				},
 				{
 					sTitle: '신청일',
@@ -60,7 +63,8 @@
 				},
 				{
 					sTitle: '기기수량',
-					mData: 'device_CNT'
+					mData: 'device_CNT',
+					orderable: false
 				},
 				{
 					sTitle: '담당자명',
@@ -71,14 +75,16 @@
 					mData: null,
 					render: function ( data, type, full, rowIndex ) {
 						return `발급 : ${'${data.issue_CNT}'}<br>폐기 : ${'${data.revoke_CNT}'}`
-					}
+					},
+					orderable: false
 				},
 				{
 					sTitle: '보기',
 					mData: null,
 					render: function ( data, type, full, rowIndex ) {
 						return `<button type="button" class="btn_type" onclick="goDetail('${'${data.apply_PKG_ID}'}')">상세</button>`
-					}
+					},
+					orderable: false
 				},
 				{
 					sTitle: 'apply_PKG_ID',

@@ -13,7 +13,7 @@
 			'sScrollXInner': '100%',
 			'sScrollY': false,
 			'bScrollCollapse': true,
-			'aaSorting': [[1, 'asc']],
+			'aaSorting': [[1, 'desc']],
 			'paging': true,
 			'serverSide': true,
 			'processing': true,
@@ -24,6 +24,8 @@
 					let param = new Object();
 					param.cpage = (d.start / 10) + 1;
 					param.applyPkgID = apply_PKG_ID;
+					param.targetColumn = (d.columns[d.order[0].column].data).toUpperCase();
+					param.orderType = (d.order[0].dir).toUpperCase();
 					return param;
 				},
 				contentType: 'application/x-www-form-urlencoded',
@@ -68,7 +70,8 @@
 				{
 					sTitle: '순번',
 					mData: 'num',
-					className: 'dt-center'
+					className: 'dt-center',
+					orderable: false,
 				},
 				{
 					sTitle: 'MAC 주소',
@@ -84,7 +87,8 @@
 				},
 				{
 					sTitle: '상태',
-					mData: 'status'
+					mData: 'status',
+					orderable: false
 				},
 				{
 					sTitle: 'apply_ID',
