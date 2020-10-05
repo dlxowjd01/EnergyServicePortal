@@ -67,7 +67,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 			width: 1
 		}],
 		title: {
-			text: 'kWh',
+			text: 'Wh',
 			align: 'low',
 			rotation: 0, /* 타이틀 기울기 */
 			y: 25, /* 타이틀 위치 조정 */
@@ -79,7 +79,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 		},
 		labels: {
 			formatter: function () {
-				return displayNumberFixedDecimal(this.value, standardSuffix, 4, 0).join(' ');
+				return (displayNumberFixedDecimal(this.value, standardSuffix, 4, 0).join(' ')).replace('Wh', '');
 			},
 			style: {
 				color: 'var(--white60)',
@@ -89,7 +89,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 	}, { // Secondary yAxis
 		gridLineWidth: 0,
 		title: {
-			text: '천원',
+			text: '원',
 			align: 'low',
 			rotation: 0, /* 타이틀 기울기 */
 			y: 25, /* 타이틀 위치 조정 */
@@ -101,7 +101,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 		},
 		labels: {
 			formatter: function () {
-				return displayNumberFixedDecimal(this.value, standardSuffix, 4, 0).join(' ');
+				return  (displayNumberFixedDecimal(this.value, '천원', 4, 0).join(' ')).replace('원', '');
 			},
 			style: {
 				color: 'var(--white60)',
@@ -328,7 +328,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 			width: 1
 		}],
 		title: {
-			text: 'kWh',
+			text: 'Wh',
 			align: 'low',
 			rotation: 0, /* 타이틀 기울기 */
 			y: 25, /* 타이틀 위치 조정 */
@@ -340,7 +340,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		},
 		labels: {
 			formatter: function () {
-				return displayNumberFixedDecimal(this.value, standardSuffix, 4, 0).join(' ');
+				return  (displayNumberFixedDecimal(this.value, standardSuffix, 4, 0).join(' ')).replace('Wh', '');
 			},
 			style: {
 				color: 'var(--white60)',
@@ -350,7 +350,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 	}, { // Secondary yAxis
 		gridLineWidth: 0, /* 기준선 grid 안보이기/보이기 */
 		title: {
-			text: '천원',
+			text: '원',
 			align: 'low',
 			rotation: 0, /* 타이틀 기울기 */
 			y: 25, /* 타이틀 위치 조정 */
@@ -362,7 +362,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		},
 		labels: {
 			formatter: function () {
-				return displayNumberFixedDecimal(this.value, standardSuffix, 4, 0).join(' ');
+				return  (displayNumberFixedDecimal(this.value, '천원', 4, 0).join(' ')).replace('원', '');
 			},
 			style: {
 				color: 'var(--white60)',

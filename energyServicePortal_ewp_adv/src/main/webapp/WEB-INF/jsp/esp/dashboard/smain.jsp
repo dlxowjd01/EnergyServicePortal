@@ -955,7 +955,7 @@
 				return this.points.reduce(function (s, point) {
 					let suffix = point.series.userOptions.tooltip.valueSuffix;
 					return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + numberComma(point.y) + suffix;
-				}, '<b>' + this.x + '</b>');
+				}, '<b>' + this.x + '일 </b>');
 			},
 			shared: true,
 			borderColor: 'none',
@@ -1534,6 +1534,12 @@
 			}
 		},
 		tooltip: {
+			formatter: function () {
+				return this.points.reduce(function (s, point) {
+					let suffix = point.series.userOptions.tooltip.valueSuffix;
+					return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + numberComma(point.y) + suffix;
+				}, '<b>' + this.x + '시 </b>');
+			},
 			shared: true,
 			borderColor: 'none',
 			backgroundColor: 'var(--bg-color)',

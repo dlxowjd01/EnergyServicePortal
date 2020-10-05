@@ -10,6 +10,17 @@
 const displayNumberFixedDecimal = function(number, unit, intChipher, decimalChipher) {
 	let rtnValue = []
 	let whUnit = ['', 'k', 'M', 'G', 'T'];
+	let moneyUnit = [
+		{ unit: '', chipher: 1 },
+		{ unit: '십', chipher: 10 },
+		{ unit: '백', chipher: 100 },
+		{ unit: '천', chipher: 1000 },
+		{ unit: '만', chipher: 10000 },
+		{ unit: '십만', chipher: 100000 },
+		{ unit: '백만', chipher: 1000000 },
+		{ unit: '천만', chipher: 10000000 },
+		{ unit: '억', chipher: 100000000 },
+	];
 	let suffix = '';
 
 	if(isEmpty(number)) {
@@ -36,14 +47,14 @@ const displayNumberFixedDecimal = function(number, unit, intChipher, decimalChip
 			whUnit.some(function(v, k) {
 				let str = String(Math.floor(number));
 				if(isEmpty(intChipher)) {
-					if(str.length > 3 && v != 'GW') {
+					if(str.length > 3 && v != 'T') {
 						number = number / 1000;
 					} else {
 						rtnValue = [numberComma((number).toFixed(decimalChipher)), v + 'W' + suffix];
 						return rtnValue;
 					}
 				} else {
-					if(str.length > intChipher && v != 'GW') {
+					if(str.length > intChipher && v != 'T') {
 						number = number / 1000;
 					} else {
 						rtnValue = [numberComma((number).toFixed(decimalChipher)), v + 'W' + suffix];
@@ -52,37 +63,32 @@ const displayNumberFixedDecimal = function(number, unit, intChipher, decimalChip
 				}
 			});
 		} else {
-			if(isEmpty(decimalChipher)) {
+			if (isEmpty(intChipher)) {
+				intChipher = 3;
+			}
+
+			if (isEmpty(decimalChipher)) {
 				decimalChipher = 0;
 			}
 
-			let str = String(Math.floor(number));
-			if(isEmpty(intChipher)) {
-				if(str.length > 4) {
-					number = number / 10000;
-					rtnValue = [numberComma((number).toFixed(decimalChipher)), '만원'];
-				} else if(str.length > 3) {
-					number = number / 1000;
-					rtnValue = [numberComma((number).toFixed(decimalChipher)), '천원'];
-				} else {
-					rtnValue = [numberComma((number).toFixed(decimalChipher)), '원'];
-				}
-			} else {
-				let str = String(Math.floor(number));
-				if (str.length > intChipher) {
-					if (str.length - 3 <= intChipher) {
-						number = number / 1000;
-						rtnValue = [numberComma((number).toFixed(decimalChipher)), '천원'];
-					} else {
-						number = number / 10000;
-						rtnValue = [numberComma((number).toFixed(decimalChipher)), '만원'];
-					}
-					number = number / 1000;
-				} else {
-					rtnValue = [numberComma((number).toFixed(decimalChipher)), '원'];
+			/* 시작 unit 단위가 w보다 클경우 */
+			const standardUnit = (unit.substr(0, 1)).replace('원', '');
+			const findIndex = moneyUnit.findIndex(targetUnit => (targetUnit.unit).match(standardUnit));
+			if (findIndex > 0) {
+				moneyUnit = moneyUnit.splice(findIndex, moneyUnit.length);
+			}
+			/* 시작 unit 단위가 w보다 클경우 */
+
+			moneyUnit.some((money, index) => {
+				const mUnit = money['unit'];
+				const mChipher = money['chipher'];
+
+				console.log(mUnit);
+				if(String(Math.round(number / mChipher)).length <= intChipher || mUnit == '억') {
+					rtnValue = [numberComma((number / mChipher).toFixed(decimalChipher)), mUnit + '원'];
 					return rtnValue;
 				}
-			}
+			});
 		}
 		return rtnValue;
 	}

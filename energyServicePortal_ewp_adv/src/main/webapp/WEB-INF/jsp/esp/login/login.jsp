@@ -258,7 +258,6 @@
 						$("#" + rules[i].Target).removeClass("checked")
 					}
 				}
-
 			});
 
 			$("#verifyNewPwd").keyup(function() {
