@@ -2,7 +2,6 @@
 <%@ include file="/decorators/include/taglibs.jsp" %>
 <script type="text/javascript">
 	$(function () {
-
 		let optionList = [
 			{
 				url: apiHost + "/config/sites?oid=" + oid,
@@ -38,7 +37,6 @@
 			});
 		}
 
-		
 		// Validations
 		$("#newSiteName").on("keydown", function() {
 			$("#invalidSite").addClass("hidden");
@@ -702,38 +700,41 @@
 	}
 
 	function adminTable(siteData, vppNameData, callback) {
-		if(!callback) {
+		if(isEmpty(callback)) {
 			getPropertyData();
 			getVppDrData(vppNameData);
 		} else {
 			callback();
 		}
+
 		if(siteData) {
-			// console.log("siteData---", siteData)
 			let newArr = [];
-			Promise.resolve(siteData.map((item, index) => {
-					$("#loadingCircle").show();
+			let essDvcArr = ["INV_PV", "PCS_ESS", "BMS_SYS"];
 
-					if(isEmpty(item.ess) || item.ess === 0){
-						item.ess == "-"
-					} else {
-						if(item.ess === 1){
-							item.ess = "DemandESS"
-						} else if(item.ess === 2){
-							item.ess = "GenerationESS"
-						}
+			// Promise.resolve(siteData.map((item, index) => {
+			siteData.map((item, index) => {
+
+				$("#loadingCircle").show();
+
+				if(isEmpty(item.ess) || item.ess === 0){
+					item.ess == "-"
+				} else {
+					if(item.ess === 1){
+						item.ess = "DemandESS"
+					} else if(item.ess === 2){
+						item.ess = "GenerationESS"
 					}
+				}
 
-					if(item.resource_type === 0) {
-						// Demand && ESS : pair
-						item.siteType = "수요자원"
-						item.powerSource = "부하"
+				if(item.resource_type === 0) {
+					// Demand && ESS : pair
+					item.siteType = "수요자원"
+					item.powerSource = "부하"
+				} else {
+					if(isEmpty(item.resource_type)){
+						item.siteType = "-"
 					} else {
-						if(isEmpty(item.resource_type)){
-							item.siteType = "-"
-						} else {
-							item.siteType = "발전소"
-						}
+						item.siteType = "발전소"
 						if(item.resource_type === 1){
 							item.powerSource = "태양광"
 						} else if(item.resource_type === 2){
@@ -742,87 +743,97 @@
 							item.powerSource = "소수력"
 						}
 					}
+				}
 
-					// Match name with dr_group_id
-					if(!isEmpty(item.dr_group_id)){
-						let found = vppNameData.dr_group.findIndex( x => x.dgid == item.dr_group_id);
-						if(found > -1){
-							item.drName = vppNameData.dr_group[found].name;
-						}
-					} else {
-						item.drName = "-"
+				// Match name with dr_group_id
+				if(!isEmpty(item.dr_group_id)){
+					let found = vppNameData.dr_group.findIndex( x => x.dgid == item.dr_group_id);
+					if(found > -1){
+						item.drName = vppNameData.dr_group[found].name;
 					}
+				} else {
+					item.drName = "-"
+				}
 
-					// Match name with vpp_group_id
-					if(!isEmpty(item.vpp_group_id)){
-						let found = vppNameData.vpp_group.findIndex( x => x.vgid == item.vpp_group_id);
-						if(found > -1){
-							item.vppName = vppNameData.vpp_group[found].name;
-						}
-					} else {
-						item.vppName = "-"
+				// Match name with vpp_group_id
+				if(!isEmpty(item.vpp_group_id)){
+					let found = vppNameData.vpp_group.findIndex( x => x.vgid == item.vpp_group_id);
+					if(found > -1){
+						item.vppName = vppNameData.vpp_group[found].name;
 					}
-					// console.log("sid-===", item.sid);
-					let deviceOpt = {
-						url: apiHost + "/config/devices?"+'oid='+oid,
-						type: 'get',
-						async: false,
-						data:{
-							sid: item.sid
-						}
+				} else {
+					item.vppName = "-"
+				}
+				// console.log("sid-===", item.sid);
+				let deviceOpt = {
+					url: apiHost + "/config/devices?"+'oid='+oid,
+					type: 'get',
+					async: false,
+					data:{
+						sid: item.sid
 					}
+				}
 
-					$.ajax(deviceOpt).done(function (json, textStatus, jqXHR) {
-						if(json.length > 0 ){
-							// let alarmArr = [];
-							let found = json.findIndex( x => x.alarm_to);
-							if( found > - 1) {
-								item.alarmFlag = true;
-								item.alarmLength = found;
-							} else {
-								alarmFlag = false;
-							}
-							item.alarmInfo = json;
-							json.map( devData => {
-								let devTypeList = ["INV_PV", "PCS_ESS", "INV_PV" ];
-								let hasDevType = devTypeList.some( x => x.includes(devData.device_type));
+				$.ajax(deviceOpt).done(function (json, textStatus, jqXHR) {
+					if(json.length > 0 ){
+						// let alarmArr = [];
+						let genCapacity = 0;
+						let pcsCapacity = 0;
+						let bmsCapacity = 0;
 
-								if(hasDevType == true){
-									if( devData.device_type == "INV_PV" ) {
-										let val = displayNumberFixedDecimal(devData.capacity, 'Wh', 3, 2, "noComma");
-										item.genCapacity = val[0] + " " + val[1];
-									} else {
-										item.genCapacity = "0";
-									}
-									if( devData.device_type == "PCS_ESS" ) {
-										let val = displayNumberFixedDecimal(devData.capacity, 'Wh', 3, 2, "noComma");
-										item.pcsCapacity = val[0] + " " + val[1];
-									} else {
-										item.pcsCapacity = "0";
-									}
-									if( devData.device_type == "BMS_SYS" ) {
-										let val = displayNumberFixedDecimal(devData.capacity, 'Wh', 3, 2, "noComma");
-										item.bmsCapacity = val[0] + " " + val[1];
-									} else {
-										item.bmsCapacity = "0";
-									}
-								} else {
-									item.genCapacity = "0";
-									item.pcsCapacity = "0";
-									item.bmsCapacity = "0";
+						let found = json.findIndex( x => x.alarm_to);
+
+						if( found > - 1) {
+							item.alarmFlag = true;
+							item.alarmLength = found;
+						} else {
+							alarmFlag = false;
+						}
+
+						item.alarmInfo = json;
+
+						$.each(json, function( index, el ){
+							let hasDevType = essDvcArr.some( x => x.includes(el.device_type));
+
+							if(hasDevType == true){
+								if( el.device_type == "INV_PV" ) {
+									genCapacity += el.capacity;
 								}
-								
-								item.updatedAt = new Date(item.updatedAt).toLocaleDateString("en-CA").replace(/\//g, '-') + '&ensp;' + new Date(item.updatedAt).toLocaleTimeString();
-								newArr.push(item);
-							});
-						}
-					}).fail(function (jqXHR, textStatus, errorThrown) {
-						console.log("deviceOpt error===", jqXHR)
-						return false;
-					});
+								if( el.device_type == "PCS_ESS" ) {
+									pcsCapacity += el.capacity;
+								}
+								if( el.device_type == "BMS_SYS" ) {
+									bmsCapacity += el.capacity;
+								}
+							} else {
+								genCapacity = 0;
+								pcsCapacity = 0;
+								bmsCapacity = 0;
+							}
+						});
 
-			})).then( res => {
-				// console.log("newArr===", newArr);
+						genCapacity = displayNumberFixedDecimal(genCapacity, 'Wh', 3, 2, "noComma");
+						item.genCapacity = genCapacity[0] + " " + genCapacity[1];
+					
+						pcsCapacity = displayNumberFixedDecimal(pcsCapacity, 'Wh', 3, 2, "noComma");
+						item.pcsCapacity = pcsCapacity[0] + " " + pcsCapacity[1];
+						
+						bmsCapacity = displayNumberFixedDecimal(bmsCapacity, 'Wh', 3, 2, "noComma");
+						item.bmsCapacity = bmsCapacity[0] + " " + bmsCapacity[1];
+
+					} else {
+						item.genCapacity = "-";
+						item.pcsCapacity = "-";
+						item.bmsCapacity = "-";
+					}
+					item.updatedAt = new Date(item.updatedAt).toLocaleDateString("en-CA").replace(/\//g, '-') + '&ensp;' + new Date(item.updatedAt).toLocaleTimeString();
+					newArr.push(item);
+				}).fail(function (jqXHR, textStatus, errorThrown) {
+					console.log("deviceOpt error===", jqXHR);
+					return false;
+				});
+			});
+			// })).then( res => {
 				// console.log("m===", newArr[14].alarmData)
 				// console.log("response===", response)
 				// 1. 사업소 유형
@@ -1123,66 +1134,80 @@
 				});
 
 				getVppDrData(vppNameData);
-				$("#loadingCircle").hide();
+				if(!$('#loadingCircle').is(":hidden")){
+					$("#loadingCircle").hide();
+				}
 
-			});
+			// });
 		}
 	}
 
 	function nonAdminTable(mySites, vppNameData, userSites, callback) {
-		let newArr = [];
-
 		if(!callback) {
 			getPropertyData();
 			getVppDrData(vppNameData);
 		} else {
 			callback();
 		}
+		let newArr = [];
+		let essDvcArr = ["INV_PV", "PCS_ESS", "BMS_SYS"];
 
+		// Promise.resolve(mySites.map((item, index) => {
 		mySites.map((item, index) => {
 			let found = userSites.findIndex( x => x.sid === item.sid);
 
 			if(found > -1){
 				// let matchedData = item;
-				let rawDataOpt = {
-					url: apiHost + "/status/raw/site",
+				let deviceOpt = {
+					url: apiHost + "/config/devices?"+'oid='+oid,
 					type: 'get',
 					async: false,
 					data:{
-						sid: item.sid,
-						formId: 'v2'
-					},
-					beforeSend: function(){
-						$("#loadingCircle").show();
+						sid: item.sid
 					}
 				}
 
-				$.ajax(rawDataOpt).done(function (json, textStatus, jqXHR) {
-					$("#loadingCircle").show();
-					if(!isEmpty(json.INV_PV) && ( Object.keys("genCapacity").length === 0 ) ) {
-						item.genCapacity = json.INV_PV.capacity;
-					} else {
-						item.genCapacity = 0;
-					}
-					if(!isEmpty(json.PCS_ESS) && ( Object.keys("pcsCapacity").length === 0 ) ) {
-						item.pcsCapacity = json.PCS_ESS.capacity;
-					} else {
-						item.pcsCapacity = 0;
-					}
-					if(!isEmpty(json.BMS_SYS) && ( Object.keys("bmsCapacity").length === 0 ) ) {
-						item.bmsCapacity = json.BMS_SYS.capacity;
-					} else {
-						item.bmsCapacity = 0;
-					}
+				$("#loadingCircle").show();
 
-					if(isEmpty(item.ess)){
-						item.ess == "-"
+				$.ajax(deviceOpt).done(function (json, textStatus, jqXHR) {
+					if(json.length > 0 ){
+						// let alarmArr = [];
+						let genCapacity = 0;
+						let pcsCapacity = 0;
+						let bmsCapacity = 0;
+
+						$.each(json, function( index, el ){
+							let hasDevType = essDvcArr.some( x => x.includes(el.device_type));
+
+							if(hasDevType == true){
+								if( el.device_type == "INV_PV" ) {
+									genCapacity += el.capacity;
+								}
+								if( el.device_type == "PCS_ESS" ) {
+									pcsCapacity += el.capacity;
+								}
+								if( el.device_type == "BMS_SYS" ) {
+									bmsCapacity += el.capacity;
+								}
+							} else {
+								genCapacity = 0;
+								pcsCapacity = 0;
+								bmsCapacity = 0;
+							}
+						});
+
+						genCapacity = displayNumberFixedDecimal(genCapacity, 'Wh', 3, 2, "noComma");
+						item.genCapacity = genCapacity[0] + " " + genCapacity[1];
+					
+						pcsCapacity = displayNumberFixedDecimal(pcsCapacity, 'Wh', 3, 2, "noComma");
+						item.pcsCapacity = pcsCapacity[0] + " " + pcsCapacity[1];
+						
+						bmsCapacity = displayNumberFixedDecimal(bmsCapacity, 'Wh', 3, 2, "noComma");
+						item.bmsCapacity = bmsCapacity[0] + " " + bmsCapacity[1];
 					} else {
-						if(item.ess == 1){
-							item.ess = "DemandESS"
-						} else if(item.ess == 2){
-							item.ess = "GenerationESS"
-						}
+						item.genCapacity = "-";
+						item.pcsCapacity = "-";
+						item.bmsCapacity = "-";
 					}
 
 					item.role = userSites[found].role;
@@ -1193,25 +1218,37 @@
 						item.location = "-";
 					}
 
-					if(item.resource_type === 0) {
-						// Demand && ESS : pair
-						item.siteType = "수요자원"
-						item.powerSource = "부하"
+
+					if(isEmpty(item.ess) || item.ess === 0){
+						item.ess == "-"
 					} else {
-						if(isEmpty(item.resource_type)){
-							item.siteType = "-"
-						} else {
-							item.siteType = "발전소"
-						}
-						if(item.resource_type === 1){
-							item.powerSource = "태양광"
-						} else if(item.resource_type === 2){
-							item.powerSource = "풍력"
-						} else if(item.resource_type === 3){
-							item.powerSource = "소수력"
+						if(item.ess === 1){
+							item.ess = "DemandESS"
+						} else if(item.ess === 2){
+							item.ess = "GenerationESS"
 						}
 					}
 
+					console.log("item.resource_type===", item.resource_type)
+					if(isEmpty(item.resource_type)){
+						item.siteType = "-"
+					} else {
+
+						if(item.resource_type == 0) {
+							// Demand && ESS : pair
+							item.siteType = "수요자원"
+							item.powerSource = "부하"
+						} else {
+							item.siteType = "발전소"
+							if(item.resource_type === 1){
+								item.powerSource = "태양광"
+							} else if(item.resource_type === 2){
+								item.powerSource = "풍력"
+							} else if(item.resource_type === 3){
+								item.powerSource = "소수력"
+							}
+						}
+					}
 					// Match name with dr_group_id
 					if(!isEmpty(item.dr_group_id)){
 						let found = vppNameData.dr_group.findIndex( x => x.dgid == item.dr_group_id);
@@ -1245,238 +1282,240 @@
 					// }
 
 					item.updatedAt = new Date(item.updatedAt).toLocaleDateString("en-CA").replace(/\//g, '-') + '&ensp;' + new Date(item.updatedAt).toLocaleTimeString();
-					// newArr.push(item);
+					newArr.push(item);
 
 				}).fail(function (jqXHR, textStatus, errorThrown) {
 					console.log("error====", jqXHR);
 					return false;
 				});
-				newArr.push(item);
+
 			} else {
 				newArr = [];
 			}
-				// return newArr;
 		});
-
-		if(newArr.length === 0 ){
-			drawEmptyTable($("#siteTable"));
-		} else {
-			// 1. 사업소 유형
-			// 2. 사업소명
-			// 3. 지역
-			// 4. 발전원 => 0: MicroGrid, 1: photovoltaic, 2: wind, 3: SmallHydro (hydroelectric power for local community)
-			// 5. 발전 용량
-			// 6. ESS 용량 (PCS)
-			// 7. ESS 용량(BMS)
-			// 8. DR 자원 코드 => 이름
-			// 9. Vpp 자원 코드 ( virtual power plant ) => 이름
-			// 10. 수정/조회 권한
-			// 11. 알람 설정
-			var siteReadOnlyTable = $('#siteTable').DataTable({
-				"aaData": newArr,
-				"table-layout": "fixed",
-				"fixedHeader": true,
-				"bAutoWidth": true,
-				"bSearchable" : true,
-				"sScrollY": true,
-				"scrollY": "720px",
-				"bScrollCollapse": true,
-				"pageLength": 100,
-				"aaSorting": [[ 0, 'asc' ]],
-				"bSortable": true,
-				"order": [[ 1, 'asc' ]],
-				// "bFilter": false, disabling this option will prevent table.search()
-	
-				"aoColumnDefs": [
-					{
-						"aTargets": [ 0 ],
-						"bSortable": false,
-						"orderable": false
-					},
-				],
-				"aoColumns": [
-					// {
-					// 	"sTitle": "순번",
-					// 	"mData": null,
-					// 	"className": "dt-center no-sorting"
-					// },
-					{
-						"sTitle": "",
-						"mData": null,
-						"mRender": function ( data, type, full, rowIndex )  {
-							return '<a class="chk_type" href="#"><input type="checkbox" id="' + rowIndex.row + '" name="table_checkbox"><label for="' + rowIndex.row + '"></label></a>'
+		// })).then( res => {
+			if(newArr.length === 0 ){
+				drawEmptyTable($("#siteTable"));
+			} else {
+				// 1. 사업소 유형
+				// 2. 사업소명
+				// 3. 지역
+				// 4. 발전원 => 0: MicroGrid, 1: photovoltaic, 2: wind, 3: SmallHydro (hydroelectric power for local community)
+				// 5. 발전 용량
+				// 6. ESS 용량 (PCS)
+				// 7. ESS 용량(BMS)
+				// 8. DR 자원 코드 => 이름
+				// 9. Vpp 자원 코드 ( virtual power plant ) => 이름
+				// 10. 수정/조회 권한
+				// 11. 알람 설정
+				var siteReadOnlyTable = $('#siteTable').DataTable({
+					"aaData": newArr,
+					"table-layout": "fixed",
+					"fixedHeader": true,
+					"bAutoWidth": true,
+					"bSearchable" : true,
+					"sScrollY": true,
+					"scrollY": "720px",
+					"bScrollCollapse": true,
+					"pageLength": 100,
+					"aaSorting": [[ 0, 'asc' ]],
+					"bSortable": true,
+					"order": [[ 1, 'asc' ]],
+					// "bFilter": false, disabling this option will prevent table.search()
+		
+					"aoColumnDefs": [
+						{
+							"aTargets": [ 0 ],
+							"bSortable": false,
+							"orderable": false
 						},
-						"className": "dt-body-center no-sorting"
+					],
+					"aoColumns": [
+						// {
+						// 	"sTitle": "순번",
+						// 	"mData": null,
+						// 	"className": "dt-center no-sorting"
+						// },
+						{
+							"sTitle": "",
+							"mData": null,
+							"mRender": function ( data, type, full, rowIndex )  {
+								return '<a class="chk_type" href="#"><input type="checkbox" id="' + rowIndex.row + '" name="table_checkbox"><label for="' + rowIndex.row + '"></label></a>'
+							},
+							"className": "dt-body-center no-sorting"
+						},
+						{
+							"sTitle": "사업소 유형",
+							"mData": "siteType",
+						},
+						{
+							"sTitle": "사업소 명",
+							"mData": "name"
+						},
+						{
+							"sTitle": "지역",
+							"mData": "location",
+						},
+						{
+							"sTitle": "발전 자원",
+							"mData": "powerSource",
+						},
+						{
+							"sTitle": "발전 용량",
+							"mData": "genCapacity",
+						},
+						{
+							"sTitle": "ESS 용량 (PCS)",
+							"mData": "pcsCapacity",
+						},
+						{
+							"sTitle": "ESS 용량 (BMS)",
+							"mData": "bmsCapacity",
+						},
+						{
+							"sTitle": "DR 자원 ID",
+							"mData": "drName",
+						},
+						{
+							"sTitle": "VPP 자원 ID",
+							"mData": "vppName",
+						},
+						{
+							"sTitle": "업데이트 일자",
+							"mData": "updatedAt",
+						},
+					],
+					"language": {
+						"emptyTable": "조회된 데이터가 없습니다.",
+						"zeroRecords":  "검색된 결과가 없습니다."
 					},
-					{
-						"sTitle": "사업소 유형",
-						"mData": "siteType",
+					"dom": 'tip',
+					"select": {
+						style: 'single',
+						// selector: 'td:first-child > a',
+						selector: 'td input[type="checkbox"], tr'
+						// selector: 'td input[type="checkbox"], td:not(:nth-of-type(11))'
 					},
-					{
-						"sTitle": "사업소 명",
-						"mData": "name"
-					},
-					{
-						"sTitle": "지역",
-						"mData": "location",
-					},
-					{
-						"sTitle": "발전 자원",
-						"mData": "powerSource",
-					},
-					{
-						"sTitle": "발전 용량",
-						"mData": "genCapacity",
-					},
-					{
-						"sTitle": "ESS 용량 (PCS)",
-						"mData": "pcsCapacity",
-					},
-					{
-						"sTitle": "ESS 용량 (BMS)",
-						"mData": "bmsCapacity",
-					},
-					{
-						"sTitle": "DR 자원 ID",
-						"mData": "drName",
-					},
-					{
-						"sTitle": "VPP 자원 ID",
-						"mData": "vppName",
-					},
-					{
-						"sTitle": "업데이트 일자",
-						"mData": "updatedAt",
-					},
-				],
-				"language": {
-					"emptyTable": "조회된 데이터가 없습니다.",
-					"zeroRecords":  "검색된 결과가 없습니다."
-				},
-				"dom": 'tip',
-				"select": {
-					style: 'single',
-					// selector: 'td:first-child > a',
-					selector: 'td input[type="checkbox"], tr'
-					// selector: 'td input[type="checkbox"], td:not(:nth-of-type(11))'
-				},
-				initComplete: function(settings, json ){
-					// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-					// 	cell.innerHTML = i+1;
-					// 	$(cell).data("id", i);
-					// });		
-					let str = `<div id="btnGroup" class="right-end"><!--
-						--><button type="button" disabled class="btn_type03" onclick="updateModal('edit')">선택 수정</button><!--
-						--><button type="button" disabled class="btn_type03" onclick="updateModal('delete')">선택 삭제</button><!--
-					--></div>`;
-					$("#siteTable_wrapper").append($(str));
+					initComplete: function(settings, json ){
+						// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+						// 	cell.innerHTML = i+1;
+						// 	$(cell).data("id", i);
+						// });		
+						let str = `<div id="btnGroup" class="right-end"><!--
+							--><button type="button" disabled class="btn_type03" onclick="updateModal('edit')">선택 수정</button><!--
+							--><button type="button" disabled class="btn_type03" onclick="updateModal('delete')">선택 삭제</button><!--
+						--></div>`;
+						$("#siteTable_wrapper").append($(str));
 
-					// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-					// 	cell.innerHTML = i+1;
-					// 	$(cell).data("id", i);
-					// });
-					if(oid.match("testkpx")){
-						let colGroup = $("#siteTable").find("colgroup col");
-						this.api().columns([8,9]).visible( false );
-						colGroup.eq(8).addClass("hidden");
-						colGroup.eq(9).addClass("hidden");
+						// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+						// 	cell.innerHTML = i+1;
+						// 	$(cell).data("id", i);
+						// });
+						if(oid.match("testkpx")){
+							let colGroup = $("#siteTable").find("colgroup col");
+							this.api().columns([8,9]).visible( false );
+							colGroup.eq(8).addClass("hidden");
+							colGroup.eq(9).addClass("hidden");
+						}
+
+						this.api().columns().header().each ((el, i) => {
+							if(i == 0){
+								$(el).attr ('style', 'min-width: 50px');
+							}
+						});
+					},
+					drawCallback: function (settings) {
+						$('#siteTable_wrapper').addClass('mb-28');
+					},
+				}).on("select", function(e, dt, type, indexes) {
+					let btn = $("#btnGroup").find(".btn_type03");
+					let role = null;
+					if(!isEmpty(siteReadOnlyTable.row( indexes ).data())){
+						role = siteReadOnlyTable.row( indexes ).data().role;
 					}
 
-					this.api().columns().header().each ((el, i) => {
-						if(i == 0){
-							$(el).attr ('style', 'min-width: 50px');
-						}
-					});
-				},
-				drawCallback: function (settings) {
-					$('#siteTable_wrapper').addClass('mb-28');
-				},
-			}).on("select", function(e, dt, type, indexes) {
-				let btn = $("#btnGroup").find(".btn_type03");
-				let role = null;
-				if(!isEmpty(siteReadOnlyTable.row( indexes ).data())){
-					role = siteReadOnlyTable.row( indexes ).data().role;
-				}
-
-				if(role === 1){
-					btn.each(function(index, element){
-						if($(this).is(":disabled")){
-							$(this).prop("disabled", false);
-						}
-					});
-				} else {	
-					btn.each(function(index, element){
-						if(index == 0){
+					if(role === 1){
+						btn.each(function(index, element){
 							if($(this).is(":disabled")){
 								$(this).prop("disabled", false);
 							}
-						} else {
-							$(this).prop("disabled", true);
-						}
+						});
+					} else {	
+						btn.each(function(index, element){
+							if(index == 0){
+								if($(this).is(":disabled")){
+									$(this).prop("disabled", false);
+								}
+							} else {
+								$(this).prop("disabled", true);
+							}
 
-					});
-				}
-
-				siteReadOnlyTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
-				// console.log("dt---", siteReadOnlyTable[ type ]( indexes ).nodes())
-			}).on("deselect", function(e, dt, type, indexes) {
-				let btn = $("#btnGroup").find(".btn_type03");
-				let role = null;
-
-				if(!isEmpty(siteReadOnlyTable.row( indexes ).data())){
-					role = siteReadOnlyTable.row( indexes ).data().role;
-				}
-
-				btn.each(function(index, element){
-					if(!$(this).is(":disabled")){
-						$(this).prop("disabled", true);
+						});
 					}
-				});
-				if(role === 1){
+
+					siteReadOnlyTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
+					// console.log("dt---", siteReadOnlyTable[ type ]( indexes ).nodes())
+				}).on("deselect", function(e, dt, type, indexes) {
+					let btn = $("#btnGroup").find(".btn_type03");
+					let role = null;
+
+					if(!isEmpty(siteReadOnlyTable.row( indexes ).data())){
+						role = siteReadOnlyTable.row( indexes ).data().role;
+					}
+
 					btn.each(function(index, element){
 						if(!$(this).is(":disabled")){
 							$(this).prop("disabled", true);
 						}
 					});
-				} else {	
-					btn.each(function(index, element){
-						if(index == 0){
+					if(role === 1){
+						btn.each(function(index, element){
 							if(!$(this).is(":disabled")){
 								$(this).prop("disabled", true);
 							}
-						}
-					});
-				}
-				siteReadOnlyTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", false);
-				// console.log("dt---", siteReadOnlyTable[ type ]( indexes ).nodes())
-			}).columns.adjust();
+						});
+					} else {	
+						btn.each(function(index, element){
+							if(index == 0){
+								if(!$(this).is(":disabled")){
+									$(this).prop("disabled", true);
+								}
+							}
+						});
+					}
+					siteReadOnlyTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", false);
+					// console.log("dt---", siteReadOnlyTable[ type ]( indexes ).nodes())
+				}).columns.adjust();
 
-			$("#loadingCircle").hide();
-
-			$('#siteTable').find("input:checkbox").on('click', function() {
-				var $box = $(this);
-				if ($box.is(":checked")) {
-					var group = "input:checkbox[name='" + $box.attr("name") + "']";
-					$(group).prop("checked", false);
-					$box.prop("checked", true);
-				} else {
-					$box.prop("checked", false);
+				if(!$('#loadingCircle').is(":hidden")){
+					$("#loadingCircle").hide();
 				}
-			});
-			
-			$("#siteType").find("li").on( 'click', function(){
-				if(!isEmpty($(this).data("name"))){
-					filterColumn("1", $(this).data("value"));
-				} else {
-					filterColumn("1", "");
-				}
-			});
-			
-			$("#siteSearchBox").on( 'keyup search input paste cut', function(){
-				console.log()
-				siteReadOnlyTable.columns(2).search( this.value ).draw();
-			});
-		}
+				
+				$('#siteTable').find("input:checkbox").on('click', function() {
+					var $box = $(this);
+					if ($box.is(":checked")) {
+						var group = "input:checkbox[name='" + $box.attr("name") + "']";
+						$(group).prop("checked", false);
+						$box.prop("checked", true);
+					} else {
+						$box.prop("checked", false);
+					}
+				});
+				
+				$("#siteType").find("li").on( 'click', function(){
+					if(!isEmpty($(this).data("name"))){
+						filterColumn("1", $(this).data("value"));
+					} else {
+						filterColumn("1", "");
+					}
+				});
+				
+				$("#siteSearchBox").on( 'keyup search input paste cut', function(){
+					console.log()
+					siteReadOnlyTable.columns(2).search( this.value ).draw();
+				});
+			}
+		// });
 	}
 
 

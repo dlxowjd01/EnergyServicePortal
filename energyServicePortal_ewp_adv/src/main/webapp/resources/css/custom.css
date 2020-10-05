@@ -144,10 +144,10 @@ bootstrap default
 	/* ********* Supplementary ********* */
 	--circle-charge: #2BEEE9;
 	--circle-solar-power: #9363fd;
+	
 	--mustard: #ffd954;
 	--cream-can: #edc249;
-
-	--booger-buster: #E7DD6C;
+	/* --booger-buster: #E7DD6C; */
 	--orange-peel: #ffa100;
 	--sea-buckthorn: #f49e34;
 	--orange-soda: : #f75c4a;
@@ -1836,14 +1836,14 @@ footer .copyright {
 /* .side-nav>ul>li>a:before { */
 .side-nav:hover>ul>li.menu-item>a:before {
 	position: absolute;
-	top: 20px;
+	top: 22px;
 	right: 25px;
-	width: 0;
-	height: 0;
-	/* border-bottom: 5px solid var(--white87); */
-	border-top: 5px solid transparent;
-	border-bottom: 5px solid transparent;
-	border-right: 5px solid var(--white87);
+	width: 9px;
+	height: 9px;
+	border: 2px solid var(--white87);
+	border-left: 0;
+	border-top: 0;
+	transform: rotate(45deg);
 	content: "";
 }
 
@@ -1852,7 +1852,8 @@ footer .copyright {
 }
 
 .side-nav:hover>ul>li.on>a:before {
-	transform: rotate(270deg);
+	top: 24px;
+	transform: rotate(225deg);
 }
 
 .side-nav>ul>li.smn1>a:after {
@@ -5855,9 +5856,13 @@ input.inp[readonly]:focus {
 }
 
 .gmain_table.smain.wrap_type {
-	height: auto
+	height: auto;
 }
 
+.smain_alarm .no-data,
+.gmain_table .no-data {
+	padding-top: 20%;
+}
 
 .gmain_table.smain.unset {
 	min-height: 406px;
@@ -8610,7 +8615,8 @@ div.di_wrap dl .link a {
 .gmain_table.smain .type_list_detail .gtbl_wrap.type {
 	margin-top: 20px;
 	padding: 10px 20px;
-	height: 170px;
+	/* height: 170px; */
+	height: 146px;
 	background: var(--mobile-nav-bg);
 	border-radius: 4px;
 }
