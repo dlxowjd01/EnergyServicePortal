@@ -80,7 +80,9 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 		},
 		labels: {
 			formatter: function () {
-				return numberComma(this.value);
+				const suffix = this.chart.yAxis[0].userOptions.title.text;
+				const yAxisValue = displayNumberFixedUnit(this.value, 'kWh', suffix, 0);
+				return yAxisValue[0];
 			},
 			style: {
 				color: 'var(--white60)',
@@ -308,9 +310,11 @@ const dailyChart = Highcharts.chart('dailyChart', {
 			}
 		},
 		labels: {
-			// formatter: function () {
-			// 	return  (displayNumberFixedDecimal(this.value, standardSuffix, 3, 0).join(' ')).replace('Wh', '');
-			// },
+			formatter: function () {
+				const suffix = this.chart.yAxis[0].userOptions.title.text;
+				const yAxisValue = displayNumberFixedUnit(this.value, 'kWh', suffix, 0);
+				return yAxisValue[0];
+			},
 			style: {
 				color: 'var(--white60)',
 				fontSize: '12px'
@@ -466,6 +470,11 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 			}
 		},
 		labels: {
+			formatter: function () {
+				const suffix = this.chart.yAxis[0].userOptions.title.text;
+				const yAxisValue = displayNumberFixedUnit(this.value, 'kWh', suffix, 0);
+				return yAxisValue[0];
+			},
 			overflow: 'justify',
 			x: -10, /* 그래프와의 거리 조정 */
 			style: {
@@ -531,7 +540,7 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 
 				},
 				formatter: function () {
-					return this.y + this.series.yAxis.userOptions.title.text;
+					return numberComma(this.y) + 'kWh';
 				}
 			},
 		},

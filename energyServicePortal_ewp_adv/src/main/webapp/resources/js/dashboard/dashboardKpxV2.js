@@ -427,65 +427,6 @@ const ajaxData = (urls, target) => {
 }
 
 /**
- * 월별차트 && 데일리차트
- * 필요데이터 정제
- *
- * @param target month:월별, day:일별
- * @returns {Object}
- */
-const refineEnergy = (target) => {
-	const keyArray = ['battery', 'generation'];
-	let rtnObject = new Object();
-	let sliceStart = 4;
-	let sliceEnd = 6;
-	if (target === 'day') {
-		sliceStart = 6;
-		sliceEnd = 8;
-	}
-
-	Object.entries(target).forEach(rstData => {
-		const key = rstData[0]
-			, data = rstData[1];
-		if (keyArray.includes(key)) {
-			if (key === 'battery') {
-				Object.entries(data).forEach(elm => {
-					const type = elm[0]
-						, typeData = elm[1];
-					Object.entries(typeData).forEach(element => {
-						const index = Number(String(element.basetime).slice(sliceStart, sliceEnd)) - 1;
-						if (type === 'charging') {
-							rtnObject['type'] = key + '_charging';
-							rtnObject['energy'] = element.energy;
-							rtnObject['money'] = element.money;
-							rtnObject['index'] = index;
-						} else if (type == 'discharging') {
-							rtnObject['type'] = key + '_discharging';
-							rtnObject['energy'] = element.energy;
-							rtnObject['money'] = element.money;
-							rtnObject['index'] = index;
-						}
-					});
-				});
-			} else {
-				if (!isEmpty(data.items)) {
-					(data.items).forEach(elm => {
-						if (!isEmpty(elm.energy)) {
-							const index = Number(String(elm.basetime).slice(sliceStart, sliceEnd)) - 1;
-							rtnObject['type'] = key;
-							rtnObject['energy'] = elm.energy;
-							rtnObject['money'] = elm.money;
-							rtnObject['index'] = index;
-						}
-					});
-				}
-			}
-		}
-	});
-
-	return rtnObject;
-}
-
-/**
  * 월간 차트
  * 조회기간 1년
  *
@@ -512,14 +453,17 @@ const monthlyChartDraw = async () => {
 							if (!isEmpty(generation)) { //태양광
 								const items = generation.items;
 								items.forEach(item => {
-									const index = Number(String(item.basetime).slice(4, 6)) - 1;
-									if (isEmpty(pvList[siteData['resource_type']])) {
-										pvList[siteData['resource_type']] = new Array(12).fill(0);
-										sumObj[siteData['resource_type']] = 0;
-									}
+									if (!isEmpty(item['energy'])) {
+										const index = Number(String(item['basetime']).slice(4, 6)) - 1;
 
-									pvList[siteData['resource_type']][index] += Math.floor(item.energy);
-									sumObj[siteData['resource_type']] += Math.floor(item.energy);
+										if (isEmpty(pvList[siteData['resource_type']])) {
+											pvList[siteData['resource_type']] = new Array(12).fill(0);
+											sumObj[siteData['resource_type']] = 0;
+										}
+
+										pvList[siteData['resource_type']][index] += Math.floor(item['energy']);
+										sumObj[siteData['resource_type']] += Math.floor(item['energy']);
+									}
 								});
 							}
 						});
@@ -529,16 +473,18 @@ const monthlyChartDraw = async () => {
 				if (!isEmpty(apiData)) {
 					const siteNowEnergyData = apiData['data'];
 					Object.entries(siteNowEnergyData).forEach(([siteKey, nowEnergy]) => {
-						const siteData = siteList.find(site => site.sid === siteKey)
-							, index = Number(String(nowEnergy['start']).slice(4, 6)) - 1;
+						if (!isEmpty(nowEnergy['energy'])) {
+							const siteData = siteList.find(site => site.sid === siteKey)
+								, index = Number(String(nowEnergy['start']).slice(4, 6)) - 1;
 
-						if (isEmpty(pvList[siteData['resource_type']])) {
-							pvList[siteData['resource_type']] = new Array(12).fill(0);
-							sumObj[siteData['resource_type']] = 0;
+							if (isEmpty(pvList[siteData['resource_type']])) {
+								pvList[siteData['resource_type']] = new Array(12).fill(0);
+								sumObj[siteData['resource_type']] = 0;
+							}
+
+							pvList[siteData['resource_type']][index] += Math.floor(nowEnergy['energy']);
+							sumObj[siteData['resource_type']] += Math.floor(nowEnergy['energy']);
 						}
-
-						pvList[siteData['resource_type']][index] += Math.floor(nowEnergy['energy']);
-						sumObj[siteData['resource_type']] += Math.floor(nowEnergy['energy']);
 					});
 				}
 			}
@@ -566,8 +512,8 @@ const monthlyChartDraw = async () => {
 		const rtnUnit = refineMaxValue[1];
 		Object.entries(pvList).forEach(([type, dataArray]) => {
 			dataArray.forEach((data, index) => {
-				const refineValue = displayNumberFixedUnit(data, 'Wh', rtnUnit, 2);
-				pvList[type][index] = (refineValue[0] == '-' || refineValue[0] == 0) ? 0 : Number((refineValue[0]).replace(/[^0-9 \.]/, ''));
+				const refineValue = displayNumberFixedUnit(data, 'Wh', 'kWh', 0);
+				pvList[type][index] = (refineValue[0] == '-' || refineValue[0] == 0) ? 0 : Number((refineValue[0]).replace(/[^0-9]/g, ''));
 			});
 		});
 
@@ -584,13 +530,13 @@ const monthlyChartDraw = async () => {
 				chartSeries['type'] = 'column';
 				chartSeries['color'] = chartColorArray[code];
 				chartSeries['data'] = pvList[code];
-				chartSeries['tooltip'] = {valueSuffix: rtnUnit}
+				chartSeries['tooltip'] = {valueSuffix: 'kWh'}
 				monthlyChart.addSeries(chartSeries, false);
 			}
 
 			if (!isEmpty(sumObj[code])) {
-				const refineValue = displayNumberFixedUnit(sumObj[code], 'Wh', rtnUnit, 2);
-				str += '<li class="pv">' + txt + ' : ' + refineValue[0] + ' ' + rtnUnit + '</li>';
+				const refineValue = displayNumberFixedDecimal(sumObj[code], 'Wh', 3, 2);
+				str += '<li class="pv">' + txt + ' : ' + refineValue.join(' ') + '</li>';
 			}
 		});
 		monthlyChart.yAxis[0].setTitle({
@@ -705,8 +651,8 @@ const dailyChartDraw = async () => {
 		const rtnUnit = refineMaxValue[1];
 		Object.entries(pvList).forEach(([type, dataArray]) => {
 			dataArray.forEach((data, index) => {
-				const refineValue = displayNumberFixedUnit(data, 'Wh', rtnUnit, 2);
-				pvList[type][index] = (refineValue[0] == '-' || refineValue[0] == 0) ? 0 : Number((refineValue[0]).replace(/[^0-9 \.]/, ''));
+				const refineValue = displayNumberFixedUnit(data, 'Wh', 'kWh', 0);
+				pvList[type][index] = (refineValue[0] == '-' || refineValue[0] == 0) ? 0 : Number((refineValue[0]).replace(/[^0-9]/g, ''));
 			});
 		});
 
@@ -728,8 +674,8 @@ const dailyChartDraw = async () => {
 
 				if (!isEmpty(sumObj[code])) {
 					if (!isEmpty(sumObj[code])) {
-						const refineValue = displayNumberFixedUnit(sumObj[code], 'Wh', rtnUnit, 2);
-						str += '<li class="pv">' + txt + ' : ' + refineValue[0] + ' ' + rtnUnit + '</li>';
+						const refineValue = displayNumberFixedDecimal(sumObj[code], 'Wh', 3, 2);
+						str += '<li class="pv">' + txt + ' : ' + refineValue.join(' ') + '</li>';
 					}
 				}
 			}
@@ -822,13 +768,13 @@ const typeSiteDraw = async () => {
 		const refineMaxValue = displayNumberFixedDecimal(maxValue, 'Wh', 3, 2);
 		const rtnUnit = refineMaxValue[1];
 		Object.entries(siteGenArray).forEach(([siteId, data]) => {
-			const refineValue = displayNumberFixedUnit(data, 'Wh', rtnUnit, 2);
+			const refineValue = displayNumberFixedUnit(data, 'Wh', 'kWh', 2);
 			siteGenArray[siteId] = (refineValue[0] == '-' || refineValue[0] == 0) ? 0 : Number((refineValue[0]).replace(/[^0-9 \.]/, ''));
 			maxValue = data;
 		});
 
 		Object.entries(siteForeGenArray).forEach(([siteId, data]) => {
-			const refineValue = displayNumberFixedUnit(data, 'Wh', rtnUnit, 2);
+			const refineValue = displayNumberFixedUnit(data, 'Wh', 'kWh', 2);
 			siteForeGenArray[siteId] = (refineValue[0] == '-' || refineValue[0] == 0) ? 0 : Number((refineValue[0]).replace(/[^0-9 \.]/, ''));
 			maxValue = data;
 		});
@@ -884,15 +830,13 @@ const typeSiteDraw = async () => {
 		let genForecastSum = 0;
 
 		if(!isEmpty(tempGenArray)){
-			let newValue = '';
 			genSum = tempGenArray.reduce((acc, val) => { return acc + val } , 0);
-			str += '<li class="charge">전일 발전 : ' + genSum + ' ' + rtnUnit + '</li>';
+			str += '<li class="charge">전일 발전 : ' + displayNumberFixedDecimal(genSum, 'kWh', 3, 2).join(' ') + '</li>';
 		}
 
 		if(!isEmpty(tempForeArray)){
-			let newValue = '';
 			genForecastSum = tempForeArray.reduce((acc, val) => { return acc + val } , 0);
-			str += '<li class="discharge">그제 발전 : ' + genForecastSum + ' ' + rtnUnit + '</li>';
+			str += '<li class="discharge">그제 발전 : ' + displayNumberFixedDecimal(genForecastSum, 'kWh', 3, 2).join(' ') + '</li>';
 		}
 
 		$("#yesterdaySum").append(str);

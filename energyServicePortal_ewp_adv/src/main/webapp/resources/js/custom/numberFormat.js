@@ -72,10 +72,13 @@ const displayNumberFixedDecimal = function(number, unit, intChipher, decimalChip
 
 			/* 시작 unit 단위가 w보다 클경우 */
 			const standardUnit = (unit.substr(0, 1)).replace(/W/i, '');
-			const findIndex = whUnit.findIndex(targetUnit => targetUnit.match(standardUnit));
-			if (findIndex > 0) {
-				whUnit = whUnit.splice(findIndex, whUnit.length);
+			if (!isEmpty(standardUnit)) {
+				const findIndex = whUnit.findIndex(targetUnit => targetUnit.match(standardUnit));
+				if (findIndex > 0) {
+					whUnit = whUnit.splice(findIndex, whUnit.length);
+				}
 			}
+
 			/* 시작 unit 단위가 w보다 클경우 */
 
 			if (unit.match('h')) {
@@ -111,9 +114,11 @@ const displayNumberFixedDecimal = function(number, unit, intChipher, decimalChip
 
 			/* 시작 unit 단위가 w보다 클경우 */
 			const standardUnit = (unit.substr(0, 1)).replace('원', '');
-			const findIndex = moneyUnit.findIndex(targetUnit => (targetUnit.unit).match(standardUnit));
-			if (findIndex > 0) {
-				moneyUnit = moneyUnit.splice(findIndex, moneyUnit.length);
+			if (!isEmpty(standardUnit)) {
+				const findIndex = moneyUnit.findIndex(targetUnit => (targetUnit.unit).match(standardUnit));
+				if (findIndex > 0) {
+					moneyUnit = moneyUnit.splice(findIndex, moneyUnit.length);
+				}
 			}
 			/* 시작 unit 단위가 w보다 클경우 */
 
@@ -141,9 +146,9 @@ const displayNumberFixedDecimal = function(number, unit, intChipher, decimalChip
  * @param decimalChipher
  * @returns {[string, *]|[]}
  */
-const displayNumberFixedUnit = function(input_num, input_unit, fixed_unit, num_frac) {
+const displayNumberFixedUnit = function (input_num, input_unit, fixed_unit, num_frac) {
 	let rtnValue = []
-	let whUnit = ['W', 'kW', 'MW', 'GW'];
+	let whUnit = ['', 'k', 'M', 'G', 'T'];
 	let moneyUnit = [
 		{ unit: '원', chipher: 1 },
 		{ unit: '십원', chipher: 10 },
@@ -155,6 +160,7 @@ const displayNumberFixedUnit = function(input_num, input_unit, fixed_unit, num_f
 		{ unit: '천만원', chipher: 10000000 },
 		{ unit: '억원', chipher: 100000000 },
 	];
+	let suffix = '';
 
 	if(isEmpty(input_num)) {
 		rtnValue = ['-', input_unit];
@@ -165,7 +171,19 @@ const displayNumberFixedUnit = function(input_num, input_unit, fixed_unit, num_f
 			return rtnValue;
 		}
 
-		if(input_unit == 'Wh' || input_unit == 'W') {
+		if(input_unit.match('W')) {
+			/* 시작 unit 단위가 w보다 클경우 */
+			const standardUnit = (input_unit.substr(0, 1)).replace(/W/i, '');
+			if (!isEmpty(standardUnit)) {
+				const findIndex = whUnit.findIndex(targetUnit => targetUnit.match(standardUnit));
+				if (findIndex > 0) {
+					whUnit = whUnit.splice(findIndex, whUnit.length);
+				}
+			}
+			/* 시작 unit 단위가 w보다 클경우 */
+			if (input_unit.match('h')) {
+				suffix = 'h';
+			}
 
 			if(isEmpty(num_frac)) {
 				num_frac = 2;
@@ -178,20 +196,12 @@ const displayNumberFixedUnit = function(input_num, input_unit, fixed_unit, num_f
 
 			whUnit.some(function(v, k) {
 				let str = String(Math.floor(input_num));
-				if(fixed_unit.startsWith(v)) {
+				if(fixed_unit == v + 'W' + suffix) {
 					input_num = input_num / Math.pow(1000, k);
-					if(input_unit.endsWith('h')) {
-						if(Math.floor(input_num * 100) == 0) {
-							rtnValue = [0, v + 'h'];
-						} else {
-							rtnValue = [numberComma((input_num).toFixed(num_frac)), v + 'h'];
-						}
+					if(Math.floor(input_num * 100) == 0) {
+						rtnValue = [0, v + 'W' +  suffix];
 					} else {
-						if(Math.floor(input_num * 100) == 0) {
-							rtnValue = [0, v + 'h'];
-						} else {
-							rtnValue = [numberComma((input_num).toFixed(num_frac)), v];
-						}
+						rtnValue = [numberComma((input_num).toFixed(num_frac)), v + 'W' +  suffix];
 					}
 					return rtnValue;
 				}
