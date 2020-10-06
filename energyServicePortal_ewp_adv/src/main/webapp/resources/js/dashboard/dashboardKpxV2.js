@@ -669,7 +669,7 @@ const dailyChartDraw = async () => {
 				chartSeries['type'] = 'column';
 				chartSeries['color'] = chartColorArray[code];
 				chartSeries['data'] = pvList[code];
-				chartSeries['tooltip'] = {valueSuffix: rtnUnit}
+				chartSeries['tooltip'] = {valueSuffix: 'kWh'}
 				dailyChart.addSeries(chartSeries, false);
 
 				if (!isEmpty(sumObj[code])) {
