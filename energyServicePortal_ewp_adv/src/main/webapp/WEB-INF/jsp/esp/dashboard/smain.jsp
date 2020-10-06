@@ -896,10 +896,10 @@
 				},
 				labels: {
 					formatter: function () {
-						if (String(this.value).length  >= 7) {
-							return numberComma(this.value / 1000000) + ' G';
-						} else if (String(this.value).length  >= 5) {
-							return numberComma(this.value / 1000) + ' M';
+						if (String(this.value).length  >= 9) {
+							return numberComma(this.value / 1000000000) + ' G';
+						} else if (String(this.value).length  >= 6) {
+							return numberComma(this.value / 1000000) + ' M';
 						} else {
 							return this.value;
 						}
@@ -938,10 +938,10 @@
 				},
 				labels: {
 					formatter: function () {
-						if (String(this.value).length  >= 7) {
-							return numberComma(this.value / 1000000) + ' G';
-						} else if (String(this.value).length  >= 5) {
-							return numberComma(this.value / 1000) + ' M';
+						if (String(this.value).length  >= 9) {
+							return numberComma(this.value / 1000000000) + ' G';
+						} else if (String(this.value).length  >= 6) {
+							return numberComma(this.value / 1000000) + ' M';
 						} else {
 							return this.value;
 						}
@@ -3324,7 +3324,7 @@
 						let dataMonth = parseInt(String(chartItems1[d].basetime).substring(4, 6));
 						if (i + 1 == dataMonth) {
 							energyData[i] = [i, chartItems1[d].energy / 1000];
-
+							console.log("energyData[i]==", energyData[i])
 							if (!oid.match('testkpx')) {
 								if ($(':radio[name="radio_t"]:checked').val() == 1) {
 									let energy = chartItems1[d].energy / 1000;
@@ -3763,8 +3763,9 @@
 						let v = Object.values(data.data);
  
 						if(!isEmpty(v) && v.flat()[0]["items"].length>0){
-							let rstData = v.flat()[0]["items"];
+							const rstData = v.flat()[0]["items"];
 							rstData.forEach(rst => {
+								// console.log("rst===", rst)
 								if (!isEmpty(rst.energy)) {
 									getNowEnergyDay += rst.energy;
 									nowBillingDay += rst.money;
@@ -3776,7 +3777,9 @@
 						}
 
 						// console.log("nowBillingDay===", nowBillingDay)
+				
 						if ((data.start) == formYesterData.startTime) {
+							console.log("start==formYesterData ===> ", getNowEnergyDay);
 							$('#centerTbody tr td:nth-child(3) em').before(displayNumberFixedUnit(getNowEnergyDay, 'Wh', 'kWh', 2)[0]);
 							itemEnergyDay = getNowEnergyDay;
 						} else {
@@ -3788,6 +3791,7 @@
 							}
 						}
 					} else if ((url).match(apiEnergyNowSite)) {
+						console.log("apiEnergyNowSite===", data.data[siteId])
 						if(!isEmpty(data.data[siteId])) {
 							let rstData = data.data[siteId];
 							let getNowEnergyDay = rstData.energy;
@@ -3923,7 +3927,6 @@
 
 					pieChart.series[0].setData([pie1Data, pie2Data]);
 				}
-
 				$('#centerTbody tr td:nth-child(1) em').before(displayNumberFixedUnit(itemCapacity, 'W', 'kW', 1)[0]);
 				pieChart.setTitle({text: displayNumberFixedUnit(itemAcPower, 'W', 'kW', 1)[0] + 'kW'});
 			});

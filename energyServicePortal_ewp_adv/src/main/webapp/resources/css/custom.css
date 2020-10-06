@@ -6685,6 +6685,7 @@ div.di_wrap dl .link a {
 	display: flex;
 	margin: 12px 0 3px;
 	overflow: auto;
+	max-height: 487px;
 }
 
 .smain_cal .calendar {
@@ -6787,6 +6788,8 @@ div.di_wrap dl .link a {
 
 .weather-wrap {
 	margin-top: 10px;
+	max-height: 180px;
+	overflow: auto;
 }
 
 .weather-wrap .fl dl dt {

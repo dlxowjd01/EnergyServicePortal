@@ -582,14 +582,6 @@
 				let contactNum = td.eq(4).find(".tx_inp_type");
 				let nonUserArr = [];
 				let registeredUserArr = [];
-				if(isEmpty(did)){
-					$("#duplicatedGroup").removeClass("hidden");
-					setTimeout(function(){
-						target.data({"value": "", "did" : "" }).html('선택<span class="caret"></span>');
-						$("#duplicatedGroup").addClass("hidden");
-					}, 1600);
-					return false;
-				}
 				let alarmToObj = {};
 
 				let deviceOpt = {
@@ -600,7 +592,7 @@
 				};
 				for(let i=0, length = alarmLvl.length; i<length; i++){
 					// if(!$(editItems[i]).is(":disabled")){
-					if(!alarmLvl.eq(i).is(":disabled")){
+					if( (!alarmLvl.eq(i).is(":disabled") ) && !isEmpty(did) ){
 						let levelArr = [];
 						let contactNameArr = [];
 						let contactNumArr = [];
@@ -2436,8 +2428,6 @@
 						x.alarmToUser = res;
 						alarmList.push(x);
 					});
-				} else {
-					console.log("no alarmTO===")
 				}
 			})).then( () => {
 				let newDevType = [...new Map(alarmList.map(x => [x.device_type, x])).values()];
@@ -2481,10 +2471,9 @@
 							{
 								"aTargets": [ 2 ],
 								"createdCell": function (td, cellData, rowData, row, col) {
-									let el = $(td).find(".dropdown");
-									let lvlStr = $(td).find(".dropdown-toggle");
+									let dropdown = $(td).find(".dropdown");
 
-									$.each(el, function(index, chk){
+									$.each(dropdown, function(index, el){
 										let selected = $(this).find(".dropdown-toggle").data("value");
 										let input = $(this).find("input[type='checkbox']");
 
@@ -2507,26 +2496,15 @@
 							{
 								"aTargets": [ 3 ],
 								"createdCell": function (td, cellData, rowData, row, col) {
+									// console.log("rowData11---", rowData);
+
 									if (!isEmpty(rowData.alarmToUser)) {
-										if(!isEmpty(rowData.alarmToUser.non_user) && !isEmpty(rowData.alarmToUser.user) ){
-											let user = rowData.alarmToUser.user;
-											let nonUser = rowData.alarmToUser.non_user;
+										let dropdown = $(td).find(".dropdown");
+										let val = dropdown.find(".dropdown-toggle").data("value");
 
-										} else {
-											if(!isEmpty(rowData.alarmToUser.user)){
-												let user = rowData.alarmToUser.user;
-											} 
-											if(!isEmpty(rowData.alarmToUser.non_user)){
-												let nonUser = rowData.alarmToUser.non_user;
-											}
-										}
-
-										console.log("rowData---", rowData, "row===", row);
-										// console.log("cellData---", cellData);
-										let dropdown = $(td).find(".dropdown-toggle");
 										$.each(dropdown, function(index, el){
 											let target = $(this).next().find("input[type='checkbox']");
-											console.log("target===", target, "$(this)===", $(this))
+
 											if(!isEmpty(target) && target.length > 0){
 												let targetArr = target.toArray();
 												// console.log("$(this).text()====", $(this).text())
@@ -2542,8 +2520,8 @@
 							{
 								"aTargets": [ 4 ],
 								"createdCell": function (td, cellData, rowData, row, col) {
+									let input = $(td).find("input");
 									if (!isEmpty(rowData.alarmToUser)) {
-										let input = $(td).find("input");
 										$.each(input, function(index, el){
 											$(this).val($(this).attr("value"));
 										});
@@ -2621,11 +2599,6 @@
 										{  name : "미정", val: 9 },
 									];
 
-									// $.each(aLevelOpt, function(index, el){
-									// 	str3 += `
-									// 		<li data-name="${'${ el.name }'}" data-value="${'${ el.val }'}"><a href="#" tabindex="-1">${'${ el.name }'}</a></li>
-									// 	`
-									// });
 
 									$.each(aLevelOpt, function(index, el){
 										str3 += `
@@ -2638,11 +2611,52 @@
 										`
 									});
 
-									// if(!isEmpty(data.alarmToUser)) {
-										let nonUser = data.alarmToUser.non_user;
-										let registeredUser = data.alarmToUser.user;
+									if( isEmpty(data.alarmToUser.non_user) && isEmpty(data.alarmToUser.user) ) {
+										dropdown3 = `
+											<div class="dropdown">
+												<button type="button" class="dropdown-toggle" data-toggle="dropdown" disabled>선택<span class="caret"></span></button>
+												<ul id="aDvcAlarmList${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str3 }'}</ul>
+											</div>
+										`
+									} else {
+										if(!isEmpty(data.alarmToUser.user) && data.alarmToUser.user.length > 0){
+											let registeredUser = data.alarmToUser.user;
+											let joinedVal = "";
 
-										if(!isEmpty(nonUser) && nonUser.length > 0){
+											$.each(registeredUser, function(index, el){
+												let levText = "";
+												let levVal = "";
+												let newIdx = String(rowIndex.row + index);
+
+												if(!isEmpty(el.level)){
+													let val;
+													joinedVal = el.level.join(",");
+
+													if(el.level.length > 1){
+														val = el.level[0];
+														levText = aLevelOpt[val].name + ' 외 ' + String(el.level.length - 1) + "개";
+													} else if(el.level.length == 1) {
+														joinedVal = el.level[0];
+														levText = aLevelOpt[joinedVal].name;
+													} else if(el.level.length < 0) {
+														joinedVal = "";
+														levText = "선택";
+													}
+
+													dropdown3 += `
+														<div class="dropdown">
+															<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="${'${ joinedVal }'}" data-name="${'${ levText }'}" disabled>${'${ levText }'}<span class="caret"></span></button>
+															<ul id="aDvcAlarmList${'${ newIdx }'}" class="dropdown-menu">${'${ str3 }'}</ul>
+														</div>
+													`
+												}
+											});
+										}
+										
+										if(!isEmpty(data.alarmToUser.non_user) && data.alarmToUser.non_user.length > 0){
+											let nonUser = data.alarmToUser.non_user;
+											let joinedVal = "";
+											
 											$.each(nonUser, function(index, el){
 												let levText = "";
 												let levVal = "";
@@ -2650,16 +2664,28 @@
 
 												if(!isEmpty(el.level)){
 													let val;
-													let joinedVal = el.level.join(",");
+													joinedVal = el.level.join(",");
 
-													if(!isEmpty(el.level)){
-														console.log("el.level==", el.level)
+													if(el.level.length > 1){
 														val = el.level[0];
 														levText = aLevelOpt[val].name + ' 외 ' + String(el.level.length - 1) + "개";
-													} else {
-														joinedVal = ""
+													} else if(el.level.length == 1) {
+														joinedVal = el.level[0];
+														levText = aLevelOpt[joinedVal].name;
+													} else if(el.level.length < 0) {
+														joinedVal = "";
 														levText = "선택";
 													}
+
+													// if(!isEmpty(el.level)){
+													// 	val = el.level[0];
+													// 	levText = aLevelOpt[val].name + ' 외 ' + String(el.level.length - 1) + "개";
+													// } else {
+													// 	joinedVal = ""
+													// 	levText = "선택";
+													// }
+
+
 													dropdown3 += `
 														<div class="dropdown">
 															<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="${'${ joinedVal }'}" data-name="선택" disabled>${'${ levText }'}<span class="caret"></span></button>
@@ -2676,46 +2702,7 @@
 												}
 											});																		
 										}
-
-										if(!isEmpty(registeredUser) && registeredUser.length > 0){
-											$.each(registeredUser, function(index, el){
-												let levText = "";
-												let levVal = "";
-												let newIdx = String(rowIndex.row + index);
-
-												if(!isEmpty(el.level)){
-													let joinedVal = el.level.join(",");
-													let val;
-
-													if(!isEmpty(el.level) && el.level[0].length>0){
-														console.log("el.level==", el.level)
-														val = el.level[0];
-														levText = aLevelOpt[val].name + ' 외 ' + String(el.level.length - 1) + "개";
-													} else {
-														joinedVal = ""
-														levText = "선택";
-													}
-
-													dropdown3 += `
-														<div class="dropdown">
-															<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="${'${ joinedVal }'}" data-name="${'${ levText }'}" disabled>${'${ levText }'}<span class="caret"></span></button>
-															<ul id="aDvcAlarmList${'${ newIdx }'}" class="dropdown-menu">${'${ str3 }'}</ul>
-														</div>
-													`
-												}
-
-											});
-										}
-									// } else {
-									// 	// console.log("no alarmTO---", data)
-									// 	dropdown3 = `
-									// 		<div class="dropdown">
-									// 			<button type="button" class="dropdown-toggle" data-toggle="dropdown" >선택<span class="caret"></span></button>
-									// 			<ul id="aDvcAlarmList${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str3 }'}</ul>
-									// 		</div>
-									// 	`;
-
-									// }
+									}
 
 									return dropdown3;
 								},
@@ -2729,76 +2716,110 @@
 									let dropdown4 = ``;
 									let userIdx = '';
 
-									let nonUser = data.alarmToUser.non_user;
-									let registeredUser = data.alarmToUser.user;
-
-									if(!isEmpty(nonUser) && nonUser.length > 0){
-										nonUser.forEach((item, index) => {
-											let displayName = item.name;
-											newIdx = String(rowIndex.row + index);
+									if( isEmpty(data.alarmToUser.non_user) && isEmpty(data.alarmToUser.user) ) {
+										str4 += `
+											<li onclick='addNewInput(this)'><a href="#">직접 입력</a></li>
+										`;
+										$.each(userData, function(idx, el){
+											let nameId = `${'${ el.name }'}` + ` / ` + `${'${ el.login_id }'}`;
+											let phoneNum = "";
+											el.contact_phone ? phoneNum = el.contact_phone : "";
 
 											str4 += `
-												<li onclick='addNewInput(this)'><a href="#">직접 입력</a></li>
+												<li onclick='removeNewInput(this)'>
+													<a class="chk_type" href="#">
+														<input type="checkbox" data-id="${'${ el.login_id }'}${'${ rowIndex.row }'}" name="aDvcContactPerson${'${ rowIndex.row }'}" value="${'${ el.uid }'}" data-uid="${'${ el.uid }'}" data-name="${'${ el.name }'}" data-contact-num="${'${ phoneNum }'}" />
+														<label>${'${ nameId }'}</label>
+													</a>
+												</li>
 											`;
-											$.each(userData, function(idx, el){
-												let nameId = `${'${ el.name }'}` + ` / ` + `${'${ el.login_id }'}`;
-												let phoneNum = "";
-												el.contact_phone ? phoneNum = el.contact_phone : "";
+										});
+										
+										dropdown4 = `
+											<div class="dropdown" data-user-type="non-user" data-user-index="${'${ rowIndex.row }'}">
+												<button type="button" class="dropdown-toggle" data-toggle="dropdown" disabled>선택<span class="caret"></span></button>
+												<ul id="aDvcContactListNonUser${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str4 }'}</ul>
+											</div>
+											<div class="tx_inp_type ml-0 hidden"><input type="text" name="aDvcContactNonUser${'${ rowIndex.row }'}" /></div>
+										`
+									} else {
+										if(!isEmpty(data.alarmToUser.non_user) && data.alarmToUser.non_user.length > 0){
+											let nonUser = data.alarmToUser.non_user;
+											
+											nonUser.forEach((item, index) => {
+												let displayName = item.name;
+
+												console.log("displayName==", item)
+												newIdx = String(rowIndex.row + index);
 
 												str4 += `
-													<li onclick='removeNewInput(this)'>
-														<a class="chk_type" href="#">
-															<input type="checkbox" data-id="${'${ el.login_id }'}${'${ newIdx }'}" name="aDvcContactPerson${'${ newIdx }'}" value="${'${ el.uid }'}" data-uid="${'${ el.uid }'}" data-name="${'${ el.name }'}" data-contact-num="${'${ phoneNum }'}" />
-															<label>${'${ nameId }'}</label>
-														</a>
-													</li>
+													<li onclick='addNewInput(this)'><a href="#">직접 입력</a></li>
 												`;
+												$.each(userData, function(idx, el){
+													let nameId = `${'${ el.name }'}` + ` / ` + `${'${ el.login_id }'}`;
+													let phoneNum = "";
+													el.contact_phone ? phoneNum = el.contact_phone : "";
+
+													str4 += `
+														<li onclick='removeNewInput(this)'>
+															<a class="chk_type" href="#">
+																<input type="checkbox" data-id="${'${ el.login_id }'}${'${ newIdx }'}" name="aDvcContactPerson${'${ newIdx }'}" value="${'${ el.uid }'}" data-uid="${'${ el.uid }'}" data-name="${'${ el.name }'}" data-contact-num="${'${ phoneNum }'}" />
+																<label>${'${ nameId }'}</label>
+															</a>
+														</li>
+													`;
+												});
+
+												dropdown4 += `
+													<div class="dropdown" data-user-type="non-user" data-user-index="${'${ newIdx }'}">
+														<button type="button" class="dropdown-toggle" data-value="${'${ displayName }'}" data-toggle="dropdown" data-name="선택" disabled>${'${ displayName }'}<span class="caret"></span></button>
+														<ul id="aDvcContactListNonUser${'${ newIdx }'}" class="dropdown-menu">${'${ str4 }'}</ul>
+													</div>
+													<div class="tx_inp_type ml-0 hidden"><input type="text" name="aDvcContactNonUser${'${ newIdx }'}" /></div>
+												`;
+
 											});
+										}
 
-											dropdown4 += `
-												<div class="dropdown" data-user-type="non-user" data-user-index="${'${ newIdx }'}">
-													<button type="button" class="dropdown-toggle" data-value="${'${ displayName }'}" data-toggle="dropdown" data-name="선택" disabled>${'${ displayName }'}<span class="caret"></span></button>
-													<ul id="aDvcContactListNonUser${'${ newIdx }'}" class="dropdown-menu">${'${ str4 }'}</ul>
-												</div>
-												<div class="tx_inp_type ml-0 hidden"><input type="text" name="aDvcContactNonUser${'${ newIdx }'}" /></div>
-											`;
+										if(!isEmpty(data.alarmToUser.user) && data.alarmToUser.user.length > 0){
+											let registeredUser = data.alarmToUser.user;
 
-										});
-									}
-
-									if(!isEmpty(registeredUser) && registeredUser.length > 0){
-										registeredUser.forEach((item, index) => {
-											let newIdx = String(rowIndex.row + index);
-											let displayName = item.uid;
-
-											str4 += `
-												<li onclick='addNewInput(this)'><a href="#">직접 입력</a></li>
-											`
-											$.each(userData, function(idx, el){
-												let nameId = `${'${ el.name }'}` + `(` + `${'${ el.login_id }'}` + `)`;
-												let phoneNum = "";
-												el.contact_phone ? phoneNum = el.contact_phone : "";
+											registeredUser.forEach((item, index) => {
+												let newIdx = String(rowIndex.row + index);
+												let displayName = "";
 
 												str4 += `
-													<li onclick='removeNewInput(this)'>
-														<a class="chk_type" href="#">
-															<input type="checkbox" data-id="${'${ el.login_id }'}${'${ newIdx }'}" name="aDvcContactPerson${'${ newIdx }'}" value="${'${ el.uid }'}" data-name="${'${ el.name }'}" data-contact-num="${'${ phoneNum }'}" />
-															<label>${'${ nameId }'}</label>
-														</a>
-													</li>
+													<li onclick='addNewInput(this)'><a href="#">직접 입력</a></li>
 												`
+												$.each(userData, function(idx, el){
+													let nameId = `${'${ el.name }'}` + `(` + `${'${ el.login_id }'}` + `)`;
+													let phoneNum = "";
+													if(el.uid == item.uid){
+														displayName = el.name
+													}
+													
+													el.contact_phone ? phoneNum = el.contact_phone : "";
+
+													str4 += `
+														<li onclick='removeNewInput(this)'>
+															<a class="chk_type" href="#">
+																<input type="checkbox" data-id="${'${ el.login_id }'}${'${ newIdx }'}" name="aDvcContactPerson${'${ newIdx }'}" value="${'${ el.uid }'}" data-name="${'${ el.name }'}" data-contact-num="${'${ phoneNum }'}" />
+																<label>${'${ nameId }'}</label>
+															</a>
+														</li>
+													`
+												});
+												dropdown4 += `
+													<div class="dropdown" data-user-type="user" data-user-index="${'${ newIdx }'}">
+														<button type="button" class="dropdown-toggle" data-value="${'${ item.uid }'}" data-toggle="dropdown" data-name="" disabled>${'${ displayName }'}<span class="caret"></span></button>
+														<ul id="aDvcContactList${'${ newIdx }'}" class="dropdown-menu">${'${ str4 }'}</ul>
+													</div>
+													<div class="tx_inp_type ml-0 hidden"><input type="text" name="aDvcContact${'${ newIdx }'}" id="aDvcContact${'${ newIdx }'}" /></div>
+												`;
+
 											});
-											dropdown4 += `
-												<div class="dropdown" data-user-type="user" data-user-index="${'${ newIdx }'}">
-													<button type="button" class="dropdown-toggle" data-value="" data-toggle="dropdown" data-name="선택" disabled><span class="caret"></span></button>
-													<ul id="aDvcContactList${'${ newIdx }'}" class="dropdown-menu">${'${ str4 }'}</ul>
-												</div>
-												<div class="tx_inp_type ml-0 hidden"><input type="text" name="aDvcContact${'${ newIdx }'}" id="aDvcContact${'${ newIdx }'}" /></div>
-											`;
-
-										});
+										}
 									}
-
 									return dropdown4;
 								},
 								// "className": "no-sorting",
@@ -2809,29 +2830,40 @@
 								"mData": null,
 								"mRender": function ( data, type, row, rowIndex ) {
 									let str5 = ``;
-									let nonUser = data.alarmToUser.non_user;
-									let registeredUser = data.alarmToUser.user;
 
-									if(!isEmpty(nonUser) && nonUser.length > 0){
-										nonUser.forEach((item, index) => {
-											let newIdx = String(rowIndex.row + index);
-											let displayName = item.name;
-											let phoneNum = "";
-											item.phone ? phoneNum = item.phone : "";
+									if( isEmpty(data.alarmToUser.non_user) && isEmpty(data.alarmToUser.user) ) {
+										str5 += `<div class="tx_inp_type disabled" data-user-type="user"><input type="text" name="aDvcPhone${'${ rowIndex.row }'}" value="" disabled /></div>`;
+									} else {
+										if(!isEmpty(data.alarmToUser.non_user) && data.alarmToUser.non_user.length > 0){
+											let nonUser = data.alarmToUser.non_user;
+											nonUser.forEach((item, index) => {
+												let newIdx = String(rowIndex.row + index);
+												let displayName = item.name;
+												let phoneNum = "";
+												item.phone ? (phoneNum = item.phone) : ( phoneNum = "" );
 
-											str5 += `<div class="tx_inp_type disabled" data-user-type="non-user"><input type="text" name="aDvcPhoneNonUser${'${ newIdx }'}" value="${'${ phoneNum }'}" disabled /></div>`;
-										});
-									}
+												str5 += `<div class="tx_inp_type disabled" data-user-type="non-user"><input type="text" name="aDvcPhoneNonUser${'${ newIdx }'}" value="${'${ phoneNum }'}" disabled /></div>`;
+											});
+										}
 
-									if(!isEmpty(registeredUser) && registeredUser.length > 0){								
-										registeredUser.forEach((item, index) => {
-											let newIdx = String(rowIndex.row + index);
-											let displayName = item.name;
-											let phoneNum = "";
-											item.phone ? phoneNum = item.phone : "";
+										if(!isEmpty(data.alarmToUser.user) && data.alarmToUser.user.length > 0){
+											
+											let registeredUser = data.alarmToUser.user;
 
-											str5 += `<div class="tx_inp_type disabled" data-user-type="user"><input type="text" name="aDvcPhone${'${ newIdx }'}" value="${'${ phoneNum }'}" disabled /></div>`;
-										});
+											registeredUser.forEach((item, index) => {
+												let newIdx = String(rowIndex.row + index);
+												let displayName = item.name;
+												let phoneNum = "";
+												let found = userData.findIndex(x => x.uid == item.uid);
+
+												if(found > -1){
+													if(!isEmpty(userData[found].contact_phone)){
+														phoneNum = userData[found].contact_phone; 
+													}
+												}
+												str5 += `<div class="tx_inp_type disabled" data-user-type="user"><input type="text" name="aDvcPhone${'${ newIdx }'}" value="${'${ phoneNum }'}" disabled /></div>`;
+											});
+										}
 									}
 
 									return str5;
@@ -2845,20 +2877,30 @@
 									let deleteStr = ``;
 									let length = 0;
 
-									if(!isEmpty(data.alarmToUser.user)){
-										length += data.alarmToUser.user.length;
-									} 
-									if(!isEmpty(data.alarmToUser.non_user)){
-										length += data.alarmToUser.non_user.length;
-									}
-									for(let i = 0, arrLength = length; i < arrLength; i++ ){
-										deleteStr += `
+									if( isEmpty(data.alarmToUser.non_user) && isEmpty(data.alarmToUser.user) ) {
+										deleteStr = `
 											<div class="flex_start">
-												<button type="button" class="icon-add" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'add' )">추가</button>
-												<button type="button" class="icon-edit" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'edit')">수정</button>
-												<button type="button" class="icon-delete" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'delete')">삭제</button>
+												<button type="button" class="icon-add" data-index="${'${rowIndex.row}'}" onclick="updateAlarmTable($(this), 'add' )">추가</button>
+												<button type="button" class="icon-edit" data-index="${'${rowIndex.row}'}" onclick="updateAlarmTable($(this), 'edit')">수정</button>
+												<button type="button" class="icon-delete" data-index="${'${rowIndex.row}'}" onclick="updateAlarmTable($(this), 'delete')">삭제</button>
 											</div>
 										`;
+									} else {
+										if(!isEmpty(data.alarmToUser.user)){
+											length += data.alarmToUser.user.length;
+										} 
+										if(!isEmpty(data.alarmToUser.non_user)){
+											length += data.alarmToUser.non_user.length;
+										}
+										for(let i = 0, arrLength = length; i < arrLength; i++ ){
+											deleteStr += `
+												<div class="flex_start">
+													<button type="button" class="icon-add" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'add' )">추가</button>
+													<button type="button" class="icon-edit" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'edit')">수정</button>
+													<button type="button" class="icon-delete" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'delete')">삭제</button>
+												</div>
+											`;
+										}
 									}
 
 									return deleteStr;
