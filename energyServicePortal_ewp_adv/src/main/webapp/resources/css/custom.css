@@ -5856,7 +5856,7 @@ input.inp[readonly]:focus {
 }
 
 .gmain_table.smain.wrap_type {
-	height: auto;
+	height: 684px;
 }
 
 .smain_alarm .no-data,
@@ -5871,7 +5871,7 @@ input.inp[readonly]:focus {
 
 .gmain_table.smain .type_list {
 	overflow: auto;
-	max-height: 780px;
+	max-height: 610px;
 }
 
 .jmain_table.gmain_table {
@@ -6684,7 +6684,7 @@ div.di_wrap dl .link a {
 .smain_cal .calendar_wrap {
 	display: flex;
 	margin: 12px 0 3px;
-	overflow: auto;
+	overflow: hidden;
 	max-height: 487px;
 }
 

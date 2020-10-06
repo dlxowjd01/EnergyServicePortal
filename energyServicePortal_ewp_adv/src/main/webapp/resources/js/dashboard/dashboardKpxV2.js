@@ -916,6 +916,9 @@ const getTodayTotalDetail = async function () {
 		  , acPower = 0
 		  , capacitySum = 0;
 
+		let tempSolarA = 0;
+		let tempWindA = 0;
+
 		Object.entries(rawStatus).forEach(([resourceType, resourceData]) => {
 			capacitySum += resourceData['capacity']
 		});
@@ -938,26 +941,29 @@ const getTodayTotalDetail = async function () {
 			acPower += aPower;
 
 			if (resourceType == 1) {
+				tempSolarA =+ resourceData['activePower'];
 				deviceArray.push({
 					color: 'var(--circle-solar-power)',
 					name: resourceTemplate[resourceType],
 					dataLabels: {
 						enabled: false
 					},
-					y: Math.floor((aPower / capacitySum) * 100)
+					y: Math.floor((tempSolarA / capacitySum) * 100)
 				});
 
 				$('#centerTbody tr:eq(0) td:nth-child(4)').html('태양광'); //구분
 				$('#centerTbody tr:eq(0) td:nth-child(5)').html(siteCount + '<em>&nbsp;&nbsp;개소</em>'); //사업소
 				$('#centerTbody tr:eq(0) td:nth-child(6)').html(numberComma(Math.floor((capacity / 1000)) + '<em>&nbsp;&nbsp;kW</em>')); //설비용량
 			} else if (resourceType == 2) {
+				tempWindA =+ resourceData['activePower'];
+
 				deviceArray.push({
 					color: 'var(--summer-sky)',
 					name: resourceTemplate[resourceType],
 					dataLabels: {
 						enabled: false
 					},
-					y: Math.floor((aPower / capacitySum) * 100)
+					y: Math.floor((tempWindA / capacitySum) * 100)
 				});
 
 				$('#centerTbody tr:eq(0) td:nth-child(1)').html('풍력'); //구분
@@ -969,7 +975,7 @@ const getTodayTotalDetail = async function () {
 		pieChart.setTitle({text: Math.floor(acPower / 1000) + 'kW'});
 		const usage = Math.floor((acPower / capacitySum) * 100);
 		const other = 100 - usage;
-
+		
 		deviceArray.push({
 			color: 'var(--grey)',
 			name: '미사용량',
