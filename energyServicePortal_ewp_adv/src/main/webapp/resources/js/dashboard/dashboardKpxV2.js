@@ -1249,7 +1249,7 @@ const searchSite = async function () {
 												refineList[index]['lastTargetActivePowerRecvDate'] = '-'
 
 												const cmdBody = JSON.parse(command.cmd_body);
-												refineList[index]['targetActivePower'] = isEmpty(cmdBody['targetPower']) ? '-' : cmdBody['targetPower'];
+												refineList[index]['targetActivePower'] = isEmpty(cmdBody['targetPower']) ? '-' : displayNumberFixedUnit(Number(cmdBody['targetPower']), 'Wh', 'kWh', 2)[0];
 
 												let diffTime = Math.floor(((new Date() - hitoryDate) / 1000) / 60 / 60 % 24);
 												if (diffTime >= 1) {
@@ -1267,7 +1267,6 @@ const searchSite = async function () {
 			});
 		}
 
-		console.log(refineList);
 		setMakeList(refineList, 'siteList', {'dataFunction': {'align': alignFunc}}); //list생성
 		return refineList;
 	}).then(refineList => {
