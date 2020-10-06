@@ -187,8 +187,8 @@
 									<ul class="dropdown-menu chk_type" id="alarm_codeList">
 										<li>
 											<a href="javascript:void(0);" tabindex="-1">
-												<input type="checkbox" id="alarm_code_[INDEX]" value="[code]" name="alarm_code">
-												<label for="alarm_code_[INDEX]">[code]</label>
+												<input type="checkbox" id="alarm_code_[INDEX]" value="[val]" name="alarm_code">
+												<label for="alarm_code_[INDEX]">[name]</label>
 											</a>
 										</li>
 									</ul>
@@ -934,8 +934,10 @@
 			
 			self.addClass("active").siblings().removeClass("active");
 
-			const now = new Date(resultData['timestamp']);
-			$('.dbTime').text(now.format('yyyy-MM-dd HH:mm:ss'));
+			if (!isEmpty(resultData)) {
+				const now = new Date(resultData['timestamp']);
+				$('.dbTime').text(now.format('yyyy-MM-dd HH:mm:ss'));
+			}
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);
 			console.error(textStatus);
@@ -1243,6 +1245,7 @@
 			dropDown = popup.find('.dropdown-toggle'),
 			textArea = popup.find('textarea'),
 			inputArr = popup.find('input');
+
 		dropDown.each(function () {
 			$(this).data('value', '').html($(this).data('name') + '<span class="caret"></span>');
 		});
@@ -1271,6 +1274,16 @@
 		});
 		setMakeList(deviceTypeList, 'device_typeList', {'dataFunction': {}});
 
+		const aLevelOpt = [
+			{  name : "정보", val: 0 },
+			{  name : "경고", val: 1 },
+			{  name : "이상", val: 2 },
+			{  name : "트립", val: 3 },
+			{  name : "긴급", val: 4 },
+			{  name : "미정", val: 9 }
+		];
+		setMakeList(aLevelOpt, 'alarm_codeList', {'dataFunction': {}});
+
 		//costSetList();
 
 		//did가 있으면 수정
@@ -1296,11 +1309,8 @@
 					}
 				});
 
-				dropDownInit($('#alarm_code'));
-
 				// let propArray = ['dashboard', 'billing', 'forecasting', 'manufacturer', 'alarm_set_id', 'alarm_code'];
 				let propArray = ['dashboard', 'billing', 'forecasting', 'capacity'];
-				let alarm_code = new Array();
 				$.map(data, function(val, key) {
 					if ($.inArray(key, propArray) >= 0) {
 						if (key == 'dashboard' || key == 'billing' || key == 'forecasting') {
@@ -1341,14 +1351,24 @@
 					}
 				});
 
-				// $('#alarm_codeList input').each(function() {
-				// 	let thisVal = $(this).val();
-				// 	if ($.inArray(thisVal, alarm_code) >= 0) {
-				// 		$(this).prop('checked', true);
-				// 	}
-				// });
+				let alarmCode = new Array();
+				if (!isEmpty(data['alarm_code'])) {
+					if (data['alarm_code'].match(',')) {
+						alarmCode = data['alarm_code'].split(',');
+					} else {
+						alarmCode = new Array();
+						alarmCode.push(data['alarm_code']);
+					}
+				}
 
-				// displayDropdown($('#alarm_code'));
+				$('#alarm_codeList input').each(function() {
+					let thisVal = $(this).val();
+					if (alarmCode.includes(thisVal)) {
+						$(this).prop('checked', true);
+					}
+				});
+				displayDropdown($('#alarm_code'));
+
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				console.error(jqXHR);
 				console.error(textStatus);

@@ -125,8 +125,6 @@ const displayNumberFixedDecimal = function(number, unit, intChipher, decimalChip
 			moneyUnit.some((money, index) => {
 				const mUnit = money['unit'];
 				const mChipher = money['chipher'];
-
-				console.log(mUnit);
 				if(String(Math.round(number / mChipher)).length <= intChipher || mUnit == '억') {
 					rtnValue = [numberComma((number / mChipher).toFixed(decimalChipher)), mUnit + '원'];
 					return rtnValue;
