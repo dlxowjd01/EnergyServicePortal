@@ -192,6 +192,7 @@
 	<input type="hidden" name="interval" />
 </form>
 <script type="text/javascript">
+	const siteList = JSON.parse('${siteList}');
 	let standard = new Array();
 	let deferreds = new Array();
 	let accociation = new Map();
@@ -204,7 +205,7 @@
 	};
 
 	$(function () {
-		siteList(); //사이트 조회
+		makeSiteList(); //사이트 조회
 
 		//전체 선택/전체 해제
 		$('#deviceType button.btn-type03').on('click', function (e) {
@@ -339,13 +340,24 @@
 		));
 
 		//체크된 디바이스
-		const checkedDevices = $.makeArray($('input[name="device"]:checked').map(
-			function () {
-				if (!$(this).attr('id').match('device')) {
-					return $(this).attr('id');
+		const checkedDevices = new Array();
+		document.querySelectorAll('input[name="device"]:checked').forEach(chk => {
+			const did = chk.dataset['did'];
+			if (!isEmpty(did)) {
+				if (did.match(',')) {
+					const dids = did.split(',');
+					dids.forEach(di => {
+						if (!checkedDevices.includes(di)) {
+							checkedDevices.push(di);
+						}
+					});
+				} else {
+					if (!checkedDevices.includes(did)) {
+						checkedDevices.push(did);
+					}
 				}
 			}
-		));
+		});
 
 		if (stat == 'basic') {
 			$('#measure li a').eq(0).addClass('on');
@@ -369,50 +381,51 @@
 			ignore_tolerance = null;
 		}
 
-		let data = {
-			'observed': applicationData.observed,
-			'forecasted': applicationData.forecasted,
-			'sid': sites,
-			'did': checkedDevices,
-			'measure': $('#measure button').data('value'),
-			'ignore_ref': ignore_ref,
-			'ignore_tolerance': ignore_tolerance,
-			'interval': $('#interval button').data('value')
-		}
-
-		$.ajax({
-			url: apiHost + '/energy/forecasting/error_calculator',
-			type: "post",
-			async: false,
-			contentType: "application/json",
-			traditional: true,
-			data: JSON.stringify(data),
-			success: function (result) {
-				$('.value-num').eq(2).empty();
-				if (result != null && result != '' && result.message == 'OK') {
-					let calWat = result.value;
-					if (calWat != null) {
-						$('.value-num').eq(2).append('<span class="num">' + calWat.toFixed(2) + '</span>%');
-					} else {
-						alert('예측 오차 계산의 비교 대상 데이터가 없습니다.');
-						$('.value-num').eq(2).append('<span class="num"> </span>%');
-					}
-				}
-			},
-			error: function (error) {
-				$('.value-num').eq(2).empty();
-				console.error(error);
+		if (!isEmpty(applicationData.observed) && !isEmpty(applicationData.forecasted)) {
+			let data = {
+				'observed': applicationData.observed,
+				'forecasted': applicationData.forecasted,
+				'sid': sites,
+				'did': checkedDevices,
+				'measure': $('#measure button').data('value'),
+				'ignore_ref': ignore_ref,
+				'ignore_tolerance': ignore_tolerance,
+				'interval': $('#interval button').data('value')
 			}
-		});
+
+			$.ajax({
+				url: apiHost + '/energy/forecasting/error_calculator',
+				type: "post",
+				async: false,
+				contentType: "application/json",
+				traditional: true,
+				data: JSON.stringify(data),
+				success: function (result) {
+					$('.value-num').eq(2).empty();
+					if (result != null && result != '' && result.message == 'OK') {
+						let calWat = result.value;
+						if (calWat != null) {
+							$('.value-num').eq(2).append('<span class="num">' + calWat.toFixed(2) + '</span>%');
+						} else {
+							alert('예측 오차 계산의 비교 대상 데이터가 없습니다.');
+							$('.value-num').eq(2).append('<span class="num"> </span>%');
+						}
+					}
+				},
+				error: function (error) {
+					$('.value-num').eq(2).empty();
+					console.error(error);
+				}
+			});
+		}
 	};
 
 	//사업소 호출
-	const siteList = function () {
+	const makeSiteList = function () {
 		$('#siteList ul').empty();
 
 		let str = '';
-		let sites = JSON.parse('${siteList}');
-		sites.forEach((site, index) => {
+		siteList.forEach((site, index) => {
 			str += `<li>
 						<a href="javascript:void(0);" data-value="${'${site.sid}'}" tabindex="-1">
 							<input type="checkbox" id="${'${site.sid}'}" value="${'${site.sid}'}" name="site">
@@ -429,8 +442,10 @@
 		if ($(':checkbox[name="site"]:checked').length > 0) {
 			$('#deviceType .sec-li-box').remove();
 			$(':checkbox[name="site"]:checked').each(function () {
-				let sid = $(this).val(),
-					sNm = $(this).next('label').text();
+				const sid = $(this).val()
+					, sNm = $(this).next('label').text()
+					, dashboardArray = new Array()
+					, billingArray = new Array();
 
 				$.ajax({
 					url: apiHost + '/config/devices/',
@@ -442,6 +457,7 @@
 					},
 					success: function (result) {
 						let devices = result;
+
 						if (devices.length > 0) {
 							let siteGrp = $('<div>').addClass('sec-li-box');
 							siteGrp.append('<p>');
@@ -454,11 +470,13 @@
 								'BMS_RACK', 'SENSOR_SOLAR', 'SENSOR_FLAME', 'SENSOR_TEMP_HUMIDITY', 'CCTV', 'COMBINER_BOX', 'CIRCUIT_BREAKER'
 							];
 							$.each(devices, function (i, el) {
+								if (el.billing) billingArray.push(el.did);
+								if (el.dashboard) dashboardArray.push(el.did);
 								$.each(deviceType, function (j, tp) {
 									if (tp == el.device_type && (el.dashboard || el.billing)) {
 										let deviceHtml = $('<li>').append('<a>');
 										deviceHtml.find('a').attr('href', '#').attr('tabindex', '-1');
-										deviceHtml.find('a').append('<input id="' + el.did + '" name="device" type="checkbox" value="' + el.did + '" data-name="' + sNm + '_' + el.name + '">').append('<label>');
+										deviceHtml.find('a').append('<input id="' + el.did + '" name="device" type="checkbox" value="' + el.did + '" data-name="' + sNm + '_' + el.name + '" data-did="' + el.did + '">').append('<label>');
 										deviceHtml.find('label').attr('for', el.did).append('<span>').append('&nbsp;' + el.name);
 										siteGrp.find('ul').append(deviceHtml);
 									}
@@ -469,13 +487,13 @@
 
 							let deviceHtml1 = $('<li>').append('<a>');
 							deviceHtml1.find('a').attr('href', '#').attr('tabindex', '-1');
-							deviceHtml1.find('a').append('<input id="device_billing_' + sid + '" name="device" type="checkbox" value="' + sid + '" data-name="' + sNm + '_매전">').append('<label>');
+							deviceHtml1.find('a').append('<input id="device_billing_' + sid + '" name="device" type="checkbox" value="' + sid + '" data-name="' + sNm + '_매전" data-did="' + billingArray.toString() + '">').append('<label>');
 							deviceHtml1.find('label').attr('for', 'device_billing_' + sid).append('<span>').append('&nbsp;매전량');
 							siteGrp.find('ul').prepend(deviceHtml1);
 
 							let deviceHtml2 = $('<li>').append('<a>');
 							deviceHtml2.find('a').attr('href', '#').attr('tabindex', '-1');
-							deviceHtml2.find('a').append('<input id="device_dash_' + sid + '" name="device" type="checkbox" value="' + sid + '" data-name="' + sNm + '_대시보드">').append('<label>');
+							deviceHtml2.find('a').append('<input id="device_dash_' + sid + '" name="device" type="checkbox" value="' + sid + '" data-name="' + sNm + '_대시보드" data-did="' + dashboardArray.toString() + '">').append('<label>');
 							deviceHtml2.find('label').attr('for', 'device_dash_' + sid).append('<span>').append('&nbsp;대시보드');
 							siteGrp.find('ul').prepend(deviceHtml2);
 

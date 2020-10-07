@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/decorators/include/taglibs.jsp"%>
 <script type="text/javascript">
+	const pathName = location.pathname;
+
 	// unCheckAll($("#reqStatus"));
 	$(function() {
 		const tableBody = $('#tableBody');
@@ -12,43 +14,23 @@
 		const perPage = 14;
 
 		var spcArr = [];
-		tableBody.find("template").remove();
-		tableFooter.find("template").remove();
 
-		if (task != 3) {
-			$('#approvalBtn').remove();
-		}
-
-		// $("#warningModal .modal-title").text('처리 중 오류가 발생했습니다.');
-		// $("#warningModal").modal("show");
-		unCheckAll($("#reqStatus"));
-		unCheckAll($('#tableBody').parents(".sort-table "));
-		getSpcList();
-
-		selectAll($("#reqStatus"));
-		setDropdownValue($("#reqStatus"));
-		// [자산운용사]
-		// "반송" : 0 => redEdit.jsp , "검토 대기" : 1" => do nothing, "검토중" : "2" => withdrawReqStatusDetail, "검토 완료": "3"
-
+		pageInit();
 		$("#searchForm").on("submit", function(e){
 			e.preventDefault();
 			let searchOpt = {};
-			let checkbox = $("#reqStatus").find("input[type='checkbox']");
-			var status= [];
+			let status= [];
+			document.querySelectorAll('input[type="checkbox"]:checked').forEach(chk => {
+				status.push(chk.value);
+			});
 
-			if (checkbox.first().is(':checked')) {
-				checkbox.each(function(){
-					status.push($(this).val())
-				});
-			} else {
-				checkbox.each(function(){
-					if($(this).is(":checked")){
-						status.push($(this).val())
-					}
-				});
-			}
 			searchOpt.status = status;
 			searchOpt.keyword = $("#keyword").val().trim().toLowerCase();
+
+			if (!isEmpty(status)) {
+				window.sessionStorage.setItem(pathName + '_status', status.toString()); //세션스토리지에 저장한다.
+			}
+			window.sessionStorage.setItem(pathName + '_keyword', $("#keyword").val()); //세션스토리지에 저장한다.
 
 			if (isEmpty(searchOpt.status) && isEmpty(searchOpt.keyword)) {
 				getDataList(1, null);
@@ -140,22 +122,18 @@
 				$('#approvalModal').modal('hide');
 
 				let searchOpt = {};
-				let checkbox = $("#reqStatus").find("input[type='checkbox']");
-				var status= [];
+				let status= [];
+				document.querySelectorAll('input[type="checkbox"]:checked').forEach(chk => {
+					status.push(chk.value);
+				});
 
-				if (checkbox.first().is(':checked')) {
-					checkbox.each(function(){
-						status.push($(this).val())
-					});
-				} else {
-					checkbox.each(function(){
-						if($(this).is(":checked")){
-							status.push($(this).val());
-						}
-					});
-				}
 				searchOpt.status = status;
 				searchOpt.keyword = $("#keyword").val().trim().toLowerCase();
+
+				if (!isEmpty(status)) {
+					window.sessionStorage.setItem(pathName + '_status', status.toString()); //세션스토리지에 저장한다.
+				}
+				window.sessionStorage.setItem(pathName + '_keyword', $("#keyword").val()); //세션스토리지에 저장한다.
 
 				if (isEmpty(searchOpt.status) && isEmpty(searchOpt.keyword)) {
 					getDataList(1, null);
@@ -171,27 +149,67 @@
 			});
 		});
 
-		function getSpcList() {
-			let action = 'get';
-			let syncOpt = true;
-			let option = {
-				url: apiHost + "/spcs?oid="+oid,
-				type: action,
-				async: syncOpt
+		function pageInit() {
+			tableBody.find("template").remove();
+			tableFooter.find("template").remove();
+
+			if (task != 3) {
+				$('#approvalBtn').remove();
 			}
-			$.ajax(option).done(function (json, callBack, param) {
-				let spcInfoList = [];
-				json.data.forEach((item, index) => {
-					let obj = {
-						spc_id: item.spc_id,
-						spc_name: item.name
-					}
-					spcArr.push(obj);
-					// spcInfoList.push(obj);
+
+			unCheckAll($('#tableBody').parents(".sort_table "));
+
+			return new Promise((resolve, reject) => {
+				$.ajax({
+					url: apiHost + "/spcs?oid="+oid,
+					type: 'get',
+				}).done(function (json, callBack, param) {
+					let spcInfoList = [];
+					json.data.forEach((item, index) => {
+						let obj = {
+							spc_id: item.spc_id,
+							spc_name: item.name
+						}
+						spcArr.push(obj);
+					});
+
+					resolve('');
+				}).fail(function (jqXHR, textStatus, errorThrown) {
+					reject('처리 중 오류가 발생했습니다.');
 				});
-				getDataList(1);
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				alert('처리 중 오류가 발생했습니다.');
+			}).then(resolve => {
+				const status = window.sessionStorage.getItem(pathName + '_status');
+				const keyword = window.sessionStorage.getItem(pathName + '_keyword');
+
+				if (!isEmpty(status)) {
+					if (status.match(',')) {
+						const statusArray = status.split(',');
+						document.querySelectorAll('[name="review_status"]').forEach(chk => {
+							if (statusArray.includes(chk.value)) {
+								chk.checked = true;
+							}
+						});
+					} else {
+						document.querySelectorAll('[name="review_status"]').forEach(chk => {
+							if (chk.value === status) {
+								chk.checked = true;
+							}
+						});
+					}
+				} else {
+					document.querySelectorAll('[name="review_status"]').forEach(chk => {
+						chk.checked = true;
+					});
+				}
+				displayDropdown($("#reqStatus"));
+
+				if (!isEmpty(keyword)) {
+					document.getElementById('keyword').value = keyword;
+				}
+
+				$("#searchForm").submit();
+			}).catch(error => {
+				alert(error);
 				return false;
 			});
 		}
@@ -607,7 +625,7 @@
 		$("#reviewReqId").val(reqId);
 		$("#reviewAccountInfo").val(accInfo);
 
-		
+
 		let action = 'get';
 		let syncOpt = true;
 		let option = {
@@ -723,13 +741,13 @@
 				--><div id="reqStatus" class="dropdown"><!--
 				--><button type="button" class="dropdown-toggle unused" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button><!--
 				--><ul class="dropdown-menu chk-type" role="menu"><!--
-					--><li data-value="1,2,3" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="all" name="review_status" value="all"><label for="all">전체</label></a></li><!--
 					--><li data-value="2" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="wait" name="review_status" value="2"><label for="wait">검토 중</label></a></li><!--
 					--><li data-value="1" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="inProgress" name="review_status" value="1"><label for="inProgress">검토 대기</label></a></li><!--
 					--><li data-value="3" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="complete" name="review_status" value="3"><label for="complete">승인 완료</label></a></li><!--
-					--><li data-value="3" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="provisional" name="review_status" value="4"><label for="provisional">출금 가승인</label></a></li><!--
-					--><li data-value="3" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="finalApproval" name="review_status" value="5"><label for="finalApproval">출금 최종승인</label></a></li><!--
-					--><li data-value="3" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="reject" name="review_status" value="0"><label for="reject">반송</label></a></li><!--
+					--><li data-value="4" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="provisional" name="review_status" value="4"><label for="provisional">출금 가승인</label></a></li><!--
+					--><li data-value="5" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="finalApproval" name="review_status" value="5"><label for="finalApproval">출금 최종승인</label></a></li><!--
+					--><li data-value="0" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="reject" name="review_status" value="0"><label for="reject">반송</label></a></li><!--
+					--><li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16">적용</button></li><!--
 				--></ul>
 				</div>
 			</div><!--
