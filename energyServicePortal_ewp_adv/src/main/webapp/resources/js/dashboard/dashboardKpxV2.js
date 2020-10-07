@@ -212,10 +212,7 @@ $(document).ready(function () {
 			emptyTable: '조회된 데이터가 없습니다.',
 			zeroRecords:  '검색된 결과가 없습니다.'
 		},
-		dom: 'tip',
-		drawCallback: function (settings) {
-			console.log(settings);
-		}
+		dom: 'tip'
 	}).columns.adjust();
 
 	$($.fn.dataTable.tables(true)).DataTable().columns.adjust();
@@ -1322,9 +1319,17 @@ const searchSite = async function () {
 			let targetLocation = false;
 			let targetResource = false;
 			let searchSite = false;
+
 			if (!isEmpty(operation)) {
-				const searchOperation = operation.some(target => {
-					return deviceStatus.includes(String(target));
+				const searchOperation = deviceStatus.some(status => {
+					if (status != '1') {
+						let op = operation;
+						const idx = op.indexOf(1);
+						if (idx > -1) op.splice(idx, 1);
+						return op.length > 0;
+					} else {
+						return operation.includes(Number(status));
+					}
 				});
 
 				if (searchOperation) {
@@ -1334,7 +1339,11 @@ const searchSite = async function () {
 				if (deviceStatus.length == 2) { //전체 선택이면 operation 없는 디바이스도 표시
 					targetOperation = true;
 				} else {
-					targetOperation = false;
+					if (deviceStatus.includes('2')) {
+						targetOperation = true;
+					} else {
+						targetOperation = false;
+					}
 				}
 			}
 
