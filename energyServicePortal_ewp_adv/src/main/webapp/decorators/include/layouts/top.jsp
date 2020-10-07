@@ -112,7 +112,7 @@
 		changeFavicon('/resources/favicon.ico');
 			</c:when>
 			<c:when test="${fn:contains(pageContext.request.serverName, 'wpsolar')}">
-		changeFavicon('/resources/favicon_wpsolar.svg');
+		changeFavicon('/resources/favicon_wpsolar.ico');
 			</c:when>
 			<c:otherwise>
 		changeFavicon('/resources/favicon_encored.ico');

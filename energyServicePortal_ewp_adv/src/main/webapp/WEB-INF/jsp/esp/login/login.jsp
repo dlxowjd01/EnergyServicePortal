@@ -85,7 +85,7 @@
 
 			<c:choose>
 				<c:when test="${fn:contains(pageContext.request.serverName, 'wpsolar')}">
-					changeFavicon('/resources/favicon-wpsolar.svg');
+					changeFavicon('/resources/favicon_wpsolar.ico');
 				</c:when>
 				<c:when test="${fn:contains(pageContext.request.serverName, 'spower')}">
 					changeFavicon('/resources/favicon.ico');
