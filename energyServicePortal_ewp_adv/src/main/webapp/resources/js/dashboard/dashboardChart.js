@@ -68,7 +68,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 			width: 1
 		}],
 		title: {
-			text: 'MWh',
+			text: 'kWh',
 			align: 'low',
 			rotation: 0, /* 타이틀 기울기 */
 			y: 25, /* 타이틀 위치 조정 */
@@ -81,7 +81,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 		labels: {
 			formatter: function () {
 				const suffix = this.chart.yAxis[0].userOptions.title.text;
-				const yAxisValue = displayNumberFixedUnit(this.value, 'kWh', suffix, 0);
+				const yAxisValue = displayNumberFixedUnit(this.value, 'kWh', suffix, 1);
 				return yAxisValue[0];
 			},
 			style: {
@@ -92,7 +92,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 	}, { // Secondary yAxis
 		gridLineWidth: 0,
 		title: {
-			text: '원',
+			text: '천원',
 			align: 'low',
 			rotation: 0, /* 타이틀 기울기 */
 			y: 25, /* 타이틀 위치 조정 */
@@ -104,14 +104,14 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 		},
 		labels: {
 			formatter: function () {
-				return  (displayNumberFixedDecimal(this.value, '천원', 3, 0).join(' ')).replace('원', '');
+				return  numberComma(this.value);
 			},
 			style: {
 				color: 'var(--white60)',
 				fontSize: '12px'
 			}
 		},
-		visible: false,
+		visible: secondYAxis,
 		opposite: true
 	}],
 	tooltip: {
@@ -299,7 +299,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 			width: 1
 		}],
 		title: {
-			text: 'MWh',
+			text: 'kWh',
 			align: 'low',
 			rotation: 0, /* 타이틀 기울기 */
 			y: 25, /* 타이틀 위치 조정 */
@@ -312,7 +312,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		labels: {
 			formatter: function () {
 				const suffix = this.chart.yAxis[0].userOptions.title.text;
-				const yAxisValue = displayNumberFixedUnit(this.value, 'kWh', suffix, 0);
+				const yAxisValue = displayNumberFixedUnit(this.value, 'kWh', suffix, 1);
 				return yAxisValue[0];
 			},
 			style: {
@@ -323,7 +323,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 	}, { // Secondary yAxis
 		gridLineWidth: 0, /* 기준선 grid 안보이기/보이기 */
 		title: {
-			text: '원',
+			text: '천원',
 			align: 'low',
 			rotation: 0, /* 타이틀 기울기 */
 			y: 25, /* 타이틀 위치 조정 */
@@ -342,7 +342,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 				fontSize: '12px'
 			}
 		},
-		visible: false,
+		visible: secondYAxis,
 		opposite: true
 	}],
 	tooltip: {

@@ -68,6 +68,7 @@
 <script type="text/javascript" src="/js/data_tables/extensions/vfs_fonts_kr.js"></script>
 <script type="text/javascript" src="/js/data_tables/extensions/select.js"></script>
 <script type="text/javascript" src="/js/data_tables/extensions/fixed_header.js"></script>
+<script type="text/javascript" src="/js/data_tables/extensions/rowGroup.js"></script>
 
 <script type="text/javascript">
 	// role: 1: 시스템관리자, 2: 일반

@@ -1103,10 +1103,16 @@
 			 */
 			if ( oInit.asStripeClasses === null )
 			{
-				oSettings.asStripeClasses =[
-					oClasses.sStripeOdd,
-					oClasses.sStripeEven
-				];
+				if (oInit.rowGroup === undefined) {
+					oSettings.asStripeClasses = [
+						oClasses.sStripeOdd,
+						oClasses.sStripeEven
+					];
+				} else {
+					oSettings.asStripeClasses = [
+						oClasses.sStripeEven
+					];
+				}
 			}
 			
 			/* Remove row stripe classes if they are already on the table row */

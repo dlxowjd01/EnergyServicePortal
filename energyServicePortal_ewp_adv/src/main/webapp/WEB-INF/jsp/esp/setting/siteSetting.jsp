@@ -190,7 +190,7 @@
 
 			let newSiteName = $("#newSiteName").val();
 			let newSiteType = Number($("#newSiteType").prev().data("value"));
-			let newResTypeName = $("#newResList").prev().data("name");			
+			let newResTypeName = $("#newResList").prev().data("name");
 			let newResType = Number($("#newResList").prev().data("value"));
 
 			let newEss = Number($("#newEssList").prev().data("value"));

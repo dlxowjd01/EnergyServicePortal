@@ -66,6 +66,10 @@ const displayNumberFixedDecimal = function(number, unit, intChipher, decimalChip
 	} else {
 		if(unit.match('W')) {
 
+			if(isEmpty(intChipher)) {
+				decimalChipher = 3;
+			}
+
 			if(isEmpty(decimalChipher)) {
 				decimalChipher = 2;
 			}
@@ -87,20 +91,11 @@ const displayNumberFixedDecimal = function(number, unit, intChipher, decimalChip
 
 			whUnit.some(function(v, k) {
 				let str = String(Math.floor(number));
-				if(isEmpty(intChipher)) {
-					if(str.length > 3 && v != 'T') {
-						number = number / 1000;
-					} else {
-						rtnValue = [numberComma((number).toFixed(decimalChipher)), v + 'W' + suffix];
-						return rtnValue;
-					}
+				if(str.length > intChipher && v != 'T') {
+					number = number / 1000;
 				} else {
-					if(str.length > intChipher && v != 'T') {
-						number = number / 1000;
-					} else {
-						rtnValue = [numberComma((number).toFixed(decimalChipher)), v + 'W' + suffix];
-						return rtnValue;
-					}
+					rtnValue = [numberComma((number).toFixed(decimalChipher)), v + 'W' + suffix];
+					return rtnValue;
 				}
 			});
 		} else {
@@ -193,7 +188,6 @@ const displayNumberFixedUnit = function (input_num, input_unit, fixed_unit, num_
 			}
 
 			whUnit.some(function(v, k) {
-				let str = String(Math.floor(input_num));
 				if(fixed_unit == v + 'W' + suffix) {
 					input_num = input_num / Math.pow(1000, k);
 					if(Math.floor(input_num * 100) == 0) {

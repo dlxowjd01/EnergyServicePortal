@@ -5841,6 +5841,10 @@ input.inp[readonly]:focus {
 	width: 48%;
 }
 
+.gmain_map2_content_kpx {
+	width: 100%;
+}
+
 .gmain_table {
 	display: inline-flex;
 	width: 100%;
@@ -6000,6 +6004,11 @@ input.inp[readonly]:focus {
 .gmain_table .gtbl_wrap {
 	margin-top: 20px;
 	overflow-y: auto;
+}
+
+gmain_table .gtbl_wrap_kpx {
+	margin-top: 20px;
+	overflow-y: hidden;
 }
 
 .gmain_table .gtbl_wrap .intable {
@@ -6356,7 +6365,8 @@ div.di_wrap dl .link a {
 
 /* 오류/경고 배경색 */
 
-.gtbl_wrap .status {
+.gtbl_wrap .status,
+.gtbl_wrap_kpx .status {
 	display: inline-block;
 	font-size: 0;
 	vertical-align: middle;
@@ -6365,22 +6375,26 @@ div.di_wrap dl .link a {
 	margin: auto 2px auto 10px;
 }
 
-.gtbl_wrap .status.status_drv {
+.gtbl_wrap .status.status_drv,
+.gtbl_wrap_kpx .status.status_drv{
 	background: var(--status-drive) no-repeat center center;
 	/* 운전 */
 }
 
-.gtbl_wrap .status.status_hld {
+.gtbl_wrap .status.status_hld,
+.gtbl_wrap_kpx .status.status_hld {
 	background: var(--status-hold) no-repeat center center;
 	/* 대기 */
 }
 
-.gtbl_wrap .status.status_stp {
+.gtbl_wrap .status.status_stp,
+.gtbl_wrap_kpx .status.status_stp {
 	background: var(--status-stop) no-repeat center center;
 	/* 정지 */
 }
 
-.gtbl_wrap .status.status_err {
+.gtbl_wrap .status.status_err,
+.gtbl_wrap_kpx .status.status_err {
 	background: var(--status-error) no-repeat center center;
 	/* 통신이상 */
 }

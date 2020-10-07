@@ -5,6 +5,7 @@ let yesterData = getSiteMainSchCollection('yesterday');
 let yester2Data = getSiteMainSchCollection('beforeTwo');
 let dayData = getSiteMainSchCollection('day');
 let minIntervalCount = 0;
+let siteListTable = null;
 
 const resourceTemplate = new Object()
 const chartColorArray = ['var(--circle-charge)', 'var(--grey)', 'var(--circle-solar-power)', 'var(--white)'];
@@ -72,8 +73,152 @@ $(document).ready(function () {
 		}
 	}).on('keyup', function() {
 		$(this).val($(this).val().replace(replaceChar, ''));
-
 	});
+
+	siteListTable = $('#siteList').DataTable({
+		autoWidth: true,
+		fixedHeader: true,
+		scrollY: '550px',
+		scrollCollapse: true,
+		sortable: true,
+		pageLength: -1,
+		retrieve: true,
+		order: [[8, 'asc']],
+		rowGroup: {
+			startRender: function (rows, group) {
+				//발전 용량
+				let capacitySum = rows.data().pluck('capacity').reduce(function (a, b) {
+					return a + Number(String(b).replace(/[^\d]/g, ''));
+				}, 0);
+				capacitySum = $.fn.dataTable.render.number(',', '.', 0, '').display(capacitySum);
+
+				//현재 출력
+				let activePowerSum = rows.data().pluck('activePower').reduce(function (a, b) {
+					return a + Number(String(b).replace(/[^\d]/g, ''));
+				}, 0);
+				activePowerSum = $.fn.dataTable.render.number(',', '.', 0, '').display(activePowerSum);
+
+				//출력 제어
+				let targetActivePowerSum = rows.data().pluck('targetActivePower').reduce(function (a, b) {
+					return a + Number(String(b).replace(/[^\d]/g, ''));
+				}, 0);
+				targetActivePowerSum = $.fn.dataTable.render.number(',', '.', 0, '').display(targetActivePowerSum);
+
+				return $('<tr/>')
+				.append('<td class="dt-center">' + group + '</td>')
+				.append('<td class="dt-center">' + rows.count() + '</td>')
+				.append('<td/>')
+				.append('<td/>')
+				.append('<td class="dt-right">' + capacitySum + '</td>')
+				.append('<td class="dt-right">' + activePowerSum + '</td>')
+				.append('<td class="dt-right">' + targetActivePowerSum + '</td>')
+				.append('<td/>');
+			},
+			endRender: null,
+			dataSrc: 'resourceName'
+		},
+		columns: [
+			{
+				title: '지역',
+				data: 'location',
+				render: function ( data, type, full, rowIndex ) {
+					return isEmpty(data) ? '-' : data;
+				},
+				width: '10%',
+				className: 'dt-center no-sorting'
+			},
+			{
+				title: '발전소',
+				data: 'name',
+				width: '15%',
+				className: 'dt-body-left dt-head-center'
+			},
+			{
+				title: '송신',
+				data: 'lastTargetActivePowerReqDate',
+				render: function (data, type, full, rowIndex) {
+					if (isEmpty(data) || data === '-') {
+						return '<span class="status status_err" title="에러">에러</span>';
+					} else {
+						return '<span class="status status_drv" title="확인 중">확인 중</span>';
+					}
+				},
+				width: '10%',
+				className: 'dt-center'
+			},
+			{
+				title: '수신',
+				data: 'lastTargetActivePowerRecvDate',
+				render: function (data, type, full, rowIndex) {
+					if (isEmpty(data) || data === '-') {
+						return '<span class="status status_err" title="에러">에러</span>';
+					} else {
+						const recvDate = new Date(String(data).replace(/[^0-9]/g,'').replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$2/$3/$1 $4:$5:$6'));
+						let diffTime = Math.floor(((new Date() - recvDate) / 1000) / 60 / 60 % 24);
+						if (diffTime >= 1) {
+							return '<span class="status status_err" title="에러">에러</span>';
+						} else {
+							return '<span class="status status_drv" title="확인 중">확인 중</span>';
+						}
+
+					}
+				},
+				width: '10%',
+				className: 'dt-center'
+			},
+			{
+				title: '발전용량',
+				data: 'capacity',
+				render: function (data, type, full, rowIndex) {
+					return isEmpty(data) ? '-' : data;
+				},
+				width: '10%',
+				className: 'dt-right'
+			},
+			{
+				title: '현재출력',
+				data: 'activePower',
+				render: function (data, type, full, rowIndex) {
+					return isEmpty(data) ? '-' : data;
+				},
+				width: '10%',
+				className: 'dt-right'
+			},
+			{
+				title: "출력제어",
+				data: 'targetActivePower',
+				render: function (data, type, full, rowIndex) {
+					return isEmpty(data) ? '-' : data;
+				},
+				width: '10%',
+				className: 'dt-right'
+			},
+			{
+				title: '최근 오류 내용',
+				data: 'faultDesc',
+				render: function (data, type, full, rowIndex) {
+					return isEmpty(data) ? '-' : data;
+				},
+				width: '25%',
+				className: 'dt-center'
+			},
+			{
+				title: '발전유형',
+				data: 'resourceName',
+				visible: false
+			}
+		],
+		language: {
+			emptyTable: '조회된 데이터가 없습니다.',
+			zeroRecords:  '검색된 결과가 없습니다.'
+		},
+		dom: 'tip',
+		drawCallback: function (settings) {
+			console.log(settings);
+		}
+	}).columns.adjust();
+
+	$($.fn.dataTable.tables(true)).DataTable().columns.adjust();
 });
 
 /**
@@ -82,6 +227,8 @@ $(document).ready(function () {
  */
 const firstAjax = () => {
 	setInitList('alarmNotice'); //알람 공지 세팅
+	setInitList('resourceULList'); //발전형
+	setInitList('locationULList'); //위치
 
 	yearData = getSiteMainSchCollection('year');
 	monthData = getSiteMainSchCollection('month');
@@ -94,6 +241,9 @@ const firstAjax = () => {
 
 	let urls = new Array();
 	let ess = false;
+
+	const locationArray = new Array();
+	const resourceTypeArray = new Array();
 
 	siteList.forEach(site => {
 		const rtus = site.rtus;
@@ -235,7 +385,7 @@ const firstAjax = () => {
 	if (!ess) {
 		$('#statusSiteList').find('.ESS').remove();
 	}
-	setInitList('siteList'); //사이트 리스트
+	//setInitList('siteList'); //사이트 리스트
 
 	apiDatas = new Object();
 	ajaxData(urls);
@@ -414,6 +564,26 @@ const ajaxData = (urls, target) => {
 			getTodayTotalDetail();
 			alarmInfoList();
 		} else {
+			const locationArray = new Array();
+			const resourceTypeArray = new Array();
+			siteList.forEach(site => {
+				if (isEmpty(locationArray.find(location => location['loc'] === site.location))) {
+					locationArray.push({
+						loc: site.location
+					});
+				}
+
+				if (isEmpty(resourceTypeArray.find(resource => resource['resourceCode'] === site.resource_type))) {
+					resourceTypeArray.push({
+						resourceCode: site.resource_type,
+						resourceName: resourceTemplate[site.resource_type]
+					});
+				}
+			});
+
+			setMakeList(locationArray, 'locationULList', {'dataFunction': {}}); //list생성
+			setMakeList(resourceTypeArray, 'resourceULList', {'dataFunction': {}}); //list생성
+
 			monthlyChartDraw();
 			dailyChartDraw();
 			typeSiteDraw();
@@ -539,6 +709,7 @@ const monthlyChartDraw = async () => {
 				str += '<li class="pv">' + txt + ' : ' + refineValue.join(' ') + '</li>';
 			}
 		});
+
 		monthlyChart.yAxis[0].setTitle({
 			text: rtnUnit,
 			align: 'low',
@@ -551,6 +722,7 @@ const monthlyChartDraw = async () => {
 			}
 		});
 		monthlyChart.redraw();
+
 		$('#monthlySum').append(str);
 
 	}).catch((error) => {
@@ -1079,17 +1251,27 @@ const levelClass = (level) => {
  */
 const searchSite = async function () {
 	const targetApi = [apiHost + '/alarms', apiHost + '/control/command_history'];
+	/* 검색 조건 */
 	const searchName = document.getElementById('searchName').value.trim();
-	const deviceStatus = new Array();
+	const rowCount = Number($('#rowCount button').data('value'));
+	const deviceStatus = new Array(); //상태 선택
+	const resourceTypes = new Array(); //리소스 선택
+	const locations = new Array(); //지역 선택
 	document.querySelectorAll('[name="deviceStatus"]:checked').forEach(chk => {
 		deviceStatus.push(chk.value);
 	});
+	document.querySelectorAll('[name="resourceType"]:checked').forEach(chk => {
+		resourceTypes.push(chk.value);
+	});
+	document.querySelectorAll('[name="location"]:checked').forEach(chk => {
+		locations.push(chk.value);
+	});
+	/* 검색 조건 */
 
 	return new Promise((resolve, reject) => {
 		const refineList = new Array();
 		siteList.forEach(site => {
 			const siteId = site.sid;
-
 			let operation = new Array()
 				, capacity = '-'
 				, activePower = '-'
@@ -1097,13 +1279,9 @@ const searchSite = async function () {
 				, essActivePower = '-'
 				, maxActivePower = '-'
 				, targetActivePower = '-'
-				, temperature = '-'
-				, irradiationPoa = '-'
-				, humidity = '-'
 				, lastTargetActivePowerReqDate = '-'
 				, lastTargetActivePowerRecvDate = '-'
-				, statusLocalTime = '-'
-				, inverterCount = '-';
+				, faultDesc = '';
 			Object.entries(apiDatas).forEach(api => {
 				const apiUrl = api[0]
 					, apiDatas = api[1];
@@ -1129,14 +1307,9 @@ const searchSite = async function () {
 								const targetDevice_EssActivePower = essDActivePower - essCActivePower;
 								essActivePower = (essActivePower != '-') ? essActivePower + targetDevice_EssActivePower : targetDevice_EssActivePower;
 
-								temperature = (isEmpty(deviceData['temperature']) ? '-' : deviceData['temperature']) + ' °C';
-								irradiationPoa = (isEmpty(deviceData['irradiationPoa']) ? '-' : deviceData['irradiationPoa']) + ' W/㎡';
-								humidity = (isEmpty(deviceData['humidity']) ? '-' : deviceData['humidity']) + ' %';
-
 								lastTargetActivePowerReqDate = isEmpty(deviceData['lastTargetActivePowerReqDate']) ? '-' : String(deviceData['lastTargetActivePowerReqDate']).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
 								lastTargetActivePowerRecvDate = isEmpty(deviceData['lastTargetActivePowerRecvDate']) ? '-' : String(deviceData['lastTargetActivePowerRecvDate']).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
-								statusLocalTime = isEmpty(deviceData['localtime']) ? '-' : String(deviceData['localtime']).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
-								inverterCount = (inverterCount != '-') ? inverterCount++ : 1;
+								faultDesc = deviceData['deviceFault']
 							}
 						}
 					});
@@ -1146,6 +1319,8 @@ const searchSite = async function () {
 			// 인버터 설비 정보가 없을경우
 			// 정지로 판단한다.
 			let targetOperation = false;
+			let targetLocation = false;
+			let targetResource = false;
 			let searchSite = false;
 			if (!isEmpty(operation)) {
 				const searchOperation = operation.some(target => {
@@ -1156,65 +1331,71 @@ const searchSite = async function () {
 					targetOperation = true;
 				}
 			} else {
-				if (deviceStatus.length == 3) { //전체 선택이면 operation 없는 디바이스도 표시
+				if (deviceStatus.length == 2) { //전체 선택이면 operation 없는 디바이스도 표시
 					targetOperation = true;
 				} else {
 					targetOperation = false;
 				}
 			}
 
+			if (!isEmpty(site['location'])) {
+				if (locations.includes(String(site['location']))) {
+					targetLocation = true;
+				} else {
+					targetLocation = false;
+				}
+			} else {
+				if (locations.length === document.querySelectorAll('[name="location"]').length) {
+					targetLocation = true;
+				} else {
+					targetLocation = false;
+				}
+			}
+
+			if (!isEmpty(site['resource_type'])) {
+				if (resourceTypes.includes(String(site['resource_type']))) {
+					targetResource = true;
+				} else {
+					targetResource = false;
+				}
+			} else {
+				if (resourceTypes.length === document.querySelectorAll('[name="resourceType"]').length) {
+					targetResource = true;
+				} else {
+					targetResource = false;
+				}
+			}
+
 			if (!isEmpty(searchName)) {
 				const searchPattern = new RegExp(searchName, 'i'); //ignoreCase 대소문자 구분X
-				if (searchPattern.test(site.name) || searchPattern.test(site.address)) {
+				if (searchPattern.test(site.name)) {
 					searchSite = true;
 				}
 			} else {
 				searchSite = true;
 			}
 
-			if (targetOperation && searchSite) {
-				if (operation.includes('0')) {
-					site['status'] = '중지';
-					site['statusClass'] = 'status_stp';
-				} else if (operation.includes('1')) {
-					site['status'] = '정상';
-					site['statusClass'] = 'status_drv';
-				} else if (operation.includes('2')) {
-					site['status'] = '트립';
-					site['statusClass'] = 'status_err';
-				} else {
-					site['status'] = '에러';
-					site['statusClass'] = 'status_err';
-				}
-
-				site['capacity'] = capacity;
+			if (targetOperation && searchSite && targetLocation && targetResource) {
+				site['capacity'] = isNaN(capacity) ? '-' : displayNumberFixedUnit(capacity, 'Wh', 'kWh', 0)[0];
 				site['activePower'] = isNaN(activePower) ? '-' : displayNumberFixedUnit(activePower, 'Wh', 'kWh', 0)[0];
 				site['reactivePower'] = isNaN(reactivePower) ? '-' :  displayNumberFixedUnit(reactivePower, 'Wh', 'kWh', 0)[0];
 				site['essActivePower'] = isNaN(essActivePower) ? '-' :  displayNumberFixedUnit(essActivePower, 'Wh', 'kWh', 0)[0];
 				site['maxActivePower'] = isNaN(maxActivePower) ? '-' :  displayNumberFixedUnit(maxActivePower, 'Wh', 'kWh', 0)[0];
 				site['targetActivePower'] = isNaN(targetActivePower) ? '-' :   displayNumberFixedUnit(targetActivePower, 'Wh', 'kWh', 0)[0];
-				site['temperature'] = temperature;
-				site['irradiationPoa'] = irradiationPoa;
-				site['humidity'] = humidity;
 				site['lastTargetActivePowerReqDate'] = lastTargetActivePowerReqDate;
 				site['lastTargetActivePowerRecvDate'] = lastTargetActivePowerRecvDate;
-				site['statusLocalTime'] = statusLocalTime;
-				site['inverterCount'] = inverterCount //사이트에 속한 인버터 갯수.
 				site['operation'] = operation; //사이트 상태 정보.
+				site['faultDesc'] = faultDesc; //사이트 상태 정보.
 				refineList.push(site);
 			}
 		});
 
-		if (refineList.length > 0) {
-			resolve(refineList);
-		} else {
-			setMakeList(refineList, 'siteList', {'dataFunction': {'align': alignFunc}}); //list생성
-		}
+		resolve(refineList);
 	}).then(refineList => {
 		if (!isEmpty(refineList)) {
 			refineList.forEach((site, index) => {
 				const siteId = site.sid;
-				refineList[index].resourceClass = resourceIcon(site.resource_type);
+				refineList[index].resourceName = resourceTemplate[site.resource_type];
 				targetApi.forEach((target, targetIdx) => {
 					const apiData = apiDatas[target];
 					if (targetIdx === 0) {
@@ -1241,17 +1422,13 @@ const searchSite = async function () {
 							const commandHistory = apiData.data;
 							const rtuIds = new Array();
 							if (!isEmpty(commandHistory)) {
-								(site.rtus).forEach(rtu => { rtuIds.push(rtu.rid) });
+								if (!isEmpty(site.rtus)) {
+									(site.rtus).forEach(rtu => { rtuIds.push(rtu.rid) });
 
-								commandHistory.forEach(command => {
-									if (rtuIds.includes(command.rid)) {
-										if (site['lastTargetActivePowerReqDate'] === '-') {
-											refineList[index]['lastTargetActivePowerReqDate'] = new Date(command.requested_at.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$2/$3/$1 $4:$5:$6')).format('yyyMMdd HH:mm:ss');
-										} else {
-											let statusDate = new Date((site['lastTargetActivePowerReqDate'].replace(/[^0-9]/g,'')).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$2/$3/$1 $4:$5:$6'));
-											let hitoryDate = new Date(command.requested_at.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$2/$3/$1 $4:$5:$6'));
-											if (statusDate.getTime() < hitoryDate.getTime()) {
-												refineList[index]['lastTargetActivePowerReqDate'] = hitoryDate.format('yyyy-MM-dd HH:mm:ss');
+									commandHistory.forEach(command => {
+										if (rtuIds.includes(command.rid)) {
+											if (site['lastTargetActivePowerReqDate'] === '-') {
+												refineList[index]['lastTargetActivePowerReqDate'] = new Date(String(command.requested_at).replace(/[^0-9]/g,'').replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$2/$3/$1 $4:$5:$6')).format('yyyy-MM-dd HH:mm:ss');
 												refineList[index]['lastTargetActivePowerRecvDate'] = '-'
 
 												const cmdBody = JSON.parse(command.cmd_body);
@@ -1262,10 +1439,26 @@ const searchSite = async function () {
 													refineList[index]['status'] = '에러';
 													refineList[index]['statusClass'] = 'status_err';
 												}
+											} else {
+												let statusDate = new Date((site['lastTargetActivePowerRecvDate'].replace(/[^0-9]/g,'')).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$2/$3/$1 $4:$5:$6'));
+												let hitoryDate = new Date(String(command.requested_at).replace(/[^0-9]/g,'').replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$2/$3/$1 $4:$5:$6'));
+												if (statusDate.getTime() < hitoryDate.getTime()) {
+													refineList[index]['lastTargetActivePowerReqDate'] = hitoryDate.format('yyyy-MM-dd HH:mm:ss');
+													refineList[index]['lastTargetActivePowerRecvDate'] = '-'
+
+													const cmdBody = JSON.parse(command.cmd_body);
+													refineList[index]['targetActivePower'] = isEmpty(cmdBody['targetPower']) ? '-' : displayNumberFixedUnit(Number(cmdBody['targetPower']), 'Wh', 'kWh', 2)[0];
+
+													let diffTime = Math.floor(((new Date() - hitoryDate) / 1000) / 60 / 60 % 24);
+													if (diffTime >= 1) {
+														refineList[index]['status'] = '에러';
+														refineList[index]['statusClass'] = 'status_err';
+													}
+												}
 											}
 										}
-									}
-								});
+									});
+								}
 							}
 						}
 					}
@@ -1273,78 +1466,10 @@ const searchSite = async function () {
 			});
 		}
 
-		setMakeList(refineList, 'siteList', {'dataFunction': {'align': alignFunc}}); //list생성
-		return refineList;
-	}).then(refineList => {
-		if (typeof (geocodeAddress) == 'function') {
-			map = new google.maps.Map(document.getElementById('gMainMap'), {
-				mapTypeId: 'satellite',
-				zoom: 7.3,
-				mapTypeControl: false, //맵타입
-				streetViewControl: false, //스트리트뷰
-				fullscreenControl: false, //전체보기
-				center: {lat: 36.549012, lng: 127.788546} // center: new google.maps.LatLng(37.549012, 126.988546),
-			});
-
-			if (refineList.length > 0) {
-				makerObject = new Object();
-
-				refineList.forEach((site, idx) => {
-					if (site.latlng != null) {
-						let operationColor = '#90caf3';
-						if(site.operation == '0') {
-							operationColor = '#f2a363';
-						} else if(site.operation == '1') {
-							operationColor = '#90caf3';
-						} else {
-							operationColor = '#e97373';
-						}
-
-						geocodeAddress(site.address, site.sid, site.name, site.latlng, operationColor);
-					} else {
-						makerObject[site.sid] = new Object();
-					}
-				});
-			}
-		}
-
-		setTimeout(function () {
-			refineList.forEach((site, siteIdx) => {
-				let capacity = (site.capacity == '-' || site.activePower == 0) ? 0 :site.capacity / 1000;
-				let activePower = (site.activePower == '-' || site.activePower == 0) ? 0 : Number(site.activePower.replace(/[^0-9]/g, ''));
-
-				let activePercent = Math.floor((activePower / capacity) * 100);
-				let title = activePercent + '%';
-				if (isNaN(activePercent)) {
-					title = '- %';
-				}
-
-				let etc = capacity - activePower;
-				let series = [{
-					type: 'pie',
-					innerSize: '50%',
-					name: '설비용량',
-					colorByPoint: true,
-					data: [{
-						color: 'var(--turquoise)',
-						name: '총 설비용량',
-						dataLabels: {
-							enabled: false
-						},
-						y: activePower
-					}, {
-						color: 'var(--grey)',
-						name: '미설비용량',
-						dataLabels: {
-							enabled: false
-						},
-						y: etc //30% 나머지
-					}]
-				}];
-
-				siteListChart('type_chart' + siteIdx, series, title);
-			});
-		}, 500);
+		siteListTable.clear();
+		siteListTable.page.len(rowCount);
+		siteListTable.rows.add(refineList).draw();
+		//$($.fn.dataTable.tables(true)).DataTable().columns.adjust();
 	}).catch(error => {
 		console.error(error);
 

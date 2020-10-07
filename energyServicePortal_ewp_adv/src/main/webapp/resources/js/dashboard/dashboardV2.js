@@ -484,6 +484,29 @@ const monthlyChartDraw = async () => {
 
 		resolve();
 	}).then(() => {
+
+		let maxValue = 0;
+		chargeList.forEach(data => {
+			if (data > maxValue) {
+				maxValue = data;
+			}
+		});
+
+		dischargeList.forEach(data => {
+			if (data > maxValue) {
+				maxValue = data;
+			}
+		});
+
+		pvList.forEach(data => {
+			if (data > maxValue) {
+				maxValue = data;
+			}
+		});
+
+		const refineMaxValue = displayNumberFixedDecimal(maxValue, 'kWh', 3, 2);
+		const rtnUnit = refineMaxValue[1];
+
 		let seriesLength = monthlyChart.series.length;
 		for (let i = seriesLength - 1; i > -1; i--) {
 			monthlyChart.series[i].remove();
@@ -505,39 +528,33 @@ const monthlyChartDraw = async () => {
 			monthlyChart.addSeries(chartSeries, false);
 		});
 
-		monthlyChart.redraw(); // 차트 데이터를 다시 그린다
+		monthlyChart.yAxis[0].setTitle({
+			text: rtnUnit,
+			align: 'low',
+			rotation: 0, /* 타이틀 기울기 */
+			y: 25, /* 타이틀 위치 조정 */
+			x: 15,
+			style: {
+				color: 'var(--white60)',
+				fontSize: '12px'
+			}
+		});
+		monthlyChart.redraw();
 
-		return new Promise((resolve, reject) => {
+		return new Promise(resolve => {
 			let str = '';
 			Object.entries(sumObj).forEach(([key, value]) => {
 				if(key == "chargeSum"){
-					let newValue = '';
-					if (String(value).length  >= 5) {
-						newValue = numberComma(value / 1000) + ' M';
-					} else {
-						newValue = String(value);
-					}
-					str += '<li class="charge">충전 : ' + newValue + '</li>';
+					str += '<li class="charge">충전 : ' + displayNumberFixedDecimal(value, 'kWh', 3, 2).join(' ') + '</li>';
 				}
 				if(key == "dischargeSum"){
-					let newValue = '';
-					if (String(value).length  >= 5) {
-						newValue = numberComma(value / 1000) + ' M';
-					} else {
-						newValue = String(value);
-					}
-					str += '<li class="discharge">방전 : ' + newValue + '</li>';
+					str += '<li class="discharge">방전 : ' + displayNumberFixedDecimal(value, 'kWh', 3, 2).join(' ') + '</li>';
 				}
 				if(key == "pvSum"){
-					let newValue = '';
-					if (String(value).length  >= 5) {
-						newValue = numberComma(value / 1000) + ' M';
-					} else {
-						newValue = String(value);
-					}
-					str += '<li class="pv">태양광 : ' + newValue + '</li>';
+					str += '<li class="pv">태양광 : ' + displayNumberFixedDecimal(value, 'kWh', 3, 2).join(' ') + '</li>';
 				}
 			});
+
 			resolve(str);
 		}).then(res => {
 			$("#monthlySum").append(res)
@@ -643,6 +660,29 @@ const dailyChartDraw = async () => {
 
 		resolve();
 	}).then(() => {
+
+		let maxValue = 0;
+		chargeList.forEach(data => {
+			if (data > maxValue) {
+				maxValue = data;
+			}
+		});
+
+		dischargeList.forEach(data => {
+			if (data > maxValue) {
+				maxValue = data;
+			}
+		});
+
+		pvList.forEach(data => {
+			if (data > maxValue) {
+				maxValue = data;
+			}
+		});
+
+		const refineMaxValue = displayNumberFixedDecimal(maxValue, 'kWh', 3, 2);
+		const rtnUnit = refineMaxValue[1];
+
 		let seriesLength = dailyChart.series.length;
 		for (let i = seriesLength - 1; i > -1; i--) {
 			dailyChart.series[i].remove();
@@ -664,37 +704,31 @@ const dailyChartDraw = async () => {
 			dailyChart.addSeries(chartSeries, false);
 		});
 
+		dailyChart.yAxis[0].setTitle({
+			text: rtnUnit,
+			align: 'low',
+			rotation: 0, /* 타이틀 기울기 */
+			y: 25, /* 타이틀 위치 조정 */
+			x: 15,
+			style: {
+				color: 'var(--white60)',
+				fontSize: '12px'
+			}
+		});
 		dailyChart.xAxis[0].setCategories(categories);
 		dailyChart.redraw(); // 차트 데이터를 다시 그린다
-		return new Promise((resolve, reject) => {
+
+		return new Promise(resolve => {
 			let str = '';
 			Object.entries(sumObj).forEach(([key, value]) => {
 				if(key == 'chargeSum'){
-					let newValue = '';
-					if (String(value).length  >= 5) {
-						newValue = numberComma(value / 1000) + ' M';
-					} else {
-						newValue = String(value);
-					}
-					str += '<li class="charge">충전 : ' + newValue + '</li>';
+					str += '<li class="charge">충전 : ' + displayNumberFixedDecimal(value, 'kWh', 3, 2).join(' ') + '</li>';
 				}
 				if(key == 'dischargeSum'){
-					let newValue = '';
-					if (String(value).length  >= 5) {
-						newValue = numberComma(value / 1000) + ' M';
-					} else {
-						newValue = String(value);
-					}
-					str += '<li class="discharge">방전 : ' + newValue + '</li>';
+					str += '<li class="discharge">방전 : ' + displayNumberFixedDecimal(value, 'kWh', 3, 2).join(' ') + '</li>';
 				}
 				if(key == 'pvSum'){
-					let newValue = '';
-					if (String(value).length  >= 5) {
-						newValue = numberComma(value / 1000) + ' M';
-					} else {
-						newValue = String(value);
-					}
-					str += '<li class="pv">태양광 : ' + newValue + '</li>';
+					str += '<li class="pv">태양광 : ' + displayNumberFixedDecimal(value, 'kWh', 3, 2).join(' ') + '</li>';
 				}
 			});
 			resolve(str);
@@ -748,8 +782,24 @@ const typeSiteDraw = async () => {
 
 		resolve();
 	}).then(() => {
-		let seriesLength = typeSiteCurrent.series.length;
 
+		let maxValue = 0;
+		Object.entries(siteGenArray).forEach(([siteId, data]) => {
+			if (data > maxValue) {
+				maxValue = data;
+			}
+		});
+
+		Object.entries(siteForeGenArray).forEach(([siteId, data]) => {
+			if (data > maxValue) {
+				maxValue = data;
+			}
+		});
+
+		const refineMaxValue = displayNumberFixedDecimal(maxValue, 'kWh', 3, 2);
+		const rtnUnit = refineMaxValue[1];
+
+		let seriesLength = typeSiteCurrent.series.length;
 		for (let i = seriesLength - 1; i > -1; i--) {
 			typeSiteCurrent.series[i].remove();
 		}
@@ -790,6 +840,13 @@ const typeSiteDraw = async () => {
 
 		//typeSiteCurrent.xAxis[0].categories = true;
 		typeSiteCurrent.xAxis[0].setCategories(categories);
+		typeSiteCurrent.yAxis[0].setTitle({
+			text: rtnUnit,
+			style: {
+				color: 'var(--white60)',
+				fontSize: '12px'
+			}
+		});
 		typeSiteCurrent.redraw();
 
 		let str = '';
@@ -797,29 +854,12 @@ const typeSiteDraw = async () => {
 		let genForecastSum = 0;
 
 		if(!isEmpty(tmepGenArray)){
-			let newValue = '';
 			genSum = tmepGenArray.reduce((acc, val) => { return acc + val } , 0);
-			if ( ( String(genSum).length  >= 3 ) && ( String(genSum).length  < 5 ) ) {
-				newValue = String(genSum).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " kWh";
-			} else if (String(genSum).length  >= 5) {
-				newValue = String(numberComma(genSum / 1000))  + ' M';
-			} else {
-				newValue = String(genSum) + "kWh";
-			}
-			str += '<li class="charge">발전 : ' + newValue + '</li>';
+			str += '<li class="charge">발전 : ' + displayNumberFixedDecimal(genSum, 'kWh', 3, 2).join(' ') + '</li>';
 		}
 		if(!isEmpty(tempForeArray)){
-			let newValue = '';
 			genForecastSum = tempForeArray.reduce((acc, val) => { return acc + val } , 0);
-
-			if ( ( String(genForecastSum).length  >= 3 ) && ( String(genForecastSum).length  < 5 ) ) {
-				newValue = String(genForecastSum).replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " kWh";
-			} else if (String(genForecastSum).length  >= 5) {
-				newValue = String(numberComma(genForecastSum / 1000)) + ' M';
-			} else {
-				newValue = String(genForecastSum) + "kWh";
-			}
-			str += '<li class="discharge">발전 예측 : ' + newValue + '</li>';
+			str += '<li class="discharge">발전 예측 : ' + displayNumberFixedDecimal(genForecastSum, 'kWh', 3, 2).join(' ') + '</li>';
 		}
 		$("#yesterdaySum").append(str);
 	}).catch((error) => {

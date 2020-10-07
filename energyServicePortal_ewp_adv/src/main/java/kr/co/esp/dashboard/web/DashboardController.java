@@ -20,6 +20,14 @@ public class DashboardController {
 	@RequestMapping(value = "/dashboard/gmain.do")
 	public String gmain(HttpServletRequest request, HttpSession session, Model model) {
 		String dashboardMap = (String) EgovProperties.getProperty("dashboard.map"); // TEST 서버 여부
+
+		String defaultOid = EgovProperties.getProperty("default.oid");
+		if ("testkpx".equals(defaultOid)) {
+			model.addAttribute("secondYAxis", false);
+		} else {
+			model.addAttribute("secondYAxis", true);
+		}
+
 		model.addAttribute("dashboardMap", dashboardMap);
 		return "esp/dashboard/gmain";
 	}
