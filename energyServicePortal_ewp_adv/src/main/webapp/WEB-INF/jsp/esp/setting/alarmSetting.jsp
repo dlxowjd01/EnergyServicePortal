@@ -117,7 +117,7 @@
 			'buttons':[
 				{
 					text: '적용',
-					className: 'btn_type fr my-offset-28',
+					className: 'btn-type fr my-offset-28',
 					action: function ( e, dt, node, config ) {
 						register();
 					},
@@ -129,7 +129,7 @@
 				{
 					extend: 'excel',
 					text: '엑셀 내보내기',
-					className: 'btn_type03 fr my-offset-28 mr-8',
+					className: 'btn-type03 fr my-offset-28 mr-8',
 					exportOptions: {
 						columns: [1, 2, 3, 4, 5, 6, 7, 8, 9]
 					},
@@ -137,7 +137,7 @@
 				},
 				{
 					text: '엑셀 업로드',
-					className: 'btn_type03 fr my-offset-28',
+					className: 'btn-type03 fr my-offset-28',
 					action: function ( e, dt, node, config ) {
 						document.getElementById('excelUploadBtn').click();
 					}
@@ -153,7 +153,7 @@
 			},
 			initComplete: function(settings, json) {
 				let str = `<div id="btnGroup" class="right-end"><!--
-							--><button type="button" disabled class="btn_type03" onclick="deleteRow()">선택 삭제</button><!--
+							--><button type="button" disabled class="btn-type03" onclick="deleteRow()">선택 삭제</button><!--
 						--></div>`;
 				$('#alarmTable_wrapper').append($(str));
 			},
@@ -767,26 +767,26 @@
 
 <div class="row">
 	<div class="col-12">
-		<div class="flex_group">
-			<span class="tx_tit">설비 타입</span>
+		<div class="flex-group">
+			<span class="tx-tit">설비 타입</span>
 			<div class="dropdown" id="deviceType">
 				<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
 					선택 <span class="caret"></span>
 				</button>
-				<ul class="dropdown-menu chk_type" role="menu"></ul>
+				<ul class="dropdown-menu chk-type" role="menu"></ul>
 			</div>
 		</div>
-		<div class="flex_group">
-			<span class="tx_tit">제조사</span>
+		<div class="flex-group">
+			<span class="tx-tit">제조사</span>
 			<div class="dropdown" id="manufacturer">
 				<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
 					선택 <span class="caret"></span>
 				</button>
-				<ul class="dropdown-menu chk_type" role="menu"></ul>
+				<ul class="dropdown-menu chk-type" role="menu"></ul>
 			</div>
 		</div>
-		<div class="flex_group">
-			<span class="tx_tit">모델명</span>
+		<div class="flex-group">
+			<span class="tx-tit">모델명</span>
 			<div class="dropdown" id="model">
 				<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
 					선택<span class="caret"></span>
@@ -794,15 +794,15 @@
 				<ul class="dropdown-menu"></ul>
 			</div>
 		</div>
-		<div class="flex_group">
-			<span class="tx_tit">펌웨어 버전</span>
+		<div class="flex-group">
+			<span class="tx-tit">펌웨어 버전</span>
 			<div class="dropdown" id="version">
 				<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
 					선택<span class="caret"></span>
 				</button>
 				<ul class="dropdown-menu"></ul>
 			</div>
-			<button type="button" class="btn_type ml-16" onclick="schAlarmList();">검색</button>
+			<button type="button" class="btn-type ml-16" onclick="schAlarmList();">검색</button>
 		</div>
 	</div>
 </div>
@@ -810,7 +810,7 @@
 <div class="row content-wrapper">
 	<div class="col-12">
 		<div class="indiv">
-			<table id="alarmTable" class="chk_type">
+			<table id="alarmTable" class="chk-type">
 				<colgroup>
 					<col style="width:5%">
 					<col style="width:5%">

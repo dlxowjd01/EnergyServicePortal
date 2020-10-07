@@ -8,7 +8,7 @@
 		const tableCloned = tableBody.find("template.table-body").clone().html();
 		const tfootClone = tableFooter.find("template.table-footer").clone().html();
 		const searchBar = $('.spc-search-bar');
-		const dropdownOpt = $('#searchOption').find('.dropdown-menu:not(.chk_type) li');
+		const dropdownOpt = $('#searchOption').find('.dropdown-menu:not(.chk-type) li');
 		const perPage = 14;
 
 		var spcArr = [];
@@ -22,7 +22,7 @@
 		// $("#warningModal .modal-title").text('처리 중 오류가 발생했습니다.');
 		// $("#warningModal").modal("show");
 		unCheckAll($("#reqStatus"));
-		unCheckAll($('#tableBody').parents(".sort_table "));
+		unCheckAll($('#tableBody').parents(".sort-table "));
 		getSpcList();
 
 		selectAll($("#reqStatus"));
@@ -488,7 +488,7 @@
 				searchOpt.keyword = $("#keyword").val().trim().toLowerCase();
 
 				let sortOption = new Object();
-				$('.sort_table th button').each(function() {
+				$('.sort-table th button').each(function() {
 					if ($(this).hasClass('up') || $(this).hasClass('down')) {
 						let columnName = $(this).data('column');
 						if ($(this).hasClass('up')) {
@@ -533,12 +533,12 @@
 			$("#tableBody").find('input:checkbox').prop('checked', this.checked);
 		});
 
-		$('.sort_table th').click(function(){
+		$('.sort-table th').click(function(){
 			let thisBtn = $(this).find('button');
 			if (thisBtn.length > 0) {
 				let column = thisBtn.data('column');
 				// var table = $(this).parents("table");
-				// var rows = tableBody.find('tr').toArray().sort(comparer($('.sort_table th').index(this)));
+				// var rows = tableBody.find('tr').toArray().sort(comparer($('.sort-table th').index(this)));
 
 				let searchOpt = {};
 				let checkbox = $("#reqStatus").find("input[type='checkbox']");
@@ -718,11 +718,11 @@
 <form id="searchForm" name="search_form">
 	<div class="row spc-search-bar">
 		<div class="col-11">
-			<div class="sa_select"><!--
-				--><span class="tx_tit">검토 상태</span><!--
+			<div class="sa-select"><!--
+				--><span class="tx-tit">검토 상태</span><!--
 				--><div id="reqStatus" class="dropdown"><!--
 				--><button type="button" class="dropdown-toggle unused" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button><!--
-				--><ul class="dropdown-menu chk_type" role="menu"><!--
+				--><ul class="dropdown-menu chk-type" role="menu"><!--
 					--><li data-value="1,2,3" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="all" name="review_status" value="all"><label for="all">전체</label></a></li><!--
 					--><li data-value="2" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="wait" name="review_status" value="2"><label for="wait">검토 중</label></a></li><!--
 					--><li data-value="1" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="inProgress" name="review_status" value="1"><label for="inProgress">검토 대기</label></a></li><!--
@@ -733,23 +733,23 @@
 				--></ul>
 				</div>
 			</div><!--
-			--><div class="sa_select">
-				<div class="tx_inp_type mr-16"><input type="text" id="keyword" placeholder="입력"></div>
-				<button type="submit" class="btn_type">검색</button>
+			--><div class="sa-select">
+				<div class="text-input-type mr-16"><input type="text" id="keyword" placeholder="입력"></div>
+				<button type="submit" class="btn-type">검색</button>
 			</div>
 		</div>
 		<div class="col-1">
-			<button type="button" id="approvalBtn" class="btn_type">출금 최종승인</button>
+			<button type="button" id="approvalBtn" class="btn-type">출금 최종승인</button>
 		</div>
 	</div>
 </form>
 <div class="row content-wrapper">
 	<div class="col-lg-12">
-		<div class="indiv no_border spc_tbl">
-			<div class="btn_wrap_type01">
-<%--				<button type="button" class="btn_type">선택 인쇄</button>--%>
+		<div class="indiv no-border spc-tbl">
+			<div class="btn-wrap-type01">
+<%--				<button type="button" class="btn-type">선택 인쇄</button>--%>
 			</div>
-			<table class="sort_table table-footer transaction-table">
+			<table class="sort-table table-footer transaction-table">
 				<colgroup>
 					<col style="width:5%">
 					<col style="width:8%">
@@ -766,38 +766,38 @@
 				<thead>
 				<tr>
 					<th>
-						<a class="chk_type select_row">
+						<a class="chk-type select_row">
 							<input type="checkbox" id="selectAll" name="select_all">
 							<label for="selectAll"></label>
 						</a>
 					</th>
 					<th>
-						<button type="button" class="btn_align" data-column="withdrawDay">출금 일자</button>
+						<button type="button" class="btn-align" data-column="withdrawDay">출금 일자</button>
 					</th>
 					<th>
-						<button type="button" class="btn_align" data-column="spcName">SPC 명</button>
+						<button type="button" class="btn-align" data-column="spcName">SPC 명</button>
 					</th>
 					<th class="right">
-						<button type="button" class="btn_align" data-column="totalAmount">금액</button>
+						<button type="button" class="btn-align" data-column="totalAmount">금액</button>
 					</th>
 					<th>
-						<button type="button" class="btn_align" data-column="requestedAt">요청/수정일</button>
+						<button type="button" class="btn-align" data-column="requestedAt">요청/수정일</button>
 					</th>
 					<th>
-						<button type="button" class="btn_align" data-column="requestedBy">사무 수탁사</button>
+						<button type="button" class="btn-align" data-column="requestedBy">사무 수탁사</button>
 					</th>
 					<th>
-						<button type="button" class="btn_align" data-column="transferAgent">담당자</button>
+						<button type="button" class="btn-align" data-column="transferAgent">담당자</button>
 					</th>
 					<th>
-						<button type="button" class="btn_align" data-column="status">상태</button>
+						<button type="button" class="btn-align" data-column="status">상태</button>
 					</th>
 
 					<th>
-						<button type="button" class="btn_align" data-column="statusChangedBy">승인자</button>
+						<button type="button" class="btn-align" data-column="statusChangedBy">승인자</button>
 					</th>
 					<th>
-						<button type="button" class="btn_align" data-column="statusChangedAt">승인일</button>
+						<button type="button" class="btn-align" data-column="statusChangedAt">승인일</button>
 					</th>
 				</tr>
 				</thead>
@@ -805,7 +805,7 @@
 					<tr><td colspan='10' class='no-data center'>데이터가 없습니다.</td></tr></tr>
 					<template class='table-body'>
 						<tr>
-							<td><a class="chk_type select_row"><input type="checkbox" id="*chkOpt*" name="reviewOpt"><label for="*chkOpt*"></label></a></td>
+							<td><a class="chk-type select_row"><input type="checkbox" id="*chkOpt*" name="reviewOpt"><label for="*chkOpt*"></label></a></td>
 							<td>*withdrawDay*</td>
 							<td>*spcName*</td>
 							<td class="right">*totalAmount*</td>
@@ -836,7 +836,7 @@
 </div>
 <div class="modal fade" id="warningModal" role="dialog" aria-labelledby="warningModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-sm">
-		<div class="modal-content collection_modal_content">
+		<div class="modal-content collect-modal-content">
 			<div class="modal-body">
 				<h2 id="warningMsg" class="warning"></h2>
 			</div>
@@ -852,9 +852,9 @@
 			<div class="modal-body">
 				<div class="row">
 				</div>
-				<div class="btn_wrap_type02">
-					<button type="button" class="btn_type" id="finalApprovalBtn">확인</button>
-					<button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button>
+				<div class="btn-wrap-type02">
+					<button type="button" class="btn-type" id="finalApprovalBtn">확인</button>
+					<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close">취소</button>
 				</div>
 			</div>
 		</div>

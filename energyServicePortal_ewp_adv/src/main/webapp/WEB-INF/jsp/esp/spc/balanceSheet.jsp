@@ -42,8 +42,8 @@
 			page = 1;
 		}else{
 			if(isEmpty(n) && isEmpty(sort)) {
-				$('.sort_table > thead').find('button').each(function(){
-					if($(this).attr('class') != 'btn_align'){
+				$('.sort-table > thead').find('button').each(function(){
+					if($(this).attr('class') != 'btn-align'){
 						n = $(this).data('colname');
 						sort = $(this).data('classname');
 					}
@@ -81,7 +81,7 @@
 						jsonList.push(result.data[i]);
 					}
 				}
-				$(".sort_table").data("nowjsp", "balance");
+				$(".sort-table").data("nowjsp", "balance");
 				jsonListSort(n, sort, jsonList)
 				jsonList = paging(page, jsonList);
 				setMakeList(jsonList, "listData", { "dataFunction": { "INDEX": getNumberIndex } }); //list생성
@@ -208,16 +208,16 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-12 clear inp_align">
+	<div class="col-12 clear input-align">
 		<div class="fl">
-			<span class="tx_tit">기준</span>
-			<div class="sa_select">
+			<span class="tx-tit">기준</span>
+			<div class="sa-select">
 				<div class="dropdown" id="year">
 					<button type="button" class="dropdown-toggle w8" data-toggle="dropdown"
 						data-value="2020">
 						2020년<span class="caret"></span>
 					</button>
-					<ul class="dropdown-menu chk_type" role="menu">
+					<ul class="dropdown-menu chk-type" role="menu">
 						<li data-value="2020"><a href="#">2020년</a></li>
 						<li data-value="2019"><a href="#">2019년</a></li>
 						<li data-value="2018"><a href="#">2018년</a></li>
@@ -226,26 +226,26 @@
 			</div>
 		</div>
 		<div class="fl">
-			<div class="tx_inp_type">
+			<div class="text-input-type">
 				<input type="text" id="key_word" name="searchName" placeholder="입력">
 			</div>
 		</div>
 		<div class="fl">
-			<button type="button" class="btn_type" onclick="getDataList();">검색</button>
+			<button type="button" class="btn-type" onclick="getDataList();">검색</button>
 		</div>
 		<div class="fr">
-			<a href="javascript:getCsvDown();" class="save_btn">엑셀 다운로드</a>
+			<a href="javascript:getCsvDown();" class="btn-save">엑셀 다운로드</a>
 		</div>
 	</div>
 </div>
 <div class="row">
 	<div class="col-12">
 		<div class="indiv">
-			<div class="btn_wrap_type01">
-				<button type="button" class="btn_type" onclick="location.href='/spc/balanceSheetPost.do'">신규 등록</button>
+			<div class="btn-wrap-type01">
+				<button type="button" class="btn-type" onclick="location.href='/spc/balanceSheetPost.do'">신규 등록</button>
 			</div>
-			<div class="spc_tbl align_type" id="excelList">
-				<table class="sort_table chk_type">
+			<div class="spc-tbl align-type" id="excelList">
+				<table class="sort-table chk-type">
 					<colgroup>
 						<col width="6%">
 						<col width="15%">
@@ -263,13 +263,13 @@
 								<input type="checkbox" id="chk_op01" value="순번">
 								<label for="chk_op01">순번</label>
 							</th>
-							<th><button type="button" class="btn_align down">SPC명</button></th>
-							<th><button type="button" class="btn_align down">발전소 명</button></th>
-							<th><button type="button" class="btn_align down">기준년월</button></th>
-<%--							<th class="right"><button type="button" class="btn_align down">용량(kW)</button></th>--%>
-							<th class="right"><button type="button" class="btn_align down">현금유입(원)</button></th>
-							<th class="right"><button type="button" class="btn_align down">현금유출(원)</button></th>
-							<th class="right"><button type="button" class="btn_align down">기말 현금흐름(원)</button></th>
+							<th><button type="button" class="btn-align down">SPC명</button></th>
+							<th><button type="button" class="btn-align down">발전소 명</button></th>
+							<th><button type="button" class="btn-align down">기준년월</button></th>
+<%--							<th class="right"><button type="button" class="btn-align down">용량(kW)</button></th>--%>
+							<th class="right"><button type="button" class="btn-align down">현금유입(원)</button></th>
+							<th class="right"><button type="button" class="btn-align down">현금유출(원)</button></th>
+							<th class="right"><button type="button" class="btn-align down">기말 현금흐름(원)</button></th>
 						</tr>
 					</thead>
 					<tbody id="listData">
@@ -279,10 +279,10 @@
 								<label for="chk_op[INDEX]">[INDEX]</label>
 							</td>
 							<td>
-								<a href="/spc/entityDetailsBySite.do?spc_id=[spc_id]&site_id=&balance_yyyy=[balance_yyyymm]" class="tbl_link">[spc_name]</a>
+								<a href="/spc/entityDetailsBySite.do?spc_id=[spc_id]&site_id=&balance_yyyy=[balance_yyyymm]" class="table-link">[spc_name]</a>
 							</td>
 							<td>
-								<a href="/spc/entityDetailsBySite.do?spc_id=[spc_id]&site_id=[site_id]&balance_yyyy=[balance_yyyymm]" class="tbl_link">[name]</a>
+								<a href="/spc/entityDetailsBySite.do?spc_id=[spc_id]&site_id=[site_id]&balance_yyyy=[balance_yyyymm]" class="table-link">[name]</a>
 							</td>
 							<td>[balance_yyyymm]</td>
 <%--							<td class="right">-</td>--%>
@@ -293,11 +293,11 @@
 					</tbody>
 				</table>
 			</div>
-			<div class="btn_wrap_type02 mt30">
-				<!--                 <button type="button" class="btn_type03" onclick="setCheckedDataModify();">선택 수정</button> -->
-				<button type="button" class="btn_type03" onclick="deleteRow();">선택 삭제</button>
+			<div class="btn-wrap-type02 mt30">
+				<!--                 <button type="button" class="btn-type03" onclick="setCheckedDataModify();">선택 수정</button> -->
+				<button type="button" class="btn-type03" onclick="deleteRow();">선택 삭제</button>
 			</div>
-			<div class="paging_wrap" id="paging">
+			<div class="pagination-wrapper" id="paging">
 			</div>
 		</div>
 	</div>

@@ -51,7 +51,7 @@ const getYearGenData = async function () {
 
 	let pvList = new Object();
 	let sumObj = new Object();
-	$(`.gmain_chart1 span.term`).text(today.getFullYear() + '.1.1 ~ ' + today.getFullYear() + '.' + (Number(today.getMonth()) + 1) + '.' + today.getDate());
+	$(`.gmain-chart1 span.term`).text(today.getFullYear() + '.1.1 ~ ' + today.getFullYear() + '.' + (Number(today.getMonth()) + 1) + '.' + today.getDate());
 	siteList.forEach(site => {
 		resourceType[site.sid] = site.resource_type;
 
@@ -366,7 +366,7 @@ const getDailyGenData = async function () {
 		categories.push(String(i));
 	}
 
-	$(`.gmain_chart2 span.term`).text(today.format('yyyy.MM') + '.1 ~ ' + today.format('yyyy.MM') + '.' + today.getDate());
+	$(`.gmain-chart2 span.term`).text(today.format('yyyy.MM') + '.1 ~ ' + today.format('yyyy.MM') + '.' + today.getDate());
 	siteList.forEach(site => {
 		resourceType[site.sid] = site.resource_type;
 
@@ -669,7 +669,7 @@ const getGenDataBySiteYesterday = async function () { //3번째 indiv 사업소�
 		pvSum: 0,
 	};
 
-	$(`.gmain_chart3 span.term`).text(yesterday.getFullYear() + '.' + (Number(yesterday.getMonth()) + 1) + '.' + yesterday.getDate());
+	$(`.gmain-chart3 span.term`).text(yesterday.getFullYear() + '.' + (Number(yesterday.getMonth()) + 1) + '.' + yesterday.getDate());
 	
 	siteList.forEach((site, siteIdx) => {
 		let siteGenSum = 0;
@@ -988,7 +988,7 @@ const getAlarmInfo = function () {
 			}
 		});
 
-		$('.a_alert').find('em').text(alarmList.length);
+		$('.alarm-alert').find('em').text(alarmList.length);
 		setMakeList(alarmList, 'alarmNotice', {'dataFunction': {'level': levelClass}}); //list생성
 	}).fail(function (jqXHR, textStatus, errorThrown) {
 		console.error(jqXHR);
@@ -1170,8 +1170,8 @@ const beforeTodayTotalPromise = (site) => {
 
 const getTodayTotalDetail = async function () {
 
-	$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(0);
-	$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text(0);
+	$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(1) span').text(0);
+	$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(2) span').text(0);
 
 	const formData = getSiteMainSchCollection('day');
 	if (!oid.match('testkpx')) {
@@ -1186,9 +1186,9 @@ const getTodayTotalDetail = async function () {
 		$('#centerTbody tr:eq(0) td:nth-child(5)').text(' - ');
 		$('#centerTbody tr:eq(0) td:nth-child(6)').text(' - ');
 
-		$('.gmain_chart_kpx .chart_box .chart_info .ci_right ul li:nth-child(1) span').text('')
-		$('.gmain_chart_kpx .chart_box .chart_info .ci_right ul li:nth-child(2) span').text('')
-		$('.gmain_chart_kpx .chart_box .chart_info .ci_right ul li:nth-child(3) span').text('')
+		$('.gmain-chart-kpx .chart-box .chart-info .chart-info-right ul li:nth-child(1) span').text('')
+		$('.gmain-chart-kpx .chart-box .chart-info .chart-info-right ul li:nth-child(2) span').text('')
+		$('.gmain-chart-kpx .chart-box .chart-info .chart-info-right ul li:nth-child(3) span').text('')
 	}
 
 	let deviceArray = new Array();
@@ -1221,13 +1221,13 @@ const getTodayTotalDetail = async function () {
 				rtnData.forEach(di => {
 					let aPower = di.activePower;
 					let tPower = di.targetActivePower;
-					let prevVal1 = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text().replace(/[^0-9]/g, ''));
-					$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(numberComma(Math.floor(prevVal1 += (aPower / 1000))));
-					let prevVal2 = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text().replace(/[^0-9]/g, ''));
-					$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text(numberComma(Math.floor(prevVal2 += (tPower / 1000))));
+					let prevVal1 = Number($('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(1) span').text().replace(/[^0-9]/g, ''));
+					$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(1) span').text(numberComma(Math.floor(prevVal1 += (aPower / 1000))));
+					let prevVal2 = Number($('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(2) span').text().replace(/[^0-9]/g, ''));
+					$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(2) span').text(numberComma(Math.floor(prevVal2 += (tPower / 1000))));
 
-					let prevVal3 = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(3) span').text().replace(/[^0-9]/g, ''));
-					$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(3) span').text(numberComma(Math.floor(prevVal3 += (capacity / 1000))));
+					let prevVal3 = Number($('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(3) span').text().replace(/[^0-9]/g, ''));
+					$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(3) span').text(numberComma(Math.floor(prevVal3 += (capacity / 1000))));
 
 					if (resourceType == 1) {
 						deviceArray.push({
@@ -1240,7 +1240,7 @@ const getTodayTotalDetail = async function () {
 						})
 					} else {
 						deviceArray.push({
-							color: 'var(--summer-sky)',
+							color: 'var(--blueberry)',
 							name: '풍력',
 							dataLabels: {
 								enabled: false
@@ -1744,7 +1744,7 @@ const searchSite = function () {
 								}
 							});
 
-							let statusClass = 'status_drv';
+							let statusClass = 'status-drv';
 							$.ajax({
 								url: apiHost + '/control/command_history',
 								type: 'get',
@@ -1770,7 +1770,7 @@ const searchSite = function () {
 
 											let diffTime = Math.floor(((new Date() - hitoryDate) / 1000) / 60 / 60 % 24);
 											if (diffTime >= 1) {
-												statusClass = 'status_err';
+												statusClass = 'status-error';
 											}
 										}
 									}
@@ -1782,20 +1782,20 @@ const searchSite = function () {
 							let dateLocal = new Date(String(di.localtime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$2-$3-$3 $4:$5:$6'));
 							let diffTime = Math.floor(((new Date() - dateLocal) / 1000) / 60 / 60 % 24);
 							if (diffTime >= 1) {
-								statusClass = 'status_err';
+								statusClass = 'status-error';
 							} else {
 								if (operation.includes('0')) {
 									refineList[siteIdx].status = '중지';
-									statusClass = 'status_stp';
+									statusClass = 'status-stop';
 								} else if (operation.includes('1')) {
 									refineList[siteIdx].status = '정상';
-									statusClass = 'status_drv';
+									statusClass = 'status-drv';
 								} else if (operation.includes('2')) {
 									refineList[siteIdx].status = '트립';
-									statusClass = 'status_err';
+									statusClass = 'status-error';
 								} else {
 									refineList[siteIdx].status = '에러';
-									statusClass = 'status_err';
+									statusClass = 'status-error';
 								}
 							}
 
@@ -2063,7 +2063,7 @@ function SortTable(table, n, sort) {
 	// table 에 tbody tag 가 반드시 존재한다고 가정한다.
 	let tbody = table.tBodies[0];
 	let rows = tbody.querySelectorAll('tr.dbclickopen');
-	let rows2 = tbody.querySelectorAll('tr.detail_info');
+	let rows2 = tbody.querySelectorAll('tr.detail-info');
 	rows = Array.prototype.slice.call(rows, 0);
 	rows.sort(function (row1, row2) {
 		var cell1 = row1.getElementsByTagName("td")[n];

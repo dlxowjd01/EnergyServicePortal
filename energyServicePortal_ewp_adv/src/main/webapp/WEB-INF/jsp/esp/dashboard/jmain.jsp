@@ -15,8 +15,8 @@
 </div>
 <div class="row content-wrapper">
 	<div class="col-xl-4 col-md-12 col-sm-12">
-		<div class="indiv gmain_chart gmain_chart1">
-			<div class="chart_top clear">
+		<div class="indiv gmain-chart gmain-chart1">
+			<div class="chart-top clear">
 				<h2 class="ntit"><fmt:message key="vppdash.1.month" /></h2>
 				<span class="term"></span>
 			</div>
@@ -27,8 +27,8 @@
 				<div id="monthlyChart"></div>
 			</div>
 		</div>
-		<div class="indiv gmain_chart gmain_chart2">
-			<div class="chart_top clear">
+		<div class="indiv gmain-chart gmain-chart2">
+			<div class="chart-top clear">
 				<h2 class="ntit"><fmt:message key="vppdash.2.daily" /></h2>
 				<span class="term"></span>
 			</div>
@@ -36,12 +36,12 @@
 				<div id="dailyChart"></div>
 			</div>
 		</div>
-		<div class="indiv gmain_chart gmain_chart3">
-			<div class="chart_top clear">
+		<div class="indiv gmain-chart gmain-chart3">
+			<div class="chart-top clear">
 				<h2 class="ntit"><fmt:message key="vppdash.3.yesterday" /></h2>
 				<span class="term"></span>
 			</div>
-			<%--					<ul class="gtab_menu">--%>
+			<%--					<ul class="gtab-menu">--%>
 			<%--						<li class="active"><a href="#;">사업소별 현황</a></li>--%>
 			<%--						<li><a href="#;">유형별 발전 현황</a></li>--%>
 			<%--					</ul>--%>
@@ -52,7 +52,7 @@
 						<div id="typeSiteCurrent"></div>
 					</div>
 					<!-- 데이터 추출용 테이블 -->
-					<div class="hidden_table" style="display:none">
+					<div class="hidden" style="display:none">
 						<table id="gdatatable3">
 							<thead>
 							<tr>
@@ -68,7 +68,7 @@
 				</div>
 				<div>
 					<!-- 유형별 발전 현황 -->
-					<div class="sa_chart type-table">
+					<div class="chart-sa type-table">
 						<div class="inchart type-left">
 							<div id="gchart4"></div>
 						</div>
@@ -89,20 +89,20 @@
 	</div>
 
 	<div class="col-xl-4 col-md-12 col-sm-12">
-		<div class="indiv gmain_map gmain_chart gmain_chart4 ">
-			<div class="chart_top clear">
+		<div class="indiv gmain-map gmain-chart gmain-chart4 ">
+			<div class="chart-top clear">
 				<h2 class="ntit"><fmt:message key="vppdash.4.current" /></h2>
 			</div>
-			<div class="chart_box">
-				<div class="chart_info">
-					<div class="ci_left">
+			<div class="chart-box">
+				<div class="chart-info">
+					<div class="ci-left">
 						<div class="inchart">
 							<div id="pie_chart"></div>
 
 						</div>
 					</div>
-					<div class="ci_right">
-						<div class="legend_wrap">
+					<div class="chart-info-right">
+						<div class="legend-wrap">
 							<span class="bu1"><fmt:message key="vppdash.4.gen" /></span>
 							<span class="bu4"><fmt:message key="vppdash.4.idle" /></span>
 						</div>
@@ -115,7 +115,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="local_info s_center">
+			<div class="local-info s-center">
 				<table>
 					<thead>
 					<tr>
@@ -138,26 +138,26 @@
 				</table>
 			</div>
 		</div>
-		<div class="indiv gmain_chart jmain_center2">
-			<div class="chart_top clear">
+		<div class="indiv gmain-chart jmain-center2">
+			<div class="chart-top clear">
 				<h2 class="ntit"><fmt:message key="vppdash.5.realtime_result" /></h2>
 			</div>
 			<div class="realtime clear" style="position:relative;">
-				<div class="realtime_by_site">
+				<div class="realtime-site">
 					<div id="rchart1"></div>
 				</div>
-				<div class="realtime_total">
+				<div class="realtime-total">
 					<div id="rchart2"></div>
 				</div>
-				<div class="realtime_time"></div>
-				<div class="realtime_label"></div>
+				<div class="realtime-time"></div>
+				<div class="realtime-label"></div>
 			</div>
 		</div>
-		<div class="indiv gmain_chart jmain_center3">
-			<div class="chart_top clear">
+		<div class="indiv gmain-chart jmain-center3">
+			<div class="chart-top clear">
 				<h2 class="ntit"><fmt:message key="vppdash.6.bid_status" /></h2>
 			</div>
-			<div class="realtime_wrap">
+			<div class="realtime-wrap">
 				<div class="inchart">
 					<div id="rchart3"></div>
 				</div>
@@ -165,36 +165,36 @@
 		</div>
 	</div>
 	<div class="col-xl-4 col-md-12 col-sm-12">
-		<div class="indiv jmain_alarm wrap_type">
-			<div class="alarm_stat clear">
-				<div class="a_alert clear"><span><fmt:message key="vppdash.7.today_alerts" /></span><em>0</em></div><div class="a_warning clear"><a href="javascript:void(0);" onclick="pageMove('all', 'alarm');" class="btn cancel_btn"><fmt:message key="vppdash.7.details" /></a></div>
+		<div class="indiv jmain-alarm wrap-type">
+			<div class="alarm-status clear">
+				<div class="alarm-alert clear"><span><fmt:message key="vppdash.7.today_alerts" /></span><em>0</em></div><div class="alarm-warning clear"><a href="javascript:void(0);" onclick="pageMove('all', 'alarm');" class="btn btn-cancel"><fmt:message key="vppdash.7.details" /></a></div>
 			</div>
-			<div class="alarm_notice">
+			<div class="alarm-notice">
 				<ul id="alarmNotice">
 					<li>
 						<a href="javascript:void(0);" onclick="pageMove('[sid]', 'alarm');" class="[level]">
-							<span class="err_msg">[site_name] - [message]</span>
-							<span class="err_time">[standardTime]</span>
+							<span class="err-msg">[site_name] - [message]</span>
+							<span class="err-time">[standardTime]</span>
 						</a>
 					</li>
 				</ul>
 			</div>
 		</div>
-		<div class="indiv gmain_table jmain_table">
-			<div class="gtbl_top clear">
-				<div class="input_group1">
+		<div class="indiv gmain-table jmain-table">
+			<div class="gtable-top clear">
+				<div class="input-group1">
 					<input type="text" class="input" id="searchName" name="searchName" value="" placeholder="사업소 검색" onkeyup="if (event.keyCode == 13) searchSiteList();">
 					<button type="button" onclick="searchSite();"><fmt:message key="vppdash.8.apply" /></button>
 				</div>
-				<div class="input_group2">
-					<span class="tx_tit"><fmt:message key="vppdash.8.status" /></span>
-					<div class="sa_select">
+				<div class="input-group2">
+					<span class="tx-tit"><fmt:message key="vppdash.8.status" /></span>
+					<div class="sa-select">
 						<div class="dropdown" id="deviceStatus">
 							<button type="button" class="dropdown-toggle w8"
 									data-toggle="dropdown" data-name="설비 상태">
 								전체<span class="caret"></span>
 							</button>
-							<ul class="dropdown-menu chk_type" role="menu">
+							<ul class="dropdown-menu chk-type" role="menu">
 								<li data-value="0">
 									<a href="javascript:void(0);" tabindex="-1">
 										<input type="checkbox" id="deviceStatus1" name="deviceStatus" value="0" checked>
@@ -218,46 +218,46 @@
 					</div>
 				</div>
 			</div>
-			<div class="gtbl_wrap">
+			<div class="gmain-wrap">
 				<div class="intable" id="statusSiteList">
 					<table>
 						<caption>(단위: kWh)</caption>
 						<thead>
 						<tr>
 							<th>
-								<button type="button" class="btn_align"><fmt:message key="vppdash.8.status" /></button>
+								<button type="button" class="btn-align"><fmt:message key="vppdash.8.status" /></button>
 							</th>
 							<th>
-								<button type="button" class="btn_align"><fmt:message key="vppdash.8.err" /></button>
+								<button type="button" class="btn-align"><fmt:message key="vppdash.8.err" /></button>
 							</th>
 							<th>
-								<button type="button" class="btn_align"><fmt:message key="vppdash.8.warn" /></button>
+								<button type="button" class="btn-align"><fmt:message key="vppdash.8.warn" /></button>
 							</th>
 							<th>
-								<button type="button" class="btn_align"><fmt:message key="vppdash.8.site" /></button>
+								<button type="button" class="btn-align"><fmt:message key="vppdash.8.site" /></button>
 							</th>
 							<th>
-								<button type="button" class="btn_align"><fmt:message key="vppdash.8.cap" /></button>
+								<button type="button" class="btn-align"><fmt:message key="vppdash.8.cap" /></button>
 							</th>
 							<th>
-								<button type="button" class="btn_align"><fmt:message key="vppdash.8.forecast" /></button>
+								<button type="button" class="btn-align"><fmt:message key="vppdash.8.forecast" /></button>
 							</th>
 							<th>
-								<button type="button" class="btn_align"><fmt:message key="vppdash.8.gen" /></button>
+								<button type="button" class="btn-align"><fmt:message key="vppdash.8.gen" /></button>
 							</th>
 							<th class="ESS">
-								<button type="button" class="btn_align"><fmt:message key="vppdash.8.charge" /></button>
+								<button type="button" class="btn-align"><fmt:message key="vppdash.8.charge" /></button>
 							</th>
 							<th class="ESS">
-								<button type="button" class="btn_align"><fmt:message key="vppdash.8.discharge" /></button>
+								<button type="button" class="btn-align"><fmt:message key="vppdash.8.discharge" /></button>
 							</th>
 						</tr>
 						</thead>
 						<tbody id="siteList">
 							<tr class="dbclickopen flag[INDEX]">
-								<td class="first_td">
+								<td class="first-td">
 									<span class="status [statusClass]" title="[status]">[status]</span>
-									<span class="st_bar"></span>
+									<span class="status-bar"></span>
 								</td>
 								<td>[alarmError]</td>
 								<td>[alarmWarning]</td>
@@ -268,13 +268,13 @@
 								<td class="ESS">-</td>
 								<td class="ESS">-</td>
 							</tr>
-							<tr class="detail_info list[INDEX] flag[INDEX]">
+							<tr class="detail-info list[INDEX] flag[INDEX]">
 								<td colspan="9">
-									<div class="di_wrap">
-										<div class="di_wrap_in">
-											<div class="di_top_sec">
+									<div class="di-wrap">
+										<div class="di-wrap-in">
+											<div class="di-top-sec">
 												<span class="ico [resourceClass]"></span>
-												<div class="tx_area clear">
+												<div class="text-wrapper clear">
 													<div class="fl">
 														<span class="tx"><fmt:message key="vppdash.8.irr" /></span>
 														<span class="tx2">[irradiationPoa] W/㎡</span>
@@ -285,48 +285,48 @@
 													</div>
 												</div>
 											</div>
-											<div class="di_btm_sec clear">
-												<div class="sec_bx left">
-													<div class="bx_in">
-														<div class="bx_top">
+											<div class="di-bottom-sec clear">
+												<div class="sec-box left">
+													<div class="box-in">
+														<div class="box-top">
 															<div class="inchart" id="type_chart[INDEX]"></div>
 														</div>
-														<ul class="di_list">
+														<ul class="di-list">
 															<li>
-																<span class="di_li_tit"><fmt:message key="vppdash.8.production" /> (kW)</span>
-																<span class="di_li_tx">[activePower]</span>
+																<span class="di-li-title"><fmt:message key="vppdash.8.production" /> (kW)</span>
+																<span class="di-li-text">[activePower]</span>
 															</li>
 															<li>
-																<span class="di_li_tit"><fmt:message key="vppdash.8.gen_today" /> (kWh)</span>
-																<span class="di_li_tx">[accumulate]</span>
+																<span class="di-li-title"><fmt:message key="vppdash.8.gen_today" /> (kWh)</span>
+																<span class="di-li-text">[accumulate]</span>
 															</li>
 															<li>
-																<span class="di_li_tit"><fmt:message key="vppdash.8.gen_forecast" /> (kWh)</span>
-																<span class="di_li_tx">[forecast]</span>
+																<span class="di-li-title"><fmt:message key="vppdash.8.gen_forecast" /> (kWh)</span>
+																<span class="di-li-text">[forecast]</span>
 															</li>
 															<li>
-																<span class="di_li_tit"><fmt:message key="vppdash.8.gen_yesterday" /> (kWh)</span>
-																<span class="di_li_tx">[beforeDay]</span>
+																<span class="di-li-title"><fmt:message key="vppdash.8.gen_yesterday" /> (kWh)</span>
+																<span class="di-li-text">[beforeDay]</span>
 															</li>
 														</ul>
 													</div>
 												</div>
-												<div class="sec_bx right">
-													<div class="bx_in">
-														<div class="bx_top">
-															<div class="bx_top_inner"></div>
+												<div class="sec-box right">
+													<div class="box-in">
+														<div class="box-top">
+															<div class="box-top-inner"></div>
 														</div>
-														<ul class="di_list">
+														<ul class="di-list">
 															<li>
-																<span class="di_li_tit"><fmt:message key="vppdash.8.tot_cap" /> (kW)</span>
-																<span class="di_li_tx">[capacity]</span>
+																<span class="di-li-title"><fmt:message key="vppdash.8.tot_cap" /> (kW)</span>
+																<span class="di-li-text">[capacity]</span>
 															</li>
 															<li>
-																<span class="di_li_tit"><fmt:message key="vppdash.8.num_inv" /> (EA)</span>
-																<span class="di_li_tx">[inverterCount]</span>
+																<span class="di-li-title"><fmt:message key="vppdash.8.num_inv" /> (EA)</span>
+																<span class="di-li-text">[inverterCount]</span>
 															</li>
 														</ul>
-														<div class="di_tx_bx">
+														<div class="di-text-box">
 															<a href="javascript:void(0);"
 																onclick="pageMove('[sid]', 'alarm')">
 																<p class="tx">최근 미처리 오류 :
@@ -338,8 +338,8 @@
 													</div>
 												</div>
 											</div>
-											<div class="btn_bx clear">
-												<a href="javascript:void(0);" onclick="pageMove('[sid]', 'siteMain')" class="btn_type02 fr">대시 보드 보기 <span class="ico_arrow"></span></a>
+											<div class="btn-box clear">
+												<a href="javascript:void(0);" onclick="pageMove('[sid]', 'siteMain')" class="btn-type02 fr">대시 보드 보기 <span class="line-arrow"></span></a>
 											</div>
 										</div>
 									</div>
@@ -720,14 +720,14 @@
 			let label = `${' 현재시간<br>${ currentTime }'}`;
 			console.log(label)
 			const now = new Date().getMinutes();
-			const nowBottom = parseInt($('.realtime_time').css('bottom'), 10);
+			const nowBottom = parseInt($('.realtime-time').css('bottom'), 10);
 			
 			if (nowBottom >= 206) {
-				$(".realtime_label").html(label).css('bottom', '44px');
-				$('.realtime_time').css('bottom', '63px');
+				$(".realtime-label").html(label).css('bottom', '44px');
+				$('.realtime-time').css('bottom', '63px');
 			} else {
-				$(".realtime_label").html(label).css('bottom', 44 + ((206 / 60) * now));
-				$('.realtime_time').css('bottom', 63 + ((206 / 60) * now));
+				$(".realtime-label").html(label).css('bottom', 44 + ((206 / 60) * now));
+				$('.realtime-time').css('bottom', 63 + ((206 / 60) * now));
 			}
 		}
 	}
@@ -973,6 +973,7 @@
 						color: '#ffffff',
 						fontSize: '11px',
 						fontWeight: 400,
+						textShadow: false,
 						textOutline: 0 /* 막대 안의 라벨 수치 테두리 없애기 */
 					}
 				}
@@ -1064,7 +1065,7 @@
 						bar: {
 							dataLabels: {
 								style: {
-									fontSize: '13px'
+									fontSize: '13px',
 								}
 							}
 						}

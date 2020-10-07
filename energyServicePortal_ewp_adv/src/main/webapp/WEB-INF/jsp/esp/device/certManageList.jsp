@@ -82,7 +82,7 @@
 					sTitle: '보기',
 					mData: null,
 					render: function ( data, type, full, rowIndex ) {
-						return `<button type="button" class="btn_type" onclick="goDetail('${'${data.apply_PKG_ID}'}')">상세</button>`
+						return `<button type="button" class="btn-type" onclick="goDetail('${'${data.apply_PKG_ID}'}')">상세</button>`
 					},
 					orderable: false
 				},
@@ -119,17 +119,17 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-lg-12 clear inp_align">
+	<div class="col-lg-12 clear input-align">
 		<div class="fl">
-			<span class="tx_tit">신청 기간</span>
-			<div class="sel_calendar">
+			<span class="tx-tit">신청 기간</span>
+			<div class="sel-calendar">
 				<input type="text" id="write_date_from" class="sel fromDate" value="" autocomplete="off">
 				<input type="text" id="write_date_to" class="sel toDate" value="" autocomplete="off">
 			</div>
 		</div>
 		<div class="fl">
-			<span class="tx_tit">기기 고유정보</span>
-			<div class="sa_select">
+			<span class="tx-tit">기기 고유정보</span>
+			<div class="sa-select">
 				<div class="dropdown" id="deviceSearchType">
 					<button type="button" class="dropdown-toggle w5" data-toggle="dropdown" data-value="">
 						선택 <span class="caret"></span>
@@ -146,12 +146,12 @@
 			</div>
 		</div>
 		<div class="fl">
-			<div class="tx_inp_type">
+			<div class="text-input-type">
 				<input type="text" id="deviceSearchText" name="deviceSearchText" placeholder="입력">
 			</div>
 		</div>
 		<div class="fl">
-			<button type="button" class="btn_type" onclick="goSearch();">검색</button>
+			<button type="button" class="btn-type" onclick="goSearch();">검색</button>
 		</div>
 	</div>
 </div>

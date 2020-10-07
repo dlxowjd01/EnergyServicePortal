@@ -29,7 +29,7 @@
 							"latlng": true,
 							"tz": true,
 							"address": true,
-							"detail_info": true,
+							"detail-info": true,
 							// "utility": true,
 							"dr_info": true,
 							"vpp_info": true,
@@ -68,7 +68,7 @@
 					// 		"data":  "",
 					// 		render: function ( data, type, row ) {
 					// 			// console.log("data--", row, "type===", type)
-					// 			return '<a class="chk_type" href="javascript:void(0); onclick=""><input type="checkbox" id="' + row.idx + '" name="' + row.sid + '"><label for="' + row.idx + '"></label></a>'
+					// 			return '<a class="chk-type" href="javascript:void(0); onclick=""><input type="checkbox" id="' + row.idx + '" name="' + row.sid + '"><label for="' + row.idx + '"></label></a>'
 					// 		},
 					// 		className: "dt-body-center"
 					// 	},
@@ -90,7 +90,7 @@
 							"mData": "",
 							"mRender": function ( data, type, row )  {
 								// console.log('row==', row)
-								return '<a class="chk_type" href="javascript:void(0); onclick=""><input type="checkbox" id="' + row.idx + '" name="' + row.sid + '"><label for="' + row.idx + '"></label></a>'
+								return '<a class="chk-type" href="javascript:void(0); onclick=""><input type="checkbox" id="' + row.idx + '" name="' + row.sid + '"><label for="' + row.idx + '"></label></a>'
 							},
 							"className": "dt-body-center"
 						},
@@ -141,13 +141,13 @@
 					buttons: [
 						{
 							extend: 'copyHtml5',
-							className: "btn_type03",
+							className: "btn-type03",
 							text: '데이터 복사',
 						},
 						{
 							extend: 'print',
 							text: '전체 인쇄',
-							className: "btn_type03",
+							className: "btn-type03",
 							exportOptions: {
 								modifier: {
 									selected: null
@@ -156,27 +156,27 @@
 						},
 						{
 							extend: 'print',
-							className: "btn_type03",
+							className: "btn-type03",
 							text: '선택 인쇄'
 						},
 						{
 							extend: 'excelHtml5',
-							className: "btn_type03",
+							className: "btn-type03",
 							text: 'Excel'
 						},
 						{
 							extend: 'csvHtml5',
-							className: "btn_type03",
+							className: "btn-type03",
 							text: 'CSV'
 						},
 						{
 							extend: 'pdfHtml5',
-							className: "btn_type03",
+							className: "btn-type03",
 							text: 'PDF',
 						},
 						{
 							text: '추가',
-							className: "btn_type fr",
+							className: "btn-type fr",
 							action: function (e, node, config){
 								console.log("node===", node, "e---", e, "config===", config)
 								$('#addSiteModal').modal('show');
@@ -230,12 +230,12 @@
 <div class="row content-wrapper">
 	<div class="col-12">
 		<div class="indiv">
-			<div class="flex_group">
-				<span class="tx_tit">사업소</span>
+			<div class="flex-group">
+				<span class="tx-tit">사업소</span>
 				<div class="dropdown">
 					<button type="button" class="dropdown-toggle"
 						data-toggle="dropdown">선택<span class="caret"></span></button>
-					<ul class="dropdown-menu chk_type" role="menu" id="siteList">
+					<ul class="dropdown-menu chk-type" role="menu" id="siteList">
 						<li>
 							<a href="#" tabindex="-1">
 								<input type="checkbox" name="allSites" id="allSites" value="all">
@@ -246,18 +246,18 @@
 					</ul>
 				</div>
 			</div>
-			<div class="flex_group">
-				<span class="tx_tit">지역</span>
+			<div class="flex-group">
+				<span class="tx-tit">지역</span>
 				<div class="dropdown">
 					<button type="button" class="dropdown-toggle"
 						data-toggle="dropdown">선택<span class="caret"></span></button>
-					<ul class="dropdown-menu chk_type" role="menu">
+					<ul class="dropdown-menu chk-type" role="menu">
 						<li><a href="#"></a></li>
 					</ul>
 				</div>
 			</div>
-			<div class="flex_group">
-				<span class="tx_tit">발전 자원</span>
+			<div class="flex-group">
+				<span class="tx-tit">발전 자원</span>
 				<div class="dropdown">
 					<button type="button" class="dropdown-toggle"
 						data-toggle="dropdown">선택<span class="caret"></span></button>
@@ -269,13 +269,13 @@
 					</ul>
 				</div>
 			</div>
-			<div class="flex_group">
-				<span class="tx_tit">발전소명</span>
-				<div class="flex_start">
-					<div class="tx_inp_type">
+			<div class="flex-group">
+				<span class="tx-tit">발전소명</span>
+				<div class="flex-start">
+					<div class="text-input-type">
 						<input type="text" id="key_word" placeholder="입력">
 					</div>
-					<button type="button" class="btn_type ml-16" onclick="getDataList();">검색</button>
+					<button type="button" class="btn-type ml-16" onclick="getDataList();">검색</button>
 				</div>
 			</div>
 

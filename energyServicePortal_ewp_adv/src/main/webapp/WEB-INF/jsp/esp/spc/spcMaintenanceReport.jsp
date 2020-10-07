@@ -18,15 +18,15 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-lg-12 clear inp_align">
+		<div class="col-lg-12 clear input-align">
 			<div class="fl">
-				<span class="tx_tit">보고서 구분</span>
-				<div class="sa_select">
+				<span class="tx-tit">보고서 구분</span>
+				<div class="sa-select">
 					<div class="dropdown">
 						<button type="button" class="dropdown-toggle w5" data-toggle="dropdown">전체
 							<span class="caret"></span>
 						</button>
-						<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="type">
+						<ul class="dropdown-menu dropdown-menu-form chk-type" role="menu" id="type">
 							<li><a href="#">전체</a></li>
 							<li><a href="#">2020</a></li>
 							<li><a href="#">2019</a></li>
@@ -36,34 +36,34 @@
 				</div>
 			</div>
 			<div class="fl">
-				<span class="tx_tit">작성 일자</span>
-				<div class="sel_calendar">
+				<span class="tx-tit">작성 일자</span>
+				<div class="sel-calendar">
 					<input type="text" id="datepicker1" class="sel" value="" autocomplete="off">
 					<em></em>
 					<input type="text" id="datepicker2" class="sel" value="" autocomplete="off">
 				</div>
 			</div>
 			<div class="fl">
-				<div class="tx_inp_type">
+				<div class="text-input-type">
 					<input type="text" placeholder="입력">
 				</div>
 			</div>
 			<div class="fl">
-				<button type="submit" class="btn_type">검색</button>
+				<button type="submit" class="btn-type">검색</button>
 			</div>
 			<div class="fr">
-				<a href="#;" class="save_btn">CVS 다운로드</a>
+				<a href="#;" class="btn-save">CVS 다운로드</a>
 			</div>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="indiv">
-				<div class="btn_wrap_type">
-					<button type="button" class="btn_type">등록</button>
+				<div class="btn-wrap-type">
+					<button type="button" class="btn-type">등록</button>
 				</div>
-				<div class="spc_tbl align_type">			
-					<table class="chk_type">
+				<div class="spc-tbl align-type">			
+					<table class="chk-type">
 						<thead>
 							<tr>
 								<th>
@@ -86,7 +86,7 @@
 								</td>
 								<td>OCI 서울</td>
 								<td>SPW-TR1912-18</td>
-								<td><a href="/spc/entityDetailsBySite.do" class="tbl_link">OCI서울태양광 암사아리수 정수센터 시스템 Q.C 보고서</a></td>
+								<td><a href="/spc/entityDetailsBySite.do" class="table-link">OCI서울태양광 암사아리수 정수센터 시스템 Q.C 보고서</a></td>
 								<td>인코어드</td>
 								<td>2018-12-04</td>
 								<td>임시저장</td>
@@ -98,7 +98,7 @@
 								</td>
 								<td>OCI 서울</td>
 								<td>SPW-TR1912-18</td>
-								<td><a href="/spc/entityDetailsBySite.do" class="tbl_link">OCI서울태양광 암사아리수 정수센터 시스템 Q.C 보고서</a></td>
+								<td><a href="/spc/entityDetailsBySite.do" class="table-link">OCI서울태양광 암사아리수 정수센터 시스템 Q.C 보고서</a></td>
 								<td>인코어드</td>
 								<td>2018-12-04</td>
 								<td>임시저장</td>
@@ -178,12 +178,12 @@
 						</tbody>
 					</table>	
 				</div>
-				<div class="paging_wrap">
-					<a href="#;" class="btn_prev">prev</a>
+				<div class="pagination-wrapper">
+					<a href="#;" class="btn-prev">prev</a>
 					<strong>1</strong>
 					<a href="#;">2</a>
 					<a href="#;">3</a>
-					<a href="#;" class="btn_next">next</a>
+					<a href="#;" class="btn-next">next</a>
 				</div>
 			</div>
 		</div>

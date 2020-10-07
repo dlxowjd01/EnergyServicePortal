@@ -236,7 +236,7 @@ nav .dropdown {
 	padding: 8px 5px 5px;
 }
 
-.chk_type input[type="checkbox"] {
+.chk-type input[type="checkbox"] {
 	display: none;
 	opacity: 0;
 	position: absolute;
@@ -246,7 +246,7 @@ nav .dropdown {
 	left: -999999px;
 }
 
-.chk_type input[type="checkbox"]+label {
+.chk-type input[type="checkbox"]+label {
 	position: relative;
 	padding: 0;
 	vertical-align: middle;
@@ -256,7 +256,7 @@ nav .dropdown {
 	cursor: pointer;
 }
 
-.chk_type input[type="checkbox"]+label:before {
+.chk-type input[type="checkbox"]+label:before {
 	content: '';
 	margin-right: 10px;
 	display: inline-block;
@@ -267,12 +267,12 @@ nav .dropdown {
 	border-radius: 2px;
 }
 
-.chk_type input[type="checkbox"]:checked+label:before {
+.chk-type input[type="checkbox"]:checked+label:before {
 	background: var(--white87);
 	border: 2px solid var(--white87);
 }
 
-.chk_type input[type="checkbox"]:checked+label:after {
+.chk-type input[type="checkbox"]:checked+label:after {
 	content: '';
 	position: absolute;
 	left: 6px;
@@ -533,7 +533,7 @@ textarea:focus {
 }
 
 
-.tx_inp_type {
+.text-input-type {
 	background: var(--white20);
 	padding: 0;
 	height: 36px;
@@ -543,7 +543,7 @@ textarea:focus {
 }
 
 
-.tx_inp_type input {
+.text-input-type input {
 	position: relative;
 	padding: 0;
 	width: 100%;
@@ -557,31 +557,31 @@ textarea:focus {
 	white-space: normal;
 }
 
-.tx_inp_type>input[type="text"],
-.tx_inp_type>input[type="search"],
-.tx_inp_type>input[type="password"] {
+.text-input-type>input[type="text"],
+.text-input-type>input[type="search"],
+.text-input-type>input[type="password"] {
 	text-indent: 12px;
 }
 
 
-.tx_inp_type.unit {
+.text-input-type.unit {
 	position: relative;
 	padding-right: 30px;
 }
 
-.btn_wrap_type02 button {
+.btn-wrap-type02 button {
 	width: 109px;
 }
-.btn_wrap_type02 button + button {
+.btn-wrap-type02 button + button {
 	margin-left: 16px;
 }
 
-.setting-form .btn_wrap_type02 {
+.setting-form .btn-wrap-type02 {
 	margin-top: 0;
 	float: right;
 }
 
-.btn_type {
+.btn-type {
 	outline-style: none;
 	border: 0;
 	border-radius: 4px;
@@ -593,7 +593,7 @@ textarea:focus {
 	white-space: nowrap;
 }
 
-.btn_type03 {
+.btn-type03 {
 	outline-style: none;
 	border: 1px solid var(--white87);
 	padding: 0 12px;
@@ -606,26 +606,26 @@ textarea:focus {
 }
 
 
-.btn_type,
-.btn_type:link,
-.btn_type:visited,
-.btn_type:active {
+.btn-type,
+.btn-type:link,
+.btn-type:visited,
+.btn-type:active {
 	color: var(--white);
 }
 
-.flex_start,
-.flex_start2,
-.flex_start3 {
+.flex-start,
+.flex-start2,
+.flex-start3 {
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
 }
 
-.setting-form .flex_start .tx_inp_type.w-55 {
+.setting-form .flex-start .text-input-type.w-55 {
 	width: 55%;
 }
 
-.setting-form .input_label {
+.setting-form .input-label {
 	margin: auto;
 	padding: 10px 0;
 	white-space: nowrap;
@@ -635,7 +635,7 @@ textarea:focus {
 	vertical-align: middle;
 }
 
-.setting-form .input_label.asterisk:after {
+.setting-form .input-label.asterisk:after {
 	display: flex;
 	margin: 0 0 5% 0;
 	height: 27px;
@@ -643,12 +643,12 @@ textarea:focus {
 	color: var(--vivid-blue);
 }
 
-.setting-form .input_label.asterisk.no-symbol:after {
+.setting-form .input-label.asterisk.no-symbol:after {
 	content: none;
 }
 
-.setting-form .dropdown + .tx_inp_type,
-.setting-form .tx_inp_type + .dropdown {
+.setting-form .dropdown + .text-input-type,
+.setting-form .text-input-type + .dropdown {
 	margin-left: 12px;
 }
 
@@ -672,7 +672,7 @@ textarea:focus {
 	top: 35px;
 }
 
-.setting-form .tx_inp_type+.btn_type {
+.setting-form .text-input-type+.btn-type {
 	padding: 0 10px;
 	margin-left: 12px;
 }
@@ -700,21 +700,21 @@ textarea:focus {
 	overflow-x: hidden;
 }
 
-.setting-form .input_label {
+.setting-form .input-label {
 	display: flex;
 }
 
-.setting-form.input_label.asterisk:after {
+.setting-form.input-label.asterisk:after {
 	display: block;
 	margin: -5% 0 0 5%;
 	height: auto;
 }
 
-.setting-form .flex_start .input_label:not(:first-of-type) {
+.setting-form .flex-start .input-label:not(:first-of-type) {
 	margin-left: 30px;
 }
 
-.setting-form .input_label.offset {
+.setting-form .input-label.offset {
 	padding-left: 24px;
 }
 

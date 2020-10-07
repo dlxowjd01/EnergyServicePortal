@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/decorators/include/taglibs.jsp"%>
 							<form id="schForm" name="schForm">
-								<div class="chart_top clear">
+								<div class="chart-top clear">
 									<c:choose>
 										<c:when test="${schGbn eq 'alarm' }"><!-- 상황관제 -->
 											<h2 class="ntit fl">알림현황</h2>
@@ -18,7 +18,7 @@
 												    <li><a href="#" onclick="changeSelTerm('other');">기간설정</a></li>
 												  </ul>
 												</div>
-											<div class="sel_calendar fr">
+											<div class="sel-calendar fr">
 												<input type="text" id="datepicker1" class="sel" value="">
 												<span>-</span>
 												<input type="text" id="datepicker2" class="sel" value="">
@@ -46,12 +46,12 @@
 														    <li id="sp_1hour"><a href="#" onclick="changePeriod('hour');">1시간</a></li>
 														  </ul>
 														</div>
-														<div class="today_date fl">
+														<div class="date-today fl">
 															<span>날짜선택</span>
 															<input type="text" id="datepicker5" name="datepicker5" class="sel" value="">
 															<!-- <input type="text" id="datepicker1" name="datepicker1" class="sel" value=""> -->
 														</div>
-														<div class="search_opt fl">
+														<div class="search-option fl">
 															<span>기준부하 시간설정</span>
 															<input type="text" class="input" id="cblAmtHourFrom" name="cblAmtHourFrom" maxlength="2" value="10"
 																   style="width:60px;" onkeydown="onlyNum(event);">
@@ -66,7 +66,7 @@
 															<input id="check1" type="checkbox" class="styled">
 															<label for="check1">실시간 자동 갱신</label>
 														</div>
-														<div class="real_time fl"><span>00:00</span></div>
+														<div class="real-time fl"><span>00:00</span></div>
 														<div class="meter fl">
 															<span class="fl">계량값</span>
 															<div class="dropdown fl">
@@ -110,7 +110,7 @@
 														    <li id="sp_1month"><a href="#" onclick="changePeriod('month');">1월</a>
 														  </ul>
 														</div>
-														<div class="sel_calendar fl">
+														<div class="sel-calendar fl">
 															<span>기간설정</span>
 															<input type="text" id="datepicker1" name="datepicker1" class="sel" value="">
 															<span>-</span>
@@ -132,7 +132,7 @@
 														</div>								
 													</c:if>
 													<c:if test="${schGbn eq 'billRevenue' }">
-														<div class="sel_calendar fl">
+														<div class="sel-calendar fl">
 															<span>기간설정</span>
 															<input type="text" id="datepicker3" name="datepicker3" class="sel" value="">
 															<span>-</span>

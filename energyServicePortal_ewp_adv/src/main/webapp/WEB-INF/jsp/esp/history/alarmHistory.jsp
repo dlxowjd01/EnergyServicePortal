@@ -4,15 +4,15 @@
 <!-- 파일 업로드 폼 -->
 <form id="picupload" name="upload" method="multipart/form-data"></form>
 <div id="alarmConfirm" class="modal fade" role="dialog">
-	<div class="modal-dialog his_alarm">
+	<div class="modal-dialog history-alarm">
 		<div class="modal-content">
-			<div class="ly_wrap">
+			<div class="ly-wrapper">
 				<h2 class="ly_tit">알람 상태</h2>
-				<p class="tx_line1">"확인" 처리 하시겠습니까?</p>
+				<p class="text-line1">"확인" 처리 하시겠습니까?</p>
 			</div>
-			<div class="btn_wrap_type02">
-				<button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">아니오</button>
-				<button type="button" class="btn_type" onclick="alarmConfirmProcess();">예</button>
+			<div class="btn-wrap-type02">
+				<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close">아니오</button>
+				<button type="button" class="btn-type" onclick="alarmConfirmProcess();">예</button>
 			</div>
 		</div>
 	</div>
@@ -20,30 +20,30 @@
 
 <div id="alarmMeasure" class="modal fade" role="dialog">
 	<div class="modal-dialog">
-		<div class="modal-content alarm_modal_content">
+		<div class="modal-content alarm-modal-content">
 			<div class="modal-header">
 				<h2><fmt:message key="alertshistory.4.acknowledgement" /></h2>
 			</div>
 			<div class="modal-body">
-				<div class="ly_wrap">
-					<div class="flex_wrap_top">
-						<span class="input_label">조치 이력</span>
+				<div class="ly-wrapper">
+					<div class="flex-align-top">
+						<span class="input-label">조치 이력</span>
 						<textarea id="ticket_log" name="ticket_log" class="textarea" readonly></textarea>
 					</div>
 					<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-					<div class="flex_wrap">
-						<span class="input_label">사진 올리기</span>
-						<div class="tx_inp_type">
+					<div class="flex-wrapper">
+						<span class="input-label">사진 올리기</span>
+						<div class="text-input-type">
 							<input type="text" id="photoFile" name="photoFile" placeholder="사진 파일 이름" readonly="" autocomplete="off">
 						</div>
 						<div class="type">
-							<button type="button" id="fileUpload" class="btn_type" accept="image/*">업로드</button>
-							<input type="file" id="picture" name="filename" class="uploadBtn hidden"/>
-							<span class="upload_text ml-16 hidden"></span>
+							<button type="button" id="fileUpload" class="btn-type" accept="image/*">업로드</button>
+							<input type="file" id="picture" name="filename" class="btn-upload hidden"/>
+							<span class="upload-text ml-16 hidden"></span>
 						</div>
 					</div>
 
-					<div class="photo_load_wrap">
+					<div class="upload-photo">
 						<hr>
 						<ul>
 						</ul>
@@ -51,8 +51,8 @@
 					</div>
 					</c:if>
 
-					<div class="flex_wrap">
-						<span class="input_label">조치 여부</span>
+					<div class="flex-wrapper">
+						<span class="input-label">조치 여부</span>
 						<div class="dropdown placeholder" id="ticket_status">
 							<button type="button" class="dropdown-toggle required" placeholder="선택"
 								data-toggle="dropdown"><span class="caret"></span></button>
@@ -68,28 +68,28 @@
 					</div>
 					<hr>
 
-					<div class="flex_wrap">
-						<span class="input_label">담당자</span>
+					<div class="flex-wrapper">
+						<span class="input-label">담당자</span>
 						<div class="dropdown placeholder" id="userlist">
 							<button type="button" class="dropdown-toggle required"
 								data-toggle="dropdown">선택<span class="caret"></span></button>
 							<ul class="dropdown-menu">
 							</ul>
 						</div>
-						<div class="tx_inp_type ml-12 w200">
+						<div class="text-input-type ml-12 w200">
 							<input type="text" id="ticket_user_id" name="ticket_user_id" placeholder="직접 입력" readonly autocomplete="off">
 						</div>
 					</div>
 
 					<hr>
 
-					<div class="flex_wrap">
-						<span class="input_label">조치 메모</span>
+					<div class="flex-wrapper">
+						<span class="input-label">조치 메모</span>
 						<textarea id="memo" name="memo" class="textarea"></textarea>
 					</div>
-					<div class="btn_wrap_type02">
-						<button type="button" class="btn_type03" data-dismiss="modal">취소</button>
-						<button type="button" class="btn_type" onclick="ackProcess();">확인</button>
+					<div class="btn-wrap-type02">
+						<button type="button" class="btn-type03" data-dismiss="modal">취소</button>
+						<button type="button" class="btn-type" onclick="ackProcess();">확인</button>
 					</div>
 				</div>
 			</div>
@@ -107,10 +107,10 @@
 <div class="row history_search">
 	<div class="col-12">
 		<form id="alarmHistorySearchForm">
-			<div class="sa_select">
+			<div class="sa-select">
 				<div class="dropdown" id="site">
 					<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택해주세요.">선택해주세요<span class="caret"></span></button>
-					<ul class="dropdown-menu chk_type" role="menu" id="siteList">
+					<ul class="dropdown-menu chk-type" role="menu" id="siteList">
 						<li data-value="[sid]">
 							<a href="javascript:void(0);" tabindex="-1">
 								<input type="checkbox" id="site_[INDEX]" value="[sid]" name="site">
@@ -121,17 +121,17 @@
 				</div>
 			</div>
 
-			<div id="searchDetail" class="search_expand sa_select">
+			<div id="searchDetail" class="search-expand sa-select">
 				<button type="button" class="btn clear-btn" data-target="#searchDropdown" data-name="상세 조건" onclick="$('#searchDetail').toggleClass('open')">상세 검색<span class="caret"></span></button>
-				<div id="searchDropdown" class="dropdown-menu search_dropdown">
-					<div class="flex_start3">
-						<div class="sa_select">
-							<h2 class="tx_tit"><fmt:message key="alertshistory.1.devicetype" /></h2>
+				<div id="searchDropdown" class="dropdown-menu search-dropdown">
+					<div class="flex-start3">
+						<div class="sa-select">
+							<h2 class="tx-tit"><fmt:message key="alertshistory.1.devicetype" /></h2>
 							<div id="equipmentList" class="dropdown">
 								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
 									선택<span class="caret"></span>
 								</button>
-								<ul class="dropdown-menu chk_type" role="menu" id="device">
+								<ul class="dropdown-menu chk-type" role="menu" id="device">
 									<li data-value="[type]">
 										<a href="javascript:void(0);" tabindex="-1">
 											<input type="checkbox" id="type_[INDEX]" value="[type]" name="deviceType">
@@ -142,12 +142,12 @@
 							</div>
 						</div>
 					</div>
-					<div class="flex_start3">
-						<div class="sa_select">
-							<h2 class="tx_tit">알람 종류</h2>
+					<div class="flex-start3">
+						<div class="sa-select">
+							<h2 class="tx-tit">알람 종류</h2>
 							<div class="dropdown">
 								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택"><fmt:message key="alertshistory.1.all" /><span class="caret"></span></button>
-								<ul class="dropdown-menu chk_type" role="menu">
+								<ul class="dropdown-menu chk-type" role="menu">
 									<li>
 										<a href="javascript:void(0)" tabindex="-1">
 											<input type="checkbox" id="alarm1" value="9" name="alarm" checked>
@@ -187,11 +187,11 @@
 								</ul>
 							</div>
 						</div>
-						<div class="sa_select">
-							<h2 class="tx_tit"><fmt:message key="alertshistory.4.alertstatus" /></h2>
+						<div class="sa-select">
+							<h2 class="tx-tit"><fmt:message key="alertshistory.4.alertstatus" /></h2>
 							<div class="dropdown short" id="alarmstatus">	
 								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">미확인<span class="caret"></span></button>
-								<ul class="dropdown-menu chk_type" role="menu" id="alstatus">
+								<ul class="dropdown-menu chk-type" role="menu" id="alstatus">
 									<li>
 										<a href="javascript:void(0)" tabindex="-1">
 											<input type="checkbox" id="alstatus1" name="confirm">
@@ -207,11 +207,11 @@
 								</ul>
 							</div>
 						</div>
-						<div class="sa_select">
-							<h2 class="tx_tit"><fmt:message key="alertshistory.4.acknowledgement" /></h2>
+						<div class="sa-select">
+							<h2 class="tx-tit"><fmt:message key="alertshistory.4.acknowledgement" /></h2>
 							<div class="dropdown">
 								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">전체<span class="caret"></span></button>
-								<ul class="dropdown-menu chk_type" role="menu" id="status">
+								<ul class="dropdown-menu chk-type" role="menu" id="status">
 									<li>
 										<a href="javascript:void(0)" tabindex="-1">
 											<input type="checkbox" id="status1" name="status" value="new" checked>
@@ -252,9 +252,9 @@
 							</div>
 						</div>
 					</div>
-					<div class="flex_start3 dateField">
-						<div class="sa_select">
-							<h2 class="tx_tit"><fmt:message key="alertshistory.1.timeframe" /></h2>
+					<div class="flex-start3 dateField">
+						<div class="sa-select">
+							<h2 class="tx-tit"><fmt:message key="alertshistory.1.timeframe" /></h2>
 							<div class="dropdown short">
 								<button type="button" class="dropdown-toggle" data-toggle="dropdown">1일<span class="caret"></span></button>
 								<ul class="dropdown-menu" role="menu" id="term">
@@ -265,16 +265,16 @@
 								</ul>
 							</div>
 						</div>
-						<div class="sa_select">
-							<label class="tx_tit" for="fromDate"><fmt:message key="alertshistory.1.period" /></label>
+						<div class="sa-select">
+							<label class="tx-tit" for="fromDate"><fmt:message key="alertshistory.1.period" /></label>
 							<input type="text" id="fromDate" name="fromDate" class="sel fromDate" value="" autocomplete="off">
 						</div>
-						<div class="sa_select">
-							<label for="toDate" class="tx_tit"></label>
+						<div class="sa-select">
+							<label for="toDate" class="tx-tit"></label>
 							<input type="text" id="toDate" name="toDate" class="sel toDate" value="" autocomplete="off">
 						</div>
-						<div class="sa_select">
-							<h2 class="tx_tit">단위</h2>
+						<div class="sa-select">
+							<h2 class="tx-tit">단위</h2>
 							<div id="cycle" class="dropdown short">
 								<button type="button" class="dropdown-toggle interval" data-toggle="dropdown">선택<span class="caret"></span></button>
 								<ul class="dropdown-menu" id="detailterm">
@@ -287,14 +287,14 @@
 						</div>
 					</div>
 										
-					<div class="btn_wrap_type05">
-						<button type="button" class="btn_type03 w80" onclick="$('#searchDetail').removeClass('open')">취소</button><!--
-					--><button type="button" class="btn_type w80 ml-12" onclick="$('#searchDetail').removeClass('open')">적용</button>
+					<div class="btn-wrap-type05">
+						<button type="button" class="btn-type03 w80" onclick="$('#searchDetail').removeClass('open')">취소</button><!--
+					--><button type="button" class="btn-type w80 ml-12" onclick="$('#searchDetail').removeClass('open')">적용</button>
 					</div>
 				</div>
 
-				<div class="sa_select">
-					<button type="button" id="search" class="btn_type ml-6"><fmt:message key="alertshistory.1.update" /></button>
+				<div class="sa-select">
+					<button type="button" id="search" class="btn-type ml-6"><fmt:message key="alertshistory.1.update" /></button>
 				</div>
 			</div>
 		</form>			
@@ -304,11 +304,11 @@
 
 <div class="row">
 	<div class="col-xl-8 col-lg-9 col-md-6 col-sm-12">
-		<div class="indiv alarm_stat_wrapper">
-			<div class="alarm_header">
+		<div class="indiv alarm-stat-wrapper">
+			<div class="alarm-header">
 				<h2 class="ntit fl"><fmt:message key="alertshistory.2.alertstatus" /></h2>
-				<div class="his_inp_bx">
-					<div class="rdo_type his_rdo_bx" id="chartType">
+				<div class="history-input-box">
+					<div class="radio-type history-radio-box" id="chartType">
 						<span>
 							<input type="radio" id="rdo03_1" name="chartType" value="type" checked>
 							<label for="rdo03_1"><fmt:message key="alertshistory.2.devicetype" /></label>
@@ -326,12 +326,12 @@
 		</div>
 	</div>
 	<div class="col-xl-4 col-lg-3 col-md-6 col-sm-12">
-		<div class="indiv alarm_pie_wrapper">
+		<div class="indiv alarm-pie-wrapper">
 			<div class="inchart">
 				<div id="hchart2_2">
 				</div>
 			</div>
-			<div id="legendArea" class="chart_legend_area">
+			<div id="legendArea" class="chart-legend-wrapper">
 			</div>
 		</div>
 	</div>
@@ -339,8 +339,8 @@
 
 <div class="row">
 	<div class="col-12">
-		<div class="indiv alarm_detail_wrapper">
-			<div class="tbl_wrap_type">
+		<div class="indiv alarm-detail-wrapper">
+			<div class="table-wrap-type">
 			</div>
 		</div>
 	</div>
@@ -403,7 +403,7 @@
 		$('#fromDate').datepicker('setDate', 'today');
 		$('#toDate').datepicker('setDate', 'today');
 
-		$('.rdo_type').on('click', function () {
+		$('.radio-type').on('click', function () {
 			if ($(this).find('input').is(':checked')) { } else {
 				$(this).find('input').prop('checked', true);
 			}
@@ -471,13 +471,13 @@
 			contentType: false,
 			success: function (result) {
 				if (result.files.length > 0) {
-					liStr += '<li class="flex_start"><span class="pt_tx"><a href="' + apiHost + '/files/download/' + result.files[0].fieldname + '?oid=' + oid + '&orgFilename=' + result.files[0].originalname + '">' + result.files[0].originalname + '</a></span>';
-					liStr += '<button type="button" class="btn_close" data-time="' + new Date().toISOString() + '" value="' + result.files[0].fieldname + '" name="file_original_name">삭제</button></li>';
+					liStr += '<li class="flex-start"><span class="photo-text"><a href="' + apiHost + '/files/download/' + result.files[0].fieldname + '?oid=' + oid + '&orgFilename=' + result.files[0].originalname + '">' + result.files[0].originalname + '</a></span>';
+					liStr += '<button type="button" class="btn-close" data-time="' + new Date().toISOString() + '" value="' + result.files[0].fieldname + '" name="file_original_name">삭제</button></li>';
 				}
-				$('.photo_load_wrap ul').append(liStr);
+				$('.upload-photo ul').append(liStr);
 
-				if ($('.photo_load_wrap').css('display') == 'none') {
-					$('.photo_load_wrap').show();
+				if ($('.upload-photo').css('display') == 'none') {
+					$('.upload-photo').show();
 				}
 			},
 			error: function (error) {
@@ -561,7 +561,7 @@
 	};
 
 	const periodData = function () {
-		$('.tbl_wrap_type').empty();
+		$('.table-wrap-type').empty();
 
 		if ($(':checkbox[name="deviceType"]:checked').length == 0) {
 			alert('설비유형을 한개이상 선택해 주세요.');
@@ -573,7 +573,7 @@
 			return false;
 		}
 
-		$('.his_tbl tbody').empty();
+		$('.history-table tbody').empty();
 
 		let alarmData = "";
 		let deviceArray = new Array();
@@ -629,7 +629,7 @@
 					jsonList.push(new Array());
 				}
 				
-				$('.his_tbl').remove();
+				$('.history-table').remove();
 				
 				for(let i in data){
 					var temp = data[i];
@@ -641,15 +641,15 @@
 					data[i].message = ((isEmpty(temp.message)) ? "" : temp.message); // 알람메시지
 					
 					if (temp.confirm == false) {
-						data[i].confirm  = '<a href="javascript:alarmConfirm(\'' + temp.alarm_id + '\',\'' + temp.ticket_id + '\');" class="tbl_link" >미확인</a>'; // 알람상태
+						data[i].confirm  = '<a href="javascript:alarmConfirm(\'' + temp.alarm_id + '\',\'' + temp.ticket_id + '\');" class="table-link" >미확인</a>'; // 알람상태
 					} else {
 						data[i].confirm = '확인'; // 알람상태
 					}
 					
 					if (!(isEmpty(temp.status))) {
-						data[i].status = '<a href="javascript:updateAck(\'' + temp.alarm_id + '\',\'' + temp.ticket_id + '\');" class="tbl_link" >' + statusTemplate[temp.status] + '</a>'; // 조치상태
+						data[i].status = '<a href="javascript:updateAck(\'' + temp.alarm_id + '\',\'' + temp.ticket_id + '\');" class="table-link" >' + statusTemplate[temp.status] + '</a>'; // 조치상태
 					} else {
-						data[i].status = '<a href="javascript:createAck(\'' + temp.alarm_id + '\');" class="tbl_link" >신규</a>'; // 조치상태
+						data[i].status = '<a href="javascript:createAck(\'' + temp.alarm_id + '\');" class="table-link" >신규</a>'; // 조치상태
 					}
 					
 					if (!(isEmpty(temp.status_timestamp))) {
@@ -683,11 +683,11 @@
 	
 	const makeDiv = function (deviceType) {
 		let divStr = '';
-		divStr += '<div class="tbl_top clear">';
+		divStr += '<div class="table-top clear">';
 		divStr += '<h2 class="ntit fl">' + deviceTemplate[deviceType] + '</h2>';
-		divStr += '<button type="button" class="btn_type03 fr" onclick="alarmConfirmAll(\'' + deviceType + '\');">일괄 확인</button>';
+		divStr += '<button type="button" class="btn-type03 fr" onclick="alarmConfirmAll(\'' + deviceType + '\');">일괄 확인</button>';
 		divStr += '</div>';
-		$(".tbl_wrap_type").append(divStr);
+		$(".table-wrap-type").append(divStr);
 	}
 	
 	const makeTableHead = function (deviceType) {
@@ -705,7 +705,7 @@
 				hCell.innerHTML = '<input type="checkbox" id="alarmConfirmCheck' + deviceType + '" onclick="alarmConfirmCheckAll(\'' + deviceType + '\');"><label for="alarmConfirmCheck' + deviceType + '"></label>';
 				tRow.appendChild(hCell);
 			} else {
-				hCell.innerHTML = '<button type="button" class="btn_align">' + colList[i - 1] + '</button>';
+				hCell.innerHTML = '<button type="button" class="btn-align">' + colList[i - 1] + '</button>';
 				tRow.appendChild(hCell);
 			}
 		}
@@ -721,10 +721,10 @@
 			}
 		}
 		
-		newHeadTable.setAttribute('class', 'sort_table his_tbl chk_type');
+		newHeadTable.setAttribute('class', 'sort-table history-table chk-type');
 		newHeadTable.setAttribute('id', deviceType+'Table');
 		tbody.setAttribute('id', deviceType);
-		$(".tbl_wrap_type").append(newHeadTable);
+		$(".table-wrap-type").append(newHeadTable);
 	}
 	
 	const createAck = function (alarmId) {
@@ -779,7 +779,7 @@
 
 	//조치상태 팝업 초기화
 	const ackStatusInit = function () {
-		$('.photo_load_wrap').hide().find('li').remove();
+		$('.upload-photo').hide().find('li').remove();
 		$('#ticket_log').empty();
 		$('#memo').val('');
 		ticketLogList = '';
@@ -848,14 +848,14 @@
 				$.each(ticketFileList, function (i, el) {
 					let liStr = '';
 					if (ticketFileList.length > 0) {
-						liStr += '<li class="flex_start"><span class="pt_tx"><a href="' + apiHost + '/files/download/' + el.file_key + '?oid=' + oid + '&orgFilename=' + el.file_original_name + '">' + el.file_original_name + '</a></span>';
-						liStr += '<button type="button" class="btn_close" data-time= "' + el.update_dt + '" value="' + el.file_key + '" name="file_original_name">삭제</button></li>';
+						liStr += '<li class="flex-start"><span class="photo-text"><a href="' + apiHost + '/files/download/' + el.file_key + '?oid=' + oid + '&orgFilename=' + el.file_original_name + '">' + el.file_original_name + '</a></span>';
+						liStr += '<button type="button" class="btn-close" data-time= "' + el.update_dt + '" value="' + el.file_key + '" name="file_original_name">삭제</button></li>';
 					}
-					$('.photo_load_wrap ul').append(liStr);
+					$('.upload-photo ul').append(liStr);
 				})
 
-				if ($('.photo_load_wrap li').length > 0) {
-					$('.photo_load_wrap').show();
+				if ($('.upload-photo li').length > 0) {
+					$('.upload-photo').show();
 				}
 
 				$('#ticket_status button').html(statusTemplate[data.ticket_status] + '&nbsp;<span class="caret"></span>').data('value', data.ticket_status);
@@ -1384,7 +1384,7 @@
 		var num2 = 0;
 		var legendInner = $('#legendArea');
 		var wrapper = `
-			<ul class="chart_legend col"></ul>
+			<ul class="chart-legend col"></ul>
 		`;
 		legendInner.empty();
 		legendInner.append(wrapper);
@@ -1404,7 +1404,7 @@
 				};
 				pieSeriesData.push($temp);
 				num2++
-				var liStr = '<li><span class="bu t'+num2+'">' + key + '</span><span class="legend_val">' + val + '건</span></li>';
+				var liStr = '<li><span class="bu t'+num2+'">' + key + '</span><span class="legend-value">' + val + '건</span></li>';
 				legendInner.find("ul").append(liStr);
 			}
 		});

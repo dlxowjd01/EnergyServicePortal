@@ -115,7 +115,7 @@
 					<c:otherwise>
 						<li class="${menuMap.icon_class} menu-item">
 							<a href="javascript:void(0);">${menuName}</a>
-							<div class="sub_layer">
+							<div class="sub-layer">
 								<ul>
 									<c:forEach var="subMenu" items="${menuList}">
 										<c:set var="subMenuMap" value="${subMenu.value}"/>

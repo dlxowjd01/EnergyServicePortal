@@ -20,17 +20,17 @@
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="right">
-				<a href="#;" class="save_btn">PDF 다운로드</a>
+				<a href="#;" class="btn-save">PDF 다운로드</a>
 			</div>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="indiv">
-				<div class="tbl_top">
+				<div class="table-top">
 					<h2 class="ntit mt25">출장 이력</h2>
 				</div>
-				<div class="spc_tbl_row">
+				<div class="spc-table-row">
 					<table>
 						<colgroup>
 							<col style="width: 15%;" />
@@ -58,16 +58,16 @@
 						</tr>
 					</table>
 				</div>
-				<div class="btn_wrap_type02">
+				<div class="btn-wrap-type02">
 					<a href="/report/maintenanceReportEdit.do">수정</a>
-					<button type="button" class="btn_type03">목록</button>
+					<button type="button" class="btn-type03">목록</button>
 				</div>
 			</div>
 			<div class="indiv mt25">
-				<div class="tbl_top">
+				<div class="table-top">
 					<h2 class="ntit mt25">처리 내역</h2>
 				</div>
-				<div class="spc_tbl_row">
+				<div class="spc-table-row">
 					<table>
 						<colgroup>
 							<col style="width: 10%;" />
@@ -80,7 +80,7 @@
 						<tr>
 							<th>현장 점검</th>
 							<td>
-								<div class="img_bx">
+								<div class="img-wrapper">
 									<img src="../img/reportSample03.png" /><img src="../img/reportSample04.png" />
 								</div>
 							</td>
@@ -102,15 +102,15 @@
 						<tr>
 							<th>첨부 파일</th>
 							<td>
-								<span class="tx_file">혜원솔라 02 RTU 통신장비
+								<span class="text-file">혜원솔라 02 RTU 통신장비
 									라우터.jpg</span>
 							</td>
 						</tr>
 					</table>
 				</div>
-				<div class="btn_wrap_type02">
+				<div class="btn-wrap-type02">
 					<a href="/report/maintenanceReportEdit.do">수정</a>
-					<button type="button" class="btn_type03">목록</button>
+					<button type="button" class="btn-type03">목록</button>
 				</div>
 			</div>
 		</div>

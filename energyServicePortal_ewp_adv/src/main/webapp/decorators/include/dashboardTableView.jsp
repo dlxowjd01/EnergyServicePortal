@@ -99,7 +99,7 @@
 					data: 'toDaySky',
 					render: function (data, type, full, rowIndex) {
 						const weather = getWeatherIconClass(data);
-						return '<i class="ico_weather ' + weather + '"></i>';
+						return '<i class="ico-weather ' + weather + '"></i>';
 					},
 					width: '5%',
 					className: 'dt-body-center dt-head-center'
@@ -118,7 +118,7 @@
 					data: 'yesterDaySky',
 					render: function (data, type, full, rowIndex) {
 						const weather = getWeatherIconClass(data);
-						return '<i class="ico_weather ' + weather + '"></i>';
+						return '<i class="ico-weather ' + weather + '"></i>';
 					},
 					width: '5%',
 					className: 'dt-body-center dt-head-center'

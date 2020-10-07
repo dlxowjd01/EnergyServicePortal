@@ -123,14 +123,14 @@
 <div class="row">
 	<div class="col-lg-12">
 		<div>
-			<span class="tx_tit">보고서 구분</span>
-			<div class="sa_select">
+			<span class="tx-tit">보고서 구분</span>
+			<div class="sa-select">
 				<div class="dropdown" id="report_type">
 					<button type="button" class="dropdown-toggle w9 disabled" data-toggle="dropdown">
 						출장/조치 보고서
 						<span class="caret"></span>
 					</button>
-					<ul class="dropdown-menu chk_type" role="menu">
+					<ul class="dropdown-menu chk-type" role="menu">
 						<li data-value="1">
 							<a href="javascript:void(0);">출장/조치 보고서</a>
 						</li>
@@ -146,17 +146,17 @@
 <!--<div class="row">
 <div class="col-lg-12">
 <div class="right">
-<a href="#;" class="save_btn">PDF 다운로드</a>
+<a href="#;" class="btn-save">PDF 다운로드</a>
 </div>
 </div>
 </div>-->
 <div class="row">
 	<div class="col-12">
 		<div class="indiv" id="work_info">
-			<div class="tbl_top">
+			<div class="table-top">
 				<h2 class="ntit mt25">출장 이력</h2>
 			</div>
-			<div class="spc_tbl_row">
+			<div class="spc-table-row">
 				<table>
 					<!-- <colgroup>
 						<col style="width: 15%;" />
@@ -194,10 +194,10 @@
 			</div>
 		</div>
 		<div class="indiv mt25" id="work_detail_info">
-			<div class="tbl_top">
+			<div class="table-top">
 				<h2 class="ntit mt25">처리 내역</h2>
 			</div>
-			<div class="spc_tbl_row spc_tbl_row report_detail_box">
+			<div class="spc-table-row spc-table-row report-detail-box">
 				<table>
 					<tr>
 						<th>시스템 개요</th>
@@ -207,7 +207,7 @@
 						<th>현장 점검</th>
 						<td>
 							<div id="fileList01">
-								<p class="tx_file">
+								<p class="text-file">
 									<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">
 										<img src="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]" alt="[originalname]"/>
 									</a>
@@ -231,7 +231,7 @@
 						<th>첨부 파일</th>
 						<td>
 							<div id="fileList02">
-								<p class="tx_file">
+								<p class="text-file">
 									<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
 								</p>
 							</div>
@@ -239,14 +239,14 @@
 					</tr>
 				</table>
 			</div>
-			<div class="btn_wrap_type02">
-				<button type="button" class="btn_type03" onclick="goMoveDelete();">
+			<div class="btn-wrap-type02">
+				<button type="button" class="btn-type03" onclick="goMoveDelete();">
 					삭제
 				</button>
-				<button type="button" class="btn_type03" onclick="goMoveEdit();">
+				<button type="button" class="btn-type03" onclick="goMoveEdit();">
 					수정
 				</button>
-				<button type="button" class="btn_type03" onclick="goMoveList();">
+				<button type="button" class="btn-type03" onclick="goMoveList();">
 					목록
 				</button>
 			</div>

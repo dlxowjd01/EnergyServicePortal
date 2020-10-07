@@ -84,7 +84,7 @@
 	<ul>
 		<li class="smn1 menu-item">
 			<a href="javascript:void(0);">대시보드</a>
-			<div class="sub_layer">
+			<div class="sub-layer">
 				<ul>
 					<li><a href="/dashboard/gmain.do">통합관리 대시보드</a></li>
 				</ul>
@@ -92,7 +92,7 @@
 		</li>
 		<li class="smn2 menu-item">
 			<a href="javascript:void(0);">장치 관리</a>
-			<div class="sub_layer">
+			<div class="sub-layer">
 				<ul>
 					<li><a href="/device/deviceState.do">설비구성</a></li>
 					<li><a href="/device/collectionState.do">RTU 관리</a></li>
@@ -103,7 +103,7 @@
 		</li>
 		<li class="smn3 menu-item">
 			<a href="javascript:void(0);">이력 관리</a>
-			<div class="sub_layer">
+			<div class="sub-layer">
 				<ul>
 					<li><a href="/history/operationHistory.do">상태이력</a></li>
 					<li><a href="/energy/pvGen.do">발전이력</a></li>
@@ -113,7 +113,7 @@
 		</li>
 		<li class="smn8 menu-item">
 			<a href="javascript:void(0);">설정</a>
-			<div class="sub_layer">
+			<div class="sub-layer">
 				<ul>
 					<c:if test="${userRole ne '2'}">
 						<li><a href="/setting/userSetting.do">사용자 관리</a></li>

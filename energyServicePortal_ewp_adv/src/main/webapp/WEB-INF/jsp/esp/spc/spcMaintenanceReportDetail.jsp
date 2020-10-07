@@ -18,17 +18,17 @@
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="right">
-				<a href="#;" class="save_btn">PDF 다운로드</a>
+				<a href="#;" class="btn-save">PDF 다운로드</a>
 			</div>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="indiv">
-				<div class="tbl_top">
+				<div class="table-top">
 					<h2 class="ntit mt25">출장 이력</h2>
 				</div>
-				<div class="spc_tbl_row">			
+				<div class="spc-table-row">			
 					<table>
 						<colgroup>
 						<col style="width:15%">
@@ -56,16 +56,16 @@
 						</tr>
 					</table>	
 				</div>
-				<div class="btn_wrap_type02">
-					<button type="button" class="btn_type03">수정</button>
-					<button type="button" class="btn_type03">목록</button>
+				<div class="btn-wrap-type02">
+					<button type="button" class="btn-type03">수정</button>
+					<button type="button" class="btn-type03">목록</button>
 				</div>
 			</div>
 			<div class="indiv mt25">
-				<div class="tbl_top">
+				<div class="table-top">
 					<h2 class="ntit mt25">처리 내역</h2>
 				</div>
-				<div class="spc_tbl_row">			
+				<div class="spc-table-row">			
 					<table>
 						<colgroup>
 						<col style="width:10%">
@@ -77,7 +77,7 @@
 						</tr>
 						<tr>
 							<th>현장 점검</th>
-							<td><div class="img_bx"><img src="../img/@sample.jpg"><img src="../img/@sample.jpg"></div></td>
+							<td><div class="img-wrapper"><img src="../img/@sample.jpg"><img src="../img/@sample.jpg"></div></td>
 						</tr>
 						<tr>
 							<th>특이사항</th>
@@ -93,13 +93,13 @@
 						</tr>
 						<tr>
 							<th>첨부 파일</th>
-							<td><span class="tx_file">암사정수장 수배전반 사진_JPG (17.8 KB)</span> / download - 1회</td>
+							<td><span class="text-file">암사정수장 수배전반 사진_JPG (17.8 KB)</span> / download - 1회</td>
 						</tr>
 					</table>	
 				</div>
-				<div class="btn_wrap_type02">
-					<button type="button" class="btn_type03">수정</button>
-					<button type="button" class="btn_type03">목록</button>
+				<div class="btn-wrap-type02">
+					<button type="button" class="btn-type03">수정</button>
+					<button type="button" class="btn-type03">목록</button>
 				</div>
 			</div>
 		</div>

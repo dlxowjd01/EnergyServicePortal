@@ -13,12 +13,12 @@
 </div>
 <div class="row">
 	<div class="col-lg-3 col-md-4 col-sm-6">
-		<div class="header_drop_area w-60">
+		<div class="dropdown-wrapper w-60">
 			<div class="dropdown" id="siteList">
 				<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="사업소 선택">
 					사업소 선택<span class="caret"></span>
 				</button>
-				<ul class="dropdown-menu chk_type" role="menu" id="siteULList">
+				<ul class="dropdown-menu chk-type" role="menu" id="siteULList">
 					<li>
 						<a href="javascript:void(0);" tabindex="-1">
 							<input type="checkbox" id="site_[INDEX]" value="[sid]" name="site">
@@ -30,16 +30,16 @@
 		</div>
 	</div>
 </div>
-<div class="row content-wrapper device_row">
+<div class="row content-wrapper device-row">
 	<div class="col-lg-12 hidden" id="noDevice">
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="indiv clear">
-					<div class="chart_top clear">
+					<div class="chart-top clear">
 						<h2 class="ntit fl">설비 추가</h2>
 					</div>
 					<ul class="device-list">
-						<li class="eq_add">
+						<li class="equip-add">
 							<a href="javascript:addDeviceForm('');"></a>
 						</li>
 					</ul>
@@ -52,12 +52,12 @@
 		<div class="row" id="[typeId]">
 			<div class="col-lg-8">
 				<div class="indiv clear">
-					<div class="chart_top clear">
+					<div class="chart-top clear">
 						<h2 class="ntit fl">[typeName]</h2>
-						<div class="eq_icon fr">
-							<span class="eq_normal">정상([normal])</span>
-							<span class="eq_alert">중지([alert])</span>
-							<span class="eq_error">트립([error])</span>
+						<div class="eq-icon fr">
+							<span class="equip-normal">정상([normal])</span>
+							<span class="equip-alert">중지([alert])</span>
+							<span class="equip-error">트립([error])</span>
 						</div>
 					</div>
 					<ul class="device-list [typeClass]" id="[typeId]_List">
@@ -66,27 +66,27 @@
 				</div>
 			</div>
 			<div class="col-lg-4">
-				<div class="indiv eq_card hidden">
-					<div class="chart_top clear">
+				<div class="indiv eq-card hidden">
+					<div class="chart-top clear">
 						<h2 class="ntit fl"></h2>
 					</div>
-					<ul class="eq_card_ul clear">
+					<ul class="eq-card-ul clear">
 						[featureHead]
 					</ul>
-					<div class="inv_sec_bx">
-						<p class="inv_tit"></p>
-						<ul class="isb_in clear">
+					<div class="inv-search-box">
+						<p class="inv-title"></p>
+						<ul class="isb-in clear">
 							<li>
-								<ul class="di_list">[featureBody1]</ul>
+								<ul class="di-list">[featureBody1]</ul>
 							</li>
 							<li>
-								<ul class="di_list">[featureBody2]</ul>
+								<ul class="di-list">[featureBody2]</ul>
 							</li>
 						</ul>
 					</div>
-					<div class="eq_btn_bx">
-						<button type="button" class="btn_type04" onclick="alert('선택된 설비가 없습니다.'); return false;">설비 정보 수정</button>
-						<button type="button" class="btn_type04" onclick="alert('선택된 설비가 없습니다.'); return false;">운영 이력 조회</button>
+					<div class="eq-btn-box">
+						<button type="button" class="btn-type04" onclick="alert('선택된 설비가 없습니다.'); return false;">설비 정보 수정</button>
+						<button type="button" class="btn-type04" onclick="alert('선택된 설비가 없습니다.'); return false;">운영 이력 조회</button>
 					</div>
 				</div>
 			</div>
@@ -95,7 +95,7 @@
 </div>
 
 <div class="modal fade" id="addDeviceModal" role="dialog">
-	<div class="modal-dialog device_modal modal-lg">
+	<div class="modal-dialog device-modal modal-lg">
 		<div class="modal-content new_device">
 			<div class="modal-header stit">
 				<h2>설비 정보 수정</h2>
@@ -105,7 +105,7 @@
 					<div class="row">
 						<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
 							<div class="input-group inline-flex">
-								<label for="addSiteList" class="input_label">사업소</label>
+								<label for="addSiteList" class="input-label">사업소</label>
 								<div class="dropdown" id="addSiteList">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="사업소 선택">
 										사업소 선택<span class="caret"></span>
@@ -118,11 +118,11 @@
 								</div>
 							</div>
 							<div class="input-group inline-flex">
-								<label for="name" class="input_label">장치명</label>
-								<input class="input tx_inp_type" type="text" name="name" id="name" placeholder="입력" autocomplete="off">
+								<label for="name" class="input-label">장치명</label>
+								<input class="input text-input-type" type="text" name="name" id="name" placeholder="입력" autocomplete="off">
 							</div>
 							<div class="input-group inline-flex">
-								<label for="device_type" class="input_label">장치 타입</label>
+								<label for="device_type" class="input-label">장치 타입</label>
 								<div class="dropdown" id="device_type">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="타입 선택">
 										타입 선택<span class="caret"></span>
@@ -135,7 +135,7 @@
 								</div>
 							</div>
 							<div class="input-group inline-flex">
-								<label for="metering_type" class="input_label">계량 유형</label>
+								<label for="metering_type" class="input-label">계량 유형</label>
 								<div class="dropdown" id="metering_type">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="유형 선택">
 										유형 선택<span class="caret"></span>
@@ -157,7 +157,7 @@
 								</div>
 							</div>
 							<div class="input-group inline-flex">
-								<label for="manufacturer" class="input_label">제조사</label>
+								<label for="manufacturer" class="input-label">제조사</label>
 <%--								<div class="dropdown" id="manufacturer">--%>
 <%--									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="제조사 선택">--%>
 <%--										제조사 선택<span class="caret"></span>--%>
@@ -168,23 +168,23 @@
 <%--										</li>--%>
 <%--									</ul>--%>
 <%--								</div>--%>
-								<input type="text" id="manufacturer" name="manufacturer" class="input tx_inp_type" placeholder="제조사" autocomplete="off">
+								<input type="text" id="manufacturer" name="manufacturer" class="input text-input-type" placeholder="제조사" autocomplete="off">
 							</div>
 							<div class="input-group inline-flex">
-								<label for="capacity" class="input_label">설비 용량(kW)</label>
-								<input class="input tx_inp_type" type="text" name="capacity" id="capacity" autocomplete="off">
+								<label for="capacity" class="input-label">설비 용량(kW)</label>
+								<input class="input text-input-type" type="text" name="capacity" id="capacity" autocomplete="off">
 							</div>
 							<div class="input-group inline-flex">
-								<label for="manager" class="input_label">담당자</label>
-								<input class="input tx_inp_type" type="text" name="manager" id="manager" autocomplete="off">
+								<label for="manager" class="input-label">담당자</label>
+								<input class="input text-input-type" type="text" name="manager" id="manager" autocomplete="off">
 							</div>
 							<div class="input-group inline-flex">
-								<label for="alarm_code" class="input_label">알림 코드</label>
+								<label for="alarm_code" class="input-label">알림 코드</label>
 								<div class="dropdown" id="alarm_code">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="장치 알람 메세지 설정">
 										장치 알람 메세지 설정<span class="caret"></span>
 									</button>
-									<ul class="dropdown-menu chk_type" id="alarm_codeList">
+									<ul class="dropdown-menu chk-type" id="alarm_codeList">
 										<li>
 											<a href="javascript:void(0);" tabindex="-1">
 												<input type="checkbox" id="alarm_code_[INDEX]" value="[val]" name="alarm_code">
@@ -196,13 +196,13 @@
 							</div>
 						</div>
 						<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
-							<div class="input-group inline-flex chk_type">
-								<label for="forecasting" class="input_label">예측</label>
-								<input type="checkbox" class="input tx_inp_type" id="forecasting" value="true" name="forecasting">
+							<div class="input-group inline-flex chk-type">
+								<label for="forecasting" class="input-label">예측</label>
+								<input type="checkbox" class="input text-input-type" id="forecasting" value="true" name="forecasting">
 								<label for="forecasting"></label>
 							</div>
 							<div class="input-group inline-flex">
-								<label for="rid" class="input_label">RTU명</label>
+								<label for="rid" class="input-label">RTU명</label>
 								<div id="rid" class="dropdown">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="장치 선택">
 										장치 선택<span class="caret"></span>
@@ -215,7 +215,7 @@
 								</div>
 							</div>
 							<div class="input-group inline-flex">
-								<label for="parent_did" class="input_label">상위 장치</label>
+								<label for="parent_did" class="input-label">상위 장치</label>
 								<div id="parent_did" class="dropdown">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="장치 선택">
 										장치 선택<span class="caret"></span>
@@ -228,12 +228,12 @@
 								</div>
 							</div>
 							<div class="input-group inline-flex">
-								<label for="addDeviceDisplayType" class="input_label">표시 유형</label>
+								<label for="addDeviceDisplayType" class="input-label">표시 유형</label>
 								<div id="addDeviceDisplayType" class="dropdown">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="유형 선택">
 										유형 선택<span class="caret"></span>
 									</button>
-									<ul class="dropdown-menu chk_type">
+									<ul class="dropdown-menu chk-type">
 										<li>
 											<a href="javascript:void(0);" tabindex="-1">
 												<input type="checkbox" id="dashboard" value="true" name="dashboard">
@@ -250,7 +250,7 @@
 								</div>
 							</div>
 							<div class="input-group inline-flex">
-								<label for="product_name" class="input_label">제품명</label>
+								<label for="product_name" class="input-label">제품명</label>
 <%--								<div class="dropdown" id="alarm_set_id">--%>
 <%--									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="제품명 선택">--%>
 <%--										제품명 선택<span class="caret"></span>--%>
@@ -261,30 +261,30 @@
 <%--										</li>--%>
 <%--									</ul>--%>
 <%--								</div>--%>
-								<input type="text" id="product_name" name="product_name" class="input tx_inp_type" value="" placeholder="제품명" autocomplete="off">
+								<input type="text" id="product_name" name="product_name" class="input text-input-type" value="" placeholder="제품명" autocomplete="off">
 							</div>
 							<div class="input-group inline-flex">
-								<label for="serial_id" class="input_label">시리얼 ID</label>
-								<input class="input tx_inp_type" type="text" name="serial_id" id="serial_id" autocomplete="off">
+								<label for="serial_id" class="input-label">시리얼 ID</label>
+								<input class="input text-input-type" type="text" name="serial_id" id="serial_id" autocomplete="off">
 							</div>
 							<div class="input-group inline-flex">
-								<label for="contact" class="input_label">담당자 연락처</label>
-								<input class="input tx_inp_type" type="text" name="contact" id="contact" autocomplete="off">
+								<label for="contact" class="input-label">담당자 연락처</label>
+								<input class="input text-input-type" type="text" name="contact" id="contact" autocomplete="off">
 							</div>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-12">
 							<div class="input-group inline-flex">
-								<label for="description" class="input_label">설명</label>
+								<label for="description" class="input-label">설명</label>
 								<textarea name="addDeviceDescription" id="description" class="textarea"></textarea>
 							</div>
 						</div>
 					</div>
 				</form>
-				<div class="btn_wrap_type02">
-					<button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button>
-					<button type="button" class="btn_type" id="addDevice">등록</button>
+				<div class="btn-wrap-type02">
+					<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close">취소</button>
+					<button type="button" class="btn-type" id="addDevice">등록</button>
 				</div>
 			</div>
 		</div>
@@ -292,7 +292,7 @@
 </div>
 
 <div class="modal fade" id="manualAddDeviceModal" role="dialog">
-	<div class="modal-dialog device_modal">
+	<div class="modal-dialog device-modal">
 		<div class="modal-content manual_input">
 			<div class="modal-header stit"><h2>수기 입력</h2></div>
 			<div class="modal-body">
@@ -300,7 +300,7 @@
 					<div class="row">
 						<div class="col-12 dateField">
 							<div class="input-group inline-flex">
-								<label for="deviceType" class="input_label">구분</label>
+								<label for="deviceType" class="input-label">구분</label>
 								<div id="deviceType" class="dropdown">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 									<ul class="dropdown-menu">
@@ -314,7 +314,7 @@
 								</div>
 							</div>
 							<div class="input-group inline-flex">
-								<label for="timeInterval" class="input_label">입력 단위</label>
+								<label for="timeInterval" class="input-label">입력 단위</label>
 								<div id="timeInterval" class="dropdown">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 									<ul class="dropdown-menu">
@@ -327,8 +327,8 @@
 							</div>
 
 							<div id="timeStartGroup" class="input-group inline-flex">
-								<label for="start" class="input_label">시작</label>
-								<div class="sel_calendar">
+								<label for="start" class="input-label">시작</label>
+								<div class="sel-calendar">
 									<input type="text" id="start" name="start" class="sel customFromDate" value="" autocomplete="off" readonly>
 								</div>
 <%--								<div class="dropdown hidden" id="startHour">--%>
@@ -372,8 +372,8 @@
 							</div>
 
 							<div id="timeEndGroup" class="input-group inline-flex">
-								<label for="end" class="input_label">종료</label>
-								<div class="sel_calendar">
+								<label for="end" class="input-label">종료</label>
+								<div class="sel-calendar">
 									<input type="text" id="end" name="end"class="sel customToDate" value="" autocomplete="off" readonly>
 								</div>
 <%--								<div class="dropdown hidden" id="endHour">--%>
@@ -420,15 +420,15 @@
 					<div class="row">
 						<div class="col-12">
 							<div class="input-group inline-flex">
-								<label class="input_label">
+								<label class="input-label">
 									<a href="javascript:void(0);" onclick="setManualForm();">
 										데이터 확인
 									</a>
 								</label>
-								<button type="button" class="btn_type03 end" onclick="initManualForm();">입력 초기화</button>
+								<button type="button" class="btn-type03 end" onclick="initManualForm();">입력 초기화</button>
 							</div>
-							<div class="spc_tbl mt20">
-								<table class="ly_type">
+							<div class="spc-tbl mt20">
+								<table class="ly-type">
 									<thead>
 									<th>15분 단위</th>
 									<th>데이터 값</th>
@@ -440,9 +440,9 @@
 						</div>
 					</div>
 				</form>
-				<div class="btn_wrap_type02">
-					<button type="button" class="btn_type03" data-dismiss="modal">취소</button>
-					<button type="button" class="btn_type" onclick="saveManualForm();">저장</button>
+				<div class="btn-wrap-type02">
+					<button type="button" class="btn-type03" data-dismiss="modal">취소</button>
+					<button type="button" class="btn-type" onclick="saveManualForm();">저장</button>
 				</div>
 			</div>
 		</div>
@@ -765,7 +765,7 @@
 						let prop = featureProperties[key].headerProp;
 						prop.forEach(el => {
 							if (!(el.key == 'dname')) {
-								featureHead += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><p class="t_ti">' + el.value + '</p><p class="t_value"></p></li>';
+								featureHead += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><p class="t-title">' + el.value + '</p><p class="t-value"></p></li>';
 							}
 						});
 					}
@@ -773,15 +773,15 @@
 						let prop = featureProperties[key].bodyProp;
 						prop.forEach((el, idx) => {
 							if (idx % 2 == 0) {
-								featureBody1 += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><span class="di_li_tit">' + el.value + '</span><span class="di_li_tx"></span></li>';
+								featureBody1 += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><span class="di-li-title">' + el.value + '</span><span class="di-li-text"></span></li>';
 							} else {
-								featureBody2 += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><span class="di_li_tit">' + el.value + '</span><span class="di_li_tx"></span></li>';
+								featureBody2 += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><span class="di-li-title">' + el.value + '</span><span class="di-li-text"></span></li>';
 							}
 						});
 					}
 				}
 
-				let liTemp = `<li class="eq_add"><a href="javascript:addDeviceForm(\'${'${key}'}\');"></a></li>`;
+				let liTemp = `<li class="equip-add"><a href="javascript:addDeviceForm(\'${'${key}'}\');"></a></li>`;
 				deviceList.append(liTemp);
 
 				let typeClass;
@@ -858,7 +858,7 @@
 
 		$('#deviceStateTypeList div.row').each(function() {
 			if ($(this).prop('id') == 'SM_MANUAL') {
-				$(this).find('.eq_card .eq_btn_bx button').eq(1).html('데이터 입력');
+				$(this).find('.eq-card .eq-btn-box button').eq(1).html('데이터 입력');
 			}
 		});
 
@@ -879,58 +879,58 @@
 				dName = data[did].dname,
 				operation = 't2';
 
-				$('#' + dType + ' .eq_card').removeClass("hidden");
+				$('#' + dType + ' .eq-card').removeClass("hidden");
 				if(deviceStatus == 0){
 					// 중지
-					$('#' + dType + ' .eq_card').addClass('alert');
+					$('#' + dType + ' .eq-card').addClass('alert');
 				} else if(deviceStatus == 1){
 					// 정상
-					$('#' + dType + ' .eq_card').addClass('normal');
+					$('#' + dType + ' .eq-card').addClass('normal');
 				} else if(deviceStatus == 2) {
 					// 트립
-					$('#' + dType + ' .eq_card').addClass('error');
+					$('#' + dType + ' .eq-card').addClass('error');
 				}
 
-			$('#' + dType + ' .eq_card .ntit').text(dName);
-			$('#' + dType + ' .eq_card .inv_tit').text(dName + ' 현황');
+			$('#' + dType + ' .eq-card .ntit').text(dName);
+			$('#' + dType + ' .eq-card .inv-title').text(dName + ' 현황');
 
-			$('#' + dType + ' .eq_card .eq_card_ul li').each(function () {
+			$('#' + dType + ' .eq-card .eq-card-ul li').each(function () {
 				let liData = $(this).data('key'),
 					suffix = $(this).data('suffix');
 
 				if (liData == 'dname') {
-					$(this).find('.t_value').text(dName);
+					$(this).find('.t-value').text(dName);
 				} else {
 					if (!isEmpty(resultData) && !isEmpty(resultData[liData])) {
 						let dValue = displayNumberFixedDecimal(resultData[liData], suffix, 3, 2);
 						dValue = dValue[0] != '-' ? dValue.join(' ') : dValue[0];
-						$(this).find('.t_value').text(dValue);
+						$(this).find('.t-value').text(dValue);
 					} else {
-						$(this).find('.t_value').text('-');
+						$(this).find('.t-value').text('-');
 					}
 				}
 			});
 
-			$('#' + dType + ' .eq_card .isb_in .di_list li').each(function () {
+			$('#' + dType + ' .eq-card .isb-in .di-list li').each(function () {
 				let liData = $(this).data('key'),
 					suffix = $(this).data('suffix');
 
 				if (!isEmpty(resultData) && !isEmpty(resultData[liData])) {
 					let dValue = displayNumberFixedDecimal(resultData[liData], suffix, 3, 2);
 					dValue = dValue[0] != '-' ? dValue.join(' ') : dValue[0];
-					$(this).find('.di_li_tx').text(dValue);
+					$(this).find('.di-li-text').text(dValue);
 				} else {
-					$(this).find('.di_li_tx').text('-');
+					$(this).find('.di-li-text').text('-');
 				}
 
 			});
 
 			if (dType == 'SM_MANUAL') {
-				$('#' + dType + ' .eq_card .eq_btn_bx button').eq(1).attr('onclick', 'addManualForm("' + did + '")'); //설비 수정
+				$('#' + dType + ' .eq-card .eq-btn-box button').eq(1).attr('onclick', 'addManualForm("' + did + '")'); //설비 수정
 			} else {
-				$('#' + dType + ' .eq_card .eq_btn_bx button').eq(1).attr('onclick', 'moveOperation("' + did + '");'); //상태이력으로 이동
+				$('#' + dType + ' .eq-card .eq-btn-box button').eq(1).attr('onclick', 'moveOperation("' + did + '");'); //상태이력으로 이동
 			}
-			$('#' + dType + ' .eq_card .eq_btn_bx button').eq(0).attr('onclick', 'addDeviceForm("' + dType + '", "' + did + '")'); //설비 수정
+			$('#' + dType + ' .eq-card .eq-btn-box button').eq(0).attr('onclick', 'addDeviceForm("' + dType + '", "' + did + '")'); //설비 수정
 			
 			self.addClass("active").siblings().removeClass("active");
 
@@ -1095,7 +1095,7 @@
 									<tr>
 										<td>${'${textDate}'}</td>
 										<td>
-											<div class="tx_inp_type center edit">
+											<div class="text-input-type center edit">
 												<input id="${'${date}'}" type="text" name="${'${date}'}" value="">
 											</div>
 										</td>

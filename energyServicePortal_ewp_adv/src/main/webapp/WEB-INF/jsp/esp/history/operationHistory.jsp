@@ -57,13 +57,13 @@
 		});
 
 		//헤더 클릭
-		$('.his_tbl thead th').on('click', function (e) {
+		$('.history-table thead th').on('click', function (e) {
 			e.preventDefault();
-			var idx = $('.his_tbl thead th').index($(this)),
+			var idx = $('.history-table thead th').index($(this)),
 				order = $(this).data('order'),
 				column = $(this).data('column');
 			if (idx > 1) {
-				$('.his_tbl thead th button').removeClass('up').removeClass('down');
+				$('.history-table thead th button').removeClass('up').removeClass('down');
 				if (order == undefined || order == null || order == '') {
 					gridList.sort(function (a, b) {
 						return a[column] - b[column];
@@ -89,8 +89,8 @@
 		});
 
 		//전체 선택/전체 해제
-		$('#devices button.btn_type03').on('click', function (e) {
-			let idx = $('#devices button.btn_type03').index($(this));
+		$('#devices button.btn-type03').on('click', function (e) {
+			let idx = $('#devices button.btn-type03').index($(this));
 
 			if (idx == 0) {
 				$('[id^="device_"]').prop('checked', true);
@@ -119,13 +119,13 @@
 
 				//기존항목이 존재한다면 중복체크
 				if ($('#way').find('button').data('value') == 'l') {
-					if ($('#analyzeTag1 .tx_tit:eq(0) span').length > 0) {
+					if ($('#analyzeTag1 .tx-tit:eq(0) span').length > 0) {
 						if (duplicateTag(0)) {
 							return false;
 						}
 					}
 				} else if ($('#way').find('button').data('value') == 'r') {
-					if ($('#analyzeTag1 .tx_tit:eq(1) span').length > 0) {
+					if ($('#analyzeTag1 .tx-tit:eq(1) span').length > 0) {
 						if (duplicateTag(1)) {
 							return false;
 						}
@@ -136,7 +136,7 @@
 				}
 
 				let $txt = $('#chartDid button').text() + ': ' + $(':radio[name="column"]:checked').next('label').text() + $(':radio[name="rdValue"]:checked').next('label').text()
-				let $span = $('<span>').addClass('tag_type').append($txt).append('<button>')
+				let $span = $('<span>').addClass('tag-type').append($txt).append('<button>')
 				$span.data('deviceId', $('#chartDid button').data('value'));
 				$span.data('sid', $('#chartDid button').data('sid'));
 				$span.data('type', $('#chartDid button').data('type'));
@@ -145,9 +145,9 @@
 				$span.find('button').append('닫기');
 
 				if ($('#way').find('button').data('value') == 'l') {
-					$('#analyzeTag1 .tx_tit').eq(0).append($span);
+					$('#analyzeTag1 .tx-tit').eq(0).append($span);
 				} else {
-					$('#analyzeTag1 .tx_tit').eq(1).append($span);
+					$('#analyzeTag1 .tx-tit').eq(1).append($span);
 				}
 			} else {
 				if ($('#chartDid2 button').data('value') == '') {
@@ -189,7 +189,7 @@
 
 				let $txt = $('#chartDid2 button').text() + ': ' + $(':radio[name="column2"]:checked').next('label').text() + $(':radio[name="rdValue2"]:checked').next('label').text();
 				let $txt2 = $('#chartDid3 button').text() + ': ' + $(':radio[name="column3"]:checked').next('label').text() + $(':radio[name="rdValue3"]:checked').next('label').text();
-				let $span = $('<span>').addClass('tag_type').append($txt + '/' + $txt2).append('<button>')
+				let $span = $('<span>').addClass('tag-type').append($txt + '/' + $txt2).append('<button>')
 				$span.data('deviceIdX', $('#chartDid2 button').data('value'));
 				$span.data('keyX', $(':radio[name="column2"]:checked').val());
 				$span.data('key2X', $(':radio[name="rdValue2"]:checked').val());
@@ -208,8 +208,8 @@
 		});
 
 		//항목 삭제
-		$(document).on('click', '.tag_type button', function () {
-			$(this).parents('span.tag_type').remove();
+		$(document).on('click', '.tag-type button', function () {
+			$(this).parents('span.tag-type').remove();
 		});
 
 		$(':radio[name="summation"]').on('change', function () {
@@ -235,7 +235,7 @@
 				let index = 0;
 				let dupY = 1;
 
-				$('#analyzeTag1 .tx_tit').find('span').each(function () {
+				$('#analyzeTag1 .tx-tit').find('span').each(function () {
 					let deviceId = $(this).data('deviceId');
 					let type = $(this).data('type');
 
@@ -257,7 +257,7 @@
 
 				categories.sort(); //시간 정렬
 
-				$('#analyzeTag1 .tx_tit').eq(0).find('span').each(function () {
+				$('#analyzeTag1 .tx-tit').eq(0).find('span').each(function () {
 					let dataArr = new Array();
 
 					let keyText = $(this).data('key');
@@ -343,7 +343,7 @@
 					chartSeries.push(temp);
 
 					//양쪽이 동일할경우 체크
-					$('#analyzeTag1 .tx_tit').eq(1).find('span').each(function () {
+					$('#analyzeTag1 .tx-tit').eq(1).find('span').each(function () {
 						let keyText_1 = $(this).data('key');
 						if (keyText == keyText_1) {
 							dupY = 0;
@@ -351,7 +351,7 @@
 					});
 				});
 
-				$('#analyzeTag1 .tx_tit').eq(1).find('span').each(function () {
+				$('#analyzeTag1 .tx-tit').eq(1).find('span').each(function () {
 					let dataArr = new Array();
 
 					let keyText = $(this).data('key');
@@ -493,7 +493,7 @@
 			}
 		});
 
-		$('.save_btn').on('click', function (e) {
+		$('.btn-save').on('click', function (e) {
 			let excelName = '상태이력';
 			let $val = $('#datatable').find('tbody');
 			let cnt = $val.length;
@@ -663,16 +663,16 @@
 		);
 
 		if (typeArray.length > 0 && deviceList.length > 0) {
-			$('#devices .dropdown_cov').empty();
+			$('#devices .dropdown-cov').empty();
 
 			//선택된 사이트를 기준으로 한다.
 			$(':checkbox[name="site"]:checked').each(function () {
 				let siteNm = $(this).next().text(),
 					siteId = $(this).val(),
-					siteGrp = $('<li>').addClass('sec_li_bx');
+					siteGrp = $('<li>').addClass('sec-li-box');
 
 				siteGrp.append('<p>');
-				siteGrp.find('p').addClass('tx_li_tit').text(siteNm);
+				siteGrp.find('p').addClass('tx-li-title').text(siteNm);
 				siteGrp.append('<ul>');
 
 				$.each(deviceList, function (i, el) {
@@ -691,7 +691,7 @@
 					}
 				});
 
-				$('#devices .dropdown_cov').prepend(siteGrp);
+				$('#devices .dropdown-cov').prepend(siteGrp);
 			});
 		}
 
@@ -738,7 +738,7 @@
 			let hRow = thead.insertRow();
 			let bRow = tbody.insertRow();
 
-			targetTable.setAttribute('class', 'his_tbl');
+			targetTable.setAttribute('class', 'history-table');
 			tbody.setAttribute('id', chkVal + '_Table');
 
 			$.map(tableProperties, function (value, key) {
@@ -868,7 +868,7 @@
 		let chartDid = new Array();
 
 		$(':checkbox[name="device"]:checked').each(function () {
-			let siteNm = $(this).parents('li.sec_li_bx').find('p.tx_li_tit').text().trim(); //사이트명
+			let siteNm = $(this).parents('li.sec-li-box').find('p.tx-li-title').text().trim(); //사이트명
 			let deviceNm = $(this).next().text().trim();
 
 			chartDid.push({
@@ -911,7 +911,7 @@
 				}
 			});
 		} else {
-			$('#analyzeTag1 .tx_tit:eq(' + i + ') span').each(function () {
+			$('#analyzeTag1 .tx-tit:eq(' + i + ') span').each(function () {
 				let spanDid = $(this).data('deviceId');
 				let spanColumn = $(this).data('key');
 				let spanRdVal = $(this).data('key2');
@@ -1121,9 +1121,9 @@
 <div class="row">
 	<div class="col-12">
 		<form id="operationSearchForm">
-			<div class="dropdown sa_select" id="siteList">
+			<div class="dropdown sa-select" id="siteList">
 				<button type="button" class="dropdown-toggle w1" data-toggle="dropdown" data-name="사업소 선택">사업소 선택<span class="caret"></span></button>
-				<ul class="dropdown-menu chk_type" role="menu" id="siteULList">
+				<ul class="dropdown-menu chk-type" role="menu" id="siteULList">
 					<li data-value="[sid]">
 						<a href="javascript:void(0);" tabindex="-1">
 							<input type="checkbox" id="site_[INDEX]" value="[sid]" name="site">
@@ -1133,14 +1133,14 @@
 				</ul>
 			</div>
 
-			<div id="searchDetail" class="search_expand sa_select">
+			<div id="searchDetail" class="search-expand sa-select">
 				<button type="button" class="btn clear-btn" data-target="#searchDropdown" data-name="상세 검색" onclick="$('#searchDetail').toggleClass('open')">상세 검색<span class="caret"></span></button>
-				<div id="searchDropdown" class="dropdown-menu search_dropdown">
-					<h2 class="tx_tit"><fmt:message key="statushistory.1.devicetype" /></h2>
-					<div class="flex_start">
+				<div id="searchDropdown" class="dropdown-menu search-dropdown">
+					<h2 class="tx-tit"><fmt:message key="statushistory.1.devicetype" /></h2>
+					<div class="flex-start">
 						<div class="dropdown" id="deviceType"><!--
 						--><button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="설비유형 선택">설비유형 선택<span class="caret"></span></button><!--
-						--><ul class="dropdown-menu chk_type" role="menu" id="typeULList">
+						--><ul class="dropdown-menu chk-type" role="menu" id="typeULList">
 								<li data-value="[type]">
 									<a href="javascript:void(0);" tabindex="-1">
 										<input type="checkbox" id="type_[INDEX]" value="[type]" name="type">
@@ -1151,32 +1151,32 @@
 					--></div>
 						<div class="dropdown ml-16" id="devices"><!--
 						--><button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="복수 선택"><fmt:message key="statushistory.1.multiple.select" /><span class="caret"></span></button><!--
-						--><div class="dropdown-menu dropdown-menu-form chk_type"><!--
-							 --><ul class="dropdown_cov clear"></ul>
-								<div class="li_btn_bx clear"><!--
+						--><div class="dropdown-menu dropdown-menu-form chk-type"><!--
+							 --><ul class="dropdown-cov clear"></ul>
+								<div class="li-btn-box clear"><!--
 								--><div class="fl"><!--
-									--><button type="button" class="btn_type03"><fmt:message key="statushistory.1.selectall" /></button><!--
-									--><button type="button" class="btn_type03"><fmt:message key="statushistory.1.clearall" /></button><!--
+									--><button type="button" class="btn-type03"><fmt:message key="statushistory.1.selectall" /></button><!--
+									--><button type="button" class="btn-type03"><fmt:message key="statushistory.1.clearall" /></button><!--
 								--></div>
-									<div class="fr"><button type="button" class="btn_type"><fmt:message key="statushistory.1.apply" /></button></div>
+									<div class="fr"><button type="button" class="btn-type"><fmt:message key="statushistory.1.apply" /></button></div>
 								</div>
 							</div>
 						</div>
 					</div>
 
-					<div class="flex_start2 mt20">
-						<div class="sa_select">
-							<h2 class="tx_tit"><fmt:message key="statushistory.1.timeframe" /></h2>
-							<label for="fromDate" class="tx_tit sr-only">시작일</label>
+					<div class="flex-start2 mt20">
+						<div class="sa-select">
+							<h2 class="tx-tit"><fmt:message key="statushistory.1.timeframe" /></h2>
+							<label for="fromDate" class="tx-tit sr-only">시작일</label>
 							<input type="text" id="fromDate" name="fromDate" class="sel fromDate" value="" autocomplete="off">
 						</div>
 						<div class="">
-							<h2 class="tx_tit"></h2>
-							<label for="toDate" class="tx_tit sr-only">마지막일</label>
+							<h2 class="tx-tit"></h2>
+							<label for="toDate" class="tx-tit sr-only">마지막일</label>
 							<input type="text" id="toDate" name="toDate" class="sel toDate" value="" autocomplete="off">
 						</div>
 						<div class="dropdown" id="interval">
-							<h2 class="tx_tit">단위</h2>
+							<h2 class="tx-tit">단위</h2>
 							<button type="button" class="dropdown-toggle w3" data-toggle="dropdown" data-value="15min" data-name="15분">15분<span class="caret"></span></button>
 							<ul class="dropdown-menu">
 								<li data-value="1min"><a href="javascript:void(0);">1분</a></li>
@@ -1189,46 +1189,46 @@
 						</div>
 					</div>
 					
-					<div class="btn_wrap_type05">
-						<button type="button" class="btn_type03 w80" onclick="$('#searchDetail').removeClass('open')">취소</button><!--
-					--><button type="button" class="btn_type w80 ml-12" onclick="$('#searchDetail').removeClass('open')">적용</button>
+					<div class="btn-wrap-type05">
+						<button type="button" class="btn-type03 w80" onclick="$('#searchDetail').removeClass('open')">취소</button><!--
+					--><button type="button" class="btn-type w80 ml-12" onclick="$('#searchDetail').removeClass('open')">적용</button>
 					</div>
 				</div>
 			</div>
 		
-			<button type="button" id="search" class="btn_type ml-6"><fmt:message key="statushistory.1.update" /></button>
-			<a href="#;" class="save_btn fr">데이터저장</a>
+			<button type="button" id="search" class="btn-type ml-6"><fmt:message key="statushistory.1.update" /></button>
+			<a href="#;" class="btn-save fr">데이터저장</a>
 		</form>
 	</div>
 </div>
 
 <div class="row">
 	<div class="col-12">
-		<div class="indiv operation_table_wrap">
+		<div class="indiv table-operation-wrapper">
 			<div class="header-wrapper">
-				<h2 class="fl s_tit"><fmt:message key="statushistory.2.selectdevice" /></h2>
-<%--				<a href="javascript:void(0);" class="btn_type02 fr">분석 조건 저장</a>--%>
+				<h2 class="fl sm-title"><fmt:message key="statushistory.2.selectdevice" /></h2>
+<%--				<a href="javascript:void(0);" class="btn-type02 fr">분석 조건 저장</a>--%>
 			</div>
 			<div class="his_chart_top clear">
 				<!-- 기본 항목 -->
 				<div class="clear">
 					<div class="fl mr-12" id="analyzeDiv1">
-						<div class="sa_select pb-10">
+						<div class="sa-select pb-10">
 							<div class="dropdown" id="chartDid">
 								<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="설비명 선택">설비명 선택<span class="caret"></span></button>
 								<ul class="dropdown-menu" id="chartDidUl"><li data-value="[val]" data-sid="[sid]" data-type="[type]"><a href="javascript:void(0);">[siteDevice]</a></li></ul>
 							</div>
 						</div>
-						<div class="sa_select pb-10">
+						<div class="sa-select pb-10">
 							<div class="dropdown">
 								<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="설비속성 선택">설비속성 선택<span class="caret"></span></button>
-								<ul class="dropdown-menu rdo_type" role="menu" id="columnLi"><li data-value="[key]"><a href="javascript:void(0);" tabindex="-1"><input type="radio" id="column[INDEX]" name="column" value="[key]"><label for="column[INDEX]">[value]</label></a></li></ul>
+								<ul class="dropdown-menu radio-type" role="menu" id="columnLi"><li data-value="[key]"><a href="javascript:void(0);" tabindex="-1"><input type="radio" id="column[INDEX]" name="column" value="[key]"><label for="column[INDEX]">[value]</label></a></li></ul>
 							</div>
 						</div>
-						<div class="sa_select pb-10">
+						<div class="sa-select pb-10">
 							<div class="dropdown">
 								<button type="button" class="dropdown-toggle w4" data-toggle="dropdown" data-vlue="mean" data-name="평균"><fmt:message key="statushistory.2.average" /> <span class="caret"></span></button>
-								<ul class="dropdown-menu rdo_type" role="menu">
+								<ul class="dropdown-menu radio-type" role="menu">
 									<li data-value="max">
 										<a href="javascript:void(0);" tabindex="-1">
 											<input type="radio" id="rdValue1" name="rdValue" value="max">
@@ -1250,7 +1250,7 @@
 								</ul>
 							</div>
 						</div>
-						<div class="sa_select pb-10">
+						<div class="sa-select pb-10">
 							<div class="dropdown" id="way">
 								<button type="button" class="dropdown-toggle w5" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 								<ul class="dropdown-menu">
@@ -1263,8 +1263,8 @@
 
 					<div id="analyzeDiv2" style="display:none;">
 						<div class="fl">
-							<span class="tx_tit">x축</span>
-							<div class="sa_select">
+							<span class="tx-tit">x축</span>
+							<div class="sa-select">
 								<div class="dropdown" id="chartDid2">
 									<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="설비명 선택">설비명 선택<span class="caret"></span></button>
 									<ul class="dropdown-menu" id="chartDidUl2">
@@ -1272,10 +1272,10 @@
 									</ul>
 								</div>
 							</div>
-							<div class="sa_select">
+							<div class="sa-select">
 								<div class="dropdown" id="columnDrop2">
 									<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="설비속성 선택">설비속성 선택<span class="caret"></span></button>
-									<ul class="dropdown-menu chk_type" role="menu" id="columnLi2">
+									<ul class="dropdown-menu chk-type" role="menu" id="columnLi2">
 										<li data-value="[key]">
 											<a href="javascript:void(0);" tabindex="-1">
 												<input type="radio" id="column02_[INDEX]" name="column2" value="[key]">
@@ -1285,10 +1285,10 @@
 									</ul>
 								</div>
 							</div>
-							<div class="sa_select">
+							<div class="sa-select">
 								<div class="dropdown">
 									<button type="button" class="dropdown-toggle w4" data-toggle="dropdown" data-value="mean" data-name="평균"><fmt:message key="statushistory.2.average" /><span class="caret"></span></button>
-									<ul class="dropdown-menu rdo_type " role="menu">
+									<ul class="dropdown-menu radio-type " role="menu">
 										<li data-value="max">
 											<a href="javascript:void(0);" tabindex="-1">
 												<input type="radio" id="rdValue2_01" name="rdValue2" value="max">
@@ -1312,8 +1312,8 @@
 							</div>
 						</div>
 						<div class="fl">
-							<span class="tx_tit">y축</span>
-							<div class="sa_select">
+							<span class="tx-tit">y축</span>
+							<div class="sa-select">
 								<div class="dropdown" id="chartDid3">
 									<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="설비명 선택">
 										설비명 선택<span class="caret"></span>
@@ -1323,10 +1323,10 @@
 									</ul>
 								</div>
 							</div>
-							<div class="sa_select">
+							<div class="sa-select">
 								<div class="dropdown" id="columnDrop3">
 									<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="설비속성 선택">설비속성 선택<span class="caret"></span></button>
-									<ul class="dropdown-menu chk_type" role="menu" id="columnLi3">
+									<ul class="dropdown-menu chk-type" role="menu" id="columnLi3">
 										<li>
 											<a href="javascript:void(0);" data-value="[key]" tabindex="-1">
 												<input type="radio" id="column03_[INDEX]" name="column3" value="[key]">
@@ -1336,10 +1336,10 @@
 									</ul>
 								</div>
 							</div>
-							<div class="sa_select">
+							<div class="sa-select">
 								<div class="dropdown">
 									<button type="button" class="dropdown-toggle w4" data-toggle="dropdown" data-value="mean" data-name="평균"><fmt:message key="statushistory.2.average" /><span class="caret"></span></button>
-									<ul class="dropdown-menu rdo_type" role="menu">
+									<ul class="dropdown-menu radio-type" role="menu">
 										<li data-value="max">
 											<a href="javascript:void(0);" tabindex="-1">
 												<input type="radio" id="rdValue3_1" name="rdValue3" value="max">
@@ -1366,13 +1366,13 @@
 
 					<!-- 버튼 -->
 					<div class="fl">
-						<button type="button" class="btn_type" id="chartAdd"><fmt:message key="statushistory.2.additem" /></button>
-						<button type="button" class="btn_type" id="chartDraw"><fmt:message key="statushistory.2.create" /></button>
+						<button type="button" class="btn-type" id="chartAdd"><fmt:message key="statushistory.2.additem" /></button>
+						<button type="button" class="btn-type" id="chartDraw"><fmt:message key="statushistory.2.create" /></button>
 					</div>
 
 					<!-- 우측 항목 -->
-					<div class="fr his_inp_bx">
-						<div class="rdo_type his_rdo_bx">
+					<div class="fr history-input-box">
+						<div class="radio-type history-radio-box">
 							<span>
 								<input type="radio" id="analyze1" name="analyze" value="시계열 분석" checked>
 								<label for="analyze1"><fmt:message key="statushistory.2.time_series" /></label>
@@ -1383,10 +1383,10 @@
 							</span>
 						</div>
 
-						<div class="sa_select">
+						<div class="sa-select">
 							<div class="dropdown" id="summation">
 								<button type="button" class="dropdown-toggle w6" data-toggle="dropdown" data-value="siteAccrue"><fmt:message key="statushistory.2.noselect" /><span class="caret"></span></button>
-								<ul class="dropdown-menu rdo_type">
+								<ul class="dropdown-menu radio-type">
 									<li>
 										<a href="javascript:void(0);" data-value="option1" tabindex="-1">
 											<input type="radio" id="summation1" name="summation" value="siteAccrue">
@@ -1425,19 +1425,19 @@
 				</div>
 				<br>
 				<!-- 시계열 분석 -->
-				<div class="tag_bx clear" id="analyzeTag1">
-					<div class="fl"><span class="tx_tit"><fmt:message key="statushistory.2.y_left" /></span></div>
-					<div class="fl"><span class="tx_tit"><fmt:message key="statushistory.2.y_right" /></span></div>
+				<div class="tag-box clear" id="analyzeTag1">
+					<div class="fl"><span class="tx-tit"><fmt:message key="statushistory.2.y_left" /></span></div>
+					<div class="fl"><span class="tx-tit"><fmt:message key="statushistory.2.y_right" /></span></div>
 				</div>
 				<!-- 상관 분석 -->
-				<div class="tag_bx clear" id="analyzeTag2">
+				<div class="tag-box clear" id="analyzeTag2">
 					<div class="fl"></div>
 				</div>
 			</div>
 			<div class="inchart"><div id="hchart2"></div></div>
 		</div>
-		<div class="indiv operation_table_wrap">
-			<div class="usage_chart_table" id="datatable"></div>
+		<div class="indiv table-operation-wrapper">
+			<div class="usage-chart-table" id="datatable"></div>
 		</div>
 	</div>
 </div>

@@ -5,37 +5,37 @@
 	<div class="col-lg-12">
 		<h1 class="page-header">발전 예측</h1>
 	</div>
-	<div class="header_drop_area col-lg-2">
+	<div class="dropdown-wrapper col-lg-2">
 		<div class="dropdown" id="siteList">
 			<button type="button" class="dropdown-toggle" data-toggle="dropdown">
 				<fmt:message key="genforecast.1.select" /><span class="caret"></span>
 			</button>
-			<ul class="dropdown-menu chk_type"></ul>
+			<ul class="dropdown-menu chk-type"></ul>
 		</div>
 	</div>
 </div>
 <div class="row">
 	<div class="col-lg-3 col-md-4">
-		<div class="indiv diagnosis_chart">
+		<div class="indiv chart-diagnosis">
 			<h2 class="ntit"><fmt:message key="genforecast.2.forecast_summary" /></h2>
-			<div class="value_area">
-				<h3 class="value_tit"><fmt:message key="genforecast.2.actual" /></h3>
-				<p class="value_num"></p>
+			<div class="value-wrapper">
+				<h3 class="value-title"><fmt:message key="genforecast.2.actual" /></h3>
+				<p class="value-num"></p>
 			</div>
-			<div class="value_area">
-				<h3 class="value_tit"><fmt:message key="genforecast.2.forecasted" /></h3>
-				<p class="value_num"></p>
+			<div class="value-wrapper">
+				<h3 class="value-title"><fmt:message key="genforecast.2.forecasted" /></h3>
+				<p class="value-num"></p>
 			</div>
-			<div class="value_area">
-				<h3 class="value_tit"><fmt:message key="genforecast.2.forecast_err_average" /></h3>
-				<p class="value_num"></p>
+			<div class="value-wrapper">
+				<h3 class="value-title"><fmt:message key="genforecast.2.forecast_err_average" /></h3>
+				<p class="value-num"></p>
 			</div>
-			<div class="toggle_bx">
-				<div class="tb_area clear">
-					<p class="tb_tx fl"><fmt:message key="genforecast.2.forecast_err_method" /></p>
-					<button type="button" class="tb_fold_btn fr">펼치기</button>
+			<div class="toggle-box">
+				<div class="table-area clear">
+					<p class="table-text fl"><fmt:message key="genforecast.2.forecast_err_method" /></p>
+					<button type="button" class="table-fold-btn fr">펼치기</button>
 				</div>
-				<div class="tb_fold_div">
+				<div class="table-fold-container">
 					<div class="dropdown" id="measure">
 						<button type="button" class="dropdown-toggle w8" data-toggle="dropdown"
 							data-value="NMAE">
@@ -49,7 +49,7 @@
 							<li data-value="RRMSE"><a href="javascript:void(0);">RRMSE</a></li>
 						</ul>
 					</div>
-					<p class="tb_tx">오차 계산 데이터 필터</p>
+					<p class="table-text">오차 계산 데이터 필터</p>
 					<div class="dropdown mb-10" id="ignore_ref">
 						<button type="button" class="dropdown-toggle" data-toggle="dropdown">
 							용량 대비 발전량 % 이상<span class="caret"></span>
@@ -66,17 +66,17 @@
 							</li>
 						</ul>
 					</div>
-					<div class="flex_wrapper">
-						<div class="tx_inp_type unit w-100">
+					<div class="flex-wrapper">
+						<div class="text-input-type unit w-100">
 							<input type="number" name="ignore_tolerance1" />
 							<span>%</span>
 						</div>
-						<div class="tx_inp_type unit t1 w-100">
+						<div class="text-input-type unit t1 w-100">
 							<input type="number" name="ignore_tolerance2" />
 							<span>kWh</span>
 						</div>
 					</div>
-					<button type="button" class="btn_type" id="application">
+					<button type="button" class="btn-type" id="application">
 						<fmt:message key="genforecast.2.apply" />
 					</button>
 				</div>
@@ -84,34 +84,34 @@
 		</div>
 	</div>
 	<div class="col-lg-9 col-md-8">
-		<div class="indiv diagnosis_chart">
-			<div class="chart_top">
+		<div class="indiv chart-diagnosis">
+			<div class="chart-top">
 				<div id="deviceType">
-					<span class="tx_tit"><fmt:message key="genforecast.3.measured_data" /></span>
-					<div class="sa_select">
+					<span class="tx-tit"><fmt:message key="genforecast.3.measured_data" /></span>
+					<div class="sa-select">
 						<div class="dropdown">
 							<button type="button" class="dropdown-toggle w7" type="button" data-toggle="dropdown" data-name="복수 선택">
 								<fmt:message key="genforecast.3.multiple_selection" /><span class="caret"></span>
 							</button>
-							<div class="dropdown-menu chk_type"><!--
-							--><ul class="dropdown_cov clear selectDevices"></ul><!--
-							--><div class="li_btn_bx clear">
+							<div class="dropdown-menu chk-type"><!--
+							--><ul class="dropdown-cov clear selectDevices"></ul><!--
+							--><div class="li-btn-box clear">
 									<div class="fl">
-										<button type="button" class="btn_type03"><fmt:message key="genforecast.3.selectall" /></button>
-										<button type="button" class="btn_type03"><fmt:message key="genforecast.3.clearall" /></button>
+										<button type="button" class="btn-type03"><fmt:message key="genforecast.3.selectall" /></button>
+										<button type="button" class="btn-type03"><fmt:message key="genforecast.3.clearall" /></button>
 									</div>
 									<div class="end">
-										<button type="button" class="btn_type fr"><fmt:message key="genforecast.3.apply" /></button>
+										<button type="button" class="btn-type fr"><fmt:message key="genforecast.3.apply" /></button>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="inline_flex">
+				<div class="inline-flex">
 					<div class="period">
-						<span class="tx_tit">기간</span>
-						<div class="sa_select">
+						<span class="tx-tit">기간</span>
+						<div class="sa-select">
 							<div class="dropdown" id="period">
 								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="오늘">
 									<fmt:message key="genforecast.3.today" /><span class="caret"></span>
@@ -127,16 +127,16 @@
 					</div>
 
 					<div class="duration" id="dateArea">
-						<span class="tx_tit"><fmt:message key="genforecast.3.period" /></span>
-						<div class="sel_calendar">
+						<span class="tx-tit"><fmt:message key="genforecast.3.period" /></span>
+						<div class="sel-calendar">
 							<input type="text" id="fromDate" class="sel fromDate" value="" autocomplete="off" readonly /></div>
-						<div class="sel_calendar">
+						<div class="sel-calendar">
 							<input type="text" id="toDate" class="sel toDate" value="" autocomplete="off" readonly /></div>
 					</div>
 
 					<div class="unit" id="cycle">
-						<span class="tx_tit">단위</span>
-						<div class="sa_select">
+						<span class="tx-tit">단위</span>
+						<div class="sa-select">
 							<div class="dropdown" id="interval">
 								<button type="button" class="dropdown-toggle w3" data-toggle="dropdown">
 									<fmt:message key="genforecast.3.term" /><span class="caret"></span>
@@ -150,12 +150,12 @@
 							</div>
 						</div>
 					</div>
-					<button type="button" class="btn_type" id="renderBtn"><fmt:message key="genforecast.3.update" /></button>
+					<button type="button" class="btn-type" id="renderBtn"><fmt:message key="genforecast.3.update" /></button>
 				</div>
 			</div>
-			<a href="javascript:void(0);" class="chart_change_column" id="changeChart">그래프</a>
+			<a href="javascript:void(0);" class="link-chart-change" id="changeChart">그래프</a>
 			<div class="inchart">
-				<p class="tx_time"></p>
+				<p class="text-time"></p>
 				<div id="chart2"></div>
 			</div>
 		</div>
@@ -163,20 +163,20 @@
 </div>
 
 
-<div class="row pv_chart_table">
+<div class="row chart-pv-table">
 	<div class="col-lg-12">
-		<div class="indiv diagnosis_table">
-			<div class="tbl_save_bx">
-				<a href="javascript:void(0);" class="save_btn"><fmt:message key="genforecast.4.dataextracts" /></a>
+		<div class="indiv table-diagnosis">
+			<div class="table-save-box">
+				<a href="javascript:void(0);" class="btn-save"><fmt:message key="genforecast.4.dataextracts" /></a>
 			</div>
-			<div class="tbl_top clear">
+			<div class="table-top clear">
 				<h2 class="ntit fl"><fmt:message key="genforecast.4.datatable" /></h2>
 				<ul class="fr">
-					<li><a href="javascript:void(0);" class="fold_btn">표접기</a></li>
+					<li><a href="javascript:void(0);" class="btn-fold">표접기</a></li>
 				</ul>
 			</div>
-			<div class="tbl_wrap">
-				<div class="fold_div" id="pc_use"></div>
+			<div class="table-wrapper">
+				<div class="fold-box" id="table-desktop"></div>
 			</div>
 		</div>
 	</div>
@@ -207,8 +207,8 @@
 		siteList(); //사이트 조회
 
 		//전체 선택/전체 해제
-		$('#deviceType button.btn_type03').on('click', function (e) {
-			var idx = $('#deviceType button.btn_type03').index($(this));
+		$('#deviceType button.btn-type03').on('click', function (e) {
+			var idx = $('#deviceType button.btn-type03').index($(this));
 
 			if (idx == 0) {
 				$(':checkbox[name="device"]').prop('checked', true);
@@ -236,9 +236,9 @@
 			}
 		});
 
-		$('.tb_fold_btn').click(function () {
-			var tbl_height = $(".tb_fold_div").height();
-			$('.tb_fold_div').slideToggle();
+		$('.table-fold-btn').click(function () {
+			var tbl_height = $(".table-fold-container").height();
+			$('.table-fold-container').slideToggle();
 			$(this).toggleClass("on");
 			$(this).text($(this).text() == '내용접기' ? '펼치기' : '내용접기');
 		});
@@ -287,16 +287,16 @@
 			chartMakeData();
 		});
 
-		$('.save_btn').on('click', function (e) {
+		$('.btn-save').on('click', function (e) {
 			let excelName = '발전예측';
-			let $val = $('#pc_use').find('tbody');
+			let $val = $('#table-desktop').find('tbody');
 			let cnt = $val.length;
 
 			if (cnt < 1) {
 				alert('다운받을 데이터가 없습니다.');
 			} else {
 				if (confirm('엑셀로 저장하시겠습니까?')) {
-					tableToExcel('pc_use', excelName, e);
+					tableToExcel('table-desktop', excelName, e);
 				}
 			}
 		});
@@ -388,19 +388,19 @@
 			traditional: true,
 			data: JSON.stringify(data),
 			success: function (result) {
-				$('.value_num').eq(2).empty();
+				$('.value-num').eq(2).empty();
 				if (result != null && result != '' && result.message == 'OK') {
 					let calWat = result.value;
 					if (calWat != null) {
-						$('.value_num').eq(2).append('<span class="num">' + calWat.toFixed(2) + '</span>%');
+						$('.value-num').eq(2).append('<span class="num">' + calWat.toFixed(2) + '</span>%');
 					} else {
 						alert('예측 오차 계산의 비교 대상 데이터가 없습니다.');
-						$('.value_num').eq(2).append('<span class="num"> </span>%');
+						$('.value-num').eq(2).append('<span class="num"> </span>%');
 					}
 				}
 			},
 			error: function (error) {
-				$('.value_num').eq(2).empty();
+				$('.value-num').eq(2).empty();
 				console.error(error);
 			}
 		});
@@ -427,7 +427,7 @@
 		$('#deviceType .dropdown-toggle').empty().append('복수 선택').append('<span class="caret"></span>');
 
 		if ($(':checkbox[name="site"]:checked').length > 0) {
-			$('#deviceType .sec_li_bx').remove();
+			$('#deviceType .sec-li-box').remove();
 			$(':checkbox[name="site"]:checked').each(function () {
 				let sid = $(this).val(),
 					sNm = $(this).next('label').text();
@@ -443,9 +443,9 @@
 					success: function (result) {
 						let devices = result;
 						if (devices.length > 0) {
-							let siteGrp = $('<div>').addClass('sec_li_bx');
+							let siteGrp = $('<div>').addClass('sec-li-box');
 							siteGrp.append('<p>');
-							siteGrp.find('p').addClass('tx_li_tit').text(sNm);
+							siteGrp.find('p').addClass('tx-li-title').text(sNm);
 							siteGrp.append('<ul>');
 
 							let chargeArr = new Array();
@@ -741,7 +741,7 @@
 	}
 
 	function drawPage() {
-		$('table.pc_use tbody').empty();
+		$('table.table-desktop tbody').empty();
 
 		let interval = $('#interval button').data('value');
 
@@ -751,9 +751,9 @@
 		let totalArr = new Array();
 		if (interval == '15min' || interval == 'hour') {
 			let dateVal = '';
-			let tableTemp = $('<div class="chart_table">').append('<table class="pc_use">');
+			let tableTemp = $('<div class="chart-table">').append('<table class="table-desktop">');
 			let tr = $('<tr>');
-			$('div.chart_table').remove();
+			$('div.chart-table').remove();
 
 			$.each(standard, function (i, el) {
 				let th = $('<th>');
@@ -793,10 +793,10 @@
 							color++;
 						}
 					});
-					$('div.fold_div').append(tableTemp);
+					$('div.fold-box').append(tableTemp);
 
 					//값 초기화.
-					tableTemp = $('<div class="chart_table">').append('<table class="pc_use">');
+					tableTemp = $('<div class="chart-table">').append('<table class="table-desktop">');
 					tr = $('<tr>');
 					th = $('<th>');
 					dateVal = el.substring(0, 8);
@@ -816,9 +816,9 @@
 			});
 		} else if (interval == 'day') {
 			let dateVal = '';
-			let tableTemp = $('<div class="chart_table">').append('<table class="pc_use">');
+			let tableTemp = $('<div class="chart-table">').append('<table class="table-desktop">');
 			let tr = $('<tr>');
-			$('div.chart_table').remove();
+			$('div.chart-table').remove();
 
 			$.each(standard, function (i, el) {
 				let th = $('<th>');
@@ -853,7 +853,7 @@
 								color++;
 							}
 						});
-						$('div.fold_div').append(tableTemp);
+						$('div.fold-box').append(tableTemp);
 					}
 				} else if (dateVal != el.substring(0, 6) || standard.length == (i + 1)) {
 					if (standard.length == (i + 1)) {
@@ -882,10 +882,10 @@
 							color++;
 						}
 					});
-					$('div.fold_div').append(tableTemp);
+					$('div.fold-box').append(tableTemp);
 
 					//값 초기화.
-					tableTemp = $('<div class="chart_table">').append('<table class="pc_use">');
+					tableTemp = $('<div class="chart-table">').append('<table class="table-desktop">');
 					tr = $('<tr>');
 					th = $('<th>');
 					dateVal = el.substring(0, 6);
@@ -904,9 +904,9 @@
 			});
 		} else if (interval == 'month') {
 			let dateVal = '';
-			let tableTemp = $('<div class="chart_table">').append('<table class="pc_use">');
+			let tableTemp = $('<div class="chart-table">').append('<table class="table-desktop">');
 			let tr = $('<tr>');
-			$('div.chart_table').remove();
+			$('div.chart-table').remove();
 
 			$.each(standard, function (i, el) {
 				let th = $('<th>');
@@ -941,7 +941,7 @@
 								color++;
 							}
 						});
-						$('div.fold_div').append(tableTemp);
+						$('div.fold-box').append(tableTemp);
 					}
 				} else if (dateVal != el.substring(0, 4) || standard.length == (i + 1)) {
 					if (standard.length == (i + 1)) {
@@ -970,10 +970,10 @@
 							color++;
 						}
 					});
-					$('div.fold_div').append(tableTemp);
+					$('div.fold-box').append(tableTemp);
 
 					//값 초기화.
-					tableTemp = $('<div class="chart_table">').append('<table class="pc_use">');
+					tableTemp = $('<div class="chart-table">').append('<table class="table-desktop">');
 					tr = $('<tr>');
 					th = $('<th>');
 					dateVal = el.substring(0, 4);
@@ -991,8 +991,8 @@
 				}
 			});
 		}
-		$(".indiv.diagnosis_chart").addClass("fixed");
-		$(".indiv.diagnosis_table").addClass("fixed");
+		$(".indiv.chart-diagnosis").addClass("fixed");
+		$(".indiv.table-diagnosis").addClass("fixed");
 		chartMakeData(interval);
 		dup = false;
 	}
@@ -1383,7 +1383,7 @@
 			unit = 'kWh';
 		}
 
-		$('.value_num').eq(type).empty().append('<span class="num">' + total.toFixed(2) + '</span>' + unit);
+		$('.value-num').eq(type).empty().append('<span class="num">' + total.toFixed(2) + '</span>' + unit);
 	}
 
 	function dateFormat(val) {

@@ -17,7 +17,7 @@
 	function modalOpen(boardId) {
 		$('#addNotice input').val('');
 		$('#addNotice textarea').val('');
-		$('#addNotice div.file_list ul').html('<li class="upload_text"></li>');
+		$('#addNotice div.file_list ul').html('<li class="upload-text"></li>');
 		initDropdownValue($('#addNotice .dropdown-toggle'));
 		$('#modi_attachement_info').addClass('hidden');
 		$('#spc_id').parent().addClass('hidden');
@@ -323,9 +323,9 @@
 		let endPage = ((startPage + navCount - 1) > totalPage) ? totalPage : (startPage + navCount - 1);
 
 		if (navgroup == 1) {
-			pageStr += '<a href="javascript:void(0);" class="btn_prev first_prev">prev</a>';
+			pageStr += '<a href="javascript:void(0);" class="btn-prev first_prev">prev</a>';
 		} else{
-			pageStr += '<a href="javascript:getNoticeList(\'' + (startPage -1) + '\');" class="btn_prev">prev</a>';
+			pageStr += '<a href="javascript:getNoticeList(\'' + (startPage -1) + '\');" class="btn-prev">prev</a>';
 		}
 
 		for (let i = startPage ; i <= endPage; i++) {
@@ -337,9 +337,9 @@
 		}
 
 		if (navgroup <totalnav) {
-			pageStr += '<a href="javascript:getNoticeList(\'' + (endPage +1) + '\');"  class="btn_next">next</a>';
+			pageStr += '<a href="javascript:getNoticeList(\'' + (endPage +1) + '\');"  class="btn-next">next</a>';
 		} else {
-			pageStr += '<a href="javascript:void(0);"  class="btn_next larst_next">next</a>';
+			pageStr += '<a href="javascript:void(0);"  class="btn-next larst_next">next</a>';
 		}
 		$('#paging').append(pageStr);
 	}
@@ -375,11 +375,11 @@
 						<div class="row">
 							<div class="col-12">
 								<div class="input-group inline-flex">
-									<label for="subject" class="input_label">제목</label>
-									<input type="text" id="subject" class="input tx_inp_type w-100" name="subject" placeholder="입력" autocomplete="off">
+									<label for="subject" class="input-label">제목</label>
+									<input type="text" id="subject" class="input text-input-type w-100" name="subject" placeholder="입력" autocomplete="off">
 								</div>
 								<div class="input-group inline-flex top">
-									<label for="contents" class="input_label">내용</label>
+									<label for="contents" class="input-label">내용</label>
 									<textarea name="contents" id="contents" class="textarea w-100"></textarea>
 								</div>
 							</div>
@@ -387,7 +387,7 @@
 						<div class="row mt8">
 							<div class="col-lg-6 col-sm-12">
 								<div class="input-group inline-flex">
-									<h2 class="input_label">공개 범위</h2>
+									<h2 class="input-label">공개 범위</h2>
 									<div class="dropdown w-100" id="level">
 										<button type="button" class="dropdown-toggle w-100" data-toggle="dropdown" data-name="공개 범위 선택">
 											공개 범위 선택<span class="caret"></span>
@@ -410,7 +410,7 @@
 							</div>
 							<div class="col-lg-6 col-sm-12">
 								<div class="input-group inline-flex hidden">
-									<h2 class="input_label">SPC 선택</h2>
+									<h2 class="input-label">SPC 선택</h2>
 									<div class="dropdown w-100" id="spc_id">
 										<button type="button" class="dropdown-toggle w-100" data-toggle="dropdown" data-name="SPC 선택">
 											SPC 선택<span class="caret"></span>
@@ -426,25 +426,25 @@
 						</div>
 						<div class="row">
 							<div class="col-12">
-								<div class="input-group flex_align_top">
-									<h2 class="input_label">첨부 파일</h2>
+								<div class="input-group flex-align-top">
+									<h2 class="input-label">첨부 파일</h2>
 									<input type="file" id="spc_notice_file" class="hidden" name="spc_notice_file" accept=".gif, .jpg, .png" multiple="">
-									<label for="spc_notice_file" class="btn file_upload ml-20">파일 선택</label>
-									<div class="file_list ml-16"><ul><li class="upload_text"></li></ul></div>
+									<label for="spc_notice_file" class="btn file-upload ml-20">파일 선택</label>
+									<div class="file_list ml-16"><ul><li class="upload-text"></li></ul></div>
 									<div class="file_list ml-16" id="modi_attachement_info">
-										<p class="tx_file">
+										<p class="text-file">
 											<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-											<button type="button" class="btn_type07" onclick="setRemoveFileList('modi_attachement_info', [INDEX]);">삭제</button>
+											<button type="button" class="btn-type07" onclick="setRemoveFileList('modi_attachement_info', [INDEX]);">삭제</button>
 										</p>
 									</div>
 								</div>
 							</div>
 						</div>
 					</form>
-					<div class="btn_wrap_type02">
-						<button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button>
+					<div class="btn-wrap-type02">
+						<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close">취소</button>
 						<c:if test="${userInfo.task eq 2 or userInfo.role eq 1}">
-						<button type="button" class="btn_type" id="addBtn">완료</button>
+						<button type="button" class="btn-type" id="addBtn">완료</button>
 						</c:if>
 					</div>
 				</div>
@@ -463,11 +463,11 @@
 				<div class="row">
 					<div class="col-12">
 						<div class="input-group inline-flex">
-							<h2 class="input_label">제목</h2>
+							<h2 class="input-label">제목</h2>
 							<div id="view_subject"></div>
 						</div>
 						<div class="input-group inline-flex top">
-							<h2 class="input_label">내용</h2>
+							<h2 class="input-label">내용</h2>
 							<pre id="view_contents"></pre>
 						</div>
 					</div>
@@ -475,36 +475,36 @@
 				<div class="row mt8">
 					<div class="col-lg-6 col-sm-12">
 						<div class="input-group inline-flex">
-							<h2 class="input_label">공개 범위</h2>
+							<h2 class="input-label">공개 범위</h2>
 							<div id="view_level"></div>
 						</div>
 					</div>
 					<div class="col-lg-6 col-sm-12">
 						<div class="input-group inline-flex">
-							<h2 class="input_label">SPC 선택</h2>
+							<h2 class="input-label">SPC 선택</h2>
 							<div id="view_spc_name"></div>
 						</div>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-12">
-						<div class="input-group flex_align_top">
-							<h2 class="input_label">첨부 파일</h2>
+						<div class="input-group flex-align-top">
+							<h2 class="input-label">첨부 파일</h2>
 							<div class="file_list ml-16" id="view_attachement_info">
-								<p class="tx_file">
+								<p class="text-file">
 									<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
 								</p>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="btn_wrap_type02">
+				<div class="btn-wrap-type02">
 					<c:if test="${userInfo.task eq 2 or userInfo.role eq 1}">
-					<button type="button" class="btn_type04" id="delBtn">삭제</button>
+					<button type="button" class="btn-type04" id="delBtn">삭제</button>
 					</c:if>
-					<button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">닫기</button>
+					<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close">닫기</button>
 					<c:if test="${userInfo.task eq 2 or userInfo.role eq 1}">
-					<button type="button" class="btn_type" id="chgBtn">수정</button>
+					<button type="button" class="btn-type" id="chgBtn">수정</button>
 					</c:if>
 				</div>
 			</div>
@@ -519,24 +519,24 @@
 </div>
 <div class="row">
 	<div class="col-10">
-		<div class="flex_start">
-			<div class="tx_inp_type mr-12">
+		<div class="flex-start">
+			<div class="text-input-type mr-12">
 				<input type="text" id="search" name="search" placeholder="입력" onKeyDown="pressEnter()">
 			</div>
-			<button type="button" class="btn_type" onclick="getNoticeList(1);">검색</button>
+			<button type="button" class="btn-type" onclick="getNoticeList(1);">검색</button>
 		</div>
 	</div>
 </div>
 <div class="row">
 	<div class="col-lg-12">
-		<div class="indiv supplementary_docs">
-			<div class="btn_wrap_type01">
+		<div class="indiv supplementary-docs">
+			<div class="btn-wrap-type01">
 				<c:if test="${userInfo.task eq 2 or userInfo.role eq 1}">
-					<button type="button" class="btn_type big" onclick="modalOpen()">작성</button>
+					<button type="button" class="btn-type big" onclick="modalOpen()">작성</button>
 				</c:if>
 			</div>
-			<div class="spc_tbl align_type left">
-				<table class="sort_table chk_type">
+			<div class="spc-tbl align-type left">
+				<table class="sort-table chk-type">
 					<colgroup>
 						<col style="width:15%">
 						<col style="width:40%">
@@ -557,12 +557,12 @@
 					<tbody id="listData">
 						<tr>
 							<td>
-								<a href="javascript:void(0);" onclick="getDetailNotice('[id]');" class="tbl_link">
+								<a href="javascript:void(0);" onclick="getDetailNotice('[id]');" class="table-link">
 									[spc_name]
 								</a>
 							</td>
 							<td>
-								<a href="javascript:void(0);" onclick="getDetailNotice('[id]');" class="tbl_link">
+								<a href="javascript:void(0);" onclick="getDetailNotice('[id]');" class="table-link">
 									[subject]
 								</a>
 							</td>
@@ -573,7 +573,7 @@
 					</tbody>
 				</table>
 			</div>
-			<div class="paging_wrap" id="paging">
+			<div class="pagination-wrapper" id="paging">
 			</div>
 		</div>
 	</div>

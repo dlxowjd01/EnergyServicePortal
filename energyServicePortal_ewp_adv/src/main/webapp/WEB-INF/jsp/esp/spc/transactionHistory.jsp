@@ -24,9 +24,9 @@
 			}
 		});
 
-		$('.sort_table th').click(function(){
+		$('.sort-table th').click(function(){
 			if ($(this).find('button').length > 0) {
-				var rows = tableBody.find('tr').toArray().sort(comparer($('.sort_table th').index(this)))
+				var rows = tableBody.find('tr').toArray().sort(comparer($('.sort-table th').index(this)))
 				this.asc = !this.asc;
 				if (!this.asc){
 					rows = rows.reverse();
@@ -123,7 +123,7 @@
 						}
 						spcList.append($(listItem));
 					});
-					spcList.append(`<li class="btn_wrap_type03 btn_wrap_border"><button type="button" class="btn_type mr-16">적용</button></li>`);
+					spcList.append(`<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16">적용</button></li>`);
 					resolve('');
 				}).fail(function (jqXHR, textStatus, errorThrown) {
 					reject('');
@@ -168,7 +168,7 @@
 							inp.checked = false;
 						}
 					});
-					displayDropdown($('#spcStatus').parents('div.dropdown.bx_align'));
+					displayDropdown($('#spcStatus').parents('div.dropdown.box-align'));
 				}
 
 				if (!isEmpty(type)) {
@@ -190,7 +190,7 @@
 				// 			inp.checked = false;
 				// 		}
 				// 	});
-				//  displayDropdown($('#spcPurposeList').parents('div.dropdown.bx_align'));
+				//  displayDropdown($('#spcPurposeList').parents('div.dropdown.box-align'));
 				// }
 
 				searchForm.submit();
@@ -620,14 +620,14 @@
 
 <div class="modal fade" id="warningModal" role="dialog" aria-labelledby="warningModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog">
-		<div class="modal-content collection_modal_content">
+		<div class="modal-content collect-modal-content">
 			<div class="modal-header">
 				<h4 lass="modal-title">조회된 데이터가 없습니다.</h4>
 			</div>
 			<div class="modal-footer">
-				<div class="btn_wrap_type02">
-					<button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button>
-					<button type="submit" id="confirmBtn" class="btn_type">확인</button>
+				<div class="btn-wrap-type02">
+					<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close">취소</button>
+					<button type="submit" id="confirmBtn" class="btn-type">확인</button>
 				</div>
 			</div>
 		</div>
@@ -643,11 +643,11 @@
 <div class='row spc-search-bar header-wrapper'>
 	<div class='col-11'><!--
 	--><form id='transactionForm'><!--
-		--><span class='tx_tit'>SPC 선택</span><!--
-		--><div class='sa_select'>
+		--><span class='tx-tit'>SPC 선택</span><!--
+		--><div class='sa-select'>
 				<div class='dropdown'>
 					<button type='button' class='dropdown-toggle no-close' data-toggle='dropdown' data-name="선택" data-value="">전체<span class='caret'></span></button>
-					<ul id='spcList' class='dropdown-menu chk_type' role='menu'>
+					<ul id='spcList' class='dropdown-menu chk-type' role='menu'>
 						<li data-value="*spcId*"><!--
 						--><a href="javascript:void(0);" tabindex="-1"><!--
 							--><input type="checkbox" id="*spcName*" value="*spcId*" data-value="*spcId*" name="*uniqName*" checked><!--
@@ -662,11 +662,11 @@
 				<button type='button' id='collapseBtn' class='dropdown-toggle clear-btn ml-24' data-toggle='collapse' data-target='#searchOption'>상세 조건<span class='caret'></span></button>
 				<ul id='searchOption' class='collapse dropdown-menu unused'>
 					<li class=""><!--
-					--><h2 class='comp_tit'>입출금 조회 기간</h2>
+					--><h2 class='compare-title'>입출금 조회 기간</h2>
 						<div class='row align-group3'>
 							<div id="dateTerm" class='dropdown'>
 								<button type='button' class='dropdown-toggle' data-toggle='dropdown' data-target="#dateTerm" data-name="선택" value="">선택<span class='caret'></span></button>
-								<ul id="unitOpt" class='dropdown-menu dropdown_offset' role='menu'>
+								<ul id="unitOpt" class='dropdown-menu dropdown-offset' role='menu'>
 									<li data-value="yearly"><a href='javascript:void(0)' tabindex='-1'>년</a></li>
 									<li data-value="monthly"><a href='javascript:void(0)' tabindex='-1'>월</a></li>
 									<li data-value="daily"><a href='javascript:void(0)' tabindex='-1'>일</a></li>
@@ -684,10 +684,10 @@
 				--></li><!--
 				--><li class="">
 						<div class='row align-group3'>
-							<div class='bx_align dropdown'>
-								<h2 class='comp_tit'>상태</h2>
+							<div class='box-align dropdown'>
+								<h2 class='compare-title'>상태</h2>
 								<button type='button' class='dropdown-toggle' data-toggle='dropdown' data-name="선택" value="">전체<span class='caret'></span></button>
-								<ul id="spcStatus" class='dropdown-menu chk_type dropdown_offset' role='menu'>
+								<ul id="spcStatus" class='dropdown-menu chk-type dropdown-offset' role='menu'>
 									<li>
 										<a href='javascript:void(0)' tabindex='-1'>
 											<input type='checkbox' id='approved' value='' data-value='3' name='approvalStatus' checked>
@@ -727,21 +727,21 @@
 								</ul>
 								<small class="hidden warning">선택해 주세요.</small>
 							</div>
-							<div class='bx_align dropdown'>
-								<h2 class='comp_tit'>입출금 구분</h2>
+							<div class='box-align dropdown'>
+								<h2 class='compare-title'>입출금 구분</h2>
 								<button type='button' class='dropdown-toggle' data-toggle='dropdown' value="" data-value="all">전체<span class='caret'></span></button>
-								<ul id="transactionType" class='dropdown-menu dropdown_offset' role='menu'>
+								<ul id="transactionType" class='dropdown-menu dropdown-offset' role='menu'>
 									<li data-value='all'><a href='javascript:void(0)' tabindex='-1'>전체</a></li>
 									<li data-value='deposit'><a href='javascript:void(0)' tabindex='-1'>입금</a></li>
 									<li data-value='withdraw'><a href='javascript:void(0)' tabindex='-1'>출금</a></li>
 								</ul>
 								<small class="hidden warning">선택해 주세요.</small>
 							</div>
-<%--							<div class='bx_align'>--%>
-<%--								<h2 class='comp_tit'>용도 구분</h2>--%>
+<%--							<div class='box-align'>--%>
+<%--								<h2 class='compare-title'>용도 구분</h2>--%>
 <%--								<div class='dropdown w-100'>--%>
 <%--									<button type='button' class='dropdown-toggle' data-toggle='dropdown' data-name="선택">전체<span class='caret'></span></button>--%>
-<%--									<ul id="spcPurposeList" class='dropdown-menu chk_type dropdown_offset' role='menu'>--%>
+<%--									<ul id="spcPurposeList" class='dropdown-menu chk-type dropdown-offset' role='menu'>--%>
 <%--										<li>--%>
 <%--											<a href='javascript:void(0)'tabindex='-1'>--%>
 <%--												<input type='checkbox' id='recMargin' data-value='0' data-name="REC 수익" name='spcPurpose' checked>--%>
@@ -784,9 +784,9 @@
 <%--							</div>--%>
 <%--						</div>--%>
 					</li>
-					<li class='btn_wrap_type03 btn_wrap_border'>
-						<button type='button' data-toggle='collapse' data-target='#searchOption' class='btn_type03' id='closeDropdown'>취소</button>
-						<button type='submit' class='btn_type ml-6'>검색</button>
+					<li class='btn-wrap-type03 btn-wrap-border'>
+						<button type='button' data-toggle='collapse' data-target='#searchOption' class='btn-type03' id='closeDropdown'>취소</button>
+						<button type='submit' class='btn-type ml-6'>검색</button>
 					</li>
 				</ul>
 			</div>
@@ -808,8 +808,8 @@
 <div class='row spc-transaction'>
 	<div class='col-12'>
 		<div class='indiv'>
-			<div class='spc_tbl'>
-				<table class='sort_table table-footer transaction-table'>
+			<div class='spc-tbl'>
+				<table class='sort-table table-footer transaction-table'>
 					<colgroup>
 						<col style='width:5%'>
 						<col style='width:10%'>
@@ -825,17 +825,17 @@
 					</colgroup>
 					<thead>
 						<tr>
-							<!-- <th><button type='button' class='btn_align down'>순번</button></th> -->
+							<!-- <th><button type='button' class='btn-align down'>순번</button></th> -->
 							<th>순번</th>
-							<th><button type='button' class='btn_align down'>입출금 일자</button></th>
-							<th><button type='button' class='btn_align down'>입출금 구분</button></th>
-							<th><button type='button' class='btn_align down'>용도 구분</button></th>
-							<!-- <th><button type='button' class='btn_align down'>계좌 구분</button></th> -->
-							<th class="right pr-16"><button type='button' class='btn_align down'>금액</button></th>
-							<th><button type='button' class='btn_align down'>최종 업데이트</button></th>
+							<th><button type='button' class='btn-align down'>입출금 일자</button></th>
+							<th><button type='button' class='btn-align down'>입출금 구분</button></th>
+							<th><button type='button' class='btn-align down'>용도 구분</button></th>
+							<!-- <th><button type='button' class='btn-align down'>계좌 구분</button></th> -->
+							<th class="right pr-16"><button type='button' class='btn-align down'>금액</button></th>
+							<th><button type='button' class='btn-align down'>최종 업데이트</button></th>
 							<th>요청자</th>
 							<th>승인자</th>
-							<th class='left'><button type='button' class='btn_align down'>상태</button></th>
+							<th class='left'><button type='button' class='btn-align down'>상태</button></th>
 						</tr>
 					</thead>
 					<tbody id='tableBody'>
@@ -852,7 +852,7 @@
 								<td>*requestedBy*</td>
 								<td>*approvedBy*</td>
 								<td class='left' data-id="*transactionSpcId*" data-name="*transactionSpcName*" data-value="*statusVal*"><!--
-								--><div class="flex_start"><!--
+								--><div class="flex-start"><!--
 									--><button type="button" class="*linkAttr* clear-btn" data-name="*withdrawBankName*" data-value="*withdrawAccountNum*" data-req-id="*transactionReqId*" onclick="goToDetail($(this))">*status*</button><!--
 									<c:if test="${userInfo.task ne 2}">
 									--><a href="#" onclick="goToEdit($(this))" class='icon-edit *editVisibility*' data-req-id="*transactionReqId*"></a><!--

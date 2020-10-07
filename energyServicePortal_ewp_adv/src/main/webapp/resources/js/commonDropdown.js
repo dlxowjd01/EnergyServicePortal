@@ -5,7 +5,7 @@
  *
  */
 //드롭 다운 공통 동작 작업 -- 디스에이블이 아닌 항목에 대해서 작동함.
-$(document).on('click', '.dropdown-menu:not(.unused) li:not(.disabled, .dropdown_cov .sec_li_bx, .btn_wrap_type03, .lang)', function (e) {
+$(document).on('click', '.dropdown-menu:not(.unused) li:not(.disabled, .dropdown-cov .sec-li-box, .btn-wrap-type03, .lang)', function (e) {
 	e.preventDefault(); //다른 드롭 다운 동작 막기
 	let $selector = $(this),
 		$dropdown = $selector.closest('.dropdown'),
@@ -116,7 +116,7 @@ const selectAll = ($selector) => {
  * @param $selector
  */
 const selectAllGroup = ($selector) => {
-	let group = $selector.find('.dropdown-menu.chk_type');
+	let group = $selector.find('.dropdown-menu.chk-type');
 	$.each(group, function(){
 		let item = $(this).find("li");
 		let firstCheckbox = item.first();
@@ -221,7 +221,7 @@ const setDropdownValue = ($selector) => {
  * @param $selector
  */
 const setSingleSelectDropdown = ($selector) => {
-	let btn = $selector.find(".dropdown-menu:not('.chk_type')");
+	let btn = $selector.find(".dropdown-menu:not('.chk-type')");
 	$.each(btn, function(index, element) {
 		let item = $(this).find("li");
 		item.on("click", function() {

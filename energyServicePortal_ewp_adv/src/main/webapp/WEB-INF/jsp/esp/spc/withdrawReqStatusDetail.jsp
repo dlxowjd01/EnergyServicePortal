@@ -86,9 +86,9 @@
 							attachList.forEach(attach => {
 								let downUrl = apiHost + '/files/download/' + attach.filedName + '?oid=' + oid + '&orgFilename=' + attach.originalName.trim();
 								let templateAttach = `
-												<div class="flex_wrapper border">
-													<a href="#" class="btn_type02">${'${attach.originalName.trim()}'}</a>
-													<a href="${'${downUrl}'}" class="save_btn"></a>
+												<div class="flex-wrapper border">
+													<a href="#" class="btn-type02">${'${attach.originalName.trim()}'}</a>
+													<a href="${'${downUrl}'}" class="btn-save"></a>
 												</div>`;
 
 								$('#attachementList').append(templateAttach);
@@ -537,13 +537,13 @@
 
 <div class="modal fade" id="warningModal" role="dialog" aria-labelledby="warningModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog">
-		<div class="modal-content collection_modal_content">
+		<div class="modal-content collect-modal-content">
 			<div class="modal-header">
 				<h4 lass="modal-title">저장 하실 내용을 입력해 주세요.</h4>
 			</div>
 			<div class="modal-footer">
-				<div class="btn_wrap_type02">
-					<button type="button" data-dismiss="modal" class="btn_type" aria-label="Close">확인</button>
+				<div class="btn-wrap-type02">
+					<button type="button" data-dismiss="modal" class="btn-type" aria-label="Close">확인</button>
 				</div>
 			</div>
 		</div>
@@ -559,21 +559,21 @@
 <div class="row">
 	<div class="col-xl-8 col-lg-7 col-md-6 col-sm-12">
 		<div class="indiv spc-detail">
-			<div class="flex_wrapper mb-20">
+			<div class="flex-wrapper mb-20">
 				<h2 class="ntit">출금 요청서</h2>
-				<span id="statusName" class="tx_tit blue_text">상태: ${param.req_detail_status}</span>
+				<span id="statusName" class="tx-tit blue_text">상태: ${param.req_detail_status}</span>
 			</div>
-			<div class="flex_start">
-				<h2 class="tx_tit">SPC 명</h2>
-				<span id="spcName" class="tx_tit">${param.req_detail_spc_id}</span>
+			<div class="flex-start">
+				<h2 class="tx-tit">SPC 명</h2>
+				<span id="spcName" class="tx-tit">${param.req_detail_spc_id}</span>
 			</div>
-			<div class="flex_start">
-				<h2 class="tx_tit">출금 계좌 번호</h2>
-				<span class="tx_tit">${param.req_detail_acc_info} ${param.req_detail_acc_holder}</span>
+			<div class="flex-start">
+				<h2 class="tx-tit">출금 계좌 번호</h2>
+				<span class="tx-tit">${param.req_detail_acc_info} ${param.req_detail_acc_holder}</span>
 			</div>
 
-			<div class="tbl_wrap_type collect_wrap mt30">
-				<table class="his_tbl table-footer">
+			<div class="table-wrap-type collect-wrap mt30">
+				<table class="history-table table-footer">
 					<thead>
 						<tr>
 							<th>출금일자</th>
@@ -611,65 +611,65 @@
 	<div class="col-xl-4 col-lg-5 col-md-6 col-sm-12">
 		<form id="attachedFileForm" name="attached_file_form" action="#" method="post">
 			<div class="indiv spc-detail spc-req-status">
-				<div class="flex_wrapper"><h2 class="ntit">증빙 서류</h2></div>
+				<div class="flex-wrapper"><h2 class="ntit">증빙 서류</h2></div>
 				<div id="attachementList" class="attachment-list"></div>
 
-				<div class="flex_wrapper">
+				<div class="flex-wrapper">
 					<h2 class="heading">출금 요청서</h2>
 					<div class="fr"><!--
-					--><button type="button" class="btn_type03" onclick="previewPdf(this)" data-name="previewReqDoc">미리 보기</button><!--
-					--><button type="button" class="btn_type ml-12" onclick="downloadFile(this)" data-name="downloadReqDoc">다운로드</button><!--
+					--><button type="button" class="btn-type03" onclick="previewPdf(this)" data-name="previewReqDoc">미리 보기</button><!--
+					--><button type="button" class="btn-type ml-12" onclick="downloadFile(this)" data-name="downloadReqDoc">다운로드</button><!--
 				--></div>
 				</div>
-				<div class="flex_wrapper file-wrapper">
+				<div class="flex-wrapper file-wrapper">
 					<h2 class="heading">증빙 서류</h2><input type="hidden" name="proof_file" id="proofFile" class="sr-only"/>
 					<div class="fr"><!--
-					--><button type="button" class="btn_type03" onclick="previewPdf(this)" data-name="previewProof">미리 보기</button><!--
-					--><button type="button" class="btn_type ml-12" onclick="downloadFile(this)" data-name="downloadProof" >다운로드</button><!--
+					--><button type="button" class="btn-type03" onclick="previewPdf(this)" data-name="previewProof">미리 보기</button><!--
+					--><button type="button" class="btn-type ml-12" onclick="downloadFile(this)" data-name="downloadProof" >다운로드</button><!--
 				--></div>
 				</div>
-				<div class="flex_wrapper border file-wrapper">
+				<div class="flex-wrapper border file-wrapper">
 					<h2 class="heading">출금 요청서 + 증빙 서류</h2><input type="hidden" name="proof_file" id="proofFile" class="sr-only"/>
 					<div class="fr"><!--
-					--><button type="button" class="btn_type03" onclick="previewPdf(this)" data-name="previewMergeDocs">미리 보기</button><!--
-					--><button type="button" class="btn_type ml-12" onclick="downloadFile(this)" data-name="downloadMergeDocs" >다운로드</button><!--
+					--><button type="button" class="btn-type03" onclick="previewPdf(this)" data-name="previewMergeDocs">미리 보기</button><!--
+					--><button type="button" class="btn-type ml-12" onclick="downloadFile(this)" data-name="downloadMergeDocs" >다운로드</button><!--
 				--></div>
 				</div>
-				<div class="flex_wrapper mt20">
+				<div class="flex-wrapper mt20">
 					<h2 class="heading">메모 히스토리</h2>
 				</div>
-				<div class="flex_wrapper border mt12">
+				<div class="flex-wrapper border mt12">
 					<textarea id="txt1" class="textarea w-100" readonly></textarea>
 				</div>
 				<!-- 사무수탁 && 출금관리 -->
 				<c:choose>
 					<c:when test="${userInfo.role eq 1}">
-						<div class="flex_wrapper mt20">
+						<div class="flex-wrapper mt20">
 							<h2 class="heading">메모</h2><!--
-						--><a class="chk_type" href="javascript:void(0);"><input type="checkbox" id="memoOpt" name="memo_opt"><label for="memoOpt">사무수탁사 함께 보기</label></a><!--
+						--><a class="chk-type" href="javascript:void(0);"><input type="checkbox" id="memoOpt" name="memo_opt"><label for="memoOpt">사무수탁사 함께 보기</label></a><!--
 					--></div>
 						<div class="textarea-container mt12">
-							<button type="button" id="saveBtn" class="btn_type03 fixed_btn">저장</button>
+							<button type="button" id="saveBtn" class="btn-type03 btn-fixed">저장</button>
 							<textarea placeholder="직접입력" id="txt2" class="textarea w-100"></textarea>
 						</div>
 						<c:choose>
 							<c:when test="${param.req_detail_status_val eq 3}">
 								<div class="spc-btn-group my-20"><!--
-									--><button type="button" id="reviewBtn" class="btn_type mr-16">검토대기로 변경</button><!--
-									--><button type="button" id="provisionalBtn" class="btn_type">출금 가승인</button><!--
+									--><button type="button" id="reviewBtn" class="btn-type mr-16">검토대기로 변경</button><!--
+									--><button type="button" id="provisionalBtn" class="btn-type">출금 가승인</button><!--
 								--></div>
 							</c:when>
 							<c:when test="${param.req_detail_status_val eq 4}">
 								<div class="spc-btn-group my-20"><!--
-									--><button type="button" id="finalApprovalBtn" class="btn_type">승인완료로 변경</button><!--
+									--><button type="button" id="finalApprovalBtn" class="btn-type">승인완료로 변경</button><!--
 								--></div>
 							</c:when>
 							<c:otherwise>
 								<c:if test="${(param.req_detail_status_val ne 4 and param.req_detail_status_val ne 5)}">
 									<div class="spc-btn-group my-20"><!--
-										--><button type="button" id="reviewBtn" class="btn_type mr-16">검토대기로 변경</button><!--
-										--><button type="button" id="rejectBtn" class="btn_type03 w80">반송</button><!--
-										--><button type="submit" class="btn_type ml-12">승인</button><!--
+										--><button type="button" id="reviewBtn" class="btn-type mr-16">검토대기로 변경</button><!--
+										--><button type="button" id="rejectBtn" class="btn-type03 w80">반송</button><!--
+										--><button type="submit" class="btn-type ml-12">승인</button><!--
 									--></div>
 								</c:if>
 							</c:otherwise>
@@ -677,31 +677,31 @@
 					</c:when>
 					<c:otherwise>
 						<c:if test="${userInfo.task ne 1}">
-							<div class="flex_wrapper mt20">
+							<div class="flex-wrapper mt20">
 								<h2 class="heading">메모</h2><!--
-							--><a class="chk_type" href="javascript:void(0);"><input type="checkbox" id="memoOpt" name="memo_opt"><label for="memoOpt">사무수탁사 함께 보기</label></a><!--
+							--><a class="chk-type" href="javascript:void(0);"><input type="checkbox" id="memoOpt" name="memo_opt"><label for="memoOpt">사무수탁사 함께 보기</label></a><!--
 						--></div>
 							<div class="textarea-container mt12">
-								<button type="button" id="saveBtn" class="btn_type03 fixed_btn">저장</button>
+								<button type="button" id="saveBtn" class="btn-type03 btn-fixed">저장</button>
 								<textarea placeholder="직접입력" id="txt2" class="textarea w-100"></textarea>
 							</div>
 							<c:choose>
 								<c:when test="${userInfo.task eq 3 and param.req_detail_status_val eq 3}">
 									<div class="spc-btn-group my-20"><!--
-									--><button type="button" id="provisionalBtn" class="btn_type">출금 가승인</button><!--
+									--><button type="button" id="provisionalBtn" class="btn-type">출금 가승인</button><!--
 								--></div>
 								</c:when>
 								<c:when test="${userInfo.task eq 3 and param.req_detail_status_val eq 4}">
 									<div class="spc-btn-group my-20"><!--
-									--><button type="button" id="finalApprovalBtn" class="btn_type">승인완료로 변경</button><!--
+									--><button type="button" id="finalApprovalBtn" class="btn-type">승인완료로 변경</button><!--
 								--></div>
 								</c:when>
 								<c:otherwise>
 									<c:if test="${userInfo.task eq 2 and (param.req_detail_status_val ne 4 and param.req_detail_status_val ne 5)}">
 										<div class="spc-btn-group my-20"><!--
-										--><button type="button" id="reviewBtn" class="btn_type mr-16">검토대기로 변경</button><!--
-										--><button type="button" id="rejectBtn" class="btn_type03 w80">반송</button><!--
-										--><button type="submit" class="btn_type ml-12">승인</button><!--
+										--><button type="button" id="reviewBtn" class="btn-type mr-16">검토대기로 변경</button><!--
+										--><button type="button" id="rejectBtn" class="btn-type03 w80">반송</button><!--
+										--><button type="submit" class="btn-type ml-12">승인</button><!--
 									--></div>
 									</c:if>
 								</c:otherwise>
@@ -711,8 +711,8 @@
 				</c:choose>
 			</div>
 		</form>
-		<div class="btn_wrap_type05 my-20"><!--
-		--><button type="button" id="backList" class="btn_type03 w80">목록</button><!--
+		<div class="btn-wrap-type05 my-20"><!--
+		--><button type="button" id="backList" class="btn-type03 w80">목록</button><!--
 	--></div>
 	</div>
 </div>

@@ -70,10 +70,10 @@ $(function() {
 
 /* 표 접기/펼치기 */
 $(function() {
-    $('.fold_btn').click(function(){
-        var tbl_height = $(".fold_div").height();
-//        $(".tbl_wrap").css("min-height",tbl_height);
-        $('.fold_div').slideToggle();
+    $('.btn-fold').click(function(){
+        var tbl_height = $(".fold-box").height();
+//        $(".table-wrapper").css("min-height",tbl_height);
+        $('.fold-box').slideToggle();
         $(this).toggleClass("on");
         $(this).text($(this).text() == '표접기' ? '펼치기' : '표접기');
     });
@@ -84,7 +84,7 @@ $(function() {
     $(".tblDisplay").sectionDisplay({
         act : "click",
         start:0,
-        nav : $('.tab_menu, .gtab_menu'),
+        nav : $('.tab-menu, .gtab-menu'),
         auto: false,
         autoTime:3000
     });
@@ -111,7 +111,7 @@ $(function() {
             if(!isEmpty(marker)) {
                 map = marker.getMap();
 
-                if($(this).next().find('.di_wrap').css('display') == 'block') {
+                if($(this).next().find('.di-wrap').css('display') == 'block') {
                     map.setCenter({lat: 37.549012, lng: 126.988546});
                     smoothZoom(map, 6, map.getZoom(), false);
                 } else {
@@ -126,7 +126,7 @@ $(function() {
             touchtime = new Date().getTime();
             //$('.dbclickopen').removeClass("click");
             $(this).toggleClass("click");
-            $(this).next(".detail_info").find(".di_wrap").slideToggle();
+            $(this).next(".detail-info").find(".di-wrap").slideToggle();
         } else {
             //compare first click to this click and see if they occurred within double click threshold
             if(((new Date().getTime())-touchtime) < 800) {
@@ -140,7 +140,7 @@ $(function() {
                 touchtime = new Date().getTime();
                 //$('.dbclickopen').removeClass("click");
                 $(this).toggleClass("click");
-                $(this).next(".detail_info").find(".di_wrap").slideToggle();
+                $(this).next(".detail-info").find(".di-wrap").slideToggle();
             }
         }
 
@@ -153,7 +153,7 @@ $(function() {
 function list_detail_open(list_number) {
     var target = list_number;
     //alert(list_number);
-    $("."+target+"").find(".di_wrap").slideToggle();
+    $("."+target+"").find(".di-wrap").slideToggle();
 }
 
 
@@ -173,11 +173,11 @@ $(function(){
 
 /* 테이블 리스트 선택 효과 */
 $(function(){
-    $(".s_table tbody tr, .chart_table tbody tr, .tbl_box tbody tr, .default_tbl tbody tr").click(function() {
-        $(".s_table tbody tr").removeClass("click");
-        $(".chart_table tbody tr").removeClass("click");
-        $(".tbl_box tbody tr").removeClass("click");
-        $(".default_tbl tbody tr").removeClass("click");
+    $(".table-site tbody tr, .chart-table tbody tr, .table-box tbody tr, .table-default tbody tr").click(function() {
+        $(".table-site tbody tr").removeClass("click");
+        $(".chart-table tbody tr").removeClass("click");
+        $(".table-box tbody tr").removeClass("click");
+        $(".table-default tbody tr").removeClass("click");
         $(this).addClass("click");
         return false;
     });
@@ -193,7 +193,7 @@ $(function () {
 		if (isEmpty(t)) {return false;}
 		if ($(this).attr("multiple")) {
             let list = $(this).parent().find(".file_list ul");
-            let delBtn = 'icon_btn';
+            let delBtn = 'btn-icon';
 		    if ($(this).parent().find("ul.file_list").length > 0) {
                 list = $(this).parent().find("ul.file_list");
                 if ($(this).attr('id').match('공인인증서')) {
@@ -211,7 +211,7 @@ $(function () {
                 $(this).parent().find(".no-data").addClass("hidden");
             }
 
-            if (list.find('.upload_text').length <= 0) {
+            if (list.find('.upload-text').length <= 0) {
                 list.empty();
             }
 
@@ -219,9 +219,9 @@ $(function () {
                 let listItem = ``;
                 let dataId = genUuid();
                 listItem = `
-                                <li class='upload_text' data-id="${dataId}">
+                                <li class='upload-text' data-id="${dataId}">
                                     ${element.name}
-                                    <button type='button' class='btn_close ${delBtn}' onclick='deleteFile($(this))'></button>
+                                    <button type='button' class='btn-close ${delBtn}' onclick='deleteFile($(this))'></button>
                                 </li>
                             `
                 list.append(listItem);
@@ -231,12 +231,12 @@ $(function () {
 		} else {
             let targetId = $(this).attr('id');
             if (targetId.match('SPC_법인_인감_파일')) {
-                let listItem = `<button type='button' class='btn_close icon-trash ' onclick='deleteFile($(this), "front")'></button>`;
-                $(this).parent().find(".upload_text").next('.icon-trash').remove();
-                $(this).parent().find(".upload_text").html(labelText).after(listItem);
+                let listItem = `<button type='button' class='btn-close icon-trash ' onclick='deleteFile($(this), "front")'></button>`;
+                $(this).parent().find(".upload-text").next('.icon-trash').remove();
+                $(this).parent().find(".upload-text").html(labelText).after(listItem);
             } else {
-                let listItem = `${labelText}<button type='button' class='btn_close icon_btn' onclick='deleteFile($(this))'></button>`;
-                $(this).parent().find(".upload_text").html(listItem);
+                let listItem = `${labelText}<button type='button' class='btn-close btn-icon' onclick='deleteFile($(this))'></button>`;
+                $(this).parent().find(".upload-text").html(listItem);
             }
 		}
 	});
@@ -246,20 +246,20 @@ function deleteFile(self, type) {
     if (type === undefined) {
         let ul = self.parents("ul.file_list");
         if (ul.length > 0) {
-            if (self.parent('.upload_text').prop('tagName') == 'LI') {
+            if (self.parent('.upload-text').prop('tagName') == 'LI') {
                 let file = self.parent().parent().parent().find('input[type="file"]').data('file');
                 if (!isEmpty(file)) {
                     let idx = self.parents('ul.file_list').find('button').index(self);
                     file.splice(idx, 1);
                     self.parent().parent().parent().find('input[type="file"]').data('file', file);
                 }
-                self.parent(".upload_text").remove();
+                self.parent(".upload-text").remove();
             } else {
-                self.parent(".upload_text").parent().find('input[type="file"]').val('');
-                self.parent(".upload_text").empty();
+                self.parent(".upload-text").parent().find('input[type="file"]').val('');
+                self.parent(".upload-text").empty();
             }
         } else {
-            self.parent(".upload_text").remove();
+            self.parent(".upload-text").remove();
             if (ul.children().length <= 0) {
                 let item = '';
                 item = '<li class="no-file">선택된 파일이 없습니다.</li>'
@@ -269,7 +269,7 @@ function deleteFile(self, type) {
         }
     } else {
         let parent = self.parent();
-        parent.find('span.upload_text').html('');
+        parent.find('span.upload-text').html('');
         parent.find('input[type="file"]').val('').removeData('file');
         self.remove();
     }
@@ -458,16 +458,16 @@ $(function() {
 });
 
 
-/* type_list slideToggle */
-$(document).on('click', ".type_list .chart_top", function() {
-    $(this).next(".type_list_detail").slideToggle();
+/* type-list slideToggle */
+$(document).on('click', ".type-list .chart-top", function() {
+    $(this).next(".type-list-detail").slideToggle();
     return false;
 });
 
 
 /* submenu show/hide */
 $(function($){
-    var nav = $(".sub_layer");
+    var nav = $(".sub-layer");
 
     nav.find("li").each(function() {
         if ($(this).find("div").length > 0) {
@@ -511,7 +511,7 @@ $(function() {
 
 /* input file */
 $(function() {
-    var uploadFile = $('.fileBox .uploadBtn');
+    var uploadFile = $('.fileBox .btn-upload');
     uploadFile.on('change', function(){
         if(window.FileReader){
             var filename = $(this)[0].files[0].name;

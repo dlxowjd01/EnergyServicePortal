@@ -32,7 +32,7 @@ const getYearGenData = async function () {
 		pvSum: 0,
 	};
 
-	$(`.gmain_chart1 span.term`).text(today.getFullYear() + '.1.1 ~ ' + today.getFullYear() + '.' + (Number(today.getMonth()) + 1) + '.' + today.getDate());
+	$(`.gmain-chart1 span.term`).text(today.getFullYear() + '.1.1 ~ ' + today.getFullYear() + '.' + (Number(today.getMonth()) + 1) + '.' + today.getDate());
 	
 	siteList.forEach(site => {
 		$.ajax({
@@ -492,7 +492,7 @@ const getDailyGenData = async function () {
 		categories.push(String(i));
 	}
 
-	$(`.gmain_chart2 span.term`).text(today.format('yyyy.MM') + '.1 ~ ' + today.format('yyyy.MM') + '.' + today.getDate());
+	$(`.gmain-chart2 span.term`).text(today.format('yyyy.MM') + '.1 ~ ' + today.format('yyyy.MM') + '.' + today.getDate());
 	siteList.forEach(site => {
 		$.ajax({
 			url: apiHost + '/energy/sites',
@@ -877,7 +877,7 @@ const getGenDataBySiteYesterday = async function () { //3번째 indiv 사업소�
 
 	yesterday.setDate(Number(today.getDate()) - 1);
 
-	$(`.gmain_chart3 span.term`).text(yesterday.getFullYear() + '.' + (Number(yesterday.getMonth()) + 1) + '.' + yesterday.getDate());
+	$(`.gmain-chart3 span.term`).text(yesterday.getFullYear() + '.' + (Number(yesterday.getMonth()) + 1) + '.' + yesterday.getDate());
 	
 	siteList.forEach((site, siteIdx) => {
 		let siteGenSum = 0;
@@ -1220,7 +1220,7 @@ const getAlarmInfo = function () {
 			}
 		});
 
-		$('.a_alert').find('em').text(alarmList.length);
+		$('.alarm-alert').find('em').text(alarmList.length);
 		setMakeList(alarmList, 'alarmNotice', {'dataFunction': {'level': levelClass}}); //list생성
 	}).fail(function (jqXHR, textStatus, errorThrown) {
 		console.error(jqXHR);
@@ -1385,8 +1385,8 @@ const beforeTodayTotalPromise = (site) => {
 
 const getTodayTotalDetail = async function () {
 
-	$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(0);
-	$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text(0);
+	$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(1) span').text(0);
+	$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(2) span').text(0);
 
 	const formData = getSiteMainSchCollection('day');
 	$('#centerTbody tr td:nth-child(1)').html(Math.floor(siteList.length) + '<em>&nbsp;&nbsp;개소</em>');
@@ -1440,8 +1440,8 @@ const getTodayTotalDetail = async function () {
 		}).done(function (data, textStatus, jqXHR) {
 			let generationForecastSum = 0;
 			data.data[0].generation.items.map((e, idx) => generationForecastSum += e.energy);
-			let prevVal = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text().replace(/[^0-9]/g, ''));
-			$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text(numberComma(Math.floor(prevVal += generationForecastSum / 1000)));
+			let prevVal = Number($('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(2) span').text().replace(/[^0-9]/g, ''));
+			$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(2) span').text(numberComma(Math.floor(prevVal += generationForecastSum / 1000)));
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);
 			console.error(textStatus);
@@ -1462,8 +1462,8 @@ const getTodayTotalDetail = async function () {
 		}).done(function (data, textStatus, jqXHR) {
 			if (!isEmpty(data.data[site.sid])) {
 				co2Sum += Math.floor(data.data[site.sid].co2);
-				let prevVal = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text().replace(/[^0-9]/g, ''));
-				$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(numberComma(Math.floor(prevVal += (data.data[site.sid].energy / 1000))));
+				let prevVal = Number($('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(1) span').text().replace(/[^0-9]/g, ''));
+				$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(1) span').text(numberComma(Math.floor(prevVal += (data.data[site.sid].energy / 1000))));
 				$('#centerTbody tr td:nth-child(4)').html(numberComma(Math.floor(co2Sum / 1000)) + '<em>&nbsp;&nbsp;kg</em>');
 
 				let prevPay = Number($('#centerTbody tr td:nth-child(5)').text().replace(/[^0-9]/g, ''));
@@ -1880,16 +1880,16 @@ const searchSite = function () {
 		let statusClass = '';
 		if (operation.includes('0')) {
 			refineList[siteIdx].status = '중지';
-			statusClass = 'status_stp';
+			statusClass = 'status-stop';
 		} else if (operation.includes('1')) {
 			refineList[siteIdx].status = '정상';
-			statusClass = 'status_drv';
+			statusClass = 'status-drv';
 		} else if (operation.includes('2')) {
 			refineList[siteIdx].status = '트립';
-			statusClass = 'status_err';
+			statusClass = 'status-error';
 		} else {
 			refineList[siteIdx].status = '에러';
-			statusClass = 'status_err';
+			statusClass = 'status-error';
 		}
 		refineList[siteIdx].statusClass = statusClass;
 
@@ -2126,7 +2126,7 @@ function SortTable(table, n, sort) {
 	// table 에 tbody tag 가 반드시 존재한다고 가정한다.
 	let tbody = table.tBodies[0];
 	let rows = tbody.querySelectorAll('tr.dbclickopen');
-	let rows2 = tbody.querySelectorAll('tr.detail_info');
+	let rows2 = tbody.querySelectorAll('tr.detail-info');
 	rows = Array.prototype.slice.call(rows, 0);
 	rows.sort(function (row1, row2) {
 		var cell1 = row1.getElementsByTagName("td")[n];
@@ -2429,7 +2429,7 @@ const getDashboardTable = (table) => {
 	// 	"buttons": [
 	// 		{
 	// 			extend: 'excelHtml5',
-	// 			className: "save_btn",
+	// 			className: "btn-save",
 	// 			text: '엑셀 다운로드',
 	// 			// exportOptions: {
 	// 			// 	modifier: {
@@ -2457,12 +2457,12 @@ const getDashboardTable = (table) => {
 	// 		},
 	// 		// {
 	// 		// 	extend: 'csvHtml5',
-	// 		// 	className: "btn_type03",
+	// 		// 	className: "btn-type03",
 	// 		// 	text: 'CSV'
 	// 		// },
 	// 		// {
 	// 		// 	extend: 'pdfHtml5',
-	// 		// 	className: "btn_type03",
+	// 		// 	className: "btn-type03",
 	// 		// 	text: 'PDF',
 	// 		// },
 	// 	],

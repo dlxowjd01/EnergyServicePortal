@@ -9,7 +9,7 @@
 		const purposeList = $("#purposeList");
 		const receiveList = $("#receiveList");
 		const firstRow = tableBody.find("tr:first-child")
-		const dropdownOpt = withdrawForm.find('.dropdown-menu:not(.chk_type)');
+		const dropdownOpt = withdrawForm.find('.dropdown-menu:not(.chk-type)');
 		const cloned = spcList.clone().html();
 		const copyWithdrawList = $("#withdrawList").clone().html();
 		const copyReceiveList = $("#receiveList").clone().html();
@@ -274,7 +274,7 @@
 			jsonData.requested_at = new Date();
 			jsonData.transfer_agent = loginName;
 
-			let fileNames = $("#addFileList").find("li.upload_text");
+			let fileNames = $("#addFileList").find("li.upload-text");
 			$.each(fileNames, function(index, element){
 				let obj = {};
 				obj.originalName = $(this).text();
@@ -400,9 +400,9 @@
 				}
 
 				fileList.forEach(file => {
-					let listItem = `<li class='upload_text' data-id="${'${file.fieldname}'}">
+					let listItem = `<li class='upload-text' data-id="${'${file.fieldname}'}">
 									${'${file.originalname}'}
-									<button type='button' class='btn_close icon_btn' onclick='deleteFile($(this))'></button>
+									<button type='button' class='btn-close btn-icon' onclick='deleteFile($(this))'></button>
 								</li>`;
 
 					$('#fileInput').parent().find('div.file_list ul').append(listItem);
@@ -523,31 +523,31 @@
 <form id="withdrawForm" name="withdraw_form" action="#" method="post">
 	<div class="row spc-search-bar">
 		<div class="col-12">
-			<div class="sa_select"><!--
-			--><span class="tx_tit">SPC 선택</span><!--
+			<div class="sa-select"><!--
+			--><span class="tx-tit">SPC 선택</span><!--
 			--><div class="dropdown"><!--
 				--><button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택" data-value="">선택<span class="caret"></span></button><!--
 				--><ul id="spcList" class="dropdown-menu unused center" role="menu"><li id="*spcName*" data-value="*spcId*"><a href="javascript:void(0);" tabindex="-1">*spcName*</a></li></ul><!--
 				--><small class="hidden warning">SPC를 선택해 주세요.</small>
 				</div>
 			</div>
-			<div class="sa_select"><!--
-			--><span class="tx_tit">출금 계좌번호</span><!--
+			<div class="sa-select"><!--
+			--><span class="tx-tit">출금 계좌번호</span><!--
 			--><div class="dropdown"><!--
 				--><button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택" data-value="">선택<span class="caret"></span></button>
 					<ul id="withdrawList" class="dropdown-menu unused center" role="menu"><li data-acc-holder="*acc_holder*" data-name="*bank_name*" data-value="*acc_num*"><a href="#" tabindex="-1">*bank_name* *acc_num*</a></li></ul>
 					<small class="hidden warning">출금 요청 계좌를 선택해 주세요.</small>
 				</div>
 			</div>
-			<div class="sa_select"><!--
-			--><label for="availableAmount" class="tx_tit">계좌 잔액</label><!--
-			--><div class="tx_inp_type"><input type="text" id="" name="availableAmount" disabled="" readonly=""></div>
+			<div class="sa-select"><!--
+			--><label for="availableAmount" class="tx-tit">계좌 잔액</label><!--
+			--><div class="text-input-type"><input type="text" id="" name="availableAmount" disabled="" readonly=""></div>
 			</div>
 		</div>
 	</div>
 	<div class="row content-wrapper spc-transaction">
 		<div class="col-12">
-			<div class="indiv spc_bal_post">
+			<div class="indiv spc-balance-post">
 				<table class="table-footer">
 					<colgroup>
 						<col style="width:4%">
@@ -561,7 +561,7 @@
 					<thead>
 					<tr>
 						<th>
-							<a class="chk_type select_row">
+							<a class="chk-type select_row">
 								<input type="checkbox" id="selectAll" name="select_all">
 								<label for="selectAll"></label>
 							</a>
@@ -576,16 +576,16 @@
 					<tbody id="tableBody">
 						<tr>
 							<td>
-								<a class="chk_type select_row">
+								<a class="chk-type select_row">
 									<input type="checkbox" id="apply" name="apply">
 									<label for="apply"></label>
 								</a>
 							</td>
 							<td>
-								<div class="sel_calendar"><input type="text" id="requestedDate" name="requestedDate" class="sel fromDate" value="" autocomplete="off" placeholder="선택"></div>
+								<div class="sel-calendar"><input type="text" id="requestedDate" name="requestedDate" class="sel fromDate" value="" autocomplete="off" placeholder="선택"></div>
 							</td>
 							<td>
-								<div class="sa_select">
+								<div class="sa-select">
 									<div class="dropdown placeholder">
 										<button type="button" class="dropdown-toggle" data-clone="empty" data-toggle="dropdown" data-name="" data-value="">선택<span class="caret"></span></button>
 										<ul id="purposeList" class="dropdown-menu" role="menu">
@@ -595,29 +595,29 @@
 								</div>
 							</td>
 							<td>
-								<div class="tx_inp_type"><!--
+								<div class="text-input-type"><!--
 								--><input type="text" id="transferAmount" class="amount right" name="transfer_amount" placeholder="직접 입력" maxlength="18"><!--
 							--></div><!--
 						--></td>
 							<td>
-								<div class="sa_select">
+								<div class="sa-select">
 									<div class="dropdown placeholder" id="receiveDropDown">
 										<button type="button" class="dropdown-toggle" data-clone="empty" data-toggle="dropdown" data-name="">선택<span class="caret"></span></button>
 										<ul id="receiveList" class="receive-list dropdown-menu" role="menu"><li data-acc-holder="*acc_holder*" data-acc-type="*to_acc_type*" data-name="*to_bank_name*" data-value="*to_account_no*"><a href="#" tabindex="-1">*to_bank_name* *to_account_no* (*acc_holder*)</a></li></ul>
 									</div>
 								</div>
-								<div class="sa_select hidden">
+								<div class="sa-select hidden">
 									<div class="dropdown placeholder">
 										<button type="button" class="dropdown-toggle" data-clone="empty" data-toggle="dropdown" data-name="">선택<span class="caret"></span></button>
 										<ul id="bankList" class="bank-list dropdown-menu" role="menu"><li data-value="*code*"><a href="#" tabindex="-1">*bankName*</a></li></ul>
 									</div>
 								</div><!--
-							--><div class="tx_inp_type hidden"><!--
+							--><div class="text-input-type hidden"><!--
 								--><input type="text" id="accountNo" class="center" name="accountNo" placeholder="계좌번호" maxlength="18"><!--
 							--></div><!--
 						--></td>
 							<td>
-								<div class="tx_inp_type"><input type="text" id="note" name="note" placeholder="직접 입력"></div>
+								<div class="text-input-type"><input type="text" id="note" name="note" placeholder="직접 입력"></div>
 							</td>
 						</tr>
 					</tbody>
@@ -632,17 +632,17 @@
 						</tr>
 					</tfoot>
 				</table>
-				<div class="btn_wrap_type">
+				<div class="btn-wrap-type">
 					<div class="fl"><!--
 					--><small class="hidden warning">테이블의 출금 요청 정보를 모두 기입해 주세요.</small><!--
 					--><small class="hidden warning">출금 요청 정보를 기입해 주세요.</small><!--
 				--></div><!--
-				--><button type="button" id="deleteRowBtn" class="btn_type07">선택 삭제</button><!--
+				--><button type="button" id="deleteRowBtn" class="btn-type07">선택 삭제</button><!--
 				--><button type="button" id="addRowBtn" class="btn-text-blue">열 추가</button><!--
 			--></div>
 			</div>
 			<div class="indiv mt25">
-				<div class="spc_tbl_row">
+				<div class="spc-table-row">
 					<table id="secondTable">
 						<colgroup>
 							<col style="width:15%">
@@ -651,9 +651,9 @@
 						</colgroup>
 						<tr>
 							<th class="th_type">증빙 첨부</th>
-							<td id="addFileList" class="flex_start_td"><!--
-								--><input type="file" name="file" id="fileInput" class="uploadBtn hidden stand-alone" accept=".pdf" multiple><!--
-								--><label for="fileInput" class="btn file_upload">파일 선택</label><!--
+							<td id="addFileList" class="flex-start-td"><!--
+								--><input type="file" name="file" id="fileInput" class="btn-upload hidden stand-alone" accept=".pdf" multiple><!--
+								--><label for="fileInput" class="btn file-upload">파일 선택</label><!--
 								--><div class="file_list ml-16"><ul><li>선택된 파일이 없습니다.</li></ul></div>
 							</td>
 							<td></td>
@@ -661,9 +661,9 @@
 					</table>
 				</div>
 
-				<div class="btn_wrap_type05"><!--
-				--><button type="button" onclick="location.href='/spc/transactionCalendar.do'" class="btn btn_type03 w80 mr-12">목록</button><!--
-				--><button type="submit" class="btn btn_type">제출</button><!--
+				<div class="btn-wrap-type05"><!--
+				--><button type="button" onclick="location.href='/spc/transactionCalendar.do'" class="btn btn-type03 w80 mr-12">목록</button><!--
+				--><button type="submit" class="btn btn-type">제출</button><!--
 			--></div>
 			</div>
 		</div>

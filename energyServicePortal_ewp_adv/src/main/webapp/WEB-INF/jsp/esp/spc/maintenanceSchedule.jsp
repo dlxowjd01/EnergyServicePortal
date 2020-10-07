@@ -8,7 +8,7 @@
 		pageInit();
 
 		//날짜 셀렉트박스 클릭 시
-		$('.sch_sel_area ul li').on('click', function () {
+		$('.search-select-wrapper ul li').on('click', function () {
 			var thisVal = $(this).data('value');
 			var thisId = $(this).parent().parent().attr('id');
 			
@@ -21,19 +21,19 @@
 		});
 
 		//전월
-		$('.btn_prev_mon').on('click', function () {
+		$('.btn-prev-month').on('click', function () {
 			today = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
 			buildCalendar();
 		});
 
 		//다음월
-		$('.btn_next_mon').on('click', function () {
+		$('.btn-next-month').on('click', function () {
 			today = new Date(today.getFullYear(), today.getMonth() + 1, today.getDate());
 			buildCalendar();
 		});
 
 		//요번달
-		$('.btn_type03.active').on('click', function () {
+		$('.btn-type03.active').on('click', function () {
 			today = new Date();
 			buildCalendar();
 		});
@@ -152,7 +152,7 @@
 			}
 		}
 
-		$('.sch_btn > strong').html(doMonth.getMonth() + 1 + '월');
+		$('.search-btn > strong').html(doMonth.getMonth() + 1 + '월');
 		$('#year > button').html(doMonth.getFullYear() + '년<span class="caret"></span>').data('value', doMonth.getFullYear());
 		$('#month > button').html(doMonth.getMonth() + 1 + '월<span class="caret"></span>').data('value', doMonth.getMonth() + 1);
 
@@ -393,7 +393,7 @@
 		const input = modal.find('input');
 		const textarea = modal.find('textarea');
 		const dropDown = modal.find('button.btn-primary');
-		const repeat_wrapper = $('#repeat_yn').parents('.flex_start3');
+		const repeat_wrapper = $('#repeat_yn').parents('.flex-start3');
 		const repeat_cycle = $('#repeat_yn button');
 		const addScheduleBtn = $('#addScheduleBtn');
 		const deleteScheduleBtn = $('#deleteScheduleBtn');
@@ -402,7 +402,7 @@
 		repeat_cycle.parents('div.dropdown').siblings().addClass('hidden');
 		repeat_wrapper.removeClass("short");
 		$('#repeat_end').val('').datepicker('destroy').removeClass('sel');
-		$('#repeat_end').parent().removeClass('sel_calendar').addClass('tx_inp_type');
+		$('#repeat_end').parent().removeClass('sel-calendar').addClass('text-input-type');
 
 		if (data == undefined) {
 			title.text('점검계획 등록');
@@ -433,17 +433,17 @@
 
 			if ($('#repeat_yn button').data('value') == 'N') {
 				$('#repeat_end').val('').datepicker('destroy').removeClass('sel');
-				$('#repeat_end').parent().removeClass('sel_calendar').addClass('tx_inp_type');
+				$('#repeat_end').parent().removeClass('sel-calendar').addClass('text-input-type');
 
-				$('#repeat_yn').parents('.flex_start3').removeClass('short');
+				$('#repeat_yn').parents('.flex-start3').removeClass('short');
 				$('#repeat_yn').siblings().addClass('hidden');
 
-				$('#repeat_end').removeClass('sel').parent().removeClass('sel_calendar').addClass('tx_inp_type');
+				$('#repeat_end').removeClass('sel').parent().removeClass('sel-calendar').addClass('text-input-type');
 			} else {
-				$('#repeat_yn').parents('.flex_start3').addClass('short');
+				$('#repeat_yn').parents('.flex-start3').addClass('short');
 				$('#repeat_yn').siblings().removeClass('hidden');
 
-				$('#repeat_end').addClass('sel').parent().removeClass('tx_inp_type').addClass('sel_calendar');
+				$('#repeat_end').addClass('sel').parent().removeClass('text-input-type').addClass('sel-calendar');
 				$('#repeat_end').removeClass('hasDatepicker').datepicker({
 					showOn: 'both',
 					buttonImageOnly: true,
@@ -476,7 +476,7 @@
 			return false;
 		} else if ($('#repeat_yn button').data('value') == 'N') {
 			$('#repeat_end').val('').datepicker('destroy').removeClass('sel');
-			$('#repeat_end').parent().removeClass('sel_calendar').addClass('tx_inp_type');
+			$('#repeat_end').parent().removeClass('sel-calendar').addClass('text-input-type');
 		} else {
 			$('#repeat_end').removeClass('hasDatepicker').datepicker({
 				showOn: 'both',
@@ -492,7 +492,7 @@
 					$(this).closest('.dateField').find('.fromDate').datepicker('option', 'maxDate', selected);
 				}
 			});
-			$('#repeat_end').addClass('sel').parent().removeClass('tx_inp_type').addClass('sel_calendar');
+			$('#repeat_end').addClass('sel').parent().removeClass('text-input-type').addClass('sel-calendar');
 		}
 
 		if (!isEmpty($('#alarmSetup button').data('value')) && $('#alarmSetup button').data('value') != '직접 설정') {
@@ -514,15 +514,15 @@
 			val = obj.find('button').data('value');
 		if (buttonId == 'repeat_yn') {
 			if (val == 'Y') {
-				obj.parents('.flex_start3').addClass('short');
+				obj.parents('.flex-start3').addClass('short');
 				obj.siblings().removeClass('hidden');
-				obj.next('.tx_inp_type').find('input').val('');
-				$('#repeat_end').addClass('sel').parent().removeClass('tx_inp_type').addClass('sel_calendar');
+				obj.next('.text-input-type').find('input').val('');
+				$('#repeat_end').addClass('sel').parent().removeClass('text-input-type').addClass('sel-calendar');
 			} else {
-				obj.parents('.flex_start3').removeClass('short');
+				obj.parents('.flex-start3').removeClass('short');
 				obj.siblings().addClass('hidden');
-				obj.next('.tx_inp_type').find('input').val(0);
-				$('#repeat_end').removeClass('sel').parent().removeClass('sel_calendar').addClass('tx_inp_type');
+				obj.next('.text-input-type').find('input').val(0);
+				$('#repeat_end').removeClass('sel').parent().removeClass('sel-calendar').addClass('text-input-type');
 			}
 			dropDownInit($('#repeat_unit'));
 			repeatEnd();
@@ -562,8 +562,8 @@
 </script>
 
 <div class="modal fade" id="registerModal" tabindex="-1" role="form" aria-labelledby="myModalLabel">
-	<div class="modal-dialog spc_modal_lg" role="modal">
-		<div class="modal-content spc_modal_content">
+	<div class="modal-dialog spc-modal-lg" role="modal">
+		<div class="modal-content spc-modal-content">
 			<div class="modal-header">
 				<h2>점검계획 등록</h2>
 			</div>
@@ -571,21 +571,21 @@
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-lg-2 col-md-2 col-sm-3">
-							<span class="input_label">발전소 선택</span>
+							<span class="input-label">발전소 선택</span>
 						</div>
-						<div class="col-lg-10 col-md-10 col-sm-9 px-0 flex_start">
-							<div class="tx_inp_type mr-12">
+						<div class="col-lg-10 col-md-10 col-sm-9 px-0 flex-start">
+							<div class="text-input-type mr-12">
 								<input type="text" id="siteName" name="siteName" placeholder="입력" class="required" autocomplete="off">
 								<input type="hidden" id="site_id" name="site_id">
 							</div>
-							<button type="submit" class="btn_type">검색</button>
+							<button type="submit" class="btn-type">검색</button>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-lg-2 col-md-2 col-sm-3">
-							<span class="input_label">점검 구분</span>
+							<span class="input-label">점검 구분</span>
 						</div>
-						<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
+						<div class="col-lg-4 col-md-4 col-sm-9 flex-start px-0">
 							<div class="dropdown placeholder" id="job_type">
 								<button type="button" class="dropdown-toggle required" data-toggle="dropdown" data-name="점검 계획 항목 선택"><span class="caret"></span></button>
 								<ul class="dropdown-menu">
@@ -607,9 +607,9 @@
 							</div>
 						</div>
 						<div class="col-lg-2 col-md-2 col-sm-3">
-							<span class="input_label">점검 주기</span>
+							<span class="input-label">점검 주기</span>
 						</div>
-						<div class="col-lg-4 col-md-4 col-sm-9 flex_start3 px-0">
+						<div class="col-lg-4 col-md-4 col-sm-9 flex-start3 px-0">
 							<div class="dropdown" id="repeat_yn">
 								<button type="button" class="dropdown-toggle required" data-toggle="dropdown" data-name="점검 선택">점검 선택<span class="caret"></span></button>
 								<ul class="dropdown-menu">
@@ -617,7 +617,7 @@
 									<li data-value="N"><a href="javascript:void(0);">일시 점검</a></li>
 								</ul>
 							</div>
-							<div class="tx_inp_type hidden">
+							<div class="text-input-type hidden">
 								<input type="text" id="repeat_interval" name="repeat_interval" placeholder="입력" onkeydown="onlyNum(event);" maxlength="2" autocomplete="off">
 							</div>
 							<div class="dropdown hidden" id="repeat_unit">
@@ -634,27 +634,27 @@
 					</div>
 					<div class="row dateField">
 						<div class="col-lg-2 col-md-2 col-sm-3">
-							<span class="input_label">기준 일자</span>
+							<span class="input-label">기준 일자</span>
 						</div>
-						<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
-							<div class="sel_calendar">
+						<div class="col-lg-4 col-md-4 col-sm-9 flex-start px-0">
+							<div class="sel-calendar">
 								<input type="text" id="job_date" name="job_date" class="sel fromDate required w-100" placeholder="기준 일자" value="" autocomplete="off" readonly>
 							</div>
 						</div>
 						<div class="col-lg-2 col-md-2 col-sm-3">
-							<span class="input_label">반복 종료일</span>
+							<span class="input-label">반복 종료일</span>
 						</div>
-						<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
-							<div class="tx_inp_type">
+						<div class="col-lg-4 col-md-4 col-sm-9 flex-start px-0">
+							<div class="text-input-type">
 								<input type="text" id="repeat_end" name="repeat_end" class="required toDate w-100" placeholder="반복 종료일" value="" readonly>
 							</div>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-lg-2 col-md-2 col-sm-3">
-							<span class="input_label">공휴일 처리</span>
+							<span class="input-label">공휴일 처리</span>
 						</div>
-						<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
+						<div class="col-lg-4 col-md-4 col-sm-9 flex-start px-0">
 							<div class="dropdown placeholder" id="repeat_before_after_holiday">
 								<button type="button" class="dropdown-toggle required" data-toggle="dropdown" data-name="공휴일 처리 선택"><span class="caret"></span></button>
 								<ul class="dropdown-menu">
@@ -667,35 +667,35 @@
 					</div>
 					<div class="row">
 						<div class="col-lg-2 col-md-2 col-sm-3">
-							<span class="input_label">내용</span>
+							<span class="input-label">내용</span>
 						</div>
-						<div class="col-lg-10 col-md-10 col-sm-9 flex_start px-0">
+						<div class="col-lg-10 col-md-10 col-sm-9 flex-start px-0">
 							<textarea class="textarea" id="description" name="description" placeholder="입력"></textarea>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-lg-2 col-md-2 col-sm-3">
-							<span class="input_label">작업자</span>
+							<span class="input-label">작업자</span>
 						</div>
-						<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
-							<div class="tx_inp_type">
+						<div class="col-lg-4 col-md-4 col-sm-9 flex-start px-0">
+							<div class="text-input-type">
 								<input type="text" id="worker" name="worker" placeholder="입력" maxlength="10">
 							</div>
 						</div>
 						<div class="col-lg-2 col-md-2 col-sm-3">
-							<span class="input_label">비고</span>
+							<span class="input-label">비고</span>
 						</div>
-						<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
-							<div class="tx_inp_type">
+						<div class="col-lg-4 col-md-4 col-sm-9 flex-start px-0">
+							<div class="text-input-type">
 								<input type="text" id="note" name="note" placeholder="입력" maxlength="50">
 							</div>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-lg-2 col-md-2 col-sm-3">
-							<span class="input_label">알림 설정</span>
+							<span class="input-label">알림 설정</span>
 						</div>
-						<div class="col-lg-4 col-md-4 col-sm-9 flex_start2 px-0">
+						<div class="col-lg-4 col-md-4 col-sm-9 flex-start2 px-0">
 							<div class="dropdown mr-12" id="alarmSetup">
 								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="일시">일시<span class="caret"></span></button>
 								<ul class="dropdown-menu">
@@ -705,14 +705,14 @@
 									<li data-value="직접 설정"><a href="javascript:void(0);">직접 설정</a></li>
 								</ul>
 							</div>
-							<div class="sel_calendar">
+							<div class="sel-calendar">
 								<input type="text" id="alarmDate" name="alarmDate" class="sel disabled" value="" autocomplete="off" readonly>
 							</div>
 						</div>
 						<div class="col-lg-2 col-md-2 col-sm-3">
-							<span class="input_label">알림 시간</span>
+							<span class="input-label">알림 시간</span>
 						</div>
-						<div class="col-lg-4 col-md-4 col-sm-9 flex_start2 px-0">
+						<div class="col-lg-4 col-md-4 col-sm-9 flex-start2 px-0">
 							<div class="dropdown placeholder mr-12" id="alarmTime">
 								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="시간">시간<span class="caret"></span></button>
 								<ul class="dropdown-menu">
@@ -721,17 +721,17 @@
 									</c:forEach>
 								</ul>
 							</div>
-							<div class="tx_inp_type">
+							<div class="text-input-type">
 								<input type="text" id="alarmPhone" name="alarmPhone" placeholder="수신 번호" maxlength="12" onkeydown="onlyNum(event)">
 							</div>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-12 end">
-							<div class="btn_wrap_type02">
-								<button type="button" id="deleteScheduleBtn" class="btn_type04 hidden">삭제</button>
-								<button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button>
-								<button type="button" id="addScheduleBtn" class="btn_type">등록</button>
+							<div class="btn-wrap-type02">
+								<button type="button" id="deleteScheduleBtn" class="btn-type04 hidden">삭제</button>
+								<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close">취소</button>
+								<button type="button" id="addScheduleBtn" class="btn-type">등록</button>
 							</div>
 						</div>
 					</div>
@@ -749,8 +749,8 @@
 
 <div class="row">
 	<div class="col-lg-2 clear">
-		<div class="sch_sel_area">
-			<div class="sch_sel_item">
+		<div class="search-select-wrapper">
+			<div class="search-select-item">
 				<div class="dropdown" id="year">
 					<button type="button" class="dropdown-toggle" data-toggle="dropdown">
 						<span class="caret"></span>
@@ -762,7 +762,7 @@
 					</ul>
 				</div>
 			</div>
-			<div class="sch_sel_item">
+			<div class="search-select-item">
 				<div class="dropdown" id="month">
 					<button type="button" class="dropdown-toggle" data-toggle="dropdown">
 						<span class="caret"></span>
@@ -788,88 +788,88 @@
 </div>
 
 <div class="row">
-	<div class="col-lg-2 col-md-3 col-sm-4 sch_left">
+	<div class="col-lg-2 col-md-3 col-sm-4 search-left">
 		<div class="indiv">
 			<h2 class="ntit">점검 구분</h2>
-			<div class="sch_inp_area">
-				<div class="chk_type c1">
+			<div class="search-input-wrapper">
+				<div class="chk-type c1">
 					<input type="checkbox" id="chk_op01" name="type" value="1" checked>
 					<label for="chk_op01">정기점검</label>
 				</div>
-				<div class="chk_type c2">
+				<div class="chk-type c2">
 					<input type="checkbox" id="chk_op02" name="type" value="2" checked>
 					<label for="chk_op02">구조물 안전진단</label>
 				</div>
-				<div class="chk_type c3">
+				<div class="chk-type c3">
 					<input type="checkbox" id="chk_op03" name="type" value="3" checked>
 					<label for="chk_op03">소방점검</label>
 				</div>
-				<div class="chk_type c4">
+				<div class="chk-type c4">
 					<input type="checkbox" id="chk_op04" name="type" value="4" checked>
 					<label for="chk_op04">등기이사 기간만료</label>
 				</div>
-				<div class="chk_type c5">
+				<div class="chk-type c5">
 					<input type="checkbox" id="chk_op05" name="type" value="5" checked>
 					<label for="chk_op05">모듈점검</label>
 				</div>
-				<div class="chk_type c6">
+				<div class="chk-type c6">
 					<input type="checkbox" id="chk_op06" name="type" value="6" checked>
 					<label for="chk_op06">케이블점검</label>
 				</div>
-				<div class="chk_type c7">
+				<div class="chk-type c7">
 					<input type="checkbox" id="chk_op07" name="type" value="7" checked>
 					<label for="chk_op07">구조물점검</label>
 				</div>
-				<div class="chk_type c8">
+				<div class="chk-type c8">
 					<input type="checkbox" id="chk_op08" name="type" value="8" checked>
 					<label for="chk_op08">접속함점검</label>
 				</div>
-				<div class="chk_type c9">
+				<div class="chk-type c9">
 					<input type="checkbox" id="chk_op09" name="type" value="9" checked>
 					<label for="chk_op09">인버터점검</label>
 				</div>
-				<div class="chk_type c10">
+				<div class="chk-type c10">
 					<input type="checkbox" id="chk_op10" name="type" value="10" checked>
 					<label for="chk_op10">수배전반점검</label>
 				</div>
-				<div class="chk_type c11">
+				<div class="chk-type c11">
 					<input type="checkbox" id="chk_op11" name="type" value="11" checked>
 					<label for="chk_op11">부지점검</label>
 				</div>
-				<div class="chk_type c12">
+				<div class="chk-type c12">
 					<input type="checkbox" id="chk_op12" name="type" value="12" checked>
 					<label for="chk_op12">열화상점검</label>
 				</div>
-				<div class="chk_type c13">
+				<div class="chk-type c13">
 					<input type="checkbox" id="chk_op13" name="type" value="13" checked>
 					<label for="chk_op13">소모품점검</label>
 				</div>
-				<div class="chk_type c14">
+				<div class="chk-type c14">
 					<input type="checkbox" id="chk_op14" name="type" value="14" checked>
 					<label for="chk_op14">기타점검</label>
 				</div>
 			</div>
 
 			<h2 class="ntit">발전소</h2>
-			<div class="tx_inp_type">
+			<div class="text-input-type">
 				<input type="text" id="searchName" name="searchName" placeholder="입력">
 			</div>
 		</div>
 	</div>
 	<div class="col-lg-10 col-md-9 col-sm-8">
-		<div class="indiv pd_type">
+		<div class="indiv indiv-type">
 			<div class="schedule_area">
-				<div class="sch_top_info clear">
-					<div class="sch_btn fl">
-						<button type="button" class="btn_type03 active">오늘</button>
-						<button type="button" class="btn_prev_mon">prev</button>
-						<button type="button" class="btn_next_mon">next</button>
+				<div class="search-top-info clear">
+					<div class="search-btn fl">
+						<button type="button" class="btn-type03 active">오늘</button>
+						<button type="button" class="btn-prev-month">prev</button>
+						<button type="button" class="btn-next-month">next</button>
 						<strong></strong>
 					</div>
-					<a href="javascript:void(0);" class="btn_type fr" id="register">등록</a>
-					<!--<a href="/spc/maintenanceSchedulePost.do" class="btn_type fr">등록</a>-->
+					<a href="javascript:void(0);" class="btn-type fr" id="register">등록</a>
+					<!--<a href="/spc/maintenanceSchedulePost.do" class="btn-type fr">등록</a>-->
 				</div>
-				<div class="sch_btm_area">
+				<div class="search-bottom-wrapper">
 					<table id="calendar">
 						<colgroup>
 							<col style="width:14.28%">

@@ -7,7 +7,7 @@
 
 		getDataList(page);
 
-		$('.save_btn').on('click', function (e) {
+		$('.btn-save').on('click', function (e) {
 			let excelName = 'spc_이관자료_목록';
 			let $val = $('#excelList').find('tbody');
 			let cnt = $val.length;
@@ -59,8 +59,8 @@
 			page = 1;
 		}else{
 			if(isEmpty(n) && isEmpty(sort)) {
-				$('.sort_table > thead').find('button').each(function(){
-					if($(this).attr('class') != 'btn_align'){
+				$('.sort-table > thead').find('button').each(function(){
+					if($(this).attr('class') != 'btn-align'){
 						n = $(this).data('colname');
 						sort = $(this).data('classname');
 					}
@@ -162,7 +162,7 @@
 					}
 
 				}
-				$(".sort_table").data("nowjsp", "supplementary");
+				$(".sort-table").data("nowjsp", "supplementary");
 				jsonListSort(n, sort, jsonList);
 				jsonList = paging(page, jsonList);
 				setMakeList(jsonList, "listData", {
@@ -189,24 +189,24 @@
 </div>
 <div class="row">
 	<div class="col-lg-3 col-md-4 col-sm-4">
-		<div class="tx_btn_area">
-			<div class="tx_inp_type">
+		<div class="text-btn-area">
+			<div class="text-input-type">
 				<input type="text" id="key_word" placeholder="입력">
 			</div>
-			<button type="button" class="btn_type" onclick="getDataList();">검색</button>
+			<button type="button" class="btn-type" onclick="getDataList();">검색</button>
 		</div>
 	</div>
 	<div class="col-lg-9 col-md-8 col-sm-8">
 		<div class="right">
-			<a href="#;" class="save_btn">엑셀 다운로드</a>
+			<a href="#;" class="btn-save">엑셀 다운로드</a>
 		</div>
 	</div>
 </div>
 <div class="row">
 	<div class="col-lg-12">
-		<div class="indiv supplementary_docs">
-			<div class="spc_tbl align_type" id="excelList">
-				<table class="sort_table chk_type">
+		<div class="indiv supplementary-docs">
+			<div class="spc-tbl align-type" id="excelList">
+				<table class="sort-table chk-type">
 					<colgroup>
 						<col style="width:5%">
 						<col style="width:25%">
@@ -223,12 +223,12 @@
 								<input type="hidden" id="chk_header" value="순번">
 								<label for="chk_header">순번</label>
 							</th>
-							<th><button type="button" class="btn_align down">SPC명</button></th>
-							<th><button type="button" class="btn_align down">발전소 명</button></th>
-<%--							<th class="right"><button type="button" class="btn_align down">용량(kW)</button></th>--%>
-							<th><button type="button" class="btn_align down">관리 운영기간</button></th>
-							<th class="right"><button type="button" class="btn_align down">이관자료</button></th>
-							<th class="right"><button type="button" class="btn_align up">첨부파일</button></th>
+							<th><button type="button" class="btn-align down">SPC명</button></th>
+							<th><button type="button" class="btn-align down">발전소 명</button></th>
+<%--							<th class="right"><button type="button" class="btn-align down">용량(kW)</button></th>--%>
+							<th><button type="button" class="btn-align down">관리 운영기간</button></th>
+							<th class="right"><button type="button" class="btn-align down">이관자료</button></th>
+							<th class="right"><button type="button" class="btn-align up">첨부파일</button></th>
 						</tr>
 					</thead>
 					<tbody id="listData">
@@ -237,8 +237,8 @@
 								<input type="hidden" id="chk_op[INDEX]" name="rowCheck" value="1">
 								<label for="chk_op[INDEX]">[INDEX]</label>
 							</td>
-							<td><a href="/spc/entityDetailsBySPC.do?spc_id=[spc_id]&gen_id=[gen_id]&oid=[oid]" class="tbl_link">[name]</a></td>
-							<td><a href="/spc/entityDetailsBySPC.do?spc_id=[spc_id]&gen_id=[gen_id]&oid=[oid]" class="tbl_link">[발전소_명]</a></td>
+							<td><a href="/spc/entityDetailsBySPC.do?spc_id=[spc_id]&gen_id=[gen_id]&oid=[oid]" class="table-link">[name]</a></td>
+							<td><a href="/spc/entityDetailsBySPC.do?spc_id=[spc_id]&gen_id=[gen_id]&oid=[oid]" class="table-link">[발전소_명]</a></td>
 <%--							<td class="right">[설치_용량]</td>--%>
 							<td>[관리_운영_기간]</td>
 							<td class="right">[파일_현재_개수]&nbsp;/&nbsp;[파일_총_개수]</td>
@@ -247,7 +247,7 @@
 					</tbody>
 				</table>
 			</div>
-			<div class="paging_wrap" id="paging">
+			<div class="pagination-wrapper" id="paging">
 			</div>
 		</div>
 	</div>

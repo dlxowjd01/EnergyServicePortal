@@ -1,11 +1,11 @@
 /* Laptop ~ Desktop screen sizes */
 
 @media all and (min-width: 993px) and (max-width: 1199px) {
-	.gmain_chart1 #monthlyChart {
+	.gmain-chart1 #monthlyChart {
 		height: 285px;
 	}
 
-	.gmain_chart2 #dailyChart {
+	.gmain-chart2 #dailyChart {
 		height: 323px;
 	}
 }
@@ -14,71 +14,82 @@
 /* col-md size */
 
 @media all and (min-width: 769px) and (max-width: 992px) {
-	.gmain_chart1,
-	.gmain_chart4 {
+	.gmain-chart1,
+	.gmain-chart4 {
 		height: 533px;
 	}
 
-	.gmain_chart1 #monthlyChart {
+	.gmain-chart1 #monthlyChart {
 		height: 450px;
 	}
 
-	.gmain_chart2,
-	.gmain_chart.jmain_center2 {
+	.gmain-chart2,
+	.gmain-chart.jmain-center2 {
 		height: 400px;
 	}
 
-	.gmain_chart2 #dailyChart {
+	.gmain-chart2 #dailyChart {
 		height: 315px;
 	}
 
-	.gmain_chart3,
-	.jmain_center3 {
+	.gmain-chart3,
+	.jmain-center3 {
 		min-height: auto;
 		height: 450px;
 	}
 
-	.gmain_chart3 .inchart {
+	.gmain-chart3 .inchart {
 		height: 355px;
 	}
 
-	.gmain_chart3 #gchart3 {
+	.gmain-chart3 #gchart3 {
 		height: 355px;
 	}
 
-	.jmain_center3 .realtime_wrap .inchart {
+	.jmain-center3 .realtime-wrap .inchart {
 		height: 365px;
 	}
 
-	.jmain_center3 .realtime_wrap .inchart #rchart3 {
+	.jmain-center3 .realtime-wrap .inchart #rchart3 {
 		height: 365px;
 	}
 }
 
+@media (min-width: 1092px) {
+	.modal-dialog {
+		width:1092px
+	}
+	.spc_tbl02_row {
+		overflow-x:visible
+	}
+	.modal-dialog.history-alarm {
+		width:560px
+	}
+}
 
 @media all and (max-width: 1280px) {
-	.indiv.diagnosis_chart .chart_top .inline_flex .duration {
+	.indiv.chart-diagnosis .chart-top .inline-flex .duration {
 		display: none;
 	}
 
-	.entity_wrap.post .indiv .spc_tbl_row.st_edit .tx_inp_type.edit,
-	.entity_wrap.post .indiv .spc_tbl_row.st_edit .sel_calendar.edit,
-	.entity_wrap.post .indiv .spc_tbl_row.st_edit .fixed_heightw300 {
+	.entity-wrapper.post .indiv .spc-table-row.st-edit .text-input-type.edit,
+	.entity-wrapper.post .indiv .spc-table-row.st-edit .sel-calendar.edit,
+	.entity-wrapper.post .indiv .spc-table-row.st-edit .fixed_heightw300 {
 		max-width: 300px;
 		width: 100%;
 	}
 
-	.entity_wrap.post .indiv .spc_tbl_row th,
-	.entity_wrap.post .indiv .spc_tbl_row td {
+	.entity-wrapper.post .indiv .spc-table-row th,
+	.entity-wrapper.post .indiv .spc-table-row td {
 		white-space: normal;
 	}
 
-	.entity_wrap.post .indiv .spc_tbl_row .sel_calendar.edit.twin .sel {
+	.entity-wrapper.post .indiv .spc-table-row .sel-calendar.edit.twin .sel {
 		width: 100%;
 		float: none;
 	}
 
-	.inv_sec_bx {
+	.inv-search-box {
 		max-height: 160px;
 		overflow-y: auto;
 	}
@@ -87,37 +98,37 @@
 
 @media all and (max-width: 1199px) {
 
-	.group_type.short .dropdown.edit,
-	.group_type.short .dropdown.edit:nth-child(2) {
+	.group-type.short .dropdown.edit,
+	.group-type.short .dropdown.edit:nth-child(2) {
 		width: 100%;
 	}
 
-	.entity_wrap.post .indiv .spc_tbl_row.st_edit .group_type>div+div {
+	.entity-wrapper.post .indiv .spc-table-row.st-edit .group-type>div+div {
 		margin-left: 0;
 		float: left;
 		clear: both;
 		content: "";
 	}
 
-	.entity_wrap.post .indiv .spc_tbl_row td.flex_start .sel_calendar.twin {
+	.entity-wrapper.post .indiv .spc-table-row td.flex-start .sel-calendar.twin {
 		padding-top: 49px;
 		width: 70%;
 	}
 
-	.entity_wrap.post .indiv .spc_tbl_row td.flex_start .chk_type.ml-38 {
+	.entity-wrapper.post .indiv .spc-table-row td.flex-start .chk-type.ml-38 {
 		margin: 10px 0 10px 15px;
 		padding-top: 45px;
 		white-space: normal;
 	}
 
-	.group_type>div,
-	.group_type>div.tx_inp_type,
+	.group-type>div,
+	.group-type>div.text-input-type,
 	.dropup.edit,
 	.dropdown.edit {
 		width: 100%;
 	}
 
-	.w_type {
+	.w-180 {
 		width: 100%
 	}
 
@@ -127,43 +138,43 @@
 	}
 
 
-	.gmain_map .chart_info>div.ci_left {
+	.gmain-map .chart-info>div.ci-left {
 		margin: 0 auto;
 	}
 
-	.gmain_map.smain_circle .chart_info .ci_left {
+	.gmain-map.smain-circle .chart-info .ci-left {
 		display: table;
 		width: auto;
 		padding: 0;
 	}
 
-	.gmain_map .chart_info>div {
+	.gmain-map .chart-info>div {
 		display: block;
 	}
 
-	.gmain_chart .chart_top {
+	.gmain-chart .chart-top {
 		margin-bottom: 0;
 	}
 
-	.gmain_chart.gmain_chart1,
-	.gmain_chart.gmain_chart2,
-	.gmain_chart.gmain_chart3 {
+	.gmain-chart.gmain-chart1,
+	.gmain-chart.gmain-chart2,
+	.gmain-chart.gmain-chart3 {
 		padding: 20px 30px;
 		height: auto;
 	}
 
-	.gmain_chart.gmain_chart1 .chart_top .ntit,
-	.gmain_chart.gmain_chart2 .chart_top .ntit,
-	.gmain_chart.gmain_chart3 .chart_top .ntit {
+	.gmain-chart.gmain-chart1 .chart-top .ntit,
+	.gmain-chart.gmain-chart2 .chart-top .ntit,
+	.gmain-chart.gmain-chart3 .chart-top .ntit {
 		margin: 0 auto;
 	}
 
-	.gmain_chart.gmain_chart1>.inchart,
-	.gmain_chart.gmain_chart1 .term,
-	.gmain_chart.gmain_chart2 .term,
-	.gmain_chart.gmain_chart3 .term,
-	.gmain_chart.gmain_chart2>.inchart,
-	.gmain_chart.gmain_chart3>.tblDisplay {
+	.gmain-chart.gmain-chart1>.inchart,
+	.gmain-chart.gmain-chart1 .term,
+	.gmain-chart.gmain-chart2 .term,
+	.gmain-chart.gmain-chart3 .term,
+	.gmain-chart.gmain-chart2>.inchart,
+	.gmain-chart.gmain-chart3>.tblDisplay {
 		display: none;
 	}
 
@@ -171,20 +182,20 @@
 		display: flex !important;
 	}
 
-	.gmain_map.gmain_chart.gmain_chart4,
-	.gmain_alarm {
+	.gmain-map.gmain-chart.gmain-chart4,
+	.gmain-alarm {
 		height: 520px;
 	}
 
-	.jmain_alarm {
+	.jmain-alarm {
 		height: 520px;
 	}
 
-	.local_info.s_center {
+	.local-info.s-center {
 		margin-top: 15px;
 	}
 
-	.indiv.diagnosis_chart .chart_top.clear .btn_type {
+	.indiv.chart-diagnosis .chart-top.clear .btn-type {
 		margin-top: 16px;
 	}
 	
@@ -197,16 +208,16 @@
 /* Tablet && Mobile screen sizes */
 
 @media all and (max-width: 992px) {
-	.entity_wrap.post .indiv .spc_tbl_row td.flex_start {
+	.entity-wrapper.post .indiv .spc-table-row td.flex-start {
 		display: table-cell;
 	}
 
-	.entity_wrap.post .indiv .spc_tbl_row td.flex_start .sel_calendar.twin {
+	.entity-wrapper.post .indiv .spc-table-row td.flex-start .sel-calendar.twin {
 		padding-top: 0;
 		width: 100%;
 	}
 
-	.entity_wrap.post .indiv .spc_tbl_row td.flex_start .chk_type.ml-38 {
+	.entity-wrapper.post .indiv .spc-table-row td.flex-start .chk-type.ml-38 {
 		padding-top: 0;
 		margin: 10px 0 10px 0px;
 	}
@@ -226,87 +237,87 @@
 	/********************************************************************************
 										alarm
 	*********************************************************************************/
-	.alarm_notice li:not(:last-child) {
+	.alarm-notice li:not(:last-child) {
 		margin-bottom: 10px;
 	}
 
 	/********************************************************************************
 										gmain
 	*********************************************************************************/
-	.gmain_map2 {
+	.gmain-map2 {
 		margin-bottom: 20px;
 	}
 
-	.gmain_map2,
-	.gmain_map2 .map_wrap {
+	.gmain-map2,
+	.gmain-map2 .map-wrap {
 		height: 380px;
 		width: 100%;
 	}
 
-	.gmain_map2_content {
+	.gmain-map2-content {
 		width: 100%;
 	}
 
-	.gmain_map .chart_info>div {
+	.gmain-map .chart-info>div {
 		display: block;
 		width: 100%
 	}
 
-	.gmain_map.gmain_chart.gmain_chart4,
-	.gmain_alarm {
+	.gmain-map.gmain-chart.gmain-chart4,
+	.gmain-alarm {
 		height: 533px;
 	}
 
-	.jmain_alarm {
+	.jmain-alarm {
 		height: 533px;
 	}
 
-	.gmain_map.gmain_chart.gmain_chart4 {
+	.gmain-map.gmain-chart.gmain-chart4 {
 		overflow: hidden;
 	}
 
-	.gmain_map.gmain_chart.gmain_chart4 .local_info.s_center {
+	.gmain-map.gmain-chart.gmain-chart4 .local-info.s-center {
 		overflow: scroll;
 		height: 100px;
 	}
 
-	.gmain_table .gtbl_wrap .intable {
+	.gmain-table .gmain-wrap .intable {
 		max-height: 365px;
 	}
 
-	.gmain_table {
+	.gmain-table {
 		display: block;
 		height: 874px;
 	}
 
-	.gmain_table.jmain_table .gtbl_wrap .intable {
+	.gmain-table.jmain-table .gmain-wrap .intable {
 		max-height: 760px;
 	}
 
-	.gmain_chart .chart_top .ntit {
+	.gmain-chart .chart-top .ntit {
 		margin: 6px 0 10px;
 	}
 
-	.gmain_map .chart_info>div.ci_left {
+	.gmain-map .chart-info>div.ci-left {
 		padding: 0;
 	}
 
-	.gmain_map .chart_info>div.ci_left>.inchart {
+	.gmain-map .chart-info>div.ci-left>.inchart {
 		margin: 0 auto;
 		padding: 0;
 	}
 
-	.di_btm_sec .bx_top {
+	.di-bottom-sec .box-top {
 		margin: 20px auto -30px;
 	}
 
-	.di_btm_sec .bx_top .inchart {
+	.di-bottom-sec .box-top .inchart {
 		height: 200px;
 	}
 
-	.flex_start,
-	.flex_start2,
-	.flex_start3 {
+	.flex-start,
+	.flex-start2,
+	.flex-start3 {
 		flex-wrap: wrap;
 	}
 
@@ -317,28 +328,28 @@
 	.modal-content.user-modal-content {
 		width: auto;
 	}
-	.user-modal-content .input_label.offset {
+	.user-modal-content .input-label.offset {
 		padding-left: 0;
 	}
 
-	.device_modal .modal-content.new_device .textarea {
+	.device-modal .modal-content.new_device .textarea {
 		width: 250px;
 	}
 
-	.dropdown_modal.modal-dialog .modal-content {
+	.dropdown-modal.modal-dialog .modal-content {
 		padding: 20px;
 	}
 
-	.dropdown_modal {
+	.dropdown-modal {
 		display: none;
 		width: 300px;
 	}
 
-	.spc-search-bar .sa_select+.sa_select {
+	.spc-search-bar .sa-select+.sa-select {
 		margin: 0 0 10px;
 	}
 
-	.spc-search-bar .tx_tit {
+	.spc-search-bar .tx-tit {
 		min-width: 80px;
 	}
 
@@ -568,7 +579,7 @@
 		margin: 20px 0 0 0;
 	}
 
-	nav .nav_right {
+	nav .nav-right {
 		margin-right: 20px;
 	}
 
@@ -654,7 +665,7 @@
 		padding: 19px 20px;
 	}
 
-	.indiv.wrap_type {
+	.indiv.wrap-type {
 		padding: 0;
 	}
 
@@ -663,16 +674,16 @@
 		margin: 20px;
 	}
 
-	.spc_modal_content .input_label {
+	.spc-modal-content .input-label {
 		white-space: normal;
 	}
 
-	.spc_modal_content .flex_start2 .sel_calendar,
-	.spc_modal_content .flex_start2 .sel {
+	.spc-modal-content .flex-start2 .sel-calendar,
+	.spc-modal-content .flex-start2 .sel {
 		width: 120px;
 	}
 
-	.spc_modal_content .flex_start .textarea {
+	.spc-modal-content .flex-start .textarea {
 		width: calc(100% - 85px);
 	}
 
@@ -688,21 +699,21 @@
 		min-height: initial;
 	}
 
-	.alarm_notice {
+	.alarm-notice {
 		margin-top: 10px;
 		padding-right: 0;
 		height: auto;
 		overflow-y: inherit;
 	}
 
-	.chart_top .meter {
+	.chart-top .meter {
 		clear: both;
 		margin-left: 0;
 		font-size: 0;
 		float: none;
 	}
 
-	.chart_top .meter>span {
+	.chart-top .meter>span {
 		display: inline-block;
 		height: 36px;
 		line-height: 36px;
@@ -712,37 +723,37 @@
 		margin-right: 15px;
 	}
 
-	.chart_top .meter>* {
+	.chart-top .meter>* {
 		margin-top: 10px;
 	}
 
 	/********************************************************************************
-								table ( tbl_wrap_type )
+								table ( table-wrap-type )
 	*********************************************************************************/
-	.tbl_wrap_type.collect_wrap {
+	.table-wrap-type.collect-wrap {
 		overflow-y: auto
 	}
 
-	.spc_tbl_row {
+	.spc-table-row {
 		overflow-y: auto
 	}
 
-	.spc_tbl_row::-webkit-scrollbar-track {
+	.spc-table-row::-webkit-scrollbar-track {
 		border-radius: 2px;
 		background-color: var(--scroll-track);
 	}
 
-	.spc_tbl_row::-webkit-scrollbar {
+	.spc-table-row::-webkit-scrollbar {
 		height: 8px;
 		border-radius: 2px;
 		background-color: var(--scroll-track);
 	}
 
-	.spc_tbl_row::-webkit-scrollbar-corner {
+	.spc-table-row::-webkit-scrollbar-corner {
 		background-color: var(--scroll-track);
 	}
 
-	.spc_tbl_row::-webkit-scrollbar-thumb {
+	.spc-table-row::-webkit-scrollbar-thumb {
 		border-radius: 2px;
 		background-color: var(--white60);
 	}
@@ -757,22 +768,22 @@
 
 
 	/********************************************************************************
-										pv_chart
+										chart-pv
 	*********************************************************************************/
-	.indiv.pv_chart .chart_top {
+	.indiv.chart-pv .chart-top {
 		width: calc(100% - 160px);
 	}
 
-	.pv_chart .chart_top .duration,
-	.pv_chart_table {
+	.chart-pv .chart-top .duration,
+	.chart-pv-table {
 		display: none;
 	}
 
-	.pv_chart .chart_top .sel_calendar {
+	.chart-pv .chart-top .sel-calendar {
 		margin-left: 0;
 	}
 
-	.pv_chart .chart_top .sel_calendar button {
+	.chart-pv .chart-top .sel-calendar button {
 		display: inline-block;
 	}
 
@@ -780,12 +791,12 @@
 			prev => max-width : 481px from below
 	************************************************* */
 
-	.wrap_type .alarm_notice {
+	.wrap-type .alarm-notice {
 		max-height: 186px;
 	}
 
 	.weather-table-box,
-	.wt_list_wrap {
+	.wt-list-wrap {
 		width: 100%
 	}
 
@@ -793,78 +804,78 @@
 		margin-right: 0
 	}
 
-	.weather-wrap .wt_list_wrap {
+	.weather-wrap .wt-list-wrap {
 		margin-left: 0
 	}
 
 	/* *************************************************
-						local_info
+						local-info
 	************************************************* */
-	.local_info h2 {
+	.local-info h2 {
 		font-size: 22px;
 	}
 
-	.local_info div ul:first-child {
+	.local-info div ul:first-child {
 		padding-right: 12px;
 	}
 
-	.local_info div ul:last-child {
+	.local-info div ul:last-child {
 		padding-left: 12px;
 	}
 
-	.local_info div ul li {
+	.local-info div ul li {
 		padding-top: 15px;
 	}
 
-	.local_info div ul li strong {
+	.local-info div ul li strong {
 		font-size: 13px;
 	}
 
-	.local_info div ul li span {
+	.local-info div ul li span {
 		font-size: 14px;
 	}
 
-	.local_info div ul li em {
+	.local-info div ul li em {
 		font-size: 11px;
 		font-weight: normal;
 	}
 
-	.local_info table th {
+	.local-info table th {
 		font-size: 13px;
 	}
 
-	.local_info table td {
+	.local-info table td {
 		font-size: 13px;
 	}
 
-	.local_info table th,
-	.local_info table td {
+	.local-info table th,
+	.local-info table td {
 		height: 40px;
 		line-height: 2.5;
 		padding: 5px;
 	}
 
-	.local_info.s_center table,
-	.local_info.s_center thead,
-	.local_info.s_center tbody,
-	.local_info.s_center th,
-	.local_info.s_center td,
-	.local_info.s_center tr {
+	.local-info.s-center table,
+	.local-info.s-center thead,
+	.local-info.s-center tbody,
+	.local-info.s-center th,
+	.local-info.s-center td,
+	.local-info.s-center tr {
 		display: block;
 	}
 
 	/* Hide table headers (but not display: none;, for accessibility) */
-	.local_info.s_center thead tr {
+	.local-info.s-center thead tr {
 		position: absolute;
 		top: -9999px;
 		left: -9999px;
 	}
 
-	.local_info.s_center tr {
+	.local-info.s-center tr {
 		margin: 0 0 1rem 0;
 	}
 
-	.local_info.s_center td {
+	.local-info.s-center td {
 		border: none;
 		border-bottom: 1px solid #4c5260;
 		position: relative;
@@ -873,7 +884,7 @@
 		vertical-align: top;
 	}
 
-	.local_info.s_center td:before {
+	.local-info.s-center td:before {
 		position: absolute;
 		top: 50%;
 		transform: translateY(-50%);
@@ -886,234 +897,234 @@
 	}
 
 	/* Label the data */
-	.local_info.s_center td:nth-of-type(1):before {
+	.local-info.s-center td:nth-of-type(1):before {
 		content: "총 사업소";
 	}
 
-	.local_info.s_center td:nth-of-type(2):before {
+	.local-info.s-center td:nth-of-type(2):before {
 		content: "총 설비(인버터,PCS)";
 	}
 
-	.local_info.s_center td:nth-of-type(3):before {
+	.local-info.s-center td:nth-of-type(3):before {
 		content: "총 설비용량";
 	}
 
-	.local_info.s_center td:nth-of-type(4):before {
+	.local-info.s-center td:nth-of-type(4):before {
 		content: "금일 CO2저감량";
 	}
 
-	.local_info.s_center td:nth-of-type(5):before {
+	.local-info.s-center td:nth-of-type(5):before {
 		content: "금일 누적수익";
 	}
 
-	.local_info.emain.s_center td:nth-of-type(1):before {
+	.local-info.emain.s-center td:nth-of-type(1):before {
 		content: "오늘 누적 충전량";
 	}
 
-	.local_info.emain.s_center td:nth-of-type(2):before {
+	.local-info.emain.s-center td:nth-of-type(2):before {
 		content: "오늘 충전 계획";
 	}
 
-	.local_info.emain.s_center td:nth-of-type(3):before {
+	.local-info.emain.s-center td:nth-of-type(3):before {
 		content: "오늘 누적 방전량";
 	}
 
-	.local_info.emain.s_center td:nth-of-type(4):before {
+	.local-info.emain.s-center td:nth-of-type(4):before {
 		content: "오늘 방전 계획";
 	}
 
-	.local_info.jmain.s_center td:nth-of-type(1):before {
+	.local-info.jmain.s-center td:nth-of-type(1):before {
 		content: "총 사업소";
 	}
 
-	.local_info.jmain.s_center td:nth-of-type(2):before {
+	.local-info.jmain.s-center td:nth-of-type(2):before {
 		content: "총 설비수";
 	}
 
-	.local_info.jmain.s_center td:nth-of-type(3):before {
+	.local-info.jmain.s-center td:nth-of-type(3):before {
 		content: "총 출력용량";
 	}
 
-	.local_info.jmain.s_center td:nth-of-type(4):before {
+	.local-info.jmain.s-center td:nth-of-type(4):before {
 		content: "금일 예상출력";
 	}
 
-	.local_info.jmain.s_center td:nth-of-type(5):before {
+	.local-info.jmain.s-center td:nth-of-type(5):before {
 		content: "금일 누적출력";
 	}
 
-	.local_info.smain.s_center td {
+	.local-info.smain.s-center td {
 		font-size: 13px;
 	}
 
-	.local_info.smain.s_center td span {
+	.local-info.smain.s-center td span {
 		font-size: 14px;
 	}
 
 	/* Label the data */
-	.local_info.smain.s_center td:nth-of-type(1):before {
+	.local-info.smain.s-center td:nth-of-type(1):before {
 		content: "PV 용량";
 	}
 
-	.local_info.smain.s_center td:nth-of-type(2):before {
+	.local-info.smain.s-center td:nth-of-type(2):before {
 		content: "오늘 누적 발전량";
 	}
 
-	.local_info.smain.s_center td:nth-of-type(3):before {
+	.local-info.smain.s-center td:nth-of-type(3):before {
 		content: "오늘 발전 예측";
 	}
 
-	.local_info.smain.s_center td:nth-of-type(4):before {
+	.local-info.smain.s-center td:nth-of-type(4):before {
 		content: "SMP 수익 예상";
 	}
 
 	/* *************************************************
-						type_list_detail
+						type-list-detail
 	************************************************* */
-	.type_list_detail .local_info th {
+	.type-list-detail .local-info th {
 		line-height: 1.3;
 	}
 
-	.type_list_detail .local_info td {
+	.type-list-detail .local-info td {
 		padding: 5px 2px;
 	}
 
-	.chart_top .ntit+.alert_icon {
+	.chart-top .ntit+.alert-icon {
 		margin-top: 0
 	}
 
 	/* *************************************************
 
 	************************************************* */
-	.not_top span {
+	.not-top span {
 		font-size: 12px;
 	}
 
-	.not_top span+span {
+	.not-top span+span {
 		margin-left: 5px;
 	}
 
-	.w_type {
+	.w-180 {
 		width: 100%
 	}
 
 	/* *************************************************
 							gmain
 	************************************************* */
-	.indiv.gmain_chart:not(:last-of-type) {
+	.indiv.gmain-chart:not(:last-of-type) {
 		margin-bottom: 12px;
 	}
 
-	.gmain_row1 {
+	.gmain-row1 {
 		display: table;
 		margin-bottom: 12px;
 	}
 
-	.gmain_alarm {
+	.gmain-alarm {
 		height: 280px;
 		overflow: auto;
 	}
 
-	.gmain_map.gmain_chart.gmain_chart4,
-	.gmain_alarm {
+	.gmain-map.gmain-chart.gmain-chart4,
+	.gmain-alarm {
 		margin: auto 0 12px;
 	}
 
-	.gmain_table.smain {
+	.gmain-table.smain {
 		height: auto;
 		max-height: inherit;
 	}
 
-	.gmain_table.smain .chart_top h2.ntit {
+	.gmain-table.smain .chart-top h2.ntit {
 		font-size: 14px;
 		margin: 3px 0 10px
 	}
 
-	.gmain_table.smain .local_info table td {
+	.gmain-table.smain .local-info table td {
 		padding: 0;
 		height: 25px;
 		line-height: 25px;
 	}
 
-	.gmain_table.smain .gtbl_wrap {
+	.gmain-table.smain .gmain-wrap {
 		margin-top: 5px;
 		height: calc(100vh - 285px);
 	}
 
-	.gmain_map.emain .chart_info .ci_center.ct1 {
+	.gmain-map.emain .chart-info .ci-center.ct1 {
 		margin-top: -80px;
 	}
 
-	.gmain_map.emain .chart_info .ci_right {
+	.gmain-map.emain .chart-info .chart-info-right {
 		margin-top: 20px;
 	}
 
-	.gmain_map.emain .chart_info .ci_right .soc {
+	.gmain-map.emain .chart-info .chart-info-right .soc {
 		text-align: center;
 	}
 
-	.gmain_map.emain .chart_info .ci_right .soc .battery {
+	.gmain-map.emain .chart-info .chart-info-right .soc .battery {
 		margin: 10px auto 0;
 		width: 120px;
 		height: 44px;
 		background-size: 120px 44px;
 	}
 
-	.gmain_map.emain .chart_info .ci_right .soc .battery span {
+	.gmain-map.emain .chart-info .chart-info-right .soc .battery span {
 		height: 44px;
 	}
 
-	.gmain_map.emain .chart_info .ci_center.ct2 {
+	.gmain-map.emain .chart-info .ci-center.ct2 {
 		margin-top: 20px;
 		margin-bottom: 20px;
 	}
 
-	.gmain_alarm .alarm_stat>div span,
-	.jmain_alarm .alarm_stat>div span {
+	.gmain-alarm .alarm-status>div span,
+	.jmain-alarm .alarm-status>div span {
 		padding: 8px 10px;
 		font-size: 12px;
 	}
 
-	.gmain_alarm .alarm_stat>div em,
-	.jmain_alarm .alarm_stat>div em {
+	.gmain-alarm .alarm-status>div em,
+	.jmain-alarm .alarm-status>div em {
 		font-size: 16px;
 		line-height: 30px;
 		margin-top: 0;
 	}
 
-	.gmain_alarm .alarm_stat>div.a_warning a,
-	.jmain_alarm .alarm_stat>div.a_warning a {
+	.gmain-alarm .alarm-status>div.alarm-warning a,
+	.jmain-alarm .alarm-status>div.alarm-warning a {
 		height: 30px;
 		line-height: 30px;
 		font-size: 12px;
 	}
 
-	.gmain_alarm,
-	.jmain_alarm {
+	.gmain-alarm,
+	.jmain-alarm {
 		min-height: initial;
 	}
 
-	.gmain_chart .gchart_top h2 {
+	.gmain-chart .gchart_top h2 {
 		float: none;
 		text-align: center;
 	}
 
-	.gmain_chart .gchart_top ul {
+	.gmain-chart .gchart_top ul {
 		float: none;
 		margin-top: 15px;
 		text-align: center;
 	}
 
-	.gmain_chart .gchart_top ul li:first-child {
+	.gmain-chart .gchart_top ul li:first-child {
 		display: block;
 		margin-bottom: 10px;
 	}
 
-	.gmain_chart .gchart_top ul li:first-child:after {
+	.gmain-chart .gchart_top ul li:first-child:after {
 		display: none;
 	}
 
-	.gmain_chart .sa_chart {
+	.gmain-chart .chart-sa {
 		height: auto;
 		overflow-y: inherit;
 		padding-right: 0px;
@@ -1121,78 +1132,78 @@
 		max-height: inherit;
 	}
 
-	.gmain_chart .sa_chart.type-table {
+	.gmain-chart .chart-sa.type-table {
 		display: block;
 	}
 
-	.gmain_chart .sa_chart.type-table .type-left {
+	.gmain-chart .chart-sa.type-table .type-left {
 		display: block;
 		width: 100%;
 		padding-right: 0px;
 	}
 
-	.gmain_chart .sa_chart.type-table .type-right {
+	.gmain-chart .chart-sa.type-table .type-right {
 		display: block;
 		width: 100%;
 	}
 
-	.gmain_map .chart_box {
+	.gmain-map .chart-box {
 		height: auto;
 	}
 
-	.gmain_map .chart_info>div {
+	.gmain-map .chart-info>div {
 		display: block;
 	}
 
-	.gmain_map .chart_info>div.ci_right ul li {
+	.gmain-map .chart-info>div.chart-info-right ul li {
 		line-height: 1.5;
 		font-size: 14px;
 	}
 
-	.gmain_map .chart_info>div.ci_right ul li span {
+	.gmain-map .chart-info>div.chart-info-right ul li span {
 		font-size: 16px;
 	}
 
-	.gmain_map .chart_info>div.ci_right ul li em {
+	.gmain-map .chart-info>div.chart-info-right ul li em {
 		font-size: 12px;
 	}
 
-	.gmain_table {
+	.gmain-table {
 		min-height: initial;
 	}
 
-	.gmain_table .term_menu>ul {
+	.gmain-table .term_menu>ul {
 		float: none;
 		text-align: center;
 	}
 
-	.gmain_table .term_menu>ol {
+	.gmain-table .term_menu>ol {
 		float: none;
 		margin-top: 10px;
 		text-align: center;
 	}
 
-	.gmain_table .gtbl_wrap table th,
-	.gmain_table .gtbl_wrap table td {
+	.gmain-table .gmain-wrap table th,
+	.gmain-table .gmain-wrap table td {
 		height: 45px;
 		font-size: 12px;
 	}
 
-	.gmain_table .gtbl_wrap table td a {
+	.gmain-table .gmain-wrap table td a {
 		font-size: 12px;
 	}
 
-	.gmain_table .gtbl_wrap table tbody td .eq_icon span {
+	.gmain-table .gmain-wrap table tbody td .eq-icon span {
 		height: 14px;
 		width: 14px;
 		background-size: 90%;
 	}
 
-	.gmain_table .gtbl_wrap table tbody td .eq_icon span+span {
+	.gmain-table .gmain-wrap table tbody td .eq-icon span+span {
 		margin-left: 0px;
 	}
 
-	.gmain_table .gtbl_top .fl .check-option {
+	.gmain-table .gtable-top .fl .check-option {
 		display: block;
 		margin-top: 15px;
 	}
@@ -1201,37 +1212,37 @@
 		min-height: initial;
 	}
 
-	.gmain_chart.jmain3 .gtab_menu li a {
+	.gmain-chart.jmain3 .gtab-menu li a {
 		font-size: 13px;
 	}
 
-	.gmain_map.dmain .chart_box {
+	.gmain-map.dmain .chart-box {
 		height: auto;
 	}
 
 	/* *************************************************
 							dmain
 	************************************************* */
-	.dmain .chart_info>div {
+	.dmain .chart-info>div {
 		width: 100%;
 	}
 
-	.dmain .chart_info>div.ci_left {
+	.dmain .chart-info>div.ci-left {
 		height: 120px;
 	}
 
-	.dmain .pchart_info {
+	.dmain .pchart-info {
 		margin-top: 15px;
 	}
 
-	.dmain .pchart_info>div {
+	.dmain .pchart-info>div {
 		float: none;
 		padding-left: 0;
 		width: 100%;
 		text-align: right;
 	}
 
-	.dmain .pchart_info>div strong {
+	.dmain .pchart-info>div strong {
 		display: inline-block;
 		width: 60%;
 		float: left;
@@ -1269,21 +1280,21 @@
 	/* *************************************************
 						emain
 	************************************************* */
-	.emain .ci_center dl {
+	.emain .ci-center dl {
 		display: table;
 		width: 100%;
 	}
 
-	.emain .ci_center dl+dl {
+	.emain .ci-center dl+dl {
 		margin-top: 0;
 	}
 
-	.emain .ci_center dt {
+	.emain .ci-center dt {
 		display: table-cell;
 		width: 50%;
 	}
 
-	.emain .ci_center dd {
+	.emain .ci-center dd {
 		display: table-cell;
 		width: 50%;
 		text-align: right;
@@ -1292,41 +1303,41 @@
 	/* *************************************************
 						smain
 	************************************************* */
-	.smain_pv ul li {
+	.smain-pv ul li {
 		line-height: 1.5;
 		font-size: 14px;
 	}
 
-	.smain_pv ul li>div {
+	.smain-pv ul li>div {
 		padding-left: 10px;
 	}
 
-	.smain_pv ul li>div:last-child {
+	.smain-pv ul li>div:last-child {
 		font-size: 13px;
 	}
 
-	.smain_pv ul li strong {
+	.smain-pv ul li strong {
 		margin-right: 10px;
 	}
 
-	.smain_pv ul li span {
+	.smain-pv ul li span {
 		font-size: 16px;
 	}
 
-	.smain_pv ul li em {
+	.smain-pv ul li em {
 		font-size: 12px;
 	}
 
-	.smain_cal {
+	.smain-cal {
 		min-height: auto;
 	}
 
-	.smain_cal .calendar tr td {
+	.smain-cal .calendar tr td {
 		height: auto;
 		padding: 5px;
 	}
 
-	.smain_cal .calendar tr td div {
+	.smain-cal .calendar tr td div {
 		/* margin-top: 15px; */
 		display: block;
 		position: relative;
@@ -1334,11 +1345,11 @@
 		right: inherit;
 	}
 
-	.smain_cal .calendar tr td div strong {
+	.smain-cal .calendar tr td div strong {
 		font-size: 12px;
 	}
 
-	.smain_cal .calendar tr td span {
+	.smain-cal .calendar tr td span {
 		/* margin-top: 15px; */
 		margin-top: 0;
 		display: block;
@@ -1348,7 +1359,7 @@
 		text-align: center;
 	}
 
-	.smain_cal .calendar tr td span strong {
+	.smain-cal .calendar tr td span strong {
 		display: block;
 		font-size: 12px;
 	}
@@ -1425,24 +1436,24 @@
 }
 
 @media all and (max-width: 487px) {
-	.gmain_table .gtbl_wrap .intable {
+	.gmain-table .gmain-wrap .intable {
 		max-height: 400px;
 	}
 
-	.indiv.diagnosis_chart .inline_flex {
+	.indiv.chart-diagnosis .inline-flex {
 		flex-wrap: wrap;
 	}
 
-	.indiv.diagnosis_chart .chart_top {
+	.indiv.chart-diagnosis .chart-top {
 		width: calc(100% - 60px);
 		margin-left: -14px;
 	}
 
-	.indiv.diagnosis_chart .chart_top span:not(.caret) {
+	.indiv.chart-diagnosis .chart-top span:not(.caret) {
 		width: 45px;
 	}
 
-	.indiv.diagnosis_chart .chart_top .btn_type {
+	.indiv.chart-diagnosis .chart-top .btn-type {
 		margin-left: 62px;
 	}
 }

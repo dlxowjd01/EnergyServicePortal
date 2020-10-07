@@ -138,9 +138,9 @@ $(document).ready(function () {
 				data: 'lastTargetActivePowerReqDate',
 				render: function (data, type, full, rowIndex) {
 					if (isEmpty(data) || data === '-') {
-						return '<span class="status status_err" title="에러">에러</span>';
+						return '<span class="status status-error" title="에러">에러</span>';
 					} else {
-						return '<span class="status status_drv" title="확인 중">확인 중</span>';
+						return '<span class="status status-drv" title="확인 중">확인 중</span>';
 					}
 				},
 				width: '10%',
@@ -151,14 +151,14 @@ $(document).ready(function () {
 				data: 'lastTargetActivePowerRecvDate',
 				render: function (data, type, full, rowIndex) {
 					if (isEmpty(data) || data === '-') {
-						return '<span class="status status_err" title="에러">에러</span>';
+						return '<span class="status status-error" title="에러">에러</span>';
 					} else {
 						const recvDate = new Date(String(data).replace(/[^0-9]/g,'').replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$2/$3/$1 $4:$5:$6'));
 						let diffTime = Math.floor(((new Date() - recvDate) / 1000) / 60 / 60 % 24);
 						if (diffTime >= 1) {
-							return '<span class="status status_err" title="에러">에러</span>';
+							return '<span class="status status-error" title="에러">에러</span>';
 						} else {
-							return '<span class="status status_drv" title="확인 중">확인 중</span>';
+							return '<span class="status status-drv" title="확인 중">확인 중</span>';
 						}
 
 					}
@@ -602,7 +602,7 @@ const ajaxData = (urls, target) => {
 const monthlyChartDraw = async () => {
 	const targetApi = [apiHost + '/energy/sites?interval=month', apiHost + '/energy/now/sites?interval=month'];
 
-	$(`.gmain_chart1 span.term`).text(today.getFullYear() + '.1.1 ~ ' + today.getFullYear() + '.' + (Number(today.getMonth()) + 1) + '.' + today.getDate());
+	$(`.gmain-chart1 span.term`).text(today.getFullYear() + '.1.1 ~ ' + today.getFullYear() + '.' + (Number(today.getMonth()) + 1) + '.' + today.getDate());
 	return new Promise(resolve => {
 		const pvList = new Object()
 			, sumObj = new Object();
@@ -743,7 +743,7 @@ const dailyChartDraw = async () => {
 		categories.push(String(i));
 	}
 
-	$(`.gmain_chart2 span.term`).text(today.format('yyyy.MM') + '.1 ~ ' + today.format('yyyy.MM') + '.' + today.getDate());
+	$(`.gmain-chart2 span.term`).text(today.format('yyyy.MM') + '.1 ~ ' + today.format('yyyy.MM') + '.' + today.getDate());
 
 	return new Promise(resolve => {
 		const pvList = new Object()
@@ -874,7 +874,7 @@ const typeSiteDraw = async () => {
 	const targetApi = [apiHost + '/energy/sites?interval=day&startTime=' + yesterData.startTime + '&endTime=' +yesterData.endTime, apiHost + '/energy/sites?interval=day&startTime=' + yester2Data.startTime + '&endTime=' +yester2Data.endTime];
 	let categories = new Array();
 
-	$(`.gmain_chart3 span.term`).text(today.getFullYear() + '.' + (Number(today.getMonth()) + 1) + '.' + today.getDate());
+	$(`.gmain-chart3 span.term`).text(today.getFullYear() + '.' + (Number(today.getMonth()) + 1) + '.' + today.getDate());
 
 	return new Promise((resolve, reject) => {
 		const siteGenArray = new Array(siteList.length).fill(0);
@@ -1025,7 +1025,7 @@ const typeSiteDraw = async () => {
 const getTodayTotalDetail = async function () {
 	const targetApi = [apiHost + '/status/raw/site', apiHost + '/energy/now/sites'];
 	const resourceByStatus = document.querySelectorAll('#centerTbody tr td');
-	const targetArea = document.querySelectorAll('.gmain_chart4 .chart_box .chart_info .ci_right ul li');
+	const targetArea = document.querySelectorAll('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li');
 
 	resourceByStatus.forEach((td, index) => {
 		if (index !== 0 && index !== 3){
@@ -1098,14 +1098,14 @@ const getTodayTotalDetail = async function () {
 			  , tPower = resourceData['targetActivePower']
 			  , siteCount = resourceData['siteCount'];
 
-			let prevVal1 = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text().replace(/[^0-9]/g, ''));
-			$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(numberComma(Math.floor(prevVal1 += (aPower / 1000))));
+			let prevVal1 = Number($('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(1) span').text().replace(/[^0-9]/g, ''));
+			$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(1) span').text(numberComma(Math.floor(prevVal1 += (aPower / 1000))));
 
-			let prevVal2 = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text().replace(/[^0-9]/g, ''));
-			$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text(numberComma(Math.floor(prevVal2 += (tPower / 1000))));
+			let prevVal2 = Number($('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(2) span').text().replace(/[^0-9]/g, ''));
+			$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(2) span').text(numberComma(Math.floor(prevVal2 += (tPower / 1000))));
 
-			let prevVal3 = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(3) span').text().replace(/[^0-9]/g, ''));
-			$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(3) span').text(numberComma(Math.floor(prevVal3 += (capacity / 1000))));
+			let prevVal3 = Number($('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(3) span').text().replace(/[^0-9]/g, ''));
+			$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(3) span').text(numberComma(Math.floor(prevVal3 += (capacity / 1000))));
 
 			acPower += aPower;
 
@@ -1204,7 +1204,7 @@ const alarmInfoList = async () => {
 					}
 				});
 
-				$('.a_alert').find('em').text(alarmList.length);
+				$('.alarm-alert').find('em').text(alarmList.length);
 				setMakeList(alarmList, 'alarmNotice', {'dataFunction': {'level': levelClass}}); //list생성
 			}
 		}
@@ -1446,7 +1446,7 @@ const searchSite = async function () {
 												let diffTime = Math.floor(((new Date() - hitoryDate) / 1000) / 60 / 60 % 24);
 												if (diffTime >= 1) {
 													refineList[index]['status'] = '에러';
-													refineList[index]['statusClass'] = 'status_err';
+													refineList[index]['statusClass'] = 'status-error';
 												}
 											} else {
 												let statusDate = new Date((site['lastTargetActivePowerRecvDate'].replace(/[^0-9]/g,'')).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$2/$3/$1 $4:$5:$6'));
@@ -1461,7 +1461,7 @@ const searchSite = async function () {
 													let diffTime = Math.floor(((new Date() - hitoryDate) / 1000) / 60 / 60 % 24);
 													if (diffTime >= 1) {
 														refineList[index]['status'] = '에러';
-														refineList[index]['statusClass'] = 'status_err';
+														refineList[index]['statusClass'] = 'status-error';
 													}
 												}
 											}
@@ -1525,7 +1525,7 @@ function SortTable(table, n, sort) {
 	// table 에 tbody tag 가 반드시 존재한다고 가정한다.
 	let tbody = table.tBodies[0];
 	let rows = tbody.querySelectorAll('tr.dbclickopen');
-	let rows2 = tbody.querySelectorAll('tr.detail_info');
+	let rows2 = tbody.querySelectorAll('tr.detail-info');
 	rows = Array.prototype.slice.call(rows, 0);
 	rows.sort(function (row1, row2) {
 		var cell1 = row1.getElementsByTagName("td")[n];

@@ -492,8 +492,8 @@
 				</div>
 
 				<div class="menu-btn-wrapper">
-					<button type="button" class="btn_type03" id="systemInit">초기화</button><!--
-					--><button type="button" class="btn_type ml-12" id="systemApply">적용</button>
+					<button type="button" class="btn-type03" id="systemInit">초기화</button><!--
+					--><button type="button" class="btn-type ml-12" id="systemApply">적용</button>
 				</div>
 				<script type="text/javascript">
 					$('#systemInit').on('click', function() {
@@ -514,16 +514,16 @@
 	</div>
 
 
-	<ul class="nav_right">
+	<ul class="nav-right">
 		<c:choose>
 			<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
 				<li class="member clear">
-					<div><button type="button" data-toggle="modal" data-target="#updateUserInfoModal" data-backdrop="static" data-keyboard="false" id="userInfoBtn" class="btn_type03">${sessionScope.userInfo.name}<span class="light">&emsp;${sessionScope.userInfo.login_id}</span></button></div>
+					<div><button type="button" data-toggle="modal" data-target="#updateUserInfoModal" data-backdrop="static" data-keyboard="false" id="userInfoBtn" class="btn-type03">${sessionScope.userInfo.name}<span class="light">&emsp;${sessionScope.userInfo.login_id}</span></button></div>
 				</li>
 			</c:when>
 			<c:otherwise>
 				<li class="member clear">
-					<div class="fr"><button type="button" data-toggle="modal" data-target="#updateUserInfoModal" data-backdrop="static" data-keyboard="false" id="userInfoBtn" class="btn_type03">${sessionScope.userInfo.name}<span class="light">&emsp;${sessionScope.userInfo.login_id}</span></button></div>
+					<div class="fr"><button type="button" data-toggle="modal" data-target="#updateUserInfoModal" data-backdrop="static" data-keyboard="false" id="userInfoBtn" class="btn-type03">${sessionScope.userInfo.name}<span class="light">&emsp;${sessionScope.userInfo.login_id}</span></button></div>
 				</li>
 				<%--
 				<li>
@@ -566,9 +566,9 @@
 				<p class="mt8">정말 닫으시겠습니까?</p>
 			</div>
 			<div class="modal-footer">
-				<div class="btn_wrap_type mb-0">
-					<button type="button" class="btn_type03" data-dismiss="modal">취소</button>
-					<button type="button" class="btn_type" onclick="resetModal();">확인</button>
+				<div class="btn-wrap-type mb-0">
+					<button type="button" class="btn-type03" data-dismiss="modal">취소</button>
+					<button type="button" class="btn-type" onclick="resetModal();">확인</button>
 				</div>
 			</div>
 		</div>
@@ -583,11 +583,11 @@
 				<h5 id="comDeleteSuccessMsg" class="ntit">삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>
 			</div>
 			<div class="modal-body">
-				<div class="tx_inp_type"><input type="text" name="confirm_title" id="confirmTitle" placeholder="사이트 이름 입력"/></div>
+				<div class="text-input-type"><input type="text" name="confirm_title" id="confirmTitle" placeholder="사이트 이름 입력"/></div>
 			</div>
-			<div class="btn_wrap_type05"><!--
-				--><button type="button" class="btn_type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
-				--><button type="submit" id="comDeleteBtn" class="btn_type w80 ml-12" disabled>확인</button><!--
+			<div class="btn-wrap-type05"><!--
+				--><button type="button" class="btn-type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
+				--><button type="submit" id="comDeleteBtn" class="btn-type w80 ml-12" disabled>확인</button><!--
 			--></div>
 		</div>
 	</div>
@@ -606,92 +606,92 @@
 						<form id="pwdForm" name="pwd_form">
 							<h3 class="sub-title">비밀번호</h3>
 							<div class="input-group inline-flex">
-								<label for="oldPwd" class="input_label bold">기존 비밀번호</label>
-								<input type="password" name="current_pwd" id="oldPwd" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
+								<label for="oldPwd" class="input-label bold">기존 비밀번호</label>
+								<input type="password" name="current_pwd" id="oldPwd" class="input text-input-type w-100" placeholder="입력" autocomplete="off">
 							</div>
-								<div class="flex_start warning-wrapper">
+								<div class="flex-start warning-wrapper">
 								<small id="oldPwdErr" class="warning-text hidden">기존 비밀번호와 일치 하지 않습니다. 비밀번호 확인 후 재시도 해 주세요.
 									<!-- <br><br><a href="#" class="text-link">비밀번호 복구 요청</a> -->
 								</small>
 							</div>
 
 							<div class="input-group inline-flex">
-								<label for="newPwd" class="input_label bold">변경 비밀번호</label>
-								<input type="password" name="new_pwd" id="newPwd" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
+								<label for="newPwd" class="input-label bold">변경 비밀번호</label>
+								<input type="password" name="new_pwd" id="newPwd" class="input text-input-type w-100" placeholder="입력" autocomplete="off">
 							</div>
-							<div class="flex_start warning-wrapper">
+							<div class="flex-start warning-wrapper">
 								<small id="hasLetter" class="tick">영문</small>
 								<small id="hasNumber" class="tick">숫자</small>
 								<small id="isSixCharLong" class="tick">6자리 이상</small>
 							</div>
 
 							<div class="input-group inline-flex">
-								<label for="confirmNewPwd" class="input_label bold">변경 비밀번호 확인</label>
-								<input type="password" name="confirm_new_pwd" id="confirmNewPwd" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
+								<label for="confirmNewPwd" class="input-label bold">변경 비밀번호 확인</label>
+								<input type="password" name="confirm_new_pwd" id="confirmNewPwd" class="input text-input-type w-100" placeholder="입력" autocomplete="off">
 							</div>
 
-							<div class="flex_start warning-wrapper">
+							<div class="flex-start warning-wrapper">
 								<small id="pwdMatched" class="warning-text hidden">비밀번호가 일치하지 않습니다.</small>
 							</div>
 
-							<div class="btn_wrap_type">
+							<div class="btn-wrap-type">
 								<small id="successMsg1" class="text-blue text-sm left hidden">비밀번호가 성공적으로 변경 되었습니다.</small>
-								<button type="submit" id="updatePwdBtn" class="btn_type03 disabled" disabled>비밀번호 변경</button>
+								<button type="submit" id="updatePwdBtn" class="btn-type03 disabled" disabled>비밀번호 변경</button>
 							</div>
 						</form>
 						<form id="profileForm" name="profile_form">
 							<h3 class="sub-title">개인정보</h3>
 							<div class="input-group inline-flex">
-								<label for="fullName" class="input_label bold">이름</label>
-								<input type="text" name="full_name" id="fullName" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
+								<label for="fullName" class="input-label bold">이름</label>
+								<input type="text" name="full_name" id="fullName" class="input text-input-type w-100" placeholder="입력" autocomplete="off">
 							</div>
-							<div class="flex_start warning-wrapper">
+							<div class="flex-start warning-wrapper">
 								<small id="isValidName" class="warning-text hidden">한글/영문 이름만 가능합니다.</small>
 							</div>
 							<div class="input-group inline-flex">
-								<label for="emailAddr" class="input_label bold">이메일</label>
-								<input type="text" name="email_addr" id="emailAddr" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
+								<label for="emailAddr" class="input-label bold">이메일</label>
+								<input type="text" name="email_addr" id="emailAddr" class="input text-input-type w-100" placeholder="입력" autocomplete="off">
 							</div>
-							<div class="flex_start warning-wrapper">
+							<div class="flex-start warning-wrapper">
 								<small id="isValidEmail" class="warning-text hidden">유효한 이메일 주소를 입력해 주세요.</small>
 							</div>
 							<div class="input-group inline-flex">
-								<label for="mobileNum" class="input_label bold">휴대폰</label>
-								<input type="text" name="mobile_num" id="mobileNum" class="input tx_inp_type w-100" placeholder="입력" autocomplete="off">
+								<label for="mobileNum" class="input-label bold">휴대폰</label>
+								<input type="text" name="mobile_num" id="mobileNum" class="input text-input-type w-100" placeholder="입력" autocomplete="off">
 							</div>
-							<div class="flex_start warning-wrapper">
+							<div class="flex-start warning-wrapper">
 								<small id="isValidMobileNum" class="warning-text hidden">10자리 이상의 휴대폰 번호를 입력해 주세요.</small>
 							</div>
-							<div class="btn_wrap_type">
+							<div class="btn-wrap-type">
 								<small id="successMsg2" class="text-blue text-sm left hidden">개인정보가 성공적으로 변경 되었습니다.</small>
-								<button type="submit" id="updateProfileBtn" class="btn_type03 disabled" disabled>개인정보 변경</button>
+								<button type="submit" id="updateProfileBtn" class="btn-type03 disabled" disabled>개인정보 변경</button>
 							</div>
 						</form>
 					</div>
 					<div class="col-lg-3 col-md-3 col-sm-12">
 						<div class="mb-10">
-							<label for="userId" class="input_label pt-0">아이디</label>
+							<label for="userId" class="input-label pt-0">아이디</label>
 							<input type="text" name="user_id" id="userId" class="clear-input" readonly="" autocomplete="off">
 						</div>
 						<div class="mb-10">
-							<label for="affiliation" class="input_label bold">회사 이름</label>
+							<label for="affiliation" class="input-label bold">회사 이름</label>
 							<input type="text" name="affiliation" id="affiliation" class="clear-input" readonly="" autocomplete="off">
 						</div>
 						<div class="mb-10">
-							<label for="accessLevel" class="input_label bold">권한 레벨</label>
+							<label for="accessLevel" class="input-label bold">권한 레벨</label>
 							<input type="text" name="access_level" id="accessLevel" class="clear-input" readonly="" autocomplete="off">
 						</div>
 						<div class="">
-							<label for="taskCategory" class="input_label bold">업무 구분</label>
+							<label for="taskCategory" class="input-label bold">업무 구분</label>
 							<input type="text" name="task_category" id="taskCategory" class="clear-input" readonly="" autocomplete="off">
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="modal-footer border">
-				<div class="btn_wrap_type02">
+				<div class="btn-wrap-type02">
 					<small class="text-blue text-sm left">* 수정하신 정보는 다음 로그인 부터 반영됩니다.</small>
-					<button type="button" class="btn_type" onclick="resetModal();" aria-label="Close">완료</button>
+					<button type="button" class="btn-type" onclick="resetModal();" aria-label="Close">완료</button>
 				</div>
 			</div>
 		</div>

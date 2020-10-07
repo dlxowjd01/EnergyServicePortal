@@ -18,7 +18,7 @@
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="indiv">
-				<div class="spc_tbl_row">
+				<div class="spc-table-row">
 					<table>
 						<colgroup>
 						<col style="width:15%">
@@ -42,10 +42,10 @@
 				</div>
 			</div>
 			<div class="indiv mt25">
-				<div class="tbl_top">
+				<div class="table-top">
 					<h2 class="ntit mt25">운영 정보</h2>
 				</div>
-				<div class="spc_tbl_row">
+				<div class="spc-table-row">
 					<table>
 						<colgroup>
 						<col style="width:15%">
@@ -97,16 +97,16 @@
 						</tr>
 					</table>
 				</div>
-				<div class="btn_wrap_type02">
+				<div class="btn-wrap-type02">
 					<a href="/spc/entityInformationEdit.do">수정</a>
-					<button type="button" class="btn_type03">목록</button>
+					<button type="button" class="btn-type03">목록</button>
 				</div>
 			</div>
 			<div class="indiv mt25">
-				<div class="tbl_top">
+				<div class="table-top">
 					<h2 class="ntit mt25">설비 정보</h2>
 				</div>
-				<div class="spc_tbl_row">
+				<div class="spc-table-row">
 					<table>
 						<colgroup>
 						<col style="width:15%">
@@ -152,16 +152,16 @@
 						</tr>
 					</table>
 				</div>
-				<div class="btn_wrap_type02">
+				<div class="btn-wrap-type02">
 					<a href="/spc/entityInformationEdit.do">수정</a>
-					<button type="button" class="btn_type03">목록</button>
+					<button type="button" class="btn-type03">목록</button>
 				</div>
 			</div>
 			<div class="indiv mt25">
-				<div class="tbl_top">
+				<div class="table-top">
 					<h2 class="ntit mt25">금융 정보</h2>
 				</div>
-				<div class="spc_tbl_row">
+				<div class="spc-table-row">
 					<table>
 						<colgroup>
 						<col style="width:15%">
@@ -177,16 +177,16 @@
 						</tr>
 					</table>
 				</div>
-				<div class="btn_wrap_type02">
+				<div class="btn-wrap-type02">
 					<a href="/spc/entityInformationEdit.do">수정</a>
-					<button type="button" class="btn_type03">목록</button>
+					<button type="button" class="btn-type03">목록</button>
 				</div>
 			</div>
 			<div class="indiv mt25">
-				<div class="tbl_top">
+				<div class="table-top">
 					<h2 class="ntit mt25">보증 정보</h2>
 				</div>
-				<div class="spc_tbl_row">
+				<div class="spc-table-row">
 					<table>
 						<colgroup>
 						<col style="width:15%">
@@ -232,16 +232,16 @@
 						</tr>
 					</table>
 				</div>
-				<div class="btn_wrap_type02">
+				<div class="btn-wrap-type02">
 					<a href="/spc/entityInformationEdit.do">수정</a>
-					<button type="button" class="btn_type03">목록</button>
+					<button type="button" class="btn-type03">목록</button>
 				</div>
 			</div>
 			<div class="indiv mt25">
-				<div class="tbl_top">
+				<div class="table-top">
 					<h2 class="ntit mt25">환경 변수</h2>
 				</div>
-				<div class="spc_tbl_row">
+				<div class="spc-table-row">
 					<table>
 						<colgroup>
 						<col style="width:15%">
@@ -275,16 +275,16 @@
 						</tr>
 					</table>
 				</div>
-				<div class="btn_wrap_type02">
+				<div class="btn-wrap-type02">
 					<a href="/spc/entityInformationEdit.do">수정</a>
-					<button type="button" class="btn_type03">목록</button>
+					<button type="button" class="btn-type03">목록</button>
 				</div>
 			</div>
 			<div class="indiv mt25">
-				<div class="tbl_top">
+				<div class="table-top">
 					<h2 class="ntit mt25">관련 정보</h2>
 				</div>
-				<div class="spc_tbl_row">
+				<div class="spc-table-row">
 					<table>
 						<colgroup>
 						<col style="width:15%">
@@ -318,16 +318,16 @@
 						</tr>
 					</table>
 				</div>
-				<div class="btn_wrap_type02">
+				<div class="btn-wrap-type02">
 					<a href="/spc/entityInformationEdit.do">수정</a>
-					<button type="button" class="btn_type03">목록</button>
+					<button type="button" class="btn-type03">목록</button>
 				</div>
 			</div>
 			<div class="indiv spc-detail02 mt25">
-				<div class="tbl_top">
+				<div class="table-top">
 					<h2 class="ntit mt25">첨부 파일</h2>
 				</div>
-				<div class="spc_tbl_row">
+				<div class="spc-table-row">
 					<table>
 						<colgroup>
 						<col style="width:10%">
@@ -336,59 +336,59 @@
 						</colgroup>
 						<tr>
 							<th>현장 사진</th>
-							<td><div class="img_bx"><img src="../img/@sample03.png"></div></td>
-							<td class="vbt"><button type="button" class="btn_file up">업로드</button></td>
+							<td><div class="img-wrapper"><img src="../img/@sample03.png"></div></td>
+							<td class="vbt"><button type="button" class="btn-file up">업로드</button></td>
 						</tr>
 						<tr>
 							<th>수배전반</th>
 							<td></td>
-							<td><button type="button" class="btn_file down">다운로드</button></td>
+							<td><button type="button" class="btn-file down">다운로드</button></td>
 						</tr>
 						<tr>
 							<th>케이블</th>
 							<td></td>
-							<td><button type="button" class="btn_file down">다운로드</button></td>
+							<td><button type="button" class="btn-file down">다운로드</button></td>
 						</tr>
 						<tr>
 							<th>모듈</th>
 							<td></td>
-							<td><button type="button" class="btn_file down">다운로드</button></td>
+							<td><button type="button" class="btn-file down">다운로드</button></td>
 						</tr>
 						<tr>
 							<th>인버터</th>
-							<td><p class="tx_file">GCI2014-PS007-M10-100옥외형_제작사양서_V010_140922.pdf</p></td>
-							<td><button type="button" class="btn_file down">다운로드</button></td>
+							<td><p class="text-file">GCI2014-PS007-M10-100옥외형_제작사양서_V010_140922.pdf</p></td>
+							<td><button type="button" class="btn-file down">다운로드</button></td>
 						</tr>
 						<tr>
 							<th>결선도</th>
-							<td><p class="tx_file">M10-100_계통도V020_150302.pdf</p></td>
-							<td><button type="button" class="btn_file down">다운로드</button></td>
+							<td><p class="text-file">M10-100_계통도V020_150302.pdf</p></td>
+							<td><button type="button" class="btn-file down">다운로드</button></td>
 						</tr>
 						<tr>
 							<th>토목</th>
 							<td></td>
-							<td><button type="button" class="btn_file down">다운로드</button></td>
+							<td><button type="button" class="btn-file down">다운로드</button></td>
 						</tr>
 						<tr>
 							<th>구조물</th>
 							<td></td>
-							<td><button type="button" class="btn_file up">업로드</button></td>
+							<td><button type="button" class="btn-file up">업로드</button></td>
 						</tr>
 						<tr>
 							<th>접속반</th>
 							<td></td>
-							<td><button type="button" class="btn_file down">다운로드</button></td>
+							<td><button type="button" class="btn-file down">다운로드</button></td>
 						</tr>
 						<tr>
 							<th>기타설비</th>
 							<td></td>
-							<td><button type="button" class="btn_file down">다운로드</button></td>
+							<td><button type="button" class="btn-file down">다운로드</button></td>
 						</tr>
 					</table>
 				</div>
-				<div class="btn_wrap_type02">
+				<div class="btn-wrap-type02">
 					<a href="/spc/entityInformationEdit.do">수정</a>
-					<button type="button" class="btn_type03">목록</button>
+					<button type="button" class="btn-type03">목록</button>
 				</div>
 			</div>
 		</div>

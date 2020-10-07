@@ -122,7 +122,7 @@
 				jsonList.push(rowData);
 			}
 		}
-		$('.sort_table').data('nowjsp', 'maintenance');
+		$('.sort-table').data('nowjsp', 'maintenance');
 		jsonListSort(n, sort, jsonList);
 		jsonList = paging(page, jsonList);
 		return jsonList;
@@ -133,8 +133,8 @@
 			page = 1;
 		}else{
 			if(isEmpty(n) && isEmpty(sort)) {
-				$('.sort_table > thead').find('button').each(function(){
-					if($(this).attr('class') != 'btn_align'){
+				$('.sort-table > thead').find('button').each(function(){
+					if($(this).attr('class') != 'btn-align'){
 						n = $(this).data('colname');
 						sort = $(this).data('classname');
 					}
@@ -201,10 +201,10 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-lg-12 clear inp_align">
+	<div class="col-lg-12 clear input-align">
 		<div class="fl">
-			<span class="tx_tit"><fmt:message key="workreport.1.reportType" /></span>
-			<div class="sa_select">
+			<span class="tx-tit"><fmt:message key="workreport.1.reportType" /></span>
+			<div class="sa-select">
 				<div class="dropdown">
 					<button type="button" id="report_type" class="dropdown-toggle w5"
 						data-toggle="dropdown" data-value="">
@@ -226,58 +226,58 @@
 			</div>
 		</div>
 		<div class="fl">
-			<span class="tx_tit"><fmt:message key="workreportmain.1.dateOfIssue" /></span>
-			<div class="sel_calendar">
+			<span class="tx-tit"><fmt:message key="workreportmain.1.dateOfIssue" /></span>
+			<div class="sel-calendar">
 				<input type="text" id="write_date_from" class="sel datepicker fromDate" value="" autocomplete="off" />
 				<em></em>
 				<input type="text" id="write_date_to" class="sel datepicker toDate" value="" autocomplete="off" />
 			</div>
 		</div>
 		<div class="fl">
-			<div class="tx_inp_type">
+			<div class="text-input-type">
 				<input type="text" id="key_word" placeholder="입력" />
 			</div>
 		</div>
 		<div class="fl">
-			<button type="submit" class="btn_type" onclick="getDataList();">
+			<button type="submit" class="btn-type" onclick="getDataList();">
 				<fmt:message key="workreportmain.1.search" />
 			</button>
 		</div>
 		<div class="fr">
-			<a href="javascript:void(0);" class="save_btn" onclick="getCsvDown();"><fmt:message key="workreportmain.1.dataExtracts" /></a>
+			<a href="javascript:void(0);" class="btn-save" onclick="getCsvDown();"><fmt:message key="workreportmain.1.dataExtracts" /></a>
 		</div>
 	</div>
 </div>
 <div class="row">
 	<div class="col-lg-12">
 		<div class="indiv report maintenance_report">
-			<div class="btn_wrap_type02">
-				<button type="button" class="btn_type" onclick="location.href='/report/maintenanceReportPost.do'">
+			<div class="btn-wrap-type02">
+				<button type="button" class="btn-type" onclick="location.href='/report/maintenanceReportPost.do'">
 					<fmt:message key="workreportmain.2.register" />
 				</button>
 			</div>
-			<div class="spc_tbl align_type">
-				<table class="sort_table chk_type">
+			<div class="spc-tbl align-type">
+				<table class="sort-table chk-type">
 					<thead>
 						<tr>
 							<th><fmt:message key="workreportmain.2.number" /></th>
 							<th>
-								<button type="button" class="btn_align"><fmt:message key="workreportmain.2.reportType" /></button>
+								<button type="button" class="btn-align"><fmt:message key="workreportmain.2.reportType" /></button>
 							</th>
 							<th>
-								<button type="button" class="btn_align"><fmt:message key="workreportmain.2.documentNumber" /></button>
+								<button type="button" class="btn-align"><fmt:message key="workreportmain.2.documentNumber" /></button>
 							</th>
 							<th>
-								<button type="button" class="btn_align"><fmt:message key="workreportmain.2.reportName" /></button>
+								<button type="button" class="btn-align"><fmt:message key="workreportmain.2.reportName" /></button>
 							</th>
 							<th>
-								<button type="button" class="btn_align"><fmt:message key="workreportmain.2.writer" /></button>
+								<button type="button" class="btn-align"><fmt:message key="workreportmain.2.writer" /></button>
 							</th>
 							<th>
-								<button type="button" class="btn_align"><fmt:message key="workreportmain.2.dateOfIssue" /></button>
+								<button type="button" class="btn-align"><fmt:message key="workreportmain.2.dateOfIssue" /></button>
 							</th>
 							<th>
-								<button type="button" class="btn_align"><fmt:message key="workreportmain.2.registrationStatus" /></button>
+								<button type="button" class="btn-align"><fmt:message key="workreportmain.2.registrationStatus" /></button>
 							</th>
 						</tr>
 					</thead>
@@ -287,7 +287,7 @@
 							<td>[report_type]</td>
 							<td>[report_id]</td>
 							<td>
-								<a href="/report/maintenanceReportDetails.do?report_id=[report_id]" class="tbl_link">
+								<a href="/report/maintenanceReportDetails.do?report_id=[report_id]" class="table-link">
 									[report_name]
 								</a>
 							</td>
@@ -298,7 +298,7 @@
 					</tbody>
 				</table>
 			</div>
-			<div class="paging_wrap" id="paging"></div>
+			<div class="pagination-wrapper" id="paging"></div>
 		</div>
 	</div>
 </div>

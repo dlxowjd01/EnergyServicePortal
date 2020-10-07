@@ -106,7 +106,7 @@
 				// 		"data":  "",
 				// 		render: function ( data, type, row ) {
 				// 			// console.log("data--", row, "type===", type)
-				// 			return '<a class="chk_type" href="javascript:void(0); onclick=""><input type="checkbox" id="' + row.idx + '" name="' + row.sid + '"><label for="' + row.idx + '"></label></a>'
+				// 			return '<a class="chk-type" href="javascript:void(0); onclick=""><input type="checkbox" id="' + row.idx + '" name="' + row.sid + '"><label for="' + row.idx + '"></label></a>'
 				// 		},
 				// 		className: "dt-body-center"
 				// 	},
@@ -128,7 +128,7 @@
 						"mData": "",
 						"mRender": function ( data, type, row )  {
 							// console.log('row==', row)
-							return '<a class="chk_type" href="javascript:void(0); onclick=""><input type="checkbox" id="' + row.idx + '" name="' + row.sid + '"><label for="' + row.idx + '"></label></a>'
+							return '<a class="chk-type" href="javascript:void(0); onclick=""><input type="checkbox" id="' + row.idx + '" name="' + row.sid + '"><label for="' + row.idx + '"></label></a>'
 						},
 						"className": "dt-body-center"
 					},
@@ -159,13 +159,13 @@
 				buttons: [
 					{
 						extend: 'copyHtml5',
-						className: "btn_type03",
+						className: "btn-type03",
 						text: '데이터 복사',
 					},
 					{
 						extend: 'print',
 						text: '전체 인쇄',
-						className: "btn_type03",
+						className: "btn-type03",
 						exportOptions: {
 							modifier: {
 								selected: null
@@ -174,27 +174,27 @@
 					},
 					{
 						extend: 'print',
-						className: "btn_type03",
+						className: "btn-type03",
 						text: '선택 인쇄'
 					},
 					{
 						extend: 'excelHtml5',
-						className: "btn_type03",
+						className: "btn-type03",
 						text: 'Excel'
 					},
 					{
 						extend: 'csvHtml5',
-						className: "btn_type03",
+						className: "btn-type03",
 						text: 'CSV'
 					},
 					{
 						extend: 'pdfHtml5',
-						className: "btn_type03",
+						className: "btn-type03",
 						text: 'PDF',
 					},
 					{
 						text: '추가',
-						className: "btn_type fr",
+						className: "btn-type fr",
 						action: function (e, node, config){
 							console.log("node===", node, "e---", e, "config===", config)
 							$('#addUserModal').modal('show');
@@ -253,7 +253,7 @@
 	</div>
 	<div class="col-9">
 		<div class="indiv">
-			<h2 class="tx_tit"></h2>
+			<h2 class="tx-tit"></h2>
 			<table id="example" class="stripe">
 				<thead></thead>
 				<tbody>

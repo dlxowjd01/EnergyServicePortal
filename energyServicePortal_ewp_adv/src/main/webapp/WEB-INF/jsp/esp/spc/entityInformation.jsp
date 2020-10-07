@@ -4,7 +4,7 @@
 	pagePerData = 50;
 
 	$(function () {
-		var spcFrom = document.querySelector('#spc_form button.btn_type');
+		var spcFrom = document.querySelector('#spc_form button.btn-type');
 		var keyWord = document.getElementById("key_word");
 
 		keyWord.addEventListener("focus", function (e) {
@@ -22,7 +22,7 @@
 		setInitList("listData"); //리스트초기화
 		getDataList(page);
 
-		$('.save_btn').on('click', function (e) {
+		$('.btn-save').on('click', function (e) {
 			let excelName = 'SPC기본정보';
 			let $val = $('#excelList').find('tbody');
 			let cnt = $val.length;
@@ -197,7 +197,7 @@
 			}
 		}
 
-		// $(".sort_table").data("nowjsp", "entityinformation");
+		// $(".sort-table").data("nowjsp", "entityinformation");
 		jsonListSort(n, sort, jsonList);
 		jsonList = paging(page, jsonList);
 		return jsonList;
@@ -209,8 +209,8 @@
 			page = 1;
 		} else {
 			if (isEmpty(n) && isEmpty(sort)) {
-				$('.sort_table > thead').find('button').each(function () {
-					if ($(this).attr('class') != 'btn_align') {
+				$('.sort-table > thead').find('button').each(function () {
+					if ($(this).attr('class') != 'btn-align') {
 						n = $(this).data('colname');
 						sort = $(this).data('classname');
 					}
@@ -385,13 +385,13 @@
 <div class="row">
 	<div class="col-10">
 		<form id="spc_form" onsubmit="return false;">
-			<div class="flex_start">
-				<label for="operation_select" class="tx_tit">운영 여부</label>
-				<div class="dropdown sa_select mr-16" id="operation_select">
+			<div class="flex-start">
+				<label for="operation_select" class="tx-tit">운영 여부</label>
+				<div class="dropdown sa-select mr-16" id="operation_select">
 					<button type="button" class="dropdown-toggle w7" data-toggle="dropdown" data-name="운영 여부 선택">
 						운영 여부 선택<span class="caret"></span>
 					</button>
-					<ul class="dropdown-menu chk_type" role="menu" id="operationList">
+					<ul class="dropdown-menu chk-type" role="menu" id="operationList">
 						<li>
 							<a href="javascript:void(0);" tabindex="-1">
 								<input type="checkbox" id="operation_1" value="운영중" name="operation_opt">
@@ -413,12 +413,12 @@
 					</ul>
 				</div>
 
-				<label for="warranty_select" class="tx_tit">보증 방식</label>
-				<div class="dropdown sa_select mr-16" id="warranty_select">
+				<label for="warranty_select" class="tx-tit">보증 방식</label>
+				<div class="dropdown sa-select mr-16" id="warranty_select">
 					<button type="button" class="dropdown-toggle w7" data-toggle="dropdown" data-name="보증 방식 선택">
 						보증 방식 선택<span class="caret"></span>
 					</button>
-					<ul class="dropdown-menu chk_type" role="menu" id="warrantyList">
+					<ul class="dropdown-menu chk-type" role="menu" id="warrantyList">
 						<li>
 							<a href="javascript:void(0);" tabindex="-1">
 								<input type="checkbox" id="warranty_1" value="PR" name="warranty_opt">
@@ -440,12 +440,12 @@
 					</ul>
 				</div>
 
-				<label for="contract_select" class="tx_tit">계약 구분</label>
-				<div class="dropdown sa_select mr-24" id="contract_select">
+				<label for="contract_select" class="tx-tit">계약 구분</label>
+				<div class="dropdown sa-select mr-24" id="contract_select">
 					<button type="button" class="dropdown-toggle w7" data-toggle="dropdown" data-name="계약 구분 선택">
 						계약 구분 선택<span class="caret"></span>
 					</button>
-					<ul class="dropdown-menu chk_type" role="menu" id="contractList">
+					<ul class="dropdown-menu chk-type" role="menu" id="contractList">
 						<li>
 							<a href="javascript:void(0);" tabindex="-1">
 								<input type="checkbox" id="contract_1" value="종합" name="contract_opt">
@@ -479,27 +479,27 @@
 					</ul>
 				</div>
 
-				<div class="tx_inp_type mr-12">
+				<div class="text-input-type mr-12">
 					<input type="text" id="key_word" placeholder="입력">
 				</div>
-				<button type="button" class="btn_type">검색</button>
+				<button type="button" class="btn-type">검색</button>
 			</div>
 		</form>
 	</div>
 	<div class="col-2">
 		<div class="right">
-			<a href="javascript:void(0);" class="save_btn">엑셀 다운로드</a>
+			<a href="javascript:void(0);" class="btn-save">엑셀 다운로드</a>
 		</div>
 	</div>
 </div>
 <div class="row">
 	<div class="col-lg-12">
 		<div class="indiv">
-			<div class="btn_wrap_type01">
-				<button type="button" class="btn_type big" onclick="location.href='/spc/entityInformationPost.do'">신규 등록</button>
+			<div class="btn-wrap-type01">
+				<button type="button" class="btn-type big" onclick="location.href='/spc/entityInformationPost.do'">신규 등록</button>
 			</div>
-			<div class="spc_tbl align_type" id="excelList">
-				<table class="sort_table chk_type">
+			<div class="spc-tbl align-type" id="excelList">
+				<table class="sort-table chk-type">
 					<colgroup>
 						<col style="width:8%">
 						<col style="width:8%">
@@ -518,28 +518,28 @@
 								type="checkbox" id="chk_header" value="순번"
 								onclick="setCheckedAll(this, 'rowCheck');"><label for="chk_header">순번</label></th>
 						<th>
-							<button type="button" class="btn_align down">SPC명</button>
+							<button type="button" class="btn-align down">SPC명</button>
 						</th>
 						<th>
-							<button type="button" class="btn_align down">발전소 명</button>
+							<button type="button" class="btn-align down">발전소 명</button>
 						</th>
 						<th>
-							<button type="button" class="btn_align down">연차</button>
+							<button type="button" class="btn-align down">연차</button>
 						</th>
 						<th>
-							<button type="button" class="btn_align down">관리 운영기간</button>
+							<button type="button" class="btn-align down">관리 운영기간</button>
 						</th>
 						<th>
-							<button type="button" class="btn_align down">보증</button>
+							<button type="button" class="btn-align down">보증</button>
 						</th>
 						<th class="right">
-							<button type="button" class="btn_align down">보증 값</button>
+							<button type="button" class="btn-align down">보증 값</button>
 						</th>
 						<th class="right">
-							<button type="button" class="btn_align down">감소율</button>
+							<button type="button" class="btn-align down">감소율</button>
 						</th>
 						<th>
-							<button type="button" class="btn_align down">- 추가보수</button>
+							<button type="button" class="btn-align down">- 추가보수</button>
 						</th>
 					</tr>
 					</thead>
@@ -550,12 +550,12 @@
 							<label for="chk_op[INDEX]">[INDEX]</label>
 						</td>
 						<td name="aTagTd01">
-							<a href="javascript:moveModifyPage('[spc_id]', '[gen_id]');" class="tbl_link">
+							<a href="javascript:moveModifyPage('[spc_id]', '[gen_id]');" class="table-link">
 								[name]
 							</a>
 						</td>
 						<td name="aTagTd02">
-							<a href="javascript:moveModifyPage('[spc_id]', '[gen_id]');" class="tbl_link">
+							<a href="javascript:moveModifyPage('[spc_id]', '[gen_id]');" class="table-link">
 								[발전소_명]
 							</a>
 						</td>
@@ -569,11 +569,11 @@
 					</tbody>
 				</table>
 			</div>
-			<div class="btn_wrap_type02 mt30">
-				<%--				<button type="button" class="btn_type03" onclick="setCheckedDataEdit();">선택 수정</button>--%>
-				<button type="button" class="btn_type03" onclick="setCheckedDataRemove();">선택 삭제</button>
+			<div class="btn-wrap-type02 mt30">
+				<%--				<button type="button" class="btn-type03" onclick="setCheckedDataEdit();">선택 수정</button>--%>
+				<button type="button" class="btn-type03" onclick="setCheckedDataRemove();">선택 삭제</button>
 			</div>
-			<div class="paging_wrap" id="paging"></div>
+			<div class="pagination-wrapper" id="paging"></div>
 		</div>
 	</div>
 </div>

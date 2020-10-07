@@ -16,7 +16,7 @@
 			tableData();
 		});
 
-		$('.save_btn').on('click', function(e) {
+		$('.btn-save').on('click', function(e) {
 			let excelName = 'SPC 원가관리';
 			let $val = $('#balanceTable').find('tbody');
 			let cnt = $val.length;
@@ -122,7 +122,7 @@
 
 					for (let j = 0; j <= 13; j++) {
 						if (j == 0) {
-							tr.append('<td class="sub_td">차입금 상환(' + String.fromCharCode(Number(index) + 65) + ')</td>')
+							tr.append('<td class="sub-td">차입금 상환(' + String.fromCharCode(Number(index) + 65) + ')</td>')
 						} else {
 							tr.append('<td>-</td>');
 						}
@@ -133,7 +133,7 @@
 					tr = $('<tr>').attr('id', 'interestCost_' + index);
 					for (let j = 0; j <= 13; j++) {
 						if (j == 0) {
-							tr.append('<td class="sub_td">이자 비용(' + String.fromCharCode(Number(index) + 65) + ')</td>')
+							tr.append('<td class="sub-td">이자 비용(' + String.fromCharCode(Number(index) + 65) + ')</td>')
 						} else {
 							tr.append('<td>-</td>');
 						}
@@ -215,9 +215,9 @@
 <div class="modal fade" id="historyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
-			<div class="ly_wrap">
+			<div class="ly-wrapper">
 				<h2 class="ly_tit">SPC 원가관리 등록/수정 이력</h2>
-				<div class="spc_tbl ly_type">
+				<div class="spc-tbl ly-type">
 					<table id="hitoryTable">
 						<colgroup>
 							<col style="width:15%">
@@ -244,8 +244,8 @@
 					</table>
 				</div>
 			</div>
-			<div class="btn_wrap_type02">
-				<button type="button" class="btn_type" data-dismiss="modal" aria-label="Close">확인</button>
+			<div class="btn-wrap-type02">
+				<button type="button" class="btn-type" data-dismiss="modal" aria-label="Close">확인</button>
 			</div>
 		</div>
 	</div>
@@ -257,36 +257,36 @@
 	</div>
 </div>
 <div class="row">
-	<div class="header_drop_area col-8">
+	<div class="dropdown-wrapper col-8">
 		<div class="dropdown" id="spcGen">
 			<button type="button" class="dropdown-toggle w8" data-toggle="dropdown">
 				전체<span class="caret"></span>
 			</button>
-			<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu">
+			<ul class="dropdown-menu dropdown-menu-form chk-type" role="menu">
 			</ul>
 		</div>
 	</div>
 	<div class="col-4">
 		<div class="right">
-			<a href="javascript:void(0);" class="save_btn">다운로드</a>
+			<a href="javascript:void(0);" class="btn-save">다운로드</a>
 		</div>
 	</div>
 </div>
 <div class="row">
 	<div class="col-12">
-		<div class="indiv entity_site">
-			<div class="btn_wrap_type">
+		<div class="indiv entity-site">
+			<div class="btn-wrap-type">
 				<div class="dropdown" id="year">
 					<button type="button" class="dropdown-toggle w8" data-toggle="dropdown" data-value="2020">
 						2020년<span class="caret"></span>
 					</button>
-					<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu">
+					<ul class="dropdown-menu dropdown-menu-form chk-type" role="menu">
 						<li data-value=""><a href="#">전체</a></li>
 						<li data-value="2020"><a href="#">2020</a></li>
 					</ul>
 				</div>
 			</div>
-			<div class="spc_tbl align_type02" id="balanceTable">
+			<div class="spc-tbl align-type02" id="balanceTable">
 				<table>
 					<colgroup>
 						<col style="width:15%">
@@ -340,7 +340,7 @@
 						<td>-</td>
 					</tr>
 					<tr id="siteBilling">
-						<td class="sub_td">전략 판매 대금</td>
+						<td class="sub-td">전략 판매 대금</td>
 						<td>-</td>
 						<td>-</td>
 						<td>-</td>
@@ -356,7 +356,7 @@
 						<td>-</td>
 					</tr>
 					<tr id="siteMoney">
-						<td class="sub_td">REC 매매 대금</td>
+						<td class="sub-td">REC 매매 대금</td>
 						<td>-</td>
 						<td>-</td>
 						<td>-</td>
@@ -388,7 +388,7 @@
 						<td>-</td>
 					</tr>
 					<tr id="loan_0">
-						<td class="sub_td">차입금 상환(A)</td>
+						<td class="sub-td">차입금 상환(A)</td>
 						<td>-</td>
 						<td>-</td>
 						<td>-</td>
@@ -404,7 +404,7 @@
 						<td>-</td>
 					</tr>
 					<tr id="interestCost_0">
-						<td class="sub_td">이자 비용(A)</td>
+						<td class="sub-td">이자 비용(A)</td>
 						<td>-</td>
 						<td>-</td>
 						<td>-</td>
@@ -420,7 +420,7 @@
 						<td>-</td>
 					</tr>
 					<tr id="conversionCharge_0">
-						<td class="sub_td">대리 기관 수수료</td>
+						<td class="sub-td">대리 기관 수수료</td>
 						<td>-</td>
 						<td>-</td>
 						<td>-</td>
@@ -436,7 +436,7 @@
 						<td>-</td>
 					</tr>
 					<tr id="managementCharge_0">
-						<td class="sub_td">관리 운영 수수료</td>
+						<td class="sub-td">관리 운영 수수료</td>
 						<td>-</td>
 						<td>-</td>
 						<td>-</td>
@@ -452,7 +452,7 @@
 						<td>-</td>
 					</tr>
 					<tr id="corporateTax">
-						<td class="sub_td">법인세</td>
+						<td class="sub-td">법인세</td>
 						<td>-</td>
 						<td>-</td>
 						<td>-</td>
@@ -468,7 +468,7 @@
 						<td>-</td>
 					</tr>
 					<tr id="additionalTax">
-						<td class="sub_td">부가세</td>
+						<td class="sub-td">부가세</td>
 						<td>-</td>
 						<td>-</td>
 						<td>-</td>
@@ -484,7 +484,7 @@
 						<td>-</td>
 					</tr>
 					<tr id="rental">
-						<td class="sub_td">임대료</td>
+						<td class="sub-td">임대료</td>
 						<td>-</td>
 						<td>-</td>
 						<td>-</td>
@@ -500,7 +500,7 @@
 						<td>-</td>
 					</tr>
 					<tr id="expense">
-						<td class="sub_td">기타비용</td>
+						<td class="sub-td">기타비용</td>
 						<td>-</td>
 						<td>-</td>
 						<td>-</td>
@@ -532,7 +532,7 @@
 						<td>-</td>
 					</tr>
 					<tr id="endOfTerm">
-						<td class="sub_td">기말 현금</td>
+						<td class="sub-td">기말 현금</td>
 						<td>-</td>
 						<td>-</td>
 						<td>-</td>
@@ -550,13 +550,13 @@
 					</tbody>
 				</table>
 			</div>
-			<div class="btn_wrap_type02 mt30">
+			<div class="btn-wrap-type02 mt30">
 				<c:set var="siteId" value="${param.site_id}"/>
 				<c:if test="${not empty siteId}">
-				<button type="button" class="btn_type03" onclick="setCheckedDataModify();">수정</button>
+				<button type="button" class="btn-type03" onclick="setCheckedDataModify();">수정</button>
 				</c:if>
-				<button type="button" class="btn_type03" onclick="list();">목록</button>
-				<button type="button" class="btn_type" onclick="historyInit();">이력 확인</button>
+				<button type="button" class="btn-type03" onclick="list();">목록</button>
+				<button type="button" class="btn-type" onclick="historyInit();">이력 확인</button>
 			</div>
 		</div>
 	</div>

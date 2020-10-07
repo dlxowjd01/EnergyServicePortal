@@ -17,7 +17,7 @@
 			<button type="button" class="dropdown-toggle w10" data-toggle="dropdown" data-name="사업소 선택">
 				사업소 선택<span class="caret"></span>
 			</button>
-			<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="siteULList">
+			<ul class="dropdown-menu dropdown-menu-form chk-type" role="menu" id="siteULList">
 				<li data-value="[sid]">
 					<a href="javascript:void(0);" tabindex="-1">
 						<input type="checkbox" id="site_[INDEX]" value="[sid]" name="site">
@@ -26,24 +26,24 @@
 				</li>
 			</ul>
 		</div>
-		<a href="javascript:void(0);" class="btn_type02 collect_btn fr" id="excelDown"><fmt:message key="datacolleciton.4.savelog" /></a>
+		<a href="javascript:void(0);" class="btn-type02 collect-btn fr" id="excelDown"><fmt:message key="datacolleciton.4.savelog" /></a>
 	</div>
 </div>
 
 <div class="modal fade" id="addRtuModal" aria-labelledby="RTU_Register" role="dialog">
 	<div class="modal-dialog">
-		<div class="modal-content collection_modal_content">
+		<div class="modal-content collect-modal-content">
 			<div class="modal-header">
 				<h4 id="RTU_Register" class="modal-title">RTU 등록</h4>
 			</div>
 			<div class="modal-body">
 				<div class="input-group inline-flex">
-					<label for="rtuSite" class="input_label">사이트</label>
+					<label for="rtuSite" class="input-label">사이트</label>
 					<div class="dropdown" id="rtuSite">
 						<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="사업소 선택">
 							사업소 선택<span class="caret"></span>
 						</button>
-						<ul class="dropdown-menu chk_type" id="rtuSiteULList">
+						<ul class="dropdown-menu chk-type" id="rtuSiteULList">
 							<li data-value="[sid]">
 								<a href="javascript:void(0);" tabindex="-1">[name]</a>
 							</li>
@@ -51,24 +51,24 @@
 					</div>
 				</div>
 				<div class="input-group inline-flex">
-					<label for="serialNumber" class="input_label">시리얼 번호</label>
-					<input type="text" name="serialNumber" id="serialNumber" class="tx_inp_type text_input">
+					<label for="serialNumber" class="input-label">시리얼 번호</label>
+					<input type="text" name="serialNumber" id="serialNumber" class="text-input-type text-input">
 				</div>
 				<div class="input-group inline-flex">
-					<label for="rtuName" class="input_label">RTU 이름</label>
-					<input type="text" name="rtuName" id="rtuName" class="tx_inp_type text_input">
+					<label for="rtuName" class="input-label">RTU 이름</label>
+					<input type="text" name="rtuName" id="rtuName" class="text-input-type text-input">
 				</div>
 				<div class="input-group inline-flex">
-					<label for="rtuSecret" class="input_label">RTU 비밀키</label>
-					<input type="text" name="rtuSecret" id="rtuSecret" class="tx_inp_type text_input">
+					<label for="rtuSecret" class="input-label">RTU 비밀키</label>
+					<input type="text" name="rtuSecret" id="rtuSecret" class="text-input-type text-input">
 				</div>
 				<div class="input-group inline-flex">
-					<label for="description" class="input_label">메모</label>
+					<label for="description" class="input-label">메모</label>
 					<textarea class="textarea" id="description" name="description"></textarea>
 				</div>
-				<div class="btn_wrap_type02">
-					<button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button>
-					<button type="button" class="btn_type" onclick="registerRtu(); return false">확인</button>
+				<div class="btn-wrap-type02">
+					<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close">취소</button>
+					<button type="button" class="btn-type" onclick="registerRtu(); return false">확인</button>
 				</div>
 			</div>
 		</div>
@@ -77,13 +77,13 @@
 
 <div class="row">
 	<div class="col-xl-5 col-lg-6 col-md-6 col-sm-12">
-		<div class="indiv collect_box">
-			<div class="tbl_top clear">
+		<div class="indiv collect-box">
+			<div class="table-top clear">
 				<h2 class="ntit fl"><fmt:message key="datacolleciton.1.rtu" /></h2>
-				<button type="button" class="btn_type fr" id="showRegRtu"><fmt:message key="datacolleciton.1.add" /></button>
+				<button type="button" class="btn-type fr" id="showRegRtu"><fmt:message key="datacolleciton.1.add" /></button>
 			</div>
-			<div class="tbl_wrap_type collect_wrap">
-				<table class="his_tbl scroll" id="PV_INVERTER">
+			<div class="table-wrap-type collect-wrap">
+				<table class="history-table scroll" id="PV_INVERTER">
 					<thead>
 						<tr>
 							<th><fmt:message key="datacolleciton.1.siteid" /></th>
@@ -98,39 +98,39 @@
 					</tr>
 					</tbody>
 				</table>
-				<div class="paging_wrap" id="paging"></div>
+				<div class="pagination-wrapper" id="paging"></div>
 			</div>
 		</div>
 	</div>
 	<div class="col-xl-7 col-lg-6 col-md-6 col-sm-12">
-		<div class="indiv collect_box">
-			<div class="tbl_top clear">
+		<div class="indiv collect-box">
+			<div class="table-top clear">
 				<h2 class="ntit fl"><span id="selectedRTU">RTU</span> 상세정보</h2>
-				<div class="btn_wrap_type02 fr">
-					<button type="button" class="btn_type03 delete_btn">삭제</button>
-					<button type="button" class="btn_type modify_btn">수정</button>
+				<div class="btn-wrap-type02 fr">
+					<button type="button" class="btn-type03 delete_btn">삭제</button>
+					<button type="button" class="btn-type modify_btn">수정</button>
 				</div>
 			</div>
 			<div class="row">
 				<div class="w-50">
-					<h2 class="list_title">기기정보</h2>
-					<ul id="rtuDeviceInfo" class="device_list">
-						<li>시리얼 번호<span class="data_val"></span></li>
-						<li>코드 버전<span class="data_val"></span></li>
+					<h2 class="list-title">기기정보</h2>
+					<ul id="rtuDeviceInfo" class="device-list">
+						<li>시리얼 번호<span class="data-val"></span></li>
+						<li>코드 버전<span class="data-val"></span></li>
 					</ul>
 				</div>
 				<div class="w-50">
-					<h2 class="list_title">기기상태</h2>
-					<ul id="deviceStatus" class="device_list">
-						<li>CPU 사용량<span class="data_val"></span></li>
-						<li>메모리 사용량<span class="data_val"></span></li>
-						<li>디스크 사용량<span class="data_val"></span></li>
-						<li>기기 온도<span class="data_val"></span></li>
+					<h2 class="list-title">기기상태</h2>
+					<ul id="deviceStatus" class="device-list">
+						<li>CPU 사용량<span class="data-val"></span></li>
+						<li>메모리 사용량<span class="data-val"></span></li>
+						<li>디스크 사용량<span class="data-val"></span></li>
+						<li>기기 온도<span class="data-val"></span></li>
 					</ul>
 				</div>
 			</div>
 
-			<div class="tbl_wrap_type collect_wrap">
+			<div class="table-wrap-type collect-wrap">
 				<ul class="nav nav-tabs">
 					<li class="nav-item active">
 						<a class="nav-link" data-toggle="tab" href="#deviceList">연결 설비</a>
@@ -140,10 +140,10 @@
 					</li>
 				</ul>
 				<div class="tab-content">
-					<div class="tab-pane fade active in spc_tbl_row st_edit panel-collapse collapse" id="deviceList">
-						<div class="tbl_top clear"></div>
-						<div class="collect_wrap table_scroll">
-							<table id="detailInfoTable" class="his_tbl">
+					<div class="tab-pane fade active in spc-table-row st-edit panel-collapse collapse" id="deviceList">
+						<div class="table-top clear"></div>
+						<div class="collect-wrap table-scroll">
+							<table id="detailInfoTable" class="history-table">
 								<thead>
 								<tr>
 									<th>설비 타입</th>
@@ -162,12 +162,12 @@
 							</table>
 						</div>
 					</div>
-					<div class="tab-pane fade spc_tbl_row st_edit panel-collapse collapse" id="commandSend">
+					<div class="tab-pane fade spc-table-row st-edit panel-collapse collapse" id="commandSend">
 						<div class="row">
 							<div class="w-100">
 								<div id="rtuCommand" class="command-list">
-									<div class="flex_group">
-										<span class="s_tit">커멘드</span>
+									<div class="flex-group">
+										<span class="sm-title">커멘드</span>
 										<div class="dropdown" id="command">
 											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 											<ul class="dropdown-menu" role="menu">
@@ -175,20 +175,20 @@
 											</ul>
 										</div>
 									</div>
-									<div class="flex_group">
-										<span class="s_tit">옵션</span>
+									<div class="flex-group">
+										<span class="sm-title">옵션</span>
 										<div class="dropdown" id="commandKey">
 											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 											<ul class="dropdown-menu" role="menu" id="selectCmdOptList">
 												<li data-value="targetPower"><a href="javascript:void(0);" tabindex="-1">목표출력</a></li>
 											</ul>
 										</div>
-										<div class="tx_inp_type">
+										<div class="text-input-type">
 											<input type="text" id="optionVal" name="optionVal" placeholder="">
 										</div>
-										<div class="btn_wrap_type02 flex_start">
-											<%--								<button type="button" class="btn_type03">삭제</button>--%>
-											<button type="button" class="btn_type" onclick="commandModal();">보내기</button>
+										<div class="btn-wrap-type02 flex-start">
+											<%--								<button type="button" class="btn-type03">삭제</button>--%>
+											<button type="button" class="btn-type" onclick="commandModal();">보내기</button>
 										</div>
 									</div>
 								</div>
@@ -203,15 +203,15 @@
 
 <div class="row">
 	<div class="col-12">
-		<div class="indiv collect_box last_box">
-			<div class="tbl_wrap_type collect_wrap">
-				<div class="tbl_top clear">
+		<div class="indiv collect-box last-box">
+			<div class="table-wrap-type collect-wrap">
+				<div class="table-top clear">
 					<h2 class="ntit fl"><fmt:message key="datacolleciton.3.datacollectionlog" /></h2>
 				</div>
-				<div class="clear inp_align">
+				<div class="clear input-align">
 					<div class="fl">
-						<span class="tx_tit">로그타입</span>
-						<div class="sel_calendar">
+						<span class="tx-tit">로그타입</span>
+						<div class="sel-calendar">
 							<div class="dropdown" id="logType">
 								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="상태">상태<span class="caret"></span></button>
 								<ul class="dropdown-menu" role="menu">
@@ -226,8 +226,8 @@
 						</div>
 					</div>
 					<div class="fl">
-						<span class="tx_tit"><fmt:message key="datacolleciton.3.timeframe" /></span>
-						<div class="sel_calendar">
+						<span class="tx-tit"><fmt:message key="datacolleciton.3.timeframe" /></span>
+						<div class="sel-calendar">
 							<input type="text" id="datepicker1" class="sel" value="" autocomplete="off">
 							<em></em>
 							<input type="text" id="timepicker1" name="timepicker1" class="sel timepicker"/>
@@ -238,11 +238,11 @@
 						</div>
 					</div>
 					<div class="fl">
-						<button type="button" class="btn_type" id="selectLogByDate"><fmt:message key="datacolleciton.3.search" /></button>
+						<button type="button" class="btn-type" id="selectLogByDate"><fmt:message key="datacolleciton.3.search" /></button>
 					</div>
 				</div>
 				<div id="logTableDiv">
-					<table class="his_tbl" id="logTable">
+					<table class="history-table" id="logTable">
 						<colgroup>
 							<col style="width:10%">
 							<col style="width:10%">
@@ -270,7 +270,7 @@
 						</tbody>
 					</table>
 				</div>
-				<div class="paging_wrap" id="logPaging">
+				<div class="pagination-wrapper" id="logPaging">
 				</div>
 			</div>
 		</div>
@@ -287,12 +287,12 @@
 				<div class="modal-body">
 					<div class="row">
 						<div class="col-12">
-							<input type="password" id="certPass" name="certPass" class="input tx_inp_type w-100" value="" placeholder="패스워드" autocomplete="off">
+							<input type="password" id="certPass" name="certPass" class="input text-input-type w-100" value="" placeholder="패스워드" autocomplete="off">
 						</div>
 					</div>
-					<div class="btn_wrap_type02">
-						<button type="button" class="btn_type" onclick="commandSend();">확인</button>
-						<button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button>
+					<div class="btn-wrap-type02">
+						<button type="button" class="btn-type" onclick="commandSend();">확인</button>
+						<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close">취소</button>
 					</div>
 				</div>
 			</div>
@@ -477,11 +477,11 @@
 		$.when($.ajax(rtuInfo[0]), $.ajax(rtuInfo[1])).done(function (result1, result2) {
 			if (result1[0]) {
 				const basic = result1[0];
-				const info = $('#rtuDeviceInfo').find('.data_val');
+				const info = $('#rtuDeviceInfo').find('.data-val');
 				const table = $('#detailInfoTable').find('tbody');
 				const devices = basic.devices;
 				info.eq(0).text(result1[0].serialNumber);
-				basic.version ? info.eq(1).text(basic.version) : info.eq(1).addClass('no_val').text("-");
+				basic.version ? info.eq(1).text(basic.version) : info.eq(1).addClass('no-val').text("-");
 				table.empty().data('deviceList', devices);
 
 				let str = ``;
@@ -524,7 +524,7 @@
 
 			if (!isEmpty(result2[0][rids]) && !isEmpty(result2[0][rids].data)) {
 				const detail = result2[0][rids].data[0];
-				const status = $('#deviceStatus').find('.data_val');
+				const status = $('#deviceStatus').find('.data-val');
 				status.eq(0).text(detail.cpu.toFixed(2) + ' %');
 				status.eq(1).text(detail.mem.toFixed(2) + ' %');
 				status.eq(2).text(detail.disk.toFixed(2) + ' %');
@@ -634,13 +634,13 @@
 		const rtuName = $('#selectedRTU');
 		rtuName.text('RTU').data('rid', '');
 
-		const info = $('#rtuDeviceInfo').find('.data_val');
+		const info = $('#rtuDeviceInfo').find('.data-val');
 		const table = $('#detailInfoTable').find('tbody');
 		info.eq(0).text('-');
-		info.eq(1).addClass('no_val').text('-')
+		info.eq(1).addClass('no-val').text('-')
 		table.empty();
 
-		const status = $('#deviceStatus').find('.data_val');
+		const status = $('#deviceStatus').find('.data-val');
 		status.eq(0).text('-');
 		status.eq(1).text('-');
 		status.eq(2).text('-');
@@ -796,10 +796,10 @@
 
 			const rid = $('#selectedRTU').data('rid');
 			$('#RTU_Register').text('RTU 수정');
-			$('#addRtuModal .btn_wrap_type02 button').eq(1).attr('onclick', 'registerRtu("patch", "' + rid + '"); return false');
+			$('#addRtuModal .btn-wrap-type02 button').eq(1).attr('onclick', 'registerRtu("patch", "' + rid + '"); return false');
 		} else {
 			$('#RTU_Register').text('RTU 등록');
-			$('#addRtuModal .btn_wrap_type02 button').eq(1).attr('onclick', 'registerRtu("post"); return false');
+			$('#addRtuModal .btn-wrap-type02 button').eq(1).attr('onclick', 'registerRtu("post"); return false');
 		}
 
 		$('#addRtuModal').modal();
@@ -930,9 +930,9 @@
 		let endPage = ((startPage + pagePerData - 1) > totalPage) ? totalPage : (startPage + pagePerData - 1);
 
 		if (navgroup == 1) {
-			pageStr += '<a href="javascript:void(0);" class="btn_prev first_prev">prev</a>';
+			pageStr += '<a href="javascript:void(0);" class="btn-prev first_prev">prev</a>';
 		} else{
-			pageStr += '<a href="javascript:selectLog(\'' + rids + '\',\'\',\'\',\'5\',\'' + (startPage -1) + '\');" class="btn_prev">prev</a>';
+			pageStr += '<a href="javascript:selectLog(\'' + rids + '\',\'\',\'\',\'5\',\'' + (startPage -1) + '\');" class="btn-prev">prev</a>';
 		}
 
 		for (let i = startPage ; i <= endPage; i++) {
@@ -944,9 +944,9 @@
 		}
 
 		if (navgroup <totalnav) {
-			pageStr += '<a href="javascript:selectLog(\'' + rids + '\',\'\',\'\',\'5\',\'' + (endPage +1) + '\');"  class="btn_next">next</a>';
+			pageStr += '<a href="javascript:selectLog(\'' + rids + '\',\'\',\'\',\'5\',\'' + (endPage +1) + '\');"  class="btn-next">next</a>';
 		} else {
-			pageStr += '<a href="javascript:void(0);"  class="btn_next larst_next">next</a>';
+			pageStr += '<a href="javascript:void(0);"  class="btn-next larst_next">next</a>';
 		}
 
 		$('#logPaging').append(pageStr);

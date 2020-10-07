@@ -106,10 +106,10 @@
 		let $selecter = $('#' + addId);
 
 		if (addId == 'addFileList01') {
-			$selecter.append('<input name="work_report_file_01' + addListCnt1 + '" type="file" class="hidden" id="work_report_file_'+addListCnt1+'"><label for="work_report_file_'+addListCnt1+'" class="btn file_upload">파일 선택</label>')
+			$selecter.append('<input name="work_report_file_01' + addListCnt1 + '" type="file" class="hidden" id="work_report_file_'+addListCnt1+'"><label for="work_report_file_'+addListCnt1+'" class="btn file-upload">파일 선택</label>')
 			addListCnt1++;
 		} else if (addId == 'addFileList02') {
-			$selecter.append('<input name="work_report_file_02' + addListCnt2 + '" type="file" class="hidden" id="work_report_file_'+addListCnt2+'"><label for="work_report_file_'+addListCnt2+'" class="btn file_upload">파일 선택</label>')
+			$selecter.append('<input name="work_report_file_02' + addListCnt2 + '" type="file" class="hidden" id="work_report_file_'+addListCnt2+'"><label for="work_report_file_'+addListCnt2+'" class="btn file-upload">파일 선택</label>')
 			addListCnt2++;
 		}
 	}
@@ -234,13 +234,13 @@
 <div class="row">
 	<div class="col-lg-12">
 		<div>
-			<span class="tx_tit">보고서 구분</span>
-			<div class="sa_select">
+			<span class="tx-tit">보고서 구분</span>
+			<div class="sa-select">
 				<div class="dropdown" id="report_type">
 					<button type="button" class="dropdown-toggle w9" data-toggle="dropdown" data-value="">
 						<span class="caret"></span>
 					</button>
-					<ul class="dropdown-menu chk_type" role="menu">
+					<ul class="dropdown-menu chk-type" role="menu">
 						<li data-value="1"><a href="javascript:void(0);">출장/조치 보고서</a></li>
 						<li data-value="2"><a href="javascript:void(0);">QC 보고서</a></li>
 					</ul>
@@ -251,11 +251,11 @@
 </div>
 <div class="row">
 	<div class="col-lg-12">
-		<div class="indiv report_post" id="work_info">
-			<div class="tbl_top">
+		<div class="indiv report-post" id="work_info">
+			<div class="table-top">
 				<h2 class="ntit mt25">출장 이력</h2>
 			</div>
-			<div class="spc_tbl_row">
+			<div class="spc-table-row">
 				<table>
 					<colgroup>
 						<col style="width:15%">
@@ -266,7 +266,7 @@
 					<tr>
 						<th>보고서 명</th>
 						<td>
-							<div class="tx_inp_type edit">
+							<div class="text-input-type edit">
 								<input type="text" id="report_name" placeholder="직접 입력">
 							</div>
 						</td>
@@ -285,14 +285,14 @@
 					<tr>
 						<th>출장 시기</th>
 						<td>
-							<div class="sel_calendar edit twin clear">
+							<div class="sel-calendar edit twin clear">
 								<input type="text" id="출장_시기_from" class="sel datepicker fromDate" value="" autocomplete="off" placeholder="시작일">
 								<input type="text" id="출장_시기_to" class="sel datepicker toDate" value="" autocomplete="off" placeholder="종료일">
 							</div>
 						</td>
 						<th>출장 장소</th>
 						<td>
-							<div class="tx_inp_type edit">
+							<div class="text-input-type edit">
 								<input type="text" id="출장_장소" placeholder="직접 입력">
 							</div>
 						</td>
@@ -300,13 +300,13 @@
 					<tr>
 						<th>작성 일자</th>
 						<td>
-							<div class="sel_calendar edit">
+							<div class="sel-calendar edit">
 								<input type="text" id="작성_일자" class="sel datepicker" value="" autocomplete="off" placeholder="날짜 선택">
 							</div>
 						</td>
 						<th>출장 목적</th>
 						<td>
-							<div class="tx_inp_type edit">
+							<div class="text-input-type edit">
 								<input type="text" id="출장_목적" placeholder="직접 입력">
 							</div>
 						</td>
@@ -314,13 +314,13 @@
 					<tr>
 						<th>소속 부서</th>
 						<td>
-							<div class="tx_inp_type edit">
+							<div class="text-input-type edit">
 								<input type="text" id="소속_부서" placeholder="직접 입력">
 							</div>
 						</td>
 						<th>출장자</th>
 						<td>
-							<div class="tx_inp_type edit">
+							<div class="text-input-type edit">
 								<input type="text" id="출장자" placeholder="직접 입력">
 							</div>
 						</td>
@@ -329,36 +329,36 @@
 			</div>
 		</div>
 		<form id="work_detail_info" name="work_detail_info">
-			<div class="indiv mt25 report_post02">
-				<div class="tbl_top">
+			<div class="indiv mt25 report-post02">
+				<div class="table-top">
 					<h2 class="ntit mt25">처리 내역</h2>
 				</div>
-				<div class="spc_tbl_row">
+				<div class="spc-table-row">
 					<table>
 						<colgroup>
 							<col style="width:15%">
 							<col>
 						</colgroup>
 						<tr>
-							<th class="vert_type">시스템 개요</th>
+							<th class="th-title">시스템 개요</th>
 							<td>
-								<div class="txarea_inp_type">
+								<div class="textarea-input-type">
 									<textarea placeholder="내용 추가" id="시스템_개요" rows="4"></textarea>
 								</div>
 							</td>
 						</tr>
 						<tr>
-							<th class="vert_type">현장 점검</th>
+							<th class="th-title">현장 점검</th>
 							<td>
 								<div id="fileList01" class="hide-no-data">
-									<p class="tx_file">
+									<p class="text-file">
 										<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList01', [INDEX]);">삭제</button>
+										<button type="button" class="btn-type07" onclick="setRemoveFileList('fileList01', [INDEX]);">삭제</button>
 									</p>
 								</div>
 								<div id="addFileList01">
 									<input type="file" name="work_report_file_01" class="hidden" id="work_report_file_01" accept="image/*" multiple>
-									<label for="work_report_file_01" class="btn file_upload">파일 선택</label>
+									<label for="work_report_file_01" class="btn file-upload">파일 선택</label>
 									<div class="file_list ml-16">
 										<ul></ul>
 									</div>
@@ -366,41 +366,41 @@
 							</td>
 						</tr>
 						<tr>
-							<th class="vert_type">특이사항</th>
+							<th class="th-title">특이사항</th>
 							<td>
-								<div class="txarea_inp_type">
+								<div class="textarea-input-type">
 									<textarea id="특이사항" placeholder="내용 추가" rows="4"></textarea>
 								</div>
 							</td>
 						</tr>
 						<tr>
-							<th class="vert_type">향후 진행예정 업무</th>
+							<th class="th-title">향후 진행예정 업무</th>
 							<td>
-								<div class="txarea_inp_type">
+								<div class="textarea-input-type">
 									<textarea id="향후_진행예정_업무" placeholder="내용 추가" rows="4"></textarea>
 								</div>
 							</td>
 						</tr>
 						<tr>
-							<th class="vert_type">담당자 의견</th>
+							<th class="th-title">담당자 의견</th>
 							<td>
-								<div class="txarea_inp_type">
+								<div class="textarea-input-type">
 									<textarea id="담당자_의견" placeholder="내용 추가" rows="4"></textarea>
 								</div>
 							</td>
 						</tr>
 						<tr>
-							<th class="vert_type">첨부 파일</th>
+							<th class="th-title">첨부 파일</th>
 							<td>
 								<div id="fileList02" class="hide-no-data">
-									<p class="tx_file">
+									<p class="text-file">
 										<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-										<button type="button" class="btn_type07" onclick="setRemoveFileList('fileList02', [INDEX]);">삭제</button>
+										<button type="button" class="btn-type07" onclick="setRemoveFileList('fileList02', [INDEX]);">삭제</button>
 									</p>
 								</div>
 								<div id="addFileList02">
 									<input type="file" name="work_report_file_02" class="hidden" id="work_report_file_02" accept="image/*" multiple>
-									<label for="work_report_file_02" class="btn file_upload">파일 선택</label>
+									<label for="work_report_file_02" class="btn file-upload">파일 선택</label>
 									<div class="file_list ml-16">
 										<ul></ul>
 									</div>
@@ -409,9 +409,9 @@
 						</tr>
 					</table>
 				</div>
-				<div class="btn_wrap_type02">
-					<button type="button" class="btn_type03" onclick="goMoveList();">목록</button>
-					<button type="button" class="btn_type" onclick="setSaveData();">수정</button>
+				<div class="btn-wrap-type02">
+					<button type="button" class="btn-type03" onclick="goMoveList();">목록</button>
+					<button type="button" class="btn-type" onclick="setSaveData();">수정</button>
 				</div>
 			</div>
 		</form>

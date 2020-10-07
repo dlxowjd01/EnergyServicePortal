@@ -300,7 +300,7 @@
 					siteObj.address = newStreetAddr;
 				}
 				if( !isEmpty(newSiteDetail) ){
-					siteObj.detail_info = newSiteDetail;
+					siteObj.detail-info = newSiteDetail;
 				}
 				// if( !isEmpty(newDrResId) ){
 				// 	siteObj.dr_group_id = newDrResId;
@@ -447,7 +447,7 @@
 					siteEditObj.address = newStreetAddr;
 				}
 				if( !isEmpty(newSiteDetail)){
-					siteEditObj.detail_info = newSiteDetail;
+					siteEditObj.detail-info = newSiteDetail;
 				}
 				// if( !isEmpty(newDrResId) && td.eq(8).text() != newDrResId ){
 				// 	siteEditObj.dr_group_id = newDrResId;
@@ -578,8 +578,8 @@
 				let did = td.eq(0).find(".dropdown-toggle").data("did");
 				let alarmLvl = td.eq(2).find(".dropdown-toggle");
 				let contactName = td.eq(3).find(".dropdown-toggle");
-				// let contactInput = td.eq(3).find(".dropdown + .tx_inp_type");
-				let contactNum = td.eq(4).find(".tx_inp_type");
+				// let contactInput = td.eq(3).find(".dropdown + .text-input-type");
+				let contactNum = td.eq(4).find(".text-input-type");
 				let nonUserArr = [];
 				let registeredUserArr = [];
 				let alarmToObj = {};
@@ -918,7 +918,7 @@
 							"sTitle": "",
 							"mData": null,
 							"mRender": function ( data, type, full, rowIndex )  {
-								return '<a class="chk_type" href="#"><input type="checkbox" id="' + rowIndex.row + '" name="table_checkbox"><label for="' + rowIndex.row + '"></label></a>'
+								return '<a class="chk-type" href="#"><input type="checkbox" id="' + rowIndex.row + '" name="table_checkbox"><label for="' + rowIndex.row + '"></label></a>'
 							},
 							"className": "dt-body-center no-sorting"
 						},
@@ -967,11 +967,11 @@
 							"sTitle": "알람 수신",
 							"mData": null,
 							"mRender": function ( data, type, full, rowIndex )  {
-								// return '<button type="button" class="btn-type-sm btn_type03">알람</button>'
+								// return '<button type="button" class="btn-type-sm btn-type03">알람</button>'
 								if(!isEmpty(data.alarmInfo)){
-									return '<button type="button" class="btn-type-sm btn_type03">알람</button>'
+									return '<button type="button" class="btn-type-sm btn-type03">알람</button>'
 								} else {
-									return '<button type="button" disabled class="btn-type-sm btn_type03">알람</button>'
+									return '<button type="button" disabled class="btn-type-sm btn-type03">알람</button>'
 								}
 							},
 						},
@@ -988,11 +988,11 @@
 					},
 					initComplete: function(settings, json ){
 						let str = `<div id="btnGroup" class="right-end"><!--
-							--><button type="button" disabled class="btn_type03" onclick="updateModal('edit')">선택 수정</button><!--
-							--><button type="button" disabled class="btn_type03" onclick="updateModal('delete')">선택 삭제</button><!--
+							--><button type="button" disabled class="btn-type03" onclick="updateModal('edit')">선택 수정</button><!--
+							--><button type="button" disabled class="btn-type03" onclick="updateModal('delete')">선택 삭제</button><!--
 						--></div>`;
 
-						let addBtnStr = `<button type="button" class="btn_type fr mb-20" onclick="updateModal('add')">추가</button>`;
+						let addBtnStr = `<button type="button" class="btn-type fr mb-20" onclick="updateModal('add')">추가</button>`;
 						$("#siteTable_wrapper").append($(str)).prepend($(addBtnStr));
 						if(oid.match("testkpx")){
 							let colGroup = $("#siteTable").find("colgroup col");
@@ -1012,7 +1012,7 @@
 						$('#siteTable_wrapper').addClass('mb-28');
 					}
 				}).on("select", function(e, dt, type, indexes) {
-					let btn = $("#btnGroup").find(".btn_type03");
+					let btn = $("#btnGroup").find(".btn-type03");
 					btn.each(function(index, element){
 						if($(this).is(":disabled")){
 							$(this).prop("disabled", false);
@@ -1021,7 +1021,7 @@
 					siteTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
 					// console.log("dt---", siteTable[ type ]( indexes ).nodes())
 				}).on("deselect", function(e, dt, type, indexes) {
-					let btn = $("#btnGroup").find(".btn_type03");
+					let btn = $("#btnGroup").find(".btn-type03");
 					btn.each(function(index, element){
 						if(!$(this).is(":disabled")){
 							$(this).prop("disabled", true);
@@ -1082,7 +1082,7 @@
 					"buttons": [
 						{
 							extend: 'excelHtml5',
-							className: "save_btn",
+							className: "btn-save",
 							text: '엑셀 다운로드',
 							filename: '사용자관리_' + new Date().format('yyyyMMddHHmmss'),
 							// exportOptions: {
@@ -1111,12 +1111,12 @@
 						},
 						// {
 						// 	extend: 'csvHtml5',
-						// 	className: "btn_type03",
+						// 	className: "btn-type03",
 						// 	text: 'CSV'
 						// },
 						// {
 						// 	extend: 'pdfHtml5',
-						// 	className: "btn_type03",
+						// 	className: "btn-type03",
 						// 	text: 'PDF',
 						// },
 					],
@@ -1345,7 +1345,7 @@
 							"sTitle": "",
 							"mData": null,
 							"mRender": function ( data, type, full, rowIndex )  {
-								return '<a class="chk_type" href="#"><input type="checkbox" id="' + rowIndex.row + '" name="table_checkbox"><label for="' + rowIndex.row + '"></label></a>'
+								return '<a class="chk-type" href="#"><input type="checkbox" id="' + rowIndex.row + '" name="table_checkbox"><label for="' + rowIndex.row + '"></label></a>'
 							},
 							"className": "dt-body-center no-sorting"
 						},
@@ -1407,8 +1407,8 @@
 						// 	$(cell).data("id", i);
 						// });		
 						let str = `<div id="btnGroup" class="right-end"><!--
-							--><button type="button" disabled class="btn_type03" onclick="updateModal('edit')">선택 수정</button><!--
-							--><button type="button" disabled class="btn_type03" onclick="updateModal('delete')">선택 삭제</button><!--
+							--><button type="button" disabled class="btn-type03" onclick="updateModal('edit')">선택 수정</button><!--
+							--><button type="button" disabled class="btn-type03" onclick="updateModal('delete')">선택 삭제</button><!--
 						--></div>`;
 						$("#siteTable_wrapper").append($(str));
 
@@ -1433,7 +1433,7 @@
 						$('#siteTable_wrapper').addClass('mb-28');
 					},
 				}).on("select", function(e, dt, type, indexes) {
-					let btn = $("#btnGroup").find(".btn_type03");
+					let btn = $("#btnGroup").find(".btn-type03");
 					let role = null;
 					if(!isEmpty(siteReadOnlyTable.row( indexes ).data())){
 						role = siteReadOnlyTable.row( indexes ).data().role;
@@ -1461,7 +1461,7 @@
 					siteReadOnlyTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
 					// console.log("dt---", siteReadOnlyTable[ type ]( indexes ).nodes())
 				}).on("deselect", function(e, dt, type, indexes) {
-					let btn = $("#btnGroup").find(".btn_type03");
+					let btn = $("#btnGroup").find(".btn-type03");
 					let role = null;
 
 					if(!isEmpty(siteReadOnlyTable.row( indexes ).data())){
@@ -2002,13 +2002,13 @@
 						$(this).prop("disabled", true);
 					});
 					// 추가 정보
-					$('#newSiteDetail').val(rowData.detail_info).prop("disabled", true);
+					$('#newSiteDetail').val(rowData.detail-info).prop("disabled", true);
 
 					addBtn.addClass("hidden");
 
 				} else {
 					// 추가 정보
-					$('#newSiteDetail').val(rowData.detail_info).prop("disabled", false);
+					$('#newSiteDetail').val(rowData.detail-info).prop("disabled", false);
 					addBtn.prop("disabled", false).text("수정").removeClass("hidden");
 				}
 
@@ -2361,7 +2361,7 @@
 		let input = parent.next();
 		let alarmLvl = $(self).parents().closest("tr").find("td:nth-of-type(3) .dropdown");
 		let phone = $(self).parents().closest("tr").find("td:nth-of-type(5) input[type='text']");
-		let btnGroup = $(self).parents().closest("tr").find("td:nth-of-type(6) .flex_start");
+		let btnGroup = $(self).parents().closest("tr").find("td:nth-of-type(6) .flex-start");
 
 		$(self).siblings().find("input:checked").prop("checked", false);
 		input.toggleClass("hidden");
@@ -2382,7 +2382,7 @@
 		let alarmLvl = $(self).parents().closest("tr").find("td:nth-of-type(3) .dropdown");
 
 		let phone = $(self).parents().closest("tr").find("td:nth-of-type(5) input[type='text']");
-		let btnGroup = $(self).parents().closest("tr").find("td:nth-of-type(6) .flex_start");
+		let btnGroup = $(self).parents().closest("tr").find("td:nth-of-type(6) .flex-start");
 
 		$(self).siblings().removeClass("hidden");
 		parent.addClass("hidden");
@@ -2603,7 +2603,7 @@
 									$.each(aLevelOpt, function(index, el){
 										str3 += `
 											<li>
-												<a class="chk_type" href="#">
+												<a class="chk-type" href="#">
 													<input type="checkbox" data-id="aDvcLevel${'${ el.val }'}" name="aDvcLevel${'${ el.val }'}" value="${'${ el.val }'}" />
 													<label>${'${ el.name }'}</label>
 												</a>
@@ -2727,7 +2727,7 @@
 
 											str4 += `
 												<li onclick='removeNewInput(this)'>
-													<a class="chk_type" href="#">
+													<a class="chk-type" href="#">
 														<input type="checkbox" data-id="${'${ el.login_id }'}${'${ rowIndex.row }'}" name="aDvcContactPerson${'${ rowIndex.row }'}" value="${'${ el.uid }'}" data-uid="${'${ el.uid }'}" data-name="${'${ el.name }'}" data-contact-num="${'${ phoneNum }'}" />
 														<label>${'${ nameId }'}</label>
 													</a>
@@ -2740,7 +2740,7 @@
 												<button type="button" class="dropdown-toggle" data-toggle="dropdown" disabled>선택<span class="caret"></span></button>
 												<ul id="aDvcContactListNonUser${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str4 }'}</ul>
 											</div>
-											<div class="tx_inp_type ml-0 hidden"><input type="text" name="aDvcContactNonUser${'${ rowIndex.row }'}" /></div>
+											<div class="text-input-type ml-0 hidden"><input type="text" name="aDvcContactNonUser${'${ rowIndex.row }'}" /></div>
 										`
 									} else {
 										if(!isEmpty(data.alarmToUser.non_user) && data.alarmToUser.non_user.length > 0){
@@ -2762,7 +2762,7 @@
 
 													str4 += `
 														<li onclick='removeNewInput(this)'>
-															<a class="chk_type" href="#">
+															<a class="chk-type" href="#">
 																<input type="checkbox" data-id="${'${ el.login_id }'}${'${ newIdx }'}" name="aDvcContactPerson${'${ newIdx }'}" value="${'${ el.uid }'}" data-uid="${'${ el.uid }'}" data-name="${'${ el.name }'}" data-contact-num="${'${ phoneNum }'}" />
 																<label>${'${ nameId }'}</label>
 															</a>
@@ -2775,7 +2775,7 @@
 														<button type="button" class="dropdown-toggle" data-value="${'${ displayName }'}" data-toggle="dropdown" data-name="선택" disabled>${'${ displayName }'}<span class="caret"></span></button>
 														<ul id="aDvcContactListNonUser${'${ newIdx }'}" class="dropdown-menu">${'${ str4 }'}</ul>
 													</div>
-													<div class="tx_inp_type ml-0 hidden"><input type="text" name="aDvcContactNonUser${'${ newIdx }'}" /></div>
+													<div class="text-input-type ml-0 hidden"><input type="text" name="aDvcContactNonUser${'${ newIdx }'}" /></div>
 												`;
 
 											});
@@ -2802,7 +2802,7 @@
 
 													str4 += `
 														<li onclick='removeNewInput(this)'>
-															<a class="chk_type" href="#">
+															<a class="chk-type" href="#">
 																<input type="checkbox" data-id="${'${ el.login_id }'}${'${ newIdx }'}" name="aDvcContactPerson${'${ newIdx }'}" value="${'${ el.uid }'}" data-name="${'${ el.name }'}" data-contact-num="${'${ phoneNum }'}" />
 																<label>${'${ nameId }'}</label>
 															</a>
@@ -2814,7 +2814,7 @@
 														<button type="button" class="dropdown-toggle" data-value="${'${ item.uid }'}" data-toggle="dropdown" data-name="" disabled>${'${ displayName }'}<span class="caret"></span></button>
 														<ul id="aDvcContactList${'${ newIdx }'}" class="dropdown-menu">${'${ str4 }'}</ul>
 													</div>
-													<div class="tx_inp_type ml-0 hidden"><input type="text" name="aDvcContact${'${ newIdx }'}" id="aDvcContact${'${ newIdx }'}" /></div>
+													<div class="text-input-type ml-0 hidden"><input type="text" name="aDvcContact${'${ newIdx }'}" id="aDvcContact${'${ newIdx }'}" /></div>
 												`;
 
 											});
@@ -2832,7 +2832,7 @@
 									let str5 = ``;
 
 									if( isEmpty(data.alarmToUser.non_user) && isEmpty(data.alarmToUser.user) ) {
-										str5 += `<div class="tx_inp_type disabled" data-user-type="user"><input type="text" name="aDvcPhone${'${ rowIndex.row }'}" value="" disabled /></div>`;
+										str5 += `<div class="text-input-type disabled" data-user-type="user"><input type="text" name="aDvcPhone${'${ rowIndex.row }'}" value="" disabled /></div>`;
 									} else {
 										if(!isEmpty(data.alarmToUser.non_user) && data.alarmToUser.non_user.length > 0){
 											let nonUser = data.alarmToUser.non_user;
@@ -2842,7 +2842,7 @@
 												let phoneNum = "";
 												item.phone ? (phoneNum = item.phone) : ( phoneNum = "" );
 
-												str5 += `<div class="tx_inp_type disabled" data-user-type="non-user"><input type="text" name="aDvcPhoneNonUser${'${ newIdx }'}" value="${'${ phoneNum }'}" disabled /></div>`;
+												str5 += `<div class="text-input-type disabled" data-user-type="non-user"><input type="text" name="aDvcPhoneNonUser${'${ newIdx }'}" value="${'${ phoneNum }'}" disabled /></div>`;
 											});
 										}
 
@@ -2861,7 +2861,7 @@
 														phoneNum = userData[found].contact_phone; 
 													}
 												}
-												str5 += `<div class="tx_inp_type disabled" data-user-type="user"><input type="text" name="aDvcPhone${'${ newIdx }'}" value="${'${ phoneNum }'}" disabled /></div>`;
+												str5 += `<div class="text-input-type disabled" data-user-type="user"><input type="text" name="aDvcPhone${'${ newIdx }'}" value="${'${ phoneNum }'}" disabled /></div>`;
 											});
 										}
 									}
@@ -2879,7 +2879,7 @@
 
 									if( isEmpty(data.alarmToUser.non_user) && isEmpty(data.alarmToUser.user) ) {
 										deleteStr = `
-											<div class="flex_start">
+											<div class="flex-start">
 												<button type="button" class="icon-add" data-index="${'${rowIndex.row}'}" onclick="updateAlarmTable($(this), 'add' )">추가</button>
 												<button type="button" class="icon-edit" data-index="${'${rowIndex.row}'}" onclick="updateAlarmTable($(this), 'edit')">수정</button>
 												<button type="button" class="icon-delete" data-index="${'${rowIndex.row}'}" onclick="updateAlarmTable($(this), 'delete')">삭제</button>
@@ -2894,7 +2894,7 @@
 										}
 										for(let i = 0, arrLength = length; i < arrLength; i++ ){
 											deleteStr += `
-												<div class="flex_start">
+												<div class="flex-start">
 													<button type="button" class="icon-add" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'add' )">추가</button>
 													<button type="button" class="icon-edit" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'edit')">수정</button>
 													<button type="button" class="icon-delete" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'delete')">삭제</button>
@@ -3044,7 +3044,7 @@
 									$.each(aLevelOpt, function(index, el){
 										str3 += `
 											<li>
-												<a class="chk_type" href="#">
+												<a class="chk-type" href="#">
 													<input type="checkbox" data-id="aDvcLevel${'${ el.val }'}" name="aDvcLevel${'${ el.val }'}" value="${'${ el.val }'}" />
 													<label>${'${ el.name }'}</label>
 												</a>
@@ -3083,7 +3083,7 @@
 
 										str4 += `
 											<li onclick='removeNewInput(this)'>
-												<a class="chk_type" href="#">
+												<a class="chk-type" href="#">
 													<input type="checkbox" data-id="${'${ el.login_id }'}${'${ newIdx }'}" name="aDvcContactPerson${'${ newIdx }'}" data-uid="${'${ el.uid }'}" value="${'${ el.uid }'}" data-name="${'${ el.name }'}" data-contact-num="${'${ phoneNum }'}" />
 													<label>${'${ nameId }'}</label>
 												</a>
@@ -3096,7 +3096,7 @@
 											<button type="button" class="dropdown-toggle" data-value="" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 											<ul id="aDvcContactListNonUser${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str4 }'}</ul>
 										</div>
-										<div class="tx_inp_type ml-0 hidden"><input type="text" name="aDvcContactNonUser${'${ rowIndex.row }'}" /></div>
+										<div class="text-input-type ml-0 hidden"><input type="text" name="aDvcContactNonUser${'${ rowIndex.row }'}" /></div>
 									`;
 
 									return dropdown4;
@@ -3110,7 +3110,7 @@
 								"mRender": function ( data, type, row, rowIndex ) {
 									let str5 = ``;
 									
-									str5 = `<div class="tx_inp_type" data-user-type="non-user"><input type="text" name="aDvcPhoneNonUser${'${ rowIndex.row }'}" value="" /></div>`;
+									str5 = `<div class="text-input-type" data-user-type="non-user"><input type="text" name="aDvcPhoneNonUser${'${ rowIndex.row }'}" value="" /></div>`;
 
 									return str5;
 								},
@@ -3124,7 +3124,7 @@
 									let i = 0;
 
 									deleteStr = `
-										<div class="flex_start">
+										<div class="flex-start">
 											<button type="button" class="icon-add" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'add')">추가</button>
 											<button type="button" class="icon-edit" disabled data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'edit')">수정</button>
 											<button type="button" class="icon-delete" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'delete')">삭제</button>
@@ -3212,15 +3212,15 @@
 
 			copy.find("td:nth-of-type(3) .dropdown:not(:last-of-type)").remove();
 			copy.find("td:nth-of-type(4) div:lt(-2)").remove();
-			copy.find("td:nth-of-type(5) .tx_inp_type:not(:last-of-type)").remove();
-			copy.find("td:nth-of-type(6) .flex_start:not(:last-of-type)").remove();
+			copy.find("td:nth-of-type(5) .text-input-type:not(:last-of-type)").remove();
+			copy.find("td:nth-of-type(6) .flex-start:not(:last-of-type)").remove();
 
 			copy.find("input[type='checkbox']").prop("checked", false);
 			copy.find("td .dropdown-toggle").prop("disabled", false).html('선택<span class="caret"></span>');
 			copy.find("input[type='checkbox']").prop("checked", false);
 			copy.find("td input[type='text']").prop("disabled", false).val("").parent().removeClass("disabled");
 			
-			let tempIdx = tr.find("td:nth-of-type(6) .flex_start:last-of-type .icon-edit").data("index") + 1;
+			let tempIdx = tr.find("td:nth-of-type(6) .flex-start:last-of-type .icon-edit").data("index") + 1;
 
 			copy.find("td:nth-of-type(4) .dropdown").attr("data-user-index", tempIdx);
 			copy.find("td:nth-of-type(6) .icon-add").attr("data-index", tempIdx);
@@ -3429,9 +3429,9 @@
 
 		if(!copy.hasClass("single")){
 			copy.find("td .dropdown:not(:first-of-type)").remove();
-			copy.find("td:nth-of-type(4) .tx_inp_type:not(:nth-of-type(2))").remove();
-			copy.find("td:nth-of-type(5) .tx_inp_type:not(:first-of-type)").remove();
-			copy.find("td .flex_start:not(:first-of-type)").remove();
+			copy.find("td:nth-of-type(4) .text-input-type:not(:nth-of-type(2))").remove();
+			copy.find("td:nth-of-type(5) .text-input-type:not(:first-of-type)").remove();
+			copy.find("td .flex-start:not(:first-of-type)").remove();
 		}
 		
 		copy.find("td:nth-of-type(1) .dropdown-menu li").attr( "onclick", "showSubgroup(this)");
@@ -3473,7 +3473,7 @@
 			if(index>=2){
 				if(index != 3){
 					$(this).find(".dropdown:last-of-type").remove();
-					$(this).find(".tx_inp_type:last-of-type").remove();
+					$(this).find(".text-input-type:last-of-type").remove();
 				}
 
 				if(index == 3){
@@ -3481,7 +3481,7 @@
 				}
 
 				if(index == 5){
-					$(this).find(".flex_start:last-of-type").remove();
+					$(this).find(".flex-start:last-of-type").remove();
 				}
 			}
 		});
@@ -3570,19 +3570,19 @@
 
 <div id="propertyRow" class="row">
 	<div class="col-10">
-		<div class="flex_group">
-			<span class="tx_tit">사업소 유형</span>
+		<div class="flex-group">
+			<span class="tx-tit">사업소 유형</span>
 			<div class="dropdown">
 				<button type="button" class="dropdown-toggle"
 					data-toggle="dropdown">전체<span class="caret"></span></button>
 					<ul id="siteType" class="dropdown-menu"></ul>
 			</div>
 		</div>
-		<div class="flex_group">
+		<div class="flex-group">
 			<span class="inline-title">지역</span>
 			<div class="dropdown">
 				<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-				<ul id="countryList" class="dropdown-menu chk_type" role="menu">
+				<ul id="countryList" class="dropdown-menu chk-type" role="menu">
 					<li><a href="#">전체</a></li>
 					<c:forEach var="country" items="${location}">
 						<c:if test="${country.value.code eq 'kr'}">
@@ -3600,18 +3600,18 @@
 				</ul>
 			</div>
 		</div>
-		<div class="flex_group">
-			<span class="tx_tit">발전 자원</span>
+		<div class="flex-group">
+			<span class="tx-tit">발전 자원</span>
 			<div class="dropdown">
 				<button type="button" class="dropdown-toggle"
 					data-toggle="dropdown">선택<span class="caret"></span></button>
 				<ul id="resTypeList" class="dropdown-menu"></ul>
 			</div>
 		</div>
-		<div class="flex_group">
-			<span class="tx_tit">사업소 명</span>
-			<div class="flex_start">
-				<div class="tx_inp_type">
+		<div class="flex-group">
+			<span class="tx-tit">사업소 명</span>
+			<div class="flex-start">
+				<div class="text-input-type">
 					<input type="text" id="siteSearchBox" name="site_search_box" placeholder="입력">
 				</div>
 			</div>
@@ -3619,7 +3619,7 @@
 	</div>
 	<div class="col-2">
 		<div id="exportBtnGroup" class="fr"></div>
-		<!-- <button type="button" class="save_btn ml-16 fr" onclick="$(this).prev().toggleClass('hidden')">데이터 다운로드</button>--> 
+		<!-- <button type="button" class="btn-save ml-16 fr" onclick="$(this).prev().toggleClass('hidden')">데이터 다운로드</button>--> 
 	</div>
 </div>
 
@@ -3656,8 +3656,8 @@
 				<h4 id="resultSuccessMsg" class="text-blue hidden">사용자가 성공적으로<br>추가 되었습니다.</h4>
 				<h4 id="resultFailureMsg" class="warning-text hidden">사업소 추가에 실패하였습니다.<br>다시 시도해 주세요.</h4>
 			</div>
-			<div class="btn_wrap_type05"><!--
-			--><button type="button" id="resultBtn" class="btn_type03" data-dismiss="modal" aria-label="Close">확인</button><!--
+			<div class="btn-wrap-type05"><!--
+			--><button type="button" id="resultBtn" class="btn-type03" data-dismiss="modal" aria-label="Close">확인</button><!--
 		--></div>
 		</div>
 	</div>
@@ -3671,11 +3671,11 @@
 				<h5 id="deleteSuccessMsg" class="ntit">사이트 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>
 			</div>
 			<div class="modal-body">
-				<div class="tx_inp_type"><input type="text" name="confirm_site" id="confirmSite" placeholder="사이트 이름 입력"/></div>
+				<div class="text-input-type"><input type="text" name="confirm_site" id="confirmSite" placeholder="사이트 이름 입력"/></div>
 			</div>
-			<div class="btn_wrap_type05"><!--
-				--><button type="button" class="btn_type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
-				--><button type="submit" id="deleteConfirmBtn" class="btn_type w80 ml-12" disabled>확인</button><!--
+			<div class="btn-wrap-type05"><!--
+				--><button type="button" class="btn-type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
+				--><button type="submit" id="deleteConfirmBtn" class="btn-type w80 ml-12" disabled>확인</button><!--
 			--></div>
 		</div>
 	</div>
@@ -3689,11 +3689,11 @@
 				<h5 id="alarmDeleteSuccessMsg" class="ntit">알람 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;을 입력해 주세요.</h5>
 			</div>
 			<div class="modal-body">
-				<div class="tx_inp_type"><input type="text" name="confirm_alarm" id="confirmAlarm" placeholder="장치명 입력"/></div>
+				<div class="text-input-type"><input type="text" name="confirm_alarm" id="confirmAlarm" placeholder="장치명 입력"/></div>
 			</div>
-			<div class="btn_wrap_type05"><!--
-				--><button type="button" class="btn_type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
-				--><button type="submit" id="alarmDeleteConfirmBtn" class="btn_type w80 ml-12" disabled>확인</button><!--
+			<div class="btn-wrap-type05"><!--
+				--><button type="button" class="btn-type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
+				--><button type="submit" id="alarmDeleteConfirmBtn" class="btn-type w80 ml-12" disabled>확인</button><!--
 			--></div>
 		</div>
 	</div>
@@ -3704,7 +3704,7 @@
 <div class="modal fade" id="addAlarmModal" tabindex="-1" role="dialog" aria-labelledby="addAlarmModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-xl">
 		<div class="modal-content site-modal-content">
-			<div class="modal-header flex_start">
+			<div class="modal-header flex-start">
 				알람 설정<button type="button" class="btn-add ml-24" onclick="insertRowCopy()">열 추가</button><!--
 				--><small id="duplicatedGroup" class="warning hidden">해당 설비는 이미 선택 되었습니다.</small><!--
 				--><small id="noIdWarning" class="warning hidden">중복되지 않는 설비 타입/ 설비명은 필수입니다.</small><!--
@@ -3723,9 +3723,9 @@
 						<thead></thead>
 						<tbody></tbody>
 					</table>
-					<div class="btn_wrap_type05"><!--
-					--><button type="button" class="btn_type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
-					--><button type="submit" class="btn_type w80 ml-12">추가</button><!--
+					<div class="btn-wrap-type05"><!--
+					--><button type="button" class="btn-type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
+					--><button type="submit" class="btn-type w80 ml-12">추가</button><!--
 				--></div>
 				</form>
 			</div>
@@ -3744,13 +3744,13 @@
 					<form name="add_site_form" id="updateSiteForm" class="setting-form">
 						<section id="sectionSiteInfo">
 							<div class="row">
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label asterisk">사업소 명</span></div>
+								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label asterisk">사업소 명</span></div>
 								<div class="col-xl-3 col-lg-6 col-md-4 col-sm-10 pl-0">
-									<div class="flex_start">
-										<div class="tx_inp_type offset-73">
+									<div class="flex-start">
+										<div class="text-input-type offset-73">
 											<input type="text" name="new_site_name" id="newSiteName" placeholder="입력" minlength="2" maxlength="15">
 										</div>
-										<button type="button" class="btn_type fr" onclick="checkSiteId($('#newSiteName').val())" disabled>중복 체크</button>
+										<button type="button" class="btn-type fr" onclick="checkSiteId($('#newSiteName').val())" disabled>중복 체크</button>
 									</div>
 									<small class="hidden warning">추가하실 사이트를 입력해 주세요</small>
 									<small class="hidden warning">2~15 글자를 입력해 주세요.</small>
@@ -3759,7 +3759,7 @@
 									<small id="validSite" class="text-blue text-sm hidden">추가 가능한 사이트 입니다.</small>
 								</div>
 
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">사업소 유형</span></div>
+								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">사업소 유형</span></div>
 								<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
 									<div class="dropdown">
 										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
@@ -3768,7 +3768,7 @@
 									<small class="hidden warning">사업소 유형을 선택해 주세요</small>
 								</div>
 
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label asterisk">발전원</span></div>
+								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label asterisk">발전원</span></div>
 								<div class="col-xl-2 col-lg-6 col-md-4 col-sm-10 pl-0">
 									<div class="dropdown">
 										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
@@ -3777,7 +3777,7 @@
 									<small class="hidden warning">발전원 옵션을 선택해 주세요</small>
 								</div>
 
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">ESS 유무</span></div>
+								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">ESS 유무</span></div>
 								<div class="col-xl-1 col-lg-2 col-md-4 col-sm-10 pl-0">
 									<div class="dropdown">
 										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
@@ -3790,9 +3790,9 @@
 							</div>
 
 							<div class="row">
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label asterisk">사업소재지</span></div>
+								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label asterisk">사업소재지</span></div>
 								<div class="col-xl-6 col-lg-6 col-md-4 col-sm-10 pl-0">
-									<div class="flex_start">
+									<div class="flex-start">
 										<div class="dropdown w-55">
 											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 											<ul id="newCityList" class="dropdown-menu">
@@ -3807,26 +3807,26 @@
 												</c:forEach>
 											</ul>
 										</div>
-										<div class="tx_inp_type w-100"><input type="text" name="new_street_addr" id="newStreetAddr" placeholder="입력" minlength="3" maxlength="28"></div>
+										<div class="text-input-type w-100"><input type="text" name="new_street_addr" id="newStreetAddr" placeholder="입력" minlength="3" maxlength="28"></div>
 									</div>
 									<small class="hidden warning">사업소재지를 선택해 주세요</small>
 								</div>
 
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">위경도</span></div>
+								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">위경도</span></div>
 								<div class="col-xl-4 col-lg-2 col-md-4 col-sm-10 pl-0">
-									<div class="tx_inp_type"><input type="text" name="new_coord" id="newCoord" placeholder="예) 35.9078, 127.7669" minlength="3" maxlength="28"></div>
+									<div class="text-input-type"><input type="text" name="new_coord" id="newCoord" placeholder="예) 35.9078, 127.7669" minlength="3" maxlength="28"></div>
 								</div>
 							</div>
 
 							<div class="row">
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">추가 정보</span></div>
+								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">추가 정보</span></div>
 								<div class="col-xl-6 col-lg-6 col-md-10 col-sm-10 pl-0">
 									<textarea name="new_site_desc" id="newSiteDetail" class="textarea" placeholder="입력"></textarea>
 								</div>
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">기상 그리드</span></div>
+								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">기상 그리드</span></div>
 								<div class="col-xl-1 col-lg-2 col-md-4 col-sm-10 pl-0">
-									<div class="flex_start">
-										<div class="tx_inp_type">
+									<div class="flex-start">
+										<div class="text-input-type">
 											<input type="text" name="station_id" id="station_id" placeholder="입력" minlength="1" maxlength="15">
 										</div>
 									</div>
@@ -3835,26 +3835,26 @@
 
 							<c:if test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
 								<div class="row">
-									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">발전기 코드</span></div>
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">발전기 코드</span></div>
 									<div class="col-xl-3 col-lg-6 col-md-4 col-sm-10 pl-0">
-										<div class="flex_start">
-											<div class="tx_inp_type">
+										<div class="flex-start">
+											<div class="text-input-type">
 												<input type="text" name="kpx_genid" id="kpx_genid" placeholder="입력" minlength="2" maxlength="15">
 											</div>
 										</div>
 									</div>
-									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">모선 전압</span></div>
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">모선 전압</span></div>
 									<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
-										<div class="flex_start">
-											<div class="tx_inp_type">
+										<div class="flex-start">
+											<div class="text-input-type">
 												<input type="text" name="kpx_transvol" id="kpx_transvol" placeholder="입력" minlength="2" maxlength="15">
 											</div>
 										</div>
 									</div>
-									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">EMS 코드</span></div>
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">EMS 코드</span></div>
 									<div class="col-xl-2 col-lg-6 col-md-4 col-sm-10 pl-0">
-										<div class="flex_start">
-											<div class="tx_inp_type">
+										<div class="flex-start">
+											<div class="text-input-type">
 												<input type="text" name="kpx_emsid" id="kpx_emsid" placeholder="입력" minlength="2" maxlength="100">
 											</div>
 										</div>
@@ -3867,9 +3867,9 @@
 							<section id="sectionPowerMarketInfo">
 								<h2 class="stit">전력 구매 정보</h2>
 								<div class="row">
-									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">계약 종별</span></div>
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">계약 종별</span></div>
 									<div class="col-xl-3 col-lg-6 col-md-4 col-sm-10 pl-0">
-										<div class="flex_start">
+										<div class="flex-start">
 											<div class="dropdown w-100">
 												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 												<ul id="newContractList" class="dropdown-menu"></ul>
@@ -3882,17 +3882,17 @@
 										<small id="newVoltWarning" class="hidden warning">계약종별 상세 옵션을 선택해 주세요.</small>
 									</div>
 									
-									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">계약 전력</span></div>
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">계약 전력</span></div>
 									<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
-										<div class="tx_inp_type"><input type="text" name="new_peak_demand" id="newPeakDemand" class="pr-36" oninput="truncateNonDigit(event, this)" onkeyup="formatUnit(this)" placeholder="입력" maxlength="10"><span class="unit">kW</span></div>
+										<div class="text-input-type"><input type="text" name="new_peak_demand" id="newPeakDemand" class="pr-36" oninput="truncateNonDigit(event, this)" onkeyup="formatUnit(this)" placeholder="입력" maxlength="10"><span class="unit">kW</span></div>
 									</div>
 
-									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label offset-top">요금 적용<br>전력</span></div>
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label offset-top">요금 적용<br>전력</span></div>
 									<div class="col-xl-2 col-lg-6 col-md-4 col-sm-10 pl-0">
-										<div class="tx_inp_type"><input type="text" name="new_dr_charge" id="newDrCharge" class="pr-36" oninput="truncateNonDigit(event, this)" onkeyup="formatUnit(this)" placeholder="입력" maxlength="10"><span class="unit">kW</span></div>
+										<div class="text-input-type"><input type="text" name="new_dr_charge" id="newDrCharge" class="pr-36" oninput="truncateNonDigit(event, this)" onkeyup="formatUnit(this)" placeholder="입력" maxlength="10"><span class="unit">kW</span></div>
 									</div>
 
-									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">검침일</span></div>
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">검침일</span></div>
 									<div class="col-xl-1 col-lg-2 col-md-4 col-sm-10 pl-0">
 										<div class="dropdown">
 											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
@@ -3902,19 +3902,19 @@
 								</div>
 
 								<div class="row">
-									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label offset-top">한전<br>고객번호</span></div>
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label offset-top">한전<br>고객번호</span></div>
 									<div class="col-xl-3 col-lg-3 col-md-4 col-sm-10 pl-0">
-										<div class="tx_inp_type"><input type="text" name="new_kepco_id" id="newKepcoId" placeholder="입력" maxlength="18"></div>
+										<div class="text-input-type"><input type="text" name="new_kepco_id" id="newKepcoId" placeholder="입력" maxlength="18"></div>
 									</div>
 
-									<div class="col-xl-1 col-lg-1 col-md-2 col-sm-2"><span class="input_label offset-top">iSMART<br>아이디</span></div>
+									<div class="col-xl-1 col-lg-1 col-md-2 col-sm-2"><span class="input-label offset-top">iSMART<br>아이디</span></div>
 									<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
-										<div class="tx_inp_type"><input type="text" name="new_smart_id" id="newISmartId" placeholder="입력" maxlength="18"></div>
+										<div class="text-input-type"><input type="text" name="new_smart_id" id="newISmartId" placeholder="입력" maxlength="18"></div>
 									</div>
 
-									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label offset-top">iSMART<br>비밀번호</span></div>
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label offset-top">iSMART<br>비밀번호</span></div>
 									<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
-										<div class="tx_inp_type"><!--
+										<div class="text-input-type"><!--
 										--><input type="password" name="new_smart_pwd" id="newISmartPwd" placeholder="입력" maxlength="18" autocomplete><!--
 										--><button type="button" class="pwd-icon" onclick="showPwd('newISmartPwd', this)">show</button><!--
 									--></div>
@@ -3924,9 +3924,9 @@
 							<section id="sectionPowerMarketInfo">
 								<h2 class="stit">매전 정보</h2>
 								<div class="row">
-									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">정상 단가</span></div>
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">정상 단가</span></div>
 									<div class="col-xl-3 col-lg-6 col-md-4 col-sm-10 pl-0">
-										<div class="flex_start">
+										<div class="flex-start">
 											<div class="dropdown w-100">
 												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 												<ul id="newPriceModelList" class="dropdown-menu">
@@ -3935,7 +3935,7 @@
 													<li data-name="SMP" data-value="SMP"><a href="#">SMP</a></li>
 												</ul>
 											</div>
-											<div class="tx_inp_type hidden"><input type="text" name="Price" id="newPrice" oninput="truncateNonDigit(event, this)" placeholder="입력" maxlength="8"></div>
+											<div class="text-input-type hidden"><input type="text" name="Price" id="newPrice" oninput="truncateNonDigit(event, this)" placeholder="입력" maxlength="8"></div>
 										</div>
 									</div>
 								</div>
@@ -3944,7 +3944,7 @@
 							<!-- <section id="sectionDRInfo">
 								<h2 class="stit">DR 거래 정보</h2>
 								<div class="row">
-									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">자원 ID</span></div>
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">자원 ID</span></div>
 									<div class="col-xl-3 col-lg-3 col-md-4 col-sm-10 pl-0">
 										<div class="dropdown">
 											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
@@ -3952,14 +3952,14 @@
 										</div>
 									</div>
 
-									<div class="col-xl-1 col-lg-1 col-md-2 col-sm-2"><span class="input_label">계약용량</span></div>
+									<div class="col-xl-1 col-lg-1 col-md-2 col-sm-2"><span class="input-label">계약용량</span></div>
 									<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
-										<div class="tx_inp_type">
+										<div class="text-input-type">
 											<input type="text" name="new_dr_vol" id="newDrVol" class="pr-36" oninput="truncateNonDigit(event, this)" onkeyup="formatUnit(this)" placeholder="입력" maxlength="10"><span class="unit">kW</span>
 										</div>
 									</div>
 
-									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">CBL 계산식</span></div>
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">CBL 계산식</span></div>
 									<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
 										<div class="dropdown">
 											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
@@ -3970,9 +3970,9 @@
 										</div>
 									</div>
 
-									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input_label">수익 분배율</span></div>
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">수익 분배율</span></div>
 									<div class="col-xl-1 col-lg-3 col-md-4 col-sm-10 pl-0">
-										<div class="tx_inp_type"><input type="text" name="new_dr_rev_share" id="newDrRevShare" class="pr-36" oninput="truncateNonDigit(event, this, 'percentage')" onkeyup="formatRatio(this)" placeholder="입력" maxlength="5"><span class="unit">%</span></div>
+										<div class="text-input-type"><input type="text" name="new_dr_rev_share" id="newDrRevShare" class="pr-36" oninput="truncateNonDigit(event, this, 'percentage')" onkeyup="formatRatio(this)" placeholder="입력" maxlength="5"><span class="unit">%</span></div>
 									</div>
 								</div>
 							</section> -->
@@ -3980,7 +3980,7 @@
 							<section id="sectionVppInfo">
 								<h2 class="stit">중개 거래 정보</h2>
 								<div class="row">
-									<div class="col-xl-1 col-lg-2 col-sm-2"><span class="input_label">자원 ID</span></div>
+									<div class="col-xl-1 col-lg-2 col-sm-2"><span class="input-label">자원 ID</span></div>
 									<div class="col-xl-3 col-lg-3 col-sm-4 pl-0">
 										<div class="dropdown">
 											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
@@ -3988,9 +3988,9 @@
 										</div>
 									</div>
 
-									<div class="col-xl-1 col-lg-2 col-md-1 col-sm-2"><span class="input_label">수익 분배율</span></div>
+									<div class="col-xl-1 col-lg-2 col-md-1 col-sm-2"><span class="input-label">수익 분배율</span></div>
 									<div class="col-xl-2 col-lg-2 col-sm-4 pl-0">
-										<div class="tx_inp_type"><input type="text" name="vpp_rev_share" id="newVppRevShare" class="pr-36" oninput="truncateNonDigit(event, this, 'percentage')" onkeyup="formatRatio(this)" placeholder="입력" maxlength="5"><span class="unit">%</span></div>
+										<div class="text-input-type"><input type="text" name="vpp_rev_share" id="newVppRevShare" class="pr-36" oninput="truncateNonDigit(event, this, 'percentage')" onkeyup="formatRatio(this)" placeholder="입력" maxlength="5"><span class="unit">%</span></div>
 									</div>
 								</div>
 							</section>
@@ -3998,9 +3998,9 @@
 
 						<div class="row">
 							<div class="col-12">
-								<div class="btn_wrap_type02">
-									<button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button>
-									<button type="submit" id="addSiteBtn" class="btn_type" disabled>추가</button>
+								<div class="btn-wrap-type02">
+									<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close">취소</button>
+									<button type="submit" id="addSiteBtn" class="btn-type" disabled>추가</button>
 								</div>
 							</div>
 						</div>

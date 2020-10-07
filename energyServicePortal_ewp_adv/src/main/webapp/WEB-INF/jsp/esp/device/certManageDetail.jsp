@@ -189,7 +189,7 @@
 		<form>
 			<div class="indiv">
 				<div class="certType">
-					<div class="spc_tbl_row st_edit">
+					<div class="spc-table-row st-edit">
 						<table>
 							<colgroup>
 								<col style="width:15%">
@@ -200,34 +200,34 @@
 							</colgroup>
 							<tbody>
 							<tr>
-								<th><h2 class="tx_tit">신청일</h2></th>
+								<th><h2 class="tx-tit">신청일</h2></th>
 								<td id="CREATE_DATE">
 								</td>
-								<th><h2 class="tx_tit">기기등록</h2></th>
+								<th><h2 class="tx-tit">기기등록</h2></th>
 								<td id="registerDevice">
 								</td>
 							</tr>
 							<tr>
-								<th><h2 class="tx_tit">유효기간</h2></th>
+								<th><h2 class="tx-tit">유효기간</h2></th>
 								<td id="CERT_POLICY_VALID">
 								</td>
 								<th></th>
 								<td></td>
 							</tr>
 							<tr>
-								<th><h2 class="tx_tit">발급정책</h2></th>
+								<th><h2 class="tx-tit">발급정책</h2></th>
 								<td id="CERT_POLICY_ID"></td>
 								<th></th>
 								<td></td>
 							</tr>
 							<tr>
-								<th><h2 class="tx_tit">제조사명</h2></th>
+								<th><h2 class="tx-tit">제조사명</h2></th>
 								<td id="PKG_MANUFACTURE_NAME"></td>
-								<th><h2 class="tx_tit">폐기</h2></th>
+								<th><h2 class="tx-tit">폐기</h2></th>
 								<td id="revokeDevice"></td>
 							</tr>
 							<tr>
-								<th><h2 class="tx_tit">제품모델명</h2></th>
+								<th><h2 class="tx-tit">제품모델명</h2></th>
 								<td id="PKG_MODEL_NAME"></td>
 								<th></th>
 								<td></td>
@@ -235,11 +235,11 @@
 							</tbody>
 						</table>
 					</div>
-					<div class="flex_wrapper mb-20 mt30">
+					<div class="flex-wrapper mb-20 mt30">
 						<h2 class="ntit">기기인증서 리스트</h2>
 					</div>
-					<div class="spc_tbl align_type">
-						<table class="chk_type" id="deviceTable">
+					<div class="spc-tbl align-type">
+						<table class="chk-type" id="deviceTable">
 							<colgroup>
 								<col style="width:15%">
 								<col style="width:25%">
@@ -257,11 +257,11 @@
 			</div>
 		</form>
 	</div>
-	<div class="btn_wrap_type_right">
-		<button type="button" class="btn_type03" onclick="downloadCert();">인증서 다운로드</button>
-		<button type="button" class="btn_type03" onclick="goProc('issue', '발급');">발급</button>
-<%--		<button type="button" class="btn_type03" onclick="goProc('reIssue');">갱신</button>--%>
-		<button type="button" class="btn_type03" onclick="goProc('revoke', '폐기');">폐기</button>
-		<button type="button" class="btn_type03" onclick="goList();">목록</button>
+	<div class="btn-wrap-type-r">
+		<button type="button" class="btn-type03" onclick="downloadCert();">인증서 다운로드</button>
+		<button type="button" class="btn-type03" onclick="goProc('issue', '발급');">발급</button>
+<%--		<button type="button" class="btn-type03" onclick="goProc('reIssue');">갱신</button>--%>
+		<button type="button" class="btn-type03" onclick="goProc('revoke', '폐기');">폐기</button>
+		<button type="button" class="btn-type03" onclick="goList();">목록</button>
 	</div>
 </div>

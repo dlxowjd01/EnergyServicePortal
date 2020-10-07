@@ -149,7 +149,7 @@
 		setMakeList(addFileList09, "addFileList09", { "dataFunction": {} });
 		setMakeList(addFileList10, "addFileList10", { "dataFunction": {} });
 		
-		let noData = $('#attachement_info .spc_tbl_row .no-data').parent().next().children();
+		let noData = $('#attachement_info .spc-table-row .no-data').parent().next().children();
 		for(let i in noData){
 			noData.hide();
 		}
@@ -563,14 +563,14 @@
 		<h1 class="page-header">SPC 기본 정보</h1>
 	</div>
 </div>
-<div class="row entity_wrap post panel-group" id="accordion">
+<div class="row entity-wrapper post panel-group" id="accordion">
 	<div class="col-12">
 		<div class="indiv panel panel-default" id="basicInfo">
-			<div class="tbl_top panel-heading">
+			<div class="table-top panel-heading">
 				<h2 class="ntit mt25">기본 정보</h2>
-				<a role="button" href="#basicInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse_arrow"></a>
+				<a role="button" href="#basicInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse-arrow"></a>
 			</div>
-			<div id="basicInfoToggle" class="spc_tbl_row st_edit panel-collapse collapse in" role="tabpanel">
+			<div id="basicInfoToggle" class="spc-table-row st-edit panel-collapse collapse in" role="tabpanel">
 				<table>
 					<colgroup>
 						<col style="width:15%">
@@ -639,16 +639,16 @@
 						<td id="사업_관리자(연락처)"></td>
 					</tr>
 					<tr>
-						<th class="group_type">SPC 법인 인감</th>
+						<th class="group-type">SPC 법인 인감</th>
 						<td id="SPC_법인_인감">
 							<p>
 								<span class="offset-label">[SPC_법인_인감_대표]</span>
-								<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]" class="tx_file">[SPC_법인_인감_유형] - [originalname]</a>
+								<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]" class="text-file">[SPC_법인_인감_유형] - [originalname]</a>
 							</p>
 						</td>
 						<th></th>
 						<td>
-							<div class="fixed_height"></div>
+							<div class="fixed-height"></div>
 						</td>
 					</tr>
 				</table>
@@ -656,11 +656,11 @@
 		</div>
 
 		<div class="indiv panel panel-default" id="addressInfo">
-			<div class="tbl_top panel-heading">
+			<div class="table-top panel-heading">
 				<h2 class="ntit mt25">발전소 정보</h2>
-				<a role="button" href="#addressInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse_arrow"></a>
+				<a role="button" href="#addressInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse-arrow"></a>
 			</div>
-			<div id="addressInfoToggle" class="spc_tbl_row st_edit panel-collapse collapse in" role="tabpanel">
+			<div id="addressInfoToggle" class="spc-table-row st-edit panel-collapse collapse in" role="tabpanel">
 				<table>
 					<colgroup>
 						<col style="width:15%">
@@ -670,10 +670,10 @@
 					</colgroup>
 					<tr>
 						<th><label for="genName">발전소명</label></th>
-						<td class="group_type" id="genName"></td>
+						<td class="group-type" id="genName"></td>
 						<th></th>
 						<td>
-							<div class="fixed_height"></div>
+							<div class="fixed-height"></div>
 						</td>
 					</tr>
 					<tr>
@@ -691,11 +691,11 @@
 		</div>
 
 		<div class="indiv panel panel-default" id="maintenanceInfo">
-			<div class="tbl_top panel-heading">
+			<div class="table-top panel-heading">
 				<h2 class="ntit mt25">관리 운영 정보</h2>
-				<a href="#maintenanceInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse_arrow"></a>
+				<a href="#maintenanceInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse-arrow"></a>
 			</div>
-			<div id="maintenanceInfoToggle" class="spc_tbl_row st_edit panel-collapse collapse in">
+			<div id="maintenanceInfoToggle" class="spc-table-row st-edit panel-collapse collapse in">
 				<table>
 					<colgroup>
 						<col style="width:15%">
@@ -734,14 +734,14 @@
 					<tr>
 						<th>등기이사 소속</th>
 						<td class="addList_affiliation entity">
-							<div class="group_type flex_start fixed_height">
+							<div class="group-type flex-start fixed-height">
 								<span id="등기이사_소속_[index]"></span>
 								<span id="등기이사_명[index]" class="ml-6"></span>
 							</div>
 						</td>
 						<th>등기 기간</th>
 						<td class="addList_affiliation2 entity">
-							<div class="group_type flex_start fixed_height">
+							<div class="group-type flex-start fixed-height">
 								<span id="등기_기간_from[index]"></span> ~ <span id="등기_기간_to[index]"></span>&nbsp;&nbsp;&nbsp;&nbsp;
 								<span id="등기_이사_만료_알림[index]"></span>
 							</div>
@@ -750,7 +750,7 @@
 					<tr>
 						<th><label for="계약_단가">계약 단가</label></th>
 						<td>
-							<div class="flex_start fixed_height">
+							<div class="flex-start fixed-height">
 								<span id="계약_단가"></span>
 								<span class="ml-6">원</span>
 							</div>
@@ -789,11 +789,11 @@
 		</div>
 
 		<div class="indiv panel panel-default" id="accountInfo">
-			<div class="tbl_top panel-heading">
+			<div class="table-top panel-heading">
 				<h2 class="ntit mt25">계정 정보</h2>
-				<a role="button" href="#accountInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse_arrow"></a>
+				<a role="button" href="#accountInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse-arrow"></a>
 			</div>
-			<div id="accountInfoToggle" class="spc_tbl_row st_edit panel-collapse collapse in" role="tabpanel">
+			<div id="accountInfoToggle" class="spc-table-row st-edit panel-collapse collapse in" role="tabpanel">
 				<table>
 					<colgroup>
 						<col style="width:15%">
@@ -806,7 +806,7 @@
 						<td id="RPS_시스템_ID"></td>
 						<th>PW</th>
 						<td>
-							<div class="fixed_height"></div>
+							<div class="fixed-height"></div>
 						</td>
 					</tr>
 					<tr>
@@ -814,7 +814,7 @@
 						<td id="전력_거래소_ID"></td>
 						<th>PW</th>
 						<td>
-							<div class="fixed_height"></div>
+							<div class="fixed-height"></div>
 						</td>
 					</tr>
 					<tr>
@@ -828,11 +828,11 @@
 		</div>
 
 		<div class="indiv panel panel-default" id="financeInfo">
-			<div class="tbl_top panel-heading">
+			<div class="table-top panel-heading">
 				<h2 class="ntit mt25">금융 정보</h2>
-				<a role="button" href="#financeInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse_arrow"></a>
+				<a role="button" href="#financeInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse-arrow"></a>
 			</div>
-			<div id="financeInfoToggle" class="spc_tbl_row st_edit panel-collapse collapse in" role="tabpanel">
+			<div id="financeInfoToggle" class="spc-table-row st-edit panel-collapse collapse in" role="tabpanel">
 				<table>
 					<colgroup>
 						<col style="width:15%">
@@ -851,60 +851,60 @@
 						<td id="계약_체결일"></td>
 						<th>대출 약정액</th>
 						<td>
-							<div class="flex_start fixed_height">
+							<div class="flex-start fixed-height">
 								<span id="대출_약정액"></span>
 								<span class="ml-6">원</span>
 							</div>
 						</td>
 					</tr>
 					<tr>
-						<th class="group_type">상환 만기일</th>
+						<th class="group-type">상환 만기일</th>
 						<td id="상환_만기일"></td>
-						<th class="group_type">이자 지급일</th>
+						<th class="group-type">이자 지급일</th>
 						<td id="addList_interest_pay_date" class="entity">
-							<div class="group_type flex_start">
+							<div class="group-type flex-start">
 								<span id="이자_지급일[index]"></span>
 							</div>
 						</td>
 					</tr>
 					<tr>
-						<th class="group_type">보장발전시간 정산일</th>
+						<th class="group-type">보장발전시간 정산일</th>
 						<td id="addList_payroll_date" class="entity">
-							<div class="group_type flex_start fixed_height">
+							<div class="group-type flex-start fixed-height">
 								<span id="보장발전시간_정산일[index]"></span>
 							</div>
 						</td>
 						<th>대리기관 수수료 지급일</th>
 						<td id="addList_commission_payment" class="entity">
-							<div class="group_type flex_start fixed_height">
+							<div class="group-type flex-start fixed-height">
 								<span id="대리기관_수수료_지급일[index]"></span>
 							</div>
 						</td>
 					</tr>
 					<tr class="addList_account_holder entity">
 						<th>
-							<div class="fixed_height">은행 계좌</div>
-							<div class="fixed_height">예금주</div>
+							<div class="fixed-height">은행 계좌</div>
+							<div class="fixed-height">예금주</div>
 						</th>
 						<td>
-							<div class="fixed_height group_type short">
+							<div class="fixed-height group-type short">
 								<span id="입출금_구분[index]"></span>
 								<span id="계좌구분[index]"></span>
 								<span id="은행_리스트[index]"></span>
 							</div>
-							<div class="fixed_height">
+							<div class="fixed-height">
 								<span id="예금주[index]"></span>
 							</div>
 						</td>
 						<th>
-							<div class="fixed_height">계좌 번호</div>
-							<div class="fixed_height">계좌개설 은행(지점)</div>
+							<div class="fixed-height">계좌 번호</div>
+							<div class="fixed-height">계좌개설 은행(지점)</div>
 						</th>
 						<td>
-							<div class="fixed_height">
+							<div class="fixed-height">
 								<span id="계좌_번호[index]"></span>
 							</div>
-							<div class="fixed_height">
+							<div class="fixed-height">
 								<span id="계좌개설_은행(지점)[index]"></span>
 							</div>
 						</td>
@@ -916,23 +916,23 @@
 						<td></td>
 					</tr>
 					<tr class="addList_certificate_registration entity">
-						<th class="group_type">공인인증서 등록</th>
+						<th class="group-type">공인인증서 등록</th>
 						<td id="공인인증서">
-							<div class="flex_start fixed_height">
-								<p class="tx_file">
+							<div class="flex-start fixed-height">
+								<p class="text-file">
 									[용도] - [originalname]
 								</p>
 							</div>
 						</td>
 						<th>인증서 비밀번호</th>
-						<td class="flex_start fixed_height">
+						<td class="flex-start fixed-height">
 							<span id="인증서_비밀번호[index]"></span>
 						</td>
 					</tr>
 					<tr>
 						<th>DSRA 적립 요구금액</th>
 						<td>
-							<div class="flex_start fixed_height">
+							<div class="flex-start fixed-height">
 								<span id="DSRA_적립_요구금액"></span>
 								<span class="ml-6">원</span>
 							</div>
@@ -942,86 +942,86 @@
 					</tr>
 					<tr>
 						<th>
-							<div class="fixed_height">고정 금액</div>
-							<div class="fixed_height">전체 용량</div>
-							<div class="fixed_height">관리 운영비</div>
-							<div class="fixed_height">대수선비</div>
-							<div class="fixed_height">사무 수탁비</div>
-							<div class="fixed_height">임대료</div>
-							<div class="fixed_height">SMP</div>
-							<div class="fixed_height">REC</div>
+							<div class="fixed-height">고정 금액</div>
+							<div class="fixed-height">전체 용량</div>
+							<div class="fixed-height">관리 운영비</div>
+							<div class="fixed-height">대수선비</div>
+							<div class="fixed-height">사무 수탁비</div>
+							<div class="fixed-height">임대료</div>
+							<div class="fixed-height">SMP</div>
+							<div class="fixed-height">REC</div>
 						</th>
-						<td class="align_top">
-							<div class="flex_start fixed_height"></div>
-							<div class="flex_start fixed_height">
+						<td class="align-top">
+							<div class="flex-start fixed-height"></div>
+							<div class="flex-start fixed-height">
 								<span id="전체_용량"></span>
 								<span class="ml-6">MW</span>
 							</div>
-							<div class="flex_start">
-								<div class="fixed_height mr-30">
+							<div class="flex-start">
+								<div class="fixed-height mr-30">
 									<span id="관리_운영비"></span>
 									<span class="ml-6">원</span>
 								</div>
-								<span class="fixed_height"><span class="auto_price mr-6"></span>원/MW</span>
+								<span class="fixed-height"><span class="auto_price mr-6"></span>원/MW</span>
 							</div>
-							<div class="flex_start">
-								<div class="fixed_height mr-30">
+							<div class="flex-start">
+								<div class="fixed-height mr-30">
 									<span id="대수선비"></span>
 									<span class="ml-6">원</span>
 								</div>
-								<span class="fixed_height"><span class="auto_price mr-6"></span>원/MW</span>
+								<span class="fixed-height"><span class="auto_price mr-6"></span>원/MW</span>
 							</div>
-							<div class="flex_start">
-								<div class="fixed_height mr-30">
+							<div class="flex-start">
+								<div class="fixed-height mr-30">
 									<span id="사무_수탁비"></span>
 									<span class="ml-6">원</span>
 								</div>
-								<span class="fixed_height"><span class="auto_price mr-6"></span>원/MW</span>
+								<span class="fixed-height"><span class="auto_price mr-6"></span>원/MW</span>
 							</div>
-							<div class="flex_start">
-								<div class="fixed_height mr-30">
+							<div class="flex-start">
+								<div class="fixed-height mr-30">
 									<span id="임대료"></span>
 									<span class="ml-6">원</span>
 								</div>
-								<span class="fixed_height"><span class="auto_price mr-6"></span>원/MW</span>
+								<span class="fixed-height"><span class="auto_price mr-6"></span>원/MW</span>
 							</div>
-							<div class="group_type">
-								<div class="fixed_height">
+							<div class="group-type">
+								<div class="fixed-height">
 									<span id="SMP"></span>
 									<span id="SMP원" class="ml-6"></span>
 									<span class="ml-6">원</span>
 								</div>
 							</div>
-							<div class="group_type">
-								<div class="fixed_height">
+							<div class="group-type">
+								<div class="fixed-height">
 									<span id="REC"></span>
 									<span id="REC원" class="ml-6"></span>
 									<span class="ml-6">원</span>
 								</div>
 							</div>
 						</td>
-						<th class="align_top">
-							<div class="fixed_height"></div>
-							<div class="fixed_height"></div>
-							<div class="fixed_height"></div>
-							<div class="fixed_height"></div>
-							<div class="fixed_height"></div>
-							<div class="fixed_height flex_wrap_center">임대료 지급일</div>
-							<div class="fixed_height"></div>
-							<div class="fixed_height"></div>
+						<th class="align-top">
+							<div class="fixed-height"></div>
+							<div class="fixed-height"></div>
+							<div class="fixed-height"></div>
+							<div class="fixed-height"></div>
+							<div class="fixed-height"></div>
+							<div class="fixed-height flex-wrap-center">임대료 지급일</div>
+							<div class="fixed-height"></div>
+							<div class="fixed-height"></div>
 						</th>
-						<td class="align_top">
-							<div class="fixed_height"></div>
-							<div class="fixed_height"></div>
-							<div class="fixed_height"></div>
-							<div class="fixed_height"></div>
-							<div class="fixed_height"></div>
-							<div class="sel_calendar group_type edit addList_rental_deduction entity">
-								<div  class="fixed_height">
+						<td class="align-top">
+							<div class="fixed-height"></div>
+							<div class="fixed-height"></div>
+							<div class="fixed-height"></div>
+							<div class="fixed-height"></div>
+							<div class="fixed-height"></div>
+							<div class="sel-calendar group-type edit addList_rental_deduction entity">
+								<div  class="fixed-height">
 									<span id="임대료_지급일[index]"></span>
 								</div>
 							</div>
-							<div class="fixed_height"></div>
+							<div class="fixed-height"></div>
 						</td>
 					</tr>
 				</table>
@@ -1029,11 +1029,11 @@
 		</div>
 
 		<div class="indiv panel panel-default" id="contractInfo">
-			<div class="tbl_top panel-heading">
+			<div class="table-top panel-heading">
 				<h2 class="ntit mt25">시공 계약 정보</h2>
-				<a role="button" href="#contractInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse_arrow"></a>
+				<a role="button" href="#contractInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse-arrow"></a>
 			</div>
-			<div id="contractInfoToggle" class="spc_tbl_row st_edit panel-collapse collapse in" role="tabpanel">
+			<div id="contractInfoToggle" class="spc-table-row st-edit panel-collapse collapse in" role="tabpanel">
 				<table>
 					<colgroup>
 						<col style="width:15%">
@@ -1079,98 +1079,98 @@
 						<th>인출 가능 기한</th>
 						<td>
 							<span id="인출_가능_기한"></span>
-							<span class="fixed_height" id="인출_가능_남은일"></span>
+							<span class="fixed-height" id="인출_가능_남은일"></span>
 						</td>
 						<th></th>
 						<td></td>
 					</tr>
 					<tr>
 						<th>
-							<div class="fixed_height">지급 약정</div>
-							<div class="fixed_height">계약서 명시 인출일<span class="fr fixed_height">1차</span></div>
-							<div class="fixed_height"><span class="fr fixed_height">2차</span></div>
-							<div class="fixed_height"><span class="fr fixed_height">3차</span></div>
-							<div class="fixed_height">지급금액<span class="fr fixed_height">1차</span></div>
-							<div class="fixed_height"><span class="fr fixed_height">2차</span></div>
-							<div class="fixed_height"><span class="fr fixed_height">3차</span></div>
-							<div class="fixed_height">
+							<div class="fixed-height">지급 약정</div>
+							<div class="fixed-height">계약서 명시 인출일<span class="fr fixed-height">1차</span></div>
+							<div class="fixed-height"><span class="fr fixed-height">2차</span></div>
+							<div class="fixed-height"><span class="fr fixed-height">3차</span></div>
+							<div class="fixed-height">지급금액<span class="fr fixed-height">1차</span></div>
+							<div class="fixed-height"><span class="fr fixed-height">2차</span></div>
+							<div class="fixed-height"><span class="fr fixed-height">3차</span></div>
+							<div class="fixed-height">
 								미지급액
 							</div>
 						</th>
 						<td>
-							<div class="flex_start fixed_height"></div>
-							<div class="flex_start">
-								<span class="fixed_height" id="계약서_명시_인출일_1차"></span>
+							<div class="flex-start fixed-height"></div>
+							<div class="flex-start">
+								<span class="fixed-height" id="계약서_명시_인출일_1차"></span>
 							</div>
-							<div class="flex_start">
-								<span class="fixed_height" id="계약서_명시_인출일_2차"></span>
+							<div class="flex-start">
+								<span class="fixed-height" id="계약서_명시_인출일_2차"></span>
 							</div>
-							<div class="flex_start">
-								<span class="fixed_height" id="계약서_명시_인출일_3차"></span>
+							<div class="flex-start">
+								<span class="fixed-height" id="계약서_명시_인출일_3차"></span>
 							</div>
-							<div class="flex_start">
-								<div class="fixed_height">
+							<div class="flex-start">
+								<div class="fixed-height">
 									<span id="지급금액_1차"></span>
 									<span class="ml-6">원</span>
 								</div>
 							</div>
-							<div class="flex_start">
-								<span class="fixed_height">
-									<div class="fixed_height">
+							<div class="flex-start">
+								<span class="fixed-height">
+									<div class="fixed-height">
 										<span id="지급금액_2차"></span>
 										<span class="ml-6">원</span>
 									</div>
 								</span>
 							</div>
-							<div class="flex_start">
-								<span class="fixed_height">
-									<div class="fixed_height">
+							<div class="flex-start">
+								<span class="fixed-height">
+									<div class="fixed-height">
 										<span id="지급금액_3차"></span>
 										<span class="ml-6">원</span>
 									</div>
 								</span>
 							</div>
-							<div class="fixed_height w300">
+							<div class="fixed-height w300">
 								<span class="text" id="미지급_금액">자동 계산</span>
 								<span class="fr">원</span>
 							</div>
 						</td>
-						<th class="align_top">
-							<div class="fixed_height"></div>
-							<div class="fixed_height">실 지급일<span class="fr fixed_height">1차</span></div>
-							<div class="fixed_height"><span class="fr fixed_height">2차</span></div>
-							<div class="fixed_height"><span class="fr fixed_height">3차</span></div>
+						<th class="align-top">
+							<div class="fixed-height"></div>
+							<div class="fixed-height">실 지급일<span class="fr fixed-height">1차</span></div>
+							<div class="fixed-height"><span class="fr fixed-height">2차</span></div>
+							<div class="fixed-height"><span class="fr fixed-height">3차</span></div>
 						</th>
-						<td class="align_top">
-							<div class="fixed_height"></div>
-							<div class="flex_start">
-								<span class="fixed_height" id="실_지급일_1차"></span>
+						<td class="align-top">
+							<div class="fixed-height"></div>
+							<div class="flex-start">
+								<span class="fixed-height" id="실_지급일_1차"></span>
 							</div>
-							<div class="flex_start">
-								<span class="fixed_height" id="실_지급일_2차"></span>
+							<div class="flex-start">
+								<span class="fixed-height" id="실_지급일_2차"></span>
 							</div>
-							<div class="flex_start">
-								<span class="fixed_height" id="실_지급일_3차"></span>
+							<div class="flex-start">
+								<span class="fixed-height" id="실_지급일_3차"></span>
 							</div>
 						</td>
-						<th class="align_top">
-							<div class="fixed_height"></div>
-							<div class="fixed_height"></div>
-							<div class="fixed_height"></div>
-							<div class="fixed_height"></div>
-							<div class="fixed_height"></div>
-							<div class="fixed_height"></div>
-							<div class="fixed_height"></div>
-							<div class="fixed_height"></div>
+						<th class="align-top">
+							<div class="fixed-height"></div>
+							<div class="fixed-height"></div>
+							<div class="fixed-height"></div>
+							<div class="fixed-height"></div>
+							<div class="fixed-height"></div>
+							<div class="fixed-height"></div>
+							<div class="fixed-height"></div>
+							<div class="fixed-height"></div>
 						</th>
-						<td class="align_top">
-							<div class="fixed_height"></div>
-							<div class="fixed_height"></div>
-							<div class="fixed_height"></div>
-							<div class="fixed_height"></div>
-							<div class="fixed_height"></div>
-							<div class="fixed_height"></div>
-							<div class="fixed_height"></div>
+						<td class="align-top">
+							<div class="fixed-height"></div>
+							<div class="fixed-height"></div>
+							<div class="fixed-height"></div>
+							<div class="fixed-height"></div>
+							<div class="fixed-height"></div>
+							<div class="fixed-height"></div>
+							<div class="fixed-height"></div>
 						</td>
 					</tr>
 				</table>
@@ -1178,11 +1178,11 @@
 		</div>
 
 		<div class="indiv panel panel-default" id="insuranceInfo">
-			<div class="tbl_top panel-heading">
+			<div class="table-top panel-heading">
 				<h2 class="ntit mt25">보험 정보</h2>
-				<a role="button" href="#insuranceInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse_arrow"></a>
+				<a role="button" href="#insuranceInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse-arrow"></a>
 			</div>
-			<div id="insuranceInfoToggle" class="spc_tbl_row st_edit panel-collapse collapse in" role="tabpanel">
+			<div id="insuranceInfoToggle" class="spc-table-row st-edit panel-collapse collapse in" role="tabpanel">
 				<table>
 					<colgroup>
 						<col style="width:15%">
@@ -1204,7 +1204,7 @@
 					</tr>
 					<tr>
 						<th>보험 기간</th>
-						<td class="group_type">
+						<td class="group-type">
 							<span id="보험_기간_from[index]"></span> ~ <span id="보험_기간_to[index]"></span>
 						</td>
 						<th>보험료</th>
@@ -1235,20 +1235,20 @@
 						<th>시작일</th>
 						<td id="보험_시작일[index]"></td>
 						<th>종료일</th>
-						<td class="flex_start">
+						<td class="flex-start">
 							<span id="보험_종료일[index]"></span>
 							&nbsp;&nbsp;&nbsp;&nbsp;
-							<span class="fixed_height" id="보험_종료일_차이[index]"></span>
+							<span class="fixed-height" id="보험_종료일_차이[index]"></span>
 						</td>
 					</tr>
 					<tr>
 						<th></th>
 						<td></td>
 						<th>만기일</th>
-						<td class="flex_start">
+						<td class="flex-start">
 							<span id="보험_만기일[index]"></span>
 							&nbsp;&nbsp;&nbsp;&nbsp;
-							<span class="fixed_height" id="보험_만기일_차이[index]"></span>
+							<span class="fixed-height" id="보험_만기일_차이[index]"></span>
 						</td>
 					</tr>
 				</table>
@@ -1256,11 +1256,11 @@
 		</div>
 
 		<div class="indiv panel panel-default" id="deviceInfo">
-			<div class="tbl_top panel-heading">
+			<div class="table-top panel-heading">
 				<h2 class="ntit mt25">설비 정보</h2>
-				<a role="button" href="#deviceInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse_arrow"></a>
+				<a role="button" href="#deviceInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse-arrow"></a>
 			</div>
-			<div id="deviceInfoToggle" class="spc_tbl_row st_edit panel-collapse collapse in" role="tabpanel">
+			<div id="deviceInfoToggle" class="spc-table-row st-edit panel-collapse collapse in" role="tabpanel">
 				<table>
 					<colgroup>
 						<col style="width:15%">
@@ -1271,13 +1271,13 @@
 					<tr>
 						<th>모듈 제조사 / 모델</th>
 						<td id="addList_module_info" class="entity">
-							<div class="flex_start fixed_height">
+							<div class="flex-start fixed-height">
 								<span id="모듈_제조사[index]" class="mr-30"></span>
 								<span id="모듈_제조사_모델[index]"></span>
 							</div>
 						</td>
 						<th>설치 용량</th>
-						<td class="flex_start fixed_height">
+						<td class="flex-start fixed-height">
 							<span id="설치_용량_KW"></span>
 							<span class="ml-6">kW</span>
 							<span id="설치_용량(매)"class="ml-30"></span>
@@ -1287,7 +1287,7 @@
 					<tr>
 						<th>모듈 설치 각도</th>
 						<td id="addList_module_angle" class="entity">
-							<div class="flex_start fixed_height">
+							<div class="flex-start fixed-height">
 								<span id="모듈_설치_각도[index]"></span><span class="ml-6">°</span>
 							</div>
 						</td>
@@ -1299,14 +1299,14 @@
 					<tr>
 						<th>인버터 제조사 / 모델</th>
 						<td id="addList_inverter" class="entity">
-							<div class="flex_start fixed_height">
+							<div class="flex-start fixed-height">
 								<span id="인버터_제조사[index]"></span>
 								<span id="인버터_제조사_모델[index]" class="ml-30"></span>
 							</div>
 						</td>
 						<th>인버터 용량 / 대수</th>
 						<td id="addList_inverter_vol" class="entity">
-							<div class="flex_start fixed_height">
+							<div class="flex-start fixed-height">
 								<span id="인버터_용량[index]"></span><span class="ml-6">kW</span>
 								<span id="인버터_용량_대수[index]" class="ml-30"></span><span class="ml-6">대</span>
 							</div>
@@ -1315,14 +1315,14 @@
 					<tr>
 						<th>접속반 제조사 / 모델</th>
 						<td id="addList_manufacturer" class="entity">
-							<div class="flex_start fixed_height">
+							<div class="flex-start fixed-height">
 								<span id="접속반_제조사[index]"></span>
 								<span id="접속반_제조사_모델[index]"></span>
 							</div>
 						</td>
 						<th>접속반 채널 / 대수</th>
 						<td id="addList_connection" class="entity">
-							<div class="flex_start fixed_height">
+							<div class="flex-start fixed-height">
 								<span id="접속반_채널[index]"></span><span class="ml-6">Ch</span>
 								<span id="접속반_채널_대수[index]" class="ml-30"></span><span class="ml-6">대</span>
 							</div>
@@ -1330,7 +1330,7 @@
 					</tr>
 					<tr>
 						<th>접속반 용량 / 통신방식</th>
-						<td class="flex_start fixed_height">
+						<td class="flex-start fixed-height">
 							<span id="접속반_용량"></span><span class="ml-6">kW</span>
 							<span id="통신방식" class="ml-6"></span>
 						</td>
@@ -1342,7 +1342,7 @@
 						<td id="설치_타입"></td>
 						<th>수배전반 제조사 / 모델</th>
 						<td id="addList_switch_gear" class="entity">
-							<div class="flex_start fixed_height">
+							<div class="flex-start fixed-height">
 								<span id="수배전반_제조사[index]"></span>
 								<span id="수배전반_모델[index]" class="ml-30"></span>
 							</div>
@@ -1353,11 +1353,11 @@
 		</div>
 
 		<div class="indiv panel panel-default" id="warrantyInfo">
-			<div class="tbl_top panel-heading">
+			<div class="table-top panel-heading">
 				<h2 class="ntit mt25">보증 정보</h2>
-				<a role="button" href="#warrantyInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse_arrow"></a>
+				<a role="button" href="#warrantyInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse-arrow"></a>
 			</div>
-			<div id="warrantyInfoToggle" class="spc_tbl_row st_edit panel-collapse collapse in" role="tabpanel">
+			<div id="warrantyInfoToggle" class="spc-table-row st-edit panel-collapse collapse in" role="tabpanel">
 				<table>
 					<colgroup>
 						<col style="width:15%">
@@ -1385,7 +1385,7 @@
 					</tr>
 					<tr>
 						<th>기준 단가</th>
-						<td class="group_type">
+						<td class="group-type">
 							<span id="기준_단가"></span>
 							<span id="기준_단가_원"></span><span class="ml-6">원 / kW</span>
 						</td>
@@ -1418,7 +1418,7 @@
 							<span id="추가_보수_백분율"></span><span class="ml-6">%</span>
 						</td>
 						<th>전력요금 종별</th>
-						<td class="group_type">
+						<td class="group-type">
 							<span id="전력요금_종별_요금제"></span>
 							<span id="전력요금_종별_계약전력"></span><span class="ml-6">kW</span>
 						</td>
@@ -1428,11 +1428,11 @@
 		</div>
 
 		<div class="indiv panel panel-default" id="coefficientInfo">
-			<div class="tbl_top panel-heading">
+			<div class="table-top panel-heading">
 				<h2 class="ntit mt25">환경 변수</h2>
-				<a href="#coefficientInfoToggle" data-toggle="collapse" class="collapse_arrow"></a>
+				<a href="#coefficientInfoToggle" data-toggle="collapse" class="collapse-arrow"></a>
 			</div>
-			<div id="coefficientInfoToggle" class="spc_tbl_row st_edit panel-collapse collapse in" role="tabpanel">
+			<div id="coefficientInfoToggle" class="spc-table-row st-edit panel-collapse collapse in" role="tabpanel">
 				<table>
 					<colgroup>
 						<col style="width:15%">
@@ -1485,11 +1485,11 @@
 		</div>
 
 		<div class="indiv panel panel-default" id="associatedInfo">
-			<div class="tbl_top panel-heading">
+			<div class="table-top panel-heading">
 				<h2 class="ntit mt25">관련 정보</h2>
-				<a href="#associatedInfoToggle" data-toggle="collapse" class="collapse_arrow"></a>
+				<a href="#associatedInfoToggle" data-toggle="collapse" class="collapse-arrow"></a>
 			</div>
-			<div id="associatedInfoToggle" class="spc_tbl_row st_edit panel-collapse collapse in" role="tabpanel">
+			<div id="associatedInfoToggle" class="spc-table-row st-edit panel-collapse collapse in" role="tabpanel">
 				<table>
 					<colgroup>
 						<col style="width:15%">
@@ -1540,12 +1540,12 @@
 		</div>
 
 		<div class="indiv panel panel-default attachment">
-			<div class="tbl_top panel-heading">
+			<div class="table-top panel-heading">
 				<h2 class="ntit mt25">첨부 파일</h2>
-				<a href="#attachementInfoToggle" data-toggle="collapse" class="collapse_arrow"></a>
+				<a href="#attachementInfoToggle" data-toggle="collapse" class="collapse-arrow"></a>
 			</div>
 			<form id="attachement_info" name="attachement_info" class="mt-25">
-				<div id="attachementInfoToggle" class="spc_tbl_row st_edit panel-collapse collapse in">
+				<div id="attachementInfoToggle" class="spc-table-row st-edit panel-collapse collapse in">
 				<table>
 					<colgroup>
 						<col style="width:15%">
@@ -1555,100 +1555,100 @@
 					<tr>
 						<th>현장 사진</th>
 						<td id="addFileList01">
-							<p class="tx_file">
+							<p class="text-file">
 								<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
-							<button type="button" class="btn_file down" onclick="location.href='${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]'"></button>
+							<button type="button" class="btn-file down" onclick="location.href='${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]'"></button>
 						</td>
 						<td></td>
 					</tr>
 					<tr>
 						<th>수배전반</th>
 						<td id="addFileList02">
-							<p class="tx_file">
+							<p class="text-file">
 								<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
-							<button type="button" class="btn_file down" onclick="location.href='${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]'"></button>
+							<button type="button" class="btn-file down" onclick="location.href='${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]'"></button>
 						</td>
 						<td></td>
 					</tr>
 					<tr>
 						<th>케이블</th>
 						<td id="addFileList03">
-							<p class="tx_file">
+							<p class="text-file">
 								<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
-							<button type="button" class="btn_file down" onclick="location.href='${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]'"></button>
+							<button type="button" class="btn-file down" onclick="location.href='${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]'"></button>
 						</td>
 						<td></td>
 					</tr>
 					<tr>
 						<th>모듈</th>
 						<td id="addFileList04">
-							<p class="tx_file">
+							<p class="text-file">
 								<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
-							<button type="button" class="btn_file down" onclick="location.href='${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]'"></button>
+							<button type="button" class="btn-file down" onclick="location.href='${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]'"></button>
 						</td>
 						<td></td>
 					</tr>
 					<tr>
 						<th>인버터</th>
 						<td id="addFileList05">
-							<p class="tx_file">
+							<p class="text-file">
 								<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
-							<button type="button" class="btn_file down" onclick="location.href='${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]'"></button>
+							<button type="button" class="btn-file down" onclick="location.href='${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]'"></button>
 						</td>
 						<td></td>
 					</tr>
 					<tr>
 						<th>결선도</th>
 						<td id="addFileList06">
-							<p class="tx_file">
+							<p class="text-file">
 								<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
-							<button type="button" class="btn_file down" onclick="location.href='${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]'"></button>
+							<button type="button" class="btn-file down" onclick="location.href='${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]'"></button>
 						</td>
 						<td></td>
 					</tr>
 					<tr>
 						<th>토목</th>
 						<td id="addFileList07">
-							<p class="tx_file">
+							<p class="text-file">
 								<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
-							<button type="button" class="btn_file down" onclick="location.href='${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]'"></button>
+							<button type="button" class="btn-file down" onclick="location.href='${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]'"></button>
 						</td>
 						<td></td>
 					</tr>
 					<tr>
 						<th>구조물</th>
 						<td id="addFileList08">
-							<p class="tx_file">
+							<p class="text-file">
 								<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
-							<button type="button" class="btn_file down" onclick="location.href='${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]'"></button>
+							<button type="button" class="btn-file down" onclick="location.href='${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]'"></button>
 						</td>
 						<td></td>
 					</tr>
 					<tr>
 						<th>접속반</th>
 						<td id="addFileList09">
-							<p class="tx_file">
+							<p class="text-file">
 								<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
-							<button type="button" class="btn_file down" onclick="location.href='${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]'"></button>
+							<button type="button" class="btn-file down" onclick="location.href='${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]'"></button>
 						</td>
 						<td></td>
 					</tr>
 					<tr>
 						<th>기타설비</th>
 						<td id="addFileList10">
-							<p class="tx_file">
+							<p class="text-file">
 								<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 							</p>
-							<button type="button" class="btn_file down" onclick="location.href='${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]'"></button>
+							<button type="button" class="btn-file down" onclick="location.href='${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]'"></button>
 						</td>
 						<td></td>
 					</tr>
@@ -1657,10 +1657,10 @@
 			</form>
 		</div>
 
-		<div class="btn_wrap_type_right"><!--
-			--><button type="button" class="btn_type03" onclick="getExcelDown();">엑셀 다운로드</button><!--
-			--><button type="button" id="modifyButton" class="btn_type03" onclick="setCheckedDataEdit();">수정</button><!--
-			--><button type="button" class="btn_type03" onclick="goMoveList();">목록</button><!--
+		<div class="btn-wrap-type-r"><!--
+			--><button type="button" class="btn-type03" onclick="getExcelDown();">엑셀 다운로드</button><!--
+			--><button type="button" id="modifyButton" class="btn-type03" onclick="setCheckedDataEdit();">수정</button><!--
+			--><button type="button" class="btn-type03" onclick="goMoveList();">목록</button><!--
 		--></div>
 		<div id="excelList" style="display:none;">
 		</div>

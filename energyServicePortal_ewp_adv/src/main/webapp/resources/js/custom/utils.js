@@ -619,7 +619,7 @@ var excelHandler = {
 		var ArrOfArr = [];
 		var xlsTableArr = [];
 		if ('drResult' != infoName) {
-			xlsTableArr = $('#excel_dataDiv .chart_table');
+			xlsTableArr = $('#excel_dataDiv .chart-table');
 			for (var i = 0; i < xlsTableArr.length; i++) {
 				var tableObj = xlsTableArr[i];
 				var ArrFromTable = tableToArr(tableObj);
@@ -629,7 +629,7 @@ var excelHandler = {
 				ArrOfArr.push([]); //개행을 위한 배열 추가
 			}
 		} else {
-			xlsTableArr = tableToArr($('.dr_use')[0]); // dr 테이블 엑셀다운로드 로직 필요
+			xlsTableArr = tableToArr($('.dr-use')[0]); // dr 테이블 엑셀다운로드 로직 필요
 			ArrOfArr = xlsTableArr;
 		}
 		return ArrOfArr;
@@ -1506,10 +1506,10 @@ const addRow = function (listId, type, nextIdx) {
 	}
 
 	if ($selecter.hasClass('entity') && listLength > 0) {
-		if($('#' + listId).find(".btn_close").is(".fixed_height")){
-			rowHtml = rowHtml.replace(/\bbtn_close fixed_height hidden\b/g, 'btn_close fixed_height');
+		if($('#' + listId).find(".btn-close").is(".fixed-height")){
+			rowHtml = rowHtml.replace(/\bbtn-close fixed-height hidden\b/g, 'btn-close fixed-height');
 		} else {
-			rowHtml = rowHtml.replace(/\bbtn_close hidden\b/g, 'btn_close');
+			rowHtml = rowHtml.replace(/\bbtn-close hidden\b/g, 'btn-close');
 		}
 	}
 
@@ -1519,7 +1519,7 @@ const addRow = function (listId, type, nextIdx) {
 			$tr.append(rowHtml);
 
 			if ($selecter.hasClass('entity')) {
-				$tr.find('.btn_add').remove();
+				$tr.find('.btn-add').remove();
 			}
 			$selecter.eq($selecter.length - 1).after($tr);
 		} else {
@@ -1529,8 +1529,8 @@ const addRow = function (listId, type, nextIdx) {
 		let trowStr = '';
 		if (listId == 'insuranceInfoToggle' && listLength >= 1) {
 			var section = '<section id="insuranceSection' + listLength + '">';
-			section += '<div class="tbl_top flex_wrapper mt-offset-10"><h2 class="ntit">보험 정보</h2><button type="button" class="btn_close" onclick="$(this).parents().closest(\'section\').remove()"></button></div>';
-			section += '<div class="spc_tbl_row st_edit">';
+			section += '<div class="table-top flex-wrapper mt-offset-10"><h2 class="ntit">보험 정보</h2><button type="button" class="btn-close" onclick="$(this).parents().closest(\'section\').remove()"></button></div>';
+			section += '<div class="spc-table-row st-edit">';
 			section += rowHtml;
 			section += '</div>';
 			section += '</section>';
@@ -1588,7 +1588,7 @@ const setttingSuffix = function(keyText) {
 }
 
 $(function() {
-	$(document).on('click', '.sort_table:not(".transaction-table")', function(i){
+	$(document).on('click', '.sort-table:not(".transaction-table")', function(i){
 		let tables = $(this);
 		const tableBodyId = tables.find('tbody').prop('id');
 		let tableBodyTemp = $.data(document, tableBodyId);
@@ -1599,13 +1599,13 @@ $(function() {
 		tableColumnArray.forEach(function(el, index) {
 			tableColumnArray[index] = el.replace('[', '');
 		});
-		if($('.sort_table').data('nowjsp') == 'balance'){
+		if($('.sort-table').data('nowjsp') == 'balance'){
 			tableColumnArray.splice(3, 0, '-');
-		}else if(($('.sort_table').data('nowjsp') == 'supplementary')){
+		}else if(($('.sort-table').data('nowjsp') == 'supplementary')){
 			tableColumnArray[4] = '파일_현재_개수';
-		}else if(($('.sort_table').data('nowjsp') == 'entityinformation')){
+		}else if(($('.sort-table').data('nowjsp') == 'entityinformation')){
 			tableColumnArray.splice(2, 0, '연차');
-		}else if(($('.sort_table').data('nowjsp') == 'maintenance')){
+		}else if(($('.sort-table').data('nowjsp') == 'maintenance')){
 			tableColumnArray = tableColumnArray.slice(1,5);
 			tableColumnArray.splice(2, 0, 'report_name');
 		}
@@ -1654,7 +1654,7 @@ function SortTable(table, n, sort) {
 	// table 에 tbody tag 가 반드시 존재한다고 가정한다.
 	let tbody = table.tBodies[0];
 	let rows = tbody.querySelectorAll('tr');
-	let rows2 = tbody.querySelectorAll('tr.detail_info');
+	let rows2 = tbody.querySelectorAll('tr.detail-info');
 	rows = Array.prototype.slice.call(rows, 0);
 	rows.sort(function (row1, row2) {
 		var cell1 = row1.getElementsByTagName('td')[n+1];
@@ -1703,7 +1703,7 @@ function jsonListSort(n, sort, jsonList) {
 		return false;
 	}
 
-	let nowJspPage = $(".sort_table").data("nowjsp");
+	let nowJspPage = $(".sort-table").data("nowjsp");
 	if(nowJspPage == "yield") {
 		n = isEmpty(n) ? 'generated_date' : n;
 	} else if(nowJspPage == "maintenance") {
@@ -1777,9 +1777,9 @@ function makeNavigation (page, totalPage) {
 	let endPage = ((startPage + navCount-1) > totalPage)? totalPage : (startPage + navCount-1);
 
 	if (navgroup == 1) {
-		pageStr += '<a href="javascript:void(0);" class="btn_prev first_prev">prev</a>';
+		pageStr += '<a href="javascript:void(0);" class="btn-prev first_prev">prev</a>';
 	} else{
-		pageStr += '<a href="javascript:getDataList(' + Number(startPage-1) + ');" class="btn_prev">prev</a>';
+		pageStr += '<a href="javascript:getDataList(' + Number(startPage-1) + ');" class="btn-prev">prev</a>';
 	}
 
 	for (let i = startPage ; i <= endPage; i++) {
@@ -1791,9 +1791,9 @@ function makeNavigation (page, totalPage) {
 	}
 
 	if (navgroup <totalnav) {
-		pageStr += '<a href="javascript:getDataList(' + Number(endPage+1) + ');"  class="btn_next">next</a>';
+		pageStr += '<a href="javascript:getDataList(' + Number(endPage+1) + ');"  class="btn-next">next</a>';
 	} else {
-		pageStr += '<a href="javascript:void(0);"  class="btn_next larst_next">next</a>';
+		pageStr += '<a href="javascript:void(0);"  class="btn-next larst_next">next</a>';
 	}
 	$('#paging').append(pageStr);
 }
@@ -1885,7 +1885,7 @@ const makeTableTemplate = (standard, interval) => {
 
 	let hCell, firstTh = '', firstTd = '', thText = '', tdText = '', stdDate = '';
 
-	targetTable.setAttribute('class', 'his_tbl');
+	targetTable.setAttribute('class', 'history-table');
 	tbody.setAttribute('id', 'table_' + index);
 
 	standard.forEach((stnd, idx) => {
@@ -1909,8 +1909,8 @@ const makeTableTemplate = (standard, interval) => {
 				makeTableCell(hRow, hCell, bRow, thText, tdText);
 			}
 
-			let $div = $('<div>').addClass('chart_table');
-			let html = $('<div>').addClass('fold_div').append(targetTable);
+			let $div = $('<div>').addClass('chart-table');
+			let html = $('<div>').addClass('fold-box').append(targetTable);
 			html.appendTo($div);
 			$('#datatable').append($div);
 			setInitList('table_' + index);
@@ -1921,7 +1921,7 @@ const makeTableTemplate = (standard, interval) => {
 			tbody = targetTable.createTBody();
 			hRow = thead.insertRow();
 			bRow = tbody.insertRow();
-			targetTable.setAttribute('class', 'his_tbl');
+			targetTable.setAttribute('class', 'history-table');
 			tbody.setAttribute('id', 'table_' + index);
 
 			if (interval == 'day') {
@@ -1970,8 +1970,8 @@ const makeTableTemplate = (standard, interval) => {
 				makeTableCell(hRow, hCell, bRow, thText, tdText);
 
 				if (standard.length == idx + 1) {
-					let $div = $('<div>').addClass('chart_table');
-					let html = $('<div>').addClass('fold_div').append(targetTable);
+					let $div = $('<div>').addClass('chart-table');
+					let html = $('<div>').addClass('fold-box').append(targetTable);
 					html.appendTo($div);
 					$('#datatable').append($div);
 					setInitList('table_' + index);

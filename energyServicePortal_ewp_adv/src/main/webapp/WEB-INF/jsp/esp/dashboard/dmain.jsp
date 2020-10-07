@@ -30,8 +30,8 @@ $(function(){
 	<div class="col-lg-4">
 		<div class="row">
 			<div class="col-sm-12">
-				<div class="indiv smain_pv clear">
-					<div class="chart_top clear">
+				<div class="indiv smain-pv clear">
+					<div class="chart-top clear">
 						<h2 class="ntit">월별 발전량 종합</h2>
 					</div>
 					<div class="inchart">
@@ -278,10 +278,10 @@ $(function(){
 		</div>						
 		<div class="row">
 			<div class="col-sm-12">
-				<div class="indiv smain_cal">
-					<div class="chart_top clear">
+				<div class="indiv smain-cal">
+					<div class="chart-top clear">
 						<h2 class="ntit">이 달의 발전 달력</h2>
-						<span class="real_time">2020-03-03 15:25:23</span>
+						<span class="real-time">2020-03-03 15:25:23</span>
 					</div>
 					<div>
 						<table class="calendar">
@@ -484,13 +484,13 @@ $(function(){
 	<div class="col-lg-4">
 		<div class="row">
 			<div class="col-sm-12">
-				<div class="indiv gmain_map smain_circle emain dmain">
-					<div class="chart_top clear">
+				<div class="indiv gmain-map smain-circle emain dmain">
+					<div class="chart-top clear">
 						<h2 class="ntit">${siteName }<c:if test="${empty siteName }">코닝정밀</c:if></h2>
 					</div>
-					<div class="chart_box">
-						<div class="chart_info">
-							<div class="ci_left">
+					<div class="chart-box">
+						<div class="chart-info">
+							<div class="ci-left">
 								<div class="inchart">
 									<div id="pie_chart" style="height:180px;"></div>
 									<script language="JavaScript">
@@ -629,9 +629,9 @@ $(function(){
 									});
 									</script>
 								</div>
-								<div class="pc_tit pt_up"><strong>태양광 출력</strong> <span>65</span><em>MW</em></div>
+								<div class="pc-tit pt-up"><strong>태양광 출력</strong> <span>65</span><em>MW</em></div>
 							</div>
-							<div class="ci_left">
+							<div class="ci-left">
 								<div class="inchart">
 									<div id="pie_chart5" style="height:180px;"></div>
 									<script language="JavaScript">
@@ -753,24 +753,24 @@ $(function(){
 									});
 									</script>
 								</div>
-								<div class="pc_tit pt_up"><strong>PCS 출력</strong> <span>65</span><em>MW</em></div>												
+								<div class="pc-tit pt-up"><strong>PCS 출력</strong> <span>65</span><em>MW</em></div>												
 							</div>											
-							<div class="ci_right">
+							<div class="chart-info-right">
 								<div class="soc">
 									<h2>SOC(잔량)</h2>
 									<div class="batt_wrap">
 										<div class="battery"><span style="width:85.4%;"><!--잔량--></span></div>
-										<div class="battery_per"><span><em>85.4</em>%</span></div>
+										<div class="battery-per"><span><em>85.4</em>%</span></div>
 									</div>
 								</div>
-								<div class="pc_tit"><strong>총 배터리 용량</strong> <span>250</span><em>MWh</em></div>
+								<div class="pc-tit"><strong>총 배터리 용량</strong> <span>250</span><em>MWh</em></div>
 							</div>											
 						</div>										
 					</div>
-					<div class="pchart_info clear">
+					<div class="pchart-info clear">
 						<div><strong>총 PV 용량</strong> <span>65</span><em>MW</em></div>
 					</div>
-					<div class="local_info dmain dminfo">
+					<div class="local-info dmain dminfo">
 						<table>
 							<tr>
 								<td>
@@ -807,11 +807,11 @@ $(function(){
 		</div>
 		<div class="row">
 			<div class="col-sm-12">
-				<div class="indiv gmain_map smain_circle emain dmain">
-					<div class="chart_top clear">
+				<div class="indiv gmain-map smain-circle emain dmain">
+					<div class="chart-top clear">
 						<h2 class="ntit">금일 발전현황</h2>
 					</div>
-					<div class="sa_wrap">
+					<div class="search-wrap">
 						<div class="inchart">
 							<div id="schart5"></div>
 							<script language="JavaScript"> 
@@ -1004,7 +1004,7 @@ $(function(){
 							});
 							</script>
 							<!-- 데이터 추출용 -->
-							<div class="chart_table" style="display:none;">			
+							<div class="chart-table" style="display:none;">			
 								<table id="sdatatable2">
 									<thead>
 										<tr>
@@ -1169,9 +1169,9 @@ $(function(){
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="indiv emain">
-					<div class="chart_top clear">
+					<div class="chart-top clear">
 						<h2 class="ntit">시스템 충/방전 제어</h2>
-						<div class="not_top fr">
+						<div class="not-top fr">
 							<span class="st1">운전모드 <em>자동</em></span>
 							<span class="st2">화제경보</span>
 							<span class="st3">비상정지</span>
@@ -1191,7 +1191,7 @@ $(function(){
 													</div>
 													<div class="cont clear">
 														<div class="tfl">
-															<span class="ic_pcs">PCS 아이콘</span>
+															<span class="icon-pcs">PCS 아이콘</span>
 														</div>
 														<div class="tfr">
 															<table>
@@ -1220,7 +1220,7 @@ $(function(){
 													</div>
 													<div class="cont clear">
 														<div class="tfl">
-															<span class="ic_bms">BMS 아이콘</span>
+															<span class="icon-bms">BMS 아이콘</span>
 														</div>
 														<div class="tfr">
 															<table>
@@ -1255,7 +1255,7 @@ $(function(){
 													</div>
 													<div class="cont clear">
 														<div class="tfl">
-															<span class="ic_pcs">PCS 아이콘</span>
+															<span class="icon-pcs">PCS 아이콘</span>
 														</div>
 														<div class="tfr">
 															<table>
@@ -1284,7 +1284,7 @@ $(function(){
 													</div>
 													<div class="cont clear">
 														<div class="tfl">
-															<span class="ic_bms">BMS 아이콘</span>
+															<span class="icon-bms">BMS 아이콘</span>
 														</div>
 														<div class="tfr">
 															<table>
@@ -1311,7 +1311,7 @@ $(function(){
 													</div>
 													<div class="cont clear">
 														<div class="tfl">
-															<span class="ic_bms">BMS 아이콘</span>
+															<span class="icon-bms">BMS 아이콘</span>
 														</div>
 														<div class="tfr">
 															<table>
@@ -1338,7 +1338,7 @@ $(function(){
 													</div>
 													<div class="cont clear">
 														<div class="tfl">
-															<span class="ic_bms">BMS 아이콘</span>
+															<span class="icon-bms">BMS 아이콘</span>
 														</div>
 														<div class="tfr">
 															<table>
@@ -1373,7 +1373,7 @@ $(function(){
 													</div>
 													<div class="cont clear">
 														<div class="tfl">
-															<span class="ic_pcs">PCS 아이콘</span>
+															<span class="icon-pcs">PCS 아이콘</span>
 														</div>
 														<div class="tfr">
 															<table>
@@ -1402,7 +1402,7 @@ $(function(){
 													</div>
 													<div class="cont clear">
 														<div class="tfl">
-															<span class="ic_bms">BMS 아이콘</span>
+															<span class="icon-bms">BMS 아이콘</span>
 														</div>
 														<div class="tfr">
 															<table>
@@ -1429,7 +1429,7 @@ $(function(){
 													</div>
 													<div class="cont clear">
 														<div class="tfl">
-															<span class="ic_bms">BMS 아이콘</span>
+															<span class="icon-bms">BMS 아이콘</span>
 														</div>
 														<div class="tfr">
 															<table>
@@ -1463,11 +1463,11 @@ $(function(){
 	<div class="col-lg-4">
 		<div class="row">
 			<div class="col-sm-12">
-				<div class="indiv gmain_alarm">
-					<div class="alarm_stat">
-						<div class="a_alert"><span>금일 발생 오류</span><em>5</em></div><div class="a_warning"><a href="#" class="btn cancel_btn">상세보기</a></div>
+				<div class="indiv gmain-alarm">
+					<div class="alarm-status">
+						<div class="alarm-alert"><span>금일 발생 오류</span><em>5</em></div><div class="alarm-warning"><a href="#" class="btn btn-cancel">상세보기</a></div>
 					</div>
-					<div class="alarm_notice">
+					<div class="alarm-notice">
 						<ul>
 							<li>
 								<a href="javascript:list_detail_open('list3');">동국제강 - 인버터21 발전 정지</a>
@@ -1496,8 +1496,8 @@ $(function(){
 		</div>
 		<div class="row">
 			<div class="col-sm-12">
-				<div class="indiv gmain_table smain">
-					<div class="gtbl_top clear">
+				<div class="indiv gmain-table smain">
+					<div class="gtable-top clear">
 						<div class="fl">
 							<span>키워드</span>
 							<input type="text" class="input" value="">
@@ -1509,18 +1509,18 @@ $(function(){
 							</div>
 						</div>
 					</div>
-					<ul class="type_list">
+					<ul class="type-list">
 						<li>
-							<div class="chart_top clear">
+							<div class="chart-top clear">
 								<h2 class="ntit">PCS(10)</h2>
-								<div class="alert_icon fr">
-									<span class="inv_normal">정상 9</span> 
-									<span class="inv_error">이상 1</span>
-									<span class="inv_alert">경고 2</span>
+								<div class="alert-icon fr">
+									<span class="inv-error">정상 9</span> 
+									<span class="inv-error">이상 1</span>
+									<span class="inv-alert">경고 2</span>
 								</div>
 							</div>
-							<div class="type_list_detail">
-								<div class="local_info smain">
+							<div class="type-list-detail">
+								<div class="local-info smain">
 									<table>
 										<colgroup>
 											<col>
@@ -1546,7 +1546,7 @@ $(function(){
 										</tbody>
 									</table>
 								</div>									
-								<div class="gtbl_wrap">										
+								<div class="gmain-wrap">										
 									<div class="intable">
 										<table>
 											<colgroup>
@@ -1655,16 +1655,16 @@ $(function(){
 							</div>
 						</li>
 						<li>
-							<div class="chart_top clear">
+							<div class="chart-top clear">
 								<h2 class="ntit">BMS(10)</h2>
-								<div class="alert_icon fr">
-									<span class="inv_normal">정상 8</span> 
-									<span class="inv_error">이상 1</span>
-									<span class="inv_alert">경고 1</span>
+								<div class="alert-icon fr">
+									<span class="inv-error">정상 8</span> 
+									<span class="inv-error">이상 1</span>
+									<span class="inv-alert">경고 1</span>
 								</div>
 							</div>
-							<div class="type_list_detail">
-								<div class="local_info smain">
+							<div class="type-list-detail">
+								<div class="local-info smain">
 									<table>
 										<colgroup>
 											<col>
@@ -1696,14 +1696,14 @@ $(function(){
 							</div>
 						</li>
 						<li>
-							<div class="chart_top clear">
+							<div class="chart-top clear">
 								<h2 class="ntit">계량기(18)</h2>
-								<div class="alert_icon fr">
-									<span class="inv_normal">정상 18</span>
+								<div class="alert-icon fr">
+									<span class="inv-error">정상 18</span>
 								</div>
 							</div>
-							<div class="type_list_detail">
-								<div class="local_info smain">
+							<div class="type-list-detail">
+								<div class="local-info smain">
 									<table>
 										<colgroup>
 											<col>
@@ -1732,14 +1732,14 @@ $(function(){
 							</div>
 						</li>
 						<li>
-							<div class="chart_top clear">
+							<div class="chart-top clear">
 								<h2 class="ntit">환경센서(2)</h2>
-								<div class="alert_icon fr">
-									<span class="inv_normal">정상 2</span>
+								<div class="alert-icon fr">
+									<span class="inv-error">정상 2</span>
 								</div>
 							</div>
-							<div class="type_list_detail">
-								<div class="local_info smain">
+							<div class="type-list-detail">
+								<div class="local-info smain">
 									<table>
 										<colgroup>
 											<col>

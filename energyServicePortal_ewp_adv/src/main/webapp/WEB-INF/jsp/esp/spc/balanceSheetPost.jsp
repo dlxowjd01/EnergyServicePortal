@@ -43,7 +43,7 @@
 			}, setUploadAfter, thisId);
 		});
 
-		$('button.btn_close').on('click', function() {
+		$('button.btn-close').on('click', function() {
 			setDefaultFile($(this));
 		});
 
@@ -817,12 +817,12 @@
 		if(data.files.length > 0) {
 			let prop = $('#'+propName);
 			prop.parents('tr').find('label').hide();
-			prop.parents('tr').find('.btn_close').show();
+			prop.parents('tr').find('.btn-close').show();
 
 
 			let linkUrl = apiHost + '/files/download/'+data.files[0].fieldname+'?oid='+oid + '&orgFilename' + data.files[0].originalname;
 			let linkTag = $('<a>').prop('href', linkUrl).html(data.files[0].originalname);
-			let pTag = $('<p>').addClass('tx_file').append(linkTag);
+			let pTag = $('<p>').addClass('text-file').append(linkTag);
 			let inpOgin = $('<input>').prop('type', 'hidden').prop('id', propName + '_originalname').prop('name', propName + '_originalname').val(data.files[0].originalname);
 			let inpField = $('<input>').prop('type', 'hidden').prop('id', propName + '_fieldname').prop('name', propName + '_fieldname').val(data.files[0].fieldname);
 			prop.parent().append(pTag).append(inpOgin).append(inpField);
@@ -831,9 +831,9 @@
 
 	const setDefaultFile = function(obj) {
 		let tr = obj.parents('tr.th_span');
-		tr.find('p.tx_file').remove();
+		tr.find('p.text-file').remove();
 		tr.find('label').show();
-		tr.find('button.btn_close').hide();
+		tr.find('button.btn-close').hide();
 
 		tr.find('input[name$="_originalname"]').val('');
 		tr.find('input[name$="_fieldname"]').val('');
@@ -1020,9 +1020,9 @@
 </div>
 <div class="row">
 	<div class="col-lg-12">
-		<div class="indiv bal_edit bal_post">
-			<div class="spc_st_top">
-				<div class="spc_bal_post">
+		<div class="indiv balance-edit balance-post">
+			<div class="spc-status-top">
+				<div class="spc-balance-post">
 					<table>
 						<colgroup>
 							<col style="width:50%">
@@ -1037,7 +1037,7 @@
 						<tbody>
 						<tr>
 							<td>
-								<div class="sa_select">
+								<div class="sa-select">
 									<div class="dropdown placeholder" id="spc">
 										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
 											선택 <span class="caret"></span>
@@ -1047,12 +1047,12 @@
 								</div>
 							</td>
 							<td>
-								<div class="sa_select">
+								<div class="sa-select">
 									<div class="dropdown placeholder" id="spcGen">
 										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
 											선택 <span class="caret"></span>
 										</button>
-										<ul class="dropdown-menu chk_type" role="menu"></ul>
+										<ul class="dropdown-menu chk-type" role="menu"></ul>
 									</div>
 								</div>
 							</td>
@@ -1060,7 +1060,7 @@
 						</tbody>
 					</table>
 				</div>
-				<div class="spc_bal_post">
+				<div class="spc-balance-post">
 					<table id="interestTable">
 						<colgroup>
 							<col style="width:48px">
@@ -1096,65 +1096,65 @@
 						<tbody id="interestTbody">
 							<tr>
 								<td>
-									<div class="chk_type">
+									<div class="chk-type">
 										<input type="checkbox" id="chkInterest[index]">
 										<label for="chkInterest[index]"></label>
 									</div>
 								</td>
 								<td>[alphabet]</td>
 								<td>
-									<div class="tx_inp_type">
+									<div class="text-input-type">
 										<input type="text" id="principal_[index]" name="principal_[index]" placeholder="직접 입력" onkeyup="onlyDecimal(event)">
 									</div>
 								</td>
 								<td>
-									<div class="sel_calendar">
+									<div class="sel-calendar">
 										<input type="text" id="enforce_[index]" name="enforce_[index]" class="sel fromDate" value="" autocomplete="off" readonly placeholder="선택">
 									</div>
 								</td>
 								<td>
-									<div class="sel_calendar">
+									<div class="sel-calendar">
 										<input type="text" id="expiry_[index]" name="expiry_[index]" class="sel toDate" value="" autocomplete="off" readonly placeholder="선택">
 									</div>
 								</td>
 								<td>
-									<div class="tx_inp_type">
+									<div class="text-input-type">
 										<input type="text" id="period_[index]" name="period_[index]" placeholder="자동 계산" readonly>
 									</div>
 								</td>
 								<td>
-									<div class="rdo_type">
+									<div class="radio-type">
 										<input type="radio" id="repayType01_[index]" name="repayType_[index]" value="1">
 										<label for="repayType01_[index]"></label>
 									</div>
 								</td>
 								<td>
-									<div class="rdo_type">
+									<div class="radio-type">
 										<input type="radio" id="repayType02_[index]" name="repayType_[index]" value="2">
 										<label for="repayType02_[index]"></label>
 									</div>
 								</td>
 								<td>
-									<div class="rdo_type">
+									<div class="radio-type">
 										<input type="radio" id="repayType03_[index]" name="repayType_[index]" value="3">
 										<label for="repayType03_[index]"></label>
 									</div>
 								</td>
 								<td>
-									<div class="tx_inp_type">
+									<div class="text-input-type">
 										<input type="text" id="interestRate_[index]" name="interestRate_[index]" placeholder="직접 입력">
 									</div>
 								</td>
 							</tr>
 						</tbody>
 					</table>
-					<div class="btn_wrap_type">
-						<a href="javascript:void(0);" class="btn_type07" onclick="removeRow('interestTbody');">선택 삭제</a>
-						<a href="javascript:void(0);" class="btn_add" onclick="nextAddRow('interestTbody'); return false;">추가</a>
+					<div class="btn-wrap-type">
+						<a href="javascript:void(0);" class="btn-type07" onclick="removeRow('interestTbody');">선택 삭제</a>
+						<a href="javascript:void(0);" class="btn-add" onclick="nextAddRow('interestTbody'); return false;">추가</a>
 					</div>
 				</div>
 
-				<div class="spc_bal_post">
+				<div class="spc-balance-post">
 					<table id="service_chargeTable">
 						<colgroup>
 							<col style="width:48px">
@@ -1193,19 +1193,19 @@
 						<tbody>
 						<tr>
 							<td>
-<%--								<div class="chk_type">--%>
+<%--								<div class="chk-type">--%>
 <%--									<input type="checkbox" id="chkService0">--%>
 <%--									<label for="chkService0"></label>--%>
 <%--								</div>--%>
 							</td>
 							<td>A</td>
 							<td>
-								<%--								<div class="sa_select">--%>
+								<%--								<div class="sa-select">--%>
 								<%--									<div class="dropdown" id="commission_1">--%>
 								<%--										<button type="button" class="dropdown-toggle" data-toggle="dropdown">--%>
 								<%--											선택<span class="caret"></span>--%>
 								<%--										</button>--%>
-								<%--										<ul class="dropdown-menu chk_type" role="menu">--%>
+								<%--										<ul class="dropdown-menu chk-type" role="menu">--%>
 								<%--											<li><a href="javascript:void(0);">대리기관 수수료</a></li>--%>
 								<%--											<li><a href="javascript:void(0);">관리운영 수수료</a></li>--%>
 								<%--										</ul>--%>
@@ -1214,68 +1214,68 @@
 								대리기관 수수료
 							</td>
 							<td>
-								<div class="rdo_type">
+								<div class="radio-type">
 									<input type="radio" id="chk_bal01_0" name="contract_0" value="1">
 									<label for="chk_bal01_0"></label>
 								</div>
 							</td>
 							<td>
-								<div class="rdo_type">
+								<div class="radio-type">
 									<input type="radio" id="chk_bal02_0" name="contract_0" value="2">
 									<label for="chk_bal02_0"></label>
 								</div>
 							</td>
 							<td>
-								<div class="tx_inp_type">
+								<div class="text-input-type">
 									<input type="text" id="grossPerMonth_0" name="grossPerMonth_0" placeholder="직접 입력" readonly>
 								</div>
 							</td>
 							<td>
-								<div class="tx_inp_type">
+								<div class="text-input-type">
 									<input type="text" id="grossPerMonthSurtax_0" name="grossPerMonthSurtax_0" placeholder="자동 계산" readonly>
 								</div>
 							</td>
 							<td>
-								<div class="tx_inp_type">
+								<div class="text-input-type">
 									<input type="text" id="grossPerMonthSumtax_0" name="grossPerMonthSumtax_0" placeholder="자동 계산" readonly>
 								</div>
 							</td>
 							<td>
-								<div class="tx_inp_type">
+								<div class="text-input-type">
 									<input type="text" id="salesRate_0" name="salesRate_0" placeholder="직접 입력" readonly>
 								</div>
 							</td>
 							<td>
-								<div class="tx_inp_type">
+								<div class="text-input-type">
 									<input type="text" id="salesSupply_0" name="salesSupply_0" placeholder="직접 입력" readonly>
 								</div>
 							</td>
 							<td>
-								<div class="tx_inp_type">
+								<div class="text-input-type">
 									<input type="text" id="salesSupplySurtax_0" name="salesSupplySurtax_0" placeholder="자동 계산" readonly>
 								</div>
 							</td>
 							<td>
-								<div class="tx_inp_type">
+								<div class="text-input-type">
 									<input type="text" id="salesSupplySumtax_0" name="salesSupplySumtax_0" placeholder="자동 계산" readonly>
 								</div>
 							</td>
 						</tr>
 						<tr>
 							<td>
-<%--								<div class="chk_type">--%>
+<%--								<div class="chk-type">--%>
 <%--									<input type="checkbox" id="chkService1">--%>
 <%--									<label for="chkService1"></label>--%>
 <%--								</div>--%>
 							</td>
 							<td>A</td>
 							<td>
-								<%--								<div class="sa_select">--%>
+								<%--								<div class="sa-select">--%>
 								<%--									<div class="dropdown" id="commission_2">--%>
 								<%--										<button type="button" class="dropdown-toggle" data-toggle="dropdown">--%>
 								<%--											선택<span class="caret"></span>--%>
 								<%--										</button>--%>
-								<%--										<ul class="dropdown-menu chk_type" role="menu">--%>
+								<%--										<ul class="dropdown-menu chk-type" role="menu">--%>
 								<%--											<li><a href="javascript:void(0);">대리기관 수수료</a></li>--%>
 								<%--											<li><a href="javascript:void(0);">관리운영 수수료</a></li>--%>
 								<%--										</ul>--%>
@@ -1284,62 +1284,62 @@
 								관리운영 수수료
 							</td>
 							<td>
-								<div class="rdo_type">
+								<div class="radio-type">
 									<input type="radio" id="chk_bal01_1" name="contract_1" value="1">
 									<label for="chk_bal01_1"></label>
 								</div>
 							</td>
 							<td>
-								<div class="rdo_type">
+								<div class="radio-type">
 									<input type="radio" id="chk_bal02_1" name="contract_1" value="2">
 									<label for="chk_bal02_1"></label>
 								</div>
 							</td>
 							<td>
-								<div class="tx_inp_type">
+								<div class="text-input-type">
 									<input type="text" id="grossPerMonth_1" name="grossPerMonth_1" placeholder="직접 입력" readonly>
 								</div>
 							</td>
 							<td>
-								<div class="tx_inp_type">
+								<div class="text-input-type">
 									<input type="text" id="grossPerMonthSurtax_1" name="grossPerMonthSurtax_1" placeholder="자동 계산" readonly>
 								</div>
 							</td>
 							<td>
-								<div class="tx_inp_type">
+								<div class="text-input-type">
 									<input type="text" id="grossPerMonthSumtax_1" name="grossPerMonthSumtax_1" placeholder="자동 계산" readonly>
 								</div>
 							</td>
 							<td>
-								<div class="tx_inp_type">
+								<div class="text-input-type">
 									<input type="text" id="salesRate_1" name="salesRate_1" placeholder="직접 입력" readonly>
 								</div>
 							</td>
 							<td>
-								<div class="tx_inp_type">
+								<div class="text-input-type">
 									<input type="text" id="salesSupply_2" name="salesSupply_2" placeholder="직접 입력"
 									       readonly>
 								</div>
 							</td>
 							<td>
-								<div class="tx_inp_type">
+								<div class="text-input-type">
 									<input type="text" id="salesSupplySurtax_1" name="salesSupplySurtax_1" placeholder="자동 계산" readonly>
 								</div>
 							</td>
 							<td>
-								<div class="tx_inp_type">
+								<div class="text-input-type">
 									<input type="text" id="salesSupplySumtax_1" name="salesSupplySumtax_1" placeholder="자동 계산" readonly>
 								</div>
 							</td>
 						</tr>
 						</tbody>
 					</table>
-					<%--					<div class="btn_wrap_type">--%>
-					<%--						<a href="javascript:void(0);" class="btn_add" onclick="addRowTable('service_chargeTable'); return false;">추가</a>--%>
+					<%--					<div class="btn-wrap-type">--%>
+					<%--						<a href="javascript:void(0);" class="btn-add" onclick="addRowTable('service_chargeTable'); return false;">추가</a>--%>
 					<%--					</div>--%>
 				</div>
 
-				<div class="spc_bal_post">
+				<div class="spc-balance-post">
 					<table id="rentTable">
 						<colgroup>
 							<col style="width:48px">
@@ -1360,53 +1360,53 @@
 						<tbody id="rentTbody">
 						<tr>
 							<td>
-								<div class="chk_type">
+								<div class="chk-type">
 									<input type="checkbox" id="chkRent[index]">
 									<label for="chkRent[index]"></label>
 								</div>
 							</td>
 							<td>[alphabet]</td>
 							<td>
-								<div class="tx_inp_type">
+								<div class="text-input-type">
 									<input type="text" id="supply_[index]" name="supply_[index]" placeholder="직접 입력">
 								</div>
 							</td>
 							<td>
-								<div class="tx_inp_type">
+								<div class="text-input-type">
 									<input type="text" id="surtax_[index]" name="surtax_[index]" placeholder="자동 계산" readonly>
 								</div>
 							</td>
 							<td>
-								<div class="tx_inp_type">
+								<div class="text-input-type">
 									<input type="text" id="supplySum_[index]" name="supplySum_[index]" placeholder="자동 계산" readonly>
 								</div>
 							</td>
 						</tr>
 						</tbody>
 					</table>
-					<div class="btn_wrap_type">
-						<a href="javascript:void(0);" class="btn_type07" onclick="removeRow('rentTbody');">선택 삭제</a>
-						<a href="javascript:void(0);" class="btn_add" onclick="nextAddRow('rentTbody'); return false;">추가</a>
+					<div class="btn-wrap-type">
+						<a href="javascript:void(0);" class="btn-type07" onclick="removeRow('rentTbody');">선택 삭제</a>
+						<a href="javascript:void(0);" class="btn-add" onclick="nextAddRow('rentTbody'); return false;">추가</a>
 					</div>
 				</div>
 			</div>
 			<div class="clear">
 				<div class="fl">
-					<span class="tx_tit">기준</span>
-					<div class="sa_select">
+					<span class="tx-tit">기준</span>
+					<div class="sa-select">
 						<div class="dropdown" id="year">
 							<button type="button" class="dropdown-toggle w5" data-toggle="dropdown">
 								2020년
 								<span class="caret"></span>
 							</button>
-							<ul class="dropdown-menu chk_type" role="menu">
+							<ul class="dropdown-menu chk-type" role="menu">
 								<li data-value="2020"><a href="javascript:void(0);">2020년</a></li>
 								<li data-value="2019"><a href="javascript:void(0);">2019년</a></li>
 								<li data-value="2018"><a href="javascript:void(0);">2018년</a></li>
 							</ul>
 						</div>
 					</div>
-					<div class="sa_select">
+					<div class="sa-select">
 						<div class="dropdown" id="month">
 							<button type="button" class="dropdown-toggle w8" data-toggle="dropdown">
 								<span class="caret"></span>
@@ -1429,14 +1429,14 @@
 					</div>
 				</div>
 				<div class="fr">
-					<p class="tx_type fl">단위:원</p>
-					<div class="chk_type fl">
+					<p class="text-type fl">단위:원</p>
+					<div class="chk-type fl">
 						<input type="checkbox" id="noteDown" name="noteDown" value="1">
 						<label for="noteDown">수기입력 활성화</label>
 					</div>
 				</div>
 			</div>
-			<div class="spc_tbl_row st_edit">
+			<div class="spc-table-row st-edit">
 				<table id="balanceTable">
 					<colgroup>
 						<col style="width:15%">
@@ -1447,13 +1447,13 @@
 					<tr>
 						<th>전력 판매 대금</th>
 						<td>
-							<div class="tx_inp_type read">
+							<div class="text-input-type read">
 								<input type="text" id="siteBilling" name="siteBilling" value="" placeholder="자동 입력" readonly>
 							</div>
 						</td>
 						<th>REC 매매대금</th>
 						<td>
-							<div class="tx_inp_type edit">
+							<div class="text-input-type edit">
 								<input type="text" id="siteMoney" name="siteMoney" value="" placeholder="직접 입력">
 							</div>
 						</td>
@@ -1461,13 +1461,13 @@
 					<tr class="interestTr">
 						<th>차임금 상환([alphabet])</th>
 						<td>
-							<div class="tx_inp_type read">
+							<div class="text-input-type read">
 								<input type="text" id="loan_[index]" name="loan_[index]" value="" placeholder="자동 입력" readonly>
 							</div>
 						</td>
 						<th>이자 비용([alphabet])</th>
 						<td>
-							<div class="tx_inp_type read">
+							<div class="text-input-type read">
 								<input type="text" id="interestCost_[index]" name="interestCost_[index]" value="" placeholder="자동 입력" readonly>
 							</div>
 						</td>
@@ -1475,13 +1475,13 @@
 					<tr class="service_chargeTr">
 						<th>대리기관 수수료</th>
 						<td>
-							<div class="tx_inp_type read">
+							<div class="text-input-type read">
 								<input type="text" id="conversionCharge_0" name="conversionCharge_0" value="" placeholder="자동 입력" readonly>
 							</div>
 						</td>
 						<th>관리 운영 수수료</th>
 						<td>
-							<div class="tx_inp_type read">
+							<div class="text-input-type read">
 								<input type="text" id="managementCharge_0" name="managementCharge_0" value="" placeholder="자동 입력" readonly>
 							</div>
 						</td>
@@ -1489,13 +1489,13 @@
 					<tr>
 						<th>법인세</th>
 						<td>
-							<div class="tx_inp_type edit">
+							<div class="text-input-type edit">
 								<input type="text" id="corporateTax" name="corporateTax" value="" placeholder="직접 입력">
 							</div>
 						</td>
 						<th>부가세</th>
 						<td>
-							<div class="tx_inp_type edit">
+							<div class="text-input-type edit">
 								<input type="text" id="additionalTax" name="additionalTax" placeholder="직접 입력">
 							</div>
 						</td>
@@ -1503,13 +1503,13 @@
 					<tr>
 						<th>임대료</th>
 						<td>
-							<div class="tx_inp_type read">
+							<div class="text-input-type read">
 								<input type="text" id="rental" name="rental" placeholder="자동 계산" readonly>
 							</div>
 						</td>
 						<th>기타 비용</th>
 						<td>
-							<div class="tx_inp_type edit">
+							<div class="text-input-type edit">
 								<input type="text" id="expense" name="expense" placeholder="직접 입력">
 							</div>
 						</td>
@@ -1517,13 +1517,13 @@
 					<tr>
 						<th>현금 유입 합계</th>
 						<td>
-							<div class="tx_inp_type read">
+							<div class="text-input-type read">
 								<input type="text" id="inflowOfCash" name="inflowOfCash" placeholder="자동 입력" readonly>
 							</div>
 						</td>
 						<th>현금 유출 합계</th>
 						<td>
-							<div class="tx_inp_type read">
+							<div class="text-input-type read">
 								<input type="text" id="outflowOfCash" name="outflowOfCash" placeholder="자동 입력" readonly>
 							</div>
 						</td>
@@ -1531,36 +1531,36 @@
 					<tr>
 						<th>기말 현금</th>
 						<td>
-							<div class="tx_inp_type read">
+							<div class="text-input-type read">
 								<input type="text" id="endOfTerm" name="endOfTerm" placeholder="자동 입력" readonly>
 							</div>
 						</td>
 						<th>기말 현금흐름</th>
 						<td>
-							<div class="tx_inp_type read">
+							<div class="text-input-type read">
 								<input type="text" id="endOfTermFlow" name="endOfTermFlow" placeholder="자동 입력" readonly>
 							</div>
 						</td>
 					</tr>
 					<tr class="th_span">
-						<th>손익 계산서 <label for="income" class="btn_add fr">추가</label></th>
+						<th>손익 계산서 <label for="income" class="btn-add fr">추가</label></th>
 						<td colspan="2">
-							<input type="file" id="income" name="income" class="uploadBtn" style="display:none;">
+							<input type="file" id="income" name="income" class="btn-upload" style="display:none;">
 						</td>
-						<td><button type="button" class="btn_close" style="display:none;">삭제</button></td>
+						<td><button type="button" class="btn-close" style="display:none;">삭제</button></td>
 					</tr>
 					<tr class="th_span">
-						<th>세무 조정 계산<label for="taxAdjustment" class="btn_add fr">추가</label></th>
+						<th>세무 조정 계산<label for="taxAdjustment" class="btn-add fr">추가</label></th>
 						<td colspan="2">
-							<input type="file" id="taxAdjustment" name="taxAdjustment" class="uploadBtn" style="display:none;">
+							<input type="file" id="taxAdjustment" name="taxAdjustment" class="btn-upload" style="display:none;">
 						</td>
-						<td><button type="button" class="btn_close" style="display:none;">삭제</button></td>
+						<td><button type="button" class="btn-close" style="display:none;">삭제</button></td>
 					</tr>
 				</table>
 			</div>
-			<div class="btn_wrap_type02">
-				<button type="button" class="btn_type03" onclick="list();">목록</button>
-				<button type="button" class="btn_type" onclick="register('interest');">등록</button>
+			<div class="btn-wrap-type02">
+				<button type="button" class="btn-type03" onclick="list();">목록</button>
+				<button type="button" class="btn-type" onclick="register('interest');">등록</button>
 			</div>
 		</div>
 	</div>

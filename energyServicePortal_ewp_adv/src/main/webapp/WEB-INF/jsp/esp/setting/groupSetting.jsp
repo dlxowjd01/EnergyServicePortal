@@ -39,10 +39,10 @@
 				radioGroup.prop("checked", false);
 				resIdWrapper.removeClass("hidden").prev().removeClass("hidden");
 				if(val == "vpp_group"){
-					resIdWrapper.prev().find(".input_label").text("거래 ID");
+					resIdWrapper.prev().find(".input-label").text("거래 ID");
 				}
 				// else {
-					// resIdWrapper.prev().find(".input_label").text("자원 ID");
+					// resIdWrapper.prev().find(".input-label").text("자원 ID");
 				// }
 			}
 
@@ -743,7 +743,7 @@
 						"sTitle": "",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex )  {
-							return '<a class="chk_type" href="#"><input type="checkbox" id="' + rowIndex.row + '" name="table_checkbox"><label for="' + rowIndex.row + '"></label></a>'
+							return '<a class="chk-type" href="#"><input type="checkbox" id="' + rowIndex.row + '" name="table_checkbox"><label for="' + rowIndex.row + '"></label></a>'
 						},
 						"className": "dt-body-center no-sorting"
 					},
@@ -811,7 +811,7 @@
 
 								if(full.sites.length > 3){
 									// onmouseover="updateModal('detail', this)" 
-									return `<div class="flex_start">${'${siteName}'}&ensp;<a href="#" role="button" data-toggle="popover" data- rel="popover" onmouseover="updateModal('detail', this)" class="text-link">more</a></div>`
+									return `<div class="flex-start">${'${siteName}'}&ensp;<a href="#" role="button" data-toggle="popover" data- rel="popover" onmouseover="updateModal('detail', this)" class="text-link">more</a></div>`
 								} else {
 									return siteName;
 								}
@@ -877,11 +877,11 @@
 				initComplete: function(settings, json ){
 					// console.log("init settings---", settings)
 					let str = `<div id="btnGroup" class="right-end"><!--
-						--><button type="button" disabled class="btn_type03" onclick="updateModal('edit')">선택 수정</button><!--
-						--><button type="button" disabled class="btn_type03" onclick="updateModal('delete')">선택 삭제</button><!--
+						--><button type="button" disabled class="btn-type03" onclick="updateModal('edit')">선택 수정</button><!--
+						--><button type="button" disabled class="btn-type03" onclick="updateModal('delete')">선택 삭제</button><!--
 					--></div>`;
 
-					let addBtnStr = `<button type="button" class="btn_type fr mb-20" onclick="updateModal('add')">추가</button>`;
+					let addBtnStr = `<button type="button" class="btn-type fr mb-20" onclick="updateModal('add')">추가</button>`;
 
 					$("#groupTable_wrapper").append($(str)).prepend($(addBtnStr));
 				},
@@ -893,7 +893,7 @@
 				// 	// console.log("data---", data.alarmFlag);
 				// }
 			}).on("select", function(e, dt, type, indexes) {
-				let btn = $("#btnGroup").find(".btn_type03");
+				let btn = $("#btnGroup").find(".btn-type03");
 				btn.each(function(index, element){
 					if($(this).is(":disabled")){
 						$(this).prop("disabled", false);
@@ -902,7 +902,7 @@
 				groupTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
 				// console.log("dt---", groupTable[ type ]( indexes ).nodes())
 			}).on("deselect", function(e, dt, type, indexes) {
-				let btn = $("#btnGroup").find(".btn_type03");
+				let btn = $("#btnGroup").find(".btn-type03");
 				btn.each(function(index, element){
 					if(!$(this).is(":disabled")){
 						$(this).prop("disabled", true);
@@ -938,7 +938,7 @@
 				"buttons": [
 					{
 						extend: 'excelHtml5',
-						className: "save_btn",
+						className: "btn-save",
 						text: '엑셀 다운로드',
 						// exportOptions: {
 						// 	modifier: {
@@ -966,12 +966,12 @@
 					},
 					// {
 					// 	extend: 'csvHtml5',
-					// 	className: "btn_type03",
+					// 	className: "btn-type03",
 					// 	text: 'CSV'
 					// },
 					// {
 					// 	extend: 'pdfHtml5',
-					// 	className: "btn_type03",
+					// 	className: "btn-type03",
 					// 	text: 'PDF',
 					// },
 				],
@@ -1020,7 +1020,7 @@
 					"sTitle": "",
 					"mData": null,
 					"mRender": function ( data, type, full, rowIndex )  {
-						return '<a class="chk_type" href="#"><input type="checkbox" id="' + rowIndex + '" name="table_checkbox"><label for="' + rowIndex + '"></label></a>'
+						return '<a class="chk-type" href="#"><input type="checkbox" id="' + rowIndex + '" name="table_checkbox"><label for="' + rowIndex + '"></label></a>'
 					},
 					"className": "dt-body-center no-sorting"
 				},
@@ -1079,7 +1079,7 @@
 								}
 							});
 							if(full.sites.length > 3){
-								return `<div class="flex_start">${'${siteName}'}&ensp;<a href="#" role="button" data-toggle="popover" data- rel="popover" onmouseover="updateModal('detail', this)" class="text-link">more</a></div>`
+								return `<div class="flex-start">${'${siteName}'}&ensp;<a href="#" role="button" data-toggle="popover" data- rel="popover" onmouseover="updateModal('detail', this)" class="text-link">more</a></div>`
 							} else {
 								return siteName;
 							}
@@ -1200,7 +1200,7 @@
 			initComplete: function(){
 				this.addClass("no-stripe");
 				if(role == 1){
-					let addBtnStr = `<button type="button" class="btn_type fr mb-20" onclick="updateModal('add')">추가</button>`;
+					let addBtnStr = `<button type="button" class="btn-type fr mb-20" onclick="updateModal('add')">추가</button>`;
 					$("#groupTable_wrapper").prepend($(addBtnStr));
 				}
 			}
@@ -1317,7 +1317,7 @@
 								sharedOpt = "(미공유)";
 								$("#shareOpt2").prop("checked", true);
 							}
-							sharedStr = `<span class="input_label list-label">등록된 사이트 리스트&ensp;${'${sharedOpt}'}</span>`;
+							sharedStr = `<span class="input-label list-label">등록된 사이트 리스트&ensp;${'${sharedOpt}'}</span>`;
 					
 
 							$.each(s, function(index, el){
@@ -1369,12 +1369,12 @@
 						}
 
 						if (rowData.vgid){
-							resIdWrapper.removeClass("hidden").prev().removeClass("hidden").find(".input_label").text("거래 ID");
+							resIdWrapper.removeClass("hidden").prev().removeClass("hidden").find(".input-label").text("거래 ID");
 							newGroupType.prev().data("value", "vpp_group").html("VPP 그룹<span class='caret'></span>").prop("disabled", true);
 
 						}
 						// else if(rowData.dgid){
-						// 	resIdWrapper.removeClass("hidden").prev().removeClass("hidden").find(".input_label").text("자원 ID");
+						// 	resIdWrapper.removeClass("hidden").prev().removeClass("hidden").find(".input-label").text("자원 ID");
 						// 	newGroupType.prev().data("value", "dr_group").html("DR 그룹<span class='caret'></span>").prop("disabled", true);
 						
 						// }
@@ -1413,10 +1413,10 @@
 					});
 					let content = '<ul class="selected-list">' + popOverStr + '</ul>';
 				
-					// <h4 class="s_tit">그룹 유형 : ${'${groupType}'}</h4>
-					// 	<h4 class="s_tit">그룹 명 : ${'${groupName}'}</h4>	
-					// 	<h4 class="s_tit">사업소 명</h4>
-					// <h4 class="s_tit">추가 정보 : ${'${popOverRowData.description}'}</h4>	
+					// <h4 class="sm-title">그룹 유형 : ${'${groupType}'}</h4>
+					// 	<h4 class="sm-title">그룹 명 : ${'${groupName}'}</h4>	
+					// 	<h4 class="sm-title">사업소 명</h4>
+					// <h4 class="sm-title">추가 정보 : ${'${popOverRowData.description}'}</h4>	
 
 					// $(popOverLink).attr(template).popover('show');
 					// $(popOverLink).popover('show');
@@ -1594,12 +1594,12 @@
 
 <div class="row">
 	<div class="col-10">
-		<div class="flex_group">
-			<span class="tx_tit">그룹 유형</span>
+		<div class="flex-group">
+			<span class="tx-tit">그룹 유형</span>
 			<div class="dropdown">
 				<button type="button" class="dropdown-toggle"
 					data-toggle="dropdown">선택<span class="caret"></span></button>
-				<ul class="dropdown-menu chk_type" role="menu" id="groupList">
+				<ul class="dropdown-menu chk-type" role="menu" id="groupList">
 					<li><a href="#">전체</a></li>
 					<li data-name="사업소 그룹" data-value=""><a href="#">사업소 그룹</a></li>
 					<li data-name="VPP 그룹" data-value=""><a href="#">VPP 그룹</a></li>
@@ -1607,15 +1607,15 @@
 				</ul>
 			</div>
 		</div>
-		<div class="flex_group">
-			<div class="tx_inp_type">
+		<div class="flex-group">
+			<div class="text-input-type">
 				<input type="text" id="groupSearchBox" name="group_search_box" placeholder="키워드 검색">
 			</div>
 		</div>
 	</div>
 	<div class="col-2">
 		<div id="exportBtnGroup" class="fr"></div>
-		<!-- <button type="button" class="save_btn ml-16 fr" onclick="$(this).prev().toggleClass('hidden')">데이터 다운로드</button>--> 
+		<!-- <button type="button" class="btn-save ml-16 fr" onclick="$(this).prev().toggleClass('hidden')">데이터 다운로드</button>--> 
 	</div>
 </div>
 
@@ -1647,8 +1647,8 @@
 				<h4 id="resultSuccessMsg" class="text-blue hidden">그룹 추가가 성공적으로<br>완료 되었습니다.</h4>
 				<h4 id="resultFailureMsg" class="warning-text hidden">그룹 추가에 실패하였습니다.<br>다시 시도해 주세요.</h4>
 			</div>
-			<div class="btn_wrap_type05"><!--
-			--><button type="button" id="resultBtn" class="btn_type03" data-dismiss="modal" aria-label="Close">확인</button><!--
+			<div class="btn-wrap-type05"><!--
+			--><button type="button" id="resultBtn" class="btn-type03" data-dismiss="modal" aria-label="Close">확인</button><!--
 		--></div>
 		</div>
 	</div>
@@ -1662,11 +1662,11 @@
 				<h5 id="deleteSuccessMsg" class="ntit">그룹 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>
 			</div>
 			<div class="modal-body">
-				<div class="tx_inp_type"><input type="text" name="confirm_group" id="confirmGroupName" placeholder="사이트 이름 입력"/></div>
+				<div class="text-input-type"><input type="text" name="confirm_group" id="confirmGroupName" placeholder="사이트 이름 입력"/></div>
 			</div>
-			<div class="btn_wrap_type05"><!--
-				--><button type="button" class="btn_type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
-				--><button type="submit" id="deleteConfirmBtn" class="btn_type w80 ml-12" disabled>확인</button><!--
+			<div class="btn-wrap-type05"><!--
+				--><button type="button" class="btn-type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
+				--><button type="submit" id="deleteConfirmBtn" class="btn-type w80 ml-12" disabled>확인</button><!--
 			--></div>
 		</div>
 	</div>
@@ -1681,7 +1681,7 @@
 				<div class="container-fluid">
 					<form name="add_group_form" id="updateGroupForm" class="setting-form">
 						<div class="row">
-							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12"><span class="input_label asterisk">그룹 유형</span></div>
+							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12"><span class="input-label asterisk">그룹 유형</span></div>
 							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
 								<div class="dropdown">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
@@ -1694,21 +1694,21 @@
 								<small class="hidden warning">그룹 유형을 선택해 주세요</small>
 							</div>
 
-							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 pl-40 hidden"><span class="input_label asterisk">거래 ID</span></div>
+							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 pl-40 hidden"><span class="input-label asterisk">거래 ID</span></div>
 							<div id="resIdWrapper" class="col-xl-4 col-lg-4 col-md-4 col-sm-12 hidden">
-								<div class="tx_inp_type"><input type="text" id="newResId" name="new_res_id" /></div>
+								<div class="text-input-type"><input type="text" id="newResId" name="new_res_id" /></div>
 								<small class="hidden warning">거래 ID를 입력해 주세요.</small>
 							</div>
 						</div>
 
 						<div class="row">
-							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12"><span class="input_label asterisk">그룹 명</span></div>
+							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12"><span class="input-label asterisk">그룹 명</span></div>
 							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
-								<div class="flex_start">
-									<div class="tx_inp_type offset-width">
+								<div class="flex-start">
+									<div class="text-input-type offset-width">
 										<input type="text" name="new_group_name" id="newGroupName" placeholder="입력" minlength="2" maxlength="15">
 									</div>
-									<button type="button" id="checkGroupBtn" class="btn_type fr" disabled>중복 체크</button>
+									<button type="button" id="checkGroupBtn" class="btn-type fr" disabled>중복 체크</button>
 								</div>
 								<small class="hidden warning">추가하실 그룹을 입력해 주세요</small>
 								<small class="hidden warning">2~15 글자를 입력해 주세요.</small>
@@ -1717,9 +1717,9 @@
 								<small id="validGroup" class="text-blue text-sm hidden">추가 가능한 그룹 입니다.</small>
 							</div>
 
-							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 pl-40 hidden"><span class="input_label asterisk">그룹 공유</span></div>
+							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 pl-40 hidden"><span class="input-label asterisk">그룹 공유</span></div>
 							<div id="shareOptGroup" class="col-xl-4 col-lg-4 col-md-4 col-sm-12 hidden">
-								<div class="rdo_type flex_start">
+								<div class="radio-type flex-start">
 									<div class="radio-group">
 										<input type="radio" id="shareOpt1" name="share_option" data-value="1" data-option-val="true">
 										<label for="shareOpt1">예</label>
@@ -1734,14 +1734,14 @@
 						</div>
 
 						<div class="row">
-							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12"><span class="input_label">사업소 명</span></div>
+							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12"><span class="input-label">사업소 명</span></div>
 							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
 								<div class="dropdown">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-									<ul id="newSiteList" class="dropdown-menu chk_type">
+									<ul id="newSiteList" class="dropdown-menu chk-type">
 										<c:forEach var="site" items="${siteList}" varStatus="siteName">
 											<li data-id="${site.name}" data-name="${site.name}" data-value="${site.sid}">
-												<a href="#" class="chk_type" tabindex="-1">
+												<a href="#" class="chk-type" tabindex="-1">
 													<input type="checkbox" name="${site.name}" id="${site.name}" data-value="${site.sid}"/>
 													<label for="${site.name}" class="on"><c:out value="${site.name}"></c:out></label>
 												</a>
@@ -1758,7 +1758,7 @@
 						</div>
 
 						<div class="row">
-							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12"><span class="input_label">추가 정보</span></div>
+							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12"><span class="input-label">추가 정보</span></div>
 							<div class="col-xl-10 col-lg-10 col-md-10 col-sm-12">
 								<textarea name="new_site_desc" id="newGroupDesc" class="textarea" placeholder="입력"></textarea>
 							</div>
@@ -1766,9 +1766,9 @@
 
 						<div class="row">
 							<div class="col-12">
-								<div class="btn_wrap_type02">
-									<button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button>
-									<button type="submit" id="addGroupBtn" class="btn_type" disabled>추가</button>
+								<div class="btn-wrap-type02">
+									<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close">취소</button>
+									<button type="submit" id="addGroupBtn" class="btn-type" disabled>추가</button>
 								</div>
 							</div>
 						</div>

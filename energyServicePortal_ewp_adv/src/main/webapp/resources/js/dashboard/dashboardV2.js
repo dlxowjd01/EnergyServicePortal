@@ -421,7 +421,7 @@ const monthlyChartDraw = async () => {
 		pvSum: 0,
 	};
 
-	$(`.gmain_chart1 span.term`).text(today.getFullYear() + '.1.1 ~ ' + today.getFullYear() + '.' + (Number(today.getMonth()) + 1) + '.' + today.getDate());
+	$(`.gmain-chart1 span.term`).text(today.getFullYear() + '.1.1 ~ ' + today.getFullYear() + '.' + (Number(today.getMonth()) + 1) + '.' + today.getDate());
 	return new Promise(resolve => {
 		targetApi.forEach((targetUrl, index) => {
 			const apiData = apiDatas[targetUrl];
@@ -594,7 +594,7 @@ const dailyChartDraw = async () => {
 		categories.push(String(i));
 	}
 
-	$(`.gmain_chart2 span.term`).text(today.format('yyyy.MM') + '.1 ~ ' + today.format('yyyy.MM') + '.' + today.getDate());
+	$(`.gmain-chart2 span.term`).text(today.format('yyyy.MM') + '.1 ~ ' + today.format('yyyy.MM') + '.' + today.getDate());
 
 	return new Promise(resolve => {
 		targetApi.forEach((targetUrl, index) => {
@@ -753,7 +753,7 @@ const typeSiteDraw = async () => {
 
 	yesterday.setDate(Number(today.getDate()) - 1);
 
-	$(`.gmain_chart3 span.term`).text(yesterday.getFullYear() + '.' + (Number(yesterday.getMonth()) + 1) + '.' + yesterday.getDate());
+	$(`.gmain-chart3 span.term`).text(yesterday.getFullYear() + '.' + (Number(yesterday.getMonth()) + 1) + '.' + yesterday.getDate());
 
 	return new Promise(resolve => {
 		targetApi.forEach((targetUrl, index) => {
@@ -877,10 +877,10 @@ const typeSiteDraw = async () => {
 const getTodayTotalDetail = async function () {
 	const targetApi = [apiHost + '/energy/now/sites?interval=day', apiHost + '/energy/forecasting/sites?interval=15min', apiHost + '/status/raw/site'];
 
-	let targetArea = $('.gmain_chart4 .chart_box .chart_info .ci_right ul li');
+	let targetArea = $('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li');
 
-	$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(0);
-	$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text(0);
+	$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(1) span').text(0);
+	$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(2) span').text(0);
 
 	$('#centerTbody tr td:nth-child(1)').html(Math.floor(siteList.length) + '<em>&nbsp;&nbsp;개소</em>');
 	$('#centerTbody tr td:nth-child(2)').text('');
@@ -907,7 +907,7 @@ const getTodayTotalDetail = async function () {
 						}
 					});
 
-					$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(1) span').text(numberComma(Math.floor(energySum / 1000)));
+					$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(1) span').text(numberComma(Math.floor(energySum / 1000)));
 					$('#centerTbody tr td:nth-child(4)').html(numberComma(Math.floor(co2Sum / 1000)) + '<em>&nbsp;&nbsp;kg</em>');
 					$('#centerTbody tr td:nth-child(5)').html(numberComma(Math.floor(moneySum / 1000)) + '<em>&nbsp;&nbsp;천원</em>');
 				} else if (index === 1) {
@@ -918,8 +918,8 @@ const getTodayTotalDetail = async function () {
 						if (!isEmpty(generation) && !isEmpty(generation['items'])) {
 							generation['items'].map(e => generationForecastSum += e['energy']);
 
-							let preForeVal = Number($('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text().replace(/[^0-9]/g, ''));
-							$('.gmain_chart4 .chart_box .chart_info .ci_right ul li:nth-child(2) span').text(numberComma(Math.floor(preForeVal += generationForecastSum / 1000)));
+							let preForeVal = Number($('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(2) span').text().replace(/[^0-9]/g, ''));
+							$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(2) span').text(numberComma(Math.floor(preForeVal += generationForecastSum / 1000)));
 						}
 					});
 				}
@@ -1017,7 +1017,7 @@ const alarmInfoList = async () => {
 					}
 				});
 
-				$('.a_alert').find('em').text(alarmList.length);
+				$('.alarm-alert').find('em').text(alarmList.length);
 				setMakeList(alarmList, 'alarmNotice', {'dataFunction': {'level': levelClass}}); //list생성
 			}
 		}
@@ -1137,16 +1137,16 @@ const searchSite = async function () {
 			if (targetOperation && searchSite) {
 				if (operation.includes('0')) {
 					site['status'] = '중지';
-					site['statusClass'] = 'status_stp';
+					site['statusClass'] = 'status-stop';
 				} else if (operation.includes('1')) {
 					site['status'] = '정상';
-					site['statusClass'] = 'status_drv';
+					site['statusClass'] = 'status-drv';
 				} else if (operation.includes('2')) {
 					site['status'] = '트립';
-					site['statusClass'] = 'status_err';
+					site['statusClass'] = 'status-error';
 				} else {
 					site['status'] = '에러';
-					site['statusClass'] = 'status_err';
+					site['statusClass'] = 'status-error';
 				}
 
 				site['inverterCount'] = inverterCount //사이트에 속한 인버터 갯수.
@@ -1348,7 +1348,7 @@ function SortTable(table, n, sort) {
 	// table 에 tbody tag 가 반드시 존재한다고 가정한다.
 	let tbody = table.tBodies[0];
 	let rows = tbody.querySelectorAll('tr.dbclickopen');
-	let rows2 = tbody.querySelectorAll('tr.detail_info');
+	let rows2 = tbody.querySelectorAll('tr.detail-info');
 	rows = Array.prototype.slice.call(rows, 0);
 	rows.sort(function (row1, row2) {
 		var cell1 = row1.getElementsByTagName("td")[n];

@@ -37,8 +37,8 @@
 
 	$(function () {
 		deviceProperties2();
-		const compareArea = $('#siteList').next().find('.compare_area');
-		const dropdownArea = compareArea.find('.search_expand');
+		const compareArea = $('#siteList').next().find('.compare-wrapper');
+		const dropdownArea = compareArea.find('.search-expand');
 		const compareSelectBox = compareArea.find('.btn.clear-btn');
 		const modalCompare = compareSelectBox.next('ul');
 
@@ -67,7 +67,7 @@
 			searchGrid();
 		});
 
-		$('.save_btn').on('click', function (e) {
+		$('.btn-save').on('click', function (e) {
 			let excelName = '이상분석';
 			let $val = $('#datatable').find('tbody');
 			let cnt = $val.length;
@@ -429,7 +429,7 @@
 			}
 		}
 
-		$('#compareList').parents(".search_expand").removeClass('open');
+		$('#compareList').parents(".search-expand").removeClass('open');
 
 		let standard = makeStandard(interval);
 		makeTableTemplate(standard, interval);
@@ -739,33 +739,33 @@
 			}
 
 			if (verifyList.length > 0) {
-				$('.value_area').eq(0).find('p.value_num').eq(0).text(verifyTotal);
+				$('.value-wrapper').eq(0).find('p.value-num').eq(0).text(verifyTotal);
 				if (compareList.length > 0) {
-					$('.value_area').eq(0).find('p.value_num').eq(1).text((Number(verifyTotal) - Number(compareTotal)).toFixed(2));
+					$('.value-wrapper').eq(0).find('p.value-num').eq(1).text((Number(verifyTotal) - Number(compareTotal)).toFixed(2));
 				} else {
-					$('.value_area').eq(0).find('p.value_num').eq(1).text(verifyTotal);
+					$('.value-wrapper').eq(0).find('p.value-num').eq(1).text(verifyTotal);
 				}
 			} else {
-				$('.value_area').eq(0).find('p.value_num').eq(0).text('-');
+				$('.value-wrapper').eq(0).find('p.value-num').eq(0).text('-');
 				if (compareList.length > 0) {
-					$('.value_area').eq(0).find('p.value_num').eq(1).text((0 - Number(compareTotal)).toFixed(2));
+					$('.value-wrapper').eq(0).find('p.value-num').eq(1).text((0 - Number(compareTotal)).toFixed(2));
 				} else {
-					$('.value_area').eq(0).find('p.value_num').eq(1).text('-');
+					$('.value-wrapper').eq(0).find('p.value-num').eq(1).text('-');
 				}
 			}
 			if (compareList.length > 0) {
-				$('.value_area').eq(1).find('p.value_num').eq(0).text(compareTotal);
+				$('.value-wrapper').eq(1).find('p.value-num').eq(0).text(compareTotal);
 				if (verifyList.length > 0) {
-					$('.value_area').eq(1).find('p.value_num').eq(1).text((Number(compareTotal) - Number(verifyTotal)).toFixed(2));
+					$('.value-wrapper').eq(1).find('p.value-num').eq(1).text((Number(compareTotal) - Number(verifyTotal)).toFixed(2));
 				} else {
-					$('.value_area').eq(1).find('p.value_num').eq(1).text(compareTotal);
+					$('.value-wrapper').eq(1).find('p.value-num').eq(1).text(compareTotal);
 				}
 			} else {
-				$('.value_area').eq(1).find('p.value_num').eq(0).text('-');
+				$('.value-wrapper').eq(1).find('p.value-num').eq(0).text('-');
 				if (verifyList.length > 0) {
-					$('.value_area').eq(1).find('p.value_num').eq(1).text((0 - Number(verifyTotal)).toFixed(2));
+					$('.value-wrapper').eq(1).find('p.value-num').eq(1).text((0 - Number(verifyTotal)).toFixed(2));
 				} else {
-					$('.value_area').eq(1).find('p.value_num').eq(1).text('-');
+					$('.value-wrapper').eq(1).find('p.value-num').eq(1).text('-');
 				}
 			}
 
@@ -1154,12 +1154,12 @@
 	</div>
 </div>
 <div class="row">
-	<div id="siteList" class="header_drop_area col-lg-2 col-md-4 col-sm-3">
+	<div id="siteList" class="dropdown-wrapper col-lg-2 col-md-4 col-sm-3">
 		<div class="dropdown" id="selectSiteList">
 			<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택해주세요.">
 				선택해주세요.<span class="caret"></span>
 			</button>
-			<ul class="dropdown-menu dropdown-menu-form chk_type" role="menu" id="siteULList">
+			<ul class="dropdown-menu dropdown-menu-form chk-type" role="menu" id="siteULList">
 				<li data-value="[sid]">
 					<a href="javascript:void(0);" tabindex="-1">
 						<input type="checkbox" id="site_[INDEX]" value="[sid]" name="site">
@@ -1170,27 +1170,27 @@
 		</div>
 	</div>
 	<div class="col-lg-10 col-md-8 col-sm-9">
-		<div class="compare_area">
-			<div class="search_expand">
+		<div class="compare-wrapper">
+			<div class="search-expand">
 				<button type="button" class="btn clear-btn" data-target="#compareList" data-name="상세 조건" 
 						onclick="$('#searchDetail').toggleClass('open')">비교하기<span class="caret"></span></button>
-				<ul id="compareList" class="dropdown-menu search_dropdown unused">
+				<ul id="compareList" class="dropdown-menu search-dropdown unused">
 					<li>
-						<div class="compare_bx">
+						<div class="compare-box">
 							<div class="row align-group2">
-								<div class="bx_align">
-									<p class="comp_tit type">검증 설비</p>
-									<ul class="comp_ul">
+								<div class="box-align">
+									<p class="compare-title type">검증 설비</p>
+									<ul class="compare-ul">
 										<li>
 											<div class="dropdown placeholder" id="typeList">
 												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="설비 유형">
 													설비 유형 <span class="caret"></span>
 												</button>
 												<!-- 라디오 타입 -->
-												<ul class="dropdown-menu rdo_type" role="menu" id="typeULList">
+												<ul class="dropdown-menu radio-type" role="menu" id="typeULList">
 													<li data-type="[type]">
 														<a href="javascript:void(0);" tabindex="-1">
-															<span class="comp_inp">
+															<span class="compare-input">
 																<input type="radio" id="type_[INDEX]" value="[type]" name="type">
 																<label for="type_[INDEX]">[name]</label>
 															</span>
@@ -1205,10 +1205,10 @@
 													설비 명 <span class="caret"></span>
 												</button>
 												<!-- 체크박스 타입 -->
-												<ul class="dropdown-menu rdo_type" id="deviceName">
+												<ul class="dropdown-menu radio-type" id="deviceName">
 													<li data-type="[type]">
 														<a href="javascript:void(0);" tabindex="-1">
-															<span class="comp_inp">
+															<span class="compare-input">
 																<input type="radio" id="deviceNm_[INDEX]" name="deviceNm" value="[did]" data-forcasting="[forcasting]" data-metering="[metering]">
 																<label for="deviceNm_[INDEX]">[siteName] - [name]</label>
 															</span>
@@ -1222,10 +1222,10 @@
 												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="설비 속성">
 													설비 속성 <span class="caret"></span>
 												</button>
-												<ul class="dropdown-menu rdo_type" role="menu" id="deviceAttribute">
+												<ul class="dropdown-menu radio-type" role="menu" id="deviceAttribute">
 													<li>
 														<a href="javascript:void(0);" tabindex="-1">
-															<span class="comp_inp">
+															<span class="compare-input">
 																<input type="radio" id="attr_[INDEX]" value="[key]" name="attr" data-suffix="[suffix]">
 																<label for="attr_[INDEX]">[value]</label>
 															</span>
@@ -1236,18 +1236,18 @@
 										</li>
 									</ul>
 								</div>
-								<div class="bx_align">
-									<p class="comp_tit type">비교 설비</p>
-									<ul class="comp_ul">
+								<div class="box-align">
+									<p class="compare-title type">비교 설비</p>
+									<ul class="compare-ul">
 										<li>
 											<div class="dropdown placeholder" id="compareTypeList">
 												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="설비 유형">
 													설비 유형 <span class="caret"></span>
 												</button>
-												<ul class="dropdown-menu rdo_type" role="menu" id="compareTypeULList">
+												<ul class="dropdown-menu radio-type" role="menu" id="compareTypeULList">
 													<li data-type="[type]">
 														<a href="javascript:void(0);" tabindex="-1">
-															<span class="comp_inp">
+															<span class="compare-input">
 																<input type="radio" id="compareType_[INDEX]" value="[type]" name="compareType">
 																<label for="compareType_[INDEX]">[name]</label>
 															</span>
@@ -1261,10 +1261,10 @@
 												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="설비 명">
 													설비 명 <span class="caret"></span>
 												</button>
-												<ul class="dropdown-menu chk_type" id="compareDeviceName">
+												<ul class="dropdown-menu chk-type" id="compareDeviceName">
 													<li data-type="[type]">
 														<a href="javascript:void(0);" tabindex="-1">
-															<span class="comp_inp">
+															<span class="compare-input">
 																<input type="checkbox" id="compDeviceNm_[INDEX]" name="compDevice" value="[did]" data-forcasting="[forcasting]" data-metering="[metering]">
 																<label for="compDeviceNm_[INDEX]">[siteName] - [name]</label>
 															</span>
@@ -1278,10 +1278,10 @@
 												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="설비 속성">
 													설비 속성 <span class="caret"></span>
 												</button>
-												<ul class="dropdown-menu rdo_type" role="menu" id="compareDeviceAttribute">
+												<ul class="dropdown-menu radio-type" role="menu" id="compareDeviceAttribute">
 													<li>
 														<a href="javascript:void(0);" tabindex="-1">
-															<span class="comp_inp">
+															<span class="compare-input">
 																<input type="radio" id="comp_attr_[INDEX]" value="[key]" name="compAttr" data-suffix="[suffix]">
 																<label for="comp_attr_[INDEX]">[value]</label>
 															</span>
@@ -1294,19 +1294,19 @@
 								</div>
 							</div>
 
-							<p class="comp_tit type2">제외값</p>
+							<p class="compare-title type2">제외값</p>
 							<div class="row align-group3">
-								<div class="bx_align">
-									<ul class="comp_ul">
+								<div class="box-align">
+									<ul class="compare-ul">
 										<li>
 											<div class="dropdown placeholder">
 												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="기준">
 													기준<span class="caret"></span>
 												</button>
-												<ul class="dropdown-menu rdo_type">
+												<ul class="dropdown-menu radio-type">
 													<li>
 														<a href="javascript:void(0);" tabindex="-1">
-															<span class="comp_inp">
+															<span class="compare-input">
 																<input type="radio" id="benchmark0" name="benchmark" value="up">
 																<label for="benchmark0">이상</label>
 															</span>
@@ -1314,7 +1314,7 @@
 													</li>
 													<li>
 														<a href="javascript:void(0);" tabindex="-1">
-															<span class="comp_inp">
+															<span class="compare-input">
 																<input type="radio" id="benchmark1" name="benchmark" value="down">
 																<label for="benchmark1">이하</label>
 															</span>
@@ -1325,17 +1325,17 @@
 										</li>
 									</ul>
 								</div>
-								<div class="bx_align">
-									<ul class="comp_ul">
+								<div class="box-align">
+									<ul class="compare-ul">
 										<li>
 											<div class="dropdown placeholder">
 												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="단위">
 													단위<span class="caret"></span>
 												</button>
-												<ul class="dropdown-menu rdo_type">
+												<ul class="dropdown-menu radio-type">
 													<li>
 														<a href="javascript:void(0);" tabindex="-1">
-															<span class="comp_inp">
+															<span class="compare-input">
 																<input type="radio" id="unit0" name="unit" value="relative">
 																<label for="unit0">%</label>
 															</span>
@@ -1343,7 +1343,7 @@
 													</li>
 													<li>
 														<a href="javascript:void(0);" tabindex="-1">
-															<span class="comp_inp">
+															<span class="compare-input">
 																<input type="radio" id="unit1" name="unit" value="absolute">
 																<label for="unit1">절대값</label>
 															</span>
@@ -1354,10 +1354,10 @@
 										</li>
 									</ul>
 								</div>
-								<div class="bx_align">
-									<ul class="comp_ul">
+								<div class="box-align">
+									<ul class="compare-ul">
 										<li>
-											<div class="tx_inp_type">
+											<div class="text-input-type">
 												<input type="text" id="reference" name="reference" value="" placeholder="기준 값" autocomplete="off" onkeydown="onlyDecimal(event);">
 											</div>
 										</li>
@@ -1365,19 +1365,19 @@
 								</div>
 							</div>
 
-							<p class="comp_tit type2">비교 방법</p>
+							<p class="compare-title type2">비교 방법</p>
 							<div class="row align-group2">
-								<div class="bx_align">
-									<ul class="comp_ul">
+								<div class="box-align">
+									<ul class="compare-ul">
 										<li>
 											<div class="dropdown placeholder">
 												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="비교식">
 													비교식<span class="caret"></span>
 												</button>
-												<ul class="dropdown-menu rdo_type">
+												<ul class="dropdown-menu radio-type">
 													<li>
 														<a href="javascript:void(0);" tabindex="-1">
-															<span class="comp_inp">
+															<span class="compare-input">
 																<input type="radio" id="comparison0" name="compare_formula" value="point">
 																<label for="comparison0">POINT</label>
 															</span>
@@ -1385,7 +1385,7 @@
 													</li>
 													<li>
 														<a href="javascript:void(0);" tabindex="-1">
-															<span class="comp_inp">
+															<span class="compare-input">
 																<input type="radio" id="comparison1" name="compare_formula" value="cusum">
 																<label for="comparison1">CUSUM</label>
 															</span>
@@ -1396,17 +1396,17 @@
 										</li>
 									</ul>
 								</div>
-								<div class="bx_align">
-									<ul class="comp_ul">
+								<div class="box-align">
+									<ul class="compare-ul">
 										<li>
 											<div class="dropdown placeholder">
 												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="비교 기준">
 													비교 기준 <span class="caret"></span>
 												</button>
-												<ul class="dropdown-menu rdo_type">
+												<ul class="dropdown-menu radio-type">
 													<li>
 														<a href="javascript:void(0);" tabindex="-1">
-															<span class="comp_inp">
+															<span class="compare-input">
 																<input type="radio" id="compare_criterion0" name="compare_criterion" value="absolute">
 																<label for="compare_criterion0">절대값</label>
 															</span>
@@ -1414,7 +1414,7 @@
 													</li>
 													<li>
 														<a href="javascript:void(0);" tabindex="-1">
-															<span class="comp_inp">
+															<span class="compare-input">
 																<input type="radio" id="compare_criterion1" name="compare_criterion" value="relative">
 																<label for="compare_criterion1">상대값(%)</label>
 															</span>
@@ -1422,7 +1422,7 @@
 													</li>
 													<li>
 														<a href="javascript:void(0);" tabindex="-1">
-															<span class="comp_inp">
+															<span class="compare-input">
 																<input type="radio" id="compare_criterion2" name="compare_criterion" value="abs_of_absolute">
 																<label for="compare_criterion2">abs(절대값)</label>
 															</span>
@@ -1430,7 +1430,7 @@
 													</li>
 													<li>
 														<a href="javascript:void(0);" tabindex="-1">
-															<span class="comp_inp">
+															<span class="compare-input">
 																<input type="radio" id="compare_criterion3" name="compare_criterion" value="abs_of_relative">
 																<label for="compare_criterion3">abs(상대값) %</label>
 															</span>
@@ -1443,39 +1443,39 @@
 								</div>
 							</div>
 							<div class="row align-group2">
-								<div class="bx_align">
-									<ul class="comp_ul">
+								<div class="box-align">
+									<ul class="compare-ul">
 										<li>
-											<div class="tx_inp_type">
+											<div class="text-input-type">
 												<input type="text" id="normality_threshold_lower" name="normality_threshold_lower" value="" placeholder="하한 허용치" autocomplete="off" onkeydown="onlyDecimal(event);">
 											</div>
 										</li>
 									</ul>
 								</div>
-								<div class="bx_align">
-									<ul class="comp_ul">
+								<div class="box-align">
+									<ul class="compare-ul">
 										<li>
-											<div class="tx_inp_type">
+											<div class="text-input-type">
 												<input type="text" id="normality_threshold_upper" name="normality_threshold_upper" value="" placeholder="상한 허용치" autocomplete="off" onkeydown="onlyDecimal(event);">
 											</div>
 										</li>
 									</ul>
 								</div>
 							</div>
-							<p class="comp_tit type2">비교 기간</p>
+							<p class="compare-title type2">비교 기간</p>
 							<div class="row align-group2 dateField">
-								<div class="sel_calendar">
-									<div class="bx_align">
-										<ul class="comp_ul">
+								<div class="sel-calendar">
+									<div class="box-align">
+										<ul class="compare-ul">
 											<li>
 												<input type="text" id="fromDate" name="fromDate" class="sel fromDate" value="" autocomplete="off" placeholder="시작">
 											</li>
 										</ul>
 									</div>
 								</div>
-								<div class="sel_calendar">
-									<div class="bx_align">
-										<ul class="comp_ul">
+								<div class="sel-calendar">
+									<div class="box-align">
+										<ul class="compare-ul">
 											<li>
 												<input type="text" id="toDate" name="toDate" class="sel toDate" value="" autocomplete="off" placeholder="종료">
 											</li>
@@ -1483,10 +1483,10 @@
 									</div>
 								</div>
 							</div>						
-							<p class="comp_tit type2">시간 단위</p>
+							<p class="compare-title type2">시간 단위</p>
 							<div class="row align-group2">
-								<div class="bx_align">
-									<ul class="comp_ul">
+								<div class="box-align">
+									<ul class="compare-ul">
 										<li>
 											<div class="dropdown placeholder" id="interval">
 												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="hour" data-name="1시간">
@@ -1504,8 +1504,8 @@
 								</div>
 							</div>
 						</div>
-						<div class="comp_btn_wrap">
-							<button type="button" class="btn_type" id="renderBtn">규칙 등록</button>
+						<div class="compare-btn-wrapper">
+							<button type="button" class="btn-type" id="renderBtn">규칙 등록</button>
 						</div>
 					</li>
 				</ul>
@@ -1515,43 +1515,43 @@
 </div>
 <div class="row">
 	<div class="col-lg-2 col-md-4 col-sm-3">
-		<div class="indiv analysis_chart">
+		<div class="indiv analysis-chart">
 			<h2 class="ntit">이상 비교</h2>
-			<div class="value_area">
-				<h3 class="value_tit2">검증 설비</h3>
-				<h3 class="value_tit">평균</h3>
-				<p class="value_num"></p>
-				<h3 class="value_tit">편차</h3>
-				<p class="value_num"></p>
+			<div class="value-wrapper">
+				<h3 class="value-title2">검증 설비</h3>
+				<h3 class="value-title">평균</h3>
+				<p class="value-num"></p>
+				<h3 class="value-title">편차</h3>
+				<p class="value-num"></p>
 			</div>
-			<div class="value_area">
-				<h3 class="value_tit2">비교 설비</h3>
-				<h3 class="value_tit">평균</h3>
-				<p class="value_num"></p>
-				<h3 class="value_tit">편차</h3>
-				<p class="value_num"></p>
+			<div class="value-wrapper">
+				<h3 class="value-title2">비교 설비</h3>
+				<h3 class="value-title">평균</h3>
+				<p class="value-num"></p>
+				<h3 class="value-title">편차</h3>
+				<p class="value-num"></p>
 			</div>
 		</div>
 	</div>
 	<div class="col-lg-10 col-md-8 col-sm-9">
-		<div class="indiv analysis_chart">
+		<div class="indiv analysis-chart">
 			<div id="chart_analysis"></div>
 		</div>
 	</div>
 </div>
-<div class="row pv_chart_table">
+<div class="row chart-pv-table">
 	<div class="col-lg-12">
 		<div class="indiv clear">
-			<div class="tbl_save_bx">
-				<a href="javascript:void(0);" class="save_btn">데이터저장</a>
+			<div class="table-save-box">
+				<a href="javascript:void(0);" class="btn-save">데이터저장</a>
 			</div>
-			<div class="tbl_top clear">
+			<div class="table-top clear">
 				<ul class="fr">
-					<li><a href="javascript:void(0);" class="fold_btn">표접기</a></li>
+					<li><a href="javascript:void(0);" class="btn-fold">표접기</a></li>
 				</ul>
 			</div>
-			<div class="tbl_wrap" id="datatable">
-				<div class="fold_div" id="pc_use">
+			<div class="table-wrapper" id="datatable">
+				<div class="fold-box" id="table-desktop">
 				</div>
 			</div>
 		</div>

@@ -16,7 +16,7 @@
 
 	<div class="row content-wrapper">
 		<div class="col-12">
-			<div class="flex_start">
+			<div class="flex-start">
 				<div class="dropdown">
 					<!-- <button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="2" disabled>태양광 #2<span class="caret"></span></button> -->
 					<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="1" disabled>사이트 대시보드 #1<span class="caret"></span></button>
@@ -31,8 +31,8 @@
 
 	<div id="defaultDashboard" class="row">
 		<div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
-			<div class="indiv smain_pv clear">
-				<div class="chart_top clear">
+			<div class="indiv smain-pv clear">
+				<div class="chart-top clear">
 					<h2 class="ntit">월별 발전량 종합</h2>
 					<h1 class="stit">
 						<fmt:parseDate var="startPrint" value="${startMonth }" pattern="yyyyMMddHHmmss"/>
@@ -43,7 +43,7 @@
 						<fmt:formatDate value="${endPrint}" pattern="yyyy.MM.dd"/>
 					</h1>
 				</div>
-				<div class="chart_mid clear">
+				<div class="chart-middle clear">
 					<div class="box">
 						<div class="line1">이번달 총 발전량</div>
 						<div class="line2" id="monthEnergyValue"></div>
@@ -56,13 +56,13 @@
 					</div>
 					<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
 					<div class="box type">
-						<span class="tx_tit">그래프 옵션</span>
-						<div class="sa_select">
+						<span class="tx-tit">그래프 옵션</span>
+						<div class="sa-select">
 							<div class="dropdown" id="chartType">
 								<button type="button" class="dropdown-toggle w8" data-toggle="dropdown">
 									PR<span class="caret"></span>
 								</button>
-								<ul class="dropdown-menu rdo_type" role="menu">
+								<ul class="dropdown-menu radio-type" role="menu">
 									<li>
 										<a href="javascript:void(0);" tabindex="-1">
 											<input type="radio" id="radio_t1" name="radio_t" value="1" checked>
@@ -91,8 +91,8 @@
 					<div id="dailyChart"></div>
 				</div>
 			</div>
-			<div class="indiv smain_cal">
-				<div class="chart_top clear">
+			<div class="indiv smain-cal">
+				<div class="chart-top clear">
 					<h2 class="ntit">이 달의 발전 달력</h2>
 					<h1 class="stit">
 						<fmt:parseDate var="sDate" value="${startDate}" pattern="yyyyMMddHHmmss"/>
@@ -102,7 +102,7 @@
 						<em>${sDt} ~ ${eDt}</em>
 					</h1>
 				</div>
-				<div class="calendar_wrap">
+				<div class="calendar-wrap">
 					<table class="calendar">
 						<thead>
 							<tr>
@@ -122,7 +122,7 @@
 										<c:choose>
 											<c:when test="${day ne 0 }">
 												<td <c:if test="${nowDay eq day }">class="today"</c:if>>
-													<div class="flex_wrapper">
+													<div class="flex-wrapper">
 														<em class="calWeatherDay day">${day }</em>
 														<em id="calWeatherValue_${day }"></em>
 													</div>
@@ -140,16 +140,16 @@
 							</c:forEach>
 
 							<%--
-								<i class="ico_weather w1"></i> 	1	- 맑음 o
-								<i class="ico_weather w2"></i>   	- 바람 x
-								<i class="ico_weather w3"></i>	20	- 안개 o
-								<i class="ico_weather w4"></i>	7	- 흐림 o
-								<i class="ico_weather w5"></i>	 	- 바람/비 x
-								<i class="ico_weather w6"></i>	13	- 비또는눈 o
-								<i class="ico_weather w7"></i>  	- 구름/바람/비 x
-								<i class="ico_weather w8"></i>	11	- 눈 o
-								<i class="ico_weather w9"></i>	17	- 천둥번개 o
-								<i class="ico_weather w10"></i>	12 - 가끔눈 o
+								<i class="ico-weather w1"></i> 	1	- 맑음 o
+								<i class="ico-weather w2"></i>   	- 바람 x
+								<i class="ico-weather w3"></i>	20	- 안개 o
+								<i class="ico-weather w4"></i>	7	- 흐림 o
+								<i class="ico-weather w5"></i>	 	- 바람/비 x
+								<i class="ico-weather w6"></i>	13	- 비또는눈 o
+								<i class="ico-weather w7"></i>  	- 구름/바람/비 x
+								<i class="ico-weather w8"></i>	11	- 눈 o
+								<i class="ico-weather w9"></i>	17	- 천둥번개 o
+								<i class="ico-weather w10"></i>	12 - 가끔눈 o
 							--%>
 							</tr>
 						</tbody>
@@ -158,24 +158,31 @@
 			</div>
 		</div>
 		<div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
-			<div class="indiv gmain_map smain_circle">
-				<div class="chart_top clear">
+			<div class="indiv gmain-map smain-circle">
+				<div class="chart-top clear">
 					<h2 class="ntit">${siteName} <c:if test="${empty siteName }">사업소 현황</c:if></h2>
-					<div class="btn_bx_type">
-						<a href="javascript:void(0);" class="btn cancel_btn" id="cctv">CCTV 보기</a>
+					<div class="btn-bx-type">
+						<a href="javascript:void(0);" class="btn btn-cancel" id="cctv">CCTV 보기</a>
 					</div>
 				</div>
-				<div class="chart_box">
-					<div class="chart_info">
-						<div class="ci_left">
+				<div class="chart-box">
+					<div class="chart-info">
+						<div class="ci-left">
 							<div class="inchart">
 								<div id="pie_chart" style="height:200px; width:230px"></div>
 							</div>
 						</div>
-						<div class="ci_right">
-							<div class="legend_wrap">
+						<div class="chart-info-right">
+							<!-- <div class="legend-wrap">
 								<span class="bu1">태양광</span>
 								<span class="bu4">미 사용량</span>
+							</div> -->
+							<div class="legend-wrap">
+								<c:if test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
+									<span class="bu2">풍력</span>
+								</c:if>
+								<span class="bu1"><fmt:message key="gdash.4.gen" /></span>
+								<span class="bu4"><fmt:message key="gdash.4.idle" /></span>
 							</div>
 							<ul>
 								<c:choose>
@@ -195,7 +202,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="local_info smain s_center">
+				<div class="local-info smain s-center">
 					<table>
 						<c:choose>
 							<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
@@ -238,18 +245,18 @@
 					</table>
 				</div>
 			</div>
-			<div class="indiv gmain_map smain_circle">
-				<div class="chart_top clear">
+			<div class="indiv gmain-map smain-circle">
+				<div class="chart-top clear">
 					<h2 class="ntit">금일 발전현황</h2>
 				</div>
-				<div class="sa_wrap">
+				<div class="search-wrap">
 					<div class="inchart">
 						<div id="hourlyChart"></div>
 					</div>
 				</div>
 			</div>
 			<div class="indiv smain weather">
-				<div class="chart_top clear">
+				<div class="chart-top clear">
 					<h2 class="ntit">기상 정보</h2>
 					<h1 id="currentTimeA" class="stit">${nowTime }</h1>
 				</div>
@@ -261,7 +268,7 @@
 								<strong> - </strong>
 								<em id="weekTemp"></em>
 							</dt>
-							<dd class="dd_tbl">
+							<dd class="dd-tbl">
 								<table>
 									<tr>
 										<th>오늘</th>
@@ -286,8 +293,8 @@
 							</dd>
 						</dl>
 					</div>
-					<div class="fr wt_list_wrap">
-						<ul class="list_type">
+					<div class="fr wt-list-wrap">
+						<ul class="list-type">
 							<li><strong>풍향</strong> <span id="weekWindDirection">-</span> &deg;</li>
 							<li><strong>풍속</strong> <span id="weekWindVelocity"></span></li>
 							<li><strong>습도</strong> <span id="weekHum"></span></li>
@@ -297,35 +304,35 @@
 			</div>
 		</div>
 		<div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
-			<div class="indiv smain_alarm wrap_type">
-				<div class="alarm_stat clear">
-					<div class="a_alert"><span>금일 발생 오류</span><em>0</em></div>
-					<div class="a_warning"><a href="javascript:void(0);" onclick="pageMove('', 'alarm');" class="btn cancel_btn">상세보기</a></div>
+			<div class="indiv smain-alarm wrap-type">
+				<div class="alarm-status clear">
+					<div class="alarm-alert"><span>금일 발생 오류</span><em>0</em></div>
+					<div class="alarm-warning"><a href="javascript:void(0);" onclick="pageMove('', 'alarm');" class="btn btn-cancel">상세보기</a></div>
 				</div>
-				<div class="alarm_notice">
+				<div class="alarm-notice">
 					<ul id="alarmNotice">
 						<li>
 							<a href="javascript:void(0);" onclick="pageMove('[sid]', 'alarm');" class="[level]">
-								<span class="err_msg">[site_name] - [message]</span>
-								<span class="err_time">[standardTime]</span>
+								<span class="err-msg">[site_name] - [message]</span>
+								<span class="err-time">[standardTime]</span>
 							</a>
 						</li>
 					</ul>
 				</div>
 			</div>
-			<div class="indiv gmain_table smain wrap_type">
-				<div class="gtbl_top clear">
+			<div class="indiv gmain-table smain wrap-type">
+				<div class="gtable-top clear">
 					<div class="fl">
 						<input type="text" class="input" name="keyword" value="" placeholder="키워드">
 					</div>
 					<div class="fr">
-						<span class="tx_tit">설비 상태</span>
-						<div class="sa_select">
+						<span class="tx-tit">설비 상태</span>
+						<div class="sa-select">
 							<div class="dropdown" id="statusDevice">
 								<button type="button" class="dropdown-toggle w8" data-toggle="dropdown" data-name="선택">
 									전체 <span class="caret"></span>
 								</button>
-								<ul class="dropdown-menu chk_type" role="menu">
+								<ul class="dropdown-menu chk-type" role="menu">
 									<li>
 										<a href="javascript:void(0);" tabindex="-1">
 											<input type="checkbox" id="deviceStatus1" name="deviceStatus" value="0" checked>
@@ -349,21 +356,21 @@
 						</div>
 					</div>
 				</div>
-				<ul class="type_list" id="typeList">
+				<ul class="type-list" id="typeList">
 					<li class="[type]">
-						<div class="chart_top clear">
+						<div class="chart-top clear">
 							<h2 class="ntit">[name] (<span>0</span>)</h2>
-							<div class="alert_icon fr">
-								<span class="inv_normal">정상 (<span>0</span>)</span>
-								<span class="inv_error">트립 (<span>0</span>)</span>
-								<span class="inv_alert">중지 (<span>0</span>)</span>
+							<div class="alert-icon fr">
+								<span class="inv-normal">정상 (<span>0</span>)</span>
+								<span class="inv-error">트립 (<span>0</span>)</span>
+								<span class="inv-alert">중지 (<span>0</span>)</span>
 							</div>
 						</div>
-						<div class="type_list_detail">
-							<div class="tbl_type">
+						<div class="type-list-detail">
+							<div class="table-type">
 								[head]
 							</div>
-							<div class="gtbl_wrap type">
+							<div class="gmain-wrap type">
 								<div class="intable">
 									[body]
 								</div>
@@ -431,25 +438,25 @@
 			</div>
 
 			<div class="col-xl-4 col-lg-12 col-md-12 col-sm-12">
-				<div class="indiv gmain_table smain wrap_type unset">
-					<div class="gtbl_top clear">
-						<h2 class="tx_tit">인버터 상태</h2>
+				<div class="indiv gmain-table smain wrap-type unset">
+					<div class="gtable-top clear">
+						<h2 class="tx-tit">인버터 상태</h2>
 					</div>
 					<ul class="inverter_list" id="invList">
 						<li class="[type]">
-							<div class="chart_top clear">
+							<div class="chart-top clear">
 								<h2 class="ntit">[name] (<span>0</span>)</h2>
-								<div class="alert_icon fr">
-									<span class="inv_normal">정상 (<span>0</span>)</span>
-									<span class="inv_error">트립 (<span>0</span>)</span>
-									<span class="inv_alert">중지 (<span>0</span>)</span>
+								<div class="alert-icon fr">
+									<span class="inv-normal">정상 (<span>0</span>)</span>
+									<span class="inv-error">트립 (<span>0</span>)</span>
+									<span class="inv-alert">중지 (<span>0</span>)</span>
 								</div>
 							</div>
-							<div class="type_list_detail">
-								<div class="tbl_type">
+							<div class="type-list-detail">
+								<div class="table-type">
 									[head]
 								</div>
-								<div class="gtbl_wrap type">
+								<div class="gmain-wrap type">
 									<div class="intable">
 										[body]
 									</div>
@@ -483,7 +490,7 @@
 											<strong> - </strong>
 											<em id="sTemp"></em>
 										</dt>
-										<dd class="dd_tbl">
+										<dd class="dd-tbl">
 											<table>
 												<tr>
 													<th>오늘</th>
@@ -508,8 +515,8 @@
 										</dd>
 									</dl>
 								</div>
-								<div class="fr wt_list_wrap">
-									<ul class="list_type">
+								<div class="fr wt-list-wrap">
+									<ul class="list-type">
 										<li><strong>풍향</strong> <span id="sWindDirection">-</span> &deg;</li>
 										<li><strong>풍속</strong> <span id="sWindVelocity"></span></li>
 										<li><strong>습도</strong> <span id="sHumidity"></span></li>
@@ -805,21 +812,32 @@
 			innerSize: '70%',
 			name: '발전량',
 			colorByPoint: true,
-			data: [{
-				color: 'var(--circle-solar-power)',
-				name: '태양광',
-				dataLabels: {
-					enabled: false
+			data: [
+				{
+					color: 'var(--blueberry)',
+					name: "풍력",
+					dataLabels: {
+						enabled: false
+					},
+					y: 0
 				},
-				y: 60
-			}, {
-				color: 'var(--grey)',
-				name: '미사용량',
-				dataLabels: {
-					enabled: false
+				{
+					color: 'var(--circle-solar-power)',
+					name: '태양광',
+					dataLabels: {
+						enabled: false
+					},
+					y: 60
 				},
-				y: 20
-			}]
+				{
+					color: 'var(--grey)',
+					name: '미사용량',
+					dataLabels: {
+						enabled: false
+					},
+					y: 20
+				}
+			]
 		}],
 		responsive: {
 			rules: [{
@@ -840,8 +858,8 @@
 	var dailyChart = Highcharts.chart('dailyChart', {
 		chart: {
 			marginTop: 40,
-			marginLeft: 50,
-			marginRight: 50,
+			marginLeft: 40,
+			marginRight: 40,
 			height: 280,
 			backgroundColor: 'transparent',
 			zoomType: 'xy'
@@ -888,7 +906,7 @@
 					align: 'low',
 					rotation: 0,
 					y: 25,
-					x: 15,
+					x: 5,
 					style: {
 						color: 'var(--white60)',
 						fontSize: '12px'
@@ -896,10 +914,8 @@
 				},
 				labels: {
 					formatter: function () {
-						if (String(this.value).length  >= 9) {
-							return numberComma(this.value / 1000000000) + ' G';
-						} else if (String(this.value).length  >= 6) {
-							return numberComma(this.value / 1000000) + ' M';
+						if (String(this.value).length  >= 6) {
+							return numberComma(this.value / 1000000);
 						} else {
 							return this.value;
 						}
@@ -930,7 +946,7 @@
 					align: 'low',
 					rotation: 0,
 					y: 25,
-					x: -12,
+					x: -5,
 					style: {
 						color: 'var(--white60)',
 						fontSize: '12px'
@@ -959,7 +975,6 @@
 				return this.points.reduce(function (s, point) {
 					let suffix = point.series.userOptions.tooltip.valueSuffix;
 					let tempVal = displayNumberFixedUnit(point.y, 'Wh', 'kWh', 0)[0];
-
 					return s + '<br/><span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + tempVal + suffix;
 				}, '<b>' + this.x + '월 </b>');
 			},
@@ -2052,6 +2067,7 @@
 				const devices = site.devices;
 				if (!isEmpty(devices)) {
 					devices.forEach(di => {
+			
 						const deviceType = di.device_type;
 						if (deviceType === 'KPX_EMS') {
 							did = di.did;
@@ -2081,28 +2097,28 @@
 			}
 
 			$.when($.ajax(weekWeather), $.ajax(weekWeatherTime), $.ajax(statusRaw)).done(function (weekWeatherData, weekWeatherTimeData, statusRawData) {
-				console.log("weekWeatherData==", weekWeatherData, "weekWeatherTimeData==", weekWeatherTimeData, "statusRawData==", statusRawData)
-				
+
 				if (weekWeatherData[1] == 'success') {
 					let weekWeather = weekWeatherData[0];
-
+					// console.log("weekWeatherData[0]===", weekWeatherData)
 					if($('#viewOptList').prev().data("value") == "2"){
 						weekWeather.forEach((el, index) => {
 							$('#sTemp' + (index + 1)).text((el.temperature).toFixed(1));
 							let weatherIconClass = getWeatherIcons(el.sky);
-							$('#sWeatherIcon' + (index + 1)).html('<i class="ico_weather ' + weatherIconClass + '"></i>');
+							$('#sWeatherIcon' + (index + 1)).html('<i class="ico-weather ' + weatherIconClass + '"></i>');
 						});
 					} else {
 						weekWeather.forEach((el, index) => {
 							$('#weekTemp' + (index + 1)).text((el.temperature).toFixed(1));
 							let weatherIconClass = getWeatherIcons(el.sky);
-							$('#weekIcon' + (index + 1)).html('<i class="ico_weather ' + weatherIconClass + '"></i>');
+							$('#weekIcon' + (index + 1)).html('<i class="ico-weather ' + weatherIconClass + '"></i>');
 						});
 					}
 				}
 
 				if (weekWeatherTimeData[1] == 'success') {
 					let items = weekWeatherTimeData[0];
+					// console.log("weekWeatherTimeData[0]===", weekWeatherTimeData)
 					if (items.length > 0) {
 						let tempArray = new Array();
 						$.each(items, function (i, el) {
@@ -2115,10 +2131,10 @@
 							let weatherIconClass = getWeatherIcons(tempArray[tempArray.length - 1].sky);
 							if($('#viewOptList').prev().data("value") == "2"){
 								$('#sTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + ' ' + '&#8451;');
-								$('#weekSolarIcon').html('<i class="ico_weather ' + weatherIconClass + '"></i>').next('strong').html(sList[0].location);
+								$('#weekSolarIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i>').next('strong').html(sList[0].location);
 							} else {
 								$('#weekTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + ' ' + '&#8451;');
-								$('#weekIcon').html('<i class="ico_weather ' + weatherIconClass + '"></i>').next('strong').html(sList[0].location);
+								$('#weekIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i>').next('strong').html(sList[0].location);
 							}
 						}
 					}
@@ -2126,6 +2142,7 @@
 
 				if (statusRawData[1] == 'success') {
 					let items = statusRawData[0];
+					// console.log("statusRawData==", items);
 					if (!isEmpty(items)) {
 						Object.entries(items).map(obj => {
 							let deviceData = obj[1].data;
@@ -2147,10 +2164,15 @@
 									$('.weather .stit').html(new Date(di.timestamp).format('yyyy-MM-dd HH:mm:ss'));
 
 								} else {
-									console.log("di==", di)
+									// console.log("di==", di, "windSpeed===", windSpeed);
 									$('#weekTemp').html(temperature + '&#8451;');
 									$('#weekIcon').next('strong').html(sList[0].location);
-									$('#weekWindVelocity').text((windSpeed).toFixed(1) + ' km/h');
+									if(windSpeed != "-"){
+										$('#weekWindVelocity').text((windSpeed).toFixed(1) + ' km/h');
+									} else {
+										$('#weekWindVelocity').text((windSpeed));
+									}
+									
 									$('#weekWindDirection').text(windDirection);
 									$('#weekHum').html(humidity + ' ' + '&#37;');
 
@@ -2185,14 +2207,14 @@
 						weekWeather.forEach((el, index) => {
 							$('#sTemp' + (index + 1)).text((el.temperature).toFixed(1));
 							let weatherIconClass = getWeatherIcons(el.sky);
-							$('#sWeatherIcon' + (index + 1)).html('<i class="ico_weather ' + weatherIconClass + '"></i>');
+							$('#sWeatherIcon' + (index + 1)).html('<i class="ico-weather ' + weatherIconClass + '"></i>');
 						});
 					} else {
 
 						weekWeather.forEach((el, index) => {
 							$('#weekTemp' + (index + 1)).text((el.temperature).toFixed(1));
 							let weatherIconClass = getWeatherIcons(el.sky);
-							$('#weekIcon' + (index + 1)).html('<i class="ico_weather ' + weatherIconClass + '"></i>');
+							$('#weekIcon' + (index + 1)).html('<i class="ico-weather ' + weatherIconClass + '"></i>');
 						});
 					}
 				}
@@ -2213,7 +2235,7 @@
 
 							if($('#viewOptList').prev().data("value") == "2") {
 								$('#sTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + '&#8451;');
-								$('#weekSolarIcon').html('<i class="ico_weather ' + weatherIconClass + '"></i>');
+								$('#weekSolarIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i>');
 								$('#weekSolarIcon').next('strong').html(sList[0].location);
 								$('#sWindVelocity').text((tempArray[tempArray.length - 1].wind_speed).toFixed(1) + ' km/h');
 								$('#sWindDirection').text(tempArray[tempArray.length - 1].wind_velocity);
@@ -2221,7 +2243,7 @@
 								$('#currentTimeB').html(String(tempArray[tempArray.length - 1].basetime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6'));
 							} else {
 								$('#weekTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + '&#8451;');
-								$('#weekIcon').html('<i class="ico_weather ' + weatherIconClass + '"></i>');
+								$('#weekIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i>');
 								$('#weekIcon').next('strong').html(sList[0].location);
 								$('#weekWindVelocity').text((tempArray[tempArray.length - 1].wind_speed).toFixed(1) + ' km/h');
 								$('#weekWindDirection').text(tempArray[tempArray.length - 1].wind_velocity);
@@ -2343,23 +2365,22 @@
 				let propList = val.properties;
 				let tempFeature = new Array();
 				let tempFeature2 = new Array();
-				let propName = (langStatus == 'KO') ? val.name.kr : val.name.en
+				let devicePropName = (langStatus == 'KO') ? val.name.kr : val.name.en
 
 				$.map(propList, function (v, k) {
-
 					if (v.dashboard_head) {
 						let tempObj = new Object();
 						let unit = (v.unit != null && v.unit != '') ? '' + v.unit + '' : '';
-						// let propName = (langStatus == 'KO') ? v.name.kr : v.name.en;
+						let propName = (langStatus == 'KO') ? v.name.kr : v.name.en;
 
 						tempObj['key'] = k;
-						tempObj['value'] = deviceName;
+						tempObj['value'] = propName;
 						tempObj['suffix'] = unit;
 						tempObj['reducer'] = v.dashboard_head_reducer;
 						tempFeature.push(tempObj);
 
 						featureProperties[deviceName] = {
-							name: propName,
+							name: devicePropName,
 							prop: tempFeature
 						};
 					}
@@ -2421,6 +2442,7 @@
 					dids: deviceArray.toString()
 				}
 			}).done(function (data, textStatus, jqXHR) {
+				console.log("data==", data)
 				if (!isEmpty(option)){
 					let invType = new Array();
 					let sortedData;
@@ -2473,9 +2495,15 @@
 										"var(--light-blue)",
 										"var(--blueberry)",
 										"var(--royal-blue)",
-										"var(--jordy-blue)",
+										"var(--blue-yonder)",
+										"var(--circle-solar-power)",
 										"var(--deep-lilac)",
-										"var(--mustard)",
+										"var(--yellow-green)",
+										"var(--green)",
+										"var(--eucalyptus)",
+										"var(--french-pass)",
+										"var(--malibu)",
+										"var(--vivid-blue)",
 									];
 
 									for(let i=0, arrLength = temp.length; i<arrLength; i++){
@@ -2491,9 +2519,22 @@
 										});
 									}
 
-									if(temp.length > 6 ){				
-										hourlyINVChart.optionsMarginTop += 50;
+									if(temp.length > 12 ){	
+										let chart = $('#hourlyINVChart').highcharts();
+										chart.margin[0]= 120;
+										// chart.optionsMarginTop += 50;
+										chart.isDirtyBox = true;
+										// chart.redraw();
+										chart.render();
+
+										// hourlyINVChart.update({
+										// 	chart: {
+										// 		marginTop: 100
+										// 	}
+										// });
+										
 									}
+
 									hourlyINVChart.addSeries({
 										name: val.dname,
 										index: index,
@@ -2588,9 +2629,9 @@
 												if(isEmpty(value)) {
 													value = '-';
 												} else {
-													if((el.suffix.match('W') || el.suffix.match('Wh')) && !el.suffix.match('W/㎡')) {
+													if((el.suffix.match('W') || el.suffix.match('Wh')) && !el.key.match("irradiationPoa")) {
 														value = Number(value);
-													} else if(el.suffix.match('%') || el.suffix.match('℃') || el.suffix.match('W/㎡')) {
+													} else if(el.suffix.match('%') || el.suffix.match('℃') || el.key.match("irradiationPoa")) {
 														value = Number(value);
 													}
 												}
@@ -2604,10 +2645,17 @@
 													}
 												} else {
 													if(!isEmpty(headerData[el.key])) {
-														tmpObj['value'] = Number(value) + Number(tmpObj['value']);
+														if(value != '-') {
+															tmpObj['value'] = Number(value) + Number(tmpObj['value']);
+														} else {
+															tmpObj['value'] = value;
+														}
+									
 														tmpObj['cnt'] = Number(tmpObj['cnt']) + 1;
 													} else {
-														tmpObj['value'] = Number(value);
+														if(value != '-') {
+															tmpObj['value'] = Number(value);
+														}
 														tmpObj['cnt'] = 1;
 													}
 
@@ -2628,10 +2676,10 @@
 												if(isEmpty(value)) {
 													rowData[0][el.key] = '-';
 												} else {
-													if((el.suffix.match('W') || el.suffix.match('Wh')) && !el.suffix.match('W/㎡')) {
+													if((el.suffix.match('W') || el.suffix.match('Wh')) && !el.key.match("irradiationPoa")) {
 														let dummy = displayNumberFixedUnit(value, 'W', 'kW', 2);
 														rowData[0][el.key] = dummy[0];
-													} else if(el.suffix.match('%') || el.suffix.match('℃') || el.suffix.match('W/㎡')) {
+													} else if(el.suffix.match('%') || el.suffix.match('℃') || el.key.match("irradiationPoa")) {
 														rowData[0][el.key] = value.toFixed(2);
 													} else if(el.suffix.match('V')) {
 														rowData[0][el.key] = value.toFixed(2);
@@ -2669,12 +2717,12 @@
 
 									textValue = displayNumberFixedDecimal(textValue, suffix, 3, 2);
 
-									invItem.find('.tbl_type td.' + key + ' span:nth-child(1)').html(textValue[0]);
+									invItem.find('.table-type td.' + key + ' span:nth-child(1)').html(textValue[0]);
 									if(suffix == 'W' || suffix == 'Wh' || suffix == 'V' || suffix == 'A') {
-										invItem.find('.tbl_type td.' + key + ' span:nth-child(2)').html(textValue[1]);
+										invItem.find('.table-type td.' + key + ' span:nth-child(2)').html(textValue[1]);
 									}
 								} else {
-									invItem.find('.tbl_type td.' + key + ' span:nth-child(1)').html(textValue);
+									invItem.find('.table-type td.' + key + ' span:nth-child(1)').html(textValue);
 								}
 
 							});
@@ -2684,9 +2732,9 @@
 						let tableName = 'table_' + newInvType + '2';
 
 						invItem.find('.ntit span').html(deviceCnt);
-						invItem.find('.alert_icon .inv_normal span').html(operationNormal);
-						invItem.find('.alert_icon .inv_error span').html(operationError);
-						invItem.find('.alert_icon .inv_alert span').html(operationAlert);
+						invItem.find('.alert-icon .inv-normal span').html(operationNormal);
+						invItem.find('.alert-icon .inv-error span').html(operationError);
+						invItem.find('.alert-icon .inv-alert span').html(operationAlert);
 
 						setMakeList(tableArray, tableName , {'dataFunction': {'operation': setOperation}});
 
@@ -2709,10 +2757,12 @@
 							deviceType.push(val.device_type);
 						}
 					});
-
 					deviceType.sort();
 
 					$.each(deviceType, function (i, el) {
+						// console.log("featureProperties[el]===", featureProperties[el])
+						// console.log("featurePropertiesSub[el]===", featurePropertiesSub[el])
+
 						if (el == 'SM_MANUAL') return false;
 						deviceType[i] = {
 							name: featureProperties[el].name,
@@ -2724,6 +2774,7 @@
 							}
 						}
 					});
+					
 
 					setMakeList(deviceType, 'typeList', { 'dataFunction': { 'head': makeHeadTable, 'body': makeBodyTable } });
 
@@ -2756,13 +2807,16 @@
 
 									$.map(featureProperties, function(val, key) {
 										let headerData = new Object();
+
 										if(!isEmpty(headerDataObject[key])) {
 											headerData = headerDataObject[key];
 										}
+										
 										if (key == dvcType) {
 											$.each(val.prop, function(i, el) {
-												let value = rowData[0][el.key],
-													tmpObj = new Object();
+												let value = rowData[0][el.key];
+												let tmpObj = new Object();
+
 												if(isEmpty(headerData[el.key])) {
 													tmpObj['reducer'] = el.reducer;
 												} else {
@@ -2772,27 +2826,48 @@
 												if(isEmpty(value)) {
 													value = '-';
 												} else {
-													if((el.suffix.match('W') || el.suffix.match('Wh')) && !el.suffix.match('W/㎡')) {
-														value = Number(value);
-													} else if(el.suffix.match('%') || el.suffix.match('℃') || el.suffix.match('W/㎡')) {
-														value = Number(value);
+													if((el.suffix.match('W') || el.suffix.match('Wh')) && !el.key.match("irradiationPoa")) {
+														if(value != isNaN) {
+															value = Number(value);
+														}
+													} else if(el.key.match('humidity') || el.key.match('temperature') || el.key.match("irradiationPoa")) {
+														if(value != '-') {
+															value = Number(value);
+														} else {
+															value = '-';
+														}
 													}
 												}
 
+										
 												if(value == '-') {
-													if(!isEmpty(headerData[el.key])) {
-														tmpObj['cnt'] = Number(tmpObj['cnt']) + 1;
-													} else {
-														tmpObj['value'] = '-';
-														tmpObj['cnt'] = 1;
+													if(tmpObj['cnt'] == Number){
+														if(!isEmpty(headerData[el.key])) {
+															console.log("000000==", tmpObj)
+															tmpObj['cnt'] = Number(tmpObj['cnt']) + 1;
+														} else {
+															tmpObj['value'] = "-";
+															tmpObj['cnt'] = 1;
+														}
 													}
 												} else {
 													if(!isEmpty(headerData[el.key])) {
-														tmpObj['value'] = Number(value) + Number(tmpObj['value']);
-														tmpObj['cnt'] = Number(tmpObj['cnt']) + 1;
+														if(tmpObj['value'] == Number) {
+															tmpObj['value'] = Number(value) + Number(tmpObj['value']);
+															tmpObj['cnt'] = Number(tmpObj['cnt']) + 1;
+														} else {
+															tmpObj['value'] = value;
+															tmpObj['cnt'] = 1;
+														}
+													
 													} else {
-														tmpObj['value'] = Number(value);
-														tmpObj['cnt'] = 1;
+														if( tmpObj['value'] == Number){
+															tmpObj['value'] = Number(value);
+															tmpObj['cnt'] = 1;
+														} else {
+															tmpObj['value'] = value;
+															tmpObj['cnt'] = 1;
+														}
 													}
 
 													tmpObj['suffix'] = el.suffix;
@@ -2802,6 +2877,7 @@
 											});
 											headerDataObject[key] = headerData;
 										}
+							
 									});
 
 									$.map(featurePropertiesSub, function(val, key) {
@@ -2809,13 +2885,15 @@
 											$.each(val.prop, function(i, el) {
 												let value = rowData[0][el.key];
 
+												// console.log("key===", key, "el===", el);
+
 												if(isEmpty(value)) {
-													rowData[0][el.key] = '-';
+													rowData[0][el.key] = "-";
 												} else {
-													if((el.suffix.match('W') || el.suffix.match('Wh')) && !el.suffix.match('W/㎡')) {
+													if((el.suffix.match('W') || el.suffix.match('Wh')) && !el.key.match("irradiationPoa")) {
 														let dummy = displayNumberFixedUnit(value, 'W', 'kW', 2);
 														rowData[0][el.key] = dummy[0];
-													} else if(el.suffix.match('%') || el.suffix.match('℃') || el.suffix.match('W/㎡')) {
+													} else if(el.suffix.match('%') || el.key.match('temperature') || el.key.match("irradiationPoa")) {
 														rowData[0][el.key] = value.toFixed(2);
 													} else if(el.suffix.match('V')) {
 														rowData[0][el.key] = value.toFixed(2);
@@ -2824,6 +2902,7 @@
 											});
 										}
 									});
+												
 
 									if (deviceSearch(dname, operation)) {
 										if(isEmpty(tableArray)) {
@@ -2840,6 +2919,8 @@
 							}
 						});
 
+						console.log("headerDataObject===", headerDataObject);
+
 						$.map(headerDataObject, function(el, device) {
 							let deviceType = device;
 
@@ -2853,12 +2934,12 @@
 
 									textValue = displayNumberFixedDecimal(textValue, suffix, 3, 2);
 
-									$('#typeList').find('.' + deviceType).find('.tbl_type td.' + key + ' span:nth-child(1)').html(textValue[0]);
+									$('#typeList').find('.' + deviceType).find('.table-type td.' + key + ' span:nth-child(1)').html(textValue[0]);
 									if(suffix == 'W' || suffix == 'Wh' || suffix == 'V' || suffix == 'A') {
-										$('#typeList').find('.' + deviceType).find('.tbl_type td.' + key + ' span:nth-child(2)').html(textValue[1]);
+										$('#typeList').find('.' + deviceType).find('.table-type td.' + key + ' span:nth-child(2)').html(textValue[1]);
 									}
 								} else {
-									$('#typeList').find('.' + deviceType).find('.tbl_type td.' + key + ' span:nth-child(1)').html(textValue);
+									$('#typeList').find('.' + deviceType).find('.table-type td.' + key + ' span:nth-child(1)').html(textValue);
 								}
 
 							});
@@ -2866,9 +2947,9 @@
 						let deviceCnt = tableArray.length;
 
 						$('#typeList').find('.' + dvcType).find('.ntit span').html(deviceCnt);
-						$('#typeList').find('.' + dvcType).find('.alert_icon .inv_normal span').html(operationNormal);
-						$('#typeList').find('.' + dvcType).find('.alert_icon .inv_error span').html(operationError);
-						$('#typeList').find('.' + dvcType).find('.alert_icon .inv_alert span').html(operationAlert);
+						$('#typeList').find('.' + dvcType).find('.alert-icon .inv-normal span').html(operationNormal);
+						$('#typeList').find('.' + dvcType).find('.alert-icon .inv-error span').html(operationError);
+						$('#typeList').find('.' + dvcType).find('.alert-icon .inv-alert span').html(operationAlert);
 						setMakeList(tableArray, 'table_' + dvcType, {'dataFunction': {'operation': setOperation}});
 					});
 
@@ -3324,7 +3405,7 @@
 						let dataMonth = parseInt(String(chartItems1[d].basetime).substring(4, 6));
 						if (i + 1 == dataMonth) {
 							energyData[i] = [i, chartItems1[d].energy / 1000];
-							console.log("energyData[i]==", energyData[i])
+
 							if (!oid.match('testkpx')) {
 								if ($(':radio[name="radio_t"]:checked').val() == 1) {
 									let energy = chartItems1[d].energy / 1000;
@@ -3486,6 +3567,17 @@
 			});
 
 		}
+	
+		if(oid.match('testkpx')) {
+			// console.log("daily chart margin----")
+			let chart = $('#dailyChart').highcharts();
+			// chart.margin[1]= 0;
+			chart.optionsMarginRight -= 30;
+			chart.isDirtyBox = true;
+			chart.redraw();
+			// chart.render();
+		}
+	
 	}
 
 	function getWeatherCalendarEnergyData() {
@@ -3530,7 +3622,7 @@
 			}
 
 			for (let i = 1; i <= calendarDays.length; i++) {
-				if (energyItems.length > 0) {
+				if (!isEmpty(energyItems) && energyItems.length > 0) {
 					energyItems.forEach(el => {
 						let dataDay = parseInt(String(el.basetime).substring(6, 8));
 						if (i == dataDay) {
@@ -3538,6 +3630,8 @@
 							$('#calEnergyValue_' + i).html('<strong>' + energyText[0] + '</strong><em>' + energyText[1] + '</em>');
 						}
 					});
+				} else {
+					$('#calEnergyValue_' + i).html('<strong>-</strong>');
 				}
 
 				if (weatherItems.length > 0) {
@@ -3548,7 +3642,7 @@
 							$('#calWeatherValue_' + i).text((el.temperature).toFixed(1) + '℃');
 
 							let weatherIconClass = getWeatherIcons(el.sky);
-							$('#calWeatherIcon_' + i).html('<i class="ico_weather ' + weatherIconClass + '"></i>');
+							$('#calWeatherIcon_' + i).html('<i class="ico-weather ' + weatherIconClass + '"></i>');
 						}
 					});
 				}
@@ -3779,7 +3873,7 @@
 						// console.log("nowBillingDay===", nowBillingDay)
 				
 						if ((data.start) == formYesterData.startTime) {
-							console.log("start==formYesterData ===> ", getNowEnergyDay);
+							// console.log("start==formYesterData ===> ", getNowEnergyDay);
 							$('#centerTbody tr td:nth-child(3) em').before(displayNumberFixedUnit(getNowEnergyDay, 'Wh', 'kWh', 2)[0]);
 							itemEnergyDay = getNowEnergyDay;
 						} else {
@@ -3791,7 +3885,6 @@
 							}
 						}
 					} else if ((url).match(apiEnergyNowSite)) {
-						console.log("apiEnergyNowSite===", data.data[siteId])
 						if(!isEmpty(data.data[siteId])) {
 							let rstData = data.data[siteId];
 							let getNowEnergyDay = rstData.energy;
@@ -3801,7 +3894,6 @@
 							$('#centerTbody tr td:nth-child(4) em').before(displayNumberFixedUnit(nowBillingDay, 'Wh', 'kWh', 2)[0]);
 						}
 					} else if ((url).match(apiForecastingSite)) {
-						console.log("apiForecastingSite==", data.data)
 						let todayForeEnergy = 0;
 						
 						if (!isEmpty(data.data) && Object.values(data.data).flat()[0]["items"].length > 0) {
@@ -3814,15 +3906,15 @@
 								}
 							});
 						}
-
 						$('#centerTbody tr td:nth-child(3) em').before(displayNumberFixedUnit(todayForeEnergy, 'Wh', 'kWh', 2)[0]);
+					
 					} else if ((url).match('/control/command_history')) {
 						if (!isEmpty(data.data)) {
 							if (!isEmpty(lastTargetActivePowerReqDate)) {
 								let statusDate = new Date(lastTargetActivePowerReqDate.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$3/$2/$1 $4:$5:$6'));
-								let hitoryDate = new Date(data.data[0].requested_at.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$3/$2/$1 $4:$5:$6'));
-								if (statusDate.getTime() < hitoryDate.getTime()) {
-									lastTargetActivePowerReqDate = hitoryDate.format('yyyyMMddHHmmss');
+								let historyData = new Date(data.data[0].requested_at.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$3/$2/$1 $4:$5:$6'));
+								if (statusDate.getTime() < historyData.getTime()) {
+									lastTargetActivePowerReqDate = historyData.format('yyyyMMddHHmmss');
 									lastTargetActivePowerRecvDate = '-';
 
 									const cmdBody = JSON.parse(data.data[0].cmd_body);
@@ -3837,8 +3929,10 @@
 							}
 						}
 					} else {
+						// url : apiStatusRawSite
 						if (!isEmpty(data)) {
 							Object.entries(data).forEach(rawData => {
+								// console.log("rawData==", rawData)
 								const deviceType = rawData[0];
 								const deviceData = rawData[1];
 
@@ -3853,9 +3947,9 @@
 										itemAcPower = deviceData.activePower;
 
 										if (!isEmpty(lastTargetActivePowerReqDate)) {
-											let hitoryDate = new Date(lastTargetActivePowerReqDate.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$3/$2/$1 $4:$5:$6'));
+											let historyData = new Date(lastTargetActivePowerReqDate.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$3/$2/$1 $4:$5:$6'));
 											let statusDate = new Date(String(deviceData.lastTargetActivePowerReqDate).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$3/$2/$1 $4:$5:$6'));
-											if (statusDate.getTime() > hitoryDate.getTime()) {
+											if (statusDate.getTime() > historyData.getTime()) {
 												lastTargetActivePowerReqDate = String(deviceData.lastTargetActivePowerReqDate);
 												lastTargetActivePowerRecvDate = String(deviceData.lastTargetActivePowerReqDate);
 												targetActivePower = deviceData.targetActivePower;
@@ -3891,7 +3985,10 @@
 				});
 
 				if (oid.match('testkpx')) {
-					let genHour = isNaN(itemEnergyDay / itemCapacity) ? '-' : itemEnergyDay / itemCapacity;
+					let genHour = isNaN(itemEnergyDay / itemCapacity) ? '-' : (itemEnergyDay / itemCapacity);
+
+					// console.log("itemEnergyDay===", itemEnergyDay, "itemCapacity==", itemCapacity, "genHour===", genHour);
+
 					if (genHour === '-') {
 						$('#centerTbody tr td:nth-child(4) em').before(genHour);
 					} else {
@@ -3908,12 +4005,23 @@
 					let other = 100 - usage;
 
 					pieChart.series[0].data.forEach((e, idx) => {
-						if (e.name === "태양광") {
-							e.update({y: usage});
-						} else if (e.name === "미사용량") {
-							e.update({y: other});
-						} else {
-							e.update({y: 0});
+						if (!isEmpty(sList)) {
+							if(sList[0].resource_type == "1") {
+								pieChart.series[0].name = "태양광"
+								e.update({y: usage});
+							} else if(sList[0].resource_type == "2"){
+								pieChart.series[0].name = "풍력"
+								e.update({y: usage});
+							} else if(sList[0].resource_type == "2"){
+								pieChart.series[0].name = "소수력"
+								e.update({y: usage});
+							}
+
+							if (e.name === "태양광") {
+								e.update({y: usage});
+							} else if (e.name === "미사용량") {
+								e.update({y: other});
+							}
 						}
 					});
 					pieChart.redraw();
@@ -3925,8 +4033,13 @@
 					let pie1Data = Math.round(itemEfficiency);
 					let pie2Data = 100 - pie1Data;
 
+					if(pieChart.series[0].data.length == 3){
+						pieChart.series[0].data[0].remove(true);
+					}
+
 					pieChart.series[0].setData([pie1Data, pie2Data]);
 				}
+
 				$('#centerTbody tr td:nth-child(1) em').before(displayNumberFixedUnit(itemCapacity, 'W', 'kW', 1)[0]);
 				pieChart.setTitle({text: displayNumberFixedUnit(itemAcPower, 'W', 'kW', 1)[0] + 'kW'});
 			});
@@ -4279,7 +4392,7 @@
 					alarmList.push(el);
 				}
 			});
-			$('.a_alert').find('em').text(alarmList.length);
+			$('.alarm-alert').find('em').text(alarmList.length);
 			setMakeList(alarmList, 'alarmNotice', {'dataFunction': {'level': levelClass}});
 
 		}).fail(function (jqXHR, textStatus, errorThrown) {

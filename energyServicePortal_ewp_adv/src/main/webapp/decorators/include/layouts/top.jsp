@@ -120,27 +120,28 @@
 		</c:choose>
 
 
-		$('#loadingCircle').hide();
+		if(!$('#loadingCircle').is(":hidden")){
+			$('#loadingCircle').hide();
+		}
+	});
 
-		});
+	//API 토큰 세팅
+	$.ajaxSetup({
+		headers: {'Authorization': 'Bearer <c:out value="${sessionScope.userInfo.token}" escapeXml="false" />'},
+		"timeout": 30000,
+	});
 
-		//API 토큰 세팅
-		$.ajaxSetup({
-			headers: {'Authorization': 'Bearer <c:out value="${sessionScope.userInfo.token}" escapeXml="false" />'},
-			"timeout": 30000,
-		});
+	$(document).ajaxSuccess(function() {
+		if(!$('#loadingCircle').is(":hidden")){
+			$('#loadingCircle').hide();
+		}
+	});
 
-		$(document).ajaxSuccess(function() {
-			if(!$('#loadingCircle').is(":hidden")){
-				$('#loadingCircle').hide();
-			}
-		});
-
-		$(document).ajaxError(function(event, jqxhr, settings, thrownError) {
-			if(!$('#loadingCircle').is(":hidden")){
-				$('#loadingCircle').hide();
-			}
-		});
+	$(document).ajaxError(function(event, jqxhr, settings, thrownError) {
+		if(!$('#loadingCircle').is(":hidden")){
+			$('#loadingCircle').hide();
+		}
+	});
 
 	function formatErrorMessage(jqXHR, exception) {
 		if (jqXHR.status === 0) {

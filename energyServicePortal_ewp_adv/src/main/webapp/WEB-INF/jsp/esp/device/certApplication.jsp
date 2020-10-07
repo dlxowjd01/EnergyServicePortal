@@ -182,15 +182,15 @@
 			}
 			for(let i = 0; i < rowCount; i++) {
 				let trStr = `<tr class="device">
-								<th><h2 class="tx_tit">기기 MAC</h2></th>
+								<th><h2 class="tx-tit">기기 MAC</h2></th>
 								<td>
-									<div class="tx_inp_type edit">
+									<div class="text-input-type edit">
 										<input type="text" id="macAdd${'${i}'}" name="macAdd" placeholder="기기 MAC 입력">
 									</div>
 								</td>
-								<th class="${'${disp}'}"><h2 class="tx_tit">시리얼번호</h2></th>
+								<th class="${'${disp}'}"><h2 class="tx-tit">시리얼번호</h2></th>
 								<td class="${'${disp}'}">
-									<div class="tx_inp_type edit">
+									<div class="text-input-type edit">
 										<input type="text" id="serialNum${'${i}'}" name="serialNum" placeholder="시리얼번호">
 									</div>
 								</td>
@@ -242,7 +242,7 @@
 </script>
 <div class="modal fade" id="warningModal" role="dialog" aria-labelledby="warningModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-xs">
-		<div class="modal-content collection_modal_content">
+		<div class="modal-content collect-modal-content">
 			<div class="modal-body">
 				<h2 id="warningMsg" class="warning"></h2>
 			</div>
@@ -260,10 +260,10 @@
 	<div class="col-lg-12">
 		<form id="form1" name="form1" method="get" enctype="multipart/form-data">
 			<div class="indiv">
-				<div class="flex_wrapper mb-20 mt30">
+				<div class="flex-wrapper mb-20 mt30">
 					<h2 class="ntit">인증서 정보 입력</h2>
 				</div>
-				<div class="spc_tbl_row st_edit">
+				<div class="spc-table-row st-edit">
 					<table>
 						<colgroup>
 							<col style="width:5%">
@@ -275,9 +275,9 @@
 						</colgroup>
 						<tbody>
 						<tr>
-							<th><h2 class="tx_tit">기기인증서 발급 정책</h2></th>
+							<th><h2 class="tx-tit">기기인증서 발급 정책</h2></th>
 							<td>
-								<div class="sa_select">
+								<div class="sa-select">
 									<div class="dropdown" id="policy">
 										<button type="button" class="dropdown-toggle w5" data-toggle="dropdown" data-value="">
 											선택 <span class="caret"></span>
@@ -291,9 +291,9 @@
 							</td>
 						</tr>
 						<tr>
-							<th><h2 class="tx_tit">제조사명</h2></th>
+							<th><h2 class="tx-tit">제조사명</h2></th>
 							<td>
-								<div class="tx_inp_type edit">
+								<div class="text-input-type edit">
 									<label for="manuName" class="sr-only">제조사명</label>
 									<input type="text" id="manuName" name="manuName" placeholder="제조사명 입력">
 								</div>
@@ -302,9 +302,9 @@
 							<td></td>
 						</tr>
 						<tr>
-							<th><h2 class="tx_tit">제품모델명 입력</h2></th>
+							<th><h2 class="tx-tit">제품모델명 입력</h2></th>
 							<td>
-								<div class="tx_inp_type edit">
+								<div class="text-input-type edit">
 									<label for="modelName" class="sr-only">제품모델명 입력</label>
 									<input type="text" id="modelName" name="modelName" placeholder="제품모델명 입력">
 								</div>
@@ -315,10 +315,10 @@
 						</tbody>
 					</table>
 				</div>
-				<div class="flex_wrapper mb-20 mt30">
+				<div class="flex-wrapper mb-20 mt30">
 					<h2 class="ntit">기기 정보 입력</h2>
 				</div>
-				<div class="tbl_wrap_type collect_wrap">
+				<div class="table-wrap-type collect-wrap">
 					<ul class="nav nav-tabs">
 						<li class="nav-item active">
 							<a class="nav-link" data-toggle="tab" href="#manual">기기정보 수동 입력</a>
@@ -328,7 +328,7 @@
 						</li>
 					</ul>
 					<div class="tab-content">
-						<div class="tab-pane fade active in spc_tbl_row st_edit panel-collapse collapse" id="manual">
+						<div class="tab-pane fade active in spc-table-row st-edit panel-collapse collapse" id="manual">
 							<table class="mt30">
 								<colgroup>
 									<col style="width:15%">
@@ -338,18 +338,18 @@
 								</colgroup>
 								<tbody>
 								<tr>
-									<th><h2 class="tx_tit">수량</h2></th>
+									<th><h2 class="tx-tit">수량</h2></th>
 									<td>
-										<div class="tx_inp_type edit">
+										<div class="text-input-type edit">
 											<input type="text" id="row" name="row" placeholder="수량 입력">
 										</div>
 									</td>
-									<td colspan="2"><button type="button" class="btn_type big" onclick="makeDeivceRow();">수량 입력</button></td>
+									<td colspan="2"><button type="button" class="btn-type big" onclick="makeDeivceRow();">수량 입력</button></td>
 								</tr>
 								</tbody>
 							</table>
 						</div>
-						<div class="tab-pane fade spc_tbl_row st_edit panel-collapse collapse" id="excel">
+						<div class="tab-pane fade spc-table-row st-edit panel-collapse collapse" id="excel">
 							<table class="mt30">
 								<colgroup>
 									<col style="width:15%">
@@ -358,21 +358,21 @@
 									<col style="width:35%">
 								</colgroup>
 								<tbody>
-								<th><h2 class="tx_tit">기기정보 EXCEL</h2></th>
+								<th><h2 class="tx-tit">기기정보 EXCEL</h2></th>
 								<td>
 									<input type="file" id="file1" class="hidden" name="file1" accept=".xls, .xlsx">
-									<label for="file1" class="btn file_upload">파일 선택</label>
-									<span class="upload_text ml-16"></span>
-									<button type="button" class="btn_close fixed_height hidden mt-0" onclick="$(this).parents().closest('.group_type').remove()"></button>
+									<label for="file1" class="btn file-upload">파일 선택</label>
+									<span class="upload-text ml-16"></span>
+									<button type="button" class="btn-close fixed-height hidden mt-0" onclick="$(this).parents().closest('.group-type').remove()"></button>
 								</td>
 								</tbody>
 							</table>
 						</div>
 					</div>
 				</div>
-				<div class="btn_wrap_type_right">
-					<button type="button" class="btn_type03 big" onclick="sampleDownload();">샘플 다운로드</button>
-					<button type="button" class="btn_type big" id="register">신청</button>
+				<div class="btn-wrap-type-r">
+					<button type="button" class="btn-type03 big" onclick="sampleDownload();">샘플 다운로드</button>
+					<button type="button" class="btn-type big" id="register">신청</button>
 				</div>
 			</div>
 		</form>

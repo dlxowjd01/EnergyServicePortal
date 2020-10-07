@@ -917,7 +917,7 @@
 									"sTitle": "",
 									"mData": "null",
 									"mRender": function ( data, type, full, rowIndex )  {
-										return '<a class="chk_type" href="#"><input type="checkbox" id="' + rowIndex.row + '" name="table_checkbox"><label for="' + rowIndex.row + '"></label></a>'
+										return '<a class="chk-type" href="#"><input type="checkbox" id="' + rowIndex.row + '" name="table_checkbox"><label for="' + rowIndex.row + '"></label></a>'
 									},
 									"className": "dt-body-center no-sorting"
 								},
@@ -972,12 +972,12 @@
 							initComplete: function(){
 								let str = `
 									<div id="btnGroup" class="right-end"><!--
-										--><button type="button" disabled class="btn_type03" onclick="updateModal('edit')">선택 수정</button><!--
-										--><button type="button" disabled class="btn_type03" onclick="updateModal('delete')">선택 삭제</button><!--
+										--><button type="button" disabled class="btn-type03" onclick="updateModal('edit')">선택 수정</button><!--
+										--><button type="button" disabled class="btn-type03" onclick="updateModal('delete')">선택 삭제</button><!--
 								--></div>
 								`;
 								let addBtnStr = `
-									<button type="button" class="btn_type fr mb-20" onclick="updateModal('add')">추가</button>
+									<button type="button" class="btn-type fr mb-20" onclick="updateModal('add')">추가</button>
 								`;
 								$("#userTable_wrapper").append($(str)).prepend($(addBtnStr));
 
@@ -1021,7 +1021,7 @@
 						// }).on( 'user-select', function ( e, dt, type, cell, originalEvent ) {
 						// 	console.log("tra--", originalEvent.target.nodeName );
 						}).on("select", function(e, dt, type, indexes) {
-							let btn = $("#btnGroup").find(".btn_type03");
+							let btn = $("#btnGroup").find(".btn-type03");
 							btn.each(function(index, element){
 								if($(this).is(":disabled")){
 									$(this).prop("disabled", false);
@@ -1030,7 +1030,7 @@
 							userTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
 							// console.log("dt---", userTable[ type ]( indexes ).nodes())
 						}).on("deselect", function(e, dt, type, indexes) {
-							let btn = $("#btnGroup").find(".btn_type03");
+							let btn = $("#btnGroup").find(".btn-type03");
 							btn.each(function(index, element){
 								if(!$(this).is(":disabled")){
 									$(this).prop("disabled", true);
@@ -1074,7 +1074,7 @@
 									"sTitle": "",
 									"mData": "null",
 									"mRender": function ( data, type, row )  {
-										return '<a class="chk_type" href="#"><input type="checkbox" id="' + row.idx + '" name="table_checkbox"><label for="' + row.idx + '"></label></a>'
+										return '<a class="chk-type" href="#"><input type="checkbox" id="' + row.idx + '" name="table_checkbox"><label for="' + row.idx + '"></label></a>'
 									},
 									"className": "dt-body-center no-sorting"
 								},
@@ -1136,12 +1136,12 @@
 							initComplete: function(){
 								let str = `
 									<div id="btnGroup" class="right-end"><!--
-										--><button type="button" disabled class="btn_type03" onclick="updateModal('edit')">선택 수정</button><!--
-										--><button type="button" disabled class="btn_type03" onclick="updateModal('delete')">선택 삭제</button><!--
+										--><button type="button" disabled class="btn-type03" onclick="updateModal('edit')">선택 수정</button><!--
+										--><button type="button" disabled class="btn-type03" onclick="updateModal('delete')">선택 삭제</button><!--
 								--></div>
 								`;
 								let addBtnStr = `
-									<button type="button" class="btn_type fr mb-20" onclick="updateModal('add')">추가</button>
+									<button type="button" class="btn-type fr mb-20" onclick="updateModal('add')">추가</button>
 								`;
 								$("#userTable_wrapper").append($(str)).prepend($(addBtnStr));
 
@@ -1185,7 +1185,7 @@
 						// }).on( 'user-select', function ( e, dt, type, cell, originalEvent ) {
 						// 	console.log("tra--", originalEvent.target.nodeName );
 						}).on("select", function(e, dt, type, indexes) {
-							let btn = $("#btnGroup").find(".btn_type03");
+							let btn = $("#btnGroup").find(".btn-type03");
 							btn.each(function(index, element){
 								if($(this).is(":disabled")){
 									$(this).prop("disabled", false);
@@ -1193,7 +1193,7 @@
 							});
 							userTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
 						}).on("deselect", function(e, dt, type, indexes) {
-							let btn = $("#btnGroup").find(".btn_type03");
+							let btn = $("#btnGroup").find(".btn-type03");
 							btn.each(function(index, element){
 								if(!$(this).is(":disabled")){
 									$(this).prop("disabled", true);
@@ -1230,7 +1230,7 @@
 						"buttons": [
 							{
 								extend: 'excelHtml5',
-								className: "save_btn",
+								className: "btn-save",
 								text: '엑셀 다운로드',
 								filename: '사용자관리_' + new Date().format('yyyyMMddHHmmss'),
 								// exportOptions: {
@@ -1259,12 +1259,12 @@
 							},
 							// {
 							// 	extend: 'csvHtml5',
-							// 	className: "btn_type03",
+							// 	className: "btn-type03",
 							// 	text: 'CSV'
 							// },
 							// {
 							// 	extend: 'pdfHtml5',
-							// 	className: "btn_type03",
+							// 	className: "btn-type03",
 							// 	text: 'PDF',
 							// },
 						],
@@ -1404,7 +1404,7 @@
 			initComplete: function(){
 				this.addClass("no-stripe");
 				let addBtnStr = `
-					<button type="button" class="btn_type fr mb-20" onclick="updateModal('add')">추가</button>
+					<button type="button" class="btn-type fr mb-20" onclick="updateModal('add')">추가</button>
 				`;
 				$("#userTable_wrapper").prepend($(addBtnStr));
 			},
@@ -1841,15 +1841,15 @@
 
 
 	// function cloneSpcRow(){
-	// 	let clone = $("#spcRow .flex_start:first-of-type").clone();
-	// 	let length = $("#spcRow .flex_start").length;
+	// 	let clone = $("#spcRow .flex-start:first-of-type").clone();
+	// 	let length = $("#spcRow .flex-start").length;
 	// 	let ul = $(clone).find(".dropdown-menu");
 	// 	let id = $(ul).attr("id");
 
 	// 	$.each(ul, function(index, element){
 	// 		$(this).attr("id", id.replace(/(\d+)/, length));
 	// 	});
-	// 	$(clone).find(".btn_close").removeClass("hidden");
+	// 	$(clone).find(".btn-close").removeClass("hidden");
 
 	// 	$("#spcRow").append($(clone));
 	// }
@@ -1878,8 +1878,8 @@
 				<h4 id="resultSuccessMsg" class="text-blue hidden">사용자가 성공적으로<br>추가 되었습니다.</h4>
 				<h4 id="resultFailureMsg" class="warning-text hidden">사용자 추가에 실패하였습니다.<br>다시 시도해 주세요.</h4>
 			</div>
-			<div class="btn_wrap_type05"><!--
-			--><button type="button" id="resultBtn" class="btn_type03" data-dismiss="modal" aria-label="Close">확인</button><!--
+			<div class="btn-wrap-type05"><!--
+			--><button type="button" id="resultBtn" class="btn-type03" data-dismiss="modal" aria-label="Close">확인</button><!--
 		--></div>
 		</div>
 	</div>
@@ -1892,11 +1892,11 @@
 				<h5 id="deleteSuccessMsg" class="ntit">사용자 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>
 			</div>
 			<div class="modal-body">
-				<div class="tx_inp_type"><input type="text" id="confirmUserId" name="confirm_user_id" placeholder="사용자 아이디 입력"/></div>
+				<div class="text-input-type"><input type="text" id="confirmUserId" name="confirm_user_id" placeholder="사용자 아이디 입력"/></div>
 				</div>
-				<div class="btn_wrap_type05"><!--
-				--><button type="button" class="btn_type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
-				--><button type="button" id="deleteConfirmBtn" class="btn_type w80 ml-12" disabled>확인</button><!--
+				<div class="btn-wrap-type05"><!--
+				--><button type="button" class="btn-type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
+				--><button type="button" id="deleteConfirmBtn" class="btn-type w80 ml-12" disabled>확인</button><!--
 			--></div>
 		</div>
 	</div>
@@ -1911,13 +1911,13 @@
 				<div class="container-fluid">
 					<form name="add_user_form" id="updateUserForm" class="setting-form">
 						<div class="row">
-							<div class="col-lg-2 col-sm-3"><span class="input_label asterisk">ID</span></div>
+							<div class="col-lg-2 col-sm-3"><span class="input-label asterisk">ID</span></div>
 							<div class="col-lg-4 col-sm-9">
-								<div class="flex_start">
-									<div class="tx_inp_type offset-width">
+								<div class="flex-start">
+									<div class="text-input-type offset-width">
 										<input type="text" name="new_id" id="newId" placeholder="입력" minlength="5" maxlength="15">
 									</div>
-									<button type="button" class="btn_type fr" onclick="checkId($('#newId').val())" disabled>중복 체크</button>
+									<button type="button" class="btn-type fr" onclick="checkId($('#newId').val())" disabled>중복 체크</button>
 								</div>
 								<small class="hidden warning">사용자 아이디를 입력해 주세요</small>
 								<small class="hidden warning">5~15 글자를 입력해 주세요.</small>
@@ -1926,13 +1926,13 @@
 								<small id="validId" class="text-blue text-sm hidden">사용 가능한 아이디 입니다.</small>
 							</div>
 
-							<div class="col-lg-2 col-sm-3"><span class="input_label offset asterisk">비밀번호</span></div>
+							<div class="col-lg-2 col-sm-3"><span class="input-label offset asterisk">비밀번호</span></div>
 							<div class="col-lg-4 col-sm-9">
-								<div class="tx_inp_type"><!--
+								<div class="text-input-type"><!--
 									--><input type="password" id="newUserPwd" name="new_pwd" placeholder="입력" minlength="8" maxlength="32"><!--
 									--><button type="button" class="pwd-icon" onclick="showPwd('newUserPwd', this)">show</button><!--
 								--></div>
-								<div class="flex_start warning-wrapper">
+								<div class="flex-start warning-wrapper">
 									<small id="hasLet" class="tick">영문</small>
 									<small id="hasNum" class="tick">숫자</small>
 									<small id="sixCharLong" class="tick">8자리 이상</small>
@@ -1941,12 +1941,12 @@
 						</div>
 
 						<div class="row">
-							<div class="col-lg-2 col-sm-3"><span class="input_label asterisk">이름</span></div>
+							<div class="col-lg-2 col-sm-3"><span class="input-label asterisk">이름</span></div>
 							<div class="col-lg-4 col-sm-9">
-								<div class="tx_inp_type"><input type="text" id="newFullName" name="new_full_name" placeholder="입력" minlength="3" maxlength="28"></div>
+								<div class="text-input-type"><input type="text" id="newFullName" name="new_full_name" placeholder="입력" minlength="3" maxlength="28"></div>
 								<small class="hidden warning">영문/한글(3~28 글자) 조합의 이름을 입력해 주세요</small>
 							</div>
-							<div class="col-lg-2 col-sm-3"><span class="input_label offset asterisk">권한 등급</span></div>
+							<div class="col-lg-2 col-sm-3"><span class="input-label offset asterisk">권한 등급</span></div>
 							<div class="col-lg-4 col-sm-9">
 								<div class="dropdown">
 									<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
@@ -1959,26 +1959,26 @@
 						</div>
 
 						<div class="row">
-							<div class="col-lg-2 col-sm-3"><span class="input_label">휴대폰</span></div>
+							<div class="col-lg-2 col-sm-3"><span class="input-label">휴대폰</span></div>
 							<div class="col-lg-4 col-sm-9">
-								<div class="tx_inp_type"><input type="text" id="newMobileNum" name="new_mobil_num" placeholder="입력" maxlength="13"></div>
+								<div class="text-input-type"><input type="text" id="newMobileNum" name="new_mobil_num" placeholder="입력" maxlength="13"></div>
 								<small id="isValidNewMobileNum" class=" warning hidden">10자리 이상의 휴대폰 번호를 입력해 주세요.</small>
 							</div>
-							<div class="col-lg-2 col-sm-3"><span class="input_label offset">소속</span></div>
+							<div class="col-lg-2 col-sm-3"><span class="input-label offset">소속</span></div>
 							<div class="col-lg-4 col-sm-9">
-								<div class="tx_inp_type"><input type="text" id="newAffiliation" name="new_affiliation" placeholder="입력">
+								<div class="text-input-type"><input type="text" id="newAffiliation" name="new_affiliation" placeholder="입력">
 								</div>
 							</div>
 						</div>
 
 						<div class="row">
-							<div class="col-lg-2 col-sm-3"><span class="input_label">이메일</span></div>
+							<div class="col-lg-2 col-sm-3"><span class="input-label">이메일</span></div>
 							<div class="col-lg-4 col-sm-9">
-								<div class="tx_inp_type"><input type="text" id="newEmailAddr" name="new_email_addr" placeholder="입력"></div>
+								<div class="text-input-type"><input type="text" id="newEmailAddr" name="new_email_addr" placeholder="입력"></div>
 								<small class="hidden warning">올바른 이메일 형식을 입력해 주세요.</small>
 							</div>
 							<c:if test="${activateSPC eq true}">
-							<div class="col-lg-2 col-sm-3"><span class="input_label offset">업무 구분</span></div>
+							<div class="col-lg-2 col-sm-3"><span class="input-label offset">업무 구분</span></div>
 							<div class="col-lg-4 col-sm-9">
 								<div class="dropdown">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
@@ -1995,7 +1995,7 @@
 						</div>
 
 						<div class="row">
-							<div class="col-lg-2 col-sm-3"><span class="input_label">사용 여부</span></div>
+							<div class="col-lg-2 col-sm-3"><span class="input-label">사용 여부</span></div>
 							<div class="col-lg-4 col-sm-9">
 								<div class="dropdown">
 									<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
@@ -2007,7 +2007,7 @@
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-lg-2 col-sm-3"><span class="input_label">설명</span></div>
+							<div class="col-lg-2 col-sm-3"><span class="input-label">설명</span></div>
 							<div class="col-lg-10 col-sm-9">
 								<textarea name="new_user_desc" id="newUserDesc" class="textarea w-100" placeholder="입력"></textarea>
 							</div>
@@ -2028,7 +2028,7 @@
 							<div id="siteTab" class="tab-pane fade in active">
 								<div class="row user-row">
 									<div class="col-lg-7 col-md-7 col-sm-12">
-										<div class="flex_start">
+										<div class="flex-start">
 											<div class="dropdown w-40">
 												<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 												<ul id="siteOptList" class="dropdown-menu">
@@ -2060,7 +2060,7 @@
 							<div id="spcTab" class="tab-pane fade">
 								<div id="spcRow" class="row user-row">
 									<div class="col-lg-7 col-md-7 col-sm-12">
-										<div class="flex_start">
+										<div class="flex-start">
 											<div class="dropdown w-40">
 												<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 												<ul id="spcOptList" class="dropdown-menu">
@@ -2090,10 +2090,10 @@
 
 						<div class="row">
 							<div class="col-12">
-								<div class="btn_wrap_type02">
-									<button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button>
-									<button type="submit" id="addUserBtn" class="btn_type" disabled>등록</button>
-									<!-- <button type="submit" id="addUserBtn" class="btn_type">확인</button> -->
+								<div class="btn-wrap-type02">
+									<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close">취소</button>
+									<button type="submit" id="addUserBtn" class="btn-type" disabled>등록</button>
+									<!-- <button type="submit" id="addUserBtn" class="btn-type">확인</button> -->
 								</div>
 							</div>
 						</div>
@@ -2113,8 +2113,8 @@
 
 <div class="row">
 	<div class="col-10">
-		<div class="flex_group">
-			<span class="tx_tit">사용자 유형</span>
+		<div class="flex-group">
+			<span class="tx-tit">사용자 유형</span>
 			<div class="dropdown">
 				<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 				<ul class="dropdown-menu" id="userList">
@@ -2124,22 +2124,22 @@
 				</ul>
 			</div>
 		</div>
-		<div class="flex_group">
-			<div class="tx_inp_type">
+		<div class="flex-group">
+			<div class="text-input-type">
 				<input type="search" id="searchBox" aria-controls="userTable" placeholder="키워드 검색">
 			</div>
 		</div>
 	</div>
 	<div class="col-2">
 		<div id="exportBtnGroup" class="fr"></div>
-		<!-- <button type="button" class="save_btn ml-16 fr" onclick="$(this).prev().toggleClass('hidden')">데이터 다운로드</button>--> 
+		<!-- <button type="button" class="btn-save ml-16 fr" onclick="$(this).prev().toggleClass('hidden')">데이터 다운로드</button>--> 
 	</div>
 </div>
 
 <div class="row content-wrapper">
 	<div class="col-12">
 		<div class="indiv">
-			<!-- <div class="flex_group">
+			<!-- <div class="flex-group">
 				<div class="dropdown">
 					<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 					<ul class="dropdown-menu" id="pageLengthList">
@@ -2149,7 +2149,7 @@
 						<li data-value="50"><a href="#" tabindex="-1">50</a></li>
 					</ul>
 				</div>
-				<span class="tx_tit pl-16">개 씩 보기&ensp;</span>
+				<span class="tx-tit pl-16">개 씩 보기&ensp;</span>
 			</div> -->
 			<table id="userTable">
 				<colgroup>

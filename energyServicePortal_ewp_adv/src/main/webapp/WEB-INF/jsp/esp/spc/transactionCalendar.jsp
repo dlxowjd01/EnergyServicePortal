@@ -80,7 +80,7 @@
 		}
 
 		//날짜 셀렉트박스 클릭 시
-		$('.sch_sel_area ul li').on('click', function () {
+		$('.search-select-wrapper ul li').on('click', function () {
 			var thisVal = $(this).data('value');
 			var thisId = $(this).parent().parent().attr('id');
 			if (thisId == 'year') {
@@ -93,7 +93,7 @@
 		});
 
 		//전월
-		$('.btn_prev_mon').click(function () {
+		$('.btn-prev-month').click(function () {
 			let prevMonth = today.getMonth() - 1;
 			today = new Date(today.getFullYear(), prevMonth, today.getDate());
 			$('#modalTitle').text(prevMonth);
@@ -104,7 +104,7 @@
 		});
 
 		//다음월
-		$('.btn_next_mon').click(function () {
+		$('.btn-next-month').click(function () {
 			let nextMonth = today.getMonth() + 1;
 			today = new Date(today.getFullYear(), nextMonth, today.getDate());
 			$('#modalTitle').text(nextMonth);
@@ -114,7 +114,7 @@
 		});
 
 		//요번달
-		$('.btn_type03.active').click(function () {
+		$('.btn-type03.active').click(function () {
 			today = new Date();
 			buildCalendar();
 			maintenance(spcPairArr, 'get');
@@ -133,15 +133,15 @@
 
 		// 	if (buttonId == 'repeat_yn') {
 		// 		if (value == 'Y') {
-		// 			$(this).parents('.flex_start3').addClass('short');
+		// 			$(this).parents('.flex-start3').addClass('short');
 		// 			$(this).parents('div.dropdown').siblings().removeClass('hidden');
 
-		// 			$('#repeat_end').addClass('sel').parent().removeClass('tx_inp_type').addClass('sel_calendar');
+		// 			$('#repeat_end').addClass('sel').parent().removeClass('text-input-type').addClass('sel-calendar');
 		// 		} else {
-		// 			$(this).parents('.flex_start3').removeClass('short');
+		// 			$(this).parents('.flex-start3').removeClass('short');
 		// 			$(this).parents('div.dropdown').siblings().addClass('hidden');
 
-		// 			$('#repeat_end').removeClass('sel').parent().removeClass('sel_calendar').addClass('tx_inp_type');
+		// 			$('#repeat_end').removeClass('sel').parent().removeClass('sel-calendar').addClass('text-input-type');
 		// 		}
 		// 		repeatEnd();
 		// 	} else if (buttonId == 'alarmSetup') {
@@ -254,7 +254,7 @@
 			}
 		}
 
-		$('.sch_btn .btn_type03:last-of-type').text(thisMonth);
+		$('.search-btn .btn-type03:last-of-type').text(thisMonth);
 		$('#modalTitle').text(thisMonth);
 		$('#year > button').html(doMonth.getFullYear() + '년<span class="caret"></span>').data('value', doMonth.getFullYear());
 		$('#month > button').html(doMonth.getMonth() + 1 + '월<span class="caret"></span>').data('value', doMonth.getMonth() + 1);
@@ -522,7 +522,7 @@
 					} else {
 						tableStr = '<li data-jobId="' + v.id + '" data-id="' + v.spc_id + '" data-name="' + spcName + '" class="link bu t' + job_type + ' ' + hiddenClass + '">[' + spcName + '] ' + job_Name(job_type) + '</li>';
 					}
-					bulletStr = '<span data-jobId="' + v.id + '" data-id="' + v.spc_id + '" data-name="' + spcName + '" class="bu t' + job_type + '">[ ' + spcName + ' ] ' + job_Name(job_type) + '</span><span class="fr btn_next"></span>';
+					bulletStr = '<span data-jobId="' + v.id + '" data-id="' + v.spc_id + '" data-name="' + spcName + '" class="bu t' + job_type + '">[ ' + spcName + ' ] ' + job_Name(job_type) + '</span><span class="fr btn-next"></span>';
 					calendar.eq(Number(job_date) - 1).append(tableStr);
 					modalData.append(
 						'<li class="link alarm-item ' + hiddenClass + '" data-id="'+v.id+'">'
@@ -591,10 +591,10 @@
 				if(firstStatus !=0){
 					if(item[1].length>1){
 						tStr = '<li data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + ' ' + hiddenClass + '">[' + spcName + '] ' + statusList[firstStatus].val + ' 외 + ' + (item[1].length - 1) + '건</li>';
-						bStr = '<span data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + '">[' + spcName + '] ' + statusList[firstStatus].val + ' 외 + ' + (item[1].length - 1) + '건</span><span class="fr btn_next"></span>';
+						bStr = '<span data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + '">[' + spcName + '] ' + statusList[firstStatus].val + ' 외 + ' + (item[1].length - 1) + '건</span><span class="fr btn-next"></span>';
 					} else {
 						tStr = '<li data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + ' ' + hiddenClass + '">[' + spcName + '] ' + statusList[firstStatus].val + '</li>';
-						bStr = '<span data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + '">[' + spcName + '] ' + statusList[firstStatus].val + '</span><span class="fr btn_next"></span>';
+						bStr = '<span data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + '">[' + spcName + '] ' + statusList[firstStatus].val + '</span><span class="fr btn-next"></span>';
 					}
 					calendar.eq(Number(d) - 1).append(tStr);
 					modalData.append(
@@ -644,7 +644,7 @@
 		const title = modal.find('h2');
 		const input = modal.find('input');
 		const dropDown = modal.find('.dropdown-toggle');
-		const repeat_wrapper = $('#repeat_yn').parents('.flex_start3');
+		const repeat_wrapper = $('#repeat_yn').parents('.flex-start3');
 		const repeat_cycle = $('#repeat_yn button');
 		const postScheduleBtn = $('#postScheduleBtn');
 		const deleteScheduleBtn = $('#deleteScheduleBtn');
@@ -656,7 +656,7 @@
 		repeat_wrapper.removeClass("short");
 
 
-		$('#repeat_end').removeClass('sel').parent().removeClass('sel_calendar').addClass('tx_inp_type');
+		$('#repeat_end').removeClass('sel').parent().removeClass('sel-calendar').addClass('text-input-type');
 		warning.addClass('hidden');
 
 		if (data == undefined) {
@@ -725,17 +725,17 @@
 
 			if ($('#repeat_yn button').data('value') == 'N') {
 				$('#repeat_end').val('').datepicker('destroy').removeClass('sel');
-				$('#repeat_end').parent().removeClass('sel_calendar').addClass('tx_inp_type');
+				$('#repeat_end').parent().removeClass('sel-calendar').addClass('text-input-type');
 
-				$('#repeat_yn').parents('.flex_start3').removeClass('short');
+				$('#repeat_yn').parents('.flex-start3').removeClass('short');
 				$('#repeat_yn').siblings().addClass('hidden');
 
-				$('#repeat_end').removeClass('sel').parent().removeClass('sel_calendar').addClass('tx_inp_type');
+				$('#repeat_end').removeClass('sel').parent().removeClass('sel-calendar').addClass('text-input-type');
 			} else {
-				$('#repeat_yn').parents('.flex_start3').addClass('short');
+				$('#repeat_yn').parents('.flex-start3').addClass('short');
 				$('#repeat_yn').siblings().removeClass('hidden');
 
-				$('#repeat_end').addClass('sel').parent().removeClass('tx_inp_type').addClass('sel_calendar');
+				$('#repeat_end').addClass('sel').parent().removeClass('text-input-type').addClass('sel-calendar');
 				$('#repeat_end').removeClass('hasDatepicker').datepicker({
 					showOn: 'both',
 					buttonImageOnly: true,
@@ -919,7 +919,7 @@
 			return false;
 		} else if ($('#repeat_yn button').data('value') == 'N') {
 			$('#repeat_end').val('').datepicker('destroy').removeClass('sel');
-			$('#repeat_end').parent().removeClass('sel_calendar').addClass('tx_inp_type');
+			$('#repeat_end').parent().removeClass('sel-calendar').addClass('text-input-type');
 		} else {
 			$('#repeat_end').removeClass('hasDatepicker').datepicker({
 				showOn: 'both',
@@ -935,7 +935,7 @@
 					$(this).closest('.dateField').find('.fromDate').datepicker('option', 'maxDate', selected);
 				}
 			});
-			$('#repeat_end').addClass('sel').parent().removeClass('tx_inp_type').addClass('sel_calendar');
+			$('#repeat_end').addClass('sel').parent().removeClass('text-input-type').addClass('sel-calendar');
 		}
 
 		if ($('#alarmSetup button').data('value') != '' && $('#alarmSetup button').data('value') != '직접 설정') {
@@ -954,15 +954,15 @@
 			val = obj.find('button').data('value');
 		if (buttonId == 'repeat_yn') {
 			if (val == 'Y') {
-				obj.parents('.flex_start3').addClass('short');
+				obj.parents('.flex-start3').addClass('short');
 				obj.siblings().removeClass('hidden');
-				obj.next('.tx_inp_type').find('input').val('');
-				$('#repeat_end').addClass('sel').parent().removeClass('tx_inp_type').addClass('sel_calendar');
+				obj.next('.text-input-type').find('input').val('');
+				$('#repeat_end').addClass('sel').parent().removeClass('text-input-type').addClass('sel-calendar');
 			} else {
-				obj.parents('.flex_start3').removeClass('short');
+				obj.parents('.flex-start3').removeClass('short');
 				obj.siblings().addClass('hidden');
-				obj.next('.tx_inp_type').find('input').val(0);
-				$('#repeat_end').removeClass('sel').parent().removeClass('sel_calendar').addClass('tx_inp_type');
+				obj.next('.text-input-type').find('input').val(0);
+				$('#repeat_end').removeClass('sel').parent().removeClass('sel-calendar').addClass('text-input-type');
 			}
 			dropDownInit($('#repeat_unit'));
 			repeatEnd();
@@ -1057,21 +1057,21 @@
 
 <div class="modal fade" id="warningModal" role="dialog" aria-labelledby="warningModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog">
-		<div class="modal-content collection_modal_content">
+		<div class="modal-content collect-modal-content">
 			<div class="modal-header">
 				<h4 lass="modal-title"></h4>
 			</div>
 			<div class="modal-footer">
-				<div class="btn_wrap_type02">
-					<button type="button" id="closeBtn" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button>
-					<button type="submit" id="warningConfirmBtn" class="btn_type">확인</button>
+				<div class="btn-wrap-type02">
+					<button type="button" id="closeBtn" class="btn-type03" data-dismiss="modal" aria-label="Close">취소</button>
+					<button type="submit" id="warningConfirmBtn" class="btn-type">확인</button>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
 
-<div id="popoverModal" class="popover modal-content popover_modal">
+<div id="popoverModal" class="popover modal-content popover-modal">
 	<div class="modal-header">
 		<h2 class="popover_title"></h2>
 	</div>
@@ -1086,8 +1086,8 @@
 
 <div class="row">
 	<div class="col-lg-2 col-md-4 clear">
-		<div class="sch_sel_area">
-			<div class="sch_sel_item">
+		<div class="search-select-wrapper">
+			<div class="search-select-item">
 				<div class="dropdown" id="year">
 					<button type="button" class="dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
 					<ul class="dropdown-menu">
@@ -1097,7 +1097,7 @@
 					</ul>
 				</div>
 			</div>
-			<div class="sch_sel_item">
+			<div class="search-select-item">
 				<div class="dropdown" id="month">
 					<button type="button" class="dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
 					<ul class="dropdown-menu">
@@ -1122,9 +1122,9 @@
 
 
 
-<div class="modal fade alarm_modal" id="spcAlarmModal" tabindex="-1" role="form">
-	<div class="modal-dialog spc_modal_lg">
-		<div class="modal-content spc_modal_content">
+<div class="modal fade alarm-modal" id="spcAlarmModal" tabindex="-1" role="form">
+	<div class="modal-dialog spc-modal-lg">
+		<div class="modal-content spc-modal-content">
 			<form id="spcAlarmForm">
 				<div class="modal-header">
 					<h2>주요 일정 알림 등록</h2>
@@ -1132,28 +1132,28 @@
 				<div class="modal-body">
 					<div class="container-fluid">
 						<div class="row">
-							<div class="col-lg-2 col-md-2 col-sm-3"><span class="input_label">SPC 선택</span></div>
+							<div class="col-lg-2 col-md-2 col-sm-3"><span class="input-label">SPC 선택</span></div>
 
-							<div class="col-lg-10 col-md-10 col-sm-9 px-0 flex_start">
+							<div class="col-lg-10 col-md-10 col-sm-9 px-0 flex-start">
 								<div id="spc_id" class="dropdown"><!--
 								--><button type="button" name="spcName" class="dropdown-toggle" data-toggle="dropdown" data-name="선택" data-value="">선택<span class="caret"></span></button><!--
 								--><ul id="spcList" class="dropdown-menu unused center" role="menu"><li data-name="*spcName*" data-value="*spcId*"><a href="javascript:void(0);" tabindex="-1">*spcName*</a></li></ul><!--
 								--><small class="hidden warning">SPC를 선택해 주세요.</small>
 								</div>
 
-								<!-- <div class="tx_inp_type mr-12">
+								<!-- <div class="text-input-type mr-12">
 									<input type="text" id="spcName" name="spcName" value="" placeholder="입력" class="required" autocomplete="off">
 									<input type="hidden" id="spc_id" name="spc_id">
 									<small class="hidden warning">SPC를 선택해 주세요</small>
 								</div> -->
-								<!-- <button type="button" class="btn_type">검색</button> -->
+								<!-- <button type="button" class="btn-type">검색</button> -->
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-lg-2 col-md-2 col-sm-3">
-								<span class="input_label">알림 항목</span>
+								<span class="input-label">알림 항목</span>
 							</div>
-							<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
+							<div class="col-lg-4 col-md-4 col-sm-9 flex-start px-0">
 								<div class="dropdown placeholder" id="job_type">
 									<button type="button" class="dropdown-toggle required" data-toggle="dropdown" data-name="알림 항목 선택">선택<span class="caret"></span></button>
 									<ul class="dropdown-menu">
@@ -1175,9 +1175,9 @@
 								</div>
 							</div>
 							<div class="col-lg-2 col-md-2 col-sm-3">
-								<span class="input_label">알림 주기</span>
+								<span class="input-label">알림 주기</span>
 							</div>
-							<div class="col-lg-4 col-md-4 col-sm-9 flex_start3 px-0">
+							<div class="col-lg-4 col-md-4 col-sm-9 flex-start3 px-0">
 								<div class="dropdown" id="repeat_yn">
 									<button type="button" class="dropdown-toggle required" data-toggle="dropdown" data-name="점검 선택">선택<span class="caret"></span></button>
 									<ul class="dropdown-menu">
@@ -1185,7 +1185,7 @@
 										<li data-value="N"><a href="javascript:void(0);">일시 알림</a></li>
 									</ul>
 								</div>
-								<div class="tx_inp_type hidden">
+								<div class="text-input-type hidden">
 									<input type="text" id="repeat_interval" name="repeat_interval" placeholder="입력" onkeydown="onlyNum(event);" maxlength="2" autocomplete="off">
 								</div>
 								<div class="dropdown hidden" id="repeat_unit">
@@ -1202,28 +1202,28 @@
 						</div>
 						<div class="row dateField">
 							<div class="col-lg-2 col-md-2 col-sm-3">
-								<span class="input_label">기준 일자</span>
+								<span class="input-label">기준 일자</span>
 							</div>
-							<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
-								<div class="sel_calendar">
+							<div class="col-lg-4 col-md-4 col-sm-9 flex-start px-0">
+								<div class="sel-calendar">
 									<input type="text" id="job_date" name="job_date" class="sel fromDate required w-100" value="" autocomplete="off" readonly placeholder="기준 일자">
 									<small class="hidden warning">기준일을 선택해 주세요</small>
 								</div>
 							</div>
 							<div class="col-lg-2 col-md-2 col-sm-3">
-								<span class="input_label">반복 종료일</span>
+								<span class="input-label">반복 종료일</span>
 							</div>
-							<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
-								<div class="tx_inp_type">
+							<div class="col-lg-4 col-md-4 col-sm-9 flex-start px-0">
+								<div class="text-input-type">
 									<input type="text" id="repeat_end" name="repeat_end" class="required toDate w-100" placeholder="반복 종료일" value="" readonly>
 								</div>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-lg-2 col-md-2 col-sm-3">
-								<span class="input_label">공휴일 처리</span>
+								<span class="input-label">공휴일 처리</span>
 							</div>
-							<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
+							<div class="col-lg-4 col-md-4 col-sm-9 flex-start px-0">
 								<div class="dropdown placeholder" id="repeat_before_after_holiday">
 									<button type="button" class="dropdown-toggle required" data-toggle="dropdown" data-name="공휴일 처리 선택"><span class="caret"></span></button>
 									<ul class="dropdown-menu">
@@ -1236,36 +1236,36 @@
 						</div>
 						<div class="row">
 							<div class="col-lg-2 col-md-2 col-sm-3">
-								<span class="input_label">내용</span>
+								<span class="input-label">내용</span>
 							</div>
-							<div class="col-lg-10 col-md-10 col-sm-9 flex_start px-0">
+							<div class="col-lg-10 col-md-10 col-sm-9 flex-start px-0">
 								<textarea class="textarea" id="description" name="description" placeholder="입력"></textarea>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-lg-2 col-md-2 col-sm-3">
-								<span class="input_label">담당자</span>
+								<span class="input-label">담당자</span>
 							</div>
-							<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
-								<div class="tx_inp_type">
+							<div class="col-lg-4 col-md-4 col-sm-9 flex-start px-0">
+								<div class="text-input-type">
 									<input type="text" id="worker" name="worker" placeholder="입력" maxlength="10">
 									<small class="hidden warning">담당자를 선택해 주세요</small>
 								</div>
 							</div>
 							<div class="col-lg-2 col-md-2 col-sm-3">
-								<span class="input_label">비고</span>
+								<span class="input-label">비고</span>
 							</div>
-							<div class="col-lg-4 col-md-4 col-sm-9 flex_start px-0">
-								<div class="tx_inp_type">
+							<div class="col-lg-4 col-md-4 col-sm-9 flex-start px-0">
+								<div class="text-input-type">
 									<input type="text" id="note" name="note" placeholder="입력" maxlength="50">
 								</div>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-lg-2 col-md-2 col-sm-3">
-								<span class="input_label">알림 설정</span>
+								<span class="input-label">알림 설정</span>
 							</div>
-							<div class="col-lg-4 col-md-4 col-sm-9 flex_start2 px-0">
+							<div class="col-lg-4 col-md-4 col-sm-9 flex-start2 px-0">
 								<div class="dropdown mr-12" id="alarmSetup">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="일시"><span class="caret"></span></button>
 									<ul class="dropdown-menu">
@@ -1275,14 +1275,14 @@
 										<li data-value="직접 설정"><a href="javascript:void(0);">직접 설정</a></li>
 									</ul>
 								</div>
-								<div class="sel_calendar">
+								<div class="sel-calendar">
 									<input type="text" id="alarmDate" name="alarmDate" class="sel disabled" value="" autocomplete="off" readonly>
 								</div>
 							</div>
 							<div class="col-lg-2 col-md-2 col-sm-3">
-								<span class="input_label">알림 시간</span>
+								<span class="input-label">알림 시간</span>
 							</div>
-							<div class="col-lg-4 col-md-4 col-sm-9 flex_start2 px-0">
+							<div class="col-lg-4 col-md-4 col-sm-9 flex-start2 px-0">
 								<div class="dropdown placeholder mr-12" id="alarmTime">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="시간"><span class="caret"></span></button>
 									<ul class="dropdown-menu">
@@ -1291,17 +1291,17 @@
 										</c:forEach>
 									</ul>
 								</div>
-								<div class="tx_inp_type">
+								<div class="text-input-type">
 									<input type="text" id="alarmPhone" name="alarmPhone" placeholder="수신 번호" maxlength="12" onkeydown="onlyNum(event)">
 								</div>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-12 end">
-								<div class="btn_wrap_type02">
-									<button type="button" id="deleteScheduleBtn" class="btn_type04 fl hidden">삭제</button>
-									<button type="button" class="btn_type03" data-dismiss="modal" aria-label="Close">취소</button>
-									<button type="button" id="postScheduleBtn" class="btn_type">등록</button>
+								<div class="btn-wrap-type02">
+									<button type="button" id="deleteScheduleBtn" class="btn-type04 fl hidden">삭제</button>
+									<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close">취소</button>
+									<button type="button" id="postScheduleBtn" class="btn-type">등록</button>
 								</div>
 							</div>
 						</div>
@@ -1313,105 +1313,105 @@
 </div>
 
 <div class="row">
-	<div class="col-lg-3 col-md-4 col-sm-12 sch_left">
+	<div class="col-lg-3 col-md-4 col-sm-12 search-left">
 		<div class="indiv">
-			<div class="flex_wrapper">
+			<div class="flex-wrapper">
 				<h2 class="ntit">입출금 상태</h2>
 			</div>
-			<div class="sch_inp_area narrow">
-				<div class="chk_type c1">
+			<div class="search-input-wrapper narrow">
+				<div class="chk-type c1">
 					<input type="checkbox" id="chk_op01" name="type" value="1" checked>
 					<label for="chk_op01">출금 - 승인 완료</label>
 				</div>
-				<div class="chk_type c2">
+				<div class="chk-type c2">
 					<input type="checkbox" id="chk_op02" name="type" value="2" checked>
 					<label for="chk_op02">출금 - 승인 대기</label>
 				</div>
-				<div class="chk_type c3">
+				<div class="chk-type c3">
 					<input type="checkbox" id="chk_op03" name="type" value="3" checked>
 					<label for="chk_op03">출금 - 승인 중</label>
 				</div>
-				<div class="chk_type c4">
+				<div class="chk-type c4">
 					<input type="checkbox" id="chk_op04" name="type" value="4" checked>
 					<label for="chk_op04">출금 - 가승인</label>
 				</div>
-				<div class="chk_type c5">
+				<div class="chk-type c5">
 					<input type="checkbox" id="chk_op05" name="type" value="5" checked>
 					<label for="chk_op05">출금 - 최종승인</label>
 				</div>
 
-				<div class="flex_wrapper mt40">
+				<div class="flex-wrapper mt40">
 					<h2 class="ntit">주요 일정</h2>
-					<button type="button" id="addAlarmBtn" class="btn_add">알림 등록</button>
+					<button type="button" id="addAlarmBtn" class="btn-add">알림 등록</button>
 				</div>
 
-				<div class="chk_type c6">
+				<div class="chk-type c6">
 					<input type="checkbox" id="chk_op06" name="type" value="6" checked>
 					<label for="chk_op06">이자 지급일</label>
 				</div>
-				<div class="chk_type c7">
+				<div class="chk-type c7">
 					<input type="checkbox" id="chk_op07" name="type" value="7" checked>
 					<label for="chk_op07">보장발전시간 정산일</label>
 				</div>
-				<div class="chk_type c8">
+				<div class="chk-type c8">
 					<input type="checkbox" id="chk_op08" name="type" value="8" checked>
 					<label for="chk_op08">보험 갱신일</label>
 				</div>
-				<div class="chk_type c9">
+				<div class="chk-type c9">
 					<input type="checkbox" id="chk_op09" name="type" value="9" checked>
 					<label for="chk_op09">보험 납부일</label>
 				</div>
-				<div class="chk_type c10">
+				<div class="chk-type c10">
 					<input type="checkbox" id="chk_op10" name="type" value="10" checked>
 					<label for="chk_op10">임대료 지급일</label>
 				</div>
-				<div class="chk_type c11">
+				<div class="chk-type c11">
 					<input type="checkbox" id="chk_op11" name="type" value="11" checked>
 					<label for="chk_op11">대리기관수수료 지급일</label>
 				</div>
-				<div class="chk_type c12">
+				<div class="chk-type c12">
 					<input type="checkbox" id="chk_op12" name="type" value="12" checked>
 					<label for="chk_op12">대출상환 만기일</label>
 				</div>
 			</div>
-			<div class="sch_inp_area flex_wrapper">
+			<div class="search-input-wrapper flex-wrapper">
 				<h2 class="ntit">SPC</h2>
 				<span class="desc">spc 이름을 입력해 주세요.</span>
 			</div>
-			<div class="tx_inp_type"><input type="text" id="searchName" name="searchName" placeholder="입력"></div>
+			<div class="text-input-type"><input type="text" id="searchName" name="searchName" placeholder="입력"></div>
 		</div>
 	</div>
 	<div class="col-lg-9 col-md-8 col-sm-12">
-		<div class="indiv pd_type">
+		<div class="indiv indiv-type">
 			<div class="schedule_area">
-				<div class="sch_top_info clear">
-					<div class="fl sch_btn"><!--
-					--><button type="button" class="btn_type03 active">오늘</button><!--
-					--><button type="button" class="btn_prev_mon">prev</button><!--
-					--><button type="button" class="btn_next_mon">next</button><!--
-					--><button type="button" id="detailModalTrigger" class="btn_type03" onclick="$('#detailInfoModal').toggleClass('active')"></button><!--
+				<div class="search-top-info clear">
+					<div class="fl search-btn"><!--
+					--><button type="button" class="btn-type03 active">오늘</button><!--
+					--><button type="button" class="btn-prev-month">prev</button><!--
+					--><button type="button" class="btn-next-month">next</button><!--
+					--><button type="button" id="detailModalTrigger" class="btn-type03" onclick="$('#detailInfoModal').toggleClass('active')"></button><!--
 				--></div>
-					<div class="dropdown_modal modal-dialog" id="detailInfoModal">
+					<div class="dropdown-modal modal-dialog" id="detailInfoModal">
 						<div class="modal-content spc-detail-content">
 							<div class="modal-header">
 								<h2 id="modalTitle" class="fl"></h2>
-								<!-- <a href="#" class="btn_type02 fr">상세보기</a> -->
+								<!-- <a href="#" class="btn-type02 fr">상세보기</a> -->
 							</div>
 							<div class="modal-body">
 								<ul class="alarm-list"></ul>
 							</div>
-							<div class="btn_wrap_type05">
-								<button type="button" id="confirmBtn" class="btn_type" data-dismiss="modal" data-target="#detailInfoModal">확인</button>
+							<div class="btn-wrap-type05">
+								<button type="button" id="confirmBtn" class="btn-type" data-dismiss="modal" data-target="#detailInfoModal">확인</button>
 							</div>
 						</div>
 					</div>
-					<div class="btn_wrap_type02 btn_wrap_fixed"><!--
-					--><a href="/spc/transactionHistory.do" class="btn btn_type03 mr-12" id="writeBtn">입출금 관리 내역</a><!--
-					--><a href="/spc/withdrawReqWrite.do" class="btn btn_type" id="requestBtn">출금 요청서 신청</a><!--
-					--><a href="/spc/withdrawReqStatus.do" class="btn btn_type" id="requestBtnReview">출금 요청서 목록</a><!--
+					<div class="btn-wrap-type02 btn-wrap-fixed"><!--
+					--><a href="/spc/transactionHistory.do" class="btn btn-type03 mr-12" id="writeBtn">입출금 관리 내역</a><!--
+					--><a href="/spc/withdrawReqWrite.do" class="btn btn-type" id="requestBtn">출금 요청서 신청</a><!--
+					--><a href="/spc/withdrawReqStatus.do" class="btn btn-type" id="requestBtnReview">출금 요청서 목록</a><!--
 					--></div>
 				</div>
-				<div class="sch_btm_area">
+				<div class="search-bottom-wrapper">
 					<table id="calendar">
 						<thead>
 							<tr>

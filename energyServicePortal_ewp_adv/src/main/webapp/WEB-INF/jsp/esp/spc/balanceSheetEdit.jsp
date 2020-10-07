@@ -46,7 +46,7 @@
 			}, setUploadAfter, thisId);
 		});
 
-		$('button.btn_close').on('click', function() {
+		$('button.btn-close').on('click', function() {
 			setDefaultFile($(this));
 		});
 
@@ -223,11 +223,11 @@
 					if (index != 0) {
 						let tr = $('<tr>').addClass('interestTr');
 						tr.append('<th>차입금 상환(' + String.fromCharCode(Number(index) + 65) + ')</th>');
-						tr.append('<td>').find('td').append('<div>').find('div').addClass('tx_inp_type').addClass('read');
-						tr.find('div.tx_inp_type').append('<input type="text" id="loan_' + index + '" name="loan_' + index + '" placeholder="자동 입력" readonly>');
+						tr.append('<td>').find('td').append('<div>').find('div').addClass('text-input-type').addClass('read');
+						tr.find('div.text-input-type').append('<input type="text" id="loan_' + index + '" name="loan_' + index + '" placeholder="자동 입력" readonly>');
 						tr.append('<th>이자 비용(' + String.fromCharCode(Number(index) + 65) + ')</th>');
-						tr.append('<td>').find('td:eq(1)').append('<div>').find('div').addClass('tx_inp_type').addClass('read');
-						tr.find('div:eq(1).tx_inp_type').append('<input type="text" id="interestCost_' + index + '" name="interestCost_' + index + '" placeholder="자동 입력" readonly>');
+						tr.append('<td>').find('td:eq(1)').append('<div>').find('div').addClass('text-input-type').addClass('read');
+						tr.find('div:eq(1).text-input-type').append('<input type="text" id="interestCost_' + index + '" name="interestCost_' + index + '" placeholder="자동 입력" readonly>');
 
 						$('tr.interestTr').eq($('tr.interestTr').length - 1).after(tr);
 					}
@@ -264,12 +264,12 @@
 		if(data.files.length > 0) {
 			let prop = $('#'+propName);
 			prop.parents('tr').find('label').addClass("hidden");
-			prop.parents('tr').find('.btn_close').removeClass("hidden");
+			prop.parents('tr').find('.btn-close').removeClass("hidden");
 
 
 			let linkUrl = apiHost + '/files/download/'+data.files[0].fieldname+'?oid='+oid + '&orgFilename' + data.files[0].originalname;
 			let linkTag = $('<a>').prop('href', linkUrl).html(data.files[0].originalname);
-			let pTag = $('<p>').addClass('tx_file').append(linkTag);
+			let pTag = $('<p>').addClass('text-file').append(linkTag);
 			let inpOgin = $('<input>').prop('type', 'hidden').prop('id', propName + '_originalname').prop('name', propName + '_originalname').val(data.files[0].originalname);
 			let inpField = $('<input>').prop('type', 'hidden').prop('id', propName + '_fieldname').prop('name', propName + '_fieldname').val(data.files[0].fieldname);
 			prop.parent().append(pTag).append(inpOgin).append(inpField);
@@ -278,9 +278,9 @@
 
 	const setDefaultFile = function(obj) {
 		let tr = obj.parents('tr.th_span');
-		tr.find('p.tx_file').remove();
+		tr.find('p.text-file').remove();
 		tr.find('label').show();
-		tr.find('button.btn_close').addClass("hidden");
+		tr.find('button.btn-close').addClass("hidden");
 
 		tr.find('input[name$="_originalname"]').val('');
 		tr.find('input[name$="_fieldname"]').val('');
@@ -344,8 +344,8 @@
 </div>
 <div class="row">
 	<div class="col-12">
-		<div class="indiv bal_edit">
-			<div class="spc_bal_post">
+		<div class="indiv balance-edit">
+			<div class="spc-balance-post">
 				<table>
 					<colgroup>
 						<col style="width:50%">
@@ -369,39 +369,39 @@
 			</div>
 			<div class="clear mt30">
 				<div class="fl">
-					<span class="tx_tit">기준</span>
-					<div class="sa_select">
+					<span class="tx-tit">기준</span>
+					<div class="sa-select">
 						<div class="dropdown" id="year">
 							<button type="button" class="dropdown-toggle w5" data-toggle="dropdown">
 <%--								${fn:substring(param.yyyymm, 0, 4)}년--%>
 								<span class="caret"></span>
 							</button>
-							<ul class="dropdown-menu chk_type" role="menu">
+							<ul class="dropdown-menu chk-type" role="menu">
 <%--								<li><a href="javascript:void(0);">${fn:substring(param.yyyymm, 0, 4)}년</a></li>--%>
 							</ul>
 						</div>
 					</div>
-					<div class="sa_select">
+					<div class="sa-select">
 						<div class="dropdown" id="month">
 							<button type="button" class="dropdown-toggle w8" data-toggle="dropdown">
 <%--								${fn:substring(param.yyyymm, 4, 6)}월--%>
 								<span class="caret"></span>
 							</button>
-							<ul class="dropdown-menu chk_type" role="menu">
+							<ul class="dropdown-menu chk-type" role="menu">
 <%--								<li><a href="javascript:void(0);">${fn:substring(param.yyyymm, 4, 6)}월</a></li>--%>
 							</ul>
 						</div>
 					</div>
 				</div>
 				<div class="fr">
-					<p class="tx_type fl">단위:원</p>
-					<div class="chk_type fl">
+					<p class="text-type fl">단위:원</p>
+					<div class="chk-type fl">
 						<input type="checkbox" id="noteDown" name="noteDown" value="1">
 						<label for="noteDown">수기입력 활성화</label>
 					</div>
 				</div>
 			</div>
-			<div class="spc_tbl_row st_edit">
+			<div class="spc-table-row st-edit">
 				<table id="balanceTable">
 					<colgroup>
 						<col style="width:15%">
@@ -412,14 +412,14 @@
 					<tr>
 						<th>전력 판매 대금</th>
 						<td>
-							<div class="tx_inp_type read">
+							<div class="text-input-type read">
 								<input type="text" id="siteBilling" name="siteBilling" value="" placeholder="자동 입력"
 								       readonly>
 							</div>
 						</td>
 						<th>REC 매매대금</th>
 						<td>
-							<div class="tx_inp_type edit">
+							<div class="text-input-type edit">
 								<input type="text" id="siteMoney" name="siteMoney" value="" placeholder="직접 입력">
 							</div>
 						</td>
@@ -427,13 +427,13 @@
 					<tr class="interestTr">
 						<th>차임금 상환(A)</th>
 						<td>
-							<div class="tx_inp_type read">
+							<div class="text-input-type read">
 								<input type="text" id="loan_0" name="loan_0" value="" placeholder="자동 입력" readonly>
 							</div>
 						</td>
 						<th>이자 비용(A)</th>
 						<td>
-							<div class="tx_inp_type read">
+							<div class="text-input-type read">
 								<input type="text" id="interestCost_0" name="interestCost_0" value="" placeholder="자동 입력" readonly>
 							</div>
 						</td>
@@ -441,13 +441,13 @@
 					<tr class="service_chargeTr">
 						<th>대리기관 수수료</th>
 						<td>
-							<div class="tx_inp_type read">
+							<div class="text-input-type read">
 								<input type="text" id="conversionCharge_0" name="conversionCharge_0" value="" placeholder="자동 입력" readonly>
 							</div>
 						</td>
 						<th>관리 운영 수수료</th>
 						<td>
-							<div class="tx_inp_type read">
+							<div class="text-input-type read">
 								<input type="text" id="managementCharge_0" name="managementCharge_0" value="" placeholder="자동 입력" readonly>
 							</div>
 						</td>
@@ -455,13 +455,13 @@
 					<tr>
 						<th>법인세</th>
 						<td>
-							<div class="tx_inp_type edit">
+							<div class="text-input-type edit">
 								<input type="text" id="corporateTax" name="corporateTax" value="" placeholder="직접 입력">
 							</div>
 						</td>
 						<th>부가세</th>
 						<td>
-							<div class="tx_inp_type edit">
+							<div class="text-input-type edit">
 								<input type="text" id="additionalTax" name="additionalTax" placeholder="직접 입력">
 							</div>
 						</td>
@@ -469,13 +469,13 @@
 					<tr>
 						<th>임대료</th>
 						<td>
-							<div class="tx_inp_type read">
+							<div class="text-input-type read">
 								<input type="text" id="rental" name="rental" placeholder="자동 계산" readonly>
 							</div>
 						</td>
 						<th>기타 비용</th>
 						<td>
-							<div class="tx_inp_type edit">
+							<div class="text-input-type edit">
 								<input type="text" id="expense" name="expense" placeholder="직접 입력">
 							</div>
 						</td>
@@ -483,13 +483,13 @@
 					<tr>
 						<th>현금 유입 합계</th>
 						<td>
-							<div class="tx_inp_type read">
+							<div class="text-input-type read">
 								<input type="text" id="inflowOfCash" name="inflowOfCash" placeholder="자동 입력" readonly>
 							</div>
 						</td>
 						<th>현금 유출 합계</th>
 						<td>
-							<div class="tx_inp_type read">
+							<div class="text-input-type read">
 								<input type="text" id="outflowOfCash" name="outflowOfCash" placeholder="자동 입력" readonly>
 							</div>
 						</td>
@@ -497,42 +497,42 @@
 					<tr>
 						<th>기말 현금</th>
 						<td>
-							<div class="tx_inp_type read">
+							<div class="text-input-type read">
 								<input type="text" id="endOfTerm" name="endOfTerm" placeholder="자동 입력" readonly>
 							</div>
 						</td>
 						<th>기말 현금흐름</th>
 						<td>
-							<div class="tx_inp_type read">
+							<div class="text-input-type read">
 								<input type="text" id="endOfTermFlow" name="endOfTermFlow" placeholder="자동 입력" readonly>
 							</div>
 						</td>
 					</tr>
 					<tr class="th_span">
-						<th>손익 계산서 <label for="income" class="btn_add fr">추가</label></th>
+						<th>손익 계산서 <label for="income" class="btn-add fr">추가</label></th>
 						<td colspan="2">
-							<input type="file" id="income" name="income" class="uploadBtn hidden">
-							<p class="tx_file">
+							<input type="file" id="income" name="income" class="btn-upload hidden">
+							<p class="text-file">
 								<a href="javascript:void(0);" class="filedown"></a>
 							</p>
 						</td>
-						<td><button type="button" class="btn_close hidden">삭제</button></td>
+						<td><button type="button" class="btn-close hidden">삭제</button></td>
 					</tr>
 					<tr class="th_span">
-						<th>세무 조정 계산<label for="taxAdjustment" class="btn_add fr">추가</label></th>
+						<th>세무 조정 계산<label for="taxAdjustment" class="btn-add fr">추가</label></th>
 						<td colspan="2">
-							<input type="file" id="taxAdjustment" name="taxAdjustment" class="uploadBtn hidden">
-							<p class="tx_file">
+							<input type="file" id="taxAdjustment" name="taxAdjustment" class="btn-upload hidden">
+							<p class="text-file">
 								<a href="javascript:void(0);" class="filedown"></a>
 							</p>
 						</td>
-						<td><button type="button" class="btn_close hidden">삭제</button></td>
+						<td><button type="button" class="btn-close hidden">삭제</button></td>
 					</tr>
 				</table>
 			</div>
-			<div class="btn_wrap_type02 mt30">
-				<button type="button" class="btn_type03" onclick="list()">목록</button>
-				<button type="button" class="btn_type" onclick="register()">수정</button>
+			<div class="btn-wrap-type02 mt30">
+				<button type="button" class="btn-type03" onclick="list()">목록</button>
+				<button type="button" class="btn-type" onclick="register()">수정</button>
 			</div>
 		</div>
 	</div>

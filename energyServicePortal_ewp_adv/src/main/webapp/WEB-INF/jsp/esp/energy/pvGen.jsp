@@ -6,45 +6,45 @@
 	</div>
 </div>
 <div class="row content-wrapper">
-	<div class="col-lg-2 col-md-4 col-sm-6 header_drop_area">
+	<div class="col-lg-2 col-md-4 col-sm-6 dropdown-wrapper">
 		<div class="dropdown" id="siteList">
 			<button type="button" class="dropdown-toggle w-100" data-toggle="dropdown" data-name="<fmt:message key="renewablesgen.3.multipleselection" />"><fmt:message key="renewablesgen.1.select" /><span class="caret"></span></button>
-			<ul class="dropdown-menu chk_type"></ul>
+			<ul class="dropdown-menu chk-type"></ul>
 		</div>
 	</div>
 </div>
 <div class="row">
 	<div class="col-lg-2 col-md-4 col-sm-6">
-		<div class="indiv pv_chart">
+		<div class="indiv chart-pv">
 			<h2 class="ntit"><fmt:message key="renewablesgen.2.solarenergy" /></h2>
-			<div class="value_area"></div>
+			<div class="value-wrapper"></div>
 		</div>
 	</div>
 	<div class="col-lg-10 col-md-8 col-sm-6">
-		<div class="indiv pv_chart">
-			<div class="flex_wrapper">
-				<div class="chart_top">
-					<div id="deviceType" class="flex_group">
-						<span class="tx_tit"><fmt:message key="renewablesgen.3.measureddata" /></span>
-						<div class="sa_select">
+		<div class="indiv chart-pv">
+			<div class="flex-wrapper">
+				<div class="chart-top">
+					<div id="deviceType" class="flex-group">
+						<span class="tx-tit"><fmt:message key="renewablesgen.3.measureddata" /></span>
+						<div class="sa-select">
 							<div class="dropdown">
 								<button type="button" class="dropdown-toggle w7" data-toggle="dropdown" data-name="<fmt:message key="renewablesgen.3.multipleselection" />"><fmt:message key="renewablesgen.3.multipleselection" /><span class="caret"></span></button>
-								<div class="dropdown-menu chk_type"><!--
-								--><ul class="dropdown_cov clear selectDevices"></ul><!--
-								 --><div class="li_btn_bx clear">
+								<div class="dropdown-menu chk-type"><!--
+								--><ul class="dropdown-cov clear selectDevices"></ul><!--
+								 --><div class="li-btn-box clear">
 										<div class="fl"><!--
-										--><button type="button" class="btn_type03">모두 선택</button><!--
-										--><button type="button" class="btn_type03">모두 해제</button><!--
+										--><button type="button" class="btn-type03">모두 선택</button><!--
+										--><button type="button" class="btn-type03">모두 해제</button><!--
 									--></div>
-										<div class="fr"><button type="button" class="btn_type">적용</button></div>
+										<div class="fr"><button type="button" class="btn-type">적용</button></div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-					<div class="flex_group period">
-						<span class="tx_tit">기간</span>
-						<div class="sa_select">
+					<div class="flex-group period">
+						<span class="tx-tit">기간</span>
+						<div class="sa-select">
 							<div class="dropdown" id="period">
 								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key="renewablesgen.3.today" />"><fmt:message key="renewablesgen.3.today" /><span class="caret"></span></button>
 								<ul class="dropdown-menu">
@@ -56,17 +56,17 @@
 							</div>
 						</div>
 					</div>
-					<div class="flex_group duration" id="dateArea">
-						<span class="tx_tit">날짜입력</span>
-						<div class="sel_calendar">
+					<div class="flex-group duration" id="dateArea">
+						<span class="tx-tit">날짜입력</span>
+						<div class="sel-calendar">
 							<input type="text" id="fromDate" class="sel fromDate" value="" autocomplete="off" readonly>
 							<em></em>
 							<input type="text" id="toDate" class="sel toDate" value="" autocomplete="off" readonly>
 						</div>
 					</div>
-					<div class="flex_group unit" id="cycle">
-						<span class="tx_tit">단위</span>
-						<div class="sa_select">
+					<div class="flex-group unit" id="cycle">
+						<span class="tx-tit">단위</span>
+						<div class="sa-select">
 							<div class="dropdown" id="interval">
 								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
 									선택 <span class="caret"></span>
@@ -79,11 +79,11 @@
 								</ul>
 							</div>
 						</div>
-						<button type="button" class="btn_type" id="renderBtn"><fmt:message key="renewablesgen.3.update" /></button>
+						<button type="button" class="btn-type" id="renderBtn"><fmt:message key="renewablesgen.3.update" /></button>
 					</div>
 				</div>
-				<div class="end"><span class="tx_tit">그래프</span><!--
-				--><div class="sa_select">
+				<div class="end"><span class="tx-tit">그래프</span><!--
+				--><div class="sa-select">
 						<div class="dropdown" id="chartStyle"><!--
 							--><button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="each"><fmt:message key="renewablesgen.3.individualbar" /><span class="caret"></span></button><!--
 						--><ul class="dropdown-menu"><!--
@@ -97,7 +97,7 @@
 			</div>
 			<div class="row hidden">
 				<div class="inchart">
-					<p class="tx_time"></p>
+					<p class="text-time"></p>
 					<div id="chart2"></div>
 				</div>
 			</div>
@@ -105,21 +105,21 @@
 	</div>
 </div>
 
-<div class="row pv_chart_table hidden">
+<div class="row chart-pv-table hidden">
 	<div class="col-12">
-		<div class="indiv pv_chart table_box">
-			<div class="tbl_top clear">
+		<div class="indiv chart-pv table-box">
+			<div class="table-top clear">
 				<h2 class="ntit fl"><fmt:message key="renewablesgen.4.powergenerationchart" /></h2>
 				<ul class="fr">
-					<li><span class="tbl_save_bx"> <a href="#;" class="save_btn"><fmt:message key="renewablesgen.4.dataextracts" /></a></li>
-					<li><a href="#;" class="fold_btn">표접기</a></li>
+					<li><span class="table-save-box"> <a href="#;" class="btn-save"><fmt:message key="renewablesgen.4.dataextracts" /></a></li>
+					<li><a href="#;" class="btn-fold">표접기</a></li>
 				</ul>
 			</div>
-			<div class="tbl_wrap">
-				<div class="fold_div" id="pc_use">
+			<div class="table-wrapper">
+				<div class="fold-box" id="table-desktop">
 					<!-- PC 버전용 테이블 -->
-					<div class="chart_table">
-						<table class="pc_use">
+					<div class="chart-table">
+						<table class="table-desktop">
 							<thead>
 								<tr>
 									<th>2020-08-01</th>
@@ -191,8 +191,8 @@
 		siteList(); //사이트 조회
 
 		//전체 선택/전체 해제
-		$('#deviceType button.btn_type03').on('click', function (e) {
-			let idx = $('#deviceType button.btn_type03').index($(this));
+		$('#deviceType button.btn-type03').on('click', function (e) {
+			let idx = $('#deviceType button.btn-type03').index($(this));
 			if (idx == 0) {
 				$(':checkbox[name="device"]').prop('checked', true);
 			} else {
@@ -206,16 +206,16 @@
 			fetchGenData();
 		});
 
-		$('.save_btn').on('click', function (e) {
+		$('.btn-save').on('click', function (e) {
 			let excelName = '발전이력';
-			let $val = $('#pc_use').find('tbody');
+			let $val = $('#table-desktop').find('tbody');
 			let cnt = $val.length;
 
 			if (cnt < 1) {
 				alert('다운받을 데이터가 없습니다.');
 			} else {
 				if (confirm('엑셀로 저장하시겠습니까?')) {
-					tableToExcel('pc_use', excelName, e);
+					tableToExcel('table-desktop', excelName, e);
 				}
 			}
 		});
@@ -244,7 +244,7 @@
 	const device = function () {
 		$('#devices .dropdown-toggle').text().replace(/<[^>]+>/g, '복수 선택');
 		if ($(':checkbox[name="site"]:checked').length > 0) {
-			$('#deviceType .sec_li_bx').remove();
+			$('#deviceType .sec-li-box').remove();
 			$(':checkbox[name="site"]:checked').each(function () {
 				let sid = $(this).val()
 				let sNm = $(this).next('label').text();
@@ -260,9 +260,9 @@
 					success: function (result) {
 						let devices = result;
 						if (devices.length > 0) {
-							let siteGrp = $('<li>').addClass('sec_li_bx');
+							let siteGrp = $('<li>').addClass('sec-li-box');
 							siteGrp.append('<p>');
-							siteGrp.find('p').addClass('tx_li_tit').text(sNm);
+							siteGrp.find('p').addClass('tx-li-title').text(sNm);
 							siteGrp.append('<ul>');
 
 							let chargeArr = new Array();
@@ -479,7 +479,7 @@
 	}
 
 	function drawPage() {
-		$('table.pc_use tbody').empty();
+		$('table.table-desktop tbody').empty();
 		$('.no-data').addClass('hidden');
 		let sDate = $('#fromDate').val().replace(/-/g, '');
 		let eDate = $('#toDate').val().replace(/-/g, '');
@@ -545,9 +545,9 @@
 		let totalArr = new Array();
 		if (interval == '15min' || interval == 'hour') {
 			let dateVal = '';
-			let tableTemp = $('<div class="chart_table">').append('<table class="pc_use">');
+			let tableTemp = $('<div class="chart-table">').append('<table class="table-desktop">');
 			let tr = $('<tr>');
-			$('div.chart_table').remove();
+			$('div.chart-table').remove();
 
 			$.each(standard, function (i, el) {
 				let th = $('<th>');
@@ -592,10 +592,10 @@
 							color++;
 						}
 					});
-					$('div.fold_div').append(tableTemp);
+					$('div.fold-box').append(tableTemp);
 
 					//값 초기화.
-					tableTemp = $('<div class="chart_table">').append('<table class="pc_use">');
+					tableTemp = $('<div class="chart-table">').append('<table class="table-desktop">');
 					tr = $('<tr>');
 					th = $('<th>');
 					dateVal = el.substring(0, 8);
@@ -614,9 +614,9 @@
 			});
 		} else if (interval == 'day') {
 			let dateVal = '';
-			let tableTemp = $('<div class="chart_table">').append('<table class="pc_use">');
+			let tableTemp = $('<div class="chart-table">').append('<table class="table-desktop">');
 			let tr = $('<tr>');
-			$('div.chart_table').remove();
+			$('div.chart-table').remove();
 
 			$.each(standard, function (i, el) {
 				let th = $('<th>');
@@ -656,7 +656,7 @@
 								color++;
 							}
 						});
-						$('div.fold_div').append(tableTemp);
+						$('div.fold-box').append(tableTemp);
 					}
 				} else if (dateVal != el.substring(0, 6) || standard.length == (i + 1)) {
 					if (standard.length == (i + 1)) {
@@ -691,10 +691,10 @@
 							color++;
 						}
 					});
-					$('div.fold_div').append(tableTemp);
+					$('div.fold-box').append(tableTemp);
 
 					//값 초기화.
-					tableTemp = $('<div class="chart_table">').append('<table class="pc_use">');
+					tableTemp = $('<div class="chart-table">').append('<table class="table-desktop">');
 					tr = $('<tr>');
 					th = $('<th>');
 					dateVal = el.substring(0, 6);
@@ -712,9 +712,9 @@
 			});
 		} else if (interval == 'month') {
 			let dateVal = '';
-			let tableTemp = $('<div class="chart_table">').append('<table class="pc_use">');
+			let tableTemp = $('<div class="chart-table">').append('<table class="table-desktop">');
 			let tr = $('<tr>');
-			$('div.chart_table').remove();
+			$('div.chart-table').remove();
 
 			$.each(standard, function (i, el) {
 				let th = $('<th>');
@@ -754,7 +754,7 @@
 								color++;
 							}
 						});
-						$('div.fold_div').append(tableTemp);
+						$('div.fold-box').append(tableTemp);
 					}
 				} else if (dateVal != el.substring(0, 4) || standard.length == (i + 1)) {
 					if (standard.length == (i + 1)) {
@@ -788,10 +788,10 @@
 							color++;
 						}
 					});
-					$('div.fold_div').append(tableTemp);
+					$('div.fold-box').append(tableTemp);
 
 					//값 초기화.
-					tableTemp = $('<div class="chart_table">').append('<table class="pc_use">');
+					tableTemp = $('<div class="chart-table">').append('<table class="table-desktop">');
 					tr = $('<tr>');
 					th = $('<th>');
 					dateVal = el.substring(0, 4);
@@ -1074,8 +1074,8 @@
 		chartDraw(standard, seriesData);
 
 		//발전량 합계
-		$('.value_area').empty();
-		$('table.pc_use').parents('.pv_chart_table').removeClass("hidden");
+		$('.value-wrapper').empty();
+		$('table.table-desktop').parents('.chart-pv-table').removeClass("hidden");
 		if (seriesData.length > 0) {
 			let totalArr = new Array();
 			$.each(seriesData, function (i, el) {
@@ -1126,21 +1126,21 @@
 			});
 
 			$.each(totalArr, function (i, el) {
-				let totTitle = '<h3 class="value_tit">' + el.name + '</h3>';
+				let totTitle = '<h3 class="value-title">' + el.name + '</h3>';
 				let refined = displayNumberFixedDecimal(el.totVal, 'Wh');
-				totTitle += '<p class="value_num"><span class="num">' + refined[0] + '</span>' + refined[1] + '</p>';
-				$('.value_area').append(totTitle);
+				totTitle += '<p class="value-num"><span class="num">' + refined[0] + '</span>' + refined[1] + '</p>';
+				$('.value-wrapper').append(totTitle);
 			});
 		}
 
 		const now = new Date();
-		$('.tx_time').text(now.format('yyyy-MM-dd HH:mm:ss'));
+		$('.text-time').text(now.format('yyyy-MM-dd HH:mm:ss'));
 	}
 
 	const chartDraw = function (standard, seriesData) {
 		let chart = $('#chart2').highcharts();
 		$('#chart2').parents(".row").removeClass("hidden");
-		$(".indiv.pv_chart").addClass("fixed");
+		$(".indiv.chart-pv").addClass("fixed");
 
 		if (chart) {
 			chart.destroy();
