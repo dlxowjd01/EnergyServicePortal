@@ -183,6 +183,7 @@ bootstrap default
 	--encored-logo: url("/img/logo_encored_wh.svg");
 	--iderms-logo: url("/img/logo_iderms.svg");
 	--spower-logo: url("/img/logo_spower.svg");
+	--wpsolar-logo: url("/img/logo_wpsolar.svg");
 	--spower-logo-wh: url("/img/logo_spower_wh.svg");
 
 }
@@ -2004,6 +2005,18 @@ nav .nav-brand.spower a {
 }
 
 nav .nav-brand.spower a:hover {
+	opacity: 0.7;
+}
+
+nav .nav-brand.wpsolar a {
+	width: 130px;
+	height: 100%;
+	background: var(--wpsolar-logo) no-repeat -25px 12px;
+	background-size: 182px 36px;
+	font-size: 0;
+}
+
+nav .nav-brand.wpsolar a:hover {
 	opacity: 0.7;
 }
 

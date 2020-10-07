@@ -961,7 +961,7 @@
 					let tempVal = displayNumberFixedUnit(point.y, 'Wh', 'kWh', 0)[0];
 
 					return s + '<br/><span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + tempVal + suffix;
-				}, '<b>' + this.x + '일 </b>');
+				}, '<b>' + this.x + '월 </b>');
 			},
 			shared: true,
 			borderColor: 'none',

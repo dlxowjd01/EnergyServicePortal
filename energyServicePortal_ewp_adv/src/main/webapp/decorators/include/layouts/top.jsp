@@ -7,8 +7,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <c:choose>
-	<c:when test="${pageContext.request.serverName eq 'spower.iderms.ai' or pageContext.request.serverName eq '13.114.199.169' or pageContext.request.serverName eq 'localhost'}">
+	<c:when test="${fn:contains(pageContext.request.serverName, 'spower')}">
 		<title>S-POWER iDERMS</title>
+	</c:when>
+	<c:when test="${fn:contains(pageContext.request.serverName, 'wpsolar')}">
+		<title>WpSolar iDERMS</title>
 	</c:when>
 	<c:otherwise>
 		<title>Encored iDERMS</title>
@@ -103,9 +106,19 @@
 
 
 	$(document).ready(function () {
-		<c:if test="${!fn:contains(pageContext.request.serverName, 'spower')}">
-			changeFavicon('/resources/favicon_encored.ico');
-		</c:if>
+
+		<c:choose>
+			<c:when test="${fn:contains(pageContext.request.serverName, 'spower')}">
+		changeFavicon('/resources/favicon.ico');
+			</c:when>
+			<c:when test="${fn:contains(pageContext.request.serverName, 'wpsolar')}">
+		changeFavicon('/resources/favicon_wpsolar.svg');
+			</c:when>
+			<c:otherwise>
+		changeFavicon('/resources/favicon_encored.ico');
+			</c:otherwise>
+		</c:choose>
+
 
 		$('#loadingCircle').hide();
 

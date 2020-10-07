@@ -1201,28 +1201,30 @@ const searchSite = async function () {
 								refineList[siteIdx]['forecast'] = '-';
 							}
 						}
-					} else if (!isEmpty(apiData) && index === 3) {
+					} else if (index === 3) {
 						let temperature = '-'
 							, humidity = '-';
-						//시간 역순으로 정렬한 다음에 Observed 값을 만나면 그값이 쓰는값
-						if (!isEmpty(apiData) && !isEmpty(apiData[siteId])) {
-							const weatherData = apiData[siteId];
-							weatherData.sort((a, b) => {
-								if (a.basetime > b.basetime) {return -1;}
-								if (a.basetime < b.basetime) {return 1;}
-								return 0;
-							});
+						if (!isEmpty(apiData)) {
+							//시간 역순으로 정렬한 다음에 Observed 값을 만나면 그값이 쓰는값
+							if (!isEmpty(apiData) && !isEmpty(apiData[siteId])) {
+								const weatherData = apiData[siteId];
+								weatherData.sort((a, b) => {
+									if (a.basetime > b.basetime) {return -1;}
+									if (a.basetime < b.basetime) {return 1;}
+									return 0;
+								});
 
-							const observedData = weatherData.find(weather => weather.observed === true);
-							if (!isEmpty(observedData)) {
-								temperature = isEmpty(observedData['temperature']) ? '-' : observedData['temperature'];
-								humidity = isEmpty(observedData['humidity']) ? '-' : observedData['humidity'];
+								const observedData = weatherData.find(weather => weather.observed === true);
+								if (!isEmpty(observedData)) {
+									temperature = isEmpty(observedData['temperature']) ? '-' : observedData['temperature'];
+									humidity = isEmpty(observedData['humidity']) ? '-' : observedData['humidity'];
+								}
 							}
 						}
 
 						refineList[siteIdx]['temperature'] = temperature + ' °C';
 						refineList[siteIdx]['humidity'] = humidity + ' %'
-					} else if (!isEmpty(apiData) && index === 4) {
+					} else if (index === 4) {
 						let alarmWarning = 0, alarmError = 0;
 
 						if (!isEmpty(apiData)) {

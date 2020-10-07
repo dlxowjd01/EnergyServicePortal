@@ -17,8 +17,11 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="user-scalable=yes, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width" />
 	<c:choose>
-		<c:when test="${pageContext.request.serverName eq 'spower.iderms.ai'}">
+		<c:when test="${fn:contains(pageContext.request.serverName, 'spower')}">
 			<title>S-POWER iDERMS</title>
+		</c:when>
+		<c:when test="${fn:contains(pageContext.request.serverName, 'wpsolar')}">
+			<title>Wpsolar iDERMS</title>
 		</c:when>
 		<c:otherwise>
 			<title>Encored iDERMS</title>
@@ -68,7 +71,6 @@
 				$(this).val($(this).val().replace(replaceNotFullKorean, ''));
 			});
 
-
 			const changeFavicon = link => {
 				let $favicon = document.querySelector('link[rel="icon"]');
 				if ($favicon !== null) {
@@ -81,9 +83,17 @@
 				}
 			};
 
-			<c:if test="${!fn:contains(pageContext.request.serverName, 'spower')}">
-			changeFavicon('/resources/favicon_encored.ico');
-			</c:if>
+			<c:choose>
+				<c:when test="${fn:contains(pageContext.request.serverName, 'wpsolar')}">
+					changeFavicon('/resources/favicon-wpsolar.svg');
+				</c:when>
+				<c:when test="${fn:contains(pageContext.request.serverName, 'spower')}">
+					changeFavicon('/resources/favicon.ico');
+				</c:when>
+				<c:otherwise>
+					changeFavicon('/resources/favicon_encored.ico');
+				</c:otherwise>
+			</c:choose>
 
 			$("#loginUserId").val("");
 			$("#loginUserPw").val("");
@@ -448,6 +458,9 @@
 				<c:when test="${fn:contains(pageContext.request.serverName, 'spower')}">
 					<div class="nav-brand spower"><a href="#">Spower</a></div>
 				</c:when>
+				<c:when test="${fn:contains(pageContext.request.serverName, 'wpsolar')}">
+					<div class="nav-brand wpsolar"><a href="#">WpSolar</a></div>
+				</c:when>
 				<c:otherwise>
 					<div class="nav-brand"><a href="#">Encored</a></div>
 				</c:otherwise>
@@ -460,6 +473,9 @@
 				<c:choose>
 					<c:when test="${fn:contains(pageContext.request.serverName, 'spower')}">
 						<img src="../img/logo_login_spower.svg" alt="login modal spower logo" class="login-logo center"/>
+					</c:when>
+					<c:when test="${fn:contains(pageContext.request.serverName, 'wpsolar')}">
+						<img src="../img/logo_login_wpsolar.svg" alt="login modal wpsolar logo" class="login-logo center"/>
 					</c:when>
 					<c:otherwise>
 						<img src="../img/logo_iderms.svg" alt="login modal iderms logo" class="login-logo center"/>
