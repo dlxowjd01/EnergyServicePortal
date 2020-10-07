@@ -129,14 +129,6 @@
 			}
 		});
 
-	$(document).ajaxSuccess(function() {
-		$('#loadingCircle').hide();
-	});
-
-	$(document).ajaxError(function(event, jqxhr, settings, thrownError) {
-		$('#loadingCircle').hide();
-	});
-
 	function formatErrorMessage(jqXHR, exception) {
 		if (jqXHR.status === 0) {
 			return ('Not connected.\nPlease verify your network connection.');

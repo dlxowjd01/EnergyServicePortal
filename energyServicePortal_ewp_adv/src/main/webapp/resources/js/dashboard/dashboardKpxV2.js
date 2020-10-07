@@ -1127,7 +1127,7 @@ const getTodayTotalDetail = async function () {
 				tempWindA =+ resourceData['activePower'];
 
 				deviceArray.push({
-					color: 'var(--summer-sky)',
+					color: 'var(--blueberry)',
 					name: resourceTemplate[resourceType],
 					dataLabels: {
 						enabled: false
