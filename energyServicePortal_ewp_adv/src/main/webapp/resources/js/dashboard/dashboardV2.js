@@ -1144,47 +1144,7 @@ const searchSite = async function () {
 
 				targetApi.forEach((targetUrl, index) => {
 					const apiData = apiDatas[targetUrl];
-					if (!isEmpty(apiData) && !isEmpty(apiData['data'])) {
-						const resultData = apiData['data'];
-						if (index === 0) {
-							let siteYesterGenSum = 0;
-							if (!isEmpty(resultData[siteId])) {
-								const siteEnergy = resultData[siteId];
-								siteEnergy.forEach(siteForeEnergyItem => {
-									if (!isEmpty(siteForeEnergyItem['items'])) {
-										siteForeEnergyItem['items'].map(e => siteYesterGenSum += e['energy']);
-										refineList[siteIdx]['beforeDay'] = displayNumberFixedUnit(siteYesterGenSum, 'Wh', 'kWh', 0)[0];
-									} else {
-										refineList[siteIdx]['beforeDay'] = '-';
-									}
-								});
-							} else {
-								refineList[siteIdx]['beforeDay'] = '-';
-							}
-						} else if (index === 1) { //금일 누적
-							const siteNowEnergy = resultData[siteId];
-							if(!isEmpty(siteNowEnergy) && !isEmpty(siteNowEnergy['energy'])) {
-								refineList[siteIdx]['accumulate'] = displayNumberFixedUnit(siteNowEnergy['energy'], 'Wh', 'kWh', 0)[0];
-							} else {
-								refineList[siteIdx]['accumulate'] = '-';
-							}
-						} else if (index === 2) { //금일 예측
-							let siteForeGenSum = 0;
-							if (!isEmpty(resultData[siteId])) {
-								const siteEnergy = resultData[siteId];
-								siteEnergy.forEach(siteForeEnergyItem => {
-									if (!isEmpty(siteForeEnergyItem['items'])) {
-										siteForeEnergyItem['items'].map(e => siteForeGenSum += e['energy']);
-										refineList[siteIdx]['forecast'] = displayNumberFixedUnit(siteForeGenSum, 'Wh', 'kWh', 0)[0];
-									} else {
-										refineList[siteIdx]['forecast'] = '-';
-									}
-								});
-							} else {
-								refineList[siteIdx]['forecast'] = '-';
-							}
-						}
-					} else if (index === 3) {
+					if (index === 3) {
 						let temperature = '-'
 							, humidity = '-';
 						if (!isEmpty(apiData)) {
@@ -1225,6 +1185,49 @@ const searchSite = async function () {
 						refineList[siteIdx]['alarmWarning'] = alarmWarning;
 						refineList[siteIdx]['alarmError'] = alarmError;
 						refineList[siteIdx]['alarmTotal'] = alarmError + alarmWarning;
+					} else {
+						if (!isEmpty(apiData)) {
+							const resultData = apiData['data'];
+							if (index === 0) {
+								let siteYesterGenSum = 0;
+								if (!isEmpty(resultData[siteId])) {
+									const siteEnergy = resultData[siteId];
+									siteEnergy.forEach(siteForeEnergyItem => {
+										if (!isEmpty(siteForeEnergyItem['items'])) {
+											siteForeEnergyItem['items'].map(e => siteYesterGenSum += e['energy']);
+											refineList[siteIdx]['beforeDay'] = displayNumberFixedUnit(siteYesterGenSum, 'Wh', 'kWh', 0)[0];
+										} else {
+											refineList[siteIdx]['beforeDay'] = '-';
+										}
+									});
+								} else {
+									refineList[siteIdx]['beforeDay'] = '-';
+								}
+							} else if (index === 1) { //금일 누적
+								const siteNowEnergy = resultData[siteId];
+								if(!isEmpty(siteNowEnergy) && !isEmpty(siteNowEnergy['energy'])) {
+									refineList[siteIdx]['accumulate'] = displayNumberFixedUnit(siteNowEnergy['energy'], 'Wh', 'kWh', 0)[0];
+								} else {
+									refineList[siteIdx]['accumulate'] = '-';
+								}
+							} else if (index === 2) { //금일 예측
+								let siteForeGenSum = 0;
+								console.log('resultData', resultData);
+								if (!isEmpty(resultData[siteId])) {
+									const siteEnergy = resultData[siteId];
+									siteEnergy.forEach(siteForeEnergyItem => {
+										if (!isEmpty(siteForeEnergyItem['items'])) {
+											siteForeEnergyItem['items'].map(e => siteForeGenSum += e['energy']);
+											refineList[siteIdx]['forecast'] = displayNumberFixedUnit(siteForeGenSum, 'Wh', 'kWh', 0)[0];
+										} else {
+											refineList[siteIdx]['forecast'] = '-';
+										}
+									});
+								} else {
+									refineList[siteIdx]['forecast'] = '-';
+								}
+							}
+						}
 					}
 				});
 			});

@@ -300,7 +300,7 @@
 					siteObj.address = newStreetAddr;
 				}
 				if( !isEmpty(newSiteDetail) ){
-					siteObj.detail-info = newSiteDetail;
+					siteObj.detail_info = newSiteDetail;
 				}
 				// if( !isEmpty(newDrResId) ){
 				// 	siteObj.dr_group_id = newDrResId;
@@ -447,7 +447,7 @@
 					siteEditObj.address = newStreetAddr;
 				}
 				if( !isEmpty(newSiteDetail)){
-					siteEditObj.detail-info = newSiteDetail;
+					siteEditObj.detail_info = newSiteDetail;
 				}
 				// if( !isEmpty(newDrResId) && td.eq(8).text() != newDrResId ){
 				// 	siteEditObj.dr_group_id = newDrResId;
@@ -2002,13 +2002,13 @@
 						$(this).prop("disabled", true);
 					});
 					// 추가 정보
-					$('#newSiteDetail').val(rowData.detail-info).prop("disabled", true);
+					$('#newSiteDetail').val(rowData.detail_info).prop("disabled", true);
 
 					addBtn.addClass("hidden");
 
 				} else {
 					// 추가 정보
-					$('#newSiteDetail').val(rowData.detail-info).prop("disabled", false);
+					$('#newSiteDetail').val(rowData.detail_info).prop("disabled", false);
 					addBtn.prop("disabled", false).text("수정").removeClass("hidden");
 				}
 

@@ -317,7 +317,7 @@
 						});
 					}
 
-					refineSpcList.push({spc_id: '', name: '직접입력'});
+					refineSpcList.unshift({spc_id: '', name: '직접입력'});
 					setMakeList(refineSpcList, 'spcList', {'dataFunction': {}});
 				}
 			}).fail(function (jqXHR, textStatus, errorThrown) {
@@ -326,7 +326,7 @@
 			});
 		} else {
 			$.ajax(spcSearch).done(function (data, textStatus, jqXHR) {
-				data.data.push({spc_id: '', name: '직접입력'});
+				data.data.unshift({spc_id: '', name: '직접입력'});
 
 				setMakeList(data.data, 'spcList', {'dataFunction': {}});
 			}).fail(function (jqXHR, textStatus, errorThrown) {
@@ -353,7 +353,7 @@
 						spcGens = json;
 					}
 
-					spcGens.push({sid: '', name: '직접입력', location: '', address: ''});
+					spcGens.unshift({sid: '', name: '직접입력', location: '', address: ''});
 					setMakeList(spcGens, 'genList', {'dataFunction': {}});
 
 				},
@@ -363,7 +363,7 @@
 			});
 		} else {
 			let spcGens = Array.from(siteList);
-			spcGens.push({sid: '', name: '직접입력', location: '', address: ''});
+			spcGens.unshift({sid: '', name: '직접입력', location: '', address: ''});
 			setMakeList(spcGens, 'genList', {'dataFunction': {}});
 		}
 	}
