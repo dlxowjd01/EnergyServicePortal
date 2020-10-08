@@ -810,9 +810,10 @@
 				<table class='sort-table table-footer transaction-table'>
 					<colgroup>
 						<col style='width:5%'>
+						<col style='width:7%'>
 						<col style='width:10%'>
+						<col style='width:8%'>
 						<col style='width:10%'>
-						<col style='width:15%'>
 						<!-- <col style='width:10%'> -->
 						<col style='width:10%'>
 						<col style='width:15%'>
@@ -825,6 +826,7 @@
 						<tr>
 							<!-- <th><button type='button' class='btn-align down'>순번</button></th> -->
 							<th>순번</th>
+							<th><button type='button' class='btn-align down'>SPC명</button></th>
 							<th><button type='button' class='btn-align down'>입출금 일자</button></th>
 							<th><button type='button' class='btn-align down'>입출금 구분</button></th>
 							<th><button type='button' class='btn-align down'>용도 구분</button></th>
@@ -841,6 +843,7 @@
 						<template class='table-body'>
 							<tr>
 								<td>*index*</td>
+								<td>*transactionSpcName*</td>
 								<td>*withdrawDay*</td>
 								<td>*transactionType*</td>
 								<td>*purpose*</td>
@@ -866,7 +869,7 @@
 							<tr>
 								<td></td>
 								<td>합계</td>
-								<td colspan='2'></td>
+								<td colspan='3'></td>
 								<td class="right">*total* 원</td>
 								<td colspan='4'></td>
 							</tr>
