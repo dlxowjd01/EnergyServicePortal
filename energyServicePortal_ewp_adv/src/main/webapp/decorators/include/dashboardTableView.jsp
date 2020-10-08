@@ -1,8 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
-<%--<style type="text/css">--%>
-<%--	.dataTable {table-layout: fixed}--%>
-<%--</style>--%>
 <div class="row content-wrapper hidden">
 	<div class="col-12">
 		<div class="indiv">
@@ -151,9 +148,9 @@
 					className: 'dt-body-right dt-head-center'
 				},
 			],
-			"language": {
-				"emptyTable": "조회된 데이터가 없습니다.",
-				"zeroRecords":  "검색된 결과가 없습니다."
+			language: {
+				emptyTable: "조회된 데이터가 없습니다.",
+				zeroRecords:  "검색된 결과가 없습니다."
 			},
 			dom: 'tip'
 		}).columns.adjust();
@@ -208,28 +205,6 @@
 				}
 			});
 
-			//어제 발전
-			urls.push({
-				url: apiHost + '/energy/sites?sid=' + site.sid,
-				type: 'get',
-				data: {
-					startTime: yesterDayFormData.startTime,
-					endTime: yesterDayFormData.endTime,
-					interval: 'day'
-				}
-			});
-
-			//작년 동월 발전
-			urls.push({
-				url: apiHost + '/energy/sites?sid=' + site.sid,
-				type: 'get',
-				data: {
-					startTime: yearFormData.startTime,
-					endTime: yearFormData.endTime,
-					interval: 'month'
-				}
-			});
-
 			siteArray.push(site.sid);
 			tableData.push({
 				sid: site.sid,
@@ -243,7 +218,7 @@
 				url: apiHost + '/energy/now/sites',
 				type: 'get',
 				data: {
-					sids: siteArray.join(','),
+					sids: siteArray.toString(),
 					metering_type: 2,
 					interval: 'day'
 				}
@@ -253,9 +228,33 @@
 				url: apiHost + '/energy/now/sites',
 				type: 'get',
 				data: {
-					sids: siteArray.join(','),
+					sids: siteArray.toString(),
 					metering_type: 2,
 					interval: 'month'
+				}
+			});
+
+			//어제 발전
+			urls.push({
+				url: apiHost + '/energy/sites?interval=day',
+				type: 'get',
+				data: {
+					sid: siteArray.toString(),
+					startTime: yesterDayFormData.startTime,
+					endTime: yesterDayFormData.endTime,
+					formId: 'v2'
+				}
+			});
+
+			//작년 동월 발전
+			urls.push({
+				url: apiHost + '/energy/sites?interval=month',
+				type: 'get',
+				data: {
+					sid: siteArray.toString(),
+					startTime: yearFormData.startTime,
+					endTime: yearFormData.endTime,
+					formId: 'v2'
 				}
 			});
 		}
@@ -380,19 +379,21 @@
 							});
 						}
 					} else if (targetUrl.match('/energy/sites')) {
-						const interval = result.interval;
-						const genData = result.data[0].generation.items;
+						const interval = targetUrl.match('day');
 						tableData.forEach((site, index) => {
-							if (targetUrl.match(site.sid)) {
-								if (interval === 'day') { //어제 발전
-									if (!isEmpty(genData) && genData.length > 0) {
-										tableData[index]['yesterEnergy'] = (genData[0].energy / 1000).toFixed(2);
+							if (!isEmpty(result[site.sid])) {
+								const siteEnergyItem = result[site.sid];
+								siteEnergyItem.forEach(siteEnergy => {
+									const items = siteEnergy['items'];
+									if (!isEmpty(items)) {
+										items.map(e => genEnergy += e['energy']);
+										if (interval) {
+											tableData[index]['yesterEnergy'] = (genEnergy / 1000).toFixed(2);
+										} else {
+											tableData[index]['beforeYearGen'] = (genEnergy / 1000000).toFixed(2);
+										}
 									}
-								} else {
-									if (!isEmpty(genData) && genData.length > 0) {
-										tableData[index]['beforeYearGen'] = (genData[0].energy / 1000000).toFixed(2);
-									}
-								}
+								});
 							}
 						});
 					}

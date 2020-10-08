@@ -10,7 +10,7 @@
 		<h1 class="page-header fl">${siteName}</h1>
 		<c:if test="${fn:contains(sessionScope.userInfo.oid, 'spower')}">
 			<label class="switch switch-slide fl">
-				<input type="checkbox" value="showTable" id="switchBtn" class="switch-input"/>
+				<input type="checkbox" value="showTable" id="switchBtn" class="switch-input" ${cookie['switch'].value}/>
 				<span class="switch-label" data-on="테이블" data-off="대시보드"></span>
 				<span class="switch-handle"></span>
 			</label>
@@ -575,12 +575,24 @@
 
 		$('#switchBtn').on('click', function () {
 			if ($(this).is(':checked')) {
+				document.cookie = 'switch=checked; path=/';
 				target.eq(0).addClass('hidden').next().removeClass('hidden');
 				$($.fn.dataTable.tables(true)).DataTable().columns.adjust();
 				getDashboardTable('gmainTable');
+				clearInterval();
 			} else {
+				document.cookie = 'switch=; path=/';
 				target.eq(0).removeClass('hidden').next().addClass('hidden');
-				//destroyDashboardTable('gmainTable');
+				firstAjax();
+
+				minIntervalCount = 0
+				setInterval(() => firstAjax(), 60 * 60 * 1000); // 한시간에 한번 화면갱신
+				setInterval(() => {
+					minIntervalCount++;
+					if ((minIntervalCount % 60) !== 0) {
+						minAjax();
+					}
+				}, 60 * 1000); //1분에 한번 현재혆황 & 알림 갱신
 			}
 		});
 	});

@@ -94,58 +94,6 @@ const firstAjax = () => {
 	siteList.forEach(site => {
 		siteSids.push(site.sid);
 
-		//1년 에너지 데이터
-		urls.push({
-			url: apiHost + '/energy/sites?interval=month',
-			type: 'GET',
-			data: {
-				sid: site.sid,
-				startTime: yearData.startTime,
-				endTime: yearData.endTime,
-				displayType: 'dashboard',
-			}
-		});
-
-		//1달 에너지 데이터
-		urls.push({
-			url: apiHost + '/energy/sites?interval=day&startTime=' + monthData.startTime + '&endTime=' +monthData.endTime,
-			type: 'GET',
-			data: {
-				sid: site.sid,
-				displayType: 'dashboard',
-			}
-		});
-
-		//어제 에너지 데이터
-		urls.push({
-			url: apiHost + '/energy/sites?interval=day&startTime=' + yesterData.startTime + '&endTime=' +yesterData.endTime,
-			type: 'GET',
-			data: {
-				sid: site.sid,
-				displayType: 'dashboard',
-			}
-		});
-
-		urls.push({
-			url: apiHost + '/energy/forecasting/sites?interval=day',
-			type: 'GET',
-			data: {
-				sid: site.sid,
-				startTime: yesterData.startTime,
-				endTime: yesterData.endTime,
-			}
-		});
-
-		urls.push({
-			url: apiHost + '/energy/forecasting/sites?interval=15min',
-			type: 'GET',
-			data: {
-				sid: site.sid,
-				startTime: dayData.startTime,
-				endTime: dayData.endTime,
-			},
-		});
-
 		urls.push({
 			url: apiHost + '/status/raw/site',
 			type: 'GET',
@@ -173,6 +121,63 @@ const firstAjax = () => {
 				}
 			});
 		}
+	});
+
+	//1년 에너지 데이터
+	urls.push({
+		url: apiHost + '/energy/sites?interval=month',
+		type: 'GET',
+		data: {
+			sid: siteSids.toString(),
+			startTime: yearData.startTime,
+			endTime: yearData.endTime,
+			displayType: 'dashboard',
+			formId: 'v2'
+		}
+	});
+
+	//1달 에너지 데이터
+	urls.push({
+		url: apiHost + '/energy/sites?interval=day&startTime=' + monthData.startTime + '&endTime=' +monthData.endTime,
+		type: 'GET',
+		data: {
+			sid: siteSids.toString(),
+			displayType: 'dashboard',
+			formId: 'v2'
+		}
+	});
+
+	//어제 에너지 데이터
+	urls.push({
+		url: apiHost + '/energy/sites?interval=day&startTime=' + yesterData.startTime + '&endTime=' +yesterData.endTime,
+		type: 'GET',
+		data: {
+			sid: siteSids.toString(),
+			displayType: 'dashboard',
+			formId: 'v2'
+		}
+	});
+
+	urls.push({
+		url: apiHost + '/energy/forecasting/sites?interval=day',
+		type: 'GET',
+		data: {
+			sid: siteSids.toString(),
+			startTime: yesterData.startTime,
+			endTime: yesterData.endTime,
+			formId: 'v2'
+		}
+	});
+
+	urls.push({
+		url: apiHost + '/energy/forecasting/sites?interval=15min',
+		type: 'GET',
+		data: {
+			sid: siteSids.toString(),
+			startTime: dayData.startTime,
+			endTime: dayData.endTime,
+			formId: 'v2'
+		},
 	});
 
 	//현재 발전량
@@ -232,26 +237,6 @@ const minAjax = () => {
 		siteSids.push(site.sid);
 
 		urls.push({
-			url: apiHost + '/energy/now/sites',
-			type: 'GET',
-			data: {
-				sids: site.sid,
-				metering_type: 2,
-				interval: 'day'
-			}
-		});
-
-		urls.push({
-			url: apiHost + '/energy/forecasting/sites?interval=15min',
-			type: 'GET',
-			data: {
-				sid: site.sid,
-				startTime: dayData.startTime,
-				endTime: dayData.endTime,
-			}
-		});
-
-		urls.push({
 			url: apiHost + '/status/raw/site',
 			type: 'GET',
 			data: {
@@ -259,6 +244,27 @@ const minAjax = () => {
 				formId: 'v2'
 			}
 		});
+	});
+
+	urls.push({
+		url: apiHost + '/energy/now/sites',
+		type: 'GET',
+		data: {
+			sids: siteSids.toString(),
+			metering_type: 2,
+			interval: 'day'
+		}
+	});
+
+	urls.push({
+		url: apiHost + '/energy/forecasting/sites?interval=15min',
+		type: 'GET',
+		data: {
+			sid: siteSids.toString(),
+			startTime: dayData.startTime,
+			endTime: dayData.endTime,
+			formId: 'v2'
+		}
 	});
 
 	//알람 이력
@@ -321,7 +327,6 @@ const ajaxData = (urls, target) => {
 				let targetUrl = result.url; //API_URL
 				let siteId = '';
 
-				delete result['url'];
 				if ((!targetUrl.match('/weather/site') && isEmpty(apiDatas[targetUrl])) || (targetUrl.match('/weather/site') && isEmpty(apiDatas[apiHost + '/weather/site']))) {
 					if (targetUrl.match('/status/raw/site') || targetUrl.match('/weather/site')) {
 						if (targetUrl.match('/status/raw/site')) {
@@ -345,13 +350,7 @@ const ajaxData = (urls, target) => {
 						apiDatas[targetUrl] = result;
 					}
 				} else {
-					if (targetUrl.match('/energy/sites')) {
-						let rtnData = apiDatas[targetUrl].data;
-						(result.data).forEach(rtn => {
-							rtnData.push(rtn);
-						});
-						apiDatas[targetUrl].data = rtnData;
-					} else if (targetUrl.match('/status/raw/site') || targetUrl.match('/weather/site')) {
+					if (targetUrl.match('/status/raw/site') || targetUrl.match('/weather/site')) {
 						if (targetUrl.match('/status/raw/site')) {
 							Object.entries(result).forEach(rtn => {
 								if (rtn[0] !== 'url') {
@@ -429,35 +428,24 @@ const monthlyChartDraw = async () => {
 				if (!isEmpty(apiData)) {
 					const siteEnergyData = apiData['data'];
 					if (!isEmpty(siteEnergyData)) {
-						siteEnergyData.forEach(siteEnergy => {
-							const battery = siteEnergy['battery']
-								, generation = siteEnergy['generation'];
-
-							if (!isEmpty(battery)) { //충방전
-								if (!isEmpty(battery['charging']) && !isEmpty(battery['discharging'])) {
-									Object.entries(battery).forEach(([type, typeData]) => {
-										const items = typeData.items;
+						Object.entries(siteEnergyData).forEach(([siteId, siteEnergyItem]) => {
+							if (!isEmpty(siteEnergyItem)) {
+								siteEnergyItem.forEach(siteEnergy => {
+									const items = siteEnergy['items'];
+									if (!isEmpty(items)) {
 										items.forEach(item => {
-											const index = Number(String(item.basetime).slice(4, 6)) - 1;
-											if (type === 'charging') {
-												chargeList[index] += item.energy;
-												sumObj['chargeSum'] += item.energy;
-											} else if (type == 'discharging') {
-												dischargeList[index] += item.energy;
-												sumObj['dischargeSum'] += item.energy;
-											}
-										});
-									});
-								}
-							}
+											const index = Number(String(item['basetime']).slice(4, 6)) - 1;
+											chargeList[index] += Math.floor(item['cenergy'] / 1000);
+											sumObj['chargeSum'] += Math.floor(item['cenergy'] / 1000);
 
-							if (!isEmpty(generation)) { //태양광
-								const items = generation.items;
-								items.forEach(item => {
-									const index = Number(String(item.basetime).slice(4, 6)) - 1;
-									pvList[index] += Math.floor(item.energy / 1000);
-									payList[index] += Math.floor(item.money / 1000);
-									sumObj['pvSum'] += Math.floor(item.energy / 1000);
+											dischargeList[index] += Math.floor(item['denergy'] / 1000);
+											sumObj['dischargeSum'] += Math.floor(item['denergy'] / 1000);
+
+											pvList[index] += Math.floor(item['energy'] / 1000);
+											payList[index] += Math.floor(item['money'] / 1000);
+											sumObj['pvSum'] += Math.floor(item['energy'] / 1000);
+										});
+									}
 								});
 							}
 						});
@@ -467,18 +455,17 @@ const monthlyChartDraw = async () => {
 				if (!isEmpty(apiData)) {
 					const siteNowEnergyData = apiData['data'];
 					Object.entries(siteNowEnergyData).forEach(([siteKey, siteData]) => {
-						const index = Number(siteData.start.toString().slice(4, 6)) - 1;
-						if (!isEmpty(siteData.energy)) {
-							pvList[index] += Math.floor(siteData.energy / 1000);
-							sumObj.pvSum += Math.floor(siteData.energy / 1000);
+						const index = Number(siteData['start'].toString().slice(4, 6)) - 1;
+						if (!isEmpty(siteData['energy'])) {
+							pvList[index] += Math.floor(siteData['energy'] / 1000);
+							sumObj.pvSum += Math.floor(siteData['energy'] / 1000);
 						}
 
-						if (!isEmpty(siteData.money)) {
-							payList[index] += Math.floor(siteData.money / 1000);
+						if (!isEmpty(siteData['money'])) {
+							payList[index] += Math.floor(siteData['money'] / 1000);
 						}
 					});
 				}
-				console.log(apiData);
 			}
 		});
 
@@ -603,35 +590,17 @@ const dailyChartDraw = async () => {
 				if (!isEmpty(apiData)) {
 					const siteEnergyData = apiData['data'];
 					if (!isEmpty(siteEnergyData)) {
-						siteEnergyData.forEach(siteEnergy => {
-							const battery = siteEnergy['battery']
-								, generation = siteEnergy['generation'];
-
-							if (!isEmpty(battery)) { //충방전
-								if (!isEmpty(battery['charging']) && !isEmpty(battery['discharging'])) {
-									Object.entries(battery).forEach(([type, typeData]) => {
-										const items = typeData.items;
+						Object.entries(siteEnergyData).forEach(([siteId, siteEnergyItem]) => {
+							if (!isEmpty(siteEnergyItem)) {
+								siteEnergyItem.forEach(siteEnergy => {
+									const items = siteEnergy['items'];
+									if (!isEmpty(items)) {
 										items.forEach(item => {
-											const index = Number(String(item.basetime).slice(6, 8)) - 1;
-											if (type === 'charging') {
-												chargeList[index] += item.energy;
-												sumObj['chargeSum'] += item.energy;
-											} else if (type == 'discharging') {
-												dischargeList[index] += item.energy;
-												sumObj['dischargeSum'] += item.energy;
-											}
+											const index = Number(String(item['basetime']).slice(6, 8)) - 1;
+											pvList[index] += Math.floor(item['energy'] / 1000);
+											sumObj['pvSum'] += Math.floor(item['energy'] / 1000);
 										});
-									});
-								}
-							}
-
-							if (!isEmpty(generation)) { //태양광
-								const items = generation.items;
-								items.forEach(item => {
-									const index = Number(String(item.basetime).slice(6, 8)) - 1;
-									pvList[index] += Math.floor(item.energy / 1000);
-									payList[index] += Math.floor(item.money / 1000);
-									sumObj['pvSum'] += Math.floor(item.energy / 1000);
+									}
 								});
 							}
 						});
@@ -642,14 +611,14 @@ const dailyChartDraw = async () => {
 					const siteNowEnergyData = apiData['data'];
 					Object.entries(siteNowEnergyData).forEach(([siteKey, siteData]) => {
 						if (!isEmpty(siteData)) {
-							const index = Number(String(siteData.start).slice(6, 8)) - 1;
-							if (!isEmpty(siteData.energy)) {
-								pvList[index] += Math.floor(siteData.energy / 1000);
-								sumObj.pvSum += Math.floor(siteData.energy / 1000);
+							const index = Number(String(siteData['start']).slice(6, 8)) - 1;
+							if (!isEmpty(siteData['energy'])) {
+								pvList[index] += Math.floor(siteData['energy'] / 1000);
+								sumObj['pvSum'] += Math.floor(siteData['energy'] / 1000);
 							}
 
-							if (!isEmpty(siteData.money)) {
-								payList[index] += Math.floor(siteData.money / 1000);
+							if (!isEmpty(siteData['money'])) {
+								payList[index] += Math.floor(siteData['money'] / 1000);
 							}
 						}
 
@@ -760,23 +729,26 @@ const typeSiteDraw = async () => {
 			const apiData = apiDatas[targetUrl];
 			if (!isEmpty(apiData)) {
 				const siteEnergyData = apiData['data'];
-				siteEnergyData.forEach(siteData => {
-					const sid = siteData['sid']
-						, generation = siteData['generation'];
-
-					if (!isEmpty(generation)) { //태양광
-						const items = generation.items;
-						items.forEach(item => {
-							if (index === 0) {
-								if (isEmpty(siteGenArray[sid])) siteGenArray[sid] = 0;
-								siteGenArray[sid] += item.energy / 1000;
-							} else {
-								if (isEmpty(siteForeGenArray[sid])) siteForeGenArray[sid] = 0;
-								siteForeGenArray[sid] += item.energy / 1000;
-							}
-						});
-					}
-				});
+				if (!isEmpty(siteEnergyData)) {
+					Object.entries(siteEnergyData).forEach(([siteId, siteEnergyItem]) => {
+						if (!isEmpty(siteEnergyItem)) {
+							siteEnergyItem.forEach(siteEnergy => {
+								const items = siteEnergy['items'];
+								if (!isEmpty(items)) {
+									items.forEach(item => {
+										if (index === 0) {
+											if (isEmpty(siteGenArray[siteId])) siteGenArray[siteId] = 0;
+											siteGenArray[siteId] += item['energy'] / 1000;
+										} else {
+											if (isEmpty(siteForeGenArray[siteId])) siteForeGenArray[siteId] = 0;
+											siteForeGenArray[siteId] += item['energy'] / 1000;
+										}
+									});
+								}
+							});
+						}
+					});
+				}
 			}
 		});
 
@@ -911,15 +883,15 @@ const getTodayTotalDetail = async function () {
 					$('#centerTbody tr td:nth-child(4)').html(numberComma(Math.floor(co2Sum / 1000)) + '<em>&nbsp;&nbsp;kg</em>');
 					$('#centerTbody tr td:nth-child(5)').html(numberComma(Math.floor(moneySum / 1000)) + '<em>&nbsp;&nbsp;천원</em>');
 				} else if (index === 1) {
-					resultData.forEach(siteForeEnergy => {
-						const generation = siteForeEnergy['generation'];
+					let generationForecastSum = 0;
+					console.log('resultData', resultData);
+					Object.entries(resultData).forEach(([siteId, siteForeEnergyItem]) => {
+						if (!isEmpty(siteForeEnergyItem)) {
+							siteForeEnergyItem.forEach(siteForeEnergy => {
+								siteForeEnergy['items'].map(e => generationForecastSum += e['energy']);
 
-						let generationForecastSum = 0;
-						if (!isEmpty(generation) && !isEmpty(generation['items'])) {
-							generation['items'].map(e => generationForecastSum += e['energy']);
-
-							let preForeVal = Number($('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(2) span').text().replace(/[^0-9]/g, ''));
-							$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(2) span').text(numberComma(Math.floor(preForeVal += generationForecastSum / 1000)));
+								$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(2) span').text(numberComma(Math.floor(generationForecastSum / 1000)));
+							});
 						}
 					});
 				}
@@ -947,7 +919,6 @@ const getTodayTotalDetail = async function () {
 			capacity: capacitySum
 		}
 
-		console.log('resolveData', resolveData)
 		resolve(resolveData);
 	}).then(resolveData => {
 		const acPowerSum = resolveData['activePower']
@@ -1177,10 +1148,16 @@ const searchSite = async function () {
 						const resultData = apiData['data'];
 						if (index === 0) {
 							let siteYesterGenSum = 0;
-							const siteYesterEnergy = resultData.find(result => result['sid'] == siteId);
-							if (!isEmpty(siteYesterEnergy) && !isEmpty(siteYesterEnergy['generation']) && !isEmpty(siteYesterEnergy['generation']['items'])) {
-								siteYesterEnergy['generation']['items'].map(x => siteYesterGenSum += x['energy']);
-								refineList[siteIdx]['beforeDay'] = displayNumberFixedUnit(siteYesterGenSum, 'Wh', 'kWh', 0)[0];
+							if (!isEmpty(resultData[siteId])) {
+								const siteEnergy = resultData[siteId];
+								siteEnergy.forEach(siteForeEnergyItem => {
+									if (!isEmpty(siteForeEnergyItem['items'])) {
+										siteForeEnergyItem['items'].map(e => siteYesterGenSum += e['energy']);
+										refineList[siteIdx]['beforeDay'] = displayNumberFixedUnit(siteYesterGenSum, 'Wh', 'kWh', 0)[0];
+									} else {
+										refineList[siteIdx]['beforeDay'] = '-';
+									}
+								});
 							} else {
 								refineList[siteIdx]['beforeDay'] = '-';
 							}
@@ -1193,10 +1170,16 @@ const searchSite = async function () {
 							}
 						} else if (index === 2) { //금일 예측
 							let siteForeGenSum = 0;
-							const siteForeEnergy = resultData.find(result => result['sid'] == siteId);
-							if (!isEmpty(siteForeEnergy) && !isEmpty(siteForeEnergy['generation']) && !isEmpty(siteForeEnergy['generation']['items'])) {
-								siteForeEnergy['generation']['items'].map(x => siteForeGenSum += x['energy']);
-								refineList[siteIdx]['forecast'] = displayNumberFixedUnit(siteForeGenSum, 'Wh', 'kWh', 0)[0];
+							if (!isEmpty(resultData[siteId])) {
+								const siteEnergy = resultData[siteId];
+								siteEnergy.forEach(siteForeEnergyItem => {
+									if (!isEmpty(siteForeEnergyItem['items'])) {
+										siteForeEnergyItem['items'].map(e => siteForeGenSum += e['energy']);
+										refineList[siteIdx]['forecast'] = displayNumberFixedUnit(siteForeGenSum, 'Wh', 'kWh', 0)[0];
+									} else {
+										refineList[siteIdx]['forecast'] = '-';
+									}
+								});
 							} else {
 								refineList[siteIdx]['forecast'] = '-';
 							}
