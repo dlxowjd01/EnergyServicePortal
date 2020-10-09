@@ -203,7 +203,7 @@
 					</table>
 				</div>
 			</div>
-			<div class="indiv gmain-alarm wrap-type">
+			<div class="indiv gmain-alarm wrap-type" data-alarm="">
 				<div class="alarm-status">
 					<div class="alarm-alert"><span><fmt:message key="gdash.6.today_alerts"/></span><em>0</em></div>
 					<div class="alarm-warning"><a href="javascript:void(0);" onclick="pageMove('all', 'alarm');" class="btn btn-cancel"><fmt:message key="gdash.6.details"/></a></div>

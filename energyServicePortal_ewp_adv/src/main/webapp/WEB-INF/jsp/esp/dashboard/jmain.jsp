@@ -165,7 +165,7 @@
 		</div>
 	</div>
 	<div class="col-xl-4 col-md-12 col-sm-12">
-		<div class="indiv jmain-alarm wrap-type">
+		<div class="indiv jmain-alarm wrap-type" data-alarm="">
 			<div class="alarm-status clear">
 				<div class="alarm-alert clear"><span><fmt:message key="vppdash.7.today_alerts" /></span><em>0</em></div><div class="alarm-warning clear"><a href="javascript:void(0);" onclick="pageMove('all', 'alarm');" class="btn btn-cancel"><fmt:message key="vppdash.7.details" /></a></div>
 			</div>

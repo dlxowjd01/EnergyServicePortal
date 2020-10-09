@@ -108,18 +108,16 @@
 <div class="row chart-pv-table hidden">
 	<div class="col-12">
 		<div class="indiv chart-pv table-box">
+			<div class="table-save-box"><a href="#;" class="btn-save"><fmt:message key="renewablesgen.4.dataextracts" /></a></div>
 			<div class="table-top clear">
 				<h2 class="ntit fl"><fmt:message key="renewablesgen.4.powergenerationchart" /></h2>
-				<ul class="fr">
-					<li><span class="table-save-box"> <a href="#;" class="btn-save"><fmt:message key="renewablesgen.4.dataextracts" /></a></li>
-					<li><a href="#;" class="btn-fold">표접기</a></li>
-				</ul>
+				<span class="fr"><a href="#;" class="btn-fold">표접기</a></span>
 			</div>
 			<div class="table-wrapper">
-				<div class="fold-box" id="table-desktop">
+				<div class="fold-box" id="tableDesktop">
 					<!-- PC 버전용 테이블 -->
 					<div class="chart-table">
-						<table class="table-desktop">
+						<table class="tableDesktop">
 							<thead>
 								<tr>
 									<th>2020-08-01</th>
@@ -208,7 +206,7 @@
 
 		$('.btn-save').on('click', function (e) {
 			let excelName = '발전이력';
-			let $val = $('#table-desktop').find('tbody');
+			let $val = $('#tableDesktop').find('tbody');
 			let cnt = $val.length;
 
 			if (cnt < 1) {
@@ -1059,7 +1057,7 @@
 						stack: stack,
 						sid: sid,
 						tooltip: {
-							valueSuffix: 'Wh'
+							valueSuffix: 'Wh',
 						},
 						total: totalCurrent,
 						color: colorArr[num],
@@ -1149,14 +1147,14 @@
 		let option = {
 			chart: {
 				renderTo: 'chart2',
-				marginTop: 70,
+				marginTop: 50,
 				marginLeft: 60,
-				marginRight: 40,
+				marginRight: 30,
 				backgroundColor: 'transparent',
 			},
 			navigation: {
 				buttonOptions: {
-					enabled: false /* 메뉴 안보이기 */
+					enabled: false
 				}
 			},
 			title: {
@@ -1181,26 +1179,20 @@
 				},
 				categories: standard,
 				tickInterval: 1,
-				/* 눈금의 픽셀 간격 조정 */
 				title: {
 					text: null
 				},
-				crosshair: true /* 포커스 선 */
+				crosshair: true
 			},
 			yAxis: {
 				gridLineWidth: 1,
-				/* 기준선 grid 안보이기/보이기 */
 				min: 0,
-				/* 최소값 지정 */
 				title: {
 					text: '(kWh)',
 					align: 'low',
 					rotation: 0,
-					/* 타이틀 기울기 */
 					y: 25,
-					/* 타이틀 위치 조정 */
 					x: 5,
-					/* 타이틀 위치 조정 */
 					style: {
 						color: 'var(--white)',
 						fontSize: '8px'
@@ -1209,115 +1201,67 @@
 				labels: {
 					overflow: 'justify',
 					x: -20,
-					/* 그래프와의 거리 조정 */
 					style: {
 						color: 'var(--white)',
 						fontSize: '10px'
 					}
 				}
 			},
-
-			/* 범례 */
 			legend: {
 				enabled: true,
 				align: 'right',
 				verticalAlign: 'top',
-				x: -120,
+				x: -10,
+				y: -15,
 				itemStyle: {
-					color: 'var(--white)',
-					fontSize: '10px',
+					color: 'var(--white60)',
+					fontSize: '12px',
 					fontWeight: 400
 				},
 				itemHoverStyle: {
-					color: '' /* 마우스 오버시 색 */
+					color: ''
 				},
-				symbolPadding: 3,
-				/* 심볼 - 텍스트간 거리 */
-				symbolHeight: 8 /* 심볼 크기 */
+				symbolPadding: 0,
+				symbolHeight: 7
 			},
-
-			/* 툴팁 */
 			tooltip: {
 				formatter: function () {
 					return this.points.reduce(function (s, point) {
 						let displayValue = displayNumberFixedDecimal(point.y, 'Wh');
 						let displayNumber = displayValue[0] == undefined ? '' : displayValue[0];
 						let displayUnit = displayValue[1] == undefined ? '' : displayValue[1];
-						return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + displayNumber + displayUnit;
+						return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + displayNumber + displayUnit;
 					}, '<b>' + dateFormat(this.points[0].point.name) + '</b>');
 				},
-				shared: true /* 툴팁 공유 */
+				shared: true,
+				borderColor: 'none',
+				backgroundColor: 'var(--bg-color)',
+				padding: 16,
+				style: {
+					color: 'var(--white87)',
+					lineHeight: '18px'
+				}
 			},
-
-			/* 옵션 */
 			plotOptions: {
 				series: {
 					label: {
 						connectorAllowed: false
 					},
-					borderWidth: 0 /* 보더 0 */
+					borderWidth: 0
 				},
 				column: {
 					stacking: 'normal'
 				},
 				line: {
 					marker: {
-						enabled: false /* 마커 안보이기 */
+						enabled: false
 					}
 				}
 			},
-
-			/* 출처 */
 			credits: {
 				enabled: false
 			},
-
-			/* 그래프 스타일 */
 			series: seriesData,
-
-			/* 반응형 */
-			responsive: {
-				rules: [{
-					condition: {
-						maxWidth: 414 /* 차트 사이즈 */
-					},
-					chartOptions: {
-						chart: {
-							// marginLeft: 60,
-							// marginTop: 80
-						},
-						xAxis: {
-							labels: {
-								style: {
-									fontSize: '13px'
-								}
-							}
-						},
-						yAxis: {
-							title: {
-								style: {
-									fontSize: '13px'
-								}
-							},
-							labels: {
-								x: -10, /* 그래프와의 거리 조정 */
-								style: {
-									fontSize: '13px'
-								}
-							}
-						},
-						legend: {
-							layout: 'horizontal',
-							verticalAlign: 'bottom',
-							align: 'center',
-							x: 0,
-							itemStyle: {
-								fontSize: '13px'
-							}
-						}
-					}
-				}]
-			}
 		}
 
 		chart = new Highcharts.Chart(option);

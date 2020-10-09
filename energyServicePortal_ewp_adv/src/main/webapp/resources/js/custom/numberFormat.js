@@ -139,7 +139,7 @@ const displayNumberFixedDecimal = function(number, unit, intChipher, decimalChip
  * @param decimalChipher
  * @returns {[string, *]|[]}
  */
-const displayNumberFixedUnit = function (input_num, input_unit, fixed_unit, num_frac) {
+const displayNumberFixedUnit = function (input_num, input_unit, fixed_unit, num_frac, option) {
 	let rtnValue = []
 	let whUnit = ['', 'k', 'M', 'G', 'T'];
 	let moneyUnit = [
@@ -160,7 +160,12 @@ const displayNumberFixedUnit = function (input_num, input_unit, fixed_unit, num_
 		return rtnValue;
 	} else {
 		if (input_unit == fixed_unit) {
-			rtnValue = [numberComma((input_num).toFixed(num_frac)), fixed_unit];
+			if(option != "round"){
+				rtnValue = [numberComma((input_num).toFixed(num_frac)), fixed_unit];
+			} else {
+				let pFraction = Math.pow(10, num_frac);
+				rtnValue = [numberComma(( Math.round(input_num * pFraction) / pFraction ).toFixed(num_frac)), fixed_unit];
+			}
 			return rtnValue;
 		}
 
@@ -193,7 +198,12 @@ const displayNumberFixedUnit = function (input_num, input_unit, fixed_unit, num_
 					if(Math.floor(input_num * 100) == 0) {
 						rtnValue = [0, v + 'W' +  suffix];
 					} else {
-						rtnValue = [numberComma((input_num).toFixed(num_frac)), v + 'W' +  suffix];
+						if(option != "round"){
+							rtnValue = [numberComma((input_num).toFixed(num_frac)), v + 'W' +  suffix];
+						} else {
+							let pFraction = Math.pow(10, num_frac);
+							rtnValue = [numberComma(( Math.round(input_num * pFraction) / pFraction ).toFixed(num_frac)), v + 'W' +  suffix];
+						}
 					}
 					return rtnValue;
 				}
@@ -205,7 +215,12 @@ const displayNumberFixedUnit = function (input_num, input_unit, fixed_unit, num_
 					if(Math.floor(input_num * 100) == 0) {
 						rtnValue = [0, el.unit];
 					} else {
-						rtnValue = [numberComma((input_num).toFixed(num_frac)), el.unit];
+						if(option != "round"){
+							rtnValue = [numberComma((input_num).toFixed(num_frac)), el.unit];
+						} else {
+							let pFraction = Math.pow(10, num_frac);
+							rtnValue = [numberComma(( Math.round(input_num * pFraction) / pFraction ).toFixed(num_frac)), el.unit];
+						}
 					}
 					return false;
 				}

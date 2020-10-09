@@ -26,7 +26,7 @@
 				</li>
 			</ul>
 		</div>
-		<a href="javascript:void(0);" class="btn-type02 collect-btn fr" id="excelDown"><fmt:message key="datacolleciton.4.savelog" /></a>
+		<a href="javascript:void(0);" class="btn-type02 btn-save fr" id="excelDown"><fmt:message key="datacolleciton.4.savelog" /></a>
 	</div>
 </div>
 

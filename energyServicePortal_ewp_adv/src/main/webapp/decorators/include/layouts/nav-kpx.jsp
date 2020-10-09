@@ -58,17 +58,31 @@
 			$(this).toggleClass('on');
 		});
 
-		if ($(window).width() > 768) {
-			$('#mobileNav').hide();
-		}
+		$( window ).resize(function() {
+			if($( window ).width()>768){
+				if( $('#mask').css('display') == 'block'){
+					$('#mask').hide();
+					$('body').removeClass("sidenav-no-scroll");
+				}
+				$("#mobileNav").hide();
+			}
+		});
 
+		if($( window ).width()>768){
+			if( $('#mask').css('display') == 'none'){
+				$('#mask').hide();
+				$('body').removeClass("sidenav-no-scroll");
+			}
+			$("#mobileNav").hide();
+		}
+		
 		$('#mobileNavBtn').click(function(){
 			$('#mask').fadeTo("slow", 0.8);
 			$('body').addClass("sidenav-no-scroll");
 			$('#mobileNav').show(10);
 		});
 
-		$("#mobileNav").find('.category_close').click(function(){
+		$("#mobileNav").find('.mobile-nav-close').click(function(){
 			$('#mask').hide();
 			$('body').removeClass("sidenav-no-scroll");
 			$('#mobileNav').hide();
@@ -133,7 +147,7 @@
 		<h1 class="mobile-logo">
 			<span class="mobile"></span>
 		</h1>
-		<a href="javascript:void(0);" class="category_close"><img src="/img/gnb_close.png" width="17" alt="닫기"></a>
+		<a href="javascript:void(0);" class="mobile-nav-close"></a>
 	</div>
 	
 	<div class="g_menu">

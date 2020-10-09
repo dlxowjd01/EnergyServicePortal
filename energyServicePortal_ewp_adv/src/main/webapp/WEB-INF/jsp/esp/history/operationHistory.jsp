@@ -943,7 +943,7 @@
 			},
 			navigation: {
 				buttonOptions: {
-					enabled: false /* 메뉴 안보이기 */
+					enabled: false
 				}
 			},
 			title: {
@@ -960,24 +960,19 @@
 				},
 				categories: categories,
 				tickInterval: 1,
-				/* 눈금의 픽셀 간격 조정 */
 				title: {
 					text: null
 				},
-				crosshair: true /* 포커스 선 */
+				crosshair: true
 			},
 			yAxis: [{
 				gridLineWidth: 1,
-				/* 기준선 grid 안보이기/보이기 */
 				title: {
 					text: '',
 					align: 'low',
 					rotation: 0,
-					/* 타이틀 기울기 */
 					y: 25,
-					/* 타이틀 위치 조정 */
 					x: 5,
-					/* 타이틀 위치 조정 */
 					style: {
 						color: 'var(--white)',
 						fontSize: '10px'
@@ -986,7 +981,6 @@
 				labels: {
 					overflow: 'justify',
 					x: -10,
-					/* 그래프와의 거리 조정 */
 					style: {
 						color: 'var(--white)',
 						fontSize: '10px'
@@ -994,16 +988,12 @@
 				}
 			}, {
 				gridLineWidth: 1,
-				/* 기준선 grid 안보이기/보이기 */
 				title: {
 					text: '',
 					align: 'low',
 					rotation: 0,
-					/* 타이틀 기울기 */
 					y: 25,
-					/* 타이틀 위치 조정 */
 					x: -5,
-					/* 타이틀 위치 조정 */
 					style: {
 						color: 'var(--white)',
 						fontSize: '10px'
@@ -1012,7 +1002,6 @@
 				labels: {
 					overflow: 'justify',
 					x: 10,
-					/* 그래프와의 거리 조정 */
 					style: {
 						color: 'var(--white)',
 						fontSize: '10px'
@@ -1021,7 +1010,6 @@
 				alignTicks: false,
 				opposite: true
 			}],
-			/* 범례 */
 			legend: {
 				enabled: true,
 				align: 'right',
@@ -1033,18 +1021,17 @@
 					fontWeight: 400
 				},
 				itemHoverStyle: {
-					color: '' /* 마우스 오버시 색 */
+					color: ''
 				},
 				symbolPadding: 3,
-				/* 심볼 - 텍스트간 거리 */
-				symbolHeight: 8 /* 심볼 크기 */
+				symbolHeight: 8
 			},
 			/* 툴팁 */
 			tooltip: {
 				formatter: function () {
 					if ($(':radio[name="analyze"]:checked').val() == '시계열 분석') {
 						return this.points.reduce(function (s, point) {
-							return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + Number(point.y).toFixed(2) + point.series.userOptions.tooltip.valueSuffix;
+							return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + Number(point.y).toFixed(2) + point.series.userOptions.tooltip.valueSuffix;
 						}, '<b>' + new Date(this.x).format('yyyy.MM.dd HH:mm:ss') + '</b>');
 					} else {
 						let tooltip = this.series.name + '<br/>' +
@@ -1052,22 +1039,28 @@
 						return tooltip;
 					}
 				},
-				shared: true /* 툴팁 공유 */
+				shared: true,
+				borderColor: 'none',
+				backgroundColor: 'var(--bg-color)',
+				padding: 16,
+				style: {
+					color: 'var(--white87)',
+					lineHeight: '18px'
+				}
 			},
-			/* 옵션 */
 			plotOptions: {
 				series: {
 					label: {
 						connectorAllowed: false
 					},
-					borderWidth: 0 /* 보더 0 */
+					borderWidth: 0
 				},
 				column: {
 					stacking: 'normal'
 				},
 				line: {
 					marker: {
-						enabled: false /* 마커 안보이기 */
+						enabled: false
 					}
 				},
 				column: {
@@ -1262,7 +1255,7 @@
 					</div>
 
 					<div id="analyzeDiv2" style="display:none;">
-						<div class="fl">
+						<div class="fl ml-12">
 							<span class="tx-tit">x축</span>
 							<div class="sa-select">
 								<div class="dropdown" id="chartDid2">
@@ -1278,7 +1271,7 @@
 									<ul class="dropdown-menu chk-type" role="menu" id="columnLi2">
 										<li data-value="[key]">
 											<a href="javascript:void(0);" tabindex="-1">
-												<input type="radio" id="column02_[INDEX]" name="column2" value="[key]">
+												<input type="checkbox" id="column02_[INDEX]" name="column2" value="[key]">
 												<label for="column02_[INDEX]">[value]</label>
 											</a>
 										</li>
@@ -1311,7 +1304,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="fl">
+						<div class="fl ml-16">
 							<span class="tx-tit">y축</span>
 							<div class="sa-select">
 								<div class="dropdown" id="chartDid3">
@@ -1329,7 +1322,7 @@
 									<ul class="dropdown-menu chk-type" role="menu" id="columnLi3">
 										<li>
 											<a href="javascript:void(0);" data-value="[key]" tabindex="-1">
-												<input type="radio" id="column03_[INDEX]" name="column3" value="[key]">
+												<input type="checkbox" id="column03_[INDEX]" name="column3" value="[key]">
 												<label for="column03_[INDEX]">[value]</label>
 											</a>
 										</li>

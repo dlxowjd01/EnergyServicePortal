@@ -410,15 +410,16 @@
 	}
 
 	.g_menu .menu-list > li.menu-item > a:after {
+		display: block;
 		float: right;
-		margin: 22px 26px 0 0;
-		width: 0;
-		height: 0;
-		border-top: 5px solid transparent;
-		border-bottom: 5px solid transparent;
-		border-right: 5px solid var(--white60);
+		margin: 18px 27px 0 0;
+		width: 9px;
+		height: 9px;
+		border: 2px solid var(--white87);
+		border-left: 0;
+		border-top: 0;
 		content: "";
-		opacity: 0.6;
+		transform: rotate(45deg);
 	}
 
 	.g_menu .menu-list > li.gmn1>a:before {
@@ -472,9 +473,8 @@
 	}
 
 	.g_menu .menu-list > li.on > a:after {
-		opacity: 1;
-		margin-top: 18px;
-		transform: rotate(270deg);
+		margin-top: 20px;
+		transform: rotate(225deg);
 	}
 
 	.g_menu .menu-list > li.on > .sub-menu-list {
@@ -543,10 +543,28 @@
 		margin: 8px 0 0 3px;
 	}
 
-	.category_close {
+	.mobile-nav-close {
 		position: absolute;
 		top: 20px;
 		right: 20px;
+	}
+
+	.mobile-nav-close:before,
+	.mobile-nav-close:after {
+		position: absolute;
+		right: 12px;
+		content: ' ';
+		height: 24px;
+		width: 2px;
+		background-color: var(--white87);
+	}
+
+	.mobile-nav-close:before {
+		transform: rotate(45deg);
+	}
+
+	.mobile-nav-close:after {
+		transform: rotate(-45deg);
 	}
 
 	nav {
@@ -917,22 +935,6 @@
 		content: "금일 누적수익";
 	}
 
-	.local-info.emain.s-center td:nth-of-type(1):before {
-		content: "오늘 누적 충전량";
-	}
-
-	.local-info.emain.s-center td:nth-of-type(2):before {
-		content: "오늘 충전 계획";
-	}
-
-	.local-info.emain.s-center td:nth-of-type(3):before {
-		content: "오늘 누적 방전량";
-	}
-
-	.local-info.emain.s-center td:nth-of-type(4):before {
-		content: "오늘 방전 계획";
-	}
-
 	.local-info.jmain.s-center td:nth-of-type(1):before {
 		content: "총 사업소";
 	}
@@ -1051,34 +1053,6 @@
 		height: calc(100vh - 285px);
 	}
 
-	.gmain-map.emain .chart-info .ci-center.ct1 {
-		margin-top: -80px;
-	}
-
-	.gmain-map.emain .chart-info .chart-info-right {
-		margin-top: 20px;
-	}
-
-	.gmain-map.emain .chart-info .chart-info-right .soc {
-		text-align: center;
-	}
-
-	.gmain-map.emain .chart-info .chart-info-right .soc .battery {
-		margin: 10px auto 0;
-		width: 120px;
-		height: 44px;
-		background-size: 120px 44px;
-	}
-
-	.gmain-map.emain .chart-info .chart-info-right .soc .battery span {
-		height: 44px;
-	}
-
-	.gmain-map.emain .chart-info .ci-center.ct2 {
-		margin-top: 20px;
-		margin-bottom: 20px;
-	}
-
 	.gmain-alarm .alarm-status>div span,
 	.jmain-alarm .alarm-status>div span {
 		padding: 8px 10px;
@@ -1193,13 +1167,13 @@
 		font-size: 12px;
 	}
 
-	.gmain-table .gmain-wrap table tbody td .eq-icon span {
+	.gmain-table .gmain-wrap table tbody td .equip-icon span {
 		height: 14px;
 		width: 14px;
 		background-size: 90%;
 	}
 
-	.gmain-table .gmain-wrap table tbody td .eq-icon span+span {
+	.gmain-table .gmain-wrap table tbody td .equip-icon span+span {
 		margin-left: 0px;
 	}
 
@@ -1214,90 +1188,6 @@
 
 	.gmain-chart.jmain3 .gtab-menu li a {
 		font-size: 13px;
-	}
-
-	.gmain-map.dmain .chart-box {
-		height: auto;
-	}
-
-	/* *************************************************
-							dmain
-	************************************************* */
-	.dmain .chart-info>div {
-		width: 100%;
-	}
-
-	.dmain .chart-info>div.ci-left {
-		height: 120px;
-	}
-
-	.dmain .pchart-info {
-		margin-top: 15px;
-	}
-
-	.dmain .pchart-info>div {
-		float: none;
-		padding-left: 0;
-		width: 100%;
-		text-align: right;
-	}
-
-	.dmain .pchart-info>div strong {
-		display: inline-block;
-		width: 60%;
-		float: left;
-		text-align: left;
-	}
-
-	.dmain.dminfo {
-		display: block;
-		margin-top: 15px;
-	}
-
-	.dmain.dminfo .tfl {
-		display: block;
-		width: 100%;
-	}
-
-	.dmain.dminfo .tfr {
-		display: block;
-		width: 100%;
-	}
-
-	.dmain.dminfo>div.tfl>div {
-		line-height: 1.6;
-	}
-
-	.dmain.dminfo>div.tfl>div strong {
-		padding-left: 0;
-	}
-
-	.dmain.dminfo>div.tfr {
-		margin-top: 15px;
-		padding-left: 0;
-	}
-
-	/* *************************************************
-						emain
-	************************************************* */
-	.emain .ci-center dl {
-		display: table;
-		width: 100%;
-	}
-
-	.emain .ci-center dl+dl {
-		margin-top: 0;
-	}
-
-	.emain .ci-center dt {
-		display: table-cell;
-		width: 50%;
-	}
-
-	.emain .ci-center dd {
-		display: table-cell;
-		width: 50%;
-		text-align: right;
 	}
 
 	/* *************************************************
@@ -1391,29 +1281,8 @@
 	}
 
 	/* *************************************************
-					dmain, emain scontrol
+					group-modal-content
 	************************************************* */
-	.scontrol {
-		margin-top: 15px;
-	}
-
-	.scontrol dd ul li {
-		width: 98%;
-	}
-
-	.scontrol dd ul li .sbj {
-		font-size: 12px;
-	}
-
-	.scontrol dd ul li .sbj .fr {
-		float: none;
-		display: inline-block;
-	}
-
-	.scontrol dd ul li .cont .tfr {
-		padding-left: 5px;
-	}
-
 	.group-modal-content .col-sm-12:nth-child(even) {
 		padding: 0 12px 0;
 		margin-top: -12px;

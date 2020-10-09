@@ -966,6 +966,7 @@ const getTodayTotalDetail = async function () {
  * @returns {Promise<void>}
  */
 const alarmInfoList = async () => {
+	console.log("alarmInfoList====")
 	const targetApi = [apiHost + '/alarms'];
 
 	Object.entries(apiDatas).forEach(rst => {
@@ -980,6 +981,8 @@ const alarmInfoList = async () => {
 				});
 
 				let alarmList = new Array();
+				let alarmColor = "";
+				
 				apiData.forEach(alarm => {
 					if(alarm.level !== 0) {
 						let localTime = (alarm.localtime != null && alarm.localtime != '') ? String(alarm.localtime) : '';
@@ -988,8 +991,45 @@ const alarmInfoList = async () => {
 					}
 				});
 
+				// if(alarmList.length>0){
+				// 	// const isUrgent = alarmList.includes(4);
+				// 	// const isShutoff = alarmList.includes(3);
+				// 	// const isCritical = alarmList.includes(2);
+				// 	// const isWarning = alarmList.includes(1);
+				// 	// const isInfo = alarmList.includes(1);
+					
+				// 	if(alarmList.includes(4)){
+				// 		alarmColor = "urgent";
+				// 	} else {
+				// 		if(!isEmpty(alarmList.includes(3))){
+				// 			alarmColor = "shutoff";
+				// 		} else {
+				// 			if(!isEmpty(alarmList.includes(2))){
+				// 				alarmColor = "critical";
+				// 			} else {
+				// 				if(!isEmpty(alarmList.includes(1))){
+				// 					alarmColor = "warning";
+				// 				} else {
+				// 					if(!isEmpty(alarmList.includes(0))){
+				// 						alarmColor = "info";
+				// 					} else {
+				// 						alarmColor = "";
+				// 					}
+				// 				}
+				// 			}
+				// 		}
+				// 	}
+				// } else {
+				// 	alarmColor = "";
+				// }
+				// let alarmEl = $('.indiv[data-alarm]');
+				// alarmEl.attr("data-alarm", alarmColor);
+
 				$('.alarm-alert').find('em').text(alarmList.length);
 				setMakeList(alarmList, 'alarmNotice', {'dataFunction': {'level': levelClass}}); //list생성
+			} else {
+				let alarmEl = $('.indiv[data-alarm]');
+				alarmEl.attr("data-alarm", "");
 			}
 		}
 	});

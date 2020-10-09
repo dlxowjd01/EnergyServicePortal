@@ -16,9 +16,9 @@ html.darkmode:root {
 	--border: rgba(107, 107, 107, 0.6);
 	--scroll-track: #444;
 	--dropdown-bg: #363636;
-	--icon-eye: url("/img/icon_eye.svg");
-	--icon-eye-close: url("/img/icon_eye_close.svg");
-	--ico-warning: url("/img/ico-warning.svg");
+	--icon-eye: url("/img/ico_eye.svg");
+	--icon-eye-close: url("/img/ico_eye_close.svg");
+	--ico-warning: url("/img/ico_warning.svg");
 }
 
 * {

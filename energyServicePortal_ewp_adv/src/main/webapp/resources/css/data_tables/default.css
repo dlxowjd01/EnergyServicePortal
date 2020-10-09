@@ -12,9 +12,7 @@
 
 
 html.darkmode:root {
-	--collapse-arrow: url("/img/sel_down_dark.png");
 	--ico-prev: url("/img/btn-prev-active.svg");
-
 	--ico-sort-up: url("/img/sorting_up.png");
 	--ico-sort-down: url("/img/sorting_down.png");
 }

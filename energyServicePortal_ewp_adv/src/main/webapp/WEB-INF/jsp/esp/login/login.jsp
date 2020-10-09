@@ -475,7 +475,7 @@
 						<img src="../img/logo_login_spower.svg" alt="login modal spower logo" class="login-logo center"/>
 					</c:when>
 					<c:when test="${fn:contains(pageContext.request.serverName, 'wpsolar')}">
-						<img src="../img/logo_login_wpsolar.svg" alt="login modal wpsolar logo" class="login-logo center"/>
+						<img src="../img/logo_wpsolar.svg" alt="login modal wpsolar logo" class="login-logo center"/>
 					</c:when>
 					<c:otherwise>
 						<img src="../img/logo_iderms.svg" alt="login modal iderms logo" class="login-logo center"/>

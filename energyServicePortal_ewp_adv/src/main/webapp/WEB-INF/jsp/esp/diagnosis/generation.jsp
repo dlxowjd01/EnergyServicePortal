@@ -7,7 +7,7 @@
 	</div>
 	<div class="dropdown-wrapper col-lg-2">
 		<div class="dropdown" id="siteList">
-			<button type="button" class="dropdown-toggle" data-toggle="dropdown">
+			<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name='<fmt:message key="genforecast.1.select" />'>
 				<fmt:message key="genforecast.1.select" /><span class="caret"></span>
 			</button>
 			<ul class="dropdown-menu chk-type"></ul>
@@ -33,7 +33,7 @@
 			<div class="toggle-box">
 				<div class="table-area clear">
 					<p class="table-text fl"><fmt:message key="genforecast.2.forecast_err_method" /></p>
-					<button type="button" class="table-fold-btn fr">펼치기</button>
+					<button type="button" class="btn-caret fr">펼치기</button>
 				</div>
 				<div class="table-fold-container">
 					<div class="dropdown" id="measure">
@@ -153,7 +153,7 @@
 					<button type="button" class="btn-type" id="renderBtn"><fmt:message key="genforecast.3.update" /></button>
 				</div>
 			</div>
-			<a href="javascript:void(0);" class="link-chart-change" id="changeChart">그래프</a>
+			<a href="javascript:void(0);" class="btn-chart" id="changeChart">그래프</a>
 			<div class="inchart">
 				<p class="text-time"></p>
 				<div id="chart2"></div>
@@ -171,12 +171,10 @@
 			</div>
 			<div class="table-top clear">
 				<h2 class="ntit fl"><fmt:message key="genforecast.4.datatable" /></h2>
-				<ul class="fr">
-					<li><a href="javascript:void(0);" class="btn-fold">표접기</a></li>
-				</ul>
+				<span class="fr"><a href="javascript:void(0);" class="btn-fold">표접기</a></span>
 			</div>
 			<div class="table-wrapper">
-				<div class="fold-box" id="table-desktop"></div>
+				<div class="fold-box" id="tableDesktop"></div>
 			</div>
 		</div>
 	</div>
@@ -237,8 +235,7 @@
 			}
 		});
 
-		$('.table-fold-btn').click(function () {
-			var tbl_height = $(".table-fold-container").height();
+		$('.btn-caret').click(function () {
 			$('.table-fold-container').slideToggle();
 			$(this).toggleClass("on");
 			$(this).text($(this).text() == '내용접기' ? '펼치기' : '내용접기');
@@ -290,14 +287,14 @@
 
 		$('.btn-save').on('click', function (e) {
 			let excelName = '발전예측';
-			let $val = $('#table-desktop').find('tbody');
+			let $val = $('#tableDesktop').find('tbody');
 			let cnt = $val.length;
 
 			if (cnt < 1) {
 				alert('다운받을 데이터가 없습니다.');
 			} else {
 				if (confirm('엑셀로 저장하시겠습니까?')) {
-					tableToExcel('table-desktop', excelName, e);
+					tableToExcel('tableDesktop', excelName, e);
 				}
 			}
 		});
@@ -1104,7 +1101,7 @@
 		let seriesData = new Array();
 		let num = 0;
 		let colorArr = ['var(--turquoise)',
-						'var(--sandy-brown)',
+						'var(--grey)',
 						'var(--cream-can)',
 						'var(--summer-sky)',
 						'var(--orange-red)',
@@ -1206,12 +1203,6 @@
 		application('basic');
 	}
 
-	/**
-		* 차트 그리기
-		*
-		* @param standard
-		* @param seriesData
-		*/
 	const chartDraw = function (seriesData) {
 		let chart = $('#chart2').highcharts();
 		if (chart) {
@@ -1221,13 +1212,14 @@
 		let option = {
 			chart: {
 				renderTo: 'chart2',
-				marginLeft: 60,
-				marginRight: 20,
+				marginTop: 70,
+				marginLeft: 40,
+				marginRight: 15,
 				backgroundColor: 'transparent',
 			},
 			navigation: {
 				buttonOptions: {
-					enabled: false /* 메뉴 안보이기 */
+					enabled: false
 				}
 			},
 			title: {
@@ -1251,93 +1243,86 @@
 				},
 				categories: standard,
 				tickInterval: 1,
-				/* 눈금의 픽셀 간격 조정 */
 				title: {
 					text: null
 				},
-				crosshair: true /* 포커스 선 */
+				crosshair: true
 			},
 			yAxis: {
 				gridLineWidth: 1,
-				/* 기준선 grid 안보이기/보이기 */
 				min: 0,
-				/* 최소값 지정 */
 				title: {
 					text: '(kWh)',
 					align: 'low',
 					rotation: 0,
-					/* 타이틀 기울기 */
 					y: 25,
-					/* 타이틀 위치 조정 */
 					x: 5,
-					/* 타이틀 위치 조정 */
 					style: {
 						color: 'var(--white)',
-						fontSize: '18px'
+						fontSize: '12px'
 					}
 				},
 				labels: {
 					overflow: 'justify',
 					x: -20,
-					/* 그래프와의 거리 조정 */
 					style: {
 						color: 'var(--white)',
 						fontSize: '10px'
 					}
 				}
 			},
-			/* 범례 */
 			legend: {
 				enabled: true,
 				align: 'right',
 				verticalAlign: 'top',
-				x: -120,
+				x: 5,
+				y: -15,
 				itemStyle: {
-					color: 'var(--white)',
-					fontSize: '10px',
+					color: 'var(--white60)',
+					fontSize: '12px',
 					fontWeight: 400
 				},
 				itemHoverStyle: {
-					color: '' /* 마우스 오버시 색 */
+					color: ''
 				},
 				symbolPadding: 3,
-				/* 심볼 - 텍스트간 거리 */
-				symbolHeight: 8 /* 심볼 크기 */
+				symbolHeight: 8
 			},
-			/* 툴팁 */
 			tooltip: {
 				formatter: function () {
 					return this.points.reduce(function (s, point) {
-						return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + numberComma(point.y) + point.series.userOptions.tooltip.valueSuffix;
+						return s + '<br/><span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + numberComma(point.y) + point.series.userOptions.tooltip.valueSuffix;
 					}, '<b>' + dateFormat(this.points[0].point.name) + '</b>');
 				},
-				shared: true /* 툴팁 공유 */
+				shared: true,
+				borderColor: 'none',
+				backgroundColor: 'var(--bg-color)',
+				padding: 16,
+				style: {
+					color: 'var(--white87)'
+				}
 			},
-			/* 옵션 */
 			plotOptions: {
 				series: {
 					label: {
 						connectorAllowed: false
 					},
-					borderWidth: 0 /* 보더 0 */
+					borderWidth: 0
 				},
 				line: {
 					marker: {
-						enabled: false /* 마커 안보이기 */
+						enabled: false
 					}
 				}
 			},
-			/* 출처 */
 			credits: {
 				enabled: false
 			},
-			/* 그래프 스타일 */
 			series: seriesData,
-			/* 반응형 */
 			responsive: {
 				rules: [{
 					condition: {
-						maxWidth: 414 /* 차트 사이즈 */
+						maxWidth: 414
 					},
 					chartOptions: {
 						chart: {
@@ -1359,7 +1344,6 @@
 							},
 							labels: {
 								x: -10,
-								/* 그래프와의 거리 조정 */
 								style: {
 									fontSize: '13px'
 								}

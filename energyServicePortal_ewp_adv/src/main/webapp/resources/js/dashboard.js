@@ -1219,8 +1219,9 @@ const getAlarmInfo = function () {
 				alarmList.push(element);
 			}
 		});
+	
+		$('alarm-alert ').find('em').text(alarmList.length);
 
-		$('.alarm-alert').find('em').text(alarmList.length);
 		setMakeList(alarmList, 'alarmNotice', {'dataFunction': {'level': levelClass}}); //list생성
 	}).fail(function (jqXHR, textStatus, errorThrown) {
 		console.error(jqXHR);

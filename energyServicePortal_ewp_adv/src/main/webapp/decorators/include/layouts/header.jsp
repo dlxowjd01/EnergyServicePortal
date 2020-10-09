@@ -549,7 +549,7 @@
 </nav>
 
 <div class="modal fade" id="errorModal" role="dialog" aria-labelledby="errorModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
-	<div class="modal-dialog modal-sm">
+	<div class="modal-dialog modal-warning">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h3 id="errMsg" class="warning-text center"></h3>

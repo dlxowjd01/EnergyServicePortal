@@ -304,7 +304,7 @@
 			</div>
 		</div>
 		<div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
-			<div class="indiv smain-alarm wrap-type">
+			<div class="indiv smain-alarm wrap-type" data-alarm="">
 				<div class="alarm-status clear">
 					<div class="alarm-alert"><span>금일 발생 오류</span><em>0</em></div>
 					<div class="alarm-warning"><a href="javascript:void(0);" onclick="pageMove('', 'alarm');" class="btn btn-cancel">상세보기</a></div>
@@ -857,7 +857,7 @@
 
 	var dailyChart = Highcharts.chart('dailyChart', {
 		chart: {
-			marginTop: 40,
+			marginTop: 60,
 			marginLeft: 40,
 			marginRight: 40,
 			height: 280,
@@ -905,8 +905,8 @@
 					text: 'MWh',
 					align: 'low',
 					rotation: 0,
-					y: 25,
 					x: 5,
+					y: 25,
 					style: {
 						color: 'var(--white60)',
 						fontSize: '12px'
@@ -914,10 +914,12 @@
 				},
 				labels: {
 					formatter: function () {
-						if (String(this.value).length  >= 6) {
+						if (String(this.value).length >= 7) {
 							return numberComma(this.value / 1000000);
+						} else if (String(this.value).length >= 5) {
+							return numberComma(this.value / 1000);
 						} else {
-							return this.value;
+							return (this.value/1000);
 						}
 					},
 					style: {
@@ -948,16 +950,16 @@
 					y: 25,
 					x: -5,
 					style: {
-						color: 'var(--white60)',
+						color: 'var(--grey)',
 						fontSize: '12px'
 					}
 				},
 				labels: {
 					formatter: function () {
-						if (String(this.value).length  >= 9) {
-							return numberComma(this.value / 1000000000) + ' G';
-						} else if (String(this.value).length  >= 6) {
-							return numberComma(this.value / 1000000) + ' M';
+						if (String(this.value).length >= 7) {
+							return numberComma(this.value / 1000000) + ' G';
+						} else if (String(this.value).length >= 5) {
+							return numberComma(this.value / 1000) + ' M';
 						} else {
 							return this.value;
 						}
@@ -972,11 +974,15 @@
 		],
 		tooltip: {
 			formatter: function () {
+				// return this.points.reduce(function (s, point) {
+				// 	let suffix = point.series.userOptions.tooltip.valueSuffix;
+				// 	let tempVal = displayNumberFixedUnit(point.y, 'Wh', 'kWh', 0)[0];
+				// 	return s + '<br/><span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + tempVal + suffix;
+				// }, '<b>' + this.x + '월 </b>');
 				return this.points.reduce(function (s, point) {
 					let suffix = point.series.userOptions.tooltip.valueSuffix;
-					let tempVal = displayNumberFixedUnit(point.y, 'Wh', 'kWh', 0)[0];
-					return s + '<br/><span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + tempVal + suffix;
-				}, '<b>' + this.x + '월 </b>');
+					return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + numberComma(point.y) + suffix;
+				}, '<b>' + this.x + '</b>');
 			},
 			shared: true,
 			borderColor: 'none',
@@ -991,7 +997,7 @@
 			enabled: true,
 			align: 'right',
 			verticalAlign: 'top',
-			x: -10,
+			x: 5,
 			y: -10,
 			itemStyle: {
 				color: 'var(--grey)',
@@ -1010,7 +1016,29 @@
 					connectorAllowed: false
 				},
 				borderColor: 'var(--grey)',
-				borderWidth: 0
+				borderWidth: 0,
+				// TO DO!!!!!!!!!!
+				// events: {
+				// 	legendItemClick: function(event) {
+				// 		var thisSeries = this,
+				// 		chart = this.chart;
+
+				// 		if (this.visible === true) {
+				// 			this.hide();
+				// 			chart.get("highcharts-navigator-series").hide();
+				// 		} else {
+				// 			this.show();
+				// 			chart.series.forEach(function(el, inx) {
+				// 				if (el !== thisSeries) {
+				// 				el.hide();
+				// 				}
+				// 			});
+				// 			chart.get("highcharts-navigator-series").setData(thisSeries.options.data, false);
+				// 			chart.get("highcharts-navigator-series").show();
+				// 		}
+				// 		event.preventDefault();
+				// 	}
+				// }
 			},
 			line: {
 				marker: {
@@ -1151,9 +1179,9 @@
 				labels: {
 					// y: -8,
 					formatter: function () {
-						if (String(this.value).length  >= 7) {
+						if (String(this.value).length >= 7) {
 							return numberComma(this.value / 1000000) + ' G';
-						} else if (String(this.value).length  >= 5) {
+						} else if (String(this.value).length >= 5) {
 							return numberComma(this.value / 1000) + ' M';
 						} else {
 							return this.value;
@@ -1561,7 +1589,7 @@
 				formatter: function () {
 					if (String(this.value).length  >= 7) {
 						return numberComma(this.value / 1000000) + ' G';
-					} else if (String(this.value).length  >= 5) {
+					} else if (String(this.value).length >= 5) {
 						return numberComma(this.value / 1000) + ' M';
 					} else {
 						return this.value;
@@ -1672,7 +1700,7 @@
 		chart: {
 			// styledMode: true,
 			marginTop: 80,
-			marginLeft: 20,
+			marginLeft: 30,
 			marginRight: 50,
 			height: 320,
 			backgroundColor: 'transparent',
@@ -1749,9 +1777,9 @@
 				},
 				labels: {
 					formatter: function () {
-						if (String(this.value).length  >= 7) {
+						if (String(this.value).length >= 7) {
 							return numberComma(this.value / 1000000) + ' G';
-						} else if (String(this.value).length  >= 5) {
+						} else if (String(this.value).length >= 5) {
 							return numberComma(this.value / 1000) + ' M';
 						} else {
 							return this.value;
@@ -1788,9 +1816,9 @@
 				},
 				labels: {
 					formatter: function () {
-						if (String(this.value).length  >= 7) {
+						if (String(this.value).length >= 7) {
 							return numberComma(this.value / 1000000) + ' G';
-						} else if (String(this.value).length  >= 5) {
+						} else if (String(this.value).length >= 5) {
 							return numberComma(this.value / 1000) + ' M';
 						} else {
 							return this.value;
@@ -1926,9 +1954,9 @@
 				},
 				labels: {
 					formatter: function () {
-						if (String(this.value).length  >= 7) {
+						if (String(this.value).length >= 7) {
 							return numberComma(this.value / 1000000) + ' G';
-						} else if (String(this.value).length  >= 5) {
+						} else if (String(this.value).length >= 5) {
 							return numberComma(this.value / 1000) + ' M';
 						} else {
 							return this.value;
@@ -1966,9 +1994,9 @@
 				},
 				labels: {
 					formatter: function () {
-						if (String(this.value).length  >= 7) {
+						if (String(this.value).length >= 7) {
 							return numberComma(this.value / 1000000) + ' G';
-						} else if (String(this.value).length  >= 5) {
+						} else if (String(this.value).length >= 5) {
 							return numberComma(this.value / 1000) + ' M';
 						} else {
 							return this.value;
@@ -2442,7 +2470,6 @@
 					dids: deviceArray.toString()
 				}
 			}).done(function (data, textStatus, jqXHR) {
-				console.log("data==", data)
 				if (!isEmpty(option)){
 					let invType = new Array();
 					let sortedData;
@@ -2461,7 +2488,6 @@
 					$.map(sortedData, function(val, index) {
 						if ( val.device_type == "INV_PV"){
 							const formData = getSiteMainSchCollection('day');
-
 							let hourlyINV = {
 								url: apiHost + apiEnergyDvc,
 								type: 'get',
@@ -2553,13 +2579,6 @@
 										// }
 									});
 
-								} else {
-									hourlyINVChart.addSeries({
-										name: '',
-										color: 'rgba(0,0,0,0)',
-										title: '',
-										data: [],
-									});
 								}
 
 							}).fail(function (jqXHR, textStatus, errorThrown) {
@@ -2714,8 +2733,11 @@
 									if(element.reducer == 'avg') {
 										textValue =  textValue / element.cnt;
 									}
-
-									textValue = displayNumberFixedDecimal(textValue, suffix, 3, 2);
+									if(!isEmpty(suffix)) {
+										textValue = displayNumberFixedDecimal(textValue, suffix, 3, 2);
+									} else {
+										textValue = displayNumberFixedDecimal(textValue, "kWh", 3, 2);
+									}
 
 									invItem.find('.table-type td.' + key + ' span:nth-child(1)').html(textValue[0]);
 									if(suffix == 'W' || suffix == 'Wh' || suffix == 'V' || suffix == 'A') {
@@ -2760,9 +2782,6 @@
 					deviceType.sort();
 
 					$.each(deviceType, function (i, el) {
-						// console.log("featureProperties[el]===", featureProperties[el])
-						// console.log("featurePropertiesSub[el]===", featurePropertiesSub[el])
-
 						if (el == 'SM_MANUAL') return false;
 						deviceType[i] = {
 							name: featureProperties[el].name,
@@ -2783,6 +2802,7 @@
 						let operationNormal = 0;
 						let operationError = 0;
 						let operationAlert = 0;
+
 						let headerDataObject = new Object();
 							
 						if (el.type == 'SM_MANUAL') return false;
@@ -2843,7 +2863,6 @@
 												if(value == '-') {
 													if(tmpObj['cnt'] == Number){
 														if(!isEmpty(headerData[el.key])) {
-															console.log("000000==", tmpObj)
 															tmpObj['cnt'] = Number(tmpObj['cnt']) + 1;
 														} else {
 															tmpObj['value'] = "-";
@@ -2919,8 +2938,6 @@
 							}
 						});
 
-						console.log("headerDataObject===", headerDataObject);
-
 						$.map(headerDataObject, function(el, device) {
 							let deviceType = device;
 
@@ -2931,8 +2948,11 @@
 									if(element.reducer == 'avg') {
 										textValue =  textValue / element.cnt;
 									}
-
-									textValue = displayNumberFixedDecimal(textValue, suffix, 3, 2);
+									if(!isEmpty(suffix)) {
+										textValue = displayNumberFixedDecimal(textValue, suffix, 3, 2);
+									} else {
+										textValue = [textValue, ""];
+									}
 
 									$('#typeList').find('.' + deviceType).find('.table-type td.' + key + ' span:nth-child(1)').html(textValue[0]);
 									if(suffix == 'W' || suffix == 'Wh' || suffix == 'V' || suffix == 'A') {
@@ -3321,10 +3341,10 @@
 							chartItems1[index].money = Math.floor(item.money / 1000);
 						});
 
-						monthGen = displayNumberFixedUnit(initData, 'Wh', 'kWh', 0);
+						monthGen = displayNumberFixedUnit(initData, 'Wh', 'MWh', 1, "round");
 
 						el.eq(4).text(monthGen[0]);
-						el.eq(4).next().text("kWh");
+						el.eq(4).next().text(monthGen[1]);
 					} else {
 						el.eq(4).text("-");
 						chartItems1 = null;
@@ -3397,7 +3417,7 @@
 				}
 			});
 			itemChartCapacity = Number((itemChartCapacity / 1000).toFixed(1));
-			
+
 			for (let i = 0; i < 12; i++) {	
 				let matchMonth = false;
 				if (!isEmpty(chartItems1)) {
@@ -3462,40 +3482,35 @@
 					}
 				}
 			}
-
+			
 			dailyChart.series[0].setData(energyData);
+
 			if (!oid.match('testkpx')) {
-				dailyChart.series[1].setData(billingData);
 				let seriesName = '';
-				let suffix = '';
+				let newSuffix = '';
+				dailyChart.series[1].setData(billingData);
+
 				if ($(':radio[name="radio_t"]:checked').val() == 1) {
 					seriesName = 'PR';
-					suffix = '%';
+					newSuffix = '%';
 				} else if ($(':radio[name="radio_t"]:checked').val() == 2) {
 					seriesName = '발전시간';
-					suffix = '시간';
+					newSuffix = '시간';
 				} else {
 					seriesName = '매전량';
-					suffix = '천원';
+					newSuffix = '천원';
 				}
 
 				dailyChart.series[1].name = seriesName;
-				dailyChart.series[1].tooltipOptions.valueSuffix = suffix;
+				dailyChart.series[1].tooltipOptions.valueSuffix = newSuffix;
 				dailyChart.series[1].legendItem.element.firstElementChild.innerHTML = seriesName;
-				dailyChart.yAxis[1].setTitle({
-					text: suffix,
-					align: 'low',
-					rotation: 0,
-					y: 25,
-					x: -12,
-					style: {
-						color: 'var(--white)',
-						fontSize: '12px'
+				dailyChart.yAxis[1].update({
+					title:{
+						text: newSuffix,
 					}
 				});
 			}
 		} else {
-
 			let seriesName = [
 				{
 					label : '${siteName}' + ' 대시보드'
@@ -3541,8 +3556,20 @@
 				// }
 			});
 			
-			let trimChartItems3 = chartItems3.slice(18, 30);
-			let trimChartItems2 = chartItems2.slice(18, 30);
+			let trimChartItems3;
+			let trimChartItems2;
+			
+			if(!isEmpty(chartItems3)){
+				trimChartItems3 = chartItems3.slice(18, 30);
+			} else {
+				trimChartItems3 = chartItems3;
+			}
+
+			if(!isEmpty(chartItems2)){
+				trimChartItems2 = chartItems2.slice(18, 30);
+			} else {
+				trimChartItems2 = chartItems2;
+			}
 
 
 			dailySolarChart.addSeries({
@@ -3575,7 +3602,7 @@
 			chart.optionsMarginRight -= 30;
 			chart.isDirtyBox = true;
 			chart.redraw();
-			// chart.render();
+			// chart.render(); 
 		}
 	
 	}
@@ -4012,7 +4039,7 @@
 							} else if(sList[0].resource_type == "2"){
 								pieChart.series[0].name = "풍력"
 								e.update({y: usage});
-							} else if(sList[0].resource_type == "2"){
+							} else if(sList[0].resource_type == "3"){
 								pieChart.series[0].name = "소수력"
 								e.update({y: usage});
 							}
@@ -4085,20 +4112,20 @@
 
 			Promise.all(promises).then(res => {
 				let el = $("#solarDashboard .mini .data-num");
-				let accumVal = displayNumberFixedUnit(res[0].INV_PV.accumActiveEnergy, 'Wh', 'kWh', 0);
-				let activePower = displayNumberFixedUnit(res[0].INV_PV.activePower, 'Wh', 'kWh', 0);
-				let efficiency = toFixedNum(res[0].INV_PV.efficiency, 2);
+				let accumVal = displayNumberFixedUnit(res[0].INV_PV.accumActiveEnergy, 'Wh', 'MWh', 1, "round");
+				let activePower = displayNumberFixedUnit(res[0].INV_PV.activePower, 'Wh', 'MWh', 0);
+				let efficiency = toFixedNum(res[0].INV_PV.efficiency, 1);
 				let dailyGen = displayNumberFixedUnit( Object.entries(res[1].data)[0][1].energy, 'Wh', 'kWh', 0);
 				let yesterDayGen = [];
 				let v = Object.values(res[2].data);
 
 				if(!isEmpty(res[2].data) && v.flat()[0]["items"].length > 0 ){
 					let data = v.flat()[0]["items"];
-					yesterDayGen = displayNumberFixedUnit(data[0].energy,'Wh', 'kWh', 0);
+					yesterDayGen = displayNumberFixedUnit(data[0].energy,'Wh', 'kWh', 1, "round");
 				}
 
 				el.eq(0).text(activePower[0]);
-				el.eq(0).next().text("kWh");
+				el.eq(0).next().text("kW");
 
 				el.eq(1).text(efficiency);
 				el.eq(1).next().text("%");
@@ -4110,7 +4137,7 @@
 				el.eq(3).next().text("kWh");
 
 				el.eq(5).text(accumVal[0]);
-				el.eq(5).next().text("kWh");
+				el.eq(5).next().text(accumVal[1]);
 			});
 		}
 	}
@@ -4261,8 +4288,6 @@
 						let v = Object.values(foreGenData[0].data).flat()[0]["items"];
 
 						v.forEach((el, index) => {
-							// energyData2[index] = parseFloat((el.energy / 1000).toFixed(2));
-							// energyData2[index] = numberComma(el.energy / 1000000);
 							energyData2[index] = parseFloat((el.energy / 1000).toFixed(2));
 						});
 					}
@@ -4273,14 +4298,12 @@
 					let hour = today.getHours();
 
 					if(!isEmpty(nowGenData[0].data[siteId])) {
-						// energyData1[hour] = parseFloat((nowGenData[0].data[siteId].energy / 1000).toFixed(2));
 						energyData1[hour] = nowGenData[0].data[siteId].energy;
 					}
 				}
 
 				energyData1.forEach((el, index) => {
 					energyData1[index] = parseFloat((el / 1000).toFixed(2));
-					// energyData1[index] = numberComma(el / 1000000);
 				});
 
 				if (insolationData[1] == 'success') {
@@ -4294,68 +4317,54 @@
 					}
 				}
 				
+				// console.log("energyData1==", energyData1, "energyData2==", energyData2, "energyData3==", energyData3);
+
 				if(!isEmpty(hourlySolarChart.series.length>0)){
 					hourlySolarChart.series.length = 0;
 				}
 
 				if(energyData1.length>0){
-					// if (first) {
-						// hourlySolarChart.series[0].setData(energyData1);
-
-						hourlySolarChart.addSeries({
-							name: '발전 실적',
-							type: 'column',
-							color: 'var(--turquoise)',
-							tooltip: {
-								valueSuffix: 'kWh'
-							},
-							data: energyData1
-							// data: {
-							// csvURL: urlInput.value,
-							// enablePolling: pollingCheckbox.checked === true,
-							// dataRefreshRate: parseInt(pollingInput.value, 10)
-							// }
-						});
-					// } else {
-					// 	hourlySolarChart.series[0].setData(energyData1);
-					// }
+					hourlySolarChart.addSeries({
+						name: '발전 실적',
+						type: 'column',
+						color: 'var(--turquoise)',
+						tooltip: {
+							valueSuffix: 'kWh'
+						},
+						data: energyData1
+						// data: {
+						// csvURL: urlInput.value,
+						// enablePolling: pollingCheckbox.checked === true,
+						// dataRefreshRate: parseInt(pollingInput.value, 10)
+						// }
+					});
 
 				}
 
 				if(energyData2.length>0){
-					// hourlySolarChart.series.push(energyData2);
-					// if (first) {
-							hourlySolarChart.addSeries({
-								name: '발전 에측',
-								type: 'column',
-								color: 'var(--white25)',
-								tooltip: {
-									valueSuffix: 'kWh'
-								},
-								data: energyData2
-							});
-					// } else {
-					// 	hourlySolarChart.series[1].setData(energyData2);
-					// }
+					hourlySolarChart.addSeries({
+						name: '발전 에측',
+						type: 'column',
+						color: 'var(--white25)',
+						tooltip: {
+							valueSuffix: 'kWh'
+						},
+						data: energyData2
+					});
 				}
 
 				if(energyData3.length>0){
-					// hourlySolarChart.series[2].setData(energyData3);
-					// if (first) {
-						hourlySolarChart.addSeries({
-							name: '일사량',
-							type: 'line',
-							dashStyle: 'ShortDash',
-							yAxis: 1,
-							color: 'var(--white60)',
-							tooltip: {
-								valueSuffix: '%'
-							},
-							data: energyData3
-						});
-					// } else {
-					// 	hourlySolarChart.series[2].setData(energyData3);
-					// }
+					hourlySolarChart.addSeries({
+						name: '일사량',
+						type: 'line',
+						dashStyle: 'ShortDash',
+						yAxis: 1,
+						color: 'var(--white60)',
+						tooltip: {
+							valueSuffix: '%'
+						},
+						data: energyData3
+					});
 				}
 			}).fail(function () {
 				console.error('rejected');
@@ -4382,9 +4391,10 @@
 				return a.localtime > b.localtime ? -1 : a.localtime < b.localtime ? 1 : 0;
 			});
 
-			//데이터 세팅
 			let alarmList = new Array();
-			
+			let alarmEl = $('.indiv[data-alarm]');
+			let alarmColor = "";
+
 			data.forEach((el, index) => {
 				if(el.level != 0) {
 					let localTime = (el.localtime != null && el.localtime != '') ? String(el.localtime) : '';
@@ -4392,6 +4402,40 @@
 					alarmList.push(el);
 				}
 			});
+
+			// if(alarmList.length>0){
+			// 	// const isUrgent = alarmList.includes(4);
+			// 	// const isShutoff = alarmList.includes(3);
+			// 	// const isCritical = alarmList.includes(2);
+			// 	// const isWarning = alarmList.includes(1);
+			// 	// const isInfo = alarmList.includes(1);
+				
+			// 	if(alarmList.includes(4)){
+			// 		alarmColor = "urgent";
+			// 	} else {
+			// 		if(!isEmpty(alarmList.includes(3))){
+			// 			alarmColor = "shutoff";
+			// 		} else {
+			// 			if(!isEmpty(alarmList.includes(2))){
+			// 				alarmColor = "critical";
+			// 			} else {
+			// 				if(!isEmpty(alarmList.includes(1))){
+			// 					alarmColor = "warning";
+			// 				} else {
+			// 					if(!isEmpty(alarmList.includes(0))){
+			// 						alarmColor = "info";
+			// 					} else {
+			// 						alarmColor = "";
+			// 					}
+			// 				}
+			// 			}
+			// 		}
+			// 	}
+			// alarmEl.attr("data-alarm", alarmColor);
+			// } else {
+			// 	alarmEl.attr("data-alarm", "");
+			// }
+
 			$('.alarm-alert').find('em').text(alarmList.length);
 			setMakeList(alarmList, 'alarmNotice', {'dataFunction': {'level': levelClass}});
 

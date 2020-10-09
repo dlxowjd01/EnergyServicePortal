@@ -54,7 +54,7 @@
 				<div class="indiv clear">
 					<div class="chart-top clear">
 						<h2 class="ntit fl">[typeName]</h2>
-						<div class="eq-icon fr">
+						<div class="equip-icon fr">
 							<span class="equip-normal">정상([normal])</span>
 							<span class="equip-alert">중지([alert])</span>
 							<span class="equip-error">트립([error])</span>
@@ -66,11 +66,11 @@
 				</div>
 			</div>
 			<div class="col-lg-4">
-				<div class="indiv eq-card hidden">
+				<div class="indiv equip-card hidden">
 					<div class="chart-top clear">
 						<h2 class="ntit fl"></h2>
 					</div>
-					<ul class="eq-card-ul clear">
+					<ul class="equip-card-ul clear">
 						[featureHead]
 					</ul>
 					<div class="inv-search-box">
@@ -798,37 +798,37 @@
 
 				switch (key) {
 					case 'SM_MANUAL':
-						typeClass = 'device-list list-manual';
+						typeClass = 'list-manual';
 						break;
 					case 'SM_ISMART':
-						typeClass = 'device-list list-ami';
+						typeClass = 'list-ami';
 						break;
 					case 'SM':
-						typeClass = 'device-list list-meter';
+						typeClass = 'list-meter';
 						break;
 					case 'INV_PV':
-						typeClass = 'device-list list-inverter';
+						typeClass = 'list-inverter';
 						break;
 					case 'PCS_ESS':
-						typeClass = 'device-list list-pcs';
+						typeClass = 'list-pcs';
 						break;
 					case 'BMS_SYS':
-						typeClass = 'device-list list-bms-sys';
+						typeClass = 'list-bms-sys';
 						break;
 					case 'BMS_RACK':
-						typeClass = 'device-list list-bms-rack';
+						typeClass = 'list-bms-rack';
 						break;
 					case 'SENSOR_SOLAR': case 'SENSOR_WEATHER': case 'SENSOR_TEMPHUMID': case 'SENSOR_FLAME':
-						typeClass = 'device-list list-sensor';
+						typeClass = 'list-sensor';
 						break;
 					case 'CIRCUIT_BREAKER':
-						typeClass = 'device-list list-disconnector';
+						typeClass = 'list-disconnector';
 						break;
 					case 'COMBINER_BOX':
-						typeClass = 'device-list list-connector';
+						typeClass = 'list-connector';
 						break;
 					default:
-						typeClass = 'device-list';
+						typeClass = '';
 						break;
 				}
 
@@ -858,7 +858,7 @@
 
 		$('#deviceStateTypeList div.row').each(function() {
 			if ($(this).prop('id') == 'SM_MANUAL') {
-				$(this).find('.eq-card .eq-btn-box button').eq(1).html('데이터 입력');
+				$(this).find('.equip-card .eq-btn-box button').eq(1).html('데이터 입력');
 			}
 		});
 
@@ -879,22 +879,22 @@
 				dName = data[did].dname,
 				operation = 't2';
 
-				$('#' + dType + ' .eq-card').removeClass("hidden");
+				$('#' + dType + ' .equip-card').removeClass("hidden");
 				if(deviceStatus == 0){
 					// 중지
-					$('#' + dType + ' .eq-card').addClass('alert');
+					$('#' + dType + ' .equip-card').addClass('alert');
 				} else if(deviceStatus == 1){
 					// 정상
-					$('#' + dType + ' .eq-card').addClass('normal');
+					$('#' + dType + ' .equip-card').addClass('normal');
 				} else if(deviceStatus == 2) {
 					// 트립
-					$('#' + dType + ' .eq-card').addClass('error');
+					$('#' + dType + ' .equip-card').addClass('error');
 				}
 
-			$('#' + dType + ' .eq-card .ntit').text(dName);
-			$('#' + dType + ' .eq-card .inv-title').text(dName + ' 현황');
+			$('#' + dType + ' .equip-card .ntit').text(dName);
+			$('#' + dType + ' .equip-card .inv-title').text(dName + ' 현황');
 
-			$('#' + dType + ' .eq-card .eq-card-ul li').each(function () {
+			$('#' + dType + ' .equip-card .equip-card-ul li').each(function () {
 				let liData = $(this).data('key'),
 					suffix = $(this).data('suffix');
 
@@ -911,7 +911,7 @@
 				}
 			});
 
-			$('#' + dType + ' .eq-card .isb-in .di-list li').each(function () {
+			$('#' + dType + ' .equip-card .isb-in .di-list li').each(function () {
 				let liData = $(this).data('key'),
 					suffix = $(this).data('suffix');
 
@@ -926,11 +926,11 @@
 			});
 
 			if (dType == 'SM_MANUAL') {
-				$('#' + dType + ' .eq-card .eq-btn-box button').eq(1).attr('onclick', 'addManualForm("' + did + '")'); //설비 수정
+				$('#' + dType + ' .equip-card .eq-btn-box button').eq(1).attr('onclick', 'addManualForm("' + did + '")'); //설비 수정
 			} else {
-				$('#' + dType + ' .eq-card .eq-btn-box button').eq(1).attr('onclick', 'moveOperation("' + did + '");'); //상태이력으로 이동
+				$('#' + dType + ' .equip-card .eq-btn-box button').eq(1).attr('onclick', 'moveOperation("' + did + '");'); //상태이력으로 이동
 			}
-			$('#' + dType + ' .eq-card .eq-btn-box button').eq(0).attr('onclick', 'addDeviceForm("' + dType + '", "' + did + '")'); //설비 수정
+			$('#' + dType + ' .equip-card .eq-btn-box button').eq(0).attr('onclick', 'addDeviceForm("' + dType + '", "' + did + '")'); //설비 수정
 			
 			self.addClass("active").siblings().removeClass("active");
 

@@ -691,6 +691,7 @@
 	}
 	
 	const makeTableHead = function (deviceType) {
+		let newContainer = document.createElement('Div');
 		let newHeadTable = document.createElement('table');
 		let colList = ['사업소', '장치명', '알람 시간', '알람 타입', '알람 메세지', '확인 여부', '조치 상태', '최종 업데이트 시간'];
 		let tdList = ['[site_name]', '[device_name]', '[tlocaltime]', '[alarmtype]', '[message]', '[confirm]', '[status]', '[status_timestamp]'];
@@ -724,7 +725,9 @@
 		newHeadTable.setAttribute('class', 'sort-table history-table chk-type');
 		newHeadTable.setAttribute('id', deviceType+'Table');
 		tbody.setAttribute('id', deviceType);
-		$(".table-wrap-type").append(newHeadTable);
+		newContainer.setAttribute('class', 'table-scroll');
+		newContainer.appendChild(newHeadTable);
+		$(".table-wrap-type").append(newContainer);
 	}
 	
 	const createAck = function (alarmId) {
@@ -1242,6 +1245,7 @@
 		}
 
 		var gr_type = $('#rdo03_1').is(':checked');
+		console.log("gr_type===", gr_type);
 
 		var chartTypeNm = (gr_type == true) ? 'deviceType' : 'alarm';
 		let dataMap = new Map();
@@ -1263,14 +1267,15 @@
 		let alarmColorArr = {
 			0: 'var(--jordy-blue)',
 			1: 'var(--sandy-brown)',
-			2: 'var(--sunglow)',
-			3: 'var(--white60)',
-			4: 'var(--alarm)',
-			9: ''
+			2: 'var(--mustard)',
+			3: 'var(--sunglow)',
+			4: 'var(--error)',
+			9: 'var(--grey)'
 		};
 
 		let colorArr = (gr_type == true) ? typeColorArr : alarmColorArr;
 		let num = 0;
+
 		dataMap.forEach(function (v, k) {
 			data.sort(function (a, b) {
 				return a['localtime'] - b['localtime'];
@@ -1388,24 +1393,63 @@
 		`;
 		legendInner.empty();
 		legendInner.append(wrapper);
+
 		pieMap.forEach(function (val, key, legendAreaCopy) {
 			var typeNm = key;
+			var enName = "";
+			var colorNum;
+
+			if(key == "긴급"){
+				colorNum = 4;
+				enName = "urgent";
+			} else if(key == "트립"){
+				colorNum = 3;
+				enName = "shutoff";
+			} else if(key == "이상"){
+				colorNum = 2;
+				enName = "critical";
+			} else if(key == "경고"){
+				colorNum = 1;
+				enName = "warning";
+			} else if(key == "정상"){
+				colorNum = 0;
+				enName = "info";
+			} else {
+				colorNum = 9;
+			}
+
 			$(':checkbox[name="' + chartTypeNm + '"]:checked').each(function () {
 				if (key == $(this).val()) typeNm = $(this).next('label').text();
 			});
+
 			if (val != undefined) {
-				$temp = {
-					name: typeNm,
-					dataLabels: {
-						enabled: false
-					},
-					color: colorArr[num2],
-					y: val
-				};
+				var liStr = '';
+				if(gr_type == true){
+					$temp = {
+						name: typeNm,
+						dataLabels: {
+							enabled: false
+						},
+						color: typeColorArr[num2],
+						y: val
+					};
+					liStr = '<li data-alarm="' + (num2+1) + '">' + key + '<span class="legend-value">' + val + '건</span></li>';
+
+				} else {
+					$temp = {
+						name: typeNm,
+						dataLabels: {
+							enabled: false
+						},
+						color: colorArr[colorNum],
+						y: val
+					};
+					liStr = '<li data-alarm="' + enName + '">' + key + '<span class="legend-value">' + val + '건</span></li>';
+				}
+				num2++;
 				pieSeriesData.push($temp);
-				num2++
-				var liStr = '<li><span class="bu t'+num2+'">' + key + '</span><span class="legend-value">' + val + '건</span></li>';
 				legendInner.find("ul").append(liStr);
+
 			}
 		});
 
@@ -1420,16 +1464,16 @@
 		let myChart = {
 			chart: {
 				renderTo: 'hchart2',
-				marginTop: 70,
+				marginTop: 50,
 				marginLeft: 0,
 				marginRight: 0,
 				backgroundColor: 'transparent',
 				type: 'column',
-				height: 340
+				height: 320
 			},
 			navigation: {
 				buttonOptions: {
-					enabled: false /* 메뉴 안보이기 */
+					enabled: false
 				}
 			},
 			title: {
@@ -1455,7 +1499,7 @@
 				title: {
 					text: null
 				},
-				crosshair: true /* 포커스 선 */
+				crosshair: true
 			},
 			yAxis: {
 				gridLineWidth: 1,
@@ -1481,15 +1525,12 @@
 				labels: {
 					overflow: 'justify',
 					x: -20,
-					/* 그래프와의 거리 조정 */
 					style: {
 						color: 'var(--white60)',
 						fontSize: '14px'
 					}
 				}
 			},
-
-			/* 범례 */
 			legend: {
 				enabled: true,
 				align: 'right',
@@ -1501,51 +1542,51 @@
 					fontWeight: 400
 				},
 				itemHoverStyle: {
-					color: '' /* 마우스 오버시 색 */
+					color: ''
 				},
 				symbolPadding: 3,
-				/* 심볼 - 텍스트간 거리 */
-				symbolHeight: 8 /* 심볼 크기 */
+				symbolHeight: 8
 			},
-
-			/* 툴팁 */
 			tooltip: {
 				formatter: function () {
 					return this.points.reduce(function (s, point) {
-						let displayValue = displayNumberFixedDecimal(point.y);
+						// console.log("point.y===", point.y)
+						let displayValue = displayNumberFixedDecimal(point.y, '', 3, 0);
+						// let displayValue = [point.y, "unit"];
 						let displayNumber = displayValue[0] == undefined ? '' : displayValue[0];
 						let displayUnit = displayValue[1] == undefined ? '' : '건';
 						// console.log(displayUnit);
-						return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + displayNumber + displayUnit;
+						return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + displayNumber + displayUnit;
 					}, '<b>' + dateFormat(this.points[0].point.name) + '</b>');
 				},
-				shared: true
+				shared: true,
+				borderColor: 'none',
+				backgroundColor: 'var(--bg-color)',
+				padding: 16,
+				style: {
+					color: 'var(--white87)',
+					lineHeight: '18px'
+				}
 			},
-
-			/* 옵션 */
 			plotOptions: {
 				series: {
 					label: {
 						connectorAllowed: false
 					},
-					borderWidth: 0 /* 보더 0 */
+					borderWidth: 0
 				},
 				line: {
 					marker: {
-						enabled: false /* 마커 안보이기 */
+						enabled: false
 					}
 				},
 				column: {
 					stacking: 'normal'
 				}
 			},
-
-			/* 출처 */
 			credits: {
 				enabled: false
 			},
-
-			/* 그래프 스타일 */
 			series: columnSeriesData
 		}
 
@@ -1577,8 +1618,6 @@
 			subtitle: {
 				text: ''
 			},
-
-			/* 범례 */
 			legend: {
 				enabled: true,
 				align: 'left',
@@ -1591,19 +1630,14 @@
 					fontWeight: 400
 				},
 				itemHoverStyle: {
-					color: '' /* 마우스 오버시 색 */
+					color: ''
 				},
 				symbolPadding: 3,
-				/* 심볼 - 텍스트간 거리 */
-				symbolHeight: 8 /* 심볼 크기 */
+				symbolHeight: 8
 			},
-
-			/* 툴팁 */
 			tooltip: {
-				shared: true /* 툴팁 공유 */
+				shared: true
 			},
-
-			/* 옵션 */
 			plotOptions: {
 				pie: {
 					dataLabels: {
