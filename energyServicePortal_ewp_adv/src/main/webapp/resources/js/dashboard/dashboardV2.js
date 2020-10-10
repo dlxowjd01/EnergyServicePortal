@@ -518,11 +518,11 @@ const monthlyChartDraw = async () => {
 		monthlyChart.yAxis[0].setTitle({
 			text: rtnUnit,
 			align: 'low',
-			rotation: 0, /* 타이틀 기울기 */
-			y: 25, /* 타이틀 위치 조정 */
+			rotation: 0,
+			y: 25,
 			x: 15,
 			style: {
-				color: 'var(--white60)',
+				color: 'var(--grey)',
 				fontSize: '12px'
 			}
 		});
@@ -676,11 +676,11 @@ const dailyChartDraw = async () => {
 		dailyChart.yAxis[0].setTitle({
 			text: rtnUnit,
 			align: 'low',
-			rotation: 0, /* 타이틀 기울기 */
-			y: 25, /* 타이틀 위치 조정 */
+			rotation: 0,
+			y: 25,
 			x: 15,
 			style: {
-				color: 'var(--white60)',
+				color: 'var(--grey)',
 				fontSize: '12px'
 			}
 		});
@@ -815,7 +815,7 @@ const typeSiteDraw = async () => {
 		typeSiteCurrent.yAxis[0].setTitle({
 			text: rtnUnit,
 			style: {
-				color: 'var(--white60)',
+				color: 'var(--grey)',
 				fontSize: '12px'
 			}
 		});
@@ -982,6 +982,7 @@ const alarmInfoList = async () => {
 
 				let alarmList = new Array();
 				let alarmColor = "";
+				let alarmEl = $('.indiv[data-alarm]');
 				
 				apiData.forEach(alarm => {
 					if(alarm.level !== 0) {
@@ -991,42 +992,36 @@ const alarmInfoList = async () => {
 					}
 				});
 
-				// if(alarmList.length>0){
-				// 	// const isUrgent = alarmList.includes(4);
-				// 	// const isShutoff = alarmList.includes(3);
-				// 	// const isCritical = alarmList.includes(2);
-				// 	// const isWarning = alarmList.includes(1);
-				// 	// const isInfo = alarmList.includes(1);
-					
-				// 	if(alarmList.includes(4)){
-				// 		alarmColor = "urgent";
-				// 	} else {
-				// 		if(!isEmpty(alarmList.includes(3))){
-				// 			alarmColor = "shutoff";
-				// 		} else {
-				// 			if(!isEmpty(alarmList.includes(2))){
-				// 				alarmColor = "critical";
-				// 			} else {
-				// 				if(!isEmpty(alarmList.includes(1))){
-				// 					alarmColor = "warning";
-				// 				} else {
-				// 					if(!isEmpty(alarmList.includes(0))){
-				// 						alarmColor = "info";
-				// 					} else {
-				// 						alarmColor = "";
-				// 					}
-				// 				}
-				// 			}
-				// 		}
-				// 	}
-				// } else {
-				// 	alarmColor = "";
-				// }
-				// let alarmEl = $('.indiv[data-alarm]');
-				// alarmEl.attr("data-alarm", alarmColor);
+				if(alarmList.length>0){
+					if( alarmList.findIndex(x => x.level == 4) > -1){
+						alarmColor = "urgent";
+					} else {
+						if( alarmList.findIndex(x => x.level == 3) > -1 ){
+							alarmColor = "shutoff";
+						} else {
+							if( alarmList.findIndex(x => x.level == 2) > -1 ){
+								alarmColor = "critical";
+							} else {
+								if( alarmList.findIndex(x => x.level == 1) > -1 ){
+									alarmColor = "warning";
+								} else {
+									if( alarmList.findIndex(x => x.level == 0) > -1 ){
+										alarmColor = "info";
+									} else {
+										alarmColor = "";
+									}
+								}
+							}
+						}
+					}
+				} else {
+					alarmColor = "";
+				}
 
-				$('.alarm-alert').find('em').text(alarmList.length);
+				alarmEl.attr("data-alarm", alarmColor);
+				alarmEl.find('em').text(alarmList.length);
 				setMakeList(alarmList, 'alarmNotice', {'dataFunction': {'level': levelClass}}); //list생성
+			
 			} else {
 				let alarmEl = $('.indiv[data-alarm]');
 				alarmEl.attr("data-alarm", "");
@@ -1252,7 +1247,7 @@ const searchSite = async function () {
 								}
 							} else if (index === 2) { //금일 예측
 								let siteForeGenSum = 0;
-								console.log('resultData', resultData);
+								// console.log('resultData', resultData);
 								if (!isEmpty(resultData[siteId])) {
 									const siteEnergy = resultData[siteId];
 									siteEnergy.forEach(siteForeEnergyItem => {

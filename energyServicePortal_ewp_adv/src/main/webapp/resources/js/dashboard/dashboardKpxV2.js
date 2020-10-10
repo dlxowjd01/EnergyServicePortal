@@ -8,9 +8,14 @@ let minIntervalCount = 0;
 let siteListTable = null;
 
 const resourceTemplate = new Object()
-const chartColorArray = ['var(--circle-charge)', 'var(--grey)', 'var(--circle-solar-power)', 'var(--white)'];
+const chartColorArray = [
+	'var(--circle-charge)',
+	'var(--circle-solar-power)',
+	'var(--blueberry)',
+	'var(--white)'
+];
 
-//대시보드 먼슬리 && 데일리 차트 시리증 설정.
+//대시보드 먼슬리 && 데일리 차트 시리즈 설정. <<<< 안쓰는 중???
 const seriesArray = [
 	{name: '충전', type: 'column', color: 'var(--circle-charge)', data: 'chargeList', suffix: 'kWh'},
 	{name: '방전', type: 'column', color: 'var(--grey)', data: 'dischargeList', suffix: 'kWh'},
@@ -618,6 +623,7 @@ const monthlyChartDraw = async () => {
 								, generation = siteEnergy['generation'];
 
 							if (!isEmpty(generation)) { //태양광
+								console.log("generation---", generation)
 								const items = generation.items;
 								items.forEach(item => {
 									if (!isEmpty(item['energy'])) {
@@ -709,15 +715,20 @@ const monthlyChartDraw = async () => {
 
 		monthlyChart.yAxis[0].setTitle({
 			text: rtnUnit,
-			align: 'low',
-			rotation: 0, /* 타이틀 기울기 */
-			y: 25, /* 타이틀 위치 조정 */
-			x: 15,
-			style: {
-				color: 'var(--white60)',
-				fontSize: '12px'
+			x: 10,
+			y: 27
+		});
+
+		monthlyChart.update({
+			chart: {
+				marginLeft: 40,
+				marginRight: 5,
+			},
+			legend: {
+				x: 10
 			}
 		});
+
 		monthlyChart.redraw();
 
 		$('#monthlySum').append(str);
@@ -857,7 +868,7 @@ const dailyChartDraw = async () => {
 			y: 25, /* 타이틀 위치 조정 */
 			x: 15,
 			style: {
-				color: 'var(--white60)',
+				color: 'var(--grey)',
 				fontSize: '12px'
 			}
 		});
@@ -988,7 +999,7 @@ const typeSiteDraw = async () => {
 		typeSiteCurrent.yAxis[0].setTitle({
 			text: rtnUnit,
 			style: {
-				color: 'var(--white60)',
+				color: 'var(--grey)',
 				fontSize: '12px'
 			}
 		});
@@ -1196,8 +1207,8 @@ const alarmInfoList = async () => {
 				});
 
 				let alarmList = new Array();
-				let alarmEl = $('.indiv[data-alarm]');
 				let alarmColor = "";
+				let alarmEl = $('.indiv[data-alarm]');
 				
 				apiDatas.forEach(alarm => {
 					if(alarm.level !== 0) {
@@ -1206,41 +1217,35 @@ const alarmInfoList = async () => {
 						alarmList.push(alarm);
 					}
 				});
+				if(alarmList.length>0){
+					if( alarmList.findIndex(x => x.level == 4) > -1){
+						alarmColor = "urgent";
+					} else {
+						if( alarmList.findIndex(x => x.level == 3) > -1 ){
+							alarmColor = "shutoff";
+						} else {
+							if( alarmList.findIndex(x => x.level == 2) > -1 ){
+								alarmColor = "critical";
+							} else {
+								if( alarmList.findIndex(x => x.level == 1) > -1 ){
+									alarmColor = "warning";
+								} else {
+									if( alarmList.findIndex(x => x.level == 0) > -1 ){
+										alarmColor = "info";
+									} else {
+										alarmColor = "";
+									}
+								}
+							}
+						}
+					}
+				} else {
+					alarmColor = "";
+				}
 
-				// if(alarmList.length>0){
-				// 	// const isUrgent = alarmList.includes(4);
-				// 	// const isShutoff = alarmList.includes(3);
-				// 	// const isCritical = alarmList.includes(2);
-				// 	// const isWarning = alarmList.includes(1);
-				// 	// const isInfo = alarmList.includes(1);
-					
-				// 	if(alarmList.includes(4)){
-				// 		alarmColor = "urgent";
-				// 	} else {
-				// 		if(!isEmpty(alarmList.includes(3))){
-				// 			alarmColor = "shutoff";
-				// 		} else {
-				// 			if(!isEmpty(alarmList.includes(2))){
-				// 				alarmColor = "critical";
-				// 			} else {
-				// 				if(!isEmpty(alarmList.includes(1))){
-				// 					alarmColor = "warning";
-				// 				} else {
-				// 					if(!isEmpty(alarmList.includes(0))){
-				// 						alarmColor = "info";
-				// 					} else {
-				// 						alarmColor = "";
-				// 					}
-				// 				}
-				// 			}
-				// 		}
-				// 	}
-				// alarmEl.attr("data-alarm", alarmColor);
-				// } else {
-				// 	alarmEl.attr("data-alarm", "");
-				// }
-				
-				$('.alarm-alert').find('em').text(alarmList.length);
+				alarmEl.attr("data-alarm", alarmColor);
+				alarmEl.find('em').text(alarmList.length);
+
 				setMakeList(alarmList, 'alarmNotice', {'dataFunction': {'level': levelClass}}); //list생성
 			}
 		}

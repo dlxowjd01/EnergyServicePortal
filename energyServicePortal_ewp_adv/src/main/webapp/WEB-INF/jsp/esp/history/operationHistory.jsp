@@ -142,7 +142,7 @@
 				$span.data('type', $('#chartDid button').data('type'));
 				$span.data('key', $(':radio[name="column"]:checked').val())
 				$span.data('key2', $(':radio[name="rdValue"]:checked').val());
-				$span.find('button').append('닫기');
+				$span.find('button').html("&times;");
 
 				if ($('#way').find('button').data('value') == 'l') {
 					$('#analyzeTag1 .tx-tit').eq(0).append($span);

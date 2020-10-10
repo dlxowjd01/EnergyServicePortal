@@ -6218,7 +6218,7 @@ div.di-wrap dl dd .error div p {
 
 .indiv.smain-tab-box {
 	padding: 0 0 24px;
-	min-height: 667px;
+	min-height: 666px;
 }
 
 /* 사업소 현황 */
@@ -7630,15 +7630,11 @@ div.di-wrap dl dd .error div p {
 
 .tag-box .tag-type button {
 	display: inline-block;
-	margin: -2px 2px 0 5px;
-	width: 10px;
-	height: 10px;
-	background: var(--btn-close) no-repeat center;
-	background-size: 9px;
-	border-radius: 10px;
-	text-indent: -9999px;
+	background: none;
 	border: 0;
-	vertical-align: middle;
+	font-size: 18px;
+	font-weight: 300;
+	padding: 0 5px 0 7px;
 }
 
 .tag-box .tx-tit {

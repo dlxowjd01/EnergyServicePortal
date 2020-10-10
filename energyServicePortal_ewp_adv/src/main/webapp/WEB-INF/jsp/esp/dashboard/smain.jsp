@@ -658,6 +658,7 @@
 				{
 					title: {
 						style: {
+							color: 'var(--grey)',
 							fontSize: '12px'
 						}
 					},
@@ -768,11 +769,11 @@
 			text: '- Wh',
 			align: 'center',
 			verticalAlign: 'middle',
-			y: 10,
 			x: 0,
+			y: 10,
 			style: {
 				fontSize: '14px',
-				color: 'var(--white60)'
+				color: 'var(--white87)'
 			}
 		},
 		subtitle: {
@@ -788,7 +789,6 @@
 			padding: 16,
 			style: {
 				color: 'var(--white)',
-				lineHeight: '18px'
 			},
 			valueSuffix: ' kwh',
 			pointFormat: '<b>{point.percentage:.0f}%</b>'
@@ -876,11 +876,11 @@
 			text: ''
 		},
 		xAxis: [{
-			lineColor: 'var(--white60)',
-			tickColor: 'var(--white60)',
+			lineColor: 'var(--grey)',
+			tickColor: 'var(--grey)',
 			gridLineColor: 'var(--white25)',
 			plotLines: [{
-				color: 'var(--white60)',
+				color: 'var(--grey)',
 				width: 1
 			}],
 			tickInterval: 1,
@@ -892,35 +892,31 @@
 		}],
 		yAxis: [
 			{
-				lineColor: 'var(--white60)',
-				tickColor: 'var(--white60)',
+				lineColor: 'var(--grey)',
+				tickColor: 'var(--grey)',
 				gridLineColor: 'var(--white25)',
 				gridLineWidth: 1,
 				plotLines: [{
-					color: 'var(--white60)',
+					color: 'var(--grey)',
 					width: 1
 				}],
 				gridLineWidth: 1,
 				title: {
-					text: 'MWh',
+					text: '',
 					align: 'low',
 					rotation: 0,
-					x: 5,
+					x: 15,
 					y: 25,
-					style: {
-						color: 'var(--white60)',
-						fontSize: '12px'
-					}
+					// style: {
+					// 	color: 'var(--grey)',
+					// 	fontSize: '12px'
+					// }
 				},
 				labels: {
 					formatter: function () {
-						if (String(this.value).length >= 7) {
-							return numberComma(this.value / 1000000);
-						} else if (String(this.value).length >= 5) {
-							return numberComma(this.value / 1000);
-						} else {
-							return (this.value/1000);
-						}
+						let suffix = this.chart.yAxis[0].userOptions.title.text;
+						console.log("suffix==", suffix)
+						return displayNumberFixedUnit(this.value, 'kWh', suffix, 1)[0];
 					},
 					style: {
 						color: 'var(--grey)',
@@ -932,13 +928,13 @@
 			<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
 			{
 				opposite: true,
-				lineColor: 'var(--white60)',
-				tickColor: 'var(--white60)',
+				lineColor: 'var(--grey)',
+				tickColor: 'var(--grey)',
 				gridLineColor: 'var(--white25)',
 				gridLineWidth: 1,
 				plotLines: [
 					{
-						color: 'var(--white60)',
+						color: 'var(--grey)',
 						width: 1
 					}
 				],
@@ -948,7 +944,6 @@
 					align: 'low',
 					rotation: 0,
 					y: 25,
-					x: -5,
 					style: {
 						color: 'var(--grey)',
 						fontSize: '12px'
@@ -979,28 +974,31 @@
 				// 	let tempVal = displayNumberFixedUnit(point.y, 'Wh', 'kWh', 0)[0];
 				// 	return s + '<br/><span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + tempVal + suffix;
 				// }, '<b>' + this.x + '월 </b>');
+				
 				return this.points.reduce(function (s, point) {
 					let suffix = point.series.userOptions.tooltip.valueSuffix;
-					return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + numberComma(point.y) + suffix;
-				}, '<b>' + this.x + '</b>');
+					let val = displayNumberFixedDecimal(point.y, 'kWh', 'kWh', 0)[0];
+					return s + '<br/><span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + val + " " + suffix;
+				}, '<span style="display:flex; margin-bottom:-10px;"><b>' + this.x + '월</b></span>');
+
 			},
 			shared: true,
+			useHTML: true,
 			borderColor: 'none',
 			backgroundColor: 'var(--bg-color)',
 			padding: 16,
 			style: {
 				color: 'var(--white)',
-				lineHeight: '18px'
 			}
 		},
 		legend: {
 			enabled: true,
 			align: 'right',
 			verticalAlign: 'top',
-			x: 5,
+			x: 20,
 			y: -10,
 			itemStyle: {
-				color: 'var(--grey)',
+				color: 'var(--white87)',
 				fontSize: '12px',
 				fontWeight: 400
 			},
@@ -1064,7 +1062,6 @@
 				data: [],
 				tooltip: {
 					valueSuffix: 'kWh',
-					lineHeight: '18px'
 				}
 
 			},
@@ -1078,7 +1075,6 @@
 				data: [],
 				tooltip: {
 					valueSuffix: '천원',
-					lineHeight: '18px'
 				}
 			}
 			</c:if>
@@ -1119,21 +1115,21 @@
 			text: ''
 		},
 		xAxis: [{
-			lineColor: 'var(--white60)',
-			tickColor: 'var(--white60)',
+			lineColor: 'var(--grey)',
+			tickColor: 'var(--grey)',
 			gridLineColor: 'var(--white25)',
 			plotLines: [{
-				color: 'var(--white60)',
+				color: 'var(--grey)',
 				width: 1
 			}],
 			labels: {
 				align: 'center',
 				overflow: 'justify',
 				y: 27,
-				style: {
-					color: 'var(--grey)',
-					fontSize: '12px'
-				},
+				// style: {
+				// 	color: 'var(--grey)',
+				// 	fontSize: '12px'
+				// },
 				formatter: function () {
 					let temp = date12List[ ( this.value - 1)];
 					let newVal = temp.substring(0,2) + "/" + temp.substring(2,4)
@@ -1151,13 +1147,13 @@
 		yAxis: [
 			{
 				opposite: true,
-				lineColor: 'var(--white60)',
-				tickColor: 'var(--white60)',
+				lineColor: 'var(--grey)',
+				tickColor: 'var(--grey)',
 				gridLineColor: 'var(--white25)',
 				gridLineWidth: 1,
 				plotLines: [
 					{
-						color: 'var(--white60)',
+						color: 'var(--grey)',
 						width: 1
 					}
 				],
@@ -1171,10 +1167,10 @@
 					rotation: 0,
 					y: 30,
 					x: -13,
-					style: {
-						color: 'var(--grey)',
-						fontSize: '12px',
-					}
+					// style: {
+					// 	color: 'var(--grey)',
+					// 	fontSize: '12px',
+					// }
 				},
 				labels: {
 					// y: -8,
@@ -1197,21 +1193,24 @@
 		],
 		tooltip: {
 			shared: true,
+			useHTML: true,
 			borderColor: 'none',
 			backgroundColor: 'var(--bg-color)',
 			padding: 16,
 			style: {
 				color: 'var(--white)',
-				lineHeight: '18px'
 			},
 			formatter: function () {
 				let temp = date12List[(this.x-1)];
 				let newVal = temp.substring(0,2) + "/" + temp.substring(2,4);
 
-				return ['<b>' + newVal + '</b>'].concat(
+				return ['<span style="display:flex; margin-bottom:-10px;"><b>' + newVal + '</b></span>'].concat(
 					this.points ?
 						this.points.map(function (point) {
-							return "<br/><span style='color:" + point.series.color + "'>\u25CF</span> " + point.series.name + point.y  + "<br/>";
+							let suffix  = '';
+							point.series.options.tooltip.valueSuffix ? (suffix = point.series.options.tooltip.valueSuffix) : (suffix = "");
+
+							return  "<span style='color:" + point.series.color + "'>\u25CF</span> " + point.series.name + ": " + point.point.y + " " + suffix + "<br/>";
 						}) : []
 				);
 			},
@@ -1223,7 +1222,7 @@
 			x: -10,
 			y: -10,
 			itemStyle: {
-				color: 'var(--grey)',
+				color: 'var(--white87)',
 				fontSize: '12px',
 				fontWeight: 400
 			},
@@ -1350,7 +1349,6 @@
 					formatter: function () {
 						let temp = date31List[this.value];
 						let newVal = temp.substring(0,2) + "/" + temp.substring(2,4);
-
 						return newVal;
 					},
 				}
@@ -1369,11 +1367,11 @@
 		},
 		xAxis: [
 			{
-				lineColor: 'var(--white60)',
-				tickColor: 'var(--white60)',
+				lineColor: 'var(--grey)',
+				tickColor: 'var(--grey)',
 				gridLineColor: 'var(--white25)',
 				plotLines: [{
-					color: 'var(--white60)',
+					color: 'var(--grey)',
 					width: 1
 				}],
 				// minRange:  24 * 3600 * 1000,
@@ -1439,7 +1437,7 @@
 				gridLineWidth: 0,
 				plotLines: [
 					{
-						color: 'var(--white60)',
+						color: 'var(--grey)',
 						width: 1
 					}
 				],
@@ -1464,16 +1462,16 @@
 		],
 		tooltip: {
 			shared: true,
+			useHTML: true,
 			split: false,
 			borderColor: 'none',
 			backgroundColor: 'var(--bg-color)',
 			padding: 16,
 			style: {
 				color: 'var(--white)',
-				lineHeight: '18px'
 			},
-			valueSuffix: ' kwh',
 			formatter: function () {
+			
 			// 	return "<b>"+this.x+"</b><br/>"+
             //         "<span style='color:" + this.points[0].series.color +
             //         "'>\u25CF</span> " +                                 
@@ -1486,11 +1484,15 @@
 				// console.log("temp==", this.value);
 				let temp = date31List[this.x];
 				let newVal = temp.substring(0,2) + "/" + temp.substring(2,4);
-
-				return ['<b>' + newVal + '</b>'].concat(
+			
+				return ['<span style="display:flex; margin-bottom:-10px;"><b>' + newVal + '</b></span>'].concat(
 					this.points ?
 						this.points.map(function (point) {
-							return "<span style='color:" + point.series.color + "'>\u25CF</span> " + point.series.name;
+							let suffix  = '';
+							point.series.options.tooltip.valueSuffix ? (suffix = point.series.options.tooltip.valueSuffix) : (suffix = "");
+
+							// console.log("point trend--", point)
+							return "<br/><span style='color:" + point.series.color + "'>\u25CF</span> " + point.series.name + ": " + point.point.y + " " + suffix;
 						}) : []
 				);
 			},
@@ -1541,11 +1543,11 @@
 			text: ''
 		},
 		xAxis: {
-			lineColor: 'var(--white60)',
-			tickColor: 'var(--white60)',
+			lineColor: 'var(--grey)',
+			tickColor: 'var(--grey)',
 			gridLineColor: 'var(--white25)',
 			plotLines: [{
-				color: 'var(--white60)',
+				color: 'var(--grey)',
 				width: 1
 			}],
 			labels: {
@@ -1564,17 +1566,17 @@
 			crosshair: true
 		},
 		yAxis: {
-			lineColor: 'var(--white60)',
-			tickColor: 'var(--white60)',
+			lineColor: 'var(--grey)',
+			tickColor: 'var(--grey)',
 			gridLineColor: 'var(--white25)',
 			plotLines: [{
-				color: 'var(--white60)',
+				color: 'var(--grey)',
 				width: 1
 			}],
 			gridLineWidth: 1,
 			min: 0,
 			title: {
-				text: 'kWh',
+				text: '',
 				align: 'low',
 			rotation: 0,
 				y: 25,
@@ -1606,16 +1608,16 @@
 			formatter: function () {
 				return this.points.reduce(function (s, point) {
 					let suffix = point.series.userOptions.tooltip.valueSuffix;
-					return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + numberComma(point.y) + suffix;
-				}, '<b>' + this.x + '시 </b>');
+					return s + '<br/><span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + numberComma(point.y) + suffix;
+				}, '<span style="display:flex; margin-bottom:-10px;"><b>' + this.x + '시</b></span>');
 			},
 			shared: true,
+			useHTML: true,
 			borderColor: 'none',
 			backgroundColor: 'var(--bg-color)',
 			padding: 16,
 			style: {
 				color: 'var(--white87)',
-				lineHeight: '18px'
 			},
 		},
 		legend: {
@@ -1625,7 +1627,7 @@
 			x: 5,
 			y: -10,
 			itemStyle: {
-				color: 'var(--grey)',
+				color: 'var(--white87)',
 				fontSize: '12px',
 				fontWeight: 400
 			},
@@ -1669,7 +1671,6 @@
 				color: 'var(--turquoise)', /* PV발전량 */
 				tooltip: {
 					valueSuffix: 'kWh',
-					lineHeight: '18px'
 				},
 				data: []
 			},
@@ -1687,7 +1688,6 @@
 				color: 'var(--grey)',
 				tooltip: {
 					valueSuffix: 'kWh',
-					lineHeight: '18px'
 				},
 				data: []
 			}
@@ -1729,11 +1729,11 @@
 			text: ''
 		},
 		xAxis: {
-			lineColor: 'var(--white60)',
-			tickColor: 'var(--white60)',
+			lineColor: 'var(--grey)',
+			tickColor: 'var(--grey)',
 			gridLineColor: 'var(--white25)',
 			plotLines: [{
-				color: 'var(--white60)',
+				color: 'var(--grey)',
 				width: 1
 			}],
 			labels: {
@@ -1755,11 +1755,11 @@
 			{
 				// className: 'js-axis-title',
 				opposite: true,
-				lineColor: 'var(--white60)',
-				tickColor: 'var(--white60)',
+				lineColor: 'var(--grey)',
+				tickColor: 'var(--grey)',
 				gridLineColor: 'var(--white25)',
 				plotLines: [{
-					color: 'var(--white60)',
+					color: 'var(--grey)',
 					width: 1
 				}],
 				gridLineWidth: 1,
@@ -1792,13 +1792,13 @@
 				}
 			},
 			{
-				lineColor: 'var(--white60)',
-				tickColor: 'var(--white60)',
+				lineColor: 'var(--grey)',
+				tickColor: 'var(--grey)',
 				gridLineColor: 'var(--white25)',
 				gridLineWidth: 1,
 				plotLines: [
 					{
-						color: 'var(--white60)',
+						color: 'var(--grey)',
 						width: 1
 					}
 				],
@@ -1840,7 +1840,6 @@
 			valueSuffix: 'kWh',
 			style: {
 				color: 'var(--white87)',
-				lineHeight: '18px'
 			}
 		},
 		legend: {
@@ -1850,7 +1849,7 @@
 			x: 5,
 			y: -10,
 			itemStyle: {
-				color: 'var(--grey)',
+				color: 'var(--white87)',
 				fontSize: '12px',
 				fontWeight: 400
 			},
@@ -1907,11 +1906,11 @@
 			text: ''
 		},
 		xAxis: {
-			lineColor: 'var(--white60)',
-			tickColor: 'var(--white60)',
+			lineColor: 'var(--grey)',
+			tickColor: 'var(--grey)',
 			gridLineColor: 'var(--white25)',
 			plotLines: [{
-				color: 'var(--white60)',
+				color: 'var(--grey)',
 				width: 1
 			}],
 			labels: {
@@ -1932,11 +1931,11 @@
 		yAxis: [
 			{
 				opposite: true,
-				lineColor: 'var(--white60)',
-				tickColor: 'var(--white60)',
+				lineColor: 'var(--grey)',
+				tickColor: 'var(--grey)',
 				gridLineColor: 'var(--white25)',
 				plotLines: [{
-					color: 'var(--white60)',
+					color: 'var(--grey)',
 					width: 1
 				}],
 				gridLineWidth: 1,
@@ -1970,13 +1969,13 @@
 			},
 			{
 				opposite: false,
-				lineColor: 'var(--white60)',
-				tickColor: 'var(--white60)',
+				lineColor: 'var(--grey)',
+				tickColor: 'var(--grey)',
 				gridLineColor: 'var(--white25)',
 				gridLineWidth: 1,
 				plotLines: [
 					{
-						color: 'var(--white60)',
+						color: 'var(--grey)',
 						width: 1
 					}
 				],
@@ -2018,7 +2017,6 @@
 			valueSuffix: 'kWh',
 			style: {
 				color: 'var(--white87)',
-				lineHeight: '18px'
 			}
 		},
 		legend: {
@@ -2029,7 +2027,7 @@
 			y: -10,
 			margin: 30,
 			itemStyle: {
-				color: 'var(--grey)',
+				color: 'var(--white87)',
 				fontSize: '12px',
 				fontWeight: 400,
 			},
@@ -2568,7 +2566,6 @@
 										color: colorArr[index],
 										tooltip: {
 											valueSuffix: "kWh",
-											lineHeight: '18px'
 										},
 										marker: {
 											symbol: "circle"
@@ -3404,6 +3401,7 @@
 		let totalPrevYearEnergy = 0;
 		let totalPrevMonthEnergy = 0;
 		let energyData = [];
+		let energyMaxVal = 0;
 		let irradiationData = [];
 		let billingData = [];
 
@@ -3424,8 +3422,10 @@
 					for (let d = 0, arrLength = chartItems1.length; d < arrLength; d++) {
 						let dataMonth = parseInt(String(chartItems1[d].basetime).substring(4, 6));
 						if (i + 1 == dataMonth) {
-							energyData[i] = [i, chartItems1[d].energy / 1000];
-
+							energyData[i] = [i, chartItems1[d].energy/1000];
+							if(chartItems1[d].energy/1000 > energyMaxVal ){
+								energyMaxVal = chartItems1[d].energy/1000;
+							}
 							if (!oid.match('testkpx')) {
 								if ($(':radio[name="radio_t"]:checked').val() == 1) {
 									let energy = chartItems1[d].energy / 1000;
@@ -3488,29 +3488,76 @@
 			if (!oid.match('testkpx')) {
 				let seriesName = '';
 				let newSuffix = '';
+				
 				dailyChart.series[1].setData(billingData);
 
 				if ($(':radio[name="radio_t"]:checked').val() == 1) {
 					seriesName = 'PR';
 					newSuffix = '%';
+					dailyChart.yAxis[1].update({
+						title:{
+							text: newSuffix,
+							x: -20
+						}
+					});
 				} else if ($(':radio[name="radio_t"]:checked').val() == 2) {
 					seriesName = '발전시간';
 					newSuffix = '시간';
+					dailyChart.yAxis[1].update({
+						title:{
+							text: newSuffix,
+							x: -15
+						}
+					});
 				} else {
 					seriesName = '매전량';
 					newSuffix = '천원';
+
+					dailyChart.yAxis[1].update({
+						title:{
+							text: newSuffix,
+							x: -5
+						}
+					});
 				}
 
 				dailyChart.series[1].name = seriesName;
 				dailyChart.series[1].tooltipOptions.valueSuffix = newSuffix;
 				dailyChart.series[1].legendItem.element.firstElementChild.innerHTML = seriesName;
-				dailyChart.yAxis[1].update({
-					title:{
-						text: newSuffix,
-					}
+				dailyChart.update({
+					legend: {
+						x: 0
+					},
+					yAxis: [{
+						title: {
+							text: displayNumberFixedDecimal(energyMaxVal, 'kWh', 3, 2)[1]
+						}
+					}]
 				});
+				dailyChart.redraw();
+
+			} else {
+				dailyChart.update({
+					chart: {
+						marginRight: 10,
+					},
+					legend: {
+						x: 10
+					},
+					yAxis: [{
+						title: {
+							x: 7,
+							text: displayNumberFixedDecimal(energyMaxVal, 'kWh', 3, 2)[1]
+						}
+					}]
+				});
+
+				dailyChart.redraw();
 			}
 		} else {
+			// let newDailyChart = $('#dailyChart').highcharts();
+			let trimChartItems2;
+			let trimChartItems3;
 			let seriesName = [
 				{
 					label : '${siteName}' + ' 대시보드'
@@ -3545,7 +3592,7 @@
 				dashStyle: 'ShortDash',
 				color: 'var(--white60)',
 				tooltip: {
-					valueSuffix: 'kWh',
+					valueSuffix: '%',
 				},
 				marker: {
 					symbol: "circle"
@@ -3555,9 +3602,6 @@
 				// 	pointStart: 10,
 				// }
 			});
-			
-			let trimChartItems3;
-			let trimChartItems2;
 			
 			if(!isEmpty(chartItems3)){
 				trimChartItems3 = chartItems3.slice(18, 30);
@@ -3588,23 +3632,12 @@
 				dashStyle: 'ShortDash',
 				color: 'var(--white60)',
 				tooltip: {
-					valueSuffix: 'kWh',
+					valueSuffix: '%',
 				},
 				data: trimChartItems2,
 			});
 
 		}
-	
-		if(oid.match('testkpx')) {
-			// console.log("daily chart margin----")
-			let chart = $('#dailyChart').highcharts();
-			// chart.margin[1]= 0;
-			chart.optionsMarginRight -= 30;
-			chart.isDirtyBox = true;
-			chart.redraw();
-			// chart.render(); 
-		}
-	
 	}
 
 	function getWeatherCalendarEnergyData() {
@@ -4390,11 +4423,11 @@
 			data.sort((a, b) => {
 				return a.localtime > b.localtime ? -1 : a.localtime < b.localtime ? 1 : 0;
 			});
-
+			
 			let alarmList = new Array();
-			let alarmEl = $('.indiv[data-alarm]');
 			let alarmColor = "";
-
+			let alarmEl = $('.indiv[data-alarm]');
+			
 			data.forEach((el, index) => {
 				if(el.level != 0) {
 					let localTime = (el.localtime != null && el.localtime != '') ? String(el.localtime) : '';
@@ -4402,41 +4435,35 @@
 					alarmList.push(el);
 				}
 			});
+			
+			if(alarmList.length>0){
+				if( alarmList.findIndex(x => x.level == 4) > -1){
+					alarmColor = "urgent";
+				} else {
+					if( alarmList.findIndex(x => x.level == 3) > -1 ){
+						alarmColor = "shutoff";
+					} else {
+						if( alarmList.findIndex(x => x.level == 2) > -1 ){
+							alarmColor = "critical";
+						} else {
+							if( alarmList.findIndex(x => x.level == 1) > -1 ){
+								alarmColor = "warning";
+							} else {
+								if( alarmList.findIndex(x => x.level == 0) > -1 ){
+									alarmColor = "info";
+								} else {
+									alarmColor = "";
+								}
+							}
+						}
+					}
+				}
+			} else {
+				alarmColor = "";
+			}
 
-			// if(alarmList.length>0){
-			// 	// const isUrgent = alarmList.includes(4);
-			// 	// const isShutoff = alarmList.includes(3);
-			// 	// const isCritical = alarmList.includes(2);
-			// 	// const isWarning = alarmList.includes(1);
-			// 	// const isInfo = alarmList.includes(1);
-				
-			// 	if(alarmList.includes(4)){
-			// 		alarmColor = "urgent";
-			// 	} else {
-			// 		if(!isEmpty(alarmList.includes(3))){
-			// 			alarmColor = "shutoff";
-			// 		} else {
-			// 			if(!isEmpty(alarmList.includes(2))){
-			// 				alarmColor = "critical";
-			// 			} else {
-			// 				if(!isEmpty(alarmList.includes(1))){
-			// 					alarmColor = "warning";
-			// 				} else {
-			// 					if(!isEmpty(alarmList.includes(0))){
-			// 						alarmColor = "info";
-			// 					} else {
-			// 						alarmColor = "";
-			// 					}
-			// 				}
-			// 			}
-			// 		}
-			// 	}
-			// alarmEl.attr("data-alarm", alarmColor);
-			// } else {
-			// 	alarmEl.attr("data-alarm", "");
-			// }
-
-			$('.alarm-alert').find('em').text(alarmList.length);
+			alarmEl.attr("data-alarm", alarmColor);
+			alarmEl.find('em').text(alarmList.length);
 			setMakeList(alarmList, 'alarmNotice', {'dataFunction': {'level': levelClass}});
 
 		}).fail(function (jqXHR, textStatus, errorThrown) {

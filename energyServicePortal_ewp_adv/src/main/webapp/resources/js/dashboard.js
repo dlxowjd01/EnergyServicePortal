@@ -213,7 +213,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 	},
 	navigation: {
 		buttonOptions: {
-			enabled: false /* 메뉴 안보이기 */
+			enabled: false
 		}
 	},
 	title: {
@@ -223,15 +223,11 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 		text: ''
 	},
 	xAxis: [{
-		lineColor: 'var(--white60)', /* 눈금선색 */
-		tickWidth: 1,
-		tickColor: 'var(--white60)',
-		tickInterval: 1,
+		lineColor: 'var(--grey)',
+		tickColor: 'var(--grey)',
 		gridLineColor: 'var(--white25)',
-		plotLines: [{
-			color: 'var(--white60)',
-			width: 1
-		}],
+		tickWidth: 1,
+		tickColor: 'var(--grey)',
 		type: 'datetime',
 		dateTimeLabelFormats: {
 			millisecond: '%H:%M:%S.%L',
@@ -245,36 +241,35 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 		},
 		labels: {
 			align: 'center',
-			y: 27, /* 그래프와 거리 */
 			style: {
-				color: 'var(--white60)',
+				color: 'var(--grey)',
 				fontSize: '12px'
 			}
 		},
-		tickInterval: 1, /* 눈금의 픽셀 간격 조정 */
+		tickInterval: 1,
 		title: {
 			text: null
 		},
 		categories: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
 		crosshair: true
 	}],
-	yAxis: [{ // Primary yAxis
-		lineColor: 'var(--white60)', /* 눈금선색 */
-		tickColor: 'var(--white60)',
+	yAxis: [{
+		lineColor: 'var(--grey)',
+		tickColor: 'var(--grey)',
 		gridLineColor: 'var(--white25)',
-		gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
+		gridLineWidth: 1,
 		plotLines: [{
-			color: 'var(--white60)',
+			color: 'var(--grey)',
 			width: 1
 		}],
 		title: {
 			text: 'kWh',
 			align: 'low',
-			rotation: 0, /* 타이틀 기울기 */
-			y: 25, /* 타이틀 위치 조정 */
+			rotation: 0,
+			y: 25,
 			x: 15,
 			style: {
-				color: 'var(--white60)',
+				color: 'var(--grey)',
 				fontSize: '12px'
 			}
 		},
@@ -287,20 +282,20 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 				}
 			},
 			style: {
-				color: 'var(--white60)',
+				color: 'var(--grey)',
 				fontSize: '12px'
 			}
 		}
-	}, { // Secondary yAxis
+	}, {
 		gridLineWidth: 0,
 		title: {
 			text: '천원',
 			align: 'low',
-			rotation: 0, /* 타이틀 기울기 */
-			y: 25, /* 타이틀 위치 조정 */
+			rotation: 0,
+			y: 25,
 			x: -12,
 			style: {
-				color: 'var(--white60)',
+				color: 'var(--grey)',
 				fontSize: '12px'
 			}
 		},
@@ -313,7 +308,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 				}
 			},
 			style: {
-				color: 'var(--white60)',
+				color: 'var(--grey)',
 				fontSize: '12px'
 			}
 		},
@@ -326,7 +321,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 				return s + ' 월 <br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + numberComma(point.y) + suffix;
 			}, '<b>' + this.x + '</b>');
 		},
-		shared: true, /* 툴팁 공유 */
+		shared: true,
 		borderColor: 'none',
 		backgroundColor: 'var(--bg-color)',
 		padding: 16,
@@ -334,7 +329,6 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 			color: 'var(--white87)'
 		}
 	},
-	/* 범례 */
 	legend: {
 		enabled: true,
 		align: 'right',
@@ -342,31 +336,30 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 		x: 5,
 		y: -15,
 		itemStyle: {
-			color: 'var(--white60)',
+			color: 'var(--white87)',
 			fontSize: '12px',
 			fontWeight: 400
 		},
 		itemHoverStyle: {
-			color: '' /* 마우스 오버시 색 */
+			color: ''
 		},
-		symbolPadding: 0, /* 심볼 - 텍스트간 거리 */
-		symbolHeight: 7 /* 심볼 크기 */
+		symbolPadding: 0,
+		symbolHeight: 7
 	},
-	/* 옵션 */
 	plotOptions: {
 		series: {
 			label: {
 				connectorAllowed: false
 			},
-			borderWidth: 0 /* 보더 0 */
+			borderWidth: 0
 		},
 		line: {
 			marker: {
-				enabled: false /* 마커 안보이기 */
+				enabled: false
 			}
 		},
 		column: {
-			stacking: 'normal' /*위로 쌓이는 막대  ,normal */
+			stacking: 'normal'
 		}
 	},
 	series: [{
@@ -403,60 +396,11 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 			valueSuffix: '천원'
 		}
 	}],
-	/* 출처 */
 	credits: {
 		enabled: false
 	},
-	/* 반응형 */
 	responsive: {
-		rules: [{ /* 차트 사이즈 - 4K용 */
-			condition: {
-				minWidth: 787,
-			},
-			chartOptions: {
-				xAxis: {
-					labels: {
-						style: {
-							fontSize: '12px'
-						}
-					}
-				},
-				yAxis: [{
-					title: {
-						y: 30,
-						x: 20,
-						style: {
-							fontSize: '12px'
-						}
-					},
-					labels: {
-						style: {
-							fontSize: '12px'
-						}
-					}
-				}, {
-					title: {
-						y: 30,
-						x: -15,
-						style: {
-							fontSize: '12px'
-						}
-					},
-					labels: {
-						style: {
-							fontSize: '12px'
-						}
-					}
-				}],
-				legend: {
-					itemStyle: {
-						fontSize: '12px'
-					},
-					symbolPadding: 5,
-					symbolHeight: 10
-				}
-			}
-		}, { /* 차트 사이즈 - 모바일용 */
+		rules: [{
 			condition: {
 				maxWidth: 481
 			},
@@ -659,7 +603,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 	},
 	navigation: {
 		buttonOptions: {
-			enabled: false /* 메뉴 안보이기 */
+			enabled: false
 		}
 	},
 	title: {
@@ -669,9 +613,9 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		text: ''
 	},
 	xAxis: [{
-		// lineColor: 'var(--white60)',
+		lineColor: 'var(--grey)',
 		tickWidth: 1,
-		tickColor: 'var(--white60)',
+		tickColor: 'var(--grey)',
 		plotLines: [{
 			color: 'red',
 			width: 1
@@ -691,12 +635,12 @@ const dailyChart = Highcharts.chart('dailyChart', {
 			align: 'center',
 			y: 27, /* 그래프와 거리 */
 			style: {
-				color: 'var(--white60)',
+				color: 'var(--grey)',
 				fontSize: '12px'
 			}
 		},
 		tickWidth: 1,
-		tickColor: 'var(--white87)',
+		tickColor: 'var(--grey)',
 		tickInterval: 1,
 		title: {
 			text: null
@@ -705,22 +649,22 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		crosshair: true
 	}],
 	yAxis: [{ // Primary yAxis
-		lineColor: 'var(--white87)', /* 눈금선색 */
-		tickColor: 'var(--white87)',
+		lineColor: 'var(--grey)',
+		tickColor: 'var(--grey)',
 		gridLineColor: 'var(--white25)',
 		gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
 		plotLines: [{
-			color: 'var(--white87)',
+			color: 'var(--grey)',
 			width: 1
 		}],
 		title: {
 			text: 'kWh',
 			align: 'low',
-			rotation: 0, /* 타이틀 기울기 */
-			y: 25, /* 타이틀 위치 조정 */
+			rotation: 0,
+			y: 25,
 			x: 15,
 			style: {
-				color: 'var(--white60)',
+				color: 'var(--grey)',
 				fontSize: '12px'
 			}
 		},
@@ -733,20 +677,20 @@ const dailyChart = Highcharts.chart('dailyChart', {
 				}
 			},
 			style: {
-				color: 'var(--white60)',
+				color: 'var(--grey)',
 				fontSize: '12px'
 			}
 		}
-	}, { // Secondary yAxis
+	}, {
 		gridLineWidth: 0, /* 기준선 grid 안보이기/보이기 */
 		title: {
 			text: '천원',
 			align: 'low',
-			rotation: 0, /* 타이틀 기울기 */
-			y: 25, /* 타이틀 위치 조정 */
+			rotation: 0,
+			y: 25,
 			x: -12,
 			style: {
-				color: 'var(--white60)',
+				color: 'var(--grey)',
 				fontSize: '12px'
 			}
 		},
@@ -759,7 +703,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 				}
 			},
 			style: {
-				color: 'var(--white60)',
+				color: 'var(--grey)',
 				fontSize: '12px'
 			}
 		},
@@ -780,7 +724,6 @@ const dailyChart = Highcharts.chart('dailyChart', {
 			color: 'var(--white87)'
 		}
 	},
-	/* 범례 */
 	legend: {
 		enabled: true,
 		align: 'right',
@@ -788,23 +731,22 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		x: 5,
 		y: -15,
 		itemStyle: {
-			color: 'var(--white60)',
+			color: 'var(--white87)',
 			fontSize: '12px',
 			fontWeight: 400
 		},
 		itemHoverStyle: {
-			color: '' /* 마우스 오버시 색 */
+			color: ''
 		},
-		symbolPadding: 0, /* 심볼 - 텍스트간 거리 */
-		symbolHeight: 7 /* 심볼 크기 */
+		symbolPadding: 0,
+		symbolHeight: 7
 	},
-	/* 옵션 */
 	plotOptions: {
 		series: {
 			label: {
 				connectorAllowed: false
 			},
-			borderWidth: 0, /* 보더 0 */
+			borderWidth: 0,
 			events: {
 				legendItemClick: function () {
 					var visibility = this.visible ? 'visible' : 'hidden';
@@ -816,11 +758,11 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		},
 		line: {
 			marker: {
-				enabled: false /* 마커 안보이기 */
+				enabled: false
 			}
 		},
 		column: {
-			stacking: 'normal' /*위로 쌓이는 막대  ,normal */
+			stacking: 'normal'
 		}
 	},
 	series: [{
@@ -857,7 +799,6 @@ const dailyChart = Highcharts.chart('dailyChart', {
 			valueSuffix: '천원'
 		}
 	}],
-	/* 출처 */
 	credits: {
 		enabled: false
 	}
@@ -1056,7 +997,7 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 	},
 	navigation: {
 		buttonOptions: {
-			enabled: false /* 메뉴 안보이기 */
+			enabled: false
 		}
 	},
 	title: {
@@ -1066,11 +1007,10 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 		text: ''
 	},
 	xAxis: {
-		lineColor: 'var(--white25)',
-		// tickColor: 'var(--white60)',
+		lineColor: 'var(--grey)',
 		gridLineColor: 'var(--white25)',
 		plotLines: [{
-			color: 'var(--white60)',
+			color: 'var(--grey)',
 			width: 1
 		}],
 		labels: {
@@ -1087,11 +1027,10 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 		}
 	},
 	yAxis: {
-		lineColor: 'var(--white60)', /* 눈금선색 */
-		// tickColor: 'var(--white60)',
+		lineColor: 'var(--grey)',
 		gridLineColor: 'var(--white25)',
 		plotLines: [{
-			color: 'var(--white60)',
+			color: 'var(--grey)',
 			width: 1
 		}],
 		gridLineWidth: 0, /* 기준선 grid 안보이기/보이기 */
@@ -1107,7 +1046,7 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 			overflow: 'justify',
 			x: -10, /* 그래프와의 거리 조정 */
 			style: {
-				color: 'var(--white60)',
+				color: 'var(--grey)',
 				fontSize: '12px'
 			}
 		}
@@ -1119,15 +1058,15 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 		x: 5,
 		y: -10,
 		itemStyle: {
-			color: 'var(--white60)',
+			color: 'var(--white87)',
 			fontSize: '12px',
 			fontWeight: 400
 		},
 		itemHoverStyle: {
-			color: '' /* 마우스 오버시 색 */
+			color: ''
 		},
-		symbolPadding: 3, /* 심볼 - 텍스트간 거리 */
-		symbolHeight: 7 /* 심볼 크기 */
+		symbolPadding: 3,
+		symbolHeight: 7
 	},
 	tooltip: {
 		formatter: function () {
@@ -1136,7 +1075,7 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 				return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + numberComma(point.y) + suffix;
 			}, '<b>' + this.x + '</b>');
 		},
-		shared: true, /* 툴팁 공유 */
+		shared: true,
 		borderColor: 'none',
 		backgroundColor: 'var(--bg-color)',
 		padding: 16,
@@ -1212,6 +1151,9 @@ const getAlarmInfo = function () {
 
 		//데이터 세팅
 		let alarmList = new Array();
+		let alarmColor = "";
+		let alarmEl = $('.indiv[data-alarm]');
+		
 		data.forEach((element, index) => {
 			if(element.level != 0) {
 				let localTime = (element.localtime != null && element.localtime != '') ? String(element.localtime) : '';
@@ -1220,9 +1162,36 @@ const getAlarmInfo = function () {
 			}
 		});
 	
-		$('alarm-alert ').find('em').text(alarmList.length);
+		if(alarmList.length>0){
+			if( alarmList.findIndex(x => x.level == 4) > -1){
+				alarmColor = "urgent";
+			} else {
+				if( alarmList.findIndex(x => x.level == 3) > -1 ){
+					alarmColor = "shutoff";
+				} else {
+					if( alarmList.findIndex(x => x.level == 2) > -1 ){
+						alarmColor = "critical";
+					} else {
+						if( alarmList.findIndex(x => x.level == 1) > -1 ){
+							alarmColor = "warning";
+						} else {
+							if( alarmList.findIndex(x => x.level == 0) > -1 ){
+								alarmColor = "info";
+							} else {
+								alarmColor = "";
+							}
+						}
+					}
+				}
+			}
+		} else {
+			alarmColor = "";
+		}
 
+		alarmEl.attr("data-alarm", alarmColor);
+		alarmEl.find('em').text(alarmList.length);
 		setMakeList(alarmList, 'alarmNotice', {'dataFunction': {'level': levelClass}}); //list생성
+	
 	}).fail(function (jqXHR, textStatus, errorThrown) {
 		console.error(jqXHR);
 		console.error(textStatus);
@@ -1507,7 +1476,7 @@ var pieChart = Highcharts.chart('pie_chart', {
 	},
 	navigation: {
 		buttonOptions: {
-			enabled: false /* 메뉴 안보이기 */
+			enabled: false
 		}
 	},
 	title: {
@@ -1518,7 +1487,7 @@ var pieChart = Highcharts.chart('pie_chart', {
 		x: 0,
 		style: {
 			fontSize: '14px',
-			color: 'var(--white60)'
+			color: 'var(--white87)'
 		}
 	},
 	subtitle: {
@@ -2026,7 +1995,7 @@ const siteListChart = function (selector, seriesData, title) {
 		},
 		navigation: {
 			buttonOptions: {
-				enabled: false /* 메뉴 안보이기 */
+				enabled: false
 			}
 		},
 		title: {
@@ -2044,7 +2013,6 @@ const siteListChart = function (selector, seriesData, title) {
 		subtitle: {
 			text: ''
 		},
-		/* 출처 */
 		credits: {
 			enabled: false
 		},

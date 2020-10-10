@@ -132,10 +132,10 @@
 						</div>
 						<div class="chart-info-right">
 							<div class="legend-wrap">
+								<span class="bu1"><fmt:message key="gdash.4.gen"/></span>
 								<c:if test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
 									<span class="bu2">풍력</span>
 								</c:if>
-								<span class="bu1"><fmt:message key="gdash.4.gen"/></span>
 								<span class="bu4"><fmt:message key="gdash.4.idle"/></span>
 							</div>
 							<ul>

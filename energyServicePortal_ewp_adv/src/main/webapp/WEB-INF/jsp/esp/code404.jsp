@@ -4,14 +4,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>error</title>
+	<meta charset="utf-8">
+	<title>404 error</title>
 
-<script language="javascript">
-function fncGoAfterErrorPage(){
-    history.back(-2);
-}
-</script>
+	<script>
+		function fncGoAfterErrorPage(){
+			window.history.back(-2);
+		}
+	</script>
 </head>
 
 <body>
@@ -21,7 +21,7 @@ function fncGoAfterErrorPage(){
 		-->
 		<h1 style="color:rgba(255,255,255,0.97); font-size: 56px; text-align: center; line-height: 64px;">404 Error</h1>
 		<h2 style="color:rgba(255,255,255,0.97); font-size: 24px; text-align: center; line-height: 32px; margin-bottom: 48px;">요청하신 페이지를 찾을 수 없습니다.<br /></h2>
-		<a href="javascript:fncGoAfterErrorPage();" style="padding: 10px 36px; background-color: #1d98e9; color: rgba(255,255,255, 0.87); border-radius: 2px; border-width:0">이전 페이지</a>
+		<!-- <a href="javascript:fncGoAfterErrorPage();" style="padding: 10px 36px; background-color: #1d98e9; color: rgba(255,255,255, 0.87); border-radius: 2px; border-width:0">이전 페이지</a> -->
 	</div>
 
 </body>
