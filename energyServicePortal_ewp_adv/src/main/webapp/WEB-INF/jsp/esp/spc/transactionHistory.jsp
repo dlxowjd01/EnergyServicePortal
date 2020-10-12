@@ -7,7 +7,6 @@
 		const tableBody = $('#tableBody');
 		const tableFooter = $('#tableFooter')
 		const tbodyClone = tableBody.find("template.table-body").clone().html();
-		const tfootClone = tableFooter.find("template.table-footer").clone().html();
 		const searchForm = $('#transactionForm');
 
 		let spcInfoArr = [];
@@ -94,7 +93,6 @@
 
 		function pageInit () {
 			tableBody.find("template").remove();
-			tableFooter.find("template").remove();
 			$('#fromDate').datepicker('setDate', '-15');
 			$('#toDate').datepicker('setDate', '+15');
 
@@ -250,7 +248,7 @@
 				$.ajax(option).done(function (json, textStatus, jqXHR) {
 					$('#searchOption').removeClass('in');
 					$('#tableBody').empty();
-					$('#tableFooter').empty();
+					tableFooter.find('td:nth-child(4)').html('');
 					if (json.data.length > 0) {
 						let perPage = 14;
 						let startNum = (Number(currentPage) - 1) * perPage;
@@ -282,8 +280,7 @@
 			let totalAmount = 0;
 			let page = currentPage;
 			let index = 0;
-			newData.map(item => {
-				totalAmount += item.total_amount;
+			newData.map((item, itemIndex) => {
 				if(!isEmpty(arr)) {
 					item.opt = arr;	
 				}
@@ -303,6 +300,7 @@
 					}
 				}).then(res => {
 					index++;
+					totalAmount += item.total_amount;
 					const spcMatch = spcInfoArr.findIndex(x => x.spc_id === item.spc_id);
 					let perPage = 14;
 					let tbodyStr = '';
@@ -411,11 +409,8 @@
 					}
 
 					item.total_amount ? ( amount = item.total_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원' ) : amount = '-';
-
 					( ( item.requested_by !== undefined ) && ( item.requested_by != "string" ) ) ? ( requested_by = item.requested_by ) : ( requested_by = '-' );
-
 					item.status_changed_at ? ( updated_at = ( new Date(item.status_changed_at).toLocaleDateString("en-CA").replace(/\//g, '-') + '&emsp;&emsp;' + new Date(item.status_changed_at).toLocaleTimeString()) ) : ( updated_at = '-' );
-
 					item.status_changed_by ? ( approved_by = item.status_changed_by ) : ( approved_by = '-' );
 
 					// res.to_account_bank.locale
@@ -437,19 +432,16 @@
 						.replace(/\*linkAttr\*/g, link_attr).replace(/\*visibility\*/g, visibility).replace(/\*editVisibility\*/g, edit_visibility)
 						.replace(/\*statusChangedBy\*/g, status_changed_by);
 					tableBody.append($(tbodyStr));
+				}).finally(() => {
+					let str = totalAmount.toString();
+					tableFooter.find('td:nth-child(4)').html(numberComma(str) + ' 원');
 				}).catch(error => {
 					if(error){
 						console.log("error", error);
 						return false;
 					}
 				});
-			})
-			// let sum = totalAmount.toLocaleString('kr-KO');
-			let str = totalAmount.toString();
-			// str = sum.replace(/\d(?=(\d{3})+\.)/g, '$&,')
-			let tfootStr = '';
-			tfootStr = tfootClone.replace(/\*total\*/g, totalAmount.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
-			tableFooter.append($(tfootStr));
+			});
 		}
 
 		function comparer(index) {
@@ -934,15 +926,13 @@
 						</template>
 					</tbody>
 					<tfoot id="tableFooter">
-						<template class='table-footer'>
-							<tr>
-								<td></td>
-								<td>합계</td>
-								<td colspan='3'></td>
-								<td class="right">*total* 원</td>
-								<td colspan='4'></td>
-							</tr>
-						</template>
+						<tr>
+							<td></td>
+							<td>합계</td>
+							<td colspan='3'></td>
+							<td class="right"></td>
+							<td colspan='4'></td>
+						</tr>
 					</tfoot>
 				</table>
 				<!-- <div class='pagination' id='pagination'></div> -->
