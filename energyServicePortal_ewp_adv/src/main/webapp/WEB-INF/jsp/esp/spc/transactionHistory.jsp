@@ -148,7 +148,7 @@
 						}
 					});
 
-					displayDropdown($('#spcList').parents('div.dropdown'));
+					displayDropdown($('#spcList').parent('div'));
 				}
 
 				if (!isEmpty(start)) {
@@ -175,7 +175,7 @@
 							inp.checked = false;
 						}
 					});
-					displayDropdown($('#spcStatus').parents('div.dropdown.box-align'));
+					displayDropdown($('#spcStatus').parent('div'));
 				}
 
 				if (!isEmpty(type)) {
@@ -204,7 +204,7 @@
 							inp.checked = false;
 						}
 					});
-				 displayDropdown($('#spcPurposeList').parents('div.dropdown.box-align'));
+				    displayDropdown($('#spcPurposeList').parent('div'));
 				}
 
 				searchForm.submit();
