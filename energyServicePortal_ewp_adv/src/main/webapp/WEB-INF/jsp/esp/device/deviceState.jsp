@@ -1426,6 +1426,8 @@
 			areaData['billing'] = $('#billing').is(':checked');
 			if (!isEmpty(alarmArray)) {
 				areaData['alarm_code'] = alarmArray.join(',');
+			} else {
+				delete areaData['alarm_code'];
 			}
 			areaData['capacity'] = Number(areaData['capacity']) * 1000;
 			areaData['capacity_unit'] = 'W';
