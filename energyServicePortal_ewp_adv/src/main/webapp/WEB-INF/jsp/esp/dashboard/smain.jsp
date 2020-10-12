@@ -644,32 +644,6 @@
 		}
 
 		Highcharts.setOptions({
-			xAxis: {
-				labels: {
-					align: 'center',
-					y: 27,
-					style: {
-						color: 'var(--grey)',
-						fontSize: '12px'
-					}
-				},
-			},
-			yAxis: [
-				{
-					title: {
-						style: {
-							color: 'var(--grey)',
-							fontSize: '12px'
-						}
-					},
-					labels: {
-						style: {
-							color: 'var(--grey)',
-							fontSize: '12px'
-						}
-					}
-				}
-			],
 			lang : {
 				resetZoom : '확대/축소 초기화',
 				loading : '로딩 중...',
@@ -907,15 +881,14 @@
 					rotation: 0,
 					x: 15,
 					y: 25,
-					// style: {
-					// 	color: 'var(--grey)',
-					// 	fontSize: '12px'
-					// }
+					style: {
+						color: 'var(--grey)',
+						fontSize: '12px'
+					}
 				},
 				labels: {
 					formatter: function () {
 						let suffix = this.chart.yAxis[0].userOptions.title.text;
-						console.log("suffix==", suffix)
 						return displayNumberFixedUnit(this.value, 'kWh', suffix, 1)[0];
 					},
 					style: {
@@ -993,6 +966,7 @@
 		},
 		legend: {
 			enabled: true,
+			// useHTML: true,
 			align: 'right',
 			verticalAlign: 'top',
 			x: 20,
@@ -1050,12 +1024,12 @@
 		series: [
 			{
 				<c:choose>
-					<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-				name: '발전 실적',
-					</c:when>
-					<c:otherwise>
-				name: 'PV발전량',
-					</c:otherwise>
+				<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
+					name: '발전 실적',
+				</c:when>
+				<c:otherwise>
+					name: 'PV발전량',
+				</c:otherwise>
 				</c:choose>
 				type: 'column',
 				color: 'var(--turquoise)',
@@ -1089,7 +1063,7 @@
 		chart: {
 			marginTop: 80,
 			marginLeft: 20,
-			marginRight: 60,
+			marginRight: 70,
 			marginBottom: 80,
 			height: 280,
 			backgroundColor: 'transparent',
@@ -1204,7 +1178,7 @@
 				let temp = date12List[(this.x-1)];
 				let newVal = temp.substring(0,2) + "/" + temp.substring(2,4);
 
-				return ['<span style="display:flex; margin-bottom:-10px;"><b>' + newVal + '</b></span>'].concat(
+				return ['<span style="display:flex; margin-bottom:-10px;"><b>' + newVal + '</b></span><br/>'].concat(
 					this.points ?
 						this.points.map(function (point) {
 							let suffix  = '';
@@ -1258,8 +1232,8 @@
 	var dailySolarTrendChart = Highcharts.stockChart('dailySolarTrendChart', {
 		chart: {
 			marginTop: 30,
-			marginLeft: 20,
-			marginRight: 60,
+			marginLeft: 25,
+			marginRight: 70,
 			height: 300,
 			backgroundColor: 'transparent',
 			zoomType: 'xy',
@@ -1700,8 +1674,8 @@
 		chart: {
 			// styledMode: true,
 			marginTop: 80,
-			marginLeft: 30,
-			marginRight: 50,
+			marginLeft: 20,
+			marginRight: 55,
 			height: 320,
 			backgroundColor: 'transparent',
 			zoomType: 'xy',
@@ -1846,7 +1820,7 @@
 			enabled: true,
 			align: 'right',
 			verticalAlign: 'top',
-			x: 5,
+			x: -5,
 			y: -10,
 			itemStyle: {
 				color: 'var(--white87)',
@@ -1886,7 +1860,7 @@
 		chart: {
 			marginTop: 40,
 			marginLeft: 20,
-			marginRight: 50,
+			marginRight: 55,
 			height: 320,
 			backgroundColor: 'transparent',
 			zoomType: 'xy',
@@ -2023,7 +1997,7 @@
 			enabled: true,
 			align: 'right',
 			verticalAlign: 'top',
-			x: 5,
+			x: -5,
 			y: -10,
 			margin: 30,
 			itemStyle: {
@@ -3494,46 +3468,69 @@
 				if ($(':radio[name="radio_t"]:checked').val() == 1) {
 					seriesName = 'PR';
 					newSuffix = '%';
-					dailyChart.yAxis[1].update({
-						title:{
-							text: newSuffix,
-							x: -20
+
+					dailyChart.update({
+						yAxis: [{
+							title: {
+								text: displayNumberFixedDecimal(energyMaxVal, 'kWh', 3, 2)[1]
+							}
+						}, {
+							title:{
+								text: newSuffix,
+								x: -20
+							}
+						}],
+						legend: {
+							x: 20,
 						}
 					});
 				} else if ($(':radio[name="radio_t"]:checked').val() == 2) {
 					seriesName = '발전시간';
 					newSuffix = '시간';
-					dailyChart.yAxis[1].update({
-						title:{
-							text: newSuffix,
-							x: -15
+	
+					dailyChart.update({
+						yAxis: [{
+							title: {
+								text: displayNumberFixedDecimal(energyMaxVal, 'kWh', 3, 2)[1]
+							}
+						}, {
+							title: {
+								text: newSuffix,
+								x: -15
+							},
+						}],
+						legend: {
+							x: 15,
 						}
 					});
 				} else {
 					seriesName = '매전량';
 					newSuffix = '천원';
 
-					dailyChart.yAxis[1].update({
-						title:{
-							text: newSuffix,
-							x: -5
+					dailyChart.update({
+						yAxis: [{
+							title: {
+								text: displayNumberFixedDecimal(energyMaxVal, 'kWh', 3, 2)[1]
+							}
+						}, {
+							title: {
+								text: newSuffix,
+								x: -10,
+							},
+						}],
+						legend: {
+							x: 0,
 						}
 					});
 				}
 
-				dailyChart.series[1].name = seriesName;
-				dailyChart.series[1].tooltipOptions.valueSuffix = newSuffix;
-				dailyChart.series[1].legendItem.element.firstElementChild.innerHTML = seriesName;
-				dailyChart.update({
-					legend: {
-						x: 0
-					},
-					yAxis: [{
-						title: {
-							text: displayNumberFixedDecimal(energyMaxVal, 'kWh', 3, 2)[1]
-						}
-					}]
+				dailyChart.series[1].update({
+					name: seriesName,
+					tooltip: {
+						valueSuffix: newSuffix,
+					}
 				});
+
 				dailyChart.redraw();
 
 			} else {

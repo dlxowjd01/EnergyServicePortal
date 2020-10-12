@@ -1049,7 +1049,7 @@ const alarmInfoList = async () => {
 				});
 
 				let alarmList = new Array();
-				let alarmColor = '';
+				let alarmColor = "";
 				let alarmEl = $('.indiv[data-alarm]');
 				
 				apiData.forEach(alarm => {
@@ -1060,35 +1060,36 @@ const alarmInfoList = async () => {
 					}
 				});
 
-				if(alarmList.length > 0){
-					if(alarmList.findIndex(x => x.level == 4) > -1){
-						alarmColor = 'urgent';
+				if(alarmList.length>0){
+					if( alarmList.findIndex(x => x.level == 4) > -1){
+						alarmColor = "urgent";
 					} else {
-						if(alarmList.findIndex(x => x.level == 3) > -1 ){
-							alarmColor = 'shutoff';
+						if( alarmList.findIndex(x => x.level == 3) > -1 ){
+							alarmColor = "shutoff";
 						} else {
-							if(alarmList.findIndex(x => x.level == 2) > -1 ){
-								alarmColor = 'critical';
+							if( alarmList.findIndex(x => x.level == 2) > -1 ){
+								alarmColor = "critical";
 							} else {
-								if(alarmList.findIndex(x => x.level == 1) > -1 ){
-									alarmColor = 'warning';
+								if( alarmList.findIndex(x => x.level == 1) > -1 ){
+									alarmColor = "warning";
 								} else {
-									if(alarmList.findIndex(x => x.level == 0) > -1 ){
-										alarmColor = 'info';
+									if( alarmList.findIndex(x => x.level == 0) > -1 ){
+										alarmColor = "info";
 									} else {
-										alarmColor = '';
+										alarmColor = "";
 									}
 								}
 							}
 						}
 					}
 				} else {
-					alarmColor = '';
+					alarmColor = "";
 				}
 
 				alarmEl.attr("data-alarm", alarmColor);
 				alarmEl.find('em').text(alarmList.length);
 				setMakeList(alarmList, 'alarmNotice', {'dataFunction': {'level': levelClass}}); //list생성
+			
 			} else {
 				let alarmEl = $('.indiv[data-alarm]');
 				alarmEl.attr("data-alarm", "");
@@ -1314,6 +1315,7 @@ const searchSite = async function () {
 								}
 							} else if (index === 2) { //금일 예측
 								let siteForeGenSum = 0;
+								// console.log('resultData', resultData);
 								if (!isEmpty(resultData[siteId])) {
 									const siteEnergy = resultData[siteId];
 									siteEnergy.forEach(siteForeEnergyItem => {
