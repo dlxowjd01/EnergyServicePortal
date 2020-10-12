@@ -318,103 +318,130 @@
 						withdraw_bank_name = '-';
 					}
 
-						// if(!isEmpty(item.opt)){
-						// 	let acc = [...item.opt[5].split(',')];
-						// 	res.filter(x => {
-						// 		return acc.includes(String(x.purpose));
-						// 	});
-						// }
+					if (!isEmpty(item.withdraw_account_no)) {
+						withdraw_acc_num = item.withdraw_account_no;
+					} else {
+						withdraw_acc_num = '-'
+					}
 
-						let uniqSet = new Set(p);
-						if( uniqSet.size === 0 ) {
-							purpose = '-'
-						} else if( uniqSet.size == 1 ) {
-							purpose = ( purposeArr[0].value[p[0]] )
-						} else {
-							purpose = ( purposeArr[0].value[p[0]] ) + ' 외 +' + ( uniqSet.size - 1 ) + '건';
-						}
-						transaction_spc_id = item.spc_id;
-						transaction_req_id = item.request_id;
+					let transaction_type = '';
+					res.length > 0 ? ( res.length ==1 ? ( transaction_type = '출금' ) : ( transaction_type = '출금 '+ (res.length) + '건' ) ): ( transaction_type = '-' );
+					let amount = '';
+					let updated_at = ''
+					let requested_by = '';
+					let approved_by = '';
+					let status_changed_by = '';
+					// status
+					let status = '';
+					let status_val = '';
+					// delete icon
+					let visibility = '';
+					let edit_visibility = '';
+					let link_attr = '';
+					let purposeArr = [
+						{ label: "출금", value: [ "관리 운영비", "사무 수탁비", "부채 상환", "대수선비", "배당금 적립", "일반 지출", "DSRA 적립", "기타", "운영계좌", "공사비", "임대료", "대납금"]},
+						{ label: "입금", value: [ "REC 수익", "SMP 수익", "DSRA 적립", "기타", "유보 계좌", "운영 계좌" ]},
+					];
+					let account_type_list = [ "전력 판매대금", "REC 판매대금", "관리 운영비", "일반 렌탈", "전력중개 수수료", "전기 요금", "원리금" ];
+					let purpose = '';
 
-						if(item.status == 0) {
-							status="반송"
-							status_val = "0"
-							visibility = "show";
-							edit_visibility = "hidden";
-							link_attr = "text-link";
-						} else if(item.status == 1) {
-							status="승인 대기"
-							status_val = "1"
-							visibility = "show";
-							edit_visibility = "show";
-							link_attr = "text-link";
-						} else if (item.status == 2) {
-							status="승인 중"
-							status_val = "2"
-							link_attr = "text-link";
-							visibility = "hidden";
-							edit_visibility = "hidden";
-						} else if(item.status == 3) {
-							status="승인 완료"
-							status_val = "3"
-							visibility = "hidden";
-							edit_visibility = "hidden";
-							link_attr = "text-blue";
-						} else if(item.status == 4) {
-							status="출금 가승인"
-							status_val = "4"
-							visibility = "hidden";
-							edit_visibility = "hidden";
-							link_attr = "text-link";
-						} else if(item.status == 5) {
-							status="출금 최종승인"
-							status_val = "5"
-							visibility = "hidden";
-							edit_visibility = "hidden";
-							link_attr = "text-blue";
-						}
-						
-						item.total_amount ? ( amount = item.total_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원' ) : amount = '-';
+					const p = [];
+					let size = '';
 
-						( ( item.requested_by !== undefined ) && ( item.requested_by != "string" ) ) ? ( requested_by = item.requested_by ) : ( requested_by = '-' );
+					for(let i=0, arrayLength = res.length; i < arrayLength; i++){
+						p.push(res[i].purpose);
+					}
 
-						item.status_changed_at ? ( updated_at = ( new Date(item.status_changed_at).toLocaleDateString("en-CA").replace(/\//g, '-') + '&emsp;' + new Date(item.status_changed_at).toLocaleTimeString()) ) : ( updated_at = '-' );
+					if(!isEmpty(item.opt)){
+						let acc = [...item.opt[5].split(',')];
+						res.filter(x => {
+							return acc.includes(String(x.purpose));
+						});
+					}
 
-						item.status_changed_by ? ( approved_by = item.status_changed_by ) : ( approved_by = '-' );
+					let uniqSet = new Set(p);
+					if( uniqSet.size === 0 ) {
+						purpose = '-'
+					} else if( uniqSet.size == 1 ) {
+						purpose = ( purposeArr[0].value[p[0]] )
+					} else {
+						purpose = ( purposeArr[0].value[p[0]] ) + ' 외 +' + ( uniqSet.size - 1 ) + '건';
+					}
+					transaction_spc_id = item.spc_id;
+					transaction_req_id = item.request_id;
 
-						// res.to_account_bank.locale
-						tbodyStr = tbodyClone.replace(/\*index\*/g, (Number(page)-1)*perPage + Number(index)+1 )
-							.replace(/\*transactionSpcId\*/g, transaction_spc_id)
-							.replace(/\*transactionSpcName\*/g, transaction_spc_name)
-							.replace(/\*transactionReqId\*/g, transaction_req_id)
-							.replace(/\*withdrawDay\*/g, withdraw_day)
-							.replace(/\*withdrawBankName\*/g, withdraw_bank_name).replace(/\*withdrawAccountNum\*/g, withdraw_acc_num)
-							.replace(/\*transactionType\*/g, transaction_type)
-							.replace(/\*purpose\*/g, purpose)
-							// .replace(/\*accountType\*/g, account_type_list[res.length])
-							.replace(/\*amount\*/g, amount)
-							.replace(/\*updatedAt\*/g, updated_at)
-							.replace(/\*requestedBy\*/g, requested_by)
-							.replace(/\*approvedBy\*/g, approved_by)
-							.replace(/\*status\*/g, status)
-							.replace(/\*statusVal\*/g, status_val)
-							.replace(/\*linkAttr\*/g, link_attr).replace(/\*visibility\*/g, visibility).replace(/\*editVisibility\*/g, edit_visibility)
-							.replace(/\*statusChangedBy\*/g, status_changed_by);
-						tableBody.append($(tbodyStr));
-					}).then(result => {
-					}, function(error){
-						if(error){
-							console.log("error", error);
-							return false;
-						};
-					});
-			})
-			// let sum = totalAmount.toLocaleString('kr-KO');
-			let str = totalAmount.toString();
-			// str = sum.replace(/\d(?=(\d{3})+\.)/g, '$&,')
-			let tfootStr = '';
-			tfootStr = tfootClone.replace(/\*total\*/g, totalAmount.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
-			tableFooter.append($(tfootStr));
+					if(item.status == 0) {
+						status="반송"
+						status_val = "0"
+						visibility = "show";
+						edit_visibility = "hidden";
+						link_attr = "text-link";
+					} else if(item.status == 1) {
+						status="승인 대기"
+						status_val = "1"
+						visibility = "show";
+						edit_visibility = "show";
+						link_attr = "text-link";
+					} else if (item.status == 2) {
+						status="승인 중"
+						status_val = "2"
+						link_attr = "text-link";
+						visibility = "hidden";
+						edit_visibility = "hidden";
+					} else if(item.status == 3) {
+						status="승인 완료"
+						status_val = "3"
+						visibility = "hidden";
+						edit_visibility = "hidden";
+						link_attr = "text-blue";
+					} else if(item.status == 4) {
+						status="출금 가승인"
+						status_val = "4"
+						visibility = "hidden";
+						edit_visibility = "hidden";
+						link_attr = "text-link";
+					} else if(item.status == 5) {
+						status="출금 최종승인"
+						status_val = "5"
+						visibility = "hidden";
+						edit_visibility = "hidden";
+						link_attr = "text-blue";
+					}
+
+					item.total_amount ? ( amount = item.total_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원' ) : amount = '-';
+					( ( item.requested_by !== undefined ) && ( item.requested_by != "string" ) ) ? ( requested_by = item.requested_by ) : ( requested_by = '-' );
+					item.status_changed_at ? ( updated_at = ( new Date(item.status_changed_at).toLocaleDateString("en-CA").replace(/\//g, '-') + '&emsp;&emsp;' + new Date(item.status_changed_at).toLocaleTimeString()) ) : ( updated_at = '-' );
+					item.status_changed_by ? ( approved_by = item.status_changed_by ) : ( approved_by = '-' );
+
+					// res.to_account_bank.locale
+					tbodyStr = tbodyClone.replace(/\*index\*/g, (Number(page)-1)*perPage + Number(index) )
+						.replace(/\*transactionSpcId\*/g, transaction_spc_id)
+						.replace(/\*transactionSpcName\*/g, transaction_spc_name)
+						.replace(/\*transactionReqId\*/g, transaction_req_id)
+						.replace(/\*withdrawDay\*/g, withdraw_day)
+						.replace(/\*withdrawBankName\*/g, withdraw_bank_name).replace(/\*withdrawAccountNum\*/g, withdraw_acc_num)
+						.replace(/\*transactionType\*/g, transaction_type)
+						.replace(/\*purpose\*/g, purpose)
+						// .replace(/\*accountType\*/g, account_type_list[res.length])
+						.replace(/\*amount\*/g, amount)
+						.replace(/\*updatedAt\*/g, updated_at)
+						.replace(/\*requestedBy\*/g, requested_by)
+						.replace(/\*approvedBy\*/g, approved_by)
+						.replace(/\*status\*/g, status)
+						.replace(/\*statusVal\*/g, status_val)
+						.replace(/\*linkAttr\*/g, link_attr).replace(/\*visibility\*/g, visibility).replace(/\*editVisibility\*/g, edit_visibility)
+						.replace(/\*statusChangedBy\*/g, status_changed_by);
+					tableBody.append($(tbodyStr));
+				}).finally(() => {
+					let str = totalAmount.toString();
+					tableFooter.find('td:nth-child(4)').html(numberComma(str) + ' 원');
+				}).catch(error => {
+					if(error){
+						console.log("error", error);
+						return false;
+					}
+				});
+			});
 		}
 
 		function comparer(index) {
