@@ -3,6 +3,7 @@ let yearData = getSiteMainSchCollection('year');
 let monthData = getSiteMainSchCollection('month');
 let yesterData = getSiteMainSchCollection('yesterday');
 let dayData = getSiteMainSchCollection('day');
+let hourData = getSiteMainSchCollection('hour');
 let minIntervalCount = 0;
 
 //대시보드 먼슬리 && 데일리 차트 시리증 설정.
@@ -85,6 +86,7 @@ const firstAjax = () => {
 	monthData = getSiteMainSchCollection('month');
 	yesterData = getSiteMainSchCollection('yesterday');
 	dayData = getSiteMainSchCollection('day');
+	hourData = getSiteMainSchCollection('hour');
 
 	const siteSids = new Array();
 
@@ -123,6 +125,51 @@ const firstAjax = () => {
 		}
 	});
 
+	//중개거래 대시보드에서만 사용하는 항목
+	if (location.pathname.match('jmain')) {
+		urls.push({
+			url: apiHost + '/energy/sites?interval=hour',
+			type: 'GET',
+			data: {
+				sid: siteSids.toString(),
+				startTime: dayData.startTime,
+				endTime: dayData.endTime,
+				displayType: 'dashboard',
+				formId: 'v2'
+			}
+		});
+
+		urls.push({
+			url: apiHost + '/energy/forecasting/sites?interval=hour&startTime=' + dayData.startTime + '&endTime=' + dayData.endTime,
+			type: 'GET',
+			data: {
+				sid: siteSids.toString(),
+				displayType: 'dashboard',
+				formId: 'v2'
+			}
+		});
+
+		urls.push({
+			url: apiHost + '/energy/forecasting/sites?interval=hour&startTime=' + hourData.startTime + '&endTime=' + hourData.endTime,
+			type: 'GET',
+			data: {
+				sid: siteSids.toString(),
+				displayType: 'dashboard',
+				formId: 'v2'
+			}
+		});
+
+		//현재 발전량
+		urls.push({
+			url: apiHost + '/energy/now/sites?interval=hour',
+			type: 'GET',
+			data: {
+				sids: siteSids.toString(),
+				metering_type: 2
+			}
+		});
+	}
+
 	//1년 에너지 데이터
 	urls.push({
 		url: apiHost + '/energy/sites?interval=month',
@@ -159,12 +206,19 @@ const firstAjax = () => {
 	});
 
 	urls.push({
-		url: apiHost + '/energy/forecasting/sites?interval=day',
+		url: apiHost + '/energy/forecasting/sites?interval=day&startTime=' + dayData.startTime + '&endTime=' +dayData.endTime,
 		type: 'GET',
 		data: {
 			sid: siteSids.toString(),
-			startTime: yesterData.startTime,
-			endTime: yesterData.endTime,
+			formId: 'v2'
+		}
+	});
+
+	urls.push({
+		url: apiHost + '/energy/forecasting/sites?interval=day&startTime=' + yesterData.startTime + '&endTime=' +yesterData.endTime,
+		type: 'GET',
+		data: {
+			sid: siteSids.toString(),
 			formId: 'v2'
 		}
 	});
@@ -229,6 +283,7 @@ const minAjax = () => {
 	monthData = getSiteMainSchCollection('month');
 	yesterData = getSiteMainSchCollection('yesterday');
 	dayData = getSiteMainSchCollection('day');
+	hourData = getSiteMainSchCollection('hour');
 
 	const siteSids = new Array();
 	let urls = new Array();
@@ -246,24 +301,25 @@ const minAjax = () => {
 		});
 	});
 
+	//중개거래 대시보드에서만 사용하는 항목
+	if (location.pathname.match('jmain')) {
+		//현재 발전량
+		urls.push({
+			url: apiHost + '/energy/now/sites?interval=hour',
+			type: 'GET',
+			data: {
+				sids: siteSids.toString(),
+				metering_type: 2
+			}
+		});
+	}
+
 	urls.push({
-		url: apiHost + '/energy/now/sites',
+		url: apiHost + '/energy/now/sites?interval=day',
 		type: 'GET',
 		data: {
 			sids: siteSids.toString(),
-			metering_type: 2,
-			interval: 'day'
-		}
-	});
-
-	urls.push({
-		url: apiHost + '/energy/forecasting/sites?interval=15min',
-		type: 'GET',
-		data: {
-			sid: siteSids.toString(),
-			startTime: dayData.startTime,
-			endTime: dayData.endTime,
-			formId: 'v2'
+			metering_type: 2
 		}
 	});
 
@@ -279,10 +335,13 @@ const minAjax = () => {
 		},
 	});
 
-	delete apiDatas[apiHost + '/energy/now/sites'];
-	delete apiDatas[apiHost + '/energy/forecasting/sites?interval=15min'];
+	delete apiDatas[apiHost + '/energy/now/sites?interval=day'];
 	delete apiDatas[apiHost + '/status/raw/site'];
 	delete apiDatas[apiHost + '/alarms'];
+
+	if (location.pathname.match('jmain')) {
+		delete apiDatas[apiHost + '/energy/now/sites?interval=hour'];
+	}
 
 	ajaxData(urls, 'min');
 }
@@ -389,6 +448,10 @@ const ajaxData = (urls, target) => {
 		if (target === 'min') {
 			getTodayTotalDetail();
 			alarmInfoList();
+
+			if (location.pathname.match('jmain')) {
+				setRealtimeRecord();
+			}
 		} else {
 			monthlyChartDraw();
 			dailyChartDraw();
@@ -396,6 +459,10 @@ const ajaxData = (urls, target) => {
 			getTodayTotalDetail();
 			alarmInfoList();
 			searchSite();
+
+			if (location.pathname.match('jmain')) {
+				setRealtimeRecord();
+			}
 		}
 
 		document.getElementById('loadingCircleDashboard').style.display =  'none';
@@ -421,7 +488,7 @@ const monthlyChartDraw = async () => {
 	};
 
 	$(`.gmain-chart1 span.term`).text(today.getFullYear() + '.1.1 ~ ' + today.getFullYear() + '.' + (Number(today.getMonth()) + 1) + '.' + today.getDate());
-	return new Promise(resolve => {
+	new Promise(resolve => {
 		targetApi.forEach((targetUrl, index) => {
 			const apiData = apiDatas[targetUrl];
 			if (index === 0) {
@@ -528,7 +595,7 @@ const monthlyChartDraw = async () => {
 		});
 		monthlyChart.redraw();
 
-		return new Promise(resolve => {
+		new Promise(resolve => {
 			let str = '';
 			Object.entries(sumObj).forEach(([key, value]) => {
 				if(key == "chargeSum"){
@@ -583,7 +650,7 @@ const dailyChartDraw = async () => {
 
 	$(`.gmain-chart2 span.term`).text(today.format('yyyy.MM') + '.1 ~ ' + today.format('yyyy.MM') + '.' + today.getDate());
 
-	return new Promise(resolve => {
+	new Promise(resolve => {
 		targetApi.forEach((targetUrl, index) => {
 			const apiData = apiDatas[targetUrl];
 			if (index === 0) {
@@ -687,7 +754,7 @@ const dailyChartDraw = async () => {
 		dailyChart.xAxis[0].setCategories(categories);
 		dailyChart.redraw(); // 차트 데이터를 다시 그린다
 
-		return new Promise(resolve => {
+		new Promise(resolve => {
 			let str = '';
 			Object.entries(sumObj).forEach(([key, value]) => {
 				if(key == 'chargeSum'){
@@ -713,18 +780,17 @@ const dailyChartDraw = async () => {
 
 const typeSiteDraw = async () => {
 	const yesterData = getSiteMainSchCollection('yesterday');
-	const targetApi = [apiHost + '/energy/sites?interval=day&startTime=' + yesterData.startTime + '&endTime=' +yesterData.endTime, apiHost + '/energy/forecasting/sites?interval=day'];
-
+	const targetApi = [apiHost + '/energy/sites?interval=day&startTime=' + yesterData.startTime + '&endTime=' +yesterData.endTime, apiHost + '/energy/forecasting/sites?interval=day&startTime=' + yesterData.startTime + '&endTime=' +yesterData.endTime];
 	const yesterday = new Date();
-	let siteGenArray = new Object;
-	let siteForeGenArray = new Object;
-	let categories = new Array();
 
 	yesterday.setDate(Number(today.getDate()) - 1);
 
 	$(`.gmain-chart3 span.term`).text(yesterday.getFullYear() + '.' + (Number(yesterday.getMonth()) + 1) + '.' + yesterday.getDate());
 
-	return new Promise(resolve => {
+	new Promise(resolve => {
+		const siteGenArray = new Object;
+		const siteForeGenArray = new Object;
+
 		targetApi.forEach((targetUrl, index) => {
 			const apiData = apiDatas[targetUrl];
 			if (!isEmpty(apiData)) {
@@ -752,9 +818,11 @@ const typeSiteDraw = async () => {
 			}
 		});
 
-		resolve();
-	}).then(() => {
-
+		resolve({
+			siteGenArray: siteGenArray,
+			siteForeGenArray: siteForeGenArray
+		});
+	}).then(({siteGenArray, siteForeGenArray}) => {
 		let maxValue = 0;
 		Object.entries(siteGenArray).forEach(([siteId, data]) => {
 			if (data > maxValue) {
@@ -776,14 +844,16 @@ const typeSiteDraw = async () => {
 			typeSiteCurrent.series[i].remove();
 		}
 
+		let categories = new Array();
 		let tmepGenArray = new Array();
 		let tempForeArray = new Array();
 
 		siteList.forEach(site => {
 			const siteId = site.sid
 				, siteName = site.name;
-			if (!isEmpty(siteGenArray[siteId]) || !isEmpty(siteForeGenArray[siteId])) {
-				const siteGen = isEmpty(siteGenArray[siteId]) ? 0 : siteGenArray[siteId];
+
+			if (!isEmpty(siteGenArray[siteId]) && siteGenArray[siteId] > 0) {
+				const siteGen = siteGenArray[siteId];
 				const siteForeGen = isEmpty(siteForeGenArray[siteId]) ? 0 : siteForeGenArray[siteId];
 
 				categories.push(siteName);
@@ -860,7 +930,7 @@ const getTodayTotalDetail = async function () {
 	$('#centerTbody tr td:nth-child(4)').text('');
 	$('#centerTbody tr td:nth-child(5)').text('');
 
-	return new Promise((resolve, reject) => {
+	new Promise((resolve, reject) => {
 		let acPowerSum = 0
 		  , capacitySum = 0
 		  , invertorCount = 0;
@@ -884,7 +954,6 @@ const getTodayTotalDetail = async function () {
 					$('#centerTbody tr td:nth-child(5)').html(numberComma(Math.floor(moneySum / 1000)) + '<em>&nbsp;&nbsp;천원</em>');
 				} else if (index === 1) {
 					let generationForecastSum = 0;
-					console.log('resultData', resultData);
 					Object.entries(resultData).forEach(([siteId, siteForeEnergyItem]) => {
 						if (!isEmpty(siteForeEnergyItem)) {
 							siteForeEnergyItem.forEach(siteForeEnergy => {
@@ -966,7 +1035,6 @@ const getTodayTotalDetail = async function () {
  * @returns {Promise<void>}
  */
 const alarmInfoList = async () => {
-	console.log("alarmInfoList====")
 	const targetApi = [apiHost + '/alarms'];
 
 	Object.entries(apiDatas).forEach(rst => {
@@ -981,7 +1049,7 @@ const alarmInfoList = async () => {
 				});
 
 				let alarmList = new Array();
-				let alarmColor = "";
+				let alarmColor = '';
 				let alarmEl = $('.indiv[data-alarm]');
 				
 				apiData.forEach(alarm => {
@@ -992,36 +1060,35 @@ const alarmInfoList = async () => {
 					}
 				});
 
-				if(alarmList.length>0){
-					if( alarmList.findIndex(x => x.level == 4) > -1){
-						alarmColor = "urgent";
+				if(alarmList.length > 0){
+					if(alarmList.findIndex(x => x.level == 4) > -1){
+						alarmColor = 'urgent';
 					} else {
-						if( alarmList.findIndex(x => x.level == 3) > -1 ){
-							alarmColor = "shutoff";
+						if(alarmList.findIndex(x => x.level == 3) > -1 ){
+							alarmColor = 'shutoff';
 						} else {
-							if( alarmList.findIndex(x => x.level == 2) > -1 ){
-								alarmColor = "critical";
+							if(alarmList.findIndex(x => x.level == 2) > -1 ){
+								alarmColor = 'critical';
 							} else {
-								if( alarmList.findIndex(x => x.level == 1) > -1 ){
-									alarmColor = "warning";
+								if(alarmList.findIndex(x => x.level == 1) > -1 ){
+									alarmColor = 'warning';
 								} else {
-									if( alarmList.findIndex(x => x.level == 0) > -1 ){
-										alarmColor = "info";
+									if(alarmList.findIndex(x => x.level == 0) > -1 ){
+										alarmColor = 'info';
 									} else {
-										alarmColor = "";
+										alarmColor = '';
 									}
 								}
 							}
 						}
 					}
 				} else {
-					alarmColor = "";
+					alarmColor = '';
 				}
 
 				alarmEl.attr("data-alarm", alarmColor);
 				alarmEl.find('em').text(alarmList.length);
 				setMakeList(alarmList, 'alarmNotice', {'dataFunction': {'level': levelClass}}); //list생성
-			
 			} else {
 				let alarmEl = $('.indiv[data-alarm]');
 				alarmEl.attr("data-alarm", "");
@@ -1066,14 +1133,14 @@ const levelClass = (level) => {
  * 사이트명 && 작동상태로 검색 기능 작동
  */
 const searchSite = async function () {
-	const targetApi = [apiHost + '/energy/sites?interval=day&startTime=' + yesterData.startTime + '&endTime=' +yesterData.endTime, apiHost + '/energy/now/sites?interval=day', apiHost + '/energy/forecasting/sites?interval=day', apiHost + '/weather/site', apiHost + '/alarms'];
+	const targetApi = [apiHost + '/energy/sites?interval=day&startTime=' + yesterData.startTime + '&endTime=' +yesterData.endTime, apiHost + '/energy/now/sites?interval=day', apiHost + '/energy/forecasting/sites?interval=day&startTime=' + dayData.startTime + '&endTime=' + dayData.endTime, apiHost + '/weather/site', apiHost + '/alarms'];
 	const searchName = document.getElementById('searchName').value.trim();
 	const deviceStatus = new Array();
 	document.querySelectorAll('[name="deviceStatus"]:checked').forEach(chk => {
 		deviceStatus.push(chk.value);
 	});
 
-	return new Promise((resolve, reject) => {
+	new Promise((resolve, reject) => {
 		const refineList = new Array();
 		siteList.forEach(site => {
 			const siteId = site.sid;
@@ -1247,7 +1314,6 @@ const searchSite = async function () {
 								}
 							} else if (index === 2) { //금일 예측
 								let siteForeGenSum = 0;
-								// console.log('resultData', resultData);
 								if (!isEmpty(resultData[siteId])) {
 									const siteEnergy = resultData[siteId];
 									siteEnergy.forEach(siteForeEnergyItem => {

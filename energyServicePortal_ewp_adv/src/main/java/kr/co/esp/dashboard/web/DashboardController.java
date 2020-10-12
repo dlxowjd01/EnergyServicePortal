@@ -34,6 +34,13 @@ public class DashboardController {
 
 	@RequestMapping(value = "/dashboard/jmain.do")
 	public String jmain(HttpServletRequest request, HttpSession session, Model model) {
+		String defaultOid = EgovProperties.getProperty("default.oid");
+		if ("testkpx".equals(defaultOid)) {
+			model.addAttribute("secondYAxis", false);
+		} else {
+			model.addAttribute("secondYAxis", true);
+		}
+
 		return "esp/dashboard/jmain";
 	}
 

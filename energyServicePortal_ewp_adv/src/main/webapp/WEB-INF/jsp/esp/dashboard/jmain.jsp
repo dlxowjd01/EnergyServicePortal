@@ -166,8 +166,9 @@
 	</div>
 	<div class="col-xl-4 col-md-12 col-sm-12">
 		<div class="indiv jmain-alarm wrap-type" data-alarm="">
-			<div class="alarm-status clear">
-				<div class="alarm-alert clear"><span><fmt:message key="vppdash.7.today_alerts" /></span><em>0</em></div><div class="alarm-warning clear"><a href="javascript:void(0);" onclick="pageMove('all', 'alarm');" class="btn btn-cancel"><fmt:message key="vppdash.7.details" /></a></div>
+			<div class="alarm-status">
+				<div class="alarm-alert"><span><fmt:message key="vppdash.7.today_alerts"/></span><em>0</em></div>
+				<div class="alarm-warning"><a href="javascript:void(0);" onclick="pageMove('all', 'alarm');" class="btn btn-cancel"><fmt:message key="gdash.6.details"/></a></div>
 			</div>
 			<div class="alarm-notice">
 				<ul id="alarmNotice">
@@ -262,7 +263,7 @@
 								<td>[alarmError]</td>
 								<td>[alarmWarning]</td>
 								<td class="left">[name]</td>
-								<td class="right">[capacity]</td>
+								<td class="right">[capacityView]</td>
 								<td class="right">[forecast]</td>
 								<td class="right">[accumulate]</td>
 								<td class="ESS">-</td>
@@ -294,7 +295,7 @@
 														<ul class="di-list">
 															<li>
 																<span class="di-li-title"><fmt:message key="vppdash.8.production" /> (kW)</span>
-																<span class="di-li-text">[activePower]</span>
+																<span class="di-li-text">[activePowerView]</span>
 															</li>
 															<li>
 																<span class="di-li-title"><fmt:message key="vppdash.8.gen_today" /> (kWh)</span>
@@ -319,7 +320,7 @@
 														<ul class="di-list">
 															<li>
 																<span class="di-li-title"><fmt:message key="vppdash.8.tot_cap" /> (kW)</span>
-																<span class="di-li-text">[capacity]</span>
+																<span class="di-li-text">[capacityView]</span>
 															</li>
 															<li>
 																<span class="di-li-title"><fmt:message key="vppdash.8.num_inv" /> (EA)</span>
@@ -352,47 +353,40 @@
 		</div>
 	</div>
 </div>
+<script type="text/javascript">
+	const secondYAxis = ${secondYAxis};
+</script>
 
-<script type="text/javascript" src="/js/dashboard.js"></script>
+<script type="text/javascript" src="/js/dashboard/dashboardV2.js"></script>
+<script type="text/javascript" src="/js/dashboard/dashboardChart.js"></script>
 <script type="text/javascript">
 	const siteList = JSON.parse('${siteList}');
 	const vgid = '<c:out value="${vgid}" escapeXml="false" />';
 	const today = new Date();
 
-	let actualCount = 0;
-	let forecastCount = 0;
-
-	let foreCastHourCount = 0;
-	let foreCastDayCount = 0;
-	let nowHour = false;
-	let nowDay = false;
-
-	let pvListHourly = new Array();
-	let pvListForecastingHourly = new Array();
-
 	let first = true;
 
-	function fn_cycle_1hour() {
-		if (!first) {
-			getYearGenData();
-			getDailyGenData();
-			getGenDataBySiteYesterday();
-			searchSiteList();
+	$(function () {
+		if (isEmpty(siteList)) {
+			$('#errMsg').text('해당 그룹에 등록 된 사이트가 존재하지 않습니다.');
+			$('#errorModal').modal("show");
+			setTimeout(function(){
+				$('#errorModal').modal("hide");
+			}, 2000);
+			// alert('해당 그룹에 등록 된 사이트가 존재하지 않습니다.');
+			return false;
+		} else {
+			firstAjax();
+
+			setInterval(() => firstAjax(), 60 * 60 * 1000); // 한시간에 한번 화면갱신
+			setInterval(() => {
+				minIntervalCount++;
+				if ((minIntervalCount % 60) !== 0) {
+					minAjax();
+				}
+			}, 60 * 1000); //1분에 한번 현재혆황 & 알림 갱신
 		}
-
-		const now = new Date();
-		$('.dbTime').text(now.format('yyyy-MM-dd HH:mm:ss'));
-	}
-
-	function fn_cycle_1min() {
-		//getTodayTotalDetail();
-		beforeTodayTotal();
-		getAlarmInfo();
-		realtimeRecord();
-
-		const now = new Date();
-		$('.dbTime').text(now.format('yyyy-MM-dd HH:mm:ss'));
-	}
+	});
 
 	const rtnDropdown = () => {
 		searchSite();
@@ -410,229 +404,122 @@
 		}
 	}
 
-	const realtimeRecord = () => {
-		const formDataHour = getSiteMainSchCollection('hour');
-		const formDataDay = getSiteMainSchCollection('day');
+	const setRealtimeRecord = async () => {
+		const targetApi = [apiHost + '/energy/sites?interval=hour',
+							apiHost + '/energy/forecasting/sites?interval=hour&startTime=' + dayData.startTime + '&endTime=' + dayData.endTime,
+							apiHost + '/energy/forecasting/sites?interval=hour&startTime=' + hourData.startTime + '&endTime=' + hourData.endTime,
+							apiHost + '/energy/forecasting/sites?interval=day&startTime=' + dayData.startTime + '&endTime=' + dayData.endTime,
+							apiHost + '/energy/now/sites?interval=hour',
+							apiHost + '/energy/now/sites?interval=day'];
 
-		let siteArray = new Array();
+		new Promise(resolve => {
+			const pvListHourly = new Array(24).fill(0);
+			const pvListForeHourly = new Array(24).fill(0);
+			const hourForeGenBySite = new Object();
+			const todayForeGenBySite = new Object();
+			const hourGenBySite = new Object();
+			const todayGenBySite = new Object();
 
-		pvListHourly = new Array(24).fill(0);
-		pvListForecastingHourly = new Array(24).fill(0);
-
-		actualCount = 0;
-		forecastCount = 0;
-		foreCastHourCount = 0;
-		foreCastDayCount = 0;
-		nowHour = false;
-		nowDay = false;
-
-		siteList.forEach((site, siteIdx) => {
-			siteArray.push(site.sid);
-
-			$.ajax({
-				url: apiHost + '/energy/sites',
-				type: 'get',
-				data: {
-					sid: site.sid,
-					startTime: formDataDay.startTime,
-					endTime: formDataDay.endTime,
-					interval: 'hour'
-				},
-			}).done(function (data, textStatus, jqXHR) {
-				data.data[0].generation.items.map((e) => {
-					if (e.energy) {
-						const hour = Number(e.basetime.toString().slice(8, 10));
-						pvListHourly[hour] += Math.floor(e.energy / 1000);
+			targetApi.forEach((targetUrl, index) => {
+				const apiData = apiDatas[targetUrl];
+				if (index === 0 || index === 1 || index === 2 || index === 3) {
+					if (!isEmpty(apiData)) {
+						const siteNowEnergyData = apiData['data'];
+						if (!isEmpty(siteNowEnergyData)) {
+							Object.entries(siteNowEnergyData).forEach(([siteId, energyData]) => {
+								if (!isEmpty(energyData)) {
+									energyData.forEach(rowData => {
+										const items = rowData['items'];
+										if (!isEmpty(items)) {
+											items.forEach(item => {
+												const hour = Number(String(item['basetime']).slice(8, 10));
+												if (index === 0) {
+													pvListHourly[hour] += Math.floor(item['energy'] / 1000);
+												} else if (index === 1) {
+													pvListForeHourly[hour] += Math.floor(item['energy'] / 1000);
+												} else if (index === 2) {
+													if (isEmpty(hourForeGenBySite[siteId])) hourForeGenBySite[siteId] = 0;
+													hourForeGenBySite[siteId] += Math.floor(item['energy'] / 1000);
+												} else {
+													if (isEmpty(todayForeGenBySite[siteId])) todayForeGenBySite[siteId] = 0;
+													todayForeGenBySite[siteId] += Math.floor(item['energy'] / 1000);
+												}
+											});
+										}
+									});
+								}
+							});
+						}
 					}
-				});
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				console.error(jqXHR);
-				console.error(textStatus);
-				console.error(errorThrown);
-			}).always(function (jqXHR, textStatus) {
-				setRealtimeRecord('actual');
-			});
-
-			$.ajax({
-				url: apiHost + '/energy/forecasting/sites',
-				type: 'get',
-				data: {
-					sid: site.sid,
-					startTime: formDataDay.startTime,
-					endTime: formDataDay.endTime,
-					interval: 'hour'
-				},
-			}).done(function (data, textStatus, jqXHR) {
-				data.data[0].generation.items.map((e) => {
-					if (e.energy) {
-						const hour = Number(e.basetime.toString().slice(8, 10));
-						pvListForecastingHourly[hour] += Math.floor(e.energy / 1000);
+				} else {
+					if (!isEmpty(apiData)) {
+						const siteNowEnergyData = apiData['data'];
+						Object.entries(siteNowEnergyData).forEach(([siteId, siteData]) => {
+							if (!isEmpty(siteData) && !isEmpty(siteData['energy']) ) {
+								if (index === 4) {
+									if (isEmpty(hourGenBySite[siteId])) hourGenBySite[siteId] = 0;
+									hourGenBySite[siteId] += Math.floor(siteData['energy'] / 1000);
+								} else {
+									if (isEmpty(todayGenBySite[siteId])) todayGenBySite[siteId] = 0;
+									todayGenBySite[siteId] += Math.floor(siteData['energy'] / 1000);
+								}
+							}
+						});
 					}
-				});
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				console.error(jqXHR);
-				console.error(textStatus);
-				console.error(errorThrown);
-			}).always(function (jqXHR, textStatus) {
-				setRealtimeRecord('forecast');
-			});
-
-			//사이트별 현재 시간 예측
-			$.ajax({
-				url: apiHost + '/energy/forecasting/sites',
-				type: 'get',
-				data: {
-					sid: site.sid,
-					startTime: formDataHour.startTime,
-					endTime: formDataHour.endTime,
-					interval: 'hour'
-				},
-			}).done(function (data, textStatus, jqXHR) {
-				if(isEmpty(data.data[0].generation.items[0])) {
-					siteList[siteIdx].hourForecastingGenBySite = 0;
-				} else {
-					siteList[siteIdx].hourForecastingGenBySite = Math.floor(data.data[0].generation.items[0].energy / 1000);
-				}
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				console.error(jqXHR);
-				console.error(textStatus);
-				console.error(errorThrown);
-			}).always(function (jqXHR, textStatus) {
-				setRealtimeRecord('foreCastHour');
-			});
-
-			//사이트별 오늘 예측
-			$.ajax({
-				url: apiHost + '/energy/forecasting/sites',
-				type: 'get',
-				data: {
-					sid: site.sid,
-					startTime: formDataDay.startTime,
-					endTime: formDataDay.endTime,
-					interval: 'day'
-				},
-			}).done(function (data, textStatus, jqXHR) {
-				//사이트 합 오늘 예측량 더하기
-				if(isEmpty(data.data[0].generation.items[0])) {
-					siteList[siteIdx].todayForecastingGenBySite = 0;
-				} else{
-					siteList[siteIdx].todayForecastingGenBySite = Math.floor(data.data[0].generation.items[0].energy / 1000);
-				}
-				// todayForecastingGenAllSite += todayForecastingGenBySite;
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				console.error(jqXHR);
-				console.error(textStatus);
-				console.error(errorThrown);
-			}).always(function (jqXHR, textStatus) {
-				setRealtimeRecord('foreCastDay');
-			});
-		});
-
-		//사이트별 현재 시간 출력
-		$.ajax({
-			url: apiHost + '/energy/now/sites',
-			type: 'get',
-			data: {
-				sids: siteArray.join(','),
-				metering_type: 2,
-				interval: 'hour'
-			},
-		}).done(function (data, textStatus, jqXHR) {
-			siteList.forEach((site, siteIdx) => {
-				if(isEmpty(data.data[site.sid])) {
-					siteList[siteIdx].hourGenBySite = 0;
-				} else {
-					siteList[siteIdx].hourGenBySite = Math.floor(data.data[site.sid].energy / 1000);
 				}
 			});
-			setRealtimeRecord('nowHour');
-		}).fail(function (jqXHR, textStatus, errorThrown) {
-			console.error(jqXHR);
-			console.error(textStatus);
-			console.error(errorThrown);
-		});
 
-		//사이트별 오늘 출력
-		$.ajax({
-			url: apiHost + '/energy/now/sites',
-			type: 'get',
-			data: {
-				sids: siteArray.join(','),
-				metering_type: 2,
-				interval: 'day'
-			},
-		}).done(function (data, textStatus, jqXHR) {
-			siteList.forEach((site, siteIdx) => {
-				if(isEmpty(data.data[site.sid])) {
-					siteList[siteIdx].todayGenBySite = 0;
-				} else {
-					siteList[siteIdx].todayGenBySite = Math.floor(data.data[site.sid].energy / 1000);
-				}
+			resolve({
+				pvListHourly: pvListHourly,
+				pvListForeHourly: pvListForeHourly,
+				hourForeGenBySite: hourForeGenBySite,
+				hourGenBySite: hourGenBySite,
+				todayForeGenBySite: todayForeGenBySite,
+				todayGenBySite: todayGenBySite
 			});
-			//todayGenAllSite += todayGenBySite;
-			setRealtimeRecord('nowToday');
-		}).fail(function (jqXHR, textStatus, errorThrown) {
-			console.error(jqXHR);
-			console.error(textStatus);
-			console.error(errorThrown);
-		});
-	}
-
-	const setRealtimeRecord = (type) => {
-		if (type == 'foreCastHour') {
-			foreCastHourCount++;
-		} else if (type == 'foreCastDay') {
-			foreCastDayCount++;
-		} else if (type == 'nowHour') {
-			nowHour = true;
-		} else if (type == 'nowToday') {
-			nowDay = true;
-		} else if (type == 'actual') {
-			actualCount++;
-		} else if (type == 'forecast') {
-			forecastCount++;
-		}
-
-		//조회가 완료 되면 다음 프로세스 진행
-		if (foreCastHourCount == siteList.length && foreCastDayCount == siteList.length && nowHour && nowDay
-			&& actualCount == siteList.length && forecastCount == siteList.length) {
-			let todayGenAllSite = 0;
+		}).then(({pvListHourly, pvListForeHourly, hourForeGenBySite, hourGenBySite, todayForeGenBySite, todayGenBySite}) => {
 			let hourGenAllSite = 0;
-			let hourForecastingGenAllSite = 0;
+			let hourForeGenAllSite = 0;
+			let todayGenAllSite = 0;
 			let ratioDaily = 0;
 			let restDaily = 0;
 			let seriesData = new Array();
 
+			Object.entries(hourGenBySite).forEach(([siteId, hourGenData]) => {hourGenAllSite += hourGenData});
+			Object.entries(hourForeGenBySite).forEach(([siteId, hourGenData]) => {hourForeGenAllSite += hourGenData});
+
 			siteList.forEach((site, siteIdx) => {
-				let ratioHourly = 0;
-				let siteArray = new Array();
+				let ratioHourly = 0
+				  , siteArray = new Array();
 
-				hourGenAllSite += site.hourGenBySite;
-				hourForecastingGenAllSite += site.hourForecastingGenBySite;
+				const toDayGen = isEmpty(todayGenBySite[site.sid]) ? 0 : todayGenBySite[site.sid];
+				const toDayForeGen = isEmpty(todayForeGenBySite[site.sid]) ? 0 : todayForeGenBySite[site.sid];
+				const hourGen = isEmpty(hourGenBySite[site.sid]) ? 0 : hourGenBySite[site.sid];
+				const hourForeGen = isEmpty(hourForeGenBySite[site.sid]) ? 0 : hourForeGenBySite[site.sid];
 
-				if(site.todayForecastingGenBySite == 0 && site.todayGenBySite == 0) {
+
+				if (toDayGen === 0 && toDayForeGen === 0) {
 					ratioDaily = 0;
 				} else {
-					if (site.todayForecastingGenBySite <= site.todayGenBySite) {
+					if (toDayForeGen <= toDayGen) {
 						restDaily = null;
-						ratioDaily = 100;
+						ratioDaily = 1000;
 					} else {
-						ratioDaily = Math.floor((site.todayGenBySite / site.todayForecastingGenBySite) * 100);
-						restDaily = 100 - ratioDaily
+						ratioDaily = Math.floor((toDayGen / toDayForeGen) * 100);
+						restDaily = 100 - ratioDaily;
 					}
 				}
 
-				if(site.hourForecastingGenBySite == 0 && site.hourGenBySite == 0) {
+				if (hourGen === 0 && hourForeGen === 0) {
 					ratioHourly = 0;
 				} else {
-					if (site.hourForecastingGenBySite <= site.hourGenBySite) {
+					if (hourForeGen <= hourGen) {
 						ratioHourly = 100;
 					} else {
-						ratioHourly = Math.floor((site.hourGenBySite / site.hourForecastingGenBySite) * 100);
+						ratioHourly = Math.floor((hourGen / hourForeGen) * 100);
 					}
 				}
 
-				//rchart1 변경
 				siteArray.push(site.name);
 				siteArray.push(ratioHourly);
 				siteArray.push(ratioDaily);
@@ -659,11 +546,11 @@
 
 			let totalRestHourly;
 			let totalRatioHourly;
-			if (hourForecastingGenAllSite <= hourGenAllSite) {
+			if (hourForeGenAllSite <= hourGenAllSite) {
 				totalRestHourly = null;
 				totalRatioHourly = 100;
 			} else {
-				totalRatioHourly = Math.floor((hourGenAllSite / hourForecastingGenAllSite) * 100);
+				totalRatioHourly = Math.floor((hourGenAllSite / hourForeGenAllSite) * 100);
 				totalRestHourly = 100 - totalRatioHourly;
 			}
 
@@ -695,33 +582,71 @@
 
 			//입찰 현황 차트
 			const nowHour = new Date().getHours();
-			pvListHourly[nowHour] = Math.floor(todayGenAllSite / 1000);
-			rChart3.update({
-				series: [{
-					name: '출력',
-					type: 'column',
-					color: '#2BEEE9',
-					data: pvListHourly,
-					tooltip: {
-						valueSuffix: 'kWh'
+			pvListHourly[nowHour] = todayGenAllSite;
+
+			let maxValue = 0;
+			if (!isEmpty(pvListHourly)) {
+				pvListHourly.forEach(energy => {
+					if (maxValue < energy) {
+						maxValue = energy;
 					}
-				}, {
-					name: '입찰',
-					type: 'column',
-					color: '#878787',
-					data: pvListForecastingHourly,
-					tooltip: {
-						valueSuffix: 'kWh'
+				});
+			}
+
+			if (!isEmpty(pvListForeHourly)) {
+				pvListForeHourly.forEach(energy => {
+					if (maxValue < energy) {
+						maxValue = energy;
 					}
-				}],
+				});
+			}
+
+			const refineMaxValue = displayNumberFixedDecimal(maxValue, 'kWh', 3, 2);
+			const rtnUnit = refineMaxValue[1];
+
+			let seriesLength = rChart3.series.length;
+			for (let i = seriesLength - 1; i > -1; i--) {
+				rChart3.series[i].remove();
+			}
+
+			rChart3.addSeries({
+				name: '출력',
+				type: 'column',
+				color: '#2BEEE9',
+				data: pvListHourly,
+				tooltip: {
+					valueSuffix: 'kWh'
+				}
+			});
+
+			rChart3.addSeries({
+				name: '입찰',
+				type: 'column',
+				color: '#878787',
+				data: pvListForeHourly,
+				tooltip: {
+					valueSuffix: 'kWh'
+				}
+			});
+
+			rChart3.yAxis[0].setTitle({
+				text: rtnUnit,
+				align: 'low',
+				rotation: 0, /* 타이틀 기울기 */
+				y: 25, /* 타이틀 위치 조정 */
+				x: 10,
+				style: {
+					color: 'var(--white60)',
+					fontSize: '12px'
+				}
 			});
 			rChart3.redraw();
-			let currentTime = new Date().getHours() + ':' + new Date().getMinutes();
-			let label = `${' 현재시간<br>${ currentTime }'}`;
-			console.log(label)
+
+			const currentTime = new Date().getHours() + ':' + new Date().getMinutes();
+			const label = `${' 현재시간<br>${ currentTime }'}`;
 			const now = new Date().getMinutes();
 			const nowBottom = parseInt($('.realtime-time').css('bottom'), 10);
-			
+
 			if (nowBottom >= 206) {
 				$(".realtime-label").html(label).css('bottom', '44px');
 				$('.realtime-time').css('bottom', '63px');
@@ -729,7 +654,13 @@
 				$(".realtime-label").html(label).css('bottom', 44 + ((206 / 60) * now));
 				$('.realtime-time').css('bottom', 63 + ((206 / 60) * now));
 			}
-		}
+		}).catch(error => {
+			$('#errMsg').text(error);
+			$('#errorModal').modal("show");
+			setTimeout(function(){
+				$('#errorModal').modal("hide");
+			}, 2000);
+		});
 	}
 
 	const rchart1 = Highcharts.chart('rchart1', {
@@ -748,11 +679,9 @@
 				enabled: false /* 메뉴 안보이기 */
 			}
 		},
-
 		title: {
 			text: ''
 		},
-
 		subtitle: {
 			text: ''
 		},
@@ -792,9 +721,9 @@
 				width: 1
 			}],
 			scrollbar: {
-                enabled: true,
-                showFull: false
-            },
+				enabled: true,
+				showFull: false
+			},
 			title: {
 				text: '%',
 				align: 'low',
@@ -854,8 +783,6 @@
 			},
 			colorByPoint: true
 		}],
-
-		/* 출처 */
 		credits: {
 			enabled: false
 		}
@@ -1084,21 +1011,13 @@
 			type: 'column',
 			height: 300
 		},
-
 		navigation: {
 			buttonOptions: {
 				enabled: false /* 메뉴 안보이기 */
 			}
 		},
-
-		title: {
-			text: ''
-		},
-
-		subtitle: {
-			text: ''
-		},
-
+		title: {text: ''},
+		subtitle: {text: ''},
 		xAxis: {
 			lineColor: 'var(--white60)', /* 눈금선색 */
 			tickColor: 'var(--white60)',
@@ -1121,7 +1040,6 @@
 			},
 			crosshair: true
 		},
-
 		yAxis: {
 			lineColor: 'var(--white60)', /* 눈금선색 */
 			tickColor: 'var(--white60)',
@@ -1144,6 +1062,15 @@
 				}
 			},
 			labels: {
+				formatter: function () {
+					const suffix = this.chart.yAxis[0].userOptions.title.text;
+					if (suffix === 'kWh') {
+						return numberComma(this.value);
+					} else {
+						const yAxisValue = displayNumberFixedUnit(this.value, 'kWh', suffix, 1);
+						return yAxisValue[0];
+					}
+				},
 				overflow: 'justify',
 				x: -10, /* 그래프와의 거리 조정 */
 				style: {
@@ -1152,8 +1079,6 @@
 				}
 			}
 		},
-
-		/* 범례 */
 		legend: {
 			enabled: true,
 			align: 'right',
@@ -1171,31 +1096,16 @@
 			symbolPadding: 3, /* 심볼 - 텍스트간 거리 */
 			symbolHeight: 7 /* 심볼 크기 */
 		},
-
-		series: [{
-			name: '출력',
-			type: 'column',
-			color: '#2BEEE9',
-			data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-			tooltip: {
-				valueSuffix: 'kWh'
-			}
-		}, {
-			name: '입찰',
-			type: 'column',
-			color: '#878787',
-			data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-			tooltip: {
-				valueSuffix: 'kWh'
-			}
-		}],
-
-		/* 툴팁 */
+		series: [],
 		tooltip: {
+			formatter: function () {
+				return this.points.reduce(function (s, point) {
+					let suffix = point.series.userOptions.tooltip.valueSuffix;
+					return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + numberComma(Math.round(point.y)) + suffix;
+				}, '<b>' + this.x + '시 </b>');
+			},
 			shared: true
 		},
-
-		/* 옵션 */
 		plotOptions: {
 			series: {
 				label: {
@@ -1208,22 +1118,15 @@
 				marker: {
 					enabled: false /* 마커 안보이기 */
 				}
-			},
-			column: {
-				//stacking: 'normal' /*위로 쌓이는 막대  ,normal */
 			}
 		},
-
-		/* 출처 */
 		credits: {
 			enabled: false
 		},
-
-		/* 반응형 */
 		responsive: {
 			rules: [{
 				condition: {
-					minWidth: 842 /* 차트 사이즈 */
+					minWidth: 842
 				},
 				chartOptions: {
 					chart: {
@@ -1257,28 +1160,6 @@
 					}
 				}
 			}]
-		}
-
-	});
-
-
-	$(function () {
-		setInitList('alarmNotice'); //알람 공지 세팅
-
-		makeSiteList();
-		if (!isEmpty(siteList) && siteList.length > 0) {
-			fn_cycle_1hour();
-			fn_cycle_1min();
-			setInterval(() => fn_cycle_1hour(), 60 * 60 * 1000);
-			setInterval(() => fn_cycle_1min(), 60 * 1000);
-		} else {
-			$("#errMsg").text("해당 그룹에 등록 된 사이트가 존재하지 않습니다.");
-			$("#errorModal").modal("show");
-			setTimeout(function(){
-				$("#errorModal").modal("hide");
-			}, 2000);
-			// alert('해당 그룹에 등록 된 사이트가 존재하지 않습니다.');
-			return false;
 		}
 	});
 </script>

@@ -524,9 +524,9 @@
 
 <script type="text/javascript" src="/js/dashboard/dashboardChart.js"></script>
 <script type="text/javascript">
-	const siteList = JSON.parse('${siteList}');
-	const sgid = '${sgid}';
-	const today = new Date();
+	const siteList = JSON.parse('${siteList}')
+		, sgid = '${sgid}'
+		, today = new Date();
 
 	<c:if test="${dashboardMap eq 'google'}">
 	let makerObject = new Object();
