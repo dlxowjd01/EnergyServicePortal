@@ -346,7 +346,6 @@ const dailyChart = Highcharts.chart('dailyChart', {
 const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 	chart: {
 		renderTo: 'typeSiteCurrent',
-		// height: series.length * 20 + 30,
 		marginTop: 36,
 		marginRight: 16,
 		backgroundColor: 'transparent',
@@ -450,7 +449,8 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 			label: {
 				connectorAllowed: true
 			},
-			pointPadding: 0,
+			// pointWidth: 30,
+			pointPadding: 0.2,
 			groupPadding: 0.1,
 			borderWidth: 0,
 			borderColor: 'transparent',
@@ -460,8 +460,8 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 		},
 		bar: {
 			dataLabels: {
-				// enabled: true,
-				inside: true,
+				enabled: true,
+				// inside: true,
 				style: {
 					color: 'var(--white87)',
 					fontSize: '12px',
@@ -475,9 +475,6 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 				}
 			},
 		},
-		pointWidth: 15,
-		groupPadding: 0.2,
-		pointPadding: 0
 	},
 	credits: {
 		enabled: false

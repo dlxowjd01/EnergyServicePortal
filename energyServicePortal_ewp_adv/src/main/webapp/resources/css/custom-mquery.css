@@ -173,8 +173,7 @@
 	.gmain-chart.gmain-chart1 .term,
 	.gmain-chart.gmain-chart2 .term,
 	.gmain-chart.gmain-chart3 .term,
-	.gmain-chart.gmain-chart2>.inchart,
-	.gmain-chart.gmain-chart3>.tblDisplay {
+	.gmain-chart.gmain-chart2>.inchart {
 		display: none;
 	}
 
@@ -244,6 +243,10 @@
 	/********************************************************************************
 										gmain
 	*********************************************************************************/
+	.gmain-table .gmain-wrap {
+		max-height: 360px;
+	}
+
 	.gmain-map2 {
 		margin-bottom: 20px;
 	}
@@ -780,10 +783,9 @@
 		padding: 25px 20px 20px;
 	}
 
-	footer .copyright {
-		margin: 15px 0 30px;
+	footer .copyright:nth-child(2) {
+		margin: 10px 0 25px;
 	}
-
 
 	/********************************************************************************
 										chart-pv

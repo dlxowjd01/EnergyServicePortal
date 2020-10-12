@@ -79,17 +79,6 @@ $(function() {
     });
 });
 
-/* 텝메뉴 */
-$(function() {
-    $(".tblDisplay").sectionDisplay({
-        act : "click",
-        start:0,
-        nav : $('.tab-menu, .gtab-menu'),
-        auto: false,
-        autoTime:3000
-    });
-});
-
 /* [메인] 오늘/이번주/이번달 텝메뉴 */
 $(function() {
     $('.term_menu>ul a').click(function(){

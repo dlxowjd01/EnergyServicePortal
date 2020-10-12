@@ -858,7 +858,14 @@ const typeSiteDraw = async () => {
 			data: tmepGenArray,
 			tooltip: {
 				valueSuffix: 'kWh'
-			}
+			},
+			// pointWidth: 10,
+			// pointWidth: 40,
+			// plotOptions: {
+			// 	// pointWidth: 40,
+			// 	pointPadding: 0.2
+			// },
+			// pointWidth: 20
 		});
 
 		typeSiteCurrent.addSeries({
@@ -867,18 +874,38 @@ const typeSiteDraw = async () => {
 			data: tempForeArray,
 			tooltip: {
 				valueSuffix: 'kWh'
-			}
+			},
+			// pointWidth: 10,
+			// pointWidth: 30,
+			// plotOptions: {
+			// 	// pointWidth: 40,
+			// 	// pointPadding: 0.2
+			// },
 		});
 
-		//typeSiteCurrent.xAxis[0].categories = true;
-		typeSiteCurrent.xAxis[0].setCategories(categories);
-		typeSiteCurrent.yAxis[0].setTitle({
-			text: rtnUnit,
-			style: {
-				color: 'var(--grey)',
-				fontSize: '12px'
-			}
+
+
+		typeSiteCurrent.update({
+			xAxis: [{
+				categories: categories,
+			}],
+			yAxis: [{
+				text: rtnUnit,
+				style: {
+					color: 'var(--grey)',
+					fontSize: '12px'
+				}
+			}]
 		});
+
+		// typeSiteCurrent.xAxis[0].setCategories(categories);
+		// typeSiteCurrent.yAxis[0].setTitle({
+		// 	text: rtnUnit,
+		// 	style: {
+		// 		color: 'var(--grey)',
+		// 		fontSize: '12px'
+		// 	}
+		// });
 		typeSiteCurrent.redraw();
 
 		let str = '';

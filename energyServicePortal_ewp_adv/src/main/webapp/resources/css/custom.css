@@ -1770,16 +1770,32 @@ footer {
 	flex-shrink: 0;
 	width: 100%;
 	/* padding: 25px 75px 25px 0; */
+	padding: 13px 2px 0;
 	height: 53px;
-	padding-top: 13px;
+}
+
+footer .flex-wrapper {
+	flex-wrap: wrap;
 }
 
 footer .copyright {
+	padding-left: 3px;
 	font-size: 12px;
 	font-weight: 500;
 	color: var(--white87);
 	letter-spacing: 0.3px;
 }
+
+footer .copyright a + a:before {
+	display: inline-block;
+	margin: 2px 8px 0 8px;
+	width: 1px;
+	height: 12px;
+	background: var(--dove-gray);
+	vertical-align: top;
+	content: "";
+}
+
 
 .mobile-visible {
 	display: none !important;
@@ -5142,10 +5158,6 @@ input.inp[readonly]:focus {
 	font-weight: bold;
 }
 
-.gmain-chart .tblDisplay .paging {
-	margin: 0;
-}
-
 .gmain-chart .chart-sa {
 	/*height: calc(100vh - 731px);*/
 	overflow-y: auto;
@@ -6218,7 +6230,7 @@ div.di-wrap dl dd .error div p {
 
 .indiv.smain-tab-box {
 	padding: 0 0 24px;
-	min-height: 666px;
+	min-height: 487px;
 }
 
 /* 사업소 현황 */

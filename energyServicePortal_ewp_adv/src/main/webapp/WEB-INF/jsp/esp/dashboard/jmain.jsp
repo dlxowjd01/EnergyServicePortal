@@ -45,44 +45,40 @@
 			<%--						<li class="active"><a href="#;">사업소별 현황</a></li>--%>
 			<%--						<li><a href="#;">유형별 발전 현황</a></li>--%>
 			<%--					</ul>--%>
-			<div class="tblDisplay">
-				<div>
-					<!-- 사업소별 현황 -->
-					<div class="inchart">
-						<div id="typeSiteCurrent"></div>
-					</div>
-					<!-- 데이터 추출용 테이블 -->
-					<div class="hidden" style="display:none">
-						<table id="gdatatable3">
-							<thead>
-							<tr>
-								<th></th>
-								<th><fmt:message key="vppdash.3.actual" /></th>
-								<th><fmt:message key="vppdash.3.forecast" /></th>
-							</tr>
-							</thead>
-							<tbody id="siteGenTbody">
-							</tbody>
-						</table>
-					</div>
+
+			<!-- 사업소별 현황 -->
+			<div class="inchart">
+				<div id="typeSiteCurrent"></div>
+			</div>
+			<!-- 데이터 추출용 테이블 -->
+			<div class="hidden" style="display:none">
+				<table id="gdatatable3">
+					<thead>
+					<tr>
+						<th></th>
+						<th><fmt:message key="vppdash.3.actual" /></th>
+						<th><fmt:message key="vppdash.3.forecast" /></th>
+					</tr>
+					</thead>
+					<tbody id="siteGenTbody">
+					</tbody>
+				</table>
+			</div>
+
+			<!-- 유형별 발전 현황 -->
+			<div class="chart-sa type-table">
+				<div class="inchart type-left">
+					<div id="gchart4"></div>
 				</div>
-				<div>
-					<!-- 유형별 발전 현황 -->
-					<div class="chart-sa type-table">
-						<div class="inchart type-left">
-							<div id="gchart4"></div>
-						</div>
-						<div class="type-right">
-							<dl class="sun">
-								<dt><span><fmt:message key="vppdash.4.gen" /></span></dt>
-								<dd>
-									<p><strong>가동설비</strong> <span>13</span><em>기</em></p>
-									<p><strong>용량</strong> <span>13</span><em>MW</em></p>
-									<p><strong>전일발전량</strong> <span>3,500</span><em>kWH</em></p>
-								</dd>
-							</dl>
-						</div>
-					</div>
+				<div class="type-right">
+					<dl class="sun">
+						<dt><span><fmt:message key="vppdash.4.gen" /></span></dt>
+						<dd>
+							<p><strong>가동설비</strong> <span>13</span><em>기</em></p>
+							<p><strong>용량</strong> <span>13</span><em>MW</em></p>
+							<p><strong>전일발전량</strong> <span>3,500</span><em>kWH</em></p>
+						</dd>
+					</dl>
 				</div>
 			</div>
 		</div>
