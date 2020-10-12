@@ -105,16 +105,6 @@ const firstAjax = () => {
 			}
 		});
 
-		urls.push({
-			url: apiHost + '/weather/site?sid=' + site.sid,
-			type: 'get',
-			data: {
-				startTime: dayData.startTime,
-				endTime: dayData.endTime,
-				interval: 'hour'
-			}
-		});
-
 		if (site.devices != null) {
 			const devices = site.devices;
 			devices.forEach(device => {
@@ -254,6 +244,18 @@ const firstAjax = () => {
 		}
 	});
 
+	urls.push({
+		url: apiHost + '/weather/site',
+		type: 'get',
+		data: {
+			sid: siteSids.toString(),
+			startTime: dayData.startTime,
+			endTime: dayData.endTime,
+			interval: 'hour',
+			formId: 'v2'
+		}
+	});
+
 	//알람 이력
 	urls.push({
 		url: apiHost + '/alarms',
@@ -386,22 +388,16 @@ const ajaxData = (urls, target) => {
 				let targetUrl = result.url; //API_URL
 				let siteId = '';
 
-				if ((!targetUrl.match('/weather/site') && isEmpty(apiDatas[targetUrl])) || (targetUrl.match('/weather/site') && isEmpty(apiDatas[apiHost + '/weather/site']))) {
-					if (targetUrl.match('/status/raw/site') || targetUrl.match('/weather/site')) {
-						if (targetUrl.match('/status/raw/site')) {
-							Object.entries(result).forEach(rtn => {
-								if (rtn[0] !== 'url') {
-									const data = rtn[1];
-									if (!isEmpty(data.sid)) {
-										siteId = data.sid;
-									}
+				if (isEmpty(apiDatas[targetUrl])) {
+					if (targetUrl.match('/status/raw/site')) {
+						Object.entries(result).forEach(rtn => {
+							if (rtn[0] !== 'url') {
+								const data = rtn[1];
+								if (!isEmpty(data.sid)) {
+									siteId = data.sid;
 								}
-							});
-						} else {
-							const weatherApi = apiHost + '/weather/site';
-							siteId = targetUrl.replace(weatherApi + '?sid=', '');
-							targetUrl = weatherApi;
-						}
+							}
+						});
 
 						apiDatas[targetUrl] = new Object();
 						apiDatas[targetUrl][siteId] = result;
@@ -409,21 +405,15 @@ const ajaxData = (urls, target) => {
 						apiDatas[targetUrl] = result;
 					}
 				} else {
-					if (targetUrl.match('/status/raw/site') || targetUrl.match('/weather/site')) {
-						if (targetUrl.match('/status/raw/site')) {
-							Object.entries(result).forEach(rtn => {
-								if (rtn[0] !== 'url') {
-									const data = rtn[1];
-									if (!isEmpty(data.sid)) {
-										siteId = data.sid;
-									}
+					if (targetUrl.match('/status/raw/site')) {
+						Object.entries(result).forEach(rtn => {
+							if (rtn[0] !== 'url') {
+								const data = rtn[1];
+								if (!isEmpty(data.sid)) {
+									siteId = data.sid;
 								}
-							});
-						} else {
-							const weatherApi = apiHost + '/weather/site';
-							siteId = targetUrl.replace(weatherApi + '?sid=', '');
-							targetUrl = weatherApi;
-						}
+							}
+						});
 
 						if (!isEmpty(siteId)) {
 							apiDatas[targetUrl][siteId] = result;
@@ -1252,15 +1242,16 @@ const searchSite = async function () {
 							, humidity = '-';
 						if (!isEmpty(apiData)) {
 							//시간 역순으로 정렬한 다음에 Observed 값을 만나면 그값이 쓰는값
-							if (!isEmpty(apiData) && !isEmpty(apiData[siteId])) {
-								const weatherData = apiData[siteId];
-								weatherData.sort((a, b) => {
+							const weatherData = apiData['data'];
+							if (!isEmpty(weatherData) && !isEmpty(weatherData[siteId]) && !isEmpty(weatherData[siteId]['items'])) {
+								const siteWeatherData = weatherData[siteId]['items'];
+								siteWeatherData.sort((a, b) => {
 									if (a.basetime > b.basetime) {return -1;}
 									if (a.basetime < b.basetime) {return 1;}
 									return 0;
 								});
 
-								const observedData = weatherData.find(weather => weather.observed === true);
+								const observedData = siteWeatherData.find(weather => weather.observed === true);
 								if (!isEmpty(observedData)) {
 									temperature = isEmpty(observedData['temperature']) ? '-' : observedData['temperature'];
 									humidity = isEmpty(observedData['humidity']) ? '-' : observedData['humidity'];
@@ -1466,7 +1457,6 @@ function SortTable(table, n, sort) {
 
 		return 0;
 	});
-
 
 	// 정렬된 배열로 row 를 다시 저장한다. 문서에 이미 존재하는 node 는 삽입하면 해당 node 는 자동으로 제거되고 새 위치에 저장된다.
 	for (let i = 0; i < rows.length; ++i) {
