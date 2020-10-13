@@ -76,7 +76,7 @@
 					className: 'dt-center'
 				},
 				{
-					title: '현재 발전량(kW)',
+					title: '금일 누적(kWh)',
 					data: 'nowEnergy',
 					render: function (data, type, full, rowIndex) {
 						if (data == '-') {
@@ -97,7 +97,7 @@
 					className: 'dt-center'
 				},
 				{
-					title: '전일 발전',
+					title: '전일 발전(kWh)',
 					data: 'yesterEnergy',
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
@@ -114,7 +114,7 @@
 					className: 'dt-center'
 				},
 				{
-					title: '월간 발전량(MWh)',
+					title: '월간 발전(MWh)',
 					data: 'monthGen',
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
@@ -351,7 +351,7 @@
 								if (isEmpty(targetData) || isEmpty(targetData.energy)) {
 									tableData[index]['monthGen'] = '-';
 								} else {
-									tableData[index]['monthGen'] = targetData.energy > 0 ? displayNumberFixedUnit(targetData.energy, 'W', 'kW', 2)[0] : (targetData.energy / 1000).toFixed(2);
+									tableData[index]['monthGen'] = targetData.energy > 0 ? displayNumberFixedUnit(targetData.energy, 'W', 'MW', 2)[0] : (targetData.energy / 1000).toFixed(2);
 								}
 							} else {
 								if (isEmpty(targetData)) {

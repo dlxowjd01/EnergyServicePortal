@@ -315,7 +315,13 @@
 			if ($.inArray($(this).parent().prop('id'), job_info_Array) > -1) {
 				job_info[$(this).parent().prop('id')] = String($(this).data('value'));
 			} else {
-				jsonData[$(this).parent().prop('id')] = String($(this).data('value'));
+				// console.log("this---", $(this), "val---", $(this).data("value"))
+				if($(this).parent().is("#repeat_yn")){
+					jsonData[$(this).parent().prop('id')] = String($(this).data('value'));
+					// console.log("this---", $(this), "val---", $(this).data("value"))
+				} else {
+					jsonData[$(this).parent().prop('id')] = String($(this).data('value'));
+				}
 			}
 		});
 
@@ -392,7 +398,7 @@
 		const title = modal.find('h2');
 		const input = modal.find('input');
 		const textarea = modal.find('textarea');
-		const dropDown = modal.find('button.btn-primary');
+		const dropDown = modal.find('.dropdown-toggle');
 		const repeat_wrapper = $('#repeat_yn').parents('.flex-start3');
 		const repeat_cycle = $('#repeat_yn button');
 		const addScheduleBtn = $('#addScheduleBtn');
@@ -495,7 +501,9 @@
 			$('#repeat_end').addClass('sel').parent().removeClass('text-input-type').addClass('sel-calendar');
 		}
 
-		if (!isEmpty($('#alarmSetup button').data('value')) && $('#alarmSetup button').data('value') != '직접 설정') {
+		if (isEmpty($('#alarmSetup button').data('value'))) {
+			$('#alarmDate').val('');
+		} else if ($('#alarmSetup button').data('value') != '직접 설정') {
 			selectedDate.setDate(selectedDate.getDate() - Number($('#alarmSetup button').data('value')));
 			$('#alarmDate').val(selectedDate.format('yyyy-MM-dd'));
 		}
@@ -530,32 +538,37 @@
 			if ($('#alarmDate').hasClass('hasDatepicker')) {
 				$('#alarmDate').datepicker('destroy').removeClass('hasDatepicker').addClass('disabled').removeAttr('placeholder');
 			}
-			if (val != '직접 설정') {
-				let jobDate = $('#job_date').datepicker('getDate');
-				if (jobDate == null) {
-					$('#alarmDate').val('');
-				} else {
-					jobDate.setDate(jobDate.getDate() - val);
-					$('#alarmDate').val(jobDate.format('yyyy-MM-dd'));
-				}
-			} else {
-				$('#alarmDate').datepicker({
-					showOn: "both",
-					buttonImageOnly: true,
-					dateFormat: 'yy-mm-dd',
-					beforeShow: function () {
-						let minDate = $('#job_date').datepicker('getDate');
-						if (minDate != '') {
-							$('#alarmDate').datepicker('option', 'minDate', minDate);
-						}
 
-						let maxDate = $('#repeat_end').datepicker('getDate');
-						if (maxDate != '') {
-							$('#alarmDate').datepicker('option', 'maxDate', maxDate);
-						}
-					}
-				}).removeClass('disabled').attr('placeholder', '직접선택');
+			if (val === '') {
 				$('#alarmDate').val('');
+			} else {
+				if (val != '직접 설정') {
+					let jobDate = $('#job_date').datepicker('getDate');
+					if (jobDate == null) {
+						$('#alarmDate').val('');
+					} else {
+						jobDate.setDate(jobDate.getDate() - val);
+						$('#alarmDate').val(jobDate.format('yyyy-MM-dd'));
+					}
+				} else {
+					$('#alarmDate').datepicker({
+						showOn: "both",
+						buttonImageOnly: true,
+						dateFormat: 'yy-mm-dd',
+						beforeShow: function () {
+							let minDate = $('#job_date').datepicker('getDate');
+							if (minDate != '') {
+								$('#alarmDate').datepicker('option', 'minDate', minDate);
+							}
+
+							let maxDate = $('#repeat_end').datepicker('getDate');
+							if (maxDate != '') {
+								$('#alarmDate').datepicker('option', 'maxDate', maxDate);
+							}
+						}
+					}).removeClass('disabled').attr('placeholder', '직접선택');
+					$('#alarmDate').val('');
+				}
 			}
 		}
 	}
@@ -587,7 +600,7 @@
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex-start px-0">
 							<div class="dropdown placeholder" id="job_type">
-								<button type="button" class="dropdown-toggle required" data-toggle="dropdown" data-name="점검 계획 항목 선택"><span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle required" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 								<ul class="dropdown-menu">
 									<li data-value="1"><a href="javascript:void(0);">정기 점검</a></li>
 									<li data-value="2"><a href="javascript:void(0);">구조물 안전진단</a></li>
@@ -611,7 +624,7 @@
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex-start3 px-0">
 							<div class="dropdown" id="repeat_yn">
-								<button type="button" class="dropdown-toggle required" data-toggle="dropdown" data-name="점검 선택">점검 선택<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle required" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 								<ul class="dropdown-menu">
 									<li data-value="Y"><a href="javascript:void(0);">정기 점검</a></li>
 									<li data-value="N"><a href="javascript:void(0);">일시 점검</a></li>
@@ -656,7 +669,7 @@
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex-start px-0">
 							<div class="dropdown placeholder" id="repeat_before_after_holiday">
-								<button type="button" class="dropdown-toggle required" data-toggle="dropdown" data-name="공휴일 처리 선택"><span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle required" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 								<ul class="dropdown-menu">
 									<li data-value="N"><a href="javascript:void(0);">처리 안함</a></li>
 									<li data-value="B"><a href="javascript:void(0);">공휴일 직전 영업일</a></li>
@@ -697,8 +710,9 @@
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex-start2 px-0">
 							<div class="dropdown mr-12" id="alarmSetup">
-								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="일시">일시<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="알림 없음">알림 없음<span class="caret"></span></button>
 								<ul class="dropdown-menu">
+									<li data-value=""><a href="javascript:void(0);">알림 없음</a></li>
 									<li data-value="1"><a href="javascript:void(0);">1일 전</a></li>
 									<li data-value="3"><a href="javascript:void(0);">3일 전</a></li>
 									<li data-value="7"><a href="javascript:void(0);">7일 전</a></li>

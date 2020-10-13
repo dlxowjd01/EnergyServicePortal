@@ -1381,8 +1381,9 @@
 			const deviceType = $('#device_type button').data('value');
 			const refineList = codeSetList.filter(code => code.device_type == null || code.device_type === deviceType);
 			refineList.forEach(codeSet => {
+				const devicdType = codeSet['device_type'] === null ? '공통' : codeSet['device_type'];
 				alarmCode.push({
-					name: codeSet['device_type'] + '_' + codeSet['manufacturer'] + '_' + codeSet['model'] + '(' + codeSet['version'] + ')',
+					name: devicdType + '_' + codeSet['manufacturer'] + '_' + codeSet['model'] + '(' + codeSet['version'] + ')',
 					val: codeSet['set_id']
 				});
 			});
