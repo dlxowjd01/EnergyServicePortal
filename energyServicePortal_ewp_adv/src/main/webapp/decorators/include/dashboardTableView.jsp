@@ -8,15 +8,15 @@
 					<col style="width:5%">
 					<col style="width:10%">
 					<col style="width:7%">
-					<col style="width:10%">
-					<col style="width:9%">
-					<col style="width:7%">
-					<col style="width:4%">
-					<col style="width:7%">
-					<col style="width:5%">
-					<col style="width:9%">
 					<col style="width:13%">
-					<col style="width:13%">
+					<col style="width:14%">
+					<col style="width:7%">
+					<col style="width:6%">
+					<col style="width:7%">
+					<col style="width:6%">
+					<col style="width:8%">
+					<col style="width:8%">
+					<col style="width:8%">
 				</colgroup>
 				<thead></thead>
 				<tbody></tbody>
@@ -49,6 +49,9 @@
 				{
 					title: '발전소 명',
 					data: 'siteName',
+					render: function (data, type, full, rowIndex) {
+						return '<a href="javascript:pageMove(\'' + full['sid'] + '\', \'siteMain\')">' + data + '</a>';
+					},
 					className: 'dt-head-left dt-body-left'
 				},
 				{
@@ -122,7 +125,7 @@
 					className: 'dt-head-right dt-body-right'
 				},
 				{
-					title: '전년 동월 발전량(MWh)',
+					title: '전년 동월(MWh)',
 					data: 'beforeYearGen',
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
@@ -130,7 +133,7 @@
 					className: 'dt-head-right dt-body-right'
 				},
 				{
-					title: '전년 동월 대비 발전 비율(%)',
+					title: '동월 대비(%)',
 					data: 'proportion',
 					render: function (data, type, full, rowIndex) {
 						return data;
