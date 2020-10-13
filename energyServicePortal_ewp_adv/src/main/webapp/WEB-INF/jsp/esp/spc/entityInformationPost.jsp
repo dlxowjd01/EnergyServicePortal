@@ -2707,7 +2707,7 @@
 		</div>
 
 		<div class="btn-wrap-type-r">
-			<a href="/spc/entityDetails.do" class="btn btn-type03">목록</a>
+			<a href="/spc/entityInformation.do" class="btn btn-type03">목록</a>
 			<button type="button" class="btn-type big" onclick="setSaveData();">등록</button>
 		</div>
 	</div>

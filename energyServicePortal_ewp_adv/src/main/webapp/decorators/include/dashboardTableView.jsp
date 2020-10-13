@@ -254,6 +254,18 @@
 					formId: 'v2'
 				}
 			});
+
+			//알람 이력
+			urls.push({
+				url: apiHost + '/alarms',
+				type: 'GET',
+				data: {
+					sids: siteArray.toString(),
+					startTime: dayFormData.startTime,
+					endTime: dayFormData.endTime,
+					confirm: false
+				}
+			});
 		}
 
 		document.getElementById('loadingCircleDashboard').style.display =  '';
@@ -337,7 +349,7 @@
 								}
 
 								tableData[index]['capacity'] = (capacity / 1000).toFixed(2);
-								tableData[index]['deviceFault'] = deviceFault;
+								//tableData[index]['deviceFault'] = deviceFault;
 							}
 						});
 					} else if (targetUrl.match('/energy/now/sites')) {
@@ -392,6 +404,17 @@
 										}
 									}
 								});
+							}
+						});
+					} else if (targetUrl.match('/alarms')) {
+						result.sort((a, b) => {
+							return a.localtime > b.localtime ? -1 : a.localtime < b.localtime ? 1 : 0;
+						});
+
+						tableData.forEach((site, index) => {
+							const alarm = result.find(e => site['sid'] == e.sid);
+							if (!isEmpty(alarm)) {
+								tableData[index]['deviceFault'] = alarm['message'];
 							}
 						});
 					}
