@@ -293,39 +293,38 @@
 			success: function (result) {
 				var jsonList = [],
 					keyWord = $('#key_word').val();
-				for (var i in result.data) {
-					var temp = result.data[i],
-						reportTypeName = reportType[temp.report_type],
+				result['data'].forEach((temp, index) => {
+					let reportTypeName = reportType[temp.report_type],
 						report_data_start = (new Date(temp.report_data_start)).format('yyyy-MM-dd'),
 						report_data_end = (new Date(temp.report_data_end)).format('yyyy-MM-dd');
 
-					result.data[i].reportTypeName = reportTypeName; //리포트 유형명
-					result.data[i].report_date = report_data_start + '~' + report_data_end;
+					result.data[index].reportTypeName = reportTypeName; //리포트 유형명
+					result.data[index].report_date = report_data_start + '~' + report_data_end;
 
 					if (temp.generated_at != null) {
 						let generated_date = (new Date(temp.generated_at)).format('yyyy-MM-dd hh:mm:ss');
-						result.data[i].generated_date = generated_date;
+						result.data[index].generated_date = generated_date;
 					}
 
 					if (temp.generated_file_link != null) {
 						let linkData = JSON.parse(temp.generated_file_link);
-						result.data[i].file_link = 'location.href=\'' + apiHost + '/files/download/' + linkData.fileKey + '?oid=' + oid + '&orgFilename=' + linkData.orgFileName + '\'';
+						result.data[index].file_link = 'location.href=\'' + apiHost + '/files/download/' + linkData.fileKey + '?oid=' + oid + '&orgFilename=' + linkData.orgFileName + '\'';
 					}
 
 					if (temp.confirmed_at != null) {
 						let confirmed_date = (new Date(temp.confirmed_at)).format('yyyy-MM-dd hh:mm:ss');
 						let linkData = JSON.parse(temp.confirmed_file_link);
 						let file_link = 'location.href=\'' + apiHost + '/files/download/' + linkData.fileKey + '?oid=' + oid + '&orgFilename=' + linkData.orgFileName + '\'';
-						result.data[i].confirmed_date = confirmed_date + '<button type="button" class="btn-file fr down" onclick="' + file_link + '">다운로드</button>';
+						result.data[index].confirmed_date = confirmed_date + '<button type="button" class="btn-file fr down" onclick="' + file_link + '">다운로드</button>';
 					} else {
 						let confirmed_date = '확정 보고서 업로드';
-						result.data[i].confirmed_date = confirmed_date + '<label for="confirmFile' + temp.id + '" class="btn-file fr up"">업로드</label> <input type="file" id="confirmFile' + temp.id + '" name="confirmFile' + temp.id + '" class="btn-upload hidden">';
+						result.data[index].confirmed_date = confirmed_date + '<label for="confirmFile' + temp.id + '" class="btn-file fr up"">업로드</label> <input type="file" id="confirmFile' + temp.id + '" name="confirmFile' + temp.id + '" class="btn-upload hidden">';
 					}
 
-					if (jsonDataFilter(result.data[i])) {
-						jsonList.push(result.data[i]);
+					if (jsonDataFilter(result.data[index])) {
+						jsonList.push(result.data[index]);
 					}
-				}
+				});
 
 				$(".sort-table").data("nowjsp", "yield");
 				jsonListSort(n, sort, jsonList);
@@ -347,7 +346,8 @@
 			bResult = false, dResult = true, sResult = false;
 		
 		dResult = dateFilter(jsonData, dResult);
-		
+
+		console.log(jsonData);
 		if (jsonData['site_name'].toLowerCase().indexOf(keyWord) > -1 || jsonData['spc_name'].toLowerCase().indexOf(keyWord) > -1 || jsonData['updated_by'].toLowerCase().indexOf(keyWord) > -1) {
 			sResult = true;
 		}
