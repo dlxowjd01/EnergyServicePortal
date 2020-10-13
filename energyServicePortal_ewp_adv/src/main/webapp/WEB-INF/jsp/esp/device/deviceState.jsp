@@ -158,16 +158,6 @@
 							</div>
 							<div class="input-group inline-flex">
 								<label for="manufacturer" class="input-label">제조사</label>
-<%--								<div class="dropdown" id="manufacturer">--%>
-<%--									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="제조사 선택">--%>
-<%--										제조사 선택<span class="caret"></span>--%>
-<%--									</button>--%>
-<%--									<ul class="dropdown-menu" id="manufacturerList">--%>
-<%--										<li data-value="[manufacturer]">--%>
-<%--											<a href="javascript:void(0);" tabindex="-1">[manufacturer]</a>--%>
-<%--										</li>--%>
-<%--									</ul>--%>
-<%--								</div>--%>
 								<input type="text" id="manufacturer" name="manufacturer" class="input text-input-type" placeholder="제조사" autocomplete="off">
 							</div>
 							<div class="input-group inline-flex">
@@ -251,16 +241,6 @@
 							</div>
 							<div class="input-group inline-flex">
 								<label for="product_name" class="input-label">제품명</label>
-<%--								<div class="dropdown" id="alarm_set_id">--%>
-<%--									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="제품명 선택">--%>
-<%--										제품명 선택<span class="caret"></span>--%>
-<%--									</button>--%>
-<%--									<ul class="dropdown-menu" id="alarmSetIdList">--%>
-<%--										<li data-value="[set_id]">--%>
-<%--											<a href="javascript:void(0);" tabindex="-1">[model]_[version]</a>--%>
-<%--										</li>--%>
-<%--									</ul>--%>
-<%--								</div>--%>
 								<input type="text" id="product_name" name="product_name" class="input text-input-type" value="" placeholder="제품명" autocomplete="off">
 							</div>
 							<div class="input-group inline-flex">
@@ -476,8 +456,6 @@
 		setInitList('device_typeList');
 		setInitList('ridList');
 		setInitList('parent_didList');
-		// setInitList('alarmSetIdList');
-		// setInitList('manufacturerList');
 		setInitList('alarm_codeList');
 
 		$('.customFromDate').datepicker({
@@ -520,6 +498,7 @@
 			getRtusList();
 		} else if ($dropdownId == 'device_type') {
 			setParentDevice();
+			costSetList();
 		} else if ($dropdownId == 'timeInterval') {
 			let std = $('#timeInterval button').data('value');
 
@@ -535,34 +514,6 @@
 				$('#endMin').addClass('hidden');
 			}
 		}
-		// else if ($dropdownId == 'manufacturer') {
-		// 	let productList = new Array();
-		// 	const manufacturerName = $('#manufacturer button').data('value');
-		// 	dropDownInit($('#alarm_set_id'));
-		// 	dropDownInit($('#alarm_code'));
-		// 	codeSetList.forEach(function (el) {
-		// 		if(el.manufacturer == manufacturerName) {
-		// 			productList.push(el);
-		// 		}
-		// 	});
-		//
-		// 	setMakeList(productList, 'alarmSetIdList', {'dataFunction': {}});
-		// } else if ($dropdownId == 'alarm_set_id') {
-		// 	const manufacturerName = $('#manufacturer button').data('value');
-		// 	const alarmSetId = $('#alarm_set_id button').data('value');
-		// 	dropDownInit($('#alarm_code'));
-		//
-		// 	codeSetList.forEach(function (el) {
-		// 		if(el.manufacturer == manufacturerName && el.set_id == alarmSetId) {
-		// 			if (!isEmpty(el.codes)) {
-		// 				setMakeList(el.codes, 'alarm_codeList', {'dataFunction': {}});
-		// 			} else {
-		// 				setMakeList(new Array(), 'alarm_codeList', {'dataFunction': {}});
-		// 			}
-		// 			$('#product_name').val(el.model);
-		// 		}
-		// 	});
-		// }
 	}
 
 	//설비 속성 템플릿
@@ -1242,12 +1193,12 @@
 
 	const addDeviceForm = (devicetype, did) => {
 		const popup = $('#addDeviceModal'),
-			dropDown = popup.find('.dropdown-toggle'),
+			dropDown = popup.find('.dropdown'),
 			textArea = popup.find('textarea'),
 			inputArr = popup.find('input');
 
 		dropDown.each(function () {
-			$(this).data('value', '').html($(this).data('name') + '<span class="caret"></span>');
+			dropDownInit($(this));
 		});
 
 		textArea.val('');
@@ -1274,18 +1225,6 @@
 		});
 		setMakeList(deviceTypeList, 'device_typeList', {'dataFunction': {}});
 
-		const aLevelOpt = [
-			{  name : "정보", val: 0 },
-			{  name : "경고", val: 1 },
-			{  name : "이상", val: 2 },
-			{  name : "트립", val: 3 },
-			{  name : "긴급", val: 4 },
-			{  name : "미정", val: 9 }
-		];
-		setMakeList(aLevelOpt, 'alarm_codeList', {'dataFunction': {}});
-
-		//costSetList();
-
 		//did가 있으면 수정
 		if (!isEmpty(did)) {
 			$.ajax({
@@ -1309,7 +1248,7 @@
 					}
 				});
 
-				// let propArray = ['dashboard', 'billing', 'forecasting', 'manufacturer', 'alarm_set_id', 'alarm_code'];
+				//let propArray = ['dashboard', 'billing', 'forecasting', 'manufacturer', 'alarm_set_id', 'alarm_code'];
 				let propArray = ['dashboard', 'billing', 'forecasting', 'capacity'];
 				$.map(data, function(val, key) {
 					if ($.inArray(key, propArray) >= 0) {
@@ -1324,35 +1263,12 @@
 								$('#' + key).val(val);
 							}
 						}
-						// else {
-						// 	if (key == 'manufacturer') {
-						// 		$('#manufacturer button').html(val + '<span class="caret"></span>').data('value', val);
-						// 	} else if (key == 'alarm_set_id') {
-						// 		let codeList = new Array();
-						// 		codeSetList.forEach(function(el) {
-						// 			if (el.set_id == val) {
-						// 				codeList.push(el);
-						// 				$('#alarm_set_id button').html(el.model + '_' + el.version + '<span class="caret"></span>').data('value', val);
-						// 				setMakeList(codeList, 'alarmSetIdList', {'dataFunction': {}});
-						//
-						// 				if(!isEmpty(el.codes)) {
-						// 					setMakeList(el.codes, 'alarm_codeList', {'dataFunction': {}});
-						// 				} else {
-						// 					setMakeList(new Array(), 'alarm_codeList', {'dataFunction': {}});
-						// 				}
-						// 			}
-						// 		});
-						// 	} else if (key == 'alarm_code') {
-						// 		if (!isEmpty(val)) {
-						// 			alarm_code = val.split(',');
-						// 		}
-						// 	}
-						// }
 					}
 				});
 
 				let alarmCode = new Array();
 				if (!isEmpty(data['alarm_code'])) {
+					costSetList();
 					if (data['alarm_code'].match(',')) {
 						alarmCode = data['alarm_code'].split(',');
 					} else {
@@ -1379,10 +1295,10 @@
 			});
 
 			$('#addDeviceModal .modal-header.stit').text('설비 정보 수정');
-			$('#addDevice').attr('onclick', 'deviceProcess("patch", "' + did + '")');
+			$('#addDevice').attr('onclick', 'deviceProcess("patch", "' + did + '")').text('수정');
 		} else {
 			$('#addDeviceModal .modal-header.stit').text('설비 정보 등록');
-			$('#addDevice').attr('onclick', 'deviceProcess("post")');
+			$('#addDevice').attr('onclick', 'deviceProcess("post")').text('등록');
 		}
 
 		$('#addDeviceModal').modal('show');
@@ -1472,20 +1388,17 @@
 			data: { includeCodes: true }
 		}).done(function (data, textStatus, jqXHR) {
 			codeSetList = data.data;
-			let manufacturerList = new Array();
-			codeSetList.forEach(function (el) {
-				let tempManu = el.manufacturer,
-					dup = false;
-				manufacturerList.forEach(function (element) {
-					if (tempManu == element.manufacturer) dup = true;
+			const alarmCode = new Array();
+			const deviceType = $('#device_type button').data('value');
+			const refineList = codeSetList.filter(code => code.device_type === deviceType);
+			refineList.forEach(codeSet => {
+				alarmCode.push({
+					name: codeSet['device_type'] + '_' + codeSet['manufacturer'] + '_' + codeSet['model'] + '(' + codeSet['version'] + ')',
+					val: codeSet['set_id']
 				});
-				if(!dup) {
-					manufacturerList.push({
-						manufacturer: tempManu
-					});
-				}
 			});
-			setMakeList(manufacturerList, 'manufacturerList', {'dataFunction': {}})
+
+			setMakeList(alarmCode, 'alarm_codeList', {'dataFunction': {}})
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);
 			console.error(textStatus);
