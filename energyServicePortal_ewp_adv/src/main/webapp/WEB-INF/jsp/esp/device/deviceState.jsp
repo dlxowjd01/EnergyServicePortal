@@ -247,11 +247,8 @@
 											장치 알람 메세지 설정<span class="caret"></span>
 										</button>
 										<ul class="dropdown-menu chk-type" id="alarm_codeList">
-											<li>
-												<a href="javascript:void(0);" tabindex="-1">
-													<input type="checkbox" id="alarm_code_[INDEX]" value="[val]" name="alarm_code">
-													<label for="alarm_code_[INDEX]">[name]</label>
-												</a>
+											<li data-value="[val]">
+												<a href="javascript:void(0);" tabindex="-1">[name]</a>
 											</li>
 										</ul>
 									</div>
@@ -1268,25 +1265,15 @@
 					}
 				});
 
-				let alarmCode = new Array();
+				costSetList();
 				if (!isEmpty(data['alarm_code'])) {
-					costSetList();
-					if (data['alarm_code'].match(',')) {
-						alarmCode = data['alarm_code'].split(',');
-					} else {
-						alarmCode = new Array();
-						alarmCode.push(data['alarm_code']);
-					}
+					document.querySelectorAll('#alarm_codeList li').forEach(el => {
+						if (el.dataset.value == data['alarm_code']) {
+							document.querySelector('#alarm_code > button').innerHTML = el.textContent + '<span class="caret"></span>';
+							document.querySelector('#alarm_code > button').dataset.value = data['alarm_code'];
+						}
+					});
 				}
-
-				$('#alarm_codeList input').each(function() {
-					let thisVal = $(this).val();
-					if (alarmCode.includes(thisVal)) {
-						$(this).prop('checked', true);
-					}
-				});
-				displayDropdown($('#alarm_code'));
-
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				console.error(jqXHR);
 				console.error(textStatus);
@@ -1315,6 +1302,12 @@
 			urlSufffix = '/' + did;
 
 			if (method == 'patch') {
+				if (isEmpty(areaData['alarm_code'])) {
+					delete areaData['alarm_code'];
+				} else {
+					areaData['alarm_code'] = String(areaData['alarm_code']);
+				}
+
 				alertPreffix = '수정';
 				if (!confirm('설비정보를 수정하시겠습니까?')) {
 					return false;
@@ -1333,19 +1326,13 @@
 		}
 
 		if (method != 'delete') {
-			const alarmArray = $.makeArray($(':checkbox[name="alarm_code"]:checked').map(
-				function () {
-					return $(this).val();
-				})
-			);
-
 			areaData['forecasting'] = $('#forecasting').is(':checked');
 			areaData['dashboard'] = $('#dashboard').is(':checked');
 			areaData['billing'] = $('#billing').is(':checked');
-			if (!isEmpty(alarmArray)) {
-				areaData['alarm_code'] = alarmArray.join(',');
-			} else {
+			if (isEmpty(areaData['alarm_code'])) {
 				delete areaData['alarm_code'];
+			} else {
+				areaData['alarm_code'] = String(areaData['alarm_code']);
 			}
 			areaData['capacity'] = Number(areaData['capacity']) * 1000;
 			areaData['capacity_unit'] = 'W';
