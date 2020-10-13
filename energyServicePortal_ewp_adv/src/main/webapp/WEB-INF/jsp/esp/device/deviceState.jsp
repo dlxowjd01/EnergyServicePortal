@@ -903,7 +903,7 @@
 				} else {
 					if (!isEmpty(resultData) && !isEmpty(resultData[liData])) {
 						let dValue = displayNumberFixedDecimal(resultData[liData], suffix, 3, 2);
-						dValue = dValue[0] != '-' ? dValue.join(' ') : dValue[0];
+						dValue = dValue[0] != '-' ? dValue[0] + ' ' + suffix : dValue[0];
 						$(this).find('.t-value').text(dValue);
 					} else {
 						$(this).find('.t-value').text('-');
@@ -917,7 +917,7 @@
 
 				if (!isEmpty(resultData) && !isEmpty(resultData[liData])) {
 					let dValue = displayNumberFixedDecimal(resultData[liData], suffix, 3, 2);
-					dValue = dValue[0] != '-' ? dValue.join(' ') : dValue[0];
+					dValue = dValue[0] != '-' ? dValue[0] + ' ' + suffix : dValue[0];
 					$(this).find('.di-li-text').text(dValue);
 				} else {
 					$(this).find('.di-li-text').text('-');

@@ -3,22 +3,24 @@
 <div class="row content-wrapper hidden">
 	<div class="col-12">
 		<div class="indiv">
-			<table id="gmainTable">
+			<table id="gmainTable" class="cell-border">
 				<colgroup>
-					<col style="width:5%">
-					<col style="width:12%">
+					<col style="width:6%">
+					<col style="width:13%">
 					<col style="width:6%">
 					<col style="width:13%">
 					<col style="width:12%">
 					<col style="width:7%">
-					<col style="width:5%">
+					<col style="width:4%">
 					<col style="width:7%">
-					<col style="width:5%">
+					<col style="width:4%">
 					<col style="width:7%">
 					<col style="width:7%">
 					<col style="width:7%">
 					<col style="width:7%">
 				</colgroup>
+				<thead></thead>
+				<tbody></tbody>
 			</table>
 		</div>
 	</div>
@@ -30,6 +32,7 @@
 		gmainTable = $('#gmainTable').DataTable({
 			autoWidth: true,
 			fixedHeader: true,
+			'table-layout': 'fixed',
 			scrollY: '720px',
 			scrollCollapse: true,
 			paging: false,
@@ -39,16 +42,17 @@
 				{
 					title: '순번',
 					data: null,
-					render: function ( data, type, full, rowIndex ) {
+					render: function (data, type, full, rowIndex) {
 						return rowIndex.row + 1;
 					},
-					width: '5%',
 					className: 'dt-center no-sorting'
 				},
 				{
 					title: '발전소 명',
 					data: 'siteName',
-					width: '12%',
+					render: function (data, type, full, rowIndex) {
+						return '<a href="javascript:pageMove(\'' + full['sid'] + '\', \'siteMain\')">' + data + '</a>';
+					},
 					className: 'dt-body-left dt-head-center'
 				},
 				{
@@ -57,7 +61,6 @@
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
 					},
-					width: '6%',
 					className: 'dt-body-right dt-head-center'
 				},
 				{
@@ -66,7 +69,6 @@
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
 					},
-					width: '13%',
 					className: 'dt-body-center dt-head-center'
 				},
 				{
@@ -75,7 +77,6 @@
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
 					},
-					width: '12%',
 					className: 'dt-body-center dt-head-center'
 				},
 				{
@@ -88,7 +89,6 @@
 							return data[0];
 						}
 					},
-					width: '7%',
 					className: 'dt-body-right dt-head-center'
 				},
 				{
@@ -98,7 +98,6 @@
 						const weather = getWeatherIconClass(data);
 						return '<i class="ico-weather ' + weather + '"></i>';
 					},
-					width: '5%',
 					className: 'dt-body-center dt-head-center'
 				},
 				{
@@ -107,7 +106,6 @@
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
 					},
-					width: '7%',
 					className: 'dt-body-right dt-head-center'
 				},
 				{
@@ -117,7 +115,6 @@
 						const weather = getWeatherIconClass(data);
 						return '<i class="ico-weather ' + weather + '"></i>';
 					},
-					width: '5%',
 					className: 'dt-body-center dt-head-center'
 				},
 				{
@@ -126,7 +123,6 @@
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
 					},
-					width: '7%',
 					className: 'dt-body-right dt-head-center'
 				},
 				{
@@ -135,7 +131,6 @@
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
 					},
-					width: '7%',
 					className: 'dt-body-right dt-head-center'
 				},
 				{
@@ -144,7 +139,6 @@
 					render: function (data, type, full, rowIndex) {
 						return data;
 					},
-					width: '7%',
 					className: 'dt-body-right dt-head-center'
 				},
 			],
@@ -153,8 +147,11 @@
 				zeroRecords:  "검색된 결과가 없습니다."
 			},
 			dom: 'tip'
-		}).columns.adjust();
+		}).columns.adjust().draw();
 
+		gmainTable.on( 'column-sizing.dt', function ( e, settings ) {
+			$(".dataTables_scrollHeadInner").css( "width", "100%" );
+		});
 	});
 
 	/**
@@ -381,11 +378,12 @@
 					} else if (targetUrl.match('/energy/sites')) {
 						const interval = targetUrl.match('day');
 						tableData.forEach((site, index) => {
-							if (!isEmpty(result[site.sid])) {
-								const siteEnergyItem = result[site.sid];
+							if (!isEmpty(result['data']) && !isEmpty(result['data'][site.sid])) {
+								const siteEnergyItem = result['data'][site.sid];
 								siteEnergyItem.forEach(siteEnergy => {
 									const items = siteEnergy['items'];
 									if (!isEmpty(items)) {
+										let genEnergy = 0;
 										items.map(e => genEnergy += e['energy']);
 										if (interval) {
 											tableData[index]['yesterEnergy'] = (genEnergy / 1000).toFixed(2);
@@ -409,8 +407,8 @@
 			});
 
 			gmainTable.clear();
-			gmainTable.rows.add(tableData).draw();
-			$($.fn.dataTable.tables(true)).DataTable().columns.adjust();
+			gmainTable.rows.add(tableData).columns.adjust().draw();
+			// $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
 
 			document.getElementById('loadingCircleDashboard').style.display =  'none';
 		});
