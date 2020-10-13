@@ -5,47 +5,11 @@
 
 <script type="text/javascript">
 	$(function () {
-		let fullName = '${userInfo.name}';
-		let affiliation = '${userInfo.org_name}';
-		let loginMail = '${userInfo.contact_email}';
-		let mobileNum = '${userInfo.contact_phone}';
-		let accLevel = "";
-		let taskCategory = "";
+		updateModal();
 
-		// [ role ]	1: 시스템관리자, 2: 일반
-		role == 1 ? accLevel = "시스템관리자" : accLevel = "일반";
-		// [ task ] 0: 일반, 1:사무수탁, 2:자산운용, 3: 사업주
-		if(task == 0){
-			taskCategory = "일반"
-		} else if(task == 1){
-			taskCategory = "사무수탁"
-		} else if(task == 2){
-			taskCategory = "자산운용"
-		} else if(task == 3){
-			taskCategory = "사업주"
-		}
-
-		if(!isEmpty(loginId)) {
-			$("#userId").val(loginId);
-		}
-		if(!isEmpty(oid)) {
-			$("#affiliation").val(affiliation);
-		}
-		if(!isEmpty(accLevel)) {
-			$("#accessLevel").val(accLevel);
-		}
-		if(!isEmpty(taskCategory)) {
-			$("#taskCategory").val(taskCategory);
-		}
-		if(!isEmpty(fullName)) {
-			$("#fullName").val(fullName);
-		}
-		if(!isEmpty(loginMail)) {
-			$("#emailAddr").val(loginMail);
-		}
-		if(!isEmpty(mobileNum) && mobileNum != "string") {
-			$("#mobileNum").val(mobileNum);
-		}
+		$("#updateUserInfoModal").on("show.bs.modal", function() {
+			updateModal();
+		});
 
 		$(".nav-brand a").each(function(index, element) {
 			// console.log("window.href===", window.location.pathname)
@@ -59,8 +23,10 @@
 		$("#newPwd").on('keyup', validatePassword);
 
 		$("#fullName").on('keyup', function(evt) {
-			if(!isEmpty($(this).val())){
-				var kr = /[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/g
+			let value = $(this).val().trim();
+			
+			if(!isEmpty(value)){
+				let kr = /[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/g
 				let letters = /^[a-zA-Z ]+$/
 				// let kr2 =  /[\uac00-\ud7af]|[\u1100-\u11ff]|[\u3130-\u318f]|[\ua960-\ua97f]|[\ud7b0-\ud7ff]/g
 				// let engKr = /[^a-zA-Z0-9\u3130-\u318F\uAC00-\uD7AF]/g
@@ -69,13 +35,15 @@
 				// console.log("kr===", $(this).val().match(kr))
 				// console.log("letters===", $(this).val().match(letters))
 
-				if( $(this).val().match(kr) || $(this).val().match(letters)){
+				if( value.match(kr) || value.match(letters)){
 					$("#isValidName").addClass("hidden");
 				} else {
 					$("#isValidName").removeClass("hidden");
 				}
-				$("#updateProfileBtn").prop("disabled", false);
-				$("#updateProfileBtn").removeClass("disabled");
+				$("#updateProfileBtn").prop("disabled", false).removeClass("disabled");
+			} else {
+				$("#isValidName").removeClass("hidden");
+				$("#updateProfileBtn").prop("disabled", true).addClass("disabled");
 			}
 		});
 
@@ -93,8 +61,11 @@
 					$("#isValidMobileNum").removeClass("hidden");
 				}
 
+			} else {
+				$("#isValidMobileNum").addClass("hidden");
 			}
 		});
+
 		$("#mobileNum").on('keypress', function(evt) {
 			let val = $(this).val();
 			if (evt.which < 48 || evt.which > 57) {
@@ -113,6 +84,8 @@
 				}
 				$("#updateProfileBtn").prop("disabled", false);
 				$("#updateProfileBtn").removeClass("disabled");
+			} else {
+				$("#isValidEmail").addClass("hidden");
 			}
 		});
 		
@@ -265,11 +238,66 @@
 	});
 
 
+	function updateModal(){
+		let fullName = '${userInfo.name}';
+		let affiliation = '${userInfo.org_name}';
+		let loginMail = '${userInfo.contact_email}';
+		let mobileNum = '${userInfo.contact_phone}';
+		let accLevel = "";
+		let taskCategory = "";
+
+		// [ role ]	1: 시스템관리자, 2: 일반
+		role == 1 ? accLevel = "시스템관리자" : accLevel = "일반";
+		// [ task ] 0: 일반, 1:사무수탁, 2:자산운용, 3: 사업주
+		if(task == 0){
+			taskCategory = "일반"
+		} else if(task == 1){
+			taskCategory = "사무수탁"
+		} else if(task == 2){
+			taskCategory = "자산운용"
+		} else if(task == 3){
+			taskCategory = "사업주"
+		}
+
+		if(!isEmpty(loginId)) {
+			$("#userId").val(loginId);
+		}
+		if(!isEmpty(oid)) {
+			$("#affiliation").text(affiliation);
+		}
+		if(!isEmpty(accLevel)) {
+			$("#accessLevel").val(accLevel);
+		}
+		if(!isEmpty(taskCategory)) {
+			$("#taskCategory").val(taskCategory);
+		}
+		if(!isEmpty(fullName)) {
+			$("#fullName").val(fullName);
+		}
+		if(!isEmpty(loginMail)) {
+			$("#emailAddr").val(loginMail);
+		}
+		if(!isEmpty(mobileNum) && mobileNum != "string") {
+			$("#mobileNum").val(mobileNum);
+		}
+	}
+
 	function resetModal() {
 		let pwdInput = $("#pwdForm").find("input");
-		let profileInput = $("#profileForm").find("input");
+		let warning = $("#updateUserInfoModal").find(".warning-text");
 		let tick = $(".tick");
 
+		warning.each(function(){
+			if(!$(this).hasClass("hidden")){
+				$(this).addClass("hidden");
+			}
+		});
+		pwdInput.each(function(){
+			let val = $(this).val();
+			if(!isEmpty(val)){
+				$(this).val("");
+			}
+		});
 		tick.each(function(){
 			if($(this).is(".checked")){
 				$(this).removeClass("checked");
@@ -277,6 +305,7 @@
 		});
 		$("#updateUserInfoModal").modal("hide");
 	}
+
 	function dashboardMove(type, key, value) {
 
 		let inp = $('input').attr('type', 'hidden').attr('name', key).attr('value', value);
@@ -525,23 +554,6 @@
 				<li class="member clear">
 					<div class="fr"><button type="button" data-toggle="modal" data-target="#updateUserInfoModal" data-backdrop="static" data-keyboard="false" id="userInfoBtn" class="btn-type03">${sessionScope.userInfo.name}<span class="light">&emsp;${sessionScope.userInfo.login_id}</span></button></div>
 				</li>
-				<%--
-				<li>
-					<div class="nav_theme">
-						<div class="switcher">
-							<input type="radio" name="balance" value="light" id="light"
-								   class="switcher__input switcher__input--light"
-								   checked="" onClick="userTheme('light');">
-							<label for="light" class="switcher__label">Light</label>
-							<input type="radio" name="balance" value="dark" id="dark"
-								   class="switcher__input switcher__input--dark"
-								   onClick="userTheme('dark');">
-							<label for="dark" class="switcher__label">Dark</label>
-							<span class="switcher__toggle"></span>
-						</div>
-					</div>
-				</li>
-				--%>
 				<li><%@ include file="/decorators/include/selectLang.jsp" %></li>
 			</c:otherwise>
 		</c:choose>
@@ -646,7 +658,7 @@
 								<input type="text" name="full_name" id="fullName" class="input text-input-type w-100" placeholder="입력" autocomplete="off">
 							</div>
 							<div class="flex-start warning-wrapper">
-								<small id="isValidName" class="warning-text hidden">한글/영문 이름만 가능합니다.</small>
+								<small id="isValidName" class="warning-text hidden">한글/영문 이름을 입력해 주세요.</small>
 							</div>
 							<div class="input-group inline-flex">
 								<label for="emailAddr" class="input-label bold">이메일</label>
@@ -674,8 +686,8 @@
 							<input type="text" name="user_id" id="userId" class="clear-input" readonly="" autocomplete="off">
 						</div>
 						<div class="mb-10">
-							<label for="affiliation" class="input-label bold">회사 이름</label>
-							<input type="text" name="affiliation" id="affiliation" class="clear-input" readonly="" autocomplete="off">
+							<span class="input-label bold">회사 이름</span>
+							<p id="affiliation" class="clear-input"></p>
 						</div>
 						<div class="mb-10">
 							<label for="accessLevel" class="input-label bold">권한 레벨</label>

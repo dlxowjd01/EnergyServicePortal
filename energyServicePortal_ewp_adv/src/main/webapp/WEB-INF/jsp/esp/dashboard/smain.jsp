@@ -3486,7 +3486,6 @@
 					}
 				}
 			}
-			console.log("dailySolarMaxVal==", dailySolarMaxVal)
 			dailySolarTrendChart.addSeries({
 				name: seriesName[0].label,
 				type: 'column',
@@ -3512,7 +3511,7 @@
 				dashStyle: 'ShortDash',
 				color: 'var(--white60)',
 				tooltip: {
-					valueSuffix: '',
+					valueSuffix: 'W/m\xB2',
 				},
 				marker: {
 					symbol: "circle"
