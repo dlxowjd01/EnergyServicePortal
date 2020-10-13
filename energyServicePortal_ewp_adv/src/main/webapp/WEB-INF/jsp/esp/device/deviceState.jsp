@@ -168,22 +168,6 @@
 								<label for="manager" class="input-label">담당자</label>
 								<input class="input text-input-type" type="text" name="manager" id="manager" autocomplete="off">
 							</div>
-							<div class="input-group inline-flex">
-								<label for="alarm_code" class="input-label">알림 코드</label>
-								<div class="dropdown" id="alarm_code">
-									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="장치 알람 메세지 설정">
-										장치 알람 메세지 설정<span class="caret"></span>
-									</button>
-									<ul class="dropdown-menu chk-type" id="alarm_codeList">
-										<li>
-											<a href="javascript:void(0);" tabindex="-1">
-												<input type="checkbox" id="alarm_code_[INDEX]" value="[val]" name="alarm_code">
-												<label for="alarm_code_[INDEX]">[name]</label>
-											</a>
-										</li>
-									</ul>
-								</div>
-							</div>
 						</div>
 						<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
 							<div class="input-group inline-flex chk-type">
@@ -255,6 +239,24 @@
 					</div>
 					<div class="row">
 						<div class="col-12">
+							<div class="input-group inline-flex">
+								<label for="alarm_code" class="input-label">알림 코드</label>
+								<div class="dropdown-wrapper w-80">
+									<div class="dropdown" id="alarm_code">
+										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="장치 알람 메세지 설정">
+											장치 알람 메세지 설정<span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu chk-type" id="alarm_codeList">
+											<li>
+												<a href="javascript:void(0);" tabindex="-1">
+													<input type="checkbox" id="alarm_code_[INDEX]" value="[val]" name="alarm_code">
+													<label for="alarm_code_[INDEX]">[name]</label>
+												</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
 							<div class="input-group inline-flex">
 								<label for="description" class="input-label">설명</label>
 								<textarea name="addDeviceDescription" id="description" class="textarea"></textarea>
@@ -1390,7 +1392,7 @@
 			codeSetList = data.data;
 			const alarmCode = new Array();
 			const deviceType = $('#device_type button').data('value');
-			const refineList = codeSetList.filter(code => code.device_type === deviceType);
+			const refineList = codeSetList.filter(code => code.device_type == null || code.device_type === deviceType);
 			refineList.forEach(codeSet => {
 				alarmCode.push({
 					name: codeSet['device_type'] + '_' + codeSet['manufacturer'] + '_' + codeSet['model'] + '(' + codeSet['version'] + ')',

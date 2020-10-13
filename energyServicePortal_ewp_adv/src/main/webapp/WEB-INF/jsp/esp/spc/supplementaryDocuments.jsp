@@ -111,17 +111,15 @@
 										newData["파일_현재_개수"] = json.data[0].file_count_now;
 										newData["첨부파일"] = json.data[0].file_count_now;
 										
-										var supplementInfo = JSON.parse(json.data[0].supplement_info)
-										var keys = Object.keys(supplementInfo);
-										for ( var i in keys ) {
-											if ( keys[i] != 'null' ) {
-												if ( keys[i].substring(keys[i].length-12, keys[i].length) == 'originalName' && supplementInfo[keys[i]] != '') {
-													originFile.push(supplementInfo[keys[i]]);
+										const supplementInfo = JSON.parse(json.data[0].supplement_info);
+										Object.entries(supplementInfo).forEach(([key, val]) => {
+											if (!isEmpty(key)) {
+												if (key.match('originalName') && !isEmpty(val)) {
+													originFile.push(val);
 												}
 											}
-										}
+										})
 									}
-
 								},
 								error: function(request, status, error) {
 									alert('처리 중 오류가 발생했습니다.');

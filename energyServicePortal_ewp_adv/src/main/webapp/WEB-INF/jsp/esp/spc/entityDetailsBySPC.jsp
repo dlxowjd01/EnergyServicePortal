@@ -132,20 +132,19 @@
 					var keys = Object.keys(supplementInfo);
 
 					var customArray = new Array();
-					for(var i in keys) {
-						var key = keys[i],
-							val = supplementInfo[key];
-
-						if (key.match('사용자정의')) {
-							let customIndex = Number(key.replace(/[^0-9]/g, ''));
-							if (customIndex != 0) {
-								if ($.inArray(customIndex, customArray) === -1) customArray.push(customIndex);
+					Object.entries(supplementInfo).forEach(([key, val]) => {
+						if (!isEmpty(key)) {
+							if (key.match('사용자정의')) {
+								let customIndex = Number(key.replace(/[^0-9]/g, ''));
+								if (customIndex != 0) {
+									if ($.inArray(customIndex, customArray) === -1) customArray.push(customIndex);
+								}
+							} else if (key.match('_fieldName')) {
+								let keyName = key.replace('_fieldName', '');
+								supplementInfo[keyName + '_filedName'] = val;
 							}
-						} else if (key.match('_fieldName')) {
-							let keyName = key.replace('_fieldName', '');
-							supplementInfo[keyName + '_filedName'] = val;
 						}
-					}
+					})
 
 					customArray.sort();
 					customArray.forEach(function(el) {
