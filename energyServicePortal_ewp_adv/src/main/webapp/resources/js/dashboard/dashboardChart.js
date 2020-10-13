@@ -346,10 +346,10 @@ const dailyChart = Highcharts.chart('dailyChart', {
 const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 	chart: {
 		renderTo: 'typeSiteCurrent',
-		marginTop: 36,
-		marginRight: 16,
+		// spacingBottom: 60,
+		height: 300,
 		backgroundColor: 'transparent',
-		type: 'bar'
+		type: 'bar',
 	},
 	navigation: {
 		buttonOptions: {
@@ -363,32 +363,63 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 		text: ''
 	},
 	xAxis: {
+		min: 0,
+		max: 5,
 		lineColor: 'var(--grey)',
 		gridLineColor: 'var(--white25)',
 		plotLines: [{
 			color: 'var(--grey)',
 			width: 1
 		}],
+		scrollbar: {
+			enabled: true,
+			barBackgroundColor: 'var(--white40)',
+			barBorderRadius: 7,
+			barBorderWidth: 0,
+			buttonBackgroundColor: 'none',
+			buttonBorderWidth: 0,
+			buttonBorderRadius: 7,
+			trackBackgroundColor: 'none',
+			trackBorderWidth: 3,
+			trackBorderRadius: 0,
+			trackBorderColor: 'none'
+		},
 		labels: {
 			align: 'left',
+			overflow: 'justify',
 			reserveSpace: true,
 			style: {
 				color: 'var(--grey)',
-				fontSize: '12px'
+				fontSize: '12px',
+				lineHeight: '24px'
 			}
 		},
 		categories: null,
 		title: {
-			text: null
+			text: ''
 		}
 	},
 	yAxis: {
+		y: 28,
 		lineColor: 'var(--grey)',
 		gridLineColor: 'var(--white25)',
 		plotLines: [{
 			color: 'var(--grey)',
-			width: 1
+			width: 0
 		}],
+		// scrollbar: {
+		// 	enabled: true,
+		// 	barBackgroundColor: 'var(--white40)',
+		// 	barBorderRadius: 7,
+		// 	barBorderWidth: 0,
+		// 	buttonBackgroundColor: 'var(--white40)',
+		// 	buttonBorderWidth: 0,
+		// 	buttonBorderRadius: 7,
+		// 	trackBackgroundColor: 'none',
+		// 	trackBorderWidth: 3,
+		// 	trackBorderRadius: 0,
+		// 	trackBorderColor: 'none'
+		// },
 		gridLineWidth: 0,
 		min: 0,
 		title: {
@@ -406,6 +437,7 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 			},
 			overflow: 'justify',
 			x: -10,
+			y: 28,
 			style: {
 				color: 'var(--grey)',
 				fontSize: '12px'
@@ -417,7 +449,7 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 		align: 'right',
 		verticalAlign: 'top',
 		x: 5,
-		y: -10,
+		y: -15,
 		itemStyle: {
 			color: 'var(--white87)',
 			fontSize: '12px',
@@ -432,7 +464,8 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 		formatter: function () {
 			return this.points.reduce(function (s, point) {
 				let suffix = point.series.userOptions.tooltip.valueSuffix;
-				return s + '<br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + numberComma(point.y) + suffix;
+				let val = displayNumberFixedUnit(point.y, 'kWh', 'kWh', 0, "round")
+				return s + '<br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + val[0] + suffix;
 			}, '<span style="display:flex;"><b>' + this.x + '</b></span>');
 		},
 		shared: true,
@@ -446,12 +479,10 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 	},
 	plotOptions: {
 		series: {
+			enabled: true,
 			label: {
 				connectorAllowed: true
 			},
-			// pointWidth: 30,
-			pointPadding: 0.2,
-			groupPadding: 0.1,
 			borderWidth: 0,
 			borderColor: 'transparent',
 			formatter: function () {
@@ -464,14 +495,15 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 				// inside: true,
 				style: {
 					color: 'var(--white87)',
-					fontSize: '12px',
+					fontSize: '11px',
 					fontWeight: 400,
 					textOutline: 0,
+					textAlign: 'right',
 					textShadow: true,
-
 				},
 				formatter: function () {
-					return numberComma(this.y) + 'kWh';
+					let val = displayNumberFixedUnit(this.y, 'kWh', 'kWh', 0, "round");
+					return val[0] + " " +  val[1];
 				}
 			},
 		},

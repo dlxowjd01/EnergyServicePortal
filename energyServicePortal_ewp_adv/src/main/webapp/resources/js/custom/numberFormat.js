@@ -163,7 +163,7 @@ const displayNumberFixedUnit = function (input_num, input_unit, fixed_unit, num_
 			if(option != "round"){
 				rtnValue = [numberComma((input_num).toFixed(num_frac)), fixed_unit];
 			} else {
-				let pFraction = Math.pow(10, num_frac);
+				let pFraction = Math.pow(10, num_frac+1);
 				rtnValue = [numberComma(( Math.round(input_num * pFraction) / pFraction ).toFixed(num_frac)), fixed_unit];
 			}
 			return rtnValue;
@@ -201,7 +201,7 @@ const displayNumberFixedUnit = function (input_num, input_unit, fixed_unit, num_
 						if(option != "round"){
 							rtnValue = [numberComma((input_num).toFixed(num_frac)), v + 'W' +  suffix];
 						} else {
-							let pFraction = Math.pow(10, num_frac);
+							let pFraction = Math.pow(10, num_frac + 1);
 							rtnValue = [numberComma(( Math.round(input_num * pFraction) / pFraction ).toFixed(num_frac)), v + 'W' +  suffix];
 						}
 					}
@@ -218,7 +218,7 @@ const displayNumberFixedUnit = function (input_num, input_unit, fixed_unit, num_
 						if(option != "round"){
 							rtnValue = [numberComma((input_num).toFixed(num_frac)), el.unit];
 						} else {
-							let pFraction = Math.pow(10, num_frac);
+							let pFraction = Math.pow(10, num_frac + 1);
 							rtnValue = [numberComma(( Math.round(input_num * pFraction) / pFraction ).toFixed(num_frac)), el.unit];
 						}
 					}

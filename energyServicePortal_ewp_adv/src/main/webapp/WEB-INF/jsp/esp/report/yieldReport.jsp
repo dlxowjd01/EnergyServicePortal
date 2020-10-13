@@ -18,16 +18,16 @@
 
 	$(function () {
 		// popOption();
-		initRow('yield-list');
+		initRow('yieldList');
 
 		setInitList("listData"); //리스트초기화
 
 		getDataList(page);
 	})
 
-	$(document).on('click', '#yield-list > li > button.btn-type07', function () {
-		let idx = $('#yield-list > li > button.btn-type07').index($(this));
-		delRow('yield-list', idx);
+	$(document).on('click', '#yieldList > li > button.btn-type07', function () {
+		let idx = $('#yieldList > li > button.btn-type07').index($(this));
+		delRow('yieldList', idx);
 	});
 
 	$(document).on('click', '.dropdown li', function (e) {
@@ -127,7 +127,7 @@
 		$('#spc_id ul').empty().append(html);
 		$('#site_id ul').empty();
 
-		delRow('yield-list');
+		delRow('yieldList');
 
 		//팝업 오픈시 value 초기화
 		$('#reportModal input').each(function () {
@@ -582,21 +582,21 @@
 				<h2>수익 보고서 신규</h2>
 			</div>
 			<div class="modal-body">
-				<div class="ly-wrapper report-modal-content container-fluid">
+				<div class="report-modal-content container-fluid">
 					<div class="row">
-						<div class="col-lg-5 col-sm-12">
-							<div class="flex-wrapper">
+						<div class="col-lg-6 col-sm-12">
+							<div class="flex-start">
 								<span class="input-label">SPC</span>
-								<div class="dropdown placeholder" id="spc_id">
+								<div id="spc_id" class="dropdown placeholder">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="">
 										선택<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu"></ul>
 								</div>
 							</div>
-							<div class="flex-wrapper">
+							<div class="flex-start">
 								<span class="input-label"><fmt:message key="revenuereport.2.report_classification" /></span>
-								<div class="dropdown placeholder" id="report_type">
+								<div id="report_type" class="dropdown placeholder">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
 										선택<span class="caret"></span>
 									</button>
@@ -608,13 +608,14 @@
 									</ul>
 								</div>
 							</div>
-							<div class="add-wrap">
-								<span class="input-label">적용 변수</span>
-								<a href="javascript:void(0);" class="btn-add" onclick="addRow('yield-list');">추가</a>
-							</div>
+							<div class="flex-start"><!--
+								--><span class="input-label short">적용 변수</span><!--
+								--><a href="javascript:void(0);" class="btn-text-blue" onclick="addRow('yieldList');">추가</a><!--
+						--></div>
 						</div>
-						<div class="col-lg-7 col-sm-12">
-							<div class="flex-wrapper">
+
+						<div class="col-lg-6 col-sm-12">
+							<div class="flex-start">
 								<span class="input-label">발전소</span>
 								<div class="dropdown placeholder" id="site_id">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="">
@@ -623,19 +624,19 @@
 									<ul class="dropdown-menu"></ul>
 								</div>
 							</div>
-							<div class="flex-wrapper">
+							<div class="flex-start">
 								<span class="input-label">적용 기간</span>
-								<div class="sel-calendar fl">
+								<div class="sel-calendar">
 									<input type="text" id="report_data_start" name="report_data_start" value="" class="sel fromDate" autocomplete="off" readonly="" placeholder="날짜 선택">
 								</div>
-								<div class="sel-calendar fl ml">
+								<div class="sel-calendar ml-22">
 									<input type="text" id="report_data_end" name="report_data_end" value="" class="sel toDate" autocomplete="off" readonly="" placeholder="날짜 선택">
 								</div>
 							</div>
 						</div>
 					</div>
-					<hr>
-					<ul class="yield-list" id="yield-list">
+					<hr class="mt-0">
+					<ul id="yieldList" class="yield-list">
 						<li>
 							<div class="dropdown placeholder" id="report_variable_key_[index]">
 								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="">

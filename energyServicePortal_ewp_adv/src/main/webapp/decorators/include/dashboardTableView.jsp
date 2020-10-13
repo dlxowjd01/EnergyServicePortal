@@ -3,21 +3,20 @@
 <div class="row content-wrapper hidden">
 	<div class="col-12">
 		<div class="indiv">
-			<table id="gmainTable" class="cell-border">
+			<table id="gmainTable" style="table-layout: fixed; width:100%;">
 				<colgroup>
-					<col style="width:6%">
-					<col style="width:13%">
-					<col style="width:6%">
-					<col style="width:13%">
-					<col style="width:12%">
+					<col style="width:5%">
+					<col style="width:10%">
+					<col style="width:7%">
+					<col style="width:10%">
+					<col style="width:9%">
 					<col style="width:7%">
 					<col style="width:4%">
 					<col style="width:7%">
-					<col style="width:4%">
-					<col style="width:7%">
-					<col style="width:7%">
-					<col style="width:7%">
-					<col style="width:7%">
+					<col style="width:5%">
+					<col style="width:9%">
+					<col style="width:13%">
+					<col style="width:13%">
 				</colgroup>
 				<thead></thead>
 				<tbody></tbody>
@@ -32,7 +31,7 @@
 		gmainTable = $('#gmainTable').DataTable({
 			autoWidth: true,
 			fixedHeader: true,
-			'table-layout': 'fixed',
+			"table-layout": "fixed",
 			scrollY: '720px',
 			scrollCollapse: true,
 			paging: false,
@@ -45,15 +44,12 @@
 					render: function (data, type, full, rowIndex) {
 						return rowIndex.row + 1;
 					},
-					className: 'dt-center no-sorting'
+					className: 'dt-center no-sorting fixed'
 				},
 				{
 					title: '발전소 명',
 					data: 'siteName',
-					render: function (data, type, full, rowIndex) {
-						return '<a href="javascript:pageMove(\'' + full['sid'] + '\', \'siteMain\')">' + data + '</a>';
-					},
-					className: 'dt-body-left dt-head-center'
+					className: 'dt-head-left dt-body-left'
 				},
 				{
 					title: '발전용량 (kWh)',
@@ -61,7 +57,7 @@
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
 					},
-					className: 'dt-body-right dt-head-center'
+					className: 'dt-head-right dt-body-right'
 				},
 				{
 					title: '인버터 가동 상태',
@@ -69,7 +65,7 @@
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
 					},
-					className: 'dt-body-center dt-head-center'
+					className: 'dt-center'
 				},
 				{
 					title: '경고 알람',
@@ -77,7 +73,7 @@
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
 					},
-					className: 'dt-body-center dt-head-center'
+					className: 'dt-center'
 				},
 				{
 					title: '현재 발전량(kW)',
@@ -89,7 +85,7 @@
 							return data[0];
 						}
 					},
-					className: 'dt-body-right dt-head-center'
+					className: 'dt-head-right dt-body-right'
 				},
 				{
 					title: "현재 날씨",
@@ -98,7 +94,7 @@
 						const weather = getWeatherIconClass(data);
 						return '<i class="ico-weather ' + weather + '"></i>';
 					},
-					className: 'dt-body-center dt-head-center'
+					className: 'dt-center'
 				},
 				{
 					title: '전일 발전',
@@ -106,7 +102,7 @@
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
 					},
-					className: 'dt-body-right dt-head-center'
+					className: 'dt-head-right dt-body-right'
 				},
 				{
 					title: '전일 날씨',
@@ -115,7 +111,7 @@
 						const weather = getWeatherIconClass(data);
 						return '<i class="ico-weather ' + weather + '"></i>';
 					},
-					className: 'dt-body-center dt-head-center'
+					className: 'dt-center'
 				},
 				{
 					title: '월간 발전량(MWh)',
@@ -123,7 +119,7 @@
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
 					},
-					className: 'dt-body-right dt-head-center'
+					className: 'dt-head-right dt-body-right'
 				},
 				{
 					title: '전년 동월 발전량(MWh)',
@@ -131,7 +127,7 @@
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
 					},
-					className: 'dt-body-right dt-head-center'
+					className: 'dt-head-right dt-body-right'
 				},
 				{
 					title: '전년 동월 대비 발전 비율(%)',
@@ -139,19 +135,15 @@
 					render: function (data, type, full, rowIndex) {
 						return data;
 					},
-					className: 'dt-body-right dt-head-center'
+					className: 'dt-head-right dt-body-right'
 				},
 			],
 			language: {
 				emptyTable: "조회된 데이터가 없습니다.",
 				zeroRecords:  "검색된 결과가 없습니다."
 			},
-			dom: 'tip'
+			dom: 'tip',
 		}).columns.adjust().draw();
-
-		gmainTable.on( 'column-sizing.dt', function ( e, settings ) {
-			$(".dataTables_scrollHeadInner").css( "width", "100%" );
-		});
 	});
 
 	/**
@@ -430,8 +422,7 @@
 			});
 
 			gmainTable.clear();
-			gmainTable.rows.add(tableData).columns.adjust().draw();
-			// $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
+			gmainTable.rows.add(tableData).draw();
 
 			document.getElementById('loadingCircleDashboard').style.display =  'none';
 		});

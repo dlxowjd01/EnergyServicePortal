@@ -850,7 +850,7 @@ const typeSiteDraw = async () => {
 				tmepGenArray.push(siteGen);
 				tempForeArray.push(siteForeGen);
 			}
-		})
+		});
 
 		typeSiteCurrent.addSeries({
 			name: '발전',
@@ -859,15 +859,9 @@ const typeSiteDraw = async () => {
 			tooltip: {
 				valueSuffix: 'kWh'
 			},
-			// pointWidth: 10,
-			// pointWidth: 40,
-			// plotOptions: {
-			// 	// pointWidth: 40,
-			// 	pointPadding: 0.2
-			// },
-			// pointWidth: 20
+			pointWidth: 9,
+			pointPadding: 0.25,
 		});
-
 		typeSiteCurrent.addSeries({
 			name: '발전 예측',
 			color: 'var(--grey)',
@@ -875,17 +869,14 @@ const typeSiteDraw = async () => {
 			tooltip: {
 				valueSuffix: 'kWh'
 			},
-			// pointWidth: 10,
-			// pointWidth: 30,
-			// plotOptions: {
-			// 	// pointWidth: 40,
-			// 	// pointPadding: 0.2
-			// },
+			pointWidth: 9,
+			pointPadding: 0.25,
 		});
-
-
-
+		
 		typeSiteCurrent.update({
+			plotOptions: {
+				pointPadding: 0.1,
+			},
 			xAxis: [{
 				categories: categories,
 			}],
@@ -898,14 +889,6 @@ const typeSiteDraw = async () => {
 			}]
 		});
 
-		// typeSiteCurrent.xAxis[0].setCategories(categories);
-		// typeSiteCurrent.yAxis[0].setTitle({
-		// 	text: rtnUnit,
-		// 	style: {
-		// 		color: 'var(--grey)',
-		// 		fontSize: '12px'
-		// 	}
-		// });
 		typeSiteCurrent.redraw();
 
 		let str = '';
