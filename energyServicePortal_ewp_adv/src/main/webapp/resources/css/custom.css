@@ -753,7 +753,6 @@ a.btn-add,
 	border: 0;
 	line-height: 24px;
 	background: var(--ico-add-svg) no-repeat 0 2px;
-	/* background: var(--btn-add) no-repeat 0 2px; */
 	background-size: 10px;
 	color: var(--vivid-blue);
 	font-size: 13px;
@@ -3376,6 +3375,7 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 
 .site-modal-content .modal-header .btn-add {
 	margin-top: -1px;
+	background: var(--ico-add-blue) no-repeat 0 2px;
 }
 
 .site-modal-content .warning-wrapper {
@@ -8795,25 +8795,30 @@ button.text-file {
 
 .collect-box .w-50,
 .collect-box .w-100 {
-	padding: 0 16px 0 8px;
+	padding: 0 16px;
 }
 
-.collect-box .w-50:last-of-type {
+.collect-box .w-50 + .w-50 {
 	padding: 0 8px;
 }
 
-.collect-box .device-list,
 .collect-box .command-list {
 	display: flex;
 	flex-wrap: wrap;
 	margin: 0px -29px 0 -15px;
 }
 
+.collect-box .device-list {
+	display: flex;
+	flex-wrap: wrap;
+	margin: 0px -22px 0 0px;
+}
+
 .collect-box .device-list li {
 	display: table;
-	margin: 0 0 0 16px;
-	padding: 16px 0 14px;
-	width: calc(50% - 32px);
+	margin: 0 0 0 32px;
+	padding: 16px 2px 14px 0;
+	width: calc(50% - 27px);
 	height: auto;
 	color: var(--white60);
 	font-size: 13px;
@@ -8821,6 +8826,10 @@ button.text-file {
 	border-bottom: 1px solid var(--white20);
 	border-radius: 0;
 	background: none;
+}
+
+.collect-box .device-list li:nth-child(odd){
+	margin: 0;
 }
 
 .collect-box .command-list .flex-group .sm-title {
@@ -8858,10 +8867,6 @@ button.text-file {
 	float: right;
 }
 
-.collect-box .device-list li .data-val.no-val {
-	padding-right: 10px;
-}
-
 .collect-box.last-box {
 	min-height: 400px;
 }
@@ -8881,6 +8886,10 @@ button.text-file {
 
 .collect-wrap.table-scroll table {
 	margin-top: 0;
+}
+
+.collect-wrap.table-scroll table tbody tr:nth-child(odd){
+    background: none;
 }
 
 .collect-wrap .history-table.scroll {
@@ -9135,6 +9144,11 @@ th .btn-align {
 	font-weight: normal;
 }
 
+.spc-tbl thead th.left,
+.spc-tbl tbody td.left {
+	text-align: left;
+}
+
 .spc-tbl tbody th {
 	padding-left: 20px;
 	text-align: left;
@@ -9257,7 +9271,7 @@ th .btn-align {
 }
 
 .spc-table-row th:first-child {
-	padding: 0 0 0 56px;
+	padding: 0 0 0 28px;
 }
 
 .spc-table-row tr:first-child {

@@ -612,7 +612,7 @@
 						} else {
 							$.each(selectedContactName, function(){
 								let userObj = {};
-								userObj.uid = $(this).data("uid");
+								userObj.uid = $(this).val();
 								userObj.level = levelArr;
 								registeredUserArr.push(userObj);
 							});
@@ -643,6 +643,7 @@
 					alarm_to: JSON.stringify(alarmToObj)
 				}
 				deviceOpt.data = JSON.stringify(newObj);
+				console.log("alarmToObj===", alarmToObj)
 				ajaxPromises.push(makeAjaxCall(deviceOpt));
 			});
 
@@ -1071,6 +1072,7 @@
 								oid: oid,
 							}
 						}
+						console.log("getAlarmTable===")
 						Promise.resolve(makeAjaxCall(userOpt)).then(res => {
 							getAlarmTable(rowData, res);
 						});
@@ -2420,7 +2422,7 @@
 		let userType = "";
 		// let newUserList = [];
 		// let newNonUserList = [];
-
+		console.log("getAlarmTable===", alarmData)
 			// Promise.resolve(alarmData.alarmInfo.map((x, index) => {
 			Promise.resolve(alarmData.map((x, index) => {
 				if(!isEmpty(x.alarm_to)){

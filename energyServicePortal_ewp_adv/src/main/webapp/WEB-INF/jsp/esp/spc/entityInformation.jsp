@@ -502,25 +502,24 @@
 				<table class="sort-table chk-type">
 					<colgroup>
 						<col style="width:8%">
-						<col style="width:8%">
+						<col style="width:18%">
 						<col style="width:18%">
 						<col style="width:8%">
-						<col style="width:20%">
+						<col style="width:12%">
 						<col style="width:8%">
-						<col style="width:10%">
-						<col style="width:10%">
-						<col style="width:10%">
-						<col>
+						<col style="width:8%">
+						<col style="width:12%">
+						<col style="width:8%">
 					</colgroup>
 					<thead>
 					<tr>
 						<th><input
 								type="checkbox" id="chk_header" value="순번"
 								onclick="setCheckedAll(this, 'rowCheck');"><label for="chk_header">순번</label></th>
-						<th>
+						<th class="left">
 							<button type="button" class="btn-align down">SPC명</button>
 						</th>
-						<th>
+						<th class="left">
 							<button type="button" class="btn-align down">발전소 명</button>
 						</th>
 						<th>
@@ -535,10 +534,10 @@
 						<th class="right">
 							<button type="button" class="btn-align down">보증 값</button>
 						</th>
-						<th class="right">
+						<th class="right pr-36">
 							<button type="button" class="btn-align down">감소율</button>
 						</th>
-						<th>
+						<th class="right">
 							<button type="button" class="btn-align down">- 추가보수</button>
 						</th>
 					</tr>
@@ -549,12 +548,12 @@
 							<input type="checkbox" id="chk_op[INDEX]" name="rowCheck" value="">
 							<label for="chk_op[INDEX]">[INDEX]</label>
 						</td>
-						<td name="aTagTd01">
+						<td name="aTagTd01" class="left">
 							<a href="javascript:moveModifyPage('[spc_id]', '[gen_id]');" class="table-link">
 								[name]
 							</a>
 						</td>
-						<td name="aTagTd02">
+						<td name="aTagTd02" class="left">
 							<a href="javascript:moveModifyPage('[spc_id]', '[gen_id]');" class="table-link">
 								[발전소_명]
 							</a>
@@ -563,7 +562,7 @@
 						<td>[관리_운영_기간]</td>
 						<td>[보증_방식]</td>
 						<td class="right">[PR_보증치] %</td>
-						<td class="right">[보증_감소율] %</td>
+						<td class="right pr-36">[보증_감소율] %</td>
 						<td>[추가_보수]</td>
 					</tr>
 					</tbody>
