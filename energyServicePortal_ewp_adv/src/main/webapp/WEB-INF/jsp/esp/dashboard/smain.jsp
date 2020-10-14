@@ -1670,7 +1670,7 @@
 				],
 				title: {
 					text: 'W/m\xB2',
-					x: 11,
+					x: 0,
 					y: 31,
 					align: 'low',
 					rotation: 0,
@@ -1909,7 +1909,6 @@
 			verticalAlign: 'top',
 			x: -5,
 			y: -10,
-			margin: 30,
 			itemStyle: {
 				color: 'var(--white87)',
 				fontSize: '12px',
@@ -2362,10 +2361,10 @@
 				if (!isEmpty(option)){
 					let invType = new Array();
 					let sortedData;
+					let seriesLength = hourlyINVChart.series.length;
 
-					var seriesLength = hourlyINVChart.series.length;
 					if(seriesLength>0){
-						for(var i = seriesLength -1; i > -1; i--) {
+						for(let i = seriesLength -1; i > -1; i--) {
 							hourlyINVChart.series[i].remove();
 						}
 					}
@@ -2439,8 +2438,8 @@
 										let chart = $('#hourlyINVChart').highcharts();
 										chart.margin[0]= 120;
 										chart.isDirtyBox = true;
-										// chart.redraw();
-										chart.render();
+										chart.redraw();
+										// chart.render();
 									}
 
 									hourlyINVChart.addSeries({
@@ -2455,9 +2454,9 @@
 											symbol: "circle"
 										},
 										data: hourList,
-										// plotOptions: {
-										// 	pointStart: 10,
-										// }
+										plotOptions: {
+											pointStart: 10,
+										}
 									});
 
 								}
@@ -3470,9 +3469,12 @@
 			// let newDailyChart = $('#dailyChart').highcharts();
 			let dailySolarMaxVal = 0;
 			let dailyInvMaxVal = 0;
+			let dailySolarChartLength = dailySolarTrendChart.series.length;
 
-			if(dailySolarTrendChart.series.length>0){
-				dailySolarTrendChart.series.length = 0;
+			if(dailySolarChartLength>0){
+				for(let i = dailySolarTrendChart -1; i > -1; i--) {
+					dailySolarTrendChart.series[i].remove();
+				}
 			}
 
 			if(!isEmpty(chartItems2)) {
@@ -3516,6 +3518,7 @@
 					name: '일사량',
 					type: 'line',
 					// type: 'spline',
+					yAxis: 1,
 					dashStyle: 'ShortDash',
 					color: 'var(--white60)',
 					tooltip: {
@@ -4067,7 +4070,7 @@
 				if(!isEmpty(res[2].data) && v.flat()[0]["items"].length > 0 ){
 					let data = v.flat()[0]["items"];
 					if(typeof data[0].energy == "number"){
-						let yesterDayGen = displayNumberFixedUnit(data[0].energy,'Wh', 'kWh', 1, "round");
+						let yesterDayGen = displayNumberFixedUnit(data[0].energy,'Wh', 'kWh', 0, "round");
 						el.eq(3).text(yesterDayGen[0]);
 						el.eq(3).next().text(yesterDayGen[1]);
 					} else {
@@ -4278,8 +4281,12 @@
 
 				// console.log("energyData1==", energyData1, "energyData2==", energyData2, "energyData3==", energyData3);
 
-				if(hourlySolarChart.series.length>0){
-					hourlySolarChart.series.length = 0;
+				let solarChartLength = hourlySolarChart.series.length;
+
+				if(solarChartLength>0){
+					for(let i = solarChartLength -1; i > -1; i--) {
+						hourlySolarChart.series[i].remove();
+					}
 				}
 
 				if(energyData1.length>0){
@@ -4326,7 +4333,6 @@
 					});
 				}
 
-				
 			}).fail(function () {
 				console.error('rejected');
 			});
