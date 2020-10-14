@@ -332,7 +332,7 @@
 							<div class="gtable-top clear">
 								<div class="input-group1">
 									<input type="text" class="input" id="searchName" name="searchName" value="" placeholder="사업소 검색" onkeyup="if (event.keyCode == 13) searchSite();">
-									<button type="button" onclick="searchSite();"><fmt:message key="gdash.7.apply"/></button>
+									<button type="button" class="btn-type" onclick="searchSite();"><fmt:message key="gdash.7.apply"/></button>
 								</div>
 								<div class="input-group2">
 									<span class="tx-tit"><fmt:message key="gdash.7.status"/></span>

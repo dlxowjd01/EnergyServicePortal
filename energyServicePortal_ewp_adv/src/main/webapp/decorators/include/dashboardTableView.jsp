@@ -97,6 +97,7 @@
 						const weather = getWeatherIconClass(data);
 						return '<i class="ico-weather ' + weather + '"></i>';
 					},
+					sortable: false,
 					className: 'dt-center'
 				},
 				{
@@ -114,6 +115,7 @@
 						const weather = getWeatherIconClass(data);
 						return '<i class="ico-weather ' + weather + '"></i>';
 					},
+					sortable: false,
 					className: 'dt-center'
 				},
 				{

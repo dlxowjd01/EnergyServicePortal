@@ -84,7 +84,8 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 				color: 'var(--grey)',
 				fontSize: '12px'
 			}
-		}
+		},
+		showEmpty: false
 	}, {
 		gridLineWidth: 0,
 		title: {
@@ -108,7 +109,8 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 			}
 		},
 		visible: secondYAxis,
-		opposite: true
+		opposite: true,
+		showEmpty: false
 	}],
 	tooltip: {
 		formatter: function () {
@@ -254,7 +256,8 @@ const dailyChart = Highcharts.chart('dailyChart', {
 				color: 'var(--grey)',
 				fontSize: '12px'
 			}
-		}
+		},
+		showEmpty: false
 	}, {
 		gridLineWidth: 0,
 		title: {
@@ -278,7 +281,8 @@ const dailyChart = Highcharts.chart('dailyChart', {
 			}
 		},
 		visible: secondYAxis,
-		opposite: true
+		opposite: true,
+		showEmpty: false
 	}],
 	tooltip: {
 		formatter: function () {

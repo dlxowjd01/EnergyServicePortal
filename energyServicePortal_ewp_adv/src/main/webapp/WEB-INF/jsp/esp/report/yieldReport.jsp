@@ -302,7 +302,7 @@
 					result.data[index].report_date = report_data_start + '~' + report_data_end;
 
 					if (temp.generated_at != null) {
-						let generated_date = (new Date(temp.generated_at)).format('yyyy-MM-dd hh:mm:ss');
+						let generated_date = (new Date(temp.generated_at)).format('yyyy-MM-dd HH:mm:ss');
 						result.data[index].generated_date = generated_date;
 					}
 
@@ -312,7 +312,7 @@
 					}
 
 					if (temp.confirmed_at != null) {
-						let confirmed_date = (new Date(temp.confirmed_at)).format('yyyy-MM-dd hh:mm:ss');
+						let confirmed_date = (new Date(temp.confirmed_at)).format('yyyy-MM-dd HH:mm:ss');
 						let linkData = JSON.parse(temp.confirmed_file_link);
 						let file_link = 'location.href=\'' + apiHost + '/files/download/' + linkData.fileKey + '?oid=' + oid + '&orgFilename=' + linkData.orgFileName + '\'';
 						result.data[index].confirmed_date = confirmed_date + '<button type="button" class="btn-file fr down" onclick="' + file_link + '">다운로드</button>';

@@ -266,9 +266,12 @@
 			let option = {};
 			let siteObj = {};
 
-			let newStationId, kpxGenId, kpxEmsId, kpxTransvol;
+			let newStationId, kpxGenId, kpxEmsId, kpxTransvol, gridX, gridY;
 
 			newStationId = $('#station_id').val();
+			gridX = $('#gridX').val();
+			gridY = $('#gridY').val();
+
 			if (oid.match('testkpx')) {
 				kpxGenId = $('#kpx_genid').val();
 				kpxEmsId = $('#kpx_emsid').val();
@@ -311,6 +314,15 @@
 				if ( !isEmpty(newStationId) ) {
 					siteObj.station_id = Number(newStationId);
 				}
+
+				if ( !isEmpty(gridX) ) {
+					siteObj.grid_x = Number(gridX);
+				}
+
+				if ( !isEmpty(gridY) ) {
+					siteObj.grid_y = Number(gridY);
+				}
+
 				if (oid.match('testkpx')) {
 					if ( !isEmpty(kpxGenId) ) {
 						siteObj.kpx_genid = kpxGenId;
@@ -458,6 +470,15 @@
 				if ( !isEmpty(newStationId) ) {
 					siteEditObj.station_id = Number(newStationId);
 				}
+
+				if ( !isEmpty(gridX) ) {
+					siteEditObj.grid_x = Number(gridX);
+				}
+
+				if ( !isEmpty(gridY) ) {
+					siteEditObj.grid_y = Number(gridY);
+				}
+
 				if (oid.match('testkpx')) {
 					if ( !isEmpty(kpxGenId) ) {
 						siteEditObj.kpx_genid = kpxGenId;
@@ -2044,6 +2065,9 @@
 					$('#newCoord').val(rowData.latlng);
 				}
 				$('#station_id').val(rowData.station_id);
+
+				$('#gridX').val(rowData.grid_x);
+				$('#gridY').val(rowData.grid_y);
 				// kpx
 				if (oid.match('testkpx')) {
 					$('#kpx_genid').val(rowData.kpx_genid);
@@ -3825,11 +3849,24 @@
 								<div class="col-xl-6 col-lg-6 col-md-10 col-sm-10 pl-0">
 									<textarea name="new_site_desc" id="newSiteDetail" class="textarea" placeholder="입력"></textarea>
 								</div>
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">기상 그리드</span></div>
+								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">관측소 번호</span></div>
 								<div class="col-xl-1 col-lg-2 col-md-4 col-sm-10 pl-0">
 									<div class="flex-start">
 										<div class="text-input-type">
 											<input type="text" name="station_id" id="station_id" placeholder="입력" minlength="1" maxlength="15">
+										</div>
+									</div>
+								</div>
+								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">기상 그리드 </span></div>
+								<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
+									<div class="flex-start">
+										<div class="text-input-type">
+											<input type="text" name="gridX" id="gridX" placeholder="X값 입력" minlength="1" maxlength="2">
+										</div>
+									</div>
+									<div class="flex-start mt5">
+										<div class="text-input-type">
+											<input type="text" name="gridY" id="gridY" placeholder="Y값 입력" minlength="1" maxlength="2">
 										</div>
 									</div>
 								</div>

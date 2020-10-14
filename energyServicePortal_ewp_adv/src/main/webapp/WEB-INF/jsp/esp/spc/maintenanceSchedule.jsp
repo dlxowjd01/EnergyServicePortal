@@ -376,7 +376,7 @@
 
 		$('#calendar td a p.bu').each(function () {
 			let clsName = $(this).attr('class').replace('bu t', '').trim();
-			let siteName = $(this).html().match(/\[(.*?)\]/)[1];
+			let siteName = $(this).html().match(/[(.*)].+$/)[1];
 			if ($.inArray(clsName, checkType) > -1) {
 				if ($('#searchName').val() == '') {
 					$(this).parent().removeClass('hidden');
