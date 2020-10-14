@@ -19,7 +19,7 @@
 			<div class="flex-start">
 				<div class="dropdown">
 					<!-- <button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="2" disabled>태양광 #2<span class="caret"></span></button> -->
-					<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="1" disabled>사이트 대시보드 #1<span class="caret"></span></button>
+					<button type="button" class="dropdown-toggle" data-toggle="dropdown" disabled><span class="caret"></span></button>
 					<ul id="viewOptList" class="dropdown-menu" role="menu">
 						<li data-value="1" data-name="사이트 대시보드 #1"><a href="#" tabindex="-1">사이트 대시보드 #1</a></li>
 						<li data-value="2" data-name="태양광 대시보드 #2"><a href="#" tabindex="-1">태양광 대시보드 #2</a></li>
@@ -387,7 +387,7 @@
 			<div class="col-xl-2 col-lg-2 col-md-3 col-sm-4">
 				<div class="indiv mini">
 					<h3 class="ntit">현재 발전</h3>
-					<p class="word-wrap"><span class="data-num"></span><span class="data-unit">kW</span></p>
+					<p class="word-wrap"><span class="data-num"></span><span class="data-unit"></span></p>
 				</div>
 			</div>
 			<div class="col-xl-2 col-lg-2 col-md-3 col-sm-4">
@@ -526,7 +526,7 @@
 							
 						</div>
 						<div class="tab-pane fade" id="powerConnctor">
-							<h2>현재 데이터가 없습니다.</h2>
+							<h2 class="no-data">현재 데이터가 없습니다.</h2>
 						</div>
 					</div>
 				</div>
@@ -579,22 +579,45 @@
 			}
 		}
 
-		if(viewOptList.prev().data("value") == "2"){
-			$('#defaultDashboard').addClass("hidden");
-			$('#solarDashboard').removeClass("hidden");
+		if( !isEmpty( getCookie("sMainView")) ){
+			if(cookie == "2"){
+				let selected = viewOptList.find("li:last-of-type");
+				viewOptList.prev().data("value", "2").html(selected.data("name") + "<span class='caret'></span>")
+				$('#defaultDashboard').addClass("hidden");
+				$('#solarDashboard').removeClass("hidden");
+				getMinuteData("solarDashboard");
+				getQuarterData("solarDashboard");
+			} else {
+				let selected = viewOptList.find("li:first-of-type").data("name");
+				viewOptList.prev().html(selected + "<span class='caret'></span>");
+				$('#defaultDashboard').removeClass("hidden");
+				$('#solarDashboard').addClass("hidden");
+				setInitList('typeList');
+				setInitList('alarmNotice');
+				getMinuteData();
+				getQuarterData();
+			}			
 		} else {
-			$('#defaultDashboard').removeClass("hidden");
-			$('#solarDashboard').addClass("hidden");
-			setInitList('typeList');
-			setInitList('alarmNotice');
+			if(viewOptList.prev().data("value") == "2"){
+				$('#defaultDashboard').addClass("hidden");
+				$('#solarDashboard').removeClass("hidden");
+				getMinuteData("solarDashboard");
+				getQuarterData("solarDashboard");
+			} else {
+				let selected = viewOptList.find("li:first-of-type").data("name");
+				viewOptList.prev().html(selected + "<span class='caret'></span>");
+				$('#defaultDashboard').removeClass("hidden");
+				$('#solarDashboard').addClass("hidden");
+				setInitList('typeList');
+				setInitList('alarmNotice');
+				getMinuteData();
+				getQuarterData();
+			}	
 		}
 
 		getWeatherData();
 		getNowEnergy();
 		getDvcProperties();
-
-		getMinuteData();
-		getQuarterData();
 
 		if (oid.match('testkpx')) {
 			viewOptList.prev().prop("disabled", true);
@@ -609,6 +632,10 @@
 						if(val == "1"){
 							$('#defaultDashboard').removeClass("hidden");
 							$('#solarDashboard').addClass("hidden");
+							setInitList('typeList');
+							setInitList('alarmNotice');
+							getMinuteData();
+							getQuarterData();
 						} else {
 							getMinuteData(val);
 							getQuarterData(val);
@@ -649,6 +676,12 @@
 				noData: '조회된 데이터가 없습니다.'
 			},
 		});
+
+		$(window).on("unload", function(e) {
+			let selected = $("#viewOptList").prev().data("value");
+			setCookie("sMainView", selected, 1);
+		});
+
 	});
 
 	const siteId = '${sid}';
@@ -666,6 +699,7 @@
 	const featureProperties = new Object();
 	const featurePropertiesSub = new Object();
 
+	let cookie = getCookie("sMainView");
 	let first = true;
 	// let invFlag = true;
 
@@ -673,17 +707,15 @@
 	var num24List = [];
 	var num31List = [];
 
-	var date12List = addToDateList(12);
 	var date31List = addToDateList(30);
 
-	// console.log("date12List===", date12List);
 	// console.log("date31List===", date31List);
 	
 	for(let i=0; i<12; i++){
 		num12List.push(String(i+1));
 	}
 	for(let i=0; i<24; i++){
-		num24List.push(String(i+1));
+		num24List.push(String(i));
 	}
 	for(let i=0; i<31; i++){
 		num31List.push(String(i+1));
@@ -865,6 +897,7 @@
 		}],
 		yAxis: [
 			{
+				showEmpty: false,
 				lineColor: 'var(--grey)',
 				tickColor: 'var(--grey)',
 				gridLineColor: 'var(--white25)',
@@ -899,6 +932,7 @@
 			// NOT KPX
 			<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
 			{
+				showEmpty: false,
 				opposite: true,
 				lineColor: 'var(--grey)',
 				tickColor: 'var(--grey)',
@@ -991,23 +1025,27 @@
 				// TO DO!!!!!!!!!!
 				// events: {
 				// 	legendItemClick: function(event) {
-				// 		var thisSeries = this,
-				// 		chart = this.chart;
+				// 		var thisSeries = this;
+				// 		var index = thisSeries._i;
+				// 		var chart = thisSeries.chart;
+				// 		// var visibility = this.visible ? 'visible' : 'hidden';
 
-				// 		if (this.visible === true) {
-				// 			this.hide();
-				// 			chart.get("highcharts-navigator-series").hide();
-				// 		} else {
-				// 			this.show();
-				// 			chart.series.forEach(function(el, inx) {
-				// 				if (el !== thisSeries) {
-				// 				el.hide();
-				// 				}
-				// 			});
-				// 			chart.get("highcharts-navigator-series").setData(thisSeries.options.data, false);
-				// 			chart.get("highcharts-navigator-series").show();
-				// 		}
-				// 		event.preventDefault();
+				// 		console.log("thisSeries==", index)
+				// 		chart.yAxis[index].
+				// 		// if (this.visible === true) {
+				// 		// 	this.hide();
+				// 		// 	chart.get("highcharts-navigator-series").hide();
+				// 		// } else {
+				// 		// 	this.show();
+				// 		// 	chart.series.forEach(function(el, inx) {
+				// 		// 		if (el !== thisSeries) {
+				// 		// 		el.hide();
+				// 		// 		}
+				// 		// 	});
+				// 		// 	chart.get("highcharts-navigator-series").setData(thisSeries.options.data, false);
+				// 		// 	chart.get("highcharts-navigator-series").show();
+				// 		// }
+				// 		// event.preventDefault();
 				// 	}
 				// }
 			},
@@ -1410,9 +1448,9 @@
 
 	var hourlyChart = Highcharts.chart('hourlyChart', {
 		chart: {
-			marginTop: 40,
+			marginTop: 50,
 			marginLeft: 50,
-			marginRight: 0,
+			marginRight: 10,
 			height: 301,
 			backgroundColor: 'transparent',
 			type: 'column'
@@ -1452,6 +1490,7 @@
 			crosshair: true
 		},
 		yAxis: {
+			showEmpty: false,
 			lineColor: 'var(--grey)',
 			tickColor: 'var(--grey)',
 			gridLineColor: 'var(--white25)',
@@ -1462,9 +1501,9 @@
 			gridLineWidth: 1,
 			min: 0,
 			title: {
-				x: 10,
-				y: 25,
-				text: '',
+				x: 5,
+				y: 27,
+				text: 'kWh',
 				align: 'low',
 				rotation: 0,
 				style: {
@@ -1640,6 +1679,7 @@
 		yAxis: [
 			{
 				// className: 'js-axis-title',
+				showEmpty: false,
 				opposite: true,
 				lineColor: 'var(--grey)',
 				tickColor: 'var(--grey)',
@@ -1678,6 +1718,7 @@
 				}
 			},
 			{
+				showEmpty: false,
 				opposite: false,
 				lineColor: 'var(--grey)',
 				tickColor: 'var(--grey)',
@@ -1723,6 +1764,23 @@
 			backgroundColor: 'var(--bg-color)',
 			padding: 16,
 			valueSuffix: 'kWh',
+			formatter: function () {
+				let hour = "";
+				let xVal = String(this.x);
+
+				if(String(xVal).length == 1){
+					hour = "0" + String(xVal);
+				} else {
+					hour = xVal;
+				}
+				return this.points.reduce(function (s, point) {
+					let suffix = point.series.userOptions.tooltip.valueSuffix;
+					let val = displayNumberFixedDecimal(point.y, 'kWh', 'kWh', 0)[0];
+
+					return s + '<br/><span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ':  ' + val + " " + suffix;
+				}, '<span style="display:flex; margin-bottom:-10px;"><b>' + hour + '시</b></span>');
+
+			},
 			style: {
 				color: 'var(--white87)',
 			}
@@ -1815,6 +1873,7 @@
 		},
 		yAxis: [
 			{
+				showEmpty: false,
 				opposite: true,
 				lineColor: 'var(--grey)',
 				tickColor: 'var(--grey)',
@@ -1853,6 +1912,7 @@
 				}
 			},
 			{
+				showEmpty: false,
 				opposite: false,
 				lineColor: 'var(--grey)',
 				tickColor: 'var(--grey)',
@@ -1900,6 +1960,23 @@
 			backgroundColor: 'var(--bg-color)',
 			padding: 16,
 			valueSuffix: 'kWh',
+			formatter: function () {
+				let hour = "";
+				let xVal = String(this.x);
+
+				if(String(xVal).length == 1){
+					hour = "0" + String(xVal);
+				} else {
+					hour = xVal;
+				}
+				return this.points.reduce(function (s, point) {
+					let suffix = point.series.userOptions.tooltip.valueSuffix;
+					let val = displayNumberFixedDecimal(point.y, 'kWh', 'kWh', 0)[0];
+
+					return s + '<br/><span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ':  ' + val + " " + suffix;
+				}, '<span style="display:flex; margin-bottom:-10px;"><b>' + hour + '시</b></span>');
+
+			},
 			style: {
 				color: 'var(--white87)',
 			}
@@ -2330,7 +2407,11 @@
 			// alert('처리 중 오류가 발생했습니다.');
 			return false;
 		}).always(function(jqXHR, textStatus) {
-			getDvcInfo();
+			if(cookie == "2"){
+				getDvcInfo("solarDashboard");
+			} else {
+				getDvcInfo();
+			}
 			first = false;
 		});
 	};
@@ -2389,6 +2470,7 @@
 							
 							$.ajax(hourlyINV).done(function (json, textStatus, jqXHR) {
 								let result = flattenObject(json.data);
+								let hourList = new Array(24).fill(0);
 								let temp;
 
 								// const city = getNestedObject(user, ['personalInfo', 'addresses', 0, 'city']);
@@ -2396,7 +2478,6 @@
 									temp = Object.values(result)[0].items;
 
 									let length = temp.length;
-									let hourList = [];
 									let colorArr = [
 										"var(--powder-blue)",
 										"var(--turquoise)",
@@ -2417,7 +2498,7 @@
 
 									for(let i=0, arrLength = temp.length; i<arrLength; i++){
 										let tempData = parseFloat((temp[i].energy / 1000).toFixed(2));
-										hourList.push(tempData);
+										hourList[i] = tempData;
 									}
 									
 									if( length > 5 ){				
@@ -3819,7 +3900,6 @@
 				});
 			});
 
-			// console.log("urls-====", urls)
 			$.when.apply($, deferredList).then(function () {
 				let itemCapacity = null;
 				let itemDcPower = null;
@@ -3829,8 +3909,6 @@
 				let itemEnergyDay = 0;
 				let lastTargetActivePowerReqDate = '';
 				let lastTargetActivePowerRecvDate = '';
-
-				// console.log("arguments===", arguments)
 
 				Object.entries(arguments).forEach(arg => {
 					const data = arg[1];
@@ -3844,7 +3922,6 @@
 						if(!isEmpty(v) && v.flat()[0]["items"].length>0){
 							const rstData = v.flat()[0]["items"];
 							rstData.forEach(rst => {
-								// console.log("rst===", rst)
 								if (!isEmpty(rst.energy)) {
 									getNowEnergyDay += rst.energy;
 									nowBillingDay += rst.money;
@@ -3855,10 +3932,7 @@
 							nowBillingDay = 0;
 						}
 
-						// console.log("nowBillingDay===", nowBillingDay)
-				
 						if ((data.start) == formYesterData.startTime) {
-							// console.log("start==formYesterData ===> ", getNowEnergyDay);
 							$('#centerTbody tr td:nth-child(3) em').before(displayNumberFixedUnit(getNowEnergyDay, 'Wh', 'kWh', 2)[0]);
 							itemEnergyDay = getNowEnergyDay;
 						} else {
@@ -3917,7 +3991,6 @@
 						// url : apiStatusRawSite
 						if (!isEmpty(data)) {
 							Object.entries(data).forEach(rawData => {
-								// console.log("rawData==", rawData)
 								const deviceType = rawData[0];
 								const deviceData = rawData[1];
 
@@ -3971,8 +4044,6 @@
 
 				if (oid.match('testkpx')) {
 					let genHour = isNaN(itemEnergyDay / itemCapacity) ? '-' : (itemEnergyDay / itemCapacity);
-
-					// console.log("itemEnergyDay===", itemEnergyDay, "itemCapacity==", itemCapacity, "genHour===", genHour);
 
 					if (genHour === '-') {
 						$('#centerTbody tr td:nth-child(4) em').before(genHour);
@@ -4065,37 +4136,56 @@
 				},		
 			];
 
-			let promises = [];
-			promises.push( Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])),  Promise.resolve(returnAjaxRes(optionList[2])) );
+			let promises = [Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])),  Promise.resolve(returnAjaxRes(optionList[2]))];
 
 			Promise.all(promises).then(res => {
 				let el = $("#solarDashboard .mini .data-num");
-				let accumVal = displayNumberFixedUnit(res[0].INV_PV.accumActiveEnergy, 'Wh', 'MWh', 1, "round");
-				let activePower = displayNumberFixedUnit(res[0].INV_PV.activePower, 'Wh', 'kWh', 1, "round");
-				let efficiency = toFixedNum(res[0].INV_PV.efficiency, 1);
-				let dailyGen = displayNumberFixedUnit( Object.entries(res[1].data)[0][1].energy, 'Wh', 'kWh', 0);
-				let yesterDayGen = [];
-				let v = Object.values(res[2].data);
 
-				if(!isEmpty(res[2].data) && v.flat()[0]["items"].length > 0 ){
-					let data = v.flat()[0]["items"];
-					yesterDayGen = displayNumberFixedUnit(data[0].energy,'Wh', 'kWh', 1, "round");
+				if(typeof res[0].INV_PV.activePower == "number"){
+					let activePower = displayNumberFixedUnit(res[0].INV_PV.activePower, 'W', 'kW', 1, "round");
+					el.eq(0).text(activePower[0]);
+					el.eq(0).next().text(activePower[1]);
+				} else {
+					el.eq(0).text("-");
 				}
 
-				el.eq(0).text(activePower[0]);
-				el.eq(0).next().text("kW");
+				if(typeof res[0].INV_PV.efficiency == "number"){
+					el.eq(1).text( Math.round(res[0].INV_PV.efficiency * 10)/10 )
+					el.eq(1).next().text("%");
+				} else {
+					el.eq(1).text("-");
+				}
 
-				el.eq(1).text(efficiency);
-				el.eq(1).next().text("%");
+				if(typeof Object.entries(res[1].data)[0][1].energy == "number"){
+					let dailyGen = displayNumberFixedUnit( Object.entries(res[1].data)[0][1].energy, 'Wh', 'kWh', 0);
+					el.eq(2).text(dailyGen[0]);
+					el.eq(2).next().text(dailyGen[1]);
+				} else {
+					el.eq(2).text("-");
+				}
 
-				el.eq(2).text(dailyGen[0]);
-				el.eq(2).next().text("kWh");
+				let v = Object.values(res[2].data);
+				if(!isEmpty(res[2].data) && v.flat()[0]["items"].length > 0 ){
+					let data = v.flat()[0]["items"];
+					if(typeof data[0].energy == "number"){
+						let yesterDayGen = displayNumberFixedUnit(data[0].energy,'Wh', 'kWh', 1, "round");
+						el.eq(3).text(yesterDayGen[0]);
+						el.eq(3).next().text(yesterDayGen[1]);
+					} else {
+						el.eq(3).text("-");
+					}
+				} else {
+					el.eq(3).text("-");
+				}
+			
+				if(typeof res[0].INV_PV.accumActiveEnergy == "number"){
+					let accumVal = displayNumberFixedUnit(res[0].INV_PV.accumActiveEnergy, 'Wh', 'MWh', 1, "round");
+					el.eq(5).text(accumVal[0]);
+					el.eq(5).next().text(accumVal[1]);
+				} else {
+					el.eq(5).text("-");
+				}
 
-				el.eq(3).text(yesterDayGen[0]);
-				el.eq(3).next().text("kWh");
-
-				el.eq(5).text(accumVal[0]);
-				el.eq(5).next().text(accumVal[1]);
 			});
 		}
 	}
@@ -4224,6 +4314,14 @@
 
 				hourlyChart.series[0].setData(energyData1);
 				hourlyChart.series[1].setData(energyData2);
+				if (!oid.match('testkpx')) {
+					hourlyChart.update({
+						chart: {
+							marginLeft: 36
+						}
+					});
+				}
+
 			}).fail(function () {
 				console.error('rejected');
 			});
@@ -4481,24 +4579,17 @@
 
 		while(idx--){
 			now.setDate(now.getDate()-1);
-			let num = now.format("yyyyMMdd").substring(4, 8);
-
+			let newMmDd = now.format("yyyyMMdd").substring(4, 8);
 			if(!isEmpty(data)){
 				let val;
 				if(length != data.length){
-					let found = data.findIndex( x => ( parseInt(String(x.basetime).substring(4, 8)) == num) );
+					let found = data.findIndex( x => ( parseInt(String(x.basetime).substring(4, 8)) == newMmDd) );
 					if(found > -1 ){
 						if(option == "energy"){
 							val =  parseFloat((data[found].energy / 1000).toFixed(2));
 						} else if(option == "irradiationPoa"){
 							val = parseFloat((data[found].sensor_solar.irradiationPoa).toFixed(2));
 						}
-					
-						// if(String(data[found].energy).length <= 5){
-						// 	val =  parseFloat((data[found].energy/1000).toFixed(2));
-						// } else {
-						// 	val =  numberComma(data[found].energy/1000000);
-						// }
 					} else {
 						val = null;
 					}
@@ -4508,15 +4599,10 @@
 					} else if(option == "irradiationPoa"){
 						val = data[idx].sensor_solar.irradiationPoa;
 					}
-					// if(String(data[idx].energy).length <= 5){
-					// 	val = parseFloat((data[idx].energy/1000).toFixed(2));
-					// } else {
-					// 	val = parseFloat((data[idx].energy/1000000).toFixed(2));
-					// }
 				}
 				dates.push(val);
 			} else {
-				dates.push(num);
+				dates.push(newMmDd);
 			}
 
 		}

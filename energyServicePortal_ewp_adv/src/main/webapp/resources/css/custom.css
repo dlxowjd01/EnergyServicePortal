@@ -1592,6 +1592,7 @@ table tbody td .dropdown-menu {
 	width: 300px !important;
 }
 
+/* common */
 #mask {
 	display: none;
 	position: fixed;
@@ -5040,6 +5041,15 @@ input.inp[readonly]:focus {
 	line-height: 1.5;
 	font-size: 16px;
 	color: var(--white);
+}
+
+.tab-content .no-data {
+	position: absolute;
+    float: left;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) !important;
+	color: var(--white60);
 }
 
 .alarm .no-data {

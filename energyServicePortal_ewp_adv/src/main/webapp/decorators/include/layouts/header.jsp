@@ -5,10 +5,10 @@
 
 <script type="text/javascript">
 	$(function () {
-		updateModal();
+		updateHeaderModal();
 
 		$("#updateUserInfoModal").on("show.bs.modal", function() {
-			updateModal();
+			updateHeaderModal();
 		});
 
 		$(".nav-brand a").each(function(index, element) {
@@ -48,10 +48,11 @@
 		});
 
 		$("#mobileNum").on('keyup', function(evt, limit) {
-			if( $(this).val().match(/[^\x00-\x80]/) ){
+			let value = $(this).val();
+			if( value.match(/[^\x00-\x80]/) ){
 				$(this).val("");
 			}
-			if(!isEmpty($(this).val())){
+			if(!isEmpty(value)){
 				// console.log("val---", $(this).val().length)
 				if($(this).val().length >= 10) {
 					$("#isValidMobileNum").addClass("hidden");
@@ -60,22 +61,29 @@
 				} else {
 					$("#isValidMobileNum").removeClass("hidden");
 				}
-
 			} else {
 				$("#isValidMobileNum").addClass("hidden");
+				$("#updateProfileBtn").prop("disabled", false);
+				$("#updateProfileBtn").removeClass("disabled");
 			}
 		});
 
 		$("#mobileNum").on('keypress', function(evt) {
-			let val = $(this).val();
 			if (evt.which < 48 || evt.which > 57) {
 				return false;
 			}
 		});
 
+		$("#emailAddr").on('keypress', function(evt) {
+			if (evt.which == 32){
+                return false;
+            }
+		});
+
 		$("#emailAddr").on('keyup', function(evt, limit) {
-			if(!isEmpty($(this).val())){
-				// console.log( validateEmail($(this).val())  )
+			let value = $(this).val().trim();
+
+			if(!isEmpty(value)){
 				if(validateEmail($(this).val()) == false) {
 					$("#isValidEmail").removeClass("hidden");
 				} else {
@@ -86,6 +94,8 @@
 				$("#updateProfileBtn").removeClass("disabled");
 			} else {
 				$("#isValidEmail").addClass("hidden");
+				$("#updateProfileBtn").prop("disabled", false);
+				$("#updateProfileBtn").removeClass("disabled");
 			}
 		});
 		
@@ -157,14 +167,16 @@
 				$("#fullName").val(value.name);
 				$("#userInfoBtn").contents().filter(function(){ return this.nodeType == 3; }).first().replaceWith(value.name);
 			}
-			if(!isEmpty($("#emailAddr").val())) {
-				value.contact_email = $("#emailAddr").val();
-				$("#emailAddr").val(value.contact_email);
-			}
-			if(!isEmpty($("#mobileNum").val())) {
-				value.contact_phone = $("#mobileNum").val();
-				$("#mobileNum").val(value.contact_phone);
-			}
+
+			value.contact_email = $("#emailAddr").val();
+			$("#emailAddr").val(value.contact_email);
+
+			value.contact_phone = $("#mobileNum").val();
+			$("#mobileNum").val(value.contact_phone);
+
+			console.log("value.contact_email===", value.contact_email);
+			console.log("value.contact_phone===", value.contact_phone);
+
 
 			let token = '${sessionScope.userInfo.token}';
 			let option = {
@@ -233,10 +245,52 @@
 			}
 
 		}
-
-
 	});
 
+
+	function updateHeaderModal(){
+		let fullName = '${userInfo.name}';
+		let affiliation = '${userInfo.org_name}';
+		let loginMail = '${userInfo.contact_email}';
+		let mobileNum = '${userInfo.contact_phone}';
+		let accLevel = "";
+		let taskCategory = "";
+
+		// [ role ]	1: 시스템관리자, 2: 일반
+		role == 1 ? accLevel = "시스템관리자" : accLevel = "일반";
+		// [ task ] 0: 일반, 1:사무수탁, 2:자산운용, 3: 사업주
+		if(task == 0){
+			taskCategory = "일반"
+		} else if(task == 1){
+			taskCategory = "사무수탁"
+		} else if(task == 2){
+			taskCategory = "자산운용"
+		} else if(task == 3){
+			taskCategory = "사업주"
+		}
+
+		if(!isEmpty(loginId)) {
+			$("#userId").val(loginId);
+		}
+		if(!isEmpty(oid)) {
+			$("#affiliation").text(affiliation);
+		}
+		if(!isEmpty(accLevel)) {
+			$("#accessLevel").val(accLevel);
+		}
+		if(!isEmpty(taskCategory)) {
+			$("#taskCategory").val(taskCategory);
+		}
+		if(!isEmpty(fullName)) {
+			$("#fullName").val(fullName);
+		}
+		if(!isEmpty(loginMail)) {
+			$("#emailAddr").val(loginMail);
+		}
+		if(!isEmpty(mobileNum) && mobileNum != "string") {
+			$("#mobileNum").val(mobileNum);
+		}
+	}
 
 	function updateModal(){
 		let fullName = '${userInfo.name}';

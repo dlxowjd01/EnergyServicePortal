@@ -33,9 +33,7 @@
 <div class="modal fade" id="addRtuModal" aria-labelledby="RTU_Register" role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content collect-modal-content">
-			<div class="modal-header">
-				<h4 id="RTU_Register" class="modal-title">RTU 등록</h4>
-			</div>
+			<div id="RTU_Register" class="modal-header">RTU 등록</div>
 			<div class="modal-body">
 				<div class="input-group inline-flex">
 					<label for="rtuSite" class="input-label">사이트</label>
@@ -281,9 +279,7 @@
 	<form id="passForm" name="passForm" method="GET">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content device_modal_content">
-				<div class="modal-header stit">
-					<h2>비밀번호 확인</h2>
-				</div>
+				<div class="modal-header">비밀번호 확인</div>
 				<div class="modal-body">
 					<div class="row">
 						<div class="col-12">

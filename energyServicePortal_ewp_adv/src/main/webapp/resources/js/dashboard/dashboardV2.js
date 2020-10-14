@@ -862,6 +862,7 @@ const typeSiteDraw = async () => {
 			pointWidth: 9,
 			pointPadding: 0.25,
 		});
+
 		typeSiteCurrent.addSeries({
 			name: '발전 예측',
 			color: 'var(--grey)',
@@ -872,22 +873,54 @@ const typeSiteDraw = async () => {
 			pointWidth: 9,
 			pointPadding: 0.25,
 		});
-		
-		typeSiteCurrent.update({
-			plotOptions: {
-				pointPadding: 0.1,
-			},
-			xAxis: [{
-				categories: categories,
-			}],
-			yAxis: [{
-				text: rtnUnit,
-				style: {
-					color: 'var(--grey)',
-					fontSize: '12px'
-				}
-			}]
-		});
+
+		if(categories.length > 4){
+			typeSiteCurrent.update({
+				xAxis: {
+					max: 5,
+					categories: categories,
+					scrollbar: {
+						enabled: true,
+						barBackgroundColor: 'var(--white40)',
+						barBorderRadius: 7,
+						barBorderWidth: 0,
+						buttonBackgroundColor: 'none',
+						buttonBorderWidth: 0,
+						buttonBorderRadius: 7,
+						trackBackgroundColor: 'none',
+						trackBorderWidth: 3,
+						trackBorderRadius: 0,
+						trackBorderColor: 'none'
+					},
+				},
+				yAxis: [{
+					text: rtnUnit,
+					style: {
+						color: 'var(--grey)',
+						fontSize: '12px'
+					}
+				}],
+				plotOptions: {
+					pointPadding: 0.1,
+				},
+			});
+		} else {
+			typeSiteCurrent.update({
+				xAxis: {
+					categories: categories,
+				},
+				yAxis: [{
+					text: rtnUnit,
+					style: {
+						color: 'var(--grey)',
+						fontSize: '12px'
+					}
+				}],
+				plotOptions: {
+					pointPadding: 0.1,
+				},
+			});
+		}
 
 		typeSiteCurrent.redraw();
 

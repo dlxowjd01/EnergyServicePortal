@@ -364,26 +364,12 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 	},
 	xAxis: {
 		min: 0,
-		max: 5,
 		lineColor: 'var(--grey)',
 		gridLineColor: 'var(--white25)',
 		plotLines: [{
 			color: 'var(--grey)',
 			width: 1
 		}],
-		scrollbar: {
-			enabled: true,
-			barBackgroundColor: 'var(--white40)',
-			barBorderRadius: 7,
-			barBorderWidth: 0,
-			buttonBackgroundColor: 'none',
-			buttonBorderWidth: 0,
-			buttonBorderRadius: 7,
-			trackBackgroundColor: 'none',
-			trackBorderWidth: 3,
-			trackBorderRadius: 0,
-			trackBorderColor: 'none'
-		},
 		labels: {
 			align: 'left',
 			overflow: 'justify',

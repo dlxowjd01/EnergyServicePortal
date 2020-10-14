@@ -97,9 +97,7 @@
 <div class="modal fade" id="addDeviceModal" role="dialog">
 	<div class="modal-dialog device-modal modal-lg">
 		<div class="modal-content new_device">
-			<div class="modal-header stit">
-				<h2>설비 정보 수정</h2>
-			</div>
+			<div class="modal-header">설비 정보 수정</div>
 			<div class="modal-body">
 				<form id="deviceForm1" action="#" method="post" name="deviceForm" novalidate>
 					<div class="row">
@@ -273,7 +271,7 @@
 <div class="modal fade" id="manualAddDeviceModal" role="dialog">
 	<div class="modal-dialog device-modal">
 		<div class="modal-content manual_input">
-			<div class="modal-header stit"><h2>수기 입력</h2></div>
+			<div class="modal-header">수기 입력</div>
 			<div class="modal-body">
 				<form id="deviceForm2" action="#" method="post" name="deviceForm" novalidate>
 					<div class="row">
@@ -1283,10 +1281,10 @@
 				return false;
 			});
 
-			$('#addDeviceModal .modal-header.stit').text('설비 정보 수정');
+			$('#addDeviceModal .modal-header').text('설비 정보 수정');
 			$('#addDevice').attr('onclick', 'deviceProcess("patch", "' + did + '")').text('수정');
 		} else {
-			$('#addDeviceModal .modal-header.stit').text('설비 정보 등록');
+			$('#addDeviceModal .modal-header').text('설비 정보 등록');
 			$('#addDevice').attr('onclick', 'deviceProcess("post")').text('등록');
 		}
 
