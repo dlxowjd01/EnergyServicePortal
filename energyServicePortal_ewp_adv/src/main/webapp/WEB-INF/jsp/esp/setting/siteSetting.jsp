@@ -111,12 +111,14 @@
 
 		$("#newEssList li").on("click", function(){
 			let val = $(this).data("value");
-			if(val == "0"){
-				$("#newSiteType").prev().data({"value": "", "name" : ""}).html("해당 사항 없음<span class='caret'></span>").prop("disabled", true);
-				$("#newResList li").removeClass("hidden");
-			} else {
-				$("#newSiteType").prev().prop("disabled", false);
-			}
+			$("#newEssList").prev().data("value", val);
+
+			// if(val == "0"){
+			// 	$("#newSiteType").prev().data({"value": "", "name" : ""}).html("해당 사항 없음<span class='caret'></span>").prop("disabled", true);
+			// 	$("#newResList li").removeClass("hidden");
+			// } else {
+			// 	$("#newSiteType").prev().prop("disabled", false);
+			// }
 			
 			// else {
 			// 	$("#newSiteType").prev().html("선택<span class='caret'></span>").prop("disabled", false);
@@ -852,7 +854,8 @@
 						item.pcsCapacity = "-";
 						item.bmsCapacity = "-";
 					}
-					item.updatedAt = new Date(item.updatedAt).toLocaleDateString("en-CA").replace(/\//g, '-') + '&ensp;' + new Date(item.updatedAt).toLocaleTimeString();
+					let timeFormat = new Date(item.updatedAt).format("hh:mm:ss");
+					item.updatedAt = new Date(item.updatedAt).toLocaleDateString("en-CA").replace(/\//g, '-') + '&ensp;' + timeFormat;
 					newArr.push(item);
 				}).fail(function (jqXHR, textStatus, errorThrown) {
 					console.log("deviceOpt error===", jqXHR);
@@ -3663,8 +3666,8 @@
 					<col style="width:8%">
 					<col style="width:8%">
 					<col style="width:8%">
-					<col style="width:10%">
-					<col style="width:14%">
+					<col style="width:12%">
+					<col style="width:12%">
 				</colgroup>
 				<thead></thead>
 				<tbody></tbody>
