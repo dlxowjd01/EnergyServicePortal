@@ -752,8 +752,7 @@ a.btn-add,
 	outline-style: none;
 	border: 0;
 	line-height: 24px;
-	background: var(--ico-add-svg) no-repeat 0 2px;
-	background-size: 10px;
+	background: var(--ico-add-svg) no-repeat 0 6px;
 	color: var(--vivid-blue);
 	font-size: 13px;
 	font-weight: 500;
@@ -8502,7 +8501,7 @@ button.text-file {
 	margin-right: 16px;
 }
 
-.search-select-item .btn {
+.search-select-item .dropdown-toggle {
 	width: 100%;
 }
 
@@ -8973,6 +8972,11 @@ button.text-file {
 
 .indiv.balance-edit.balance-post {
 	padding-bottom: 50px;
+}
+
+.spc-balance-post td .dropdown-toggle,
+.spc-balance-post td .dropdown-toggle:hover {
+	background: none;
 }
 
 .balance-edit .text-type {
@@ -9649,37 +9653,6 @@ table.table-footer tfoot td.light {
 	overflow: auto;
 }
 
-.spc-modal-content {
-	width: 100%;
-}
-
-.spc-modal-content .modal-body .row:first-of-type {
-	padding: 0;
-}
-
-.spc-modal-content .modal-body .row:not(:last-of-type) {
-	padding: 5px 0;
-}
-
-.spc-modal-content .textarea {
-	padding: 12px 10px;
-}
-
-.spc-modal-content .warning {
-	padding-top: 5px;
-	padding-bottom: 10px;
-	margin-bottom: auto;
-}
-
-.spc-modal-content .col-lg-4 {
-	align-self: baseline;
-}
-
-.spc-modal-content .dropdown-menu+.warning,
-.spc-modal-content .sel-calendar .warning {
-	padding-bottom: 0;
-}
-
 .modal-content.spc-detail-content {
 	padding: 30px 16px;
 }
@@ -9736,6 +9709,54 @@ table.table-footer tfoot td.light {
 	content: "";
 }
 
+.spc-modal-content {
+	width: 100%;
+}
+
+.spc-modal-content .modal-body .row:first-of-type {
+	padding: 0;
+}
+
+.spc-modal-content .modal-body .row:not(:last-of-type) {
+	padding: 5px 0;
+}
+
+.spc-modal-content .modal-body .row:not(.end) .dropdown,
+.spc-modal-content .modal-body .row:not(.end) .text-input-type:not(.mr-12) {
+	width: calc(100% - 67px);
+}
+.spc-modal-content .modal-body .row:not(.end) .text-input-type.mr-12 {
+	width: calc( 100% - 154px );
+}
+
+.spc-modal-content .modal-body .row.end .dropdown,
+.spc-modal-content .modal-body .row.end .dropdown + .sel-calendar {
+	width: calc(45% - 24px);
+}
+
+.spc-modal-content .modal-body .dropdown-toggle {
+	width: 100%;
+}
+
+.spc-modal-content .textarea {
+	padding: 12px 10px;
+}
+
+.spc-modal-content .warning {
+	padding-top: 5px;
+	padding-bottom: 10px;
+	margin-bottom: auto;
+}
+
+.spc-modal-content .col-lg-4 {
+	align-self: baseline;
+}
+
+.spc-modal-content .dropdown-menu+.warning,
+.spc-modal-content .sel-calendar .warning {
+	padding-bottom: 0;
+}
+
 .spc-modal-content .search-expand .btn,
 .spc-modal-content .dropdown .btn,
 .spc-modal-content .sel {
@@ -9778,7 +9799,7 @@ table.table-footer tfoot td.light {
 }
 
 .spc-modal-content .flex-start .textarea {
-	width: calc(100% - 43px);
+	width: 100%
 }
 
 .spc-modal-content .flex-start2 .sel {
@@ -9821,14 +9842,14 @@ table.table-footer tfoot td.light {
 	text-indent: 3px;
 }
 
-.alarm-modal-content .flex-wrapper .input-label+.text-input-type {
+.alarm-modal-content .flex-wrapper .input-label + .text-input-type {
 	width: 200px;
 	margin: 0;
 }
 
-.spc-modal-content .end .btn-wrap-type02 {
+/* .spc-modal-content .row:last-of-type .btn-wrap-type02 {
 	margin-right: 35px;
-}
+} */
 
 /* spc 이관자료 */
 

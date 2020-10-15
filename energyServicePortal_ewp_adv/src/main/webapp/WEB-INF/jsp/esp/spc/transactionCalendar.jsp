@@ -1146,8 +1146,7 @@
 					<div class="container-fluid">
 						<div class="row">
 							<div class="col-lg-2 col-md-2 col-sm-3"><span class="input-label">SPC 선택</span></div>
-
-							<div class="col-lg-10 col-md-10 col-sm-9 px-0 flex-start">
+							<div class="col-lg-4 col-md-4 col-sm-9 flex-start">
 								<div id="spc_id" class="dropdown"><!--
 								--><button type="button" name="spcName" class="dropdown-toggle" data-toggle="dropdown" data-name="선택" data-value="">선택<span class="caret"></span></button><!--
 								--><ul id="spcList" class="dropdown-menu unused center" role="menu"><li data-name="*spcName*" data-value="*spcId*"><a href="javascript:void(0);" tabindex="-1">*spcName*</a></li></ul><!--
@@ -1166,7 +1165,7 @@
 							<div class="col-lg-2 col-md-2 col-sm-3">
 								<span class="input-label">알림 항목</span>
 							</div>
-							<div class="col-lg-4 col-md-4 col-sm-9 flex-start px-0">
+							<div class="col-lg-4 col-md-4 col-sm-9 flex-start">
 								<div class="dropdown placeholder" id="job_type">
 									<button type="button" class="dropdown-toggle required" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 									<ul class="dropdown-menu">
@@ -1190,15 +1189,15 @@
 							<div class="col-lg-2 col-md-2 col-sm-3">
 								<span class="input-label">알림 주기</span>
 							</div>
-							<div class="col-lg-4 col-md-4 col-sm-9 flex-start3 px-0">
-								<div class="dropdown" id="repeat_yn">
+							<div class="col-lg-4 col-md-4 col-sm-9 flex-start3">
+								<div id="repeat_yn" class="dropdown w-100">
 									<button type="button" class="dropdown-toggle required" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 									<ul class="dropdown-menu">
 										<li data-value="Y"><a href="javascript:void(0);">정기 알림</a></li>
 										<li data-value="N"><a href="javascript:void(0);">일시 알림</a></li>
 									</ul>
 								</div>
-								<div class="text-input-type hidden">
+								<div class="text-input-type ml-12 hidden">
 									<input type="text" id="repeat_interval" name="repeat_interval" placeholder="입력" onkeydown="onlyNum(event);" maxlength="2" autocomplete="off">
 								</div>
 								<div class="dropdown hidden" id="repeat_unit">
@@ -1217,7 +1216,7 @@
 							<div class="col-lg-2 col-md-2 col-sm-3">
 								<span class="input-label">기준 일자</span>
 							</div>
-							<div class="col-lg-4 col-md-4 col-sm-9 flex-start px-0">
+							<div class="col-lg-4 col-md-4 col-sm-9 flex-start">
 								<div class="sel-calendar">
 									<input type="text" id="job_date" name="job_date" class="sel fromDate required w-100" value="" autocomplete="off" readonly placeholder="기준 일자">
 									<small class="hidden warning">기준일을 선택해 주세요</small>
@@ -1226,8 +1225,8 @@
 							<div class="col-lg-2 col-md-2 col-sm-3">
 								<span class="input-label">반복 종료일</span>
 							</div>
-							<div class="col-lg-4 col-md-4 col-sm-9 flex-start px-0">
-								<div class="text-input-type">
+							<div class="col-lg-4 col-md-4 col-sm-9 flex-start">
+								<div class="text-input-type w-100">
 									<input type="text" id="repeat_end" name="repeat_end" class="required toDate w-100" placeholder="반복 종료일" value="" readonly>
 								</div>
 							</div>
@@ -1236,7 +1235,7 @@
 							<div class="col-lg-2 col-md-2 col-sm-3">
 								<span class="input-label">공휴일 처리</span>
 							</div>
-							<div class="col-lg-4 col-md-4 col-sm-9 flex-start px-0">
+							<div class="col-lg-4 col-md-4 col-sm-9 flex-start">
 								<div class="dropdown placeholder" id="repeat_before_after_holiday">
 									<button type="button" class="dropdown-toggle required" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 									<ul class="dropdown-menu">
@@ -1251,15 +1250,15 @@
 							<div class="col-lg-2 col-md-2 col-sm-3">
 								<span class="input-label">내용</span>
 							</div>
-							<div class="col-lg-10 col-md-10 col-sm-9 flex-start px-0">
-								<textarea class="textarea" id="description" name="description" placeholder="입력"></textarea>
+							<div class="col-lg-10 col-md-10 col-sm-9 flex-start">
+								<textarea id="description" class="textarea" name="description" placeholder="입력"></textarea>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-lg-2 col-md-2 col-sm-3">
 								<span class="input-label">담당자</span>
 							</div>
-							<div class="col-lg-4 col-md-4 col-sm-9 flex-start px-0">
+							<div class="col-lg-4 col-md-4 col-sm-9 flex-start">
 								<div class="text-input-type">
 									<input type="text" id="worker" name="worker" placeholder="입력" maxlength="10">
 									<small class="hidden warning">담당자를 선택해 주세요</small>
@@ -1268,17 +1267,17 @@
 							<div class="col-lg-2 col-md-2 col-sm-3">
 								<span class="input-label">비고</span>
 							</div>
-							<div class="col-lg-4 col-md-4 col-sm-9 flex-start px-0">
-								<div class="text-input-type">
+							<div class="col-lg-4 col-md-4 col-sm-9 flex-start">
+								<div class="text-input-type w-100">
 									<input type="text" id="note" name="note" placeholder="입력" maxlength="50">
 								</div>
 							</div>
 						</div>
-						<div class="row">
+						<div class="row end">
 							<div class="col-lg-2 col-md-2 col-sm-3">
 								<span class="input-label">알림 설정</span>
 							</div>
-							<div class="col-lg-4 col-md-4 col-sm-9 flex-start2 px-0">
+							<div class="col-lg-4 col-md-4 col-sm-9 flex-start2">
 								<div class="dropdown mr-12" id="alarmSetup">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="알림 없음">알림 없음<span class="caret"></span></button>
 									<ul class="dropdown-menu">
@@ -1296,7 +1295,7 @@
 							<div class="col-lg-2 col-md-2 col-sm-3">
 								<span class="input-label">알림 시간</span>
 							</div>
-							<div class="col-lg-4 col-md-4 col-sm-9 flex-start2 px-0">
+							<div class="col-lg-4 col-md-4 col-sm-9 flex-start2">
 								<div class="dropdown placeholder mr-12" id="alarmTime">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="시간"><span class="caret"></span></button>
 									<ul class="dropdown-menu">
@@ -1305,13 +1304,13 @@
 										</c:forEach>
 									</ul>
 								</div>
-								<div class="text-input-type">
+								<div class="text-input-type w-100">
 									<input type="text" id="alarmPhone" name="alarmPhone" placeholder="수신 번호" maxlength="12" onkeydown="onlyNum(event)">
 								</div>
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-12 end">
+							<div class="col-12">
 								<div class="btn-wrap-type02">
 									<button type="button" id="deleteScheduleBtn" class="btn-type04 fl hidden">삭제</button>
 									<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close">취소</button>

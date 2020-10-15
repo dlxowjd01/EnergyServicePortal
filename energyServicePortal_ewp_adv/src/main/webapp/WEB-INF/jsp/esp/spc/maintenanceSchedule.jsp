@@ -583,10 +583,8 @@
 			<div class="modal-body">
 				<div class="container-fluid">
 					<div class="row">
-						<div class="col-lg-2 col-md-2 col-sm-3">
-							<span class="input-label">발전소 선택</span>
-						</div>
-						<div class="col-lg-10 col-md-10 col-sm-9 px-0 flex-start">
+						<div class="col-lg-2 col-md-2 col-sm-3"><span class="input-label">발전소 선택</span></div>
+						<div class="col-lg-5 col-md-5 col-sm-9 flex-start">
 							<div class="text-input-type mr-12">
 								<input type="text" id="siteName" name="siteName" placeholder="입력" class="required" autocomplete="off">
 								<input type="hidden" id="site_id" name="site_id">
@@ -598,7 +596,7 @@
 						<div class="col-lg-2 col-md-2 col-sm-3">
 							<span class="input-label">점검 구분</span>
 						</div>
-						<div class="col-lg-4 col-md-4 col-sm-9 flex-start px-0">
+						<div class="col-lg-4 col-md-4 col-sm-9 flex-start">
 							<div class="dropdown placeholder" id="job_type">
 								<button type="button" class="dropdown-toggle required" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 								<ul class="dropdown-menu">
@@ -622,15 +620,15 @@
 						<div class="col-lg-2 col-md-2 col-sm-3">
 							<span class="input-label">점검 주기</span>
 						</div>
-						<div class="col-lg-4 col-md-4 col-sm-9 flex-start3 px-0">
-							<div class="dropdown" id="repeat_yn">
+						<div class="col-lg-4 col-md-4 col-sm-9 flex-start3">
+							<div id="repeat_yn" class="dropdown w-100">
 								<button type="button" class="dropdown-toggle required" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 								<ul class="dropdown-menu">
 									<li data-value="Y"><a href="javascript:void(0);">정기 점검</a></li>
 									<li data-value="N"><a href="javascript:void(0);">일시 점검</a></li>
 								</ul>
 							</div>
-							<div class="text-input-type hidden">
+							<div class="text-input-type ml-12 hidden">
 								<input type="text" id="repeat_interval" name="repeat_interval" placeholder="입력" onkeydown="onlyNum(event);" maxlength="2" autocomplete="off">
 							</div>
 							<div class="dropdown hidden" id="repeat_unit">
@@ -649,7 +647,7 @@
 						<div class="col-lg-2 col-md-2 col-sm-3">
 							<span class="input-label">기준 일자</span>
 						</div>
-						<div class="col-lg-4 col-md-4 col-sm-9 flex-start px-0">
+						<div class="col-lg-4 col-md-4 col-sm-9 flex-start">
 							<div class="sel-calendar">
 								<input type="text" id="job_date" name="job_date" class="sel fromDate required w-100" placeholder="기준 일자" value="" autocomplete="off" readonly>
 							</div>
@@ -657,9 +655,9 @@
 						<div class="col-lg-2 col-md-2 col-sm-3">
 							<span class="input-label">반복 종료일</span>
 						</div>
-						<div class="col-lg-4 col-md-4 col-sm-9 flex-start px-0">
-							<div class="text-input-type">
-								<input type="text" id="repeat_end" name="repeat_end" class="required toDate w-100" placeholder="반복 종료일" value="" readonly>
+						<div class="col-lg-4 col-md-4 col-sm-9 flex-start">
+							<div class="text-input-type w-100">
+								<input type="text" id="repeat_end" name="repeat_end" class="required toDate" placeholder="반복 종료일" value="" readonly>
 							</div>
 						</div>
 					</div>
@@ -667,7 +665,7 @@
 						<div class="col-lg-2 col-md-2 col-sm-3">
 							<span class="input-label">공휴일 처리</span>
 						</div>
-						<div class="col-lg-4 col-md-4 col-sm-9 flex-start px-0">
+						<div class="col-lg-4 col-md-4 col-sm-9 flex-start">
 							<div class="dropdown placeholder" id="repeat_before_after_holiday">
 								<button type="button" class="dropdown-toggle required" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 								<ul class="dropdown-menu">
@@ -682,7 +680,7 @@
 						<div class="col-lg-2 col-md-2 col-sm-3">
 							<span class="input-label">내용</span>
 						</div>
-						<div class="col-lg-10 col-md-10 col-sm-9 flex-start px-0">
+						<div class="col-lg-10 col-md-10 col-sm-9 flex-start">
 							<textarea class="textarea" id="description" name="description" placeholder="입력"></textarea>
 						</div>
 					</div>
@@ -690,7 +688,7 @@
 						<div class="col-lg-2 col-md-2 col-sm-3">
 							<span class="input-label">작업자</span>
 						</div>
-						<div class="col-lg-4 col-md-4 col-sm-9 flex-start px-0">
+						<div class="col-lg-4 col-md-4 col-sm-9 flex-start">
 							<div class="text-input-type">
 								<input type="text" id="worker" name="worker" placeholder="입력" maxlength="10">
 							</div>
@@ -698,17 +696,17 @@
 						<div class="col-lg-2 col-md-2 col-sm-3">
 							<span class="input-label">비고</span>
 						</div>
-						<div class="col-lg-4 col-md-4 col-sm-9 flex-start px-0">
-							<div class="text-input-type">
+						<div class="col-lg-4 col-md-4 col-sm-9 flex-start">
+							<div class="text-input-type w-100">
 								<input type="text" id="note" name="note" placeholder="입력" maxlength="50">
 							</div>
 						</div>
 					</div>
-					<div class="row">
+					<div class="row end">
 						<div class="col-lg-2 col-md-2 col-sm-3">
 							<span class="input-label">알림 설정</span>
 						</div>
-						<div class="col-lg-4 col-md-4 col-sm-9 flex-start2 px-0">
+						<div class="col-lg-4 col-md-4 col-sm-9 flex-start2">
 							<div class="dropdown mr-12" id="alarmSetup">
 								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="알림 없음">알림 없음<span class="caret"></span></button>
 								<ul class="dropdown-menu">
@@ -726,7 +724,7 @@
 						<div class="col-lg-2 col-md-2 col-sm-3">
 							<span class="input-label">알림 시간</span>
 						</div>
-						<div class="col-lg-4 col-md-4 col-sm-9 flex-start2 px-0">
+						<div class="col-lg-4 col-md-4 col-sm-9 flex-start2">
 							<div class="dropdown placeholder mr-12" id="alarmTime">
 								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="시간">시간<span class="caret"></span></button>
 								<ul class="dropdown-menu">
@@ -735,7 +733,7 @@
 									</c:forEach>
 								</ul>
 							</div>
-							<div class="text-input-type">
+							<div class="text-input-type w-100">
 								<input type="text" id="alarmPhone" name="alarmPhone" placeholder="수신 번호" maxlength="12" onkeydown="onlyNum(event)">
 							</div>
 						</div>
