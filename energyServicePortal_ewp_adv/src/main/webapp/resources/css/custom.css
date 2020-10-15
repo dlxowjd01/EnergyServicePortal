@@ -2974,6 +2974,14 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 	align-items: center;
 }
 
+.modal-dialog.modal-s {
+	max-width: 560px;
+	min-height: calc(100% - (1.75rem * 2));
+	display: flex;
+	align-items: center;
+}
+
+
 .modal-content {
 	margin: auto;
 	padding: 38px 40px;
@@ -8714,11 +8722,31 @@ button.text-file {
 	height: 100%;
 }
 
-.alarm-modal-content .flex-wrapper .text-input-type.ml {
+.alarm-modal-content .flex-align-top {
+	width: 100%;
+}
+
+.alarm-modal-content .flex-start {
+	margin-top: 24px;
+}
+
+.alarm-modal-content .flex-start .input-label + .text-input-type {
+	width: calc(20% + 119px);
+}
+
+.alarm-modal-content .flex-start .input-label + .dropdown {
+	width: calc(40% + 12px);
+}
+
+.alarm-modal-content .flex-start .input-label + .dropdown>.dropdown-toggle {
+	width: 100%;
+}
+
+.alarm-modal-content .flex-start .dropdown + .text-input-type {
 	margin-left: 12px;
 }
 
-.alarm-modal-content .flex-wrapper .text-input-type+.type {
+.alarm-modal-content .flex-start .text-input-type + .btn-wrapper {
 	margin: 0 0 0 12px;
 }
 

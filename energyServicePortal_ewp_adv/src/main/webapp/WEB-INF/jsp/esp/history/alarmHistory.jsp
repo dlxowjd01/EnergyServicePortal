@@ -4,16 +4,14 @@
 <!-- 파일 업로드 폼 -->
 <form id="picupload" name="upload" method="multipart/form-data"></form>
 <div id="alarmConfirm" class="modal fade" role="dialog">
-	<div class="modal-dialog history-alarm">
+	<div class="modal-dialog modal-s">
 		<div class="modal-content">
-			<div class="ly-wrapper">
-				<h2 class="ly_tit">알람 상태</h2>
-				<p class="text-line1">"확인" 처리 하시겠습니까?</p>
-			</div>
-			<div class="btn-wrap-type02">
-				<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close">아니오</button>
-				<button type="button" class="btn-type" onclick="alarmConfirmProcess();">예</button>
-			</div>
+			<h2 class="modal-title">알람 상태</h2>
+			<p class="text-line1 mt20 mb-24">"확인" 처리 하시겠습니까?</p>
+			<div class="btn-wrap-type05"><!--
+			--><button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close">아니오</button><!--
+			--><button type="button" class="btn-type ml-12" onclick="alarmConfirmProcess();">예</button><!--
+		--></div>
 		</div>
 	</div>
 </div>
@@ -25,73 +23,71 @@
 				<h2><fmt:message key="alertshistory.4.acknowledgement" /></h2>
 			</div>
 			<div class="modal-body">
-				<div class="ly-wrapper">
-					<div class="flex-align-top">
-						<span class="input-label">조치 이력</span>
-						<textarea id="ticket_log" name="ticket_log" class="textarea" readonly></textarea>
+				<div class="flex-align-top">
+					<span class="input-label">조치 이력</span>
+					<textarea id="ticket_log" name="ticket_log" class="textarea" readonly></textarea>
+				</div>
+				<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
+				<div class="flex-start">
+					<span class="input-label">사진 올리기</span>
+					<div class="text-input-type">
+						<input type="text" id="photoFile" name="photoFile" placeholder="사진 파일 이름" readonly="" autocomplete="off">
 					</div>
-					<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-					<div class="flex-wrapper">
-						<span class="input-label">사진 올리기</span>
-						<div class="text-input-type">
-							<input type="text" id="photoFile" name="photoFile" placeholder="사진 파일 이름" readonly="" autocomplete="off">
-						</div>
-						<div class="type">
-							<button type="button" id="fileUpload" class="btn-type" accept="image/*">업로드</button>
-							<input type="file" id="picture" name="filename" class="btn-upload hidden"/>
-							<span class="upload-text ml-16 hidden"></span>
-						</div>
-					</div>
-
-					<div class="upload-photo">
-						<hr>
-						<ul>
-						</ul>
-						<hr>
-					</div>
-					</c:if>
-
-					<div class="flex-wrapper">
-						<span class="input-label">조치 여부</span>
-						<div class="dropdown placeholder" id="ticket_status">
-							<button type="button" class="dropdown-toggle required" placeholder="선택"
-								data-toggle="dropdown"><span class="caret"></span></button>
-							<ul class="dropdown-menu">
-								<li data-value="new"><a href="javascript:void(0);">신규</a></li>
-								<li data-value="open"><a href="javascript:void(0);">작업 처리 중</a></li>
-								<li data-value="on-hold"><a href="javascript:void(0);">추가 정보 대기</a></li>
-								<li data-value="resolved"><a href="javascript:void(0);">현장 조치 완료</a></li>
-								<li data-value="pending"><a href="javascript:void(0);">처리 결과 확인</a></li>
-								<li data-value="closed"><a href="javascript:void(0);">처리 완료</a></li>
-							</ul>
-						</div>
-					</div>
-					<hr>
-
-					<div class="flex-wrapper">
-						<span class="input-label">담당자</span>
-						<div class="dropdown placeholder" id="userlist">
-							<button type="button" class="dropdown-toggle required"
-								data-toggle="dropdown">선택<span class="caret"></span></button>
-							<ul class="dropdown-menu">
-							</ul>
-						</div>
-						<div class="text-input-type ml-12 w200">
-							<input type="text" id="ticket_user_id" name="ticket_user_id" placeholder="직접 입력" readonly autocomplete="off">
-						</div>
-					</div>
-
-					<hr>
-
-					<div class="flex-wrapper">
-						<span class="input-label">조치 메모</span>
-						<textarea id="memo" name="memo" class="textarea"></textarea>
-					</div>
-					<div class="btn-wrap-type02">
-						<button type="button" class="btn-type03" data-dismiss="modal">취소</button>
-						<button type="button" class="btn-type" onclick="ackProcess();">확인</button>
+					<div class="btn-wrapper">
+						<button type="button" id="fileUpload" class="btn-type" accept="image/*">업로드</button>
+						<input type="file" id="picture" name="filename" class="btn-upload hidden"/>
+						<span class="upload-text ml-16 hidden"></span>
 					</div>
 				</div>
+
+				<div class="upload-photo">
+					<hr>
+					<ul>
+					</ul>
+					<hr>
+				</div>
+				</c:if>
+
+				<div class="flex-start">
+					<span class="input-label">조치 여부</span>
+					<div id="ticket_status" class="dropdown">
+						<button type="button" class="dropdown-toggle required" placeholder="선택"
+							data-toggle="dropdown"><span class="caret"></span></button>
+						<ul class="dropdown-menu">
+							<li data-value="new"><a href="javascript:void(0);">신규</a></li>
+							<li data-value="open"><a href="javascript:void(0);">작업 처리 중</a></li>
+							<li data-value="on-hold"><a href="javascript:void(0);">추가 정보 대기</a></li>
+							<li data-value="resolved"><a href="javascript:void(0);">현장 조치 완료</a></li>
+							<li data-value="pending"><a href="javascript:void(0);">처리 결과 확인</a></li>
+							<li data-value="closed"><a href="javascript:void(0);">처리 완료</a></li>
+						</ul>
+					</div>
+				</div>
+				<hr>
+
+				<div class="flex-start">
+					<span class="input-label">담당자</span>
+					<div id="userlist" class="dropdown w-20">
+						<button type="button" class="dropdown-toggle required"
+							data-toggle="dropdown">선택<span class="caret"></span></button>
+						<ul class="dropdown-menu">
+						</ul>
+					</div>
+					<div class="text-input-type w-20">
+						<input type="text" id="ticket_user_id" name="ticket_user_id" placeholder="직접 입력" readonly autocomplete="off">
+					</div>
+				</div>
+
+				<hr>
+
+				<div class="flex-align-top">
+					<span class="input-label">조치 메모</span>
+					<textarea id="memo" name="memo" class="textarea"></textarea>
+				</div>
+				<div class="btn-wrap-type02"><!--
+				--><button type="button" class="btn-type03" data-dismiss="modal">취소</button><!--
+				--><button type="button" class="btn-type ml-12" onclick="ackProcess();">확인</button><!--
+			--></div>
 			</div>
 		</div>
 	</div>
@@ -102,7 +98,6 @@
 		<h1 class="page-header fl">알람 이력</h1>
 	</div>
 </div>
-
 
 <div class="row history_search">
 	<div class="col-12">
@@ -287,9 +282,9 @@
 						</div>
 					</div>
 										
-					<div class="btn-wrap-type05">
+					<div class="btn-wrap-type02">
 						<button type="button" class="btn-type03 w80" onclick="$('#searchDetail').removeClass('open')">취소</button><!--
-					--><button type="button" class="btn-type w80 ml-12" onclick="$('#searchDetail').removeClass('open')">적용</button>
+					--><button type="button" class="btn-type w80" onclick="$('#searchDetail').removeClass('open')">적용</button>
 					</div>
 				</div>
 
