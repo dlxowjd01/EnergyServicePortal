@@ -216,12 +216,57 @@
 			jsonData = $('#spcList').data('gridJsonData')[idx],
 			disabledInput = $('#name').parents('.text-input-type.edit');
 
+		document.querySelectorAll('#basicInfo input').forEach(inp => {
+			inp.value = '';
+		});
+
+		$('#spcCountry button').html($('#spcCountry button').data('name') + '<span class="caret"></span>');
+		$('#spcSido button').html($('#spcSido button').data('name') + '<span class="caret"></span>');
+		dropDownInit($('#spcSeal0'));
+
+		$('#addList_registered_seal div.group-type:not(:first-child)').remove();
+		$('#addList_registered_seal div.group-type:first-child .btn-close').remove();
+		$('#addList_registered_seal div.group-type:first-child .upload-text ').empty();
+		$('[id^="SPC_법인_인감_대표"]').prop('checked', false);
+
 		if (jsonData.spc_id == "") {
 			$('#spcName').val('').prop('readonly', false);
 			disabledInput.removeClass('disabled');
 		} else {
 			$('#spcName').val(jsonData['name']).prop('readonly', true);
 			disabledInput.addClass('disabled');
+
+			const basicInfo = JSON.parse(jsonData['spc_info']);
+			if (!isEmpty(basicInfo)) {
+				const spcFileList = basicInfo['SPC_법인_인감'];
+				if(spcFileList.length > 0) {
+					spcFileList.forEach((file, index) => {
+						if (index > 0) {
+							addRow('addList_registered_seal');
+						}
+						const seal = file['SPC_법인_인감_유형'];
+						if (!isEmpty(seal)) {
+							$('#spcSeal' + index + ' button').html(seal.replace(/\_/g, ' ') + '<span class="caret"></span>').data('value', seal);
+						}
+
+						$('#basicInfo input[type="file"]').eq(index).data('file', file);
+						let listItem = `<button type='button' class='btn-close icon-trash' onclick='deleteFile($(this), "front")'></button>`;
+						//$('#basicInfo input[type="file"]').eq(index).parent().find(".upload-text").next('.file_del_btn').remove();
+						$('#basicInfo input[type="file"]').eq(index).parent().find(".upload-text").html(file['originalname']).after(listItem);
+					});
+				}
+				if (basicInfo.spcCountry == 'kr') {
+					basicInfo.spcCountry = '대한민국';
+				}
+
+				delete basicInfo['spcId'];
+				delete basicInfo['spcName'];
+				setJsonAutoMapping(basicInfo, 'basicInfo');
+
+				if (!isEmpty(basicInfo['spcSealSelected'])) {
+					$(':radio[name="SPC_법인_인감_대표"]:input[value="' + spc_info["spcSealSelected"] + '"]').prop('checked', true);
+				}
+			}
 		}
 	}
 
@@ -341,84 +386,31 @@
 	}
 
 	function getgenIdData() {
-		const selectedSpcId = $('#spcId > button').data('value');
-		new Promise(resolve => {
-			if (isEmpty(selectedSpcId)) {
-				resolve();
-			} else {
-				$.ajax({
-					url: apiHost + '/spcs/' + selectedSpcId,
-					type: 'get',
-					async: false,
-					data: { oid: oid }
-				}).done((json, textStatus, jqXHR) => {
-					console.log(json.data[0]);
-					const basicInfo = JSON.parse(json.data[0]['spc_info']);
-					if (!isEmpty(basicInfo)) {
-						if (basicInfo.spcCountry == 'kr') {
-							basicInfo.spcCountry = '대한민국';
-						}
-
-						setJsonAutoMapping(basicInfo, 'basicInfo');
-						const fileList = basicInfo['SPC_법인_인감'];
-						let spcSealSelected = '';
-						if (basicInfo['spcSealSelected'] != undefined) {
-							spcSealSelected = basicInfo['spcSealSelected'];
-						}
-
-						if (fileList.length > 0) {
-							fileList.forEach((file, idx) => {
-								if (spcSealSelected != '' && idx == spcSealSelected) {
-									fileList[idx]['SPC_법인_인감_대표'] = '대표 인감';
-								} else {
-									fileList[idx]['SPC_법인_인감_대표'] = '';
-								}
-
-								if (isEmpty(file['SPC_법인_인감_유형'])) {
-									fileList[idx]['SPC_법인_인감_유형'] = '';
-								}
-							});
-						}
-
-						setMakeList(fileList, 'SPC_법인_인감', {'dataFunction': {}});
+		if (role == 1) {
+			$.ajax({
+				url: apiHost + '/config/sites/',
+				type: 'get',
+				async: false,
+				data: {oid: oid},
+				success: function (json) {
+					let spcGens = new Array();
+					if (!isEmpty(json)) {
+						spcGens = json;
 					}
-				}).fail((jqXHR, textStatus, errorThrown) => {
-					console.error(jqXHR);
-					console.error(textStatus);
-					console.error(errorThrown);
 
-					throw '처리 중 오류가 발생했습니다.';
-				});
-			}
-		}).then(() => {
-			if (role == 1) {
-				$.ajax({
-					url: apiHost + '/config/sites/',
-					type: 'get',
-					async: false,
-					data: {oid: oid},
-					success: function (json) {
-						let spcGens = new Array();
-						if (!isEmpty(json)) {
-							spcGens = json;
-						}
+					spcGens.unshift({sid: '', name: '직접입력', location: '', address: ''});
+					setMakeList(spcGens, 'genList', {'dataFunction': {}});
 
-						spcGens.unshift({sid: '', name: '직접입력', location: '', address: ''});
-						setMakeList(spcGens, 'genList', {'dataFunction': {}});
+				},
+				error: function (request, status, error) {
 
-					},
-					error: function (request, status, error) {
-
-					}
-				});
-			} else {
-				let spcGens = Array.from(siteList);
-				spcGens.unshift({sid: '', name: '직접입력', location: '', address: ''});
-				setMakeList(spcGens, 'genList', {'dataFunction': {}});
-			}
-		}).catch(error => {
-
-		});
+				}
+			});
+		} else {
+			let spcGens = Array.from(siteList);
+			spcGens.unshift({sid: '', name: '직접입력', location: '', address: ''});
+			setMakeList(spcGens, 'genList', {'dataFunction': {}});
+		}
 	}
 
 	function setComboBoxData() {
@@ -988,7 +980,7 @@
 							<th>주소</th>
 							<td class="group-type">
 								<div class="dropdown placeholder edit" id="spcCountry">
-									<button type="button" class="dropdown-toggle underline w-100" data-toggle="dropdown">
+									<button type="button" class="dropdown-toggle underline w-100" data-toggle="dropdown" data-name="국가 선택">
 										국가 선택<span class="caret"></span>
 									</button>
 									<ul id="spcCountryList" class="dropdown-menu" role="menu">
@@ -998,7 +990,7 @@
 									</ul>
 								</div>
 								<div class="dropdown placeholder edit mr-12" id="spcSido">
-									<button type="button" class="dropdown-toggle underline w-100" data-toggle="dropdown">
+									<button type="button" class="dropdown-toggle underline w-100" data-toggle="dropdown" data-name="시/도 선택">
 										시/도 선택<span class="caret"></span>
 									</button>
 									<ul id="spcSidoList" class="dropdown-menu" role="menu">
@@ -1101,7 +1093,7 @@
 							</th>
 							<td id="addList_registered_seal" class="entity">
 								<div class="group-type">
-									<div class="dropdown placeholder edit" id="spcSeal[index]">
+									<div class="dropdown placeholder edit" id="spcSeal[index]" data-name="인감 선택">
 										<button type="button" class="dropdown-toggle" data-toggle="dropdown">
 											인감 선택<span class="caret"></span>
 										</button>

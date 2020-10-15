@@ -359,9 +359,7 @@
 
 				let visual = 'hidden';
 				if ($.inArray(job_type, checkType) > -1) { visual = ''; }
-				calendar.eq(Number(job_date) - 1).append(
-					'<a href="javascript:maintenance(\'get\', \'' + v.id + '\');" data-jobid="' + v.id + '" class="' + visual + '" ><p class="bu t' + job_type + '">[' + job_info.siteName + ']' + jobName[Number(job_type) - 1] + '</p></a>'
-				);
+				calendar.eq(Number(job_date) - 1).append(`<a href="javascript:maintenance('get', '${'${v.id}'}')" data-jobid="${'${v.id}'}" class="${'${visual}'}"><p class="bu t${'${job_type}'}" data-sitename="${'${job_info.siteName}'}">[${'${job_info.siteName}'}] ${'${jobName[Number(job_type) - 1]}'}</p></a>`);
 			});
 		}
 
@@ -376,7 +374,7 @@
 
 		$('#calendar td a p.bu').each(function () {
 			let clsName = $(this).attr('class').replace('bu t', '').trim();
-			let siteName = $(this).html().match(/[(.*)].+$/)[1];
+			let siteName = $(this).data('sitename');
 			if ($.inArray(clsName, checkType) > -1) {
 				if ($('#searchName').val() == '') {
 					$(this).parent().removeClass('hidden');
