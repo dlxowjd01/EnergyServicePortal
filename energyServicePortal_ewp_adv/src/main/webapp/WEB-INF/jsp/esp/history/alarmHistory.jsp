@@ -281,7 +281,6 @@
 							</div>
 						</div>
 					</div>
-										
 					<div class="btn-wrap-type02">
 						<button type="button" class="btn-type03 w80" onclick="$('#searchDetail').removeClass('open')">취소</button><!--
 					--><button type="button" class="btn-type w80" onclick="$('#searchDetail').removeClass('open')">적용</button>
@@ -292,7 +291,7 @@
 					<button type="button" id="search" class="btn-type ml-6"><fmt:message key="alertshistory.1.update" /></button>
 				</div>
 			</div>
-		</form>			
+		</form>
 	</div>
 </div>
 
@@ -394,6 +393,7 @@
 		if (sidparam != "") {
 			deviceTypeList(sidparam);
 		}
+
 		//사이트 선택시
 		$('#fromDate').datepicker('setDate', 'today');
 		$('#toDate').datepicker('setDate', 'today');
@@ -422,7 +422,7 @@
 		});
 
 		if (sidparam != '') {
-			$('#detailterm').prev().html('1일 &nbsp;<span class="caret"></span>').data('value', 'day');
+			$('#detailterm').prev().html('1시간 &nbsp;<span class="caret"></span>').data('value', 'hour');
 			periodData();
 			fetchCharts();
 			$('#search').trigger('click');

@@ -346,8 +346,6 @@
 			bResult = false, dResult = true, sResult = false;
 		
 		dResult = dateFilter(jsonData, dResult);
-
-		console.log(jsonData);
 		if (jsonData['site_name'].toLowerCase().indexOf(keyWord) > -1 || jsonData['spc_name'].toLowerCase().indexOf(keyWord) > -1 || jsonData['updated_by'].toLowerCase().indexOf(keyWord) > -1) {
 			sResult = true;
 		}
@@ -750,7 +748,7 @@
 							<th><button type="button" class="btn-align down"><fmt:message key="revenuereport.2.plant" /></button></th>
 							<th><button type="button" class="btn-align down"><fmt:message key="revenuereport.2.report_classification" /></button></th>
 							<th><button type="button" class="btn-align down">적용기간</button></th>
-							<th><fmt:message key="revenuereport.2.download" /></th>
+							<th><button type="button" class="btn-align down"><fmt:message key="revenuereport.2.download" /></button></th>
 							<th><button type="button" class="btn-align down">보고서 생성 시간</button></th>
 							<th><button type="button" class="btn-align down"><fmt:message key="revenuereport.2.report_confirmation" /></button></th>
 							<th><button type="button" class="btn-align down">최종 작업자</button></th>

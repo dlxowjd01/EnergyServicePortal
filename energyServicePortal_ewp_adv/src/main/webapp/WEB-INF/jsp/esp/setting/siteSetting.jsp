@@ -983,6 +983,7 @@
 						{
 							"sTitle": "DR 자원 ID",
 							"mData": "drName",
+							visible: false
 						},
 						{
 							"sTitle": "VPP 자원 ID",
@@ -1406,6 +1407,7 @@
 						{
 							"sTitle": "DR 자원 ID",
 							"mData": "drName",
+							visible: false
 						},
 						{
 							"sTitle": "VPP 자원 ID",
@@ -1597,6 +1599,7 @@
 				{
 					"title": "DR 자원 ID",
 					"data": null,
+					visible: false
 				},
 				{
 					"title": "VPP 자원 ID",

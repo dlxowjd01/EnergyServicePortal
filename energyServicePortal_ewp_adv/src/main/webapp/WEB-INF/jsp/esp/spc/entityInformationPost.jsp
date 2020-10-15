@@ -341,31 +341,84 @@
 	}
 
 	function getgenIdData() {
-		if (role == 1) {
-			$.ajax({
-				url: apiHost + '/config/sites/',
-				type: 'get',
-				async: false,
-				data: {oid: oid},
-				success: function (json) {
-					let spcGens = new Array();
-					if (!isEmpty(json)) {
-						spcGens = json;
+		const selectedSpcId = $('#spcId > button').data('value');
+		new Promise(resolve => {
+			if (isEmpty(selectedSpcId)) {
+				resolve();
+			} else {
+				$.ajax({
+					url: apiHost + '/spcs/' + selectedSpcId,
+					type: 'get',
+					async: false,
+					data: { oid: oid }
+				}).done((json, textStatus, jqXHR) => {
+					console.log(json.data[0]);
+					const basicInfo = JSON.parse(json.data[0]['spc_info']);
+					if (!isEmpty(basicInfo)) {
+						if (basicInfo.spcCountry == 'kr') {
+							basicInfo.spcCountry = '대한민국';
+						}
+
+						setJsonAutoMapping(basicInfo, 'basicInfo');
+						const fileList = basicInfo['SPC_법인_인감'];
+						let spcSealSelected = '';
+						if (basicInfo['spcSealSelected'] != undefined) {
+							spcSealSelected = basicInfo['spcSealSelected'];
+						}
+
+						if (fileList.length > 0) {
+							fileList.forEach((file, idx) => {
+								if (spcSealSelected != '' && idx == spcSealSelected) {
+									fileList[idx]['SPC_법인_인감_대표'] = '대표 인감';
+								} else {
+									fileList[idx]['SPC_법인_인감_대표'] = '';
+								}
+
+								if (isEmpty(file['SPC_법인_인감_유형'])) {
+									fileList[idx]['SPC_법인_인감_유형'] = '';
+								}
+							});
+						}
+
+						setMakeList(fileList, 'SPC_법인_인감', {'dataFunction': {}});
 					}
+				}).fail((jqXHR, textStatus, errorThrown) => {
+					console.error(jqXHR);
+					console.error(textStatus);
+					console.error(errorThrown);
 
-					spcGens.unshift({sid: '', name: '직접입력', location: '', address: ''});
-					setMakeList(spcGens, 'genList', {'dataFunction': {}});
+					throw '처리 중 오류가 발생했습니다.';
+				});
+			}
+		}).then(() => {
+			if (role == 1) {
+				$.ajax({
+					url: apiHost + '/config/sites/',
+					type: 'get',
+					async: false,
+					data: {oid: oid},
+					success: function (json) {
+						let spcGens = new Array();
+						if (!isEmpty(json)) {
+							spcGens = json;
+						}
 
-				},
-				error: function (request, status, error) {
+						spcGens.unshift({sid: '', name: '직접입력', location: '', address: ''});
+						setMakeList(spcGens, 'genList', {'dataFunction': {}});
 
-				}
-			});
-		} else {
-			let spcGens = Array.from(siteList);
-			spcGens.unshift({sid: '', name: '직접입력', location: '', address: ''});
-			setMakeList(spcGens, 'genList', {'dataFunction': {}});
-		}
+					},
+					error: function (request, status, error) {
+
+					}
+				});
+			} else {
+				let spcGens = Array.from(siteList);
+				spcGens.unshift({sid: '', name: '직접입력', location: '', address: ''});
+				setMakeList(spcGens, 'genList', {'dataFunction': {}});
+			}
+		}).catch(error => {
+
+		});
 	}
 
 	function setComboBoxData() {

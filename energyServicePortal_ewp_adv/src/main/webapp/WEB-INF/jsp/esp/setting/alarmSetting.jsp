@@ -287,16 +287,14 @@
 			}
 		});
 		
-		$("#comDeleteModal").on("hide.bs.modal", function() {
-			$("#comDeleteSuccessMsg").html('<h5 id="deleteSuccessMsg" class="ntit">삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>');
-			$("#confirmTitle").val("");
-			$("#comDeleteBtn").prop("disabled", true);
+		$('#comDeleteModal').on('hide.bs.modal', function() {
+			$("#comDeleteSuccessMsg").html('<h5 id="deleteSuccessMsg" class="ntit">삭제를 계속 진행 하시려면,<br><span class="text-blue">삭제</span>&ensp;를 입력해 주세요.</h5>');
+			$("#confirmTitle").val('');
+			$("#comDeleteBtn").prop('disabled', true);
 			setTimeout(function(){
-				$(this).find(".modal-body").removeClass("hidden");
+				$(this).find('.modal-body').removeClass('hidden');
 			}, 1600);
 		});
-
-
 	});
 
 
@@ -739,6 +737,8 @@
 	 * @param msg
 	 */
 	const errorMsg = msg => {
+		$('#excelUploadBtn').val(''); //에러 발생시 fileInput 초기화
+		
 		$("#warningMsg").text(msg);
 		$("#warningModal").modal("show");
 		setTimeout(function(){

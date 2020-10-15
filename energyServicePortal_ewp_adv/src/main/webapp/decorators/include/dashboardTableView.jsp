@@ -94,8 +94,12 @@
 					title: "현재 날씨",
 					data: 'toDaySky',
 					render: function (data, type, full, rowIndex) {
-						const weather = getWeatherIconClass(data);
-						return '<i class="ico-weather ' + weather + '"></i>';
+						if (data != null && data === '-') {
+							return '-';
+						} else {
+							const weather = getWeatherIconClass(data);
+							return '<i class="ico-weather ' + weather + '"></i>';
+						}
 					},
 					sortable: false,
 					className: 'dt-center'
@@ -112,8 +116,12 @@
 					title: '전일 날씨',
 					data: 'yesterDaySky',
 					render: function (data, type, full, rowIndex) {
-						const weather = getWeatherIconClass(data);
-						return '<i class="ico-weather ' + weather + '"></i>';
+						if (data != null && data === '-') {
+							return '-';
+						} else {
+							const weather = getWeatherIconClass(data);
+							return '<i class="ico-weather ' + weather + '"></i>';
+						}
 					},
 					sortable: false,
 					className: 'dt-center'
@@ -179,26 +187,6 @@
 				}
 			});
 
-			//기상 정보 오늘
-			urls.push({
-				url: apiHost + '/weather/site?sid=' + site.sid + '&interval=hour',
-				type: 'get',
-				data: {
-					startTime: yesterDayFormData.startTime,
-					endTime: dayFormData.endTime,
-				}
-			});
-
-			//기상 정보 어제
-			urls.push({
-				url: apiHost + '/weather/site?sid=' + site.sid + '&interval=day',
-				type: 'get',
-				data: {
-					startTime: yesterDayFormData.startTime,
-					endTime: yesterDayFormData.endTime,
-				}
-			});
-
 			siteArray.push(site.sid);
 			tableData.push({
 				sid: site.sid,
@@ -261,6 +249,32 @@
 					startTime: dayFormData.startTime,
 					endTime: dayFormData.endTime,
 					confirm: false
+				}
+			});
+
+			//기상 정보 오늘
+			urls.push({
+				url: apiHost + '/weather/site',
+				type: 'get',
+				data: {
+					sid: siteArray.toString(),
+					interval: 'hour',
+					startTime: yesterDayFormData.startTime,
+					endTime: dayFormData.endTime,
+					formId: 'v2'
+				}
+			});
+
+			//기상 정보 어제
+			urls.push({
+				url: apiHost + '/weather/site',
+				type: 'get',
+				data: {
+					sid: siteArray.toString(),
+					interval: 'day',
+					startTime: yesterDayFormData.startTime,
+					endTime: yesterDayFormData.endTime,
+					formId: 'v2'
 				}
 			});
 		}
@@ -367,22 +381,38 @@
 							}
 						});
 					} else if (targetUrl.match('/weather/site')) {
-						if (result.length > 0) {
-							tableData.forEach((site, index) => {
-								if (targetUrl.match(site.sid)) {
-									if (targetUrl.match('day')) { //전일
-										tableData[index]['yesterDaySky'] = result[0].sky;
-									} else { //당일
-										result.reverse();
-										result.forEach(rst => {
-											if (rst.observed) {
-												tableData[index]['toDaySky'] = rst.sky;
-												return false;
-											}
+						const weatherData = result['data'];
+						if (result['interval'] == 'hour') { //오늘 날씨
+							if (!isEmpty(weatherData)) {
+								tableData.forEach((site, index) => {
+									const datas = weatherData[site.sid]['items'];
+									if (isEmpty(datas)) {
+										tableData[index]['toDaySky'] = '-';
+									} else {
+										datas.sort((a, b) => {
+											return a.basetime > b.basetime ? -1 : a.basetime < b.basetime ? 1 : 0;
 										});
+										const curruntWeather = datas.find(item => item['observed'] === true);
+										console.log(curruntWeather);
+										if (isEmpty(curruntWeather)) {
+											tableData[index]['toDaySky'] = '';
+										} else {
+											tableData[index]['toDaySky'] = curruntWeather['sky'];
+										}
 									}
-								}
-							});
+								});
+							}
+						} else { //어제 날씨
+							if (!isEmpty(weatherData)) {
+								tableData.forEach((site, index) => {
+									const datas = weatherData[site.sid]['items'];
+									if (isEmpty(datas)) {
+										tableData[index]['yesterDaySky'] = '-';
+									} else {
+										tableData[index]['yesterDaySky'] = datas[0]['sky'];
+									}
+								});
+							}
 						}
 					} else if (targetUrl.match('/energy/sites')) {
 						const interval = targetUrl.match('day');
