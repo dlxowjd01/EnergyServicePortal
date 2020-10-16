@@ -56,10 +56,6 @@
 				<h2 class="ntit"><fmt:message key="gdash.3.yesterday"/></h2><span class="term"></span>
 				<ul id="yesterdaySum" class="sum-list mobile-visible"></ul>
 			</div>
-			<%--					<ul class="gtab-menu">--%>
-			<%--						<li class="active"><a href="#;">사업소별 현황</a></li>--%>
-			<%--						<li><a href="#;">유형별 발전 현황</a></li>--%>
-			<%--					</ul>--%>
 			<!-- 사업소별 현황 -->
 			<div class="inchart">
 				<div id="typeSiteCurrent"></div>

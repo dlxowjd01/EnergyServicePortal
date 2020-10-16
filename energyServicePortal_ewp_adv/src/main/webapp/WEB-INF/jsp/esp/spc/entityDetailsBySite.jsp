@@ -215,34 +215,32 @@
 <div class="modal fade" id="historyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
-			<div class="ly-wrapper">
-				<h2 class="ly_tit">SPC 원가관리 등록/수정 이력</h2>
-				<div class="spc-tbl ly-type">
-					<table id="hitoryTable">
-						<colgroup>
-							<col style="width:15%">
-							<col>
-						</colgroup>
-						<thead>
-						<tr>
-							<th>이름</th>
-							<th>사용 아이디</th>
-							<th>시작 시간</th>
-							<th>종료 시간</th>
-							<th>내용</th>
-						</tr>
-						</thead>
-						<tbody id="historyData">
-						<tr>
-							<td>[user_name]</td>
-							<td>[user_login_id]</td>
-							<td>[changed_start]</td>
-							<td>[changed_end]</td>
-							<td>[contents]</td>
-						</tr>
-						</tbody>
-					</table>
-				</div>
+			<h2 class="modal-title">SPC 원가관리 등록/수정 이력</h2>
+			<div class="spc-tbl ly-type">
+				<table id="hitoryTable">
+					<colgroup>
+						<col style="width:15%">
+						<col>
+					</colgroup>
+					<thead>
+					<tr>
+						<th>이름</th>
+						<th>사용 아이디</th>
+						<th>시작 시간</th>
+						<th>종료 시간</th>
+						<th>내용</th>
+					</tr>
+					</thead>
+					<tbody id="historyData">
+					<tr>
+						<td>[user_name]</td>
+						<td>[user_login_id]</td>
+						<td>[changed_start]</td>
+						<td>[changed_end]</td>
+						<td>[contents]</td>
+					</tr>
+					</tbody>
+				</table>
 			</div>
 			<div class="btn-wrap-type02">
 				<button type="button" class="btn-type" data-dismiss="modal" aria-label="Close">확인</button>

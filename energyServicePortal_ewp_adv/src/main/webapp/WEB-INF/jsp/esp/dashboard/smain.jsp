@@ -2358,6 +2358,7 @@
 					dids: deviceArray.toString()
 				}
 			}).done(function (data, textStatus, jqXHR) {
+				// #2 solar Dashboard
 				if (!isEmpty(option)){
 					let invType = new Array();
 					let sortedData;
@@ -2532,6 +2533,8 @@
 														value = Number(value);
 													} else if(el.suffix.match('%') || el.suffix.match('℃') || el.key.match("irradiationPoa")) {
 														value = Number(value);
+													} else if(el.suffix.match('V')){
+														value = Number(value);
 													}
 												}
 
@@ -2575,13 +2578,18 @@
 												if(isEmpty(value)) {
 													rowData[0][el.key] = '-';
 												} else {
-													if((el.suffix.match('W') || el.suffix.match('Wh')) && !el.key.match("irradiationPoa")) {
-														let dummy = displayNumberFixedUnit(value, 'W', 'kW', 2);
-														rowData[0][el.key] = dummy[0];
-													} else if(el.suffix.match('%') || el.suffix.match('℃') || el.key.match("irradiationPoa")) {
-														rowData[0][el.key] = value.toFixed(2);
-													} else if(el.suffix.match('V')) {
-														rowData[0][el.key] = value.toFixed(2);
+													if( el.key.match('activePower') || el.key.match('dcPower') ) {
+														let strVal = displayNumberFixedUnit(value, 'W', 'kW', 0, "round");
+														rowData[0][el.key] = strVal[0] + " " + strVal[1];
+													} else if( el.key.match('accumActiveEnergy') ){
+														// Unit: Wh => MWh
+														let strVal = displayNumberFixedUnit(value, 'Wh', 'MWh', 2, "round");
+														rowData[0][el.key] = strVal[0] + " " + strVal[1];
+													} else if(el.suffix.match('%') || el.key.match('temperature') || el.key.match("irradiationPoa") ) {
+														// Unit: percentage, celsius, meter square
+														rowData[0][el.key] = numberComma(value) + " " + el.suffix;
+													} else {
+														rowData[0][el.key] = value;
 													}
 												}
 											});
@@ -2607,24 +2615,31 @@
 
 						$.map(headerDataObject, function(el, device) {
 							$.map(el, function(element, key) {
-								let textValue = element.value,
-									suffix = element.suffix;
-								if(textValue != '-') {
+								let textValue = element.value;
+								let suffix = element.suffix;
+								if(textValue != '-' && !isEmpty(textValue) ) {
 									if(element.reducer == 'avg') {
 										textValue =  textValue / element.cnt;
 									}
 									if(!isEmpty(suffix)) {
-										textValue = displayNumberFixedDecimal(textValue, suffix, 3, 2);
+										if(key.match("accumActiveEnergy")) {
+											textValue = displayNumberFixedUnit(textValue, suffix, "MWh", 2, "round");
+										} else {
+											if(suffix == "W" || suffix == "Wh"){
+												textValue = displayNumberFixedUnit(textValue, "W", "kW", 0, "round");
+											} else {
+												if(!isEmpty(textValue)){
+													textValue = displayNumberFixedDecimal(textValue, suffix, 3, 2);
+												}
+											}
+										}
 									} else {
-										textValue = displayNumberFixedDecimal(textValue, "kWh", 3, 2);
+										textValue = [textValue, ""];
 									}
-
-									invItem.find('.table-type td.' + key + ' span:nth-child(1)').html(textValue[0]);
-									if(suffix == 'W' || suffix == 'Wh' || suffix == 'V' || suffix == 'A') {
-										invItem.find('.table-type td.' + key + ' span:nth-child(2)').html(textValue[1]);
-									}
+									invItem.find('.table-type td.' + key + ' span:nth-child(1)').html(textValue[0] + " " +  textValue[1]);
 								} else {
-									invItem.find('.table-type td.' + key + ' span:nth-child(1)').html(textValue);
+									invItem.find('.table-type td.' + key + ' span:nth-child(1)').html("-");
+									invItem.find('.table-type td.' + key + ' span:nth-child(2)').html("-");
 								}
 
 							});
@@ -2643,11 +2658,11 @@
 
 					});
 
-
 				} else {
+				// #1 site Dashboard
 					let deviceType = new Array();
 					let sortedData;
-					
+
 					if(!isEmpty(data) && Object.values(data)){
 						sortedData = Object.values(data);
 						sortedData.sortOn("dname");
@@ -2673,7 +2688,6 @@
 							}
 						}
 					});
-					
 
 					setMakeList(deviceType, 'typeList', { 'dataFunction': { 'head': makeHeadTable, 'body': makeBodyTable } });
 
@@ -2704,7 +2718,8 @@
 									}
 
 									rowData[0]['dname'] = dname;
-
+									
+						
 									$.map(featureProperties, function(val, key) {
 										let headerData = new Object();
 
@@ -2739,7 +2754,7 @@
 													}
 												}
 
-										
+
 												if(value == '-') {
 													if(tmpObj['cnt'] == Number){
 														if(!isEmpty(headerData[el.key])) {
@@ -2783,25 +2798,25 @@
 										if (key == dvcType) {
 											$.each(val.prop, function(i, el) {
 												let value = rowData[0][el.key];
-
-												// console.log("key===", key, "el===", el);
-
 												if(isEmpty(value)) {
 													rowData[0][el.key] = "-";
 												} else {
-													if((el.suffix.match('W') || el.suffix.match('Wh')) && !el.key.match("irradiationPoa")) {
-														let dummy = displayNumberFixedUnit(value, 'W', 'kW', 2);
-														rowData[0][el.key] = dummy[0];
-													} else if(el.suffix.match('%') || el.key.match('temperature') || el.key.match("irradiationPoa")) {
-														rowData[0][el.key] = value.toFixed(2);
-													} else if(el.suffix.match('V')) {
-														rowData[0][el.key] = value.toFixed(2);
+													if( el.key.match('activePower') || el.key.match('dcPower') ) {
+														// Unit: W => kW,  Wh => kWh
+														let strVal = displayNumberFixedUnit(value, 'W', 'kW', 0, "round");
+														rowData[0][el.key] = strVal[0] + " " + strVal[1];
+													} else if( el.key.match('accumActiveEnergy') ){
+														// Unit: Wh => MWh
+														let strVal = displayNumberFixedUnit(value, 'Wh', 'MWh', 2, "round");
+														rowData[0][el.key] = strVal[0] + " " + strVal[1];
+													} else {
+														// Unit: percentage, celsius, meter square
+														rowData[0][el.key] = displayNumberFixedDecimal(value, el.suffix, 3, 2)[0] + " " + el.suffix;
 													}
 												}
 											});
 										}
 									});
-												
 
 									if (deviceSearch(dname, operation)) {
 										if(isEmpty(tableArray)) {
@@ -2822,28 +2837,42 @@
 							let deviceType = device;
 
 							$.map(el, function(element, key) {
-								let textValue = element.value,
-									suffix = element.suffix;
-								if(textValue != '-') {
+								let textValue = element.value;
+								let suffix = element.suffix;
+
+								if(textValue != '-' && !isEmpty(textValue)) {
 									if(element.reducer == 'avg') {
-										textValue =  textValue / element.cnt;
+										textValue = (textValue / element.cnt);
 									}
 									if(!isEmpty(suffix)) {
-										textValue = displayNumberFixedDecimal(textValue, suffix, 3, 2);
+										if(key.match("accumActiveEnergy")) {
+											textValue = displayNumberFixedUnit(textValue, suffix, "MWh", 2, "round");
+										} else {
+											if(suffix == "W" || suffix == "Wh"){
+												textValue = displayNumberFixedUnit(textValue, "W", "kW", 0, "round");
+											} else {
+												textValue = displayNumberFixedDecimal(textValue, suffix, 3, 2);
+											}
+										}
 									} else {
 										textValue = [textValue, ""];
 									}
 
-									$('#typeList').find('.' + deviceType).find('.table-type td.' + key + ' span:nth-child(1)').html(textValue[0]);
-									if(suffix == 'W' || suffix == 'Wh' || suffix == 'V' || suffix == 'A') {
-										$('#typeList').find('.' + deviceType).find('.table-type td.' + key + ' span:nth-child(2)').html(textValue[1]);
-									}
+									$('#typeList').find('.' + deviceType).find('.table-type td.' + key + ' span:nth-child(1)').html(textValue[0] + " " +  textValue[1]);
+									// $('#typeList').find('.' + deviceType).find('.table-type td.' + key + ' span:nth-child(1)').html(textValue[0]);
+									// if(suffix == 'W' || suffix == 'Wh') {
+									// 	$('#typeList').find('.' + deviceType).find('.table-type td.' + key + ' span:nth-child(1)').html(textValue[0] + " " +  textValue[1]);
+									// } else if(suffix == 'V' || suffix == 'A'){
+									// 	$('#typeList').find('.' + deviceType).find('.table-type td.' + key + ' span:nth-child(1)').html(textValue[0] + " " +  textValue[1]);
+									// } 
+
 								} else {
-									$('#typeList').find('.' + deviceType).find('.table-type td.' + key + ' span:nth-child(1)').html(textValue);
+									$('#typeList').find('.' + deviceType).find('.table-type td.' + key + ' span:nth-child(1)').html("-");
 								}
 
 							});
-						});
+						});				
+
 						let deviceCnt = tableArray.length;
 
 						$('#typeList').find('.' + dvcType).find('.ntit span').html(deviceCnt);

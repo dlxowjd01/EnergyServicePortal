@@ -970,11 +970,12 @@
 		let option = {
 			chart: {
 				renderTo: 'chart_analysis',
+				marginTop: 60,
 				marginLeft: 60,
 				marginRight: 20,
+				marginBottom: 0,
 				type: 'column',
 				backgroundColor: 'transparent',
-				height: 470
 			},
 			navigation: {
 				buttonOptions: {
@@ -1032,25 +1033,26 @@
 			},
 			legend: {
 				enabled: false,
-				align: 'right',
-				verticalAlign: 'top',
-				x: 5,
-				y: -15,
-				itemStyle: {
-					color: 'var(--white)',
-					fontSize: '10px',
-					fontWeight: 400
-				},
-				itemHoverStyle: {
-					color: ''
-				},
-				symbolPadding: 3,
-				symbolHeight: 8
+				// align: 'right',
+				// verticalAlign: 'top',
+				// x: 5,
+				// y: -15,
+				// itemStyle: {
+				// 	color: 'var(--white)',
+				// 	fontSize: '10px',
+				// 	fontWeight: 400
+				// },
+				// itemHoverStyle: {
+				// 	color: ''
+				// },
+				// symbolPadding: 3,
+				// symbolHeight: 7
 			},
 			tooltip: {
 				formatter: function () {
 					return this.points.reduce(function (s, point) {
-						return s + '<br/> <span style="color:' + point.color + '">\u25CF</span> 비교 결과 : ' + Number(point.y).toFixed(2) + point.series.userOptions.tooltip.valueSuffix;
+						let val =  String(Number(point.y).toFixed(2)) + point.series.userOptions.tooltip.valueSuffix;
+						return s + '<br/><span style="color:' + point.color + '">\u25CF</span>  비교 결과 : ' + val;
 					}, '<b>' + dateFormat(this.x) + '</b>');
 				},
 				shared: true,
@@ -1157,7 +1159,7 @@
 <div class="row">
 	<div id="siteList" class="dropdown-wrapper col-lg-2 col-md-4 col-sm-3">
 		<div class="dropdown" id="selectSiteList">
-			<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택해주세요.">
+			<button type="button" class="dropdown-toggle w-100" data-toggle="dropdown" data-name="선택해주세요.">
 				선택해주세요.<span class="caret"></span>
 			</button>
 			<ul class="dropdown-menu dropdown-menu-form chk-type" role="menu" id="siteULList">

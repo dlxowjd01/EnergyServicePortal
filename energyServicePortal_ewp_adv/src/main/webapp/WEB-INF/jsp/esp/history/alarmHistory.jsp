@@ -281,6 +281,7 @@
 							</div>
 						</div>
 					</div>
+										
 					<div class="btn-wrap-type02">
 						<button type="button" class="btn-type03 w80" onclick="$('#searchDetail').removeClass('open')">취소</button><!--
 					--><button type="button" class="btn-type w80" onclick="$('#searchDetail').removeClass('open')">적용</button>

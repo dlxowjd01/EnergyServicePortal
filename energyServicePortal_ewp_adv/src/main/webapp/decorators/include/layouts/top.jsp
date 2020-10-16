@@ -45,8 +45,6 @@
 <!-- <script type="text/javascript" src="/js/modules/highstock-exporting.js"></script> -->
 <script type="text/javascript" src="/js/modules/exporting.js"></script>
 <script type="text/javascript" src="/js/modules/export-data.js"></script>
-<!-- 텝메뉴 용 -->
-<script type="text/javascript" src="/js/sectionDisplay.js"></script>
 <script type="text/javascript" src="/js/common.js"></script>
 
 <script type="text/javascript" src="/js/custom/utils.js"></script>

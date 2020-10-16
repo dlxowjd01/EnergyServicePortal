@@ -908,7 +908,7 @@
 	<div class="modal-dialog history-alarm">
 		<!-- Modal content-->
 		<div class="modal-content">
-			<div class="ly-wrapper">
+			<div class="modal-title center">
 				<h2 class="ly_tit" style="text-align: center;">처리중...</h2>
 			</div>
 		</div>

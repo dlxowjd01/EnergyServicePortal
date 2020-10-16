@@ -50,8 +50,8 @@
 						</ul>
 					</div>
 					<p class="table-text">오차 계산 데이터 필터</p>
-					<div class="dropdown mb-10" id="ignore_ref">
-						<button type="button" class="dropdown-toggle" data-toggle="dropdown">
+					<div class="dropdown mb-16" id="ignore_ref">
+						<button type="button" class="dropdown-toggle w-100" data-toggle="dropdown">
 							용량 대비 발전량 % 이상<span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu">

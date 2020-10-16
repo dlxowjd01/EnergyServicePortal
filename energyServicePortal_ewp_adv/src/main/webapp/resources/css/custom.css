@@ -810,22 +810,22 @@ a.btn-text-blue,
 }
 
 .btn-type07 {
-	padding: 0 12px 0 6px;
+	padding: 2px 12px 0 6px;
 	font-size: 13px;
 	line-height: 24px;
 	color: var(--white60);
 	border: 0;
 	background: none;
-	vertical-align: top;
+	vertical-align: middle;
 	cursor: pointer;
 }
 
 .btn-type07:before {
 	display: inline-block;
-	margin: 7px 7px 0 0;
+	margin: 1px 7px 0 0;
 	width: 18px;
 	height: 12px;
-	vertical-align: top;
+	vertical-align: middle;
 	background: var(--ico-delete) no-repeat;
 	background-size: 9px;
 	content: "";
@@ -1307,6 +1307,10 @@ table tbody td .dropdown-menu {
 	margin-bottom: 10px;
 }
 
+.mb-16 {
+	margin-bottom: 20px;
+}
+
 .mb-20 {
 	margin-bottom: 20px;
 }
@@ -1589,6 +1593,55 @@ table tbody td .dropdown-menu {
 .w300 {
 	width: 300px !important;
 }
+
+
+/* TO DO!!!!!!! */
+.yield-list .dropdown .dropdown-toggle,
+.yield-list,
+.collect-modal-content .dropdown .dropdown-toggle,
+.setting-form .text-input-type.dropdown:not(.offset-width):not(.offset-73),
+.user-modal-content .dropdown:not(.offset-width),
+.user-modal-content .dropdown-toggle,
+.site-modal-content .dataTables_wrapper .dropdown-toggle,
+.chart-table .table-desktop,
+.indiv.table-diagnosis .table-wrapper #tableDesktop,
+.indiv.chart-pv.fixed .inchart,
+.table-site table,
+.local-info table,
+.gmain-map2-content-kpx,
+.gmain-table .gmain-wrap table,
+.smain-cal .calendar,
+.table-type table,
+.dropdown-wrapper .btn,
+.toggle-box .dropdown,
+.toggle-box .btn,
+.img-wrapper .img-group img,
+.search-select-item .dropdown-toggle,
+.alarm-modal-content .flex-align-top,
+.alarm-modal-content .flex-start .input-label + .dropdown>.dropdown-toggle,
+.report-modal-content .flex-start .dropdown-toggle,
+.report-modal-content .dropdown,
+.report-modal-content .sel,
+.spc-table-row table,
+.spc-transaction .table-footer .sa-select .dropdown,
+.spc-transaction .table-footer .sa-select .dropdown-toggle,
+.spc-search-bar .align-group3 .dropdown-toggle,
+.spc-modal-content .modal-body .dropdown-toggle,
+.spc-modal-content .flex-start .text-input-type>input[type="text"],
+.spc-modal-content .flex-start2 .sel,
+.spc-modal-content .flex-start .textarea,
+.spc-modal-content,
+.indiv.spc-detail02 .img-wrapper>*,
+.align-group2>.box-align .dropdown-toggle,
+.align-group2>.sel-calendar .box-align,
+.align-group3 .box-align .dropdown-toggle,
+.compare-box .btn,
+.compare-box .sel,
+.modal-body .input-group,
+.device-modal .modal-content .textarea {
+	width: 100%;
+}
+
 
 /* common */
 #mask {
@@ -3069,10 +3122,6 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 	width: 109px;
 }
 
-.modal-body .input-group {
-	width: 100%;
-}
-
 .modal-body .sub-title {
 	font-size: 14px;
 	font-weight: bold;
@@ -3122,10 +3171,6 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 
 .modal-dialog.alarm-modal {
 	width: 80%;
-}
-
-.device-modal .modal-content .textarea {
-	width: 100%;
 }
 
 .device-modal .modal-content .input-group {
@@ -3246,10 +3291,6 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 	width: calc(100% - 74px);
 }
 
-.setting-form .text-input-type.dropdown:not(.offset-width):not(.offset-73) {
-	width: 100%;
-}
-
 /* addUserModal */
 
 .user-modal-content {
@@ -3290,11 +3331,6 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 
 .user-modal-content .btn-wrap-type02 {
 	margin-top: 0;
-}
-
-.user-modal-content .dropdown:not(.offset-width),
-.user-modal-content .dropdown-toggle {
-	width: 100%;
 }
 
 .user-modal-content .dropdown-menu {
@@ -3430,10 +3466,6 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 .site-modal-content .dataTables_wrapper .dropdown-menu .chk-type label {
 	text-overflow: ellipsis;
 	overflow: hidden;
-}
-
-.site-modal-content .dataTables_wrapper .dropdown-toggle {
-	width: 100%;
 }
 
 .site-modal-content .dropdown+.dropdown {
@@ -4186,10 +4218,6 @@ input.inp[readonly]:focus {
 
 /* PC용 */
 
-.chart-table .table-desktop {
-	width: 100%;
-}
-
 .chart-table .table-desktop thead {
 	background: var(--box-darker);
 }
@@ -4243,58 +4271,6 @@ input.inp[readonly]:focus {
 	text-align: left;
 }
 
-/* DR 실적 현황용 테이블 */
-
-.chart-table .dr-use {
-	width: 100%;
-}
-
-.chart-table .dr-use thead {
-	background: var(--porcelain);
-}
-
-.chart-table .dr-use thead th {
-	font-size: 13px;
-	color: var(--dark-grey);
-	font-weight: bold;
-}
-
-.chart-table .dr-use thead tr th:first-child {
-	border-radius: 200px 0 0 200px;
-}
-
-.chart-table .dr-use thead tr th:last-child {
-	min-width: 70px;
-	border-radius: 0 200px 200px 0;
-}
-
-.chart-table .dr-use th,
-.chart-table.dr-use td {
-	height: 48px;
-	line-height: 48px;
-	padding: 0 5px;
-	color: var(--river-bed);
-	font-size: 14px;
-	text-align: center;
-	white-space: nowrap;
-}
-
-.chart-table .dr-use tbody tr:nth-child(2n) td {
-	background: var(--porcelain);
-}
-
-.chart-table .dr-use tbody tr:nth-child(2n) td:first-child {
-	border-radius: 200px 0 0 200px;
-}
-
-.chart-table .dr-use tbody tr:nth-child(2n) td:last-child {
-	border-radius: 0 200px 200px 0;
-}
-
-.chart-table2 {
-	display: none;
-}
-
 .table-operation-wrapper:last-of-type {
 	margin: 40px auto;
 	padding-top: 30px;
@@ -4316,7 +4292,7 @@ input.inp[readonly]:focus {
 }
 
 .indiv.chart-diagnosis {
-	min-height: 475px;
+	min-height: 508px;
 }
 
 .indiv.table-diagnosis {
@@ -4328,7 +4304,7 @@ input.inp[readonly]:focus {
 }
 
 .indiv.chart-diagnosis.fixed {
-	height: 580px;
+	height: 615px;
 }
 
 .indiv.table-diagnosis.fixed {
@@ -4344,10 +4320,6 @@ input.inp[readonly]:focus {
 	display: table;
 }
 
-.indiv.table-diagnosis .table-wrapper #tableDesktop {
-	width: 100%;
-}
-
 .indiv.chart-pv {
 	min-height: 146px;
 }
@@ -4355,10 +4327,6 @@ input.inp[readonly]:focus {
 .indiv.chart-pv.fixed {
 	/* height: 600px; */
 	height: 100%;
-}
-
-.indiv.chart-pv.fixed .inchart {
-	width: 100%;
 }
 
 .indiv.chart-pv.fixed .inchart #chart2 {
@@ -4484,35 +4452,6 @@ input.inp[readonly]:focus {
 	height: 560px;
 }
 
-/* 장치 모니터링 => 텝메뉴 */
-
-.tab-menu {
-	font-size: 0;
-	margin-right: 30px;
-}
-
-.tab-menu li {
-	display: inline-block;
-}
-
-.tab-menu li+li {
-	margin-left: 30px !important;
-}
-
-.tab-menu li a {
-	display: inline-block;
-	height: 36px;
-	line-height: 36px;
-	font-size: 16px;
-	color: var(--grey);
-	padding-left: 34px;
-	background: url("/img/tab_check.png") no-repeat 0 center;
-}
-
-.tab-menu li.active a {
-	background: url("/img/tab_check_on.png") no-repeat 0 center;
-}
-
 .table-default tbody tr.click th,
 .table-default tbody tr.click td,
 .table-box tbody tr.click th,
@@ -4533,10 +4472,6 @@ input.inp[readonly]:focus {
 
 .table-site {
 	overflow-x: auto;
-}
-
-.table-site table {
-	width: 100%;
 }
 
 .table-site table thead {
@@ -4923,7 +4858,7 @@ input.inp[readonly]:focus {
 	text-align: left;
 	margin: auto;
 	padding-right: 6px;
-	background: url("/img/battery_bg.png") no-repeat 0 0;
+	background: var(--bg-battery-cover) no-repeat 0 0;
 }
 
 .soc .battery span {
@@ -5121,17 +5056,6 @@ input.inp[readonly]:focus {
 	margin: 6px 0 20px;
 }
 
-.gmain-chart .gtab-menu {
-	font-size: 0;
-	width: 100%;
-}
-
-.gmain-chart .gtab-menu li {
-	display: inline-block;
-	text-align: left;
-	vertical-align: top;
-}
-
 .gmain-chart .sum-list {
 	display: flex;
 	flex-wrap: wrap;
@@ -5151,35 +5075,6 @@ input.inp[readonly]:focus {
 
 .gmain-chart .sum-list li+li {
 	margin-left: 20px;
-}
-
-.gmain-chart .gtab-menu li:first-child {
-	position: relative;
-	margin-right: 30px;
-}
-
-.gmain-chart .gtab-menu li:first-child:after {
-	position: absolute;
-	top: 0;
-	right: -15px;
-	display: block;
-	content: "";
-	width: 1px;
-	height: 20px;
-	background: var(--dove-gray);
-}
-
-.gmain-chart .gtab-menu li a {
-	display: block;
-	font-size: 18px;
-	color: var(--white87);
-	font-weight: 600;
-}
-
-.gmain-chart .gtab-menu li.active a,
-.gmain-chart .gtab-menu li:hover a {
-	color: var(--white87);
-	font-weight: bold;
 }
 
 .gmain-chart .chart-sa {
@@ -5349,10 +5244,6 @@ input.inp[readonly]:focus {
 
 /* 지역별 정보 */
 
-.local-info table {
-	width: 100%;
-}
-
 .local-info table th {
 	font-size: 13px;
 	color: var(--white87);
@@ -5486,10 +5377,6 @@ input.inp[readonly]:focus {
 
 .gmain-map2-content {
 	width: 48%;
-}
-
-.gmain-map2-content-kpx {
-	width: 100%;
 }
 
 .gmain-table {
@@ -5660,10 +5547,6 @@ input.inp[readonly]:focus {
 .gmain-table .gmain-wrap .intable th .btn-align {
 	white-space: normal;
 	background: var(--box-color);
-}
-
-.gmain-table .gmain-wrap table {
-	width: 100%;
 }
 
 .gmain-table .gmain-wrap table thead th {
@@ -6017,15 +5900,6 @@ div.di-wrap dl dd .error div p {
 	line-height: 26px;
 }
 
-.gmain-chart .gtab-menu {
-	margin-top: 10px;
-}
-
-.gmain-chart .gtab-menu li a {
-	font-size: 15px;
-	font-weight: 300;
-}
-
 /* 중개거래자원 모니터링 */
 
 .jmain-center2 {
@@ -6178,15 +6052,12 @@ div.di-wrap dl dd .error div p {
 	max-height: 487px;
 }
 
-.smain-cal .calendar {
-	width: 100%;
-}
-
 .smain-cal .calendar tr {
 	border-bottom: solid 1px rgba(36, 36, 36, 0.25);
 }
 
-.smain-cal .calendar tr:not(:first-child) {
+.smain-cal .calendar tbody tr td {
+	width: 92px;
 	height: 92px;
 }
 
@@ -6213,6 +6084,12 @@ div.di-wrap dl dd .error div p {
 	font-size: 11px;
 }
 
+.smain-cal .calendar tbody td>div em:nth-child(2) {
+	margin-left: 4px;
+	color: var(--white60);
+	font-size: 12px;
+}
+
 .smain-cal .calendar tbody td div em .day {
 	margin-right: 16px;
 	font-weight: bold;
@@ -6221,10 +6098,11 @@ div.di-wrap dl dd .error div p {
 
 .smain-cal .calendar tbody td div .wicon {
 	padding: 15px 0px 10px;
-	color: var(--white);
+	color: var(--white); 
 }
 
 .smain-cal .calendar tbody td span {
+	display: inline-flex;
 	white-space: nowrap;
 	color: var(--white);
 	font-size: 11px;
@@ -6237,10 +6115,10 @@ div.di-wrap dl dd .error div p {
 }
 
 .smain-cal .calendar tbody td span em {
-	float: right;
+	margin-left: 4px;
 	color: var(--white60);
 	line-height: 16px;
-	font-size: 10px;
+	font-size: 12px;
 }
 
 .smain-cal .calendar tbody td.disabled em {
@@ -6632,6 +6510,7 @@ div.di-wrap dl dd .error div p {
 	height: 100%;
 	filter: invert(0.6);
 	background: var(--ico-add-svg) no-repeat center;
+	background-size: 24px;
 }
 
 .device-list li.text-black.active {
@@ -7570,10 +7449,6 @@ div.di-wrap dl dd .error div p {
 	margin-top: 15px;
 }
 
-.table-type table {
-	width: 100%;
-}
-
 .table-type th,
 .table-type td {
 	height: 25px;
@@ -7739,10 +7614,6 @@ div.di-wrap dl dd .error div p {
 }
 
 /* 발전 */
-
-.dropdown-wrapper .btn {
-	width: 100%;
-}
 
 .dropdown-wrapper .dropdown-cov {
 	width: auto;
@@ -8026,8 +7897,9 @@ div.di-wrap dl dd .error div p {
 }
 
 .toggle-box .table-text {
-	font-size: 13px;
+	margin-top: 6px;
 	color: var(--white60);
+	font-size: 13px;
 	line-height: 36px;
 }
 
@@ -8043,22 +7915,19 @@ div.di-wrap dl dd .error div p {
 .toggle-box .btn-caret:after {
 	display: block;
 	position: relative;
-	margin: -25px 0 0 6px;
+	margin: -19px 0 0 6px;
 	width: 9px;
 	height: 9px;
 	border: 2px solid var(--white87);
 	border-left: 0;
 	border-top: 0;
 	content: "";
-	transform: rotate(45deg);
+	transform: rotate(225deg);
 }
 
 .toggle-box .btn-caret.on:after {
-	transform: rotate(225deg)
-}
-
-.toggle-box .dropdown {
-	width: 100%;
+	margin: -14px 0 0 6px;
+	transform: rotate(45deg);
 }
 
 .table-fold-container {
@@ -8086,12 +7955,8 @@ div.di-wrap dl dd .error div p {
 	line-height: 24px;
 }
 
-.toggle-box .btn {
-	width: 100%;
-}
-
 .table-fold-container .btn-type {
-	margin-top: 16px;
+	margin-top: 24px;
 }
 
 .chart-legend-wrapper {
@@ -8412,10 +8277,6 @@ button.text-file {
 	margin-left: 0;
 }
 
-.img-wrapper .img-group img {
-	width: 100%;
-}
-
 .img-wrapper .img-group .btn-img-close {
 	position: absolute;
 	top: 8px;
@@ -8499,10 +8360,6 @@ button.text-file {
 
 .search-select-item:first-child {
 	margin-right: 16px;
-}
-
-.search-select-item .dropdown-toggle {
-	width: 100%;
 }
 
 .search-input-wrapper {
@@ -8721,33 +8578,11 @@ button.text-file {
 	height: 100%;
 }
 
-.alarm-modal-content .flex-align-top {
-	width: 100%;
-}
-
-.alarm-modal-content .flex-start {
-	margin-top: 24px;
-}
-
-.alarm-modal-content .flex-start .input-label + .text-input-type {
-	width: calc(20% + 119px);
-}
 
 .alarm-modal-content .flex-start .input-label + .dropdown {
 	width: calc(40% + 12px);
 }
 
-.alarm-modal-content .flex-start .input-label + .dropdown>.dropdown-toggle {
-	width: 100%;
-}
-
-.alarm-modal-content .flex-start .dropdown + .text-input-type {
-	margin-left: 12px;
-}
-
-.alarm-modal-content .flex-start .text-input-type + .btn-wrapper {
-	margin: 0 0 0 12px;
-}
 
 .alarm-modal-content .textarea {
 	color: var(--white87);
@@ -8761,9 +8596,6 @@ button.text-file {
 .report-modal-content .flex-start {
 	margin: 18px 34px;
 }
-.report-modal-content .flex-start .dropdown-toggle {
-	width: 100%;
-}
 
 .report-modal-content .input-label {
 	width: 125px;
@@ -8771,11 +8603,6 @@ button.text-file {
 
 .report-modal-content .input-label.short + .btn-text-blue {
 	margin: 0 3px 0 -30px;
-}
-
-.report-modal-content .dropdown,
-.report-modal-content .sel {
-	width: 100%;
 }
 
 .report-modal-content .text-input-type,
@@ -9054,7 +8881,7 @@ button.text-file {
 .spc-balance-post .sel {
 	padding: 0;
 	width: 100%;
-	background: url("/img/sel_down_dark.png") no-repeat right 12px top 13px;
+	background: var(--collapse-arrow) no-repeat right 12px top 13px;
 	text-align: center;
 }
 
@@ -9224,10 +9051,6 @@ th .btn-align {
 	opacity: 0.7;
 }
 
-.spc-table-row table {
-	width: 100%;
-}
-
 .report-detail-box table {
 	table-layout: fixed;
 	width: 100%;
@@ -9375,11 +9198,6 @@ th .btn-align {
 	padding: 8px 10px 0;
 }
 
-.spc-transaction .table-footer .sa-select .dropdown,
-.spc-transaction .table-footer .sa-select .dropdown-toggle {
-	width: 100%;
-}
-
 .spc-transaction .table-footer .clear-input {
 	width: 100%;
 	padding-right: 6px;
@@ -9500,10 +9318,6 @@ table.table-footer tfoot td.light {
 	width: 127px;
 }
 
-.spc-search-bar .align-group3 .dropdown-toggle {
-	width: 100%;
-}
-
 .spc-search-bar .align-group3 .dropdown:last-of-type {
 	width: 30%;
 }
@@ -9617,10 +9431,6 @@ table.table-footer tfoot td.light {
 	right: 20px;
 }
 
-.indiv.spc-detail02 .img-wrapper>* {
-	width: 100%;
-}
-
 /* spc 점검계획 등록 */
 
 .dropdown-modal {
@@ -9686,7 +9496,7 @@ table.table-footer tfoot td.light {
 }
 
 .modal-content.spc-detail-content li.alarm-item a .btn-next {
-	background: url("/img/btn-next.png") no-repeat;
+	background: var(--ico-next-page) no-repeat;
 	width: 24px;
 	height: 24px;
 	display: inline-block;
@@ -9709,10 +9519,6 @@ table.table-footer tfoot td.light {
 	content: "";
 }
 
-.spc-modal-content {
-	width: 100%;
-}
-
 .spc-modal-content .modal-body .row:first-of-type {
 	padding: 0;
 }
@@ -9732,10 +9538,6 @@ table.table-footer tfoot td.light {
 .spc-modal-content .modal-body .row.end .dropdown,
 .spc-modal-content .modal-body .row.end .dropdown + .sel-calendar {
 	width: calc(45% - 24px);
-}
-
-.spc-modal-content .modal-body .dropdown-toggle {
-	width: 100%;
 }
 
 .spc-modal-content .textarea {
@@ -9792,18 +9594,6 @@ table.table-footer tfoot td.light {
 .spc-modal-content .flex-start .text-input-type,
 .spc-modal-content .flex-start .dropdown .btn {
 	width: 250px;
-}
-
-.spc-modal-content .flex-start .text-input-type>input[type="text"] {
-	width: 100%;
-}
-
-.spc-modal-content .flex-start .textarea {
-	width: 100%
-}
-
-.spc-modal-content .flex-start2 .sel {
-	width: 100%;
 }
 
 .spc-modal-content .flex-start2 .sel.disabled {
@@ -9976,8 +9766,10 @@ table.table-footer tfoot td.light {
 	color: var(--white60);
 }
 
-.entity-wrapper.post table .text-file a+button {
+.entity-wrapper.post table .text-file a + button,
+.entity-wrapper.post table .text-file + button {
 	float: right;
+	margin-top: -23px;
 }
 
 .entity-wrapper.post fieldset.flex-start,
@@ -10248,21 +10040,12 @@ table.table-footer tfoot td.light {
 	width: 30%;
 }
 
-.align-group2>.box-align .dropdown-toggle,
-.align-group2>.sel-calendar .box-align {
-	width: 100%;
-}
-
 .align-group3 .box-align {
 	width: 35%;
 }
 
 .align-group3 .box-align:last-child {
 	width: 30%;
-}
-
-.align-group3 .box-align .dropdown-toggle {
-	width: 100%;
 }
 
 .box-align {
@@ -10281,11 +10064,6 @@ table.table-footer tfoot td.light {
 .compare-input input:checked+label,
 .compare-input input:checked+label {
 	color: var(--white87);
-}
-
-.compare-box .btn,
-.compare-box .sel {
-	width: 100%;
 }
 
 .compare-btn-wrapper {
@@ -10327,14 +10105,14 @@ table.table-footer tfoot td.light {
 	width: 200px;
 }
 
-.yield-list {
-	width: 100%;
-}
-
 .yield-list>li {
 	margin-top: 20px;
 	display: inline-flex;
 	flex-shrink: 0;
+}
+
+.yield-list>li:nth-child(odd){
+	margin-right: 100px;
 }
 
 .yield-list>li:first-child {
@@ -10349,10 +10127,6 @@ table.table-footer tfoot td.light {
 
 .yield-list .dropdown {
 	width: 200px;
-}
-
-.yield-list .dropdown .dropdown-toggle {
-	width: 100%;
 }
 
 .yield-list .text-input-type {

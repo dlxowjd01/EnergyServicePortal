@@ -589,24 +589,6 @@ function deviceExcelDownload(excelName, e, gbn) {
 	}
 }
 
-//2020-02-07 박진형 xls download
-function exportExcel(infoName) {
-	if ('drResult' != infoName) {
-		drawExcelTable(); //엑셀테이블 그리기
-	}
-
-	// step 1. workbook 생성
-	var wb = XLSX.utils.book_new();
-	// step 2. 시트 만들기
-	var newWorksheet = excelHandler.getWorksheet(infoName);
-	// step 3. workbook에 새로만든 워크시트에 이름을 주고 붙인다.
-	XLSX.utils.book_append_sheet(wb, newWorksheet, excelHandler.getSheetName(infoName));
-	// step 4. 엑셀 파일 만들기
-	var wbout = XLSX.write(wb, {bookType: 'xlsx', type: 'binary'});
-	// step 5. 엑셀 파일 내보내기
-	saveAs(new Blob([s2ab(wbout)], {type: "application/octet-stream"}), excelHandler.getExcelFileName(infoName));
-}
-
 var excelHandler = {
 	getExcelFileName: function (infoName) {
 		var downTmsp = (new Date()).format("yyyyMMddHHmmss");

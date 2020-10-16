@@ -850,8 +850,28 @@
 					$(this).find('.t-value').text(dName);
 				} else {
 					if (!isEmpty(resultData) && !isEmpty(resultData[liData])) {
-						let dValue = displayNumberFixedDecimal(resultData[liData], suffix, 3, 2);
-						dValue = dValue[0] != '-' ? dValue[0] + ' ' + suffix : dValue[0];
+						let dValue = '';
+
+						if(liData.match("activePower") || liData.match("dcPower")){
+							let rounded = Math.round(resultData[liData]);
+							if(rounded < 1000){
+								let tempVal = displayNumberFixedUnit(resultData[liData], suffix, suffix, 2, "round");
+								tempVal[0] != '-' ? ( dValue = tempVal[0] + ' ' + tempVal[1] ) : ( dValue = tempVal[0] );
+							} else if(rounded >= 1000 && rounded < 1000000){
+								let tempVal = displayNumberFixedUnit(resultData[liData], suffix, "kW", 0, "round");
+								tempVal[0] != '-' ? ( dValue = tempVal[0] + ' ' + tempVal[1] ) : ( dValue = tempVal[0] );
+							} else if(rounded >= 1000000 && rounded < 1000000000){
+								let tempVal = displayNumberFixedUnit(resultData[liData], suffix, "MW", 2, "round");
+								console.log("tempVal==", tempVal, "suffix=", suffix )
+								tempVal[0] != '-' ? ( dValue = tempVal[0] + ' ' + tempVal[1] ) : ( dValue = tempVal[0] );
+							} else if(rounded >= 1000000000){
+								let tempVal = displayNumberFixedUnit(resultData[liData], suffix, "GW", 2, "round");
+								tempVal[0] != '-' ? ( dValue = tempVal[0] + ' ' + tempVal[1] ) : ( dValue = tempVal[0] );
+							}
+						} else {
+							let tempVal = displayNumberFixedDecimal(resultData[liData], suffix, 3, 2);
+							dValue = tempVal[0] != '-' ? tempVal[0] + ' ' + tempVal[1] : tempVal[0];
+						}
 						$(this).find('.t-value').text(dValue);
 					} else {
 						$(this).find('.t-value').text('-');
@@ -864,8 +884,26 @@
 					suffix = $(this).data('suffix');
 
 				if (!isEmpty(resultData) && !isEmpty(resultData[liData])) {
-					let dValue = displayNumberFixedDecimal(resultData[liData], suffix, 3, 2);
-					dValue = dValue[0] != '-' ? dValue[0] + ' ' + suffix : dValue[0];
+					let dValue = '';
+					if(liData.match("accumActiveEnergy")){
+						let rounded = Math.round(resultData[liData]);
+						if(rounded < 1000){
+							let tempVal = displayNumberFixedUnit(resultData[liData], suffix, suffix, 2, "round");
+							tempVal[0] != '-' ? ( dValue = tempVal[0] + ' ' + tempVal[1] ) : ( dValue = tempVal[0] );
+						} else if(rounded >= 1000 && rounded < 1000000){
+							let tempVal = displayNumberFixedUnit(resultData[liData], suffix, "kWh", 0, "round");
+							tempVal[0] != '-' ? ( dValue = tempVal[0] + ' ' + tempVal[1] ) : ( dValue = tempVal[0] );
+						} else if(rounded >= 1000000 && rounded < 1000000000){
+							let tempVal = displayNumberFixedUnit(resultData[liData], suffix, "MWh", 2, "round");
+							tempVal[0] != '-' ? ( dValue = tempVal[0] + ' ' + tempVal[1] ) : ( dValue = tempVal[0] );
+						} else if(rounded >= 1000000000){
+							let tempVal = displayNumberFixedUnit(resultData[liData], suffix, "GWh", 2, "round");
+							tempVal[0] != '-' ? ( dValue = tempVal[0] + ' ' + tempVal[1] ) : ( dValue = tempVal[0] );
+						}
+					} else {
+						let tempVal = displayNumberFixedDecimal(resultData[liData], suffix, 3, 2);
+						dValue = tempVal[0] != '-' ? tempVal[0] + ' ' + tempVal[1] : tempVal[0];
+					}
 					$(this).find('.di-li-text').text(dValue);
 				} else {
 					$(this).find('.di-li-text').text('-');
