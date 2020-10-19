@@ -60,6 +60,18 @@
 		$("#groupList li").on( 'click', function(){
 			if(!isEmpty($(this).data("name"))){
 				filterColumn( "#groupTable", "1", $(this).data("name"));
+				let tr = $("#groupTable").find("tbody tr.selected");
+				let btn = $("#btnGroup").find(".btn-type03");
+				console.log("tr===", tr.length)
+				if(tr.length <= 0){		
+					btn.each(function(index, element){
+						$(this).prop("disabled", true);
+					});
+				} else {
+					btn.each(function(index, element){
+						$(this).prop("disabled", false);
+					});
+				}
 			} else {
 				filterColumn("#groupTable", "1", "");
 			}
