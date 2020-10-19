@@ -18,7 +18,6 @@
 		<div class="col-12">
 			<div class="flex-start">
 				<div class="dropdown">
-					<!-- <button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="2" disabled>태양광 #2<span class="caret"></span></button> -->
 					<button type="button" class="dropdown-toggle" data-toggle="dropdown" disabled><span class="caret"></span></button>
 					<ul id="viewOptList" class="dropdown-menu" role="menu">
 						<li data-value="1" data-name="사이트 대시보드 #1"><a href="#" tabindex="-1">사이트 대시보드 #1</a></li>
@@ -127,7 +126,7 @@
 														<em id="calWeatherValue_${day }"></em>
 													</div>
 													<div id="calWeatherIcon_${day }" class="wicon"></div>
-													<span id="calEnergyValue_${day }"></span>
+													<span id="calEnergyValue_${day }" class="fr"></span>
 												</td>
 											</c:when>
 											<c:otherwise>
@@ -158,51 +157,50 @@
 			</div>
 		</div>
 		<div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
-			<div class="indiv gmain-map smain-circle">
+			<div class="indiv smain-circle">
 				<div class="chart-top clear">
 					<h2 class="ntit">${siteName} <c:if test="${empty siteName }">사업소 현황</c:if></h2>
 					<div class="btn-bx-type">
 						<a href="javascript:void(0);" class="btn btn-cancel" id="cctv">CCTV 보기</a>
 					</div>
 				</div>
-				<div class="chart-box">
-					<div class="chart-info">
-						<div class="ci-left">
-							<div class="inchart">
-								<div id="pie_chart" style="height:200px; width:230px"></div>
-							</div>
+				<div class="chart-info">
+					<div id="pie_chart" class="chart-info-left"></div>
+					<!-- <div class="ci-left">
+						<div class="inchart">
+							<div id="pie_chart" style="height:200px; width:230px"></div>
 						</div>
-						<div class="chart-info-right">
-							<!-- <div class="legend-wrap">
-								<span class="bu1">태양광</span>
-								<span class="bu4">미 사용량</span>
-							</div> -->
-							<div class="legend-wrap">
-								<c:if test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-									<span class="bu2">풍력</span>
-								</c:if>
-								<span class="bu1"><fmt:message key="gdash.4.gen" /></span>
-								<span class="bu4"><fmt:message key="gdash.4.idle" /></span>
-							</div>
-							<ul>
-								<c:choose>
-									<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-										<li><strong>목표출력</strong> <span id="siteCapacity">-</span><em>kW</em></li>
-										<li><strong>수신시간</strong> <span id="siteDcPower">-</span></li>
-										<li><strong>송신시간</strong> <span id="siteAcPower">-</span></li>
-									</c:when>
-									<c:otherwise>
-										<li><strong>총 설비용량</strong> <span id="siteCapacity">-</span><em>kW</em></li>
-										<li><strong>실시간 DC입력</strong> <span id="siteDcPower">-</span><em>kW</em></li>
-										<li><strong>실시간 AC출력</strong> <span id="siteAcPower">-</span><em>kW</em></li>
-									</c:otherwise>
-								</c:choose>
+					</div> -->
+					<div class="chart-info-right">
+						<!-- <div class="legend-wrap">
+							<span class="bu1">태양광</span>
+							<span class="bu4">미 사용량</span>
+						</div> -->
+						<div class="legend-wrap">
+							<c:if test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
+								<span class="bu2">풍력</span>
+							</c:if>
+							<span class="bu1"><fmt:message key="gdash.4.gen" /></span>
+							<span class="bu4"><fmt:message key="gdash.4.idle" /></span>
+						</div>
+						<ul>
+							<c:choose>
+								<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
+									<li><strong>목표출력</strong> <span id="siteCapacity">-</span><em>kW</em></li>
+									<li><strong>수신시간</strong> <span id="siteDcPower">-</span></li>
+									<li><strong>송신시간</strong> <span id="siteAcPower">-</span></li>
+								</c:when>
+								<c:otherwise>
+									<li><strong>총 설비용량</strong> <span id="siteCapacity">-</span><em>kW</em></li>
+									<li><strong>실시간 DC입력</strong> <span id="siteDcPower">-</span><em>kW</em></li>
+									<li><strong>실시간 AC출력</strong> <span id="siteAcPower">-</span><em>kW</em></li>
+								</c:otherwise>
+							</c:choose>
 
-							</ul>
-						</div>
+						</ul>
 					</div>
 				</div>
-				<div class="local-info smain s-center">
+				<div class="local-info smain-center s-center">
 					<table>
 						<c:choose>
 							<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
@@ -245,7 +243,7 @@
 					</table>
 				</div>
 			</div>
-			<div class="indiv gmain-map smain-circle">
+			<div class="indiv smain-circle">
 				<div class="chart-top clear">
 					<h2 class="ntit">금일 발전현황</h2>
 				</div>
@@ -261,39 +259,36 @@
 					<h1 id="currentTimeA" class="stit">${nowTime }</h1>
 				</div>
 				<div class="weather-wrap clear">
-					<div class="fl weather-table-box">
-						<dl class="weather-table">
-							<dt>
-								<span id="weekIcon"></span>
-								<strong> - </strong>
-								<em id="weekTemp"></em>
-							</dt>
-							<dd class="dd-tbl">
-								<table>
-									<tr>
-										<th>오늘</th>
-										<th>내일</th>
-										<th>모레</th>
-									</tr>
-									<tr>
-										<td><span id="weekIcon1"></span></td>
-										<td><span id="weekIcon2"></span></td>
-										<td><span id="weekIcon3"></span></td>
-									</tr>
-									<tr>
-										<td id="weekTemp1"></td>
-										<td id="weekTemp2"></td>
-										<td id="weekTemp3"></td>
-										<td id="weekTemp4"></td>
-										<td id="weekTemp5"></td>
-										<td id="weekTemp6"></td>
-										<td id="weekTemp7"></td>
-									</tr>
-								</table>
-							</dd>
-						</dl>
+					<div class="weather-table">
+						<div class="today">
+							<span id="weekIcon"></span>
+							<strong> - </strong>
+							<em id="weekTemp"></em>
+						</div>
+
+						<table>
+							<tr>
+								<th>오늘</th>
+								<th>내일</th>
+								<th>모레</th>
+							</tr>
+							<tr>
+								<td><span id="weekIcon1"></span></td>
+								<td><span id="weekIcon2"></span></td>
+								<td><span id="weekIcon3"></span></td>
+							</tr>
+							<tr>
+								<td id="weekTemp1"></td>
+								<td id="weekTemp2"></td>
+								<td id="weekTemp3"></td>
+								<td id="weekTemp4"></td>
+								<td id="weekTemp5"></td>
+								<td id="weekTemp6"></td>
+								<td id="weekTemp7"></td>
+							</tr>
+						</table>
 					</div>
-					<div class="fr wt-list-wrap">
+					<div class="wt-list-wrap">
 						<ul class="list-type">
 							<li><strong>풍향</strong> <span id="weekWindDirection">-</span> &deg;</li>
 							<li><strong>풍속</strong> <span id="weekWindVelocity"></span></li>
@@ -303,8 +298,8 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
-			<div class="indiv smain-alarm wrap-type" data-alarm="">
+		<div class="col-xl-4 col-lg-12 col-md-12 col-sm-12">
+			<div class="indiv smain-alarm" data-alarm="">
 				<div class="alarm-status clear">
 					<div class="alarm-alert"><span>금일 발생 오류</span><em>0</em></div>
 					<div class="alarm-warning"><a href="javascript:void(0);" onclick="pageMove('', 'alarm');" class="btn btn-cancel">상세보기</a></div>
@@ -320,8 +315,9 @@
 					</ul>
 				</div>
 			</div>
-			<div class="indiv gmain-table smain wrap-type">
-				<div class="gtable-top clear">
+			<!-- <div class="indiv gmain-table smain wrap-type"> -->
+			<div class="indiv smain-table">
+				<div class="table-top clear">
 					<div class="fl">
 						<input type="text" class="input" name="keyword" value="" placeholder="키워드">
 					</div>
@@ -370,11 +366,11 @@
 							<div class="table-type">
 								[head]
 							</div>
-							<div class="gmain-wrap type">
-								<div class="intable">
-									[body]
-								</div>
+
+							<div class="device-table">
+								[body]
 							</div>
+
 						</div>
 					</li>
 				</ul>
@@ -438,8 +434,8 @@
 			</div>
 
 			<div class="col-xl-4 col-lg-12 col-md-12 col-sm-12">
-				<div class="indiv gmain-table smain wrap-type unset">
-					<div class="gtable-top clear">
+				<div class="indiv smain-table unset">
+					<div class="table-top clear">
 						<h2 class="tx-tit">인버터 상태</h2>
 					</div>
 					<ul class="inverter_list" id="invList">
@@ -482,40 +478,36 @@
 					<span id="currentTimeB" class="stit">${nowTime}</span>
 					<div class="tab-content">
 						<div class="tab-pane fade active in" id="weatherInfo">
-							<div class="weather-wrap clear">
-								<div class="fl weather-table-box">
-									<dl class="weather-table">
-										<dt>
-											<span id="weekSolarIcon"></span>
-											<strong> - </strong>
-											<em id="sTemp"></em>
-										</dt>
-										<dd class="dd-tbl">
-											<table>
-												<tr>
-													<th>오늘</th>
-													<th>내일</th>
-													<th>모레</th>
-												</tr>
-												<tr>
-													<td><span id="sWeatherIcon1"></span></td>
-													<td><span id="sWeatherIcon2"></span></td>
-													<td><span id="sWeatherIcon3"></span></td>
-												</tr>
-												<tr>
-													<td id="sTemp1"></td>
-													<td id="sTemp2"></td>
-													<td id="sTemp3"></td>
-													<td id="sTemp4"></td>
-													<td id="sTemp5"></td>
-													<td id="sTemp6"></td>
-													<td id="sTemp7"></td>
-												</tr>
-											</table>
-										</dd>
-									</dl>
+							<div class="weather-wrap">
+								<div class="weather-table">
+									<div class="today">
+										<span id="weekSolarIcon"></span>
+										<strong> - </strong>
+										<em id="sTemp"></em>
+									</div>
+									<table>
+										<tr>
+											<th>오늘</th>
+											<th>내일</th>
+											<th>모레</th>
+										</tr>
+										<tr>
+											<td><span id="sWeatherIcon1"></span></td>
+											<td><span id="sWeatherIcon2"></span></td>
+											<td><span id="sWeatherIcon3"></span></td>
+										</tr>
+										<tr>
+											<td id="sTemp1"></td>
+											<td id="sTemp2"></td>
+											<td id="sTemp3"></td>
+											<td id="sTemp4"></td>
+											<td id="sTemp5"></td>
+											<td id="sTemp6"></td>
+											<td id="sTemp7"></td>
+										</tr>
+									</table>
 								</div>
-								<div class="fr wt-list-wrap">
+								<div class="wt-list-wrap">
 									<ul class="list-type">
 										<li><strong>풍향</strong> <span id="sWindDirection">-</span> &deg;</li>
 										<li><strong>풍속</strong> <span id="sWindVelocity"></span></li>
@@ -2012,13 +2004,13 @@
 					// console.log("weekWeatherData[0]===", weekWeatherData)
 					if($('#viewOptList').prev().data("value") == "2"){
 						weekWeather.forEach((el, index) => {
-							$('#sTemp' + (index + 1)).text((el.temperature).toFixed(1));
+							$('#sTemp' + (index + 1)).text((Math.round(el.temperature * 10) / 10).toFixed(1));
 							let weatherIconClass = getWeatherIcons(el.sky);
 							$('#sWeatherIcon' + (index + 1)).html('<i class="ico-weather ' + weatherIconClass + '"></i>');
 						});
 					} else {
 						weekWeather.forEach((el, index) => {
-							$('#weekTemp' + (index + 1)).text((el.temperature).toFixed(1));
+							$('#weekTemp' + (index + 1)).text((Math.round(el.temperature * 10) / 10).toFixed(1));
 							let weatherIconClass = getWeatherIcons(el.sky);
 							$('#weekIcon' + (index + 1)).html('<i class="ico-weather ' + weatherIconClass + '"></i>');
 						});
@@ -2039,10 +2031,10 @@
 						if (tempArray.length > 0) {
 							let weatherIconClass = getWeatherIcons(tempArray[tempArray.length - 1].sky);
 							if($('#viewOptList').prev().data("value") == "2"){
-								$('#sTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + ' ' + '&#8451;');
+								$('#sTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + '&nbsp;' + '&#8451;');
 								$('#weekSolarIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i>').next('strong').html(sList[0].location);
 							} else {
-								$('#weekTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + ' ' + '&#8451;');
+								$('#weekTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + '&nbsp;' + '&#8451;');
 								$('#weekIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i>').next('strong').html(sList[0].location);
 							}
 						}
@@ -2064,7 +2056,7 @@
 								let temperature = isEmpty(di.temperature) ? '-' : (di.temperature).toFixed(1);
 								
 								if($('#viewOptList').prev().data("value") == "2"){
-									$('#sTemp').html(temperature + '&#8451;');
+									$('#sTemp').html(temperature + ' ' + '&#8451;');
 									$('#weekSolarIcon').next('strong').html(sList[0].location);
 									$('#sWindVelocity').text((windSpeed).toFixed(1) + ' km/h');
 									$('#sWindDirection').text(windDirection);
@@ -2531,7 +2523,9 @@
 												} else {
 													if((el.suffix.match('W') || el.suffix.match('Wh')) && !el.key.match("irradiationPoa")) {
 														value = Number(value);
-													} else if(el.suffix.match('%') || el.suffix.match('℃') || el.key.match("irradiationPoa")) {
+													} else if(el.suffix.match('%') || el.key.match('temperature') || el.key.match("irradiationPoa")) {
+														value = Number(value);
+													} else if(el.suffix.match('V')){
 														value = Number(value);
 													} else if(el.suffix.match('V')){
 														value = Number(value);
@@ -2587,7 +2581,7 @@
 														rowData[0][el.key] = strVal[0] + " " + strVal[1];
 													} else if(el.suffix.match('%') || el.key.match('temperature') || el.key.match("irradiationPoa") ) {
 														// Unit: percentage, celsius, meter square
-														rowData[0][el.key] = numberComma(value) + " " + el.suffix;
+														rowData[0][el.key] = displayNumberFixedDecimal(value, el.suffix, 3, 2)[0] + " " + el.suffix;
 													} else {
 														rowData[0][el.key] = value;
 													}
@@ -2688,9 +2682,9 @@
 							}
 						}
 					});
-
+	
 					setMakeList(deviceType, 'typeList', { 'dataFunction': { 'head': makeHeadTable, 'body': makeBodyTable } });
-
+					
 					$.each(deviceType, function (i, el) {
 						let dvcType = el.type;
 						let operationNormal = 0;
@@ -2698,7 +2692,7 @@
 						let operationAlert = 0;
 
 						let headerDataObject = new Object();
-							
+
 						if (el.type == 'SM_MANUAL') return false;
 						setInitList('table_' + dvcType);
 						let tableArray = new Array();
@@ -2709,6 +2703,7 @@
 								let rowData = val.data;
 								if(!isEmpty(rowData)) {
 									let operation = rowData[0]['operation'];
+
 									if(operation == '1') {
 										operationNormal++;
 									} else if(operation == '2') {
@@ -2716,22 +2711,24 @@
 									} else {
 										operationAlert++;
 									}
-
 									rowData[0]['dname'] = dname;
-									
-						
-									$.map(featureProperties, function(val, key) {
-										let headerData = new Object();
 
+									$.map(featureProperties, function(val, key) {
+										let headerData = {};
+						
 										if(!isEmpty(headerDataObject[key])) {
 											headerData = headerDataObject[key];
 										}
 										
 										if (key == dvcType) {
+											let sumActivePower = 0;
+											let sumDcPower = 0;
+											let sumAccumEnergy = 0;
+
 											$.each(val.prop, function(i, el) {
 												let value = rowData[0][el.key];
-												let tmpObj = new Object();
-
+												let tmpObj = {};
+										
 												if(isEmpty(headerData[el.key])) {
 													tmpObj['reducer'] = el.reducer;
 												} else {
@@ -2754,9 +2751,8 @@
 													}
 												}
 
-
 												if(value == '-') {
-													if(tmpObj['cnt'] == Number){
+													if(typeof tmpObj['cnt'] == "number"){
 														if(!isEmpty(headerData[el.key])) {
 															tmpObj['cnt'] = Number(tmpObj['cnt']) + 1;
 														} else {
@@ -2766,7 +2762,10 @@
 													}
 												} else {
 													if(!isEmpty(headerData[el.key])) {
-														if(tmpObj['value'] == Number) {
+														if(typeof tmpObj['value'] == "number") {
+															if(el.key == "activePower"){
+
+															}
 															tmpObj['value'] = Number(value) + Number(tmpObj['value']);
 															tmpObj['cnt'] = Number(tmpObj['cnt']) + 1;
 														} else {
@@ -2775,7 +2774,7 @@
 														}
 													
 													} else {
-														if( tmpObj['value'] == Number){
+														if( typeof tmpObj['value'] == "number") {
 															tmpObj['value'] = Number(value);
 															tmpObj['cnt'] = 1;
 														} else {
@@ -2783,15 +2782,12 @@
 															tmpObj['cnt'] = 1;
 														}
 													}
-
 													tmpObj['suffix'] = el.suffix;
 												}
-
 												headerData[el.key] = tmpObj;
-											});
+											});							
 											headerDataObject[key] = headerData;
 										}
-							
 									});
 
 									$.map(featurePropertiesSub, function(val, key) {
@@ -2809,9 +2805,11 @@
 														// Unit: Wh => MWh
 														let strVal = displayNumberFixedUnit(value, 'Wh', 'MWh', 2, "round");
 														rowData[0][el.key] = strVal[0] + " " + strVal[1];
-													} else {
+													} else if(el.suffix.match('%') || el.key.match('temperature') || el.key.match("irradiationPoa") ) {
 														// Unit: percentage, celsius, meter square
 														rowData[0][el.key] = displayNumberFixedDecimal(value, el.suffix, 3, 2)[0] + " " + el.suffix;
+													} else {
+														rowData[0][el.key] = value;
 													}
 												}
 											});
@@ -2847,6 +2845,9 @@
 									if(!isEmpty(suffix)) {
 										if(key.match("accumActiveEnergy")) {
 											textValue = displayNumberFixedUnit(textValue, suffix, "MWh", 2, "round");
+										} else if(key.match("temperature")){
+											let tempVal = displayNumberFixedDecimal(textValue, suffix, 3, 2);
+											textValue = [tempVal[0], "&#8451;"];
 										} else {
 											if(suffix == "W" || suffix == "Wh"){
 												textValue = displayNumberFixedUnit(textValue, "W", "kW", 0, "round");
@@ -2857,15 +2858,7 @@
 									} else {
 										textValue = [textValue, ""];
 									}
-
 									$('#typeList').find('.' + deviceType).find('.table-type td.' + key + ' span:nth-child(1)').html(textValue[0] + " " +  textValue[1]);
-									// $('#typeList').find('.' + deviceType).find('.table-type td.' + key + ' span:nth-child(1)').html(textValue[0]);
-									// if(suffix == 'W' || suffix == 'Wh') {
-									// 	$('#typeList').find('.' + deviceType).find('.table-type td.' + key + ' span:nth-child(1)').html(textValue[0] + " " +  textValue[1]);
-									// } else if(suffix == 'V' || suffix == 'A'){
-									// 	$('#typeList').find('.' + deviceType).find('.table-type td.' + key + ' span:nth-child(1)').html(textValue[0] + " " +  textValue[1]);
-									// } 
-
 								} else {
 									$('#typeList').find('.' + deviceType).find('.table-type td.' + key + ' span:nth-child(1)').html("-");
 								}
@@ -2879,6 +2872,7 @@
 						$('#typeList').find('.' + dvcType).find('.alert-icon .inv-normal span').html(operationNormal);
 						$('#typeList').find('.' + dvcType).find('.alert-icon .inv-error span').html(operationError);
 						$('#typeList').find('.' + dvcType).find('.alert-icon .inv-alert span').html(operationAlert);
+
 						setMakeList(tableArray, 'table_' + dvcType, {'dataFunction': {'operation': setOperation}});
 					});
 
@@ -3624,7 +3618,13 @@
 					energyItems.forEach(el => {
 						let dataDay = parseInt(String(el.basetime).substring(6, 8));
 						if (i == dataDay) {
-							let energyText = displayNumberFixedDecimal(el.energy, 'Wh', 3, 1);
+							let energyText;
+							let rounded = Math.round(el.energy);
+							if(rounded >= 1000 && rounded < 1000000){
+								energyText = displayNumberFixedDecimal(el.energy, 'Wh', 3, 0);
+							} else {
+								energyText = displayNumberFixedDecimal(el.energy, 'Wh', 3, 1);
+							}
 							$('#calEnergyValue_' + i).html('<strong>' + energyText[0] + '</strong><em>' + energyText[1] + '</em>');
 						}
 					});
@@ -3637,7 +3637,7 @@
 						// console.log("weatherItems===", el)
 						let dataDay = parseInt(String(el.basetime).substring(6, 8));
 						if (i == dataDay) {
-							$('#calWeatherValue_' + i).text((el.temperature).toFixed(1) + '℃');
+							$('#calWeatherValue_' + i).html( Math.round(el.temperature) + '&#8451;&nbsp;');
 
 							let weatherIconClass = getWeatherIcons(el.sky);
 							$('#calWeatherIcon_' + i).html('<i class="ico-weather ' + weatherIconClass + '"></i>');
@@ -3665,7 +3665,15 @@
 		}).done(function (data, textStatus, jqXHR) {
 			const calDate = new Date();
 			if (!isEmpty(data.data[siteId])) {
-				const energyText = displayNumberFixedDecimal(data.data[siteId].energy, 'Wh', 3, 1);
+				let rounded = Math.round(data.data[siteId].energy);
+				let energyText;
+
+				if(rounded >= 1000 && rounded < 1000000){
+					energyText = displayNumberFixedDecimal(data.data[siteId].energy, 'Wh', 3, 0);
+				} else {
+					energyText = displayNumberFixedDecimal(data.data[siteId].energy, 'Wh', 3, 1);
+				}
+				
 				$('#calEnergyValue_' + (calDate.getDate())).html('<strong>' + energyText[0] + '</strong><em>' + energyText[1] + '</em>');
 			}
 		}).fail(function (jqXHR, textStatus, errorThrown) {

@@ -179,7 +179,7 @@
 		</h1>
 		<a href="javascript:void(0);" class="mobile-nav-close"></a>
 	</div>
-	<div class="g_menu">
+	<div class="g-menu">
 		<ul class="menu-list">
 			<c:forEach var="menu" items="${menuList}" varStatus="status">
 				<c:set var="menuMap" value="${menu.value}"/>

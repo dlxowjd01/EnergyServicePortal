@@ -19,12 +19,12 @@
 		height: 533px;
 	}
 
-	.gmain-chart1 #monthlyChart {
+	.indiv.gmain-chart1 #monthlyChart {
 		height: 450px;
 	}
 
 	.gmain-chart2,
-	.gmain-chart.jmain-center2 {
+	.jmain-center2 {
 		height: 400px;
 	}
 
@@ -55,17 +55,6 @@
 	}
 }
 
-@media (min-width: 1092px) {
-	.modal-dialog {
-		width:1092px
-	}
-	.spc_tbl02_row {
-		overflow-x:visible
-	}
-	.modal-dialog.history-alarm {
-		width:560px
-	}
-}
 
 @media all and (max-width: 1280px) {
 	.indiv.chart-diagnosis .chart-top .inline-flex .duration {
@@ -97,6 +86,10 @@
 }
 
 @media all and (max-width: 1199px) {
+	.all-menu .menu-wrapper>ul>li.lo-type {
+		display: inline-block;
+		width: auto;
+	}
 
 	.group-type.short .dropdown.edit,
 	.group-type.short .dropdown.edit:nth-child(2) {
@@ -127,53 +120,28 @@
 	.dropdown.edit {
 		width: 100%;
 	}
-
-	.w-180 {
-		width: 100%
-	}
-
-	nav .all-menu .menu-wrapper>ul>li.lo-type {
-		display: inline-block;
-		width: auto;
-	}
-
-
-	.gmain-map .chart-info>div.ci-left {
-		margin: 0 auto;
-	}
-
-	.gmain-map.smain-circle .chart-info .ci-left {
-		display: table;
-		width: auto;
-		padding: 0;
-	}
-
-	.gmain-map .chart-info>div {
-		display: block;
-	}
-
-	.gmain-chart .chart-top {
-		margin-bottom: 0;
-	}
-
-	.gmain-chart.gmain-chart1,
-	.gmain-chart.gmain-chart2,
-	.gmain-chart.gmain-chart3 {
+	
+	.indiv.chart-wrapper,
+	.indiv.chart-wrapper2 {
 		padding: 20px 30px;
 		height: auto;
 	}
 
-	.gmain-chart.gmain-chart1 .chart-top .ntit,
-	.gmain-chart.gmain-chart2 .chart-top .ntit,
-	.gmain-chart.gmain-chart3 .chart-top .ntit {
+	.indiv.chart-wrapper:not(:last-of-type),
+	.indiv.chart-wrapper2:not(:last-of-type) {
+		margin-bottom: 18px;
+	}	
+
+	.chart-wrapper .chart-top.offset {
+		margin: -10px 0 -16px;
+	}
+	
+	.chart-wrapper .chart-top.offset .ntit {
 		margin: 0 auto;
 	}
 
-	.gmain-chart.gmain-chart1>.inchart,
-	.gmain-chart.gmain-chart1 .term,
-	.gmain-chart.gmain-chart2 .term,
-	.gmain-chart.gmain-chart3 .term,
-	.gmain-chart.gmain-chart2>.inchart {
+	.chart-wrapper .mobile-hidden,
+	.chart-wrapper .term {
 		display: none;
 	}
 
@@ -181,16 +149,16 @@
 		display: flex !important;
 	}
 
-	.gmain-map.gmain-chart.gmain-chart4,
-	.gmain-alarm {
+	.indiv.gmain-chart4,
+	.indiv.gmain-alarm {
 		height: 520px;
 	}
 
-	.jmain-alarm {
+	.indiv.jmain-alarm {
 		height: 520px;
 	}
 
-	.local-info.s-center {
+	.local-info {
 		margin-top: 15px;
 	}
 
@@ -203,6 +171,17 @@
 	}
 }
 
+@media (min-width: 1092px) {
+	.modal-dialog {
+		width:1092px
+	}
+	.spc_tbl02_row {
+		overflow-x:visible
+	}
+	.modal-dialog.history-alarm {
+		width:560px
+	}
+}
 
 /* Tablet && Mobile screen sizes */
 
@@ -221,28 +200,41 @@
 		margin: 10px 0 10px 0px;
 	}
 
-
-	nav .all-menu .menu-wrapper>ul>li:nth-child(3),
-	nav .all-menu .menu-wrapper>ul>li:nth-child(4) {
+	.all-menu .menu-wrapper>ul>li:nth-child(3),
+	.all-menu .menu-wrapper>ul>li:nth-child(4) {
 		display: inline-block;
 		float: left;
 		width: auto;
 	}
 
-	nav .all-menu .menu-wrapper>ul>li:nth-child(5) {
+	.all-menu .menu-wrapper>ul>li:nth-child(5) {
 		padding-top: 30px;
 	}
 
-	/********************************************************************************
-										alarm
-	*********************************************************************************/
 	.alarm-notice li:not(:last-child) {
 		margin-bottom: 10px;
+	}
+
+	.chart-info,
+	.chart-info .chart-info-left,
+	.chart-info-right {
+		display: block;
+		width: 100%;
+		padding: 0;
+	}
+
+	.chart-info .chart-info-right ul li em {
+		font-size: 12px;
 	}
 
 	/********************************************************************************
 										gmain
 	*********************************************************************************/
+
+	.chart-wrapper .sum-list {
+		padding-top: 2px;
+	}
+
 	.gmain-table .gmain-wrap {
 		max-height: 360px;
 	}
@@ -261,30 +253,21 @@
 		width: 100%;
 	}
 
-	.gmain-map .chart-info>div {
-		display: block;
-		width: 100%
-	}
-
-	.gmain-map.gmain-chart.gmain-chart4,
-	.gmain-alarm {
+	.indiv.jmain-alarm {
 		height: 533px;
 	}
 
-	.jmain-alarm {
-		height: 533px;
-	}
-
-	.gmain-map.gmain-chart.gmain-chart4 {
+	.gmain-chart4 {
 		overflow: hidden;
 	}
 
-	.gmain-map.gmain-chart.gmain-chart4 .local-info.s-center {
-		overflow: scroll;
+	.chart-info:not(.block) .local-info {
+		overflow: auto;
 		height: 100px;
 	}
 
-	.gmain-table .gmain-wrap .intable {
+	.gmain-wrap .intable,
+	.device-table {
 		max-height: 365px;
 	}
 
@@ -295,19 +278,6 @@
 
 	.gmain-table.jmain-table .gmain-wrap .intable {
 		max-height: 760px;
-	}
-
-	.gmain-chart .chart-top .ntit {
-		margin: 6px 0 10px;
-	}
-
-	.gmain-map .chart-info>div.ci-left {
-		padding: 0;
-	}
-
-	.gmain-map .chart-info>div.ci-left>.inchart {
-		margin: 0 auto;
-		padding: 0;
 	}
 
 	.di-bottom-sec .box-top {
@@ -380,19 +350,19 @@
 		overflow: hidden !important;
 	}
 
-	.g_menu .menu-list {
+	.g-menu .menu-list {
 		margin: 12px 0 0 0;
 	}
 
-	.g_menu >.menu-list > li.menu-item > a:hover {
+	.g-menu >.menu-list > li.menu-item > a:hover {
 		background-color: var(--white15);
 	}
 
-	.g_menu .menu-list > li.gmn9 {
+	.g-menu .menu-list > li.gmn9 {
 		margin-top: 60px;
 	}
 
-	.g_menu .menu-list > li > a {
+	.g-menu .menu-list > li > a {
 		display: block;
 		padding-left: 26px;
 		height: 50px;
@@ -402,7 +372,7 @@
 		font-weight: 600;
 	}
 
-	.g_menu .menu-list > li > a:before {
+	.g-menu .menu-list > li > a:before {
 		content: '';
 		display: block;
 		margin-right: 26px;
@@ -412,7 +382,7 @@
 		float: left;
 	}
 
-	.g_menu .menu-list > li.menu-item > a:after {
+	.g-menu .menu-list > li.menu-item > a:after {
 		display: block;
 		float: right;
 		margin: 18px 27px 0 0;
@@ -425,71 +395,71 @@
 		transform: rotate(45deg);
 	}
 
-	.g_menu .menu-list > li.gmn1>a:before {
+	.g-menu .menu-list > li.gmn1>a:before {
 		background: var(--sidebar-ico1) no-repeat center;
 	}
 
-	.g_menu .menu-list > li.gmn2>a:before {
+	.g-menu .menu-list > li.gmn2>a:before {
 		background: var(--sidebar-ico2) no-repeat center;
 	}
 
-	.g_menu .menu-list > li.gmn3>a:before {
+	.g-menu .menu-list > li.gmn3>a:before {
 		background: var(--sidebar-ico3) no-repeat center;
 	}
 
-	.g_menu .menu-list > li.gmn4>a:before {
+	.g-menu .menu-list > li.gmn4>a:before {
 		background: var(--sidebar-ico4) no-repeat center;
 	}
 
-	.g_menu .menu-list > li.gmn5>a:before {
+	.g-menu .menu-list > li.gmn5>a:before {
 		background: var(--sidebar-ico5) no-repeat center;
 	}
 
-	.g_menu .menu-list > li.gmn6>a:before {
+	.g-menu .menu-list > li.gmn6>a:before {
 		background: var(--sidebar-ico6) no-repeat center;
 	}
 
-	.g_menu .menu-list > li.gmn7>a:before {
+	.g-menu .menu-list > li.gmn7>a:before {
 		background: var(--sidebar-ico7) no-repeat center;
 	}
 
-	.g_menu .menu-list > li.gmn8>a:before {
+	.g-menu .menu-list > li.gmn8>a:before {
 		background: var(--sidebar-ico8) no-repeat center;
 	}
 
-	.g_menu .menu-list > li.gmn9>a:before {
+	.g-menu .menu-list > li.gmn9>a:before {
 		background: var(--sidebar-ico9) no-repeat center;
 	}
 
-	.g_menu .menu-list > li.gmn10>a:before {
+	.g-menu .menu-list > li.gmn10>a:before {
 		background: var(--sidebar-ico10) no-repeat center;
 	}
 
 	/* menu active */
 
-	.g_menu .menu-list > li.on > a {
+	.g-menu .menu-list > li.on > a {
 		color: var(--white87);
 	}
 
-	.g_menu .menu-list > li.on > a:before {
+	.g-menu .menu-list > li.on > a:before {
 		filter: invert(0);
 	}
 
-	.g_menu .menu-list > li.on > a:after {
+	.g-menu .menu-list > li.on > a:after {
 		margin-top: 20px;
 		transform: rotate(225deg);
 	}
 
-	.g_menu .menu-list > li.on > .sub-menu-list {
+	.g-menu .menu-list > li.on > .sub-menu-list {
 		display: block;
 	}
 
 	/* sub menu */
-	.g_menu .sub-menu-list {
+	.g-menu .sub-menu-list {
 		display: none;
 	}
 
-	.g_menu .sub-menu-list li a {
+	.g-menu .sub-menu-list li a {
 		height: 56px;
 		line-height: 56px;
 		font-size: 14px;
@@ -498,23 +468,23 @@
 		padding-left: 88px;
 	}
 
-	.g_menu .sub-menu-list li a ~ div a {
+	.g-menu .sub-menu-list li a ~ div a {
 		font-size: 13px;
 		padding-left: 30px;
 	}
 
-	.g_menu .sub-menu-list li a~div a:before {
+	.g-menu .sub-menu-list li a~div a:before {
 		display: inline-block;
 		content: "";
 		margin-right: 2px;
 	}
 
-	.g_menu .sub-menu-list li>a:hover,
-	.g_menu>ol>li>a:hover {
+	.g-menu .sub-menu-list li>a:hover,
+	.g-menu>ol>li>a:hover {
 		background: var(--white15);
 	}
 
-	.g_menu .sub-menu-list li a:before {
+	.g-menu .sub-menu-list li a:before {
 		display: inline-block;
 		content: "";
 		margin-right: 2px;
@@ -574,7 +544,7 @@
 		padding: 0;
 	}
 
-	nav .lang.mobile {
+	.lang.mobile {
 		display: none;
 	}
 
@@ -604,49 +574,47 @@
 		margin-right: 20px;
 	}
 
-	nav .all-menu {
+	.all-menu {
 		position: absolute;
 		display: block;
-		/* text-align: right; */
 		top: 0;
 		left: 70px;
-		/* margin    : 20px 0 0 0; */
 	}
 
-	nav .all-menu .menu-group {
+	.all-menu .menu-group {
 		width: 80vw;
 		top: 50px;
 		left: 0;
 		z-index: 100;
 	}
 
-	nav .all-menu > a.on + .menu-group {
+	.all-menu > a.on + .menu-group {
 		width: 100%;
 	}
 
-	nav .all-menu .menu-group > ul+ul {
+	.all-menu .menu-group > ul+ul {
 		margin-left: 0
 	}
 
-	nav .all-menu:before {
+	.all-menu:before {
 		display: none
 	}
 
-	nav .all-menu .menu-group > ul {
+	.all-menu .menu-group > ul {
 		width: 33.3%
 	}
 
-	nav .all-menu > a {
+	.all-menu > a {
 		text-align: left;
 		width: 72px;
 	}
 
-	nav .all-menu .menu-group {
+	.all-menu .menu-group {
 		left: -20px;
 		overflow: hidden
 	}
 
-	nav .all-menu .menu-wrapper>ul>li {
+	.all-menu .menu-wrapper>ul>li {
 		display: block;
 		width: 100%;
 		float: none;
@@ -654,16 +622,16 @@
 		border-left: 0;
 	}
 
-	nav .all-menu .menu-wrapper>ul {
+	.all-menu .menu-wrapper>ul {
 		width: 29vw
 	}
 	
-	nav .all-menu .menu-group .overflow-list {
+	.all-menu .menu-group .overflow-list {
 		max-height: 160px;
 	}
 
-	nav .all-menu .menu-wrapper>ul>li:nth-child(3),
-	nav .all-menu .menu-wrapper>ul>li:nth-child(5) {
+	.all-menu .menu-wrapper>ul>li:nth-child(3),
+	.all-menu .menu-wrapper>ul>li:nth-child(5) {
 		margin-top: 30px;
 	}
 
@@ -686,8 +654,13 @@
 		padding: 19px 20px;
 	}
 
-	.indiv.wrap-type {
-		padding: 0;
+	.indiv.chart-wrapper,
+	.gmain-table {
+		height: auto;
+	}
+
+	.indiv.smain-alarm {
+		height: 260px;
 	}
 
 	.modal-dialog .modal-content {
@@ -721,10 +694,7 @@
 	}
 
 	.alarm-notice {
-		margin-top: 10px;
-		padding-right: 0;
-		height: auto;
-		overflow-y: inherit;
+		margin-right: 0;
 	}
 
 	.chart-top .meter {
@@ -808,28 +778,7 @@
 	}
 
 	/* *************************************************
-			prev => max-width : 481px from below
-	************************************************* */
-
-	.wrap-type .alarm-notice {
-		max-height: 186px;
-	}
-
-	.weather-table-box,
-	.wt-list-wrap {
-		width: 100%
-	}
-
-	.weather-wrap .weather-table-box .weather-table {
-		margin-right: 0
-	}
-
-	.weather-wrap .wt-list-wrap {
-		margin-left: 0
-	}
-
-	/* *************************************************
-						local-info
+					sMain: local-info, weather
 	************************************************* */
 	.local-info h2 {
 		font-size: 22px;
@@ -875,116 +824,14 @@
 		padding: 5px;
 	}
 
-	.local-info.s-center table,
-	.local-info.s-center thead,
-	.local-info.s-center tbody,
-	.local-info.s-center th,
-	.local-info.s-center td,
-	.local-info.s-center tr {
-		display: block;
-	}
-
-	/* Hide table headers (but not display: none;, for accessibility) */
-	.local-info.s-center thead tr {
-		position: absolute;
-		top: -9999px;
-		left: -9999px;
-	}
-
-	.local-info.s-center tr {
-		margin: 0 0 1rem 0;
-	}
-
-	.local-info.s-center td {
-		border: none;
-		border-bottom: 1px solid #4c5260;
-		position: relative;
-		padding-left: 50%;
-		text-align: right;
-		vertical-align: top;
-	}
-
-	.local-info.s-center td:before {
-		position: absolute;
-		top: 50%;
-		transform: translateY(-50%);
-		left: 6px;
-		width: 50%;
-		padding-right: 10px;
-		white-space: nowrap;
-		text-align: left;
-		color: #8e95a1;
-	}
-
-	/* Label the data */
-	.local-info.s-center td:nth-of-type(1):before {
-		content: "총 사업소";
-	}
-
-	.local-info.s-center td:nth-of-type(2):before {
-		content: "총 설비(인버터,PCS)";
-	}
-
-	.local-info.s-center td:nth-of-type(3):before {
-		content: "총 설비용량";
-	}
-
-	.local-info.s-center td:nth-of-type(4):before {
-		content: "금일 CO2저감량";
-	}
-
-	.local-info.s-center td:nth-of-type(5):before {
-		content: "금일 누적수익";
-	}
-
-	.local-info.jmain.s-center td:nth-of-type(1):before {
-		content: "총 사업소";
-	}
-
-	.local-info.jmain.s-center td:nth-of-type(2):before {
-		content: "총 설비수";
-	}
-
-	.local-info.jmain.s-center td:nth-of-type(3):before {
-		content: "총 출력용량";
-	}
-
-	.local-info.jmain.s-center td:nth-of-type(4):before {
-		content: "금일 예상출력";
-	}
-
-	.local-info.jmain.s-center td:nth-of-type(5):before {
-		content: "금일 누적출력";
-	}
-
-	.local-info.smain.s-center td {
+	.local-info.smain-center td {
 		font-size: 13px;
 	}
 
-	.local-info.smain.s-center td span {
+	.local-info.smain-center td span {
 		font-size: 14px;
 	}
 
-	/* Label the data */
-	.local-info.smain.s-center td:nth-of-type(1):before {
-		content: "PV 용량";
-	}
-
-	.local-info.smain.s-center td:nth-of-type(2):before {
-		content: "오늘 누적 발전량";
-	}
-
-	.local-info.smain.s-center td:nth-of-type(3):before {
-		content: "오늘 발전 예측";
-	}
-
-	.local-info.smain.s-center td:nth-of-type(4):before {
-		content: "SMP 수익 예상";
-	}
-
-	/* *************************************************
-						type-list-detail
-	************************************************* */
 	.type-list-detail .local-info th {
 		line-height: 1.3;
 	}
@@ -997,41 +844,40 @@
 		margin-top: 0
 	}
 
-	/* *************************************************
 
-	************************************************* */
-	.not-top span {
-		font-size: 12px;
-	}
-
-	.not-top span+span {
-		margin-left: 5px;
-	}
-
-	.w-180 {
+	.weather-table,
+	.wt-list-wrap {
 		width: 100%
 	}
 
-	/* *************************************************
-							gmain
-	************************************************* */
-	.indiv.gmain-chart:not(:last-of-type) {
-		margin-bottom: 12px;
+	.weather-wrap .weather-table {
+		margin-right: 0
 	}
+
+	.weather-wrap .wt-list-wrap {
+		margin-left: 0
+	}
+
+	/* *************************************************
+							dashboard
+	************************************************* */
 
 	.gmain-row1 {
-		display: table;
+		display: block;
 		margin-bottom: 12px;
 	}
 
-	.gmain-alarm {
-		height: 280px;
-		overflow: auto;
+	.gmain-row1 .indiv.gmain-chart4 {
+		margin-right: 0;
 	}
 
-	.gmain-map.gmain-chart.gmain-chart4,
-	.gmain-alarm {
-		margin: auto 0 12px;
+	.gmain-row1 .indiv.gmain-chart4 + .gmain-alarm {
+		margin-left: 0;
+	}
+
+	.indiv.gmain-chart4,
+	.indiv.gmain-alarm {
+		margin: auto 0 20px;
 	}
 
 	.gmain-table.smain {
@@ -1055,93 +901,29 @@
 		height: calc(100vh - 285px);
 	}
 
-	.gmain-alarm .alarm-status>div span,
-	.jmain-alarm .alarm-status>div span {
+	.indiv.gmain-alarm .alarm-status>div span,
+	.indiv.jmain-alarm .alarm-status>div span {
 		padding: 8px 10px;
 		font-size: 12px;
 	}
 
-	.gmain-alarm .alarm-status>div em,
-	.jmain-alarm .alarm-status>div em {
+	.indiv.gmain-alarm .alarm-status>div em,
+	.indiv.jmain-alarm .alarm-status>div em {
 		font-size: 16px;
 		line-height: 30px;
 		margin-top: 0;
 	}
 
-	.gmain-alarm .alarm-status>div.alarm-warning a,
-	.jmain-alarm .alarm-status>div.alarm-warning a {
+	.indiv.gmain-alarm .alarm-status>div.alarm-warning a,
+	.indiv.jmain-alarm .alarm-status>div.alarm-warning a {
 		height: 30px;
 		line-height: 30px;
 		font-size: 12px;
 	}
 
-	.gmain-alarm,
-	.jmain-alarm {
+	.indiv.gmain-alarm,
+	.indiv.jmain-alarm {
 		min-height: initial;
-	}
-
-	.gmain-chart .gchart_top h2 {
-		float: none;
-		text-align: center;
-	}
-
-	.gmain-chart .gchart_top ul {
-		float: none;
-		margin-top: 15px;
-		text-align: center;
-	}
-
-	.gmain-chart .gchart_top ul li:first-child {
-		display: block;
-		margin-bottom: 10px;
-	}
-
-	.gmain-chart .gchart_top ul li:first-child:after {
-		display: none;
-	}
-
-	.gmain-chart .chart-sa {
-		height: auto;
-		overflow-y: inherit;
-		padding-right: 0px;
-		min-height: 181px;
-		max-height: inherit;
-	}
-
-	.gmain-chart .chart-sa.type-table {
-		display: block;
-	}
-
-	.gmain-chart .chart-sa.type-table .type-left {
-		display: block;
-		width: 100%;
-		padding-right: 0px;
-	}
-
-	.gmain-chart .chart-sa.type-table .type-right {
-		display: block;
-		width: 100%;
-	}
-
-	.gmain-map .chart-box {
-		height: auto;
-	}
-
-	.gmain-map .chart-info>div {
-		display: block;
-	}
-
-	.gmain-map .chart-info>div.chart-info-right ul li {
-		line-height: 1.5;
-		font-size: 14px;
-	}
-
-	.gmain-map .chart-info>div.chart-info-right ul li span {
-		font-size: 16px;
-	}
-
-	.gmain-map .chart-info>div.chart-info-right ul li em {
-		font-size: 12px;
 	}
 
 	.gmain-table {
@@ -1159,12 +941,6 @@
 		text-align: center;
 	}
 
-	.gmain-table .gmain-wrap table th,
-	.gmain-table .gmain-wrap table td {
-		height: 45px;
-		font-size: 12px;
-	}
-
 	.gmain-table .gmain-wrap table td a {
 		font-size: 12px;
 	}
@@ -1179,7 +955,7 @@
 		margin-left: 0px;
 	}
 
-	.gmain-table .gtable-top .fl .check-option {
+	.table-top .fl .check-option {
 		display: block;
 		margin-top: 15px;
 	}
@@ -1300,10 +1076,15 @@
 	.site-modal-content .unit {
 		top: 10px;
 	}
+
+	.gmain-table .gmain-wrap {
+		max-height: 305px;
+	}
 }
 
 @media all and (max-width: 487px) {
-	.gmain-table .gmain-wrap .intable {
+	.gmain-wrap .intable,
+	.device-table {
 		max-height: 400px;
 	}
 

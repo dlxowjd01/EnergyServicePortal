@@ -28,125 +28,74 @@
 
 <div class="row content-wrapper">
 	<div class="col-xl-4 col-md-12 col-sm-12">
-		<div class="indiv gmain-chart gmain-chart1">
-			<div class="chart-top clear">
+		<div class="indiv chart-wrapper gmain-chart1">
+			<div class="chart-top clear offset">
 				<h2 class="ntit"><fmt:message key="gdash.1.month"/></h2><span class="term"></span>
 				<ul id="monthlySum" class="sum-list mobile-visible"></ul>
 			</div>
 			<%--					<div class="no-data">--%>
 			<%--						<span>올해 발전량 정보를 가져올 수 없습니다.</span>--%>
 			<%--					</div>--%>
-			<div class="inchart">
+			<div class="inchart mobile-hidden">
 				<div id="monthlyChart"></div>
 			</div>
 		</div>
 
-		<div class="indiv gmain-chart gmain-chart2">
-			<div class="chart-top clear">
+		<div class="indiv chart-wrapper gmain-chart2">
+			<div class="chart-top clear offset">
 				<h2 class="ntit"><fmt:message key="gdash.2.daily"/></h2><span class="term"></span>
 				<ul id="dailySum" class="sum-list mobile-visible"></ul>
 			</div>
-			<div class="inchart">
+			<div class="inchart mobile-hidden">
 				<div id="dailyChart"></div>
 			</div>
 		</div>
 
-		<div class="indiv gmain-chart gmain-chart3">
-			<div class="chart-top clear">
+		<div class="indiv chart-wrapper gmain-chart3">
+			<div class="chart-top clear offset">
 				<h2 class="ntit"><fmt:message key="gdash.3.yesterday"/></h2><span class="term"></span>
 				<ul id="yesterdaySum" class="sum-list mobile-visible"></ul>
 			</div>
 			<!-- 사업소별 현황 -->
-			<div class="inchart">
+			<div class="inchart mobile-hidden">
 				<div id="typeSiteCurrent"></div>
-			</div>
-			<!-- 데이터 추출용 테이블 -->
-			<div class="hidden">
-				<table id="gdatatable3">
-					<thead>
-					<tr>
-						<th></th>
-						<th><fmt:message key="gdash.3.actual"/></th>
-						<th><fmt:message key="gdash.3.forecast"/></th>
-					</tr>
-					</thead>
-					<tbody id="siteGenTbody">
-					</tbody>
-				</table>
-			</div>
-
-			<!-- 유형별 발전 현황 -->
-			<div class="chart-sa type-table hidden">
-				<div class="inchart type-left">
-					<div id="gchart4"></div>
-				</div>
-				<div class="type-right">
-					<dl class="sun">
-						<dt><span><fmt:message key="gdash.4.gen"/></span></dt>
-						<dd>
-							<p><strong>가동설비</strong> <span>13</span><em>기</em></p>
-							<p><strong>용량</strong> <span>13</span><em>MW</em></p>
-							<p><strong>전일발전량</strong> <span>3,500</span><em>kWH</em></p>
-						</dd>
-					</dl>
-				</div>
-			</div>
-			<!-- 데이터 추출용 테이블 -->
-			<div class="hidden" style="display:none">
-				<table id="gdatatable4">
-					<thead>
-					<tr>
-						<th></th>
-						<th>전일발전량</th>
-						<th>예측발전량</th>
-					</tr>
-					</thead>
-					<tbody id="typeGenTbody">
-					</tbody>
-				</table>
 			</div>
 		</div>
 	</div>
 
 	<div class="col-xl-8 col-md-12 col-sm-12">
 		<div class="gmain-row1">
-			<div class="indiv gmain-map gmain-chart gmain-chart4">
+			<div class="indiv chart-wrapper gmain-chart4">
 				<div class="chart-top clear">
 					<h2 class="ntit"><fmt:message key="gdash.4.current"/></h2>
 				</div>
-				<div class="chart-box">
-					<div class="chart-info">
-						<div class="ci-left">
-							<div class="inchart">
-								<div id="pie_chart"></div>
-							</div>
+				<div class="chart-info">
+					<div id="pie_chart" class="chart-info-left"></div>
+					<div class="chart-info-right">
+						<div class="legend-wrap">
+							<span class="bu1"><fmt:message key="gdash.4.gen"/></span>
+							<c:if test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
+								<span class="bu2">풍력</span>
+							</c:if>
+							<span class="bu4"><fmt:message key="gdash.4.idle"/></span>
 						</div>
-						<div class="chart-info-right">
-							<div class="legend-wrap">
-								<span class="bu1"><fmt:message key="gdash.4.gen"/></span>
-								<c:if test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-									<span class="bu2">풍력</span>
-								</c:if>
-								<span class="bu4"><fmt:message key="gdash.4.idle"/></span>
-							</div>
-							<ul>
-								<c:choose>
-									<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-										<li><strong><fmt:message key="gdash.4.active_power"/></strong> <span> 0 </span><em>&nbsp;&nbsp;kW</em></li>
-										<li><strong>목표전력</strong> <span> 0 </span><em>&nbsp;&nbsp;kW</em></li>
-										<li><strong>설비용량</strong> <span> 0 </span><em>&nbsp;&nbsp;kW</em></li>
-									</c:when>
-									<c:otherwise>
-										<li><strong><fmt:message key="gdash.4.today_gen"/></strong> <span> 0 </span><em>&nbsp;&nbsp;kWh</em></li>
-										<li><strong><fmt:message key="gdash.4.forecast"/></strong> <span> 0 </span><em>&nbsp;&nbsp;kWh</em></li>
-										<li><strong><fmt:message key="gdash.4.today_ess"/></strong> <span> - </span><em>&nbsp;&nbsp;Wh</em> / <span> - </span><em>&nbsp;&nbsp;Wh</em></li>
-									</c:otherwise>
-								</c:choose>
-							</ul>
-						</div>
+						<ul>
+							<c:choose>
+								<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
+									<li><strong><fmt:message key="gdash.4.active_power"/></strong> <span> 0 </span><em>&nbsp;&nbsp;kW</em></li>
+									<li><strong>목표전력</strong> <span> 0 </span><em>&nbsp;&nbsp;kW</em></li>
+									<li><strong>설비용량</strong> <span> 0 </span><em>&nbsp;&nbsp;kW</em></li>
+								</c:when>
+								<c:otherwise>
+									<li><strong><fmt:message key="gdash.4.today_gen"/></strong> <span> 0 </span><em>&nbsp;&nbsp;kWh</em></li>
+									<li><strong><fmt:message key="gdash.4.forecast"/></strong> <span> 0 </span><em>&nbsp;&nbsp;kWh</em></li>
+									<li><strong><fmt:message key="gdash.4.today_ess"/></strong> <span> - </span><em>&nbsp;&nbsp;Wh</em> / <span> - </span><em>&nbsp;&nbsp;Wh</em></li>
+								</c:otherwise>
+							</c:choose>
+						</ul>
 					</div>
 				</div>
-				<div class="local-info s-center">
+				<div class="local-info gmain-center">
 					<table>
 						<thead>
 						<c:choose>
@@ -194,7 +143,7 @@
 					</table>
 				</div>
 			</div>
-			<div class="indiv gmain-alarm wrap-type" data-alarm="">
+			<div class="indiv gmain-alarm" data-alarm="">
 				<div class="alarm-status">
 					<div class="alarm-alert"><span><fmt:message key="gdash.6.today_alerts"/></span><em>0</em></div>
 					<div class="alarm-warning"><a href="javascript:void(0);" onclick="pageMove('all', 'alarm');" class="btn btn-cancel"><fmt:message key="gdash.6.details"/></a></div>
@@ -217,7 +166,7 @@
 				<div class="gmain-row2">
 					<div class="indiv gmain-table">
 						<div class="gmain-map2-content-kpx">
-							<div class="gtable-top clear">
+							<div class="table-top clear">
 								<div class="input-group1">
 									<div class="sa-select">
 										<div class="dropdown" id="rowCount">
@@ -325,7 +274,7 @@
 							<div class="map-wrap" id="gMainMap"></div>
 						</div>
 						<div class="gmain-map2-content">
-							<div class="gtable-top clear">
+							<div class="table-top clear">
 								<div class="input-group1">
 									<input type="text" class="input" id="searchName" name="searchName" value="" placeholder="사업소 검색" onkeyup="if (event.keyCode == 13) searchSite();">
 									<button type="button" class="btn-type" onclick="searchSite();"><fmt:message key="gdash.7.apply"/></button>
@@ -481,7 +430,7 @@
 															</div>
 														</div>
 														<div class="btn-box clear">
-															<a href="javascript:void(0);" onclick="pageMove('[sid]', 'siteMain')" class="btn-type02 fr line-arrow"><fmt:message key="gdash.7.go_dashboard"/></a>
+															<a href="javascript:void(0);" onclick="pageMove('[sid]', 'siteMain')" class="line-arrow"><fmt:message key="gdash.7.go_dashboard"/></a>
 														</div>
 													</div>
 												</div>

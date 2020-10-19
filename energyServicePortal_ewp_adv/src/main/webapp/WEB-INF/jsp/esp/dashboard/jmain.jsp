@@ -15,7 +15,7 @@
 </div>
 <div class="row content-wrapper">
 	<div class="col-xl-4 col-md-12 col-sm-12">
-		<div class="indiv gmain-chart gmain-chart1">
+		<div class="indiv chart-wrapper2 gmain-chart1">
 			<div class="chart-top clear">
 				<h2 class="ntit"><fmt:message key="vppdash.1.month" /></h2>
 				<span class="term"></span>
@@ -27,7 +27,7 @@
 				<div id="monthlyChart"></div>
 			</div>
 		</div>
-		<div class="indiv gmain-chart gmain-chart2">
+		<div class="indiv chart-wrapper2 gmain-chart2">
 			<div class="chart-top clear">
 				<h2 class="ntit"><fmt:message key="vppdash.2.daily" /></h2>
 				<span class="term"></span>
@@ -36,7 +36,7 @@
 				<div id="dailyChart"></div>
 			</div>
 		</div>
-		<div class="indiv gmain-chart gmain-chart3">
+		<div class="indiv chart-wrapper2 gmain-chart3">
 			<div class="chart-top clear">
 				<h2 class="ntit"><fmt:message key="vppdash.3.yesterday" /></h2>
 				<span class="term"></span>
@@ -45,68 +45,30 @@
 			<div class="inchart">
 				<div id="typeSiteCurrent"></div>
 			</div>
-			<!-- 데이터 추출용 테이블 -->
-			<div class="hidden" style="display:none">
-				<table id="gdatatable3">
-					<thead>
-					<tr>
-						<th></th>
-						<th><fmt:message key="vppdash.3.actual" /></th>
-						<th><fmt:message key="vppdash.3.forecast" /></th>
-					</tr>
-					</thead>
-					<tbody id="siteGenTbody">
-					</tbody>
-				</table>
-			</div>
-
-			<!-- 유형별 발전 현황 -->
-			<div class="chart-sa type-table">
-				<div class="inchart type-left">
-					<div id="gchart4"></div>
-				</div>
-				<div class="type-right">
-					<dl class="sun">
-						<dt><span><fmt:message key="vppdash.4.gen" /></span></dt>
-						<dd>
-							<p><strong>가동설비</strong> <span>13</span><em>기</em></p>
-							<p><strong>용량</strong> <span>13</span><em>MW</em></p>
-							<p><strong>전일발전량</strong> <span>3,500</span><em>kWH</em></p>
-						</dd>
-					</dl>
-				</div>
-			</div>
 		</div>
 	</div>
 
 	<div class="col-xl-4 col-md-12 col-sm-12">
-		<div class="indiv gmain-map gmain-chart gmain-chart4 ">
+		<div class="indiv chart-wrapper2 gmain-chart4">
 			<div class="chart-top clear">
 				<h2 class="ntit"><fmt:message key="vppdash.4.current" /></h2>
 			</div>
-			<div class="chart-box">
-				<div class="chart-info">
-					<div class="ci-left">
-						<div class="inchart">
-							<div id="pie_chart"></div>
-
-						</div>
+			<div class="chart-info block">
+				<div id="pie_chart" class="chart-info-left"></div>
+				<div class="chart-info-right">
+					<div class="legend-wrap">
+						<span class="bu1"><fmt:message key="vppdash.4.gen" /></span>
+						<span class="bu4"><fmt:message key="vppdash.4.idle" /></span>
 					</div>
-					<div class="chart-info-right">
-						<div class="legend-wrap">
-							<span class="bu1"><fmt:message key="vppdash.4.gen" /></span>
-							<span class="bu4"><fmt:message key="vppdash.4.idle" /></span>
-						</div>
-						<ul>
-							<li><strong><fmt:message key="vppdash.4.today_gen" /></strong> <span> 0 </span><em>&nbsp;&nbsp;kWh</em></li>
-							<li><strong><fmt:message key="vppdash.4.forecast" /></strong> <span> 0 </span><em>&nbsp;&nbsp;kWh</em></li>
-							<li><strong><fmt:message key="vppdash.4.today_ess" /></strong> <span> - </span><em>&nbsp;&nbsp;Wh</em> /
-								<span> - </span><em>&nbsp;&nbsp;Wh</em></li>
-						</ul>
-					</div>
+					<ul>
+						<li><strong><fmt:message key="vppdash.4.today_gen" /></strong> <span> 0 </span><em>&nbsp;&nbsp;kWh</em></li>
+						<li><strong><fmt:message key="vppdash.4.forecast" /></strong> <span> 0 </span><em>&nbsp;&nbsp;kWh</em></li>
+						<li><strong><fmt:message key="vppdash.4.today_ess" /></strong> <span> - </span><em>&nbsp;&nbsp;Wh</em> /
+							<span> - </span><em>&nbsp;&nbsp;Wh</em></li>
+					</ul>
 				</div>
 			</div>
-			<div class="local-info s-center">
+			<div class="local-info jmain-center">
 				<table>
 					<thead>
 					<tr>
@@ -129,7 +91,8 @@
 				</table>
 			</div>
 		</div>
-		<div class="indiv gmain-chart jmain-center2">
+
+		<div class="indiv chart-wrapper jmain-center2">
 			<div class="chart-top clear">
 				<h2 class="ntit"><fmt:message key="vppdash.5.realtime_result" /></h2>
 			</div>
@@ -140,11 +103,12 @@
 				<div class="realtime-total">
 					<div id="rchart2"></div>
 				</div>
-				<div class="realtime-time"></div>
-				<div class="realtime-label"></div>
+				<div class="realtime-bar"></div>
+				<div class="realtime-hhmm"></div>
 			</div>
 		</div>
-		<div class="indiv gmain-chart jmain-center3">
+
+		<div class="indiv chart-wrapper jmain-center3">
 			<div class="chart-top clear">
 				<h2 class="ntit"><fmt:message key="vppdash.6.bid_status" /></h2>
 			</div>
@@ -155,8 +119,9 @@
 			</div>
 		</div>
 	</div>
+
 	<div class="col-xl-4 col-md-12 col-sm-12">
-		<div class="indiv jmain-alarm wrap-type" data-alarm="">
+		<div class="indiv jmain-alarm" data-alarm="">
 			<div class="alarm-status">
 				<div class="alarm-alert"><span><fmt:message key="vppdash.7.today_alerts"/></span><em>0</em></div>
 				<div class="alarm-warning"><a href="javascript:void(0);" onclick="pageMove('all', 'alarm');" class="btn btn-cancel"><fmt:message key="gdash.6.details"/></a></div>
@@ -173,7 +138,7 @@
 			</div>
 		</div>
 		<div class="indiv gmain-table jmain-table">
-			<div class="gtable-top clear">
+			<div class="table-top clear">
 				<div class="input-group1">
 					<input type="text" class="input" id="searchName" name="searchName" value="" placeholder="사업소 검색" onkeyup="if (event.keyCode == 13) searchSiteList();">
 					<button type="button" onclick="searchSite();"><fmt:message key="vppdash.8.apply" /></button>
@@ -331,7 +296,7 @@
 												</div>
 											</div>
 											<div class="btn-box clear">
-												<a href="javascript:void(0);" onclick="pageMove('[sid]', 'siteMain')" class="btn-type02 fr">대시 보드 보기 <span class="line-arrow"></span></a>
+												<a href="javascript:void(0);" onclick="pageMove('[sid]', 'siteMain')" class="line-arrow">대시 보드 보기</a>
 											</div>
 										</div>
 									</div>
@@ -347,9 +312,9 @@
 <script type="text/javascript">
 	const secondYAxis = ${secondYAxis};
 </script>
-
 <script type="text/javascript" src="/js/dashboard/dashboardV2.js"></script>
 <script type="text/javascript" src="/js/dashboard/dashboardChart.js"></script>
+
 <script type="text/javascript">
 	const siteList = JSON.parse('${siteList}');
 	const vgid = '<c:out value="${vgid}" escapeXml="false" />';
@@ -364,7 +329,6 @@
 			setTimeout(function(){
 				$('#errorModal').modal("hide");
 			}, 2000);
-			// alert('해당 그룹에 등록 된 사이트가 존재하지 않습니다.');
 			return false;
 		} else {
 			firstAjax();
@@ -524,14 +488,20 @@
 					dataLabels: {
 						enabled: true,
 						inside: true,
-						format: '{point.y:.0f} %'
+						format: '{point.y:.0f} %',
+						style: {
+							color: 'var(--white87)',
+							fontSize: '11px',
+							fontWeight: 400,
+							textShadow: false,
+							textOutline: 0
+						}
 					},
 					tooltip: {
-						pointFormat: '출력: <b>{point.y} %</b>' +
-							''
+						pointFormat: '출력: <b>{point.y} %</b>' + '',
 					},
 					colorByPoint: true
-				}]
+				}],
 			});
 			rchart1.redraw();
 
@@ -544,30 +514,45 @@
 				totalRatioHourly = Math.floor((hourGenAllSite / hourForeGenAllSite) * 100);
 				totalRestHourly = 100 - totalRatioHourly;
 			}
-
-			//rchart2 변경
 			rchart2.update({
 				series: [{
 					name: '입찰',
 					data: [totalRestHourly],
 					tooltip: {
-						valueSuffix: '%'
+						valueSuffix: '%',
+						shared: true,
+						borderColor: 'none',
+						backgroundColor: 'var(--bg-color)',
+						padding: 16,
+						style: {
+							color: 'var(--white87)',
+						},
 					},
 					dataLabels: {
 						enabled: true
 					},
-					color: '#575757' /* 입찰 */
+					color: 'var(--granite-gray)'
 				}, {
 					name: '출력',
 					data: [totalRatioHourly],
 					tooltip: {
-						valueSuffix: '%'
+						valueSuffix: '%',
+						shared: true,
+						borderColor: 'none',
+						backgroundColor: 'var(--bg-color)',
+						padding: 16,
+						style: {
+							color: 'var(--white87)',
+						},
 					},
 					dataLabels: {
 						enabled: true
 					},
-					color: '#26ccc8' /* 출력 */
+					color: 'var(--turquoise)'
 				}],
+				plotLines: {
+					
+				}
 			});
 			rchart2.redraw();
 
@@ -623,8 +608,8 @@
 			rChart3.yAxis[0].setTitle({
 				text: rtnUnit,
 				align: 'low',
-				rotation: 0, /* 타이틀 기울기 */
-				y: 25, /* 타이틀 위치 조정 */
+				rotation: 0,
+				y: 25,
 				x: 10,
 				style: {
 					color: 'var(--white60)',
@@ -633,17 +618,17 @@
 			});
 			rChart3.redraw();
 
-			const currentTime = new Date().getHours() + ':' + new Date().getMinutes();
-			const label = `${' 현재시간<br>${ currentTime }'}`;
+			const currentTime = new Date().format('hh') + ':' + new Date().format('mm');
+			const label = `${' 현재시간<br><strong>${ currentTime }</strong>'}`;
 			const now = new Date().getMinutes();
-			const nowBottom = parseInt($('.realtime-time').css('bottom'), 10);
+			const nowBottom = parseInt($('.realtime-bar').css('bottom'), 10);
 
 			if (nowBottom >= 206) {
-				$(".realtime-label").html(label).css('bottom', '44px');
-				$('.realtime-time').css('bottom', '63px');
+				$(".realtime-hhmm").html(label).css('bottom', '44px');
+				$('.realtime-bar').css('bottom', '63px');
 			} else {
-				$(".realtime-label").html(label).css('bottom', 44 + ((206 / 60) * now));
-				$('.realtime-time').css('bottom', 63 + ((206 / 60) * now));
+				$(".realtime-hhmm").html(label).css('bottom', 44 + ((206 / 60) * now));
+				$('.realtime-bar').css('bottom', 63 + ((206 / 60) * now));
 			}
 		}).catch(error => {
 			$('#errMsg').text(error);
@@ -657,9 +642,8 @@
 	const rchart1 = Highcharts.chart('rchart1', {
 		chart: {
 			marginTop: 15,
-			marginLeft: 50,
-			marginRight: 0,
-			paddingRight: 30,
+			marginLeft: 60,
+			marginRight: 10,
 			zoomType: 'xy',
 			backgroundColor: 'transparent',
 			type: 'variwide',
@@ -667,7 +651,7 @@
 		},
 		navigation: {
 			buttonOptions: {
-				enabled: false /* 메뉴 안보이기 */
+				enabled: false
 			}
 		},
 		title: {
@@ -678,24 +662,25 @@
 		},
 		xAxis: {
 			type: 'category',
-			lineColor: 'var(--white60)', /* 눈금선색 */
-			tickColor: 'var(--white60)',
-			gridLineColor: 'var(--white60)',
+			lineColor: 'var(--grey)',
+			tickColor: 'var(--grey)',
+			gridLineColor: 'var(--white25)',
 			plotLines: [{
-				color: 'var(--color1)',
+				color: 'var(--grey)',
 				width: 1
 			}],
 			labels: {
 				align: 'center',
 				//reserveSpace: true,
+				overflow: 'justify',
 				rotation: 0,
-				y: 27, /* 그래프와 거리 */
+				y: 27,
 				style: {
-					color: 'var(--white60)',
+					color: 'var(--grey)',
 					fontSize: '10px'
 				}
 			},
-			tickInterval: 1, /* 눈금의 픽셀 간격 조정 */
+			tickInterval: 1,
 			title: {
 				text: null
 			}
@@ -703,33 +688,29 @@
 		yAxis: {
 			min: 0,
 			max: 100,
-			lineColor: 'var(--white60)', /* 눈금선색 */
-			tickColor: 'var(--white60)',
-			gridLineColor: 'var(--white60)',
-			gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
+			lineColor: '',
+			tickColor: 'var(--grey)',
+			gridLineColor: 'var(--white25)',
+			gridLineWidth: 1,
 			plotLines: [{
-				color: 'var(--white60)',
+				color: 'var(--grey)',
 				width: 1
 			}],
-			scrollbar: {
-				enabled: true,
-				showFull: false
-			},
 			title: {
 				text: '%',
 				align: 'low',
-				rotation: 0, /* 타이틀 기울기 */
-				y: 25, /* 타이틀 위치 조정 */
+				rotation: 0,
+				y: 25,
 				x: 15,
 				style: {
-					color: 'var(--white60)',
+					color: 'var(--grey)',
 					fontSize: '12px'
 				}
 			},
 			labels: {
 				format: '{value}',
 				style: {
-					color: 'var(--white60)',
+					color: 'var(--grey)',
 					fontSize: '12px'
 				},
 				align: 'right',
@@ -738,27 +719,36 @@
 			},
 			opposite: true
 		},
+		tooltip: {
+			shared: true,
+			borderColor: 'none',
+			backgroundColor: 'var(--bg-color)',
+			padding: 16,
+			style: {
+				color: 'var(--white87)',
+				fontSize: '12px' 
+			}
+		},
 		caption: {
 			text: ''
 		},
 		legend: {
 			enabled: false
 		},
-		/* 옵션 */
 		plotOptions: {
 			series: {
 				label: {
 					connectorAllowed: false
 				},
 				borderWidth: 0,
-				pointPadding: .2
+				pointPadding: .2,
+				pointWidth: 28,
 			},
 			column: {
-				stacking: 'percent' /*위로 쌓이는 막대  ,normal */
+				stacking: 'percent',
 			},
 			variwide: {
-				// shared options for all variwide series
-				colors: ['#00b2aa', '#009389']
+				colors: ['var(--powder-blue)', 'var(--persian-green)', 'var(--teal)', 'var(--aquamarine)']
 			}
 		},
 		series: [{
@@ -767,8 +757,12 @@
 			dataLabels: {
 				enabled: true,
 				inside: true,
-				format: '{point.y:.0f} %'
+				format: '{point.y:.0f} %',
+				style: {
+					textOutline: 0
+				}
 			},
+			borderWidth: 0,
 			tooltip: {
 				pointFormat: '출력: <b>{point.y} %</b>' + ''
 			},
@@ -791,64 +785,56 @@
 
 		navigation: {
 			buttonOptions: {
-				enabled: false /* 메뉴 안보이기 */
+				enabled: false
 			}
 		},
-
 		title: {
 			text: ''
 		},
-
 		subtitle: {
 			text: ''
 		},
-
 		xAxis: {
-			lineColor: '', /* 눈금선색 */
-			tickColor: 'var(--white60)',
-			gridLineColor: 'var(--white60)',
+			lineColor: '',
+			tickColor: 'var(--grey)',
+			gridLineColor: 'var(--white25)',
 			labels: {
 				enabled: false,
 				align: 'right',
 				reserveSpace: true,
 				style: {
 					color: 'var(--white60)',
-					fontSize: '12px'
+					fontSize: '10px'
 				}
 			},
 			title: {
 				text: '사업소 합계',
-				margin: 13
+				margin: 13,
+				style: {
+					fontSize: '12px',
+					color: 'var(--grey)'
+				}
 			},
 			categories: ['입찰', '출력'],
 			crosshair: true
 		},
-
 		yAxis: {
-			lineColor: 'var(--white60)',
-			tickColor: 'var(--white60)',
-			gridLineColor: 'var(--white60)',
+			lineColor: 'var(--grey)',
+			tickColor: 'var(--grey)',
+			gridLineColor: 'var(--white25)',
 			gridLineWidth: 0,
 			min: 0,
 			title: {
 				text: '',
 				style: {
-					color: 'var(--white60)',
+					color: 'var(--grey)',
 					fontSize: '12px'
 				}
 			},
 			labels: {
 				enabled: false,
-				overflow: 'justify',
-				x: -10, /* 그래프와의 거리 조정 */
-				style: {
-					color: 'var(--white60)',
-					fontSize: '12px'
-				}
 			}
 		},
-
-		/* 범례 */
 		legend: {
 			enabled: false,
 			align: 'right',
@@ -856,61 +842,52 @@
 			x: 5,
 			y: -10,
 			itemStyle: {
-				color: 'var(--white60)',
+				color: 'var(--white87)',
 				fontSize: '12px',
 				fontWeight: 400
 			},
 			itemHoverStyle: {
-				color: '' /* 마우스 오버시 색 */
+				color: ''
 			},
-			symbolPadding: 3, /* 심볼 - 텍스트간 거리 */
-			symbolHeight: 7 /* 심볼 크기 */
+			symbolPadding: 3,
+			symbolHeight: 7
 		},
-
-		/* 툴팁 */
 		tooltip: {
-			valueSuffix: ' MWh'
+			valueSuffix: ' MWh',
+			shared: true,
+			borderColor: 'none',
+			backgroundColor: 'var(--bg-color)',
+			padding: 16,
+			style: {
+				color: 'var(--white87)',
+				fontSize: '12px' 
+			}
 		},
-
-		/* 옵션 */
 		plotOptions: {
 			series: {
 				stacking: 'percent',
 				label: {
 					connectorAllowed: true
 				},
-				borderWidth: 0, /* 보더 0 */
-				pointWidth: 25, /* 막대 두께 */
+				borderWidth: 0,
 			},
-			bar: {
+			column: {
+				stacking: 'percent',
 				dataLabels: {
-					enabled: true, /* 막대 안의 수치 안보이기 */
-					inside: true, /* 막대 안으로 라벨 수치 넣기 */
-					format: '{point.y:.0f} %', /* 단위 넣기 */
+					format: '{point.y:.0f} %',
 					style: {
-						color: '#ffffff',
+						color: 'var(--white87)',
 						fontSize: '11px',
 						fontWeight: 400,
 						textShadow: false,
-						textOutline: 0 /* 막대 안의 라벨 수치 테두리 없애기 */
+						textOutline: 0
 					}
-				}
-			},
-			column: {
-				stacking: 'percent', /*위로 쌓이는 막대  ,normal */
-				pointWidth: 80,
-				dataLabels: {
-					format: '{point.y:.0f} %',
 				}
 			}
 		},
-
-		/* 출처 */
 		credits: {
 			enabled: false
 		},
-
-		/* 그래프 스타일 */
 		series: [{
 			name: '입찰',
 			data: [],
@@ -920,7 +897,7 @@
 			dataLabels: {
 				enabled: true
 			},
-			color: '#575757' /* 입찰 */
+			color: '#575757'
 		}, {
 			name: '출력',
 			data: [],
@@ -930,67 +907,8 @@
 			dataLabels: {
 				enabled: true
 			},
-			color: '#26ccc8' /* 출력 */
+			color: '#26ccc8'
 		}],
-
-		/* 반응형 */
-		responsive: {
-			rules: [{
-				condition: {
-					maxWidth: 414 /* 차트 사이즈 */
-				},
-				chartOptions: {
-					xAxis: {
-						labels: {
-							style: {
-								fontSize: '12px'
-							}
-						}
-					}
-				}
-			}],
-			rules: [{
-				condition: {
-					minWidth: 842 /* 차트 사이즈 */
-				},
-				chartOptions: {
-					xAxis: {
-						labels: {
-							style: {
-								fontSize: '18px'
-							}
-						}
-					},
-					yAxis: {
-						labels: {
-							style: {
-								fontSize: '18px'
-							}
-						}
-					},
-					legend: {
-						itemStyle: {
-							fontSize: '18px'
-						},
-						symbolPadding: 5,
-						symbolHeight: 10
-					},
-					plotOptions: {
-						series: {
-							pointWidth: 37 /* 막대 두께 */
-							//pointPadding: 0.25 /* 막대 사이 간격 */
-						},
-						bar: {
-							dataLabels: {
-								style: {
-									fontSize: '13px',
-								}
-							}
-						}
-					}
-				}
-			}]
-		}
 	});
 
 	const rChart3 = Highcharts.chart('rchart3', {
@@ -1004,48 +922,48 @@
 		},
 		navigation: {
 			buttonOptions: {
-				enabled: false /* 메뉴 안보이기 */
+				enabled: false
 			}
 		},
 		title: {text: ''},
 		subtitle: {text: ''},
 		xAxis: {
-			lineColor: 'var(--white60)', /* 눈금선색 */
+			lineColor: 'var(--white60)',
 			tickColor: 'var(--white60)',
-			gridLineColor: 'var(--white60)',
+			gridLineColor: 'var(--white25)',
 			plotLines: [{
 				color: 'var(--white60)',
 				width: 1
 			}],
 			labels: {
 				align: 'center',
-				y: 27, /* 그래프와 거리 */
+				y: 27,
 				style: {
 					color: 'var(--white60)',
 					fontSize: '12px'
-				}
+				},
 			},
-			tickInterval: 1, /* 눈금의 픽셀 간격 조정 */
+			tickInterval: 1,
 			title: {
 				text: null
 			},
 			crosshair: true
 		},
 		yAxis: {
-			lineColor: 'var(--white60)', /* 눈금선색 */
+			lineColor: 'var(--white60)',
 			tickColor: 'var(--white60)',
-			gridLineColor: 'var(--white60)',
+			gridLineColor: 'var(--white25)',
 			plotLines: [{
 				color: 'var(--white60)',
 				width: 1
 			}],
-			gridLineWidth: 1, /* 기준선 grid 안보이기/보이기 */
-			min: 0, /* 최소값 지정 하면 + 만 나옴 */
+			gridLineWidth: 1,
+			min: 0,
 			title: {
 				text: 'kWh',
 				align: 'low',
-				rotation: 0, /* 타이틀 기울기 */
-				y: 25, /* 타이틀 위치 조정 */
+				rotation: 0,
+				y: 25,
 				x: 10,
 				style: {
 					color: 'var(--white60)',
@@ -1063,7 +981,7 @@
 					}
 				},
 				overflow: 'justify',
-				x: -10, /* 그래프와의 거리 조정 */
+				x: -10,
 				style: {
 					color: 'var(--white60)',
 					fontSize: '12px'
@@ -1082,10 +1000,10 @@
 				fontWeight: 400
 			},
 			itemHoverStyle: {
-				color: '' /* 마우스 오버시 색 */
+				color: ''
 			},
-			symbolPadding: 3, /* 심볼 - 텍스트간 거리 */
-			symbolHeight: 7 /* 심볼 크기 */
+			symbolPadding: 3,
+			symbolHeight: 7
 		},
 		series: [],
 		tooltip: {
@@ -1095,7 +1013,14 @@
 					return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + numberComma(Math.round(point.y)) + suffix;
 				}, '<b>' + this.x + '시 </b>');
 			},
-			shared: true
+			shared: true,
+			borderColor: 'none',
+			backgroundColor: 'var(--bg-color)',
+			padding: 16,
+			style: {
+				color: 'var(--white87)',
+				fontSize: '12px' 
+			}
 		},
 		plotOptions: {
 			series: {
@@ -1103,54 +1028,54 @@
 					connectorAllowed: false
 				},
 				borderColor: 'var(--white60)',
-				borderWidth: 0 /* 보더 0 */
+				borderWidth: 0
 			},
 			line: {
 				marker: {
-					enabled: false /* 마커 안보이기 */
+					enabled: false
 				}
 			}
 		},
 		credits: {
 			enabled: false
 		},
-		responsive: {
-			rules: [{
-				condition: {
-					minWidth: 842
-				},
-				chartOptions: {
-					chart: {
-						marginLeft: 75
-					},
-					xAxis: {
-						labels: {
-							style: {
-								fontSize: '18px'
-							}
-						}
-					},
-					yAxis: {
-						title: {
-							style: {
-								fontSize: '18px'
-							}
-						},
-						labels: {
-							style: {
-								fontSize: '18px'
-							}
-						}
-					},
-					legend: {
-						itemStyle: {
-							fontSize: '18px'
-						},
-						symbolPadding: 5,
-						symbolHeight: 10
-					}
-				}
-			}]
-		}
+		// responsive: {
+		// 	rules: [{
+		// 		condition: {
+		// 			minWidth: 842
+		// 		},
+		// 		chartOptions: {
+		// 			chart: {
+		// 				marginLeft: 75
+		// 			},
+		// 			xAxis: {
+		// 				labels: {
+		// 					style: {
+		// 						fontSize: '18px'
+		// 					}
+		// 				}
+		// 			},
+		// 			yAxis: {
+		// 				title: {
+		// 					style: {
+		// 						fontSize: '18px'
+		// 					}
+		// 				},
+		// 				labels: {
+		// 					style: {
+		// 						fontSize: '18px'
+		// 					}
+		// 				}
+		// 			},
+		// 			legend: {
+		// 				itemStyle: {
+		// 					fontSize: '18px'
+		// 				},
+		// 				symbolPadding: 5,
+		// 				symbolHeight: 10
+		// 			}
+		// 		}
+		// 	}]
+		// }
 	});
 </script>

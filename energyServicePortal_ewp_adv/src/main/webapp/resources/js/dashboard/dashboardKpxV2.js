@@ -1036,7 +1036,7 @@ const typeSiteDraw = async () => {
 const getTodayTotalDetail = async function () {
 	const targetApi = [apiHost + '/status/raw/site', apiHost + '/energy/now/sites'];
 	const resourceByStatus = document.querySelectorAll('#centerTbody tr td');
-	const targetArea = document.querySelectorAll('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li');
+	const targetArea = document.querySelectorAll('.gmain-chart4 .chart-info-right ul li');
 
 	resourceByStatus.forEach((td, index) => {
 		if (index !== 0 && index !== 3){
@@ -1109,14 +1109,14 @@ const getTodayTotalDetail = async function () {
 			  , tPower = resourceData['targetActivePower']
 			  , siteCount = resourceData['siteCount'];
 
-			let prevVal1 = Number($('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(1) span').text().replace(/[^0-9]/g, ''));
-			$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(1) span').text(numberComma(Math.floor(prevVal1 += (aPower / 1000))));
+			let prevVal1 = Number($('.gmain-chart4 .chart-info-right ul li:nth-child(1) span').text().replace(/[^0-9]/g, ''));
+			$('.gmain-chart4 .chart-info-right ul li:nth-child(1) span').text(numberComma(Math.floor(prevVal1 += (aPower / 1000))));
 
-			let prevVal2 = Number($('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(2) span').text().replace(/[^0-9]/g, ''));
-			$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(2) span').text(numberComma(Math.floor(prevVal2 += (tPower / 1000))));
+			let prevVal2 = Number($('.gmain-chart4 .chart-info-right ul li:nth-child(2) span').text().replace(/[^0-9]/g, ''));
+			$('.gmain-chart4 .chart-info-right ul li:nth-child(2) span').text(numberComma(Math.floor(prevVal2 += (tPower / 1000))));
 
-			let prevVal3 = Number($('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(3) span').text().replace(/[^0-9]/g, ''));
-			$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(3) span').text(numberComma(Math.floor(prevVal3 += (capacity / 1000))));
+			let prevVal3 = Number($('.gmain-chart4 .chart-info-right ul li:nth-child(3) span').text().replace(/[^0-9]/g, ''));
+			$('.gmain-chart4 .chart-info-right ul li:nth-child(3) span').text(numberComma(Math.floor(prevVal3 += (capacity / 1000))));
 
 			acPower += aPower;
 

@@ -1355,8 +1355,8 @@ const beforeTodayTotalPromise = (site) => {
 
 const getTodayTotalDetail = async function () {
 
-	$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(1) span').text(0);
-	$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(2) span').text(0);
+	$('.gmain-chart4 .chart-info-right ul li:nth-child(1) span').text(0);
+	$('.gmain-chart4 .chart-info-right ul li:nth-child(2) span').text(0);
 
 	const formData = getSiteMainSchCollection('day');
 	$('#centerTbody tr td:nth-child(1)').html(Math.floor(siteList.length) + '<em>&nbsp;&nbsp;개소</em>');
@@ -1410,8 +1410,8 @@ const getTodayTotalDetail = async function () {
 		}).done(function (data, textStatus, jqXHR) {
 			let generationForecastSum = 0;
 			data.data[0].generation.items.map((e, idx) => generationForecastSum += e.energy);
-			let prevVal = Number($('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(2) span').text().replace(/[^0-9]/g, ''));
-			$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(2) span').text(numberComma(Math.floor(prevVal += generationForecastSum / 1000)));
+			let prevVal = Number($('.gmain-chart4 .chart-info-right ul li:nth-child(2) span').text().replace(/[^0-9]/g, ''));
+			$('.gmain-chart4 .chart-info-right ul li:nth-child(2) span').text(numberComma(Math.floor(prevVal += generationForecastSum / 1000)));
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);
 			console.error(textStatus);
@@ -1432,8 +1432,8 @@ const getTodayTotalDetail = async function () {
 		}).done(function (data, textStatus, jqXHR) {
 			if (!isEmpty(data.data[site.sid])) {
 				co2Sum += Math.floor(data.data[site.sid].co2);
-				let prevVal = Number($('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(1) span').text().replace(/[^0-9]/g, ''));
-				$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(1) span').text(numberComma(Math.floor(prevVal += (data.data[site.sid].energy / 1000))));
+				let prevVal = Number($('.gmain-chart4 .chart-info-right ul li:nth-child(1) span').text().replace(/[^0-9]/g, ''));
+				$('.gmain-chart4 .chart-info-right ul li:nth-child(1) span').text(numberComma(Math.floor(prevVal += (data.data[site.sid].energy / 1000))));
 				$('#centerTbody tr td:nth-child(4)').html(numberComma(Math.floor(co2Sum / 1000)) + '<em>&nbsp;&nbsp;kg</em>');
 
 				let prevPay = Number($('#centerTbody tr td:nth-child(5)').text().replace(/[^0-9]/g, ''));

@@ -608,6 +608,7 @@
 					if (getDeviceData[1] == 'success') {
 						const devcieArray = getDeviceData[0];
 						devcieArray.forEach(function(el) {
+							// console.log("el--", el)
 							if (isEmpty(deviceMap[el.device_type])) {
 								deviceMap[el.device_type] = new Array(el);
 							} else {
@@ -626,9 +627,22 @@
 											val.devices.forEach(function(element) {
 												if(el.did == element.did) {
 													const mergeObj = $.extend({}, el, element);
+													console.log("el==", el, "elemne===", element)
 													deviceMap[key][index] = mergeObj;
+														if(el.sid == element.did) {
+														}
 												}
 											});
+										}
+									});
+									deviceMap[key].sort(function(a, b){
+										if(a.sid == b.sid){
+											if(a["dname"] < b["dname"]){
+												return -1;
+											} else if(a["dname"] > b["dname"]){
+												return 1;
+											}
+											return 0;
 										}
 									});
 								}
@@ -798,8 +812,8 @@
 			});
 		}
 
-		typeList.sort((a, b) => {
-			return a.typeId < b.typeId ? -1 : a.typeId > b.typeId ? 1 : 0;
+		typeList.sort(function(a, b) {
+			return (a.typeId < b.typeId) ? -1 : (a.typeId > b.typeId) ? 1 : 0;
 		});
 
 		setMakeList(typeList, 'deviceStateTypeList', {'dataFunction': {}});
@@ -851,7 +865,6 @@
 				} else {
 					if (!isEmpty(resultData) && !isEmpty(resultData[liData])) {
 						let dValue = '';
-
 						if(liData.match("activePower") || liData.match("dcPower")){
 							let rounded = Math.round(resultData[liData]);
 							if(rounded < 1000){
@@ -902,7 +915,13 @@
 						}
 					} else {
 						let tempVal = displayNumberFixedDecimal(resultData[liData], suffix, 3, 2);
-						dValue = tempVal[0] != '-' ? tempVal[0] + ' ' + tempVal[1] : tempVal[0];
+						if(liData.match("voltageR") || liData.match("voltageS") || liData.match("voltageT")) {
+							dValue = tempVal[0] != '-' ? tempVal[0] + ' ' + 'V' : tempVal[0];
+						} else if(liData.match("currentR") || liData.match("currentS") || liData.match("currentT")) {
+							dValue = tempVal[0] != '-' ? tempVal[0] + ' ' + 'A' : tempVal[0];
+						} else {
+							dValue = tempVal[0] != '-' ? tempVal[0] + ' ' + tempVal[1] : tempVal[0];
+						}
 					}
 					$(this).find('.di-li-text').text(dValue);
 				} else {

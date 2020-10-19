@@ -952,10 +952,10 @@ const typeSiteDraw = async () => {
 const getTodayTotalDetail = async function () {
 	const targetApi = [apiHost + '/energy/now/sites?interval=day', apiHost + '/energy/forecasting/sites?interval=15min', apiHost + '/status/raw/site'];
 
-	let targetArea = $('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li');
+	let targetArea = $('.gmain-chart4 .chart-info-right ul li');
 
-	$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(1) span').text(0);
-	$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(2) span').text(0);
+	$('.gmain-chart4 .chart-info-right ul li:nth-child(1) span').text(0);
+	$('.gmain-chart4 .chart-info-right ul li:nth-child(2) span').text(0);
 
 	$('#centerTbody tr td:nth-child(1)').html(Math.floor(siteList.length) + '<em>&nbsp;&nbsp;개소</em>');
 	$('#centerTbody tr td:nth-child(2)').text('');
@@ -982,7 +982,7 @@ const getTodayTotalDetail = async function () {
 						}
 					});
 
-					$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(1) span').text(numberComma(Math.floor(energySum / 1000)));
+					$('.gmain-chart4 .chart-info-right ul li:nth-child(1) span').text(numberComma(Math.floor(energySum / 1000)));
 					$('#centerTbody tr td:nth-child(4)').html(numberComma(Math.floor(co2Sum / 1000)) + '<em>&nbsp;&nbsp;kg</em>');
 					$('#centerTbody tr td:nth-child(5)').html(numberComma(Math.floor(moneySum / 1000)) + '<em>&nbsp;&nbsp;천원</em>');
 				} else if (index === 1) {
@@ -992,7 +992,7 @@ const getTodayTotalDetail = async function () {
 							siteForeEnergyItem.forEach(siteForeEnergy => {
 								siteForeEnergy['items'].map(e => generationForecastSum += e['energy']);
 
-								$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(2) span').text(numberComma(Math.floor(generationForecastSum / 1000)));
+								$('.gmain-chart4 .chart-info-right ul li:nth-child(2) span').text(numberComma(Math.floor(generationForecastSum / 1000)));
 							});
 						}
 					});

@@ -1170,8 +1170,8 @@ const beforeTodayTotalPromise = (site) => {
 
 const getTodayTotalDetail = async function () {
 
-	$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(1) span').text(0);
-	$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(2) span').text(0);
+	$('.gmain-chart4 .chart-info-right ul li:nth-child(1) span').text(0);
+	$('.gmain-chart4 .chart-info-right ul li:nth-child(2) span').text(0);
 
 	const formData = getSiteMainSchCollection('day');
 	if (!oid.match('testkpx')) {
@@ -1186,9 +1186,9 @@ const getTodayTotalDetail = async function () {
 		$('#centerTbody tr:eq(0) td:nth-child(5)').text(' - ');
 		$('#centerTbody tr:eq(0) td:nth-child(6)').text(' - ');
 
-		$('.gmain-chart-kpx .chart-box .chart-info .chart-info-right ul li:nth-child(1) span').text('')
-		$('.gmain-chart-kpx .chart-box .chart-info .chart-info-right ul li:nth-child(2) span').text('')
-		$('.gmain-chart-kpx .chart-box .chart-info .chart-info-right ul li:nth-child(3) span').text('')
+		$('.gmain-chart-kpx .chart-info-right ul li:nth-child(1) span').text('')
+		$('.gmain-chart-kpx .chart-info-right ul li:nth-child(2) span').text('')
+		$('.gmain-chart-kpx .chart-info-right ul li:nth-child(3) span').text('')
 	}
 
 	let deviceArray = new Array();
@@ -1221,13 +1221,13 @@ const getTodayTotalDetail = async function () {
 				rtnData.forEach(di => {
 					let aPower = di.activePower;
 					let tPower = di.targetActivePower;
-					let prevVal1 = Number($('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(1) span').text().replace(/[^0-9]/g, ''));
-					$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(1) span').text(numberComma(Math.floor(prevVal1 += (aPower / 1000))));
-					let prevVal2 = Number($('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(2) span').text().replace(/[^0-9]/g, ''));
-					$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(2) span').text(numberComma(Math.floor(prevVal2 += (tPower / 1000))));
+					let prevVal1 = Number($('.gmain-chart4 .chart-info-right ul li:nth-child(1) span').text().replace(/[^0-9]/g, ''));
+					$('.gmain-chart4 .chart-info-right ul li:nth-child(1) span').text(numberComma(Math.floor(prevVal1 += (aPower / 1000))));
+					let prevVal2 = Number($('.gmain-chart4 .chart-info-right ul li:nth-child(2) span').text().replace(/[^0-9]/g, ''));
+					$('.gmain-chart4 .chart-info-right ul li:nth-child(2) span').text(numberComma(Math.floor(prevVal2 += (tPower / 1000))));
 
-					let prevVal3 = Number($('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(3) span').text().replace(/[^0-9]/g, ''));
-					$('.gmain-chart4 .chart-box .chart-info .chart-info-right ul li:nth-child(3) span').text(numberComma(Math.floor(prevVal3 += (capacity / 1000))));
+					let prevVal3 = Number($('.gmain-chart4 .chart-info-right ul li:nth-child(3) span').text().replace(/[^0-9]/g, ''));
+					$('.gmain-chart4 .chart-info-right ul li:nth-child(3) span').text(numberComma(Math.floor(prevVal3 += (capacity / 1000))));
 
 					if (resourceType == 1) {
 						deviceArray.push({

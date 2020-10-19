@@ -116,7 +116,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 		formatter: function () {
 			return this.points.reduce(function (s, point) {
 				let suffix = point.series.userOptions.tooltip.valueSuffix;
-				return s + '<br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + numberComma(Math.round(point.y)) + suffix;
+				return s + '<br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + numberComma(Math.round(point.y)) + ' ' + suffix;
 			}, '<span style="display:flex;"><b>' + this.x + '월</b></span>');
 		},
 		shared: true,
@@ -288,7 +288,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		formatter: function () {
 			return this.points.reduce(function (s, point) {
 				let suffix = point.series.userOptions.tooltip.valueSuffix;
-				return s + ' <br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + numberComma(Math.round(point.y)) + suffix;
+				return s + ' <br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + numberComma(Math.round(point.y)) + ' ' + suffix;
 			}, '<span style="display:flex;"><b>' + this.x + '일</b></span>');
 		},
 		shared: true,
@@ -423,7 +423,7 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 			formatter: function () {
 				const suffix = this.chart.yAxis[0].userOptions.title.text;
 				const yAxisValue = displayNumberFixedUnit(this.value, 'kWh', suffix, 0);
-				return yAxisValue[0];
+				return yAxisValue[0]/1000 + 'K';
 			},
 			overflow: 'justify',
 			x: -10,
@@ -455,7 +455,7 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 			return this.points.reduce(function (s, point) {
 				let suffix = point.series.userOptions.tooltip.valueSuffix;
 				let val = displayNumberFixedUnit(point.y, 'kWh', 'kWh', 0, "round")
-				return s + '<br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + val[0] + suffix;
+				return s + '<br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + val[0] + ' ' + suffix;
 			}, '<span style="display:flex;"><b>' + this.x + '</b></span>');
 		},
 		shared: true,
@@ -508,14 +508,13 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
  */
 const pieChart = Highcharts.chart('pie_chart', {
 	chart: {
-		marginTop: 0,
-		marginLeft: 0,
-		marginRight: 0,
+		margin: [0, 0, 0, 0],
+		spacing: [0, 0, 0, 0],
 		backgroundColor: 'transparent',
 		zoomType: 'xy',
 		plotBorderWidth: 0,
 		plotShadow: false,
-		height: 180
+		height: 160
 	},
 	navigation: {
 		buttonOptions: {
@@ -559,7 +558,7 @@ const pieChart = Highcharts.chart('pie_chart', {
 					color: 'var(--white87)'
 				}
 			},
-			center: ['40%', '50%'],
+			center: ['50%', '50%'],
 			borderWidth: 0,
 			size: '100%'
 		}
@@ -588,12 +587,15 @@ const pieChart = Highcharts.chart('pie_chart', {
 	responsive: { // 반응형
 		rules: [{
 			condition: {
-				maxWidth: 768
+				maxWidth: 992
+			},
+			chart: {
+				height: 180
 			},
 			chartOptions: {
 				plotOptions: {
 					pie: {
-						center: ['50%', '50%']
+						// center: ['50%', '50%']
 					}
 				}
 			}

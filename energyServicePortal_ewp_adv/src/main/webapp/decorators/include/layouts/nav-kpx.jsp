@@ -150,7 +150,7 @@
 		<a href="javascript:void(0);" class="mobile-nav-close"></a>
 	</div>
 	
-	<div class="g_menu">
+	<div class="g-menu">
 		<c:if test="${not empty userInfo}">
 		<ul class="menu-list">
 			<li class="gmn1 menu-item">

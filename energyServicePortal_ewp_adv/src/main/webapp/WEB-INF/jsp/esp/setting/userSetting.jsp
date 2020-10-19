@@ -1935,7 +1935,7 @@
 								<div class="flex-start warning-wrapper">
 									<small id="hasLet" class="tick">영문</small>
 									<small id="hasNum" class="tick">숫자</small>
-									<small id="sixCharLong" class="tick">8자리 이상</small>
+									<small id="sixCharLong" class="tick">6자리 이상</small>
 								</div>
 							</div>
 						</div>
