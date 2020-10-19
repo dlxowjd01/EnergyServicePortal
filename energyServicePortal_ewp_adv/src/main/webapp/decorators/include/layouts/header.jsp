@@ -363,7 +363,6 @@
 	function dashboardMove(type, key, value) {
 
 		let inp = $('input').attr('type', 'hidden').attr('name', key).attr('value', value);
-
 		if(type == 'group') {
 			$('#dashboardForm').append(inp).attr('action', '/dashboard/gmain.do').submit();
 		} else if(type == 'site') {
@@ -379,6 +378,16 @@
 			// alert('아직 정의 되지않은 타입입니다.');
 			return;
 		}
+	}
+
+	function toggleMenu(self){
+		let checkBox = $(self).find('input[type="checkbox"]');
+		if(checkBox.is(':checked')){
+			$(self).find("label").addClass("on");
+		} else {
+			$(self).find("label").removeClass("on");
+		}
+
 	}
 </script>
 
@@ -533,9 +542,9 @@
 																	</c:if>
 																</c:forEach>
 															</c:if>
-															<li>
+															<li onclick="toggleMenu(this)">
 																<input type="checkbox" name="systemLoc" id="lo${countryStat.index}" value="${country.value.code}" <c:if test="${choice eq 'true'}">checked</c:if>>
-																<label for="lo${countryStat.index}" <c:if test="${choice eq 'true'}">class="on"</c:if>>${country.value.name.kr}</label>
+																<label for="lo${countryStat.index}" class="sub-item" <c:if test="${choice eq 'true'}">class="on"</c:if>>${country.value.name.kr}</label>
 															</li>
 														</c:forEach>
 													</ul>
@@ -562,9 +571,9 @@
 													</c:if>
 												</c:forEach>
 											</c:if>
-											<li>
+											<li onclick="toggleMenu(this)">
 												<input type="checkbox" name="systemType" id="tp${stat.index}" value="${type.value.code}" <c:if test="${choice eq 'true'}">checked</c:if>>
-												<label for="tp${stat.index}" <c:if test="${choice eq 'true'}">class="on"</c:if>>${type.value.name.kr}</label>
+												<label for="tp${stat.index}" class="sub-item" <c:if test="${choice eq 'true'}">class="on"</c:if>>${type.value.name.kr}</label>
 											</li>
 										</c:forEach>
 									</ul>
