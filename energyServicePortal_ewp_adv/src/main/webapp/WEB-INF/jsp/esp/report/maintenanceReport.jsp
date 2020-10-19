@@ -1,88 +1,204 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
 <script type="text/javascript">
+	let reportTable = null;
 	$(function () {
-		setInitList('listData'); //리스트초기화
-		getDataList(page);
+		reportTable = $('#reportTable').DataTable({
+			autoWidth: true,
+			fixedHeader: true,
+			"table-layout": "fixed",
+			scrollY: '720px',
+			scrollCollapse: true,
+			sortable: true,
+			paging: true,
+			pageLength: 10,
+			columns: [
+				{
+					title: '<fmt:message key="workreportmain.2.number" />',
+					data: null,
+					render: function (data, type, full, rowIndex) {
+						return rowIndex.row + 1;
+					},
+					className: 'dt-center no-sorting fixed'
+				},
+				{
+					title: '<fmt:message key="workreportmain.2.reportType" />',
+					data: 'report_type',
+					render: function (data, type, full, rowIndex) {
+						if ('1' == data) {
+							result = '출장/조치 보고서';
+						} else if ('2' == data) {
+							result = 'QC 보고서';
+						}
+						return result;
+					},
+					className: 'dt-center'
+				},
+				{
+					title: '<fmt:message key="workreportmain.2.documentNumber" />',
+					data: 'report_id',
+					className: 'dt-center'
+				},
+				{
+					title: '<fmt:message key="workreportmain.2.reportName" />',
+					data: 'report_name',
+					render: function (data, type, full, rowIndex) {
+						return '<a href="/report/maintenanceReportDetails.do?report_id=' + full['report_id'] + '" class="table-link">' + data + '</a>';
+					},
+					className: 'dt-center'
+				},
+				{
+					title: '<fmt:message key="workreportmain.2.writer" />',
+					data: 'updated_by',
+					className: 'dt-center'
+				},
+				{
+					title: '<fmt:message key="workreportmain.2.dateOfIssue" />',
+					data: 'write_date',
+					render: function (data, type, full, rowIndex) {
+						if (data != null) {
+							return data.format('yyyy-MM-dd');
+						} else {
+							return '-';
+						}
+					},
+					className: 'dt-center'
+				},
+				{
+					title: '등록상태',
+					data: null,
+					render: function (data, type, full, rowIndex) {
+						return '<fmt:message key="workreportmain.2.saved" />'
+					},
+					className: 'dt-center'
+				}
+			],
+			language: {
+				emptyTable: "조회된 데이터가 없습니다.",
+				zeroRecords:  "검색된 결과가 없습니다."
+			},
+			dom: 'tip',
+		}).columns.adjust().draw();
+
+		new $.fn.dataTable.Buttons(reportTable, {
+			name: 'commands',
+			buttons: [
+				{
+					extend: 'excelHtml5',
+					className: "btn-save",
+					text: '<fmt:message key="workreportmain.1.dataExtracts" />',
+					filename: '작업보고서_' + new Date().format('yyyyMMddHHmmss'),
+					customize: function( xlsx ) {
+						var sheet = xlsx.xl.worksheets['sheet1.xml'];
+						$('row:first c', sheet).attr( 's', '42' );
+						var sheet = xlsx.xl.worksheets['sheet1.xml'];
+					}
+				}
+			]
+		});
+
+		reportTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup");
+		getDataList();
 	});
 
 	$(document).on('keyup', '#key_word', function (e) {
 		if (e.keyCode == 13) { getDataList(); }
 	});
 
-	function nvl(value, str) {
-		if (isEmpty(value)) {
-			return str;
+	function getDataList(page, n, sort) {
+		const write_date_from = $('#write_date_from').datepicker('getDate')
+			, write_date_to = $('#write_date_to').datepicker('getDate')
+
+		if ((write_date_from != null && write_date_to == null) || (write_date_from == null && write_date_to != null)) {
+			$('#dateWarning').removeClass('hidden');
+			return false;
 		} else {
-			return value;
+			$('#dateWarning').addClass('hidden');
 		}
+
+		$.ajax({
+			url: apiHost + '/reports/remote_work',
+			type: 'get',
+			async: false,
+			data: {oid: oid},
+		}).done((json, textStatus, jqXHR) => {
+			const data = json['data'];
+			data.forEach((rowData, index) => {
+				const workInfo = JSON.parse(rowData['work_info'])
+					, workDate = workInfo['작성_일자'];
+				data[index]['write_date'] = new Date(workDate);
+			});
+
+			let refineList = data.filter(rowData => jsonDataFilter(rowData));
+
+			//작성일 기준 역순 정렬
+			refineList.sort((a, b) => {
+				return a['workDate'] < b['workDate'] ? 1 : a['workDate'] > b['workDate'] ? -1 : 0;
+			});
+
+			reportTable.clear();
+			reportTable.rows.add(refineList).draw();
+		}).fail((jqXHR, textStatus, errorThrown) => {
+			const r = formatErrorMessage(jqXHR, errorThrown);
+			$('#errMsg').text('처리 중 오류가 발생했습니다.' + r);
+			$('#errorModal').modal('show');
+			setTimeout(function(){
+				$('#errorModal').modal('hide');
+			}, 2000);
+		});
 	}
 
-	function getCsvDown() {
-		var column = [
-			'report_type_name',
-			'report_id',
-			'report_name',
-			'updated_by',
-			'write_date',
-		], //json Key
-			header = [
-				'보고서구분',
-				'문서번호',
-				'보고서명',
-				'작성자',
-				'작성일자',
-			]; //csv 파일 헤더
 
-		getJsonCsvDownload(
-			$('#listData').data('gridJsonData'),
-			column,
-			header,
-			'work_report.csv'
-		); // json list, 컬럼, 헤더명, 파일명
-	}
+	function jsonDataFilter(rowData) {
+		const keyWord = $('#key_word').val().trim()
+			, report_type = $('#report_type').data('value')
+			, write_date_from = $('#write_date_from').datepicker('getDate')
+			, write_date_to = $('#write_date_to').datepicker('getDate')
+			, workInfo = JSON.parse(rowData['work_info']);
 
-	function jsonDataFilter(jsonData) {
-		var keyWord = $('#key_word').val().trim().toLowerCase(),
-			report_type = $('#report_type').data('value'),
-			write_date_from = $('#write_date_from').val().split('-').join(''),
-			write_date_to = $('#write_date_to').val().split('-').join(''),
-			filterCheckCount = 0,
-			workinfoObj = JSON.parse(jsonData.work_info),
-			bReportType = false,
-			bWriteDate = false,
-			bKeyWord = false;
-			bResult = false;
-		//보고서 구분
-		if ('' != report_type && report_type == jsonData.report_type) {
+		let bReportType = false
+		  , bWriteDate = false
+		  , bKeyWord = false
+		  , bResult = false; //결과값
+
+
+		if (isEmpty(report_type) || (!isEmpty(report_type) && report_type == rowData['report_type'])) {
 			bReportType = true;
-		} else if ('' == report_type) {
-			bReportType = true;
+		} else {
+			bReportType = false;
 		}
+
 		//작성일자
-		if (write_date_from != '' && write_date_to != '') {
-			var write_date = jsonData.write_date.split('-').join('');
+		if (write_date_from == null && write_date_to == null) {
+			bWriteDate = true;
+		} else if (write_date_from != null && write_date_to != null) {
+			const write_date = rowData['write_date'];
 
-			if (
-				Number(write_date) >= Number(write_date_from) &&
-				Number(write_date) <= Number(write_date_to)
-			) {
+			if (write_date.getTime() >= write_date_from.getTime() && write_date.getTime() <= write_date_to.getTime()) {
 				bWriteDate = true;
 			} else {
 				bWriteDate = false;
 			}
-		} else if (write_date_from == '' && write_date_to == '') {
-			bWriteDate = true;
+		} else {
+			bWriteDate = false;
 		}
+
 		//키워드검색
-		if (
-			jsonData.report_name.toLowerCase().indexOf(keyWord) > -1 ||
-			workinfoObj.출장_장소.toLowerCase().indexOf(keyWord) > -1 ||
-			workinfoObj.출장_목적.toLowerCase().indexOf(keyWord) > -1 ||
-			workinfoObj.출장자.toLowerCase().indexOf(keyWord) > -1 ||
-			jsonData.site_name.toLowerCase().indexOf(keyWord) > -1 ||
-			jsonData.updated_by.toLowerCase().indexOf(keyWord) > -1
-		) {
+		if (!isEmpty(keyWord)) {
+			const keyWordPattern = new RegExp(keyWord, 'i'); //ignoreCase 대소문자 구분X
+
+			if (keyWordPattern.test(rowData['report_name'])
+				|| keyWordPattern.test(workInfo['출장_장소'])
+				|| keyWordPattern.test(workInfo['출장_목적'])
+				|| keyWordPattern.test(workInfo['출장자'])
+				|| keyWordPattern.test(rowData['site_name'])
+				|| keyWordPattern.test(rowData['updated_by'])
+			) {
+				bKeyWord = true;
+			} else {
+				bKeyWord = false;
+			}
+		} else {
 			bKeyWord = true;
 		}
 
@@ -91,108 +207,6 @@
 		}
 
 		return bResult;
-	}
-
-	function setJsonDataFormat(result, page , n, sort) {
-		var jsonList = [];
-
-		for (var i = 0, count = result.data.length; i < count; i++) {
-			var rowData = result.data[i],
-				work_info = JSON.parse(rowData.work_info);
-			rowData['report_type_name'] = getReportTypeName(
-				rowData.report_type
-			);
-
-			var workInfo = new Date(work_info['작성_일자']);
-
-			var year = workInfo.getFullYear();
-			var month = workInfo.getMonth() + 1;
-			var date = workInfo.getDate();
-
-			if (('' + month).length == 1) {
-				month = '0' + month;
-			}
-			if (('' + date).length == 1) {
-				date = '0' + date;
-			}
-
-			rowData['write_date'] = year + '-' + month + '-' + date;
-
-			if (jsonDataFilter(rowData)) {
-				jsonList.push(rowData);
-			}
-		}
-		$('.sort-table').data('nowjsp', 'maintenance');
-		jsonListSort(n, sort, jsonList);
-		jsonList = paging(page, jsonList);
-		return jsonList;
-	}
-
-	function getDataList(page, n, sort) {
-		if (page == undefined) {
-			page = 1;
-		}else{
-			if(isEmpty(n) && isEmpty(sort)) {
-				$('.sort-table > thead').find('button').each(function(){
-					if($(this).attr('class') != 'btn-align'){
-						n = $(this).data('colname');
-						sort = $(this).data('classname');
-					}
-				});
-				
-			}
-		}
-		$.ajax({
-			url: apiHost + '/reports/remote_work',
-			type: 'get',
-			async: false,
-			data: { oid: oid },
-			success: function (result) {
-				
-				setMakeList(setJsonDataFormat(result, page, n, sort), 'listData', {
-					dataFunction: {
-						INDEX: getNumberIndex,
-						report_type: getReportTypeName,
-					},
-				}); //list생성
-			},
-			error: function (request, status, error) {
-				alert('오류가 발생하였습니다. \n관리자에게 문의하세요.');
-			},
-		});
-	}
-
-	function getReportTypeName(data) {
-		let result = '';
-
-		if ('1' == data) {
-			result = '출장/조치 보고서';
-		} else if ('2' == data) {
-			result = 'QC 보고서';
-		}
-
-		return result;
-	}
-
-	function getNumberIndex(index) {
-		return index + 1;
-	}
-
-	function setCheckedAll(obj, chkName) {
-		let checkVal = obj.checked;
-		$('input[name="' + chkName + '"]').prop('checked', checkVal);
-	}
-
-	function getCheckList(checkName) {
-		let jsonList = $('#listData').data('gridJsonData'),
-			checkList = [];
-		$('input[name="' + checkName + '"]').each(function (i) {
-			if (this.checked) {
-				checkList.push(jsonList[i]);
-			}
-		});
-
-		return checkList;
 	}
 </script>
 <div class="row">
@@ -227,11 +241,12 @@
 		</div>
 		<div class="fl">
 			<span class="tx-tit"><fmt:message key="workreportmain.1.dateOfIssue" /></span>
-			<div class="sel-calendar">
-				<input type="text" id="write_date_from" class="sel datepicker fromDate" value="" autocomplete="off" />
+			<div class="sel-calendar dateField">
+				<input type="text" id="write_date_from" class="sel fromDate" value="" autocomplete="off" readonly />
 				<em></em>
-				<input type="text" id="write_date_to" class="sel datepicker toDate" value="" autocomplete="off" />
+				<input type="text" id="write_date_to" class="sel toDate" value="" autocomplete="off" readonly />
 			</div>
+			<small id="dateWarning" class="hidden warning">시작일과 종료일을 모두 입력해 주세요.</small>
 		</div>
 		<div class="fl">
 			<div class="text-input-type">
@@ -243,9 +258,7 @@
 				<fmt:message key="workreportmain.1.search" />
 			</button>
 		</div>
-		<div class="fr">
-			<a href="javascript:void(0);" class="btn-save" onclick="getCsvDown();"><fmt:message key="workreportmain.1.dataExtracts" /></a>
-		</div>
+		<div id="exportBtnGroup" class="fr"></div>
 	</div>
 </div>
 <div class="row">
@@ -257,45 +270,16 @@
 				</button>
 			</div>
 			<div class="spc-tbl align-type">
-				<table class="sort-table chk-type">
-					<thead>
-						<tr>
-							<th><fmt:message key="workreportmain.2.number" /></th>
-							<th>
-								<button type="button" class="btn-align"><fmt:message key="workreportmain.2.reportType" /></button>
-							</th>
-							<th>
-								<button type="button" class="btn-align"><fmt:message key="workreportmain.2.documentNumber" /></button>
-							</th>
-							<th>
-								<button type="button" class="btn-align"><fmt:message key="workreportmain.2.reportName" /></button>
-							</th>
-							<th>
-								<button type="button" class="btn-align"><fmt:message key="workreportmain.2.writer" /></button>
-							</th>
-							<th>
-								<button type="button" class="btn-align"><fmt:message key="workreportmain.2.dateOfIssue" /></button>
-							</th>
-							<th>
-								<button type="button" class="btn-align"><fmt:message key="workreportmain.2.registrationStatus" /></button>
-							</th>
-						</tr>
-					</thead>
-					<tbody id="listData">
-						<tr>
-							<td>[INDEX]</td>
-							<td>[report_type]</td>
-							<td>[report_id]</td>
-							<td>
-								<a href="/report/maintenanceReportDetails.do?report_id=[report_id]" class="table-link">
-									[report_name]
-								</a>
-							</td>
-							<td>[updated_by]</td>
-							<td>[write_date]</td>
-							<td><fmt:message key="workreportmain.2.saved" /></td>
-						</tr>
-					</tbody>
+				<table id="reportTable">
+					<colgroup>
+						<col style="width:5%">
+						<col style="width:15%">
+						<col style="width:15%">
+						<col style="width:35%">
+						<col style="width:10%">
+						<col style="width:10%">
+						<col style="width:10%">
+					</colgroup>
 				</table>
 			</div>
 			<div class="pagination-wrapper" id="paging"></div>

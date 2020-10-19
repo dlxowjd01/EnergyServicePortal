@@ -28,11 +28,6 @@ public class ReportController {
         return "esp/report/maintenanceReportDetails";
     }
 
-    @RequestMapping(value = "/report/maintenanceReportDetails2.do")
-    public String reportMaintenanceReportDetails2(HttpServletRequest request, HttpSession session, Model model) {
-        return "esp/report/maintenanceReportDetails2";
-    }
-
     @RequestMapping(value = "/report/maintenanceReportPost.do")
     public String reportMaintenanceReportPost(HttpServletRequest request, HttpSession session, Model model) {
         return "esp/report/maintenanceReportPost";

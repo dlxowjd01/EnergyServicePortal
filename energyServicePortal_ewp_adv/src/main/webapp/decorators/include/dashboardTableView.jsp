@@ -55,7 +55,7 @@
 					className: 'dt-head-left dt-body-left'
 				},
 				{
-					title: '발전용량 (kWh)',
+					title: '발전용량 (kW)',
 					data: 'capacity',
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;

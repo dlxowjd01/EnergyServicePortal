@@ -31,7 +31,6 @@
 
 		var alarmTable = $('#alarmTable').DataTable({
 			destroy: true,
-			'aaData': null,
 			'table-layout': 'fixed',
 			"fixedHeader": true,
 			// "autoWidth": true,
@@ -143,11 +142,11 @@
 					}
 				}
 			],
-			'select': {
+			select: {
 				style: 'multi',
 				selector: 'td:first-child > :checkbox, tr'
 			},
-			'language': {
+			language: {
 				"emptyTable": "조회된 데이터가 없습니다.",
 				"zeroRecords":  "검색된 결과가 없습니다."
 			},
@@ -160,13 +159,19 @@
 			drawCallback: function (settings) {
 				$('#alarmTable_wrapper').addClass('mb-28');
 			}
-		}).on("select", function(e, dt, type, indexes) {
+		}).on('select', function(e, dt, type, indexes) {
 			alarmTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
 			$('#btnGroup button').attr('disabled', false);
-		}).on("deselect", function(e, dt, type, indexes) {
+		}).on('deselect', function(e, dt, type, indexes) {
 			alarmTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", false);
-			$('#btnGroup button').attr('disabled', true);
-		}).columns.adjust();
+
+			const checkedArray = document.querySelectorAll('[name="table_checkbox"]:checked');
+			if (checkedArray.length > 0) {
+				$('#btnGroup button').attr('disabled', false);
+			} else {
+				$('#btnGroup button').attr('disabled', true);
+			}
+		}).columns.adjust().draw();
 
 		$("#comDeleteBtn").click(function(){
 			const alarmTable = $('#alarmTable').DataTable();
@@ -176,15 +181,17 @@
 			let urls = new Array();
 			let deferreds = new Array();
 
-			if ($('#regist').prop('disabled')) {
+			if ($('#regist').prop('disabled')) { //조회한 데이터 일경우
 				checkedArray.forEach(chk => {
 					const setId = chk.dataset.setid;
 					const code = chk.dataset.code;
-					urls.push({
-						url: apiHost + '/alarms/code_sets/' + setId + '/codes/' + code,
-						type: 'delete',
-						dataType: 'json',
-					});
+					if (!isEmpty(setId) && !isEmpty(code)) {
+						urls.push({
+							url: apiHost + '/alarms/code_sets/' + setId + '/codes/' + code,
+							type: 'delete',
+							dataType: 'json',
+						});
+					}
 				});
 
 				//코드 삭제 START
@@ -282,21 +289,11 @@
 						});
 					});
 				});
-			} else {
+			} else { //엑셀 업로드 일경우
 				alarmTable.rows('.selected').remove().draw( false );
 			}
 		});
-		
-		$('#comDeleteModal').on('hide.bs.modal', function() {
-			$("#comDeleteSuccessMsg").html('<h5 id="deleteSuccessMsg" class="ntit">삭제를 계속 진행 하시려면,<br><span class="text-blue">삭제</span>&ensp;를 입력해 주세요.</h5>');
-			$("#confirmTitle").val('');
-			$("#comDeleteBtn").prop('disabled', true);
-			setTimeout(function(){
-				$(this).find('.modal-body').removeClass('hidden');
-			}, 1600);
-		});
 	});
-
 
 	<!-- 알람 코드 조회 -->
 	const alermList = async ()  => {
@@ -702,7 +699,8 @@
 	//항목 삭제
 	const deleteRow = () => {
 		let tr = $("#alarmTable").find("tbody tr.selected");
-		let alarmMsg = tr.eq(0).find("td:nth-of-type(8)").text();
+		//let alarmMsg = tr.eq(0).find("td:nth-of-type(8)").text();
+		let alarmMsg = '삭제';
 		let modal = $("#comDeleteModal");
 		let deleteBtn = $("#comDeleteBtn");
 		let confirmTitle = $("#confirmTitle");
@@ -711,7 +709,7 @@
 		modal.find(".modal-body").removeClass("hidden");
 		modal.modal("show");
 
-		confirmTitle.on("input", function() {
+		confirmTitle.on("input keyp", function() {
 			if($(this).val() !== alarmMsg) {
 				deleteBtn.prop("disabled", true);
 				return false
@@ -719,16 +717,6 @@
 				deleteBtn.prop("disabled", false);
 			}
 		});
-
-		confirmTitle.on("keyup", function() {
-			if($(this).val() !== alarmMsg) {
-				deleteBtn.prop("disabled", true);
-				return false
-			} else {
-				deleteBtn.prop("disabled", false);
-			}
-		});
-		
 	}
 
 	/**
@@ -738,7 +726,7 @@
 	 */
 	const errorMsg = msg => {
 		$('#excelUploadBtn').val(''); //에러 발생시 fileInput 초기화
-		
+
 		$("#warningMsg").text(msg);
 		$("#warningModal").modal("show");
 		setTimeout(function(){

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/decorators/include/taglibs.jsp" %>
+<%--<script type="text/javascript" src="/js/weather_station_info.js"></script>--%>
 <script type="text/javascript">
 	$(function () {
 		let optionList = [
@@ -84,7 +85,25 @@
 			}
 		});
 
-
+		// $("#newCoord").on("focusout", function(e) {
+		// 	let thisVal = $(this).val();
+		// 	thisVal = thisVal.replace(/[^\x00-\x80]/, '');
+		//
+		// 	if (thisVal.match(',')) {
+		// 		thisValArr = thisVal.split(',');
+		// 		let stationId = cloesed_aws_point(thisValArr[0], thisValArr[1]);
+		// 		let grid = dfs_xy_conv('toLL', thisValArr[0], thisValArr[1]);
+		//
+		// 		if (!isEmpty(stationId)) {
+		// 			$('#station_id').val(stationId);
+		// 		}
+		//
+		// 		if (!isEmpty(grid)) {
+		// 			$('#gridX').val(grid.x);
+		// 			$('#gridY').val(grid.y);
+		// 		}
+		// 	}
+		// });
 
 		$("#newDrVol").on("input", function() {
 			let val = $(this).val();
@@ -437,7 +456,7 @@
 				let tr = $("#siteTable").find("tbody tr.selected");
 				let td = tr.find("td");
 				let sid = dTable.row(tr).data().sid;
-	
+
 				let siteEditObj = {};
 
 				if( !isEmpty(newSiteName) && ( td.eq(2).text() != newSiteName ) ){
@@ -456,6 +475,10 @@
 				// if( !isEmpty(systemLocale)){
 				// 	siteObj.tz = "systemLocale";
 				// }
+
+				if (!isEmpty(newCity)) {
+					siteEditObj.location = newCity;
+				}
 
 				if( !isEmpty(newStreetAddr)){
 					siteEditObj.address = newStreetAddr;
@@ -1031,7 +1054,6 @@
 								$(el).attr ('style', 'min-width: 50px');
 							}
 						});
-
 					},
 					// every time DataTables performs a draw
 					drawCallback: function (settings) {
@@ -3867,12 +3889,12 @@
 								<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
 									<div class="flex-start">
 										<div class="text-input-type">
-											<input type="text" name="gridX" id="gridX" placeholder="X값 입력" minlength="1" maxlength="2">
+											<input type="text" name="gridX" id="gridX" placeholder="X값 입력" minlength="1" maxlength="4">
 										</div>
 									</div>
 									<div class="flex-start mt5">
 										<div class="text-input-type">
-											<input type="text" name="gridY" id="gridY" placeholder="Y값 입력" minlength="1" maxlength="2">
+											<input type="text" name="gridY" id="gridY" placeholder="Y값 입력" minlength="1" maxlength="4">
 										</div>
 									</div>
 								</div>

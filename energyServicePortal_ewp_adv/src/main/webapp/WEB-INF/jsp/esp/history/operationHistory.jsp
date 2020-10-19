@@ -1271,7 +1271,7 @@
 									<ul class="dropdown-menu chk-type" role="menu" id="columnLi2">
 										<li data-value="[key]">
 											<a href="javascript:void(0);" tabindex="-1">
-												<input type="checkbox" id="column02_[INDEX]" name="column2" value="[key]">
+												<input type="radio" id="column02_[INDEX]" name="column2" value="[key]">
 												<label for="column02_[INDEX]">[value]</label>
 											</a>
 										</li>
@@ -1322,7 +1322,7 @@
 									<ul class="dropdown-menu chk-type" role="menu" id="columnLi3">
 										<li>
 											<a href="javascript:void(0);" data-value="[key]" tabindex="-1">
-												<input type="checkbox" id="column03_[INDEX]" name="column3" value="[key]">
+												<input type="radio" id="column03_[INDEX]" name="column3" value="[key]">
 												<label for="column03_[INDEX]">[value]</label>
 											</a>
 										</li>

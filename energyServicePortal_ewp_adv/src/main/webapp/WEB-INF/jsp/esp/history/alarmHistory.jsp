@@ -31,28 +31,29 @@
 				<div class="flex-start">
 					<span class="input-label">사진 올리기</span>
 					<div class="text-input-type">
-						<input type="text" id="photoFile" name="photoFile" placeholder="사진 파일 이름" readonly="" autocomplete="off">
+						<input type="text" id="photoFile" name="photoFile" placeholder="사진 파일 이름" readonly="" autocomplete="off" accept="image/*">
 					</div>
-					<div class="btn-wrapper">
-						<button type="button" id="fileUpload" class="btn-type" accept="image/*">업로드</button>
+					<div class="btn-wrapper ml-6">
+						<button type="button" id="fileUpload" class="btn-type">업로드</button>
 						<input type="file" id="picture" name="filename" class="btn-upload hidden"/>
 						<span class="upload-text ml-16 hidden"></span>
 					</div>
 				</div>
 
+				<hr class="hidden">
+
 				<div class="upload-photo">
-					<hr>
 					<ul>
 					</ul>
-					<hr>
 				</div>
+
+				<hr>
 				</c:if>
 
 				<div class="flex-start">
 					<span class="input-label">조치 여부</span>
 					<div id="ticket_status" class="dropdown">
-						<button type="button" class="dropdown-toggle required" placeholder="선택"
-							data-toggle="dropdown"><span class="caret"></span></button>
+						<button type="button" class="dropdown-toggle required" placeholder="선택" data-toggle="dropdown"><span class="caret"></span></button>
 						<ul class="dropdown-menu">
 							<li data-value="new"><a href="javascript:void(0);">신규</a></li>
 							<li data-value="open"><a href="javascript:void(0);">작업 처리 중</a></li>
@@ -68,13 +69,12 @@
 				<div class="flex-start">
 					<span class="input-label">담당자</span>
 					<div id="userlist" class="dropdown w-20">
-						<button type="button" class="dropdown-toggle required"
-							data-toggle="dropdown">선택<span class="caret"></span></button>
-						<ul class="dropdown-menu">
-						</ul>
+						<button type="button" class="dropdown-toggle required" data-toggle="dropdown">선택<span class="caret"></span></button>
+						<ul class="dropdown-menu"></ul>
 					</div>
-					<div class="text-input-type w-20">
-						<input type="text" id="ticket_user_id" name="ticket_user_id" placeholder="직접 입력" readonly autocomplete="off">
+					<div class="text-input-type w-20 ml-6">
+						<input type="hidden" id="ticket_user_id" name="ticket_user_id" placeholder="직접 입력" readonly autocomplete="off">
+						<input type="text" id="ticket_phone" name="ticket_phone" placeholder="직접 입력" autocomplete="off">
 					</div>
 				</div>
 
@@ -84,6 +84,26 @@
 					<span class="input-label">조치 메모</span>
 					<textarea id="memo" name="memo" class="textarea"></textarea>
 				</div>
+
+				<hr>
+
+				<div class="flex-start">
+					<span class="input-label">작업보고서</span>
+					<div id="maintenanceReportList" class="dropdown">
+						<button type="button" class="dropdown-toggle" placeholder="선택" data-toggle="dropdown">선택<span class="caret"></span></button>
+						<ul class="dropdown-menu"></ul>
+					</div>
+				</div>
+
+				<hr class="hidden">
+
+				<div class="report-select">
+					<ul>
+					</ul>
+				</div>
+
+				<hr>
+
 				<div class="btn-wrap-type02"><!--
 				--><button type="button" class="btn-type03" data-dismiss="modal">취소</button><!--
 				--><button type="button" class="btn-type ml-12" onclick="ackProcess();">확인</button><!--
@@ -281,7 +301,7 @@
 							</div>
 						</div>
 					</div>
-										
+
 					<div class="btn-wrap-type02">
 						<button type="button" class="btn-type03 w80" onclick="$('#searchDetail').removeClass('open')">취소</button><!--
 					--><button type="button" class="btn-type w80" onclick="$('#searchDetail').removeClass('open')">적용</button>
@@ -467,6 +487,7 @@
 			contentType: false,
 			success: function (result) {
 				if (result.files.length > 0) {
+					if ($('.upload-photo li').length == 0) { $('.upload-photo').prev().removeClass('hidden'); }
 					liStr += '<li class="flex-start"><span class="photo-text"><a href="' + apiHost + '/files/download/' + result.files[0].fieldname + '?oid=' + oid + '&orgFilename=' + result.files[0].originalname + '">' + result.files[0].originalname + '</a></span>';
 					liStr += '<button type="button" class="btn-close" data-time="' + new Date().toISOString() + '" value="' + result.files[0].fieldname + '" name="file_original_name">삭제</button></li>';
 				}
@@ -484,19 +505,24 @@
 
 	$(document).on('click', 'button[name="file_original_name"]', function () {
 		$(this).parent().remove();
+		if ($('.upload-photo li').length == 0) { $('.upload-photo').prev().addClass('hidden'); }
 	});
 
 	$(document).on('click', '#userlist li', function () {
 		if ($(this).text() == '직접 입력') {
 			$('#ticket_user_id').val('').prop('readonly', false);
+			$('#ticket_phone').val('');
 		} else {
-			$('#ticket_user_id').val($(this).data('value').split(',')[0]).prop('readonly', true);
+			$('#ticket_user_id').val($(this).data('value')).prop('readonly', true);
+			$('#ticket_phone').val($(this).data('phone'));
 		}
 	});
 
 	const rtnDropdown = function (id) {
 		if (id == 'site') {
 			deviceTypeList();
+		} else if (id == 'maintenanceReportList') {
+			addReportId();
 		}
 	}
 	
@@ -616,7 +642,6 @@
 			success: function (result) {
 				let data = [];
 				let jsonList = [];
-				// console.log(data);
 				gridDataFilter(data, statusArray, alarmArray, result); //알람 및 조치상태 필터링
 				
 				changeTablegird = data;
@@ -778,14 +803,25 @@
 
 	//조치상태 팝업 초기화
 	const ackStatusInit = function () {
-		$('.upload-photo').hide().find('li').remove();
-		$('#ticket_log').empty();
-		$('#memo').val('');
 		ticketLogList = '';
+
+		$('.upload-photo').prev().addClass('hidden');
+		$('.upload-photo').find('li').remove();
+		$('.report-select').prev().addClass('hidden');
+		$('.report-select').find('li').remove();
+
+		$('#alarmMeasure input').each(function() {
+			$(this).val('');
+		});
+		$('#ticket_log').empty();
+
 		$('#userlist button').html('선택 &nbsp;<span class="caret"></span>');
 		$('#ticket_status button').html('선택 &nbsp;<span class="caret"></span>');
-		$('#ticket_user_id').val('');
+		$('#ticket_report button').html('선택 &nbsp;<span class="caret"></span>');
+		$('#maintenanceReportList button').html('선택 &nbsp;<span class="caret"></span>');
+
 		userListRender(oid); //OID에 속한 사용자 리스트
+		reportList();
 	}
 
 	const updateAck = function (alarmId, ticketId) {
@@ -871,7 +907,25 @@
 					$('#userlist button').html('직접 입력 &nbsp;<span class="caret"></span>').data('value', '직접 입력');
 					$('#ticket_user_id').val(data.ticket_person).prop('readonly', false);
 				}
+				$('#ticket_phone').val(data.ticket_phone);
 
+				if (!isEmpty(data.ticket_report) && $('#maintenanceReportList li').length) {
+					let ticketReportArray = new Array();
+					if (data.ticket_report.match(',')) {
+						ticketReportArray = data.ticket_report.split(',');
+					} else {
+						ticketReportArray.push(data.ticket_report);
+					}
+
+					$('#maintenanceReportList li').each(function() {
+						const reportId = $(this).data('value');
+						if (ticketReportArray.includes(reportId)) {
+							const reportNm = $(this).text();
+							if ($('.report-select li').length == 0) { $('.report-select').prev().removeClass('hidden'); }
+							$('.report-select ul').append(`<li class="flex-start" data-value="${'${reportId}'}"><span class="report-text">${'${reportNm}'}</span><button class="btn-close">삭제</button></li>`)
+						}
+					});
+				}
 			},
 			error: function (error) {
 				console.error(error);
@@ -882,6 +936,7 @@
 	const ackProcess = function () {
 		let ticketUserId = "";
 		let ticketPerson = "";
+		let ticketPhone = "";
 		if ($('#ticket_status button').data('value') == '') {
 			alert('조치 여부가 선택되지 않았습니다.');
 			return false;
@@ -900,6 +955,7 @@
 			ticketUserId = $('#userlist button').data('value');
 			ticketPerson = $('#userlist button').text().trim();
 		}
+		ticketPhone = $('#ticket_phone').val().trim();
 
 		let pic_file_link = new Array();
 		let fileMemo = '';
@@ -915,6 +971,12 @@
 			} else {
 				fileMemo += ', ' + $(this).parent().find('a').text();
 			}
+		});
+
+		let reportArray = new Array();
+		$('.report-select li').each(function() {
+			let reportId = $(this).data('value');
+			reportArray.push(reportId);
 		});
 
 		pic_file_link = JSON.stringify(pic_file_link);
@@ -946,7 +1008,9 @@
 				ticket_status: $('#ticket_status button').data('value'),
 				ticket_user_id: ticketUserId,
 				ticket_person: ticketPerson,
+				ticket_phone: ticketPhone,
 				pic_file_link: pic_file_link,
+				ticket_report: reportArray.toString(),
 				ticket_log: JSON.stringify(ticketLog),
 				updated_by: loginId
 			};
@@ -1021,7 +1085,9 @@
 					ticket_status: $('#ticket_status button').data('value'),
 					ticket_user_id: ticketUserId,
 					ticket_person: ticketPerson,
+					ticket_phone: ticketPhone,
 					pic_file_link: pic_file_link,
+					ticket_report: reportArray.toString(),
 					ticket_log: JSON.stringify(ticketLogList),
 					updated_by: loginId
 				}
@@ -1034,7 +1100,6 @@
 					contentType: 'application/json',
 					data: JSON.stringify(upAlarmData),
 					success: function (result) {
-						console.log(result)
 						alert('저장에 성공했습니다.');
 						$('#alarmMeasure').modal('hide');
 						periodData();
@@ -1061,21 +1126,54 @@
 			dataType: 'json',
 			type: 'get',
 			async: false,
-			data: {
-				oid: oid
-			},
+			data: {oid: oid},
 			success: function (result) {
-				let data = result;
-				$.each(data, function (i, el) {
-					let liStr = '';
-					liStr += '<li data-value="' + el.login_id + '"><a href="javascript:void(0)">' + el.name + '</a></li>';
-					$('#userlist ul').append(liStr);
-				})
+				result.forEach(user => {
+					$('#userlist ul').append(`<li data-value="${'${user[\'login_id\']}'}" data-phone="${'${user[\'contact_phone\']}'}"><a href="javascript:void(0)">${'${user[\'name\']}'}</a></li>`);
+				});
 			},
 			error: function (error) {
 				console.error(error);
 			}
 		});
+	}
+
+	const reportList = () => {
+		$('#maintenanceReportList ul').empty();
+
+		$.ajax({
+			url: apiHost + '/reports/remote_work',
+			type: 'get',
+			async: false,
+			data: {oid: oid},
+		}).done((json, textStatus, jqXHR) => {
+			const data = json['data'];
+			if (!isEmpty(json) && !isEmpty(data)) {
+				data.forEach(rowData => {
+					$('#maintenanceReportList ul').append(`<li data-value=${'${rowData.report_id}'}><a href="javascript:void(0);"> ${'${rowData.report_name}'}</a></li>`);
+				});
+			} else {
+				$('#maintenanceReportList ul').append(`<li><a href="javascript:void(0);">조회 내역이 없습니다.</a></li>`);
+			}
+		}).fail((jqXHR, textStatus, errorThrown) => {
+			const r = formatErrorMessage(jqXHR, errorThrown);
+			$('#errMsg').text('처리 중 오류가 발생했습니다.' + r);
+			$('#errorModal').modal('show');
+			setTimeout(function(){
+				$('#errorModal').modal('hide');
+			}, 2000);
+
+			$('#maintenanceReportList ul').append(`<li><a href="javascript:void(0);">조회 내역이 없습니다.</a></li>`);
+		});
+	};
+
+	const addReportId = () => {
+		const target = $('#maintenanceReportList button')
+			, targetId = target.data('value')
+			, targetNm = target.text();
+
+		if ($('.report-select li').length == 0) { $('.report-select').prev().removeClass('hidden'); }
+		$('.report-select ul').append(`<li class="flex-start" data-value="${'${targetId}'}"><span class="report-text">${'${targetNm}'}</span><button class="btn-close">삭제</button></li>`)
 	}
 
 	const dataFilter = function (array, key) {
@@ -1241,7 +1339,6 @@
 		}
 
 		var gr_type = $('#rdo03_1').is(':checked');
-		console.log("gr_type===", gr_type);
 
 		var chartTypeNm = (gr_type == true) ? 'deviceType' : 'alarm';
 		let dataMap = new Map();
@@ -1384,9 +1481,7 @@
 
 		var num2 = 0;
 		var legendInner = $('#legendArea');
-		var wrapper = `
-			<ul class="chart-legend col"></ul>
-		`;
+		var wrapper = `<ul class="chart-legend col"></ul>`;
 		legendInner.empty();
 		legendInner.append(wrapper);
 
@@ -1546,12 +1641,10 @@
 			tooltip: {
 				formatter: function () {
 					return this.points.reduce(function (s, point) {
-						// console.log("point.y===", point.y)
 						let displayValue = displayNumberFixedDecimal(point.y, '', 3, 0);
 						// let displayValue = [point.y, "unit"];
 						let displayNumber = displayValue[0] == undefined ? '' : displayValue[0];
 						let displayUnit = displayValue[1] == undefined ? '' : '건';
-						// console.log(displayUnit);
 						return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + displayNumber + displayUnit;
 					}, '<b>' + dateFormat(this.points[0].point.name) + '</b>');
 				},
@@ -1728,7 +1821,6 @@
 			$('#' + tableId + "Table" + '> tbody tr :checkbox').prop(	'checked', true);
 		}
 	}
-	
 
 	const alarmConfirmAll = function (tableId) {
 		if ($('#' + tableId + 'Table > tbody tr :checkbox:checked').length == 0) {
@@ -1765,7 +1857,6 @@
 		let preStatus = "";
 
 		if (isNaN(ticketId) == false) {
-
 			let ticketArray = {
 				oid: oid,
 				alarm_id: $('#alarmConfirm').data("value"),
@@ -1787,7 +1878,6 @@
 				data: ticketArray,
 				success: function (result) {
 					let data = result.data[0];
-					// console.log(data);
 					ticketLogList = JSON.parse(data.ticket_log);
 					prevData = {
 						ticket_status: data.ticket_status,
@@ -1838,16 +1928,16 @@
 				}
 			});
 		}
-		let data = {
-			confirm: true,
-			manager: loginName + ',' + loginId
-		}
+
 		$.ajax({
 			url: apiHost + '/alarms/' + alarmId,
 			type: 'patch',
 			dataType: 'json',
 			contentType: 'application/json',
-			data: JSON.stringify(data),
+			data: JSON.stringify({
+				confirm: true,
+				manager: loginName + ',' + loginId
+			}),
 			success: function (result) {
 				alert('확인 처리 되었습니다.');
 				$('#alarmConfirm').modal('hide').data('value', '');

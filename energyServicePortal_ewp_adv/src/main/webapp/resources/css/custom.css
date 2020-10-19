@@ -10145,21 +10145,26 @@ table.table-footer tfoot td.light {
 	color: var(--white87);
 }
 
-.upload-photo ul {
+.upload-photo ul,
+.report-select ul {
 	padding: 0 16px;
 }
 
-.upload-photo .photo-text {
+.upload-photo .photo-text,
+.report-select .report-text {
 	margin-right: 16px;
 }
 
-.upload-photo .photo-load {
+.upload-photo .photo-load,
+.report-select .report-load {
 	margin-right: 16px;
 	font-weight: bold;
 }
 
 .upload-photo .photo-text,
-.upload-photo .photo-text>* .upload-photo .photo-load {
+.upload-photo .photo-text>* .upload-photo .photo-load,
+.report-select .report-text,
+.report-select .report-text>* .report-select .report-load {
 	font-size: 13px;
 	color: var(--white87);
 	line-height: 36px;

@@ -581,7 +581,7 @@
 								if (isNaN(data)) {
 									$dataTd.html(data);
 								} else {
-									$dataTd.html(numberComma(parseFloat(data).toFixed(2)));
+									$dataTd.html(numberComma(Math.round(parseFloat(data))));
 								}
 								$dataTr.append($dataTd);
 							});
@@ -645,7 +645,7 @@
 									if (isNaN(data)) {
 										$dataTd.html(data);
 									} else {
-										$dataTd.html(numberComma(parseFloat(data).toFixed(2)));
+										$dataTd.html(numberComma(Math.round(parseFloat(data))));
 									}
 									$dataTr.append($dataTd);
 								});
@@ -679,7 +679,7 @@
 								if (isNaN(data)) {
 									$dataTd.html(data);
 								} else {
-									$dataTd.html(numberComma(parseFloat(data).toFixed(2)));
+									$dataTd.html(numberComma(Math.round(parseFloat(data))));
 								}
 
 								$dataTr.append($dataTd);
@@ -743,7 +743,7 @@
 									if (isNaN(data)) {
 										$dataTd.html(data);
 									} else {
-										$dataTd.html(numberComma(parseFloat(data).toFixed(2)));
+										$dataTd.html(numberComma(Math.round(parseFloat(data))));
 									}
 									$dataTr.append($dataTd);
 								});
@@ -777,7 +777,7 @@
 								if (isNaN(data)) {
 									$dataTd.html(data);
 								} else {
-									$dataTd.html(numberComma(parseFloat(data).toFixed(2)));
+									$dataTd.html(numberComma(Math.round(parseFloat(data))));
 								}
 								$dataTr.append($dataTd);
 							});
@@ -854,7 +854,7 @@
 							if (stdDate == '') {
 								stdDate = stnd.substring(0, 8);
 							} else if (stdDate != '' && stdDate != stnd.substring(0, 8)) {
-								let totalValue = numberComma(total.toFixed(2));
+								let totalValue = numberComma(Math.round(total));
 								arrDevice.push(totalValue); //합계.
 
 								let tempMap = {
@@ -874,7 +874,7 @@
 							$.each(arr, function (i, el) {
 								let base = String(el.basetime);
 								if (base.match(stnd)) {
-									timeValue = displayNumberFixedUnit(el.energy, 'Wh', 'kWh', 2);;
+									timeValue = displayNumberFixedUnit(el.energy, 'Wh', 'kWh', 0);;
 									if (timeValue[0] != '-') {
 										total += el.energy / 1000;
 									}
@@ -884,7 +884,7 @@
 							if (stdDate == '') {
 								stdDate = stnd.substring(0, 6);
 							} else if (stdDate != '' && stdDate != stnd.substring(0, 6)) {
-								let totalValue = numberComma(total.toFixed(2));
+								let totalValue = numberComma(Math.round(total));
 								arrDevice.push(totalValue); //합계.
 
 								let tempMap = {
@@ -904,7 +904,7 @@
 							$.each(arr, function (i, el) {
 								let base = String(el.basetime);
 								if (base.match(stnd)) {
-									timeValue = displayNumberFixedUnit(el.energy, 'Wh', 'kWh', 2);
+									timeValue = displayNumberFixedUnit(el.energy, 'Wh', 'kWh', 0);
 									if (timeValue[0] != '-') {
 										total += el.energy / 1000;
 									}
@@ -914,7 +914,7 @@
 							if (stdDate == '') {
 								stdDate = stnd.substring(0, 4);
 							} else if (stdDate != '' && stdDate != stnd.substring(0, 4)) {
-								let totalValue = numberComma(total.toFixed(2));
+								let totalValue = numberComma(Math.round(total));
 								arrDevice.push(totalValue); //합계.
 
 								let tempMap = {
@@ -934,7 +934,7 @@
 							$.each(arr, function (i, el) {
 								let base = String(el.basetime);
 								if (base.match(stnd)) {
-									timeValue = displayNumberFixedUnit(el.energy, 'Wh', 'kWh', 2);
+									timeValue = displayNumberFixedUnit(el.energy, 'Wh', 'kWh', 0);
 									if (timeValue[0] != '-') {
 										total += el.energy / 1000;
 									}
@@ -1022,7 +1022,7 @@
 						}
 
 						arrDevice.push([
-							stnd, timeValue
+							stnd, Number(displayNumberFixedUnit(timeValue, 'Wh', 'kWh', 0)[0])
 						]);
 
 						totalCurrent += timeValue;
@@ -1125,7 +1125,7 @@
 
 			$.each(totalArr, function (i, el) {
 				let totTitle = '<h3 class="value-title">' + el.name + '</h3>';
-				let refined = displayNumberFixedDecimal(el.totVal, 'Wh');
+				let refined = displayNumberFixedUnit(el.totVal, 'Wh', 'kWh', 0);
 				totTitle += '<p class="value-num"><span class="num">' + refined[0] + '</span>' + refined[1] + '</p>';
 				$('.value-wrapper').append(totTitle);
 			});
@@ -1227,10 +1227,7 @@
 			tooltip: {
 				formatter: function () {
 					return this.points.reduce(function (s, point) {
-						let displayValue = displayNumberFixedDecimal(point.y, 'Wh');
-						let displayNumber = displayValue[0] == undefined ? '' : displayValue[0];
-						let displayUnit = displayValue[1] == undefined ? '' : displayValue[1];
-						return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + displayNumber + displayUnit;
+						return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + point.y + 'kWh';
 					}, '<b>' + dateFormat(this.points[0].point.name) + '</b>');
 				},
 				shared: true,

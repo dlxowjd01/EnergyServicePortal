@@ -221,6 +221,7 @@
 
 	//보고서 생성
 	const reportCreate = function () {
+		today = new Date();
 		let data = setAreaParamData('reportModal', 'dropdown'),
 			report_variable = new Array();
 
