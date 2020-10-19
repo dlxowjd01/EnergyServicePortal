@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/decorators/include/taglibs.jsp" %>
-<%--<script type="text/javascript" src="/js/weather_station_info.js"></script>--%>
+<script type="text/javascript" src="/js/weather_station_info.js"></script>
 <script type="text/javascript">
 	$(function () {
 		let optionList = [
@@ -85,25 +85,25 @@
 			}
 		});
 
-		// $("#newCoord").on("focusout", function(e) {
-		// 	let thisVal = $(this).val();
-		// 	thisVal = thisVal.replace(/[^\x00-\x80]/, '');
-		//
-		// 	if (thisVal.match(',')) {
-		// 		thisValArr = thisVal.split(',');
-		// 		let stationId = cloesed_aws_point(thisValArr[0], thisValArr[1]);
-		// 		let grid = dfs_xy_conv('toLL', thisValArr[0], thisValArr[1]);
-		//
-		// 		if (!isEmpty(stationId)) {
-		// 			$('#station_id').val(stationId);
-		// 		}
-		//
-		// 		if (!isEmpty(grid)) {
-		// 			$('#gridX').val(grid.x);
-		// 			$('#gridY').val(grid.y);
-		// 		}
-		// 	}
-		// });
+		$("#newCoord").on("focusout", function(e) {
+			let thisVal = $(this).val();
+			thisVal = thisVal.replace(/[^\x00-\x80]/, '');
+
+			if (thisVal.match(',')) {
+				const thisValArr = thisVal.split(',');
+				let stationId = cloesed_aws_point(thisValArr[0], thisValArr[1]);
+				let grid = dfs_xy_conv('toXY', thisValArr[0], thisValArr[1]);
+
+				if (!isEmpty(stationId)) {
+					$('#station_id').val(stationId);
+				}
+
+				if (!isEmpty(grid.x) && !isEmpty(grid.y)) {
+					$('#gridX').val(grid.x);
+					$('#gridY').val(grid.y);
+				}
+			}
+		});
 
 		$("#newDrVol").on("input", function() {
 			let val = $(this).val();
