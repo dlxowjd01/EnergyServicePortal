@@ -717,6 +717,7 @@
 				"aaData": groupData,
 				"table-layout": "fixed",
 				"fixedHeader": true,
+				"autoWidth": true,
 				"bAutoWidth": true,
 				"bSearchable" : true,
 				// "retrieve": true,
@@ -1624,12 +1625,13 @@
 		<div class="indiv">
 			<table id="groupTable">
 				<colgroup>
-					<col style="width:5%">
-					<col style="width:13%">
-					<col style="width:16%">
+					<col style="width:4%">
+					<col style="width:9%">
+					<col style="width:10%">	
 					<col style="width:24%">
+					<col style="width:16%">
 					<col style="width:18%">
-					<col style="width:24%">	
+					<col style="width:17%">	
 				</colgroup>
 				<thead></thead>
 				<tbody></tbody>
