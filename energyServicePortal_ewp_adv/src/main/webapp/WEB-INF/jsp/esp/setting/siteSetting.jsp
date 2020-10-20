@@ -858,8 +858,7 @@
 						item.pcsCapacity = "-";
 						item.bmsCapacity = "-";
 					}
-					let timeFormat = new Date(item.updatedAt).format("hh:mm:ss");
-					item.updatedAt = new Date(item.updatedAt).toLocaleDateString("en-CA").replace(/\//g, '-') + '&ensp;' + timeFormat;
+					item.updatedAt = new Date(item.updatedAt).format('yyyy-MM-dd HH:mm:ss');
 					newArr.push(item);
 				}).fail(function (jqXHR, textStatus, errorThrown) {
 					console.log("deviceOpt error===", jqXHR);
@@ -2111,7 +2110,11 @@
 				if( isEmpty(rowData.ess) || rowData.ess === 0 ) {
 					$('#newEssList').prev().data("value", "0").html("무<span class='caret'></span>");
 				} else {
-					$('#newEssList').prev().data("value", rowData.ess).html("유<span class='caret'></span>");
+					if (rowData.ess === '-') {
+						$('#newEssList').prev().data("value", "0").html("무<span class='caret'></span>");
+					} else {
+						$('#newEssList').prev().data("value", "1").html("유<span class='caret'></span>");
+					}
 				}
 				// 위경도
 				if( !isEmpty(rowData.latlng)) {
