@@ -458,6 +458,7 @@
 
 			gmainTable.clear();
 			gmainTable.rows.add(tableData).draw();
+			$($.fn.dataTable.tables(true)).DataTable().columns.adjust();
 
 			document.getElementById('loadingCircleDashboard').style.display =  'none';
 		});

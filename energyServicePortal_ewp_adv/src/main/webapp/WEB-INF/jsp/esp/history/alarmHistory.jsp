@@ -518,6 +518,14 @@
 		}
 	});
 
+	$(document).on('click', '.report-select .btn-close', function() {
+		$(this).parents('li.flex-start').remove();
+
+		if ($('.report-select').find('li').length == 0) {
+			$('.report-select').prev().addClass('hidden');
+		}
+	});
+
 	const rtnDropdown = function (id) {
 		if (id == 'site') {
 			deviceTypeList();
@@ -937,24 +945,19 @@
 		let ticketUserId = "";
 		let ticketPerson = "";
 		let ticketPhone = "";
-		if ($('#ticket_status button').data('value') == '') {
+		if (isEmpty($('#ticket_status button').data('value'))) {
 			alert('조치 여부가 선택되지 않았습니다.');
 			return false;
 		}
 
-		if ($('#ticket_user_id').val() == '') {
+		if (isEmpty($('#ticket_user_id').val())) {
 			alert('담당자가 입력되지 않았습니다.');
 			$('#ticket_user_id').focus();
 			return false;
 		}
 
-		if ($("#userlist button").text() == "직접 입력") {
-			ticketUserId = $('#ticket_user_id').val();
-			ticketPerson = $('#ticket_user_id').val();
-		} else {
-			ticketUserId = $('#userlist button').data('value');
-			ticketPerson = $('#userlist button').text().trim();
-		}
+		ticketUserId = $('#userlist button').data('value');
+		ticketPerson = $('#userlist button').text().trim();
 		ticketPhone = $('#ticket_phone').val().trim();
 
 		let pic_file_link = new Array();
@@ -1120,7 +1123,6 @@
 	}
 
 	const userListRender = function (oid) {
-		$('#userlist ul').empty().append('<li data-value="직접 입력"><a href="javascript:void(0)">직접 입력</a></li>');
 		$.ajax({
 			url: apiHost + '/config/users',
 			dataType: 'json',

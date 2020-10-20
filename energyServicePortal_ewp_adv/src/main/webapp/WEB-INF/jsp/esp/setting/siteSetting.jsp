@@ -49,13 +49,13 @@
 
 			$("#validSite").addClass("hidden")
 
-			if( $(this).val().match(/^[.!#$%&'*+/=?^`{|}~]/) ) {
+			if( $(this).val().trim().match(/^[.!#$%&'*+/=?^`{|}~]/) ) {
 				warning.eq(2).removeClass("hidden");
 			} else {
 				warning.eq(2).addClass("hidden");
 			}
 
-			if( $(this).val().length <= 1 || $(this).val().length > 15) {
+			if( $(this).val().trim().length <= 1 || $(this).val().trim().length > 15) {
 				warning.eq(1).removeClass("hidden");
 			} else {
 				warning.eq(1).addClass("hidden");
@@ -66,7 +66,6 @@
 			} else {
 				$("#newSiteName").parent().next().prop("disabled", true);
 			}
-
 		});
 
 		$("#newPriceModelList li").on("click", function() {
@@ -82,26 +81,6 @@
 			// 	var re = /^[0-9] + (?:\,[0-9]+)*$/;
 			if( $(this).val().match(/[^\x00-\x80]/) ){
 				$(this).val("");
-			}
-		});
-
-		$("#newCoord").on("focusout", function(e) {
-			let thisVal = $(this).val();
-			thisVal = thisVal.replace(/[^\x00-\x80]/, '');
-
-			if (thisVal.match(',')) {
-				const thisValArr = thisVal.split(',');
-				let stationId = cloesed_aws_point(thisValArr[0], thisValArr[1]);
-				let grid = dfs_xy_conv('toXY', thisValArr[0], thisValArr[1]);
-
-				if (!isEmpty(stationId)) {
-					$('#station_id').val(stationId);
-				}
-
-				if (!isEmpty(grid.x) && !isEmpty(grid.y)) {
-					$('#gridX').val(grid.x);
-					$('#gridY').val(grid.y);
-				}
 			}
 		});
 
@@ -305,15 +284,13 @@
 				siteObj.location = newCity;
 				siteObj.resource_type = newResType;
 
-				// if( isEmpty(newEss) ){
-				// 	siteObj.ess = "0";
-				// } else {
-				// 	siteObj.ess = newEss;
-				// }
-
-				if( !isEmpty(newSiteType) ){
-					siteObj.ess = newSiteType;
+				if( isEmpty(newEss) ){
+					siteObj.ess = newEss;
 				}
+
+				// if( !isEmpty(newSiteType) ){
+				// 	siteObj.ess = newSiteType;
+				// }
 				if( !isEmpty(newCoord) ){
 					siteObj.latlng = newCoord;
 				}
@@ -451,7 +428,7 @@
 				});
 
 			} else {
-			// 2. EDIT site info
+				// 2. EDIT site info
 				let dTable = $("#siteTable").DataTable();
 				let tr = $("#siteTable").find("tbody tr.selected");
 				let td = tr.find("td");
@@ -462,14 +439,18 @@
 				if( !isEmpty(newSiteName) && ( td.eq(2).text() != newSiteName ) ){
 					siteEditObj.name = newSiteName;
 				}
-				if( !isEmpty(newSiteType) && ( td.eq(1).text() != newSiteTypeName ) ){
-					siteEditObj.ess = newSiteType;
-				}
+				// if( !isEmpty(newSiteType) && ( td.eq(1).text() != newSiteTypeName ) ){
+				// 	siteEditObj.ess = newSiteType;
+				// }
 				if( !isEmpty(newResType) && ( td.eq(4).text() != newResTypeName ) ){
 					siteEditObj.resource_type = newResType;
 				}
 				if( !isEmpty(newCoord) ){
 					siteEditObj.latlng = newCoord;
+				}
+
+				if (!isEmpty(newEss)) {
+					siteEditObj.ess = newEss;
 				}
 
 				// if( !isEmpty(systemLocale)){
@@ -3612,6 +3593,38 @@
 		}
 	}
 
+	function weatherGridCalculator() {
+		const newCoord = $('#newCoord').val();
+
+		if (!isEmpty(newCoord)) {
+			if (newCoord.match(',')) {
+				const thisValArr = newCoord.split(',');
+				let stationId = cloesed_aws_point(thisValArr[0], thisValArr[1]);
+				let grid = dfs_xy_conv('toXY', thisValArr[0], thisValArr[1]);
+
+				if (!isEmpty(stationId)) {
+					$('#station_id').val(stationId);
+				}
+
+				if (!isEmpty(grid.x) && !isEmpty(grid.y)) {
+					$('#gridX').val(grid.x);
+					$('#gridY').val(grid.y);
+				}
+			} else {
+				$("#errorModal").text('위경도 정보가 잘못 입력되었습니다.');
+				$("#errorModal").modal("show");
+				setTimeout(function(){
+					$("#errorModal").modal("hide");
+				}, 1800);
+			}
+		} else {
+			$("#errorModal").text('위경도 정보가 없습니다.');
+			$("#errorModal").modal("show");
+			setTimeout(function(){
+				$("#errorModal").modal("hide");
+			}, 1800);
+		}
+	}
 </script>
 
 <div class="row header-wrapper">
@@ -3804,7 +3817,7 @@
 										<div class="text-input-type offset-73">
 											<input type="text" name="new_site_name" id="newSiteName" placeholder="입력" minlength="2" maxlength="15">
 										</div>
-										<button type="button" class="btn-type fr" onclick="checkSiteId($('#newSiteName').val())" disabled>중복 체크</button>
+										<button type="button" class="btn-type fr" onclick="checkSiteId($('#newSiteName').val().trim())" disabled>중복 체크</button>
 									</div>
 									<small class="hidden warning">추가하실 사이트를 입력해 주세요</small>
 									<small class="hidden warning">2~15 글자를 입력해 주세요.</small>
@@ -3867,8 +3880,11 @@
 								</div>
 
 								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">위경도</span></div>
-								<div class="col-xl-4 col-lg-2 col-md-4 col-sm-10 pl-0">
+								<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
 									<div class="text-input-type"><input type="text" name="new_coord" id="newCoord" placeholder="예) 35.9078, 127.7669" minlength="3" maxlength="28"></div>
+								</div>
+								<div class="col-xl-2 col-lg-12 col-md-12 col-sm-12 pl-0">
+									<button type="button" class="btn-type w-100" onclick="weatherGridCalculator();">기상그리드 계산</button>
 								</div>
 							</div>
 
@@ -3879,23 +3895,17 @@
 								</div>
 								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">관측소 번호</span></div>
 								<div class="col-xl-1 col-lg-2 col-md-4 col-sm-10 pl-0">
-									<div class="flex-start">
-										<div class="text-input-type">
-											<input type="text" name="station_id" id="station_id" placeholder="입력" minlength="1" maxlength="15">
-										</div>
+									<div class="text-input-type">
+										<input type="text" name="station_id" id="station_id" placeholder="입력" minlength="1" maxlength="15">
 									</div>
 								</div>
 								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">기상 그리드 </span></div>
 								<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
-									<div class="flex-start">
-										<div class="text-input-type">
-											<input type="text" name="gridX" id="gridX" placeholder="X값 입력" minlength="1" maxlength="4">
-										</div>
+									<div class="text-input-type">
+										<input type="text" name="gridX" id="gridX" placeholder="X값 입력" minlength="1" maxlength="4" onkeydown="onlyNum(event)">
 									</div>
-									<div class="flex-start mt5">
-										<div class="text-input-type">
-											<input type="text" name="gridY" id="gridY" placeholder="Y값 입력" minlength="1" maxlength="4">
-										</div>
+									<div class="text-input-type mt5">
+										<input type="text" name="gridY" id="gridY" placeholder="Y값 입력" minlength="1" maxlength="4" onkeydown="onlyNum(event)">
 									</div>
 								</div>
 							</div>

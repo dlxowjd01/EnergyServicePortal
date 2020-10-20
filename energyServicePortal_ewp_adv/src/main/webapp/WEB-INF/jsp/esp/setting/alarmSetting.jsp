@@ -174,12 +174,15 @@
 		}).columns.adjust().draw();
 
 		$("#comDeleteBtn").click(function(){
+			$("#comDeleteModal").modal('hide');
+			$("#confirmTitle").val('');
+
 			const alarmTable = $('#alarmTable').DataTable();
 			const checkedArray = document.querySelectorAll('[name="table_checkbox"]:checked');
-			let modal = $("#comDeleteModal");
-			let modalBody = $("#deleteConfirmModal .modal-body");
-			let urls = new Array();
-			let deferreds = new Array();
+			const urls = new Array();
+			const deferreds = new Array();
+			const deferreds2 = new Array();
+			const deferreds3 = new Array();
 
 			if ($('#regist').prop('disabled')) { //조회한 데이터 일경우
 				checkedArray.forEach(chk => {
@@ -229,7 +232,7 @@
 
 					selectURL.forEach(function (url) {
 						let deferred = $.Deferred();
-						deferreds.push(deferred);
+						deferreds2.push(deferred);
 
 						$.ajax(url).done(function (data) {
 							data['url'] = url['url'];
@@ -241,52 +244,53 @@
 						});
 					});
 
-					$.when.apply($, deferreds).then(function () {
+					$.when.apply($, deferreds2).then(function () {
 						let deleteURL = new Array();
+						setIdArray = new Array();
+
 						for (let index = 0; index < arguments.length; index++) {
 							let data = arguments[index];
 
 							if (isEmpty(data.data)) {
-								setIdArray = new Array();
-
 								let url = data.url.split('/');
 								setIdArray.push(url[url.length - 2]);
 							}
 						}
 
-						//codeSet 삭제
-						setIdArray.forEach(setId => {
-							deleteURL.push({
-								url: apiHost + '/alarms/code_sets/' + setId,
-								type: 'delete',
-								dataType: 'json'
+						if (isEmpty(setIdArray)) {
+							//codeSet 삭제
+							setIdArray.forEach(setId => {
+								deleteURL.push({
+									url: apiHost + '/alarms/code_sets/' + setId,
+									type: 'delete',
+									dataType: 'json'
+								});
 							});
-						});
 
-						deleteURL.forEach(function (url) {
-							let deferred = $.Deferred();
-							deferreds.push(deferred);
+							deleteURL.forEach(function (url) {
+								let deferred = $.Deferred();
+								deferreds3.push(deferred);
 
-							$.ajax(url).done(function (data) {
-								data['url'] = url['url'];
-								(function (deferred) {
-									return deferred.resolve(data);
-								})(deferred);
-							}).fail(function (error) {
-								console.log(error);
+								$.ajax(url).done(function (data) {
+									data['url'] = url['url'];
+									(function (deferred) {
+										return deferred.resolve(data);
+									})(deferred);
+								}).fail(function (error) {
+									console.log(error);
+								});
 							});
-						});
 
-						$.when.apply($, deferreds).then(function () {
-							modalBody.addClass("hidden");
-							$("#comDeleteSuccessMsg").text("알람 메세지가 삭제 되었습니다.").removeClass("hidden");
+							$.when.apply($, deferreds3).then(function () {
+								schAlarmList();
+								errorMsg('알람 메세지가 삭제 되었습니다.');
+								return false;
+							});
+						} else {
 							schAlarmList();
-							setTimeout(function(){
-								modal.modal("hide");
-							}, 1000);
-
+							errorMsg('알람 메세지가 삭제 되었습니다.');
 							return false;
-						});
+						}
 					});
 				});
 			} else { //엑셀 업로드 일경우
@@ -687,6 +691,7 @@
 				alert('등록 되었습니다.');
 				alarmTable.clear().draw();
 
+				$('#excelUploadBtn').val('');
 				$('#regist').prop('disabled', true);
 			});
 		}).fail(function (jqXHR, textStatus, errorThrown) {
@@ -725,12 +730,12 @@
 	 * @param msg
 	 */
 	const errorMsg = msg => {
-		$('#excelUploadBtn').val(''); //에러 발생시 fileInput 초기화
+		$('#excelUploadBtn').val('');
 
-		$("#warningMsg").text(msg);
-		$("#warningModal").modal("show");
+		$("#errMsg").text(msg);
+		$("#errorModal").modal("show");
 		setTimeout(function(){
-			$("#warningModal").modal("hide");
+			$("#errorModal").modal("hide");
 		}, 1800);
 	}
 </script>
