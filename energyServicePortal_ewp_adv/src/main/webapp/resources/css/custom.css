@@ -1480,38 +1480,6 @@ table tbody td .dropdown-menu {
 	max-width: 100px;
 }
 
-.mxw200 {
-	max-width: 200px;
-}
-
-.mxw300 {
-	max-width: 300px;
-}
-
-.mxw400 {
-	max-width: 400px;
-}
-
-.mxw500 {
-	max-width: 500px;
-}
-
-.mxw600 {
-	max-width: 600px;
-}
-
-.mxw700 {
-	max-width: 700px;
-}
-
-.mxw800 {
-	max-width: 800px;
-}
-
-.mxw900 {
-	max-width: 900px;
-}
-
 /* width: percentage (%) */
 
 .w-5 {
@@ -1580,20 +1548,12 @@ table tbody td .dropdown-menu {
 
 /* width: pixels(px) */
 
-.w20 {
-	width: 20px !important;
-}
-
 .w50 {
 	width: 50px !important;
 }
 
 .w80 {
 	width: 80px !important;
-}
-
-.w200 {
-	width: 200px !important;
 }
 
 .w300 {
@@ -1648,7 +1608,6 @@ table tbody td .dropdown-menu {
 .device-modal .modal-content .textarea {
 	width: 100%;
 }
-
 
 /* common */
 #mask {
@@ -2457,6 +2416,15 @@ nav .site.form-group .btn {
 	display: flex;
 	align-items: baseline;
 }
+
+.site-modal-content .flex-start,
+.search-dropdown .flex-start,
+.search-dropdown .flex-start2,
+.operation-history .flex-end,
+.alarm-history .flex-end {
+	flex-wrap: nowrap;
+}
+
 
 .nav-right li.member .fr:after {
 	display: inline-block;
@@ -3510,17 +3478,6 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 	width: 42%;
 }
 
-.site-modal-content .flex-start,
-.search-dropdown .flex-start,
-.search-dropdown .flex-start2,
-.operation-history .flex-end,
-.alarm-history .flex-end {
-	flex-wrap: nowrap;
-}
-
-.search-dropdown .flex-start2 {
-
-}
 .site-modal-content .flex-start .text-input-type.offset-73 {
 	width: calc(100% - 73px);
 }
@@ -6129,9 +6086,8 @@ input.inp[readonly]:focus {
 	margin-right: 16px;
 }
 
-.list-title {
-	font-size: 16px;
-	color: var(--white87);
+.search-dropdown .sa-select {
+	margin: 2px 6px 10px;
 }
 
 .search-dropdown .sa-select {
@@ -6147,6 +6103,11 @@ input.inp[readonly]:focus {
 	margin-left: 8px;
 }
 
+
+.list-title {
+	font-size: 16px;
+	color: var(--white87);
+}
 /* 설비 테이블 */
 
 .history-table {
@@ -6755,14 +6716,6 @@ input.inp[readonly]:focus {
 
 /* 라디오 버튼 */
 
-.radio-type li a span {
-	padding: 8px 12px 10px;
-}
-
-.dropdown-menu.radio-type li>span.compare-input {
-	padding: 7px 12px;
-}
-
 .radio-type [type="radio"] {
 	display: none;
 	position: absolute;
@@ -6826,6 +6779,18 @@ input.inp[readonly]:focus {
 	transform: scale(1);
 	-webkit-transition: all 0.2s ease;
 	transition: all 0.2s ease;
+}
+
+.flex-end .radio-type {
+	font-size: 14px;
+}
+
+.radio-type li a span {
+	padding: 8px 12px 10px;
+}
+
+.dropdown-menu.radio-type li>span.compare-input {
+	padding: 7px 12px;
 }
 
 .radio-type.align-type td,
@@ -7274,8 +7239,8 @@ input.inp[readonly]:focus {
 	white-space: nowrap;
 }
 
-.operation-history .flex-end .radio-type + .radio-type,
-.operation-history .flex-end .radio-type + .dropdown {
+.flex-end .radio-type + .radio-type,
+.flex-end .radio-type + .dropdown {
 	margin-left: 24px;
 }
 
