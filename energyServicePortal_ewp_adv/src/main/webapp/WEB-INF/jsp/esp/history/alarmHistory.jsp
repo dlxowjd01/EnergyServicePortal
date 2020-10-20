@@ -958,6 +958,10 @@
 		ticketPerson = $('#userlist button').text().trim();
 		ticketPhone = $('#ticket_phone').val().trim();
 
+		if (!isEmpty(ticketUserId)) {
+			ticketUserId = String(ticketUserId);
+		}
+
 		let pic_file_link = new Array();
 		let fileMemo = '';
 		$(':button[name="file_original_name"]').each(function (i) {

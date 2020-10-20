@@ -3639,7 +3639,7 @@
 
 	function weatherGridCalculator() {
 		const newCoord = $('#newCoord').val();
-
+		$("#latLongWarnig").addClass('hidden');
 		if (!isEmpty(newCoord)) {
 			if (newCoord.match(',')) {
 				const thisValArr = newCoord.split(',');
@@ -3655,18 +3655,10 @@
 					$('#gridY').val(grid.y);
 				}
 			} else {
-				$("#errorModal").text('위경도 정보가 잘못 입력되었습니다.');
-				$("#errorModal").modal("show");
-				setTimeout(function(){
-					$("#errorModal").modal("hide");
-				}, 1800);
+				$("#latLongWarnig").removeClass('hidden');
 			}
 		} else {
-			$("#errorModal").text('위경도 정보가 없습니다.');
-			$("#errorModal").modal("show");
-			setTimeout(function(){
-				$("#errorModal").modal("hide");
-			}, 1800);
+			$("#latLongWarnig").removeClass('hidden');
 		}
 	}
 </script>
@@ -3926,6 +3918,7 @@
 								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">위경도</span></div>
 								<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
 									<div class="text-input-type"><input type="text" name="new_coord" id="newCoord" placeholder="예) 35.9078, 127.7669" minlength="3" maxlength="28"></div>
+									<small id="latLongWarnig" class="hidden warning">위경도 데이터를 다시 확인해 주세요.</small>
 								</div>
 								<div class="col-xl-2 col-lg-12 col-md-12 col-sm-12 pl-0">
 									<button type="button" class="btn-type w-100" onclick="weatherGridCalculator();">기상그리드 계산</button>
