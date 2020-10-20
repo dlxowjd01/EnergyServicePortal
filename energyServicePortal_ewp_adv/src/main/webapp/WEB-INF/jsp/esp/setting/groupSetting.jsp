@@ -62,7 +62,6 @@
 				filterColumn( "#groupTable", "1", $(this).data("name"));
 				let tr = $("#groupTable").find("tbody tr.selected");
 				let btn = $("#btnGroup").find(".btn-type03");
-				console.log("tr===", tr.length)
 				if(tr.length <= 0){		
 					btn.each(function(index, element){
 						$(this).prop("disabled", true);
@@ -729,7 +728,6 @@
 				"aaData": groupData,
 				"table-layout": "fixed",
 				"fixedHeader": true,
-				"autoWidth": true,
 				"bAutoWidth": true,
 				"bSearchable" : true,
 				// "retrieve": true,
@@ -923,7 +921,7 @@
 				});
 				groupTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", false);
 				// console.log("dt---", groupTable[ type ]( indexes ).nodes())
-			}).columns.adjust();
+			}).columns.adjust().draw();
 			// groupTable.on( 'order.dt search.dt', function () {
 			// 	groupTable.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
 			// 		cell.innerHTML = i+1;
@@ -1638,12 +1636,12 @@
 			<table id="groupTable">
 				<colgroup>
 					<col style="width:4%">
-					<col style="width:9%">
-					<col style="width:10%">	
-					<col style="width:24%">
-					<col style="width:16%">
+					<col style="width:8%">
+					<col style="width:12%">	
+					<col style="width:30%">
+					<col style="width:10%">
 					<col style="width:18%">
-					<col style="width:17%">	
+					<col style="width:18%">	
 				</colgroup>
 				<thead></thead>
 				<tbody></tbody>

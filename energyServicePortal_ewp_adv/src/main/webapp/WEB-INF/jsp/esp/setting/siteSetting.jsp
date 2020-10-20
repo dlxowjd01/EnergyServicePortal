@@ -1160,6 +1160,17 @@
 				$("#siteType").find("li").on( 'click', function(){
 					if(!isEmpty($(this).data("name"))){
 						filterColumn("1", $(this).data("value"));
+						let tr = $("#siteTable").find("tbody tr.selected");
+						let btn = $("#btnGroup").find(".btn-type03");
+						if(tr.length <= 0){		
+							btn.each(function(index, element){
+								$(this).prop("disabled", true);
+							});
+						} else {
+							btn.each(function(index, element){
+								$(this).prop("disabled", false);
+							});
+						}
 					} else {
 						filterColumn("1", "");
 					}
@@ -1805,6 +1816,17 @@
 			$("#resTypeList li").on("click", function(){
 				if(!isEmpty($(this).data("value"))){
 					filterColumn( "#siteTable", "4", $(this).data("name"));
+					let tr = $("#siteTable").find("tbody tr.selected");
+					let btn = $("#btnGroup").find(".btn-type03");
+					if(tr.length <= 0){		
+						btn.each(function(index, element){
+							$(this).prop("disabled", true);
+						});
+					} else {
+						btn.each(function(index, element){
+							$(this).prop("disabled", false);
+						});
+					}
 				} else {
 					filterColumn("#siteTable", "4", "");
 				}
@@ -1880,10 +1902,32 @@
 						selected = selected.join("|");
 					}
 					filterColumn("#siteTable", "3", selected, "multi");
+					let tr = $("#siteTable").find("tbody tr.selected");
+					let btn = $("#btnGroup").find(".btn-type03");
+					if(tr.length <= 0){
+						btn.each(function(index, element){
+							$(this).prop("disabled", true);
+						});
+					} else {
+						btn.each(function(index, element){
+							$(this).prop("disabled", false);
+						});
+					}
 				} else {
 					selected.splice(selected.indexOf(val), 1);
 					joined = selected.join("|");
 					filterColumn("#siteTable", "3", joined, "multi");
+					let tr = $("#siteTable").find("tbody tr.selected");
+					let btn = $("#btnGroup").find(".btn-type03");
+					if(tr.length <= 0){
+						btn.each(function(index, element){
+							$(this).prop("disabled", true);
+						});
+					} else {
+						btn.each(function(index, element){
+							$(this).prop("disabled", false);
+						});
+					}
 				}
 			} else {
 				filterColumn("#siteTable", "3", "");
@@ -3992,9 +4036,11 @@
 									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label offset-top">iSMART<br>비밀번호</span></div>
 									<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
 										<div class="text-input-type"><!--
-										--><input type="password" name="new_smart_pwd" id="newISmartPwd" placeholder="입력" maxlength="18" autocomplete><!--
-										--><button type="button" class="pwd-icon" onclick="showPwd('newISmartPwd', this)">show</button><!--
-									--></div>
+										--><input type="password" name="new_smart_pwd" id="newISmartPwd" placeholder="입력" maxlength="18" autocomplete>
+										<%--
+											<button type="button" class="pwd-icon" onclick="showPwd('newISmartPwd', this)">show</button>
+										--%>
+									</div>
 									</div>
 								</div>
 							</section>

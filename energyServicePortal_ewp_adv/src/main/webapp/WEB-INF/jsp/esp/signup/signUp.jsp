@@ -818,7 +818,7 @@
 		];
 
 		let password = $(this).val();
-		password.length >= 6 ? $("#sixCharLong").addClass("checked") : $("#sixCharLong").removeClass("checked");
+		password.length >= 8 ? $("#eightCharLong").addClass("checked") : $("#eightCharLong").removeClass("checked");
 
 		for (var i = 0; i < rules.length; i++) {
 			if( new RegExp(rules[i].Pattern).test(password) ) {
@@ -903,13 +903,15 @@
 							<div class="col-lg-2 col-sm-3"><span class="input-label offset asterisk">비밀번호</span></div>
 							<div class="col-lg-4 col-sm-9">
 								<div class="text-input-type"><!--
-									--><input type="password" id="newUserPwd" name="new_pwd" placeholder="입력" minlength="6" maxlength="32"><!--
-									--><button type="button" class="pwd-icon" onclick="showPwd('newUserPwd', this)">show</button><!--
-								--></div>
+									--><input type="password" id="newUserPwd" name="new_pwd" placeholder="입력" minlength="6" maxlength="32">
+									<%--
+										<button type="button" class="pwd-icon" onclick="showPwd('newUserPwd', this)">show</button>
+									--%>
+									</div>
 								<div class="flex-start warning-wrapper">
 									<small id="hasLet" class="tick">영문</small>
 									<small id="hasNum" class="tick">숫자</small>
-									<small id="sixCharLong" class="tick">6자리 이상</small>
+									<small id="eightCharLong" class="tick">8자리 이상</small>
 								</div>
 							</div>
 						</div>
@@ -1106,13 +1108,15 @@
 							<div class="col-lg-2 col-sm-3"><span class="input-label offset asterisk">비밀번호</span></div>
 							<div class="col-lg-4 col-sm-9">
 								<div class="text-input-type"><!--
-									--><input type="password" id="newUserPwd" name="new_pwd" placeholder="입력" minlength="6" maxlength="32"><!--
-									--><button type="button" class="pwd-icon" onclick="showPwd('newUserPwd', this)">show</button><!--
-								--></div>
+									--><input type="password" id="newUserPwd" name="new_pwd" placeholder="입력" minlength="6" maxlength="32">
+									<%--
+										<button type="button" class="pwd-icon" onclick="showPwd('newUserPwd', this)">show</button>
+									--%>
+								</div>
 								<div class="flex-start warning-wrapper">
 									<small id="hasLet" class="tick">영문</small>
 									<small id="hasNum" class="tick">숫자</small>
-									<small id="sixCharLong" class="tick">6자리 이상</small>
+									<small id="eightCharLong" class="tick">8자리 이상</small>
 								</div>
 							</div>
 						</div>

@@ -76,7 +76,6 @@
 
 		$("#newFullName").on('input', function(evt) {
 			if( $(this).val().match(/['.,!#$%&"*+/=?^`{|}~;:<>]+$/)){
-				console.log("matched===");
 				$(this).parent().next().removeClass("hidden");
 				return false;
 			} else {
@@ -250,7 +249,6 @@
 			let newTaskName = $("#newTaskList").prev().data("name");
 			let newUseOpt = $("#newUseOpt").prev().data("value");
 			let newUswOptName = $("#newUseOpt").prev().data("name");
-
 			let newUserDesc = $("#newUserDesc").val();
 
 			let siteItemList = $("#selectedSiteList").find("li");
@@ -357,7 +355,7 @@
 							});
 
 							Promise.all(multiPromises).then(res => {
-								console.log("altogether---", res);
+								// console.log("altogether---", res);
 								$("#addUserModal").modal("hide");
 								$("#resultSuccessMsg").text("SPC, 사이트 정보 모두 추가 되었습니다.").removeClass("hidden");
 								$("#resultBtn").parent().addClass("hidden");
@@ -1290,6 +1288,17 @@
 					$("#userList").find("li").on( 'click', function(){
 						if(!isEmpty($(this).data("value"))){
 							filterColumn( "#userTable", "6", $(this).data("value"));
+							let tr = $("#userTable").find("tbody tr.selected");
+							let btn = $("#btnGroup").find(".btn-type03");
+							if(tr.length <= 0){		
+								btn.each(function(index, element){
+									$(this).prop("disabled", true);
+								});
+							} else {
+								btn.each(function(index, element){
+									$(this).prop("disabled", false);
+								});
+							}
 						} else {
 							filterColumn("#userTable", "6", "");
 						}
@@ -1518,14 +1527,12 @@
 
 				$.when($.ajax(optSite), $.ajax(optSpc)).done(function (result1, result2) {
 					let siteData = result1[0].data;
-					console.log("siteData===", siteData);
 
 					if(siteData.length > 0){
 
 						let siteOptList = $("#siteOptList li").toArray();
 						let siteStr = ``;
 
-						console.log("siteOptList===", siteOptList);
 						$.each(siteData, function( index, item ) {
 							siteOptList.some( x => {
 								if($(x).data("value") === item.sid) {
@@ -1828,7 +1835,7 @@
 		];
 
 		let password = $(this).val();
-		password.length >= 6 ? $("#sixCharLong").addClass("checked") : $("#sixCharLong").removeClass("checked");
+		password.length >= 8 ? $("#eightCharLong").addClass("checked") : $("#eightCharLong").removeClass("checked");
 
 		for (var i = 0; i < rules.length; i++) {
 			if( new RegExp(rules[i].Pattern).test(password) ) {
@@ -1929,13 +1936,15 @@
 							<div class="col-lg-2 col-sm-3"><span class="input-label offset asterisk">비밀번호</span></div>
 							<div class="col-lg-4 col-sm-9">
 								<div class="text-input-type"><!--
-									--><input type="password" id="newUserPwd" name="new_pwd" placeholder="입력" minlength="8" maxlength="32"><!--
-									--><button type="button" class="pwd-icon" onclick="showPwd('newUserPwd', this)">show</button><!--
-								--></div>
+									--><input type="password" id="newUserPwd" name="new_pwd" placeholder="입력" minlength="8" maxlength="32">
+									<%--
+									<button type="button" class="pwd-icon" onclick="showPwd('newUserPwd', this)">show</button>
+									--%>
+								</div>
 								<div class="flex-start warning-wrapper">
 									<small id="hasLet" class="tick">영문</small>
 									<small id="hasNum" class="tick">숫자</small>
-									<small id="sixCharLong" class="tick">6자리 이상</small>
+									<small id="eightCharLong" class="tick">8자리 이상</small>
 								</div>
 							</div>
 						</div>
@@ -2166,21 +2175,6 @@
 				</colgroup>
 				<thead></thead>
 				<tbody></tbody>
-				<!-- <tfoot>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-				</tfoot> -->
 			</table>
 		</div>
 	</div>

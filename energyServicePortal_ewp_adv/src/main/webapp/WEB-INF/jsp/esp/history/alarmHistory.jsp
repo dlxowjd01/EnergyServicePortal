@@ -319,19 +319,17 @@
 
 <div class="row">
 	<div class="col-xl-8 col-lg-9 col-md-6 col-sm-12">
-		<div class="indiv alarm-stat-wrapper">
+		<div class="indiv alarm-history">
 			<div class="alarm-header">
 				<h2 class="ntit fl"><fmt:message key="alertshistory.2.alertstatus" /></h2>
-				<div class="history-input-box">
-					<div class="radio-type history-radio-box" id="chartType">
-						<span>
-							<input type="radio" id="rdo03_1" name="chartType" value="type" checked>
-							<label for="rdo03_1"><fmt:message key="alertshistory.2.devicetype" /></label>
-						</span>
-						<span>
-							<input type="radio" id="rdo03_2" name="chartType" value="alarm">
-							<label for="rdo03_2"><fmt:message key="alertshistory.2.alerttype" /></label>
-						</span>
+				<div id="chartType" class="flex-end">
+					<div class="radio-type">
+						<input type="radio" id="rdo03_1" name="chartType" value="type" checked>
+						<label for="rdo03_1"><fmt:message key="alertshistory.2.devicetype" /></label>
+					</div>
+					<div class="radio-type">
+						<input type="radio" id="rdo03_2" name="chartType" value="alarm">
+						<label for="rdo03_2"><fmt:message key="alertshistory.2.alerttype" /></label>
 					</div>
 				</div>
 			</div>

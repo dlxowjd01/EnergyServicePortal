@@ -916,7 +916,7 @@
 			let seriesArray = new Array();
 			if (data.status == 'success') {
 				let dataArray = data.data;
-				console.log("dataArray===", dataArray)
+
 				dataArray.forEach((el, index) => {
 					let colorOption = '',
 						colorBoolean = Boolean(el[3]);
@@ -973,13 +973,12 @@
 				marginTop: 60,
 				marginLeft: 60,
 				marginRight: 20,
-				marginBottom: 0,
 				type: 'column',
 				backgroundColor: 'transparent',
 			},
 			navigation: {
 				buttonOptions: {
-					enabled: false /* 메뉴 안보이기 */
+					enabled: false
 				}
 			},
 			title: {
@@ -1076,17 +1075,14 @@
 					}
 				}
 			},
-			/* 출처 */
 			credits: {
 				enabled: false
 			},
-			/* 그래프 스타일 */
 			series: seriesData,
-			/* 반응형 */
 			responsive: {
 				rules: [{
 					condition: {
-						maxWidth: 414 /* 차트 사이즈 */
+						maxWidth: 414
 					},
 					chartOptions: {
 						chart: {
