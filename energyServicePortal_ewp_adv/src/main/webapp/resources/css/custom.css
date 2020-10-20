@@ -7245,7 +7245,7 @@ input.inp[readonly]:focus {
 }
 
 .tag-box {
-	margin: 0 2px 20px;
+	margin: 0 0 20px;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -7273,6 +7273,7 @@ input.inp[readonly]:focus {
 }
 
 .tag-box .tx-tit {
+	margin: 0;
 	height: 24px;
 	line-height: 24px;
 }
