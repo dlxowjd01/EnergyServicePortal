@@ -281,10 +281,10 @@
 								<div id="deviceType" class="dropdown">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 									<ul class="dropdown-menu">
-										<li data-value="solar_opt">
+										<li data-value="PV">
 											<a href="javascript:void(0)">태양광</a>
 										</li>
-										<li data-value="wind_opt">
+										<li data-value="WIND">
 											<a href="javascript:void(0)">풍력</a>
 										</li>
 									</ul>
@@ -437,6 +437,7 @@
 	const apiConfigDevices = '/config/devices';
 	const apiAlarmCodeSets = '/alarms/code_sets';
 	const apiEnergyManual = '/energy/manual/input';
+	const apiEnergyConvertor = '/energy/manual/energy_converter';
 	const apiEnergyDevices = '/energy/devices';
 
 	let codeSetList = new Array();
@@ -608,7 +609,6 @@
 					if (getDeviceData[1] == 'success') {
 						const devcieArray = getDeviceData[0];
 						devcieArray.forEach(function(el) {
-							// console.log("el--", el)
 							if (isEmpty(deviceMap[el.device_type])) {
 								deviceMap[el.device_type] = new Array(el);
 							} else {
@@ -627,7 +627,6 @@
 											val.devices.forEach(function(element) {
 												if(el.did == element.did) {
 													const mergeObj = $.extend({}, el, element);
-													console.log("el==", el, "elemne===", element)
 													deviceMap[key][index] = mergeObj;
 														if(el.sid == element.did) {
 														}
@@ -875,7 +874,6 @@
 								tempVal[0] != '-' ? ( dValue = tempVal[0] + ' ' + tempVal[1] ) : ( dValue = tempVal[0] );
 							} else if(rounded >= 1000000 && rounded < 1000000000){
 								let tempVal = displayNumberFixedUnit(resultData[liData], suffix, "MW", 2, "round");
-								console.log("tempVal==", tempVal, "suffix=", suffix )
 								tempVal[0] != '-' ? ( dValue = tempVal[0] + ' ' + tempVal[1] ) : ( dValue = tempVal[0] );
 							} else if(rounded >= 1000000000){
 								let tempVal = displayNumberFixedUnit(resultData[liData], suffix, "GW", 2, "round");
@@ -978,10 +976,10 @@
 	const setManualForm = () => {
 		const timeInterval = $('#timeInterval button').data('value'),
 			timeIntervalTxt = $('#timeInterval button').text(),
-			startDate = $('#start').datepicker('getDate'),
-			endDate = $('#end').datepicker('getDate'),
 			did = $('#manualAddDeviceModal').data('did');
 
+		let startDate = $('#start').datepicker('getDate'),
+			endDate = $('#end').datepicker('getDate');
 		let dateArr = new Array();
 
 		$('#manualModalTable').empty();
@@ -1002,7 +1000,7 @@
 				let diffMonth = dateDiff(eDate, sDate, 'month');
 				for (let j = 0; j < diffMonth; j++) {
 					let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) + j - 1, 1);
-					let toDate = sDateTime.format('yyyyMM');
+					let toDate = sDateTime.format('yyyyMMdd');
 					dateArr.push(toDate);
 				}
 			} else {
@@ -1020,53 +1018,17 @@
 
 					for (let i = 0; i < 24; i++) {
 						if (timeInterval == '15min') { //15분
-							// if (j == 0) {
-							// 	if (Number(startHour) == i) {
-							// 		if (String(i).length == 1) {
-							// 			for (let minute = 1; minute < 4; minute++) {
-							// 				let setMinute = Number(startMin) * minute;
-							// 				if (setMinute == 0) {
-							// 					dateArr.push(toDate + '0' + i + '0000');
-							// 				} else if (setMinute <= 60) {
-							// 					dateArr.push(toDate + '0' + i + String(setMinute) + '00');
-							// 				}
-							// 			}
-							// 		} else {
-							// 			for (let minute = 1; minute < 4; minute++) {
-							// 				let setMinute = Number(startMin) * minute;
-							// 				if (setMinute == 0) {
-							// 					dateArr.push(toDate + '0' + i + '0000');
-							// 				} else if (setMinute <= 60) {
-							// 					dateArr.push(toDate + '0' + i + String(setMinute) + '00');
-							// 				}
-							// 			}
-							// 		}
-							// 	} else if (Number(startHour) < i) {
-							// 		if (String(i).length == 1) {
-							// 			dateArr.push(toDate + '0' + i + '0000');
-							// 			dateArr.push(toDate + '0' + i + '1500');
-							// 			dateArr.push(toDate + '0' + i + '3000');
-							// 			dateArr.push(toDate + '0' + i + '4500');
-							// 		} else {
-							// 			dateArr.push(toDate + i + '0000');
-							// 			dateArr.push(toDate + i + '1500');
-							// 			dateArr.push(toDate + i + '3000');
-							// 			dateArr.push(toDate + i + '4500');
-							// 		}
-							// 	}
-							// } else {
-								if (String(i).length == 1) {
-									dateArr.push(toDate + '0' + i + '0000');
-									dateArr.push(toDate + '0' + i + '1500');
-									dateArr.push(toDate + '0' + i + '3000');
-									dateArr.push(toDate + '0' + i + '4500');
-								} else {
-									dateArr.push(toDate + i + '0000');
-									dateArr.push(toDate + i + '1500');
-									dateArr.push(toDate + i + '3000');
-									dateArr.push(toDate + i + '4500');
-								}
-							// }
+							if (String(i).length == 1) {
+								dateArr.push(toDate + '0' + i + '0000');
+								dateArr.push(toDate + '0' + i + '1500');
+								dateArr.push(toDate + '0' + i + '3000');
+								dateArr.push(toDate + '0' + i + '4500');
+							} else {
+								dateArr.push(toDate + i + '0000');
+								dateArr.push(toDate + i + '1500');
+								dateArr.push(toDate + i + '3000');
+								dateArr.push(toDate + i + '4500');
+							}
 						} else if (timeInterval == '30min') { //30분
 							if (String(i).length == 1) {
 								dateArr.push(toDate + '0' + i + '0000');
@@ -1091,9 +1053,9 @@
 				if (timeInterval == '15min' || timeInterval == 'hour') {
 					textDate = date.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
 				} else if (timeInterval == 'day') {
-					textDate = date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3') + '000000';
+					textDate = date.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3');
 				} else {
-					textDate = date.replace(/(\d{4})(\d{2})/, '$1-$2');
+					textDate = date.substr(0, 6).replace(/(\d{4})(\d{2})/, '$1-$2');
 				}
 
 				let manualTemplate = `
@@ -1110,6 +1072,12 @@
 			$('#manualModalTable').data('startDate', startDate.format('yyyyMMdd'));
 			$('#manualModalTable').data('endDate', endDate.format('yyyyMMdd'));
 
+
+			if (timeInterval === 'month') {
+				endDate.setMonth(endDate.getMonth() + 1)
+				endDate.setDate(0);
+			}
+
 			$.ajax({
 				url: apiHost + apiEnergyDevices,
 				type: 'get',
@@ -1117,7 +1085,7 @@
 				async: false,
 				data: {
 					dids: did,
-					startTime: startDate.format('yyyyMMdd') + '000000',
+					startTime: startDate.format('yyyyMM') + '01000000',
 					endTime: endDate.format('yyyyMMdd') + '235959',
 					interval: timeInterval
 				},
@@ -1127,7 +1095,13 @@
 					let result = resultData[did][0].items,
 						manualObj = new Object();
 					result.forEach(manual => {
-						manualObj[manual.basetime] = Number(manual.energy);
+						let baseTime = '';
+						if (timeInterval === '15min' || timeInterval === 'hour') {
+							baseTime = manual.basetime;
+						} else {
+							baseTime = String(manual.basetime).substr(0, 8);
+						}
+						manualObj[baseTime] = Number(manual.energy);
 					});
 
 					setJsonAutoMapping(manualObj, 'manualModalTable');
@@ -1140,7 +1114,6 @@
 				alert('처리 중 오류가 발생했습니다.');
 				return false;
 			});
-
 		} else {
 			alert('입력 단위를 선택해 주세요.');
 			return false;
@@ -1155,6 +1128,7 @@
 
 	const saveManualForm = () => {
 		const timeInterval = $('#timeInterval button').data('value'),
+			type = $('#deviceType button').data('value'),
 			startDate = $('#manualModalTable').data('startDate'),
 			endDate = $('#manualModalTable').data('endDate'),
 			did = $('#manualAddDeviceModal').data('did');
@@ -1162,13 +1136,8 @@
 		let postData = new Object();
 		let data = new Array();
 		let items = new Array();
-
-		if (timeInterval != '15min') {
-			alert('현재 15분 단위만 입력 가능합니다.');
-			return false;
-		}
-
 		let stdDate = '';
+
 		$('#manualModalTable input').each(function() {
 			let index = $('#manualModalTable input').index(this),
 				length = $('#manualModalTable input').length,
@@ -1176,12 +1145,9 @@
 				thisKey = '',
 				thisStdDate = '';
 
-			if (timeInterval == 'day') {
-				thisStdDate = thisName.substring(0, 6);
-				thisKey = thisName.substring(6, 8);
-			} else if (timeInterval == 'month') {
-				thisStdDate = thisName.substring(0, 4);
-				thisKey = thisName.substring(4, 6);
+			if (timeInterval == 'day' || timeInterval == 'month') {
+				thisStdDate = thisName;
+				thisKey = '000000';
 			} else {
 				thisStdDate = thisName.substring(0, 8);
 				thisKey = thisName.substring(8, 12);
@@ -1192,7 +1158,7 @@
 
 				items.push({
 					basetime: thisKey,
-					energy: $(this).val()
+					energy: Number($(this).val())
 				});
 			} else if (stdDate != thisStdDate) {
 				data.push({
@@ -1205,12 +1171,12 @@
 
 				items.push({
 					basetime: thisKey,
-					energy: $(this).val()
+					energy: Number($(this).val())
 				});
 			} else {
 				items.push({
 					basetime: thisKey,
-					energy: $(this).val()
+					energy: Number($(this).val())
 				});
 			}
 
@@ -1222,18 +1188,26 @@
 			}
 		});
 
-		postData['start'] = startDate;
-		postData['end'] = endDate;
+		if (timeInterval === 'month') {
+			let endDateMonth = new Date(String(endDate).substr(0, 4), Number(String(endDate).substr(4, 2)), 0);
+			postData['start'] = String(startDate).substr(0, 6) + '01';
+			postData['end'] = endDateMonth.format('yyyyMMdd');
+		} else {
+			postData['start'] = startDate;
+			postData['end'] = endDate;
+		}
 		postData['data'] = data;
 
 		$.ajax({
-			url: apiHost + apiEnergyManual + '?oid=' + oid + '&did=' + did + '&interval=' + timeInterval,
+			url: apiHost + apiEnergyManual + '?oid=' + oid + '&did=' + did + '&interval=' + timeInterval + '&type=' + type,
 			type: 'post',
 			dataType: 'json',
 			contentType: 'application/json',
 			data: JSON.stringify(postData)
 		}).done(function (data, textStatus, jqXHR) {
 			alert('등록되었습니다.');
+
+			$('#manualAddDeviceModal').modal('hide');
 			return false;
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);
