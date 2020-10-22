@@ -704,10 +704,16 @@
 					if (!isEmpty(featureProperties[key].bodyProp)) {
 						let prop = featureProperties[key].bodyProp;
 						prop.forEach((el, idx) => {
-							if (idx % 2 == 0) {
+							if(el.key.startsWith('voltage') || el.key.match('accumActiveEnergy')){
 								featureBody1 += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><span class="di-li-title">' + el.value + '</span><span class="di-li-text"></span></li>';
-							} else {
+							} else if(el.key.startsWith('current') || el.key.match('temperature')){
 								featureBody2 += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><span class="di-li-title">' + el.value + '</span><span class="di-li-text"></span></li>';
+							} else {
+								if (idx % 2 == 0) {
+									featureBody1 += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><span class="di-li-title">' + el.value + '</span><span class="di-li-text"></span></li>';
+								} else {
+									featureBody2 += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><span class="di-li-title">' + el.value + '</span><span class="di-li-text"></span></li>';
+								}
 							}
 						});
 					}
@@ -766,7 +772,6 @@
 
 				let typeName = '';
 				typeName = featureProperties[key].name;
-
 				typeList.push({
 					typeName: typeName,
 					typeId: key,
@@ -861,7 +866,7 @@
 				}
 			});
 
-			$('#' + dType + ' .equip-card .isb-in .di-list li').each(function () {
+			$('#' + dType + ' .equip-card .isb-in .di-list li').each(function (index, element) {
 				let liData = $(this).data('key'),
 					suffix = $(this).data('suffix');
 

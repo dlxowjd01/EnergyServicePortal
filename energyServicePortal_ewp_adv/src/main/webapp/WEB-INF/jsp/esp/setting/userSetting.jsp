@@ -885,6 +885,7 @@
 					// console.log("uid---", item.uid)
 				})).then( () => {
 					if(!callback) {
+						$.fn.dataTable.ext.order.intl();
 						var userTable = $('#userTable').DataTable({
 							"aaData": newArr,
 							// "bDeferRender": true,
@@ -892,7 +893,7 @@
 							"table-layout": "fixed",
 							// "bStateSave": true,
 							// "bStateDuration": 60 * 60 * 24,
-							"bAutoWidth": true,					
+							"autoWidth": true,
 							"bSearchable" : true,
 							// "sScrollX": "110%",
 							// "sScrollXInner": "110%",
@@ -1040,7 +1041,7 @@
 						// }).columns.adjust().responsive.recalc();
 					} else {
 						$('#userTable').DataTable().clear().destroy();
-
+						$.fn.dataTable.ext.order.intl();
 						var userTable = $('#userTable').DataTable({
 							"aaData": newArr,
 							"retrieve": true,

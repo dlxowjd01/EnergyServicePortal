@@ -798,7 +798,7 @@
 					let color = 1;
 					$.each(gridData, function (q, grid) {
 						if (grid.std == dateVal) {
-							let $dataTr = $('<tr>').append('<td><span class="bu t' + color + '">' + grid.name + '</span></td>');
+							let $dataTr = $('<tr>').append('<td class="bullet"><span class="gen color' + color + '">' + grid.name + '</span></td>');
 							$.each(grid.data, function (w, data) {
 								let $dataTd = $('<td>');
 								$dataTd.html(data);
@@ -858,7 +858,7 @@
 						let color = 1;
 						$.each(gridData, function (q, grid) {
 							if (grid.std == dateVal) {
-								let $dataTr = $('<tr>').append('<td><span class="bu t' + color + '">' + grid.name + '</span></td>');
+								let $dataTr = $('<tr>').append('<td class="bullet"><span class="gen color' + color + '">' + grid.name + '</span></td>');
 								$.each(grid.data, function (w, data) {
 									let $dataTd = $('<td>');
 									$dataTd.html(data);
@@ -887,7 +887,7 @@
 					let color = 1;
 					$.each(gridData, function (q, grid) {
 						if (grid.std == dateVal) {
-							let $dataTr = $('<tr>').append('<td><span class="bu t' + color + '">' + grid.name + '</span></td>');
+							let $dataTr = $('<tr>').append('<td class="bullet"><span class="gen color' + color + '">' + grid.name + '</span></td>');
 							$.each(grid.data, function (w, data) {
 								let $dataTd = $('<td>');
 								$dataTd.html(data);
@@ -946,7 +946,7 @@
 						let color = 1;
 						$.each(gridData, function (q, grid) {
 							if (grid.std == dateVal) {
-								let $dataTr = $('<tr>').append('<td><span class="bu t' + color + '">' + grid.name + '</span></td>');
+								let $dataTr = $('<tr>').append('<td class="bullet"><span class="gen color' + color + '">' + grid.name + '</span></td>');
 								$.each(grid.data, function (w, data) {
 									let $dataTd = $('<td>');
 									$dataTd.html(data);
@@ -975,7 +975,7 @@
 					let color = 1;
 					$.each(gridData, function (q, grid) {
 						if (grid.std == dateVal) {
-							let $dataTr = $('<tr>').append('<td><span class="bu t' + color + '">' + grid.name + '</span></td>');
+							let $dataTr = $('<tr>').append('<td class="bullet"><span class="gen color' + color + '">' + grid.name + '</span></td>');
 							$.each(grid.data, function (w, data) {
 								let $dataTd = $('<td>');
 								$dataTd.html(data);

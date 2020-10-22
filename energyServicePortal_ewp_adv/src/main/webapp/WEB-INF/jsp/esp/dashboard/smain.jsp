@@ -261,8 +261,7 @@
 				<div class="weather-wrap clear">
 					<div class="weather-table">
 						<div class="today">
-							<span id="weekIcon"></span>
-							<strong> - </strong>
+							<span id="weekIcon"><strong> - </strong></span>
 							<em id="weekTemp"></em>
 						</div>
 
@@ -481,8 +480,8 @@
 							<div class="weather-wrap">
 								<div class="weather-table">
 									<div class="today">
-										<span id="weekSolarIcon"></span>
-										<strong> - </strong>
+										<span id="weekSolarIcon"><strong> - </strong></span>
+										
 										<em id="sTemp"></em>
 									</div>
 									<table>
@@ -2032,10 +2031,10 @@
 							let weatherIconClass = getWeatherIcons(tempArray[tempArray.length - 1].sky);
 							if($('#viewOptList').prev().data("value") == "2"){
 								$('#sTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + '&nbsp;' + '&#8451;');
-								$('#weekSolarIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i>').next('strong').html(sList[0].location);
+								$('#weekSolarIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i><strong>' + sList[0].location + '</strong>');
 							} else {
 								$('#weekTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + '&nbsp;' + '&#8451;');
-								$('#weekIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i>').next('strong').html(sList[0].location);
+								$('#weekIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i><strong>' + sList[0].location + '</strong>');
 							}
 						}
 					}
@@ -2067,7 +2066,7 @@
 								} else {
 									// console.log("di==", di, "windSpeed===", windSpeed);
 									$('#weekTemp').html(temperature + '&#8451;');
-									$('#weekIcon').next('strong').html(sList[0].location);
+									$('#weekIcon').find('strong').html(sList[0].location);
 									if(windSpeed != "-"){
 										$('#weekWindVelocity').text((windSpeed).toFixed(1) + ' km/h');
 									} else {
@@ -2136,16 +2135,14 @@
 
 							if($('#viewOptList').prev().data("value") == "2") {
 								$('#sTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + '&#8451;');
-								$('#weekSolarIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i>');
-								$('#weekSolarIcon').next('strong').html(sList[0].location);
+								$('#weekSolarIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i><strong>' + sList[0].location + '</strong>');
 								$('#sWindVelocity').text((tempArray[tempArray.length - 1].wind_speed).toFixed(1) + ' km/h');
 								$('#sWindDirection').text(tempArray[tempArray.length - 1].wind_velocity);
 								$('#sHumidity').html((tempArray[tempArray.length - 1].humidity).toFixed(1) + ' ' + '&#37;');
 								$('#currentTimeB').html(String(tempArray[tempArray.length - 1].basetime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6'));
 							} else {
 								$('#weekTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + '&#8451;');
-								$('#weekIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i>');
-								$('#weekIcon').next('strong').html(sList[0].location);
+								$('#weekIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i><strong>' + sList[0].location + '</strong>');
 								$('#weekWindVelocity').text((tempArray[tempArray.length - 1].wind_speed).toFixed(1) + ' km/h');
 								$('#weekWindDirection').text(tempArray[tempArray.length - 1].wind_velocity);
 								$('#weekHum').html((tempArray[tempArray.length - 1].humidity).toFixed(1) + ' ' + '&#37;');

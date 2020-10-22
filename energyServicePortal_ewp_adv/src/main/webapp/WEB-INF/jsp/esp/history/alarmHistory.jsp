@@ -1485,7 +1485,7 @@
 
 		var num2 = 0;
 		var legendInner = $('#legendArea');
-		var wrapper = `<ul class="chart-legend col"></ul>`;
+		var wrapper = `<ul></ul>`;
 		legendInner.empty();
 		legendInner.append(wrapper);
 
@@ -1564,7 +1564,7 @@
 				marginRight: 0,
 				backgroundColor: 'transparent',
 				type: 'column',
-				height: 320
+				height: 360
 			},
 			navigation: {
 				buttonOptions: {
@@ -1689,13 +1689,13 @@
 		var myPieChart = {
 			chart: {
 				renderTo: 'hchart2_2',
-				marginTop: 0,
+				marginTop: 36,
 				marginLeft: 0,
 				marginRight: 0,
 				backgroundColor: 'transparent',
 				plotBorderWidth: 0,
 				plotShadow: false,
-				height: 240
+				height: 270
 			},
 
 			navigation: {

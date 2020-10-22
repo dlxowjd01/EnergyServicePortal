@@ -105,7 +105,7 @@
 	</div>
 </div>
 
-<div class="row chart-pv-table hidden">
+<div id="pvTable" class="row chart-pv-table hidden">
 	<div class="col-12">
 		<div class="indiv chart-pv table-box">
 			<div class="table-save-box"><a href="#;" class="btn-save"><fmt:message key="renewablesgen.4.dataextracts" /></a></div>
@@ -117,7 +117,7 @@
 				<div class="fold-box" id="tableDesktop">
 					<!-- PC 버전용 테이블 -->
 					<div class="chart-table">
-						<table class="tableDesktop">
+						<table>
 							<thead>
 								<tr>
 									<th>2020-08-01</th>
@@ -575,7 +575,12 @@
 					let color = 1;
 					$.each(gridData, function (q, grid) {
 						if (grid.std == dateVal) {
-							let $dataTr = $('<tr>').append('<td><span class="bu t' + color + '">' + grid.deviceNm + '</span></td>');
+							let $dataTr;
+							if(gridData.length === 1){
+								$dataTr = $('<tr>').append('<td class="bullet"><span class="color2">' + grid.deviceNm + '</span></td>');
+							} else {
+								$dataTr = $('<tr>').append('<td class="bullet"><span class="color' + color + '">' + grid.deviceNm + '</span></td>');
+							}
 							$.each(grid.data, function (w, data) {
 								let $dataTd = $('<td>');
 								if (isNaN(data)) {
@@ -639,7 +644,7 @@
 						let color = 1;
 						$.each(gridData, function (q, grid) {
 							if (grid.std == dateVal) {
-								let $dataTr = $('<tr>').append('<td><span class="bu t' + color + '">' + grid.deviceNm + '</span></td>');
+								let $dataTr = $('<tr>').append('<td class="bullet"><span class="color' + color + '">' + grid.deviceNm + '</span></td>');
 								$.each(grid.data, function (w, data) {
 									let $dataTd = $('<td>');
 									if (isNaN(data)) {
@@ -673,7 +678,7 @@
 					let color = 1;
 					$.each(gridData, function (q, grid) {
 						if (grid.std == dateVal) {
-							let $dataTr = $('<tr>').append('<td><span class="bu t' + color + '">' + grid.deviceNm + '</span></td>');
+							let $dataTr = $('<tr>').append('<td class="bullet"><span class="color' + color + '">' + grid.deviceNm + '</span></td>');
 							$.each(grid.data, function (w, data) {
 								let $dataTd = $('<td>');
 								if (isNaN(data)) {
@@ -737,7 +742,7 @@
 						let color = 1;
 						$.each(gridData, function (q, grid) {
 							if (grid.std == dateVal) {
-								let $dataTr = $('<tr>').append('<td><span class="bu t' + color + '">' + grid.deviceNm + '</span></td>');
+								let $dataTr = $('<tr>').append('<td class="bullet"><span class="color' + color + '">' + grid.deviceNm + '</span></td>');
 								$.each(grid.data, function (w, data) {
 									let $dataTd = $('<td>');
 									if (isNaN(data)) {
@@ -771,7 +776,7 @@
 					let color = 1;
 					$.each(gridData, function (q, grid) {
 						if (grid.std == dateVal) {
-							let $dataTr = $('<tr>').append('<td><span class="bu t' + color + '">' + grid.deviceNm + '</span></td>');
+							let $dataTr = $('<tr>').append('<td class="bullet"><span class="color' + color + '">' + grid.deviceNm + '</span></td>');
 							$.each(grid.data, function (w, data) {
 								let $dataTd = $('<td>');
 								if (isNaN(data)) {
@@ -980,21 +985,27 @@
 		let num = 0;
 		let stack = 0;
 		let seriesData = new Array();
-		let colorArr = ['var(--turquoise)',
-						'var(--sandy-brown)',
-						'var(--cream-can)',
-						'var(--summer-sky)',
-						'var(--orange-red)',
-						'var(--blue-yonder)',
-						'var(--eucalyptus)',
-						'var(--yellow-green)',
-						'var(--sea-pink)',
-						'var(--deep-lilac)',
-						'var(--grey)',
-						'var(--vivid-blue)'];
+		let colorArr = [
+			"var(--powder-blue)",
+			"var(--turquoise)",
+			"var(--teal)",
+			"var(--light-blue)",
+			"var(--blueberry)",
+			"var(--royal-blue)",
+			"var(--blue-yonder)",
+			"var(--circle-solar-power)",
+			"var(--deep-lilac)",
+			"var(--yellow-green)",
+			"var(--green)",
+			"var(--eucalyptus)",
+			"var(--french-pass)",
+			"var(--malibu)",
+			"var(--vivid-blue)",
+		];
 		let chartStyle = $('#chartStyle button').data('value'); //현재 선택된 스타일
 
 		accociation.forEach(function (v, k) {
+
 			if (JSON.stringify(v) != '{}') {
 				$.each(v, function (i, el) {
 					let itm = el[0].items;
@@ -1007,6 +1018,7 @@
 					itm.sort(function (a, b) {
 						return a['localtime'] - b['localtime'];
 					});
+
 
 					$.each(standard, function (j, stnd) {
 						let timeValue = 0;
@@ -1051,18 +1063,35 @@
 						}
 					}
 
-					let $temp = {
-						name: deviceNm,
-						type: 'column',
-						stack: stack,
-						sid: sid,
-						tooltip: {
-							valueSuffix: 'Wh',
-						},
-						total: totalCurrent,
-						color: colorArr[num],
-						data: arrDevice
-					};
+					let $temp = {};
+
+					if( accociation.size === 1){
+						$temp = {
+							name: deviceNm,
+							type: 'column',
+							stack: stack,
+							sid: sid,
+							tooltip: {
+								valueSuffix: 'Wh',
+							},
+							total: totalCurrent,
+							color: colorArr[1],
+							data: arrDevice
+						};
+					} else {
+						$temp = {
+							name: deviceNm,
+							type: 'column',
+							stack: stack,
+							sid: sid,
+							tooltip: {
+								valueSuffix: 'Wh',
+							},
+							total: totalCurrent,
+							color: colorArr[num],
+							data: arrDevice
+						};
+					}
 					seriesData.push($temp);
 					num++;
 				});
@@ -1073,7 +1102,7 @@
 
 		//발전량 합계
 		$('.value-wrapper').empty();
-		$('table.table-desktop').parents('.chart-pv-table').removeClass("hidden");
+		$('#pvTable').removeClass("hidden");
 		if (seriesData.length > 0) {
 			let totalArr = new Array();
 			$.each(seriesData, function (i, el) {
@@ -1126,6 +1155,7 @@
 			$.each(totalArr, function (i, el) {
 				let totTitle = '<h3 class="value-title">' + el.name + '</h3>';
 				let refined = displayNumberFixedUnit(el.totVal, 'Wh', 'kWh', 0);
+				// console.log("el.totVal---", el.totVal)
 				totTitle += '<p class="value-num"><span class="num">' + refined[0] + '</span>' + refined[1] + '</p>';
 				$('.value-wrapper').append(totTitle);
 			});

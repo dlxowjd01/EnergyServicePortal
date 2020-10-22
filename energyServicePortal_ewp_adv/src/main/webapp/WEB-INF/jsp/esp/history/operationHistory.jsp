@@ -37,6 +37,22 @@
 			searchGrid();
 		});
 
+		if($('#analyze1').is(':checked')){
+			$('#analyzeDiv1').show();
+			$('#analyzeTag1').show();
+			$('#summation').show();
+
+			$('#analyzeDiv2').hide();
+			$('#analyzeTag2').hide();
+		} else {
+			$('#analyzeDiv2').show();
+			$('#analyzeTag2').show();
+			$('#summation').hide();
+
+			$('#analyzeDiv1').hide();
+			$('#analyzeTag1').hide();
+		}
+
 		$(':radio[name="analyze"]').on('change', function () {
 			$('[id^="analyzeDiv"]').hide();
 			$('[id^="analyzeTag"]').hide();
@@ -137,13 +153,12 @@
 				}
 
 				let $txt = $('#chartDid button').text() + ': ' + $(':radio[name="column"]:checked').next('label').text() + $(':radio[name="rdValue"]:checked').next('label').text()
-				let $span = $('<span>').addClass('tag-type').append($txt).append('<button>')
+				let $span = $('<span class="tag-type">' + $txt + '<button>&times;</button></span>');
 				$span.data('deviceId', $('#chartDid button').data('value'));
 				$span.data('sid', $('#chartDid button').data('sid'));
 				$span.data('type', $('#chartDid button').data('type'));
 				$span.data('key', $(':radio[name="column"]:checked').val())
 				$span.data('key2', $(':radio[name="rdValue"]:checked').val());
-				$span.find('button').html("&times;");
 
 				if ($('#way').find('button').data('value') == 'l') {
 					$('#analyzeTag1 .tx-tit').eq(0).append($span);
@@ -182,7 +197,7 @@
 				}
 
 				//기존항목이 존재한다면 중복체크
-				if ($('#analyzeTag2 > div.fl > span').length > 0) {
+				if ($('#analyzeTag2 > span').length > 0) {
 					if (duplicateTag(2)) {
 						return false;
 					}
@@ -190,7 +205,8 @@
 
 				let $txt = $('#chartDid2 button').text() + ': ' + $(':radio[name="column2"]:checked').next('label').text() + $(':radio[name="rdValue2"]:checked').next('label').text();
 				let $txt2 = $('#chartDid3 button').text() + ': ' + $(':radio[name="column3"]:checked').next('label').text() + $(':radio[name="rdValue3"]:checked').next('label').text();
-				let $span = $('<span>').addClass('tag-type').append($txt + '/' + $txt2).append('<button>')
+				let $span = $('<span class="tag-type">' + $txt + '/' + $txt2 + '<button>&times;</button></span>');
+
 				$span.data('deviceIdX', $('#chartDid2 button').data('value'));
 				$span.data('keyX', $(':radio[name="column2"]:checked').val());
 				$span.data('key2X', $(':radio[name="rdValue2"]:checked').val());
@@ -201,10 +217,7 @@
 
 				$span.data('typeX', $('#chartDid2 button').data('type'));
 				$span.data('typeY', $('#chartDid3 button').data('type'));
-
-				$span.find('button').append('닫기');
-
-				$('#analyzeTag2 > div.fl').append($span);
+				$('#analyzeTag2').append($span);
 			}
 		});
 
@@ -219,7 +232,23 @@
 
 		$('#chartDraw').on('click', function () {
 			let show = true;
-			let chartColor = ['#b0e9e8', '#26ccc8', '#009389', '#50b5ff', '#5269ef', '#274dea'];
+			let chartColor = [
+				"var(--powder-blue)",
+				"var(--turquoise)",
+				"var(--teal)",
+				"var(--light-blue)",
+				"var(--blueberry)",
+				"var(--royal-blue)",
+				"var(--blue-yonder)",
+				"var(--circle-solar-power)",
+				"var(--deep-lilac)",
+				"var(--yellow-green)",
+				"var(--green)",
+				"var(--eucalyptus)",
+				"var(--french-pass)",
+				"var(--malibu)",
+				"var(--vivid-blue)"
+			];
 			let categories = new Array();
 			let chartSeries = new Array();
 			let summation = $(':radio[name="summation"]:checked').val();
@@ -258,9 +287,11 @@
 
 				categories.sort(); //시간 정렬
 
-				$('#analyzeTag1 .tx-tit').eq(0).find('span').each(function () {
-					let dataArr = new Array();
+				let tag1Left = $('#analyzeTag1 .tx-tit').eq(0).find('span');
+				let tag1Right = $('#analyzeTag1 .tx-tit').eq(1).find('span');
 
+				tag1Left.each(function (idx, element) {
+					let dataArr = new Array();
 					let keyText = $(this).data('key');
 					let keyText2 = $(this).data('key2');
 					let deviceId = $(this).data('deviceId');
@@ -326,25 +357,42 @@
 						dataArr.sort(function (a, b) {
 							return a[0] - b[0];
 						});
-						temp = {
-							name: $(this).text().replace('닫기', ''),
-							type: 'column',
-							stack: stackNum,
-							sid: sid,
-							dType: type,
-							tooltip: {
-								valueSuffix: setttingSuffix(keyText)
-							},
-							color: chartColor[index],
-							data: dataArr
-						};
+
+						if( (tag1Left.length + tag1Right.length) === 1){
+							temp = {
+								name: $(this).contents().get(0).nodeValue,
+								type: 'column',
+								stack: stackNum,
+								sid: sid,
+								dType: type,
+								tooltip: {
+									valueSuffix: setttingSuffix(keyText)
+								},
+								color: chartColor[1],
+								data: dataArr
+							};
+						} else {
+							temp = {
+								name: $(this).contents().get(0).nodeValue,
+								type: 'column',
+								stack: stackNum,
+								sid: sid,
+								dType: type,
+								tooltip: {
+									valueSuffix: setttingSuffix(keyText)
+								},
+								color: chartColor[index],
+								data: dataArr
+							};
+						}
+						
 						index++;
 					}
 
 					chartSeries.push(temp);
 
 					//양쪽이 동일할경우 체크
-					$('#analyzeTag1 .tx-tit').eq(1).find('span').each(function () {
+					tag1Right.each(function () {
 						let keyText_1 = $(this).data('key');
 						if (keyText == keyText_1) {
 							dupY = 0;
@@ -352,9 +400,8 @@
 					});
 				});
 
-				$('#analyzeTag1 .tx-tit').eq(1).find('span').each(function () {
+				tag1Right.each(function () {
 					let dataArr = new Array();
-
 					let keyText = $(this).data('key');
 					let keyText2 = $(this).data('key2');
 					let deviceId = $(this).data('deviceId');
@@ -383,19 +430,36 @@
 					});
 
 					if (dataArr.length > 0) {
-						temp = {
-							name: $(this).text().replace('닫기', ''),
-							type: 'spline',
-							stack: index,
-							yAxis: dupY,
-							sid: sid,
-							dType: type,
-							color: chartColor[index],
-							tooltip: {
-								valueSuffix: setttingSuffix(keyText)
-							},
-							data: dataArr
-						};
+						if( (tag1Left.length + tag1Right.length) === 1){
+							temp = {
+								name: $(this).contents().get(0).nodeValue,
+								type: 'spline',
+								stack: index,
+								yAxis: dupY,
+								sid: sid,
+								dType: type,
+								color: chartColor[1],
+								tooltip: {
+									valueSuffix: setttingSuffix(keyText)
+								},
+								data: dataArr
+							};
+						} else {
+							temp = {
+								name: $(this).contents().get(0).nodeValue,
+								type: 'spline',
+								stack: index,
+								yAxis: dupY,
+								sid: sid,
+								dType: type,
+								color: chartColor[index],
+								tooltip: {
+									valueSuffix: setttingSuffix(keyText)
+								},
+								data: dataArr
+							};
+						}
+
 						index++;
 					}
 
@@ -406,15 +470,17 @@
 			} else {
 				show = true;
 				categories = new Array();
+
 				if ($('#analyzeTag2 span').length <= 0) {
 					alert('한개이상 항목을 선택해 주세요.');
 					return false;
 				}
 
-				$('#analyzeTag2 span').each(function (index) {
-					let dataArr = new Array();
+				let tag2 = $('#analyzeTag2 span');
 
-					let seriesName = $(this).text().replace(/\n(\s*)/gi, '').trim().replace('닫기', '');
+				tag2.each(function (index) {
+					let dataArr = new Array();
+					let seriesName = $(this).contents().get(0).nodeValue;
 					let keyTextX = $(this).data('keyX');
 					let keyText2X = $(this).data('key2X');
 					let deviceIdX = $(this).data('deviceIdX');
@@ -480,15 +546,27 @@
 						categories.push(parseFloat(x.toFixed(2)));
 					});
 
-					chartSeries.push({
-						name: seriesName,
-						type: 'scatter',
-						color: chartColor[index],
-						tooltip: {
-							valueSuffix: suffix
-						},
-						data: dataArr
-					});
+					if(tag2.length === 1){
+						chartSeries.push({
+							name: seriesName,
+							type: 'scatter',
+							color: chartColor[1],
+							tooltip: {
+								valueSuffix: suffix
+							},
+							data: dataArr
+						});		
+					} else {
+						chartSeries.push({
+							name: seriesName,
+							type: 'scatter',
+							color: chartColor[index],
+							tooltip: {
+								valueSuffix: suffix
+							},
+							data: dataArr
+						});							
+					}
 				});
 				chartDraw(chartSeries, null, show);
 			}
@@ -846,7 +924,9 @@
 							});
 
 							$.map(valObj.mean, function (v, k) {
-								valObj[k] = numberComma(v.toFixed(2));
+								if(typeof v == "number"){
+									valObj[k] = numberComma(v.toFixed(2));
+								}
 							});
 						});
 
@@ -951,23 +1031,29 @@
 				text: null
 			},
 			xAxis: {
+				lineColor: 'var(--grey)',
+				tickColor: 'var(--grey)',
+				gridLineColor: 'var(--white25)',
+				tickInterval: 1,
 				labels: {
 					align: 'center',
 					style: {
-						color: 'var(--white)',
+						color: 'var(--white60)',
 						fontSize: '8px'
 					},
 					enabled: show,
 				},
 				categories: categories,
-				tickInterval: 1,
+
 				title: {
 					text: null
 				},
 				crosshair: true
 			},
 			yAxis: [{
-				gridLineWidth: 1,
+				lineColor: 'var(--grey)',
+				tickColor: 'var(--grey)',
+				gridLineColor: 'var(--white25)',
 				title: {
 					text: '',
 					align: 'low',
@@ -988,7 +1074,9 @@
 					}
 				}
 			}, {
-				gridLineWidth: 1,
+				lineColor: 'var(--grey)',
+				tickColor: 'var(--grey)',
+				gridLineColor: 'var(--white25)',
 				title: {
 					text: '',
 					align: 'low',
@@ -1014,6 +1102,7 @@
 			legend: {
 				enabled: true,
 				align: 'right',
+				alignColumns: true,
 				verticalAlign: 'top',
 				x: 10,
 				itemStyle: {
@@ -1027,13 +1116,12 @@
 				symbolPadding: 3,
 				symbolHeight: 8
 			},
-			/* 툴팁 */
 			tooltip: {
 				formatter: function () {
 					if ($(':radio[name="analyze"]:checked').val() == '시계열 분석') {
 						return this.points.reduce(function (s, point) {
-							return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + Number(point.y).toFixed(2) + point.series.userOptions.tooltip.valueSuffix;
-						}, '<b>' + new Date(this.x).format('yyyy.MM.dd HH:mm:ss') + '</b>');
+							return s + '<br/><span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + Number(point.y).toFixed(2) + point.series.userOptions.tooltip.valueSuffix;
+						}, '<span style="display:flex; margin-bottom:-10px;"><b>' + new Date(this.x).format('yyyy-MM-dd HH:mm:ss') + '</b></span>');
 					} else {
 						let tooltip = this.series.name + '<br/>' +
 							'X:' + (this.x).toFixed(2) + '<br/> Y:' + (this.y).toFixed(2);
@@ -1041,6 +1129,7 @@
 					}
 				},
 				shared: true,
+				useHTML: true,
 				borderColor: 'none',
 				backgroundColor: 'var(--bg-color)',
 				padding: 16,
@@ -1068,7 +1157,6 @@
 					stacking: 'normal'
 				}
 			},
-			/* 출처 */
 			credits: {
 				enabled: false
 			},
@@ -1420,14 +1508,14 @@
 			<div class="row">
 				<div class="col-12">
 					<!-- 시계열 분석 -->
-					<div id="analyzeTag1" class="tag-box clear">
-						<span class="tx-tit"><fmt:message key="statushistory.2.y_left" /></span>
-						<span class="tx-tit"><fmt:message key="statushistory.2.y_right" /></span>
-					</div>
+					<div id="analyzeTag1" class="tag-box">
+						<h3 class="axis-label"><fmt:message key="statushistory.2.y_left" /></h3><!--
+					--><p class="tx-tit"></p>
+						<h3 class="axis-label"><fmt:message key="statushistory.2.y_right" /></h3><!--
+					--><p class="tx-tit"></p><!--
+				--></div>
 					<!-- 상관 분석 -->
-					<div id="analyzeTag2" class="tag-box clear" style="display:none;">
-						<div class="fl"></div>
-					</div>
+					<div id="analyzeTag2" class="tag-box" style="display:none;"></div>
 				</div>
 			</div>
 

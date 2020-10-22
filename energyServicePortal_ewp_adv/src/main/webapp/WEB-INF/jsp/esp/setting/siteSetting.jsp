@@ -2,6 +2,8 @@
 <%@ include file="/decorators/include/taglibs.jsp" %>
 <script type="text/javascript" src="/js/weather_station_info.js"></script>
 <script type="text/javascript">
+	let deviceNameList = [];
+
 	$(function () {
 		let optionList = [
 			{
@@ -24,16 +26,23 @@
 				type: "get",
 				async: true,
 			},
+			{
+				url: apiHost + "/config/view/device_properties?oid=" + oid,
+				type: 'get',
+				async: true
+			},
 		];
 
 		initModal();
 
 		if(role == 1){
-			Promise.all([ Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])) ]).then( res => {
+			Promise.all([ Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])), Promise.resolve(returnAjaxRes(optionList[4])) ]).then( res => {
+				deviceNameList = res[2];
 				adminTable(res[0], res[1]);
 			});
 		} else {
-			Promise.all( [ Promise.resolve(returnAjaxRes(optionList[2])), Promise.resolve(returnAjaxRes(optionList[1])), Promise.resolve(returnAjaxRes(optionList[3])) ] ).then( res => {
+			Promise.all( [ Promise.resolve(returnAjaxRes(optionList[2])), Promise.resolve(returnAjaxRes(optionList[1])), Promise.resolve(returnAjaxRes(optionList[4]) ) , Promise.resolve(returnAjaxRes(optionList[3]))] ).then( res => {
+				deviceNameList = res[3];
 				nonAdminTable( res[0], res[1], res[2].user_sites );
 			});
 		}
@@ -721,11 +730,11 @@
 
 		if(role == 1){
 			Promise.all([ Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])) ]).then( res => {
-			// Promise.resolve(returnAjaxRes(optionList[0])).then( res => {
+				// Promise.resolve(returnAjaxRes(optionList[0])).then( res => {
 				adminTable(res[0], res[1], initModal);
 			});
 		} else {
-			Promise.all( [ Promise.resolve(returnAjaxRes(optionList[2])), Promise.resolve(returnAjaxRes(optionList[1])), Promise.resolve(returnAjaxRes(optionList[3])) ] ).then( res => {
+			Promise.all([ Promise.resolve(returnAjaxRes(optionList[2])), Promise.resolve(returnAjaxRes(optionList[1])) ]).then( res => {
 				nonAdminTable( res[0], res[1], res[2].user_sites, initModal);
 			});
 		}
@@ -743,10 +752,10 @@
 		if(siteData) {
 			let newArr = [];
 			let essDvcArr = ["KPX_EMS", "INV_PV", "PCS_ESS", "BMS_SYS"];
-
+			let newName = '';
+			// deviceNameList
 			// Promise.resolve(siteData.map((item, index) => {
 			siteData.map((item, index) => {
-
 				$("#loadingCircle").show();
 
 				if(isEmpty(item.ess) || item.ess === 0){
@@ -797,6 +806,7 @@
 				} else {
 					item.vppName = "-"
 				}
+				
 				// console.log("sid-===", item.sid);
 				let deviceOpt = {
 					url: apiHost + "/config/devices?"+'oid='+oid,
@@ -918,6 +928,7 @@
 								} else {
 									$(td).attr('data-value', 1);
 								}
+								// rowData.deviceTypeKr = rowData.device_type_kr;
 							}
 						},
 						{
@@ -1091,6 +1102,7 @@
 
 					// if(!isEmpty(siteTable.row(tr).data().alarmData)){
 						let rowData = dTable.row(tr).data().alarmInfo;
+						let dvcNameKr = dTable.row(tr).data().device_type_kr;
 						let userOpt = {
 							url: apiHost + "/config/users",
 							type: 'get',
@@ -1099,9 +1111,8 @@
 								oid: oid,
 							}
 						}
-						console.log("getAlarmTable===")
 						Promise.resolve(makeAjaxCall(userOpt)).then(res => {
-							getAlarmTable(rowData, res);
+							getAlarmTable(dvcNameKr, rowData, res);
 						});
 					// }
 				});
@@ -2393,9 +2404,6 @@
 					arr.push($(this).data("value"))
 				}
 			});
-
-			console.log("arr---", arr)
-
 		} else {
 			$.each(menuItem, function(index, el){
 				if(subGroup == $(this).data("value")){
@@ -2497,12 +2505,12 @@
 
 	}
 	
-	function getAlarmTable(alarmData, userData){
+	function getAlarmTable(dvcNameData, alarmData, userData){
 		let alarmList = [];
 		let userType = "";
 		// let newUserList = [];
 		// let newNonUserList = [];
-		console.log("getAlarmTable===", alarmData)
+		// console.log("alarmData---", alarmData)
 			// Promise.resolve(alarmData.alarmInfo.map((x, index) => {
 			Promise.resolve(alarmData.map((x, index) => {
 				if(!isEmpty(x.alarm_to)){
@@ -2626,16 +2634,23 @@
 									});
 
 									devName = devName.replace(/,\s*$/, "");
+									let deviceNameKr = '';
+									for (var property in deviceNameList) {
+										if(property == data.device_type){
+											deviceNameKr = deviceNameList[property].name.kr;
+											break;
+										}
+									}
 
 									newDevType.forEach((item, index) => {
 										str1 += `
-											<li onclick="setDropdownInput(this)" data-subgroup="${'${ devName }'}" data-did="${'${ item.did }'}" data-value="${'${ item.device_type }'}"><a href="#" tabindex="-1">${'${ item.device_type }'}</a></li>
+											<li onclick="setDropdownInput(this)" data-subgroup="${'${ devName }'}" data-did="${'${ item.did }'}" data-value="${'${ item.device_type }'}"><a href="#" tabindex="-1">${'${ deviceNameKr }'}</a></li>
 										`
 									});
 
 									let dropdown1 = `
 										<div class="dropdown">
-											<button type="button" class="dropdown-toggle device-type" data-toggle="dropdown" data-did="${'${ data.did }'}" data-value="${'${ data.device_type }'}" disabled>${'${ data.device_type }'}<span class="caret"></span></button>
+											<button type="button" class="dropdown-toggle device-type" data-toggle="dropdown" data-did="${'${ data.did }'}" data-value="${'${ data.device_type }'}" disabled>${'${ deviceNameKr }'}<span class="caret"></span></button>
 											<ul id="aDvcTypeList${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str1 }'}</ul>
 										</div>
 									`;
@@ -3062,10 +3077,16 @@
 									});
 
 									devName = devName.replace(/,\s*$/, "");
-
+									let deviceNameKr = '';
+									for (var property in deviceNameList) {
+										if(property == data.device_type){
+											deviceNameKr = deviceNameList[property].name.kr;
+											break;
+										}
+									}
 									newDevType.forEach((item, index) => {
 										str1 += `
-											<li onclick="setDropdownInput(this)" data-subgroup="${'${ devName }'}" data-did="${'${ item.did }'}" data-value="${'${ item.device_type }'}"><a href="#" tabindex="-1">${'${ item.device_type }'}</a></li>
+											<li onclick="setDropdownInput(this)" data-subgroup="${'${ devName }'}" data-did="${'${ item.did }'}" data-value="${'${ item.device_type }'}"><a href="#" tabindex="-1">${'${ deviceNameKr }'}</a></li>
 										`
 									});
 
