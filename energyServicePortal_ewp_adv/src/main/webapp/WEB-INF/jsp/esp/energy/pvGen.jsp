@@ -1033,10 +1033,10 @@
 							timeValue = 0;
 						}
 
+						const chartTimeValue = Number(String(displayNumberFixedUnit(timeValue, 'Wh', 'kWh', 0)[0]).replace(/[^0-9]/g, ''));
 						arrDevice.push([
-							stnd, Number(displayNumberFixedUnit(timeValue, 'Wh', 'kWh', 0)[0])
+							stnd, chartTimeValue
 						]);
-
 						totalCurrent += timeValue;
 					});
 
@@ -1257,7 +1257,7 @@
 			tooltip: {
 				formatter: function () {
 					return this.points.reduce(function (s, point) {
-						return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + point.y + 'kWh';
+						return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + numberComma(point.y) + 'kWh';
 					}, '<b>' + dateFormat(this.points[0].point.name) + '</b>');
 				},
 				shared: true,

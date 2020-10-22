@@ -945,7 +945,7 @@
 		$('#start').datepicker('setDate', new Date());
 		$('#end').datepicker('setDate', new Date());
 
-
+		$('#manualModalTable').removeData('items');
 		$('#manualAddDeviceModal').data('did', did).modal('show');
 	}
 
@@ -1240,18 +1240,25 @@
 			, timeInterval = $('#timeInterval button').data('value')
 			, data = refineManualData(timeInterval);
 
-		if (!(!isEmpty(manualItems) && objectAreEqual(manualItems, data))) {
+		if (manualItems === undefined) {
 			if (mode === 'save') {
-				$('#saveManualModal').modal('show');
-			} else {
-				$('#closeManualModal').modal('show');
-			}
-		} else {
-			if (mode === 'save') {
-				alert('변경된 내역이 없습니다.');
-				//errorMsg('변경된 내역이 없습니다.');
+				alert('저장할 정보가 없습니다.');
 			} else {
 				$('#manualAddDeviceModal').modal('hide');
+			}
+		} else {
+			if (isEmpty(manualItems) || (objectAreEqual(manualItems, data))) {
+				if (mode === 'save') {
+					alert('변경된 내역이 없습니다.');
+				} else {
+					$('#manualAddDeviceModal').modal('hide');
+				}
+			} else {
+				if (mode === 'save') {
+					$('#saveManualModal').modal('show');
+				} else {
+					$('#closeManualModal').modal('show');
+				}
 			}
 		}
 	}

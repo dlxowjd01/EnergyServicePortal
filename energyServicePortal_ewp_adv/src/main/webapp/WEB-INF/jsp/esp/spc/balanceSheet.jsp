@@ -3,203 +3,257 @@
 <script type="text/javascript">
 	let today = new Date();
 	const siteList = JSON.parse('${siteList}');
+	let balanceTable = null;
 
 	$(function () {
-		setInitList("listData"); //리스트초기화
-		getDataList(page);
+		$(function () {
+			balanceTable = $('#balanceTable').DataTable({
+				autoWidth: true,
+				fixedHeader: true,
+				"table-layout": "fixed",
+				scrollY: '720px',
+				scrollCollapse: true,
+				sortable: true,
+				paging: true,
+				pageLength: 10,
+				columns: [
+					{
+						sTitle: '',
+						mData: null,
+						mRender: function ( data, type, full, rowIndex ) {
+							return '<input type="checkbox" id="check' + rowIndex.row + '" name="table_checkbox" data-spcId="' + full['spc_id'] + '" data-siteId="' + full['site_id'] + '" data-yyyymm="' + full['balance_yyyymm'] + '"><label for="check' + rowIndex.row + '"></label>';
+						},
+						className: 'dt-center no-sorting'
+					},
+					{
+						title: '<fmt:message key="workreportmain.2.number" />',
+						data: null,
+						render: function (data, type, full, rowIndex) {
+							return rowIndex.row + 1;
+						},
+						className: 'dt-center no-sorting fixed'
+					},
+					{
+						title: 'SPC명',
+						data: 'spc_name',
+						render: function (data, type, full, rowIndex) {
+							return '<a href="/spc/entityDetailsBySite.do?spc_id=' + full['spc_id'] + '&balance_yyyy=' + full['balance_yyyymm'] + '" class="table-link">' + data + '</a>';
+						},
+						className: 'dt-center'
+					},
+					{
+						title: '발전소 명',
+						data: 'name',
+						render: function (data, type, full, rowIndex) {
+							return '<a href="/spc/entityDetailsBySite.do?spc_id=' + full['spc_id'] + '&balance_yyyy=' + full['balance_yyyymm'] + '" class="table-link">' + data + '</a>';
+						},
+						className: 'dt-center'
+					},
+					{
+						title: '기준년월',
+						data: 'balance_yyyymm',
+						className: 'dt-center'
+					},
+					{
+						title: '현금유입(원)',
+						data: 'inflowOfCash',
+						className: 'dt-center'
+					},
+					{
+						title: '현금유출(원)',
+						data: 'outflowOfCash',
+						className: 'dt-center'
+					},
+					{
+						title: '기말 현금흐름(원)',
+						data: 'endOfTermFlow',
+						className: 'dt-center'
+					}
+				],
+				select: {
+					style: 'multi',
+					selector: 'td:first-child > :checkbox, tr'
+				},
+				language: {
+					emptyTable: "조회된 데이터가 없습니다.",
+					zeroRecords:  "검색된 결과가 없습니다."
+				},
+				dom: 'tip',
+			}).on('select', function(e, dt, type, indexes) {
+				balanceTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
+				$('#deleteBtn').attr('disabled', false);
+			}).on('deselect', function(e, dt, type, indexes) {
+				balanceTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", false);
+
+				const checkedArray = document.querySelectorAll('[name="table_checkbox"]:checked');
+				if (checkedArray.length > 0) {
+					$('#deleteBtn').attr('disabled', false);
+				} else {
+					$('#deleteBtn').attr('disabled', true);
+				}
+			}).columns.adjust().draw();
+
+			new $.fn.dataTable.Buttons(balanceTable, {
+				name: 'commands',
+				buttons: [
+					{
+						extend: 'excelHtml5',
+						className: "btn-save",
+						text: '<fmt:message key="workreportmain.1.dataExtracts" />',
+						filename: 'SPC금융관리_' + new Date().format('yyyyMMddHHmmss'),
+						customize: function( xlsx ) {
+							var sheet = xlsx.xl.worksheets['sheet1.xml'];
+							$('row:first c', sheet).attr( 's', '42' );
+							var sheet = xlsx.xl.worksheets['sheet1.xml'];
+						}
+					}
+				]
+			});
+
+			balanceTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup");
+			getDataList();
+		});
+		// setInitList("listData"); //리스트초기화
+		// getDataList(page);
 	});
 
 	$(document).on('keyup', '#key_word', function (e) {
 		if (e.keyCode == 13) {
 			getDataList(page);
 		}
-	})
+	});
 
-	function nvl(value, str) {
-		if (isEmpty(value)) {
-			return str;
-		} else {
-			return value;
-		}
-	}
-
-	function getCsvDown() {
-		let excelName = 'spc_info_list';
-		let $val = $('#excelList').find('tbody');
-		let cnt = $val.length;
-
-		if (cnt < 1) {
-			alert('다운받을 데이터가 없습니다.');
-		} else {
-			if (confirm('엑셀로 저장하시겠습니까?')) {
-				tableToExcel('excelList', excelName);
-			}
-		}
-	}
-
-	function getDataList(page ,n, sort) {
-		if (page == undefined) {
-			page = 1;
-		}else{
-			if(isEmpty(n) && isEmpty(sort)) {
-				$('.sort-table > thead').find('button').each(function(){
-					if($(this).attr('class') != 'btn-align'){
-						n = $(this).data('colname');
-						sort = $(this).data('classname');
-					}
-				});
-				
-			}
-		}
+	function getDataList() {
 		$.ajax({
 			url: apiHost + '/spcs/balance/month',
-			type: "get",
-			async: false,
+			type: 'GET',
 			data: {
 				oid: oid,
 				yyyymm: $('#year button').data('value') + '__'
 			},
 			success: function (result) {
-				var jsonList = [],
-					keyWord = $("#key_word").val().trim().toLowerCase();
+				let refineList = new Array(),
+					keyWord = $('#key_word').val().trim(),
+					resultList = result.data;
+				const keyWordPattern = new RegExp(keyWord, 'i'); //ignoreCase 대소문자 구분X
 
-				for (var i in result.data) {
-					var temp = result.data[i],
-						balance_info = JSON.parse(temp.balance_info);
+				if (!isEmpty(resultList)) {
+					resultList.forEach(rowData => {
+						if (!isEmpty(rowData['balance_info'])) {
+							const balance_info = JSON.parse(rowData['balance_info']);
 
-					result.data[i].balance_yyyymm = temp.balance_yyyymm.replace(/(\d{4})(\d{2})/, '$1-$2')
-					result.data[i].inflowOfCash = numberComma(Math.round(balance_info.inflowOfCash.replace(/[^0-9.]/g, '')));
-					result.data[i].outflowOfCash = numberComma(Math.round(balance_info.outflowOfCash.replace(/[^0-9.]/g, '')));
-					result.data[i].endOfTermFlow = numberComma(Math.round(balance_info.endOfTermFlow.replace(/[^0-9.]/g, '')));
+							rowData['balance_yyyymm'] = rowData['balance_yyyymm'].replace(/(\d{4})(\d{2})/, '$1-$2');
+							if (!isEmpty(balance_info)) {
+								rowData['inflowOfCash'] = numberComma(Math.round(balance_info['inflowOfCash'].replace(/[^0-9.]/g, '')));
+								rowData['outflowOfCash'] = numberComma(Math.round(balance_info['outflowOfCash'].replace(/[^0-9.]/g, '')));
+								rowData['endOfTermFlow'] = numberComma(Math.round(balance_info['endOfTermFlow'].replace(/[^0-9.]/g, '')));
+							}
 
-					for (var j in siteList) {
-						if (siteList[j].sid == temp.site_id) {
-							result.data[i].name = siteList[j].name;
+							const siteInfo = siteList.find(e => e.sid === rowData['site_id']);
+							rowData['name'] = siteInfo.name;
+
+							if (isEmpty(keyWord)) {
+								refineList.push(rowData);
+							} else {
+								if (keyWordPattern.test(rowData['name']) || keyWordPattern.test(rowData['spc_name'])) {
+									refineList.push(rowData);
+								}
+							}
 						}
-					}
-					if (result.data[i].name.indexOf(keyWord) > -1 || result.data[i].spc_name.indexOf(keyWord) > -1) {
-						jsonList.push(result.data[i]);
-					}
+					});
 				}
-				$(".sort-table").data("nowjsp", "balance");
-				jsonListSort(n, sort, jsonList)
-				jsonList = paging(page, jsonList);
-				setMakeList(jsonList, "listData", { "dataFunction": { "INDEX": getNumberIndex } }); //list생성
 
+				balanceTable.clear();
+				balanceTable.rows.add(refineList).draw();
 			},
 			error: function (request, status, error) {
 				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
 			}
 		});
-	}
 
-	function getNumberIndex(index) {
-		return index + 1;
-	}
+		$(document).on('click', '#comDeleteBtn', function() {
+			$('#comDeleteModal').modal('hide');
+			$('#confirmTitle').val('');
 
-	function setCheckedAll(obj, chkName) {
-		var checkVal = obj.checked;
-		$("input[name='" + chkName + "']").prop("checked", checkVal);
-	}
+			const checkedArray = document.querySelectorAll('[name="table_checkbox"]:checked');
+			const urls = new Array();
+			const deferreds = new Array();
 
-	function getCheckList(checkName) {
-		var jsonList = $("#listData").data("gridJsonData"),
-			checkList = [];
-		$("input[name='" + checkName + "']").each(function (i) {
-			if (this.checked) {
-				checkList.push(jsonList[i]);
-			}
-		});
+			checkedArray.forEach(chk => {
+				const spcId = chk.dataset.spcid;
+				const siteId = chk.dataset.siteid;
+				const yyyymm = chk.dataset.yyyymm;
 
-		return checkList;
-	}
-
-	function setCheckedDataRemove() {
-		var checkDataList = getCheckList("rowCheck");
-		count = checkDataList.length,
-			sucessCnt = 0;
-
-		if (count == 0) {
-			alert("삭제 할 목록을 선택하세요.");
-			return;
-		}
-
-		for (var i = 0; i < count; i++) {
-			var rowData = checkDataList[i];
-			$.ajax({
-				url: apiHost + '/spcs/' + rowData.spc_id + "/gens/" + rowData.gen_id,
-				type: "delete",
-				async: false,
-				data: {},
-				success: function (json) {
-					sucessCnt++;
-				},
-				error: function (request, status, error) {
-
+				if (!isEmpty(spcId) && !isEmpty(siteId) && !isEmpty(yyyymm)) {
+					const locationUrl = '/spcs/' + spcId + '/balance/month?oid=' + oid + '&site_id=' + siteId + '&yyyymm=' + yyyymm.replace('-', '');
+					urls.push({
+						url: apiHost + locationUrl,
+						type: 'delete',
+						dataType: 'json',
+					});
 				}
 			});
-		}
 
-		alert(sucessCnt + "건 삭제처리되었습니다.");
-		getDataList(page);
-	}
+			//코드 삭제 START
+			urls.forEach(function (url) {
+				let deferred = $.Deferred();
+				deferreds.push(deferred);
 
-	//     function setCheckedDataModify() {
-	//         var checkDataList = getCheckList("rowCheck");
-	//         count = checkDataList.length,
-	//             sucessCnt = 0;
+				$.ajax(url).done(function (data) {
+					data['url'] = url['url'];
+					(function (deferred) {
+						return deferred.resolve(data);
+					})(deferred);
+				}).fail(function (error) {
+					console.log(error);
+				});
+			});
 
-	//         if (count == 0) {
-	//             alert("수정 할 목록을 선택하세요.");
-	//             return;
-	//         } else if (count > 1) {
-	//             alert("1개의 사업소에 대해서만 수정 가능합니다.");
-	//             return;
-	//         }
-
-	//         var rowData = checkDataList[0];
-	//         var locationUrl = '/spc/balanceSheetEdit.do?spc_id=' + rowData.spc_id + '&site_id=' + rowData.site_id + '&yyyymm=' + rowData.balance_yyyymm;
-
-	//         location.href = locationUrl;
-	//     }
-
-	function deleteRow() {
-		var checkDataList = getCheckList("rowCheck");
-		count = checkDataList.length,
-			sucessCnt = 0;
-
-		if (count == 0) {
-			alert("삭제 할 목록을 선택하세요.");
-			return;
-		}
-
-		var inputString = prompt(count + '건을 삭제하시겠습니까? \n삭제를 원하시면 아래 "삭제"라고 입력하고 확인을 눌러 주세요.', '');
-
-		if (inputString == '삭제') {
-			for (var i = 0; i < count; i++) {
-				var rowData = checkDataList[i];
-				var locationUrl = '/spcs/' + rowData.spc_id + '/balance/month?oid=' + oid + '&site_id=' + rowData.site_id + '&yyyymm=' + rowData.balance_yyyymm.replace('-', '');
-				$.ajax({
-					url: apiHost + locationUrl,
-					type: 'delete',
-					async: false,
-					data: {},
-					success: function (json) {
-						sucessCnt++;
-					},
-					error: function (request, status, error) {
-						alert('처리 중 오류가 발생했습니다.');
-						return false;
+			$.when.apply($, deferreds).then(function () {
+				let totalDelete = 0;
+				Object.entries(arguments).forEach(([dummy, resultData]) => {
+					if (!isEmpty(resultData)) {
+						if (resultData['status'] === 'success') {
+							totalDelete += resultData['data']['count'];
+						}
 					}
 				});
-			}
-		}
 
-		if (sucessCnt > 0) {
-			alert('삭제 되었습니다.');
-			location.reload();
-			return false;
-		}
+				errorMsg(totalDelete + '개를 삭제했습니다.');
+				getDataList();
+				$("#deleteBtn").prop('disabled', true);
+			});
+		});
+	}
+
+	function deleteRow() {
+		let alarmMsg = '삭제';
+		let modal = $("#comDeleteModal");
+
+		$('#comDeleteSuccessMsg span').text(alarmMsg);
+		modal.find('.modal-body').removeClass('hidden');
+		modal.modal('show');
+
+		$("#confirmTitle").on('input keyp', function() {
+			if($(this).val() !== alarmMsg) {
+				$("#comDeleteBtn").prop('disabled', true);
+			} else {
+				$("#comDeleteBtn").prop('disabled', false);
+			}
+		});
+	}
+
+	/**
+	 * 에러 처리
+	 *
+	 * @param msg
+	 */
+	const errorMsg = msg => {
+		$('#errMsg').text(msg);
+		$('#errorModal').modal('show');
+		setTimeout(function(){
+			$('#errorModal').modal('hide');
+		}, 1800);
 	}
 </script>
 <div class="row header-wrapper">
@@ -233,9 +287,7 @@
 		<div class="fl">
 			<button type="button" class="btn-type" onclick="getDataList();">검색</button>
 		</div>
-		<div class="fr">
-			<a href="javascript:getCsvDown();" class="btn-save">엑셀 다운로드</a>
-		</div>
+		<div id="exportBtnGroup" class="fr"></div>
 	</div>
 </div>
 <div class="row">
@@ -244,60 +296,22 @@
 			<div class="btn-wrap-type01">
 				<button type="button" class="btn-type" onclick="location.href='/spc/balanceSheetPost.do'">신규 등록</button>
 			</div>
-			<div class="spc-tbl align-type" id="excelList">
-				<table class="sort-table chk-type">
+			<div class="spc-tbl align-type">
+				<table id="balanceTable" class="chk-type">
 					<colgroup>
-						<col width="6%">
-						<col width="15%">
-						<col width="17%">
-						<col width="17%">
-<%--						<col width="15%">--%>
+						<col width="5%">
+						<col width="5%">
 						<col width="15%">
 						<col width="15%">
 						<col width="15%">
-						<col>
+						<col width="15%">
+						<col width="15%">
+						<col width="15%">
 					</colgroup>
-					<thead>
-						<tr>
-							<th>
-								<input type="checkbox" id="chk_op01" value="순번">
-								<label for="chk_op01">순번</label>
-							</th>
-							<th><button type="button" class="btn-align down">SPC명</button></th>
-							<th><button type="button" class="btn-align down">발전소 명</button></th>
-							<th><button type="button" class="btn-align down">기준년월</button></th>
-<%--							<th class="right"><button type="button" class="btn-align down">용량(kW)</button></th>--%>
-							<th class="right"><button type="button" class="btn-align down">현금유입(원)</button></th>
-							<th class="right"><button type="button" class="btn-align down">현금유출(원)</button></th>
-							<th class="right"><button type="button" class="btn-align down">기말 현금흐름(원)</button></th>
-						</tr>
-					</thead>
-					<tbody id="listData">
-						<tr>
-							<td>
-								<input type="checkbox" id="chk_op[INDEX]" name="rowCheck" value="">
-								<label for="chk_op[INDEX]">[INDEX]</label>
-							</td>
-							<td>
-								<a href="/spc/entityDetailsBySite.do?spc_id=[spc_id]&site_id=&balance_yyyy=[balance_yyyymm]" class="table-link">[spc_name]</a>
-							</td>
-							<td>
-								<a href="/spc/entityDetailsBySite.do?spc_id=[spc_id]&site_id=[site_id]&balance_yyyy=[balance_yyyymm]" class="table-link">[name]</a>
-							</td>
-							<td>[balance_yyyymm]</td>
-<%--							<td class="right">-</td>--%>
-							<td class="right">[inflowOfCash]</td>
-							<td class="right">[outflowOfCash]</td>
-							<td class="right">[endOfTermFlow]</td>
-						</tr>
-					</tbody>
 				</table>
 			</div>
 			<div class="btn-wrap-type02 mt30">
-				<!--                 <button type="button" class="btn-type03" onclick="setCheckedDataModify();">선택 수정</button> -->
-				<button type="button" class="btn-type03" onclick="deleteRow();">선택 삭제</button>
-			</div>
-			<div class="pagination-wrapper" id="paging">
+				<button type="button" class="btn-type03" id="deleteBtn" onclick="deleteRow();" disabled="disabled">선택 삭제</button>
 			</div>
 		</div>
 	</div>

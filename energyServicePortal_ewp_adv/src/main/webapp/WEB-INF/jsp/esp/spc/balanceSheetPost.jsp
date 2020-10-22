@@ -114,6 +114,7 @@
 			}
 
 			payment();
+			setAutoComplete();
 		}
 	}
 
@@ -384,6 +385,7 @@
 	const setSitesNowMoney = function (data) {
 		let siteList = data.data;
 
+		console.log(siteList);
 		$.each(siteList, function (i, el) {
 			$('#siteBilling').val(numberComma(el.money));
 			balanceSum();
@@ -392,11 +394,12 @@
 
 	const setSitesMoney = function (data) {
 		let generation = data.data[0].generation.items;
+		console.log('setSitesMoney', generation);
 		if (generation.length > 0) {
 			$('#siteBilling').val(numberComma(generation[0].money));
 			balanceSum();
 		} else {
-			$('#siteBilling').val('');
+			$('#siteBilling').val(0);
 			balanceSum();
 		}
 	}
@@ -724,6 +727,11 @@
 							$('[name^="interestCost"]').eq(index).val(Math.round(iza));
 						}
 					}
+				}
+
+				if ($('[name^="loan"]').eq(index).val() === '' && $('[name^="interestCost"]').eq(index).val() === '') {
+					$('[name^="loan"]').eq(index).val(0);
+					$('[name^="interestCost"]').eq(index).val(0);
 				}
 			}
 		});
