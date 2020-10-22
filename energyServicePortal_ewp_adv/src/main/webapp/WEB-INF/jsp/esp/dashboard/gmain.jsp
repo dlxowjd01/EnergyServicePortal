@@ -8,7 +8,7 @@
 <div class="row header-wrapper">
 	<div class="col-6">
 		<h1 class="page-header fl">${siteName}</h1>
-		<c:if test="${fn:contains(sessionScope.userInfo.oid, 'spower')}">
+		<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
 			<label class="switch switch-slide fl">
 				<input type="checkbox" value="showTable" id="switchBtn" class="switch-input" ${cookie['switch'].value}/>
 				<span class="switch-label" data-on="테이블" data-off="대시보드"></span>

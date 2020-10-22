@@ -1094,7 +1094,7 @@
 							<td id="addList_registered_seal" class="entity">
 								<div class="group-type">
 									<div class="dropdown placeholder edit" id="spcSeal[index]" data-name="인감 선택">
-										<button type="button" class="dropdown-toggle" data-toggle="dropdown">
+										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
 											인감 선택<span class="caret"></span>
 										</button>
 										<ul class="dropdown-menu" role="menu">

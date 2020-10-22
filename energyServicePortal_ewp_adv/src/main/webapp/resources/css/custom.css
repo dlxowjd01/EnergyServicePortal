@@ -1725,7 +1725,7 @@ table tbody td .dropdown-menu {
 	display: block;
 	opacity: 0.3;
 	background-color: var(--white);
-	z-index: 105;
+	z-index: 200;
 	text-align: center;
 }
 
