@@ -2027,14 +2027,22 @@
 							}
 						});
 
+						console.log("tempArray===", tempArray);
+
 						if (tempArray.length > 0) {
 							let weatherIconClass = getWeatherIcons(tempArray[tempArray.length - 1].sky);
 							if($('#viewOptList').prev().data("value") == "2"){
 								$('#sTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + '&nbsp;' + '&#8451;');
 								$('#weekSolarIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i><strong>' + sList[0].location + '</strong>');
+								if(weekWeatherData[0].length <= 0){						
+									$("#sIrradiation").parents().closest('li').removeClass('hidden');
+								}
 							} else {
 								$('#weekTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + '&nbsp;' + '&#8451;');
 								$('#weekIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i><strong>' + sList[0].location + '</strong>');
+								if(weekWeatherData[0].length <= 0){	
+									$("#weekIrradiation").parents().closest('li').removeClass('hidden');
+								}
 							}
 						}
 					} else {
@@ -2044,7 +2052,6 @@
 
 				if (statusRawData[1] == 'success') {
 					let items = statusRawData[0];
-					// console.log("statusRawData==", items);
 					if (!isEmpty(items)) {
 						Object.entries(items).map(obj => {
 							let deviceData = obj[1].data;
@@ -2100,8 +2107,6 @@
 			$.when($.ajax(weekWeather), $.ajax(weekWeatherTime)).done(function (weekWeatherData, weekWeatherTimeData) {
 				let weekWeather = weekWeatherData[0];
 
-				console.log("weekWeatherData[0]===", weekWeather);
-
 				if (weekWeatherData[1] == 'success') {
 					if($('#viewOptList').prev().data("value") == "2"){
 						weekWeather.forEach((el, index) => {
@@ -2131,7 +2136,6 @@
 
 						if (tempArray.length > 0) {
 							let weatherIconClass = getWeatherIcons(tempArray[tempArray.length - 1].sky);
-
 							if($('#viewOptList').prev().data("value") == "2") {
 								$('#sTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + '&#8451;');
 								$('#weekSolarIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i><strong>' + sList[0].location + '</strong>');
@@ -2139,6 +2143,14 @@
 								$('#sWindDirection').text(tempArray[tempArray.length - 1].wind_velocity);
 								$('#sHumidity').html((tempArray[tempArray.length - 1].humidity).toFixed(1) + ' ' + '&#37;');
 								$('#currentTimeB').html(String(tempArray[tempArray.length - 1].basetime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6'));
+
+								if(isEmpty(tempArray[tempArray.length - 1].sensor_solar) || isEmpty(tempArray[tempArray.length - 1].sensor_solar.irradiationPoa) ){						
+									if(!isEmpty(tempArray[tempArray.length - 1].irradiationPoa)){
+										$("#sIrradiation").parents().closest('li').removeClass('hidden');
+										$("#sIrradiation").text(tempArray[tempArray.length - 1])
+									}
+								}
+
 							} else {
 								$('#weekTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + '&#8451;');
 								$('#weekIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i><strong>' + sList[0].location + '</strong>');
@@ -2146,17 +2158,14 @@
 								$('#weekWindDirection').text(tempArray[tempArray.length - 1].wind_velocity);
 								$('#weekHum').html((tempArray[tempArray.length - 1].humidity).toFixed(1) + ' ' + '&#37;');
 								$('#currentTimeA').html(String(tempArray[tempArray.length - 1].basetime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6'));
-								console.log("weekWeatherData[0]===", weekWeatherData[0])
-							}
-						}
-					} else {
-						if($('#viewOptList').prev().data("value") == "2") {
-							if(weekWeatherData[0].length <= 0){						
-								$("#sIrradiation").parents().closest('li').removeClass('hidden');
-							}
-						} else {	
-							if(weekWeatherData[0].length <= 0){	
-								$("#weekIrradiation").parents().closest('li').removeClass('hidden');
+								
+								if(isEmpty(tempArray[tempArray.length - 1].sensor_solar) || isEmpty(tempArray[tempArray.length - 1].sensor_solar.irradiationPoa) ){					
+									if(!isEmpty(tempArray[tempArray.length - 1].irradiationPoa)){
+										$("#weekIrradiation").parents().closest('li').removeClass('hidden');
+										$("#weekIrradiation").text(tempArray[tempArray.length - 1])
+									}
+								}
+
 							}
 						}
 					}
