@@ -1,380 +1,449 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <script type="text/javascript">
-	const searchCnt = 0;
-	pagePerData = 50;
-
+	let spcEntityTable = null;
 	$(function () {
-		var spcFrom = document.querySelector('#spc_form button.btn-type');
-		var keyWord = document.getElementById("key_word");
+		const spcFrom = document.querySelector('#searchBtn'); //검색 BUTTON
+		const keyWord = document.getElementById('key_word'); //검색명 INPUT
 
-		keyWord.addEventListener("focus", function (e) {
-			if (!keyWord.value.replace(/\s/g, '').length) {
-				keyWord.value = '';
+		/**
+		 * 검색명 Event
+		 */
+		keyWord.addEventListener('keyup', (e) => {
+			if (e.keyCode === 13) {
+				getDataList();
 			} else {
-				keyWord.value === keyWord.value;
+				const regExp = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
+				keyWord.value = (keyWord.value).replace(regExp, '');
 			}
 		});
 
+		/**
+		 * 검색버튼 Event
+		 */
 		spcFrom.addEventListener('click', function (e) {
-			getDataList(1, '', '', searchCnt);
+			getDataList();
 		});
 
-		setInitList("listData"); //리스트초기화
-		getDataList(page);
-
-		$('.btn-save').on('click', function (e) {
-			let excelName = 'SPC기본정보';
-			let $val = $('#excelList').find('tbody');
-			let cnt = $val.length;
-
-			if (cnt < 1) {
-				alert('다운받을 데이터가 없습니다.');
-			} else {
-				if (confirm('엑셀로 저장하시겠습니까?')) {
-					tableToExcel('excelList', excelName, e);
+		spcEntityTable = $('#spcEntityTable').DataTable({
+			autoWidth: true,
+			fixedHeader: true,
+			'table-layout': 'fixed',
+			scrollY: '720px',
+			scrollCollapse: true,
+			sortable: true,
+			paging: true,
+			pageLength: 50,
+			columns: [
+				{
+					sTitle: '',
+					mData: null,
+					mRender: function ( data, type, full, rowIndex ) {
+						return '<input type="checkbox" id="check' + rowIndex.row + '" name="table_checkbox" data-spcid="' + full['spc_id'] + '" data-genid="' + full['gen_id'] + '"><label for="check' + rowIndex.row + '"></label>';
+					},
+					className: 'dt-center no-sorting'
+				},
+				{
+					title: '순번',
+					data: null,
+					render: function (data, type, full, rowIndex) {
+						return rowIndex.row + 1;
+					},
+					className: 'dt-center no-sorting fixed'
+				},
+				{
+					title: 'SPC명',
+					data: 'spc_name',
+					render: function (data, type, full, rowIndex) {
+						return '<a href="javascript:moveModifyPage(\'' + full['spc_id'] + '\', \'' + full['gen_id'] + '\')">' + data + '</a>';
+					},
+					className: 'dt-left'
+				},
+				{
+					title: '발전소 명',
+					data: 'gen_name',
+					render: function (data, type, full, rowIndex) {
+						return '<a href="javascript:moveModifyPage(\'' + full['spc_id'] + '\', \'' + full['gen_id'] + '\')">' + data + '</a>';
+					},
+					className: 'dt-left'
+				},
+				{
+					title: '연차',
+					data: 'annual',
+					render: function (data, type, full, rowIndex) {
+						let suffix = ' 년차';
+						if (data === '-') {
+							suffix = '';
+						}
+						return data + suffix;
+					},
+					className: 'dt-center'
+				},
+				{
+					title: '관리 운영기간',
+					data: 'operation_period',
+					className: 'dt-center'
+				},
+				{
+					title: '보증',
+					data: 'guarantee',
+					className: 'dt-center'
+				},
+				{
+					title: '보증 값',
+					data: 'guaranteed_value',
+					render: function (data, type, full, rowIndex) {
+						let suffix = ' %';
+						if (data === '-') {
+							suffix = '';
+						}
+						return data + suffix;
+					},
+					className: 'dt-right'
+				},
+				{
+					title: '감소율',
+					data: 'reduction_rate',
+					render: function (data, type, full, rowIndex) {
+						let suffix = ' %';
+						if (data === '-') {
+							suffix = '';
+						}
+						return data + suffix;
+					},
+					className: 'dt-right'
+				},
+				{
+					title: '-추가보수',
+					data: 'additional_amount',
+					className: 'dt-center'
 				}
+			],
+			select: {
+				style: 'multi',
+				selector: 'td:first-child > :checkbox, tr'
+			},
+			language: {
+				emptyTable: "조회된 데이터가 없습니다.",
+				zeroRecords:  "검색된 결과가 없습니다."
+			},
+			dom: 'tip',
+		}).on('select', function(e, dt, type, indexes) {
+			spcEntityTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
+			$('#deleteBtn').attr('disabled', false);
+		}).on('deselect', function(e, dt, type, indexes) {
+			spcEntityTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", false);
+
+			const checkedArray = document.querySelectorAll('[name="table_checkbox"]:checked');
+			if (checkedArray.length > 0) {
+				$('#deleteBtn').attr('disabled', false);
+			} else {
+				$('#deleteBtn').attr('disabled', true);
 			}
+		}).columns.adjust().draw();
+
+		new $.fn.dataTable.Buttons(spcEntityTable, {
+			name: 'commands',
+			buttons: [
+				{
+					extend: 'excelHtml5',
+					className: "btn-save",
+					text: '엑셀 다운로드',
+					filename: 'SPC기본정보_' + new Date().format('yyyyMMddHHmmss'),
+					customize: function( xlsx ) {
+						var sheet = xlsx.xl.worksheets['sheet1.xml'];
+						$('row:first c', sheet).attr( 's', '42' );
+						var sheet = xlsx.xl.worksheets['sheet1.xml'];
+					}
+				}
+			]
 		});
+
+		spcEntityTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup");
+		getDataList();
 	});
 
-	$(document).on('keyup', '#key_word', function (e) {
-		if (e.keyCode == 13) {
-			getDataList(page);
-		}
-	})
-
-	function nvl(value, str) {
-		if (isEmpty(value)) {
-			return str;
-		} else {
-			return value;
-		}
-	}
-
-	function jsonDataFilter(jsonData, searchCnt) {
-		let keyWord = $("#key_word").val().trim().toLowerCase(),
-			kResult = false, bResult = false , wResult = false, oResult = false, cResult = false;
-
-		wResult = warrantyFilter(jsonData, wResult);
-		oResult = operationFilter(jsonData, oResult);
-		cResult = contractFilter(jsonData, cResult);
-
-		if (isEmpty(keyWord)) {
-			kResult = true;
-		} else {
-			if (jsonData["name"].toLowerCase().indexOf(keyWord) > -1 || jsonData["발전소_명"].toLowerCase().indexOf(keyWord) > -1) {
-				kResult = true;
-			}
-		}
-
-		if (wResult && oResult && cResult && kResult) {
-			kResult = true;
-		} else {
-			kResult = false;
-		}
-
-		return kResult;
-	}
-
-	function operationFilter(jsonData, oResult) {
-		let operArray = [];
-		$(":checkbox[name='operation_opt']:checked").each(function () {
-			operArray.push($(this).val());
-		});
-
-		if(operArray.length > 0) {
-			if(jsonData['spcGens'].length > 0) {
-				const maintenanceInfo = JSON.parse(jsonData['spcGens'][0].maintenance_info);
-				if (maintenanceInfo == null || maintenanceInfo['운영_여부'] === undefined) {
-					oResult = false;
-				} else {
-					$.each(operArray, function (i, operation) {
-						if (maintenanceInfo['운영_여부'].match(operation)) {
-							oResult = true;
+	/**
+	 * 리스트 검색 및 정제
+	 */
+	const getDataList = () => {
+		new Promise(resolve => {
+			$.ajax({
+				url: apiHost + '/spcs',
+				type: 'GET',
+				async: true,
+				data: {
+					oid: oid,
+					includeGens: true
+				},
+				success: (result) => {
+					if (result['status'] === 'success') {
+						const resultList = result['data'];
+						if (isEmpty(resultList)) {
+							throw new Error('조회된 내역이 없습니다.');
+						} else {
+							resolve(resultList);
 						}
-					});
-				}
-			} else {
-				oResult = false;
-			}
-		} else {
-			oResult = true;
-		}
-
-		return oResult;
-	}
-
-	function warrantyFilter(jsonData, wResult) {
-		let warrantyArray = [];
-
-		$(":checkbox[name='warranty_opt']:checked").each(function () {
-			warrantyArray.push($(this).val());
-		});
-
-		if(warrantyArray.length > 0) {
-			$.each(warrantyArray, function (i, warranty) {
-				if (jsonData['보증_방식'] == warranty) {
-					wResult = true;
+					} else {
+						throw new Error('조회에 실패했습니다.');
+					}
+				},
+				error: (error) => {
+					console.error(error);
+					throw new Error('조회에 실패했습니다.');
 				}
 			});
-		} else {
-			wResult = true;
-		}
+		}).then(resultList => {
+			//데이터화
+			const refineList = new Array();
+			resultList.forEach(rowData => {
+				const spcGens = rowData['spcGens'];
+				if (!isEmpty(spcGens)) {
+					spcGens.forEach(spcGen => {
+						const genId = spcGen['gen_id']
+							, genName = spcGen['name']
+							, maintenanceInfo = JSON.parse(spcGen['maintenance_info'])
+							, warrantyInfo = JSON.parse(spcGen['warranty_info']);
 
-		return wResult;
-	}
-
-	function contractFilter(jsonData, cResult) {
-		let contractArray = [];
-
-		$(":checkbox[name='contract_opt']:checked").each(function () {
-			contractArray.push($(this).val());
-		});
-
-		if(contractArray.length > 0) {
-			if(jsonData['spcGens'].length > 0) {
-				const maintenanceInfo = JSON.parse(jsonData['spcGens'][0].maintenance_info);
-				if (maintenanceInfo['관리_계약_구분'] === undefined) {
-					cResult = false;
-				} else {
-					let contractList = maintenanceInfo['관리_계약_구분'];
-					$.each(contractArray, function (i, contract) {
-						contractList.forEach(function(el) {
-							if (el.match(contract)) {
-								cResult = true;
+						let termDate = '';
+						if (!isEmpty(maintenanceInfo)) {
+							const mainFrom = maintenanceInfo['관리_운영_기간_from']
+								, mainTo = maintenanceInfo['관리_운영_기간_to'];
+							if (!isEmpty(mainFrom) && !isEmpty(mainTo)) {
+								termDate = new Date(mainFrom).format('yyyy-MM-dd') + ' ~ ' + new Date(mainTo).format('yyyy-MM-dd');
+							} else {
+								termDate = '-';
 							}
+						}
+
+						refineList.push({
+							spc_id: rowData['spc_id'],
+							spc_name: rowData['name'],
+							gen_id: genId,
+							gen_name: genName,
+							operation_period: termDate,
+							annual: isEmpty(warrantyInfo['현재_적용_연차']) ? '-' : warrantyInfo['현재_적용_연차'],
+							guarantee: isEmpty(warrantyInfo['보증_방식']) ? '-' : warrantyInfo['보증_방식'],
+							guaranteed_value: isEmpty(warrantyInfo['PR_보증치']) ? '-' : warrantyInfo['PR_보증치'],
+							reduction_rate: isEmpty(warrantyInfo['보증_감소율']) ? '-' : warrantyInfo['보증_감소율'],
+							additional_amount: isEmpty(warrantyInfo['추가_보수']) ? '-' : warrantyInfo['추가_보수'],
+							operation: maintenanceInfo['운영_여부'],
+							contract: maintenanceInfo['관리_계약_구분'],
+							warranty: warrantyInfo['보증_방식'],
 						});
 					});
 				}
-			} else {
-				cResult = false;
-			}
-		} else {
-			cResult = true;
-		}
+			});
 
-		return cResult;
-	}
+			refineList.sort((a, b) => {
+				return a['operation_period'] < b['operation_period'] ? 1 : a['operation_period'] > b['operation_period'] ? -1 : 0;
+			});
 
-	function setJsonDataFormat(result, page, n, sort, searchCnt) {
-		var jsonList = [];
+			return refineList;
+		}).then(refineList => {
+			const operation_opt = Array.from(document.querySelectorAll('[name="operation_opt"]:checked')).map((checkbox) => checkbox.value)
+				, warranty_opt = Array.from(document.querySelectorAll('[name="warranty_opt"]:checked')).map((checkbox) => checkbox.value)
+				, contract_opt = Array.from(document.querySelectorAll('[name="contract_opt"]:checked')).map((checkbox) => checkbox.value)
+				, key_word = new RegExp(document.getElementById('key_word').value, 'i');
 
-		for (var i = 0, count = result.data.length; i < count; i++) {
+			//필터
+			refineList = refineList.filter(rowData => {
+				const operation = isEmpty(rowData['operation']) ? '' : rowData['operation'].replace('운영_여부_', '')
+					, contract = isEmpty(rowData['contract']) ? new Array() : rowData['contract']
+					, warranty = rowData['warranty'];
 
-			var spcGensList = result.data[i].spcGens;
-			if (spcGensList !== undefined && spcGensList.length > 0) {
-				for (var j = 0, jcount = spcGensList.length; j < jcount; j++) {
+				return (((!isEmpty(operation_opt) && operation_opt.includes(operation)) || isEmpty(operation_opt))
+					&& ((!isEmpty(warranty_opt) && warranty_opt.includes(warranty)) || isEmpty(warranty_opt))
+					&& ((!isEmpty(contract_opt) && !isEmpty(contract_opt.filter(opt => contract.includes(opt)))) || isEmpty(contract_opt))
+					&& ((key_word.test(rowData['spc_name']) || key_word.test(rowData['gen_name']))));
+			});
 
-					var spcGensRow = spcGensList[j],
-						rowData = result.data[i],
-						newData = Object.assign({}, rowData),
-						warrantyInfo = JSON.parse(spcGensRow.warranty_info),
-						maintenanceInfo = JSON.parse(spcGensRow.maintenance_info);
-
-					let termDate = '';
-					if (!isEmpty(maintenanceInfo)) {
-						let mainFrom = maintenanceInfo['관리_운영_기간_from'];
-						let mainTo = maintenanceInfo['관리_운영_기간_to'];
-						if (!isEmpty(mainFrom) && !isEmpty(mainTo)) {
-							termDate = new Date(mainFrom).format('yyyy-MM-dd') + ' ~ ' + new Date(mainTo).format('yyyy-MM-dd')
-						}
-					}
-
-					newData["gen_id"] = spcGensRow.gen_id;
-					newData["발전소_명"] = spcGensRow.name;
-					newData["관리_운영_기간"] = nvl(termDate, "-");
-					newData["연차"] = nvl(warrantyInfo["현재_적용_연차"], "-");
-					newData["보증_방식"] = nvl(warrantyInfo["보증_방식"], "-");
-					newData["PR_보증치"] = nvl(warrantyInfo["PR_보증치"], "-");
-					newData["보증_감소율"] = nvl(warrantyInfo["보증_감소율"], "-");
-					newData["추가_보수"] = nvl(warrantyInfo["추가_보수"], "-");
-
-					//키워드 검색 조건 필터 처리
-					if (jsonDataFilter(newData, searchCnt)) {
-						jsonList.push(newData)
-					}
-				}
-			}
-		}
-
-		// $(".sort-table").data("nowjsp", "entityinformation");
-		jsonListSort(n, sort, jsonList);
-		jsonList = paging(page, jsonList);
-		return jsonList;
-	}
-
-	function getDataList(page, n, sort, searchCnt) {
-
-		if (page == undefined) {
-			page = 1;
-		} else {
-			if (isEmpty(n) && isEmpty(sort)) {
-				$('.sort-table > thead').find('button').each(function () {
-					if ($(this).attr('class') != 'btn-align') {
-						n = $(this).data('colname');
-						sort = $(this).data('classname');
-					}
-				});
-
-			}
-		}
-
-		$.ajax({
-			url: apiHost + '/spcs',
-			type: "get",
-			async: true,
-			data: {
-				"oid": oid,
-				includeGens: true
-			},
-			success: function (result) {
-				setMakeList(setJsonDataFormat(result, page, n, sort, searchCnt), "listData", {"dataFunction": {"INDEX": getNumberIndex}}); //list생성
-				const now = new Date();
-				$('.dbTime').text(now.format('yyyy-MM-dd HH:mm:ss'));
-			},
-			error: function (request, status, error) {
-				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
-			}
+			spcEntityTable.clear();
+			spcEntityTable.rows.add(refineList).draw();
+		}).catch(error => {
+			errorMsg(error);
 		});
 	}
 
-	function getNumberIndex(index) {
-		let baseNumber = (Number($('#paging strong').text()) - 1) * pagePerData;
-		return index + 1 + baseNumber;
+	/**
+	 * 에러 처리
+	 *
+	 * @param msg
+	 */
+	const errorMsg = msg => {
+		$('#errMsg').text(msg);
+		$('#errorModal').modal('show');
+		setTimeout(function(){
+			$('#errorModal').modal('hide');
+		}, 1800);
 	}
 
-	function setCheckedAll(obj, chkName) {
-		var checkVal = obj.checked;
-		$("input[name='" + chkName + "']").prop("checked", checkVal);
-	}
-
-	function getCheckList(checkName) {
-		var jsonList = $("#listData").data("gridJsonData"),
-			checkList = [];
-		$("input[name='" + checkName + "']").each(function (i) {
-			if (this.checked) {
-				checkList.push(jsonList[i]);
-			}
-		});
-		return checkList;
-	}
-
-	function moveModifyPage(spcId, genId) {
+	/**
+	 * 상세 페이지 이동
+	 *
+	 * @param spcId
+	 * @param genId
+	 */
+	const moveModifyPage = (spcId, genId) => {
 		location.href = '/spc/entityDetails.do?spc_id=' + spcId + '&gen_id=' + genId + '&oid=' + oid;
 	}
 
-
+	/**
+	 * 선택한 SPC 기본정보 삭제
+	 *
+	 * @returns {Promise<boolean>}
+	 */
 	function setCheckedDataRemove() {
-		var checkDataList = getCheckList("rowCheck"),
-			count = checkDataList.length,
-			sucessCnt = 0;
+		const checkedArray = document.querySelectorAll('input[name="table_checkbox"]:checked')
+			, count = checkedArray.length;
 
-		if (count == 0) {
-			alert("삭제 할 목록을 선택하세요.");
-			return;
-		}
+		if (count === 0) {
+			errorMsg('삭제 할 목록을 선택하세요.');
+		} else {
+			new Promise(resolve => {
+				if (role !== '1') {
+					$.ajax({
+						url: apiHost + '/config/user_spcs?oid=' + oid,
+						type: 'get',
+						async: false,
+						data: {user_ids: userInfoId},
+						success: (data) => {
+							const result = data['data']
+								, acceptList = new Array();
 
-		return new Promise((resolve, reject) => {
-			if (role != 1) {
-				$.ajax({
-					url: apiHost + '/config/user_spcs?oid=' + oid,
-					type: 'get',
-					async: false,
-					data: {user_ids: userInfoId}
-				}).done(function (data, textStatus, jqXHR) {
-					const result = data.data;
-					let acceptList = new Array();
+							result.forEach(spc => {
+								if (spc.role == '1') { acceptList.push(spc.spcid);}
+							});
 
-					result.forEach(spc => {
-						if (spc.role == '1') {
-							acceptList.push(spc.spcid);
+							if (acceptList.length > 0) {
+								resolve(acceptList);
+							} else {
+								throw Error('삭제 권한이 없습니다.');
+							}
 						}
 					});
+				} else {
+					let acceptList = new Array();
+					checkedArray.forEach(chk => {
+						acceptList.push(chk['dataset']['spcid']);
+					});
+					resolve(acceptList);
+				}
+			}).then(acceptList => {
+				let accept = true;
+				checkedArray.forEach(checkbox => {
+					const spcId = checkbox['dataset']['spcid'];
 
-
-					if (acceptList.length > 0) {
-						resolve(acceptList);
-					} else {
-						reject('');
+					if (!acceptList.includes(spcId)) {
+						accept = false;
 					}
-				}).fail(function (jqXHR, textStatus, errorThrown) {
-					console.error(jqXHR);
-					console.error(textStatus);
-					console.error(errorThrown);
 				});
-			} else {
-				let acceptList = new Array();
-				checkDataList.forEach(chk => {
-					acceptList.push(chk.spc_id);
+
+				if (!accept) {
+					throw Error('삭제 권한이 없습니다.');
+				}
+
+				let alarmMsg = '삭제';
+				let modal = $("#comDeleteModal");
+
+				$('#comDeleteSuccessMsg span').text(alarmMsg);
+				modal.find('.modal-body').removeClass('hidden');
+				modal.modal('show');
+
+				$("#confirmTitle").on('input keyp', function() {
+					if($(this).val() !== alarmMsg) {
+						$("#comDeleteBtn").prop('disabled', true);
+					} else {
+						$("#comDeleteBtn").prop('disabled', false);
+					}
 				});
-				resolve(acceptList);
+
+				// let delPrompt = prompt(count + '건을 삭제하시겠습니까? \n삭제를 원하시면 아래 "삭제"라고 입력하고 확인을 눌러 주세요.', '');
+				//
+				// if (delPrompt != '삭제') {
+				// 	return;
+				// }
+				//
+				// for (var i = 0; i < count; i++) {
+				// 	var rowData = checkDataList[i];
+				// 	$.ajax({
+				// 		url: apiHost + '/spcs/' + rowData.spc_id + "/gens/" + rowData.gen_id + "?oid=" + oid,
+				// 		type: "delete",
+				// 		dataType: 'json',
+				// 		async: false,
+				// 		contentType: "application/json",
+				// 		data: {
+				// 			"oid": oid
+				// 		},
+				// 		success: function (json) {
+				// 			sucessCnt++;
+				// 		},
+				// 		error: function (request, status, error) {
+				//
+				// 		}
+				// 	});
+				// }
+				//
+				// alert(sucessCnt + "건 삭제처리되었습니다.");
+				// getDataList(page);
+			}).catch(error => {
+				errorMsg(error);
+			});
+		}
+	}
+
+	$(document).on('click', '#comDeleteBtn', function() {
+		$('#comDeleteModal').modal('hide');
+		$('#confirmTitle').val('');
+
+		const checkedArray = document.querySelectorAll('[name="table_checkbox"]:checked');
+		const urls = new Array();
+		const deferreds = new Array();
+
+		checkedArray.forEach(chk => {
+			const spcId = chk['dataset']['spcid'];
+			const genId = chk['dataset']['genid'];
+
+			if (!isEmpty(spcId) && !isEmpty(genId)) {
+				const locationUrl = '/spcs/' + spcId + '/gens/' + genId + '?oid=' + oid;
+				urls.push({
+					url: apiHost + locationUrl,
+					type: 'delete',
+					dataType: 'json'
+				});
 			}
-		}).then(acceptList => {
-			let accept = true;
-			checkDataList.forEach(chk => {
-				if (!acceptList.includes(chk.spc_id)) {
-					accept = false;
+		});
+
+		//코드 삭제 START
+		urls.forEach(function (url) {
+			let deferred = $.Deferred();
+			deferreds.push(deferred);
+
+			$.ajax(url).done(function (data) {
+				data['url'] = url['url'];
+				(function (deferred) {
+					return deferred.resolve(data);
+				})(deferred);
+			}).fail(function (error) {
+				console.log(error);
+			});
+		});
+
+		$.when.apply($, deferreds).then(function () {
+			let totalDelete = 0;
+			Object.entries(arguments).forEach(([dummy, resultData]) => {
+				if (!isEmpty(resultData)) {
+					if (resultData['status'] === 'success') {
+						totalDelete += resultData['data']['count'];
+					}
 				}
 			});
 
-			if (!accept) {
-				alert('삭제 권한이 없습니다.');
-				return false;
-			}
+			errorMsg(totalDelete + '개를 삭제했습니다.');
+			getDataList();
 
-			let delPrompt = prompt(count + '건을 삭제하시겠습니까? \n삭제를 원하시면 아래 "삭제"라고 입력하고 확인을 눌러 주세요.', '');
-
-			if (delPrompt != '삭제') {
-				return;
-			}
-
-			for (var i = 0; i < count; i++) {
-				var rowData = checkDataList[i];
-				$.ajax({
-					url: apiHost + '/spcs/' + rowData.spc_id + "/gens/" + rowData.gen_id + "?oid=" + oid,
-					type: "delete",
-					dataType: 'json',
-					async: false,
-					contentType: "application/json",
-					data: {
-						"oid": oid
-					},
-					success: function (json) {
-						sucessCnt++;
-					},
-					error: function (request, status, error) {
-
-					}
-				});
-			}
-
-			alert(sucessCnt + "건 삭제처리되었습니다.");
-			getDataList(page);
-		}).catch(error => {
-			if (error == '') {
-				alert('삭제 권한이 없습니다.');
-				return;
-			}
+			$("#deleteBtn").prop('disabled', true);
 		});
-	}
-
-	function setCheckedDataEdit() {
-		var checkDataList = getCheckList("rowCheck"),
-			count = checkDataList.length;
-
-		if (count == 0) {
-			alert("수정 할 목록을 선택하세요.");
-			return false;
-		} else if (count > 1) {
-			alert("1개의 목록만 선택하세요.");
-			return false;
-		}
-
-		var spcId = checkDataList[0].spc_id,
-			genId = checkDataList[0].gen_id;
-
-		location.href = '/spc/entityInformationEdit.do?spc_id=' + spcId + "&gen_id=" + genId;
-	}
+	});
 </script>
 
 <div class="row header-wrapper">
@@ -383,8 +452,8 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-10">
-		<form id="spc_form" onsubmit="return false;">
+	<div class="col-12 clear input-align">
+		<div class="fl">
 			<div class="flex-start">
 				<label for="operation_select" class="tx-tit">운영 여부</label>
 				<div class="dropdown sa-select mr-16" id="operation_select">
@@ -480,99 +549,38 @@
 				</div>
 
 				<div class="text-input-type mr-12">
-					<input type="text" id="key_word" placeholder="입력">
+					<input type="text" id="key_word" name="key_word" placeholder="입력">
 				</div>
-				<button type="button" class="btn-type">검색</button>
+				<button type="button" class="btn-type" id="searchBtn">검색</button>
 			</div>
-		</form>
-	</div>
-	<div class="col-2">
-		<div class="right">
-			<a href="javascript:void(0);" class="btn-save">엑셀 다운로드</a>
 		</div>
+		<div id="exportBtnGroup" class="fr"></div>
 	</div>
 </div>
+
 <div class="row">
 	<div class="col-lg-12">
 		<div class="indiv">
 			<div class="btn-wrap-type01">
 				<button type="button" class="btn-type big" onclick="location.href='/spc/entityInformationPost.do'">신규 등록</button>
 			</div>
-			<div class="spc-tbl align-type" id="excelList">
-				<table class="sort-table chk-type">
-					<colgroup>
-						<col style="width:8%">
-						<col style="width:18%">
-						<col style="width:18%">
-						<col style="width:8%">
-						<col style="width:12%">
-						<col style="width:8%">
-						<col style="width:8%">
-						<col style="width:12%">
-						<col style="width:8%">
-					</colgroup>
-					<thead>
-					<tr>
-						<th><input
-								type="checkbox" id="chk_header" value="순번"
-								onclick="setCheckedAll(this, 'rowCheck');"><label for="chk_header">순번</label></th>
-						<th class="left">
-							<button type="button" class="btn-align down">SPC명</button>
-						</th>
-						<th class="left">
-							<button type="button" class="btn-align down">발전소 명</button>
-						</th>
-						<th>
-							<button type="button" class="btn-align down">연차</button>
-						</th>
-						<th>
-							<button type="button" class="btn-align down">관리 운영기간</button>
-						</th>
-						<th>
-							<button type="button" class="btn-align down">보증</button>
-						</th>
-						<th class="right">
-							<button type="button" class="btn-align down">보증 값</button>
-						</th>
-						<th class="right pr-36">
-							<button type="button" class="btn-align down">감소율</button>
-						</th>
-						<th class="right">
-							<button type="button" class="btn-align down">- 추가보수</button>
-						</th>
-					</tr>
-					</thead>
-					<tbody id="listData">
-					<tr>
-						<td>
-							<input type="checkbox" id="chk_op[INDEX]" name="rowCheck" value="">
-							<label for="chk_op[INDEX]">[INDEX]</label>
-						</td>
-						<td name="aTagTd01" class="left">
-							<a href="javascript:moveModifyPage('[spc_id]', '[gen_id]');" class="table-link">
-								[name]
-							</a>
-						</td>
-						<td name="aTagTd02" class="left">
-							<a href="javascript:moveModifyPage('[spc_id]', '[gen_id]');" class="table-link">
-								[발전소_명]
-							</a>
-						</td>
-						<td>[연차] 년차</td>
-						<td>[관리_운영_기간]</td>
-						<td>[보증_방식]</td>
-						<td class="right">[PR_보증치] %</td>
-						<td class="right pr-36">[보증_감소율] %</td>
-						<td>[추가_보수]</td>
-					</tr>
-					</tbody>
-				</table>
-			</div>
+			<table id="spcEntityTable" class="chk-type">
+				<colgroup>
+					<col style="width:4%">
+					<col style="width:4%">
+					<col style="width:16%">
+					<col style="width:16%">
+					<col style="width:8%">
+					<col style="width:16%">
+					<col style="width:8%">
+					<col style="width:8%">
+					<col style="width:12%">
+					<col style="width:8%">
+				</colgroup>
+			</table>
 			<div class="btn-wrap-type02 mt30">
-				<%--				<button type="button" class="btn-type03" onclick="setCheckedDataEdit();">선택 수정</button>--%>
-				<button type="button" class="btn-type03" onclick="setCheckedDataRemove();">선택 삭제</button>
+				<button type="button" class="btn-type03" id="deleteBtn" onclick="setCheckedDataRemove();" disabled>선택 삭제</button>
 			</div>
-			<div class="pagination-wrapper" id="paging"></div>
 		</div>
 	</div>
 </div>

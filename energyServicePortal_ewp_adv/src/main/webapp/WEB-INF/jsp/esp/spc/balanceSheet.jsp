@@ -6,113 +6,111 @@
 	let balanceTable = null;
 
 	$(function () {
-		$(function () {
-			balanceTable = $('#balanceTable').DataTable({
-				autoWidth: true,
-				fixedHeader: true,
-				"table-layout": "fixed",
-				scrollY: '720px',
-				scrollCollapse: true,
-				sortable: true,
-				paging: true,
-				pageLength: 10,
-				columns: [
-					{
-						sTitle: '',
-						mData: null,
-						mRender: function ( data, type, full, rowIndex ) {
-							return '<input type="checkbox" id="check' + rowIndex.row + '" name="table_checkbox" data-spcId="' + full['spc_id'] + '" data-siteId="' + full['site_id'] + '" data-yyyymm="' + full['balance_yyyymm'] + '"><label for="check' + rowIndex.row + '"></label>';
-						},
-						className: 'dt-center no-sorting'
+		balanceTable = $('#balanceTable').DataTable({
+			autoWidth: true,
+			fixedHeader: true,
+			"table-layout": "fixed",
+			scrollY: '720px',
+			scrollCollapse: true,
+			sortable: true,
+			paging: true,
+			pageLength: 10,
+			columns: [
+				{
+					sTitle: '',
+					mData: null,
+					mRender: function ( data, type, full, rowIndex ) {
+						return '<input type="checkbox" id="check' + rowIndex.row + '" name="table_checkbox" data-spcId="' + full['spc_id'] + '" data-siteId="' + full['site_id'] + '" data-yyyymm="' + full['balance_yyyymm'] + '"><label for="check' + rowIndex.row + '"></label>';
 					},
-					{
-						title: '<fmt:message key="workreportmain.2.number" />',
-						data: null,
-						render: function (data, type, full, rowIndex) {
-							return rowIndex.row + 1;
-						},
-						className: 'dt-center no-sorting fixed'
-					},
-					{
-						title: 'SPC명',
-						data: 'spc_name',
-						render: function (data, type, full, rowIndex) {
-							return '<a href="/spc/entityDetailsBySite.do?spc_id=' + full['spc_id'] + '&balance_yyyy=' + full['balance_yyyymm'] + '" class="table-link">' + data + '</a>';
-						},
-						className: 'dt-center'
-					},
-					{
-						title: '발전소 명',
-						data: 'name',
-						render: function (data, type, full, rowIndex) {
-							return '<a href="/spc/entityDetailsBySite.do?spc_id=' + full['spc_id'] + '&balance_yyyy=' + full['balance_yyyymm'] + '" class="table-link">' + data + '</a>';
-						},
-						className: 'dt-center'
-					},
-					{
-						title: '기준년월',
-						data: 'balance_yyyymm',
-						className: 'dt-center'
-					},
-					{
-						title: '현금유입(원)',
-						data: 'inflowOfCash',
-						className: 'dt-center'
-					},
-					{
-						title: '현금유출(원)',
-						data: 'outflowOfCash',
-						className: 'dt-center'
-					},
-					{
-						title: '기말 현금흐름(원)',
-						data: 'endOfTermFlow',
-						className: 'dt-center'
-					}
-				],
-				select: {
-					style: 'multi',
-					selector: 'td:first-child > :checkbox, tr'
+					className: 'dt-center no-sorting'
 				},
-				language: {
-					emptyTable: "조회된 데이터가 없습니다.",
-					zeroRecords:  "검색된 결과가 없습니다."
+				{
+					title: '<fmt:message key="workreportmain.2.number" />',
+					data: null,
+					render: function (data, type, full, rowIndex) {
+						return rowIndex.row + 1;
+					},
+					className: 'dt-center no-sorting fixed'
 				},
-				dom: 'tip',
-			}).on('select', function(e, dt, type, indexes) {
-				balanceTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
-				$('#deleteBtn').attr('disabled', false);
-			}).on('deselect', function(e, dt, type, indexes) {
-				balanceTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", false);
-
-				const checkedArray = document.querySelectorAll('[name="table_checkbox"]:checked');
-				if (checkedArray.length > 0) {
-					$('#deleteBtn').attr('disabled', false);
-				} else {
-					$('#deleteBtn').attr('disabled', true);
+				{
+					title: 'SPC명',
+					data: 'spc_name',
+					render: function (data, type, full, rowIndex) {
+						return '<a href="/spc/entityDetailsBySite.do?spc_id=' + full['spc_id'] + '&balance_yyyy=' + full['balance_yyyymm'] + '" class="table-link">' + data + '</a>';
+					},
+					className: 'dt-center'
+				},
+				{
+					title: '발전소 명',
+					data: 'name',
+					render: function (data, type, full, rowIndex) {
+						return '<a href="/spc/entityDetailsBySite.do?spc_id=' + full['spc_id'] + '&balance_yyyy=' + full['balance_yyyymm'] + '" class="table-link">' + data + '</a>';
+					},
+					className: 'dt-center'
+				},
+				{
+					title: '기준년월',
+					data: 'balance_yyyymm',
+					className: 'dt-center'
+				},
+				{
+					title: '현금유입(원)',
+					data: 'inflowOfCash',
+					className: 'dt-center'
+				},
+				{
+					title: '현금유출(원)',
+					data: 'outflowOfCash',
+					className: 'dt-center'
+				},
+				{
+					title: '기말 현금흐름(원)',
+					data: 'endOfTermFlow',
+					className: 'dt-center'
 				}
-			}).columns.adjust().draw();
+			],
+			select: {
+				style: 'multi',
+				selector: 'td:first-child > :checkbox, tr'
+			},
+			language: {
+				emptyTable: "조회된 데이터가 없습니다.",
+				zeroRecords:  "검색된 결과가 없습니다."
+			},
+			dom: 'tip',
+		}).on('select', function(e, dt, type, indexes) {
+			balanceTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
+			$('#deleteBtn').attr('disabled', false);
+		}).on('deselect', function(e, dt, type, indexes) {
+			balanceTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", false);
 
-			new $.fn.dataTable.Buttons(balanceTable, {
-				name: 'commands',
-				buttons: [
-					{
-						extend: 'excelHtml5',
-						className: "btn-save",
-						text: '<fmt:message key="workreportmain.1.dataExtracts" />',
-						filename: 'SPC금융관리_' + new Date().format('yyyyMMddHHmmss'),
-						customize: function( xlsx ) {
-							var sheet = xlsx.xl.worksheets['sheet1.xml'];
-							$('row:first c', sheet).attr( 's', '42' );
-							var sheet = xlsx.xl.worksheets['sheet1.xml'];
-						}
+			const checkedArray = document.querySelectorAll('[name="table_checkbox"]:checked');
+			if (checkedArray.length > 0) {
+				$('#deleteBtn').attr('disabled', false);
+			} else {
+				$('#deleteBtn').attr('disabled', true);
+			}
+		}).columns.adjust().draw();
+
+		new $.fn.dataTable.Buttons(balanceTable, {
+			name: 'commands',
+			buttons: [
+				{
+					extend: 'excelHtml5',
+					className: "btn-save",
+					text: '<fmt:message key="workreportmain.1.dataExtracts" />',
+					filename: 'SPC금융관리_' + new Date().format('yyyyMMddHHmmss'),
+					customize: function( xlsx ) {
+						var sheet = xlsx.xl.worksheets['sheet1.xml'];
+						$('row:first c', sheet).attr( 's', '42' );
+						var sheet = xlsx.xl.worksheets['sheet1.xml'];
 					}
-				]
-			});
-
-			balanceTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup");
-			getDataList();
+				}
+			]
 		});
+
+		balanceTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup");
+		getDataList();
 		// setInitList("listData"); //리스트초기화
 		// getDataList(page);
 	});
