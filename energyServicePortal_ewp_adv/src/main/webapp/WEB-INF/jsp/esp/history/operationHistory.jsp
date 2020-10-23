@@ -1297,7 +1297,7 @@
 			</div>
 			
 			<!-- 기본 항목 -->
-			<div class="row chart-top clear">
+			<div class="row chart-top">
 				<div class="col-xl-9 col-lg-7 col-md-7 col-sm-12">
 					<div id="analyzeDiv1" class="sa-select mb-10">
 						<div class="sa-select mb-10">

@@ -35,7 +35,7 @@
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="indiv clear">
-					<div class="chart-top clear">
+					<div class="chart-top">
 						<h2 class="ntit fl">설비 추가</h2>
 					</div>
 					<ul class="device-list">
@@ -52,7 +52,7 @@
 		<div class="row" id="[typeId]">
 			<div class="col-lg-8">
 				<div class="indiv clear">
-					<div class="chart-top clear">
+					<div class="chart-top">
 						<h2 class="ntit fl">[typeName]</h2>
 						<div class="equip-icon fr">
 							<span class="equip-normal">정상([normal])</span>
@@ -67,7 +67,7 @@
 			</div>
 			<div class="col-lg-4">
 				<div class="indiv equip-card hidden">
-					<div class="chart-top clear">
+					<div class="chart-top">
 						<h2 class="ntit fl"></h2>
 					</div>
 					<ul class="equip-card-ul clear">
@@ -551,7 +551,6 @@
 				return $(this).val();
 			})
 		);
-
 		if (siteArray.length > 0) {
 			let promiseCnt = 0;
 			siteArray.forEach(el => {
@@ -825,6 +824,8 @@
 				} else if(deviceStatus == 2) {
 					// 트립
 					$('#' + dType + ' .equip-card').attr('class', 'indiv equip-card error');
+				} else {
+					$('#' + dType + ' .equip-card').removeClass("hidden");
 				}
 
 			$('#' + dType + ' .equip-card .ntit').text(dName);

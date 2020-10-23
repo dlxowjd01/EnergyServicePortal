@@ -16,7 +16,7 @@
 <div class="row content-wrapper">
 	<div class="col-xl-4 col-md-12 col-sm-12">
 		<div class="indiv chart-wrapper2 gmain-chart1">
-			<div class="chart-top clear">
+			<div class="chart-top">
 				<h2 class="ntit"><fmt:message key="vppdash.1.month" /></h2>
 				<span class="term"></span>
 			</div>
@@ -28,7 +28,7 @@
 			</div>
 		</div>
 		<div class="indiv chart-wrapper2 gmain-chart2">
-			<div class="chart-top clear">
+			<div class="chart-top">
 				<h2 class="ntit"><fmt:message key="vppdash.2.daily" /></h2>
 				<span class="term"></span>
 			</div>
@@ -37,7 +37,7 @@
 			</div>
 		</div>
 		<div class="indiv chart-wrapper2 gmain-chart3">
-			<div class="chart-top clear">
+			<div class="chart-top">
 				<h2 class="ntit"><fmt:message key="vppdash.3.yesterday" /></h2>
 				<span class="term"></span>
 			</div>
@@ -50,7 +50,7 @@
 
 	<div class="col-xl-4 col-md-12 col-sm-12">
 		<div class="indiv chart-wrapper2 gmain-chart4">
-			<div class="chart-top clear">
+			<div class="chart-top">
 				<h2 class="ntit"><fmt:message key="vppdash.4.current" /></h2>
 			</div>
 			<div class="chart-info block">
@@ -93,7 +93,7 @@
 		</div>
 
 		<div class="indiv chart-wrapper jmain-center2">
-			<div class="chart-top clear">
+			<div class="chart-top">
 				<h2 class="ntit"><fmt:message key="vppdash.5.realtime_result" /></h2>
 			</div>
 			<div class="realtime clear" style="position:relative;">
@@ -109,7 +109,7 @@
 		</div>
 
 		<div class="indiv chart-wrapper jmain-center3">
-			<div class="chart-top clear">
+			<div class="chart-top">
 				<h2 class="ntit"><fmt:message key="vppdash.6.bid_status" /></h2>
 			</div>
 			<div class="realtime-wrap">

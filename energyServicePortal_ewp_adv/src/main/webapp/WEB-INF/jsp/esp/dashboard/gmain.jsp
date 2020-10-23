@@ -29,7 +29,7 @@
 <div class="row content-wrapper">
 	<div class="col-xl-4 col-md-12 col-sm-12">
 		<div class="indiv chart-wrapper gmain-chart1">
-			<div class="chart-top clear offset">
+			<div class="chart-top offset">
 				<h2 class="ntit"><fmt:message key="gdash.1.month"/></h2><span class="term"></span>
 				<ul id="monthlySum" class="sum-list mobile-visible"></ul>
 			</div>
@@ -42,7 +42,7 @@
 		</div>
 
 		<div class="indiv chart-wrapper gmain-chart2">
-			<div class="chart-top clear offset">
+			<div class="chart-top offset">
 				<h2 class="ntit"><fmt:message key="gdash.2.daily"/></h2><span class="term"></span>
 				<ul id="dailySum" class="sum-list mobile-visible"></ul>
 			</div>
@@ -52,7 +52,7 @@
 		</div>
 
 		<div class="indiv chart-wrapper gmain-chart3">
-			<div class="chart-top clear offset">
+			<div class="chart-top offset">
 				<h2 class="ntit"><fmt:message key="gdash.3.yesterday"/></h2><span class="term"></span>
 				<ul id="yesterdaySum" class="sum-list mobile-visible"></ul>
 			</div>
@@ -66,7 +66,7 @@
 	<div class="col-xl-8 col-md-12 col-sm-12">
 		<div class="gmain-row1">
 			<div class="indiv chart-wrapper gmain-chart4">
-				<div class="chart-top clear">
+				<div class="chart-top">
 					<h2 class="ntit"><fmt:message key="gdash.4.current"/></h2>
 				</div>
 				<div class="chart-info">

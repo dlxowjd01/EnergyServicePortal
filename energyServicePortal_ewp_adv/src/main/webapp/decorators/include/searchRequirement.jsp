@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/decorators/include/taglibs.jsp"%>
 							<form id="schForm" name="schForm">
-								<div class="chart-top clear">
+								<div class="chart-top">
 									<c:choose>
 										<c:when test="${schGbn eq 'alarm' }"><!-- 상황관제 -->
 											<h2 class="ntit fl">알림현황</h2>

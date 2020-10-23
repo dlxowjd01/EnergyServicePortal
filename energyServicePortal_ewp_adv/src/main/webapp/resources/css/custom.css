@@ -3756,7 +3756,15 @@ input.inp[readonly]:focus {
 	border-top: solid 1px var(--box-darker);
 }
 
-/* 차트 상단 */
+/* **************************************************************
+							chart title
+************************************************************** */
+
+.chart-top:after {
+	clear: both;
+	content: "";
+	display: block;	
+}
 
 .chart-top .ntit {
 	float: left;
@@ -5819,17 +5827,11 @@ input.inp[readonly]:focus {
 /* =========================================================
 			 [sMain] power generation calendar
 ========================================================= */
-
-.smain-cal .chart-top .real-time {
-	float: right;
-	font-size: 12px;
-	color: #ddd;
-}
-
 .smain-cal .calendar-wrap {
 	display: flex;
 	margin: 12px 0 3px;
-	overflow: hidden;
+	overflow-y: hidden;
+	overflow-x: auto;
 	max-height: 487px;
 }
 
