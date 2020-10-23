@@ -652,9 +652,9 @@
 				//배열로 디바이스 상태 수집
 				if (!isEmpty(val)) {
 					val.forEach((el, index) => {
-						let capacity = isEmpty(el.capacity) ? '-' : displayNumberFixedUnit(el.capacity, el.capacity_unit, 'kW', 2)[0] + 'kW',
-							activePower = isEmpty(el.activePower) ? '-' : displayNumberFixedUnit(el.activePower, 'W', 'kW', 2)[0] + 'kW',
-							dcPower = isEmpty(el.dcPower) ? '-' : displayNumberFixedUnit(el.dcPower, 'W', 'kW', 2)[0] + 'kW',
+						let capacity = isEmpty(el.capacity) ? '-' : displayNumberFixedUnit(el.capacity, el.capacity_unit, 'kW', 0, 'round')[0] + 'kW',
+							activePower = isEmpty(el.activePower) ? '-' : displayNumberFixedUnit(el.activePower, 'W', 'kW', 0, 'round')[0] + 'kW',
+							dcPower = isEmpty(el.dcPower) ? '-' : displayNumberFixedUnit(el.dcPower, 'W', 'kW', 0, 'round')[0] + 'kW',
 							operation = el.operation;
 
 						switch (el.operation) {
@@ -816,16 +816,15 @@
 				dName = data[did].dname,
 				operation = 't2';
 
-				$('#' + dType + ' .equip-card').removeClass("hidden");
 				if(deviceStatus == 0){
 					// 중지
-					$('#' + dType + ' .equip-card').addClass('alert');
+					$('#' + dType + ' .equip-card').attr('class', 'indiv equip-card alert');
 				} else if(deviceStatus == 1){
 					// 정상
-					$('#' + dType + ' .equip-card').addClass('normal');
+					$('#' + dType + ' .equip-card').attr('class', 'indiv equip-card normal');
 				} else if(deviceStatus == 2) {
 					// 트립
-					$('#' + dType + ' .equip-card').addClass('error');
+					$('#' + dType + ' .equip-card').attr('class', 'indiv equip-card error');
 				}
 
 			$('#' + dType + ' .equip-card .ntit').text(dName);

@@ -6401,7 +6401,7 @@ input.inp[readonly]:focus {
 	margin: 0 auto;
 	width: 48px;
 	height: 100%;
-	filter: invert(0.6);
+	filter: invert(0.5);
 	background: var(--ico-add-svg) no-repeat center;
 	background-size: 24px;
 }
