@@ -165,14 +165,10 @@
 	.indiv.chart-diagnosis .chart-top.clear .btn-type {
 		margin-top: 16px;
 	}
-	
-	.modal-dialog.modal-xl {
-		min-width: 80%;
-	}
 }
 
 @media (min-width: 1092px) {
-	.modal-dialog {
+	.modal-dialog:not(.modal-xl) {
 		width:1092px
 	}
 	.spc_tbl02_row {
@@ -337,7 +333,7 @@
 @media all and (max-width: 768px) {
 
 	/********************************************************************************
-							common ( page-wrapeer, nav, sidebar )
+							common ( page-wrapper, nav, sidebar )
 	*********************************************************************************/
 	.page-wrapper {
 		margin: 0;

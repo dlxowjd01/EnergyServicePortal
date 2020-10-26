@@ -932,6 +932,16 @@
 			title: {
 				text: null
 			},
+			labels: {
+				align: 'center',
+				overflow: 'justify',
+				rotation: 0,
+				y: 25,
+				style: {
+					color: 'var(--grey)',
+					fontSize: '12px'
+				}
+			},
 			categories: num12List,
 			crosshair: true
 		}],
@@ -1015,12 +1025,6 @@
 		],
 		tooltip: {
 			formatter: function () {
-				// return this.points.reduce(function (s, point) {
-				// 	let suffix = point.series.userOptions.tooltip.valueSuffix;
-				// 	let tempVal = displayNumberFixedUnit(point.y, 'Wh', 'kWh', 0)[0];
-				// 	return s + '<br/><span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + tempVal + suffix;
-				// }, '<b>' + this.x + '월 </b>');
-				
 				return this.points.reduce(function (s, point) {
 					let suffix = point.series.userOptions.tooltip.valueSuffix;
 					let val = displayNumberFixedDecimal(point.y, 'kWh', 'kWh', 0)[0];
@@ -1204,6 +1208,7 @@
 			{
 				lineColor: 'var(--grey)',
 				tickColor: 'var(--grey)',
+				tickInterval: 1,
 				gridLineColor: 'var(--white25)',
 				plotLines: [{
 					color: 'var(--grey)',
@@ -1222,7 +1227,6 @@
 						fontSize: '12px'
 					}
 				},
-				tickInterval: 1,
 				title: {
 					text: null
 				},
@@ -1407,6 +1411,8 @@
 			}],
 			labels: {
 				align: 'center',
+				overflow: 'justify',
+				rotation: 0,
 				y: 27,
 				style: {
 					color: 'var(--grey)',
@@ -1595,8 +1601,10 @@
 				width: 1
 			}],
 			labels: {
-				y: 27,
 				align: 'center',
+				overflow: 'justify',
+				rotation: 0,
+				y: 27,
 				style: {
 					color: 'var(--grey)',
 					fontSize: '12px'
@@ -1779,6 +1787,8 @@
 			}],
 			labels: {
 				align: 'center',
+				overflow: 'justify',
+				rotation: 0,
 				y: 27,
 				style: {
 					color: 'var(--grey)',
@@ -1796,14 +1806,14 @@
 			{
 				showEmpty: false,
 				opposite: true,
-				lineColor: 'var(--grey)',
 				tickColor: 'var(--grey)',
+				lineColor: 'var(--grey)',
 				gridLineColor: 'var(--white25)',
+				gridLineWidth: 1,
 				plotLines: [{
 					color: 'var(--grey)',
 					width: 1
 				}],
-				gridLineWidth: 1,
 				min: 0,
 				title: {
 					text: 'kWh',
@@ -2045,8 +2055,6 @@
 								}
 							}
 						}
-					} else {
-				
 					}
 				}
 

@@ -832,7 +832,7 @@
 						} else {
 							alarmFlag = false;
 						}
-
+						console.log("alarmInfo===", json)
 						item.alarmInfo = json;
 						$.each(json, function( index, el ){
 							let hasDevType = essDvcArr.some( x => x.includes(el.device_type));
@@ -1111,7 +1111,12 @@
 								oid: oid,
 							}
 						}
+
 						Promise.resolve(makeAjaxCall(userOpt)).then(res => {
+							if(rowData.length > 30){
+								console.log("rowData===", rowData.length);
+								$('#loadingCircle').show();
+							}
 							getAlarmTable(dvcNameKr, rowData, res);
 						});
 					// }
@@ -1337,7 +1342,7 @@
 					// 	item.vppId = "-"
 					// }
 
-					item.updatedAt = new Date(item.updatedAt).toLocaleDateString("en-CA").replace(/\//g, '-') + '&ensp;' + new Date(item.updatedAt).toLocaleTimeString();
+					item.updatedAt = new Date(item.updatedAt).format('yyyy-MM-dd') + '&ensp;' + new Date(item.updatedAt).toLocaleTimeString();
 					newArr.push(item);
 
 				}).fail(function (jqXHR, textStatus, errorThrown) {
@@ -2018,6 +2023,7 @@
 		let dropdownBtn = form.find(".dropdown-toggle");
 		let warning = form.find(".warning");
 
+		$("#siteSearchBox").val("");		
 		$("#validSite").addClass("hidden");
 		$("#newSiteName").val("").prop("disabled", false).parent().removeClass("disabled").next().prop("disabled", true);
 		
@@ -2506,251 +2512,251 @@
 	}
 	
 	function getAlarmTable(dvcNameData, alarmData, userData){
-		let alarmList = [];
-		let userType = "";
-		// let newUserList = [];
-		// let newNonUserList = [];
-		// console.log("alarmData---", alarmData)
-			// Promise.resolve(alarmData.alarmInfo.map((x, index) => {
-			Promise.resolve(alarmData.map((x, index) => {
-				if(!isEmpty(x.alarm_to)){
-					Promise.resolve(JSON.parse(x.alarm_to)).then( res => {
-						x.alarmToUser = res;
-						alarmList.push(x);
-					});
+		var alarmFlag = false;
+		let uniqDvcType = groupBy(alarmData, "device_type");
+		let uniqDvcName = groupBy(alarmData, "name");
+		let userType = '';
+		let dvcNameStr = '';
+
+		console.log("alarmData===", alarmData)
+		Object.entries(uniqDvcName).forEach(function(item, index){
+			dvcNameStr += '<li class="hidden" data-device-type="' + item[1].device_type + '" data-did="' +  item[1].did + '" data-value="' + item[0] + '"><a href="#" tabindex="-1">' + item[0] + '</a></li>';
+		});
+
+		// Object.entries(uniqDvcName).forEach(function(item, index){
+		// 	dvcNameStr += `
+		// 		<li class="hidden" data-device-type="${'${ item[1].device_type }'}" data-did="${'${ item[1].did }'}" data-value="${'${ item[0] }'}">
+		// 			<a class="chk-type" href="#">
+		// 				<input type="checkbox" name="${'${ item[0] }'}" value="${'${ item[0] }'}">
+		// 				<label>${'${ item[0] }'}</label>
+		// 			</a>
+		// 		</li>
+		// 	`
+		// });
+
+		Promise.resolve(alarmData.map((item, index) => {
+			let merged = uniqDvcType[item.device_type].map(e => e.name).join(",").replace(/,(\s+)?$/, "");
+			item.sub_device = merged;
+
+			// Match => kr device_type_name
+			if ($.inArray(item.device_type, alarmData) === -1) {
+				for (let property in deviceNameList) {
+					if(property === item.device_type){
+						item.device_type_label = deviceNameList[property].name.kr;
+						break;
+					}
 				}
-			})).then( () => {
-				let newDevType = [...new Map(alarmList.map(x => [x.device_type, x])).values()];
-				let subGroup = [...new Map(alarmList.map(x => [x.name, x])).values()];
-				// console.log("newDevType====", newDevType);
-				// console.log("subGroup====", subGroup);
+			}
 
-				// return false;
-				if(alarmList.length > 0) {
-					var alarmTable = $('#alarmTable').DataTable({
-						"aaData": alarmList,
-						"destroy": true,
-						// "table-layout": "fixed",
-						"fixedHeader": true,
-						"bAutoWidth": true,
-						"bSortable": true,
-						"bSearchable" : true,
-						// "retrieve": true,
-						"scrollX": true,
-						"sScrollXInner": "100%",
-						"sScrollY": true,	
-						"scrollY": "40vh",
-						// "scrollCollapse": false,
-						"pageLength": 4,
-						// "scrollY": "400px",
-						// "bScrollCollapse": true,
-						"bSearchable" : true,
-						"dom": 'tip',
-						"aoColumnDefs": [
-							// {
-							// 	"aTargets": [ 0 ],
-							// 	"bSortable": false,
-							// 	"orderable": false
-							// },
-							// {
-							// 	"aTargets": [ 0, 1, 2, 3, 4, 5, 6 ],
-							// 	"bSortable": false,
-							// 	"orderable": false
-							// },
+			if(!isEmpty(item.alarm_to)){
+				Promise.resolve(JSON.parse(item.alarm_to)).then( res => {
+					item.alarmToUser = res;
+					if(alarmFlag == false){
+						alarmFlag = true;
+					}		
+				});
+			}
 
-							{
-								"aTargets": [ 2 ],
-								"createdCell": function (td, cellData, rowData, row, col) {
+		})).then(() => {
+
+			if(alarmFlag == true) {
+				// alarmList Available
+				var alarmTable = $('#alarmTable').DataTable({
+					"aaData": alarmData,
+					"destroy": true,
+					// "table-layout": "fixed",
+					"fixedHeader": true,
+					// "autoWidth": true,
+					"bAutoWidth": true,
+					"bSortable": true,
+					"bSearchable" : true,
+					// "retrieve": true,
+					// "scrollX": true,
+					// "sScrollXInner": "100%",
+					"sScrollY": true,	
+					"scrollY": "40vh",
+					// "scrollCollapse": false,
+					"pageLength": 4,
+					// "scrollY": "400px",
+					// "bScrollCollapse": true,
+					"bSearchable" : true,
+					"dom": 'tip',
+					"aoColumnDefs": [
+						// {
+						// 	"aTargets": [ 0 ],
+						// 	"bSortable": false,
+						// 	"orderable": false
+						// },
+						// {
+						// 	"aTargets": [ 0, 1, 2, 3, 4, 5, 6 ],
+						// 	"bSortable": false,
+						// 	"orderable": false
+						// },
+
+						{
+							"aTargets": [ 2 ],
+							"createdCell": function (td, cellData, rowData, row, col) {
+								let dropdown = $(td).find(".dropdown");
+
+								$.each(dropdown, function(index, el){
+									let selected = $(this).find(".dropdown-toggle").data("value");
+									let input = $(this).find("input[type='checkbox']");
+
+									$.each(input, function(idx, checkbox){
+										if(!isEmpty(selected) && selected.length > 1){
+											let selectedVal = selected.split(",");
+											let found = selectedVal.findIndex( x => x == $(this).val() );
+											if(found > -1){
+												$(this).prop("checked", true);
+											}
+										} else {						
+											if(selected == $(this).val()){
+												$(this).prop("checked", true);
+											}
+										}
+									});
+								});
+							}
+						},
+						{
+							"aTargets": [ 3 ],
+							"createdCell": function (td, cellData, rowData, row, col) {
+								// console.log("rowData11---", rowData);
+
+								if (!isEmpty(rowData.alarmToUser)) {
 									let dropdown = $(td).find(".dropdown");
+									let val = dropdown.find(".dropdown-toggle").data("value");
 
 									$.each(dropdown, function(index, el){
-										let selected = $(this).find(".dropdown-toggle").data("value");
-										let input = $(this).find("input[type='checkbox']");
+										let target = $(this).next().find("input[type='checkbox']");
 
-										$.each(input, function(idx, checkbox){
-											if(!isEmpty(selected) && selected.length > 1){
-												let selectedVal = selected.split(",");
-												let found = selectedVal.findIndex( x => x == $(this).val() );
-												if(found > -1){
-													$(this).prop("checked", true);
+										if(!isEmpty(target) && target.length > 0){
+											let targetArr = target.toArray();
+											// console.log("$(this).text()====", $(this).text())
+											let found = targetArr.findIndex( x => ( $(x).data("name") == $(this).text() ) );
+											if( found > -1 ){
+												$(target[found]).prop("checked", true);
+											}
+										}
+									});
+								}
+							}
+						},
+						{
+							"aTargets": [ 4 ],
+							"createdCell": function (td, cellData, rowData, row, col) {
+								let input = $(td).find("input");
+								if (!isEmpty(rowData.alarmToUser)) {
+									$.each(input, function(index, el){
+										$(this).val($(this).attr("value"));
+									});
+								}
+							}
+						},
+					],
+					"aoColumns": [
+						{
+							"sTitle": "설비타입",
+							"mData": null,
+							"mRender": function ( data, type, row, rowIndex ) {
+								let str1 = '';
+								$.each(uniqDvcType[data.device_type], function(index, el) {
+									let targetId = 'aDvcNameList' + rowIndex.row;
+									str1 += '<li onclick="setDropdownInput(this,' + targetId + ')" data-subgroup="' + el.sub_device + '" data-did="' + el.did + '" data-value="' + el.device_type + '"><a href="#" tabindex="-1">' + data.device_type_label + '</a></li>'
+								});
+
+								let dropdown1 = `
+									<div class="dropdown">
+										<button type="button" class="dropdown-toggle device-type" data-toggle="dropdown" data-did="${'${ data.did }'}" data-value="${'${ data.device_type }'}" disabled>${'${ data.device_type }'}<span class="caret"></span></button>
+										<ul id="aDvcTypeList${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str1 }'}</ul>
+									</div>
+								`;
+
+								return dropdown1;
+							},
+						},
+						{
+							"sTitle": "설비명",
+							"mData": null,
+							"mRender": function ( data, type, row, rowIndex ) {
+								let subDropdown = `
+									<div class="dropdown">
+										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="${'${ row.name }'}" disabled>${'${ row.name }'}<span class="caret"></span></button>
+										<ul id="aDvcNameList${'${ rowIndex.row }'}" class="dropdown-menu">${'${ dvcNameStr }'}</ul>
+									</div>
+								`;
+								return subDropdown;
+							},
+						},
+						{
+							"sTitle": "알람레벨",
+							"mData": null,
+							"mRender": function ( data, type, row, rowIndex ) {
+								let str3 = ``;
+								let dropdown3 = ``;
+								let aLevelOpt = [
+									{  name : "정보", val: 0 },
+									{  name : "경고", val: 1 },
+									{  name : "이상", val: 2 },
+									{  name : "트립", val: 3 },
+									{  name : "긴급", val: 4 },
+									{  name : "미정", val: 9 },
+								];
+
+								$.each(aLevelOpt, function(index, el){
+									str3 += `
+										<li>
+											<a class="chk-type" href="#">
+												<input type="checkbox" data-id="aDvcLevel${'${ el.val }'}" name="aDvcLevel${'${ el.val }'}" value="${'${ el.val }'}" />
+												<label>${'${ el.name }'}</label>
+											</a>
+										</li>
+									`
+								});
+
+								if( isEmpty(data.alarm_to) || isEmpty(data.alarmToUser) ) {
+									dropdown3 = `
+										<div class="dropdown">
+											<button type="button" class="dropdown-toggle" data-toggle="dropdown" disabled>선택<span class="caret"></span></button>
+											<ul id="aDvcAlarmList${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str3 }'}</ul>
+										</div>
+									`
+								} else {
+									if(!isEmpty(data.alarmToUser.user) && data.alarmToUser.user.length > 0){
+										let registeredUser = data.alarmToUser.user;
+										let joinedVal = "";
+
+										$.each(registeredUser, function(index, el){
+											let levText = "";
+											let levVal = "";
+											let newIdx = String(rowIndex.row + index);
+
+											if(!isEmpty(el.level)){
+												let val;
+												joinedVal = el.level.join(",");
+
+												if(el.level.length > 1){
+													val = el.level[0];
+													levText = aLevelOpt[val].name + ' 외 ' + String(el.level.length - 1) + "개";
+												} else if(el.level.length == 1) {
+													joinedVal = el.level[0];
+													levText = aLevelOpt[joinedVal].name;
+												} else if(el.level.length < 0) {
+													joinedVal = "";
+													levText = "선택";
 												}
-											} else {						
-												if(selected == $(this).val()){
-													$(this).prop("checked", true);
-												}
+
+												dropdown3 += `
+													<div class="dropdown">
+														<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="${'${ joinedVal }'}" data-name="${'${ levText }'}" disabled>${'${ levText }'}<span class="caret"></span></button>
+														<ul id="aDvcAlarmList${'${ newIdx }'}" class="dropdown-menu">${'${ str3 }'}</ul>
+													</div>
+												`
 											}
 										});
-									});
-								}
-							},
-							{
-								"aTargets": [ 3 ],
-								"createdCell": function (td, cellData, rowData, row, col) {
-									// console.log("rowData11---", rowData);
-
-									if (!isEmpty(rowData.alarmToUser)) {
-										let dropdown = $(td).find(".dropdown");
-										let val = dropdown.find(".dropdown-toggle").data("value");
-
-										$.each(dropdown, function(index, el){
-											let target = $(this).next().find("input[type='checkbox']");
-
-											if(!isEmpty(target) && target.length > 0){
-												let targetArr = target.toArray();
-												// console.log("$(this).text()====", $(this).text())
-												let found = targetArr.findIndex( x => ( $(x).data("name") == $(this).text() ) );
-												if( found > -1 ){
-													$(target[found]).prop("checked", true);
-												}
-											}
-										});
 									}
-								}
-							},
-							{
-								"aTargets": [ 4 ],
-								"createdCell": function (td, cellData, rowData, row, col) {
-									let input = $(td).find("input");
-									if (!isEmpty(rowData.alarmToUser)) {
-										$.each(input, function(index, el){
-											$(this).val($(this).attr("value"));
-										});
-									}
-								}
-							},
-						],
-						"aoColumns": [
-							{
-								"sTitle": "설비타입",
-								"mData": null,
-								"mRender": function ( data, type, row, rowIndex ) {
-									let str1 = ``;
-									let devName = '';
-
-									subGroup.forEach((item, index) => {
-										if(item.device_type === data.device_type){
-											devName += item.name + ","
-										}
-									});
-
-									devName = devName.replace(/,\s*$/, "");
-									let deviceNameKr = '';
-									for (var property in deviceNameList) {
-										if(property == data.device_type){
-											deviceNameKr = deviceNameList[property].name.kr;
-											break;
-										}
-									}
-
-									newDevType.forEach((item, index) => {
-										str1 += `
-											<li onclick="setDropdownInput(this)" data-subgroup="${'${ devName }'}" data-did="${'${ item.did }'}" data-value="${'${ item.device_type }'}"><a href="#" tabindex="-1">${'${ deviceNameKr }'}</a></li>
-										`
-									});
-
-									let dropdown1 = `
-										<div class="dropdown">
-											<button type="button" class="dropdown-toggle device-type" data-toggle="dropdown" data-did="${'${ data.did }'}" data-value="${'${ data.device_type }'}" disabled>${'${ deviceNameKr }'}<span class="caret"></span></button>
-											<ul id="aDvcTypeList${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str1 }'}</ul>
-										</div>
-									`;
-
-									return dropdown1;
-								},
-								// "className": "no-sorting",
-							},
-							{
-								"sTitle": "설비명",
-								"mData": null,
-								"mRender": function ( data, type, row, rowIndex ) {	
-									let str2 = ``;
-						
-									subGroup.forEach((item, index, arr) => {
-										str2 += `
-											<li data-device-type="${'${ item.device_type }'}" data-did="${'${ item.did }'}" data-value="${'${ item.name }'}"><a href="#" tabindex="-1">${'${ item.name }'}</a></li>
-										`
-									});
-
-									let subDropdown = `
-										<div class="dropdown">
-											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="${'${ row.name }'}" disabled>${'${ row.name }'}<span class="caret"></span></button>
-											<ul id="aDvcNameList${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str2 }'}</ul>
-										</div>
-									`;
-									return subDropdown;
-								},
-								// "className": "no-sorting",
-							},
-							{
-								"sTitle": "알람레벨",
-								"mData": null,
-								"mRender": function ( data, type, row, rowIndex ) {
-									let str3 = ``;
-									let dropdown3 = ``;
-									let aLevelOpt = [
-										{  name : "정보", val: 0 },
-										{  name : "경고", val: 1 },
-										{  name : "이상", val: 2 },
-										{  name : "트립", val: 3 },
-										{  name : "긴급", val: 4 },
-										{  name : "미정", val: 9 },
-									];
-
-
-									$.each(aLevelOpt, function(index, el){
-										str3 += `
-											<li>
-												<a class="chk-type" href="#">
-													<input type="checkbox" data-id="aDvcLevel${'${ el.val }'}" name="aDvcLevel${'${ el.val }'}" value="${'${ el.val }'}" />
-													<label>${'${ el.name }'}</label>
-												</a>
-											</li>
-										`
-									});
-
-									if( isEmpty(data.alarmToUser.non_user) && isEmpty(data.alarmToUser.user) ) {
-										dropdown3 = `
-											<div class="dropdown">
-												<button type="button" class="dropdown-toggle" data-toggle="dropdown" disabled>선택<span class="caret"></span></button>
-												<ul id="aDvcAlarmList${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str3 }'}</ul>
-											</div>
-										`
-									} else {
-										if(!isEmpty(data.alarmToUser.user) && data.alarmToUser.user.length > 0){
-											let registeredUser = data.alarmToUser.user;
-											let joinedVal = "";
-
-											$.each(registeredUser, function(index, el){
-												let levText = "";
-												let levVal = "";
-												let newIdx = String(rowIndex.row + index);
-
-												if(!isEmpty(el.level)){
-													let val;
-													joinedVal = el.level.join(",");
-
-													if(el.level.length > 1){
-														val = el.level[0];
-														levText = aLevelOpt[val].name + ' 외 ' + String(el.level.length - 1) + "개";
-													} else if(el.level.length == 1) {
-														joinedVal = el.level[0];
-														levText = aLevelOpt[joinedVal].name;
-													} else if(el.level.length < 0) {
-														joinedVal = "";
-														levText = "선택";
-													}
-
-													dropdown3 += `
-														<div class="dropdown">
-															<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="${'${ joinedVal }'}" data-name="${'${ levText }'}" disabled>${'${ levText }'}<span class="caret"></span></button>
-															<ul id="aDvcAlarmList${'${ newIdx }'}" class="dropdown-menu">${'${ str3 }'}</ul>
-														</div>
-													`
-												}
-											});
-										}
-										
-										if(!isEmpty(data.alarmToUser.non_user) && data.alarmToUser.non_user.length > 0){
+									
+									if(!isEmpty(data.alarmToUser.non_user) && data.alarmToUser.non_user.length > 0){
 											let nonUser = data.alarmToUser.non_user;
 											let joinedVal = "";
 											
@@ -2799,497 +2805,525 @@
 												}
 											});																		
 										}
-									}
-
-									return dropdown3;
-								},
-								// "className": "no-sorting",
-							},
-							{
-								"sTitle": "담당자 (이름 / ID)",
-								"mData": null,
-								"mRender": function ( data, type, row, rowIndex ) {
-									let str4 = ``;
-									let dropdown4 = ``;
-									let userIdx = '';
-
-									if( isEmpty(data.alarmToUser.non_user) && isEmpty(data.alarmToUser.user) ) {
-										str4 += `
-											<li onclick='addNewInput(this)'><a href="#">직접 입력</a></li>
-										`;
-										$.each(userData, function(idx, el){
-											let nameId = `${'${ el.name }'}` + ` / ` + `${'${ el.login_id }'}`;
-											let phoneNum = "";
-											el.contact_phone ? phoneNum = el.contact_phone : "";
-
-											str4 += `
-												<li onclick='removeNewInput(this)'>
-													<a class="chk-type" href="#">
-														<input type="checkbox" data-id="${'${ el.login_id }'}${'${ rowIndex.row }'}" name="aDvcContactPerson${'${ rowIndex.row }'}" value="${'${ el.uid }'}" data-uid="${'${ el.uid }'}" data-name="${'${ el.name }'}" data-contact-num="${'${ phoneNum }'}" />
-														<label>${'${ nameId }'}</label>
-													</a>
-												</li>
-											`;
-										});
-										
-										dropdown4 = `
-											<div class="dropdown" data-user-type="non-user" data-user-index="${'${ rowIndex.row }'}">
-												<button type="button" class="dropdown-toggle" data-toggle="dropdown" disabled>선택<span class="caret"></span></button>
-												<ul id="aDvcContactListNonUser${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str4 }'}</ul>
-											</div>
-											<div class="text-input-type ml-0 hidden"><input type="text" name="aDvcContactNonUser${'${ rowIndex.row }'}" /></div>
-										`
-									} else {
-										if(!isEmpty(data.alarmToUser.non_user) && data.alarmToUser.non_user.length > 0){
-											let nonUser = data.alarmToUser.non_user;
-											
-											nonUser.forEach((item, index) => {
-												let displayName = item.name;
-
-												console.log("displayName==", item)
-												newIdx = String(rowIndex.row + index);
-
-												str4 += `
-													<li onclick='addNewInput(this)'><a href="#">직접 입력</a></li>
-												`;
-												$.each(userData, function(idx, el){
-													let nameId = `${'${ el.name }'}` + ` / ` + `${'${ el.login_id }'}`;
-													let phoneNum = "";
-													el.contact_phone ? phoneNum = el.contact_phone : "";
-
-													str4 += `
-														<li onclick='removeNewInput(this)'>
-															<a class="chk-type" href="#">
-																<input type="checkbox" data-id="${'${ el.login_id }'}${'${ newIdx }'}" name="aDvcContactPerson${'${ newIdx }'}" value="${'${ el.uid }'}" data-uid="${'${ el.uid }'}" data-name="${'${ el.name }'}" data-contact-num="${'${ phoneNum }'}" />
-																<label>${'${ nameId }'}</label>
-															</a>
-														</li>
-													`;
-												});
-
-												dropdown4 += `
-													<div class="dropdown" data-user-type="non-user" data-user-index="${'${ newIdx }'}">
-														<button type="button" class="dropdown-toggle" data-value="${'${ displayName }'}" data-toggle="dropdown" data-name="선택" disabled>${'${ displayName }'}<span class="caret"></span></button>
-														<ul id="aDvcContactListNonUser${'${ newIdx }'}" class="dropdown-menu">${'${ str4 }'}</ul>
-													</div>
-													<div class="text-input-type ml-0 hidden"><input type="text" name="aDvcContactNonUser${'${ newIdx }'}" /></div>
-												`;
-
-											});
-										}
-
-										if(!isEmpty(data.alarmToUser.user) && data.alarmToUser.user.length > 0){
-											let registeredUser = data.alarmToUser.user;
-
-											registeredUser.forEach((item, index) => {
-												let newIdx = String(rowIndex.row + index);
-												let displayName = "";
-
-												str4 += `
-													<li onclick='addNewInput(this)'><a href="#">직접 입력</a></li>
-												`
-												$.each(userData, function(idx, el){
-													let nameId = `${'${ el.name }'}` + `(` + `${'${ el.login_id }'}` + `)`;
-													let phoneNum = "";
-													if(el.uid == item.uid){
-														displayName = el.name
-													}
-													
-													el.contact_phone ? phoneNum = el.contact_phone : "";
-
-													str4 += `
-														<li onclick='removeNewInput(this)'>
-															<a class="chk-type" href="#">
-																<input type="checkbox" data-id="${'${ el.login_id }'}${'${ newIdx }'}" name="aDvcContactPerson${'${ newIdx }'}" value="${'${ el.uid }'}" data-name="${'${ el.name }'}" data-contact-num="${'${ phoneNum }'}" />
-																<label>${'${ nameId }'}</label>
-															</a>
-														</li>
-													`
-												});
-												dropdown4 += `
-													<div class="dropdown" data-user-type="user" data-user-index="${'${ newIdx }'}">
-														<button type="button" class="dropdown-toggle" data-value="${'${ item.uid }'}" data-toggle="dropdown" data-name="" disabled>${'${ displayName }'}<span class="caret"></span></button>
-														<ul id="aDvcContactList${'${ newIdx }'}" class="dropdown-menu">${'${ str4 }'}</ul>
-													</div>
-													<div class="text-input-type ml-0 hidden"><input type="text" name="aDvcContact${'${ newIdx }'}" id="aDvcContact${'${ newIdx }'}" /></div>
-												`;
-
-											});
-										}
-									}
-									return dropdown4;
-								},
-								// "className": "no-sorting",
-								// "width": "16%"
-							},
-							{
-								"sTitle": "전화번호",
-								"mData": null,
-								"mRender": function ( data, type, row, rowIndex ) {
-									let str5 = ``;
-
-									if( isEmpty(data.alarmToUser.non_user) && isEmpty(data.alarmToUser.user) ) {
-										str5 += `<div class="text-input-type disabled" data-user-type="user"><input type="text" name="aDvcPhone${'${ rowIndex.row }'}" value="" disabled /></div>`;
-									} else {
-										if(!isEmpty(data.alarmToUser.non_user) && data.alarmToUser.non_user.length > 0){
-											let nonUser = data.alarmToUser.non_user;
-											nonUser.forEach((item, index) => {
-												let newIdx = String(rowIndex.row + index);
-												let displayName = item.name;
-												let phoneNum = "";
-												item.phone ? (phoneNum = item.phone) : ( phoneNum = "" );
-
-												str5 += `<div class="text-input-type disabled" data-user-type="non-user"><input type="text" name="aDvcPhoneNonUser${'${ newIdx }'}" value="${'${ phoneNum }'}" disabled /></div>`;
-											});
-										}
-
-										if(!isEmpty(data.alarmToUser.user) && data.alarmToUser.user.length > 0){
-											
-											let registeredUser = data.alarmToUser.user;
-
-											registeredUser.forEach((item, index) => {
-												let newIdx = String(rowIndex.row + index);
-												let displayName = item.name;
-												let phoneNum = "";
-												let found = userData.findIndex(x => x.uid == item.uid);
-
-												if(found > -1){
-													if(!isEmpty(userData[found].contact_phone)){
-														phoneNum = userData[found].contact_phone; 
-													}
-												}
-												str5 += `<div class="text-input-type disabled" data-user-type="user"><input type="text" name="aDvcPhone${'${ newIdx }'}" value="${'${ phoneNum }'}" disabled /></div>`;
-											});
-										}
-									}
-
-									return str5;
-								},
-								// "className": "no-sorting",
-							},
-							{
-								"sTitle": "추가 / 수정 / 삭제",
-								"mData": null,
-								"mRender": function ( data, type, row, rowIndex ) {
-									let deleteStr = ``;
-									let length = 0;
-
-									if( isEmpty(data.alarmToUser.non_user) && isEmpty(data.alarmToUser.user) ) {
-										deleteStr = `
-											<div class="flex-start">
-												<button type="button" class="icon-add" data-index="${'${rowIndex.row}'}" onclick="updateAlarmTable($(this), 'add' )">추가</button>
-												<button type="button" class="icon-edit" data-index="${'${rowIndex.row}'}" onclick="updateAlarmTable($(this), 'edit')">수정</button>
-												<button type="button" class="icon-delete" data-index="${'${rowIndex.row}'}" onclick="updateAlarmTable($(this), 'delete')">삭제</button>
-											</div>
-										`;
-									} else {
-										if(!isEmpty(data.alarmToUser.user)){
-											length += data.alarmToUser.user.length;
-										} 
-										if(!isEmpty(data.alarmToUser.non_user)){
-											length += data.alarmToUser.non_user.length;
-										}
-										for(let i = 0, arrLength = length; i < arrLength; i++ ){
-											deleteStr += `
-												<div class="flex-start">
-													<button type="button" class="icon-add" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'add' )">추가</button>
-													<button type="button" class="icon-edit" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'edit')">수정</button>
-													<button type="button" class="icon-delete" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'delete')">삭제</button>
-												</div>
-											`;
-										}
-									}
-
-									return deleteStr;
-								},
-								"className": "dt-body-center no-sorting",
-							},
-						],
-						initComplete: function(){
-							this.api().columns().header().each ((el, i) => {
-								if(i == 0){
-									$(el).attr ('style', 'min-width: 16%;');
-								} else if(i == 1){
-									$(el).attr ('style', 'min-width: 20%;');
-								} else if(i == 2){
-									$(el).attr ('style', 'min-width: 12%;');
-								} else if(i == 3){
-									$(el).attr ('style', 'min-width: 20%;');
-								} else if(i == 4){
-									$(el).attr ('style', 'min-width: 20%;');
 								}
-							});
-							// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-							// 	cell.innerHTML = i+1;
-							// 	$(cell).data("id", i);
-							// });
-							// this.api().column(5).visible( false );
+								
+								return dropdown3;
+							},
+							// "className": "no-sorting",
 						},
-						rowCallback: function(row, data) {
-							let length = 0;
-							if(!isEmpty(data.alarmToUser) && !isEmpty(data.alarmToUser.user)){
-								length += data.alarmToUser.user.length;
-							}
-							if(!isEmpty(data.alarmToUser) && !isEmpty(data.alarmToUser.non_user)){
-								length += data.alarmToUser.non_user.length;
-							}
-							if(length === 1 ){
-								$(row).addClass('single');
-							}
-						},
-						drawCallback: function(){
-							$('#alarmTable_wrapper').addClass('fixed-width');
-							$('#alarmTable').css("width", "100%");
-						}
-					}).columns.adjust();					
-				} else {
-					let newDevType = [...new Map(alarmData.map(x => [x.device_type, x])).values()];
-					let subGroup = [...new Map(alarmData.map(x => [x.name, x])).values()];
+						{
+							"sTitle": "담당자 (이름 / ID)",
+							"mData": null,
+							"mRender": function ( data, type, row, rowIndex ) {
+								let str4 = ``;
+								let dropdown4 = ``;
+								let userIdx = '';
 
-					var alarmTable = $('#alarmTable').DataTable({
-						"aaData": newDevType,
-						"destroy": true,
-						// "table-layout": "fixed",
-						"fixedHeader": true,
-						"bAutoWidth": true,
-						"bSortable": true,
-						"bSearchable" : true,
-						// "retrieve": true,
-						"scrollX": true,
-						"sScrollXInner": "100%",
-						"sScrollY": true,	
-						"scrollY": "40vh",
-						"pageLength": 4,
-						"bSearchable" : true,
-						"dom": 'tip',
-						"aoColumns": [
-							{
-								"sTitle": "설비타입",
-								"mData": null,
-								"mRender": function ( data, type, row, rowIndex ) {
-									let str1 = ``;
-									let devName = '';
-
-									subGroup.forEach((item, index, arr) => {
-										if(item.name === data.name){
-											devName += item.name + ","
-										}
-									});
-
-									devName = devName.replace(/,\s*$/, "");
-									let deviceNameKr = '';
-									for (var property in deviceNameList) {
-										if(property == data.device_type){
-											deviceNameKr = deviceNameList[property].name.kr;
-											break;
-										}
-									}
-									newDevType.forEach((item, index) => {
-										str1 += `
-											<li onclick="setDropdownInput(this)" data-subgroup="${'${ devName }'}" data-did="${'${ item.did }'}" data-value="${'${ item.device_type }'}"><a href="#" tabindex="-1">${'${ deviceNameKr }'}</a></li>
-										`
-									});
-
-									let dropdown1 = `
-										<div class="dropdown">
-											<button type="button" class="dropdown-toggle device-type" data-toggle="dropdown" data-did="${'${ data.did }'}" data-value="${'${ data.device_type }'}">선택<span class="caret"></span></button>
-											<ul id="aDvcTypeList${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str1 }'}</ul>
-										</div>
-									`;
-
-									return dropdown1;
-								},
-								// "className": "no-sorting",
-							},
-							{
-								"sTitle": "설비명",
-								"mData": null,
-								"mRender": function ( data, type, row, rowIndex ) {	
-									let str2 = ``;
-
-									subGroup.forEach((item, index) => {
-										str2 += `
-											<li data-device-type="${'${ item.device_type }'}" data-did="${'${ item.did }'}" data-value="${'${ item.name }'}"><a href="#" tabindex="-1">${'${ item.name }'}</a></li>
-										`
-									});
-
-									let subDropdown = `
-										<div class="dropdown">
-											<button type="button" class="dropdown-toggle" data-toggle="dropdown">선택<span class="caret"></span></button>
-											<ul id="aDvcNameList${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str2 }'}</ul>
-										</div>
-									`;
-									return subDropdown;
-								},
-								// "className": "no-sorting",
-							},
-							{
-								"sTitle": "알람레벨",
-								"mData": null,
-								"mRender": function ( data, type, row, rowIndex ) {
-									let str3 = ``;
-									let dropdown3 = ``;
-									let aLevelOpt = [
-										{  name : "정보", val: 0 },
-										{  name : "경고", val: 1 },
-										{  name : "이상", val: 2 },
-										{  name : "트립", val: 3 },
-										{  name : "긴급", val: 4 },
-										{  name : "미정", val: 9 },
-									];
-
-									// $.each(aLevelOpt, function(index, el){
-									// 	str3 += `
-									// 		<li data-name="${'${ el.name }'}" data-value="${'${ el.val }'}"><a href="#" tabindex="-1">${'${ el.name }'}</a></li>
-									// 	`
-									// });
-
-									$.each(aLevelOpt, function(index, el){
-										str3 += `
-											<li>
-												<a class="chk-type" href="#">
-													<input type="checkbox" data-id="aDvcLevel${'${ el.val }'}" name="aDvcLevel${'${ el.val }'}" value="${'${ el.val }'}" />
-													<label>${'${ el.name }'}</label>
-												</a>
-											</li>
-										`
-									});
-
-									dropdown3 = `
-										<div class="dropdown">
-											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="" data-name="선택">선택<span class="caret"></span></button>
-											<ul id="aDvcAlarmList${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str3 }'}</ul>
-										</div>
-									`;
-									return dropdown3;
-								},
-								// "className": "no-sorting",
-							},
-							{
-								"sTitle": "담당자 (이름 / ID)",
-								"mData": null,
-								"mRender": function ( data, type, row, rowIndex ) {
-									let str4 = ``;
-									let dropdown4 = ``;
-									let userIdx = '';
-
+								if( isEmpty(data.alarm_to) || isEmpty(data.alarmToUser) ) {
 									str4 += `
 										<li onclick='addNewInput(this)'><a href="#">직접 입력</a></li>
 									`;
 									$.each(userData, function(idx, el){
-										newIdx = String(rowIndex.row + idx);
-
 										let nameId = `${'${ el.name }'}` + ` / ` + `${'${ el.login_id }'}`;
 										let phoneNum = "";
-										
 										el.contact_phone ? phoneNum = el.contact_phone : "";
 
 										str4 += `
 											<li onclick='removeNewInput(this)'>
 												<a class="chk-type" href="#">
-													<input type="checkbox" data-id="${'${ el.login_id }'}${'${ newIdx }'}" name="aDvcContactPerson${'${ newIdx }'}" data-uid="${'${ el.uid }'}" value="${'${ el.uid }'}" data-name="${'${ el.name }'}" data-contact-num="${'${ phoneNum }'}" />
+													<input type="checkbox" data-id="${'${ el.login_id }'}${'${ rowIndex.row }'}" name="aDvcContactPerson${'${ rowIndex.row }'}" value="${'${ el.uid }'}" data-uid="${'${ el.uid }'}" data-name="${'${ el.name }'}" data-contact-num="${'${ phoneNum }'}" />
 													<label>${'${ nameId }'}</label>
 												</a>
 											</li>
 										`;
 									});
-
+									
 									dropdown4 = `
 										<div class="dropdown" data-user-type="non-user" data-user-index="${'${ rowIndex.row }'}">
-											<button type="button" class="dropdown-toggle" data-value="" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+											<button type="button" class="dropdown-toggle" data-toggle="dropdown" disabled>선택<span class="caret"></span></button>
 											<ul id="aDvcContactListNonUser${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str4 }'}</ul>
 										</div>
 										<div class="text-input-type ml-0 hidden"><input type="text" name="aDvcContactNonUser${'${ rowIndex.row }'}" /></div>
-									`;
+									`
+								} else {
+									// 1. Unregistered User
+									if(!isEmpty(data.alarmToUser.non_user) && data.alarmToUser.non_user.length > 0){
+										let nonUser = data.alarmToUser.non_user;
+										console.log("nonUser===", nonUser);
 
-									return dropdown4;
-								},
-								// "className": "no-sorting",
-								// "width": "16%"
-							},
-							{
-								"sTitle": "전화번호",
-								"mData": null,
-								"mRender": function ( data, type, row, rowIndex ) {
-									let str5 = ``;
+										nonUser.forEach((item, index) => {
+											let displayName = item.name;
+											newIdx = String(rowIndex.row + index);
+
+											str4 += `
+												<li onclick='addNewInput(this)'><a href="#">직접 입력</a></li>
+											`;
+											$.each(userData, function(idx, el){
+												let nameId = `${'${ el.name }'}` + ` / ` + `${'${ el.login_id }'}`;
+												let phoneNum = "";
+												el.contact_phone ? phoneNum = el.contact_phone : "";
+
+												str4 += `
+													<li onclick='removeNewInput(this)'>
+														<a class="chk-type" href="#">
+															<input type="checkbox" data-id="${'${ el.login_id }'}${'${ newIdx }'}" name="aDvcContactPerson${'${ newIdx }'}" value="${'${ el.uid }'}" data-uid="${'${ el.uid }'}" data-name="${'${ el.name }'}" data-contact-num="${'${ phoneNum }'}" />
+															<label>${'${ nameId }'}</label>
+														</a>
+													</li>
+												`;
+											});
+
+											dropdown4 += `
+												<div class="dropdown" data-user-type="non-user" data-user-index="${'${ newIdx }'}">
+													<button type="button" class="dropdown-toggle" data-value="${'${ displayName }'}" data-toggle="dropdown" data-name="선택" disabled>${'${ displayName }'}<span class="caret"></span></button>
+													<ul id="aDvcContactListNonUser${'${ newIdx }'}" class="dropdown-menu">${'${ str4 }'}</ul>
+												</div>
+												<div class="text-input-type ml-0 hidden"><input type="text" name="aDvcContactNonUser${'${ newIdx }'}" /></div>
+											`;
+
+										});
+									}
+
+									// 2. Registered User
+									if(!isEmpty(data.alarmToUser.user) && data.alarmToUser.user.length > 0){
+										let registeredUser = data.alarmToUser.user;
+										let displayName = "";
+										let displayName2 = "";
+										let nameFlag = false;
+										let cnt = 0;
+										console.log("registeredUser---", registeredUser);
+
+										registeredUser.forEach((item, index) => {
+											var userEl = item;
+											let newIdx = String(rowIndex.row + index);
+											
+										
+											str4 += `
+												<li onclick='addNewInput(this)'><a href="#">직접 입력</a></li>
+											`
+											$.each(userData, function(idx, el){
+												let nameId = `${'${ el.name }'}` + `(` + `${'${ el.login_id }'}` + `)`;
+												let phoneNum = "";
+
+												if(el.name == userEl.uid){
+													if(nameFlag == false){
+														displayName = el.name;
+														nameFlag = true;
+													} else {
+														cnt++;
+													}
+												
+												}
+												if(el.uid == userEl.uid){
+													if(nameFlag == false){
+														displayName2 = el.name
+														nameFlag = true;
+													} else {
+														cnt++;
+													}
+												}
+												// let foundByUid = userData.findIndex(x => x.uid == item.uid);
+
+												el.contact_phone ? (phoneNum = el.contact_phone) : "";
+				
+												str4 += `
+													<li onclick='removeNewInput(this)'>
+														<a class="chk-type" href="#">
+															<input type="checkbox" data-id="${'${ el.login_id }'}${'${ newIdx }'}" name="aDvcContactPerson${'${ newIdx }'}" value="${'${ el.uid }'}" data-name="${'${ el.name }'}" data-contact-num="${'${ phoneNum }'}" />
+															<label>${'${ nameId }'}</label>
+														</a>
+													</li>
+												`
+											});
+
 									
-									str5 = `<div class="text-input-type" data-user-type="non-user"><input type="text" name="aDvcPhoneNonUser${'${ rowIndex.row }'}" value="" /></div>`;
+											if(cnt === 0){
+												if(!isEmpty(displayName2)){
+													displayName = displayName2;
+												}
+											} else {
+												if(!isEmpty(displayName2)){
+													displayName = displayName2 + '외 ' + cnt + '명';
+												} else {
+													displayName = displayName + '외 ' + cnt + '명';
+												}
+											}
 
-									return str5;
-								},
-								// "className": "no-sorting",
+											// console.log("displayName---", displayName);
+											// console.log("displayName2---", displayName2);
+
+											dropdown4 += `
+												<div class="dropdown" data-user-type="user" data-user-index="${'${ newIdx }'}">
+													<button type="button" class="dropdown-toggle" data-value="${'${ item.uid }'}" data-toggle="dropdown" data-name="" disabled>${'${ displayName }'}<span class="caret"></span></button>
+													<ul id="aDvcContactList${'${ newIdx }'}" class="dropdown-menu">${'${ str4 }'}</ul>
+												</div>
+												<div class="text-input-type ml-0 hidden"><input type="text" name="aDvcContact${'${ newIdx }'}" id="aDvcContact${'${ newIdx }'}" /></div>
+											`;
+
+										});
+									}
+								}
+								return dropdown4;
 							},
-							{
-								"sTitle": "추가 / 수정 / 삭제",
-								"mData": null,
-								"mRender": function ( data, type, row, row, rowIndex ) {
-									let deleteStr = ``;
-									let i = 0;
+						},
+						{
+							"sTitle": "전화번호",
+							"mData": null,
+							"mRender": function ( data, type, row, rowIndex ) {
+								let str5 = ``;
 
+								if( isEmpty(data.alarm_to) || isEmpty(data.alarmToUser) ) {
+									str5 += `<div class="text-input-type disabled" data-user-type="user"><input type="text" name="aDvcPhone${'${ rowIndex.row }'}" value="" disabled /></div>`;
+								} else {
+									if(!isEmpty(data.alarmToUser.non_user) && data.alarmToUser.non_user.length > 0){
+										let nonUser = data.alarmToUser.non_user;
+										nonUser.forEach((item, index) => {
+											let newIdx = String(rowIndex.row + index);
+											let displayName = item.name;
+											let phoneNum = "";
+											item.phone ? (phoneNum = item.phone) : ( phoneNum = "" );
+
+											str5 += `<div class="text-input-type disabled" data-user-type="non-user"><input type="text" name="aDvcPhoneNonUser${'${ newIdx }'}" value="${'${ phoneNum }'}" disabled /></div>`;
+										});
+									}
+
+									if(!isEmpty(data.alarmToUser.user) && data.alarmToUser.user.length > 0){
+										
+										let registeredUser = data.alarmToUser.user;
+
+								
+										registeredUser.forEach((item, index) => {
+											let newIdx = String(rowIndex.row + index);
+											let displayName = item.name;
+											let phoneNum = "";
+											let found = userData.findIndex(x => x.name == item.uid);
+											let found2 = userData.findIndex(x => x.uid == item.uid);
+											
+											if(!isEmpty(item.uid)) {
+												if(found2 > -1){
+													if(!isEmpty(userData[found2].contact_phone)){
+														phoneNum = userData[found2].contact_phone; 
+													}
+												} else {
+													if(found > -1){
+														if(!isEmpty(userData[found].contact_phone)){
+															phoneNum = userData[found].contact_phone; 
+														}
+													}
+												}
+											} else {
+												// console.log("empty uid===", item);
+											}
+											
+											// console.log("userData[found]===", userData[found]);
+											// console.log("userData[found]222===", userData[found2]);
+											// console.log("item.uid===", item.uid);
+										
+
+											// if(foundByUid > -1){
+											// 	if(!isEmpty(userData[foundByUid].contact_phone)){
+											// 		phoneNum = userData[foundByUid].contact_phone; 
+											// 	}
+											// }
+											str5 += `<div class="text-input-type disabled" data-user-type="user"><input type="text" name="aDvcPhone${'${ newIdx }'}" value="${'${ phoneNum }'}" disabled /></div>`;
+										});
+									}
+								}
+
+								return str5;
+							},
+							// "className": "no-sorting",
+						},
+						{
+							"sTitle": "추가 / 수정 / 삭제",
+							"mData": null,
+							"mRender": function ( data, type, row, rowIndex ) {
+								let deleteStr = ``;
+								let length = 0;
+
+								if( isEmpty(data.alarm_to) || isEmpty(data.alarmToUser) ) {
 									deleteStr = `
 										<div class="flex-start">
-											<button type="button" class="icon-add" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'add')">추가</button>
-											<button type="button" class="icon-edit" disabled data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'edit')">수정</button>
-											<button type="button" class="icon-delete" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'delete')">삭제</button>
+											<button type="button" class="icon-add" data-index="${'${length}'}" onclick="updateAlarmTable($(this), 'add' )">추가</button>
+											<button type="button" class="icon-edit" data-index="${'${length}'}" onclick="updateAlarmTable($(this), 'edit')">수정</button>
+											<button type="button" class="icon-delete" data-index="${'${length}'}" onclick="updateAlarmTable($(this), 'delete')">삭제</button>
 										</div>
 									`;
-
-									return deleteStr;
-								},
-								"className": "dt-body-center no-sorting",
-							},
-						],
-						initComplete: function(){
-							this.api().columns().header().each ((el, i) => {
-								if(i == 0){
-									$(el).attr ('style', 'min-width: 16%;');
-								} else if(i == 1){
-									$(el).attr ('style', 'min-width: 20%;');
-								} else if(i == 2){
-									$(el).attr ('style', 'min-width: 12%;');
-								} else if(i == 3){
-									$(el).attr ('style', 'min-width: 20%;');
-								} else if(i == 4){
-									$(el).attr ('style', 'min-width: 20%;');
+								} else {
+									if(!isEmpty(data.alarmToUser.user)){
+										length += data.alarmToUser.user.length;
+									} 
+									if(!isEmpty(data.alarmToUser.non_user)){
+										length += data.alarmToUser.non_user.length;
+									}
+									for(let i = 0, arrLength = length; i < arrLength; i++ ){
+										deleteStr += `
+											<div class="flex-start">
+												<button type="button" class="icon-add" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'add' )">추가</button>
+												<button type="button" class="icon-edit" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'edit')">수정</button>
+												<button type="button" class="icon-delete" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'delete')">삭제</button>
+											</div>
+										`;
+									}
 								}
-							});
-							// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-							// 	cell.innerHTML = i+1;
-							// 	$(cell).data("id", i);
-							// });
-							// this.api().column(5).visible( false );
+
+								return deleteStr;
+							},
+							"className": "dt-body-center no-sorting",
 						},
-						rowCallback: function(row, data) {
-							let length = 0;
-
-							if(!isEmpty(data.alarmToUser) && !isEmpty(data.alarmToUser.user)){
-								length += data.alarmToUser.user.length;
+					],
+					initComplete: function(){
+						this.api().columns().header().each ((el, i) => {
+							if(i == 0){
+								$(el).attr ('style', 'min-width: 16%;');
+							} else if(i == 1){
+								$(el).attr ('style', 'min-width: 20%;');
+							} else if(i == 2){
+								$(el).attr ('style', 'min-width: 12%;');
+							} else if(i == 3){
+								$(el).attr ('style', 'min-width: 20%;');
+							} else if(i == 4){
+								$(el).attr ('style', 'min-width: 20%;');
 							}
-							if(!isEmpty(data.alarmToUser) && !isEmpty(data.alarmToUser.non_user)){
-								length += data.alarmToUser.non_user.length;
-							}
-
-							if(length === 1 ){
-								$(row).addClass('single');
-							}
-						},
-						drawCallback: function(){
-							$('#alarmTable_wrapper').addClass('fixed-width');
-							$('#alarmTable').css("width", "100%");
-
-							// this.api().columns().header().each ((el, i) => {
-							// 	if(i == 0){
-							// 		$(el).attr ('style', 'width: 4%;');
-							// 	}
-							// 	if(i == 5){
-							// 		$(el).attr ('style', 'min-width: 180px;');
-							// 	}
-							// });
+						});
+						// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+						// 	cell.innerHTML = i+1;
+						// 	$(cell).data("id", i);
+						// });
+						// this.api().column(5).visible( false );
+					},
+					rowCallback: function(row, data) {
+						let length = 0;
+						if(!isEmpty(data.alarmToUser) && !isEmpty(data.alarmToUser.user)){
+							length += data.alarmToUser.user.length;
 						}
-					}).columns.adjust();
-				}
-			$("#addAlarmModal").modal("show");
+						if(!isEmpty(data.alarmToUser) && !isEmpty(data.alarmToUser.non_user)){
+							length += data.alarmToUser.non_user.length;
+						}
+						if(length === 1 ){
+							$(row).addClass('single');
+						}
+					},
+					drawCallback: function(){
+						$('#alarmTable_wrapper').addClass('fixed-width');
+						$('#alarmTable').css("width", "100%");
+					}
+				}).columns.adjust();					
+			} else {
+				let noAlarmData = getUniqueListBy(alarmData, "device_type");
+				let uniqDvcType2 = groupBy(noAlarmData, "device_type");
+				let DvcNameStr2 = '';
 
+				Object.entries(uniqDvcType2).forEach(function(item, index){
+					DvcNameStr2 += '<li class="hidden" data-device-type="' + item[1].device_type + '" data-did="' +  item[1].did + '" data-value="' + item[0] + '"><a href="#" tabindex="-1">' + item[0] + '</a></li>';
+				});
+
+				console.log("noAlarmData==", noAlarmData)
+				// NO alarmList
+				var alarmTable = $('#alarmTable').DataTable({
+					"aaData": noAlarmData,
+					"destroy": true,
+					// "table-layout": "fixed",
+					"fixedHeader": true,
+					// "autoWidth": true,
+					"bAutoWidth": true,
+					"bSortable": true,
+					"bSearchable" : true,
+					// "retrieve": true,
+					"scrollX": true,
+					"sScrollXInner": "100%",
+					"sScrollY": true,	
+					"scrollY": "40vh",
+					"pageLength": 4,
+					"bSearchable" : true,
+					"dom": 'tip',
+					"aoColumns": [
+						{
+							"sTitle": "설비타입",
+							"mData": null,
+							"mRender": function ( data, type, row, rowIndex ) {
+								// console.log("설비타입===", data);
+								let str1 = '';
+								$.each(uniqDvcType2[data.device_type], function(index, el) {
+									let targetId = 'aDvcNameList' + rowIndex.row;
+									str1 += '<li onclick="setDropdownInput(this,' + targetId + ')" data-subgroup="' + el.sub_device + '" data-did="' + el.did + '" data-value="' + el.device_type + '"><a href="#" tabindex="-1">' + data.device_type_label + '</a></li>'
+								});
+
+								let dropdown1 = `
+									<div class="dropdown">
+										<button type="button" class="dropdown-toggle device-type" data-toggle="dropdown" data-did="${'${ data.did }'}" data-value="${'${ data.device_type }'}">선택<span class="caret"></span></button>
+										<ul id="aDvcTypeList${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str1 }'}</ul>
+									</div>
+								`;
+
+								return dropdown1;
+							},
+							// "className": "no-sorting",
+						},
+						{
+							"sTitle": "설비명",
+							"mData": null,
+							"mRender": function ( data, type, row, rowIndex ) {
+								let subDropdown = `
+									<div class="dropdown">
+										<button type="button" class="dropdown-toggle" data-toggle="dropdown" disabled>선택<span class="caret"></span></button>
+										<ul id="aDvcNameList${'${ rowIndex.row }'}" class="dropdown-menu">${'${ dvcNameStr }'}</ul>
+									</div>
+								`;
+								return subDropdown;
+							},
+							// "className": "no-sorting",
+						},
+						{
+							"sTitle": "알람레벨",
+							"mData": null,
+							"mRender": function ( data, type, row, rowIndex ) {
+								let str3 = ``;
+								let dropdown3 = ``;
+								let aLevelOpt = [
+									{  name : "정보", val: 0 },
+									{  name : "경고", val: 1 },
+									{  name : "이상", val: 2 },
+									{  name : "트립", val: 3 },
+									{  name : "긴급", val: 4 },
+									{  name : "미정", val: 9 },
+								];
+
+								$.each(aLevelOpt, function(index, el){
+									str3 += `
+										<li>
+											<a class="chk-type" href="#">
+												<input type="checkbox" data-id="aDvcLevel${'${ el.val }'}" name="aDvcLevel${'${ el.val }'}" value="${'${ el.val }'}" />
+												<label>${'${ el.name }'}</label>
+											</a>
+										</li>
+									`
+								});
+
+								dropdown3 = `
+									<div class="dropdown">
+										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="" data-name="선택">선택<span class="caret"></span></button>
+										<ul id="aDvcAlarmList${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str3 }'}</ul>
+									</div>
+								`;
+								return dropdown3;
+							},
+						},
+						{
+							"sTitle": "담당자 (이름 / ID)",
+							"mData": null,
+							"mRender": function ( data, type, row, rowIndex ) {
+								let str4 = '';
+								let dropdown4 = ``;
+								let userIdx = '';
+
+								str4 += '<li onclick="addNewInput(this)"><a href="#">직접 입력</a></li>';
+
+								$.each(userData, function(idx, el){
+									// console.log("userData===", el);
+									newIdx = String(rowIndex.row + idx);
+
+									let nameId = `${'${ el.name }'}` + ` / ` + `${'${ el.login_id }'}`;
+									let phoneNum = "";
+									
+									el.contact_phone ? phoneNum = el.contact_phone : "";
+
+									str4 += `
+										<li onclick='removeNewInput(this)'>
+											<a class="chk-type" href="#">
+												<input type="checkbox" data-id="${'${ el.login_id }'}${'${ newIdx }'}" name="aDvcContactPerson${'${ newIdx }'}" data-uid="${'${ el.uid }'}" value="${'${ el.uid }'}" data-name="${'${ el.name }'}" data-contact-num="${'${ phoneNum }'}" />
+												<label>${'${ nameId }'}</label>
+											</a>
+										</li>
+									`;
+								});
+
+								dropdown4 = `
+									<div class="dropdown" data-user-type="non-user" data-user-index="${'${ rowIndex.row }'}">
+										<button type="button" class="dropdown-toggle" data-value="" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+										<ul id="aDvcContactListNonUser${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str4 }'}</ul>
+									</div>
+									<div class="text-input-type ml-0 hidden"><input type="text" name="aDvcContactNonUser${'${ rowIndex.row }'}" /></div>
+								`;
+
+								return dropdown4;
+							},
+						},
+						{
+							"sTitle": "전화번호",
+							"mData": null,
+							"mRender": function ( data, type, row, rowIndex ) {
+								let str5 = ``;
+								str5 = `<div class="text-input-type" data-user-type="non-user"><input type="text" name="aDvcPhoneNonUser${'${ rowIndex.row }'}" value="" /></div>`;
+
+								return str5;
+							},
+						},
+						{
+							"sTitle": "추가 / 수정 / 삭제",
+							"mData": null,
+							"mRender": function ( data, type, row, row, rowIndex ) {
+								let deleteStr = ``;
+								let i = 0;
+
+								deleteStr = `
+									<div class="flex-start">
+										<button type="button" class="icon-add" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'add')">추가</button>
+										<button type="button" class="icon-edit" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'edit')">수정</button>
+										<button type="button" class="icon-delete" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'delete')">삭제</button>
+									</div>
+								`;
+
+								return deleteStr;
+							},
+							"className": "dt-body-center no-sorting",
+						},
+					],
+					initComplete: function(){
+						this.api().columns().header().each ((el, i) => {
+							if(i == 0){
+								$(el).attr ('style', 'min-width: 16%;');
+							} else if(i == 1){
+								$(el).attr ('style', 'min-width: 20%;');
+							} else if(i == 2){
+								$(el).attr ('style', 'min-width: 12%;');
+							} else if(i == 3){
+								$(el).attr ('style', 'min-width: 20%;');
+							} else if(i == 4){
+								$(el).attr ('style', 'min-width: 20%;');
+							}
+						});
+						// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+						// 	cell.innerHTML = i+1;
+						// 	$(cell).data("id", i);
+						// });
+						// this.api().column(5).visible( false );
+					},
+					rowCallback: function(row, data) {
+						let length = 0;
+						if(!isEmpty(data.alarmToUser) && !isEmpty(data.alarmToUser.user)){
+							length += data.alarmToUser.user.length;
+						}
+						if(!isEmpty(data.alarmToUser) && !isEmpty(data.alarmToUser.non_user)){
+							length += data.alarmToUser.non_user.length;
+						}
+
+						if(length === 1 ){
+							$(row).addClass('single');
+						}
+					},
+					drawCallback: function(){
+						$('#alarmTable_wrapper').addClass('fixed-width');
+						$('#alarmTable').css("width", "100%");
+					}
+				}).columns.adjust();
+			}
+
+			if(alarmData.length > 30){
+				$('#loadingCircle').hide();
+			}
+			
+			$("#addAlarmModal").modal("show");
 		});
 
 	}
@@ -3356,23 +3390,21 @@
 
 		if(option == "edit"){
 			$.each(td, function(index, el){
-				if(index >= 2) {
-					if(index <= 3){
-						let target = $(this).find(".dropdown-toggle").eq(dataIdx);
-						if(target.is(":disabled")) {
-							target.prop("disabled", false);
-							if(!directInput.hasClass("hidden")){
-								directInput.prop("disabled", false).parent().removeClass("disabled");
-							}
-							if(index == 3){
-								input.prop("disabled", false).parent().removeClass("disabled");
-							}
-						} else {
-							target.prop("disabled", true);
-							directInput.prop("disabled", true).parent().addClass("disabled");
-							if(index == 3){
-								input.prop("disabled", true).parent().addClass("disabled");
-							}
+				if(index == 2 || index == 3){
+					let target = $(this).find(".dropdown-toggle").eq(dataIdx);
+					if(target.is(":disabled")) {
+						target.prop("disabled", false);
+						if(!directInput.hasClass("hidden")){
+							directInput.prop("disabled", false).parent().removeClass("disabled");
+						}
+						if(index == 3){
+							input.prop("disabled", false).parent().removeClass("disabled");
+						}
+					} else {
+						target.prop("disabled", true);
+						directInput.prop("disabled", true).parent().addClass("disabled");
+						if(index == 3){
+							input.prop("disabled", true).parent().addClass("disabled");
 						}
 					}
 				}
@@ -3590,8 +3622,23 @@
 		});
 	}
 
-	function setDropdownInput(self){
+	function setDropdownInput(self , target){
 		$(self).parent().prev().data("did", $(self).data("did"));
+		let subGroup = $(self).data("subgroup");
+		let subGroupList = subGroup.includes(",") ? subGroup.split(',') : [subGroup];
+		$(target).prev().prop("disabled", false);
+		$(target).find("li").addClass("hidden");
+
+		subGroupList.forEach( v => {
+			$(target).find('li[data-value="'+ v + '"]').removeClass("hidden");
+		});
+
+		// $(target).find("li").addClass("hidden").find("input[type='checkbox']").prop("checked", false);
+
+		// subGroupList.forEach( v => {
+		// 	let item = $(target).find('li[data-value="'+ v + '"]');
+		// 	item.removeClass("hidden").find("input[type='checkbox']").prop("checked", true);
+		// });
 	}
 
 
@@ -3769,7 +3816,7 @@
 				</colgroup>
 				<thead></thead>
 				<tbody></tbody>
-			<!-- <tfoot></tfoot> -->
+
 			</table>
 		</div>
 	</div>
@@ -3839,14 +3886,14 @@
 			<div class="modal-body mt10">
 				<form name="add_alarm_form" id="updateAlarmForm">
 					<table id="alarmTable" class="no-stripe">
-						<!-- <colgroup>
+						<colgroup>
 							<col style="width:14%">
-							<col style="width:20%">
-							<col style="width:12%">
+							<col style="width:16%">
+							<col style="width:16%">
 							<col style="width:20%">
 							<col style="width:20%">
 							<col style="width:14%">
-						</colgroup> -->
+						</colgroup>
 						<thead></thead>
 						<tbody></tbody>
 					</table>

@@ -860,7 +860,7 @@
 					}
 
 					if(!isEmpty(item.createdAt)){
-						let d = new Date(item.createdAt).toLocaleDateString("en-CA").replace(/\//g, '-') + '&ensp;' + new Date(item.createdAt).toLocaleTimeString();
+						let d = new Date(item.createdAt).format('yyyy-MM-dd') + '&ensp;' + new Date(item.createdAt).toLocaleTimeString();
 						obj.created_at = d;
 					} else {
 						obj.created_at = "-";
@@ -922,11 +922,6 @@
 								},
 								{
 									"sTitle": "ID",
-									// "mData": null,
-									// "mRender": function ( data, type, row )  {
-									// 	return '<span id="'+row.user_id+'" data-id="'+row.uid+'">' + row.user_id + '</span>'
-									// 	// return '<a href="#"><input type="checkbox" name="user_row" id="'+row.user_id+'" data-id="'+row.uid+'" class="table-checkbox"><label for="' + row.user_id + '"></label></a>'
-									// },
 									"mData": "user_id"
 								},
 								{
@@ -1085,11 +1080,6 @@
 								// },
 								{
 									"sTitle": "ID",
-									// "mData": null,
-									// "mRender": function ( data, type, row )  {
-									// 	return '<span id="'+row.user_id+'" data-id="'+row.uid+'">' + row.user_id + '</span>'
-									// 	// return '<a href="#"><input type="checkbox" name="user_row" id="'+row.user_id+'" data-id="'+row.uid+'" class="table-checkbox"><label for="' + row.user_id + '"></label></a>'
-									// },
 									"mData": "user_id"
 								},
 								{

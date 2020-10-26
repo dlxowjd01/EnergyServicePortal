@@ -1038,7 +1038,7 @@
 				labels: {
 					align: 'center',
 					style: {
-						color: 'var(--white60)',
+						color: 'var(--grey)',
 						fontSize: '8px'
 					},
 					enabled: show,
@@ -1069,7 +1069,7 @@
 					overflow: 'justify',
 					x: -10,
 					style: {
-						color: 'var(--white)',
+						color: 'var(--grey)',
 						fontSize: '10px'
 					}
 				}
@@ -1092,7 +1092,7 @@
 					overflow: 'justify',
 					x: 10,
 					style: {
-						color: 'var(--white)',
+						color: 'var(--grey)',
 						fontSize: '10px'
 					}
 				},
@@ -1106,7 +1106,7 @@
 				verticalAlign: 'top',
 				x: 10,
 				itemStyle: {
-					color: 'var(--white)',
+					color: 'var(--white87)',
 					fontSize: '14px',
 					fontWeight: 400
 				},

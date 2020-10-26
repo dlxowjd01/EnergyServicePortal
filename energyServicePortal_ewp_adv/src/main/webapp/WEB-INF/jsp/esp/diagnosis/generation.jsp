@@ -69,7 +69,7 @@
 					<div class="flex-wrapper">
 						<div class="text-input-type unit w-100">
 							<input type="number" name="ignore_tolerance1" />
-							<span>%</span>
+							<span>&#37;</span>
 						</div>
 						<div class="text-input-type unit t1 w-100">
 							<input type="number" name="ignore_tolerance2" />
@@ -1100,18 +1100,10 @@
 	const chartMakeData = function (type) {
 		let seriesData = new Array();
 		let num = 0;
-		let colorArr = ['var(--turquoise)',
-						'var(--grey)',
-						'var(--cream-can)',
-						'var(--summer-sky)',
-						'var(--orange-red)',
-						'var(--blue-yonder)',
-						'var(--eucalyptus)',
-						'var(--yellow-green)',
-						'var(--sea-pink)',
-						'var(--deep-lilac)',
-						'var(--grey)',
-						'var(--vivid-blue)'];
+		let colorArr = [
+			'var(--turquoise)',
+			'var(--grey)',
+		];
 
 		accociation.forEach(function (val, key) {
 			if (val != undefined) {
@@ -1229,10 +1221,19 @@
 				text: ''
 			},
 			xAxis: {
+				categories: standard,
+				lineColor: 'var(--grey)',
+				tickColor: 'var(--grey)',
+				gridLineColor: 'var(--white25)',
+				plotLines: [{
+					color: 'var(--grey)',
+					width: 1
+				}],
+				tickInterval: 1,
 				labels: {
 					align: 'center',
 					style: {
-						color: 'var(--white)',
+						color: 'var(--grey)',
 						fontSize: '8px'
 					},
 					y: 50,
@@ -1241,16 +1242,20 @@
 					},
 					enabled: true
 				},
-				categories: standard,
-				tickInterval: 1,
 				title: {
 					text: null
 				},
 				crosshair: true
 			},
 			yAxis: {
+				tickColor: 'var(--grey)',
+				lineColor: 'var(--grey)',
+				gridLineColor: 'var(--white25)',
 				gridLineWidth: 1,
-				min: 0,
+				plotLines: [{
+					color: 'var(--grey)',
+					width: 1
+				}],
 				title: {
 					text: '(kWh)',
 					align: 'low',
@@ -1258,7 +1263,7 @@
 					y: 25,
 					x: 5,
 					style: {
-						color: 'var(--white)',
+						color: 'var(--grey)',
 						fontSize: '12px'
 					}
 				},
@@ -1266,7 +1271,7 @@
 					overflow: 'justify',
 					x: -20,
 					style: {
-						color: 'var(--white)',
+						color: 'var(--grey)',
 						fontSize: '10px'
 					}
 				}
@@ -1299,7 +1304,7 @@
 				backgroundColor: 'var(--bg-color)',
 				padding: 16,
 				style: {
-					color: 'var(--white87)'
+					color: 'var(--grey)'
 				}
 			},
 			plotOptions: {
@@ -1319,48 +1324,6 @@
 				enabled: false
 			},
 			series: seriesData,
-			responsive: {
-				rules: [{
-					condition: {
-						maxWidth: 414
-					},
-					chartOptions: {
-						chart: {
-							marginLeft: 60,
-							marginTop: 80
-						},
-						xAxis: {
-							labels: {
-								style: {
-									fontSize: '13px'
-								}
-							}
-						},
-						yAxis: {
-							title: {
-								style: {
-									fontSize: '13px'
-								}
-							},
-							labels: {
-								x: -10,
-								style: {
-									fontSize: '13px'
-								}
-							}
-						},
-						legend: {
-							layout: 'horizontal',
-							verticalAlign: 'bottom',
-							align: 'center',
-							x: 0,
-							itemStyle: {
-								fontSize: '13px'
-							}
-						}
-					}
-				}]
-			}
 		}
 
 		chart = new Highcharts.Chart(option);

@@ -28,8 +28,6 @@
 			if (current == link) {
 				$(this).on('click', false);
 				e.preventDefault();
-			} else {
-				$(this).on('click', true);
 			}
 		});
 

@@ -1578,10 +1578,19 @@
 				text: ''
 			},
 			xAxis: {
+				categories: dateArr,
+				lineColor: 'var(--grey)',
+				tickColor: 'var(--grey)',
+				tickInterval: 1,
+				gridLineColor: 'var(--white25)',
+				plotLines: [{
+					color: 'var(--grey)',
+					width: 1
+				}],
 				labels: {
 					align: 'center',
 					style: {
-						color: 'var(--white)',
+						color: 'var(--grey)',
 						fontSize: '8px'
 					},
 					y: 40,
@@ -1589,18 +1598,16 @@
 						return dateFormat(this.value);
 					}
 				},
-				categories: dateArr,
-				tickInterval: 1,
 				title: {
 					text: null
 				},
 				crosshair: true
 			},
 			yAxis: {
+				tickColor: 'var(--grey)',
+				lineColor: 'var(--grey)',
+				gridLineColor: 'var(--white25)',
 				gridLineWidth: 1,
-				lineColor: 'var(--color1)',
-				tickColor: 'var(--color1)',
-				gridLineColor: 'var(--color1)',
 				min: 0,
 				plotLines: [{
 					color: 'var(--color1)',

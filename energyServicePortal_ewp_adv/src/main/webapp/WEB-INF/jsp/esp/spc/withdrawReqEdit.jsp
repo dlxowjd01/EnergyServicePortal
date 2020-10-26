@@ -538,6 +538,10 @@
 			totalAmount = 0;
 			newVal = this.value.replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 			this.value = newVal;
+
+			// TO: 정차장님 아래로 하면 한번만 선언해도 되는데 확인 부탁드릴꼐요.
+			// this.value = this.value.replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+			
 			// console.log("document on change===", evt)
 			if(newVal != "") {
 				// if ( (keyCode != 8 || keyCode ==32 ) && (keyCode < 48 || keyCode > 57)) { evt.preventDefault(); }

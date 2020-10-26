@@ -340,9 +340,10 @@ button.ui-button::-moz-focus-inner {
  */
 
 .ui-datepicker {
-    width: 14em;
+	display: none;
+	width: 14em;
+	margin-top: 5px;
     padding: .1em .1em 0;
-    display: none;
 }
 
 .ui-datepicker .ui-datepicker-header {
@@ -410,10 +411,11 @@ button.ui-button::-moz-focus-inner {
 }
 
 .ui-datepicker table {
+	background-color: var(--box-color);
     width: 100%;
     font-size: .9em;
     border-collapse: collapse;
-    margin: 0 0 .4em;
+	margin: 0;
 }
 
 .ui-datepicker th {
@@ -944,7 +946,7 @@ button.ui-button::-moz-focus-inner {
 ----------------------------------*/
 .ui-widget {
     font-family: Verdana, Arial, sans-serif;
-    font-size: 1.1em/;
+    font-size: 1.1em;
 }
 
 .ui-widget .ui-widget {
@@ -1940,22 +1942,15 @@ button.ui-button::-moz-focus-inner {
 
 /* datapicker skin */
 .ui-datepicker {
-    font-size: 90%;
-}
-
-.ui-widget {
-    font-family: 'Malgun Gothic', sans-serif;
-    background: #f8f8f8;
-}
-
-.ui-datepicker {
-    padding: 0;
-    border: solid 1px #3d4250;
+	padding: 0;
+	border: 0;
+	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+	font-size: 90%;
 }
 
 .ui-datepicker-header {
     padding: 0;
-    color: #fff;
+    color: var(--white87);
     font-family: 'Malgun Gothic', sans-serif;
     font-size: 13px;
     font-weight: normal;
@@ -1967,7 +1962,7 @@ button.ui-button::-moz-focus-inner {
     -moz-background-clip: padding;
     -webkit-background-clip: padding-box;
     background-clip: padding-box;
-    background-color: #3d4250;
+    background-color:var(--box-color);
 }
 
 
@@ -1990,22 +1985,15 @@ button.ui-button::-moz-focus-inner {
     background-position: -96px -16px;
 }
 
-.ui-datepicker table {
-    margin: 0;
-}
-
 .ui-datepicker th {
     padding: .5em .3em;
-    color: #777;
+    color: var(--white87);
     font-size: 11px;
     font-weight: normal;
-    /*
-	text-shadow: 0 1px 0 rgba(255,255,255,.75);
-	*/
     text-transform: uppercase;
     border: none;
-    border-bottom: 1px solid #ddd;
-    background: #fff;
+    border: 0;
+    background: var(--box-color);
 }
 
 .ui-datepicker td {
@@ -2020,7 +2008,7 @@ button.ui-button::-moz-focus-inner {
     padding: .7em 0;
     margin: 0;
     font-weight: normal;
-    color: #4d4d4d;
+    color: var(--white87);
     font-size: 11px;
 }
 

@@ -1,214 +1,813 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/decorators/include/taglibs.jsp" %>
+
 <script type="text/javascript">
+	let firstTime = true;
+	let jobIdList = [];
+
 	$(function () {
-		let sList = "${location}"
+		let yesterday = new Date().getDate()-1;
+		let currentTime = new Date().format('HH:mm');
+		// let yesterdayTime = new Date(Date.now() - 86400 * 1000);
 
-		// getSites(oid);
+		$('#fromDate').datepicker().datepicker("setDate", new Date().getDay()-1);
+		$('#toDate').datepicker().datepicker("setDate", new Date());
 
-		function getSites (siteId) {
-			let option = {
-				url: apiHost + "/config/sites",
-				type: "get",
-				async: true,
-				data: {
-					oid: siteId,
-					filter: { 
-						"limit": 200,
-						"fields": {
-							"sid": true,
-							"oid": true,
-							"name": true,
-							"location": true,
-							"resource_type": true,
-							"ess": true,
-							"vpp_group_id": true,
-							"dr_group_id": true,
-							"market_id": true,
-							"station_id": true,
-							"latlng": true,
-							"tz": true,
-							"address": true,
-							"detail-info": true,
-							// "utility": true,
-							"dr_info": true,
-							"vpp_info": true,
-							"power_market": true,
-							// "cctv_url": true,
-							// "createdAt": true,
-							// "updatedAt": true
-						},
-					}
-				},
-				beforeSend: function (jqXHR, settings) {
-					$('#loadingCircle').show();
-				},
+		$('#timepicker1').wickedpicker({
+			'defaultTime': new Date(yesterday).format('HH:mm'),
+			now: currentTime, twentyFour: true
+		});
+
+		$('#timepicker2').wickedpicker({
+			now: currentTime, twentyFour: true
+		});
+
+		getScheduleData();
+		// $("#updateScheduleForm .digit").on("keyup", function(evt, limit){
+		// 	let value = $(this).val();
+		// 	if( value.match(/[^\x00-\x80]/) ){
+		// 		$(this).val("");
+		// 	}
+			
+		// });
+
+		$(document).on("change", ".digit:not('#scheduleCycle')", function(evt) {
+			this.value = this.value.replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		});
+
+		$("#updateScheduleForm .digit").on("input", function(evt, limit){
+			let value = $(this).val();
+			if(!$(this).is("#scheduleCycle")){
+				$(this).val(value.replace(/\s/g, ''));
+				if(value.match(/[^\x00-\x80]/) || value.match(/[^0-9]/) ){
+					$(this).val( value.replace(/[^0-9]/g, "") );
+				}
+			} else {
+				if(value.match(/[^\x00-\x80]/) || value.match(/[^0-9,\-\*\s]/) ){
+					$(this).val( value.replace(/[^0-9,\-\*\s]/g, "") );
+				}
 			}
-			$.ajax(option).done(function (json, textStatus, jqXHR) {
-				let data = json;
-				let newArr = [];
+		});
 
-				$('#example').dataTable({
-					"aaData": newArr,
-					// "fixedHeader": true,
-					"scrollX": false,
-					"scrollY": "400px",
-					// columnDefs: [ {
-					// 	orderable: true,
-						// className: 'select-checkbox',
-						// targets:   0
-					// }],
-					// order: [[ 1, 'asc' ]],
-					// colReorder: {
-					// 	realtime: false
-					// },
-					"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-					// "columns": [
-					// 	{
-					// 		"data":  "",
-					// 		render: function ( data, type, row ) {
-					// 			// console.log("data--", row, "type===", type)
-					// 			return '<a class="chk-type" href="javascript:void(0); onclick=""><input type="checkbox" id="' + row.idx + '" name="' + row.sid + '"><label for="' + row.idx + '"></label></a>'
-					// 		},
-					// 		className: "dt-body-center"
-					// 	},
-					// 	{ "data": "siteType" },
-					// 	{ "data": "name"},
-					// 	{ "data": "location"},
-					// 	{ "data": "powerSource" },
-					// 	{ "data": "genVol" },
-					// 	{ "data": "pscVol" },
-					// 	{ "data": "bmsVol" },
-					// 	{ "data": "drId" },
-					// 	{ "data": "vppId"},
-					// 	{ "data": "alarmState" },
-					// ],
+		// Form Submission !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		$("#updateScheduleForm").on("submit", function(e){
+			e.preventDefault();
+			let dTable = $("#scheduleTable").DataTable();
+			let tr = $("#scheduleTable").find("tbody tr.selected");
+			let rowData = dTable.row(tr).data();
+			let scheduleId = rowData.id;
 
-					"aoColumns": [
-						{
-							"sTitle": "",
-							"mData": "",
-							"mRender": function ( data, type, row )  {
-								// console.log('row==', row)
-								return '<a class="chk-type" href="javascript:void(0); onclick=""><input type="checkbox" id="' + row.idx + '" name="' + row.sid + '"><label for="' + row.idx + '"></label></a>'
-							},
-							"className": "dt-body-center"
-						},
-						{
-							"sTitle": "사업소 타입",
-							"mData": "siteType",
-						
-						},
-						{
-							"sTitle": "사업소명",
-							"mData": "name"
-						},
-						{
-							"sTitle": "지역",
-							"mData":"location",
-						},
-						{
-							"sTitle": "발전원",
-							"mData":"powerSource",
-						},
-						{
-							"sTitle": "발전 용량",
-							"mData":"genVol",
-						},
-						{
-							"sTitle": "ESS 용량 (PCS)",
-							"mData":"pscVol",
-						},
-						{
-							"sTitle": "ESS 용량 (BMS)",
-							"mData":"bmsVol",
-						},
-						{
-							"sTitle": "DR 자원 코드",
-							"mData":"drId",
-						},
-						{
-							"sTitle": "VPP 자원코드",
-							"mData":"vppId",
-						},
-						{
-							"sTitle": "알람 수신",
-							"mData":"alarmState",
-						},
-					],
-					dom: 'Bfltip',
-					// dom: 'Bfrtip',
-					buttons: [
-						{
-							extend: 'copyHtml5',
-							className: "btn-type03",
-							text: '데이터 복사',
-						},
-						{
-							extend: 'print',
-							text: '전체 인쇄',
-							className: "btn-type03",
-							exportOptions: {
-								modifier: {
-									selected: null
-								}
-							}
-						},
-						{
-							extend: 'print',
-							className: "btn-type03",
-							text: '선택 인쇄'
-						},
-						{
-							extend: 'excelHtml5',
-							className: "btn-type03",
-							text: 'Excel'
-						},
-						{
-							extend: 'csvHtml5',
-							className: "btn-type03",
-							text: 'CSV'
-						},
-						{
-							extend: 'pdfHtml5',
-							className: "btn-type03",
-							text: 'PDF',
-						},
-						{
-							text: '추가',
-							className: "btn-type fr",
-							action: function (e, node, config){
-								console.log("node===", node, "e---", e, "config===", config)
-								$('#addSiteModal').modal('show');
-							}
-						}
-					],
-					select: {
-						style: 'os',
-						items: 'cell'
+			let newScheduleCycle = $("#scheduleCycle").val().replaceAll("\\s+$", "");
+			let newOptionDistributed = $("input[name='option_distributed']:checked").val();
+			let newOptionHold = $("input[name='option_hold']:checked").val();
+			let newArgumentParam = $("#argumentParam").val().replace(/\t+/g,'');
+			let newCpuVol = $("#cpuVol").val().replaceAll(",", "");
+			let newDiskVol = $("#diskVol").val().replaceAll(",", "");
+			let newGpuVol = $("#gpuVol").val().replaceAll(",", "");
+
+			let obj = {};
+			obj.definition_id = $("#scheduleList").prev().data("value");
+			obj.name = $("#taskName").val();
+
+			if(!$("#addScheduleModal").hasClass("edit")) {
+				// 1. ADD schedule info
+				obj.schedule = newScheduleCycle;
+
+				if(!isEmpty(newArgumentParam)){
+					obj.args = newArgumentParam;
+				}
+				if( !isEmpty(newOptionDistributed)){
+					obj.batchJobDefinition = {
+						is_distribution_needed: newOptionDistributed
+					}
+				}
+				if(!isEmpty(newOptionHold)){
+					obj.is_valid = newOptionHold;
+				}
+				
+				obj.created_by = loginId + ":" + loginName;
+
+				if(!isEmpty(newCpuVol)){
+					obj.batchJobDefinition = {
+						cpu: newCpuVol
+					}
+				}
+				if(!isEmpty(newDiskVol)){
+					obj.batchJobDefinition = {
+						mem: newDiskVol
+					}
+				}
+				if(!isEmpty(newGpuVol)){
+					obj.batchJobDefinition = {
+						gpu: newGpuVol
+					}
+				}
+
+				let option = {
+					url: apiHost + "/batch-job-submit-rules",
+					type: "post",
+					async: true,
+					data: JSON.stringify(obj)
+				}
+				$.ajax(option).done(function (json, textStatus, jqXHR) {
+					$("#addScheduleModal").modal("hide");
+					$("#resultSuccessMsg").text("배치 스케줄이 추가 되었습니다.").removeClass("hidden");
+					$("#resultBtn").parent().addClass("hidden");
+					$("#resultModal").modal("show");
+					getScheduleData();
+					setTimeout(function(){
+						$("#resultModal").modal("hide");
+					}, 1600);
+				}).fail(function (jqXHR, textStatus, errorThrown) {
+					$("#addScheduleModal").modal("hide");
+					$("#resultFailureMsg").removeClass("hidden");
+					$("#resultBtn").parent().text("배치 스케줄이 추가에 실패하였습니다. 다시 시도해 주세요.").removeClass("hidden");
+					$("#resultModal").modal("show");
+
+					$("#scheduleTable").DataTable().destroy();
+					setTimeout(function(){
+						getScheduleData();
+					}, 200);
+					
+					setTimeout(function(){
+						$("#resultModal").modal("hide");
+					}, 1600);
+					console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
+					return false;
+				});
+			} else {
+				// 2. EDIT schedule info
+
+				if(rowData.args != newArgumentParam){
+					obj.args = newArgumentParam;
+				}
+				if(rowData.schedule != newScheduleCycle){
+					obj.schedule = newScheduleCycle;
+				}
+				if(rowData.batchJobDefinition.is_distribution_needed != newOptionDistributed ) {
+					obj.batchJobDefinition = {
+						is_distribution_needed: newOptionDistributed
+					}
+				}
+				if(rowData.is_valid != newOptionHold) {
+					obj.is_valid = newOptionHold;
+				}
+				if(rowData.batchJobDefinition.cpu != newCpuVol) {
+					obj.batchJobDefinition = {
+						cpu: newCpuVol
+					}
+				}
+				if(rowData.batchJobDefinition.mem != newDiskVol) {
+					obj.batchJobDefinition = {
+						mem: newDiskVol
+					}
+				}
+				if(rowData.batchJobDefinition.gpu != newGpuVol) {
+					obj.batchJobDefinition = {
+						gpu: newGpuVol
+					}
+				}
+				console.log("obj===", obj);
+				let option = {
+					url: apiHost + "/batch-job-submit-rules/" + scheduleId,
+					type: "patch",
+					async: true,
+					data: JSON.stringify(obj)
+				}
+				$.ajax(option).done(function (json, textStatus, jqXHR) {
+					$("#addScheduleModal").modal("hide");
+					$("#resultSuccessMsg").text("배치 스케줄 성공적으로 수정 되었습니다.").removeClass("hidden");
+					$("#resultBtn").parent().addClass("hidden");
+					$("#resultModal").modal("show");
+
+					$("#scheduleTable").DataTable().destroy();
+					setTimeout(function(){
+						getScheduleData();
+					}, 200);
+					
+					setTimeout(function(){
+						$("#resultModal").modal("hide");
+					}, 1600);
+				}).fail(function (jqXHR, textStatus, errorThrown) {
+					$("#addScheduleModal").modal("hide");
+					$("#resultBtn").parent().text("배치 스케줄 수정에 실패하였습니다. 다시 시도해 주세요.").removeClass("hidden");
+					$("#resultBtn").parent().removeClass("hidden");
+					$("#resultModal").modal("show");
+					setTimeout(function(){
+						$("#resultModal").modal("hide");
+					}, 1600);
+					console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
+					return false;
+				});
+			}
+		});
+
+		$("#addScheduleModal").on("hide.bs.modal", function() {
+			$(this).hasClass("edit") ? $(this).removeClass("edit") : null;
+			initModal();
+		});
+
+		$("#deleteConfirmModal").on("hide.bs.modal", function() {
+			$("#deleteSuccessMsg").html('<h5 id="deleteSuccessMsg" class="ntit">배치 스케줄 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>');
+			$("#confirmSite").val("");
+			$("#deleteConfirmBtn").prop("disabled", true);
+			setTimeout(function(){
+				$(this).find(".modal-body").removeClass("hidden");
+			}, 1600);
+		});
+
+		$("#resultModal").on("hide.bs.modal", function() {
+			$(this).find("h4").addClass("hidden");
+		});
+		
+	});
+
+
+	function getScheduleData() {
+		let option = {
+			url: apiHost + "/batch-job-submit-rules?includeBatchJobDefinition=true",
+			type: "get",
+			async: true,
+			beforeSend: function (jqXHR, settings) {
+				$('#loadingCircle').show();
+			}
+		};
+
+		$.ajax(option).done(function (json, textStatus, jqXHR) {
+			let data = json;
+	
+			var scheduleTable = $('#scheduleTable').DataTable({
+				"aaData": data,
+				"destroy": true,
+				"table-layout": "fixed",
+				"fixedHeader": true,
+				"bAutoWidth": true,
+				"bSearchable" : true,
+				// "scrollX": true,
+				// "sScrollX": "100%",
+				// "sScrollXInner": "110%",
+				"sScrollY": true,
+				"scrollY": "720px",
+				"bScrollCollapse": true,
+				"pageLength": 100,
+				// "bFilter": false, disabling this option will prevent table.search()
+				"aaSorting": [[ 0, 'asc' ]],
+				"bSortable": true,
+				"order": [[ 1, 'asc' ]],
+				"aoColumnDefs": [
+					{
+						"aTargets": [ 0 ],
+						"bSortable": false,
+						"orderable": false
 					},
-					// select: true,
-					// select: {
-					// 	style:    'os',
-					// 	selector: 'td:first-child'
-					// },
-					rowCallback: function ( row, data ) {
-						// console.log("row-selected--", row)
-						// $('input.editor-active', row).prop( 'checked', data.active == 1 );
+				],
+				"aoColumns": [
+					{
+						"sTitle": "",
+						"mData": "",
+						"mRender": function ( data, type, full, rowIndex ) {
+							return '<a class="chk-type" href="javascript:void(0); onclick=""><input type="checkbox" id="' + full.id + '" name="' + full.id + '"><label for="' + full.id + '"></label></a>'
+						},
+						"className": "dt-body-center"
+					},
+					{
+						"sTitle": "순번",
+						"mData": "",
+						"mRender": function ( data, type, full, rowIndex ) {
+							return rowIndex.row + 1
+						},
+						"className": "dt-body-center"
+					},
+					{
+						"sTitle": "스케줄 명",
+						"mData": "name"
+					},
+					{
+						"sTitle": "작업명",
+						"mData": "",
+						"mRender": function ( data, type, full, rowIndex ) {
+							return full.batchJobDefinition.name
+						},
+					},
+					{
+						"sTitle": "실행 주기",
+						"mData":"schedule",
+					},
+					{
+						"sTitle": "등록자",
+						"mData":"created_by",
+					},
+					{
+						"sTitle": "등록일자",
+						"mData":"",
+						"mRender": function ( data, type, full, rowIndex ) {
+							return new Date(full.created_at).format('yyyy-MM-dd') + '&ensp;' + new Date(full.created_at).format('HH:mm:ss')
+						},
+					},
+				],
+				"dom": 'tip',
+				"select": {
+					style: 'single',
+					selector: 'td input[type="checkbox"], tr'
+				},
+				initComplete: function(settings, json ){
+					let str = `<div id="btnGroup" class="right-end"><!--
+						--><button type="button" disabled class="btn-type03" onclick="updateModal('edit')">선택 수정</button><!--
+						--><button type="button" disabled class="btn-type03" onclick="updateModal('delete')">선택 삭제</button><!--
+					--></div>`;
+
+					let addBtnStr = `<button type="button" class="btn-type fr mb-20" onclick="updateModal('add')">신규 등록</button>`;
+					$("#scheduleTable_wrapper").append($(str)).prepend($(addBtnStr));
+					this.api().columns().header().each ((el, i) => {
+						if(i == 0){
+							$(el).attr ('style', 'min-width: 50px');
+						}
+					});
+				},
+				// every time DataTables performs a draw
+				drawCallback: function (settings) {
+					$('#scheduleTable_wrapper').addClass('mb-28');
+				}
+			}).on("select", function(e, dt, type, indexes) {
+				let btn = $("#btnGroup").find(".btn-type03");
+				btn.each(function(index, element){
+					if($(this).is(":disabled")){
+						$(this).prop("disabled", false);
 					}
 				});
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				if(textStatus == "error"){
-					if(jqXHR.statusText == "Unauthorized" || jqXHR.status == 401){
-						$("#oldPwdErr").removeClass("hidden");
+				scheduleTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
+				// console.log("dt---", scheduleTable[ type ]( indexes ).nodes())
+			}).on("deselect", function(e, dt, type, indexes) {
+				let btn = $("#btnGroup").find(".btn-type03");
+				btn.each(function(index, element){
+					if(!$(this).is(":disabled")){
+						$(this).prop("disabled", true);
 					}
-					console.log("jqXHR==", jqXHR )
+				});
+				scheduleTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", false);
+				// console.log("dt---", scheduleTable[ type ]( indexes ).nodes())
+			}).columns.adjust().draw();
+
+
+			$('#scheduleTable').find("input:checkbox").on('click', function() {
+				var $box = $(this);
+				if ($box.is(":checked")) {
+					var group = "input:checkbox[name='" + $box.attr("name") + "']";
+					$(group).prop("checked", false);
+					$box.prop("checked", true);
+				} else {
+					$box.prop("checked", false);
 				}
-				return false;
+			});
+			
+			scheduleTable.on( 'column-sizing.dt', function ( e, settings ) {
+				$(".dataTables_scrollHeadInner").css( "width", "100%" );
+			});
+
+			if(firstTime == true){
+				getLogData(null, data);
+				let str = '';
+				data.forEach((item, index) => {
+					str += '<li data-value="' + item.name + '" data-task="' + item.batchJobDefinition.name + '"><a href="#">' + item.name + '</a></li>'
+				});
+				$("#scheduleList").append(str);
+				setTimeout(function(){
+					setDropdownValue($("#scheduleList"));
+				}, 300);
+			}
+			firstTime = false;
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			if(textStatus == "error"){
+				if(jqXHR.statusText == "Unauthorized" || jqXHR.status == 401){
+					$("#oldPwdErr").removeClass("hidden");
+				}
+				console.log("jqXHR==", jqXHR )
+			}
+			return false;
+		});
+	}
+
+	function getLogData(dateElement, scheduleData){
+		newStartDate = '';
+		newStartTime = '';
+		newEndDate = '';
+		newEndTime = '';
+
+		if(isEmpty(dateElement)){
+			let today = new Date();
+			newStartDate = new Date(today.getFullYear(), today.getMonth(), today.getDate()-1).format('yyyyMMdd');
+			newStartTime = today.format('HHmmss');
+			newEndDate = today.format('yyyyMMdd');
+			newEndTime = today.format('HHmmss');
+		} else {
+			
+			dateElement.each(function(index, el){
+				if(index === 0){
+					if(!isEmpty($(this).val())){
+						newStartDate = $(this).val().replaceAll("-", "");
+					}
+				} else if(index === 1){
+					if(!isEmpty($(this).val())){
+						newStartTime = $(this).val().replaceAll(":", "");
+					}
+				} else if(index === 2){
+					if(!isEmpty($(this).val())){
+						newEndDate = $(this).val().replaceAll("-", "");
+					}
+				} else if(index === 3){
+					if(!isEmpty($(this).val())){
+						newEndTime = $(this).val().replaceAll(":", "");
+					}
+				}
 			});
 		}
 
-	});
+		let option = {
+			url: apiHost + "/batch-job-logs",
+			type: "get",
+			async: true,
+			data: {
+				startDate: newStartDate,
+				startHHMMSS: newStartTime,
+				endDate: newEndDate,
+				endHHMMSS: newEndTime,
+			}
+		}
+
+		$.ajax(option).done(function (json, textStatus, jqXHR) {
+			var logTable = $('#logTable').DataTable({
+				"aaData": json.log,
+				"destroy": true,
+				// "table-layout": "fixed",
+				// "autoWidth": true,
+				// "bAutoWidth": true,
+				"bSearchable" : true,
+				// "scrollX": true,
+				// "sScrollX": "100%",
+				// "sScrollXInner": "110%",
+				"sScrollY": true,
+				"scrollY": "720px",
+				"bScrollCollapse": true,
+				"pageLength": 100,
+				// "bFilter": false, disabling this option will prevent table.search()
+				"aaSorting": [[ 0, 'asc' ]],
+				"bSortable": true,
+				"order": [[ 1, 'asc' ]],
+				"aoColumnDefs": [
+					{
+						"aTargets": [ 0 ],
+						"bSortable": false,
+						"orderable": false
+					},
+				],
+				"aoColumns": [
+					{
+						"sTitle": "",
+						"mData": "",
+						"mRender": function ( data, type, full, rowIndex ) {
+							return '<a class="chk-type" href="javascript:void(0); onclick=""><input type="checkbox" id="' + full.job_id + '" name="' + full.job_id + '"><label for="' + full.job_id + '"></label></a>'
+						},
+						"className": "dt-body-center"
+					},
+					{
+						"sTitle": "순번",
+						"mData": "",
+						"mRender": function ( data, type, full, rowIndex ) {
+							return rowIndex.row + 1
+						},
+						"className": "dt-body-center"
+					},
+					{
+						"sTitle": "작업자",
+						"mData": "",
+						"mRender": function ( data, type, full, rowIndex ) {
+							let found = scheduleData.findIndex( x => x.definition_id == full.definition_id );
+							let matchedName = '';
+							if (found > -1) {
+								matchedName = scheduleData[found].created_by;
+							} else {
+								matchedName = 'definition id: ' + full.definition_id;
+							}
+							return matchedName;
+
+						}
+					},
+					{
+						"sTitle": "실행시간",
+						"mData": "",
+						"mRender": function ( data, type, full, rowIndex ) {
+							let temp = new Date(full.started_at).format('yyyy-MM-dd HH:mm:ss');
+							return temp;
+						},
+					},
+					{
+						"sTitle": "결과",
+						"mData":"",
+						"mRender": function ( data, type, full, rowIndex ) {
+							let result = '';
+							if( full.was_successful == true ){
+								result = "성공"
+							} else {
+								result = "실패"
+							}
+							return result;
+						}
+					},
+					{
+						"sTitle": "실행 명령어",
+						"mData":"",
+						"mRender": function ( data, type, full, rowIndex ) {
+							let str1 = '';
+							if( full.executed_command.length > 50 ){
+								let trimmed1 = full.executed_command.substring(0, 51) + ' ...'
+								str1 = `<div class="flex-start">${'${ trimmed1 }'}&ensp;<a href="#" role="button" data-toggle="popover" data-placement="bottom" rel="popover" onmouseover="updateModal('detail', null, this)" class="text-link">more</a></div>`
+							} else {
+								str1 = full.executed_command;
+							}
+							return str1;
+						}
+					},
+					{
+						"sTitle": "로그",
+						"mData":"",
+						"mRender": function ( data, type, full, rowIndex ) {
+							let str2 = '';
+							if( full.stdout.length > 50 ){
+								let trimmed2 = full.stdout.substring(0, 51) + ' ...'
+								str2 = `<div class="flex-start">${'${ trimmed2 }'}&ensp;<a href="#" role="button" data-toggle="popover" data-placement="bottom" rel="popover" onmouseover="updateModal('detail', null, this)" class="text-link">more</a></div>`
+							} else {
+								str2 = full.stdout;
+							}
+							return str2;
+						}
+					},
+				],
+				"dom": 'tip',
+				"select": {
+					style: 'single',
+					selector: 'td input[type="checkbox"], tr'
+				},
+				initComplete: function(settings, json ){
+					let addBtnStr = `<button type="button" class="btn-type fr mb-20" onclick="updateModal('add')">로그 저장</button>`;
+
+					this.api().columns().header().each ((el, i) => {
+						if(i == 0){
+							$(el).attr ('style', 'min-width: 50px');
+						}
+					});
+				},
+				// every time DataTables performs a draw
+				drawCallback: function (settings) {
+					$('#logTable_wrapper').addClass('my-20');
+				}
+			}).on("select", function(e, dt, type, indexes) {
+				let btn = $("#btnGroup").find(".btn-type03");
+				btn.each(function(index, element){
+					if($(this).is(":disabled")){
+						$(this).prop("disabled", false);
+					}
+				});
+				logTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
+				// console.log("dt---", scheduleTable[ type ]( indexes ).nodes())
+			}).on("deselect", function(e, dt, type, indexes) {
+				let btn = $("#btnGroup").find(".btn-type03");
+				btn.each(function(index, element){
+					if(!$(this).is(":disabled")){
+						$(this).prop("disabled", true);
+					}
+				});
+				logTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", false);
+				// console.log("dt---", scheduleTable[ type ]( indexes ).nodes())
+			}).columns.adjust().draw();
+
+			new $.fn.dataTable.Buttons( logTable, {
+				name: 'commands',
+				"buttons": [
+					{
+						extend: 'excelHtml5',
+						className: "btn-save",
+						text: '엑셀 다운로드',
+						filename: '사용자관리_' + new Date().format('yyyyMMddHHmmss'),
+						// exportOptions: {
+						// 	modifier: {
+						// 		page: 'current'
+						// 	}
+						// },
+						customize: function( xlsx ) {
+							var sheet = xlsx.xl.worksheets['sheet1.xml'];
+							$('row:first c', sheet).attr( 's', '42' );
+							var sheet = xlsx.xl.worksheets['sheet1.xml'];
+							// var lastCol = sheet.getElementsByTagName('col').length - 1;
+							// var colRange = createCellPos( lastCol ) + '1';
+							// //Has to be done this way to avoid creation of unwanted namespace atributes.
+							// var afSerializer = new XMLSerializer();
+							// var xmlString = afSerializer.serializeToString(sheet);
+							// var parser = new DOMParser();
+							// var xmlDoc = parser.parseFromString(xmlString,'text/xml');
+							// var xlsxFilter = xmlDoc.createElementNS('http://schemas.openxmlformats.org/spreadsheetml/2006/main','autoFilter');
+							// var filterAttr = xmlDoc.createAttribute('ref');
+							// filterAttr.value = 'A1:' + colRange;
+							// xlsxFilter.setAttributeNode(filterAttr);
+							// sheet.getElementsByTagName('worksheet')[0].appendChild(xlsxFilter);
+
+						}
+					},
+				],
+			});
+
+			logTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup");
+
+
+			$('#logTable').find("input:checkbox").on('click', function() {
+				var $box = $(this);
+				if ($box.is(":checked")) {
+					var group = "input:checkbox[name='" + $box.attr("name") + "']";
+					$(group).prop("checked", false);
+					$box.prop("checked", true);
+				} else {
+					$box.prop("checked", false);
+				}
+			});
+			
+			logTable.on( 'column-sizing.dt', function ( e, settings ) {
+				$(".dataTables_scrollHeadInner").css( "width", "100%" );
+			});
+
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+		});
+
+	}
+
+	function initModal(){
+		let form = $("#updateScheduleForm");
+		let input = form.find("input[type='text']");
+		let radio = form.find("input[type='radio']");
+		let dropdownBtn = form.find(".dropdown-toggle");
+		let warning = form.find(".warning");
+
+
+		$("#addScheduleBtn").prop("disabled", true).removeClass("hidden");
+
+		warning.addClass("hidden");
+
+		input.each(function(){
+			if($(this).val() == "0" && !$(this).is(":checked")){
+				$(this).prop("checked", true);
+			}
+			$(this).val("").prop("disabled", false).parent().removeClass("disabled");
+		});
+
+		radio.each(function(){
+			if($(this).val() == "0" && !$(this).is(":checked")){
+				$(this).prop("checked", true);
+			} else {
+				$(this).prop("checked", true);
+			}
+		});
+
+		$.each(dropdownBtn, function(index, element){
+			$(this).data({ "value": "", "vol-type": "", "plan-id" : "" }).html('선택' + '<span class="caret"></span>').prop("disabled", false);
+			$(this).next().find("li").removeClass("hidden");
+		});
+	}
+	
+	function updateModal(option, callback, popOverLink){
+		let titleAdd = $('#titleAdd');
+		let form = $("#updateScheduleForm");
+		let required = form.find(".asterisk");
+		let addBtn = $("#addScheduleBtn");
+
+		// ADD MODAL!!!
+		if(option == "add"){
+			initModal();
+			titleAdd.removeClass("hidden").next().addClass("hidden");
+			required.hasClass("no-symbol") ? required.removeClass("no-symbol") : null;
+			addBtn.text("추가");
+			
+			$("#addScheduleModal").removeClass("edit").modal("show");
+		} else {
+			let dTable = $("#scheduleTable").DataTable();
+			let tr = $("#scheduleTable").find("tbody tr.selected");
+			let td = tr.find("td");
+			let rowData = dTable.row(tr).data();
+
+			// EDIT MODAL!!!
+			if(option == "edit") {
+				let input = form.find("input");
+				let dropdownBtn = form.find(".dropdown-toggle");
+
+				$("#scheduleList").prev().html(rowData.name + '<span class="caret"></span>').data("value", rowData.name);
+				$("#taskName").val(rowData.batchJobDefinition.name);
+				$("#scheduleCycle").val(rowData.schedule);
+				if(!isEmpty(rowData.batchJobDefinition.cpu)){
+					$("#cpuVol").val(rowData.batchJobDefinition.cpu);
+				}
+				if(!isEmpty(rowData.batchJobDefinition.mem)){
+					$("#diskVol").val(rowData.batchJobDefinition.mem);
+				}
+				if(!isEmpty(rowData.batchJobDefinition.gpu)){
+					$("#gpuVol").val(rowData.batchJobDefinition.gpu);
+				}
+				console.log("distributed---", rowData.batchJobDefinition.is_distribution_needed)
+				if(rowData.batchJobDefinition.is_distribution_needed === 1){
+					$("#isDistributed").prop("checked", true);
+				} else {
+					$("#notDistributed").prop("checked", true);
+				}
+
+				if(rowData.batchJobDefinition.is_valid === 1){
+					$("#toProceed").prop("checked", true);
+				} else {
+					$("#onHold").prop("checked", true);
+				}
+				if(!isEmpty(rowData.args)){
+					$("#argumentParam").val(rowData.args);
+				}
+
+				titleAdd.addClass("hidden").next().removeClass("hidden");
+				addBtn.prop("disabled", false).text("수정");
+
+				$("#addScheduleModal").addClass("edit").modal("show");
+			}
+			
+			if(option == "detail") {
+				let logTable = $("#logTable").DataTable();
+				// PopOver content setup
+				let popOverRow = $(popOverLink).parents().closest("tr");
+				let cell = $(popOverLink).parents().closest("td");
+				let popOverData = logTable.row(popOverRow).data();
+				let content = '';
+
+				if(cell.index() == 5){
+					content = '<div class="word-wrap">' + popOverData.executed_command + '</div>';
+				} else if(cell.index() == 6){
+					content = '<div class="word-wrap">' + popOverData.stdout + '</div>';
+				}
+
+				var popWindow = $(popOverLink).popover({
+					container: "body",
+					placement : 'bottom',
+					html: 'true',
+					trigger: "manual",
+					// "focus", "manual", "focus", "hover"
+					animation: false,
+					title: '',
+					content: content
+				}).on("mouseover", function () {
+					var _this = this;
+					$(this).popover("show");
+					$(this).siblings(".popover").on("mouseleave", function () {
+						$(_this).popover('hide');
+					});
+				}).on("mouseleave", function(){
+					var _this = this;
+					setTimeout(function() {
+						if (!$(".popover:hover").length) {
+							$(_this).popover("hide");
+						} else if ($(".popover:visible").length > 1) {
+							$(".popover").not(this).popover('hide');
+						} else if($("#logTable").find("tbody tr.selected").length > 0){
+							$(".popover").popover('hide');
+						}
+					}, 300);
+				});
+
+				popWindow.popover("show");
+			}
+
+			// DELETE MODAL!!!
+			if(option == "delete") {
+				let taskName = td.eq(3).text();
+				let modal = $("#deleteConfirmModal");
+				let deleteBtn = $("#deleteConfirmBtn");
+				let confirmName = $("#confirmName");
+
+				$("#deleteSuccessMsg span").text(taskName);
+				modal.find(".modal-body").removeClass("hidden");
+				modal.modal("show");
+
+				confirmName.on("input", function() {
+					if($(this).val() !== taskName) {
+						deleteBtn.prop("disabled", true);
+						return false
+					} else {
+						deleteBtn.prop("disabled", false);
+					}
+				});
+
+				confirmName.on("keyup", function() {
+					if($(this).val() !== taskName) {
+						deleteBtn.prop("disabled", true);
+						return false
+					} else {
+						deleteBtn.prop("disabled", false);
+					}
+				});
+			}
+		}
+
+	}
+
 
 </script>
 
@@ -218,112 +817,212 @@
 	</div>
 </div>
 
-<div class="row content-wrapper">
-	<div class="col-7">
-		<div class="indiv"></div>
+<div class="row">
+	<div class="col-xl-6 col-lg-7 col-md-8 col-sm-12">
+		<div class="indiv">
+			<h2 class="ntit">배치 스케줄</h2>
+
+			<table id="scheduleTable">
+				<colgroup>
+					<col style="width:6%">
+					<col style="width:4%">
+					<col style="width:18%">
+					<col style="width:18%">
+					<col style="width:18%">
+					<col style="width:18%">
+					<col style="width:18%">
+				</colgroup>
+				<thead></thead>
+				<tbody></tbody>
+			</table>
+		</div>
 	</div>
-	<div class="col-5">
+
+	<div class="col-xl-6 col-lg-5 col-md-4 col-sm-12">
 		<div class="indiv"></div>
 	</div>
 </div>
 
-<div class="row content-wrapper">
-	<div class="col-12">
+<div class="row">
+	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
 		<div class="indiv">
 			<div class="flex-group">
-				<span class="tx-tit">사업소</span>
-				<div class="dropdown">
-					<button type="button" class="dropdown-toggle"
-						data-toggle="dropdown">선택<span class="caret"></span></button>
-					<ul class="dropdown-menu chk-type" role="menu" id="siteList">
-						<li>
-							<a href="#" tabindex="-1">
-								<input type="checkbox" name="allSites" id="allSites" value="all">
-								<label for="allSites">전체</label>
-							</a>
-						</li>
-
-					</ul>
+				<span class="tx-tit">기간 설정</span>
+				<div class="sel-calendar">
+					<input type="text" name="fromDate" id="fromDate" class="sel fromDate" value="" autocomplete="off"><img class="ui-datepicker-trigger" src="" alt="..." title="...">
+					<em></em>
+					<input type="text" id="timepicker1" name="timepicker1" class="sel timepicker hasWickedpicker" onkeypress="return false;" aria-showingpicker="false" tabindex="0">
+					<em></em>
+					<input type="text" name="toDate" id="toDate" class="sel toDate" value="" autocomplete="off"><img class="ui-datepicker-trigger" src="" alt="..." title="...">
+					<em></em>
+					<input type="text" id="timepicker2" name="timepicker2" class="sel timepicker hasWickedpicker" onkeypress="return false;" aria-showingpicker="false" tabindex="0">
 				</div>
-			</div>
-			<div class="flex-group">
-				<span class="tx-tit">지역</span>
-				<div class="dropdown">
-					<button type="button" class="dropdown-toggle"
-						data-toggle="dropdown">선택<span class="caret"></span></button>
-					<ul class="dropdown-menu chk-type" role="menu">
-						<li><a href="#"></a></li>
-					</ul>
-				</div>
-			</div>
-			<div class="flex-group">
-				<span class="tx-tit">발전 자원</span>
-				<div class="dropdown">
-					<button type="button" class="dropdown-toggle"
-						data-toggle="dropdown">선택<span class="caret"></span></button>
-					<ul class="dropdown-menu">
-						<li data-value="solar" class="on"><a href="#">태양광</a></li>
-						<li data-value="wind"><a href="#">풍력</a></li>
-						<li data-value="wind"><a href="#">소수력</a></li>
-						<li data-value="wind"><a href="#">부하</a></li>
-					</ul>
-				</div>
-			</div>
-			<div class="flex-group">
-				<span class="tx-tit">발전소명</span>
-				<div class="flex-start">
-					<div class="text-input-type">
-						<input type="text" id="key_word" placeholder="입력">
-					</div>
-					<button type="button" class="btn-type ml-16" onclick="getDataList();">검색</button>
-				</div>
+				<button type="button" class="btn-type ml-16" onclick="getLogData($(this).prev().find('input'));">검색</button>
 			</div>
 
-			<table id="example" class="stripe">
-				<thead>
-					<!-- <tr>
-						<th></th>
-						<th>사업소 타입</th>
-						<th>사업소명</th>
-						<td>지역</th>
-						<th>발전원</th>
-						<th>발전 용량</th>
-						<th>ESS 용량 (PCS)</th>
-						<th>ESS 용량 (BMS)</th>
-						<th>DR 자원 코드</th>
-						<th>VPP 자원코드</th>
-						<th>알람 설정</th>
-					</tr> -->
-				</thead>
-				<tbody>
-				</tbody>
-				<tfoot>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-				</tfoot>
+			<div id="exportBtnGroup" class="fr"></div>
+
+			<table id="logTable">
+				<colgroup>
+					<col style="width:5%">
+					<col style="width:5%">
+					<col style="width:10%">
+					<col style="width:10%">
+					<col style="width:10%">
+					<col style="width:30%">
+					<col style="width:30%">
+				</colgroup>
+				<thead></thead>
+				<tbody></tbody>
 			</table>
 		</div>
 	</div>
 </div>
 
-<div class="modal fade" id="addSiteModal" tabindex="-1" role="dialog">
-	<div class="modal-dialog">
-		<div class="setting-modal-content modal-content">
-			<div class="modal-header"><h1>사업소 추가</h1></div>
+
+<div class="modal fade" id="addScheduleModal" tabindex="-1" role="dialog" aria-labelledby="addScheduleModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog modal-md">
+		<div class="modal-content schedule-modal-content">
+			<div id="titleAdd" class="modal-header mb-10"><h1>배치 스케줄 추가<span class="required fr">필수 입력 항목</span></h1></div>
+			<div id="titleEdit" class="modal-header"><h1>배치 스케줄 수정</h1></div>
 			<div class="modal-body">
-				
+				<div class="container-fluid">
+					<form name="update_schedule_form" id="updateScheduleForm" class="setting-form">
+						<div class="row">
+							<div class="col-xl-2 col-lg-2 col-md-4 col-sm-5"><span class="input-label asterisk">스케줄 명</span></div>
+							<div class="col-xl-4 col-lg-4 col-md-8 col-sm-7">
+								<div class="dropdown w-90">
+									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+									<ul id="scheduleList" class="dropdown-menu"></ul>
+								</div>
+								<small class="hidden warning">추가하실 스케줄 명을 선택해 주세요.</small>
+							</div>
+							<div class="col-xl-2 col-lg-2 col-md-4 col-sm-5"><span class="input-label asterisk">작업 명</span></div>
+							<div class="col-xl-4 col-lg-4 col-md-8 col-sm-7">
+								<div class="text-input-type">
+									<input type="text" name="task_name" id="taskName" placeholder="입력">
+								</div>
+								<small class="hidden warning"></small>
+							</div>
+						</div>
+
+
+						<div class="row">
+							<div class="col-xl-2 col-lg-2 col-md-4 col-sm-5"><span class="input-label asterisk">실행 주기</span></div>
+							<div class="col-xl-4 col-lg-4 col-md-8 col-sm-7">
+								<div class="text-input-type w-90">
+									<input type="text" name="schedule_cycle" id="scheduleCycle" class="digit" placeholder="입력" minlength="1" maxlength="12">
+								</div>
+								<small class="hidden warning"></small>
+							</div>
+							
+							<div class="col-xl-2 col-lg-2 col-md-3 col-sm-5"><span class="input-label">CPU 요구사항</span></div>
+							<div class="col-xl-4 col-lg-4 col-md-8 col-sm-7">
+								<div class="text-input-type unit">
+									<input type="text" name="cpu_vol" id="cpuVol" class="digit" placeholder="입력" minlength="2" maxlength="9">
+									<span>&#37;</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xl-2 col-lg-2 col-md-4 col-sm-5"><span class="input-label asterisk">작업 분배기</span></div>
+							<div class="col-xl-4 col-lg-4 col-md-8 col-sm-7">
+								<div class="flex-start">
+									<div class="radio-type fixed-height">
+										<input type="radio" name="option_distributed" id="isDistributed" value="1">
+										<label for="isDistributed">예</label>
+									</div>
+									<div class="radio-type fixed-height">
+										<input type="radio" name="option_distributed" id="notDistributed" value="0" checked>
+										<label for="notDistributed">아니오</label>
+									</div>
+								</div>
+							</div>
+							
+							<div class="col-xl-2 col-lg-2 col-md-4 col-sm-5"><span class="input-label">메모리 요구사항</span></div>
+							<div class="col-xl-4 col-lg-4 col-md-8 col-sm-7">
+								<div class="text-input-type unit">
+									<input type="text" name="disk_vol" id="diskVol" class="digit" placeholder="입력" maxlength="9">
+									<span>MB</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xl-2 col-lg-2 col-md-4 col-sm-5"><span class="input-label">임시중단 여부</span></div>
+							<div class="col-xl-4 col-lg-4 col-md-8 col-sm-7">
+								<div class="flex-start">
+									<div class="radio-type">
+										<input type="radio" name="option_hold" id="toProceed" value="1" checked>
+										<label for="toProceed">진행</label>
+									</div>
+									<div class="radio-type ml-30">
+										<input type="radio" name="option_hold" id="onHold" value="0">
+										<label for="onHold">중단</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="col-xl-2 col-lg-2 col-md-4 col-sm-5"><span class="input-label">GPU 요구사항</span></div>
+							<div class="col-xl-4 col-lg-4 col-md-8 col-sm-7">
+								<div class="text-input-type unit">
+									<input type="text" name="gpu_vol" id="gpuVol" class="digit" placeholder="입력" maxlength="9">
+									<span>&#37;</span>
+								</div>
+								<small class="hidden warning"></small>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xl-2 col-lg-2 col-md-4 col-sm-5"><span class="input-label">실행 파라미터</span></div>
+							<div class="col-xl-10 col-lg-10 col-md-8 col-sm-7">
+								<textarea name="argument_param" id="argumentParam" class="textarea" placeholder="입력"></textarea>
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-12">
+								<div class="btn-wrap-type02">
+									<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close">취소</button>
+									<button type="submit" id="addScheduleBtn" class="btn-type" disabled>추가</button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
 			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade stack" id="deleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 id="deleteSuccessMsg" class="ntit">배치 스케줄 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>
+			</div>
+			<div class="modal-body">
+				<div class="text-input-type"><input type="text" name="confirm_site" id="confirmName" placeholder="사이트 이름 입력"/></div>
+			</div>
+			<div class="btn-wrap-type05"><!--
+				--><button type="button" class="btn-type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
+				--><button type="submit" id="deleteConfirmBtn" class="btn-type w80 ml-12" disabled>확인</button><!--
+			--></div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade stack" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 id="resultSuccessMsg" class="text-blue hidden">배치 스케줄이 성공적으로<br>추가 되었습니다.</h4>
+				<h4 id="resultFailureMsg" class="warning-text hidden">배치 스케줄 추가에 실패하였습니다.<br>다시 시도해 주세요.</h4>
+			</div>
+			<div class="btn-wrap-type05"><!--
+			--><button type="button" id="resultBtn" class="btn-type03" data-dismiss="modal" aria-label="Close">확인</button><!--
+		--></div>
 		</div>
 	</div>
 </div>

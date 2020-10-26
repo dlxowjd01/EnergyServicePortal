@@ -822,7 +822,7 @@
 
 								if(full.sites.length > 3){
 									// onmouseover="updateModal('detail', this)" 
-									return `<div class="flex-start">${'${siteName}'}&ensp;<a href="#" role="button" data-toggle="popover" data- rel="popover" onmouseover="updateModal('detail', this)" class="text-link">more</a></div>`
+									return `<div class="flex-start">${'${siteName}'}&ensp;<a href="#" role="button" data-toggle="popover" data-placement="left" rel="popover" onmouseover="updateModal('detail', this)" class="text-link">more</a></div>`
 								} else {
 									return siteName;
 								}
@@ -855,12 +855,12 @@
 							let date = "";
 							if(isEmpty(full.updatedAt)){
 								if(!isEmpty(full.createdAt)){
-									date = new Date(full.createdAt).toLocaleDateString("en-CA").replace(/\//g, '-') + '&ensp;' + new Date(full.createdAt).toLocaleTimeString();
+									date = new Date(full.createdAt).format('yyyy-MM-dd') + '&ensp;' + new Date(full.createdAt).toLocaleTimeString();
 								} else {
 									date = "-";
 								}
 							} else {
-								date = new Date(full.updatedAt).toLocaleDateString("en-CA").replace(/\//g, '-') + '&ensp;' + new Date(full.updatedAt).toLocaleTimeString();
+								date = new Date(full.updatedAt).format('yyyy-MM-dd') + '&ensp;' + new Date(full.updatedAt).toLocaleTimeString();
 							}
 							return date;
 						}
@@ -1090,7 +1090,7 @@
 								}
 							});
 							if(full.sites.length > 3){
-								return `<div class="flex-start">${'${siteName}'}&ensp;<a href="#" role="button" data-toggle="popover" data- rel="popover" onmouseover="updateModal('detail', this)" class="text-link">more</a></div>`
+								return `<div class="flex-start">${'${siteName}'}&ensp;<a href="#" role="button" data-toggle="popover" data-placement="left" rel="popover" onmouseover="updateModal('detail', this)" class="text-link">more</a></div>`
 							} else {
 								return siteName;
 							}
@@ -1108,12 +1108,12 @@
 						let date = "";
 						if(isEmpty(full.updatedAt)){
 							if(!isEmpty(full.createdAt)){
-								date = new Date(full.createdAt).toLocaleDateString("en-CA").replace(/\//g, '-') + '&ensp;' + new Date(full.createdAt).toLocaleTimeString();
+								date = new Date(full.createdAt).format('yyyy-MM-dd') + '&ensp;' + new Date(full.createdAt).toLocaleTimeString();
 							} else {
 								date = "-";
 							}
 						} else {
-							date = new Date(full.updatedAt).toLocaleDateString("en-CA").replace(/\//g, '-') + '&ensp;' + new Date(full.updatedAt).toLocaleTimeString();
+							date = new Date(full.updatedAt).format('yyyy-MM-dd') + '&ensp;' + new Date(full.updatedAt).toLocaleTimeString();
 						}
 						return date;
 					}

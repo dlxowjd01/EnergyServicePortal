@@ -618,7 +618,7 @@
 			});
 			rChart3.redraw();
 
-			const currentTime = new Date().format('hh') + ':' + new Date().format('mm');
+			const currentTime = new Date().format('HH') + ':' + new Date().format('mm');
 			const label = `${' 현재시간<br><strong>${ currentTime }</strong>'}`;
 			const now = new Date().getMinutes();
 			const nowBottom = parseInt($('.realtime-bar').css('bottom'), 10);
