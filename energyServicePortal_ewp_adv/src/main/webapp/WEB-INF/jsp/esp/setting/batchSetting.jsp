@@ -10,7 +10,7 @@
 		let currentTime = new Date().format('HH:mm');
 		// let yesterdayTime = new Date(Date.now() - 86400 * 1000);
 
-		$('#fromDate').datepicker().datepicker("setDate", new Date().getDay()-1);
+		$('#fromDate').datepicker().datepicker("setDate", new Date().getDate()-1);
 		$('#toDate').datepicker().datepicker("setDate", new Date());
 
 		$('#timepicker1').wickedpicker({
