@@ -42,8 +42,7 @@
 			});
 		} else {
 			Promise.all( [ Promise.resolve(returnAjaxRes(optionList[2])), Promise.resolve(returnAjaxRes(optionList[1])), Promise.resolve(returnAjaxRes(optionList[4]) ) , Promise.resolve(returnAjaxRes(optionList[3]))] ).then( res => {
-				deviceNameList = res[3];
-				nonAdminTable( res[0], res[1], res[2].user_sites );
+				nonAdminTable( res[0], res[1], res[3].user_sites );
 			});
 		}
 
@@ -1369,6 +1368,7 @@
 					"aaData": newArr,
 					"table-layout": "fixed",
 					"fixedHeader": true,
+					// "autoWidth": true,
 					"bAutoWidth": true,
 					"bSearchable" : true,
 					"sScrollY": true,
@@ -1388,11 +1388,6 @@
 						},
 					],
 					"aoColumns": [
-						// {
-						// 	"sTitle": "순번",
-						// 	"mData": null,
-						// 	"className": "dt-center no-sorting"
-						// },
 						{
 							"sTitle": "",
 							"mData": null,
@@ -1401,6 +1396,14 @@
 							},
 							"className": "dt-body-center no-sorting"
 						},
+						// {
+						// 	"sTitle": "순번",
+						// 	"mData": null,
+						// 	"mRender": function ( data, type, full, rowIndex )  {
+						// 		return rowIndex.row + 1;
+						// 	},
+						// 	"className": "dt-center no-sorting"
+						// },
 						{
 							"sTitle": "사업소 유형",
 							"mData": "siteType",
@@ -1439,6 +1442,13 @@
 							"mData": "vppName",
 						},
 						{
+							"sTitle": "알람 설정",
+							"mData": null,
+							"mRender": function ( data, type, full, rowIndex )  {
+								return ''
+							},
+						},
+						{
 							"sTitle": "업데이트 일자",
 							"mData": "updatedAt",
 						},
@@ -1469,12 +1479,14 @@
 						// 	cell.innerHTML = i+1;
 						// 	$(cell).data("id", i);
 						// });
+						let colGroup = $("#siteTable").find("colgroup col");
 						if(oid.match("testkpx")){
-							let colGroup = $("#siteTable").find("colgroup col");
-							this.api().columns([8,9]).visible( false );
-							colGroup.eq(8).addClass("hidden");
+							this.api().columns(9).visible( false );
 							colGroup.eq(9).addClass("hidden");
 						}
+
+						this.api().columns(10).visible( false );
+						colGroup.eq(10).addClass("hidden");
 
 						this.api().columns().header().each ((el, i) => {
 							if(i == 0){
