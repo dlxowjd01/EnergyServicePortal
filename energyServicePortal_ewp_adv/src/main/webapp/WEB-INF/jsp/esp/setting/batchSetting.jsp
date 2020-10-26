@@ -67,10 +67,10 @@
 
 			let obj = {};
 			obj.definition_id = $("#scheduleList").prev().data("value");
-			obj.name = $("#taskName").val();
+			obj.name = $("#scheduleName").val();
 
-			if(!$("#addScheduleModal").hasClass("edit")) {
-				// 1. ADD schedule info
+			// 1. ADD schedule info
+			if(!$("#addScheduleModal").hasClass("edit")) {	
 				obj.schedule = newScheduleCycle;
 
 				if(!isEmpty(newArgumentParam)){
@@ -207,6 +207,38 @@
 			initModal();
 		});
 
+		$("#deleteConfirmBtn").click(function(){
+			let dTable = $("#scheduleTable").DataTable();
+			let tr = $("#scheduleTable").find("tbody tr.selected");
+			let rowData = dTable.row(tr).data();
+			let modalBody = $("#deleteConfirmModal .modal-body");
+
+			if($("#confirmSchedule").val() !== tr.find("td").eq(2).text() ) return false;
+
+			let optDelete = {
+				url: apiHost + "/batch-job-submit-rules/"+ rowData.id,
+				type: "delete",
+				async: true,
+			}
+
+			$.ajax(optDelete).done(function (json, textStatus, jqXHR) {
+				modalBody.addClass("hidden");
+				$("#deleteSuccessMsg").text("배치 스케줄이 삭제 되었습니다.").removeClass("hidden");
+				dTable.row(tr).remove().draw();
+				// refreshSiteList();
+				setTimeout(function(){
+					$("#deleteConfirmModal").modal("hide");
+				}, 1000);
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				modalBody.addClass("hidden");
+				$("#deleteSuccessMsg").text("배치 스케줄 삭제에 실패하였습니다.\n다시 시도해 주세요.").removeClass("hidden");
+				setTimeout(function(){
+					$("#deleteConfirmModal").modal("hide");
+				}, 1500);
+				console.log("fail==", jqXHR)
+			});
+		});
+
 		$("#deleteConfirmModal").on("hide.bs.modal", function() {
 			$("#deleteSuccessMsg").html('<h5 id="deleteSuccessMsg" class="ntit">배치 스케줄 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>');
 			$("#confirmSite").val("");
@@ -219,7 +251,7 @@
 		$("#resultModal").on("hide.bs.modal", function() {
 			$(this).find("h4").addClass("hidden");
 		});
-		
+
 	});
 
 
@@ -266,9 +298,10 @@
 						"sTitle": "",
 						"mData": "",
 						"mRender": function ( data, type, full, rowIndex ) {
-							return '<a class="chk-type" href="javascript:void(0); onclick=""><input type="checkbox" id="' + full.id + '" name="' + full.id + '"><label for="' + full.id + '"></label></a>'
+							return '<button type="button" class="icon-add"></button>'
+							// return '<a class="chk-type" href="javascript:void(0); onclick="showDetail(this)"><input type="checkbox" id="' + full.id + '" name="' + full.id + '"><label for="' + full.id + '"></label></a>'
 						},
-						"className": "dt-body-center"
+						"className": "dt-body-center details-control"
 					},
 					{
 						"sTitle": "순번",
@@ -308,7 +341,7 @@
 				"dom": 'tip',
 				"select": {
 					style: 'single',
-					selector: 'td input[type="checkbox"], tr'
+					selector: 'td:not(:first-child)'
 				},
 				initComplete: function(settings, json ){
 					let str = `<div id="btnGroup" class="right-end"><!--
@@ -349,16 +382,48 @@
 			}).columns.adjust().draw();
 
 
-			$('#scheduleTable').find("input:checkbox").on('click', function() {
-				var $box = $(this);
-				if ($box.is(":checked")) {
-					var group = "input:checkbox[name='" + $box.attr("name") + "']";
-					$(group).prop("checked", false);
-					$box.prop("checked", true);
-				} else {
-					$box.prop("checked", false);
-				}
+			// $('#scheduleTable').find("input:checkbox").on('click', function() {
+			// 	var $box = $(this);
+			// 	if ($box.is(":checked")) {
+			// 		var group = "input:checkbox[name='" + $box.attr("name") + "']";
+			// 		$(group).prop("checked", false);
+			// 		$box.prop("checked", true);
+			// 	} else {
+			// 		$box.prop("checked", false);
+			// 	}
+			// });
+			
+			var detailRows = [];
+
+			$("#scheduleTable tbody").on("click", "tr .details-control > .icon-add", function(){
+				var tr = $(this).closest('tr');
+				var row = scheduleTable.row( tr );
+				var idx = $.inArray( tr.attr('id'), detailRows );
+		
+				if ( row.child.isShown() ) {
+						tr.removeClass( 'details' );
+						row.child.hide();
+
+						// Remove from the 'open' array
+						detailRows.splice( idx, 1 );
+					}
+					else {
+						tr.addClass( 'details' );
+						row.child( format( row.data() ) ).show();
+
+						// Add to the 'open' array
+						if ( idx === -1 ) {
+							detailRows.push( tr.attr('id') );
+						}
+					}
 			});
+
+			scheduleTable.on( 'draw', function () {
+				$.each( detailRows, function ( i, id ) {
+					$('#'+id+' td.details-control>.icon-add').trigger( 'click' );
+				});
+			});
+			
 			
 			scheduleTable.on( 'column-sizing.dt', function ( e, settings ) {
 				$(".dataTables_scrollHeadInner").css( "width", "100%" );
@@ -481,14 +546,13 @@
 						"sTitle": "작업자",
 						"mData": "",
 						"mRender": function ( data, type, full, rowIndex ) {
-							let found = scheduleData.findIndex( x => x.definition_id == full.definition_id );
-							let matchedName = '';
-							if (found > -1) {
-								matchedName = scheduleData[found].created_by;
+							let personOnDuty = '';
+							if (!isEmpty(full.submit_rule_name)) {
+								personOnDuty = full.submit_rule_id;
 							} else {
-								matchedName = 'definition id: ' + full.definition_id;
+								personOnDuty = full.submit_rule_id;
 							}
-							return matchedName;
+							return personOnDuty;
 
 						}
 					},
@@ -520,7 +584,7 @@
 							let str1 = '';
 							if( full.executed_command.length > 50 ){
 								let trimmed1 = full.executed_command.substring(0, 51) + ' ...'
-								str1 = `<div class="flex-start">${'${ trimmed1 }'}&ensp;<a href="#" role="button" data-toggle="popover" data-placement="bottom" rel="popover" onmouseover="updateModal('detail', null, this)" class="text-link">more</a></div>`
+								str1 = `<div class="flex-start">${'${ trimmed1 }'}&ensp;<a href="#" role="button" data-toggle="popover" data-placement="bottom" rel="popover" onclick='return false' onmouseover="updateModal('detail', null, this)" class="text-link">more</a></div>`
 							} else {
 								str1 = full.executed_command;
 							}
@@ -534,7 +598,7 @@
 							let str2 = '';
 							if( full.stdout.length > 50 ){
 								let trimmed2 = full.stdout.substring(0, 51) + ' ...'
-								str2 = `<div class="flex-start">${'${ trimmed2 }'}&ensp;<a href="#" role="button" data-toggle="popover" data-placement="bottom" rel="popover" onmouseover="updateModal('detail', null, this)" class="text-link">more</a></div>`
+								str2 = `<div class="flex-start">${'${ trimmed2 }'}&ensp;<a href="#" role="button" data-toggle="popover" data-placement="bottom" rel="popover" onclick='return false' onmouseover="updateModal('detail', null, this)" class="text-link">more</a></div>`
 							} else {
 								str2 = full.stdout;
 							}
@@ -757,16 +821,17 @@
 					var _this = this;
 					$(this).popover("show");
 					$(this).siblings(".popover").on("mouseleave", function () {
-						$(_this).popover('hide');
+						if ($(".popover:visible").length > 1) {
+							$(_this).popover('hide');
+						}
 					});
 				}).on("mouseleave", function(){
 					var _this = this;
 					setTimeout(function() {
-						if (!$(".popover:hover").length) {
-							$(_this).popover("hide");
-						} else if ($(".popover:visible").length > 1) {
-							$(".popover").not(this).popover('hide');
-						} else if($("#logTable").find("tbody tr.selected").length > 0){
+						if ($(".popover:visible").length > 1) {
+							$(".popover").not(_this).popover('hide');
+						}
+						if($("#logTable").find("tbody tr.selected").length > 0){
 							$(".popover").popover('hide');
 						}
 					}, 300);
@@ -777,17 +842,17 @@
 
 			// DELETE MODAL!!!
 			if(option == "delete") {
-				let taskName = td.eq(3).text();
+				let scheduleName = td.eq(2).text();
 				let modal = $("#deleteConfirmModal");
 				let deleteBtn = $("#deleteConfirmBtn");
-				let confirmName = $("#confirmName");
+				let confirmSchedule = $("#confirmSchedule");
 
-				$("#deleteSuccessMsg span").text(taskName);
+				$("#deleteSuccessMsg span").text(scheduleName);
 				modal.find(".modal-body").removeClass("hidden");
 				modal.modal("show");
 
-				confirmName.on("input", function() {
-					if($(this).val() !== taskName) {
+				confirmSchedule.on("input", function() {
+					if($(this).val() !== scheduleName) {
 						deleteBtn.prop("disabled", true);
 						return false
 					} else {
@@ -795,8 +860,8 @@
 					}
 				});
 
-				confirmName.on("keyup", function() {
-					if($(this).val() !== taskName) {
+				confirmSchedule.on("keyup", function() {
+					if($(this).val() !== scheduleName) {
 						deleteBtn.prop("disabled", true);
 						return false
 					} else {
@@ -808,6 +873,22 @@
 
 	}
 
+	function format ( trData ) {
+		console.log("trData---", trData);
+		let isDistributed = trData.batchJobDefinition.is_distribution_needed;
+		let isValid = '';
+		(trData.is_valid == 0) ? (isValid = '중단') : (isValid = '진행');
+		let cpuVol = trData.cpu;
+		let diskVol = trData.mem;
+		let gpuVol = trData.gpu;
+		let argumentParam = trData.args;
+
+		return  '<div class="ml-36 pl-40">' +
+			'<div class="w-90 mb-10">작업분배기: ' + isDistributed + '   임시중단 여부: ' + isValid + '</div>' +
+			'<div class="w-90 mb-10">CPU 요구사항: ' + cpuVol + '%   메모리 요구사항: ' + diskVol + 'MB   GPU 요구사항: ' + gpuVol + '%</div>' +
+			'<div class="w-90">실행 파라미터: ' + argumentParam + '</div>' +
+		'</div>'
+	}
 
 </script>
 
@@ -818,14 +899,14 @@
 </div>
 
 <div class="row">
-	<div class="col-xl-6 col-lg-7 col-md-8 col-sm-12">
+	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
 		<div class="indiv">
 			<h2 class="ntit">배치 스케줄</h2>
 
 			<table id="scheduleTable">
 				<colgroup>
-					<col style="width:6%">
 					<col style="width:4%">
+					<col style="width:6%">
 					<col style="width:18%">
 					<col style="width:18%">
 					<col style="width:18%">
@@ -836,10 +917,6 @@
 				<tbody></tbody>
 			</table>
 		</div>
-	</div>
-
-	<div class="col-xl-6 col-lg-5 col-md-4 col-sm-12">
-		<div class="indiv"></div>
 	</div>
 </div>
 
@@ -865,10 +942,10 @@
 			<table id="logTable">
 				<colgroup>
 					<col style="width:5%">
+					<col style="width:6%">
+					<col style="width:12%">
+					<col style="width:12%">
 					<col style="width:5%">
-					<col style="width:10%">
-					<col style="width:10%">
-					<col style="width:10%">
 					<col style="width:30%">
 					<col style="width:30%">
 				</colgroup>
@@ -900,7 +977,7 @@
 							<div class="col-xl-2 col-lg-2 col-md-4 col-sm-5"><span class="input-label asterisk">작업 명</span></div>
 							<div class="col-xl-4 col-lg-4 col-md-8 col-sm-7">
 								<div class="text-input-type">
-									<input type="text" name="task_name" id="taskName" placeholder="입력">
+									<input type="text" name="schedule_name" id="scheduleName" placeholder="입력">
 								</div>
 								<small class="hidden warning"></small>
 							</div>
@@ -1003,7 +1080,7 @@
 				<h5 id="deleteSuccessMsg" class="ntit">배치 스케줄 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>
 			</div>
 			<div class="modal-body">
-				<div class="text-input-type"><input type="text" name="confirm_site" id="confirmName" placeholder="사이트 이름 입력"/></div>
+				<div class="text-input-type"><input type="text" name="confirm_schedule" id="confirmSchedule" placeholder="사이트 이름 입력"/></div>
 			</div>
 			<div class="btn-wrap-type05"><!--
 				--><button type="button" class="btn-type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--

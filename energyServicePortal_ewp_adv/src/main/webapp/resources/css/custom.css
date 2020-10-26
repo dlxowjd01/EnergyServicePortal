@@ -1407,6 +1407,10 @@ table tbody td .dropdown-menu {
 	margin-left: 32px;
 }
 
+.ml-36 {
+	margin-left: 36px;
+}
+
 .mb-24 {
 	margin-bottom: 24px;
 }
@@ -3342,6 +3346,7 @@ li[data-alarm="urgent"]:before,
 }
 
 .popover-content .word-wrap {
+	max-width: 200px;
 	max-height: 200px;
 	overflow-y: auto;
 }
@@ -3860,6 +3865,7 @@ li[data-alarm="urgent"]:before,
 
 .user-modal-content .tick {
 	margin: 0 14px 0 0;
+	white-space: nowrap;
 }
 
 /* siteSetting modal */
@@ -7881,6 +7887,11 @@ input.inp[readonly]:focus {
 	vertical-align: middle;
 	background: var(--btn-add) no-repeat center;
 	outline: none;
+}
+
+.details-control .icon-add {
+	background-size: 14px;
+	opacity: 0.87;	
 }
 
 .icon-edit {

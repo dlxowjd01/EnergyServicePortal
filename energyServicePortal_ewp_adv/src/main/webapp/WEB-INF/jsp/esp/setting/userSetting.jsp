@@ -1826,7 +1826,8 @@
 		];
 
 		let password = $(this).val();
-		password.length >= 8 ? $("#eightCharLong").addClass("checked") : $("#eightCharLong").removeClass("checked");
+		console.log("password==", password.length)
+		password.length >= 8 ? $("#isEightCharLong").addClass("checked") : $("#isEightCharLong").removeClass("checked");
 
 		for (var i = 0; i < rules.length; i++) {
 			if( new RegExp(rules[i].Pattern).test(password) ) {
@@ -1935,7 +1936,7 @@
 								<div class="flex-start warning-wrapper">
 									<small id="hasLet" class="tick">영문</small>
 									<small id="hasNum" class="tick">숫자</small>
-									<small id="eightCharLong" class="tick">8자리 이상</small>
+									<small id="isEightCharLong" class="tick">8자리 이상</small>
 								</div>
 							</div>
 						</div>
