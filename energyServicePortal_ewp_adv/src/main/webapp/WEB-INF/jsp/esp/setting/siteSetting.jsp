@@ -832,7 +832,7 @@
 						} else {
 							alarmFlag = false;
 						}
-						console.log("alarmInfo===", json)
+						// console.log("alarmInfo===", json)
 						item.alarmInfo = json;
 						$.each(json, function( index, el ){
 							let hasDevType = essDvcArr.some( x => x.includes(el.device_type));
@@ -1113,11 +1113,7 @@
 						}
 
 						Promise.resolve(makeAjaxCall(userOpt)).then(res => {
-							if(rowData.length > 30){
-								console.log("rowData===", rowData.length);
-								$('#loadingCircle').show();
-							}
-							getAlarmTable(dvcNameKr, rowData, res);
+							return getAlarmTable(dvcNameKr, rowData, res);
 						});
 					// }
 				});
@@ -2512,13 +2508,12 @@
 	}
 	
 	function getAlarmTable(dvcNameData, alarmData, userData){
-		var alarmFlag = false;
+		let alarmFlag = false;
 		let uniqDvcType = groupBy(alarmData, "device_type");
 		let uniqDvcName = groupBy(alarmData, "name");
 		let userType = '';
 		let dvcNameStr = '';
 
-		console.log("alarmData===", alarmData)
 		Object.entries(uniqDvcName).forEach(function(item, index){
 			dvcNameStr += '<li class="hidden" data-device-type="' + item[1].device_type + '" data-did="' +  item[1].did + '" data-value="' + item[0] + '"><a href="#" tabindex="-1">' + item[0] + '</a></li>';
 		});
@@ -2534,14 +2529,17 @@
 		// 	`
 		// });
 
-		Promise.resolve(alarmData.map((item, index) => {
+		// Promise.resolve(alarmData.map((item, index) => {
+		const promises = alarmData.map( async item => {
+			// console.log("item---", item);
 			let merged = uniqDvcType[item.device_type].map(e => e.name).join(",").replace(/,(\s+)?$/, "");
 			item.sub_device = merged;
 
 			// Match => kr device_type_name
 			if ($.inArray(item.device_type, alarmData) === -1) {
 				for (let property in deviceNameList) {
-					if(property === item.device_type){
+					if(property == item.device_type){
+						// console.log("item.device_type_label===", item.device_type_label, "property---", property);
 						item.device_type_label = deviceNameList[property].name.kr;
 						break;
 					}
@@ -2549,16 +2547,25 @@
 			}
 
 			if(!isEmpty(item.alarm_to)){
-				Promise.resolve(JSON.parse(item.alarm_to)).then( res => {
-					item.alarmToUser = res;
+				try {
+					let response = await JSON.parse(item.alarm_to);
+					// console.log("response===", response);
+					item.alarm_to = response;
+				} catch (exception) {
+					console.error(`Failed to retrieve user informations: (${exception})`);
+				} finally {
 					if(alarmFlag == false){
 						alarmFlag = true;
-					}		
-				});
+					}
+					return item;
+				}
+			} else {
+				return item;
 			}
 
-		})).then(() => {
+		});
 
+		Promise.all(promises).then( () => {
 			if(alarmFlag == true) {
 				// alarmList Available
 				var alarmTable = $('#alarmTable').DataTable({
@@ -2664,10 +2671,9 @@
 									let targetId = 'aDvcNameList' + rowIndex.row;
 									str1 += '<li onclick="setDropdownInput(this,' + targetId + ')" data-subgroup="' + el.sub_device + '" data-did="' + el.did + '" data-value="' + el.device_type + '"><a href="#" tabindex="-1">' + data.device_type_label + '</a></li>'
 								});
-
 								let dropdown1 = `
 									<div class="dropdown">
-										<button type="button" class="dropdown-toggle device-type" data-toggle="dropdown" data-did="${'${ data.did }'}" data-value="${'${ data.device_type }'}" disabled>${'${ data.device_type }'}<span class="caret"></span></button>
+										<button type="button" class="dropdown-toggle device-type" data-toggle="dropdown" data-did="${'${ data.did }'}" data-value="${'${ data.device_type }'}" disabled>${'${ data.device_type_label }'}<span class="caret"></span></button>
 										<ul id="aDvcTypeList${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str1 }'}</ul>
 									</div>
 								`;
@@ -2815,11 +2821,11 @@
 							"sTitle": "담당자 (이름 / ID)",
 							"mData": null,
 							"mRender": function ( data, type, row, rowIndex ) {
-								let str4 = ``;
 								let dropdown4 = ``;
 								let userIdx = '';
 
 								if( isEmpty(data.alarm_to) || isEmpty(data.alarmToUser) ) {
+									let str4 = ``;
 									str4 += `
 										<li onclick='addNewInput(this)'><a href="#">직접 입력</a></li>
 									`;
@@ -2846,8 +2852,8 @@
 										<div class="text-input-type ml-0 hidden"><input type="text" name="aDvcContactNonUser${'${ rowIndex.row }'}" /></div>
 									`
 								} else {
-									// 1. Unregistered User
-									if(!isEmpty(data.alarmToUser.non_user) && data.alarmToUser.non_user.length > 0){
+									if(!isEmpty(data.alarmToUser.non_user) && data.alarmToUser.non_user.length > 0 && !isEmpty(data.alarmToUser.user) && data.alarmToUser.user.length > 0 ) {
+										let str4 = ``;
 										let nonUser = data.alarmToUser.non_user;
 										console.log("nonUser===", nonUser);
 
@@ -2882,10 +2888,123 @@
 											`;
 
 										});
-									}
 
-									// 2. Registered User
-									if(!isEmpty(data.alarmToUser.user) && data.alarmToUser.user.length > 0){
+																				let registeredUser = data.alarmToUser.user;
+										let displayName = "";
+										let displayName2 = "";
+										let nameFlag = false;
+										let cnt = 0;
+										console.log("registeredUser---", registeredUser);
+
+										registeredUser.forEach((item, index) => {
+											var userEl = item;
+											let newIdx = String(rowIndex.row + index);	
+										
+											$.each(userData, function(idx, el){
+												let nameId = `${'${ el.name }'}` + `(` + `${'${ el.login_id }'}` + `)`;
+												let phoneNum = "";
+
+												if(el.name == userEl.uid){
+													if(nameFlag == false){
+														displayName = el.name;
+														nameFlag = true;
+													} else {
+														cnt++;
+													}
+												
+												}
+												if(el.uid == userEl.uid){
+													if(nameFlag == false){
+														displayName2 = el.name
+														nameFlag = true;
+													} else {
+														cnt++;
+													}
+												}
+												// let foundByUid = userData.findIndex(x => x.uid == item.uid);
+
+												el.contact_phone ? (phoneNum = el.contact_phone) : "";
+				
+												str4 += `
+													<li onclick='removeNewInput(this)'>
+														<a class="chk-type" href="#">
+															<input type="checkbox" data-id="${'${ el.login_id }'}${'${ newIdx }'}" name="aDvcContactPerson${'${ newIdx }'}" value="${'${ el.uid }'}" data-name="${'${ el.name }'}" data-contact-num="${'${ phoneNum }'}" />
+															<label>${'${ nameId }'}</label>
+														</a>
+													</li>
+												`
+											});
+
+									
+											if(cnt === 0){
+												if(!isEmpty(displayName2)){
+													displayName = displayName2;
+												}
+											} else {
+												if(!isEmpty(displayName2)){
+													displayName = displayName2 + '외 ' + cnt + '명';
+												} else {
+													displayName = displayName + '외 ' + cnt + '명';
+												}
+											}
+
+											// console.log("displayName---", displayName);
+											// console.log("displayName2---", displayName2);
+
+											dropdown4 += `
+												<div class="dropdown" data-user-type="user" data-user-index="${'${ newIdx }'}">
+													<button type="button" class="dropdown-toggle" data-value="${'${ item.uid }'}" data-toggle="dropdown" data-name="" disabled>${'${ displayName }'}<span class="caret"></span></button>
+													<ul id="aDvcContactList${'${ newIdx }'}" class="dropdown-menu">${'${ str4 }'}</ul>
+												</div>
+												<div class="text-input-type ml-0 hidden"><input type="text" name="aDvcContact${'${ newIdx }'}" id="aDvcContact${'${ newIdx }'}" /></div>
+											`;
+
+										});
+									
+										console.log("cnt===", cnt);
+
+									} else {
+										let str4 = ``;
+										// 1. Unregistered User
+										if(!isEmpty(data.alarmToUser.non_user) && data.alarmToUser.non_user.length > 0){
+											let nonUser = data.alarmToUser.non_user;
+											console.log("nonUser===", nonUser);
+
+											nonUser.forEach((item, index) => {
+												let displayName = item.name;
+												newIdx = String(rowIndex.row + index);
+
+												str4 += `
+													<li onclick='addNewInput(this)'><a href="#">직접 입력</a></li>
+												`;
+												$.each(userData, function(idx, el){
+													let nameId = `${'${ el.name }'}` + ` / ` + `${'${ el.login_id }'}`;
+													let phoneNum = "";
+													el.contact_phone ? phoneNum = el.contact_phone : "";
+
+													str4 += `
+														<li onclick='removeNewInput(this)'>
+															<a class="chk-type" href="#">
+																<input type="checkbox" data-id="${'${ el.login_id }'}${'${ newIdx }'}" name="aDvcContactPerson${'${ newIdx }'}" value="${'${ el.uid }'}" data-uid="${'${ el.uid }'}" data-name="${'${ el.name }'}" data-contact-num="${'${ phoneNum }'}" />
+																<label>${'${ nameId }'}</label>
+															</a>
+														</li>
+													`;
+												});
+
+												dropdown4 += `
+													<div class="dropdown" data-user-type="non-user" data-user-index="${'${ newIdx }'}">
+														<button type="button" class="dropdown-toggle" data-value="${'${ displayName }'}" data-toggle="dropdown" data-name="선택" disabled>${'${ displayName }'}<span class="caret"></span></button>
+														<ul id="aDvcContactListNonUser${'${ newIdx }'}" class="dropdown-menu">${'${ str4 }'}</ul>
+													</div>
+													<div class="text-input-type ml-0 hidden"><input type="text" name="aDvcContactNonUser${'${ newIdx }'}" /></div>
+												`;
+
+											});
+										}
+
+										// 2. Registered User
+										if(!isEmpty(data.alarmToUser.user) && data.alarmToUser.user.length > 0){
 										let registeredUser = data.alarmToUser.user;
 										let displayName = "";
 										let displayName2 = "";
@@ -2895,8 +3014,7 @@
 
 										registeredUser.forEach((item, index) => {
 											var userEl = item;
-											let newIdx = String(rowIndex.row + index);
-											
+											let newIdx = String(rowIndex.row + index);	
 										
 											str4 += `
 												<li onclick='addNewInput(this)'><a href="#">직접 입력</a></li>
@@ -2961,6 +3079,10 @@
 											`;
 
 										});
+									
+										console.log("cnt===", cnt);
+									}
+									
 									}
 								}
 								return dropdown4;
@@ -3319,10 +3441,6 @@
 				}).columns.adjust();
 			}
 
-			if(alarmData.length > 30){
-				$('#loadingCircle').hide();
-			}
-			
 			$("#addAlarmModal").modal("show");
 		});
 
