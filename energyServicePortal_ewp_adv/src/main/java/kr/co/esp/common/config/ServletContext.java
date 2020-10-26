@@ -128,6 +128,10 @@ public class ServletContext extends WebMvcConfigurerAdapter {
 	 */
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("/excel/**").addResourceLocations("/resources/excel/")
+				.setCachePeriod(3600).resourceChain(true)
+				.addResolver(new GzipResourceResolver())
+				.addResolver(new PathResourceResolver());
 		registry.addResourceHandler("/css/**").addResourceLocations("/resources/css/")
 				.setCachePeriod(3600).resourceChain(true)
 				.addResolver(new GzipResourceResolver())

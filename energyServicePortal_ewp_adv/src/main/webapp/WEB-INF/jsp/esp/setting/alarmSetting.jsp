@@ -115,6 +115,15 @@
 			'dom': 'Btip',
 			'buttons':[
 				{
+					text: '템플릿 다운로드',
+					className: 'btn-type fl',
+					attr: {
+						id: 'template',
+						target: '_blank',
+						onclick: 'location.href="/excel/alarmSettingTemplate.xlsx"'
+					}
+				},
+				{
 					text: '적용',
 					className: 'btn-type fr my-offset-28',
 					action: function ( e, dt, node, config ) {
@@ -129,8 +138,20 @@
 					extend: 'excel',
 					text: '엑셀 내보내기',
 					className: 'btn-type03 fr my-offset-28 mr-8',
+					title: '',
+					messageTop: ' ',
 					exportOptions: {
 						columns: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+					},
+					customize: (xlsx) => {
+						let sheet = xlsx.xl.worksheets['sheet1.xml'];
+						$('c[r=A1] t', sheet).text('작성 방법  (본 항목 삭제 금지)\n\n' +
+							'기존에 등록된 설비타압/제조사/모델명/펌웨어 버전에 대해서 동일하게 등록시 기존 항목은 모두 삭제 후 엑셀의 내용이 등록됩니다. 기존에 데이터가 있는 경우 유의하여 주시기 바랍니다. 설비타입과 알람레벨은 아래를 참고하여 값을 넣어주세요.\n\n' +
+							'1. 설비 타입: 태양광 인버터 (INV_PV), 배터리 PCS (PCS_ESS), 배터리 BMS (BMS_SYS) \n' +
+							'2. 알람 레벨: 0: 정보, 1: 경고, 2: 이상, 3: 트립, 4: 긴급, 9: 미상');
+						$('row c[r*=1]', sheet).attr('s', '55');
+						$('row', sheet).first().attr('ht', '130').attr('customHeight', "1");
+						$('row c[r*=2]', sheet).attr('s', '30');
 					},
 					filename: '알람 메시지 레벨 설정'
 				},
@@ -147,8 +168,8 @@
 				selector: 'td:first-child > :checkbox, tr'
 			},
 			language: {
-				"emptyTable": "조회된 데이터가 없습니다.",
-				"zeroRecords":  "검색된 결과가 없습니다."
+				emptyTable: "조회된 데이터가 없습니다.",
+				zeroRecords:  "검색된 결과가 없습니다."
 			},
 			initComplete: function(settings, json) {
 				let str = `<div id="btnGroup" class="right-end"><!--

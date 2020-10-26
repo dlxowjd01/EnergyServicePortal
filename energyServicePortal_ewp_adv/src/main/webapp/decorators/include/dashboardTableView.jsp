@@ -82,11 +82,7 @@
 					title: '금일 누적(kWh)',
 					data: 'nowEnergy',
 					render: function (data, type, full, rowIndex) {
-						if (data == '-') {
-							return data;
-						} else {
-							return data[0];
-						}
+						return isEmpty(data) ? '-' : data;
 					},
 					className: 'dt-head-right dt-body-right'
 				},
@@ -108,11 +104,7 @@
 					title: '전일 발전(kWh)',
 					data: 'yesterEnergy',
 					render: function (data, type, full, rowIndex) {
-						if (isEmpty(data)) {
-							return '-';
-						} else {
-							return numberComma(data);
-						}
+						return isEmpty(data) ? '-' : data;
 					},
 					className: 'dt-head-right dt-body-right'
 				},
@@ -378,13 +370,13 @@
 								if (isEmpty(targetData) || isEmpty(targetData.energy)) {
 									tableData[index]['monthGen'] = '-';
 								} else {
-									tableData[index]['monthGen'] = targetData.energy > 0 ? displayNumberFixedUnit(targetData.energy, 'W', 'MW', 2)[0] : (targetData.energy / 1000).toFixed(2);
+									tableData[index]['monthGen'] = !isNaN(targetData.energy) ? displayNumberFixedUnit(targetData.energy, 'W', 'MW', 2)[0] : '-';
 								}
 							} else {
 								if (isEmpty(targetData)) {
 									tableData[index]['nowEnergy'] = '-';
 								} else {
-									tableData[index]['nowEnergy'] = targetData.energy > 0 ? displayNumberFixedUnit(targetData.energy, 'W', 'kW', 2) : (targetData.energy / 1000).toFixed(2);
+									tableData[index]['nowEnergy'] = !isNaN(targetData.energy) ? displayNumberFixedUnit(targetData.energy, 'W', 'kW', 0)[0] : '-';
 								}
 							}
 						});
@@ -401,7 +393,6 @@
 											return a.basetime > b.basetime ? -1 : a.basetime < b.basetime ? 1 : 0;
 										});
 										const curruntWeather = datas.find(item => item['observed'] === true);
-										console.log(curruntWeather);
 										if (isEmpty(curruntWeather)) {
 											tableData[index]['toDaySky'] = '';
 										} else {
@@ -433,9 +424,9 @@
 										let genEnergy = 0;
 										items.map(e => genEnergy += e['energy']);
 										if (interval) {
-											tableData[index]['yesterEnergy'] = (genEnergy / 1000).toFixed(2);
+											tableData[index]['yesterEnergy'] = !isNaN(genEnergy) ? displayNumberFixedUnit(genEnergy, 'W', 'kW', 0)[0] : '-';
 										} else {
-											tableData[index]['beforeYearGen'] = (genEnergy / 1000000).toFixed(2);
+											tableData[index]['beforeYearGen'] = !isNaN(genEnergy) ? displayNumberFixedUnit(genEnergy, 'W', 'kW', 0)[0] : '-';
 										}
 									}
 								});
