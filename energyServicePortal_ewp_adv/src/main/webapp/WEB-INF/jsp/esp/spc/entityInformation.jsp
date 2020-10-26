@@ -54,7 +54,7 @@
 					title: 'SPC명',
 					data: 'spc_name',
 					render: function (data, type, full, rowIndex) {
-						return '<a href="javascript:moveModifyPage(\'' + full['spc_id'] + '\', \'' + full['gen_id'] + '\')">' + data + '</a>';
+						return '<a href="javascript:moveModifyPage(\'' + full['spc_id'] + '\', \'' + full['gen_id'] + '\')" class="table-link">' + data + '</a>';
 					},
 					className: 'dt-left'
 				},
@@ -62,7 +62,7 @@
 					title: '발전소 명',
 					data: 'gen_name',
 					render: function (data, type, full, rowIndex) {
-						return '<a href="javascript:moveModifyPage(\'' + full['spc_id'] + '\', \'' + full['gen_id'] + '\')">' + data + '</a>';
+						return '<a href="javascript:moveModifyPage(\'' + full['spc_id'] + '\', \'' + full['gen_id'] + '\')" class="table-link">' + data + '</a>';
 					},
 					className: 'dt-left'
 				},
@@ -356,35 +356,6 @@
 						$("#comDeleteBtn").prop('disabled', false);
 					}
 				});
-
-				// let delPrompt = prompt(count + '건을 삭제하시겠습니까? \n삭제를 원하시면 아래 "삭제"라고 입력하고 확인을 눌러 주세요.', '');
-				//
-				// if (delPrompt != '삭제') {
-				// 	return;
-				// }
-				//
-				// for (var i = 0; i < count; i++) {
-				// 	var rowData = checkDataList[i];
-				// 	$.ajax({
-				// 		url: apiHost + '/spcs/' + rowData.spc_id + "/gens/" + rowData.gen_id + "?oid=" + oid,
-				// 		type: "delete",
-				// 		dataType: 'json',
-				// 		async: false,
-				// 		contentType: "application/json",
-				// 		data: {
-				// 			"oid": oid
-				// 		},
-				// 		success: function (json) {
-				// 			sucessCnt++;
-				// 		},
-				// 		error: function (request, status, error) {
-				//
-				// 		}
-				// 	});
-				// }
-				//
-				// alert(sucessCnt + "건 삭제처리되었습니다.");
-				// getDataList(page);
 			}).catch(error => {
 				errorMsg(error);
 			});

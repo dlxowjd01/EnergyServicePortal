@@ -103,7 +103,7 @@
 					<div class="row">
 						<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
 							<div class="input-group inline-flex">
-								<label for="addSiteList" class="input-label">사업소</label>
+								<label for="addSiteList" class="input-label required">사업소</label>
 								<div class="dropdown" id="addSiteList">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="사업소 선택">
 										사업소 선택<span class="caret"></span>
@@ -116,11 +116,11 @@
 								</div>
 							</div>
 							<div class="input-group inline-flex">
-								<label for="name" class="input-label">장치명</label>
+								<label for="name" class="input-label required">장치명</label>
 								<input class="input text-input-type" type="text" name="name" id="name" placeholder="입력" autocomplete="off">
 							</div>
 							<div class="input-group inline-flex">
-								<label for="device_type" class="input-label">장치 타입</label>
+								<label for="device_type" class="input-label required">장치 타입</label>
 								<div class="dropdown" id="device_type">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="타입 선택">
 										타입 선택<span class="caret"></span>
@@ -133,7 +133,7 @@
 								</div>
 							</div>
 							<div class="input-group inline-flex">
-								<label for="metering_type" class="input-label">계량 유형</label>
+								<label for="metering_type" class="input-label required">계량 유형</label>
 								<div class="dropdown" id="metering_type">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="유형 선택">
 										유형 선택<span class="caret"></span>
@@ -1401,6 +1401,8 @@
 					}
 				});
 
+				displayDropdown($('#addDeviceDisplayType'));
+
 				costSetList();
 				if (!isEmpty(data['alarm_code'])) {
 					document.querySelectorAll('#alarm_codeList li').forEach(el => {
@@ -1434,10 +1436,36 @@
 		let areaData = setAreaParamData('addDeviceModal', 'dropdown');
 		let alertPreffix = '등록';
 		let urlSufffix = '';
+
+		if (method != 'delete') {
+
+			if (isEmpty(areaData['addSiteList'])) {
+				alert('사업소 선택은 필수 입니다.');
+				return false;
+			}
+
+			if (isEmpty(areaData['name'].trim())) {
+				alert('장치명은 필수 입니다.');
+				return false;
+			}
+
+			if (isEmpty(areaData['device_type'])) {
+				alert('장치 타입은 필수 입니다.');
+				return false;
+			}
+
+			if (isEmpty(areaData['metering_type'])) {
+				alert('계량 유형은 필수 입니다.');
+				return false;
+			}
+		}
+
+
 		if (method == 'patch' || method == 'delete') {
 			urlSufffix = '/' + did;
 
 			if (method == 'patch') {
+
 				if (isEmpty(areaData['alarm_code'])) {
 					delete areaData['alarm_code'];
 				} else {

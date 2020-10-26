@@ -108,7 +108,11 @@
 					title: '전일 발전(kWh)',
 					data: 'yesterEnergy',
 					render: function (data, type, full, rowIndex) {
-						return isEmpty(data) ? '-' : data;
+						if (isEmpty(data)) {
+							return '-';
+						} else {
+							return numberComma(data);
+						}
 					},
 					className: 'dt-head-right dt-body-right'
 				},
@@ -130,7 +134,11 @@
 					title: '월간 발전(MWh)',
 					data: 'monthGen',
 					render: function (data, type, full, rowIndex) {
-						return isEmpty(data) ? '-' : data;
+						if (isEmpty(data)) {
+							return '-';
+						} else {
+							return numberComma(data);
+						}
 					},
 					className: 'dt-head-right dt-body-right'
 				},

@@ -263,25 +263,23 @@
 </div>
 <div class="row">
 	<div class="col-lg-12">
-		<div class="indiv report maintenance_report">
-			<div class="btn-wrap-type02">
+		<div class="indiv">
+			<div class="btn-wrap-type01">
 				<button type="button" class="btn-type" onclick="location.href='/report/maintenanceReportPost.do'">
 					<fmt:message key="workreportmain.2.register" />
 				</button>
 			</div>
-			<div class="spc-tbl align-type">
-				<table id="reportTable">
-					<colgroup>
-						<col style="width:5%">
-						<col style="width:15%">
-						<col style="width:15%">
-						<col style="width:35%">
-						<col style="width:10%">
-						<col style="width:10%">
-						<col style="width:10%">
-					</colgroup>
-				</table>
-			</div>
+			<table id="reportTable">
+				<colgroup>
+					<col style="width:5%">
+					<col style="width:15%">
+					<col style="width:15%">
+					<col style="width:35%">
+					<col style="width:10%">
+					<col style="width:10%">
+					<col style="width:10%">
+				</colgroup>
+			</table>
 			<div class="pagination-wrapper" id="paging"></div>
 		</div>
 	</div>

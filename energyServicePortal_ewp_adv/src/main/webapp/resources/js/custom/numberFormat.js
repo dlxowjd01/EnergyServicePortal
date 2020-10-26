@@ -94,7 +94,12 @@ const displayNumberFixedDecimal = function(number, unit, intChipher, decimalChip
 				if(str.length > intChipher && v != 'T') {
 					number = number / 1000;
 				} else {
-					rtnValue = [numberComma((number).toFixed(decimalChipher)), v + 'W' + suffix];
+					if(decimalChipher === 0){
+						rtnValue = [numberComma(Math.round(number)), v + 'W' + suffix];
+					} else {
+						let pFraction = Math.pow(10, decimalChipher);
+						rtnValue = [numberComma(( Math.round(number * pFraction) / pFraction ).toFixed(decimalChipher)), v + 'W' + suffix];
+					}
 					return rtnValue;
 				}
 			});
@@ -121,7 +126,12 @@ const displayNumberFixedDecimal = function(number, unit, intChipher, decimalChip
 				const mUnit = money['unit'];
 				const mChipher = money['chipher'];
 				if(String(Math.round(number / mChipher)).length <= intChipher || mUnit == '억') {
-					rtnValue = [numberComma((number / mChipher).toFixed(decimalChipher)), mUnit + '원'];
+					if(decimalChipher === 0){
+						rtnValue = [numberComma(Math.round(number)), mUnit + '원'];
+					} else {
+						let pFraction = Math.pow(10, decimalChipher);
+						rtnValue = [numberComma(( Math.round(number * pFraction) / pFraction ).toFixed(decimalChipher)), mUnit + '원'];
+					}
 					return rtnValue;
 				}
 			});
@@ -137,9 +147,10 @@ const displayNumberFixedDecimal = function(number, unit, intChipher, decimalChip
  * @param unit
  * @param fixedUnit
  * @param decimalChipher
+ *
  * @returns {[string, *]|[]}
  */
-const displayNumberFixedUnit = function (input_num, input_unit, fixed_unit, num_frac, option) {
+const displayNumberFixedUnit = function (input_num, input_unit, fixed_unit, num_frac) {
 	let rtnValue = []
 	let whUnit = ['', 'k', 'M', 'G', 'T'];
 	let moneyUnit = [
@@ -159,16 +170,12 @@ const displayNumberFixedUnit = function (input_num, input_unit, fixed_unit, num_
 		rtnValue = ['-', input_unit];
 		return rtnValue;
 	} else {
-		if (input_unit == fixed_unit) {
-			if(option != "round"){
-				rtnValue = [numberComma((input_num).toFixed(num_frac)), fixed_unit];
+		if (input_unit === fixed_unit) {
+			if(num_frac === 0){
+				rtnValue = [numberComma(Math.round(input_num)), fixed_unit];
 			} else {
-				if(num_frac === 0){
-					rtnValue = [numberComma(Math.round(input_num)), fixed_unit];
-				} else {
-					let pFraction = Math.pow(10, num_frac);
-					rtnValue = [numberComma(( Math.round(input_num * pFraction) / pFraction ).toFixed(num_frac)), fixed_unit];
-				}
+				let pFraction = Math.pow(10, num_frac);
+				rtnValue = [numberComma(( Math.round(input_num * pFraction) / pFraction ).toFixed(num_frac)), fixed_unit];
 			}
 			return rtnValue;
 		}
@@ -197,20 +204,16 @@ const displayNumberFixedUnit = function (input_num, input_unit, fixed_unit, num_
 			}
 
 			whUnit.some(function(v, k) {
-				if(fixed_unit == v + 'W' + suffix) {
+				if(fixed_unit === v + 'W' + suffix) {
 					input_num = input_num / Math.pow(1000, k);
-					if(Math.floor(input_num * 100) == 0) {
+					if(Math.floor(input_num * 100) === 0) {
 						rtnValue = [0, v + 'W' +  suffix];
 					} else {
-						if(option != "round"){
-							rtnValue = [numberComma((input_num).toFixed(num_frac)), v + 'W' +  suffix];
+						if(num_frac === 0){
+							rtnValue = [numberComma(Math.round(input_num)), v + 'W' +  suffix];
 						} else {
-							if(num_frac === 0){
-								rtnValue = [numberComma(Math.round(input_num)), v + 'W' +  suffix];
-							} else {
-								let pFraction = Math.pow(10, num_frac);
-								rtnValue = [numberComma(( Math.round(input_num * pFraction) / pFraction ).toFixed(num_frac)), v + 'W' +  suffix];
-							}
+							let pFraction = Math.pow(10, num_frac);
+							rtnValue = [numberComma(( Math.round(input_num * pFraction) / pFraction ).toFixed(num_frac)), v + 'W' +  suffix];
 						}
 					}
 					return rtnValue;
@@ -218,20 +221,16 @@ const displayNumberFixedUnit = function (input_num, input_unit, fixed_unit, num_
 			});
 		} else {
 			$.each(moneyUnit, function(i, el) {
-				if(fixed_unit == el.unit) {
+				if(fixed_unit === el.unit) {
 					input_num = input_num / el.chipher;
-					if(Math.floor(input_num * 100) == 0) {
+					if(Math.floor(input_num * 100) === 0) {
 						rtnValue = [0, el.unit];
 					} else {
-						if(option != "round"){
-							rtnValue = [numberComma((input_num).toFixed(num_frac)), el.unit];
+						if(num_frac === 0){
+							rtnValue = [numberComma(Math.round(input_num)), el.unit];
 						} else {
-							if(num_frac === 0){
-								rtnValue = [numberComma(Math.round(input_num)), el.unit];
-							} else {
-								let pFraction = Math.pow(10, num_frac);
-								rtnValue = [numberComma(( Math.round(input_num * pFraction) / pFraction ).toFixed(num_frac)), el.unit];
-							}
+							let pFraction = Math.pow(10, num_frac);
+							rtnValue = [numberComma(( Math.round(input_num * pFraction) / pFraction ).toFixed(num_frac)), el.unit];
 						}
 					}
 					return false;

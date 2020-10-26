@@ -294,20 +294,18 @@
 			<div class="btn-wrap-type01">
 				<button type="button" class="btn-type" onclick="location.href='/spc/balanceSheetPost.do'">신규 등록</button>
 			</div>
-			<div class="spc-tbl align-type">
-				<table id="balanceTable" class="chk-type">
-					<colgroup>
-						<col width="5%">
-						<col width="5%">
-						<col width="15%">
-						<col width="15%">
-						<col width="15%">
-						<col width="15%">
-						<col width="15%">
-						<col width="15%">
-					</colgroup>
-				</table>
-			</div>
+			<table id="balanceTable" class="chk-type">
+				<colgroup>
+					<col width="5%">
+					<col width="5%">
+					<col width="15%">
+					<col width="15%">
+					<col width="15%">
+					<col width="15%">
+					<col width="15%">
+					<col width="15%">
+				</colgroup>
+			</table>
 			<div class="btn-wrap-type02 mt30">
 				<button type="button" class="btn-type03" id="deleteBtn" onclick="deleteRow();" disabled="disabled">선택 삭제</button>
 			</div>

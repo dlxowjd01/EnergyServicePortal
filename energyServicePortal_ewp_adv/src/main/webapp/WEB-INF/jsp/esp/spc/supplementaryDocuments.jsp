@@ -1,183 +1,285 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
-
 <script type="text/javascript">
+	let spcEntityTable = null;
+
 	$(function() {
-		setInitList("listData"); //리스트초기화
+		const keyWord = document.getElementById('key_word'); //검색명 INPUT
 
-		getDataList(page);
-
-		$('.btn-save').on('click', function (e) {
-			let excelName = 'spc_이관자료_목록';
-			let $val = $('#excelList').find('tbody');
-			let cnt = $val.length;
-
-			if (cnt < 1) {
-				alert('다운받을 데이터가 없습니다.');
+		/**
+		 * 검색명 Event
+		 */
+		keyWord.addEventListener('keyup', (e) => {
+			if (e.keyCode === 13) {
+				getDataList();
 			} else {
-				if (confirm('엑셀로 저장하시겠습니까?')) {
-					tableToExcel('excelList', excelName, e);
-				}
+				const regExp = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
+				keyWord.value = (keyWord.value).replace(regExp, '');
 			}
 		});
+
+		spcEntityTable = $('#spcEntityTable').DataTable({
+			autoWidth: true,
+			fixedHeader: true,
+			'table-layout': 'fixed',
+			scrollY: '720px',
+			scrollCollapse: true,
+			sortable: true,
+			paging: true,
+			pageLength: 50,
+			columns: [
+				{
+					title: '순번',
+					data: null,
+					render: function (data, type, full, rowIndex) {
+						return rowIndex.row + 1;
+					},
+					className: 'dt-center no-sorting fixed'
+				},
+				{
+					title: 'SPC명',
+					data: 'spc_name',
+					render: function (data, type, full, rowIndex) {
+						return '<a href="javascript:moveModifyPage(\'' + full['spc_id'] + '\', \'' + full['gen_id'] + '\')" class="table-link">' + data + '</a>';
+					},
+					className: 'dt-left'
+				},
+				{
+					title: '발전소 명',
+					data: 'gen_name',
+					render: function (data, type, full, rowIndex) {
+						return '<a href="javascript:moveModifyPage(\'' + full['spc_id'] + '\', \'' + full['gen_id'] + '\')" class="table-link">' + data + '</a>';
+					},
+					className: 'dt-left'
+				},
+				{
+					title: '관리 운영기간',
+					data: 'operation_period',
+					className: 'dt-center'
+				},
+				{
+					title: '이관자료',
+					data: null,
+					render: function (data, type, full, rowIndex) {
+						const fileAll = full['file_count_all']
+							, fileNow = full['file_count_now'];
+
+						if (!isEmpty(fileAll) && !isEmpty(fileNow)) {
+							return fileNow + '&nbsp;&nbsp;/&nbsp;&nbsp;' + fileAll;
+						} else {
+							return '-';
+						}
+					},
+					className: 'dt-center'
+				},
+				{
+					title: '첨부파일',
+					data: null,
+					render: function (data, type, full, rowIndex) {
+						const fileNow = full['file_count_now'];
+
+						if (!isEmpty(fileNow)) {
+							return fileNow + '&nbsp;&nbsp;건';
+						} else {
+							return '-';
+						}
+					},
+					className: 'dt-center'
+				}
+			],
+			language: {
+				emptyTable: "조회된 데이터가 없습니다.",
+				zeroRecords:  "검색된 결과가 없습니다."
+			},
+			dom: 'tip',
+		}).columns.adjust().draw();
+
+		new $.fn.dataTable.Buttons(spcEntityTable, {
+			name: 'commands',
+			buttons: [
+				{
+					extend: 'excelHtml5',
+					className: "btn-save",
+					text: '엑셀 다운로드',
+					filename: 'SPC이관자료_' + new Date().format('yyyyMMddHHmmss'),
+					customize: function( xlsx ) {
+						var sheet = xlsx.xl.worksheets['sheet1.xml'];
+						$('row:first c', sheet).attr( 's', '42' );
+						var sheet = xlsx.xl.worksheets['sheet1.xml'];
+					}
+				}
+			]
+		});
+
+		spcEntityTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup");
+		getDataList();
 	});
 
-	$(document).on('keyup', '#key_word', function(e) {
-		if (e.keyCode == 13) {
-			getDataList(page);
-		}
-	})
-
-	function nvl(value, str) {
-		if (isEmpty(value)) {
-			return str;
-		} else {
-			return value;
-		}
+	/**
+	 * 상세화면으로 이동
+	 *
+	 * @param spcId
+	 * @param genId
+	 */
+	const moveModifyPage = (spcId, genId) => {
+		location.href = '/spc/entityDetailsBySPC.do?spc_id=' + spcId + '&gen_id=' + genId + '&oid=' + oid;
 	}
-	//
-	// function getCsvDown() {
-	// 	let excelName = 'spc_" +oid+ "_이관자료';
-	// 	let $val = $('#excelList').find('tbody');
-	// 	let cnt = $val.length;
-	//
-	// 	if (cnt < 1) {
-	// 		alert('다운받을 데이터가 없습니다.');
-	// 	} else {
-	// 		if (confirm('엑셀로 저장하시겠습니까?')) {
-	// 			tableToExcel('excelList', excelName, e);
-	// 		}
-	// 	}
-	// 	// var column = ["name", "발전소_명", "설치_용량", "관리_운영_기간", "", ""], //json Key
-	// 	// 	header = ["SPC명", "발전소 명", "용량", "관리 운영기간	", "이관자료", "첨부파일"]; //csv 파일 헤더
-	// 	//
-	// 	// getJsonCsvDownload($("#listData").data("gridJsonData"), column, header, "spc_" +oid+ "_이관자료.csv"); // json list, 컬럼, 헤더명, 파일명
-	// }
 
-	function getDataList(page, n, sort) {
-		if(page == undefined){
-			page = 1;
-		}else{
-			if(isEmpty(n) && isEmpty(sort)) {
-				$('.sort-table > thead').find('button').each(function(){
-					if($(this).attr('class') != 'btn-align'){
-						n = $(this).data('colname');
-						sort = $(this).data('classname');
+	const getDataList = () => {
+		new Promise(resolve => {
+			$.ajax({
+				url: apiHost + '/spcs',
+				type: 'GET',
+				async: false,
+				data: {
+					oid: oid,
+					includeGens: true
+				},
+				success: (result) => {
+					if (result['status'] === 'success') {
+						const resultList = result['data'];
+						if (isEmpty(resultList)) {
+							throw new Error('조회된 내역이 없습니다.');
+						} else {
+							resolve(resultList);
+						}
+					} else {
+						throw new Error('조회에 실패했습니다.');
 					}
-				});
-				
-			}
-		}
+				},
+				error: (error) => {
+					console.error(error);
+					throw new Error('조회에 실패했습니다.');
+				}
+			});
+		}).then(resultList => {
+			//데이터화
+			const refineList = new Array();
+			resultList.forEach(rowData => {
+				const spcGens = rowData['spcGens'];
+				if (!isEmpty(spcGens)) {
+					spcGens.forEach(spcGen => {
+						const genId = spcGen['gen_id']
+							, genName = spcGen['name']
+							, maintenanceInfo = JSON.parse(spcGen['maintenance_info'])
+							, warrantyInfo = JSON.parse(spcGen['warranty_info']);
 
-		$.ajax({
-			url: apiHost + "/spcs",
-			type: "get",
-			async: false,
-			data: {
-				"oid": oid,
-				includeGens: true
-			},
-			success: function(result) {
-				var jsonList = [],
-					keyWord = $("#key_word").val().trim().toLowerCase();
-
-				for (var i = 0, count = result.data.length; i < count; i++) {
-
-					var spcGensList = result.data[i].spcGens;
-
-					if (spcGensList !== undefined && spcGensList.length > 0) {
-
-						for (var j = 0, jcount = spcGensList.length; j < jcount; j++) {
-							var spcGensRow = spcGensList[j],
-								rowData = result.data[i],
-								newData = {},
-								maintenanceInfo = JSON.parse(spcGensRow.maintenance_info);
-								originFile = new Array();
-
-							$.ajax({
-								url: apiHost + "/spcs/" + rowData.spc_id + "/gens/" + spcGensRow.gen_id + "/supplement?oid=" + rowData.oid,
-								type: "get",
-								dataType: 'json',
-								async: false,
-								contentType: "application/json",
-								success: function(json) {
-
-									if (isEmpty(json.data[0])) {
-										newData["파일_총_개수"] = '-';
-										newData["파일_현재_개수"] = '-';
-										newData["첨부파일"] = '-';
-									} else {
-										newData["파일_총_개수"] = json.data[0].file_count_all;
-										newData["파일_현재_개수"] = json.data[0].file_count_now;
-										newData["첨부파일"] = json.data[0].file_count_now;
-										
-										const supplementInfo = JSON.parse(json.data[0].supplement_info);
-										Object.entries(supplementInfo).forEach(([key, val]) => {
-											if (!isEmpty(key)) {
-												if (key.match('originalName') && !isEmpty(val)) {
-													originFile.push(val);
-												}
-											}
-										})
-									}
-								},
-								error: function(request, status, error) {
-									alert('처리 중 오류가 발생했습니다.');
-									return false;
-								}
-							});
-
-							let termDate = '';
-							if (!isEmpty(maintenanceInfo)) {
-								let mainFrom = maintenanceInfo['관리_운영_기간_from'];
-								let mainTo = maintenanceInfo['관리_운영_기간_to'];
-								if (!isEmpty(mainFrom) && !isEmpty(mainTo)) {
-									termDate = new Date(mainFrom).format('yyyy-MM-dd') + ' ~ ' + new Date(mainTo).format('yyyy-MM-dd')
-								}
-							}
-
-							newData["name"] = rowData.name;
-							newData["oid"] = rowData.oid;
-							newData["spc_id"] = rowData.spc_id;
-							newData["gen_id"] = spcGensRow.gen_id;
-							newData["발전소_명"] = spcGensRow.name;
-							newData["관리_운영_기간"] = nvl(termDate, "-");
-							// newData["설치_용량"] = nvl(contractInfo["설치_용량"], "-");
-							//키워드 검색 조건 필터 처리
-							if (newData["name"].toLowerCase().indexOf(keyWord) > -1 || newData["발전소_명"].toLowerCase().indexOf(keyWord) > -1) {
-								jsonList.push(newData)
+						let termDate = '';
+						if (!isEmpty(maintenanceInfo)) {
+							const mainFrom = maintenanceInfo['관리_운영_기간_from']
+								, mainTo = maintenanceInfo['관리_운영_기간_to'];
+							if (!isEmpty(mainFrom) && !isEmpty(mainTo)) {
+								termDate = new Date(mainFrom).format('yyyy-MM-dd') + ' ~ ' + new Date(mainTo).format('yyyy-MM-dd');
 							} else {
-								$.each(originFile, function(k,v){
-									if (v.toLowerCase().indexOf(keyWord) > -1) {
-										jsonList.push(newData);
-										return false;
+								termDate = '-';
+							}
+						}
+
+						refineList.push({
+							spc_id: rowData['spc_id'],
+							spc_name: rowData['name'],
+							gen_id: genId,
+							gen_name: genName,
+							operation_period: termDate,
+						});
+					});
+				}
+			});
+
+			refineList.sort((a, b) => {
+				return a['operation_period'] < b['operation_period'] ? 1 : a['operation_period'] > b['operation_period'] ? -1 : 0;
+			});
+
+			return refineList;
+		}).then(refineList => {
+			return new Promise(resolve=> {
+				const urls = new Array();
+				const deferreds = new Array();
+				refineList.forEach(rowData => {
+					urls.push({
+						url: apiHost + '/spcs/' + rowData['spc_id'] + '/gens/' + rowData['gen_id'] + '/supplement?oid=' + oid,
+						type: 'GET',
+						async: false,
+						dataType: 'json'
+					});
+				});
+
+				urls.forEach(function (url) {
+					let deferred = $.Deferred();
+					deferreds.push(deferred);
+					$.ajax(url).done(function (data) {
+						data['url'] = url['url'];
+						(function (deferred) {
+							return deferred.resolve(data);
+						})(deferred);
+					}).fail(function (error) {
+						console.log(error);
+					});
+				});
+
+				$.when.apply($, deferreds).then(function () {
+					Object.entries(arguments).forEach(([dummy, resultData]) => {
+						if (!isEmpty(resultData)) {
+							const targetUrl = resultData['url']
+								, urlSplit = targetUrl.split('/')
+								, spcId = urlSplit[4]
+								, detailFiles = resultData['data'];
+
+							if (!isEmpty(detailFiles)) {
+								const detail = detailFiles[0];
+								const genId = detail['gen_id'];
+
+								refineList.forEach((rowData, index) => {
+									if (Number(spcId) === rowData['spc_id'] && genId === rowData['gen_id']) {
+										refineList[index]['file_count_all'] = detail['file_count_all'];
+										refineList[index]['file_count_now'] = detail['file_count_now'];
+										refineList[index]['supplement_info'] = JSON.parse(detail['supplement_info']);
 									}
 								});
 							}
-							
 						}
-
+					});
+					resolve(refineList);
+				});
+			});
+		}).then(addFileList => {
+			const keyWord = document.getElementById('key_word').value;
+			const key_word = new RegExp(keyWord, 'gi');
+			const supplementList = addFileList.filter(rowData => {
+				if (((rowData['spc_name'].match(key_word) || rowData['gen_name'].match(key_word)))) {
+					return true;
+				} else {
+					const supplementInfo = rowData['supplement_info'];
+					if (!isEmpty(supplementInfo)) {
+						let findFileName = false;
+						Object.entries(supplementInfo).forEach(([keyName, data]) => {
+							if (/originalName/.test(keyName) && !isEmpty(data) && data.match(key_word)) {
+								findFileName = true;
+							}
+						});
+						return findFileName;
 					}
-
 				}
-				$(".sort-table").data("nowjsp", "supplementary");
-				jsonListSort(n, sort, jsonList);
-				jsonList = paging(page, jsonList);
-				setMakeList(jsonList, "listData", {
-					"dataFunction": {
-						"INDEX": getNumberIndex
-					}
-				}); //list생성
+			});
 
-			},
-			error: function(request, status, error) {
-				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
-			}
+			spcEntityTable.clear();
+			spcEntityTable.rows.add(supplementList).draw();
+		}).catch(error => {
+			errorMsg(error);
 		});
 	}
 
-	function getNumberIndex(index) {
-		return index + 1;
+	/**
+	 * 에러 처리
+	 *
+	 * @param msg
+	 */
+	const errorMsg = msg => {
+		$('#errMsg').text(msg);
+		$('#errorModal').modal('show');
+		setTimeout(function(){
+			$('#errorModal').modal('hide');
+		}, 1800);
 	}
 </script>
 <div class="row header-wrapper">
@@ -186,65 +288,32 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-lg-3 col-md-4 col-sm-4">
-		<div class="text-btn-area">
-			<div class="text-input-type">
-				<input type="text" id="key_word" placeholder="입력">
+	<div class="col-12 clear input-align">
+		<div class="fl">
+			<div class="text-input-type mr-12">
+				<input type="text" id="key_word" name="key_word" placeholder="입력">
 			</div>
+		</div>
+		<div class="fl">
 			<button type="button" class="btn-type" onclick="getDataList();">검색</button>
 		</div>
-	</div>
-	<div class="col-lg-9 col-md-8 col-sm-8">
-		<div class="right">
-			<a href="#;" class="btn-save">엑셀 다운로드</a>
-		</div>
+		<div id="exportBtnGroup" class="fr"></div>
 	</div>
 </div>
 <div class="row">
 	<div class="col-lg-12">
-		<div class="indiv supplementary-docs">
-			<div class="spc-tbl align-type" id="excelList">
-				<table class="sort-table chk-type">
-					<colgroup>
-						<col style="width:5%">
-						<col style="width:25%">
-						<col style="width:25%">
-<%--						<col style="width:10%">--%>
-						<col style="width:18%">
-						<col style="width:14%">
-						<col style="width:13%">
-						<col>
-					</colgroup>
-					<thead>
-						<tr>
-							<th>
-								<input type="hidden" id="chk_header" value="순번">
-								<label for="chk_header">순번</label>
-							</th>
-							<th><button type="button" class="btn-align down">SPC명</button></th>
-							<th><button type="button" class="btn-align down">발전소 명</button></th>
-<%--							<th class="right"><button type="button" class="btn-align down">용량(kW)</button></th>--%>
-							<th><button type="button" class="btn-align down">관리 운영기간</button></th>
-							<th class="right"><button type="button" class="btn-align down">이관자료</button></th>
-							<th class="right"><button type="button" class="btn-align up">첨부파일</button></th>
-						</tr>
-					</thead>
-					<tbody id="listData">
-						<tr>
-							<td>
-								<input type="hidden" id="chk_op[INDEX]" name="rowCheck" value="1">
-								<label for="chk_op[INDEX]">[INDEX]</label>
-							</td>
-							<td><a href="/spc/entityDetailsBySPC.do?spc_id=[spc_id]&gen_id=[gen_id]&oid=[oid]" class="table-link">[name]</a></td>
-							<td><a href="/spc/entityDetailsBySPC.do?spc_id=[spc_id]&gen_id=[gen_id]&oid=[oid]" class="table-link">[발전소_명]</a></td>
-<%--							<td class="right">[설치_용량]</td>--%>
-							<td>[관리_운영_기간]</td>
-							<td class="right">[파일_현재_개수]&nbsp;/&nbsp;[파일_총_개수]</td>
-							<td class="right">[첨부파일]건</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
+		<div class="indiv">
+			<table id="spcEntityTable" class="chk-type">
+				<colgroup>
+					<col style="width:5%">
+					<col style="width:25%">
+					<col style="width:25%">
+					<col style="width:18%">
+					<col style="width:14%">
+					<col style="width:13%">
+					<col>
+				</colgroup>
+			</table>
 			<div class="pagination-wrapper" id="paging">
 			</div>
 		</div>
