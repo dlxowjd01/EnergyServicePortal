@@ -2427,21 +2427,6 @@
 		}
 	}
 
-	function groupBy (objectArray, property) {
-		return objectArray.reduce(function (acc, obj) {
-			var key = obj[property];
-			if (!acc[key]) {
-				acc[key] = [];
-			}
-			acc[key].push(obj);
-			return acc;
-		}, {});
-	}
-
-	function removeDuplicates(data, key) {
-		return [ ...new Map( data.map(x => [key(x), x]) ).values() ];
-	};
-
 	//  using object mutation
 	// const uniqByProp = prop => arr =>
 	// 	Object.values(

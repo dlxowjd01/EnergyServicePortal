@@ -145,6 +145,10 @@ html.darkmode:root {
 	border-top: none;
 }
 
+.dataTable tbody tr.details.selected + tr td {
+	border: 1px 0 1px 0 solid var(--bg-color2);
+}
+
 .dataTable tbody tr.selected td,
 .dataTable tbody td.selected {
 	background: var(--vivid-blue) !important;

@@ -1371,6 +1371,10 @@ table tbody td .dropdown-menu {
 	margin-right: 38px;
 }
 
+.mr-56 {
+	margin-right: 38px;
+}
+
 .ml-0 {
 	margin-left: 0;
 }
@@ -6229,11 +6233,14 @@ input.inp[readonly]:focus {
 /* =========================================================
 			 [sMain] power generation calendar
 ========================================================= */
+.smain-cal {
+	height: 585px;
+	overflow: auto;
+}
+
 .smain-cal .calendar-wrap {
 	display: flex;
 	margin: 12px 0 3px;
-	overflow-y: hidden;
-	overflow-x: auto;
 	max-height: 487px;
 }
 
@@ -6250,7 +6257,7 @@ input.inp[readonly]:focus {
 
 .smain-cal .calendar tbody td {
 	width: 92px;
-	height: 92px;
+	height: 40px;
 	padding: 8px 12px;
 }
 

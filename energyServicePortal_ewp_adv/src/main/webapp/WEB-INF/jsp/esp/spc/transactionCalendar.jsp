@@ -451,17 +451,6 @@
 		}
 	};
 
-	const groupBy = function (objectArray, property) {
-		return objectArray.reduce(function (acc, obj) {
-			var key = obj[property];
-			if (!acc[key]) {
-			acc[key] = [];
-			}
-			acc[key].push(obj);
-			return acc;
-		}, {});
-	}
-
 	const fillCalendar = function (mData, tData, spcNameList) {
 		var calendar = $('#calendar .alarm-list');
 		var modalData = $('#detailInfoModal').find(".alarm-list");

@@ -585,15 +585,64 @@ function getNestedObject (nestedObj, pathArr) {
 		(obj && obj[key] !== 'undefined') ? obj[key] : undefined, nestedObj);
 }
 
-Array.prototype.sortOn = function(key){
-	this.sort(function(a, b){
-		if(a[key] < b[key]){
-			return -1;
-		}else if(a[key] > b[key]){
-			return 1;
+function groupBy (objectArray, property) {
+	return objectArray.reduce(function (acc, obj) {
+		var key = obj[property];
+		if (!acc[key]) {
+			acc[key] = [];
 		}
-		return 0;
-	});
+		acc[key].push(obj);
+		return acc;
+	}, {});
+}
+
+function removeDuplicates(data, key) {
+	return [ ...new Map( data.map(x => [key(x), x]) ).values() ];
+};
+
+function flattenObject (obj) {
+	let flat = {};
+	for (const [key, value] of Object.entries(obj)) {
+		if (typeof value === 'object' && value !== null) {
+		for (const [subkey, subvalue] of Object.entries(value)) {
+			// avoid overwriting duplicate keys: merge instead into array
+			typeof flat[subkey] === 'undefined' ?
+			flat[subkey] = subvalue :
+			Array.isArray(flat[subkey]) ?
+				flat[subkey].push(subvalue) :
+				flat[subkey] = [flat[subkey], subvalue]
+			}
+		} else {
+			flat = {...flat, ...{[key]: value}};
+		}
+	}
+	return flat;
+}
+
+Array.prototype.sortOn = function(key, depth){
+	if(!isEmpty(depth)){
+		this.sort(function(a, b){
+			let aName = a.flat(1)[depth][key];
+			let bName = b.flat(1)[depth][key];
+
+			if(aName < bName){
+				return -1;
+			} else if(aName > bName){
+				return 1;
+			}
+			return 0;
+		});
+	} else {
+		this.sort(function(a, b){
+			if(a[key] < b[key]){
+				return -1;
+			} else if(a[key] > b[key]){
+				return 1;
+			}
+			return 0;
+		});
+	}
+
 }
 
 

@@ -541,6 +541,7 @@
 
 		let gridData = gridDataMake(standard, interval);
 		let totalArr = new Array();
+		gridData.sortOn("deviceNm");
 		if (interval == '15min' || interval == 'hour') {
 			let dateVal = '';
 			let tableTemp = $('<div class="chart-table">').append('<table class="table-desktop">');
@@ -961,7 +962,6 @@
 				});
 			}
 		});
-
 		return dataArr;
 	}
 
@@ -1005,20 +1005,21 @@
 		let chartStyle = $('#chartStyle button').data('value'); //현재 선택된 스타일
 
 		accociation.forEach(function (v, k) {
-
 			if (JSON.stringify(v) != '{}') {
-				$.each(v, function (i, el) {
-					let itm = el[0].items;
-					let deviceNm = el[0].name;
+				let sorted = Object.entries(v);
+				sorted.sortOn("name", 1);
+
+				$.each(sorted, function (i, el) {
+					let itm = el[1][0].items;
+					let deviceNm = el[1][0].name;
 					let arrDevice = new Array();
-					let sid = el[0].sid;
+					let sid = el[1][0].sid;
 					let totalCurrent = 0;
 					let dup = false;
 
 					itm.sort(function (a, b) {
 						return a['localtime'] - b['localtime'];
 					});
-
 
 					$.each(standard, function (j, stnd) {
 						let timeValue = 0;
@@ -1065,7 +1066,7 @@
 
 					let $temp = {};
 
-					if( accociation.size === 1){
+					if( accociation.size === 1 && v.length === 1){
 						$temp = {
 							name: deviceNm,
 							type: 'column',

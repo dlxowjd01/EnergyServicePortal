@@ -3724,12 +3724,12 @@
 		};
 
 		$.when($.ajax(dailyEnergy), $.ajax(dailyWeather)).done(function (dailyEnergyData, dailyWeatherData) {
-			
 			let v = Object.values(dailyEnergyData[0].data);
 			let energyItems;
 			let weatherItems = dailyWeatherData[0];
 			let calendarDays = $('.calWeatherDay');
 
+			// console.log("dailyEnergyData===", v);
 			if (!isEmpty(v) &&  v.flat()[0]["items"].length > 0) {
 				energyItems = v.flat()[0]["items"];
 			} else {
@@ -4619,25 +4619,6 @@
 		} else {
 			$form.attr('action', '/dashboard/smain.do').submit();
 		}
-	}
-
-	function flattenObject (obj) {
-		let flat = {};
-		for (const [key, value] of Object.entries(obj)) {
-			if (typeof value === 'object' && value !== null) {
-			for (const [subkey, subvalue] of Object.entries(value)) {
-				// avoid overwriting duplicate keys: merge instead into array
-				typeof flat[subkey] === 'undefined' ?
-				flat[subkey] = subvalue :
-				Array.isArray(flat[subkey]) ?
-					flat[subkey].push(subvalue) :
-					flat[subkey] = [flat[subkey], subvalue]
-				}
-			} else {
-				flat = {...flat, ...{[key]: value}};
-			}
-		}
-		return flat;
 	}
 
 	function addToDateList(idx, data, option){
