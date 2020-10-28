@@ -1241,10 +1241,33 @@
 			, data = refineManualData(timeInterval);
 
 		if (manualItems === undefined) {
-			if (mode === 'save') {
-				alert('저장할 정보가 없습니다.');
+			if ($('#manualModalTable tr').length === 0) {
+				if (mode === 'save') {
+					alert('저장할 정보가 없습니다.');
+				} else {
+					$('#manualAddDeviceModal').modal('hide');
+				}
 			} else {
-				$('#manualAddDeviceModal').modal('hide');
+				let modify = false;
+				$('#manualModalTable input').each(function() {
+					if (!isEmpty($(this).val())) {
+						modify = true;
+					}
+				});
+
+				if (modify === true) {
+					if (mode === 'save') {
+						$('#saveManualModal').modal('show');
+					} else {
+						$('#closeManualModal').modal('show');
+					}
+				} else {
+					if (mode === 'save') {
+						alert('저장할 정보가 없습니다.');
+					} else {
+						$('#manualAddDeviceModal').modal('hide');
+					}
+				}
 			}
 		} else {
 			if (isEmpty(manualItems) || (objectAreEqual(manualItems, data))) {
