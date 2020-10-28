@@ -653,6 +653,10 @@ const dailyChartDraw = async () => {
 									const items = siteEnergy['items'];
 									if (!isEmpty(items)) {
 										items.forEach(item => {
+											// (인코어드 데이터 모니터링 용) 지우지 말아주세요.
+											if(item.energy > 8000000){
+												console.log("사이트 아이디===>", siteId, "에너지===>", item, "사이트 에너지 상세 ===>", siteEnergyItem )
+											}
 											const index = Number(String(item['basetime']).slice(6, 8)) - 1;
 											pvList[index] += Math.floor(item['energy'] / 1000);
 											sumObj['pvSum'] += Math.floor(item['energy'] / 1000);
@@ -748,6 +752,7 @@ const dailyChartDraw = async () => {
 			let str = '';
 			Object.entries(sumObj).forEach(([key, value]) => {
 				if(key == 'chargeSum'){
+				
 					str += '<li class="charge">충전 : ' + displayNumberFixedDecimal(value, 'kWh', 3, 2).join(' ') + '</li>';
 				}
 				if(key == 'dischargeSum'){

@@ -284,6 +284,25 @@ html.darkmode:root {
 	zoom: 1;
 }
 
+.dataTable td .text-link {
+	margin: 0 0 5px 0;
+}
+
+.dataTable td .text-link + .text-link {
+	color: var(--white87);
+	background: none;
+	border: 1px solid var(--white87);
+	border-radius: 2px;
+	text-decoration: none;
+	margin: 0 0 5px 12px;
+}
+
+.dataTable .popover-content {
+	overflow: auto;
+	width: 180px;
+	height: 150px;
+}
+
 .dataTables_wrapper label {
 	color: var(--white60);
 }

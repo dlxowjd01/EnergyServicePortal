@@ -309,13 +309,13 @@
 				
 				
 				}
-			// 2. Edit existing user info
+			
 			} else {
+			// 2. Edit existing user info
 				let dTable = $("#groupTable").DataTable();
 				let tr = $("#groupTable").find("tbody tr.selected");
 				let td = tr.find("td");
 				let rowData = dTable.row(tr).data();
-			
 				let updatedBy = "";
 
 				if(!isEmpty(rowData.updatedBy)){
@@ -357,7 +357,8 @@
 						}
 					];
 
-					Promise.all([ returnAjaxRes(editOptionList[0]), returnAjaxRes(editOptionList[1]) ]).then( res => {	
+					Promise.all([ returnAjaxRes(editOptionList[0]), returnAjaxRes(editOptionList[1]) ]).then( res => {
+						console.log("tag group res---", res)	
 						if(!isEmpty(res[0].group_sites)){
 							let deletePromises = [];
 							let groupSites = res[0].group_sites;
@@ -465,53 +466,136 @@
 							data: JSON.stringify(obj)
 						}
 
-						Promise.resolve(returnAjaxRes(editOption)).then(res => {
-							let sitePromises = [];
-							$.each(rowData.sites, function(index, el){
-								// newSiteArr.push($(this).data("value"));
-								let emptyObj = {
-									vpp_group_id : null
-								}
-								let option = {
-									url: apiHost + "/config/sites/" + el.sid,
-									type: 'patch',
-									async: true,
-									contentType: 'application/json; charset=UTF-8',
-									data: JSON.stringify(emptyObj),
-								}
-								sitePromises.push(Promise.resolve(returnAjaxRes(option)));
-							});
-
-							Promise.all(sitePromises).then( res => {
-								let newSitePromises = [];
-								$.each(siteNameStr, function(index, el){
+						if(!isEmpty(obj)) {
+							// console.log("vpp_group ====", editOption);
+							Promise.resolve(returnAjaxRes(editOption)).then(res => {
+								// console.log("res====", res);
+								let patchSitePromises = [];
+								$.each(rowData.sites, function(index, el){
 									// newSiteArr.push($(this).data("value"));
-									let siteObj = {
-										vpp_group_id: rowData.vgid
+									let emptyObj = {
+										vpp_group_id : null
 									}
 									let option = {
-										url: apiHost + "/config/sites/" + $(this).data("value"),
+										url: apiHost + "/config/sites/" + el.sid,
 										type: 'patch',
 										async: true,
 										contentType: 'application/json; charset=UTF-8',
-										data: JSON.stringify(siteObj),
+										data: JSON.stringify(emptyObj),
 									}
-									newSitePromises.push(Promise.resolve(returnAjaxRes(option)));
+									patchSitePromises.push(Promise.resolve(returnAjaxRes(option)));
 								});
-								Promise.all(newSitePromises).then( finalRes => {
-									$("#addGroupModal").modal("hide");
-									$("#resultSuccessMsg").text("그룹 정보가 수정 되었습니다.").removeClass("hidden");
-									$("#resultBtn").parent().addClass("hidden");
-									$("#resultModal").modal("show");
-									getGroupData(initModal);
-									setTimeout(function(){
-										$("#resultModal").modal("hide");
-									}, 1600);
+
+								Promise.all(patchSitePromises).then( res => {
+									let newSitePromises = [];
+									$.each(siteNameStr, function(index, el){
+										// newSiteArr.push($(this).data("value"));
+										let siteObj = {
+											vpp_group_id: rowData.vgid
+										}
+										let option = {
+											url: apiHost + "/config/sites/" + $(this).data("value"),
+											type: 'patch',
+											async: true,
+											contentType: 'application/json; charset=UTF-8',
+											data: JSON.stringify(siteObj),
+										}
+										newSitePromises.push(Promise.resolve(returnAjaxRes(option)));
+									});
+									Promise.all(newSitePromises).then( finalRes => {
+										$("#addGroupModal").modal("hide");
+										$("#resultSuccessMsg").text("그룹 정보가 수정 되었습니다.").removeClass("hidden");
+										$("#resultBtn").parent().addClass("hidden");
+										$("#resultModal").modal("show");
+										getGroupData(initModal);
+										setTimeout(function(){
+											$("#resultModal").modal("hide");
+										}, 1600);
+									});
+
 								});
+
 							});
-						});
+						} else {
+							// IF ONLY site list has been updated
+							let newSitePromises = [];
+							let deleteSitePromises = [];
+							let selectedSiteList = siteNameStr.toArray();
+
+							$.each(selectedSiteList, function(index, el){
+								let match = rowData.sites.findIndex( x => x.sid == $(el).data("value") );
+								if(match < 0){
+									let editSiteOpt = {
+										url: apiHost + "/config/sites/" + $(el).data("value"),
+										type: 'patch',
+										async: false,
+										contentType: 'application/json; charset=UTF-8',
+										data: JSON.stringify({ vpp_group_id: rowData.vgid })
+									}
+									newSitePromises.push( Promise.resolve(makeAjaxCall(editSiteOpt) ));
+								}
+							});
+
+							$.each(rowData.sites, function(index, el){
+								let match = selectedSiteList.findIndex( x => $(x).data("value") == el.sid );
+								if(match < 0){
+									let patchOption = {
+										url: apiHost + "/config/sites/" + el.sid,
+										type: 'patch',
+										async: false,
+										contentType: 'application/json; charset=UTF-8',
+										data: JSON.stringify( { vpp_group_id: null}),
+									}
+									deleteSitePromises.push( Promise.resolve(makeAjaxCall(patchOption) ) );
+								}
+
+							});
+
+							if(newSitePromises.length>0 && deleteSitePromises.length>0){
+								Promise.all(newSitePromises).then( res => {
+									Promise.all(deleteSitePromises).then( res2 => {
+										console.log("res2---", res2);
+										$("#addGroupModal").modal("hide");
+										$("#resultSuccessMsg").text("그룹 정보가 수정 되었습니다.").removeClass("hidden");
+										$("#resultBtn").parent().addClass("hidden");
+										$("#resultModal").modal("show");
+										getGroupData(initModal);
+										setTimeout(function(){
+											$("#resultModal").modal("hide");
+										}, 1600);
+									});
+								});
+							} else {
+								if(newSitePromises.length>0){
+									Promise.all(newSitePromises).then( res => {
+										console.log("newSitePromises---", res);
+										$("#addGroupModal").modal("hide");
+										$("#resultSuccessMsg").text("그룹 정보가 수정 되었습니다.").removeClass("hidden");
+										$("#resultBtn").parent().addClass("hidden");
+										$("#resultModal").modal("show");
+										getGroupData(initModal);
+										setTimeout(function(){
+											$("#resultModal").modal("hide");
+										}, 1600);
+									});
+								}
+
+								if(deleteSitePromises.length>0){
+									Promise.all(deleteSitePromises).then( res => {
+										$("#addGroupModal").modal("hide");
+										$("#resultSuccessMsg").text("그룹 정보가 수정 되었습니다.").removeClass("hidden");
+										$("#resultBtn").parent().addClass("hidden");
+										$("#resultModal").modal("show");
+										getGroupData(initModal);
+										setTimeout(function(){
+											$("#resultModal").modal("hide");
+										}, 1600);
+									});
+								}
+							}
+						}
+						
 					}
-					
 					// if(newGroupType === "dr_group"){
 					// 	let editOption = {
 					// 		url:  apiHost + "/config/dr-groups/" + rowData.dgid,
@@ -630,7 +714,7 @@
 	function getGroupData(callback){
 		if(callback){
 			callback();
-			$('#groupTable').DataTable().clear().destroy();
+			$('#groupTable').DataTable().destroy();
 		}
 		let optionList = [
 			{
@@ -658,6 +742,8 @@
 
 		// 	Promise.all([ Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])) ]).then( res => {
 		Promise.resolve(returnAjaxRes(optionList[0])).then( res => {
+			console.log("vpp_group===", res.vpp_group);
+			console.log("tag_group===", res.tag_group);
 			let flat = [];
 			// flat = [...res.dr_group, ...res.vpp_group, ...res.tag_group];
 			flat = [...res.vpp_group, ...res.tag_group];
@@ -730,6 +816,7 @@
 				"fixedHeader": true,
 				"bAutoWidth": true,
 				"bSearchable" : true,
+				"destroy": true,
 				// "retrieve": true,
 				// "ScrollX": true,
 				// "sScrollX": "110%",
@@ -1451,7 +1538,10 @@
 						var _this = this;
 						setTimeout(function() {
 							if (!$(".popover:hover").length) {
-							$(_this).popover("hide");
+								$(_this).popover("hide");
+							}
+							if($("#groupTable").find("tbody tr.selected").length > 0){
+								$(".popover").popover('hide');
 							}
 						}, 300);
 					});
@@ -1685,9 +1775,12 @@
 </div>
 
 <div class="modal fade" id="addGroupModal" tabindex="-1" role="dialog" aria-labelledby="addGroupModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
-	<div class="modal-dialog modal-lg">
+	<div class="modal-dialog modal-lg no-flex">
 		<div class="modal-content group-modal-content">
-			<div id="titleAdd" class="modal-header mb-10"><h1>그룹 추가<span class="required px-4 fr">필수 입력 항목</span></h1></div>
+			<div id="titleAdd" class="modal-header mb-10">
+				<h1 class="fl">그룹 추가</h1><span class="required px-4 fr">필수 입력 항목</span>
+			</div>
+			
 			<div id="titleEdit" class="modal-header"><h1>사업소 정보 수정</h1></div>
 			<div class="modal-body">
 				<div class="container-fluid">

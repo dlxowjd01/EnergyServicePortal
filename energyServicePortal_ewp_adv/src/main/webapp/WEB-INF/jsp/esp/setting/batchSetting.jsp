@@ -2,7 +2,7 @@
 <%@ include file="/decorators/include/taglibs.jsp" %>
 
 <script type="text/javascript">
-	
+	var defList = [];
 	$(function () {
 		let d = new Date();
 		let yesterday = new Date(d.getFullYear(), d.getMonth(), d.getDate()-1);
@@ -21,7 +21,7 @@
 		$('#timepicker2').wickedpicker({
 			now: currentTime, twentyFour: true
 		});
-
+		initDetails();
 		getData("firstTime");
 
 		// $("#updateScheduleForm .digit").on("keyup", function(evt, limit){
@@ -63,13 +63,7 @@
 			}
 		});
 		
-		$("#runNowBtn").on("click", $("#addScheduleModal").addClass("now") );
-		// Form Submission !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-		$("#addScheduleModal").on("hide.bs.modal", function() {
-			$(this).hasClass("edit") ? $(this).removeClass("edit") : null;
-			initModal();
-		});
+		$("#runNowBtn").on("click", $("#updateScheduleForm").addClass("now") );
 
 		$("#deleteConfirmBtn").click(function(){
 			let dTable = $("#scheduleTable").DataTable();
@@ -150,7 +144,7 @@
 
 	});
 
-	function getData(option){
+	function getData(option, input){
 		let optionList = [
 			{
 				url: apiHost + "/batch-job-definitions",
@@ -176,15 +170,16 @@
 			});
 
 		} else if(option === "log") {
-
+			getLogData(input, defList);
 		} else {
 			Promise.all([ Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])) ]).then(res => {
 				let definitionData = res[0];
 				let scheduleData = res[1];
 				let str = '';
+				defList = definitionData;
 
 				getScheduleData(definitionData, scheduleData);
-				getLogData(null, definitionData, scheduleData, option);
+				getLogData(null, definitionData);
 
 				definitionData.forEach((item, index) => {
 					let found = scheduleData.findIndex( x => x.batchJobDefinition.id === item.id);
@@ -205,7 +200,19 @@
 				$("#scheduleList li").on("click", function(){
 					let val = $(this).data("value");
 					$("#scheduleList").prev().data("value", val);
+					console.log("defList===", defList)
+					let found = defList.findIndex( x => x.id === val);
+					if(found > -1) {
+						let data = defList[found];
+						$("#taskName").val(data.name);
+						$('input[name="option_hold"][value="' + data.is_valid + '"]').prop( "checked", true);
+						$("#argumentParam").val(data.arg_format.replaceAll("\\s+$", ""));
+						$('input[name="option_hold"][value="' + data.option_distributed + '"]').prop( "checked", true);
+						$("#cpuVol").val(data.cpu);
+						$("#gpuVol").val(data.gpu);
+						$("#ramVol").val( String(data.mem).replace(/\B(?=(\d{3})+(?!\d))/g, "," ) ) ;
 
+					}
 					let warning = $("#scheduleList").parents().closest(".dropdown").next();
 					if( !warning.hasClass("hidden")){
 						warning.addClass("hidden");
@@ -233,7 +240,7 @@
 			// "sScrollX": "100%",
 			// "sScrollXInner": "110%",
 			"sScrollY": true,
-			"scrollY": "720px",
+			"scrollY": "530px",
 			"bScrollCollapse": true,
 			"pageLength": 20,
 			// "bFilter": false, disabling this option will prevent table.search()
@@ -301,13 +308,13 @@
 				selector: 'td:not(:first-child)'
 			},
 			initComplete: function(settings, json ){
-				let str = `<div id="btnGroup" class="right-end"><!--
-					--><button type="button" disabled class="btn-type03" onclick="updateModal('edit')">선택 수정</button><!--
-					--><button type="button" disabled class="btn-type03" onclick="updateModal('delete')">선택 삭제</button><!--
-				--></div>`;
-
-				let addBtnStr = `<button type="button" class="btn-type fr mb-20" onclick="updateModal('add')">신규 등록</button>`;
-				$("#scheduleTable_wrapper").append($(str)).prepend($(addBtnStr));
+				let addBtnStr = `
+				<div class="flex-wrapper mt15 mb-28">
+					<h2 class="ntit">배치 스케줄</h2>
+					<button type="button" class="btn-type" onclick="updateInfo('add')">신규 등록</button>
+				</div>
+				`;
+				$("#scheduleTable_wrapper").prepend($(addBtnStr));
 				this.api().columns().header().each ((el, i) => {
 					if(i == 0){
 						$(el).attr ('style', 'min-width: 50px');
@@ -316,21 +323,31 @@
 			},
 			// every time DataTables performs a draw
 			drawCallback: function (settings) {
-				$('#scheduleTable_wrapper').addClass('mb-28');
+				$('#scheduleTable_wrapper').addClass('mb-10');
 			}
 		}).on("select", function(e, dt, type, indexes) {
-			let btn = $("#btnGroup").find(".btn-type03");
+			let btn = $("#btnGroup").find("button");
 			btn.each(function(index, element){
-				if($(this).is(":disabled")){
-					$(this).prop("disabled", false);
+				if(index === 0){
+					if($(this).is(":disabled")){
+						$(this).prop("disabled", false);
+					}
+				} else {
+					$(this).prop("disabled", false).html("수정<span class='caret'></span>");
 				}
+
 			});
 			scheduleTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
+			updateInfo('edit');			
 			// console.log("dt---", scheduleTable[ type ]( indexes ).nodes())
 		}).on("deselect", function(e, dt, type, indexes) {		
 			let btn = $("#btnGroup").find(".btn-type03");
 			btn.each(function(index, element){
-				if(!$(this).is(":disabled")){
+				if(index === 0){
+					if(!$(this).is(":disabled")){
+						$(this).prop("disabled", true);
+					}
+				} else {
 					$(this).prop("disabled", true);
 				}
 			});
@@ -348,12 +365,9 @@
 				$box.prop("checked", false);
 			}
 		});
-
-		showChildData(scheduleTable);
-
 	}
 
-	function getLogData(dateElement, definitionData, scheduleData, flag){
+	function getLogData(dateElement, definitionData){
 		let newStartDate = '';
 		let newStartTime = '';
 		let newEndDate = '';
@@ -374,7 +388,7 @@
 					}
 				} else if(index === 1){
 					if(!isEmpty($(this).val())){
-						newStartTime = $(this).val().replaceAll(":", "");
+						newStartTime = $(this).wickedpicker('time').replace(/[^0-9]/g, '') + '00';
 					}
 				} else if(index === 2){
 					if(!isEmpty($(this).val())){
@@ -382,7 +396,7 @@
 					}
 				} else if(index === 3){
 					if(!isEmpty($(this).val())){
-						newEndTime = $(this).val().replaceAll(":", "");
+						newEndTime = $(this).wickedpicker('time').replace(/[^0-9]/g, '') + '00';
 					}
 				}
 			});
@@ -397,6 +411,10 @@
 				startHHMMSS: newStartTime,
 				endDate: newEndDate,
 				endHHMMSS: newEndTime,
+				limit: 20
+			},
+			beforeSend: function (jqXHR, settings) {
+				$('#loadingCircle').show();
 			}
 		}
 
@@ -487,7 +505,11 @@
 							let str1 = '';
 							if( full.executed_command.length > 50 ){
 								let trimmed1 = full.executed_command.substring(0, 51) + ' ...'
-								str1 = `<div class="flex-start">${'${ trimmed1 }'}&ensp;<a href="#" role="button" data-toggle="popover" data-placement="bottom" rel="popover" onclick='return false' onmouseover="updateModal('detail', null, this)" class="text-link">more</a></div>`
+								str1 = `
+									<div class="flex-start">${'${ trimmed1 }'}&ensp;
+										<a href="#" role="button" data-toggle="popover" data-placement="bottom" rel="popover" onclick='return false' onmouseover="updateInfo('detail', null, this)" class="text-link">more</a>
+										<button type="button" class="text-link" onclick='copyText(this, "executed_command")'>복사</button>
+									</div>`
 							} else {
 								str1 = full.executed_command;
 							}
@@ -501,7 +523,11 @@
 							let str2 = '';
 							if( full.stdout.length > 50 ){
 								let trimmed2 = full.stdout.substring(0, 51) + ' ...'
-								str2 = `<div class="flex-start">${'${ trimmed2 }'}&ensp;<a href="#" role="button" data-toggle="popover" data-placement="bottom" rel="popover" onclick='return false' onmouseover="updateModal('detail', null, this)" class="text-link">more</a></div>`
+								str2 = `
+									<div class="flex-start">${'${ trimmed2 }'}&ensp;
+										<a href="#" role="button" data-toggle="popover" data-placement="bottom" rel="popover" onclick='return false' onmouseover="updateInfo('detail', null, this)" class="text-link">more</a>
+										<button type="button" class="text-link" onclick='copyText(this, "stdout")'>복사</button>
+									</div>`
 							} else {
 								str2 = full.stdout;
 							}
@@ -512,10 +538,10 @@
 				"dom": 'tip',
 				"select": {
 					style: 'single',
-					selector: 'td input[type="checkbox"], tr'
+					selector: 'td input[type="checkbox"], td:not(:nth-child(6)):not(:nth-child(7))'
 				},
 				initComplete: function(settings, json ){
-					let addBtnStr = `<button type="button" class="btn-type fr mb-20" onclick="updateModal('add')">로그 저장</button>`;
+					let addBtnStr = `<button type="button" class="btn-type fr mb-20" onclick="updateInfo('add')">로그 저장</button>`;
 					this.api().columns().header().each ((el, i) => {
 						if(i == 0){
 							$(el).attr ('style', 'min-width: 50px');
@@ -583,7 +609,12 @@
 
 			logTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup");
 
-
+			$('#logTable').parent().on('scroll', function() {
+				console.log("scrolling===")
+				let popOver = $(".popover");
+				popOver.popover('hide');
+			});
+			
 			$('#logTable').find("input:checkbox").on('click', function() {
 				var $box = $(this);
 				if ($box.is(":checked")) {
@@ -603,14 +634,14 @@
 		});
 	}
 
-	function initModal(){
+	function initDetails(){
 		let form = $("#updateScheduleForm");
 		let input = form.find("input[type='text']");
 		let radio = form.find("input[type='radio']");
 		let dropdownBtn = form.find(".dropdown-toggle");
 		let warning = form.find(".warning");
 
-		$("#addScheduleModal").removeClass("now");
+		$("#updateScheduleForm").removeClass("now");
 		$("#addScheduleBtn").prop("disabled", true).removeClass("hidden");
 		$("#argumentParam").val("");
 
@@ -637,20 +668,18 @@
 		});
 	}
 	
-	function updateModal(option, callback, popOverLink){
-		let titleAdd = $('#titleAdd');
+	function updateInfo(option, callback, popOverLink){
 		let form = $("#updateScheduleForm");
 		let required = form.find(".asterisk");
 		let addBtn = $("#addScheduleBtn");
 
 		// ADD MODAL!!!
 		if(option == "add"){
-			initModal();
-			titleAdd.removeClass("hidden").next().addClass("hidden");
+			form.hasClass("edit") ? form.removeClass("edit") : null;
+			initDetails();
 			required.hasClass("no-symbol") ? required.removeClass("no-symbol") : null;
 			addBtn.text("추가");
-
-			$("#addScheduleModal").removeClass("edit").modal("show");
+			form.removeClass("edit");
 		} else {
 			let dTable = $("#scheduleTable").DataTable();
 			let tr = $("#scheduleTable").find("tbody tr.selected");
@@ -669,7 +698,7 @@
 					$("#cpuVol").val(rowData.batchJobDefinition.cpu);
 				}
 				if(!isEmpty(rowData.batchJobDefinition.mem)){
-					$("#diskVol").val(rowData.batchJobDefinition.mem);
+					$("#ramVol").val(rowData.batchJobDefinition.mem);
 				}
 				if(!isEmpty(rowData.batchJobDefinition.gpu)){
 					$("#gpuVol").val(rowData.batchJobDefinition.gpu);
@@ -688,11 +717,9 @@
 				if(!isEmpty(rowData.args)){
 					$("#argumentParam").val(rowData.args);
 				}
-
-				titleAdd.addClass("hidden").next().removeClass("hidden");
 				addBtn.prop("disabled", false).text("수정");
 
-				$("#addScheduleModal").addClass("edit").modal("show");
+				$("#updateScheduleForm").addClass("edit");
 			}
 			
 			if(option == "detail") {
@@ -735,7 +762,7 @@
 						if($("#logTable").find("tbody tr.selected").length > 0){
 							$(".popover").popover('hide');
 						}
-					}, 300);
+					}, 200);
 				});
 
 				popWindow.popover("show");
@@ -774,28 +801,11 @@
 
 	}
 
-	function format ( trData ) {
-		console.log("trData---", trData);
-		let isDistributed = trData.batchJobDefinition.is_distribution_needed;
-		let isValid = '';
-		(trData.is_valid == 0) ? (isValid = '중단') : (isValid = '진행');
-		let cpuVol = trData.cpu;
-		let diskVol = trData.mem;
-		let gpuVol = trData.gpu;
-		let argumentParam = trData.args;
-
-		return  '<div class="ml-36 pl-40">' +
-			'<div class="w-90 mb-10">작업분배기: ' + isDistributed + '   임시중단 여부: ' + isValid + '</div>' +
-			'<div class="w-90 mb-10">CPU 요구사항: ' + cpuVol + '%   메모리 요구사항: ' + diskVol + 'MB   GPU 요구사항: ' + gpuVol + '%</div>' +
-			'<div class="w-90">실행 파라미터: ' + argumentParam + '</div>' +
-		'</div>'
-	}
-
 	function validateForm(){
-		if($("#addScheduleModal").hasClass('edit')){
+		if($("#updateScheduleForm").hasClass('edit')){
 			$("#addSiteBtn").prop("disabled", false);
 		} else {
-			let warning = $("#addScheduleModal").find(".warning");
+			let warning = $("#updateScheduleForm").find(".warning");
 			// console.log("scheduleName===", $("#taskName").val() )
 			// console.log("scheduleCycle===", $("#scheduleCycle").val() )
 			// console.log("warning===", warning.length )
@@ -818,7 +828,7 @@
 		let newOptionHold = Number($("input[name='option_hold']:checked").val());
 		let newArgumentParam = $("#argumentParam").val().replace(/\t+/g,'');
 		let newCpuVol = $("#cpuVol").val().replaceAll(",", "");
-		let newDiskVol = $("#diskVol").val().replaceAll(",", "");
+		let newRamVol = $("#ramVol").val().replaceAll(",", "");
 		let newGpuVol = $("#gpuVol").val().replaceAll(",", "");
 
 		let obj = {};
@@ -827,7 +837,7 @@
 		obj.name = $("#taskName").val();
 		// console.log("now---", runNow);
 
-		if(!$("#addScheduleModal").hasClass("edit")) {
+		if(!$("#updateScheduleForm").hasClass("edit")) {
 			// 1. ADD schedule info
 			obj.schedule = newScheduleCycle;
 
@@ -848,9 +858,9 @@
 						cpu: newCpuVol
 					}
 				}
-				if(!isEmpty(newDiskVol)){
+				if(!isEmpty(newRamVol)){
 					obj.batchJobDefinition = {
-						mem: newDiskVol
+						mem: newRamVol
 					}
 				}
 				if(!isEmpty(newGpuVol)){
@@ -870,7 +880,6 @@
 
 				console.log("obj---", obj);
 				$.ajax(option).done(function (json, textStatus, jqXHR) {
-					$("#addScheduleModal").modal("hide");
 					$("#resultSuccessMsg").removeClass("hidden");
 					$("#resultModal").modal("show");
 					setTimeout(function(){
@@ -878,7 +887,6 @@
 						$("#resultModal").modal("hide");
 					}, 1600);
 				}).fail(function (jqXHR, textStatus, errorThrown) {
-					$("#addScheduleModal").modal("hide");
 					$("#resultFailureMsg").text("배치 스케줄 추가에 실패했습니다. 다시 시도해 주세요.").removeClass("hidden");
 					$("#resultModal").modal("show");
 					setTimeout(function(){
@@ -917,9 +925,9 @@
 						cpu: newCpuVol
 					}
 				}
-				if(!isEmpty(newDiskVol)){
+				if(!isEmpty(newRamVol)){
 					obj.batchJobDefinition = {
-						mem: newDiskVol
+						mem: newRamVol
 					}
 				}
 				if(!isEmpty(newGpuVol)){
@@ -937,7 +945,6 @@
 					data: JSON.stringify(obj)
 				}
 				$.ajax(option).done(function (json, textStatus, jqXHR) {
-					$("#addScheduleModal").modal("hide");
 					$("#resultSuccessMsg").html("배치 스케줄 성공적으로 수정 되었습니다.").removeClass("hidden");
 					$("#resultModal").modal("show");
 					getData("schedule");
@@ -945,7 +952,6 @@
 						$("#resultModal").modal("hide");
 					}, 1600);
 				}).fail(function (jqXHR, textStatus, errorThrown) {
-					$("#addScheduleModal").modal("hide");
 					$("#resultFailureMsg").html("배치 스케줄 수정에 실패했습니다. <br>다시 시도해 주세요.").removeClass("hidden");
 					$("#resultModal").modal("show");
 					setTimeout(function(){
@@ -958,66 +964,23 @@
 		}
 	};
 
-	function showChildData(table){
-		var scheduleTable = table;
-		var detailRows = [];
-
-		$("#scheduleTable tbody tr").on("click", function(){
-			let tr = $(this).closest('tr');
-			let siblings = tr.siblings();
-			let selectedRow = table.row( tr );
-			let idx = $.inArray( tr.attr('id'), detailRows );
-
-			siblings.each(function(){
-				scheduleTable.row($(this)).child.hide();
-			});
-
-			if ( selectedRow.child.isShown() ) {
-				tr.removeClass( 'details' );
-				selectedRow.child.hide();
-				// Remove from the 'open' array
-				detailRows.splice( idx, 1 );
-			} else {
-				tr.addClass( 'details' );
-				selectedRow.child( format( selectedRow.data() ) ).show();
-				// Add to the 'open' array
-				if ( idx === -1 ) {
-					detailRows.push( tr.attr('id') );
-				}
-			}
-		});
-
-		scheduleTable.on( 'draw', function () {
-			$.each( detailRows, function ( i, id ) {
-				$('#'+id+' td').trigger( 'click' );
-			});
-		});
+	function copyText(self, key){
+		let dTable = $("#logTable").DataTable();
+		let tr = $(self).parents().closest('tr');
+		let rowData;
+		if(key === "executed_command"){
+			rowData = dTable.row(tr).data().executed_command;
+		} else {
+			rowData = dTable.row(tr).data().stdout;
+		}
+		const el = document.createElement('textarea');
+		el.value = rowData;
+		document.body.appendChild(el);
+		el.select();
+		document.execCommand('copy');
+		document.body.removeChild(el);
 	}
 
-	function format ( trData ) {
-		let isDistributed = trData.batchJobDefinition.is_distribution_needed;
-		let isValid = '';
-		(trData.is_valid == 0) ? (isValid = '중단') : (isValid = '진행');
-		let cpuVol = trData.batchJobDefinition.cpu;
-		let diskVol = displayNumberFixedDecimal(trData.batchJobDefinition.mem, "MB", null, "2")[0];
-		let gpuVol = trData.batchJobDefinition.gpu;
-		let argumentParam = trData.args;
-
-		return  '<div class="ml-36 pl-40">' +
-			'<div class="row mb-10">' +
-				'<div class="col-12">' + 
-					'작업분배기:' + '&ensp;' + isDistributed + '<span class="mr-24"></span>' +
-					'임시중단 여부:' + '&ensp;' + isValid + '<span class="mr-56"></span>' +
-					'CPU 요구사항:' + '&ensp;' + cpuVol + '%' + '<span class="mr-24"></span>' +
-					'메모리 요구사항:' + '&ensp;' + diskVol + '&ensp;' + 'MB' + '<span class="mr-24"></span>' +
-					'GPU 요구사항:' + '&ensp;' + gpuVol + '%' +
-				'</div>' +
-			'</div>' +
-			'<div class="row">' +
-				'<div class="col-12">실행 파라미터:' + '&ensp;' + argumentParam + '</div>' +
-			'</div>' +
-		'</div>'
-	}
 
 </script>
 
@@ -1028,17 +991,15 @@
 </div>
 
 <div class="row">
-	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-		<div class="indiv">
-			<h2 class="ntit">배치 스케줄</h2>
-
+	<div class="col-xl-7 col-lg-7 col-md-6 col-sm-12">
+		<div class="indiv schedule-content">
 			<table id="scheduleTable">
 				<colgroup>
 					<col style="width:4%">
-					<col style="width:6%">
+					<col style="width:8%">
 					<col style="width:18%">
 					<col style="width:18%">
-					<col style="width:18%">
+					<col style="width:16%">
 					<col style="width:18%">
 					<col style="width:18%">
 				</colgroup>
@@ -1047,6 +1008,131 @@
 			</table>
 		</div>
 	</div>
+	<div class="col-xl-5 col-lg-5 col-md-6 col-sm-12">
+		<div class="indiv schedule-content">
+			<div class="row mt15 mb-28">
+				<div class="col-12">
+					<h2 class="ntit">스케줄 상세 정보<span class="required fr">필수 입력 항목</span></h2>
+				</div>
+			</div>
+			<form name="update_schedule_form" id="updateScheduleForm" class="setting-form">
+				<div class="row">
+					<div class="col-xl-2 col-lg-2 col-md-4 col-sm-5"><span class="input-label asterisk">스케줄 명</span></div>
+					<div class="col-xl-4 col-lg-4 col-md-8 col-sm-7">
+						<div class="dropdown w-90">
+							<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+							<ul id="scheduleList" class="dropdown-menu"></ul>
+						</div>
+						<small class="hidden warning">추가하실 스케줄 명을 선택해 주세요.</small>
+					</div>
+					<div class="col-xl-2 col-lg-2 col-md-4 col-sm-5"><span class="input-label asterisk">작업 명</span></div>
+					<div class="col-xl-4 col-lg-4 col-md-8 col-sm-7">
+						<div class="text-input-type">
+							<input type="text" name="schedule_name" id="taskName" placeholder="입력">
+						</div>
+						<small class="hidden warning">작업 명을 입력해 주새요.</small>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xl-2 col-lg-2 col-md-4 col-sm-5"><span class="input-label asterisk">실행 주기</span></div>
+					<div class="col-xl-4 col-lg-4 col-md-8 col-sm-7">
+						<div class="text-input-type w-90">
+							<input type="text" name="schedule_cycle" id="scheduleCycle" class="digit" placeholder="입력" minlength="1" maxlength="12">
+						</div>
+					</div>
+					<div class="col-xl-2 col-lg-2 col-md-4 col-sm-5"><span class="input-label">임시중단 여부</span></div>
+					<div class="col-xl-4 col-lg-4 col-md-8 col-sm-7">
+						<div class="flex-start">
+							<div class="radio-type">
+								<input type="radio" name="option_hold" id="toProceed" value="1" checked>
+								<label for="toProceed">진행</label>
+							</div>
+							<div class="radio-type ml-30">
+								<input type="radio" name="option_hold" id="onHold" value="0">
+								<label for="onHold">중단</label>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xl-2 col-lg-2 col-md-4 col-sm-5"><span class="input-label">실행 파라미터</span></div>
+					<div class="col-xl-10 col-lg-10 col-md-8 col-sm-7">
+						<textarea name="argument_param" id="argumentParam" class="textarea" placeholder="입력"></textarea>
+					</div>
+				</div>
+
+				<div class="row border">
+					<div class="col-12">
+						<h3 class="stit">추가/수정 시에는 반영 되지 않습니다.</h3>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xl-2 col-lg-2 col-md-3 col-sm-5"><span class="input-label">CPU 요구사항</span></div>
+					<div class="col-xl-4 col-lg-4 col-md-8 col-sm-7">
+						<div class="text-input-type unit">
+							<input type="text" name="cpu_vol" id="cpuVol" class="digit" placeholder="입력" minlength="2" maxlength="9">
+							<span>&#37;</span>
+						</div>
+					</div>
+
+					<div class="col-xl-2 col-lg-2 col-md-4 col-sm-5"><span class="input-label">메모리 요구사항</span></div>
+					<div class="col-xl-4 col-lg-4 col-md-8 col-sm-7">
+						<div class="text-input-type unit">
+							<input type="text" name="disk_vol" id="ramVol" class="digit" placeholder="입력" maxlength="9">
+							<span>MB</span>
+						</div>
+					</div>
+
+					<div class="col-xl-2 col-lg-2 col-md-4 col-sm-5"><span class="input-label">GPU 요구사항</span></div>
+					<div class="col-xl-4 col-lg-4 col-md-8 col-sm-7">
+						<div class="text-input-type unit">
+							<input type="text" name="gpu_vol" id="gpuVol" class="digit" placeholder="입력" maxlength="9">
+							<span>&#37;</span>
+						</div>
+					</div>
+				</div>
+		
+				<div class="row">
+					<div class="col-xl-2 col-lg-2 col-md-4 col-sm-5"><span class="input-label">작업 분배기</span></div>
+					<div class="col-xl-4 col-lg-4 col-md-8 col-sm-7">
+						<div class="flex-start">
+							<div class="radio-type fixed-height">
+								<input type="radio" name="option_distributed" id="isDistributed" value="1">
+								<label for="isDistributed">예</label>
+							</div>
+							<div class="radio-type fixed-height">
+								<input type="radio" name="option_distributed" id="notDistributed" value="0" checked>
+								<label for="notDistributed">아니오</label>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xl-2 col-lg-2 col-md-4 col-sm-5 py-0"></div>
+					<div class="col-xl-10 col-lg-10 col-md-8 col-sm-7 py-0">
+						<textarea name="getter_query" id="getterQuery" class="textarea" placeholder="입력"></textarea>
+					</div>
+				</div>
+
+				<div class="row pt-20">
+					<div class="col-3">
+						<button type="click" onclick="submitSchedule(event, 'now')" class="btn-type04">즉시 실행</button>
+					</div>
+					<div class="col-9">
+						<div id="btnGroup" class="btn-wrap-type02"><!--
+						--><button type="button" disabled class="btn-type03" onclick="updateInfo('delete')">삭제</button><!--
+						--><button type="button" id="addScheduleBtn" class="btn-type" onclick="submitSchedule(event)" disabled>추가</button><!--
+					--></div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	
 </div>
 
 <div class="row">
@@ -1063,7 +1149,7 @@
 					<em></em>
 					<input type="text" id="timepicker2" name="timepicker2" class="sel timepicker hasWickedpicker" onkeypress="return false;" aria-showingpicker="false" tabindex="0">
 				</div>
-				<button type="button" class="btn-type ml-16" onclick="getLogData($(this).prev().find('input'));">검색</button>
+				<button type="button" class="btn-type ml-16" onclick="getData('log', $(this).prev().find('input'));">검색</button>
 			</div>
 
 			<div id="exportBtnGroup" class="fr"></div>
@@ -1081,125 +1167,6 @@
 				<thead></thead>
 				<tbody></tbody>
 			</table>
-		</div>
-	</div>
-</div>
-
-
-<div class="modal fade" id="addScheduleModal" tabindex="-1" role="dialog" aria-labelledby="addScheduleModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
-	<div class="modal-dialog modal-md">
-		<div class="modal-content schedule-modal-content">
-			<div id="titleAdd" class="modal-header mb-10"><h1>배치 스케줄 추가<span class="required fr">필수 입력 항목</span></h1></div>
-			<div id="titleEdit" class="modal-header"><h1>배치 스케줄 수정</h1></div>
-			<div class="modal-body">
-				<div class="container-fluid">
-					<form name="update_schedule_form" id="updateScheduleForm" class="setting-form">
-						<div class="row">
-							<div class="col-xl-2 col-lg-2 col-md-4 col-sm-5"><span class="input-label asterisk">스케줄 명</span></div>
-							<div class="col-xl-4 col-lg-4 col-md-8 col-sm-7">
-								<div class="dropdown w-90">
-									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-									<ul id="scheduleList" class="dropdown-menu"></ul>
-								</div>
-								<small class="hidden warning">추가하실 스케줄 명을 선택해 주세요.</small>
-							</div>
-							<div class="col-xl-2 col-lg-2 col-md-4 col-sm-5"><span class="input-label asterisk">작업 명</span></div>
-							<div class="col-xl-4 col-lg-4 col-md-8 col-sm-7">
-								<div class="text-input-type">
-									<input type="text" name="schedule_name" id="taskName" placeholder="입력">
-								</div>
-								<small class="hidden warning">작업 명을 입력해 주새요.</small>
-							</div>
-						</div>
-
-						<div class="row">
-							<div class="col-xl-2 col-lg-2 col-md-4 col-sm-5"><span class="input-label asterisk">실행 주기</span></div>
-							<div class="col-xl-4 col-lg-4 col-md-8 col-sm-7">
-								<div class="text-input-type w-90">
-									<input type="text" name="schedule_cycle" id="scheduleCycle" class="digit" placeholder="입력" minlength="1" maxlength="12">
-								</div>
-								<small class="hidden warning">실행 주기를 입력해 주세요.</small>
-							</div>
-							
-							<div class="col-xl-2 col-lg-2 col-md-3 col-sm-5"><span class="input-label">CPU 요구사항</span></div>
-							<div class="col-xl-4 col-lg-4 col-md-8 col-sm-7">
-								<div class="text-input-type unit">
-									<input type="text" name="cpu_vol" id="cpuVol" class="digit" placeholder="입력" minlength="2" maxlength="9">
-									<span>&#37;</span>
-								</div>
-							</div>
-						</div>
-
-						<div class="row">
-							<div class="col-xl-2 col-lg-2 col-md-4 col-sm-5"><span class="input-label asterisk">작업 분배기</span></div>
-							<div class="col-xl-4 col-lg-4 col-md-8 col-sm-7">
-								<div class="flex-start">
-									<div class="radio-type fixed-height">
-										<input type="radio" name="option_distributed" id="isDistributed" value="1">
-										<label for="isDistributed">예</label>
-									</div>
-									<div class="radio-type fixed-height">
-										<input type="radio" name="option_distributed" id="notDistributed" value="0" checked>
-										<label for="notDistributed">아니오</label>
-									</div>
-								</div>
-							</div>
-							
-							<div class="col-xl-2 col-lg-2 col-md-4 col-sm-5"><span class="input-label">메모리 요구사항</span></div>
-							<div class="col-xl-4 col-lg-4 col-md-8 col-sm-7">
-								<div class="text-input-type unit">
-									<input type="text" name="disk_vol" id="diskVol" class="digit" placeholder="입력" maxlength="9">
-									<span>MB</span>
-								</div>
-							</div>
-						</div>
-
-						<div class="row">
-							<div class="col-xl-2 col-lg-2 col-md-4 col-sm-5"><span class="input-label">임시중단 여부</span></div>
-							<div class="col-xl-4 col-lg-4 col-md-8 col-sm-7">
-								<div class="flex-start">
-									<div class="radio-type">
-										<input type="radio" name="option_hold" id="toProceed" value="1" checked>
-										<label for="toProceed">진행</label>
-									</div>
-									<div class="radio-type ml-30">
-										<input type="radio" name="option_hold" id="onHold" value="0">
-										<label for="onHold">중단</label>
-									</div>
-								</div>
-							</div>
-
-							<div class="col-xl-2 col-lg-2 col-md-4 col-sm-5"><span class="input-label">GPU 요구사항</span></div>
-							<div class="col-xl-4 col-lg-4 col-md-8 col-sm-7">
-								<div class="text-input-type unit">
-									<input type="text" name="gpu_vol" id="gpuVol" class="digit" placeholder="입력" maxlength="9">
-									<span>&#37;</span>
-								</div>
-								<small class="hidden warning"></small>
-							</div>
-						</div>
-
-						<div class="row">
-							<div class="col-xl-2 col-lg-2 col-md-4 col-sm-5"><span class="input-label">실행 파라미터</span></div>
-							<div class="col-xl-10 col-lg-10 col-md-8 col-sm-7">
-								<textarea name="argument_param" id="argumentParam" class="textarea" placeholder="입력"></textarea>
-							</div>
-						</div>
-						
-						<div class="row">
-							<div class="col-3">
-								<button type="click" onclick="submitSchedule(event, 'now')" class="btn-type04 mt30">즉시 실행</button>
-							</div>
-							<div class="col-9">
-								<div class="btn-wrap-type02">
-									<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close">취소</button>
-									<button type="button" id="addScheduleBtn" class="btn-type" onclick="submitSchedule(event)" disabled>추가</button>
-								</div>
-							</div>
-						</div>
-					</form>
-				</div>
-			</div>
 		</div>
 	</div>
 </div>
