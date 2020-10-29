@@ -9100,7 +9100,8 @@ table.table-footer tfoot td.light {
 	margin-top: -18px;
 }
 
-.spc-transaction .sort-table .icon-delete {
+.spc-transaction .sort-table .icon-delete,
+.spc-transaction .icon-delete {
 	width: 13px;
 	height: 13px;
 	margin: -5px 0 0 12px;
@@ -9108,7 +9109,8 @@ table.table-footer tfoot td.light {
 	background-size: 15px 15px;
 }
 
-.spc-transaction .sort-table .icon-edit {
+.spc-transaction .sort-table .icon-edit,
+.spc-transaction .icon-edit {
 	width: 13px;
 	height: 13px;
 	margin: -5px 0 0 12px;
