@@ -358,33 +358,18 @@
 							return a[0] - b[0];
 						});
 
-						if( (tag1Left.length + tag1Right.length) === 1){
-							temp = {
-								name: $(this).contents().get(0).nodeValue,
-								type: 'column',
-								stack: stackNum,
-								sid: sid,
-								dType: type,
-								tooltip: {
-									valueSuffix: setttingSuffix(keyText)
-								},
-								color: chartColor[1],
-								data: dataArr
-							};
-						} else {
-							temp = {
-								name: $(this).contents().get(0).nodeValue,
-								type: 'column',
-								stack: stackNum,
-								sid: sid,
-								dType: type,
-								tooltip: {
-									valueSuffix: setttingSuffix(keyText)
-								},
-								color: chartColor[index],
-								data: dataArr
-							};
-						}
+						temp = {
+							name: $(this).contents().get(0).nodeValue,
+							type: 'column',
+							stack: stackNum,
+							sid: sid,
+							dType: type,
+							tooltip: {
+								valueSuffix: setttingSuffix(keyText)
+							},
+							color: ( (tag1Left.length + tag1Right.length) === 1 ) ? chartColor[1] : chartColor[index],
+							data: dataArr
+						};
 						
 						index++;
 					}
@@ -430,36 +415,19 @@
 					});
 
 					if (dataArr.length > 0) {
-						if( (tag1Left.length + tag1Right.length) === 1){
-							temp = {
-								name: $(this).contents().get(0).nodeValue,
-								type: 'spline',
-								stack: index,
-								yAxis: dupY,
-								sid: sid,
-								dType: type,
-								color: chartColor[1],
-								tooltip: {
-									valueSuffix: setttingSuffix(keyText)
-								},
-								data: dataArr
-							};
-						} else {
-							temp = {
-								name: $(this).contents().get(0).nodeValue,
-								type: 'spline',
-								stack: index,
-								yAxis: dupY,
-								sid: sid,
-								dType: type,
-								color: chartColor[index],
-								tooltip: {
-									valueSuffix: setttingSuffix(keyText)
-								},
-								data: dataArr
-							};
-						}
-
+						temp = {
+							name: $(this).contents().get(0).nodeValue,
+							type: 'spline',
+							stack: index,
+							yAxis: dupY,
+							sid: sid,
+							dType: type,
+							color: ( (tag1Left.length + tag1Right.length) === 1 ) ? chartColor[1] : chartColor[index],
+							tooltip: {
+								valueSuffix: setttingSuffix(keyText)
+							},
+							data: dataArr
+						};
 						index++;
 					}
 
@@ -1041,10 +1009,9 @@
 						color: 'var(--grey)',
 						fontSize: '8px'
 					},
-					enabled: show,
+					enabled: true,
 				},
 				categories: categories,
-
 				title: {
 					text: null
 				},

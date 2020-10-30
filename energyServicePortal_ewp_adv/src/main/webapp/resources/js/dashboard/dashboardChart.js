@@ -195,7 +195,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		tickWidth: 1,
 		tickColor: 'var(--grey)',
 		plotLines: [{
-			color: 'red',
+			color: 'var(--grey)',
 			width: 1
 		}],
 		type: 'datetime',

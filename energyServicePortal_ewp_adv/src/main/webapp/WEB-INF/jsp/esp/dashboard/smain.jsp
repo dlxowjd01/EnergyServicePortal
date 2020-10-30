@@ -1288,7 +1288,7 @@
 					}
 				],
 				title: {
-					text: 'W/m\xB2',
+					text: '',
 					x: 5,
 					y: 30,
 					align: 'low',
@@ -1567,19 +1567,6 @@
 			height: 320,
 			backgroundColor: 'transparent',
 			zoomType: 'xy',
-			events: {
-				// load: function () {
-				// 	var series = this.series[0];
-				// 	setInterval(function () {
-				// 	var x = (new Date()).getTime(), // current time
-				// 		y = Math.round(Math.random() * 100);
-				// 	series.addPoint([x, y], true, true);
-				// 	}, 1000);
-				// },
-				redraw: function () {
-					// $(".highcharts-legend-item path").attr('stroke-width', 10);
-				}
-			}
 		},
 		navigation: {
 			buttonOptions: {
@@ -2359,7 +2346,6 @@
 
 	function getDvcInfo(option) {
 		let deviceArray = new Array();
-
 		if (!isEmpty(sList[0].devices)) {
 			sList[0].devices.forEach(el => {
 				deviceArray.push(el.did);
@@ -2375,11 +2361,243 @@
 					dids: deviceArray.toString()
 				}
 			}).done(function (data, textStatus, jqXHR) {
-				// #2 solar Dashboard
-				if (!isEmpty(option)){
+				if (isEmpty(option)){
+					// #1 site Dashboard
+					let deviceType = new Array();
+					let sortedData;
+
+					if(!isEmpty(data) && Object.values(data)){
+						sortedData = Object.values(data);
+						sortedData.sortOn("dname");
+					}
+					console.log("")
+					$.map(sortedData, function(val, key) {
+						if ($.inArray(val.device_type, deviceType) === -1) {
+							// TODO!!!! api device type : SM_ISMART not available 
+							if (val.device_type == 'SM_MANUAL' || val.device_type == 'SM_ISMART') return false;
+							deviceType.push(val.device_type);
+						}
+					});
+
+					deviceType.sort();
+
+					$.each(deviceType, function (i, el) {
+						if (el == 'SM_MANUAL') return false;
+						deviceType[i] = {
+							name: featureProperties[el].name,
+							type: el,
+							head: featureProperties[el].prop,
+							body: {
+								type: el,
+								prop: featurePropertiesSub[el].prop
+							}
+						}
+					});
+	
+					setMakeList(deviceType, 'typeList', { 'dataFunction': { 'head': makeHeadTable, 'body': makeBodyTable } });
+					
+					$.each(deviceType, function (i, el) {
+						let dvcType = el.type;
+						let operationNormal = 0;
+						let operationError = 0;
+						let operationAlert = 0;
+
+						let headerDataObject = new Object();
+
+						if (el.type == 'SM_MANUAL') return false;
+						setInitList('table_' + dvcType);
+						let tableArray = new Array();
+
+						$.map(sortedData, function(val, key) {
+							let dname = val.dname;
+							if (val.device_type == dvcType) {
+								let rowData = val.data;
+								if(!isEmpty(rowData)) {
+									let operation = rowData[0]['operation'];
+
+									if(operation == '1') {
+										operationNormal++;
+									} else if(operation == '2') {
+										operationError++;
+									} else {
+										operationAlert++;
+									}
+									rowData[0]['dname'] = dname;
+
+									$.map(featureProperties, function(val, key) {
+										let headerData = {};
+						
+										if(!isEmpty(headerDataObject[key])) {
+											headerData = headerDataObject[key];
+										}
+										
+										if (key == dvcType) {
+											let sumActivePower = 0;
+											let sumDcPower = 0;
+											let sumAccumEnergy = 0;
+
+											$.each(val.prop, function(i, el) {
+												let value = rowData[0][el.key];
+												let tempObj = {};
+										
+												if(isEmpty(headerData[el.key])) {
+													tempObj['reducer'] = el.reducer;
+												} else {
+													tempObj = headerData[el.key];
+												}
+
+												if(isEmpty(value)) {
+													value = '-';
+												} else {
+													let unitList = ['W', 'Wh', 'humidity', 'irradiationPoa', 'temperature', '%', 'V'];
+													if(unitList.indexOf(el.suffix) > -1){
+														if(value != '-' && typeof value == 'number') {
+															value = Number(value);
+														}
+													}
+												}
+
+												if(value == '-') {
+													if(typeof tempObj['cnt'] == "number"){
+														if(!isEmpty(headerData[el.key])) {
+															tempObj['cnt'] = Number(tempObj['cnt']) + 1;
+														} else {
+															tempObj['value'] = "-";
+															tempObj['cnt'] = 1;
+														}
+													}
+												} else {
+													if(!isEmpty(headerData[el.key])) {
+														if(typeof tempObj['value'] == 'number') {
+															tempObj['value'] = Number(value) + Number(tempObj['value']);
+															tempObj['cnt'] = Number(tempObj['cnt']) + 1;
+														} else {
+															tempObj['value'] = value;
+															tempObj['cnt'] = 1;
+														}
+													
+													} else {
+														if( typeof tempObj['value'] == 'number') {
+															tempObj['value'] = Number(value);
+															tempObj['cnt'] = 1;
+														} else {
+															tempObj['value'] = value;
+															tempObj['cnt'] = 1;
+														}
+													}
+													tempObj['suffix'] = el.suffix;
+												}
+												headerData[el.key] = tempObj;
+											});							
+											headerDataObject[key] = headerData;
+										}
+									});
+
+									$.map(featurePropertiesSub, function(val, key) {
+										if (key == dvcType) {
+											$.each(val.prop, function(i, el) {
+												let value = rowData[0][el.key];
+												if(isEmpty(value)) {
+													rowData[0][el.key] = "-";
+												} else {
+													if( el.key.match('activePower') || el.key.match('dcPower') ) {
+														// Unit: W => kW,  Wh => kWh
+														let strVal = displayNumberFixedUnit(value, 'W', 'kW', 0, "round");
+														rowData[0][el.key] = strVal[0] + " " + strVal[1];
+													} else if( el.key.match('accumActiveEnergy') ){
+														// Unit: Wh => MWh
+														// Unit: Wh => kWh:(round), Wh, MWh, GWh
+														let rounded = Math.round(value);
+														if(rounded >= 1000 && rounded < 1000000){
+															let tempVal = displayNumberFixedUnit(value, 'Wh', "kWh", 0, "round");
+															rowData[0][el.key] = tempVal[0] + ' ' + tempVal[1];
+														} else {
+															let tempVal = displayNumberFixedDecimal(value, 'Wh', 3, 2);
+															rowData[0][el.key] = tempVal[0] + ' ' + tempVal[1];
+														}
+													} else if(el.suffix.match('%') || el.key.match('temperature') || el.key.match("irradiationPoa") ) {
+														// Unit: percentage, celsius, meter square
+														rowData[0][el.key] = displayNumberFixedDecimal(value, el.suffix, 3, 2)[0] + " " + el.suffix;
+													} else {
+														rowData[0][el.key] = value;
+													}
+												}
+											});
+										}
+									});
+
+									if (deviceSearch(dname, operation)) {
+										if(isEmpty(tableArray)) {
+											let rowData = val.data;
+											rowData[0]['dname'] = dname;
+											tableArray = rowData;
+										} else {
+											let rowData = val.data;
+											rowData[0]['dname'] = dname;
+											tableArray = tableArray.concat(rowData);
+										}
+									}
+								}
+							}
+						});
+
+						$.map(headerDataObject, function(el, device) {
+							let deviceType = device;
+
+							$.map(el, function(element, key) {
+								let textValue = element.value;
+								let suffix = element.suffix;
+
+								if(textValue != '-' && !isEmpty(textValue)) {
+									if(element.reducer == 'avg') {
+										textValue = (textValue / element.cnt);
+									}
+									if(!isEmpty(suffix)) {
+										if(key.match("accumActiveEnergy")) {
+											// Unit: Wh => kWh:(round), Wh, MWh, GWh
+											let rounded = Math.round(textValue);
+											if(rounded >= 1000 && rounded < 1000000){
+												textValue = displayNumberFixedUnit(textValue, 'Wh', "kWh", 0, "round");
+											} else {
+												textValue = displayNumberFixedDecimal(textValue, 'Wh', 3, 2);
+											}
+										} else if(key.match("temperature")){
+											let tempVal = displayNumberFixedDecimal(textValue, suffix, 3, 2);
+											textValue = [tempVal[0], "&#8451;"];
+										} else {
+											if(suffix == "W" || suffix == "Wh"){
+												textValue = displayNumberFixedUnit(textValue, "W", "kW", 0, "round");
+											} else {
+												textValue = displayNumberFixedDecimal(textValue, suffix, 3, 2);
+											}
+										}
+									} else {
+										textValue = [textValue, ""];
+									}
+									$('#typeList').find('.' + deviceType).find('.table-type td.' + key + ' span:nth-child(1)').html(textValue[0] + " " +  textValue[1]);
+								} else {
+									$('#typeList').find('.' + deviceType).find('.table-type td.' + key + ' span:nth-child(1)').html("-");
+								}
+
+							});
+						});				
+
+						let deviceCnt = tableArray.length;
+
+						$('#typeList').find('.' + dvcType).find('.ntit span').html(deviceCnt);
+						$('#typeList').find('.' + dvcType).find('.alert-icon .inv-normal span').html(operationNormal);
+						$('#typeList').find('.' + dvcType).find('.alert-icon .inv-error span').html(operationError);
+						$('#typeList').find('.' + dvcType).find('.alert-icon .inv-alert span').html(operationAlert);
+
+						setMakeList(tableArray, 'table_' + dvcType, {'dataFunction': {'operation': setOperation}});
+					});
+
+				} else {
+					// #2 solar Dashboard
 					let invType = new Array();
 					let sortedData;
 					let seriesLength = hourlyINVChart.series.length;
+					let deviceLength = 0;
 
 					if(seriesLength>0){
 						for(let i = seriesLength -1; i > -1; i--) {
@@ -2390,10 +2608,15 @@
 					if(!isEmpty(data) && Object.values(data)){
 						sortedData = Object.values(data);
 						sortedData.sortOn("dname");
+						let found = sortedData.findIndex( x => x.device_type == "INV_PV");
+						if(found > -1){
+							deviceLength = sortedData[found].data.length;
+						}
 					}
 
 					$.map(sortedData, function(val, index) {
-						if ( val.device_type == "INV_PV"){
+
+						if (val.device_type == "INV_PV"){
 							const formData = getSiteMainSchCollection('day');
 							let hourlyINV = {
 								url: apiHost + apiEnergyDvc,
@@ -2464,7 +2687,7 @@
 										name: val.dname,
 										index: index,
 										type: 'column',
-										color: colorArr[index],
+										color: (deviceLength == 1 ) ? colorArr[1] : colorArr[index],
 										tooltip: {
 											valueSuffix: "kWh",
 										},
@@ -2679,237 +2902,7 @@
 						setMakeList(tableArray, tableName , {'dataFunction': {'operation': setOperation}});
 					});
 
-				} else {
-				// #1 site Dashboard
-					let deviceType = new Array();
-					let sortedData;
-
-					if(!isEmpty(data) && Object.values(data)){
-						sortedData = Object.values(data);
-						sortedData.sortOn("dname");
-					}
-
-					$.map(sortedData, function(val, key) {
-						if ($.inArray(val.device_type, deviceType) === -1) {
-							if (val.device_type == 'SM_MANUAL') return false;
-							deviceType.push(val.device_type);
-						}
-					});
-					deviceType.sort();
-
-					$.each(deviceType, function (i, el) {
-						if (el == 'SM_MANUAL') return false;
-						deviceType[i] = {
-							name: featureProperties[el].name,
-							type: el,
-							head: featureProperties[el].prop,
-							body: {
-								type: el,
-								prop: featurePropertiesSub[el].prop
-							}
-						}
-					});
-	
-					setMakeList(deviceType, 'typeList', { 'dataFunction': { 'head': makeHeadTable, 'body': makeBodyTable } });
-					
-					$.each(deviceType, function (i, el) {
-						let dvcType = el.type;
-						let operationNormal = 0;
-						let operationError = 0;
-						let operationAlert = 0;
-
-						let headerDataObject = new Object();
-
-						if (el.type == 'SM_MANUAL') return false;
-						setInitList('table_' + dvcType);
-						let tableArray = new Array();
-
-						$.map(sortedData, function(val, key) {
-							let dname = val.dname;
-							if (val.device_type == dvcType) {
-								let rowData = val.data;
-								if(!isEmpty(rowData)) {
-									let operation = rowData[0]['operation'];
-
-									if(operation == '1') {
-										operationNormal++;
-									} else if(operation == '2') {
-										operationError++;
-									} else {
-										operationAlert++;
-									}
-									rowData[0]['dname'] = dname;
-
-									$.map(featureProperties, function(val, key) {
-										let headerData = {};
-						
-										if(!isEmpty(headerDataObject[key])) {
-											headerData = headerDataObject[key];
-										}
-										
-										if (key == dvcType) {
-											let sumActivePower = 0;
-											let sumDcPower = 0;
-											let sumAccumEnergy = 0;
-
-											$.each(val.prop, function(i, el) {
-												let value = rowData[0][el.key];
-												let tempObj = {};
-										
-												if(isEmpty(headerData[el.key])) {
-													tempObj['reducer'] = el.reducer;
-												} else {
-													tempObj = headerData[el.key];
-												}
-
-												if(isEmpty(value)) {
-													value = '-';
-												} else {
-													let unitList = ['W', 'Wh', 'humidity', 'irradiationPoa', 'temperature', '%', 'V'];
-													if(unitList.indexOf(el.suffix) > -1){
-														if(value != '-' && typeof value == 'number') {
-															value = Number(value);
-														}
-													}
-												}
-
-												if(value == '-') {
-													if(typeof tempObj['cnt'] == "number"){
-														if(!isEmpty(headerData[el.key])) {
-															tempObj['cnt'] = Number(tempObj['cnt']) + 1;
-														} else {
-															tempObj['value'] = "-";
-															tempObj['cnt'] = 1;
-														}
-													}
-												} else {
-													if(!isEmpty(headerData[el.key])) {
-														if(typeof tempObj['value'] == 'number') {
-															tempObj['value'] = Number(value) + Number(tempObj['value']);
-															tempObj['cnt'] = Number(tempObj['cnt']) + 1;
-														} else {
-															tempObj['value'] = value;
-															tempObj['cnt'] = 1;
-														}
-													
-													} else {
-														if( typeof tempObj['value'] == 'number') {
-															tempObj['value'] = Number(value);
-															tempObj['cnt'] = 1;
-														} else {
-															tempObj['value'] = value;
-															tempObj['cnt'] = 1;
-														}
-													}
-													tempObj['suffix'] = el.suffix;
-												}
-												headerData[el.key] = tempObj;
-											});							
-											headerDataObject[key] = headerData;
-										}
-									});
-
-									$.map(featurePropertiesSub, function(val, key) {
-										if (key == dvcType) {
-											$.each(val.prop, function(i, el) {
-												let value = rowData[0][el.key];
-												if(isEmpty(value)) {
-													rowData[0][el.key] = "-";
-												} else {
-													if( el.key.match('activePower') || el.key.match('dcPower') ) {
-														// Unit: W => kW,  Wh => kWh
-														let strVal = displayNumberFixedUnit(value, 'W', 'kW', 0, "round");
-														rowData[0][el.key] = strVal[0] + " " + strVal[1];
-													} else if( el.key.match('accumActiveEnergy') ){
-														// Unit: Wh => MWh
-														// Unit: Wh => kWh:(round), Wh, MWh, GWh
-														let rounded = Math.round(value);
-														if(rounded >= 1000 && rounded < 1000000){
-															let tempVal = displayNumberFixedUnit(value, 'Wh', "kWh", 0, "round");
-															rowData[0][el.key] = tempVal[0] + ' ' + tempVal[1];
-														} else {
-															let tempVal = displayNumberFixedDecimal(value, 'Wh', 3, 2);
-															rowData[0][el.key] = tempVal[0] + ' ' + tempVal[1];
-														}
-													} else if(el.suffix.match('%') || el.key.match('temperature') || el.key.match("irradiationPoa") ) {
-														// Unit: percentage, celsius, meter square
-														rowData[0][el.key] = displayNumberFixedDecimal(value, el.suffix, 3, 2)[0] + " " + el.suffix;
-													} else {
-														rowData[0][el.key] = value;
-													}
-												}
-											});
-										}
-									});
-
-									if (deviceSearch(dname, operation)) {
-										if(isEmpty(tableArray)) {
-											let rowData = val.data;
-											rowData[0]['dname'] = dname;
-											tableArray = rowData;
-										} else {
-											let rowData = val.data;
-											rowData[0]['dname'] = dname;
-											tableArray = tableArray.concat(rowData);
-										}
-									}
-								}
-							}
-						});
-
-						$.map(headerDataObject, function(el, device) {
-							let deviceType = device;
-
-							$.map(el, function(element, key) {
-								let textValue = element.value;
-								let suffix = element.suffix;
-
-								if(textValue != '-' && !isEmpty(textValue)) {
-									if(element.reducer == 'avg') {
-										textValue = (textValue / element.cnt);
-									}
-									if(!isEmpty(suffix)) {
-										if(key.match("accumActiveEnergy")) {
-											// Unit: Wh => kWh:(round), Wh, MWh, GWh
-											let rounded = Math.round(textValue);
-											if(rounded >= 1000 && rounded < 1000000){
-												textValue = displayNumberFixedUnit(textValue, 'Wh', "kWh", 0, "round");
-											} else {
-												textValue = displayNumberFixedDecimal(textValue, 'Wh', 3, 2);
-											}
-										} else if(key.match("temperature")){
-											let tempVal = displayNumberFixedDecimal(textValue, suffix, 3, 2);
-											textValue = [tempVal[0], "&#8451;"];
-										} else {
-											if(suffix == "W" || suffix == "Wh"){
-												textValue = displayNumberFixedUnit(textValue, "W", "kW", 0, "round");
-											} else {
-												textValue = displayNumberFixedDecimal(textValue, suffix, 3, 2);
-											}
-										}
-									} else {
-										textValue = [textValue, ""];
-									}
-									$('#typeList').find('.' + deviceType).find('.table-type td.' + key + ' span:nth-child(1)').html(textValue[0] + " " +  textValue[1]);
-								} else {
-									$('#typeList').find('.' + deviceType).find('.table-type td.' + key + ' span:nth-child(1)').html("-");
-								}
-
-							});
-						});				
-
-						let deviceCnt = tableArray.length;
-
-						$('#typeList').find('.' + dvcType).find('.ntit span').html(deviceCnt);
-						$('#typeList').find('.' + dvcType).find('.alert-icon .inv-normal span').html(operationNormal);
-						$('#typeList').find('.' + dvcType).find('.alert-icon .inv-error span').html(operationError);
-						$('#typeList').find('.' + dvcType).find('.alert-icon .inv-alert span').html(operationAlert);
-
-						setMakeList(tableArray, 'table_' + dvcType, {'dataFunction': {'operation': setOperation}});
-					});
-
 				}
-
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				console.error(jqXHR);
 				console.error(textStatus);
@@ -3326,7 +3319,7 @@
 					if (!isEmpty(v) &&  v.flat()[0]["items"].length > 0) {
 						let val = v.flat()[0]["items"];
 						chartItems3 = addToDateList(30, val, "energy");
-						if(flagDetail[1].energyFlag === "0"){
+						if(flagDetail[1].energyFlag == "0"){
 							flagDetail[1].energyFlag = "1";
 						}
 						// chartItems3 = addToDateList(d, 11, val);
@@ -3340,7 +3333,7 @@
 		}
 	}
 
-	function setChargeChartData(chartItems1, chartItems2, chartItems3, option) {
+	function setChargeChartData(chartItems1, chartItems2, chartItems3, flagDetail) {
 		const today = new Date();
 		const nowMonth = today.getMonth() + 1;
 
@@ -3354,8 +3347,7 @@
 		let irradiationData = [];
 		let billingData = [];
 
-
-		if (isEmpty(option)) {		
+		if (isEmpty(flagDetail)) {		
 			sList.forEach(site => {
 				if (site.devices != undefined) {
 					site.devices.forEach(device => {
@@ -3541,157 +3533,61 @@
 					dailySolarTrendChart.series[i].remove();
 				}
 			}
-
-			if(option[1].energyFlag === "1" && option[0].energyFlag == "1") {
-				for (let i = 0, arrLength = chartItems3.length; i < arrLength; i++) {
-					if(!isEmpty(chartItems3[i])) {
-						let val = chartItems3[i];
-						if(val > dailySolarMaxVal ){
-							dailySolarMaxVal = val;
-						}
+			
+			for (let i = 0, arrLength = chartItems3.length; i < arrLength; i++) {
+				if(!isEmpty(chartItems3[i])) {
+					let val = chartItems3[i];
+					if(val > dailySolarMaxVal ){
+						dailySolarMaxVal = val;
 					}
-				}
-				dailySolarTrendChart.addSeries({
-					name: '발전량',
-					type: 'column',
-					color: 'var(--turquoise)',
-					tooltip: {
-						valueSuffix: 'kWh',
-					},
-					marker: {
-						symbol: "circle"
-					},
-					data: chartItems3,
-				});
-				dailySolarTrendChart.series[0].options.showInLegend = true;
-				dailySolarTrendChart.yAxis[0].setTitle({
-					text: '',
-				});
-
-				for (let i = 0, dLength = chartItems2.length; i < dLength; i++) {
-					if(!isEmpty(chartItems2[i])) {
-						let energyData = chartItems2[i];
-						if(energyData>dailyInvMaxVal){
-							dailyInvMaxVal = energyData;
-						}
-					}
-				}
-				dailySolarTrendChart.addSeries({
-					name: '일사량',
-					type: 'spline',
-					yAxis: 1,
-					dashStyle: 'ShortDash',
-					color: 'var(--white60)',
-					tooltip: {
-						valueSuffix: 'W/m\xB2',
-					},
-					marker: {
-						symbol: "circle"
-					},
-					data: chartItems2,
-				});
-				dailySolarTrendChart.series[1].options.showInLegend = true;
-				dailySolarTrendChart.yAxis[1].update({
-					min: 0,
-					max: dailySolarMaxVal
-				});
-				
-			} else {
-				if(option[1].energyFlag === "1") {
-					for (let i = 0, arrLength = chartItems3.length; i < arrLength; i++) {
-						if(!isEmpty(chartItems3[i])) {
-							let val = chartItems3[i];
-							if(val > dailySolarMaxVal ){
-								dailySolarMaxVal = val;
-							}
-						}
-					}
-					dailySolarTrendChart.addSeries({
-						name: '발전량',
-						type: 'column',
-						color: 'var(--turquoise)',
-						tooltip: {
-							valueSuffix: 'kWh',
-						},
-						marker: {
-							symbol: "circle"
-						},
-						data: chartItems3,
-					});
-					dailySolarTrendChart.series[0].options.showInLegend = true;
-				} else {
-					let chart = $('#dailySolarTrendChart').highcharts();
-					chart.margin[3]= 30;
-					chart.isDirtyBox = true;
-					if( !isEmpty(chart.series) && chart.series[0].length > 0){
-						chart.series[0].options.showInLegend = false;
-						chart.yAxis[0].setTitle({
-							text: '',
-						});
-					}
-					chart.redraw();
-					// dailySolarTrendChart.legend.destroyItem( dailySolarTrendChart.series[0] );
-					// dailySolarTrendChart.legend.renderLegend();
-				}
-
-				if(option[0].energyFlag === "1") {
-					for (let i = 0, dLength = chartItems2.length; i < dLength; i++) {
-						if(!isEmpty(chartItems2[i])) {
-							let energyData = chartItems2[i];
-							if(energyData>dailyInvMaxVal){
-								dailyInvMaxVal = energyData;
-							}
-						}
-					}
-					dailySolarTrendChart.addSeries({
-						name: '일사량',
-						type: 'spline',
-						yAxis: 1,
-						dashStyle: 'ShortDash',
-						color: 'var(--white60)',
-						tooltip: {
-							valueSuffix: 'W/m\xB2',
-						},
-						marker: {
-							symbol: "circle"
-						},
-						data: chartItems2,
-					});
-					dailySolarTrendChart.series[1].options.showInLegend = true;
-					dailySolarTrendChart.yAxis[1].update({
-						min: 0,
-						max: dailySolarMaxVal
-					});
-				} else {
-
-					let chart = $('#dailySolarTrendChart').highcharts();
-					chart.margin[3]= 30;
-					chart.isDirtyBox = true;
-
-					if(!isEmpty(chart.series) && chart.series[1].length > 0){		
-						chart.series[1].options.showInLegend = false;
-						chart.yAxis[1].setTitle({
-							text: '',
-						});
-					}
-
-					// dailySolarTrendChart.series[1].options.showInLegend = false;
-					// dailySolarTrendChart.yAxis[1].setTitle({
-					// 	text: '',
-					// });
-					chart.redraw();
-					// dailySolarTrendChart.legend.destroyItem( dailySolarTrendChart.series[1] );
-					// dailySolarTrendChart.legend.renderLegend();
 				}
 			}
-			// console.log("dailySolarMaxVal===", dailySolarMaxVal, "inv===", dailyInvMaxVal)
-			// if(dailySolarMaxVal > 0){
+			dailySolarTrendChart.addSeries({
+				name: '발전량',
+				type: 'column',
+				color: 'var(--turquoise)',
+				tooltip: {
+					valueSuffix: 'kWh',
+				},
+				marker: {
+					symbol: "circle"
+				},
+				data: chartItems3,
+			});
+			dailySolarTrendChart.yAxis[0].update({
+				title:{
+					text: "kWh"
+				}
+			});
+			for (let i = 0, dLength = chartItems2.length; i < dLength; i++) {
+				if(!isEmpty(chartItems2[i])) {
+					let energyData = chartItems2[i];
+					if(energyData>dailyInvMaxVal){
+						dailyInvMaxVal = energyData;
+					}
+				}
+			}
+			dailySolarTrendChart.addSeries({
+				name: '일사량',
+				type: 'spline',
+				yAxis: 1,
+				dashStyle: 'ShortDash',
+				color: 'var(--white60)',
+				tooltip: {
+					valueSuffix: 'W/m\xB2',
+				},
+				marker: {
+					symbol: "circle"
+				},
+				data: chartItems2,
+			});
 
-				// dailySolarTrendChart.yAxis[0].setTitle({
-				// 	text: displayNumberFixedDecimal(dailySolarMaxVal, 'kWh', 3, 2)[1]
-				// });
-	
-			dailySolarTrendChart.render();
+			dailySolarTrendChart.yAxis[0].update({
+				title:{
+					text: "W/m\xB2"
+				}
+			});
+			dailySolarTrendChart.redraw();
 		}
 	}
 
@@ -4431,9 +4327,14 @@
 						let sumVal = 0;
 
 						for(let i=0, arrLength = insolationData[0].length; i<arrLength; i++){
-							energyData3[i] = parseFloat(displayNumberFixedUnit(insolationData[0][i].sensor_solar.irradiationPoa, 'W', 'W', 1, "round")[0]);
-							if( energyData3[i] > invMaxVal ){
-								invMaxVal = energyData3[i];
+							let irrPoa = insolationData[0][i].sensor_solar.irradiationPoa;
+							if(!isEmpty(irrPoa)){
+								console.log("irrPoa===", irrPoa)
+								energyData3[i] = numberComma(irrPoa);
+								if( energyData3[i] > invMaxVal ){
+									invMaxVal = energyData3[i];
+								}
+																
 							}
 						}
 					}
@@ -4495,7 +4396,7 @@
 						data: energyData3
 					});
 				}
-
+				hourlySolarChart.redraw();
 			}).fail(function () {
 				console.error('rejected');
 			});

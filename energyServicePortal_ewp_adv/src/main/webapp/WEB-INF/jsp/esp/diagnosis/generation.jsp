@@ -154,10 +154,9 @@
 				</div>
 			</div>
 			<a href="javascript:void(0);" class="btn-chart" id="changeChart">그래프</a>
-			<div class="inchart">
-				<p class="text-time"></p>
-				<div id="chart2"></div>
-			</div>
+
+			<h4 class="text-time"></h4>
+			<div id="chart2" class="inchart"></div>
 		</div>
 	</div>
 </div>
@@ -1191,7 +1190,8 @@
 		});
 
 		chartDraw(seriesData);
-
+		let now = new Date();
+		$('.text-time').text(now.format('yyyy-MM-dd HH:mm:ss'));
 		application('basic');
 	}
 
@@ -1205,9 +1205,10 @@
 			chart: {
 				renderTo: 'chart2',
 				marginTop: 70,
-				marginLeft: 40,
-				marginRight: 15,
+				marginLeft: 60,
+				marginRight: 10,
 				backgroundColor: 'transparent',
+				height: 480
 			},
 			navigation: {
 				buttonOptions: {

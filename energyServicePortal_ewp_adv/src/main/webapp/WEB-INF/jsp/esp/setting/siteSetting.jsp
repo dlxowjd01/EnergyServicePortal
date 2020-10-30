@@ -610,76 +610,81 @@
 
 			$.each(tr, function(index, el){
 				let td = $(this).find("td");
-				let did = td.eq(0).find(".dropdown-toggle").data("did");
-				let alarmLvl = td.eq(2).find(".dropdown-toggle");
-				let contactName = td.eq(3).find(".dropdown-toggle");
-				// let contactInput = td.eq(3).find(".dropdown + .text-input-type");
-				let contactNum = td.eq(4).find(".text-input-type");
-				let nonUserArr = [];
-				let registeredUserArr = [];
-				let alarmToObj = {};
+				if(!td.eq(1).find(".dropdown-toggle").is(":disabled")) {
+					console.log("not disabled===")
+					let selectedDvc = td.eq(1).find("input[type='checkbox']:checked");
+					let alarmLvl = td.eq(2).find(".dropdown-toggle");
+					let contactName = td.eq(3).find(".dropdown-toggle");
+					// let contactInput = td.eq(3).find(".dropdown + .text-input-type");
+					let contactNum = td.eq(4).find(".text-input-type");
+					let nonUserArr = [];
+					let registeredUserArr = [];
+					let alarmToObj = {};
 
-				let deviceOpt = {
-					url: apiHost + "/config/devices/" + did,
-					type: 'patch',
-					async: true,
-					contentType: 'application/json; charset=UTF-8',
-				};
-				for(let i=0, length = alarmLvl.length; i<length; i++){
-					// if(!$(editItems[i]).is(":disabled")){
-					if( (!alarmLvl.eq(i).is(":disabled") ) && !isEmpty(did) ){
-						let levelArr = [];
-						let contactNameArr = [];
-						let contactNumArr = [];
-						let selectedLevel = alarmLvl.eq(i).parent().find("input:checked");
-						let selectedContactName = contactName.eq(i).parent().find("input:checked");
+					let deviceOpt = {
+						// url: apiHost + "/config/devices/" + did,
+						type: 'patch',
+						async: true,
+						contentType: 'application/json; charset=UTF-8',
+					};
+					for(let i=0, length = alarmLvl.length; i<length; i++){
+						// if(!$(editItems[i]).is(":disabled")){
+						if( (!alarmLvl.eq(i).is(":disabled") ) && !isEmpty(selectedDvc) ){
+							let levelArr = [];
+							let contactNameArr = [];
+							let contactNumArr = [];
+							let selectedDvcArr = alarmLvl.eq(i).next().find("input[type='checkbox']:checked");
+							let selectedLevel = alarmLvl.eq(i).next().find("input[type='checkbox']:checked");
+							let selectedContactName = contactName.eq(i).next().find("input[type='checkbox']:checked");
 
-						$.each(selectedLevel, function(){
-							levelArr.push(Number($(this).val()));
-						});
-
-						if( !contactNum.eq(i).hasClass("disabled") ){
-							let nonUserObj = {};
-							nonUserObj.level = levelArr;
-							nonUserObj.name = contactName.eq(i).parent().next().find("input[type='text']").val();
-							nonUserObj.phone = contactNum.eq(i).children().val();
-							nonUserArr.push(nonUserObj);
-						} else {
-							$.each(selectedContactName, function(){
-								let userObj = {};
-								userObj.uid = $(this).val();
-								userObj.level = levelArr;
-								registeredUserArr.push(userObj);
+							$.each(selectedLevel, function(){
+								levelArr.push(Number($(this).val()));
 							});
+
+							if( !contactNum.eq(i).hasClass("disabled") ){
+								let nonUserObj = {};
+								nonUserObj.level = levelArr;
+								nonUserObj.name = contactName.eq(i).next().find("input[type='text']").val();
+								nonUserObj.phone = contactNum.eq(i).children().val();
+								nonUserArr.push(nonUserObj);
+							} else {
+								$.each(selectedContactName, function(){
+									let userObj = {};
+									userObj.uid = $(this).val();
+									userObj.level = levelArr;
+									registeredUserArr.push(userObj);
+								});
+							}
 						}
+
 					}
 
-				}
-
-				if(!isEmpty(nonUserArr) && !isEmpty(registeredUserArr)) {
-					alarmToObj = {
-						non_user: nonUserArr,
-						user: registeredUserArr
-					}
-				} else {
-					if(!isEmpty(nonUserArr)){
+					if(!isEmpty(nonUserArr) && !isEmpty(registeredUserArr)) {
 						alarmToObj = {
-							non_user: nonUserArr
-						}
-					}
-					if(!isEmpty(registeredUserArr)){
-						alarmToObj = {
+							non_user: nonUserArr,
 							user: registeredUserArr
 						}
+					} else {
+						if(!isEmpty(nonUserArr)){
+							alarmToObj = {
+								non_user: nonUserArr
+							}
+						}
+						if(!isEmpty(registeredUserArr)){
+							alarmToObj = {
+								user: registeredUserArr
+							}
+						}
 					}
+					deviceOpt.data = JSON.stringify({ alarm_to: JSON.stringify(alarmToObj) });
+
+					// console.log("deviceOpt===", deviceOpt);
+					$.each(selectedDvc, function(index, el) {
+						deviceOpt.url = apiHost + "/config/devices/" + $(el).val();
+						console.log("deviceOpt===", deviceOpt);
+						ajaxPromises.push(Promise.resolve(makeAjaxCall(deviceOpt)));
+					});			
 				}
-	
-				let newObj = {
-					alarm_to: JSON.stringify(alarmToObj)
-				}
-				deviceOpt.data = JSON.stringify(newObj);
-				console.log("alarmToObj===", alarmToObj)
-				ajaxPromises.push(makeAjaxCall(deviceOpt));
 			});
 
 			Promise.all(ajaxPromises).then(res => {
@@ -699,6 +704,7 @@
 					$("#resultModal").modal("hide");
 				}, 1600);
 			});
+			
 		});
 		
 	});
@@ -818,6 +824,7 @@
 
 				$.ajax(deviceOpt).done(function (json, textStatus, jqXHR) {
 					if(json.length > 0 ){
+						// console.log("deviceOpt===", json)
 						// let alarmArr = [];
 						let genCapacity = 0;
 						let pcsCapacity = 0;
@@ -834,6 +841,8 @@
 						// console.log("alarmInfo===", json)
 						item.alarmInfo = json;
 						$.each(json, function( index, el ){
+							// console.log("deviceOpt===", el);
+			
 							let hasDevType = essDvcArr.some( x => x.includes(el.device_type));
 
 							if(hasDevType == true){
@@ -1110,10 +1119,9 @@
 								oid: oid,
 							}
 						}
-
 						Promise.resolve(makeAjaxCall(userOpt)).then(res => {
-							return getAlarmTable(dvcNameKr, rowData, res);
-						});
+							getAlarmTable(dvcNameKr, rowData, res);
+						}).catch( err => console.log("cannot get user data", err));
 					// }
 				});
 
@@ -2396,14 +2404,14 @@
 		let menuItem = tr.find("td:nth-of-type(2) .dropdown-menu li");
 		menuItem.removeClass("hidden");
 
-		let found = upperGroup.findIndex( x => $(x).text() == target.text() );
-		if(found > -1) {	
-			$("#duplicatedGroup").removeClass("hidden");
-			setTimeout(function(){
-				target.data({"value": "", "did" : "" }).html('선택<span class="caret"></span>');
-				$("#duplicatedGroup").addClass("hidden");
-			}, 1600);
-		}
+		// let found = upperGroup.findIndex( x => $(x).text() == target.text() );
+		// if(found > -1) {	
+		// 	$("#duplicatedGroup").removeClass("hidden");
+		// 	setTimeout(function(){
+		// 		target.data({"value": "", "did" : "" }).html('선택<span class="caret"></span>');
+		// 		$("#duplicatedGroup").addClass("hidden");
+		// 	}, 1600);
+		// }
 		// $.each(menuItem, function(index, el){
 		if (subGroup.indexOf(',') > -1) {
 			let searchArr = [...subGroup.split(",")];
@@ -2442,39 +2450,31 @@
 
 
 	function addNewInput(self){
-		// let almTable = $("#alarmTable").DataTable();
-		// let col = almTable.column(5);
-		// col.visible( ! col.visible() );
-		let parent = $(self).parent().parent();
+		let td = $(self).parents().closest("td").eq(4);
 		let num = $(self).parent().attr("id").match(/\d+/)[0];
-		let input = parent.next();
+		let deviceName = $(self).parents().closest("tr").find("td:nth-of-type(2) .dropdown");
 		let alarmLvl = $(self).parents().closest("tr").find("td:nth-of-type(3) .dropdown");
 		let phone = $(self).parents().closest("tr").find("td:nth-of-type(5) input[type='text']");
 		let btnGroup = $(self).parents().closest("tr").find("td:nth-of-type(6) .flex-start");
 
 		$(self).siblings().find("input:checked").prop("checked", false);
-		input.toggleClass("hidden");
+		phone.val("");
 
 		$.each(phone, function(index, el){
 			if($(this).attr("name").match(/\d+/)[0] == num){
-				$(this).prop("disabled", false).val("").parent().removeClass("disabled").addClass("mb-52");
-				alarmLvl.eq(index).addClass("mb-52");
-				btnGroup.eq(index).addClass("mb-52");
+				$(this).prop("disabled", false).val("").parent().removeClass("disabled");
 			}
 		});
 
 	}
 
 	function removeNewInput(self){
-		let parent = $(self).parent().parent().next();
+		console.log("removeNewInput====")
 		let num = $(self).parent().attr("id").match(/\d+/)[0];
-		let alarmLvl = $(self).parents().closest("tr").find("td:nth-of-type(3) .dropdown");
-
 		let phone = $(self).parents().closest("tr").find("td:nth-of-type(5) input[type='text']");
-		let btnGroup = $(self).parents().closest("tr").find("td:nth-of-type(6) .flex-start");
+		// let btnGroup = $(self).parents().closest("tr").find("td:nth-of-type(6) .flex-start");
 
 		$(self).siblings().removeClass("hidden");
-		parent.addClass("hidden");
 
 		$.each(phone, function(index, el){
 			if($(this).attr("name").match(/\d+/)[0] == num){
@@ -2496,35 +2496,38 @@
 					displayText = "";
 				}
 
-				$(this).prop("disabled", true).val(displayText).parent().addClass("disabled").removeClass("mb-52");
-				alarmLvl.eq(index).removeClass("mb-52");
-				btnGroup.eq(index).removeClass("mb-52");
+				$(this).prop("disabled", true).val(displayText).parent().addClass("disabled");
 			}
 		});
 
 	}
 	
 	function getAlarmTable(dvcNameData, alarmData, userData){
+		console.log("alarmData===", alarmData)
 		let alarmFlag = false;
 		let uniqDvcType = groupBy(alarmData, "device_type");
 		let uniqDvcName = groupBy(alarmData, "name");
 		let userType = '';
 		let dvcNameStr = '';
 
-		Object.entries(uniqDvcName).forEach(function(item, index){
-			dvcNameStr += '<li class="hidden" data-device-type="' + item[1].device_type + '" data-did="' +  item[1].did + '" data-value="' + item[0] + '"><a href="#" tabindex="-1">' + item[0] + '</a></li>';
-		});
-
+		// console.log("alarmData---", alarmData);
+		// console.log("uniqDvcType---", uniqDvcType);
+		// console.log("uniqDvcName---", uniqDvcName);
 		// Object.entries(uniqDvcName).forEach(function(item, index){
-		// 	dvcNameStr += `
-		// 		<li class="hidden" data-device-type="${'${ item[1].device_type }'}" data-did="${'${ item[1].did }'}" data-value="${'${ item[0] }'}">
-		// 			<a class="chk-type" href="#">
-		// 				<input type="checkbox" name="${'${ item[0] }'}" value="${'${ item[0] }'}">
-		// 				<label>${'${ item[0] }'}</label>
-		// 			</a>
-		// 		</li>
-		// 	`
+		// 	dvcNameStr += '<li class="hidden" data-device-type="' + item[1].device_type + '" data-did="' +  item[1].did + '" data-value="' + item[0] + '"><a href="#" tabindex="-1">' + item[0] + '</a></li>';
 		// });
+
+		Object.entries(uniqDvcName).forEach(function(item, index){
+			// console.log("item===", item)
+			dvcNameStr += `
+				<li data-device-type="${'${ item[1][0].device_type }'}" data-value="${'${ item[0] }'}">
+					<a class="chk-type" href="#">
+						<input type="checkbox" name="${'${ item[0] }'}" value="${'${ item[1][0].did }'}">
+						<label>${'${ item[0] }'}</label>
+					</a>
+				</li>
+			`
+		});
 
 		// Promise.resolve(alarmData.map((item, index) => {
 		const promises = alarmData.map( async item => {
@@ -2546,8 +2549,7 @@
 			if(!isEmpty(item.alarm_to)){
 				try {
 					let response = await JSON.parse(item.alarm_to);
-					// console.log("response===", response);
-					item.alarm_to = response;
+					item.alarmToUser = response;
 				} catch (exception) {
 					console.error(`Failed to retrieve user informations: (${exception})`);
 				} finally {
@@ -2596,24 +2598,30 @@
 						// 	"bSortable": false,
 						// 	"orderable": false
 						// },
-
 						{
-							"aTargets": [ 2 ],
+							"aTargets": [ 1 ],
 							"createdCell": function (td, cellData, rowData, row, col) {
-								let dropdown = $(td).find(".dropdown");
+								let dropdown1 = $(td).find(".dropdown-menu");
+								let selectedDvc = cellData.name;
 
-								$.each(dropdown, function(index, el){
-									let selected = $(this).find(".dropdown-toggle").data("value");
+								$.each(dropdown1, function(index, el){
+									let selected = selectedDvc.includes(",") ? selectedDvc.split(",") : selectedDvc;
 									let input = $(this).find("input[type='checkbox']");
 
 									$.each(input, function(idx, checkbox){
-										if(!isEmpty(selected) && selected.length > 1){
-											let selectedVal = selected.split(",");
-											let found = selectedVal.findIndex( x => x == $(this).val() );
-											if(found > -1){
-												$(this).prop("checked", true);
+										if(!isEmpty(selected)){
+											if(typeof selected == "string"){
+												if($(this).attr("name") == selected){
+													$(this).prop("checked", true);
+												}
+											} else {
+												let found = selected.findIndex( x => x == $(this).val() );
+												if(found > -1){
+													let name = selected[found];
+													$(this).prop("checked", true);
+												}
 											}
-										} else {						
+										} else {					
 											if(selected == $(this).val()){
 												$(this).prop("checked", true);
 											}
@@ -2623,38 +2631,82 @@
 							}
 						},
 						{
-							"aTargets": [ 3 ],
+							"aTargets": [ 2 ],
 							"createdCell": function (td, cellData, rowData, row, col) {
-								// console.log("rowData11---", rowData);
+								// 알람 레벨
+								let dropdown2 = $(td).find(".dropdown-menu");
+								// let target2 = $(dropdown2).find("input[type='checkbox']");
+								// let targetArr2 = target2.toArray();
 
 								if (!isEmpty(rowData.alarmToUser)) {
-									let dropdown = $(td).find(".dropdown");
-									let val = dropdown.find(".dropdown-toggle").data("value");
-
-									$.each(dropdown, function(index, el){
-										let target = $(this).next().find("input[type='checkbox']");
-
-										if(!isEmpty(target) && target.length > 0){
-											let targetArr = target.toArray();
+									if (!isEmpty(rowData.alarmToUser.user)) {	
+										let userList = rowData.alarmToUser.user;
+										$.each(userList, function(index, singleUser){
+											let target2 = dropdown2.eq(index).find("input[type='checkbox']");
+											let targetArr2 = target2.toArray();
+											$.each(singleUser.level, function(index, item){
+												let found = targetArr2.findIndex( x => $(x).val() == item );
+												if( found > -1 ){
+													$(targetArr2[found]).prop("checked", true);
+												}
+											});
 											// console.log("$(this).text()====", $(this).text())
-											let found = targetArr.findIndex( x => ( $(x).data("name") == $(this).text() ) );
+										});			
+									}
+
+									if (!isEmpty(rowData.alarmToUser.non_user)) {	
+										console.log("non_user===", rowData.alarmToUser);
+										let nonUserList = rowData.alarmToUser.non_user;
+
+										$.each(nonUserList, function(index, el){
+											$.each(el.level, function(index, item){
+												let found = targetArr2.findIndex( x => $(x).val() == item );
+												if( found > -1 ){
+													$(targetArr2[found]).prop("checked", true);
+												}
+											});
+											// console.log("$(this).text()====", $(this).text())
+										});
+									}
+								}
+							}
+						},
+						{
+							"aTargets": [ 3 ],
+							"createdCell": function (td, cellData, rowData, row, col) {
+								// 담당자 이름
+								let dropdown3 = $(td).find(".dropdown-menu");
+								// let target3 = dropdown3.find("input[type='checkbox']");
+								// let targetArr3 = target3.toArray();
+
+								if (!isEmpty(rowData.alarmToUser)) {
+									if (!isEmpty(rowData.alarmToUser.user)) {	
+										let userList = rowData.alarmToUser.user;
+										$.each(userList, function(index, singleUser){
+											let target3 = dropdown3.eq(index).find("input[type='checkbox']");
+											let targetArr3 = target3.toArray();
+											// console.log("singleUser===", singleUser)
+											let found = targetArr3.findIndex(x => $(x).val() == singleUser.uid);
 											if( found > -1 ){
-												$(target[found]).prop("checked", true);
+												$(targetArr3[found]).prop("checked", true);
 											}
-										}
-									});
+											// console.log("$(this).text()====", $(this).text())
+										});
+										
+									}
 								}
 							}
 						},
 						{
 							"aTargets": [ 4 ],
 							"createdCell": function (td, cellData, rowData, row, col) {
-								let input = $(td).find("input");
-								if (!isEmpty(rowData.alarmToUser)) {
-									$.each(input, function(index, el){
-										$(this).val($(this).attr("value"));
-									});
-								}
+								// 전화번호
+								// let input = $(td).find("input");
+								// if (!isEmpty(rowData.alarmToUser)) {
+								// 	$.each(input, function(index, el){
+								// 		$(this).val($(this).attr("value"));
+								// 	});
+								// }
 							}
 						},
 					],
@@ -2682,6 +2734,8 @@
 							"sTitle": "설비명",
 							"mData": null,
 							"mRender": function ( data, type, row, rowIndex ) {
+								// console.log("설비명===", row);
+								let joinedDvcVal = "";
 								let subDropdown = `
 									<div class="dropdown">
 										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="${'${ row.name }'}" disabled>${'${ row.name }'}<span class="caret"></span></button>
@@ -2695,6 +2749,7 @@
 							"sTitle": "알람레벨",
 							"mData": null,
 							"mRender": function ( data, type, row, rowIndex ) {
+
 								let str3 = ``;
 								let dropdown3 = ``;
 								let aLevelOpt = [
@@ -2727,7 +2782,7 @@
 								} else {
 									if(!isEmpty(data.alarmToUser.user) && data.alarmToUser.user.length > 0){
 										let registeredUser = data.alarmToUser.user;
-										let joinedVal = "";
+										let joinedAlarmVal = "";
 
 										$.each(registeredUser, function(index, el){
 											let levText = "";
@@ -2736,78 +2791,78 @@
 
 											if(!isEmpty(el.level)){
 												let val;
-												joinedVal = el.level.join(",");
-
+												joinedAlarmVal = el.level.join(",");
 												if(el.level.length > 1){
 													val = el.level[0];
 													levText = aLevelOpt[val].name + ' 외 ' + String(el.level.length - 1) + "개";
 												} else if(el.level.length == 1) {
-													joinedVal = el.level[0];
-													levText = aLevelOpt[joinedVal].name;
+													joinedAlarmVal = el.level[0];
+													levText = aLevelOpt[joinedAlarmVal].name;
 												} else if(el.level.length < 0) {
-													joinedVal = "";
+													joinedAlarmVal = "";
 													levText = "선택";
 												}
 
 												dropdown3 += `
 													<div class="dropdown">
-														<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="${'${ joinedVal }'}" data-name="${'${ levText }'}" disabled>${'${ levText }'}<span class="caret"></span></button>
+														<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="${'${ joinedAlarmVal }'}" data-name="${'${ levText }'}" disabled>${'${ levText }'}<span class="caret"></span></button>
 														<ul id="aDvcAlarmList${'${ newIdx }'}" class="dropdown-menu">${'${ str3 }'}</ul>
 													</div>
 												`
 											}
 										});
+										
 									}
 									
 									if(!isEmpty(data.alarmToUser.non_user) && data.alarmToUser.non_user.length > 0){
-											let nonUser = data.alarmToUser.non_user;
-											let joinedVal = "";
-											
-											$.each(nonUser, function(index, el){
-												let levText = "";
-												let levVal = "";
-												let newIdx = String(rowIndex.row + "Non" + index);
+										let nonUser = data.alarmToUser.non_user;
+										let joinedAlarmVal = "";
+										
+										$.each(nonUser, function(index, el){
+											let levText = "";
+											let levVal = "";
+											let newIdx = String(rowIndex.row + "Non" + index);
 
-												if(!isEmpty(el.level)){
-													let val;
-													joinedVal = el.level.join(",");
+											if(!isEmpty(el.level)){
+												let val;
+												joinedAlarmVal = el.level.join(",");
 
-													if(el.level.length > 1){
-														val = el.level[0];
-														levText = aLevelOpt[val].name + ' 외 ' + String(el.level.length - 1) + "개";
-													} else if(el.level.length == 1) {
-														joinedVal = el.level[0];
-														levText = aLevelOpt[joinedVal].name;
-													} else if(el.level.length < 0) {
-														joinedVal = "";
-														levText = "선택";
-													}
-
-													// if(!isEmpty(el.level)){
-													// 	val = el.level[0];
-													// 	levText = aLevelOpt[val].name + ' 외 ' + String(el.level.length - 1) + "개";
-													// } else {
-													// 	joinedVal = ""
-													// 	levText = "선택";
-													// }
-
-
-													dropdown3 += `
-														<div class="dropdown">
-															<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="${'${ joinedVal }'}" data-name="선택" disabled>${'${ levText }'}<span class="caret"></span></button>
-															<ul id="aDvcAlarmList${'${ newIdx }'}" class="dropdown-menu">${'${ str3 }'}</ul>
-														</div>
-													`
-												} else {
-													dropdown3 += `
-														<div class="dropdown">
-															<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="${'${ aLevelOpt[5].val }'}" data-name="선택" disabled>${'${ aLevelOpt[5].name }'}<span class="caret"></span></button>
-															<ul id="aDvcAlarmList${'${ newIdx }'}" class="dropdown-menu">${'${ str3 }'}</ul>
-														</div>
-													`
+												if(el.level.length > 1){
+													val = el.level[0];
+													levText = aLevelOpt[val].name + ' 외 ' + String(el.level.length - 1) + "개";
+												} else if(el.level.length == 1) {
+													joinedAlarmVal = el.level[0];
+													levText = aLevelOpt[joinedAlarmVal].name;
+												} else if(el.level.length < 0) {
+													joinedAlarmVal = "";
+													levText = "선택";
 												}
-											});																		
-										}
+
+												// if(!isEmpty(el.level)){
+												// 	val = el.level[0];
+												// 	levText = aLevelOpt[val].name + ' 외 ' + String(el.level.length - 1) + "개";
+												// } else {
+												// 	joinedAlarmVal = ""
+												// 	levText = "선택";
+												// }
+
+
+												dropdown3 += `
+													<div class="dropdown">
+														<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="${'${ joinedAlarmVal }'}" data-name="선택" disabled>${'${ levText }'}<span class="caret"></span></button>
+														<ul id="aDvcAlarmList${'${ newIdx }'}" class="dropdown-menu">${'${ str3 }'}</ul>
+													</div>
+												`
+											} else {
+												dropdown3 += `
+													<div class="dropdown">
+														<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="${'${ aLevelOpt[5].val }'}" data-name="선택" disabled>${'${ aLevelOpt[5].name }'}<span class="caret"></span></button>
+														<ul id="aDvcAlarmList${'${ newIdx }'}" class="dropdown-menu">${'${ str3 }'}</ul>
+													</div>
+												`
+											}
+										});																		
+									}
 								}
 								
 								return dropdown3;
@@ -2821,7 +2876,7 @@
 								let dropdown4 = ``;
 								let userIdx = '';
 
-								if( isEmpty(data.alarm_to) || isEmpty(data.alarmToUser) ) {
+								if( isEmpty(data.alarmToUser) ) {
 									let str4 = ``;
 									str4 += `
 										<li onclick='addNewInput(this)'><a href="#">직접 입력</a></li>
@@ -2846,10 +2901,9 @@
 											<button type="button" class="dropdown-toggle" data-toggle="dropdown" disabled>선택<span class="caret"></span></button>
 											<ul id="aDvcContactListNonUser${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str4 }'}</ul>
 										</div>
-										<div class="text-input-type ml-0 hidden"><input type="text" name="aDvcContactNonUser${'${ rowIndex.row }'}" /></div>
 									`
 								} else {
-									if(!isEmpty(data.alarmToUser.non_user) && data.alarmToUser.non_user.length > 0 && !isEmpty(data.alarmToUser.user) && data.alarmToUser.user.length > 0 ) {
+									if(!isEmpty(data.alarmToUser.non_user) && data.alarmToUser.non_user.length > 0 && !isEmpty(data.alarm_to.user) && data.alarm_to.user.length > 0 ) {
 										let str4 = ``;
 										let nonUser = data.alarmToUser.non_user;
 										console.log("nonUser===", nonUser);
@@ -2881,23 +2935,21 @@
 													<button type="button" class="dropdown-toggle" data-value="${'${ displayName }'}" data-toggle="dropdown" data-name="선택" disabled>${'${ displayName }'}<span class="caret"></span></button>
 													<ul id="aDvcContactListNonUser${'${ newIdx }'}" class="dropdown-menu">${'${ str4 }'}</ul>
 												</div>
-												<div class="text-input-type ml-0 hidden"><input type="text" name="aDvcContactNonUser${'${ newIdx }'}" /></div>
 											`;
 
 										});
 
-																				let registeredUser = data.alarmToUser.user;
+										let registeredUser = data.alarmToUser.user;
 										let displayName = "";
 										let displayName2 = "";
 										let nameFlag = false;
-										let cnt = 0;
-										console.log("registeredUser---", registeredUser);
 
 										registeredUser.forEach((item, index) => {
 											var userEl = item;
 											let newIdx = String(rowIndex.row + index);	
 										
 											$.each(userData, function(idx, el){
+												console.log("userDAta---", el)
 												let nameId = `${'${ el.name }'}` + `(` + `${'${ el.login_id }'}` + `)`;
 												let phoneNum = "";
 
@@ -2905,8 +2957,6 @@
 													if(nameFlag == false){
 														displayName = el.name;
 														nameFlag = true;
-													} else {
-														cnt++;
 													}
 												
 												}
@@ -2914,8 +2964,6 @@
 													if(nameFlag == false){
 														displayName2 = el.name
 														nameFlag = true;
-													} else {
-														cnt++;
 													}
 												}
 												// let foundByUid = userData.findIndex(x => x.uid == item.uid);
@@ -2938,10 +2986,11 @@
 													displayName = displayName2;
 												}
 											} else {
+												console.log("length===", registeredUser.length);
 												if(!isEmpty(displayName2)){
-													displayName = displayName2 + '외 ' + cnt + '명';
+													displayName = displayName2 + '외 ' + String(registeredUser.length-1) + '명';
 												} else {
-													displayName = displayName + '외 ' + cnt + '명';
+													displayName = displayName + '외 ' + String(registeredUser.length-1) + '명';
 												}
 											}
 
@@ -2953,17 +3002,16 @@
 													<button type="button" class="dropdown-toggle" data-value="${'${ item.uid }'}" data-toggle="dropdown" data-name="" disabled>${'${ displayName }'}<span class="caret"></span></button>
 													<ul id="aDvcContactList${'${ newIdx }'}" class="dropdown-menu">${'${ str4 }'}</ul>
 												</div>
-												<div class="text-input-type ml-0 hidden"><input type="text" name="aDvcContact${'${ newIdx }'}" id="aDvcContact${'${ newIdx }'}" /></div>
 											`;
 
 										});
 									
-										console.log("cnt===", cnt);
 
 									} else {
+										// Either non registered User or registered user
 										let str4 = ``;
-										// 1. Unregistered User
 										if(!isEmpty(data.alarmToUser.non_user) && data.alarmToUser.non_user.length > 0){
+										// 1. Unregistered User
 											let nonUser = data.alarmToUser.non_user;
 											console.log("nonUser===", nonUser);
 
@@ -2994,7 +3042,6 @@
 														<button type="button" class="dropdown-toggle" data-value="${'${ displayName }'}" data-toggle="dropdown" data-name="선택" disabled>${'${ displayName }'}<span class="caret"></span></button>
 														<ul id="aDvcContactListNonUser${'${ newIdx }'}" class="dropdown-menu">${'${ str4 }'}</ul>
 													</div>
-													<div class="text-input-type ml-0 hidden"><input type="text" name="aDvcContactNonUser${'${ newIdx }'}" /></div>
 												`;
 
 											});
@@ -3002,83 +3049,95 @@
 
 										// 2. Registered User
 										if(!isEmpty(data.alarmToUser.user) && data.alarmToUser.user.length > 0){
-										let registeredUser = data.alarmToUser.user;
-										let displayName = "";
-										let displayName2 = "";
-										let nameFlag = false;
-										let cnt = 0;
-										console.log("registeredUser---", registeredUser);
+											let registeredUser = data.alarmToUser.user;
+	
+											registeredUser.forEach((item, index) => {
+												let userEl = item;
+												let length = registeredUser.length;
+												let newIdx = String(rowIndex.row + index);	
+												let displayName = "";
+												let nameArr = [];
+												let nameArr2 = [];
 
-										registeredUser.forEach((item, index) => {
-											var userEl = item;
-											let newIdx = String(rowIndex.row + index);	
-										
-											str4 += `
-												<li onclick='addNewInput(this)'><a href="#">직접 입력</a></li>
-											`
-											$.each(userData, function(idx, el){
-												let nameId = `${'${ el.name }'}` + `(` + `${'${ el.login_id }'}` + `)`;
-												let phoneNum = "";
-
-												if(el.name == userEl.uid){
-													if(nameFlag == false){
-														displayName = el.name;
-														nameFlag = true;
-													} else {
-														cnt++;
-													}
-												
-												}
-												if(el.uid == userEl.uid){
-													if(nameFlag == false){
-														displayName2 = el.name
-														nameFlag = true;
-													} else {
-														cnt++;
-													}
-												}
-												// let foundByUid = userData.findIndex(x => x.uid == item.uid);
-
-												el.contact_phone ? (phoneNum = el.contact_phone) : "";
-				
 												str4 += `
-													<li onclick='removeNewInput(this)'>
-														<a class="chk-type" href="#">
-															<input type="checkbox" data-id="${'${ el.login_id }'}${'${ newIdx }'}" name="aDvcContactPerson${'${ newIdx }'}" value="${'${ el.uid }'}" data-name="${'${ el.name }'}" data-contact-num="${'${ phoneNum }'}" />
-															<label>${'${ nameId }'}</label>
-														</a>
-													</li>
+													<li onclick='addNewInput(this)'><a href="#">직접 입력</a></li>
 												`
-											});
+												$.each(userData, function(idx, el){
+													let nameId = `${'${ el.name }'}` + `(` + `${'${ el.login_id }'}` + `)`;
+													let phoneNum = "";
 
-									
-											if(cnt === 0){
-												if(!isEmpty(displayName2)){
-													displayName = displayName2;
-												}
-											} else {
-												if(!isEmpty(displayName2)){
-													displayName = displayName2 + '외 ' + cnt + '명';
+													if(el.name == userEl.uid){
+														nameArr.push(el.name);
+													}
+													if(el.uid == userEl.uid){
+														nameArr2.push(el.name);
+													}
+													// let foundByUid = userData.findIndex(x => x.uid == item.uid);
+
+													el.contact_phone ? (phoneNum = el.contact_phone) : "";
+					
+													str4 += `
+														<li onclick='removeNewInput(this)'>
+															<a class="chk-type" href="#">
+																<input type="checkbox" data-id="${'${ el.login_id }'}${'${ newIdx }'}" name="aDvcContactPerson${'${ newIdx }'}" value="${'${ el.uid }'}" data-name="${'${ el.name }'}" data-contact-num="${'${ phoneNum }'}" />
+																<label>${'${ nameId }'}</label>
+															</a>
+														</li>
+													`
+												});
+
+												if(length === 0){
+													if(nameArr2.length == 0){
+														if(nameArr.length > 1){
+															displayName = nameArr[0] + String(nameArr.length-1);
+														} else {
+															displayName = nameArr[0];
+														}
+													} else {
+														if(nameArr2.length > 1){
+															displayName = nameArr2[0] + String(nameArr.length-1);
+														} else {
+															displayName = nameArr2[0];
+														}
+													}
 												} else {
-													displayName = displayName + '외 ' + cnt + '명';
+													if(length > 1) {
+														if(nameArr2.length == 0){
+															if(nameArr.length > 1){
+																displayName = nameArr[0] + ' 외 ' + String(nameArr.length-1) + '명';
+															} else {
+																displayName = nameArr[0]
+															}
+														} else {
+															if(nameArr.length > 1){
+																displayName = nameArr2[0] + ' 외 ' + String(nameArr2.length-1) + '명';
+															} else {
+																displayName = nameArr2[0];
+															}
+														}
+													} else {
+														if(nameArr.length == 0){
+															displayName = nameArr2[0];
+														} else {
+															displayName = nameArr[0];
+														}
+													}
 												}
-											}
 
-											// console.log("displayName---", displayName);
-											// console.log("displayName2---", displayName2);
+												dropdown4 += `
+													<div class="dropdown" data-user-type="user" data-user-index="${'${ newIdx }'}">
+														<button type="button" class="dropdown-toggle" data-value="${'${ item.uid }'}" data-toggle="dropdown" data-name="" disabled>${'${ displayName }'}<span class="caret"></span></button>
+														<ul id="aDvcContactList${'${ newIdx }'}" class="dropdown-menu">${'${ str4 }'}</ul>
+													</div>
+												`;
+												// console.log("displayName---", displayName);
+												// console.log("displayName2---", displayName2);
 
-											dropdown4 += `
-												<div class="dropdown" data-user-type="user" data-user-index="${'${ newIdx }'}">
-													<button type="button" class="dropdown-toggle" data-value="${'${ item.uid }'}" data-toggle="dropdown" data-name="" disabled>${'${ displayName }'}<span class="caret"></span></button>
-													<ul id="aDvcContactList${'${ newIdx }'}" class="dropdown-menu">${'${ str4 }'}</ul>
-												</div>
-												<div class="text-input-type ml-0 hidden"><input type="text" name="aDvcContact${'${ newIdx }'}" id="aDvcContact${'${ newIdx }'}" /></div>
-											`;
 
-										});
+											});
 									
-										console.log("cnt===", cnt);
-									}
+										// console.log("cnt===", cnt);
+										}
 									
 									}
 								}
@@ -3107,9 +3166,7 @@
 									}
 
 									if(!isEmpty(data.alarmToUser.user) && data.alarmToUser.user.length > 0){
-										
 										let registeredUser = data.alarmToUser.user;
-
 								
 										registeredUser.forEach((item, index) => {
 											let newIdx = String(rowIndex.row + index);
@@ -3237,7 +3294,6 @@
 					DvcNameStr2 += '<li class="hidden" data-device-type="' + item[1].device_type + '" data-did="' +  item[1].did + '" data-value="' + item[0] + '"><a href="#" tabindex="-1">' + item[0] + '</a></li>';
 				});
 
-				console.log("noAlarmData==", noAlarmData)
 				// NO alarmList
 				var alarmTable = $('#alarmTable').DataTable({
 					"aaData": noAlarmData,
@@ -3283,6 +3339,7 @@
 							"sTitle": "설비명",
 							"mData": null,
 							"mRender": function ( data, type, row, rowIndex ) {
+								// console.log("설비명===", row);
 								let subDropdown = `
 									<div class="dropdown">
 										<button type="button" class="dropdown-toggle" data-toggle="dropdown" disabled>선택<span class="caret"></span></button>
@@ -3362,7 +3419,6 @@
 										<button type="button" class="dropdown-toggle" data-value="" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 										<ul id="aDvcContactListNonUser${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str4 }'}</ul>
 									</div>
-									<div class="text-input-type ml-0 hidden"><input type="text" name="aDvcContactNonUser${'${ rowIndex.row }'}" /></div>
 								`;
 
 								return dropdown4;
@@ -3444,13 +3500,11 @@
 	}
 
 	function updateAlarmTable(self, option){
-
 		let tr = self.parents().closest("tr");
 		let td = tr.find("td");
 		let dTable = $("#alarmTable").DataTable();	
 		let rowData = dTable.row(tr).data();	
 		let dataIdx = self.data("index");
-		
 		let directInput = tr.find("td:nth-of-type(4) input[type='text']").eq(dataIdx);
 		let input = tr.find("td:nth-of-type(5) input[type='text']").eq(dataIdx);
 
@@ -3460,8 +3514,7 @@
 			let nameAttr = copy.find('[name^="aDvc"]');
 			
 			copy.find("td:nth-of-type(1)").empty();
-			copy.find("td:nth-of-type(2)").empty();
-
+			copy.find("td:nth-of-type(2) .dropdown:not(:last-of-type)").remove();
 			copy.find("td:nth-of-type(3) .dropdown:not(:last-of-type)").remove();
 			copy.find("td:nth-of-type(4) div:lt(-2)").remove();
 			copy.find("td:nth-of-type(5) .text-input-type:not(:last-of-type)").remove();
@@ -3477,7 +3530,7 @@
 			copy.find("td:nth-of-type(4) .dropdown").attr("data-user-index", tempIdx);
 			copy.find("td:nth-of-type(6) .icon-add").attr("data-index", tempIdx);
 			copy.find("td:nth-of-type(6) .icon-edit").attr("data-index", tempIdx ).prop("disabled", true);
-			copy.find("td:nth-of-type(6) .icon-delete").attr("data-index", tempIdx ).attr("onclick", "removeInnerTd(this)");
+			copy.find("td:nth-of-type(6) .icon-delete").attr("data-index", tempIdx ).attr("onclick", "updateAlarmTable($(this), 'delete')");
 	
 			$.each(idAttr, function(index, el){
 				let oldId = $(this).attr("id");
@@ -3496,7 +3549,7 @@
 
 			});
 			let newTd = copy.find("td");
-
+			td.eq(1).append(newTd.eq(1).children());
 			td.eq(2).append(newTd.eq(2).children());
 			td.eq(3).append(newTd.eq(3).children());
 			td.eq(4).append(newTd.eq(4).children());
@@ -3505,7 +3558,7 @@
 
 		if(option == "edit"){
 			$.each(td, function(index, el){
-				if(index == 2 || index == 3){
+				if(index >= 1 && index <= 3){
 					let target = $(this).find(".dropdown-toggle").eq(dataIdx);
 					if(target.is(":disabled")) {
 						target.prop("disabled", false);
@@ -3527,25 +3580,20 @@
 		}
 
 		if(option == "delete"){
-			console.log("deleteAlarm==", tr.siblings() ) ;
-
 			if(tr.siblings().length == 0) {
 				if($(self).parent().siblings().length === 0){
 					tr.addClass("hidden");
 				} else {
 					$.each(td, function(index, el){
-						if(index >= 2) {
-							if(index <= 3){
-								let target = $(this).find(".dropdown-toggle").eq(dataIdx);
-								target.parent().remove();
-								directInput.parent().remove();
-								if(index == 3){
-									input.parent().remove();
-								}
+						if(index >= 1 && index <= 3){
+							let target = $(this).find(".dropdown-toggle").eq(dataIdx);
+							target.parent().remove();
+							directInput.parent().remove();
+							if(index == 3){
+								input.parent().remove();
 							}
-							if(index == 5){
-								$(self).parent().remove();
-							}
+						} else if(index == 5){
+							$(self).parent().remove();
 						}
 					});
 				}
@@ -3554,18 +3602,15 @@
 					tr.remove();
 				} else {
 					$.each(td, function(index, el){
-						if(index >= 2) {
-							if(index <= 3){
-								let target = $(this).find(".dropdown-toggle").eq(dataIdx);
-								target.parent().remove();
-								directInput.parent().remove();
-								if(index == 3){
-									input.parent().remove();
-								}
+						if(index >= 1 && index <= 3){
+							let target = $(this).find(".dropdown-toggle").eq(dataIdx);
+							target.parent().remove();
+							directInput.parent().remove();
+							if(index == 3){
+								input.parent().remove();
 							}
-							if(index == 5){
-								$(self).parent().remove();
-							}
+						} else if (index == 5){
+							$(self).parent().remove();
 						}
 					});
 				}
@@ -3715,26 +3760,6 @@
 
 		$("#alarmTable tbody").append(copy);
 
-	}
-
-	function removeInnerTd(self){
-		let td = $(self).parents().closest("tr").find("td");
-		$.each(td, function(index, el){
-			if(index>=2){
-				if(index != 3){
-					$(this).find(".dropdown:last-of-type").remove();
-					$(this).find(".text-input-type:last-of-type").remove();
-				}
-
-				if(index == 3){
-					$(this).find("div:gt(-3)").remove();
-				}
-
-				if(index == 5){
-					$(this).find(".flex-start:last-of-type").remove();
-				}
-			}
-		});
 	}
 
 	function setDropdownInput(self , target){

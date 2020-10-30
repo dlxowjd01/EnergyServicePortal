@@ -160,7 +160,7 @@ $(function(){
 	});
 });
 
-/* 테이블 리스트 선택 효과 */
+/* 테이블 리스트 선택 효과 <<<< 안쓰고 있는지 확인 필요*/
 $(function(){
 	$(".table-site tbody tr, .chart-table tbody tr, .table-box tbody tr, .table-default tbody tr").click(function() {
 		$(".table-site tbody tr").removeClass("click");

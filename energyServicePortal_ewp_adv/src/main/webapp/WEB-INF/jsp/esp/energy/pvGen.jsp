@@ -59,8 +59,10 @@
 					<div class="flex-group duration" id="dateArea">
 						<span class="tx-tit">날짜입력</span>
 						<div class="sel-calendar">
+							<label for="fromDate" class="sr-only">시작 날짜</label>
 							<input type="text" id="fromDate" class="sel fromDate" value="" autocomplete="off" readonly>
 							<em></em>
+							<label for="toDate" class="sr-only">종료 날짜</label>
 							<input type="text" id="toDate" class="sel toDate" value="" autocomplete="off" readonly>
 						</div>
 					</div>
@@ -82,7 +84,8 @@
 						<button type="button" class="btn-type" id="renderBtn"><fmt:message key="renewablesgen.3.update" /></button>
 					</div>
 				</div>
-				<div class="end"><span class="tx-tit">그래프</span><!--
+				<div class="end"><!--
+				--><span class="tx-tit">그래프</span><!--
 				--><div class="sa-select">
 						<div class="dropdown" id="chartStyle"><!--
 							--><button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="each"><fmt:message key="renewablesgen.3.individualbar" /><span class="caret"></span></button><!--
@@ -95,11 +98,10 @@
 					</div>
 				</div>
 			</div>
-			<div class="row hidden">
-				<div class="inchart">
-					<p class="text-time"></p>
-					<div id="chart2"></div>
-				</div>
+
+			<div class="clear hidden">
+				<h4 class="text-time"></h4>
+				<div id="chart2" class="inchart"></div>
 			</div>
 		</div>
 	</div>
@@ -1168,7 +1170,7 @@
 
 	const chartDraw = function (standard, seriesData) {
 		let chart = $('#chart2').highcharts();
-		$('#chart2').parents(".row").removeClass("hidden");
+		$('#chart2').parents().closest(".clear.hidden").removeClass("hidden");
 		$(".indiv.chart-pv").addClass("fixed");
 
 		if (chart) {
@@ -1194,11 +1196,12 @@
 			subtitle: {
 				text: ''
 			},
-			xAxis: {
+			xAxis: [{
+				lineColor: 'var(--grey)',
 				labels: {
 					align: 'center',
 					style: {
-						color: 'var(--white)',
+						color: 'var(--grey)',
 						fontSize: '8px'
 					},
 					y: 50,
@@ -1209,13 +1212,13 @@
 					rotation: -45
 				},
 				categories: standard,
-				tickInterval: 1,
 				title: {
 					text: null
 				},
 				crosshair: true
-			},
+			}],
 			yAxis: {
+				gridLineColor: 'var(--white25)',
 				gridLineWidth: 1,
 				min: 0,
 				title: {
@@ -1225,16 +1228,16 @@
 					y: 25,
 					x: 5,
 					style: {
-						color: 'var(--white)',
-						fontSize: '8px'
+						color: 'var(--grey)',
+						fontSize: '10px'
 					}
 				},
 				labels: {
 					overflow: 'justify',
 					x: -20,
 					style: {
-						color: 'var(--white)',
-						fontSize: '10px'
+				
+						color: 'var(--grey)',		fontSize: '10px'
 					}
 				}
 			},
@@ -1245,7 +1248,7 @@
 				x: -10,
 				y: -15,
 				itemStyle: {
-					color: 'var(--white60)',
+					color: 'var(--white87)',
 					fontSize: '12px',
 					fontWeight: 400
 				},
