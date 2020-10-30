@@ -256,7 +256,6 @@
 				if (!isEmpty(res) && !isEmpty(res['data'])) {
 					let refineList = new Array();
 					res['data'].map(item => {
-						console.log('item', item);
 						const found = spcArr.findIndex(x => x.spc_id === item.spc_id);
 						const to_account = JSON.parse(item.to_account);
 

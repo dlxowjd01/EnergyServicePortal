@@ -159,9 +159,16 @@
 		maintenance('get');
 	};
 
-	const maintenance = function (action, jobId) {
+	/**
+	 * 등록/수정/삭제 처리
+	 *
+	 * @param action
+	 * @param jobId
+	 * @returns {boolean}
+	 */
+	const maintenance = function (action, jobId, cascade) {
 		let option = {};
-		if (action == 'post' || action == 'patch') {
+		if (action === 'post' || action === 'patch') {
 			let data = setData();
 			if (isEmpty(data['site_id'])) {
 				alert('발전소명은 필수 값입니다.');
@@ -221,7 +228,7 @@
 
 			let jobText = jobId == undefined ? '' : '&jobId=' + jobId;
 			let url = '';
-			if (action == 'patch') {
+			if (action === 'patch') {
 				if (!confirm('수정된 정보로 변경 하시겠습니까?')) {
 					return false;
 				}
@@ -240,7 +247,7 @@
 				traditional: true,
 				data: JSON.stringify(data)
 			};
-		} else if (action == 'get') {
+		} else if (action === 'get') {
 			option = {
 				url: apiHost + '/spcs/maintenance',
 				type: action,
@@ -251,22 +258,26 @@
 				}
 			};
 
-			if (jobId != undefined) {
+			if (jobId !== undefined) {
 				option.data.jobId = jobId;
 			}
 		} else {
-
-			if (!confirm('삭제 하시겠습니까?')) {
-				return false;
+			//다중 삭제 처리 하는 부분
+			//cascade 0: 반복삭제안함, 1: 반복 전체 삭제, 2: 이후 반복만 삭제
+			if (isEmpty(cascade)) {
+				cascade = 0;
+			} else {
+				$('#confirmModal').modal('hide');
 			}
 
-			let jobText = jobId == undefined ? '' : '&jobId=' + jobId;
+			let jobText = jobId === undefined ? '' : '&jobId=' + jobId;
 			option = {
 				url: apiHost + '/spcs/maintenance/' + jobId + '?oid=' + oid + jobText,
 				type: action,
 				data: {
 					oid: oid,
-					jobId: jobId
+					jobId: jobId,
+					cascade: cascade
 				}
 			};
 		}
@@ -289,6 +300,48 @@
 			}
 		});
 	};
+
+	/**
+	 * 삭제시에 반복 확인 체크
+	 */
+	const repeatConfirm = (jobId, repeatYN) => {
+		let modal = $('#comDeleteModal');
+		let deleteBtn = $('#comDeleteBtn');
+		let confirmTitle = $('#confirmTitle');
+
+		$('#comDeleteSuccessMsg span').text('삭제');
+		modal.find('.modal-body').removeClass('hidden');
+		modal.modal('show');
+
+		confirmTitle.on('input keyp', function() {
+			if($(this).val() !== '삭제') {
+				deleteBtn.prop('disabled', true);
+				return false
+			} else {
+				deleteBtn.prop('disabled', false).data('jobId', jobId).data('repeatYN', repeatYN);
+			}
+		});
+	}
+
+	$(document).on('click', '#comDeleteBtn', function() {
+		const jobId = $(this).data('jobId')
+			, repeatYN = $(this).data('repeatYN');
+
+		$(this).removeClass('jobId');
+		$(this).removeClass('repeatYN');
+
+		$('#comDeleteModal').modal('hide');
+		$('#confirmTitle').val('');
+
+		if (repeatYN === 'Y') {
+			let confirmBtn = $('#confirmModal button');
+			confirmBtn.eq(0).attr('onclick', 'maintenance(\'delete\', \'' + jobId + '\', \'0\')');
+			confirmBtn.eq(1).attr('onclick', 'maintenance(\'delete\', \'' + jobId + '\', \'1\')');
+			$('#confirmModal').modal('show');
+		} else {
+			maintenance('delete', jobId);
+		}
+	});
 
 	//등록&수정 용 데이터 세팅
 	const setData = function () {
@@ -464,7 +517,7 @@
 				});
 			}
 
-			deleteScheduleBtn.removeClass('hidden').attr('onclick', 'maintenance(\'delete\', \'' + data[0].id + '\' );');
+			deleteScheduleBtn.removeClass('hidden').attr('onclick', 'repeatConfirm(\'' + data[0].id + '\', \'' + data[0].repeat_yn + '\');');
 			addScheduleBtn.attr('onclick', 'maintenance(\'patch\', \'' + data[0].id + '\' );').text('수정');
 		}
 
@@ -904,6 +957,22 @@
 						<tbody>
 						</tbody>
 					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal stack" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModal" aria-hidden="true">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content narrow">
+			<div class="modal-body">
+				<h2>다른 정기 점검 일정도 같이 수정하시겠습니까?</h2>
+			</div>
+			<div class="modal-footer">
+				<div class="btn-wrap-type mb-0">
+					<button type="button" class="btn-type03">한건 삭제</button>
+					<button type="button" class="btn-type">모두 삭제</button>
 				</div>
 			</div>
 		</div>
