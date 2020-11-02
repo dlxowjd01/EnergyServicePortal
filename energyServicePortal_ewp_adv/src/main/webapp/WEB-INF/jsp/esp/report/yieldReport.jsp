@@ -5,10 +5,10 @@
 <script type="text/javascript" src="/js/custom/FileSaver.js" charset="utf-8"></script>
 
 <script type="text/javascript">
-	let today = new Date();
-	let repeat_type_method = 'post';
-	let repeatCoastNumber = new Object();
-	let totalCount = 0;
+	let yieldTable = null;
+
+	const yieldReportType = new Object();
+
 	let reportType = {
 		regular_mm: '월간 실적',
 		regular_qt: '분기 실적',
@@ -17,211 +17,449 @@
 	}
 
 	$(function () {
-		// popOption();
-		initRow('yieldList');
-
-		setInitList("listData"); //리스트초기화
-
-		getDataList(page);
-	})
-
-	$(document).on('click', '#yieldList > li > button.btn-type07', function () {
-		let idx = $('#yieldList > li > button.btn-type07').index($(this));
-		delRow('yieldList', idx);
-	});
-
-	$(document).on('click', '.dropdown li', function (e) {
-		e.preventDefault();
-		let dataValue = $(this).data('value');
-		let dataText = $(this).text();
-		let id = $(this).parents('.dropdown').prop('id');
-		$(this).parents('.dropdown').find('button').html(dataText + '<span class="caret"></span>').data('value', dataValue);
-
-		if (id == 'spc_id') {
-			callAjax({
-				url: apiHost + '/spcs/' + dataValue,
-				type: 'get',
-				data: {
-					oid: oid,
-					includeGens: true
+		yieldTable = $('#yieldTable').DataTable({
+			autoWidth: true,
+			fixedHeader: true,
+			"table-layout": "fixed",
+			scrollY: '720px',
+			scrollCollapse: true,
+			sortable: true,
+			paging: true,
+			pageLength: 15,
+			columns: [
+				{
+					title: '',
+					data: null,
+					mRender: function ( data, type, full, rowIndex ) {
+						return '<input type="checkbox" id="check' + rowIndex.row + '" name="table_checkbox"><label for="check' + rowIndex.row + '"></label>';
+					},
+					className: 'dt-center no-sorting'
+				},
+				{
+					title: '<fmt:message key="revenuereport.2.number" />',
+					data: null,
+					render: function (data, type, full, rowIndex) {
+						return rowIndex.row + 1;
+					},
+					className: 'dt-center no-sorting fixed'
+				},
+				{
+					title: 'SPC명',
+					data: 'spc_name',
+					render: function (data, type, full, rowIndex) {
+						if (isEmpty(data)) {
+							return '-';
+						} else {
+							return data;
+						}
+					},
+					className: 'dt-center'
+				},
+				{
+					title: '<fmt:message key="revenuereport.2.plant" />',
+					data: 'site_name',
+					render: function (data, type, full, rowIndex) {
+						if (isEmpty(data)) {
+							return '-';
+						} else {
+							return data;
+						}
+					},
+					className: 'dt-center'
+				},
+				{
+					title: '<fmt:message key="revenuereport.2.report_classification" />',
+					data: 'reportTypeName',
+					render: function (data, type, full, rowIndex) {
+						if (isEmpty(data)) {
+							return '-';
+						} else {
+							return data;
+						}
+					},
+					className: 'dt-center'
+				},
+				{
+					title: '적용기간',
+					data: 'report_date',
+					className: 'dt-center'
+				},
+				{
+					title: '<fmt:message key="revenuereport.2.download" />',
+					data: 'file_link',
+					render: function (data, type, full, rowIndex) {
+						return '<button type="button" class="text-file" onclick="' + data + '">EXCEL</button>';
+					},
+					sortable: false,
+					className: 'dt-center'
+				},
+				{
+					title: '<fmt:message key="workreportmain.2.saved" />',
+					data: 'generated_at',
+					render: function (data, type, full, rowIndex) {
+						if (data === null) {
+							return '-';
+						} else {
+							return (new Date(data)).format('yyyy-MM-dd HH:mm:ss');
+						}
+					},
+					className: 'dt-center'
+				},
+				{
+					title: '<fmt:message key="revenuereport.2.report_confirmation" />',
+					data: 'confirmed_at',
+					render: function (data, type, full, rowIndex) {
+						if (isEmpty(data)) {
+							return `확정 보고서 업로드 <label for="confirmFile${'${full[\'id\']}'}" class="btn-file fr up">업로드</label>
+									<input type="file" id="confirmFile${'${full[\'id\']}'}" name="confirmFile${'${full[\'id\']}'}" class="btn-upload hidden" accept="application/pdf">`;
+						} else {
+							const linkData = JSON.parse(full['confirmed_file_link'])
+								, confirmed_date = (new Date(data)).format('yyyy-MM-dd HH:mm:ss');
+							return `${'${confirmed_date}'} <button type="button" class="btn-file fr down" onclick="downloadFile('${'${linkData[\'fileKey\']}'}', '${'${linkData[\'orgFileName\']}'}')">다운로드</button>`;
+						}
+					},
+					className: 'dt-center'
+				},
+				{
+					title: '최종 작업자',
+					data: 'updated_by',
+					className: 'dt-center'
 				}
-			}, setSpcGen);
-		} else if (id == 'report_type') {
-			let spcid = $('#spc_id button').data('value');
-			callAjax({
-				url: apiHost + '/spcs/' + spcid,
-				type: 'get',
-				data: {
-					oid: oid,
-					includeGens: true
-				}
-			}, setSpcGenReport);
-		}
+			],
+			language: {
+				emptyTable: '조회된 데이터가 없습니다.',
+				zeroRecords: '검색된 결과가 없습니다.'
+			},
+			dom: 'tip',
+		}).columns.adjust().draw();
+
+		getProperties();
+		getDataList();
 	});
-
-	$(document).on('change', 'input[type="file"]', function () {
-		let uuid = genUuid();
-		let thisId = $(this).prop('id');
-		$('#upload').empty();
-		$(this).clone().appendTo('#upload');
-		$('#upload').find('input').attr('name', uuid).attr('id', uuid);
-
-		callAjax({
-			type: 'post',
-			enctype: 'multipart/form-data',
-			url: apiHost + '/files/upload?oid=' + oid,
-			data: new FormData($('#upload')[0]),
-			processData: false,
-			contentType: false,
-			cache: false,
-			timeout: 600000
-		}, setUploadAfter, thisId);
-	});
-
-	const callAjax = function (option, callBack, param) {
-		$.ajax(option).done(function (data, textStatus, jqXHR) {
-			if (typeof callBack == 'function') {
-				if (param != undefined) {
-					callBack.call(this, data, param);
-				} else {
-					callBack.call(this, data);
-				}
-			} else if (typeof callBack == 'string') {
-				eval(callBack + '("' + param + '")');
-			}
-		}).fail(function (jqXHR, textStatus, errorThrown) {
-			console.error(jqXHR);
-			console.error(textStatus);
-			console.error(errorThrown);
-
-			alert('처리 중 오류가 발생했습니다.');
-			return false;
-		});
-	}
 
 	$(document).on('keyup', '#key_word', function (e) {
-		if (e.keyCode == 13) {
-			getDataList();
-		}
-	})
+		if (e.keyCode == 13) { getDataList(); }
+	});
 
-	const modalInit = function () {
-		callAjax({
+	const getProperties = () => {
+		// $('#reportClass ul').empty();
+		// $('#reportClass ul').append(`<li data-value=""><a href="javascript:void(0);">전체</a></li>`);
+		$.ajax({
+			url: apiHost + '/config/view/properties',
+			type: 'GET',
+			data: { oid: oid, types: 'yield_report_type' },
+			success: (data, textStatus, jqXHR) => {
+				const yieldTemplate = data.yield_report_type;
+
+				// reportType = new Object();
+				Object.entries(yieldTemplate).forEach(([index, yield]) => {
+					const code = yield['code'];
+					const name = (langStatus == 'KO') ? yield['name']['kr'] : yield['name']['en'];
+					reportType[code] = name;
+
+					$('#reportClass ul').append(`<li data-value="${'${code}'}"><a href="javascript:void(0);">${'${name}'}</a></li>`);
+				});
+			},
+			error: (jqXHR, textStatus, errorThrown) => {
+				console.error(textStatus);
+				errorMsg('처리중 오류가 발생했습니다.');
+			}
+		});
+	}
+
+	/**
+	 * 데이터 조회
+	 */
+	const getDataList = () => {
+		new Promise(resolve => {
+			$.ajax({
+				url: apiHost + '/reports/performance',
+				type: 'GET',
+				data: { oid: oid },
+				success: (result) => {
+					if (!isEmpty(result) && !isEmpty(result['data'])) {
+						resolve(result['data']);
+					} else {
+						throw Error('조회된 내역이 없습니다.');
+					}
+				},
+				error: (request, status, error) => {
+					console.error(error);
+					throw Error('조회중 오류가 발생했습니다.');
+				}
+			});
+		}).then(resultData => {
+			resultData.forEach(data => {
+				const reportDataStart = (new Date(data['report_data_start'])).format('yyyy-MM-dd')
+					, reportDataEnd = (new Date(data['report_data_end'])).format('yyyy-MM-dd');
+
+				data['reportTypeName'] = reportType[data['report_type']];
+				data['report_date'] = reportDataStart + ' ~ ' + reportDataEnd;
+
+				if (isEmpty(data['generated_file_link'])) {
+					data['file_link'] = '-';
+				} else {
+					const linkData = JSON.parse(data['generated_file_link']);
+					data['file_link'] = 'location.href=\'' + apiHost + '/files/download/' + linkData.fileKey + '?oid=' + oid + '&orgFilename=' + linkData.orgFileName + '\'';
+				}
+			});
+
+			//작성일 기준 역순 정렬
+			resultData.sort((a, b) => {
+				return a['generated_at'] < b['generated_at'] ? 1 : a['generated_at'] > b['generated_at'] ? -1 : 0;
+			});
+
+			return resultData;
+		}).then(resultData => {
+			const searchType = $('#reportClass button').data('value')
+				, searchYear = $('#year button').data('value')
+				, searchMonth = $('#month button').data('value')
+				, keyWord = $('#key_word').val().trim()
+				, key_word = new RegExp(keyWord, 'i');
+
+			resultData = resultData.filter(rowData => {
+				let	reportYear = Number(rowData['report_date'].substring(0, 4));
+				let	reportMonth = Number(rowData['report_date'].substring(5, 7));
+
+				if (((!isEmpty(searchType) && rowData['report_type'] === searchType) || isEmpty(searchType))
+					&& ((!isEmpty(searchYear) && reportYear === searchYear) || isEmpty(searchYear))
+					&& ((!isEmpty(searchMonth) && reportMonth === searchMonth) || isEmpty(searchMonth))
+					&& ((!isEmpty(keyWord) && (rowData['site_name'].match(key_word) || rowData['spc_name'].match(key_word) || rowData['updated_by'].match(key_word))) || isEmpty(keyWord))
+				) {
+					return true;
+				}
+			});
+
+			yieldTable.clear();
+			yieldTable.rows.add(resultData).draw();
+		}).catch(error => {
+			errorMsg(error);
+		});
+	}
+
+	/**
+	 * 파일 다운로드
+	 *
+	 * @param fileKey
+	 * @param orgFilename
+	 */
+	const downloadFile = (fileKey, orgFilename) => {
+		let url = apiHost + '/files/download/' + fileKey + '?oid=' + oid + '&orgFilename' + orgFilename;
+		$.ajax({
+			url: url,
+			method: 'GET',
+			xhrFields: {
+				responseType: 'blob'
+			},
+			success: function(data) {
+				let name = orgFilename
+				  , a = document.createElement('a')
+				  , url = window.URL.createObjectURL(data);
+
+				a.href = url;
+				a.download = name;
+				document.body.append(a);
+				a.click();
+				setTimeout(function(){
+					a.remove();
+					window.URL.revokeObjectURL(url);
+				}, 200);
+			},
+			fail: function(){
+				errorMsg('다운로드중 오류가 발생했습니다.');
+			}
+		});
+	}
+
+	/**
+	 * 등록 팝업
+	 */
+	const modalInit = () => {
+		const spcs = $.ajax({
 			url: apiHost + '/spcs',
-			type: 'get',
-			data: {
-				oid: oid
-			}
-		}, setSpc);
-	}
-
-	const setSpc = function (data) {
-		let spcList = data.data;
-		let html = '';
-
-		for (let i in spcList) {
-			let temp = spcList[i];
-			html += '<li data-value="' + temp.spc_id + '"><a href="javascript:void(0);">' + temp.name + '</a></li>';
-		}
-
-		$('#spc_id ul').empty().append(html);
-		$('#site_id ul').empty();
-
-		delRow('yieldList');
-
-		//팝업 오픈시 value 초기화
-		$('#reportModal input').each(function () {
-			$(this).val('');
+			type: 'GET',
+			data: { oid: oid }
 		});
 
-		$('#reportModal .dropdown-toggle').each(function () {
-			$(this).data('value', '').html($(this).data('name') + '<span class="caret"></span>');
+		const props = $.ajax({
+			url: apiHost + '/config/view/properties',
+			type: 'GET',
+			data: { oid: oid, types: 'yield_report_type' }
 		});
 
-		$('#reportModal').modal();
+		Promise.all([spcs, props]).then(response => {
+			const resolveData = new Object();
+			response.forEach((result, index) => {
+				if (index === 0) {
+					if (!isEmpty(result) && !isEmpty(result['data'])) {
+						resolveData['spcs'] = result['data'];
+					} else {
+						resolveData['spcs'] = null;
+					}
+				} else {
+					resolveData['yield_report_type'] = result['yield_report_type'];
+				}
+			});
+
+			return resolveData;
+		}).then(data => {
+			const spcData = data['spcs']
+				, yieldTemplate = data['yield_report_type'];
+
+			$('#spc_id ul').empty(); //SPCID 초기화
+			$('#report_type ul').empty(); //보고서타입 초기화
+			$('#yieldList').empty(); // 적용변수 초기화
+
+			if (isEmpty(spcData)) {
+				$('#spc_id ul').append(`<li><a href="javascript:void(0);">조회된 내역이 없습니다.</a></li>`);
+			} else {
+				spcData.forEach(spc => {
+					$('#spc_id ul').append(`<li data-value="${'${spc[\'spc_id\']}'}"><a href="javascript:void(0);">${'${spc[\'name\']}'}</a></li>`);
+				});
+			}
+
+			if (isEmpty(yieldTemplate)) {
+				$('#report_type ul').append(`<li><a href="javascript:void(0);">조회된 내역이 없습니다.</a></li>`);
+			} else {
+				Object.entries(yieldTemplate).forEach(([index, yield]) => {
+					const name = (langStatus == 'KO') ? yield['name']['kr'] : yield['name']['en'];
+					$('#report_type ul').append(`<li data-value="${'${yield[\'code\']}'}" data-options="${'${yield[\'option\']}'}" data-range="${'${yield[\'range\']}'}" data-interval="${'${yield[\'interval\']}'}"><a href="javascript:void(0);">${'${name}'}</a></li>`);
+				});
+			}
+
+			$('#reportModal input').each(function () {
+				$(this).val('');
+			});
+
+			$('#reportModal .dropdown-toggle').each(function () {
+				$(this).data('value', '').html($(this).data('name') + '<span class="caret"></span>');
+			});
+
+			$('#reportModal').modal();
+		}).catch(error => {
+			console.log(error);
+			errorMsg('처리중 오류가 발생했습니다.');
+		});
 	}
 
-	const setSpcGen = function (data) {
-		let siteList = data.data[0].spcGens;
-		let html = '';
+	/**
+	 * 등록 팝업
+	 * - 옵션 설
+	 */
+	const addOption = () => {
+		const reportOption = $('#report_type button').data('options')
+			, reportValue = $('#report_type button').data('value');
 
-		$('#site_id button').html('선택 <span class="caret"></span>').data('value', ''); //초기화
+		if (isEmpty(reportOption)) {
+			errorMsg('해당 보고서 유형에서는 적용할 변수가 없습니다.');
+		} else {
+			let options = new Array()
+			  , liIndex = 1;
+			options = reportOption.match(',') ? reportOption.split(',') : options.push(reportOption);
 
-		for (let i in siteList) {
-			let temp = siteList[i];
-			html += '<li data-value="' + temp.gen_id + '"><a href="javascript:void(0);">' + temp.name + '</a></li>';
+			if (reportValue !== $('#yieldList').data('value')) {
+				$('#yieldList').empty(); // 적용변수 초기화
+			}
+
+			if ($('#yieldList li').length > 0) {
+				$('#yieldList li').each(function() {
+					if (!isEmpty($(this).find('div.dropdown').attr('id'))) {
+						liIndex = Number(($(this).find('div.dropdown').attr('id')).replace(/[^0-9]/g, '')) + 1;
+					}
+				});
+			}
+
+			let liStr = `<li>
+							<div class="dropdown placeholder" id="report_variable_key_${'${liIndex}'}">
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="">
+									선택<span class="caret"></span>
+								</button>
+								<ul class="dropdown-menu">
+								</ul>
+							</div>
+							<div class="text-input-type fl">
+								<input type="text" id="report_variable_val_${'${liIndex}'}" name="report_variable_val_${'${liIndex}'}" placeholder="입력">
+							</div>
+							<button type="button" class="btn-type07" onclick="$(this).parents('li').remove();">삭제</button>
+						</li>`;
+			$('#yieldList').append(liStr);
+
+			options.forEach(option => {
+				$('#report_variable_key_' + liIndex + ' ul').append(`<li data-value="${'${option}'}"><a href="javascript:void(0);">${'${option}'}</a></li>`);
+			});
+			$('#yieldList').data('value', reportValue);
 		}
-
-		$('#site_id ul').empty().append(html);
 	}
-	
-	const setSpcGenReport = function (data){
-		let spcIdList = data.data[0].spcGens;
-		let siteName = $('#site_id button').text();
-		let dataValue = $('#report_type button').data('value');
-		let managePeriod = "";
-		
-		for (let i in spcIdList){
-			let contractInfo = JSON.parse(spcIdList[i].contract_info);
-			if(siteName == spcIdList[i].name){
-				managePeriod = contractInfo.관리_운영_기간.trim();
+
+	/**
+	 * 드롭다운 선택
+	 */
+	const rtnDropdown = ($selector) => {
+		if ($selector === 'report_type') {
+			const dropdownValue = $('#' + $selector + ' button').data('value');
+			if (dropdownValue !== $('#yieldList').data('value')) {
+				$('#yieldList').empty(); // 적용변수 초기화
 			}
+
+			setSpcGenReport();
+		} else if ($selector === 'spc_id') {
+			const dropdownValue = $('#' + $selector + ' button').data('value');
+			$('#site_id ul').empty();
+
+			$.ajax({
+				url: apiHost + '/spcs/' + dropdownValue,
+				type: 'GET',
+				data: {
+					oid: oid,
+					includeGens: true
+				},
+				success: (data) => {
+					const siteList = data.data[0]['spcGens'];
+					if (!isEmpty(data) && !isEmpty(data.data[0]['spcGens'])) {
+						siteList.forEach(gen => {
+							let liStr = `<li data-value="${'${gen[\'gen_id\']}'}"><a href="javascript:void(0);">${'${gen[\'name\']}'}</a></li>`;
+							$('#site_id ul').append(liStr);
+						});
+					} else {
+						$('#site_id ul').append(`<li><a href="javascript:void(0);">조회된 내역이 없습니다.</a></li>`);
+					}
+				},
+				fail: function(){
+					errorMsg('조회중 오류가 발생했습니다.');
+					$('#site_id ul').append(`<li><a href="javascript:void(0);">조회된 내역이 없습니다.</a></li>`);
+				}
+			});
+		} else if ($selector === 'site_id') {
+			setSpcGenReport();
 		}
-		
-		let startMonth = managePeriod.substring(5,7);
-		let startDay = managePeriod.substring(8,10); 
-		
-		if(managePeriod.length > 20){
-			if (dataValue == 'regular_mm') {
-				let reportDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-				$('.fromDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() -1, startDay));
-				$('.toDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth(), startDay-1));
-			} else if (dataValue == 'regular_qt') {
-				var quarter = Math.floor((startMonth - 3) / 3);
-				prevtq = new Date(today.getFullYear(), quarter * 3, 1);
-				$('.fromDate').datepicker('setDate', new Date(today.getFullYear(), quarter * 3, startDay));
-				$('.toDate').datepicker('setDate', new Date(today.getFullYear(), (quarter + 1) * 3, startDay-1));
-			} else if (dataValue == 'regular_yy') {
-				let reportDate = new Date(today.getFullYear() - 1, 0, 1);
-				$('.fromDate').datepicker('setDate', new Date(today.getFullYear() - 1, startMonth -1, startDay));
-				$('.toDate').datepicker('setDate', new Date(today.getFullYear(), startMonth -1, startDay-1));
-			} else if (dataValue == 'profit_mm') {
-				let reportDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-				$('.fromDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() -1, startDay));
-				$('.toDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth(), startDay-1));
-			} else {
-				alert('보고서 유형이 선택되지 않았습니다.');
-				return false;
-			}
-		}else{
-			if (dataValue == 'regular_mm') {
-				let reportDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-				$('.fromDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - 2, 1));
-				$('.toDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - 1, 0));
-			} else if (dataValue == 'regular_qt') {
-				var quarter = Math.floor((today.getMonth() - 3) / 3);
-				prevtq = new Date(today.getFullYear(), quarter * 3, 1);
-				$('.fromDate').datepicker('setDate', new Date(today.getFullYear(), quarter * 3, 1));
-				$('.toDate').datepicker('setDate', new Date(today.getFullYear(), (quarter + 1) * 3, 0));
-			} else if (dataValue == 'regular_yy') {
-				let reportDate = new Date(today.getFullYear() - 1, 0, 1);
-				$('.fromDate').datepicker('setDate', new Date(today.getFullYear() - 1, 0, 1));
-				$('.toDate').datepicker('setDate', new Date(today.getFullYear(), 0, 0));
-			} else if (dataValue == 'profit_mm') {
-				let reportDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-				$('.fromDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - 2, 1));
-				$('.toDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - 1, 0));
-			} else {
-				alert('보고서 유형이 선택되지 않았습니다.');
-				return false;
-			}
-		}
-		
+ 	}
+
+ 	/**
+	 *
+	 */
+	const setSpcGenReport = () => {
+		const siteId = $('#site_id button').data('value')
+			, spcId = $('#spc_id button').data('value')
+			, reportType = $('#report_type button').data('value');
+
+	    const dataRange = $('#report_type button').data('range')
+		    , dataInterval = $('#report_type button').data('interval')
+	        , today = new Date();
+
+	    let month = 1;
+	    if (dataInterval === 'year') {
+		    month += 12;
+	    } else {
+		    month += Number(dataRange);
+	    }
+
+	    $('.fromDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - month, 1));
+	    $('.toDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - 1, 0));
 	}
 
 	//보고서 생성
 	const reportCreate = function () {
-		today = new Date();
+		const today = new Date();
 		let data = setAreaParamData('reportModal', 'dropdown'),
 			report_variable = new Array();
 
@@ -234,7 +472,7 @@
 			report_variable.push(temp);
 		});
 
-		$.map(data, function (val, key) {
+		Object.entries(data).forEach(([key, val]) => {
 			if (key.match('report_variable_')) {
 				delete data[key];
 			}
@@ -245,315 +483,132 @@
 		data['updated_by'] = loginId;
 		data['generated_at'] = today.toISOString();
 
-		let option = {
+		$.ajax({
 			url: apiHost + '/reports/performance?oid=' + oid,
 			method: 'post',
 			dataType: 'json',
 			contentType: "application/json",
 			traditional: true,
-			data: JSON.stringify(data)
-		};
-
-		callAjax(option, afterCreate);
-	}
-
-	const afterCreate = function (data) {
-		alert('보고서 등록이 완료되었습니다.');
-		$('#reportModal').modal('hide');
-		getDataList(page);
-	}
-
-	function getDataList(page, n, sort) {
-		if (page == undefined) {
-			page = 1;
-		} else {
-			if(isEmpty(n) && isEmpty(sort)) {
-				$('.sort-table > thead').find('button').each(function(){
-					if($(this).attr('class') != 'btn-align'){
-						n = $(this).data('colname');
-						sort = $(this).data('classname');
-					}
-				});
-				
-			}
-		}
-		
-		let type = $('#reportClass button').data('value');
-		let data = {
-			oid: oid
-		}
-		if (type != undefined && type != '') {
-			data['report_type'] = type;
-		}
-
-		$.ajax({
-			url: apiHost + '/reports/performance',
-			type: "get",
-			async: false,
-			data: data,
-			success: function (result) {
-				var jsonList = [],
-					keyWord = $('#key_word').val();
-				result['data'].forEach((temp, index) => {
-					let reportTypeName = reportType[temp.report_type],
-						report_data_start = (new Date(temp.report_data_start)).format('yyyy-MM-dd'),
-						report_data_end = (new Date(temp.report_data_end)).format('yyyy-MM-dd');
-
-					result.data[index].reportTypeName = reportTypeName; //리포트 유형명
-					result.data[index].report_date = report_data_start + '~' + report_data_end;
-
-					if (temp.generated_at != null) {
-						let generated_date = (new Date(temp.generated_at)).format('yyyy-MM-dd HH:mm:ss');
-						result.data[index].generated_date = generated_date;
-					}
-
-					if (temp.generated_file_link != null) {
-						let linkData = JSON.parse(temp.generated_file_link);
-						result.data[index].file_link = 'location.href=\'' + apiHost + '/files/download/' + linkData.fileKey + '?oid=' + oid + '&orgFilename=' + linkData.orgFileName + '\'';
-					}
-
-					if (temp.confirmed_at != null) {
-						let confirmed_date = (new Date(temp.confirmed_at)).format('yyyy-MM-dd HH:mm:ss');
-						let linkData = JSON.parse(temp.confirmed_file_link);
-						let file_link = 'location.href=\'' + apiHost + '/files/download/' + linkData.fileKey + '?oid=' + oid + '&orgFilename=' + linkData.orgFileName + '\'';
-						result.data[index].confirmed_date = confirmed_date + '<button type="button" class="btn-file fr down" onclick="' + file_link + '">다운로드</button>';
-					} else {
-						let confirmed_date = '확정 보고서 업로드';
-						result.data[index].confirmed_date = confirmed_date + '<label for="confirmFile' + temp.id + '" class="btn-file fr up"">업로드</label> <input type="file" id="confirmFile' + temp.id + '" name="confirmFile' + temp.id + '" class="btn-upload hidden">';
-					}
-
-					if (jsonDataFilter(result.data[index])) {
-						jsonList.push(result.data[index]);
-					}
-				});
-
-				$(".sort-table").data("nowjsp", "yield");
-				jsonListSort(n, sort, jsonList);
-				totalCount = jsonList.length;
-				jsonList = paging(page, jsonList);
-				setMakeList(jsonList, "listData", { "dataFunction": { "INDEX": getNumberIndex } }); //list생성
-
-				const now = new Date();
-				$('.dbTime').text(now.format('yyyy-MM-dd HH:mm:ss'));
+			data: JSON.stringify(data),
+			success: () => {
+				$('#reportModal').modal('hide');
+				errorMsg('보고서 등록이 완료되었습니다.');
+				getDataList();
 			},
-			error: function (request, status, error) {
-				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
+			fail: () => {
+				errorMsg('보고서 등록중 오류가 발생했습니다.');
+				return false;
 			}
 		});
 	}
-	
-	function jsonDataFilter(jsonData) {
-		let keyWord = $('#key_word').val().trim().toLowerCase(),
-			bResult = false, dResult = true, sResult = false;
-		
-		dResult = dateFilter(jsonData, dResult);
-		if (jsonData['site_name'].toLowerCase().indexOf(keyWord) > -1 || jsonData['spc_name'].toLowerCase().indexOf(keyWord) > -1 || jsonData['updated_by'].toLowerCase().indexOf(keyWord) > -1) {
-			sResult = true;
-		}
-		
-		if(sResult && dResult){
-			bResult = true;
-		}
 
-		return bResult;
-	}
+	$(document).on('change', 'input[type="file"]', function () {
+		let uuid = genUuid();
+		let thisId = $(this).prop('id');
+		$('#upload').empty();
+		$(this).clone().appendTo('#upload');
+		$('#upload').find('input').attr('name', uuid).attr('id', uuid);
 
-	function dateFilter(jsonData, dResult){
-		let selectYear = '';
-		let selectMonth = '';
-		
-		if($('#year button').text().trim() == '전체'){
-			selectYear = ''; 
-		}else{
-			selectYear = $('#year button').text().trim().replace('년','');
-		}
-		if($('#month button').text().trim() == '전체'){
-			selectMonth = '';
-		}else{
-			selectMonth = $('#month button').text().trim().replace('월','');
-		}
-		
-		let	reportYear = jsonData.report_date.substring(0,4);
-		let	reportMonth = jsonData.report_date.substring(5,7);
-		
-		if(reportMonth.indexOf(0) > -1){
-			reportMonth = reportMonth.replace('0','');
-		}
-		
-		if(selectYear != '' && selectMonth != ''){
-			if(selectYear != reportYear || selectMonth != reportMonth){
-				dResult = false;
-			}
-		}else if(selectYear != '' || selectMonth != ''){
-			if(selectYear != reportYear && selectMonth != reportMonth){
-				dResult = false;
-			}
-		}
-		
-		return dResult;
-	}
-	
-	function getNumberIndex(index) {
-		let baseNumber = (Number($('#paging strong').text()) - 1) * pagePerData;
-		return index + 1 + baseNumber;
-	}
-
-	function setCheckedAll(obj, chkName) {
-		var checkVal = obj.checked;
-		$("input[name='" + chkName + "']").prop("checked", checkVal);
-	}
-
-	function getCheckList(checkName) {
-		var jsonList = $("#listData").data("gridJsonData"),
-			checkList = [];
-		$("input[name='" + checkName + "']").each(function (i) {
-			if (this.checked) {
-				checkList.push(jsonList[i]);
-			}
-		});
-
-		return checkList;
-	}
-
-	function setCheckedDataExcelDown() {
-		var checkDataList = getCheckList("rowCheck"),
-			count = checkDataList.length,
-			sucessCnt = 0;
-
-		if (count == 0) {
-			alert("다운로드할 목록을 선택하세요.");
-			return;
-		}
-
-		var urlArr = new Array();
-		var fileNameArr = new Array();
-		for (var i = 0; i < count; i++) {
-			var rowData = checkDataList[i];
-			var fileLink = rowData.file_link.substring(15);
-			var fileLinkUrl = fileLink.substring(0, fileLink.length - 1); // 파일링크 (뒤에 쉼표 제거)
-			var orgFileName = JSON.parse(rowData.generated_file_link).orgFileName; // 파일이름
-			urlArr.push(fileLinkUrl);
-
-			if ($.inArray(orgFileName, fileNameArr) === -1) {
-				fileNameArr.push(orgFileName);
-			} else {
-				let tempName = orgFileName.split('.');
-				fileNameArr.push( tempName[0] + '_' + i + '.' + tempName[1]);
-			}
-
-		}
-
-		getZip(urlArr, fileNameArr);
-		getDataList();
-	}
-
-	function setCheckedDataRemove() {
-		var checkDataList = getCheckList("rowCheck");
-		count = checkDataList.length,
-			sucessCnt = 0;
-
-		if (count == 0) {
-			alert("삭제 할 목록을 선택하세요.");
-			return;
-		}
-
-		let delPrompt = prompt(count + '건을 삭제하시겠습니까? \n삭제를 원하시면 아래 "삭제"라고 입력하고 확인을 눌러 주세요.', '');
-		if (delPrompt != '삭제') {
-			return;
-		}
-
-		for (var i = 0; i < count; i++) {
-			var rowData = checkDataList[i];
+		new Promise(resolve => {
 			$.ajax({
-				url: apiHost + '/reports/performance/' + rowData.id + '?oid=' + oid,
-				type: 'delete',
-				async: false,
-				data: {},
-				success: function (json) {
-					sucessCnt++;
+				type: 'post',
+				enctype: 'multipart/form-data',
+				url: apiHost + '/files/upload?oid=' + oid,
+				data: new FormData($('#upload')[0]),
+				processData: false,
+				contentType: false,
+				cache: false,
+				timeout: 600000,
+				success: (data) => {
+					if (isEmpty(data) && isEmpty(data.files)) {
+						errorMsg('업로드에 실패하였습니다.');
+					} else {
+						resolve(data.files);
+					}
 				},
-				error: function (request, status, error) {
+				fail: () => {
+					errorMsg('업로드 중 오류가 발생했습니다.');
 				}
-			});
-		}
+			})
+		}).then(files => {
+			const resultId = Number(thisId.replace('confirmFile', ''))
+			const confirmed_file_link = {
+				fileKey: files[0].fieldname,
+				orgFileName: files[0].originalname
+			}
 
-		alert(sucessCnt + "건 삭제처리되었습니다.");
-		getDataList(page);
-	}
-
-	const setUploadAfter = function (result, propName) {
-		if (result.files.length > 0) {
-			var checkDataList = $("#listData").data("gridJsonData"),
-				resultId = Number(propName.replace('confirmFile', '')),
-				idx = 0;
-			let fileLen = result.files[0].originalname.length;
-			let fileNameDot = result.files[0].originalname.lastIndexOf('.');
-			let fileExt = result.files[0].originalname.substring(fileNameDot, fileLen).toLowerCase();
-			let newPageCnt = Math.floor((idx-1)/pagePerData);
-
-			checkDataList.forEach(function(el) {
-				if (el.id == resultId) {
-					idx = el.INDEX;
-				}
-			});
-
-			if(fileExt == '.pdf'){
-
-				if(newPageCnt > 0){
-					idx = idx - pagePerData * newPageCnt;
-				}
-
-				let confirmed_file_link = {
-					fileKey: result.files[0].fieldname,
-					orgFileName: result.files[0].originalname
-				}
-			
-				let data = {
+			$.ajax({
+				url: apiHost + '/reports/performance/' + resultId + '?oid=' + oid,
+				method: 'patch',
+				dataType: 'json',
+				contentType: 'application/json',
+				traditional: true,
+				data: JSON.stringify({
 					confirmed_file_link: JSON.stringify(confirmed_file_link),
 					confirmed_by: loginId,
 					confirmed_at: new Date().toISOString()
+				}),
+				success: (data) => {
+					errorMsg('확정 보고서 업로드가 완료되었습니다.');
+					getDataList();
+				},
+				fail: () => {
+					errorMsg('업로드 중 오류가 발생했습니다.');
 				}
-			
-				let option = {
-					url: apiHost + '/reports/performance/' + checkDataList[idx].id + '?oid=' + oid,
-					method: 'patch',
-					dataType: 'json',
-					contentType: "application/json",
-					traditional: true,
-					data: JSON.stringify(data)
-				};
+			});
+		}).catch(error => {
+			errorMsg(error);
+		});
+	});
 
-				callAjax(option, confirmUpload);
-				
-			}else{
-				alert('확장자가 pdf인 파일만 업로드가 가능 합니다.');
-				return false;
-			}
+	const setCheckedDataExcelDown = () => {
+		const checkedArray = document.querySelectorAll('[name="table_checkbox"]:checked');
+
+		let zipArr = new Array()
+		if (checkedArray.length === 0) {
+			errorMsg('다운로드할 목록을 선택하세요.');
+		} else {
+			checkedArray.forEach(checkBox => {
+				const chkIndex = Number((checkBox.getAttribute('id')).replace(/[^0-9]/g, ''))
+					, rowData = yieldTable.row(chkIndex).data()
+					, fileLink = (rowData.file_link.substring(15)).substring(0, rowData.file_link.substring(15).length - 1)
+					, orgFileName = JSON.parse(rowData.generated_file_link).orgFileName;
+
+				if (zipArr.some(e => e.fileName === orgFileName)) {
+					let tempName = orgFileName.split('.');
+					zipArr.push({
+						fileLink: fileLink,
+						fileName: tempName[0] + '_' + i + '.' + tempName[1]
+					});
+				} else {
+					zipArr.push({
+						fileLink: fileLink,
+						fileName: orgFileName
+					});
+				}
+			});
+
+			getZip(zipArr);
+			getDataList();
 		}
 	}
 
-	const confirmUpload = function (data) {
-		alert('보고서가 확정 처리 되었습니다.');
-		getDataList(page);
-	}
-
 	//압축
-	const getZip = function (urlArr, fileNameArr) {
-
-		var Promise = window.Promise;
+	const getZip = function (zipArr) {
+		let Promise = window.Promise;
 		if (!Promise) {
 			Promise = JSZip.external.Promise;
 		}
 		//압축하기
-		var zip = new JSZip();
-		var url = ''
-		for (var i = 0; i < urlArr.length; i++) {
-			zip.file(fileNameArr[i], urlToPromise(urlArr[i]), { binary: true });
-		}
-		zip.generateAsync({ type: "blob" })
-			.then(function (blob) {
-				saveAs(blob, "엑셀_다운로드.zip");
-			});
+		let zip = new JSZip();
+		zipArr.forEach(rowData => {
+			zip.file(rowData.fileName, urlToPromise(rowData.fileLink), { binary: true });
+		});
+
+		zip.generateAsync({ type: 'blob' })
+		.then(function (blob) {
+			saveAs(blob, '엑셀_다운로드.zip');
+		});
 	}
 
 	//바이너리
@@ -567,6 +622,77 @@
 				}
 			});
 		});
+	}
+
+	function setCheckedDataRemove() {
+		const checkedArray = document.querySelectorAll('[name="table_checkbox"]:checked');
+
+		if (checkedArray.length === 0) {
+			errorMsg('삭제 할 목록을 선택하세요.');
+		} else {
+			let modal = $("#comDeleteModal");
+			let deleteBtn = $("#comDeleteBtn");
+			let confirmTitle = $("#confirmTitle");
+
+			$("#comDeleteSuccessMsg span").text('삭제');
+			modal.find(".modal-body").removeClass("hidden");
+			modal.modal("show");
+
+			confirmTitle.on("input keyp", function() {
+				if($(this).val() !== '삭제') {
+					deleteBtn.prop("disabled", true);
+					return false
+				} else {
+					deleteBtn.prop("disabled", false);
+				}
+			});
+		}
+	}
+
+
+	$(document).on('click', '#comDeleteBtn', function() {
+		$('#comDeleteModal').modal('hide');
+		$('#confirmTitle').val('');
+
+		const deleteArray = new Array();
+		const checkedArray = document.querySelectorAll('[name="table_checkbox"]:checked');
+		checkedArray.forEach(checkBox => {
+			const chkIndex = Number((checkBox.getAttribute('id')).replace(/[^0-9]/g, ''))
+				, rowData = yieldTable.row(chkIndex).data();
+
+			deleteArray.push($.ajax({
+				url: apiHost + '/reports/performance/' + rowData.id + '?oid=' + oid,
+				type: 'delete'
+			}));
+		});
+
+		Promise.all(deleteArray).then(response => {
+			let totalDelete = 0;
+			response.forEach(result => {
+				const data = result['data']
+					, count = data['count'];
+
+				totalDelete += Number(count);
+			});
+
+			errorMsg(totalDelete + '건 삭제 처리되었습니다.');
+			getDataList();
+		}).catch(error => {
+			errorMsg(error);
+		});
+	});
+
+	/**
+	 * 에러 처리
+	 *
+	 * @param msg
+	 */
+	const errorMsg = msg => {
+		$("#errMsg").text(msg);
+		$("#errorModal").modal("show");
+		setTimeout(function(){
+			$("#errorModal").modal("hide");
+		}, 1800);
 	}
 </script>
 
@@ -587,7 +713,7 @@
 							<div class="flex-start">
 								<span class="input-label">SPC</span>
 								<div id="spc_id" class="dropdown placeholder">
-									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="">
+									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
 										선택<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu"></ul>
@@ -609,7 +735,7 @@
 							</div>
 							<div class="flex-start"><!--
 								--><span class="input-label short">적용 변수</span><!--
-								--><a href="javascript:void(0);" class="btn-text-blue" onclick="addRow('yieldList');">추가</a><!--
+								--><a href="javascript:void(0);" class="btn-text-blue" onclick="addOption();">추가</a><!--
 						--></div>
 						</div>
 
@@ -617,13 +743,13 @@
 							<div class="flex-start">
 								<span class="input-label">발전소</span>
 								<div class="dropdown placeholder" id="site_id">
-									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="">
+									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
 										선택<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu"></ul>
 								</div>
 							</div>
-							<div class="flex-start">
+							<div class="flex-start dateField">
 								<span class="input-label">적용 기간</span>
 								<div class="sel-calendar">
 									<input type="text" id="report_data_start" name="report_data_start" value="" class="sel fromDate" autocomplete="off" readonly="" placeholder="날짜 선택">
@@ -636,22 +762,6 @@
 					</div>
 					<hr class="mt-0">
 					<ul id="yieldList" class="yield-list">
-						<li>
-							<div class="dropdown placeholder" id="report_variable_key_[index]">
-								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="">
-									선택<span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu">
-									<li data-value="수익 배분율"><a href="javascript:void(0);">수익 배분율</a></li>
-									<li data-value="REC 단가"><a href="javascript:void(0);">REC 단가</a></li>
-									<li data-value="추가 예정"><a href="javascript:void(0);">추가 예정</a></li>
-								</ul>
-							</div>
-							<div class="text-input-type fl">
-								<input type="text" id="report_variable_val_[index]" name="report_variable_val_[index]" placeholder="입력">
-							</div>
-							<button type="button" class="btn-type07">삭제</button>
-						</li>
 					</ul>
 					<div class="btn-wrap-type02">
 						<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close">취소</button>
@@ -693,10 +803,10 @@
 				<div class="dropdown" id="year">
 					<button type="button" class="dropdown-toggle w7" data-toggle="dropdown"><fmt:message key="revenuereport.1.2020" /><span class="caret"></span></button>
 					<ul class="dropdown-menu" role="menu">
-						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.all" /></a></li>
-						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.2020" /></a></li>
-						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.2019" /></a></li>
-						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.2018" /></a></li>
+						<li data-value=""><a href="javascript:void(0);"><fmt:message key="revenuereport.1.all" /></a></li>
+						<li data-value="2020"><a href="javascript:void(0);"><fmt:message key="revenuereport.1.2020" /></a></li>
+						<li data-value="2019"><a href="javascript:void(0);"><fmt:message key="revenuereport.1.2019" /></a></li>
+						<li data-value="2018"><a href="javascript:void(0);"><fmt:message key="revenuereport.1.2018" /></a></li>
 					</ul>
 				</div>
 			</div>
@@ -704,19 +814,19 @@
 				<div class="dropdown" id="month">
 					<button type="button" class="dropdown-toggle w3" data-toggle="dropdown"><fmt:message key="revenuereport.1.all" /><span class="caret"></span></button>
 					<ul class="dropdown-menu" role="menu">
-						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.all" /></a></li>
-						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.january" /></a></li>
-						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.february" /></a></li>
-						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.march" /></a></li>
-						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.april" /></a></li>
-						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.may" /></a></li>
-						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.june" /></a></li>
-						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.july" /></a></li>
-						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.august" /></a></li>
-						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.september" /></a></li>
-						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.october" /></a></li>
-						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.november" /></a></li>
-						<li><a href="javascript:void(0);"><fmt:message key="revenuereport.1.december" /></a></li>
+						<li data-value=""><a href="javascript:void(0);"><fmt:message key="revenuereport.1.all" /></a></li>
+						<li data-value="1"><a href="javascript:void(0);"><fmt:message key="revenuereport.1.january" /></a></li>
+						<li data-value="2"><a href="javascript:void(0);"><fmt:message key="revenuereport.1.february" /></a></li>
+						<li data-value="3"><a href="javascript:void(0);"><fmt:message key="revenuereport.1.march" /></a></li>
+						<li data-value="4"><a href="javascript:void(0);"><fmt:message key="revenuereport.1.april" /></a></li>
+						<li data-value="5"><a href="javascript:void(0);"><fmt:message key="revenuereport.1.may" /></a></li>
+						<li data-value="6"><a href="javascript:void(0);"><fmt:message key="revenuereport.1.june" /></a></li>
+						<li data-value="7"><a href="javascript:void(0);"><fmt:message key="revenuereport.1.july" /></a></li>
+						<li data-value="8"><a href="javascript:void(0);"><fmt:message key="revenuereport.1.august" /></a></li>
+						<li data-value="9"><a href="javascript:void(0);"><fmt:message key="revenuereport.1.september" /></a></li>
+						<li data-value="10"><a href="javascript:void(0);"><fmt:message key="revenuereport.1.october" /></a></li>
+						<li data-value="11"><a href="javascript:void(0);"><fmt:message key="revenuereport.1.november" /></a></li>
+						<li data-value="12"><a href="javascript:void(0);"><fmt:message key="revenuereport.1.december" /></a></li>
 					</ul>
 				</div>
 			</div>
@@ -724,12 +834,16 @@
 		<div class="fl">
 			<div class="text-input-type"><input type="text" id="key_word" placeholder="입력"></div>
 		</div>
-		<div class="fl"><button type="submit" class="btn-type" onclick="getDataList(page);"><fmt:message key="revenuereport.1.search" /></button></div>
+		<div class="fl">
+			<button type="button" class="btn-type" onclick="getDataList();">
+				<fmt:message key="revenuereport.1.search" />
+			</button>
+		</div>
 	</div>
 </div>
 <div class="row">
-	<div class="col-12">
-		<div class="indiv report yield_report">
+	<div class="col-lg-12">
+		<div class="indiv">
 			<div class="flex-wrapper mb-20">
 				<div><!-- 
 					--><button type="button" class="btn-type03 big" onclick="setCheckedDataExcelDown();">선택 다운로드</button><!-- 
@@ -737,46 +851,20 @@
 				--></div>
 				<div><button type="button" class="btn-type" onclick="modalInit();">신규 생성</button></div>
 			</div>
-			<div class="spc-tbl align-type">
-				<table class="sort-table chk-type" id="yield_table">
-					<thead>
-						<tr>
-							<th>
-								<input type="checkbox" id="chk_header" value="순번" onclick="setCheckedAll(this, 'rowCheck');">
-								<label for="chk_header"><fmt:message key="revenuereport.2.number" /></label>
-							</th>
-							<th><button type="button" class="btn-align down">SPC명</button></th>
-							<th><button type="button" class="btn-align down"><fmt:message key="revenuereport.2.plant" /></button></th>
-							<th><button type="button" class="btn-align down"><fmt:message key="revenuereport.2.report_classification" /></button></th>
-							<th><button type="button" class="btn-align down">적용기간</button></th>
-							<th><button type="button" class="btn-align down"><fmt:message key="revenuereport.2.download" /></button></th>
-							<th><button type="button" class="btn-align down">보고서 생성 시간</button></th>
-							<th><button type="button" class="btn-align down"><fmt:message key="revenuereport.2.report_confirmation" /></button></th>
-							<th><button type="button" class="btn-align down">최종 작업자</button></th>
-						</tr>
-					</thead>
-					<tbody id="listData">
-						<tr>
-							<td>
-								<input type="checkbox" id="chk_op[INDEX]" name="rowCheck" value="">
-								<label for="chk_op[INDEX]">[INDEX]</label>
-							</td>
-							<td>[spc_name]</td>
-							<td>[site_name]</td>
-							<td>[reportTypeName]</td>
-							<td>[report_date]</td>
-							<td onclick="[file_link]">
-								<button type="button" class="text-file">EXCEL</button>
-							</td>
-							<td>[generated_date]</td>
-							<td>[confirmed_date]</td>
-							<td>[updated_by]</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="pagination-wrapper" id="paging">
-			</div>
+			<table id="yieldTable" class="chk-type">
+				<colgroup>
+					<col style="width:5%"> <!-- 체크박스 -->
+					<col style="width:5%"> <!-- 순번 -->
+					<col style="width:10%"> <!-- SPC명 -->
+					<col style="width:10%"> <!-- 발전소명 -->
+					<col style="width:8%"> <!-- 보고서 유형 -->
+					<col style="width:15%"> <!-- 적용기간 -->
+					<col style="width:8%"> <!-- 다운로드 -->
+					<col style="width:15%"> <!-- 보고서 생성 시간 -->
+					<col style="width:16%"> <!-- 보고서 확정 -->
+					<col style="width:8%"> <!-- 최종 작업자 -->
+				</colgroup>
+			</table>
 		</div>
 	</div>
 </div>
