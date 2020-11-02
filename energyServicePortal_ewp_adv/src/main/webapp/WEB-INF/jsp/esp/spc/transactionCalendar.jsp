@@ -1131,7 +1131,7 @@
 
 
 <div class="modal fade alarm-modal" id="spcAlarmModal" tabindex="-1" role="form">
-	<div class="modal-dialog spc-modal-lg">
+	<div class="modal-dialog spc-modal-lg no-flex">
 		<div class="modal-content spc-modal-content">
 			<form id="spcAlarmForm">
 				<div class="modal-header">

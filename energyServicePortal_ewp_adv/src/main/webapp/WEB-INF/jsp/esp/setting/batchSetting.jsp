@@ -411,14 +411,15 @@
 				startHHMMSS: newStartTime,
 				endDate: newEndDate,
 				endHHMMSS: newEndTime,
-				limit: 20
+				limit: 100
 			},
 			beforeSend: function (jqXHR, settings) {
 				$('#loadingCircle').show();
 			}
 		}
-
+		console.log("option==", option)
 		$.ajax(option).done(function (json, textStatus, jqXHR) {
+			console.log("json=----", json)
 			var logTable = $('#logTable').DataTable({
 				"aaData": json.log,
 				"destroy": true,

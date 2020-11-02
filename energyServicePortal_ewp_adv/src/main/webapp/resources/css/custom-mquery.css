@@ -605,6 +605,10 @@
 		width: 72px;
 	}
 
+	.all-menu > a:after {
+		margin: -17px 0 0 45px;
+	}
+	
 	.all-menu .menu-group {
 		left: -20px;
 		overflow: hidden

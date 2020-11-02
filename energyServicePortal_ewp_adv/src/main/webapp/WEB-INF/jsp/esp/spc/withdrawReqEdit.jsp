@@ -44,20 +44,6 @@
 
 		getData(spcId);
 
-		function removeDuplicates(arr) {
-			var newArray = [];
-			var lookupObject  = {};
-
-			for(var i in originalArray) {
-				lookupObject[originalArray[prop]] = originalArray;
-			}
-
-			for(i in lookupObject) {
-				newArray.push(lookupObject);
-			}
-			return newArray;
-		}
-
 		function getData (id) {
 			if (isEmpty(id)) return false;
 

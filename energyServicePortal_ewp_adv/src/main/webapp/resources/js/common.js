@@ -596,9 +596,40 @@ function groupBy (objectArray, property) {
 	}, {});
 }
 
+function groupByArray(list, keyGetter) {
+    const map = new Map();
+    list.forEach((item) => {
+         const key = keyGetter(item);
+         const collection = map.get(key);
+         if (!collection) {
+             map.set(key, [item]);
+         } else {
+             collection.push(item);
+         }
+    });
+    return map;
+}
+
+
+
 function removeDuplicates(data, key) {
 	return [ ...new Map( data.map(x => [key(x), x]) ).values() ];
 };
+
+
+// function removeDuplicates(arr) {
+// 	var newArray = [];
+// 	var lookupObject  = {};
+
+// 	for(var i in originalArray) {
+// 		lookupObject[originalArray[prop]] = originalArray;
+// 	}
+
+// 	for(i in lookupObject) {
+// 		newArray.push(lookupObject);
+// 	}
+// 	return newArray;
+// }
 
 function flattenObject (obj) {
 	let flat = {};

@@ -1237,7 +1237,8 @@
 					x: -20,
 					style: {
 				
-						color: 'var(--grey)',		fontSize: '10px'
+						color: 'var(--grey)',
+						fontSize: '10px'
 					}
 				}
 			},

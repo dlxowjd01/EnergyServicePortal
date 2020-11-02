@@ -143,12 +143,14 @@
 			initModal();
 		});
 
-
 		$("#deleteConfirmBtn").click(function(){
 			let dTable = $("#siteTable").DataTable();
 			let tr = $("#siteTable").find("tbody tr.selected");
+			let td = tr.find("td");
 			let sid = dTable.row(tr).data().sid;
 			let modalBody = $("#deleteConfirmModal .modal-body");
+
+			if(td.eq(2).text() != $("#confirmSite").val()) return false;
 
 			let optDelete = {
 				url: apiHost + "/config/sites/" + sid,
@@ -184,8 +186,7 @@
 		});
 
 		$("#addAlarmModal").on("hide.bs.modal", function() {
-			$("#alarmTable").DataTable().destroy();
-			initAlarmTable();
+			$("#alarmTable").DataTable().clear().destroy();
 		});
 
 		$("#resultModal").on("hide.bs.modal", function() {
@@ -605,87 +606,176 @@
 		$("#updateAlarmForm").on("submit", function(e){
 			e.preventDefault();
 			let aTable = $("#alarmTable").DataTable();
-			let ajaxPromises = [];
 			let tr = $("#alarmTable tbody tr:not(.hidden)");
+			let dvcArr = [];
 
-			$.each(tr, function(index, el){
-				let td = $(this).find("td");
-				if(!td.eq(1).find(".dropdown-toggle").is(":disabled")) {
-					console.log("not disabled===")
-					let selectedDvc = td.eq(1).find("input[type='checkbox']:checked");
-					let alarmLvl = td.eq(2).find(".dropdown-toggle");
-					let contactName = td.eq(3).find(".dropdown-toggle");
-					// let contactInput = td.eq(3).find(".dropdown + .text-input-type");
-					let contactNum = td.eq(4).find(".text-input-type");
-					let nonUserArr = [];
-					let registeredUserArr = [];
-					let alarmToObj = {};
+			for(let i=0, arrLength = tr.length; i < arrLength; i++){
+				let td = tr.eq(i).find("td"); 
+				let secondTd = td.eq(1); 
+				let dvcNameDropdown = secondTd.find(".dropdown-toggle");
+				if(!isEmpty(dvcNameDropdown)){
+					for(let j=0, arrLength = dvcNameDropdown.length; j < arrLength; j++){
+						let checkedDvc = dvcNameDropdown.find("input[type='checkbox']:checked");
+						let selectedDvcArr = dvcNameDropdown.next().find("input[type='checkbox']:checked");
+					
+						if(!dvcNameDropdown.eq(j).is(":disabled") && !isEmpty(selectedDvcArr.length <=0) ){ 
+							let alarmToObj = {};
+							let alarmLvl = td.eq(2).find(".dropdown-toggle").eq(j);
+							let userGroup = td.eq(3).find(".user-group").eq(j);
+							let phoneGroup = td.eq(4).find(".phone-group").eq(j);
+							let alarmLvlArr = [];
+							let nonUserArr = [];
+							let registeredUserArr = [];
 
-					let deviceOpt = {
-						// url: apiHost + "/config/devices/" + did,
-						type: 'patch',
-						async: true,
-						contentType: 'application/json; charset=UTF-8',
-					};
-					for(let i=0, length = alarmLvl.length; i<length; i++){
-						// if(!$(editItems[i]).is(":disabled")){
-						if( (!alarmLvl.eq(i).is(":disabled") ) && !isEmpty(selectedDvc) ){
-							let levelArr = [];
-							let contactNameArr = [];
-							let contactNumArr = [];
-							let selectedDvcArr = alarmLvl.eq(i).next().find("input[type='checkbox']:checked");
-							let selectedLevel = alarmLvl.eq(i).next().find("input[type='checkbox']:checked");
-							let selectedContactName = contactName.eq(i).next().find("input[type='checkbox']:checked");
+							let selectedLevel = alarmLvl.next().find("input[type='checkbox']:checked");
+							let selectedUser = userGroup.find(".dropdown-menu input[type='checkbox']:checked");
+							
+							let nonUserObj = {};
+							let selectedNonUser = userGroup.find("input[type='text']");
+							let selectedNonUserPhone = phoneGroup.find(".text-input-type[data-user-type='non-user'] input");
 
 							$.each(selectedLevel, function(){
-								levelArr.push(Number($(this).val()));
+								alarmLvlArr.push(Number($(this).val()));
 							});
 
-							if( !contactNum.eq(i).hasClass("disabled") ){
-								let nonUserObj = {};
-								nonUserObj.level = levelArr;
-								nonUserObj.name = contactName.eq(i).next().find("input[type='text']").val();
-								nonUserObj.phone = contactNum.eq(i).children().val();
-								nonUserArr.push(nonUserObj);
-							} else {
-								$.each(selectedContactName, function(){
+							// 1. user (alarm_to)
+							if(selectedUser.length > 0 ){
+								selectedUser.each(function(index, el){
 									let userObj = {};
 									userObj.uid = $(this).val();
-									userObj.level = levelArr;
+									userObj.level = alarmLvlArr;
 									registeredUserArr.push(userObj);
 								});
 							}
-						}
 
-					}
-
-					if(!isEmpty(nonUserArr) && !isEmpty(registeredUserArr)) {
-						alarmToObj = {
-							non_user: nonUserArr,
-							user: registeredUserArr
-						}
-					} else {
-						if(!isEmpty(nonUserArr)){
-							alarmToObj = {
-								non_user: nonUserArr
+							// 2. non_user (alarm_to)
+							if( !isEmpty(selectedNonUser.val()) && !isEmpty(selectedNonUserPhone.val()) ) {
+								nonUserObj.name = selectedNonUser.val();
+								nonUserObj.phone = selectedNonUserPhone.val();
+								nonUserObj.level = alarmLvlArr;
+								nonUserArr.push(nonUserObj);
+							} else {
+								if(!isEmpty(selectedNonUser.val())){
+									nonUserObj.name = selectedNonUser.val();
+									nonUserObj.level = alarmLvlArr;
+									nonUserArr.push(nonUserObj);
+								}
+								if(!isEmpty(selectedNonUserPhone.val()) ){
+									nonUserObj.phone = selectedNonUserPhone.val();
+									nonUserObj.level = alarmLvlArr;
+									nonUserArr.push(nonUserObj);
+								}
 							}
-						}
-						if(!isEmpty(registeredUserArr)){
-							alarmToObj = {
-								user: registeredUserArr
-							}
+
+							// [Loop] selected devices
+							$.each(selectedDvcArr, function(index, el){
+								let checkedId = $(el).val();
+								if(dvcArr.length>0){
+									let found = dvcArr.findIndex( x =>  x.deviceId === checkedId);
+									if(found > -1){
+										if(nonUserArr.length>0 && registeredUserArr.length>0){
+											let valArr1 = [];
+											let valArr2 = [];
+											if(!isEmpty(dvcArr[found].alarm_to.non_user)){
+												let prevArr = dvcArr[found].alarm_to.non_user;
+												valArr1 = [...new Set([...prevArr, ...nonUserArr])];
+											} else {
+												valArr1.push(...nonUserArr);
+											}
+
+											if(!isEmpty(dvcArr[found].alarm_to.user)){
+												let prevArr = dvcArr[found].alarm_to.user;
+												valArr2 = [...new Set([...prevArr, ...registeredUserArr])];
+											} else {
+												valArr.push(...registeredUserArr);
+											}
+											dvcArr[found] = {
+												deviceId: checkedId,
+												alarm_to: {
+													user: valArr1,
+													non_user: valArr2
+												}
+											}
+										} else {
+											if(nonUserArr.length>0){
+												let valArr = [];
+												if(!isEmpty(dvcArr[found].alarm_to.non_user)){
+													let prevArr = dvcArr[found].alarm_to.non_user;
+													valArr = [...new Set([...prevArr, ...nonUserArr])];
+												} else {
+													valArr.push(...nonUserArr);
+												}
+												dvcArr[found] = {
+													deviceId: checkedId,
+													alarm_to: {
+														non_user: valArr
+													}
+												}
+											}
+											if(registeredUserArr.length>0){
+												let valArr = [];
+												if(!isEmpty(dvcArr[found].alarm_to.user)){
+													let prevArr = dvcArr[found].alarm_to.user;
+													valArr = [...new Set([...prevArr, ...registeredUserArr])];
+												} else {
+													valArr.push(...registeredUserArr);
+												}
+												dvcArr[found]= {
+													deviceId: checkedId,
+													alarm_to: {
+														user: valArr
+													}
+												}
+											}
+										}
+									} 								
+								} else {
+									let obj = {};
+									if(nonUserArr.length>0 && registeredUserArr.length>0) {
+										obj.deviceId = checkedId;
+										obj.alarm_to = {
+											non_user: nonUserArr,
+											user: registeredUserArr
+										}
+									} else {
+										if(nonUserArr.length>0){
+											obj.deviceId = checkedId;
+											obj.alarm_to = {
+												non_user: nonUserArr
+											}	
+										}
+										if(registeredUserArr.length>0){
+											obj.deviceId = checkedId;
+											obj.alarm_to = {
+												user: registeredUserArr
+											}	
+										}
+									}
+									dvcArr.push(obj);
+								}
+							});
 						}
 					}
-					deviceOpt.data = JSON.stringify({ alarm_to: JSON.stringify(alarmToObj) });
-
-					// console.log("deviceOpt===", deviceOpt);
-					$.each(selectedDvc, function(index, el) {
-						deviceOpt.url = apiHost + "/config/devices/" + $(el).val();
-						console.log("deviceOpt===", deviceOpt);
-						ajaxPromises.push(Promise.resolve(makeAjaxCall(deviceOpt)));
-					});			
 				}
-			});
+			}
+
+			// [FINAL] JSON stringify Data
+
+			let urlPrefix = apiHost + "/config/devices/";
+			let deviceOpt = {
+				type: 'patch',
+				async: true,
+				contentType: 'application/json; charset=UTF-8',
+			};
+			let ajaxPromises = [];
+
+			if(dvcArr.length>0){
+				dvcArr.forEach(function(item, index){
+					deviceOpt.url = urlPrefix + item.deviceId;
+					deviceOpt.data = JSON.stringify({ alarm_to: JSON.stringify(item.alarm_to) });
+					ajaxPromises.push(Promise.resolve(makeAjaxCall(deviceOpt)));
+				});	
+			}
 
 			Promise.all(ajaxPromises).then(res => {
 				$("#addAlarmModal").modal("hide");
@@ -704,11 +794,12 @@
 					$("#resultModal").modal("hide");
 				}, 1600);
 			});
-			
+
 		});
 		
 	});
 
+	
 	function refreshSiteList(){
 		let optionList = [
 			{
@@ -736,6 +827,7 @@
 		if(role == 1){
 			Promise.all([ Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])) ]).then( res => {
 				// Promise.resolve(returnAjaxRes(optionList[0])).then( res => {
+				
 				adminTable(res[0], res[1], initModal);
 			});
 		} else {
@@ -758,8 +850,7 @@
 			let newArr = [];
 			let essDvcArr = ["KPX_EMS", "INV_PV", "PCS_ESS", "BMS_SYS"];
 			let newName = '';
-			// deviceNameList
-			// Promise.resolve(siteData.map((item, index) => {
+
 			siteData.map((item, index) => {
 				$("#loadingCircle").show();
 
@@ -825,24 +916,13 @@
 				$.ajax(deviceOpt).done(function (json, textStatus, jqXHR) {
 					if(json.length > 0 ){
 						// console.log("deviceOpt===", json)
-						// let alarmArr = [];
 						let genCapacity = 0;
 						let pcsCapacity = 0;
 						let bmsCapacity = 0;
 
-						let found = json.findIndex( x => x.alarm_to);
-
-						if( found > - 1) {
-							item.alarmFlag = true;
-							item.alarmLength = found;
-						} else {
-							alarmFlag = false;
-						}
 						// console.log("alarmInfo===", json)
 						item.alarmInfo = json;
 						$.each(json, function( index, el ){
-							// console.log("deviceOpt===", el);
-			
 							let hasDevType = essDvcArr.some( x => x.includes(el.device_type));
 
 							if(hasDevType == true){
@@ -862,13 +942,13 @@
 							}
 						});
 
-						genCapacity = displayNumberFixedDecimal(genCapacity, 'W', 3, 2, "noComma");
+						genCapacity = displayNumberFixedDecimal(genCapacity, 'W', 3, 2);
 						item.genCapacity = genCapacity[0] + " " + genCapacity[1];
 					
-						pcsCapacity = displayNumberFixedDecimal(pcsCapacity, 'W', 3, 2, "noComma");
+						pcsCapacity = displayNumberFixedDecimal(pcsCapacity, 'W', 3, 2);
 						item.pcsCapacity = pcsCapacity[0] + " " + pcsCapacity[1];
 						
-						bmsCapacity = displayNumberFixedDecimal(bmsCapacity, 'W', 3, 2, "noComma");
+						bmsCapacity = displayNumberFixedDecimal(bmsCapacity, 'W', 3, 2);
 						item.bmsCapacity = bmsCapacity[0] + " " + bmsCapacity[1];
 
 					} else {
@@ -883,8 +963,7 @@
 					return false;
 				});
 			});
-			// })).then( res => {
-				// console.log("m===", newArr[14].alarmData)
+
 				// console.log("response===", response)
 				// 1. 사업소 유형
 				// 2. 사업소명
@@ -1110,7 +1189,6 @@
 
 					// if(!isEmpty(siteTable.row(tr).data().alarmData)){
 						let rowData = dTable.row(tr).data().alarmInfo;
-						let dvcNameKr = dTable.row(tr).data().device_type_kr;
 						let userOpt = {
 							url: apiHost + "/config/users",
 							type: 'get',
@@ -1120,7 +1198,8 @@
 							}
 						}
 						Promise.resolve(makeAjaxCall(userOpt)).then(res => {
-							getAlarmTable(dvcNameKr, rowData, res);
+							rowData.sortOn("name");
+							getAlarmData(rowData, res);
 						}).catch( err => console.log("cannot get user data", err));
 					// }
 				});
@@ -1235,7 +1314,6 @@
 
 				$.ajax(deviceOpt).done(function (json, textStatus, jqXHR) {
 					if(json.length > 0 ){
-						// let alarmArr = [];
 						let genCapacity = 0;
 						let pcsCapacity = 0;
 						let bmsCapacity = 0;
@@ -1477,11 +1555,11 @@
 						// 	cell.innerHTML = i+1;
 						// 	$(cell).data("id", i);
 						// });		
-						let str = `<div id="btnGroup" class="right-end"><!--
+						let str = `<div id="btnGroup" class="right-end2"><!--
 							--><button type="button" disabled class="btn-type03" onclick="updateModal('edit')">선택 수정</button><!--
 							--><button type="button" disabled class="btn-type03" onclick="updateModal('delete')">선택 삭제</button><!--
 						--></div>`;
-						$("#siteTable_wrapper").append($(str));
+						$("#siteTable_wrapper").append($(str)).addClass('mb-28');
 
 						// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
 						// 	cell.innerHTML = i+1;
@@ -1501,9 +1579,6 @@
 								$(el).attr ('style', 'min-width: 50px');
 							}
 						});
-					},
-					drawCallback: function (settings) {
-						$('#siteTable_wrapper').addClass('mb-28');
 					},
 				}).on("select", function(e, dt, type, indexes) {
 					let btn = $("#btnGroup").find(".btn-type03");
@@ -1595,7 +1670,6 @@
 			}
 		// });
 	}
-
 
 	function drawEmptyTable(target){
 		var t = target.DataTable({
@@ -2061,11 +2135,6 @@
 		});
 		// console.log("initModal----")
 	}
-	
-	function initAlarmTable(){
-		let checkBox = $("#alarmTable").find("input[type='checkbox']");
-		checkBox.prop("checked", false);
-	}
 
 	function updateModal(option, callback){
 		// RPS(Renewable Portfolio Standard), SMP(System Marginal Price), REC(Renewable Energy Certificate) => subsidies
@@ -2339,7 +2408,6 @@
 
 	}
 
-
 	function checkSiteId(userInput){
 		if(isEmpty(userInput)) return false;
 		
@@ -2386,53 +2454,26 @@
 
 	}
 
-	// function selectRow(dataTable) {
-	// 	if ($(this).hasClass("selected")) {
-	// 		$(this).removeClass("selected");
-	// 	} else {
-	// 		dataTable.$("tr.selected").removeClass("selected");
-	// 		$(this).addClass("selected");
-	// 	}
-	// }
-
-
 	function showSubgroup (self){
-		let target = $(self).parent().prev();
-		let upperGroup = $("#alarmTable .device-type").not(parent).toArray();
 		let tr = $(self).parents().closest("tr");
-		let subGroup = $(self).data("subgroup");
-		let menuItem = tr.find("td:nth-of-type(2) .dropdown-menu li");
-		menuItem.removeClass("hidden");
+		let td = tr.find("td");
+		let dataIdx = $(self).parent().prev().data("index");
+		let typeName = $(self).data("value");
 
-		// let found = upperGroup.findIndex( x => $(x).text() == target.text() );
-		// if(found > -1) {	
-		// 	$("#duplicatedGroup").removeClass("hidden");
-		// 	setTimeout(function(){
-		// 		target.data({"value": "", "did" : "" }).html('선택<span class="caret"></span>');
-		// 		$("#duplicatedGroup").addClass("hidden");
-		// 	}, 1600);
-		// }
-		// $.each(menuItem, function(index, el){
-		if (subGroup.indexOf(',') > -1) {
-			let searchArr = [...subGroup.split(",")];
-			let val = menuItem.data("value");
-			let arr = [];
-			menuItem.addClass("hidden");
-			console.log("searchArr===", searchArr)
-			$.each(menuItem, function(index, el){
-				let found = searchArr.findIndex ( x => x == $(this).data("value"));
-				if(found > -1){
-					$(this).removeClass("hidden");
-					arr.push($(this).data("value"))
-				}
-			});
-		} else {
-			$.each(menuItem, function(index, el){
-				if(subGroup == $(this).data("value")){
-					$(this).removeClass("hidden").siblings().addClass("hidden");
-				}
-			});
-		}
+		let target = td.eq(1).find(".dropdown-toggle[data-index='" + dataIdx + "']");
+		let menuItem = target.next().find("li");
+		
+		menuItem.addClass("hidden");
+		console.log("target====", target);
+
+		menuItem.each(function(index, item){
+			let val = $(this).data("parent");
+			if(val == typeName){
+				target.prop("disabled", false).data("value", "").html("선택<span class='caret'></span>");
+				$(this).removeClass("hidden");
+			}
+		});
+	
 	}
 
 	//  using object mutation
@@ -2449,97 +2490,80 @@
 	// const subGroup = copy.filter((v,i,a)=> a.findIndex(t=>(t.name === v.name))===i);
 
 
-	function addNewInput(self){
-		let td = $(self).parents().closest("td").eq(4);
-		let num = $(self).parent().attr("id").match(/\d+/)[0];
-		let deviceName = $(self).parents().closest("tr").find("td:nth-of-type(2) .dropdown");
-		let alarmLvl = $(self).parents().closest("tr").find("td:nth-of-type(3) .dropdown");
-		let phone = $(self).parents().closest("tr").find("td:nth-of-type(5) input[type='text']");
-		let btnGroup = $(self).parents().closest("tr").find("td:nth-of-type(6) .flex-start");
+	// function addNewInput(self){
+	// 	let td = $(self).parents().closest("td").eq(4);
+	// 	let num = $(self).parent().attr("id").match(/\d+/)[0];
+	// 	let deviceName = $(self).parents().closest("tr").find("td:nth-of-type(2) .dropdown");
+	// 	let alarmLvl = $(self).parents().closest("tr").find("td:nth-of-type(3) .dropdown");
+	// 	let phone = $(self).parents().closest("tr").find("td:nth-of-type(5) input[type='text']");
+	// 	let btnGroup = $(self).parents().closest("tr").find("td:nth-of-type(6) .flex-start");
 
-		$(self).siblings().find("input:checked").prop("checked", false);
-		phone.val("");
+	// 	$(self).siblings().find("input:checked").prop("checked", false);
+	// 	phone.val("");
 
-		$.each(phone, function(index, el){
-			if($(this).attr("name").match(/\d+/)[0] == num){
-				$(this).prop("disabled", false).val("").parent().removeClass("disabled");
-			}
-		});
+	// 	$.each(phone, function(index, el){
+	// 		if($(this).attr("name").match(/\d+/)[0] == num){
+	// 			$(this).prop("disabled", false).val("").parent().removeClass("disabled");
+	// 		}
+	// 	});
 
-	}
+	// }
 
-	function removeNewInput(self){
-		console.log("removeNewInput====")
-		let num = $(self).parent().attr("id").match(/\d+/)[0];
-		let phone = $(self).parents().closest("tr").find("td:nth-of-type(5) input[type='text']");
-		// let btnGroup = $(self).parents().closest("tr").find("td:nth-of-type(6) .flex-start");
+	// function removeNewInput(self){
+	// 	let num = $(self).parent().attr("id").match(/\d+/)[0];
+	// 	let phone = $(self).parents().closest("tr").find("td:nth-of-type(5) input[type='text']");
+	// 	// let btnGroup = $(self).parents().closest("tr").find("td:nth-of-type(6) .flex-start");
 
-		$(self).siblings().removeClass("hidden");
+	// 	$(self).siblings().removeClass("hidden");
 
-		$.each(phone, function(index, el){
-			if($(this).attr("name").match(/\d+/)[0] == num){
-				let displayText = "";
-				let matchedNum = $(self).find("input[type='checkbox']").data("contact-num");
-				let selected = $(self).parent().text();
+	// 	$.each(phone, function(index, el){
+	// 		if($(this).attr("name").match(/\d+/)[0] == num){
+	// 			let displayText = "";
+	// 			let matchedNum = $(self).find("input[type='checkbox']").data("contact-num");
+	// 			let selected = $(self).parent().text();
 
-				if(selected != "선택"){
-					if($(self).siblings().find("input:checked").length>0){
-						if(isEmpty(matchedNum)){
-							displayText = "번호 없음" + " 외 " + String($(self).siblings().find("input:checked").length) + "개";
-						} else {
-							displayText = matchedNum + " 외 " + String($(self).siblings().find("input:checked").length) + "개";
-						}
-					} else {
-						displayText = matchedNum;
-					}
-				} else {
-					displayText = "";
-				}
+	// 			if(selected != "선택"){
+	// 				if($(self).siblings().find("input:checked").length>0){
+	// 					if(isEmpty(matchedNum)){
+	// 						displayText = "번호 없음" + " 외 +" + String($(self).siblings().find("input:checked").length) + "개";
+	// 					} else {
+	// 						displayText = matchedNum + " 외 +" + String($(self).siblings().find("input:checked").length) + "개";
+	// 					}
+	// 				} else {
+	// 					displayText = matchedNum;
+	// 				}
+	// 			} else {
+	// 				displayText = "";
+	// 			}
 
-				$(this).prop("disabled", true).val(displayText).parent().addClass("disabled");
-			}
-		});
+	// 			$(this).prop("disabled", true).val(displayText).parent().addClass("disabled");
+	// 		}
+	// 	});
 
-	}
+	// }
 	
-	function getAlarmTable(dvcNameData, alarmData, userData){
-		console.log("alarmData===", alarmData)
-		let alarmFlag = false;
-		let uniqDvcType = groupBy(alarmData, "device_type");
-		let uniqDvcName = groupBy(alarmData, "name");
-		let userType = '';
-		let dvcNameStr = '';
+	function getAlarmData(alarmData, userData){
+		// console.log("alarmData====", alarmData);
+		const uniqDvcType = groupBy(alarmData, "device_type");
+		const uniqDvcName = Object.values(groupBy(alarmData, "name"));
+
+		let dvcNameStr = ``;
+		let dvcTypeStr = ``;
+		let alarmLvlStr = ``;
+		let userNameStr = ``;
 
 		// console.log("alarmData---", alarmData);
 		// console.log("uniqDvcType---", uniqDvcType);
 		// console.log("uniqDvcName---", uniqDvcName);
-		// Object.entries(uniqDvcName).forEach(function(item, index){
-		// 	dvcNameStr += '<li class="hidden" data-device-type="' + item[1].device_type + '" data-did="' +  item[1].did + '" data-value="' + item[0] + '"><a href="#" tabindex="-1">' + item[0] + '</a></li>';
-		// });
-
-		Object.entries(uniqDvcName).forEach(function(item, index){
-			// console.log("item===", item)
-			dvcNameStr += `
-				<li data-device-type="${'${ item[1][0].device_type }'}" data-value="${'${ item[0] }'}">
-					<a class="chk-type" href="#">
-						<input type="checkbox" name="${'${ item[0] }'}" value="${'${ item[1][0].did }'}">
-						<label>${'${ item[0] }'}</label>
-					</a>
-				</li>
-			`
-		});
-
-		// Promise.resolve(alarmData.map((item, index) => {
+		// console.log("userData---", userData);
+		// console.log("entries---", entries);
+		
+		// return false;
 		const promises = alarmData.map( async item => {
-			// console.log("item---", item);
-			let merged = uniqDvcType[item.device_type].map(e => e.name).join(",").replace(/,(\s+)?$/, "");
-			item.sub_device = merged;
-
-			// Match => kr device_type_name
+			// global var deviceNameList => kr device_type_name 
 			if ($.inArray(item.device_type, alarmData) === -1) {
 				for (let property in deviceNameList) {
 					if(property == item.device_type){
-						// console.log("item.device_type_label===", item.device_type_label, "property---", property);
 						item.device_type_label = deviceNameList[property].name.kr;
 						break;
 					}
@@ -2549,1131 +2573,1041 @@
 			if(!isEmpty(item.alarm_to)){
 				try {
 					let response = await JSON.parse(item.alarm_to);
-					item.alarmToUser = response;
-				} catch (exception) {
-					console.error(`Failed to retrieve user informations: (${exception})`);
-				} finally {
-					if(alarmFlag == false){
-						alarmFlag = true;
+					if( !isEmpty(response.user) && response.user.length > 0 && !isEmpty(response.non_user) && response.non_user.length > 0 ) {
+						// console.log("both====", response);
+						item.alarmToUser = response;
+						item.userGroup = "both";
+					} else {
+						if( !isEmpty(response.user) && response.user.length > 0 ){
+							// console.log("user====", response);
+							item.alarmToUser = response;
+							item.userGroup = "user";
+						}
+						if( !isEmpty(response.non_user) && response.non_user.length > 0 ){
+							// console.log("non_user====", response);
+							item.alarmToUser = response;
+							item.userGroup = "non_user";
+						}
 					}
-					return item;
+				} catch (exception) {
+					console.error(`Failed to retrieve user information: (${exception})`);
 				}
 			} else {
-				return item;
+				return item.alarmToUser = null;
 			}
 
 		});
 
 		Promise.all(promises).then( () => {
-			if(alarmFlag == true) {
-				// alarmList Available
-				var alarmTable = $('#alarmTable').DataTable({
-					"aaData": alarmData,
-					"destroy": true,
-					// "table-layout": "fixed",
-					"fixedHeader": true,
-					// "autoWidth": true,
-					"bAutoWidth": true,
-					"bSortable": true,
-					"bSearchable" : true,
-					// "retrieve": true,
-					// "scrollX": true,
-					// "sScrollXInner": "100%",
-					"sScrollY": true,	
-					"scrollY": "40vh",
-					// "scrollCollapse": false,
-					"pageLength": 4,
-					// "scrollY": "400px",
-					// "bScrollCollapse": true,
-					"bSearchable" : true,
-					"dom": 'tip',
-					"aoColumnDefs": [
-						// {
-						// 	"aTargets": [ 0 ],
-						// 	"bSortable": false,
-						// 	"orderable": false
-						// },
-						// {
-						// 	"aTargets": [ 0, 1, 2, 3, 4, 5, 6 ],
-						// 	"bSortable": false,
-						// 	"orderable": false
-						// },
-						{
-							"aTargets": [ 1 ],
-							"createdCell": function (td, cellData, rowData, row, col) {
-								let dropdown1 = $(td).find(".dropdown-menu");
-								let selectedDvc = cellData.name;
+			let entries = Object.entries(uniqDvcType);
+			entries.forEach(function(item, index){
+				dvcTypeStr += `<li data-did="${'${ item[1][0].did }'}" data-value="${'${ item[1][0].device_type }'}">
+					<a href="#">${'${ item[1][0].device_type_label }'}</a>
+				</li>`;
+			});
 
-								$.each(dropdown1, function(index, el){
-									let selected = selectedDvc.includes(",") ? selectedDvc.split(",") : selectedDvc;
-									let input = $(this).find("input[type='checkbox']");
+			uniqDvcName.forEach(function(item, index){
+				dvcNameStr += `<li class="hidden" data-parent="${'${ item[0].device_type }'}">
+					<a class="chk-type" href="#">
+						<input type="checkbox" name="${'${ item[0].name }'}" value="${'${ item[0].did }'}" data-device-type="${'${ item[0].device_type }'}">
+						<label>${'${ item[0].name }'}</label>
+					</a>
+				</li>`;
+			});
+
+			let alarmLvlArr = [
+				{  name : "정보", val: 0 },
+				{  name : "경고", val: 1 },
+				{  name : "이상", val: 2 },
+				{  name : "트립", val: 3 },
+				{  name : "긴급", val: 4 },
+				{  name : "미정", val: 9 },
+			];
+
+			alarmLvlArr.forEach(function(item, index){
+				alarmLvlStr += `<li><a class="chk-type" href="#">
+					<input type="checkbox" name="aDvcLevel${'${ item.val }'}" value="${'${ item.val }'}" />
+					<label>${'${ item.name }'}</label>
+				</a></li>`;
+			});
+
+			// userNameStr += `<li onclick='addNewInput(this)'><a href="#">직접 입력</a></li>`;
+
+			userData.forEach(function(item, index){
+				let nameId = `${'${ item.name }'}` + ` / ` + `${'${ item.login_id }'}`;
+				let phoneNum = "";
+				item.contact_phone ? (phoneNum = item.contact_phone) : null;
+
+				userNameStr += `<li onclick="showPhoneNum(this)"><a class="chk-type" href="#">
+					<input type="checkbox" 
+						data-id="${'${ item.login_id }'}${'${ index }'}"
+						name="aDvcContactPerson${'${ index }'}" 
+						value="${'${ item.uid }'}"
+						data-uid="${'${ item.uid }'}" 
+						data-name="${'${ item.name }'}"
+						data-contact-num="${'${ phoneNum }'}" />
+					<label>${'${ nameId }'}</label>
+				</a></li>`;
+			});
+			
+
+			var alarmTable = $('#alarmTable').DataTable({
+				"aaData": entries,
+				"destroy": true,
+				"table-layout": "fixed",
+				// "fixedHeader": true,
+				// "autoWidth": true,
+				// "bAutoWidth": true,
+				"bSortable": true,
+				"bSearchable" : true,
+				"scrollX": true,
+				"sScrollX": "100%",
+				// "retrieve": true,
+				// "sScrollY": true,	
+				// "scrollY": "40vh",
+				"pageLength": 6,
+				// "bScrollCollapse": true,
+				"bSearchable" : true,
+				"dom": 'tip',
+				"aoColumnDefs": [
+					{
+						"aTargets": [ 1 ],
+						"createdCell": function (td, cellData, rowData, row, col) {
+
+							let dropdown1 = $(td).find(".dropdown-menu");
+							$.each(dropdown1, function(index, element){
+								for(let i = 0, arrLength = cellData[1].length; i < arrLength; i++ ){
+									let input = dropdown1.eq(i).find("input[type='checkbox']");
+									let currentCell = cellData[1][i];
+									let dvcType = currentCell.device_type;
+									let name = currentCell.name;
 
 									$.each(input, function(idx, checkbox){
-										if(!isEmpty(selected)){
-											if(typeof selected == "string"){
-												if($(this).attr("name") == selected){
-													$(this).prop("checked", true);
-												}
-											} else {
-												let found = selected.findIndex( x => x == $(this).val() );
-												if(found > -1){
-													let name = selected[found];
-													$(this).prop("checked", true);
-												}
-											}
-										} else {					
-											if(selected == $(this).val()){
-												$(this).prop("checked", true);
+										let parent = $(checkbox).parents().closest("li");
+										if($(checkbox).data("device-type") == dvcType){
+											parent.removeClass("hidden");
+										} else {
+											if(!parent.hasClass("hidden")){
+												parent.addClass("hidden");
 											}
 										}
+										if($(checkbox).attr("name") == name){
+											$(checkbox).prop("checked", true);
+										} else {
+											$(checkbox).prop("checked", false);
+										}
 									});
-								});
-							}
-						},
-						{
-							"aTargets": [ 2 ],
-							"createdCell": function (td, cellData, rowData, row, col) {
-								// 알람 레벨
-								let dropdown2 = $(td).find(".dropdown-menu");
-								// let target2 = $(dropdown2).find("input[type='checkbox']");
-								// let targetArr2 = target2.toArray();
+								}
+							});
+						}
+					},
+					{
+						"aTargets": [ 2, 3 ],
+						"createdCell": function (td, cellData, rowData, row, col) {
+							// 알람 레벨
+							let dropdown2;
+							let dropdown3;
+							let nonUserName;
+							let phoneGroup;
 
-								if (!isEmpty(rowData.alarmToUser)) {
-									if (!isEmpty(rowData.alarmToUser.user)) {	
-										let userList = rowData.alarmToUser.user;
+							if(col==2){
+								dropdown2 = $(td).find(".dropdown-menu");
+							} else if(col==3){
+								dropdown3 = $(td).find(".dropdown-menu");
+								nonUserName = $(td).find(".text-input-type[data-user-type='non-user']");
+							}
+
+							for(let i = 0, arrLength = cellData[1].length; i < arrLength; i++ ){
+								if (!isEmpty(cellData[1][i].alarmToUser)) {
+									let currentCell = cellData[1][i];
+									if (!isEmpty(currentCell.alarmToUser.user)) {
+										let checkbox2;
+										let checkboxArr2;
+										let checkbox3;
+										let checkboxArr3;
+										let userList = currentCell.alarmToUser.user;
+
+										if(col==2){
+											checkbox2 = dropdown2.eq(i).find("input[type='checkbox']");
+											checkboxArr2 = checkbox2.toArray();
+										} else if(col==3){
+											checkbox3 = dropdown3.eq(i).find("input[type='checkbox']");
+											checkboxArr3 = checkbox3.toArray();
+										}
+										// console.log("checkboxArr===", checkboxArr);
+										
 										$.each(userList, function(index, singleUser){
-											let target2 = dropdown2.eq(index).find("input[type='checkbox']");
-											let targetArr2 = target2.toArray();
-											$.each(singleUser.level, function(index, item){
-												let found = targetArr2.findIndex( x => $(x).val() == item );
+
+											if(col==2){
+												// console.log("singleUser===", singleUser)
+												$.each(singleUser.level, function(index, item){
+													let found = checkboxArr2.findIndex( x => $(x).val() == item );
+													if( found > -1 ){
+														$(checkboxArr2[found]).prop("checked", true);
+													}
+												});
+											} else if(col==3){
+												let checkbox3 = dropdown3.eq(i).find("input[type='checkbox']");
+												let checkboxArr3 = checkbox3.toArray();
+												// console.log("singleUser===", singleUser)
+												let found = checkboxArr3.findIndex(x => $(x).val() == singleUser.uid);
 												if( found > -1 ){
-													$(targetArr2[found]).prop("checked", true);
+													$(checkboxArr3[found]).prop("checked", true);
 												}
-											});
+											}
 											// console.log("$(this).text()====", $(this).text())
 										});			
 									}
 
-									if (!isEmpty(rowData.alarmToUser.non_user)) {	
-										console.log("non_user===", rowData.alarmToUser);
-										let nonUserList = rowData.alarmToUser.non_user;
+									if (!isEmpty(currentCell.alarmToUser.non_user)) {
+										let checkbox2;
+										let checkboxArr2;
+										let nonUserList = currentCell.alarmToUser.non_user;
+
+										if(col==2){
+											checkbox2 = dropdown2.eq(i).find("input[type='checkbox']");
+											checkboxArr2 = checkbox2.toArray();
+										}
 
 										$.each(nonUserList, function(index, el){
-											$.each(el.level, function(index, item){
-												let found = targetArr2.findIndex( x => $(x).val() == item );
-												if( found > -1 ){
-													$(targetArr2[found]).prop("checked", true);
+											if(col==2){
+												$.each(el.level, function(index, item){
+													let found = checkboxArr2.findIndex( x => $(x).val() == item );
+													if( found > -1 ){
+														$(checkboxArr2[found]).prop("checked", true);
+													}
+												});
+											} else if(col==3){
+												let parentEl = nonUserName.eq(i);
+												let userNameInput = parentEl.find("input");
+												let val = userNameInput.val();
+												if( !isEmpty(val)){
+													userNameInput.val(val);
 												}
-											});
-											// console.log("$(this).text()====", $(this).text())
-										});
-									}
-								}
-							}
-						},
-						{
-							"aTargets": [ 3 ],
-							"createdCell": function (td, cellData, rowData, row, col) {
-								// 담당자 이름
-								let dropdown3 = $(td).find(".dropdown-menu");
-								// let target3 = dropdown3.find("input[type='checkbox']");
-								// let targetArr3 = target3.toArray();
-
-								if (!isEmpty(rowData.alarmToUser)) {
-									if (!isEmpty(rowData.alarmToUser.user)) {	
-										let userList = rowData.alarmToUser.user;
-										$.each(userList, function(index, singleUser){
-											let target3 = dropdown3.eq(index).find("input[type='checkbox']");
-											let targetArr3 = target3.toArray();
-											// console.log("singleUser===", singleUser)
-											let found = targetArr3.findIndex(x => $(x).val() == singleUser.uid);
-											if( found > -1 ){
-												$(targetArr3[found]).prop("checked", true);
-											}
-											// console.log("$(this).text()====", $(this).text())
-										});
-										
-									}
-								}
-							}
-						},
-						{
-							"aTargets": [ 4 ],
-							"createdCell": function (td, cellData, rowData, row, col) {
-								// 전화번호
-								// let input = $(td).find("input");
-								// if (!isEmpty(rowData.alarmToUser)) {
-								// 	$.each(input, function(index, el){
-								// 		$(this).val($(this).attr("value"));
-								// 	});
-								// }
-							}
-						},
-					],
-					"aoColumns": [
-						{
-							"sTitle": "설비타입",
-							"mData": null,
-							"mRender": function ( data, type, row, rowIndex ) {
-								let str1 = '';
-								$.each(uniqDvcType[data.device_type], function(index, el) {
-									let targetId = 'aDvcNameList' + rowIndex.row;
-									str1 += '<li onclick="setDropdownInput(this,' + targetId + ')" data-subgroup="' + el.sub_device + '" data-did="' + el.did + '" data-value="' + el.device_type + '"><a href="#" tabindex="-1">' + data.device_type_label + '</a></li>'
-								});
-								let dropdown1 = `
-									<div class="dropdown">
-										<button type="button" class="dropdown-toggle device-type" data-toggle="dropdown" data-did="${'${ data.did }'}" data-value="${'${ data.device_type }'}" disabled>${'${ data.device_type_label }'}<span class="caret"></span></button>
-										<ul id="aDvcTypeList${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str1 }'}</ul>
-									</div>
-								`;
-
-								return dropdown1;
-							},
-						},
-						{
-							"sTitle": "설비명",
-							"mData": null,
-							"mRender": function ( data, type, row, rowIndex ) {
-								// console.log("설비명===", row);
-								let joinedDvcVal = "";
-								let subDropdown = `
-									<div class="dropdown">
-										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="${'${ row.name }'}" disabled>${'${ row.name }'}<span class="caret"></span></button>
-										<ul id="aDvcNameList${'${ rowIndex.row }'}" class="dropdown-menu">${'${ dvcNameStr }'}</ul>
-									</div>
-								`;
-								return subDropdown;
-							},
-						},
-						{
-							"sTitle": "알람레벨",
-							"mData": null,
-							"mRender": function ( data, type, row, rowIndex ) {
-
-								let str3 = ``;
-								let dropdown3 = ``;
-								let aLevelOpt = [
-									{  name : "정보", val: 0 },
-									{  name : "경고", val: 1 },
-									{  name : "이상", val: 2 },
-									{  name : "트립", val: 3 },
-									{  name : "긴급", val: 4 },
-									{  name : "미정", val: 9 },
-								];
-
-								$.each(aLevelOpt, function(index, el){
-									str3 += `
-										<li>
-											<a class="chk-type" href="#">
-												<input type="checkbox" data-id="aDvcLevel${'${ el.val }'}" name="aDvcLevel${'${ el.val }'}" value="${'${ el.val }'}" />
-												<label>${'${ el.name }'}</label>
-											</a>
-										</li>
-									`
-								});
-
-								if( isEmpty(data.alarm_to) || isEmpty(data.alarmToUser) ) {
-									dropdown3 = `
-										<div class="dropdown">
-											<button type="button" class="dropdown-toggle" data-toggle="dropdown" disabled>선택<span class="caret"></span></button>
-											<ul id="aDvcAlarmList${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str3 }'}</ul>
-										</div>
-									`
-								} else {
-									if(!isEmpty(data.alarmToUser.user) && data.alarmToUser.user.length > 0){
-										let registeredUser = data.alarmToUser.user;
-										let joinedAlarmVal = "";
-
-										$.each(registeredUser, function(index, el){
-											let levText = "";
-											let levVal = "";
-											let newIdx = String(rowIndex.row + index);
-
-											if(!isEmpty(el.level)){
-												let val;
-												joinedAlarmVal = el.level.join(",");
-												if(el.level.length > 1){
-													val = el.level[0];
-													levText = aLevelOpt[val].name + ' 외 ' + String(el.level.length - 1) + "개";
-												} else if(el.level.length == 1) {
-													joinedAlarmVal = el.level[0];
-													levText = aLevelOpt[joinedAlarmVal].name;
-												} else if(el.level.length < 0) {
-													joinedAlarmVal = "";
-													levText = "선택";
-												}
-
-												dropdown3 += `
-													<div class="dropdown">
-														<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="${'${ joinedAlarmVal }'}" data-name="${'${ levText }'}" disabled>${'${ levText }'}<span class="caret"></span></button>
-														<ul id="aDvcAlarmList${'${ newIdx }'}" class="dropdown-menu">${'${ str3 }'}</ul>
-													</div>
-												`
 											}
 										});
-										
-									}
-									
-									if(!isEmpty(data.alarmToUser.non_user) && data.alarmToUser.non_user.length > 0){
-										let nonUser = data.alarmToUser.non_user;
-										let joinedAlarmVal = "";
-										
-										$.each(nonUser, function(index, el){
-											let levText = "";
-											let levVal = "";
-											let newIdx = String(rowIndex.row + "Non" + index);
-
-											if(!isEmpty(el.level)){
-												let val;
-												joinedAlarmVal = el.level.join(",");
-
-												if(el.level.length > 1){
-													val = el.level[0];
-													levText = aLevelOpt[val].name + ' 외 ' + String(el.level.length - 1) + "개";
-												} else if(el.level.length == 1) {
-													joinedAlarmVal = el.level[0];
-													levText = aLevelOpt[joinedAlarmVal].name;
-												} else if(el.level.length < 0) {
-													joinedAlarmVal = "";
-													levText = "선택";
-												}
-
-												// if(!isEmpty(el.level)){
-												// 	val = el.level[0];
-												// 	levText = aLevelOpt[val].name + ' 외 ' + String(el.level.length - 1) + "개";
-												// } else {
-												// 	joinedAlarmVal = ""
-												// 	levText = "선택";
-												// }
-
-
-												dropdown3 += `
-													<div class="dropdown">
-														<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="${'${ joinedAlarmVal }'}" data-name="선택" disabled>${'${ levText }'}<span class="caret"></span></button>
-														<ul id="aDvcAlarmList${'${ newIdx }'}" class="dropdown-menu">${'${ str3 }'}</ul>
-													</div>
-												`
-											} else {
-												dropdown3 += `
-													<div class="dropdown">
-														<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="${'${ aLevelOpt[5].val }'}" data-name="선택" disabled>${'${ aLevelOpt[5].name }'}<span class="caret"></span></button>
-														<ul id="aDvcAlarmList${'${ newIdx }'}" class="dropdown-menu">${'${ str3 }'}</ul>
-													</div>
-												`
-											}
-										});																		
 									}
 								}
 								
-								return dropdown3;
-							},
-							// "className": "no-sorting",
+							}
+						}
+					},
+				],
+				"aoColumns": [
+					{
+						"sTitle": "설비타입",
+						"mData": null,
+						"mRender": function ( data, type, full, rowIndex ) {
+							let val1 = data[1];
+							let dropdown1 = ``;
+
+							$.each(val1, function(index, el){
+								let newIdx = String(rowIndex.row+index)
+								dropdown1 += `<div class="dropdown">
+										<button type="button" class="dropdown-toggle device-type" 
+											data-index="${'${index}'}"
+											data-toggle="dropdown" 
+											data-did="${'${ el.did }'}" data-value="${'${ el.device_type }'}" disabled>
+											${'${ el.device_type_label }'}<span class="caret"></span></button>
+										<ul id="aDvcTypeList${'${ newIdx }'}" class="dropdown-menu chk-type" role="menu">${'${ dvcTypeStr }'}</ul>
+									</div>`;
+							});
+							return dropdown1;
 						},
-						{
-							"sTitle": "담당자 (이름 / ID)",
-							"mData": null,
-							"mRender": function ( data, type, row, rowIndex ) {
-								let dropdown4 = ``;
-								let userIdx = '';
+					},
+					{
+						"sTitle": "설비명",
+						"mData": null,
+						"mRender": function ( data, type, full, rowIndex ) {
+							let val2 = data[1];
+							let dropdown2 = ``;
 
-								if( isEmpty(data.alarmToUser) ) {
-									let str4 = ``;
-									str4 += `
-										<li onclick='addNewInput(this)'><a href="#">직접 입력</a></li>
-									`;
-									$.each(userData, function(idx, el){
-										let nameId = `${'${ el.name }'}` + ` / ` + `${'${ el.login_id }'}`;
-										let phoneNum = "";
-										el.contact_phone ? phoneNum = el.contact_phone : "";
+							$.each(val2, function(index, el){
+								let totalLength = el.length;
+								let newIdx = String(rowIndex.row+index)
+								let displayText = "";
+								(totalLength >=2) ? (displayText = (el.name + " 외 +" + String(totalLength-1)) ) : (displayText = el.name)
 
-										str4 += `
-											<li onclick='removeNewInput(this)'>
-												<a class="chk-type" href="#">
-													<input type="checkbox" data-id="${'${ el.login_id }'}${'${ rowIndex.row }'}" name="aDvcContactPerson${'${ rowIndex.row }'}" value="${'${ el.uid }'}" data-uid="${'${ el.uid }'}" data-name="${'${ el.name }'}" data-contact-num="${'${ phoneNum }'}" />
-													<label>${'${ nameId }'}</label>
-												</a>
-											</li>
-										`;
-									});
-									
-									dropdown4 = `
-										<div class="dropdown" data-user-type="non-user" data-user-index="${'${ rowIndex.row }'}">
-											<button type="button" class="dropdown-toggle" data-toggle="dropdown" disabled>선택<span class="caret"></span></button>
-											<ul id="aDvcContactListNonUser${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str4 }'}</ul>
-										</div>
-									`
+								dropdown2 += `<div class="dropdown">
+										<button type="button" class="dropdown-toggle" 
+											data-function="concat"
+											data-toggle="dropdown" 
+											data-index="${'${index}'}"
+											data-did="${'${ el.did }'}" 
+											data-value="${'${ el.name }'}" 
+											data-name="선택" disabled>${'${ displayText }'}
+											<span class="caret"></span></button>
+										<ul id="aDvcNameList${'${ newIdx }'}" class="dropdown-menu chk-type" role="menu">${'${ dvcNameStr }'}</ul>
+									</div>`;
+							});
+							return dropdown2;
+						},
+					},
+					{
+						"sTitle": "알람레벨",
+						"mData": null,
+						"mRender": function ( data, type, full, rowIndex ) {
+							let val3 = data[1];
+							let dropdown3 = ``;
+
+							$.each(val3, function(index, el){
+								let newIdx = String(rowIndex.row+index);
+
+								if(isEmpty(el.userGroup)){
+									dropdown3 += `<div class="dropdown">
+											<button type="button" class="dropdown-toggle" 
+												data-function="concat"
+												data-index="${'${index}'}"
+												data-toggle="dropdown" data-name="선택" disabled>선택
+												<span class="caret"></span>
+											</button>
+											<ul id="aDvcAlarmList${'${ newIdx }'}" class="dropdown-menu chk-type" role="menu">${'${ alarmLvlStr }'}</ul>
+										</div>`;
 								} else {
-									if(!isEmpty(data.alarmToUser.non_user) && data.alarmToUser.non_user.length > 0 && !isEmpty(data.alarm_to.user) && data.alarm_to.user.length > 0 ) {
-										let str4 = ``;
-										let nonUser = data.alarmToUser.non_user;
-										console.log("nonUser===", nonUser);
+									let joinedVal = "";
+									let displayText = "";
+									let alarmArr = [];
 
-										nonUser.forEach((item, index) => {
-											let displayName = item.name;
-											newIdx = String(rowIndex.row + index);
+									if(el.userGroup === "both"){
+									// USER && NON USER
+										let length1 = el.alarmToUser.user.length;
+										let length2 = el.alarmToUser.non_user.length;
 
-											str4 += `
-												<li onclick='addNewInput(this)'><a href="#">직접 입력</a></li>
-											`;
-											$.each(userData, function(idx, el){
-												let nameId = `${'${ el.name }'}` + ` / ` + `${'${ el.login_id }'}`;
-												let phoneNum = "";
-												el.contact_phone ? phoneNum = el.contact_phone : "";
-
-												str4 += `
-													<li onclick='removeNewInput(this)'>
-														<a class="chk-type" href="#">
-															<input type="checkbox" data-id="${'${ el.login_id }'}${'${ newIdx }'}" name="aDvcContactPerson${'${ newIdx }'}" value="${'${ el.uid }'}" data-uid="${'${ el.uid }'}" data-name="${'${ el.name }'}" data-contact-num="${'${ phoneNum }'}" />
-															<label>${'${ nameId }'}</label>
-														</a>
-													</li>
-												`;
-											});
-
-											dropdown4 += `
-												<div class="dropdown" data-user-type="non-user" data-user-index="${'${ newIdx }'}">
-													<button type="button" class="dropdown-toggle" data-value="${'${ displayName }'}" data-toggle="dropdown" data-name="선택" disabled>${'${ displayName }'}<span class="caret"></span></button>
-													<ul id="aDvcContactListNonUser${'${ newIdx }'}" class="dropdown-menu">${'${ str4 }'}</ul>
-												</div>
-											`;
-
-										});
-
-										let registeredUser = data.alarmToUser.user;
-										let displayName = "";
-										let displayName2 = "";
-										let nameFlag = false;
-
-										registeredUser.forEach((item, index) => {
-											var userEl = item;
-											let newIdx = String(rowIndex.row + index);	
-										
-											$.each(userData, function(idx, el){
-												console.log("userDAta---", el)
-												let nameId = `${'${ el.name }'}` + `(` + `${'${ el.login_id }'}` + `)`;
-												let phoneNum = "";
-
-												if(el.name == userEl.uid){
-													if(nameFlag == false){
-														displayName = el.name;
-														nameFlag = true;
+										if(length1 === length2 && length1 >0){
+											for(let i=0, arrLength = length1; i<arrLength; i++ ){
+												if(!isEmpty(el.alarmToUser.user[i].level)){
+													if(i==0){
+														let found = alarmLvlArr.findIndex( x => x.val == el.alarmToUser.user[i].level[0]);
+														if(found > -1){
+															displayText = alarmLvlArr[found].name;
+														}
 													}
-												
+													alarmArr = [...el.alarmToUser.user[i].level];
 												}
-												if(el.uid == userEl.uid){
-													if(nameFlag == false){
-														displayName2 = el.name
-														nameFlag = true;
-													}
-												}
-												// let foundByUid = userData.findIndex(x => x.uid == item.uid);
-
-												el.contact_phone ? (phoneNum = el.contact_phone) : "";
-				
-												str4 += `
-													<li onclick='removeNewInput(this)'>
-														<a class="chk-type" href="#">
-															<input type="checkbox" data-id="${'${ el.login_id }'}${'${ newIdx }'}" name="aDvcContactPerson${'${ newIdx }'}" value="${'${ el.uid }'}" data-name="${'${ el.name }'}" data-contact-num="${'${ phoneNum }'}" />
-															<label>${'${ nameId }'}</label>
-														</a>
-													</li>
-												`
-											});
-
-									
-											if(cnt === 0){
-												if(!isEmpty(displayName2)){
-													displayName = displayName2;
-												}
-											} else {
-												console.log("length===", registeredUser.length);
-												if(!isEmpty(displayName2)){
-													displayName = displayName2 + '외 ' + String(registeredUser.length-1) + '명';
-												} else {
-													displayName = displayName + '외 ' + String(registeredUser.length-1) + '명';
+												if(!isEmpty(el.alarmToUser.non_user[i].level)){
+													alarmArr = [...el.alarmToUser.non_user[i].level];
 												}
 											}
 
-											// console.log("displayName---", displayName);
-											// console.log("displayName2---", displayName2);
+											alarmArr = [...new Set([...alarmArr])];
+											joinedVal = alarmArr.toString();
 
-											dropdown4 += `
-												<div class="dropdown" data-user-type="user" data-user-index="${'${ newIdx }'}">
-													<button type="button" class="dropdown-toggle" data-value="${'${ item.uid }'}" data-toggle="dropdown" data-name="" disabled>${'${ displayName }'}<span class="caret"></span></button>
-													<ul id="aDvcContactList${'${ newIdx }'}" class="dropdown-menu">${'${ str4 }'}</ul>
-												</div>
-											`;
+											if(alarmArr.length >=2){
+												displayText = displayText + " 외 +" + String(alarmArr.length-1);
+											}
+											
+										} else {
+											for(let i=0, arrLength = length1; i<arrLength; i++ ){
+												if(!isEmpty(el.alarmToUser.user[i].level)){
+													if(i==0){
+														let found = alarmLvlArr.findIndex( x => x.val == el.alarmToUser.user[i].level[0]);
+														if(found > -1){
+															displayText = alarmLvlArr[found].name;
+														}
+													}
+													alarmArr = [...el.alarmToUser.user[i].level];
+												}
+											}
 
-										});
-									
+											for(let i=0, arrLength = length2; i<arrLength; i++ ){
+												if(!isEmpty(el.alarmToUser.non_user[i].level)){
+													alarmArr = [...el.alarmToUser.non_user[i].level];
+												}
+											}
 
+											alarmArr = [...new Set([...alarmArr])];
+											joinedVal = alarmArr.toString();
+
+											if(alarmArr.length >=2){
+												displayText = displayText + " 외 +" + String(alarmArr.length-1);
+											}
+											
+										}
+										// console.log("alarmArr==", alarmArr, joinedVal);
 									} else {
-										// Either non registered User or registered user
-										let str4 = ``;
-										if(!isEmpty(data.alarmToUser.non_user) && data.alarmToUser.non_user.length > 0){
-										// 1. Unregistered User
-											let nonUser = data.alarmToUser.non_user;
-											console.log("nonUser===", nonUser);
+									// either USER || NON USER
+										if(el.userGroup === "user"){
+											let length1 = el.alarmToUser.user.length;
 
-											nonUser.forEach((item, index) => {
-												let displayName = item.name;
-												newIdx = String(rowIndex.row + index);
-
-												str4 += `
-													<li onclick='addNewInput(this)'><a href="#">직접 입력</a></li>
-												`;
-												$.each(userData, function(idx, el){
-													let nameId = `${'${ el.name }'}` + ` / ` + `${'${ el.login_id }'}`;
-													let phoneNum = "";
-													el.contact_phone ? phoneNum = el.contact_phone : "";
-
-													str4 += `
-														<li onclick='removeNewInput(this)'>
-															<a class="chk-type" href="#">
-																<input type="checkbox" data-id="${'${ el.login_id }'}${'${ newIdx }'}" name="aDvcContactPerson${'${ newIdx }'}" value="${'${ el.uid }'}" data-uid="${'${ el.uid }'}" data-name="${'${ el.name }'}" data-contact-num="${'${ phoneNum }'}" />
-																<label>${'${ nameId }'}</label>
-															</a>
-														</li>
-													`;
-												});
-
-												dropdown4 += `
-													<div class="dropdown" data-user-type="non-user" data-user-index="${'${ newIdx }'}">
-														<button type="button" class="dropdown-toggle" data-value="${'${ displayName }'}" data-toggle="dropdown" data-name="선택" disabled>${'${ displayName }'}<span class="caret"></span></button>
-														<ul id="aDvcContactListNonUser${'${ newIdx }'}" class="dropdown-menu">${'${ str4 }'}</ul>
-													</div>
-												`;
-
-											});
-										}
-
-										// 2. Registered User
-										if(!isEmpty(data.alarmToUser.user) && data.alarmToUser.user.length > 0){
-											let registeredUser = data.alarmToUser.user;
-	
-											registeredUser.forEach((item, index) => {
-												let userEl = item;
-												let length = registeredUser.length;
-												let newIdx = String(rowIndex.row + index);	
-												let displayName = "";
-												let nameArr = [];
-												let nameArr2 = [];
-
-												str4 += `
-													<li onclick='addNewInput(this)'><a href="#">직접 입력</a></li>
-												`
-												$.each(userData, function(idx, el){
-													let nameId = `${'${ el.name }'}` + `(` + `${'${ el.login_id }'}` + `)`;
-													let phoneNum = "";
-
-													if(el.name == userEl.uid){
-														nameArr.push(el.name);
-													}
-													if(el.uid == userEl.uid){
-														nameArr2.push(el.name);
-													}
-													// let foundByUid = userData.findIndex(x => x.uid == item.uid);
-
-													el.contact_phone ? (phoneNum = el.contact_phone) : "";
-					
-													str4 += `
-														<li onclick='removeNewInput(this)'>
-															<a class="chk-type" href="#">
-																<input type="checkbox" data-id="${'${ el.login_id }'}${'${ newIdx }'}" name="aDvcContactPerson${'${ newIdx }'}" value="${'${ el.uid }'}" data-name="${'${ el.name }'}" data-contact-num="${'${ phoneNum }'}" />
-																<label>${'${ nameId }'}</label>
-															</a>
-														</li>
-													`
-												});
-
-												if(length === 0){
-													if(nameArr2.length == 0){
-														if(nameArr.length > 1){
-															displayName = nameArr[0] + String(nameArr.length-1);
-														} else {
-															displayName = nameArr[0];
-														}
-													} else {
-														if(nameArr2.length > 1){
-															displayName = nameArr2[0] + String(nameArr.length-1);
-														} else {
-															displayName = nameArr2[0];
-														}
-													}
-												} else {
-													if(length > 1) {
-														if(nameArr2.length == 0){
-															if(nameArr.length > 1){
-																displayName = nameArr[0] + ' 외 ' + String(nameArr.length-1) + '명';
-															} else {
-																displayName = nameArr[0]
-															}
-														} else {
-															if(nameArr.length > 1){
-																displayName = nameArr2[0] + ' 외 ' + String(nameArr2.length-1) + '명';
-															} else {
-																displayName = nameArr2[0];
+											if(length1 > 0 ){
+												for(let i=0, arrLength = length1; i<arrLength; i++ ){
+													if(!isEmpty(el.alarmToUser.user[i].level)){
+														if(i==0){
+															let found = alarmLvlArr.findIndex( x => x.val == el.alarmToUser.user[i].level[0]);
+															if(found > -1){
+																displayText = alarmLvlArr[found].name;
 															}
 														}
-													} else {
-														if(nameArr.length == 0){
-															displayName = nameArr2[0];
-														} else {
-															displayName = nameArr[0];
-														}
+														alarmArr = [...el.alarmToUser.user[i].level];
 													}
 												}
-
-												dropdown4 += `
-													<div class="dropdown" data-user-type="user" data-user-index="${'${ newIdx }'}">
-														<button type="button" class="dropdown-toggle" data-value="${'${ item.uid }'}" data-toggle="dropdown" data-name="" disabled>${'${ displayName }'}<span class="caret"></span></button>
-														<ul id="aDvcContactList${'${ newIdx }'}" class="dropdown-menu">${'${ str4 }'}</ul>
-													</div>
-												`;
-												// console.log("displayName---", displayName);
-												// console.log("displayName2---", displayName2);
-
-
-											});
-									
-										// console.log("cnt===", cnt);
-										}
-									
-									}
-								}
-								return dropdown4;
-							},
-						},
-						{
-							"sTitle": "전화번호",
-							"mData": null,
-							"mRender": function ( data, type, row, rowIndex ) {
-								let str5 = ``;
-
-								if( isEmpty(data.alarm_to) || isEmpty(data.alarmToUser) ) {
-									str5 += `<div class="text-input-type disabled" data-user-type="user"><input type="text" name="aDvcPhone${'${ rowIndex.row }'}" value="" disabled /></div>`;
-								} else {
-									if(!isEmpty(data.alarmToUser.non_user) && data.alarmToUser.non_user.length > 0){
-										let nonUser = data.alarmToUser.non_user;
-										nonUser.forEach((item, index) => {
-											let newIdx = String(rowIndex.row + index);
-											let displayName = item.name;
-											let phoneNum = "";
-											item.phone ? (phoneNum = item.phone) : ( phoneNum = "" );
-
-											str5 += `<div class="text-input-type disabled" data-user-type="non-user"><input type="text" name="aDvcPhoneNonUser${'${ newIdx }'}" value="${'${ phoneNum }'}" disabled /></div>`;
-										});
-									}
-
-									if(!isEmpty(data.alarmToUser.user) && data.alarmToUser.user.length > 0){
-										let registeredUser = data.alarmToUser.user;
-								
-										registeredUser.forEach((item, index) => {
-											let newIdx = String(rowIndex.row + index);
-											let displayName = item.name;
-											let phoneNum = "";
-											let found = userData.findIndex(x => x.name == item.uid);
-											let found2 = userData.findIndex(x => x.uid == item.uid);
-											
-											if(!isEmpty(item.uid)) {
-												if(found2 > -1){
-													if(!isEmpty(userData[found2].contact_phone)){
-														phoneNum = userData[found2].contact_phone; 
-													}
-												} else {
-													if(found > -1){
-														if(!isEmpty(userData[found].contact_phone)){
-															phoneNum = userData[found].contact_phone; 
-														}
-													}
-												}
-											} else {
-												// console.log("empty uid===", item);
 											}
-											
-											// console.log("userData[found]===", userData[found]);
-											// console.log("userData[found]222===", userData[found2]);
-											// console.log("item.uid===", item.uid);
+											alarmArr = [...new Set([...alarmArr])];
+											joinedVal = alarmArr.toString();
+
+											if(alarmArr.length >=2){
+												displayText = displayText + " 외 +" + String(alarmArr.length-1);
+											}
+
+										} else if(el.userGroup === "non_user"){
+											let length2 = el.alarmToUser.non_user.length;
+
+											if(length2 > 0 ){
+												for(let i=0, arrLength = length2; i<arrLength; i++ ){
+													if(!isEmpty(el.alarmToUser.non_user[i].level)){
+														if(i==0){
+															let found = alarmLvlArr.findIndex( x => x.val == el.alarmToUser.non_user[i].level[0]);
+															if(found > -1){
+																displayText = alarmLvlArr[found].name;
+															}
+														}
+														alarmArr = [...el.alarmToUser.non_user[i].level];
+													}
+												}
+
+												alarmArr = [...new Set([...alarmArr])];
+												joinedVal = alarmArr.toString();
+
+												if(alarmArr.length >=2){
+													displayText = displayText + " 외 +" + String(alarmArr.length-1);
+												}
+
+											}
 										
+										}
+									}
 
-											// if(foundByUid > -1){
-											// 	if(!isEmpty(userData[foundByUid].contact_phone)){
-											// 		phoneNum = userData[foundByUid].contact_phone; 
-											// 	}
-											// }
-											str5 += `<div class="text-input-type disabled" data-user-type="user"><input type="text" name="aDvcPhone${'${ newIdx }'}" value="${'${ phoneNum }'}" disabled /></div>`;
-										});
+									if(displayText == "") {
+										dropdown3 += `<div class="dropdown">
+											<button type="button" class="dropdown-toggle" 
+												data-function="concat"
+												data-index="${'${index}'}"
+												data-toggle="dropdown" 
+												data-name="선택" disabled>선택
+												<span class="caret"></span>
+											</button>
+											<ul class="dropdown-menu chk-type" role="menu">${'${ alarmLvlStr }'}</ul>
+										</div>`;
+									} else {
+										dropdown3 += `<div class="dropdown" data-function="concat">
+											<button type="button" class="dropdown-toggle" 
+												data-function="concat"
+												data-index="${'${index}'}"
+												data-toggle="dropdown"
+												data-name="선택" disabled>${'${ displayText }'}
+												<span class="caret"></span>
+											</button>
+											<ul class="dropdown-menu chk-type" role="menu">${'${ alarmLvlStr }'}</ul>
+										</div>`;
 									}
 								}
-
-								return str5;
-							},
-							// "className": "no-sorting",
+							
+							});
+							
+							return dropdown3;
 						},
-						{
-							"sTitle": "추가 / 수정 / 삭제",
-							"mData": null,
-							"mRender": function ( data, type, row, rowIndex ) {
-								let deleteStr = ``;
-								let length = 0;
+					},
+					{
+						"sTitle": "담당자 (이름 / ID)",
+						"mData": null,
+						"mRender": function ( data, type, full, rowIndex ) {
+							const val4 = data[1];
+							let dropdown4 = ``;
 
-								if( isEmpty(data.alarm_to) || isEmpty(data.alarmToUser) ) {
-									deleteStr = `
-										<div class="flex-start">
-											<button type="button" class="icon-add" data-index="${'${length}'}" onclick="updateAlarmTable($(this), 'add' )">추가</button>
-											<button type="button" class="icon-edit" data-index="${'${length}'}" onclick="updateAlarmTable($(this), 'edit')">수정</button>
-											<button type="button" class="icon-delete" data-index="${'${length}'}" onclick="updateAlarmTable($(this), 'delete')">삭제</button>
+							// let userIdx = '';
+							$.each(val4, function(index, el){
+								let newIdx = String(rowIndex.row+index);
+								if(isEmpty(el.userGroup)){
+									dropdown4 += `<div class="user-group" data-index="${'${index}'}">
+										<div class="dropdown">
+											<button type="button" class="dropdown-toggle" 
+												data-function="concat"
+												data-child-id="aDvcPhoneUser${'${ newIdx }'}"
+												data-toggle="dropdown"
+												data-name="선택" disabled>선택
+												<span class="caret"></span>
+											</button>
+											<ul id="aDvcUserList${'${ newIdx }'}" class="dropdown-menu chk-type" role="menu">${'${ userNameStr }'}</ul>
 										</div>
-									`;
+										<div class="text-input-type disabled" 
+											data-child-id="aDvcPhoneNonUser${'${ newIdx }'}"
+											data-user-type="non-user">
+											<input type="text" name="aDvcNonUserList${'${ newIdx }'}" value="" placeholder="직접 입력" disabled />
+										</div>
+									</div>`;
 								} else {
-									if(!isEmpty(data.alarmToUser.user)){
-										length += data.alarmToUser.user.length;
-									} 
-									if(!isEmpty(data.alarmToUser.non_user)){
-										length += data.alarmToUser.non_user.length;
-									}
-									for(let i = 0, arrLength = length; i < arrLength; i++ ){
-										deleteStr += `
-											<div class="flex-start">
-												<button type="button" class="icon-add" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'add' )">추가</button>
-												<button type="button" class="icon-edit" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'edit')">수정</button>
-												<button type="button" class="icon-delete" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'delete')">삭제</button>
-											</div>
-										`;
-									}
-								}
+									let joinedVal = "";
+									let joinedVal2 = "";
+									let displayText = "";
+									let displayText1 = "";
+									let displayText2 = "";
+									let displayText2b = "";
 
-								return deleteStr;
-							},
-							"className": "dt-body-center no-sorting",
-						},
-					],
-					initComplete: function(){
-						this.api().columns().header().each ((el, i) => {
-							if(i == 0){
-								$(el).attr ('style', 'min-width: 16%;');
-							} else if(i == 1){
-								$(el).attr ('style', 'min-width: 20%;');
-							} else if(i == 2){
-								$(el).attr ('style', 'min-width: 12%;');
-							} else if(i == 3){
-								$(el).attr ('style', 'min-width: 20%;');
-							} else if(i == 4){
-								$(el).attr ('style', 'min-width: 20%;');
-							}
-						});
-						// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-						// 	cell.innerHTML = i+1;
-						// 	$(cell).data("id", i);
-						// });
-						// this.api().column(5).visible( false );
-					},
-					rowCallback: function(row, data) {
-						let length = 0;
-						if(!isEmpty(data.alarmToUser) && !isEmpty(data.alarmToUser.user)){
-							length += data.alarmToUser.user.length;
-						}
-						if(!isEmpty(data.alarmToUser) && !isEmpty(data.alarmToUser.non_user)){
-							length += data.alarmToUser.non_user.length;
-						}
-						if(length === 1 ){
-							$(row).addClass('single');
-						}
-					},
-					drawCallback: function(){
-						$('#alarmTable_wrapper').addClass('fixed-width');
-						$('#alarmTable').css("width", "100%");
-					}
-				}).columns.adjust();					
-			} else {
-				let noAlarmData = getUniqueListBy(alarmData, "device_type");
-				let uniqDvcType2 = groupBy(noAlarmData, "device_type");
-				let DvcNameStr2 = '';
+									let userArr = [];
+									let nonUserArr = [];
+									let nonUserNumberArr = [];
 
-				Object.entries(uniqDvcType2).forEach(function(item, index){
-					DvcNameStr2 += '<li class="hidden" data-device-type="' + item[1].device_type + '" data-did="' +  item[1].did + '" data-value="' + item[0] + '"><a href="#" tabindex="-1">' + item[0] + '</a></li>';
-				});
+									if(el.userGroup === "both"){
+									// USER && NON USER
+										let length1 = el.alarmToUser.user.length;
+										let length2 = el.alarmToUser.non_user.length;
 
-				// NO alarmList
-				var alarmTable = $('#alarmTable').DataTable({
-					"aaData": noAlarmData,
-					"destroy": true,
-					// "table-layout": "fixed",
-					"fixedHeader": true,
-					// "autoWidth": true,
-					"bAutoWidth": true,
-					"bSortable": true,
-					"bSearchable" : true,
-					// "retrieve": true,
-					"scrollX": true,
-					"sScrollXInner": "100%",
-					"sScrollY": true,	
-					"scrollY": "40vh",
-					"pageLength": 4,
-					"bSearchable" : true,
-					"dom": 'tip',
-					"aoColumns": [
-						{
-							"sTitle": "설비타입",
-							"mData": null,
-							"mRender": function ( data, type, row, rowIndex ) {
-								// console.log("설비타입===", data);
-								let str1 = '';
-								$.each(uniqDvcType2[data.device_type], function(index, el) {
-									let targetId = 'aDvcNameList' + rowIndex.row;
-									str1 += '<li onclick="setDropdownInput(this,' + targetId + ')" data-subgroup="' + el.sub_device + '" data-did="' + el.did + '" data-value="' + el.device_type + '"><a href="#" tabindex="-1">' + data.device_type_label + '</a></li>'
-								});
+										if(length1 === length2 && length1 >0){
+											for(let i=0, arrLength = length1; i<arrLength; i++ ){
+												if(!isEmpty(el.alarmToUser.user[i].uid)){
+													if(i==0){
+														let found = userData.findIndex( x => x.uid == el.alarmToUser.user[i].uid);
+														if(found > -1){
+															displayText = userData[found].name;
+															// console.log("userData[found]11===", userData[found])
+															if(!isEmpty(userData[found].contact_phone)){
+																displayText1 = userData[found].contact_phone;
+															} else {
+																displayText1 = "번호 없음";
+															}
+														}
+													}
+													userArr.push(el.alarmToUser.user[i].uid);
+												}
+												
+												if(!isEmpty(el.alarmToUser.non_user[i].name)){
+													if(isEmpty(displayText2)){
+														displayText2 = el.alarmToUser.non_user[i].name;
+													}
+													nonUserArr.push(el.alarmToUser.non_user[i].name);
+												}
+												if(!isEmpty(el.alarmToUser.non_user[i].phone)){
+													nonUserNumberArr.push(el.alarmToUser.non_user[i].phone);
+												}
+											}
+										} else {
+											for(let i=0, arrLength = length1; i<arrLength; i++ ){
+												if(!isEmpty(el.alarmToUser.user[i].uid)){
+													if(i==0){
+														let found = userData.findIndex( x => x.uid == el.alarmToUser.user[i].uid);
+														if(found > -1){
+															displayText = userData[found].name;
+															// console.log("userData[found]22===", userData[found])
+															if(!isEmpty(userData[found].contact_phone)){
+																displayText1 = userData[found].contact_phone;
+															} else {
+																displayText1 = "번호 없음";
+															}
+														}
+													}
+													userArr.push(el.alarmToUser.user[i].uid);
+												}
+											}
 
-								let dropdown1 = `
-									<div class="dropdown">
-										<button type="button" class="dropdown-toggle device-type" data-toggle="dropdown" data-did="${'${ data.did }'}" data-value="${'${ data.device_type }'}">선택<span class="caret"></span></button>
-										<ul id="aDvcTypeList${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str1 }'}</ul>
-									</div>
-								`;
-
-								return dropdown1;
-							},
-							// "className": "no-sorting",
-						},
-						{
-							"sTitle": "설비명",
-							"mData": null,
-							"mRender": function ( data, type, row, rowIndex ) {
-								// console.log("설비명===", row);
-								let subDropdown = `
-									<div class="dropdown">
-										<button type="button" class="dropdown-toggle" data-toggle="dropdown" disabled>선택<span class="caret"></span></button>
-										<ul id="aDvcNameList${'${ rowIndex.row }'}" class="dropdown-menu">${'${ dvcNameStr }'}</ul>
-									</div>
-								`;
-								return subDropdown;
-							},
-							// "className": "no-sorting",
-						},
-						{
-							"sTitle": "알람레벨",
-							"mData": null,
-							"mRender": function ( data, type, row, rowIndex ) {
-								let str3 = ``;
-								let dropdown3 = ``;
-								let aLevelOpt = [
-									{  name : "정보", val: 0 },
-									{  name : "경고", val: 1 },
-									{  name : "이상", val: 2 },
-									{  name : "트립", val: 3 },
-									{  name : "긴급", val: 4 },
-									{  name : "미정", val: 9 },
-								];
-
-								$.each(aLevelOpt, function(index, el){
-									str3 += `
-										<li>
-											<a class="chk-type" href="#">
-												<input type="checkbox" data-id="aDvcLevel${'${ el.val }'}" name="aDvcLevel${'${ el.val }'}" value="${'${ el.val }'}" />
-												<label>${'${ el.name }'}</label>
-											</a>
-										</li>
-									`
-								});
-
-								dropdown3 = `
-									<div class="dropdown">
-										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="" data-name="선택">선택<span class="caret"></span></button>
-										<ul id="aDvcAlarmList${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str3 }'}</ul>
-									</div>
-								`;
-								return dropdown3;
-							},
-						},
-						{
-							"sTitle": "담당자 (이름 / ID)",
-							"mData": null,
-							"mRender": function ( data, type, row, rowIndex ) {
-								let str4 = '';
-								let dropdown4 = ``;
-								let userIdx = '';
-
-								str4 += '<li onclick="addNewInput(this)"><a href="#">직접 입력</a></li>';
-
-								$.each(userData, function(idx, el){
-									// console.log("userData===", el);
-									newIdx = String(rowIndex.row + idx);
-
-									let nameId = `${'${ el.name }'}` + ` / ` + `${'${ el.login_id }'}`;
-									let phoneNum = "";
+											for(let i=0, arrLength = length2; i<arrLength; i++ ){
+												if(!isEmpty(el.alarmToUser.non_user[i].name)){
+													if(isEmpty(displayText2)){
+														displayText2 = el.alarmToUser.non_user[i].name;
+													}
+													nonUserArr.push(el.alarmToUser.non_user[i].name);
+												}
+												if(!isEmpty(el.alarmToUser.non_user[i].phone)){
+													nonUserNumberArr.push(el.alarmToUser.non_user[i].phone);
+												}
+											}
+										}
 									
-									el.contact_phone ? phoneNum = el.contact_phone : "";
+										userArr = [...new Set([...userArr])];
+										nonUserArr = [...new Set([...nonUserArr])];
+										nonUserNumberArr = [...new Set([...nonUserNumberArr])];
 
-									str4 += `
-										<li onclick='removeNewInput(this)'>
-											<a class="chk-type" href="#">
-												<input type="checkbox" data-id="${'${ el.login_id }'}${'${ newIdx }'}" name="aDvcContactPerson${'${ newIdx }'}" data-uid="${'${ el.uid }'}" value="${'${ el.uid }'}" data-name="${'${ el.name }'}" data-contact-num="${'${ phoneNum }'}" />
-												<label>${'${ nameId }'}</label>
-											</a>
-										</li>
-									`;
-								});
+										joinedVal = userArr.toString();
+										joinedVal2 = nonUserArr.toString();
 
-								dropdown4 = `
-									<div class="dropdown" data-user-type="non-user" data-user-index="${'${ rowIndex.row }'}">
-										<button type="button" class="dropdown-toggle" data-value="" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-										<ul id="aDvcContactListNonUser${'${ rowIndex.row }'}" class="dropdown-menu">${'${ str4 }'}</ul>
+										let totalLength1 = userArr.length;
+										let totalLength2 = nonUserArr.length;
+										let totalLength2b = nonUserNumberArr.length;
+
+										if(totalLength1 >=2){
+											displayText = displayText + " 외 +" + String(totalLength1-1);
+											displayText1 = displayText1 + " 외 +" + String(totalLength1-1);
+										}
+
+										if(totalLength2 >=2){
+											displayText2 = displayText2 + " 외 +" + String(totalLength2-1);
+										}
+
+										if(totalLength2b >=2){
+											displayText2b = nonUserNumberArr[0] + " 외 +" + String(totalLength2b-1);
+										} else {
+											displayText2b = nonUserNumberArr[0];
+										}
+									} else {
+									// either USER || NON USER
+										if(el.userGroup === "user"){
+											let length1 = el.alarmToUser.user.length;
+
+											if(length1 > 0){
+												for(let i=0, arrLength = length1; i<arrLength; i++ ){
+													if(!isEmpty(el.alarmToUser.user[i].uid)){
+														if(i==0){
+															let found = userData.findIndex( x => x.uid == el.alarmToUser.user[i].uid);
+															if(found > -1){
+																displayText = userData[found].name;
+																// console.log("userData[found]3434===", userData[found])
+																if(!isEmpty(userData[found].contact_phone)){
+																	displayText1 = userData[found].contact_phone;
+																} else {
+																	displayText1 = "번호 없음";
+																}
+															}
+														}
+														userArr.push(el.alarmToUser.user[i].uid);
+													}
+												}
+
+												userArr = [...new Set([...userArr])];
+												joinedVal = userArr.toString();
+
+												let totalLength1 = userArr.length;
+												if(totalLength1 >=2){
+													displayText = displayText + " 외 +" + String(totalLength1-1);
+													displayText1 = displayText1 + " 외 +" + String(totalLength1-1);
+												}
+											}
+										} else if(el.userGroup === "non_user"){
+											let length2 = el.alarmToUser.non_user.length;
+
+											if(length2 > 0 ){
+												for(let i=0, arrLength = length2; i<arrLength; i++ ){
+													if(!isEmpty(el.alarmToUser.non_user[i].name)){		
+														if(isEmpty(displayText2)){
+															displayText2 = el.alarmToUser.non_user[i].name;
+														}
+														nonUserArr.push(el.alarmToUser.non_user[i].name);
+													}
+													if(!isEmpty(el.alarmToUser.non_user[i].phone)){
+														nonUserNumberArr.push(el.alarmToUser.non_user[i].phone);
+													}
+												}
+
+												nonUserArr = [...new Set([...nonUserArr])];
+												nonUserNumberArr = [...new Set([...nonUserNumberArr])];
+												joinedVal2 = nonUserArr.toString();
+
+												let totalLength2 = nonUserArr.length;
+												let totalLength2b = nonUserNumberArr.length;
+
+												if(totalLength2 >=2){
+													displayText2 = displayText2 + " 외 +" + String(totalLength2-1);
+												}
+
+												if(totalLength2b >=2){
+													displayText2b = nonUserNumberArr[0] + " 외 +" + String(totalLength2b-1);
+												} else {
+													displayText2b = nonUserNumberArr[0];
+												}
+
+												
+											}
+										
+										}
+									}
+									
+									dropdown4 += `<div class="user-group" data-index="${'${index}'}">`
+									if(displayText == "") {
+										dropdown4 += `<div class="dropdown">
+												<button type="button" class="dropdown-toggle" 
+													data-function="concat"
+													data-toggle="dropdown"
+													data-child-id="aDvcPhoneUser${'${ newIdx }'}"
+													data-name="선택" disabled>선택
+													<span class="caret"></span>
+												</button>
+												<ul class="dropdown-menu chk-type" role="menu">${'${ userNameStr }'}</ul>
+											</div>`;
+									} else {
+										dropdown4 += `<div class="dropdown">
+											<button type="button" class="dropdown-toggle" 
+												data-function="concat"
+												data-toggle="dropdown"
+												data-uid="${'${ joinedVal }'}" 
+												data-phone="${'${ displayText1 }'}" 
+												data-child-id="aDvcPhoneUser${'${ newIdx }'}"
+												data-name="선택" disabled>${'${ displayText }'}
+												<span class="caret"></span>
+											</button>
+											<ul id="aDvcUserList${'${ newIdx }'}" class="dropdown-menu chk-type" role="menu">${'${ userNameStr }'}</ul>
+										</div>`;
+									}
+									// console.log("displayText===", displayText);
+									if(isEmpty(displayText2) && isEmpty(displayText2b)) {
+										dropdown4 += `<div class="text-input-type disabled" 
+											data-child-id="aDvcPhoneNonUser${'${ newIdx }'}"
+											data-user-type="non-user">
+											<input type="text" name="aDvcNonUserList${'${ newIdx }'}" value="" placeholder="직접 입력" disabled />
+										</div>`;
+									} else {
+										dropdown4 += `<div class="text-input-type disabled" 
+											data-child-id="aDvcPhoneNonUser${'${ newIdx }'}"
+											data-phone="${'${ displayText2b }'}"
+											data-user-type="non-user">
+											<input type="text" name="aDvcNonUserList${'${ newIdx }'}" value="${'${ displayText2 }'}" disabled />
+										</div>`;
+									}
+									dropdown4 += `</div>`;
+
+								}
+							
+							});
+							return dropdown4;
+						},
+					},
+					{
+						"sTitle": "전화번호",
+						"mData": null,
+						"mRender": function ( data, type, full, rowIndex ) {
+							let dropdown5 = ``;
+							let totalLength = 0;
+							let displayText = '';
+
+							$.each(data[1], function(index, el){
+								let newIdx = String(rowIndex.row+index);
+								dropdown5 += `<div class="phone-group" data-index="${'${index}'}">
+									<div class="text-input-type disabled" 
+										data-user-type="user">
+										<input type="text" 
+											name="aDvcPhoneUser${'${ newIdx }'}" 
+											id="aDvcPhoneUser${'${ newIdx }'}" 
+											data-parent-id="aDvcUserList${'${ newIdx }'}"
+											value="" disabled />
 									</div>
-								`;
-
-								return dropdown4;
-							},
-						},
-						{
-							"sTitle": "전화번호",
-							"mData": null,
-							"mRender": function ( data, type, row, rowIndex ) {
-								let str5 = ``;
-								str5 = `<div class="text-input-type" data-user-type="non-user"><input type="text" name="aDvcPhoneNonUser${'${ rowIndex.row }'}" value="" /></div>`;
-
-								return str5;
-							},
-						},
-						{
-							"sTitle": "추가 / 수정 / 삭제",
-							"mData": null,
-							"mRender": function ( data, type, row, row, rowIndex ) {
-								let deleteStr = ``;
-								let i = 0;
-
-								deleteStr = `
-									<div class="flex-start">
-										<button type="button" class="icon-add" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'add')">추가</button>
-										<button type="button" class="icon-edit" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'edit')">수정</button>
-										<button type="button" class="icon-delete" data-index="${'${i}'}" onclick="updateAlarmTable($(this), 'delete')">삭제</button>
+									<div class="text-input-type disabled" 
+										data-user-type="non-user">
+										<input type="text" 
+											placeholder="직접입력"
+											data-parent-id="aDvcNonUserList${'${ newIdx }'}"
+											name="aDvcPhoneNonUser${'${ newIdx }'}" 
+											id="aDvcPhoneNonUser${'${ newIdx }'}" 
+											value="" disabled />
 									</div>
-								`;
-
-								return deleteStr;
-							},
-							"className": "dt-body-center no-sorting",
+								</div>`;
+							});
+							return dropdown5;
 						},
-					],
-					initComplete: function(){
-						this.api().columns().header().each ((el, i) => {
-							if(i == 0){
-								$(el).attr ('style', 'min-width: 16%;');
-							} else if(i == 1){
-								$(el).attr ('style', 'min-width: 20%;');
-							} else if(i == 2){
-								$(el).attr ('style', 'min-width: 12%;');
-							} else if(i == 3){
-								$(el).attr ('style', 'min-width: 20%;');
-							} else if(i == 4){
-								$(el).attr ('style', 'min-width: 20%;');
+					},
+					{
+						"sTitle": "추가 / 수정 / 삭제",
+						"mData": null,
+						"mRender": function ( data, type, full, rowIndex ) {
+							let dropdown6 = ``;
+							$.each(data[1], function(index, el){
+								// let newIdx = String(rowIndex.row+index);
+								dropdown6 += `<div class="flex-start">
+									<button type="button" class="icon-add" data-index="${'${index}'}" onclick="updateAlarmTable($(this), 'add' )">추가</button>
+									<button type="button" class="icon-edit" data-index="${'${index}'}" onclick="updateAlarmTable($(this), 'edit')">수정</button>
+									<button type="button" class="icon-delete" data-index="${'${index}'}" onclick="updateAlarmTable($(this), 'delete')">삭제</button>
+								</div>`;
+							});
+							return dropdown6;
+						},
+						"className": "dt-body-center no-sorting",
+					},
+				],
+				initComplete: function(){
+					this.api().columns().header().each ((el, i) => {
+						if(i == 0){
+							$(el).attr ('style', 'min-width: 170px;');
+						} else if(i == 1){
+							$(el).attr ('style', 'min-width: 160px;');
+						} else if(i == 2){
+							$(el).attr ('style', 'min-width: 120px;');
+						} else if(i == 3){
+							$(el).attr ('style', 'min-width: 160px;');
+						} else if(i == 4){
+							$(el).attr ('style', 'min-width: 200px;');
+						} else if(i == 5){
+							$(el).attr ('style', 'min-width: 180px;');
+						}
+					});
+					let str = `<div id="btnGroup" class="right-end2"><!--
+								--><button type="button" class="btn-type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
+								--><button type="submit" class="btn-type w80 ml-12">추가</button><!--
+							--></div>`;
+					$('#alarmTable_wrapper').append($(str));
+					// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+					// 	cell.innerHTML = i+1;
+					// 	$(cell).data("id", i);
+					// });
+					// this.api().column(5).visible( false );
+				},
+				rowCallback: function(row, data) {
+					let length = 0;
+					if(!isEmpty(data.alarmToUser)){
+						if( userGroup == "user"){
+							length += data.alarmToUser.user.length;
+						} else if(userGroup == "non_user" ){
+							length += data.alarmToUser.non_user.length;
+						} else if(userGroup == "both" ){
+							length += data.alarmToUser.user.length + data.alarmToUser.non_user.length;
+						}
+					}	
+			
+					if(length <= 1 ){
+						$(row).addClass('single');
+					}
+				},
+				drawCallback: function(settings){
+					let userGroup = $("#alarmTable tbody").find(".user-group");
+
+					for(let i=0, arrLength = userGroup.length; i<arrLength; i ++){
+						let userNameBtn = userGroup.eq(i).find(".dropdown-toggle");
+						let userNameInput = userGroup.eq(i).find(".text-input-type");
+
+						userNameBtn.each(function(index, el){
+							if(!isEmpty($(this).data("phone"))){
+								let id = "#" + $(this).data("child-id");
+								$(id).val($(this).data("phone"))
 							}
 						});
-						// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-						// 	cell.innerHTML = i+1;
-						// 	$(cell).data("id", i);
-						// });
-						// this.api().column(5).visible( false );
-					},
-					rowCallback: function(row, data) {
-						let length = 0;
-						if(!isEmpty(data.alarmToUser) && !isEmpty(data.alarmToUser.user)){
-							length += data.alarmToUser.user.length;
-						}
-						if(!isEmpty(data.alarmToUser) && !isEmpty(data.alarmToUser.non_user)){
-							length += data.alarmToUser.non_user.length;
-						}
-
-						if(length === 1 ){
-							$(row).addClass('single');
-						}
-					},
-					drawCallback: function(){
-						$('#alarmTable_wrapper').addClass('fixed-width');
-						$('#alarmTable').css("width", "100%");
+						userNameInput.each(function(index, el){
+							if(!isEmpty($(this).data("phone"))){
+								let id = "#" + $(this).data("child-id");
+								$(id).val($(this).data("phone"))
+							}
+						});
 					}
-				}).columns.adjust();
-			}
-
+					$('#alarmTable_wrapper').addClass('fixed-width mb-10');
+				}
+			}).columns.adjust();
+			$("#loadingCircle").hide();
 			$("#addAlarmModal").modal("show");
 		});
 
 	}
 
 	function updateAlarmTable(self, option){
+		let dataIdx = self.data("index");
 		let tr = self.parents().closest("tr");
 		let td = tr.find("td");
 		let dTable = $("#alarmTable").DataTable();	
 		let rowData = dTable.row(tr).data();	
-		let dataIdx = self.data("index");
-		let directInput = tr.find("td:nth-of-type(4) input[type='text']").eq(dataIdx);
-		let input = tr.find("td:nth-of-type(5) input[type='text']").eq(dataIdx);
+		let btnSiblings = $(self).parent(".flex-start").siblings();
 
 		if(option == "add"){
 			let copy = tr.clone();
 			let idAttr = copy.find('[id^="aDvc"]');
+			let childIdAttr = copy.find('[data-child-id^="aDvc"]');
+			let parentIdAttr = copy.find('[data-parent-id^="aDvc"]');
 			let nameAttr = copy.find('[name^="aDvc"]');
-			
-			copy.find("td:nth-of-type(1)").empty();
-			copy.find("td:nth-of-type(2) .dropdown:not(:last-of-type)").remove();
-			copy.find("td:nth-of-type(3) .dropdown:not(:last-of-type)").remove();
-			copy.find("td:nth-of-type(4) div:lt(-2)").remove();
-			copy.find("td:nth-of-type(5) .text-input-type:not(:last-of-type)").remove();
-			copy.find("td:nth-of-type(6) .flex-start:not(:last-of-type)").remove();
-
-			copy.find("input[type='checkbox']").prop("checked", false);
-			copy.find("td .dropdown-toggle").prop("disabled", false).html('선택<span class="caret"></span>');
-			copy.find("input[type='checkbox']").prop("checked", false);
-			copy.find("td input[type='text']").prop("disabled", false).val("").parent().removeClass("disabled");
-			
 			let tempIdx = tr.find("td:nth-of-type(6) .flex-start:last-of-type .icon-edit").data("index") + 1;
 
-			copy.find("td:nth-of-type(4) .dropdown").attr("data-user-index", tempIdx);
-			copy.find("td:nth-of-type(6) .icon-add").attr("data-index", tempIdx);
-			copy.find("td:nth-of-type(6) .icon-edit").attr("data-index", tempIdx ).prop("disabled", true);
-			copy.find("td:nth-of-type(6) .icon-delete").attr("data-index", tempIdx ).attr("onclick", "updateAlarmTable($(this), 'delete')");
-	
-			$.each(idAttr, function(index, el){
-				let oldId = $(this).attr("id");
-				let num = (Number(oldId.match(/\d+/)[0]) + 999 );
-				let newId = oldId + String(num);
+			copy.find("td").each(function(index, el){
+				if(index<=2){
+					$(this).find(".dropdown:not(:last-of-type)").remove();
+					$(this).find(".dropdown-toggle").html('선택<span class="caret"></span>').attr({"data-index": tempIdx, "data-value": ""});
+					$(this).find("input[type='checkbox']").prop("checked", false);
+					if(index === 0 || index === 2){
+						if(index === 0) {
+							$(this).find(".dropdown-menu li").attr("onclick", "showSubgroup(this)");
+						}
+						$(this).find(".dropdown-toggle").prop("disabled", false);
+					}
+				} else {
+					if(index<=4){
+						if(index===3){
+							$(this).find(".user-group:not(:last-of-type)").remove();
+							$(this).find(".user-group").attr("data-index", tempIdx);
+							$(this).find("input[type='checkbox']").prop("checked", false);
+							$(this).find(".dropdown-toggle").prop("disabled", false).html('선택<span class="caret"></span>').attr({"data-index": tempIdx, "data-value": ""});
+						}  else if(index===4){
+							$(this).find(".phone-group:not(:last-of-type)").remove();
+							$(this).find(".phone-group").attr("data-index", tempIdx);
+						}
+						$(this).find("input[type='text']").prop("disabled", false).val("").parent().removeClass("disabled");
+					} else {
+						$(this).find(".flex-start:not(:last-of-type)").remove();
+						$(this).find(".flex-start .icon-add").attr("data-index", tempIdx);
+						$(this).find(".flex-start .icon-edit").attr("data-index", tempIdx).prop("disabled", true);
+						$(this).find(".flex-start .icon-delete").attr("data-index", tempIdx).attr("onclick", "updateAlarmTable($(this), 'delete')");
+					}
+				}
+			});
 
+			idAttr.each(function(index, el){
+				let oldId = $(this).attr("id");
+				let num = (Number(oldId.match(/\d+/)[0]) + 1 );
+				let newId = oldId + '_' + String(num);
 				$(this).attr("id", newId);
 			});
 
-			$.each(nameAttr, function(index, el){
+			nameAttr.each(function(index, el){
 				let oldName = $(this).attr("name");
-				let num = (Number(oldName.match(/\d+/)[0]) + 999 );
-				let newName = oldName + String(num);
-
+				let num = (Number(oldName.match(/\d+/)[0]) + 1 );
+				let newName = oldName + '_' + String(num);
 				$(this).attr("name", newName);
-
 			});
-			let newTd = copy.find("td");
+
+			childIdAttr.each(function(index, el){
+				let oldName = $(this).data("child-id");
+				let num = ( Number(oldName.match(/\d+/)[0]) + 1 );
+				let newName = oldName + '_' + String(num);
+				$(this).attr("data-child-id", newName);
+			});
+
+			parentIdAttr.each(function(index, el){
+				let oldName = $(this).data("parent-id");
+				let num = (Number(oldName.match(/\d+/)[0]) + 1 );
+				let newName = oldName + '_' + String(num);
+				$(this).attr("data-parent-id", newName);
+			});
+
+
+			let newTd = copy.find("td"); 
+
+			td.eq(0).append(newTd.eq(0).children());
 			td.eq(1).append(newTd.eq(1).children());
 			td.eq(2).append(newTd.eq(2).children());
 			td.eq(3).append(newTd.eq(3).children());
 			td.eq(4).append(newTd.eq(4).children());
 			td.eq(5).append(newTd.eq(5).children());
-		}
+		} else {
+			if(option == "edit"){
+				td.each(function(index, el){
+					let dropdown = $(this).find(".dropdown-toggle").eq(dataIdx);
+					if(index>=1 && index<3){
+						if(dropdown.is(":disabled")) {
+							dropdown.prop("disabled", false);
+						} else {
+							dropdown.prop("disabled", true);
+						}
+					} else if(index===3){
+						let nonUserGroup = $(this).find(".user-group").eq(dataIdx);
+						let nameInput = nonUserGroup.find("input[type='text']");
 
-		if(option == "edit"){
-			$.each(td, function(index, el){
-				if(index >= 1 && index <= 3){
-					let target = $(this).find(".dropdown-toggle").eq(dataIdx);
-					if(target.is(":disabled")) {
-						target.prop("disabled", false);
-						if(!directInput.hasClass("hidden")){
-							directInput.prop("disabled", false).parent().removeClass("disabled");
+						if(nameInput.first().is(":disabled")) {
+							dropdown.prop("disabled", false);
+							nameInput.each(function(index, el){
+								$(el).prop("disabled", false).parent().removeClass("disabled");
+							});
+						} else {
+							dropdown.prop("disabled", true);
+							nameInput.each(function(index, el){
+								$(el).prop("disabled", true).parent().addClass("disabled");
+							});
 						}
-						if(index == 3){
-							input.prop("disabled", false).parent().removeClass("disabled");
-						}
-					} else {
-						target.prop("disabled", true);
-						directInput.prop("disabled", true).parent().addClass("disabled");
-						if(index == 3){
-							input.prop("disabled", true).parent().addClass("disabled");
+					} else if(index===4){
+						let nonUserPhoneGroup = $(this).find(".phone-group").eq(dataIdx);
+						let phoneInput = nonUserPhoneGroup.find("input[type='text']");
+
+						if(phoneInput.first().is(":disabled")) {
+							phoneInput.each(function(index, el){
+								$(this).prop("disabled", false).parent().removeClass("disabled");
+							});
+						} else {
+							phoneInput.each(function(index, el){
+								$(this).prop("disabled", true).parent().addClass("disabled");
+							});
 						}
 					}
-				}
-			});
-		}
-
-		if(option == "delete"){
-			if(tr.siblings().length == 0) {
-				if($(self).parent().siblings().length === 0){
-					tr.addClass("hidden");
-				} else {
-					$.each(td, function(index, el){
-						if(index >= 1 && index <= 3){
-							let target = $(this).find(".dropdown-toggle").eq(dataIdx);
-							target.parent().remove();
-							directInput.parent().remove();
-							if(index == 3){
-								input.parent().remove();
-							}
-						} else if(index == 5){
-							$(self).parent().remove();
-						}
-					});
-				}
-			} else {
-				if($(self).parent().siblings().length === 0){
-					tr.remove();
-				} else {
-					$.each(td, function(index, el){
-						if(index >= 1 && index <= 3){
-							let target = $(this).find(".dropdown-toggle").eq(dataIdx);
-							target.parent().remove();
-							directInput.parent().remove();
-							if(index == 3){
-								input.parent().remove();
-							}
-						} else if (index == 5){
-							$(self).parent().remove();
-						}
-					});
-				}
+				});
 			}
 
-			// let alarmName = rowData.name + "/" + tr.find("td:nth-of-type(3) .dropdown-toggle").eq(dataIdx).text();
-			// let modal = $("#alarmDeleteConfirmModal");
-			// let confirmAlarmName = $("#confirmAlarm");
-			// let deleteBtn = $("#alarmDeleteConfirmBtn");
+			if(option == "delete"){
+				if(tr.siblings().length == 0) {					
+				// ONLY single row is present
+					if(btnSiblings.length === 0){
+						tr.eq(btnSiblings.length).addClass("hidden");
+					} else {
+						td.each(function(index, el){
+							let dropdown = $(el).find(".dropdown-toggle[data-index='" + dataIdx + "']");
+							if(index >= 0 && index <= 2){
+								dropdown.parent().remove();
+							} else if(index === 3){
+								dropdown.parent().remove();
+								$(el).find(".user-group[data-index='" + dataIdx + "']").remove();
+							} else if(index === 4){
+								$(el).find(".phone-group[data-index='" + dataIdx + "']").remove();
+							} else if(index === 5){
+								$(self).parent().remove();
+							}
+						});							
+					}
+				} else {
+				// Multiple rows are present
+					if(btnSiblings.length === 0){
+							console.log("multiple rows but single element left===", tr)
+							tr.eq(btnSiblings.length).remove();
+						} else {
+							td.each(function(index, el){
+								let dropdown = $(el).find(".dropdown-toggle[data-index='" + dataIdx + "']");
+								if(index >= 0 && index <= 2){
+									dropdown.parent().remove();
+								} else if(index === 3){
+									dropdown.parent().remove();
+									$(el).find(".user-group[data-index='" + dataIdx + "']").remove();
+								} else if(index === 4){
+									$(el).find(".phone-group[data-index='" + dataIdx + "']").remove();
+								} else if(index === 5){
+									$(self).parent().remove();
+								}
+							});
+						}
+					}
 
-			// let userType = tr.find("td:nth-of-type(4) .dropdown").eq(dataIdx);
-			// let userIdx = userType.data("user-index");
-			// let newAlarmTo = rowData.alarmToUser;
-			
-			// $("#alarmDeleteSuccessMsg span").text(alarmName);
-			// modal.find(".modal-body").removeClass("hidden");
-			// modal.modal("show");
+				// let alarmName = rowData.name + "/" + tr.find("td:nth-of-type(3) .dropdown-toggle").eq(dataIdx).text();
+				// let modal = $("#alarmDeleteConfirmModal");
+				// let confirmAlarmName = $("#confirmAlarm");
+				// let deleteBtn = $("#alarmDeleteConfirmBtn");
 
-			// confirmAlarmName.on("input", function() {
-			// 	if($(this).val() !== alarmName) {
-			// 		deleteBtn.prop("disabled", true);
-			// 		return false
-			// 	} else {
-			// 		deleteBtn.prop("disabled", false);
-			// 	}
-			// });
+				// let userType = tr.find("td:nth-of-type(4) .dropdown").eq(dataIdx);
+				// let userIdx = userType.data("user-index");
+				// let newAlarmTo = rowData.alarmToUser;
+				
+				// $("#alarmDeleteSuccessMsg span").text(alarmName);
+				// modal.find(".modal-body").removeClass("hidden");
+				// modal.modal("show");
 
-			// confirmAlarmName.on("keyup", function() {
-			// 	if($(this).val() !== alarmName) {
-			// 		deleteBtn.prop("disabled", true);
-			// 		return false
-			// 	} else {
-			// 		deleteBtn.prop("disabled", false);
-			// 	}
-			// });
+				// confirmAlarmName.on("input", function() {
+				// 	if($(this).val() !== alarmName) {
+				// 		deleteBtn.prop("disabled", true);
+				// 		return false
+				// 	} else {
+				// 		deleteBtn.prop("disabled", false);
+				// 	}
+				// });
 
-			// if( userType.data("user-type") == "non-user"){
-			// 	newAlarmTo.non_user.splice(userIdx, 1);
-			// } else {
-			// 	newAlarmTo.user.splice(userIdx, 1);
-			// }
+				// confirmAlarmName.on("keyup", function() {
+				// 	if($(this).val() !== alarmName) {
+				// 		deleteBtn.prop("disabled", true);
+				// 		return false
+				// 	} else {
+				// 		deleteBtn.prop("disabled", false);
+				// 	}
+				// });
 
-			// $("#alarmDeleteConfirmBtn").click(function(){
-			// 	if(confirmAlarmName != alarmName) return false;
+				// if( userType.data("user-type") == "non-user"){
+				// 	newAlarmTo.non_user.splice(userIdx, 1);
+				// } else {
+				// 	newAlarmTo.user.splice(userIdx, 1);
+				// }
 
-			// 	$.ajax(deviceOpt).done(function (json, textStatus, jqXHR) {
-			// 		$("#alarmDeleteSuccessMsg").text("해당 알람 정보가 삭제 되었습니다.").removeClass("hidden");
-			// 		refreshSiteList();
-			// 		setTimeout(function(){
-			// 			modal.modal("hide");
-			// 		}, 1500);
-			// 	}).fail(function (jqXHR, textStatus, errorThrown) {
-			// 		modal.find(".modal-body").addClass("hidden");
-			// 		$("#alarmDeleteSuccessMsg").text("해당 알람 삭제에 실패하였습니다.\n다시 시도해 주세요.").removeClass("hidden");
-			// 		setTimeout(function(){
-			// 			modal.modal("hide");
-			// 		}, 1500);
-			// 		console.log("fail==", jqXHR)
-			// 	});
-			// });
+				// $("#alarmDeleteConfirmBtn").click(function(){
+				// 	if(confirmAlarmName != alarmName) return false;
 
+				// 	$.ajax(deviceOpt).done(function (json, textStatus, jqXHR) {
+				// 		$("#alarmDeleteSuccessMsg").text("해당 알람 정보가 삭제 되었습니다.").removeClass("hidden");
+				// 		refreshSiteList();
+				// 		setTimeout(function(){
+				// 			modal.modal("hide");
+				// 		}, 1500);
+				// 	}).fail(function (jqXHR, textStatus, errorThrown) {
+				// 		modal.find(".modal-body").addClass("hidden");
+				// 		$("#alarmDeleteSuccessMsg").text("해당 알람 삭제에 실패하였습니다.\n다시 시도해 주세요.").removeClass("hidden");
+				// 		setTimeout(function(){
+				// 			modal.modal("hide");
+				// 		}, 1500);
+				// 		console.log("fail==", jqXHR)
+				// 	});
+				// });
+
+			}
 		}
-
 			// $.ajax(deviceOpt).done(function (json, textStatus, jqXHR) {
 			// 	$("#deleteSuccessMsg").text("선택하신 알람 정보가 삭제 되었습니다.").removeClass("hidden");
 			// 	refreshAlarmList();
@@ -3708,77 +3642,117 @@
 
 			// });
 
-
 	}
 
 	function insertRowCopy(){
 		let aTable = $("#alarmTable").DataTable();
-		let copy = $("#alarmTable tbody tr:last-of-type").clone();
-		let idAttr = copy.find('[id^="aDvc"]');
-		let nameAttr = copy.find('[name^="aDvc"]');
+		let tr = $("#alarmTable tbody tr");
 
-		if(copy.hasClass("hidden")){
-			$("#alarmTable tbody").empty();
-			copy.removeClass("hidden");
-		}
+		if(tr.hasClass("hidden")){
+			tr.removeClass("hidden");
+		} else {
+			let copy = tr.last().clone();
+			let temTd = copy.find("td");
+			let idAttr = copy.find('[id^="aDvc"]');
+			let nameAttr = copy.find('[name^="aDvc"]');
+			let childIdAttr = copy.find('[data-child-id^="aDvc"]');
+			let parentIdAttr = copy.find('[data-parent-id^="aDvc"]');
 
-		if(!copy.hasClass("single")){
-			copy.find("td .dropdown:not(:first-of-type)").remove();
-			copy.find("td:nth-of-type(4) .text-input-type:not(:nth-of-type(2))").remove();
-			copy.find("td:nth-of-type(5) .text-input-type:not(:first-of-type)").remove();
-			copy.find("td .flex-start:not(:first-of-type)").remove();
-		}
-		
-		copy.find("td:nth-of-type(1) .dropdown-menu li").attr( "onclick", "showSubgroup(this)");
-		copy.find("td:nth-of-type(2) .dropdown-menu li").removeClass( "hidden");
-		copy.find("td .dropdown-toggle").prop("disabled", false).html('선택<span class="caret"></span>').attr("data-value", "");
-		copy.find("input[type='checkbox']").prop("checked", false);
-		copy.find("td input[type='text']").prop("disabled", false).val("").parent().removeClass("disabled");
-		copy.find("td:nth-of-type(6) .icon-edit").prop("disabled", true);
-		copy.find("td:nth-of-type(6) .icon-delete").attr( "onclick", "$(this).parents().closest('tr').remove()");
+			temTd.each(function(index, el){
+				let tempIdx;
+				if(index === 0){
+					tempIdx = $(this).find(".dropdown-toggle").data("index") + 1;
+				}
 
-		$.each(idAttr, function(index, el){
-			let oldId = $(this).attr("id");
-			let num = (Number(oldId.match(/\d+/)[0]) + 9999 );
-			let newId = oldId + String(num);
-			// let num = Number(oldId.match(/\d+/)[0]) + 1;
-			// let text = oldId.match(/[^\d]+/) + String(num);
+				if(index <= 2){
+					$(this).find(".dropdown:not(:first-of-type)").remove();
+					$(this).find(".dropdown-toggle").html('선택<span class="caret"></span>').attr({"data-value": "", "data-index": tempIdx});
+					$(this).find("input[type='checkbox']").prop("checked", false);
+					if(index === 0 || index === 2){
+						if(index === 0) {
+							$(this).find(".dropdown-menu li").attr("onclick", "showSubgroup(this)");
+						}
+						$(this).find(".dropdown-toggle").prop("disabled", false);					
+					}
+				} else {
+					if(index<=4){
+						if(index===3){
+							$(this).find(".user-group:not(:first-of-type)").remove();
+							$(this).find("input[type='checkbox']").prop("checked", false);
+							$(this).find(".dropdown-toggle").prop("disabled", false).html('선택<span class="caret"></span>').attr({"data-value": "", "data-index": tempIdx});
+						} else if(index===4){
+							$(this).find(".phone-group:not(:first-of-type)").remove();
+						}
+						$(this).find("input[type='text']").prop("disabled", false).val("").parent().removeClass("disabled");
+					} else {
+						$(this).find(".flex-start:not(:first-of-type)").remove();
+						$(this).find(".icon-add").attr({"data-value": "", "data-index": tempIdx});
+						$(this).find(".icon-edit").prop("disabled", true).attr({"data-value": "", "data-index": tempIdx});
+						$(this).find(".icon-delete").attr( "onclick", "$(this).parents().closest('tr').remove()").attr({"data-value": "", "data-index": tempIdx});
+					}	
+				}
+			});
 
-			$(this).attr("id", newId);
-		});
+			idAttr.each(function(index, el){
+				let oldId = $(this).attr("id");
+				let num = (Number(oldId.match(/\d+/)[0]) + 1 );
+				let newId = oldId + String(num);
+				// let num = Number(oldId.match(/\d+/)[0]) + 1;
+				// let text = oldId.match(/[^\d]+/) + String(num);
+				$(this).attr("id", newId);
+			});
 
-		$.each(nameAttr, function(index, el){
-			let oldName = $(this).attr("name");
-			let num = (Number(oldName.match(/\d+/)[0]) + 9999 );
-			let newName = oldName + String(num);
+			nameAttr.each(function(index, el){
+				let oldName = $(this).attr("name");
+				let num = (Number(oldName.match(/\d+/)[0]) + 1 );
+				let newName = oldName + String(num);
 
-			$(this).attr("name", newName);
+				$(this).attr("name", newName);
 
-		});
+			});
 
-		// aTable.rows().add(copy).draw(false);
+			childIdAttr.each(function(index, el){
+				let oldName = $(this).data("child-id");
+				console.log("oldName111===", oldName)
+				let num = (Number(oldName.match(/\d+/)[0]) + 1 );
+				let newName = oldName + '_' + String(num);
+				$(this).attr("data-child-id", newName);
+			});
 
-		$("#alarmTable tbody").append(copy);
+			parentIdAttr.each(function(index, el){
+				let oldName = $(this).data("parent-id");
+				console.log("oldName222===", oldName)
+				let num = (Number(oldName.match(/\d+/)[0]) + 1 );
+				let newName = oldName + '_' + String(num);
+				$(this).attr("data-parent-id", newName);
+			});
+
+
+			// aTable.rows().add(copy).draw(false);
+			$("#alarmTable tbody").append(copy);
+		}	
 
 	}
 
-	function setDropdownInput(self , target){
-		$(self).parent().prev().data("did", $(self).data("did"));
-		let subGroup = $(self).data("subgroup");
-		let subGroupList = subGroup.includes(",") ? subGroup.split(',') : [subGroup];
-		$(target).prev().prop("disabled", false);
-		$(target).find("li").addClass("hidden");
+	function showPhoneNum(self){
+		setTimeout(function(){
+			let checked = $(self).parent().find("input[type='checkbox']:checked");
+			let val = $(self).find("input[type='checkbox']").data("contact-num");
+			let dropdown = $(self).parent().prev();
+			let target = "#" + dropdown.data("child-id");
 
-		subGroupList.forEach( v => {
-			$(target).find('li[data-value="'+ v + '"]').removeClass("hidden");
-		});
-
-		// $(target).find("li").addClass("hidden").find("input[type='checkbox']").prop("checked", false);
-
-		// subGroupList.forEach( v => {
-		// 	let item = $(target).find('li[data-value="'+ v + '"]');
-		// 	item.removeClass("hidden").find("input[type='checkbox']").prop("checked", true);
-		// });
+			if(checked.length >= 1) {
+				if(isEmpty($(target).val()) || (checked.length === 1) ){
+					$(target).val(val);
+				} else {
+					let tempVal = $(target).val();
+					let newVal = tempVal.split("외");
+					$(target).val(newVal[0].trim() + ' 외 ' + String(checked.length-1));
+				}
+			} else {
+				$(target).val("");
+			}
+		}, 200);
 	}
 
 
@@ -3850,7 +3824,7 @@
 
 	function weatherGridCalculator() {
 		const newCoord = $('#newCoord').val();
-		$("#latLongWarnig").addClass('hidden');
+		$("#latLongWarning").addClass('hidden');
 		if (!isEmpty(newCoord)) {
 			if (newCoord.match(',')) {
 				const thisValArr = newCoord.split(',');
@@ -3866,10 +3840,10 @@
 					$('#gridY').val(grid.y);
 				}
 			} else {
-				$("#latLongWarnig").removeClass('hidden');
+				$("#latLongWarning").removeClass('hidden');
 			}
 		} else {
-			$("#latLongWarnig").removeClass('hidden');
+			$("#latLongWarning").removeClass('hidden');
 		}
 	}
 </script>
@@ -4017,7 +3991,7 @@
 
 <div class="modal fade" id="addAlarmModal" tabindex="-1" role="dialog" aria-labelledby="addAlarmModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-xl">
-		<div class="modal-content site-modal-content">
+		<div class="modal-content alarm-modal-content">
 			<div class="modal-header flex-start">
 				알람 설정<button type="button" class="btn-add ml-24" onclick="insertRowCopy()">열 추가</button><!--
 				--><small id="duplicatedGroup" class="warning hidden">해당 설비는 이미 선택 되었습니다.</small><!--
@@ -4025,7 +3999,7 @@
 			--></div>
 			<div class="modal-body mt10">
 				<form name="add_alarm_form" id="updateAlarmForm">
-					<table id="alarmTable" class="no-stripe">
+					<table id="alarmTable" class="no-stripe w-100">
 						<colgroup>
 							<col style="width:14%">
 							<col style="width:16%">
@@ -4037,10 +4011,6 @@
 						<thead></thead>
 						<tbody></tbody>
 					</table>
-					<div class="btn-wrap-type05"><!--
-					--><button type="button" class="btn-type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
-					--><button type="submit" class="btn-type w80 ml-12">추가</button><!--
-				--></div>
 				</form>
 			</div>
 		</div>
@@ -4129,7 +4099,7 @@
 								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">위경도</span></div>
 								<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
 									<div class="text-input-type"><input type="text" name="new_coord" id="newCoord" placeholder="예) 35.9078, 127.7669" minlength="3" maxlength="28"></div>
-									<small id="latLongWarnig" class="hidden warning">위경도 데이터를 다시 확인해 주세요.</small>
+									<small id="latLongWarning" class="hidden warning">위경도 데이터를 다시 확인해 주세요.</small>
 								</div>
 								<div class="col-xl-2 col-lg-12 col-md-12 col-sm-12 pl-0">
 									<button type="button" class="btn-type w-100" onclick="weatherGridCalculator();">기상그리드 계산</button>

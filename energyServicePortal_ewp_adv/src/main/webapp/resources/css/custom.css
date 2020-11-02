@@ -1573,8 +1573,10 @@ table tbody td .dropdown-menu {
 	width: 300px !important;
 }
 
+/* =========================================================
+				TO DO!!!!!!! width: 100%
+ ========================================================= */
 
-/* TO DO!!!!!!! */
 .yield-list .dropdown .dropdown-toggle,
 .yield-list,
 .collect-modal-content .dropdown .dropdown-toggle,
@@ -1622,7 +1624,10 @@ table tbody td .dropdown-menu {
 	width: 100%;
 }
 
-/* common */
+/* =========================================================
+						[common]
+ ========================================================= */
+
 #mask {
 	display: none;
 	position: fixed;
@@ -1731,8 +1736,6 @@ table tbody td .dropdown-menu {
 .tick.checked:before {
 	opacity: 1;
 }
-
-/* loading icon */
 
 .loading {
 	width: 100%;
@@ -3906,17 +3909,21 @@ li[data-alarm="urgent"]:before,
 	white-space: nowrap;
 }
 
-/* siteSetting modal */
+/* =========================================================
+					[setting] siteSetting.do
+ ========================================================= */
 
 .site-modal-content .row .pl-0 {
 	padding-left: 0;
 }
 
+.alarm-modal-content .modal-header,
 .site-modal-content .modal-header {
 	line-height: 24px;
 	margin: 0 4px;
 }
 
+.alarm-modal-content .modal-header .btn-add,
 .site-modal-content .modal-header .btn-add {
 	margin-top: -1px;
 	background: var(--ico-add-blue) no-repeat 0 2px;
@@ -3931,57 +3938,12 @@ li[data-alarm="urgent"]:before,
 	z-index: 10;
 }
 
-.site-modal-content .dataTables_wrapper td .flex-start+.flex-start {
-	margin-top: 8px;
-}
-
-.site-modal-content .dataTables_wrapper td .flex-start {
-	line-height: 36px;
-	height: 36px;
-}
-
-.site-modal-content .dataTables_wrapper td .icon-add {
-	margin: 0 10px;
-	background-size: 14px;
-	fill-opacity: 0.6;
-}
-
-.site-modal-content .dataTables_wrapper td .icon-edit {
-	margin: 0 10px;
-	background-size: 14px;
-}
-
-.site-modal-content .dataTables_wrapper td .icon-delete {
-	margin: 0 10px;
-	background-size: 12px;
-}
-
-.site-modal-content .dataTables_wrapper td .dropdown-menu {
-	max-height: 150px;
-}
-
-.site-modal-content .dataTables_wrapper td:nth-of-type(4) .dropdown-menu {
-	max-width: 168px;
-}
-
-.site-modal-content .dataTables_wrapper .dropdown-menu .chk-type label {
-	text-overflow: ellipsis;
-	overflow: hidden;
-}
-
 .site-modal-content .dropdown+.dropdown {
 	margin-left: 16px;
 }
 
 .site-modal-content .dropdown+.text-input-type:not(.ml-0) {
 	margin-left: 8px;
-}
-
-.site-modal-content td .dropdown+.text-input-type,
-.site-modal-content td .dropdown+.dropdown,
-.site-modal-content td .text-input-type+.dropdown,
-.site-modal-content td .text-input-type+.text-input-type {
-	margin: 8px 0 0;
 }
 
 .site-modal-content .modal-header .warning {
@@ -4012,6 +3974,87 @@ li[data-alarm="urgent"]:before,
 .site-modal-content section+section {
 	margin-top: 50px;
 }
+
+.modal-content.alarm-modal-content {
+	width: 70vw;
+}
+
+.alarm-modal-content .btn-close {
+	margin: 2px 0 0 0;
+	background-size: 8px;
+}
+
+.alarm-modal-content .flex-start .input-label + .dropdown {
+	width: calc(40% + 12px);
+}
+
+.alarm-modal-content .textarea {
+	color: var(--white87);
+	width: calc(100% - 100px);
+}
+
+.alarm-modal-content .flex-wrapper .input-label + .text-input-type {
+	width: 200px;
+	margin: 0;
+}
+
+.alarm-modal-content .dataTables_wrapper td .dropdown-toggle {
+	width: 100%;
+}
+
+.alarm-modal-content .dataTables_wrapper td .flex-start {
+	margin: 12px 0 0;
+}
+.alarm-modal-content .dataTables_wrapper td .flex-start+.flex-start {
+	margin: 84px 0 0;
+}
+.alarm-modal-content .dataTable td .dropdown + .dropdown {
+	margin: 64px 0 0;
+}
+
+.alarm-modal-content .dataTable td .dropdown + .text-input-type {
+	margin: 8px 0 0;
+}
+
+.alarm-modal-content .dataTable td .user-group >*,
+.alarm-modal-content .dataTable td .phone-group >* {
+	min-width: 150px;
+}
+
+.alarm-modal-content .dataTable td .user-group + .user-group,
+.alarm-modal-content .dataTable td .phone-group + .phone-group {
+	margin-top: 20px;
+}
+
+.alarm-modal-content .dataTables_wrapper td .icon-add {
+	margin: 0 10px;
+	background-size: 14px;
+	fill-opacity: 0.6;
+}
+
+.alarm-modal-content .dataTables_wrapper td .icon-edit {
+	margin: 0 10px;
+	background-size: 14px;
+}
+
+.alarm-modal-content .dataTables_wrapper td .icon-delete {
+	margin: 0 10px;
+	background-size: 12px;
+}
+
+.alarm-modal-content .dataTables_wrapper .dropdown-menu .chk-type label {
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+.alarm-modal-content td .dropdown+.text-input-type,
+.alarm-modal-content td .dropdown+.dropdown,
+.alarm-modal-content td .text-input-type+.dropdown,
+.alarm-modal-content td .text-input-type+.text-input-type {
+	margin: 8px 0 0;
+}
+
+
 
 .site-modal-content .text-sm,
 .group-modal-content .text-sm {
@@ -4072,7 +4115,9 @@ li[data-alarm="urgent"]:before,
 	color: var(--white60);
 }
 
-/* input */
+/* =========================================================
+			[common] input, pagination, layout box
+ ========================================================= */
 
 .inp {
 	border: 1px solid var(--silver);
@@ -4091,8 +4136,6 @@ input.inp:read-only:focus,
 input.inp[readonly]:focus {
 	border: 1px solid var(--silver);
 }
-
-/* pagination new & old */
 
 .pagination {
 	width: 100%;
@@ -4191,8 +4234,6 @@ input.inp[readonly]:focus {
 	vertical-align: middle;
 }
 
-/* 판넬 박스 */
-
 .indiv {
 	width: 100%;
 	background: var(--box-color);
@@ -4267,22 +4308,8 @@ input.inp[readonly]:focus {
 	word-wrap: break-word;
 }
 
-/* 기본 => 피크 전력 */
-
-.indiv.chart-peak-table {
-	display: none;
-}
-
-.chart-total li {
-	padding: 18px 0;
-}
-
-.chart-total li+li {
-	border-top: solid 1px var(--box-darker);
-}
-
 /* =========================================================
-						chart title
+						chart title, table-top
  ========================================================= */
 
 .chart-top:after {
@@ -4347,8 +4374,6 @@ input.inp[readonly]:focus {
 	text-align: center;
 	border-radius: 4px;
 }
-
-/* 계량값 선택 */
 
 .chart-top .meter {
 	margin-left: 30px;
@@ -4425,7 +4450,9 @@ input.inp[readonly]:focus {
 	font-size: 12px;
 }
 
-/* DR 실적 조회 상단 */
+/* =========================================================
+				[common] chart-top
+ ========================================================= */
 
 .chart-top .date-today {
 	margin-left: 10px;
@@ -4518,8 +4545,6 @@ input.inp[readonly]:focus {
 	vertical-align: middle;
 }
 
-/* 차트 박스 */
-
 .inchart {
 	position: relative;
 }
@@ -4607,15 +4632,6 @@ input.inp[readonly]:focus {
 .collapse-arrow,
 .panel-fold {
 	display: inline-block;
-	/* background: var(--collapse-arrow) no-repeat center center;
-	transform: rotateX(180deg);
-	height: 36px;
-	line-height: 36px;
-	font-size: 13px;
-	color: var(--river-bed);
-	padding-right: 40px;
-	font-weight: bold;
-	text-indent: -9999px; */
 }
 
 .btn-fold:after,
@@ -4637,8 +4653,6 @@ input.inp[readonly]:focus {
 .btn-fold.on:after {
 	transform: rotate(45deg);
 }
-
-/* tab */
 
 .nav-tabs {
 	border-color: var(--border);
@@ -5282,13 +5296,13 @@ input.inp[readonly]:focus {
 	-o-transition: All 1s ease;
 }
 
-/* SOC (잔량) */
 
-.smain-soc {
-	min-height: 183px;
-}
 
-.soc .battery {
+/* =========================================================
+						[dashboard]
+ ========================================================= */
+
+.battery {
 	width: 120px;
 	height: 44px;
 	border-radius: 3px;
@@ -5299,7 +5313,7 @@ input.inp[readonly]:focus {
 	background: var(--bg-battery-cover) no-repeat 0 0;
 }
 
-.soc .battery span {
+.battery span {
 	display: inline-block;
 	width: auto;
 	height: 44px;
@@ -5308,21 +5322,19 @@ input.inp[readonly]:focus {
 	background: var(--green) var(--ico-battery) no-repeat center center;
 }
 
-.soc .battery-per {
+.battery-per {
 	margin-top: 10px;
 	color: var(--white);
 }
 
-.soc .battery-per span {
+.battery-per span {
 	display: inline-block;
 	font-size: 24px;
 }
 
-.soc .battery-per em {
+.battery-per em {
 	font-size: 16px;
 }
-
-/* 장치현황 */
 
 .device {
 	width: 102.5%;
@@ -5390,17 +5402,13 @@ input.inp[readonly]:focus {
 	text-align: center;
 }
 
-/* 수익현황 */
-
-.income {
-	min-height: 357px;
-}
-
-/* 충/방전량 */
-
 .charge {
 	min-height: 417px;
 }
+
+/* =========================================================
+				[common] no data, no text
+ ========================================================= */
 
 .no-text {
 	font-size: 0;
@@ -6913,7 +6921,7 @@ input.inp[readonly]:focus {
 }
 
 /* =========================================================
-						[deviceState]
+				[device] deviceState.do
 ========================================================= */
 
 .equip-icon {
@@ -7734,6 +7742,12 @@ input.inp[readonly]:focus {
 	right: 0;
 }
 
+.right-end2 {
+	position: absolute;
+	margin-top: 15px;
+	right: 0;
+}
+
 .btn-wrap-type {
 	margin: 20px 0;
 	text-align: right;
@@ -7834,11 +7848,6 @@ input.inp[readonly]:focus {
 	vertical-align: middle;
 	background: var(--btn-close) no-repeat center center;
 	outline: none;
-}
-
-.alarm-modal-content .btn-close {
-	margin: 2px 0 0 0;
-	background-size: 8px;
 }
 
 .icon-add {
@@ -8361,16 +8370,6 @@ button.text-file {
 	height: 100%;
 }
 
-.alarm-modal-content .flex-start .input-label + .dropdown {
-	width: calc(40% + 12px);
-}
-
-
-.alarm-modal-content .textarea {
-	color: var(--white87);
-	width: calc(100% - 100px);
-}
-
 .report-modal-content .row {
 	margin: auto -46px;
 }
@@ -8565,6 +8564,16 @@ button.text-file {
 .table-wrap-type.collect-wrap .history-table thead,
 .table-wrap-type.collect-wrap .history-table tbody tr {
 	table-layout: auto;
+}
+
+
+
+/* =========================================================
+		[spc] balanceSheetEdit, balanceSheetPost.do
+ ========================================================= */
+
+ .income {
+	min-height: 357px;
 }
 
 /* 원가관리 수정 */
@@ -9049,7 +9058,14 @@ table.table-footer tfoot td.light {
 	padding: 12px 0 12px 36px;
 }
 
-/* 입출금 관리 내역 (검색) */
+
+/* =========================================================
+				[spc]
+				transactionHistory.do,
+				withdrawReqEdit.do,
+				withdrawReqStatus.do,
+				withdrawReqWrite.do
+ ========================================================= */
 
 .spc-search-bar .sa-select .dropdown-toggle {
 	width: 280px;
@@ -9120,8 +9136,6 @@ table.table-footer tfoot td.light {
 	width: 150px;
 }
 
-/* 출금 요청서 검토 */
-
 .spc-search-bar .text-btn-area {
 	display: inline-block;
 }
@@ -9133,8 +9147,6 @@ table.table-footer tfoot td.light {
 .spc-search-bar .text-btn-area {
 	padding-right: 88px;
 }
-
-/* spc 출금 요청 검토 상세 */
 
 .indiv.spc-detail {
 	height: 865px;
@@ -9220,7 +9232,9 @@ table.table-footer tfoot td.light {
 	right: 20px;
 }
 
-/* spc 점검계획 등록 */
+/* =========================================================
+				[spc] transactionCalendar.do,
+ ========================================================= */
 
 .dropdown-modal {
 	display: none;
@@ -9236,8 +9250,6 @@ table.table-footer tfoot td.light {
 	top: 0px;
 	z-index: 100;
 }
-
-/* spc 입출금 관리 */
 
 .popover-modal {
 	display: none;
@@ -9306,6 +9318,13 @@ table.table-footer tfoot td.light {
 	border-radius: 4px;
 	vertical-align: middle;
 	content: "";
+}
+
+
+.spc-modal-content .dropdown .btn,
+.spc-modal-content .sel-calendar {
+	clear: both;
+	width: 200px;
 }
 
 .spc-modal-content .modal-body .row:first-of-type {
@@ -9421,16 +9440,10 @@ table.table-footer tfoot td.light {
 	text-indent: 3px;
 }
 
-.alarm-modal-content .flex-wrapper .input-label + .text-input-type {
-	width: 200px;
-	margin: 0;
-}
 
-/* .spc-modal-content .row:last-of-type .btn-wrap-type02 {
-	margin-right: 35px;
-} */
-
-/* spc 이관자료 */
+/* =========================================================
+					[spc] notice.do,
+ ========================================================= */
 
 .indiv.supplementary-docs {
 	padding-top: 56px;
@@ -9489,7 +9502,12 @@ table.table-footer tfoot td.light {
 	vertical-align: middle;
 }
 
-/* SPC 기본정보 신규 등록 */
+
+/* =========================================================
+				[spc]
+				entityInformationEdit.do,
+				entityInformationPost.do
+ ========================================================= */
 
 .row.entity-header {
 	margin: 4px 0 -7px;
@@ -9776,7 +9794,10 @@ table.table-footer tfoot td.light {
 	width: 60.4%;
 }
 
-/* 이상분석 */
+
+/* =========================================================
+			[diagnosis] abnormallyAnalysis.do
+ ========================================================= */
 
 .compare-box {
 	padding: 24px;
@@ -9886,13 +9907,10 @@ table.table-footer tfoot td.light {
 	border: 0;
 }
 
-/* 수익보고서 등록 팝업 */
 
-.spc-modal-content .dropdown .btn,
-.spc-modal-content .sel-calendar {
-	clear: both;
-	width: 200px;
-}
+/* =========================================================
+					[report] yieldReport.do
+ ========================================================= */
 
 .yield-list>li {
 	margin-top: 20px;

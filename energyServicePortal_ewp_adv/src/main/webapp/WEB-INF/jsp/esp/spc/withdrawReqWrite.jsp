@@ -113,20 +113,6 @@
 			});
 		}
 
-		function removeDuplicates(arr) {
-			var newArray = [];
-			var lookupObject  = {};
-
-			for(var i in originalArray) {
-				lookupObject[originalArray[i][prop]] = originalArray[i];
-			}
-
-			for(i in lookupObject) {
-				newArray.push(lookupObject[i]);
-			}
-			return newArray;
-		}
-
 		function getAccountInfo (id) {
 			if (isEmpty(id)) return false;
 			let action = 'get';

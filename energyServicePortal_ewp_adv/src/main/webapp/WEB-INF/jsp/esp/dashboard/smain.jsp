@@ -2609,14 +2609,11 @@
 						sortedData = Object.values(data);
 						sortedData.sortOn("dname");
 						let found = sortedData.findIndex( x => x.device_type == "INV_PV");
-						if(found > -1){
-							deviceLength = sortedData[found].data.length;
-						}
 					}
 
 					$.map(sortedData, function(val, index) {
-
 						if (val.device_type == "INV_PV"){
+							deviceLength += 1;
 							const formData = getSiteMainSchCollection('day');
 							let hourlyINV = {
 								url: apiHost + apiEnergyDvc,
@@ -2639,7 +2636,6 @@
 								let hourList = new Array(24).fill(0);
 								let temp;
 
-								// const city = getNestedObject(user, ['personalInfo', 'addresses', 0, 'city']);
 								if(!isEmpty(result) && Object.values(result)[0].items.length>0){
 									temp = Object.values(result)[0].items;
 									let length = temp.length;

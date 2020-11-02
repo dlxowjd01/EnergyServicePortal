@@ -285,16 +285,18 @@ html.darkmode:root {
 }
 
 .dataTable td .text-link {
-	margin: 0 0 5px 0;
+	margin: -3px 0 0 0;
 }
 
-.dataTable td .text-link + .text-link {
+.dataTable td button.text-link {
+	display: flex;
+	align-self: end;
 	color: var(--white87);
 	background: none;
 	border: 1px solid var(--white87);
 	border-radius: 2px;
 	text-decoration: none;
-	margin: 0 0 5px 12px;
+	margin: 0 5px 0 16px;
 }
 
 .dataTable .popover-content {

@@ -58,18 +58,44 @@ const displayDropdown = ($selector) => {
 	if ($selector.find(':radio').length > 0) {
 		$displayText = $selector.find('input[type="radio"]:checked').next().text();
 	} else if ($selector.find(':checkbox').length > 0) {
-		let checkedboxLength = $selector.find('input[type="checkbox"]:checked').length;
+		let checkedItems = $selector.find('input[type="checkbox"]:checked');
+		let checkedboxLength = checkedItems.length;
 		let checkboxLength = $selector.find('input[type="checkbox"]').length;
 
 		if(checkedboxLength == checkboxLength){
 			$displayText = '전체';
+			if( $selector.data("function", "concat") ){
+				let concatArr = [];
+				let concatStr = '';
+				$.each(checkedItems, function(index, el){
+					concatArr.push($(el).val());
+				});	
+				concatStr = concatArr.join(",");
+				$displayButton.data("value", concatStr);
+			}
 		} else {
 			if (checkedboxLength == 0){
 				$displayText = $displayButton.data('name');
+				if( $selector.data("function", "concat") ){
+					$displayButton.data("value", checkedItems.val());
+				}
 			} else if (checkedboxLength > 1) {
-				$displayText = $selector.find('input[type="checkbox"]:checked:eq(0)').next().text() + ' 외 ' + (checkedboxLength - 1) + '개';
+				$displayText = checkedItems.first().next().text() + ' 외 ' + (checkedboxLength - 1);
+
+				if( $selector.data("function", "concat") ){
+					let concatArr = [];
+					let concatStr = '';
+					$.each(checkedItems, function(index, el){
+						concatArr.push($(el).val());
+					});	
+					concatStr = concatArr.join(",");
+					$displayButton.data("value", concatStr);
+				}
 			} else {
-				$displayText = $selector.find('input[type="checkbox"]:checked:eq(0)').next().text();
+				$displayText = checkedItems.next().text();
+				if( $selector.data("function", "concat") ){
+					$displayButton.data("value", checkedItems.val());
+				}
 			}
 		}
 	}
