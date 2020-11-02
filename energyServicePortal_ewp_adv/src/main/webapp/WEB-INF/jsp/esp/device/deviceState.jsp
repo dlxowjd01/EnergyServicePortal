@@ -246,7 +246,10 @@
 										</button>
 										<ul class="dropdown-menu chk-type" id="alarm_codeList">
 											<li data-value="[val]">
-												<a href="javascript:void(0);" tabindex="-1">[name]</a>
+												<a href="javascript:void(0);" tabindex="-1">
+													<input type="checkbox" id="alarm_codeset[index]" value="[val]" name="alarm_codeset">
+													<label for="alarm_codeset[index]">[name]</label>
+												</a>
 											</li>
 										</ul>
 									</div>
@@ -1400,9 +1403,9 @@
 				getRtusList(sid, rid);
 
 				$('#addSiteUlList li').each(function() {
-					if ($(this).data('value') == sid) {
+					if ($(this).data('value') === sid) {
 						const text = $(this).text();
-						$(this).parents('.dropdown').find('button').html(text + '<span class="caret"></span>').data('value', 'sid');
+						$(this).parents('.dropdown').find('button').html(text + '<span class="caret"></span>').data('value', sid);
 					}
 				});
 
@@ -1428,12 +1431,20 @@
 
 				costSetList();
 				if (!isEmpty(data['alarm_code'])) {
-					document.querySelectorAll('#alarm_codeList li').forEach(el => {
-						if (el.dataset.value == data['alarm_code']) {
-							document.querySelector('#alarm_code > button').innerHTML = el.textContent + '<span class="caret"></span>';
-							document.querySelector('#alarm_code > button').dataset.value = data['alarm_code'];
+					let codeSetArray = new Array();
+					if (data['alarm_code'].match(',')) {
+						codeSetArray = data['alarm_code'].split(',');
+					} else {
+						codeSetArray.push(data['alarm_code']);
+					}
+
+					document.querySelectorAll('#alarm_codeList input').forEach(el => {
+						if (codeSetArray.includes(el.value)) {
+							el.checked = true;
 						}
 					});
+
+					displayDropdown($('#alarm_code'));
 				}
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				console.error(jqXHR);
@@ -1489,10 +1500,11 @@
 
 			if (method == 'patch') {
 
+				delete areaData['alarm_codeset'];
 				if (isEmpty(areaData['alarm_code'])) {
 					delete areaData['alarm_code'];
 				} else {
-					areaData['alarm_code'] = String(areaData['alarm_code']);
+					areaData['alarm_code'] = areaData['alarm_code'].toString();
 				}
 
 				alertPreffix = '수정';
@@ -1516,11 +1528,14 @@
 			areaData['forecasting'] = $('#forecasting').is(':checked');
 			areaData['dashboard'] = $('#dashboard').is(':checked');
 			areaData['billing'] = $('#billing').is(':checked');
+
+			delete areaData['alarm_codeset'];
 			if (isEmpty(areaData['alarm_code'])) {
 				delete areaData['alarm_code'];
 			} else {
-				areaData['alarm_code'] = String(areaData['alarm_code']);
+				areaData['alarm_code'] = areaData['alarm_code'].toString();
 			}
+
 			areaData['capacity'] = Number(areaData['capacity']) * 1000;
 			areaData['capacity_unit'] = 'W';
 
@@ -1623,7 +1638,7 @@
 				$('#ridList li').each(function() {
 					if ($(this).data('value') == rid) {
 						const text = $(this).text();
-						$(this).parents('.dropdown').find('button').html(text + '<span class="caret"></span>').data('value', 'sid');
+						$(this).parents('.dropdown').find('button').html(text + '<span class="caret"></span>').data('value', rid);
 					}
 				});
 			}

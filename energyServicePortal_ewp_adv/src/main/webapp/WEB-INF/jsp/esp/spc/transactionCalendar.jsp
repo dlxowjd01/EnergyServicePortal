@@ -47,7 +47,13 @@
 
 					data.map(x => {
 						spcIdList.push(x.spc_id);
-						promise.push(Promise.resolve(JSON.parse(x.spc_info)));
+						const spcInfo = JSON.parse(x.spc_info);
+						if (isEmpty(spcInfo.spcName)) {
+							spcInfo.spcName = x.name;
+							promise.push(Promise.resolve(spcInfo));
+						} else {
+							promise.push(Promise.resolve(JSON.parse(x.spc_info)));
+						}
 					});
 					// setTimeout(function(){
 						Promise.all(promise).then(res => {
@@ -56,11 +62,11 @@
 							res.map((n, i) => {
 								let str = '';
 								let obj = {};
-								if(n.name){
+								if(n.name) {
 									obj.spcName = n.name;
-								} else if(n.spcName){
+								} else if(n.spcName) {
 									obj.spcName = n.spcName;
-								} else if(isEmpty(n.name) && isEmpty(n.spcName)){
+								} else if(isEmpty(n.name) && isEmpty(n.spcName)) {
 									obj.spcName = "no_name";
 								}
 								obj.spcId = spcIdList[i];
@@ -551,7 +557,7 @@
 
 				// console.log("pair---", spcPair)
 				spcList.some(x => {
-					if(x.spcId === item[1][0].spc_id) {
+					if(x.spcId == item[1][0].spc_id) {
 						spcName = x.spcName;
 					}
 				});
@@ -1027,13 +1033,13 @@
 		}
 	}
 
-	// function beginningOfMonth(myDate){    
+	// function beginningOfMonth(myDate){
 	// 	let date = new Date(myDate);
 	// 	date.setDate(1)
 	// 	date.setHours(0);
 	// 	date.setMinutes(0);
-	// 	date.setSeconds(0);   
-	// 	return date.toLocaleString();     
+	// 	date.setSeconds(0);
+	// 	return date.toLocaleString();
 	// }
 
 	// function endOfMonth(myDate){

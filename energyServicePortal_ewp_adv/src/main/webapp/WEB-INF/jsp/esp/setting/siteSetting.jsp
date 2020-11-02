@@ -1132,7 +1132,7 @@
 							extend: 'excelHtml5',
 							className: "btn-save",
 							text: '엑셀 다운로드',
-							filename: '사용자관리_' + new Date().format('yyyyMMddHHmmss'),
+							filename: '사업소 관리' + new Date().format('yyyyMMddHHmmss'),
 							// exportOptions: {
 							// 	modifier: {
 							// 		page: 'current'
