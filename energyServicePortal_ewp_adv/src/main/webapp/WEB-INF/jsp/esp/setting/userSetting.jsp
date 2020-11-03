@@ -1618,15 +1618,18 @@
 				}
 
 				if(!isEmpty(td.eq(7).text())){
-					let textVal = td.eq(7).text()
+					let textVal = td.eq(7).text();
+					console.log("textVal==", textVal)
 					if(textVal == "일반"){
 						newTaskBtn.data( { "name" : textVal, "value" : "0"}).html(textVal + '<span class="caret">');
 					} else if(textVal == "사무 수탁사"){
 						newTaskBtn.data( { "name" : textVal, "value" : "1"}).html(textVal + '<span class="caret">');
 					} else if(textVal == "자산 운용사"){
-						newTaskBtn.prev().data( { "name" : textVal, "value" : "2"}).html(textVal + '<span class="caret">');
+						newTaskBtn.data( { "name" : textVal, "value" : "2"}).html(textVal + '<span class="caret">');
+					} else if(textVal == "출금 관리자"){
+						newTaskBtn.data( { "name" : textVal, "value" : "3"}).html(textVal + '<span class="caret">');
 					} else if(textVal == "사업주"){
-						newTaskBtn.prev().data( { "name" : textVal, "value" : "3"}).html(textVal + '<span class="caret">');
+						newTaskBtn.data( { "name" : textVal, "value" : "4"}).html(textVal + '<span class="caret">');
 					}
 				}
 
