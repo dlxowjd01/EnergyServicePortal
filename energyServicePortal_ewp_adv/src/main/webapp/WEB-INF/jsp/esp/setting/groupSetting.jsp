@@ -185,6 +185,7 @@
 					}
 
 					Promise.resolve(returnAjaxRes(option)).then(res => {
+						console.log("res---", res)
 						if(!isEmpty(res)){
 							$.each(selectedSiteId, function(index, el){
 								siteArr.push($(this).data("value") );
@@ -214,8 +215,16 @@
 								console.log("fail==", jqXHR);
 							});
 														
+						} else {
+							$("#resultSuccessMsg").addClass("hidden");
+							$("#resultFailureMsg").text("사이트 그룹이 추가에 실패하였습니다. 다시 시도해 주세요").removeClass("hidden");
+							$("#resultBtn").parent().addClass("hidden");
+							$("#resultModal").modal("show");
+							setTimeout(function(){
+								$("#resultModal").modal("hide");
+							}, 1600);
 						}
-					});
+					}).catch( err => console.log("cannot get user data", err));
 				} else {
 					obj.resourceId = newResId;
 					if(newGroupType == "vpp_group"){
@@ -229,6 +238,7 @@
 						}
 
 						Promise.resolve(returnAjaxRes(option)).then(res => {
+							console.log("res---", res);
 							if(!isEmpty(res)){
 								let promises = [];
 								let vgid = res.vgid;
@@ -246,9 +256,9 @@
 											contentType: 'application/json; charset=UTF-8',
 											data: JSON.stringify(siteObj),
 										};
-										promises.push(Promise.resolve(returnAjaxRes(siteOpt)));
+										promises.push(Promise.resolve(makeAjaxCall(siteOpt)));
 									});
-									return Promise.all(promises).then(finalRes => {
+									Promise.all(promises).then(finalRes => {
 										$("#addGroupModal").modal("hide");
 										$("#resultSuccessMsg").text("VPP(중개 거래) 그룹이 추가 되었습니다.").removeClass("hidden");
 										$("#resultBtn").parent().addClass("hidden");
@@ -257,10 +267,18 @@
 										setTimeout(function(){
 											$("#resultModal").modal("hide");
 										}, 1600);
-									});								
+									}).catch( err => console.log("cannot get user data", err));					
 								}
+							} else {
+								$("#resultSuccessMsg").addClass("hidden");
+								$("#resultFailureMsg").text("VPP(중개 거래) 그룹 추가에 실패하였습니다. 다시 시도해 주세요").removeClass("hidden");
+								$("#resultBtn").parent().addClass("hidden");
+								$("#resultModal").modal("show");
+								setTimeout(function(){
+									$("#resultModal").modal("hide");
+								}, 1600);
 							}
-						});
+						}).catch( err => console.log("cannot get user data", err));
 					}
 					
 					// if (newGroupType == "dr_group"){
@@ -1509,7 +1527,7 @@
 						let selected = checkBoxList.some( x => $(x).data("value") === el.sid );
 						popOverStr += '<li>' + el.name + '</li>';
 					});
-					let content = '<ul class="selected-list">' + popOverStr + '</ul>';
+					let content = '<div class="word-wrap"><ul class="selected-list">' + popOverStr + '</ul></div>';
 				
 					// <h4 class="sm-title">그룹 유형 : ${'${groupType}'}</h4>
 					// 	<h4 class="sm-title">그룹 명 : ${'${groupName}'}</h4>	
@@ -1532,18 +1550,20 @@
 						var _this = this;
 						$(this).popover("show");
 						$(this).siblings(".popover").on("mouseleave", function () {
-							$(_this).popover('hide');
+							if ($(".popover:visible").length > 1) {
+								$(_this).popover('hide');
+							}
 						});
 					}).on("mouseleave", function(){
 						var _this = this;
 						setTimeout(function() {
-							if (!$(".popover:hover").length) {
-								$(_this).popover("hide");
+							if ($(".popover:visible").length > 1) {
+								$(".popover").not(_this).popover('hide');
 							}
-							if($("#groupTable").find("tbody tr.selected").length > 0){
+							if($("#logTable").find("tbody tr.selected").length > 0){
 								$(".popover").popover('hide');
 							}
-						}, 300);
+						}, 200);
 					});
 
 					popWindow.popover("show");
@@ -1784,7 +1804,7 @@
 			<div id="titleEdit" class="modal-header"><h1>사업소 정보 수정</h1></div>
 			<div class="modal-body">
 				<div class="container-fluid">
-					<form name="add_group_form" id="updateGroupForm" class="setting-form">
+					<form name="add_group_form" id="updateGroupForm" class="setting-form" autocomplete="off">
 						<div class="row">
 							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12"><span class="input-label asterisk">그룹 유형</span></div>
 							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">

@@ -649,21 +649,60 @@
 							}
 
 							// 2. non_user (alarm_to)
-							if( !isEmpty(selectedNonUser.val()) && !isEmpty(selectedNonUserPhone.val()) ) {
-								nonUserObj.name = selectedNonUser.val();
-								nonUserObj.phone = selectedNonUserPhone.val();
-								nonUserObj.level = alarmLvlArr;
-								nonUserArr.push(nonUserObj);
-							} else {
-								if(!isEmpty(selectedNonUser.val())){
-									nonUserObj.name = selectedNonUser.val();
-									nonUserObj.level = alarmLvlArr;
-									nonUserArr.push(nonUserObj);
+							if(!isEmpty(selectedNonUser.data("name-list")) || !isEmpty(selectedNonUser.data("phone-list")) ) {
+								let tempNameArr = [];
+								let tempPhoneArr = [];
+
+								if(!isEmpty(selectedNonUser.data("name-list"))){
+									tempNameArr = selectedNonUser.data("name-list").split(",");
 								}
-								if(!isEmpty(selectedNonUserPhone.val()) ){
+								if(!isEmpty(selectedNonUser.data("phone-list"))){
+									tempPhoneArr = selectedNonUser.data("phone-list").split(",");
+								}
+
+								if(tempNameArr.length>0 || tempPhoneArr.length>0){
+									for(let i = 0, arrLength = tempNameArr.length; i< arrLength; i++){
+										nonUserObj.name = tempNameArr[i];
+										nonUserObj.phone = tempPhoneArr[i];
+										nonUserObj.level = alarmLvlArr;
+										nonUserArr.push(nonUserObj);
+									}
+								}
+								if( !isEmpty(selectedNonUser.val()) && !isEmpty(selectedNonUserPhone.val()) ) {
+									nonUserObj.name = selectedNonUser.val();
 									nonUserObj.phone = selectedNonUserPhone.val();
 									nonUserObj.level = alarmLvlArr;
 									nonUserArr.push(nonUserObj);
+								} else {
+									if(!isEmpty(selectedNonUser.val())){
+										nonUserObj.name = selectedNonUser.val();
+										nonUserObj.level = alarmLvlArr;
+										nonUserArr.push(nonUserObj);
+									}
+									if(!isEmpty(selectedNonUserPhone.val()) ){
+										nonUserObj.phone = selectedNonUserPhone.val();
+										nonUserObj.level = alarmLvlArr;
+										nonUserArr.push(nonUserObj);
+									}
+								}
+								
+							} else {
+								if( !isEmpty(selectedNonUser.val()) && !isEmpty(selectedNonUserPhone.val()) ) {
+									nonUserObj.name = selectedNonUser.val();
+									nonUserObj.phone = selectedNonUserPhone.val();
+									nonUserObj.level = alarmLvlArr;
+									nonUserArr.push(nonUserObj);
+								} else {
+									if(!isEmpty(selectedNonUser.val())){
+										nonUserObj.name = selectedNonUser.val();
+										nonUserObj.level = alarmLvlArr;
+										nonUserArr.push(nonUserObj);
+									}
+									if(!isEmpty(selectedNonUserPhone.val()) ){
+										nonUserObj.phone = selectedNonUserPhone.val();
+										nonUserObj.level = alarmLvlArr;
+										nonUserArr.push(nonUserObj);
+									}
 								}
 							}
 
@@ -2963,6 +3002,7 @@
 														}
 														alarmArr = [...el.alarmToUser.non_user[i].level];
 													}
+													alarmArr = [...el.alarmToUser.user[i].level];
 												}
 
 												alarmArr = [...new Set([...alarmArr])];
@@ -3037,15 +3077,17 @@
 									</div>`;
 								} else {
 									let joinedVal = "";
-									let joinedVal2 = "";
 									let displayText = "";
 									let displayText1 = "";
 									let displayText2 = "";
 									let displayText2b = "";
+									let nonUserNameStr = "";
+									let nonUserNumStr = "";
 
 									let userArr = [];
 									let nonUserArr = [];
 									let nonUserNumberArr = [];
+									let mergedNonUserArr = [];
 
 									if(el.userGroup === "both"){
 									// USER && NON USER
@@ -3104,21 +3146,39 @@
 													if(isEmpty(displayText2)){
 														displayText2 = el.alarmToUser.non_user[i].name;
 													}
+													if(!isEmpty(el.alarmToUser.non_user[i].phone)){
+														nonUserNumberArr.push(el.alarmToUser.non_user[i].phone);
+													} else {
+														nonUserNumberArr.push("");
+													}
 													nonUserArr.push(el.alarmToUser.non_user[i].name);
-												}
-												if(!isEmpty(el.alarmToUser.non_user[i].phone)){
-													nonUserNumberArr.push(el.alarmToUser.non_user[i].phone);
-												}
+												} else {
+													// nonUser does NOT have a name
+													if(!isEmpty(el.alarmToUser.non_user[i].phone)){
+														nonUserArr.push("");
+														nonUserNumberArr.push(el.alarmToUser.non_user[i].phone);
+													}
+												}		
 											}
 										}
 									
 										userArr = [...new Set([...userArr])];
-										nonUserArr = [...new Set([...nonUserArr])];
-										nonUserNumberArr = [...new Set([...nonUserNumberArr])];
+										nonUserArr = [...nonUserArr];
+										nonUserNumberArr = [...nonUserNumberArr];
+
+										// mergedNonUserArr.push({ label: "name", val: [...nonUserArr] });
+										// mergedNonUserArr.push({ label: "phone", val: [...nonUserNumberArr] });
+										// mergedNonUserArr = getUniqueListBy(mergedNonUserArr, "name");
+										// console.log("nonUserArr===", nonUserArr, "nonUserNumberArr===", nonUserNumberArr);
+										// console.log("mergedNonUserArr===", mergedNonUserArr);
+
+
+										// nonUserArr = [...new Set([...nonUserArr])];
+										// nonUserNumberArr = [...new Set([...nonUserNumberArr])];
 
 										joinedVal = userArr.toString();
-										joinedVal2 = nonUserArr.toString();
 
+										let tempNonUserNum ="";
 										let totalLength1 = userArr.length;
 										let totalLength2 = nonUserArr.length;
 										let totalLength2b = nonUserNumberArr.length;
@@ -3132,10 +3192,20 @@
 											displayText2 = displayText2 + " 외 +" + String(totalLength2-1);
 										}
 
-										if(totalLength2b >=2){
-											displayText2b = nonUserNumberArr[0] + " 외 +" + String(totalLength2b-1);
+										nonUserNameStr = nonUserArr.toString();
+										nonUserNumStr = nonUserNumberArr.toString();
+
+										for(let i=0, arrLength = nonUserNumberArr.length; i<arrLength; i++){
+											if(nonUserNumberArr[i] != ""){
+												text = nonUserNumberArr[i];
+												break;
+											}
+										}	
+										
+										if(totalLength2b >=2){		
+											displayText2b = tempNonUserNum + " 외 +" + String(totalLength2b-1);
 										} else {
-											displayText2b = nonUserNumberArr[0];
+											displayText2b = tempNonUserNum;
 										}
 									} else {
 									// either USER || NON USER
@@ -3175,35 +3245,64 @@
 
 											if(length2 > 0 ){
 												for(let i=0, arrLength = length2; i<arrLength; i++ ){
-													if(!isEmpty(el.alarmToUser.non_user[i].name)){		
+													if(!isEmpty(el.alarmToUser.non_user[i].name)){
 														if(isEmpty(displayText2)){
 															displayText2 = el.alarmToUser.non_user[i].name;
 														}
+														if(!isEmpty(el.alarmToUser.non_user[i].phone)){
+															nonUserNumberArr.push(el.alarmToUser.non_user[i].phone);
+														} else {
+															nonUserNumberArr.push("");
+														}
 														nonUserArr.push(el.alarmToUser.non_user[i].name);
-													}
-													if(!isEmpty(el.alarmToUser.non_user[i].phone)){
-														nonUserNumberArr.push(el.alarmToUser.non_user[i].phone);
-													}
+													} else {
+														// nonUser does NOT have a name
+														if(!isEmpty(el.alarmToUser.non_user[i].phone)){
+															nonUserArr.push("");
+															nonUserNumberArr.push(el.alarmToUser.non_user[i].phone);
+														}
+													}		
+													
+													// if(!isEmpty(el.alarmToUser.non_user[i].name)){		
+													// 	if(isEmpty(displayText2)){
+													// 		displayText2 = el.alarmToUser.non_user[i].name;
+													// 	}
+													// 	nonUserArr.push(el.alarmToUser.non_user[i].name);
+													// }
+													// if(!isEmpty(el.alarmToUser.non_user[i].phone)){
+													// 	nonUserNumberArr.push(el.alarmToUser.non_user[i].phone);
+													// }
 												}
 
-												nonUserArr = [...new Set([...nonUserArr])];
-												nonUserNumberArr = [...new Set([...nonUserNumberArr])];
-												joinedVal2 = nonUserArr.toString();
+												nonUserArr = [...nonUserArr];
+												nonUserNumberArr = [...nonUserNumberArr];
 
+												console.log("nonUserArr===", nonUserArr);
+												console.log("nonUserNumberArr===", nonUserNumberArr);
+
+												let tempNonUserNum = ""
 												let totalLength2 = nonUserArr.length;
 												let totalLength2b = nonUserNumberArr.length;
-
+												
 												if(totalLength2 >=2){
 													displayText2 = displayText2 + " 외 +" + String(totalLength2-1);
 												}
 
-												if(totalLength2b >=2){
-													displayText2b = nonUserNumberArr[0] + " 외 +" + String(totalLength2b-1);
-												} else {
-													displayText2b = nonUserNumberArr[0];
+												nonUserNameStr = nonUserArr.toString();
+												nonUserNumStr = nonUserNumberArr.toString();
+										
+												for(let i=0, arrLength = nonUserNumberArr.length; i<arrLength; i++){
+													if(nonUserNumberArr[i] !== ""){
+														text = nonUserNumberArr[i];
+														break;
+													}
 												}
 
-												
+												if(totalLength2b >=2){		
+													displayText2b = tempNonUserNum + " 외 +" + String(totalLength2b-1);
+												} else {
+													displayText2b = tempNonUserNum;
+												}
 											}
 										
 										}
@@ -3245,6 +3344,8 @@
 									} else {
 										dropdown4 += `<div class="text-input-type disabled" 
 											data-child-id="aDvcPhoneNonUser${'${ newIdx }'}"
+											data-name-list="${'${ nonUserNameStr }'}"
+											data-phone-list="${'${ nonUserNumStr }'}"
 											data-phone="${'${ displayText2b }'}"
 											data-user-type="non-user">
 											<input type="text" name="aDvcNonUserList${'${ newIdx }'}" value="${'${ displayText2 }'}" disabled />
@@ -3362,13 +3463,27 @@
 						userNameBtn.each(function(index, el){
 							if(!isEmpty($(this).data("phone"))){
 								let id = "#" + $(this).data("child-id");
-								$(id).val($(this).data("phone"))
+								$(id).val($(this).data("phone"))			
 							}
 						});
 						userNameInput.each(function(index, el){
-							if(!isEmpty($(this).data("phone"))){
+							if(!isEmpty($(this).data("phone")) || !isEmpty($(this).data("phone-list"))){
 								let id = "#" + $(this).data("child-id");
-								$(id).val($(this).data("phone"))
+								let tempVal = "";
+								if(!isEmpty($(this).data("phone"))){
+									$(id).val($(this).data("phone"))
+								} else {
+									if(!isEmpty($(this).data("phone-list"))){
+										let val = String($(this).data("phone-list"));
+										let newVal = "";
+										if(val.indexOf(",") != -1){
+											newVal = val.split(",")[0];
+										} else {
+											newVal=Number(val);
+										}
+										$(id).val(newVal)
+									}
+								}				
 							}
 						});
 					}
@@ -4025,7 +4140,7 @@
 			<div id="titleEdit" class="modal-header"><h1>사업소 정보 수정</h1></div>
 			<div class="modal-body">
 				<div class="container-fluid">
-					<form name="add_site_form" id="updateSiteForm" class="setting-form">
+					<form name="add_site_form" id="updateSiteForm" class="setting-form" autocomplete="off">
 						<section id="sectionSiteInfo">
 							<div class="row">
 								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label asterisk">사업소 명</span></div>

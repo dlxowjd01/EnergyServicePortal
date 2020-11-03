@@ -417,7 +417,7 @@
 				$('#loadingCircle').show();
 			}
 		}
-		console.log("option==", option)
+		
 		$.ajax(option).done(function (json, textStatus, jqXHR) {
 			console.log("json=----", json)
 			var logTable = $('#logTable').DataTable({
@@ -1016,7 +1016,7 @@
 					<h2 class="ntit">스케줄 상세 정보<span class="required fr">필수 입력 항목</span></h2>
 				</div>
 			</div>
-			<form name="update_schedule_form" id="updateScheduleForm" class="setting-form">
+			<form name="update_schedule_form" id="updateScheduleForm" class="setting-form" autocomplete="off">
 				<div class="row">
 					<div class="col-xl-2 col-lg-2 col-md-4 col-sm-5"><span class="input-label asterisk">스케줄 명</span></div>
 					<div class="col-xl-4 col-lg-4 col-md-8 col-sm-7">

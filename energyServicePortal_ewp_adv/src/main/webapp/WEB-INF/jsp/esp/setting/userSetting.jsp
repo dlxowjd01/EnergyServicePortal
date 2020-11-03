@@ -6,9 +6,6 @@
 	var siteDeleteList = [];
 
 	$(function () {
-		<%--let sL = JSON.parse('${siteList}');--%>
-		// console.log("sL---", sL);
-
 		let copySpcList = $("#spcRow").find("template").clone().html();
 		$("#spcRow").find("template").remove();
 
@@ -1908,7 +1905,7 @@
 			<div id="titleEdit" class="modal-header"><h1>사용자 정보 수정</h1></div>
 			<div class="modal-body">
 				<div class="container-fluid">
-					<form name="add_user_form" id="updateUserForm" class="setting-form">
+					<form name="add_user_form" id="updateUserForm" class="setting-form" autocomplete="off">
 						<div class="row">
 							<div class="col-lg-2 col-sm-3"><span class="input-label asterisk">ID</span></div>
 							<div class="col-lg-4 col-sm-9">
