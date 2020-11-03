@@ -168,7 +168,7 @@
 }
 
 @media (min-width: 1092px) {
-	.modal-dialog:not(.modal-xl) {
+	.modal-dialog:not(.modal-xl):not(.calendar-modal) {
 		width:1092px
 	}
 	.spc_tbl02_row {

@@ -1399,7 +1399,7 @@
 					--><button type="button" class="btn-next-month">next</button><!--
 					--><button type="button" id="detailModalTrigger" class="btn-type03" onclick="$('#detailInfoModal').toggleClass('active')"></button><!--
 				--></div>
-					<div class="dropdown-modal modal-dialog" id="detailInfoModal">
+					<div id="detailInfoModal" class="dropdown-modal modal-dialog calendar-modal">
 						<div class="modal-content spc-detail-content">
 							<div class="modal-header">
 								<h2 id="modalTitle" class="fl"></h2>

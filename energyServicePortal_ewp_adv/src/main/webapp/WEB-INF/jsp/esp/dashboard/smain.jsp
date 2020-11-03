@@ -1194,6 +1194,7 @@
 			},
 			maskFill: 'var(--clear)',
             series: {
+				// 변수 적용시 라인에 fill이 되어 버림
                 color: '#26ccc8',
                 fillOpacity: 0.00,
                 lineWidth: 2

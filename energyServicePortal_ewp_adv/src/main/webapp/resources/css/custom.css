@@ -3457,7 +3457,7 @@ li[data-alarm="urgent"]:before,
 	max-width: 850px
 }
 
-.modal-dialog:not(.no-flex) {
+.modal-dialog:not(.no-flex):not(.calendar-modal) {
 	text-align: left;
 	min-height: calc(100% - (1.75rem * 2));
 	display: flex;
