@@ -2,7 +2,9 @@
 <%@ include file="/decorators/include/taglibs.jsp" %>
 <script type="text/javascript" src="/js/weather_station_info.js"></script>
 <script type="text/javascript">
-	let deviceNameList = [];
+	var deviceNameList = [];
+	var alarmDataList = [];
+	var deleteAlarmList = [];
 
 	$(function () {
 		let optionList = [
@@ -613,6 +615,7 @@
 				let td = tr.eq(i).find("td"); 
 				let secondTd = td.eq(1); 
 				let dvcNameDropdown = secondTd.find(".dropdown-toggle");
+
 				if(!isEmpty(dvcNameDropdown)){
 					for(let j=0, arrLength = dvcNameDropdown.length; j < arrLength; j++){
 						let checkedDvc = dvcNameDropdown.find("input[type='checkbox']:checked");
@@ -705,7 +708,7 @@
 									}
 								}
 							}
-
+							console.log("dvcArr===", dvcArr);
 							// [Loop] selected devices
 							$.each(selectedDvcArr, function(index, el){
 								let checkedId = $(el).val();
@@ -715,19 +718,21 @@
 										if(nonUserArr.length>0 && registeredUserArr.length>0){
 											let valArr1 = [];
 											let valArr2 = [];
-											if(!isEmpty(dvcArr[found].alarm_to.non_user)){
-												let prevArr = dvcArr[found].alarm_to.non_user;
-												valArr1 = [...new Set([...prevArr, ...nonUserArr])];
-											} else {
-												valArr1.push(...nonUserArr);
-											}
 
 											if(!isEmpty(dvcArr[found].alarm_to.user)){
 												let prevArr = dvcArr[found].alarm_to.user;
-												valArr2 = [...new Set([...prevArr, ...registeredUserArr])];
+												valArr1 = [...new Set([...prevArr, ...registeredUserArr])];
 											} else {
-												valArr.push(...registeredUserArr);
+												valArr1.push(...registeredUserArr);
 											}
+
+											if(!isEmpty(dvcArr[found].alarm_to.non_user)){
+												let prevArr = dvcArr[found].alarm_to.non_user;
+												valArr2 = [...new Set([...prevArr, ...nonUserArr])];
+											} else {
+												valArr2.push(...nonUserArr);
+											}
+
 											dvcArr[found] = {
 												deviceId: checkedId,
 												alarm_to: {
@@ -744,6 +749,7 @@
 												} else {
 													valArr.push(...nonUserArr);
 												}
+
 												dvcArr[found] = {
 													deviceId: checkedId,
 													alarm_to: {
@@ -808,7 +814,59 @@
 			};
 			let ajaxPromises = [];
 
-			if(dvcArr.length>0){
+			if(deleteAlarmList.length>0){
+			// A. tr has been deleted
+				deleteAlarmList.forEach((item, index) => {
+					let found = dvcArr.findIndex( x => x.deviceId === item.deviceId);
+
+					if(found > -1){
+						let foundAlarmTo = dvcArr[found].alarm_to;
+
+						if(JSON.stringify(foundAlarmTo) != JSON.stringify(item.alarm_to)) {
+							let deleteArrUser = item.alarm_to.user;
+							let deleteArrNonUser = item.alarm_to.non_user;
+								
+							if(!isEmpty(foundAlarmTo.user) && foundAlarmTo.user.length>0){
+								foundAlarmTo = foundAlarmTo.user.filter( (val, index, arr) => {
+									if(!isEmpty(deleteArrUser) && deleteArrUser.length>0){
+										let found = deleteArrUser.findIndex( x => x.uid == val.uid);
+										if(found == -1){
+											return val;
+										}
+									}
+								});
+							}
+
+							if(!isEmpty(foundAlarmTo.non_user) && foundAlarmTo.non_user.length>0){
+								foundAlarmTo.non_user.filter( (val, index, arr) => {
+									if(!isEmpty(deleteArrNonUser) && deleteArrNonUser.length>0){
+										let foundName = deleteArrNonUser.findIndex( x => x.name == val.name);
+										let foundPhone = deleteArrNonUser.findIndex( x => x.phone == val.phone);
+										if(found == -1 || foundPhone == -1){
+											return val;
+										}
+									}
+								})
+							}
+
+							dvcArr[found].alarm_to = foundAlarmTo;
+						} else {
+							dvcArr.push({ deviceId: item.deviceId, alarm_to: null });
+						}
+						dvcArr.push({ deviceId: item.deviceId, alarm_to: foundAlarmTo });
+					} else {
+						dvcArr.push({ deviceId: item.deviceId, alarm_to: null });
+					}
+				})
+
+				dvcArr.forEach(function(item, index){
+					deviceOpt.url = urlPrefix + item.deviceId;
+					deviceOpt.data = JSON.stringify({ alarm_to: JSON.stringify(item.alarm_to) });
+					ajaxPromises.push(Promise.resolve(makeAjaxCall(deviceOpt)));
+				});
+
+			} else {
+			// B. None of tr has been deleted
 				dvcArr.forEach(function(item, index){
 					deviceOpt.url = urlPrefix + item.deviceId;
 					deviceOpt.data = JSON.stringify({ alarm_to: JSON.stringify(item.alarm_to) });
@@ -2503,8 +2561,6 @@
 		let menuItem = target.next().find("li");
 		
 		menuItem.addClass("hidden");
-		console.log("target====", target);
-
 		menuItem.each(function(index, item){
 			let val = $(this).data("parent");
 			if(val == typeName){
@@ -2585,6 +2641,9 @@
 		// console.log("alarmData====", alarmData);
 		const uniqDvcType = groupBy(alarmData, "device_type");
 		const uniqDvcName = Object.values(groupBy(alarmData, "name"));
+
+		alarmDataList = uniqDvcType;
+		deleteAlarmList = [];
 
 		let dvcNameStr = ``;
 		let dvcTypeStr = ``;
@@ -3505,11 +3564,7 @@
 		let btnSiblings = $(self).parent(".flex-start").siblings();
 
 		if(option == "add"){
-			let copy = tr.clone();
-			let idAttr = copy.find('[id^="aDvc"]');
-			let childIdAttr = copy.find('[data-child-id^="aDvc"]');
-			let parentIdAttr = copy.find('[data-parent-id^="aDvc"]');
-			let nameAttr = copy.find('[name^="aDvc"]');
+			let copy = tr.clone(true);
 			let tempIdx = tr.find("td:nth-of-type(6) .flex-start:last-of-type .icon-edit").data("index") + 1;
 
 			copy.find("td").each(function(index, el){
@@ -3530,11 +3585,14 @@
 							$(this).find(".user-group").attr("data-index", tempIdx);
 							$(this).find("input[type='checkbox']").prop("checked", false);
 							$(this).find(".dropdown-toggle").prop("disabled", false).html('선택<span class="caret"></span>').attr({"data-index": tempIdx, "data-value": ""});
+							$(this).find("input[type='text']").prop("disabled", false).val("").parent().removeClass("disabled");
 						}  else if(index===4){
 							$(this).find(".phone-group:not(:last-of-type)").remove();
 							$(this).find(".phone-group").attr("data-index", tempIdx);
+							$(this).find(".text-input-type:nth-of-type(1) input[type='text']").val("");
+							$(this).find(".text-input-type:nth-of-type(2) input[type='text']").prop("disabled", false).val("").parent().removeClass("disabled");
 						}
-						$(this).find("input[type='text']").prop("disabled", false).val("").parent().removeClass("disabled");
+						
 					} else {
 						$(this).find(".flex-start:not(:last-of-type)").remove();
 						$(this).find(".flex-start .icon-add").attr("data-index", tempIdx);
@@ -3543,6 +3601,11 @@
 					}
 				}
 			});
+
+			let idAttr = copy.find('[id^="aDvc"]');
+			let childIdAttr = copy.find('[data-child-id^="aDvc"]');
+			let parentIdAttr = copy.find('[data-parent-id^="aDvc"]');
+			let nameAttr = copy.find('[name^="aDvc"]');
 
 			idAttr.each(function(index, el){
 				let oldId = $(this).attr("id");
@@ -3581,6 +3644,7 @@
 			td.eq(3).append(newTd.eq(3).children());
 			td.eq(4).append(newTd.eq(4).children());
 			td.eq(5).append(newTd.eq(5).children());
+
 		} else {
 			if(option == "edit"){
 				td.each(function(index, el){
@@ -3612,11 +3676,15 @@
 
 						if(phoneInput.first().is(":disabled")) {
 							phoneInput.each(function(index, el){
-								$(this).prop("disabled", false).parent().removeClass("disabled");
+								if(index === 1){
+									$(this).prop("disabled", false).parent().removeClass("disabled");
+								}
 							});
 						} else {
 							phoneInput.each(function(index, el){
-								$(this).prop("disabled", true).parent().addClass("disabled");
+								if(index === 1){
+									$(this).prop("disabled", true).parent().addClass("disabled");
+								}
 							});
 						}
 					}
@@ -3624,9 +3692,24 @@
 			}
 
 			if(option == "delete"){
+				let didMatchArr = Object.values(alarmDataList);
+
+				didMatchArr.forEach( (item, index) => {
+					let targetDropdown = td.eq(1).find(".dropdown-toggle[data-index='" + dataIdx + "']");
+					let targetDid = targetDropdown.data("did");
+
+					let found = item.findIndex( x => x.did === targetDid );
+					if(found > -1){
+						if(!isEmpty(item[found].alarm_to)){
+							deleteAlarmList.push({ deviceId: targetDid, alarm_to : item[found].alarmToUser });
+						}
+						
+					}
+				});
+
 				if(tr.siblings().length == 0) {					
 				// ONLY single row is present
-					if(btnSiblings.length === 0){
+					if(btnSiblings.length == 0){
 						tr.eq(btnSiblings.length).addClass("hidden");
 					} else {
 						td.each(function(index, el){
@@ -3644,118 +3727,27 @@
 						});							
 					}
 				} else {
-				// Multiple rows are present
-					if(btnSiblings.length === 0){
-							console.log("multiple rows but single element left===", tr)
-							tr.eq(btnSiblings.length).remove();
-						} else {
-							td.each(function(index, el){
-								let dropdown = $(el).find(".dropdown-toggle[data-index='" + dataIdx + "']");
-								if(index >= 0 && index <= 2){
-									dropdown.parent().remove();
-								} else if(index === 3){
-									dropdown.parent().remove();
-									$(el).find(".user-group[data-index='" + dataIdx + "']").remove();
-								} else if(index === 4){
-									$(el).find(".phone-group[data-index='" + dataIdx + "']").remove();
-								} else if(index === 5){
-									$(self).parent().remove();
-								}
-							});
-						}
+					// Multiple rows are present
+					if(btnSiblings.length == 0){
+						tr.eq(btnSiblings.length).remove();
+					} else {
+						td.each(function(index, el){
+							let dropdown = $(el).find(".dropdown-toggle[data-index='" + dataIdx + "']");
+							if(index >= 0 && index <= 2){
+								dropdown.parent().remove();
+							} else if(index === 3){
+								dropdown.parent().remove();
+								$(el).find(".user-group[data-index='" + dataIdx + "']").remove();
+							} else if(index === 4){
+								$(el).find(".phone-group[data-index='" + dataIdx + "']").remove();
+							} else if(index === 5){
+								$(self).parent().remove();
+							}
+						});
 					}
-
-				// let alarmName = rowData.name + "/" + tr.find("td:nth-of-type(3) .dropdown-toggle").eq(dataIdx).text();
-				// let modal = $("#alarmDeleteConfirmModal");
-				// let confirmAlarmName = $("#confirmAlarm");
-				// let deleteBtn = $("#alarmDeleteConfirmBtn");
-
-				// let userType = tr.find("td:nth-of-type(4) .dropdown").eq(dataIdx);
-				// let userIdx = userType.data("user-index");
-				// let newAlarmTo = rowData.alarmToUser;
-				
-				// $("#alarmDeleteSuccessMsg span").text(alarmName);
-				// modal.find(".modal-body").removeClass("hidden");
-				// modal.modal("show");
-
-				// confirmAlarmName.on("input", function() {
-				// 	if($(this).val() !== alarmName) {
-				// 		deleteBtn.prop("disabled", true);
-				// 		return false
-				// 	} else {
-				// 		deleteBtn.prop("disabled", false);
-				// 	}
-				// });
-
-				// confirmAlarmName.on("keyup", function() {
-				// 	if($(this).val() !== alarmName) {
-				// 		deleteBtn.prop("disabled", true);
-				// 		return false
-				// 	} else {
-				// 		deleteBtn.prop("disabled", false);
-				// 	}
-				// });
-
-				// if( userType.data("user-type") == "non-user"){
-				// 	newAlarmTo.non_user.splice(userIdx, 1);
-				// } else {
-				// 	newAlarmTo.user.splice(userIdx, 1);
-				// }
-
-				// $("#alarmDeleteConfirmBtn").click(function(){
-				// 	if(confirmAlarmName != alarmName) return false;
-
-				// 	$.ajax(deviceOpt).done(function (json, textStatus, jqXHR) {
-				// 		$("#alarmDeleteSuccessMsg").text("해당 알람 정보가 삭제 되었습니다.").removeClass("hidden");
-				// 		refreshSiteList();
-				// 		setTimeout(function(){
-				// 			modal.modal("hide");
-				// 		}, 1500);
-				// 	}).fail(function (jqXHR, textStatus, errorThrown) {
-				// 		modal.find(".modal-body").addClass("hidden");
-				// 		$("#alarmDeleteSuccessMsg").text("해당 알람 삭제에 실패하였습니다.\n다시 시도해 주세요.").removeClass("hidden");
-				// 		setTimeout(function(){
-				// 			modal.modal("hide");
-				// 		}, 1500);
-				// 		console.log("fail==", jqXHR)
-				// 	});
-				// });
-
+				}
 			}
 		}
-			// $.ajax(deviceOpt).done(function (json, textStatus, jqXHR) {
-			// 	$("#deleteSuccessMsg").text("선택하신 알람 정보가 삭제 되었습니다.").removeClass("hidden");
-			// 	refreshAlarmList();
-			// 	setTimeout(function(){
-			// 		$("#deleteConfirmModal").modal("hide");
-			// 	}, 1500);
-			// }).fail(function (jqXHR, textStatus, errorThrown) {
-			// 	modalBody.addClass("hidden");
-			// 	$("#deleteSuccessMsg").text("사이트 삭제에 실패하였습니다.\n다시 시도해 주세요.").removeClass("hidden");
-			// 	setTimeout(function(){
-			// 		$("#deleteConfirmModal").modal("hide");
-			// 	}, 1500);
-			// 	console.log("fail==", jqXHR)
-			// });
-	
-			// did
-			// localtime
-			// code
-
-			// let arr = [];
-			// $.each(tr, function(index, el){
-
-			// 	let obj = {};
-			// 	let dropdown = el.find(".dropdown-toggle");
-			// 	let input = el.find("input[type='text']");
-
-			// 	obj.device_type = dropdown.eq(0).data("value");
-			// 	obj.name = dropdown.eq(1).data("value");
-			// 	obj.level = dropdown.eq(2).data("value");
-			// 	obj.person = dropdown.eq(3).data("value");
-			// 	obj.phone = input.val();
-
-			// });
 
 	}
 
@@ -3766,12 +3758,8 @@
 		if(tr.hasClass("hidden")){
 			tr.removeClass("hidden");
 		} else {
-			let copy = tr.last().clone();
+			let copy = tr.last().clone(true);
 			let temTd = copy.find("td");
-			let idAttr = copy.find('[id^="aDvc"]');
-			let nameAttr = copy.find('[name^="aDvc"]');
-			let childIdAttr = copy.find('[data-child-id^="aDvc"]');
-			let parentIdAttr = copy.find('[data-parent-id^="aDvc"]');
 
 			temTd.each(function(index, el){
 				let tempIdx;
@@ -3795,18 +3783,25 @@
 							$(this).find(".user-group:not(:first-of-type)").remove();
 							$(this).find("input[type='checkbox']").prop("checked", false);
 							$(this).find(".dropdown-toggle").prop("disabled", false).html('선택<span class="caret"></span>').attr({"data-value": "", "data-index": tempIdx});
+							$(this).find("input[type='text']").prop("disabled", false).val("").parent().removeClass("disabled");
 						} else if(index===4){
 							$(this).find(".phone-group:not(:first-of-type)").remove();
+							$(this).find(".text-input-type:nth-of-type(1) input[type='text']").val("");
+							$(this).find(".text-input-type:nth-of-type(2) input[type='text']").prop("disabled", false).val("").parent().removeClass("disabled");
 						}
-						$(this).find("input[type='text']").prop("disabled", false).val("").parent().removeClass("disabled");
 					} else {
 						$(this).find(".flex-start:not(:first-of-type)").remove();
 						$(this).find(".icon-add").attr({"data-value": "", "data-index": tempIdx});
 						$(this).find(".icon-edit").prop("disabled", true).attr({"data-value": "", "data-index": tempIdx});
-						$(this).find(".icon-delete").attr( "onclick", "$(this).parents().closest('tr').remove()").attr({"data-value": "", "data-index": tempIdx});
+						$(this).find(".icon-delete").attr({"data-index": tempIdx});
 					}	
 				}
 			});
+
+			let idAttr = copy.find('[id^="aDvc"]');
+			let nameAttr = copy.find('[name^="aDvc"]');
+			let childIdAttr = copy.find('[data-child-id^="aDvc"]');
+			let parentIdAttr = copy.find('[data-parent-id^="aDvc"]');
 
 			idAttr.each(function(index, el){
 				let oldId = $(this).attr("id");
@@ -3828,7 +3823,6 @@
 
 			childIdAttr.each(function(index, el){
 				let oldName = $(this).data("child-id");
-				console.log("oldName111===", oldName)
 				let num = (Number(oldName.match(/\d+/)[0]) + 1 );
 				let newName = oldName + '_' + String(num);
 				$(this).attr("data-child-id", newName);
@@ -3836,13 +3830,11 @@
 
 			parentIdAttr.each(function(index, el){
 				let oldName = $(this).data("parent-id");
-				console.log("oldName222===", oldName)
 				let num = (Number(oldName.match(/\d+/)[0]) + 1 );
 				let newName = oldName + '_' + String(num);
 				$(this).attr("data-parent-id", newName);
 			});
-
-
+			
 			// aTable.rows().add(copy).draw(false);
 			$("#alarmTable tbody").append(copy);
 		}	
@@ -3851,10 +3843,12 @@
 
 	function showPhoneNum(self){
 		setTimeout(function(){
+			let td = $(self).parents().closest("tr").find("td");
 			let checked = $(self).parent().find("input[type='checkbox']:checked");
 			let val = $(self).find("input[type='checkbox']").data("contact-num");
-			let dropdown = $(self).parent().prev();
-			let target = "#" + dropdown.data("child-id");
+			let dataIdx = $(self).parents().closest(".user-group").data("index");
+			let phoneGroup = td.find(".phone-group[data-index='" + dataIdx + "']");
+			let target = phoneGroup.find(".text-input-type[data-user-type='user'] input");
 
 			if(checked.length >= 1) {
 				if(isEmpty($(target).val()) || (checked.length === 1) ){

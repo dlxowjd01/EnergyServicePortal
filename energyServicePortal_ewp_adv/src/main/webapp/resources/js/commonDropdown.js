@@ -80,7 +80,7 @@ const displayDropdown = ($selector) => {
 					$displayButton.data("value", checkedItems.val());
 				}
 			} else if (checkedboxLength > 1) {
-				$displayText = checkedItems.first().next().text() + ' 외 ' + (checkedboxLength - 1);
+				$displayText = checkedItems.first().next().text() + ' 외 +' + (checkedboxLength - 1);
 
 				if( $selector.data("function", "concat") ){
 					let concatArr = [];
