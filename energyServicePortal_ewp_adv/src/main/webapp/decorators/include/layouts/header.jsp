@@ -623,7 +623,7 @@
 	</ul>
 </nav>
 
-<div class="modal fade" id="errorModal" role="dialog" aria-labelledby="errorModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+<div class="modal fade stack" id="errorModal" role="dialog" aria-labelledby="errorModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-warning">
 		<div class="modal-content">
 			<div class="modal-header">

@@ -138,7 +138,7 @@
 	});
 
 	$(document).on('keyup', '#key_word', function (e) {
-		if (e.keyCode == 13) { getDataList(); }
+		if (e.keyCode === 13) { getDataList(); }
 	});
 
 	const getProperties = () => {
@@ -350,6 +350,11 @@
 		const reportOption = $('#report_type button').data('options')
 			, reportValue = $('#report_type button').data('value');
 
+		if (isEmpty(reportValue)) {
+			errorMsg('보고서 유형을 선택해주세요.');
+			return false;
+		}
+
 		if (isEmpty(reportOption)) {
 			errorMsg('해당 보고서 유형에서는 적용할 변수가 없습니다.');
 		} else {
@@ -462,6 +467,28 @@
 		const today = new Date();
 		let data = setAreaParamData('reportModal', 'dropdown'),
 			report_variable = new Array();
+
+		if (isEmpty($('#spc_id button').data('value'))) {
+			errorMsg('SPC 선택은 필수입니다.');
+			return;
+		}
+
+		if (isEmpty($('#report_type button').data('value'))) {
+			errorMsg('보고서 유형 선택은 필수입니다.');
+			return;
+		}
+
+		if (!($('#report_type button').data('value')).match('quaterly')) {
+			if (isEmpty($('#site_id button').data('value'))) {
+				errorMsg('발전소 선택은 필수입니다.');
+				return;
+			}
+		}
+
+		if ($('#report_data_start').datapicker('getDate') === null || $('#report_data_end').datapicker('getDate') === null) {
+			errorMsg('적용기간 입력은 필수입니다.');
+			return;
+		}
 
 		$('[id^=report_variable_key_]').each(function () {
 			let keyText = $(this).find('button').data('value'),

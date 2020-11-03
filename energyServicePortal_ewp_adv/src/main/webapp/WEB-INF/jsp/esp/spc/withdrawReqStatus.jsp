@@ -2,467 +2,64 @@
 <%@ include file="/decorators/include/taglibs.jsp"%>
 <script type="text/javascript">
 	const pathName = location.pathname;
-	const spcArr = new Array();
 
-	let withdrawReqStatus = null;
+	// unCheckAll($("#reqStatus"));
 	$(function() {
-		withdrawReqStatus = $('#withdrawReqStatus').DataTable({
-			autoWidth: true,
-			fixedHeader: true,
-			"table-layout": "fixed",
-			scrollY: '720px',
-			scrollCollapse: true,
-			sortable: true,
-			paging: true,
-			pageLength: 15,
-			columns: [
-				{
-					title: '',
-					data: null,
-					mRender: function ( data, type, full, rowIndex ) {
-						return `<input type="checkbox" id="check${'${rowIndex.row}'}" name="table_checkbox" value="${'${rowIndex.row}'}">
-								<label for="check${'${rowIndex.row}'}"></label>`;
-					},
-					className: 'dt-center no-sorting'
-				},
-				{
-					title: '출금 일자',
-					data: 'withdrawDay',
-					className: 'dt-center no-sorting fixed'
-				},
-				{
-					title: 'SPC 명',
-					data: 'spcName',
-					className: 'dt-head-center dt-body-center'
-				},
-				{
-					title: '금 액',
-					data: 'totalAmount',
-					render: function (data, type, full, rowIndex) {
-						return numberComma(data);
-					},
-					className: 'dt-head-center dt-body-right'
-				},
-				{
-					title: '입출금 구분',
-					data: null,
-					render: function (data, type, full, rowIndex) {
-						const toAccount = full['toAccount'];
+		const tableBody = $('#tableBody');
+		const tableFooter = $('#tableFooter')
+		const tableCloned = tableBody.find("template.table-body").clone().html();
+		const tfootClone = tableFooter.find("template.table-footer").clone().html();
+		const searchBar = $('.spc-search-bar');
+		const dropdownOpt = $('#searchOption').find('.dropdown-menu:not(.chk-type) li');
+		const perPage = 14;
 
-						if (isEmpty(toAccount)) {
-							return '-';
-						} else {
-							if (toAccount.length > 1) {
-								return '출금 ' + (toAccount.length) + '건';
-							} else {
-								return '출금';
-							}
-						}
-					},
-					className: 'dt-center'
-				},
-				{
-					title: '용도 구분',
-					data: null,
-					render: function (data, type, full, rowIndex) {
-						const toAccount = full['toAccount'];
-						const purposeArray = new Array();
-						const purposeTemplate = [
-							{label: '출금', value: ['관리 운영비', '사무 수탁비', '부채 상환', '대수선비', '배당금 적립', '일반 지출', 'DSRA 적립', '기타', '운영계좌', '공사비', '임대료', '대납금']},
-							{label: '입금', value: ['REC 수익', 'SMP 수익', 'DSRA 적립', '기타', '유보 계좌', '운영 계좌']},
-						];
-						toAccount.forEach(acc => { purposeArray.push(acc.purpose); });
+		var spcArr = [];
 
-						if (purposeArray.length === 0) {
-							return '-';
-						} else if (purposeArray.length === 1) {
-							return purposeTemplate[0].value[purposeArray[0]];
-						} else {
-							return purposeTemplate[0].value[purposeArray[0]] + ' 외 +' + (purposeArray.length - 1) + '건';
-						}
-					},
-					className: 'dt-center'
-				},
-				{
-					title: '요청/수정일',
-					data: 'requestedAt',
-					render: function (data, type, full, rowIndex) {
-						if (isEmpty(data)) {
-							return '-';
-						} else {
-							const date = new Date(data.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$3/$2/$1 $4:$5:$6'))
-							return date.format('yyyy-MM-dd HH:mm:ss');
-						}
-					},
-					className: 'dt-center'
-				},
-				{
-					title: '요청자',
-					data: 'requestedBy',
-					className: 'dt-center'
-				},
-				{
-					title: '상태',
-					data: 'status',
-					render: function (data, type, full, rowIndex) {
-						let statusButton = `<button class="${'${full.statusClass}'} clear-btn" onclick="goToDetail(\'${'${rowIndex.row}'}\')">${'${data}'}</button>`;
-						if (task !== '2') {
-							statusButton += `<a href="javascript:void(0);" onclick="goToEdit(\'${'${rowIndex.row}'}\')" class="icon-edit"></a>
-											<a href="javascript:void(0);" onclick="deleteRow(\'${'${rowIndex.row}'}\')" class="icon-delete"></a>`;
-						}
-						return statusButton;
-					},
-					className: 'dt-center'
-				},
-				{
-					title: '승인자',
-					data: 'statusChangedBy',
-					className: 'dt-center'
-				},
-				{
-					title: '승인일',
-					data: 'statusChangedAt',
-					render: function (data, type, full, rowIndex) {
-						if (isEmpty(data)) {
-							return '-';
-						} else {
-							const date = new Date(data.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$3/$2/$1 $4:$5:$6'))
-							return date.format('yyyy-MM-dd HH:mm:ss');
-						}
-					},
-					className: 'dt-center'
-				}
-			],
-			rowGroup: {
-				startRender: null,
-				endRender: function(rows, group) {
-					let sumTot = rows.data().pluck('totalAmount').reduce(function (a,b){
-						return a + b;
-					});
-
-					sumTot = numberComma(sumTot);
-					return $('<tr/>')
-						.append('<td/>')
-						.append('<td/>')
-						.append('<td class="dt-center">합계</td>')
-						.append('<td class="dt-right">' + sumTot + '</td>')
-						.append('<td colspan="6"></td>');
-				}
-			},
-			language: {
-				emptyTable: '조회된 데이터가 없습니다.',
-				zeroRecords: '검색된 결과가 없습니다.'
-			},
-			dom: 'tip',
-		}).columns.adjust().draw();
-
-		$('#searchForm').on('submit', function(e) {
+		pageInit();
+		$("#searchForm").on("submit", function(e){
 			e.preventDefault();
-			let searchOpt = new Object();
-			let status = new Array();
-
-			document.querySelectorAll('input[name="review_status"]:checked').forEach(chk => {
+			let searchOpt = {};
+			let status= [];
+			document.querySelectorAll('input[type="checkbox"]:checked').forEach(chk => {
 				status.push(chk.value);
 			});
 
 			searchOpt.status = status;
-
-			if (!isEmpty(document.getElementById('keyword').value.trim())) {
-				searchOpt.keyword = new RegExp(document.getElementById('keyword').value.trim(), 'i');
-			}
+			searchOpt.keyword = $("#keyword").val().trim().toLowerCase();
 
 			if (!isEmpty(status)) {
 				window.sessionStorage.setItem(pathName + '_status', status.toString()); //세션스토리지에 저장한다.
 			}
-			window.sessionStorage.setItem(pathName + '_keyword', document.getElementById('keyword').value.trim()); //세션스토리지에 저장한다.
+			window.sessionStorage.setItem(pathName + '_keyword', $("#keyword").val()); //세션스토리지에 저장한다.
 
 			if (isEmpty(searchOpt.status) && isEmpty(searchOpt.keyword)) {
-				getDataList(null);
+				getDataList(1, null);
 			} else {
-				getDataList(searchOpt);
+				getDataList(1, searchOpt);
 			}
 		});
 
-		pageInit();
-	});
+		$('#approvalBtn').on('click', function(e) {
+			e.preventDefault();
 
-	function pageInit() {
-		if (task !== '3') { $('#approvalBtn').remove(); }
+			let agree = true;
+			let checkedList = new Array();
 
-		return new Promise((resolve, reject) => {
-			$.ajax({
-				url: apiHost + '/spcs?oid=' + oid,
-				type: 'GET',
-				success: (json, textStatus, jqXHR) => {
-					json.data.forEach(item => {
-						spcArr.push({
-							spc_id: item['spc_id'],
-							spc_name: item['name']
-						});
-					});
+			if ($(':checkbox[name="reviewOpt"]:checked').length <= 0) {
+				$("#warningMsg").text('하나이상의 항목을 선택해 주세요.');
+				$("#warningModal").modal("show");
+				setTimeout(function(){
+					$("#warningModal").modal("hide");
+				}, 1800);
 
-					resolve(spcArr);
-				},
-				error: (jqXHR, textStatus, errorThrown) => {
-					console.error(textStatus);
-					new Error('SPC정보 조회중 오류가 발생했습니다.');
-				}
-			})
-		}).then(spcArr => {
-			const status = window.sessionStorage.getItem(pathName + '_status');
-			const keyword = window.sessionStorage.getItem(pathName + '_keyword');
-
-			if (!isEmpty(status)) {
-				if (status.match(',')) {
-					const statusArray = status.split(',');
-					document.querySelectorAll('[name="review_status"]').forEach(chk => {
-						if (statusArray.includes(chk.value)) {
-							chk.checked = true;
-						}
-					});
-				} else {
-					document.querySelectorAll('[name="review_status"]').forEach(chk => {
-						if (chk.value === status) {
-							chk.checked = true;
-						}
-					});
-				}
-			} else {
-				document.querySelectorAll('[name="review_status"]').forEach(chk => {
-					chk.checked = true;
-				});
-			}
-			displayDropdown($('#reqStatus'));
-
-			if (!isEmpty(keyword)) {
-				document.getElementById('keyword').value = keyword;
+				return false;
 			}
 
-			$('#searchForm').submit();
-		}).catch(error => {
-			errorMsg(error);
-		});
-	}
-
-	const getDataList = (searchOpt) => {
-		Promise.all([$.ajax({
-			url: apiHost + '/spcs/transactions',
-			type: 'GET',
-			data: {
-				'oid' : oid
-			}
-		})]).then(response => {
-			response.forEach(res => {
-				if (!isEmpty(res) && !isEmpty(res['data'])) {
-					let refineList = new Array();
-					res['data'].map(item => {
-						const found = spcArr.findIndex(x => x.spc_id === item.spc_id);
-						const to_account = JSON.parse(item.to_account);
-
-						let statusVal = ''
-						  , statusClass = '';
-						switch (item.status) {
-							case 0:
-								statusVal = '반송';
-								statusClass = 'text-link';
-								break;
-							case 1:
-								statusVal = '검토 대기';
-								statusClass = 'text-link';
-								break;
-							case 2:
-								statusVal = '검토 중';
-								statusClass = 'text-link';
-								break;
-							case 3:
-								statusVal = '승인 완료';
-								statusClass = 'text-blue';
-								break;
-							case 4:
-								statusVal = '출금 가승인';
-								statusClass = 'text-link';
-								break;
-							case 5:
-								statusVal = '출금 최종승인';
-								statusClass = 'text-blue';
-								break;
-							default:
-								statusVal = '';
-								statusClass = 'text-link';
-						}
-
-						refineList.push({
-							transactionSpcId: item.spc_id,
-							spcName: spcArr[found].spc_name,
-							transactionReqId: item.request_id,
-							bankName: item.withdraw_bank,
-							accNum: item.withdraw_account_no,
-							withdrawDay: item.withdraw_day.substring(0, 4) + '-' + item.withdraw_day.substring(4, 6) + '-' + item.withdraw_day.substring(6, 8),
-							status: statusVal,
-							statusVal: item.status,
-							statusClass: statusClass,
-							totalAmount: item.total_amount,
-							requestedAt: item.requested_at,
-							statusChangedAt: item.status_changed_at,
-							transferAgent: item.transfer_agent,
-							requestedBy: item.requested_by,
-							statusChangedBy: item.status_changed_by,
-							toAccount: to_account
-						});
-					});
-
-					if (!isEmpty(searchOpt)) {
-						refineList = refineList.filter(rowData => {
-							if ((searchOpt.status).includes(String(rowData.statusVal))
-								&& (rowData.spcName).match(searchOpt.keyword)) {
-								return true;
-							}
-						});
-					}
-
-					withdrawReqStatus.clear();
-					withdrawReqStatus.rows.add(refineList).draw();
-					$($.fn.dataTable.tables(true)).DataTable().columns.adjust();
-				} else {
-					throw Error('조회된 내역이 없습니다.');
-				}
-			});
-		}).catch(error => {
-			errorMsg(error);
-		});
-	}
-
-	const goToDetail = (rowIndex) => {
-		const rowData = withdrawReqStatus.row(rowIndex).data()
-			, status = rowData.status
-			, statusVal = rowData.statusVal
-			, spcId = rowData.transactionSpcId
-			, spcName = rowData.spcName
-			, reqId = rowData.transactionReqId
-			, accNum = rowData.accNum
-			, accInfo = rowData.bankName + ' ' + accNum;
-
-		if(statusVal === 1 && task === '2'){
-			document.getElementById('reqDetailStatus').value = '검토 중';
-			document.getElementById('reqDetailStatusVal').value = 2;
-
-			updateStatus(statusVal, reqId);
-		} else {
-			document.getElementById('reqDetailStatus').value = status;
-			document.getElementById('reqDetailStatusVal').value = statusVal;
-		}
-
-		document.getElementById('reqDetailSpcId').value = spcId;
-		document.getElementById('reqDetailSpcName').value = spcName;
-		document.getElementById('reqDetailReqId').value = reqId;
-		document.getElementById('reqDetailAccountInfo').value = accInfo;
-
-		submit({spcId, accNum});
-		// [자산 운용사]
-		// "반송" : 0, "검토 중" : "2", "승인완료": "3"	 => /spc/withdrawReqStatusDetail.do
-		// "검토 대기" : 1" 						  => /spc/withdrawReqEdit.do
-	}
-
-	const updateStatus = (newStatus, id) => {
-		$.ajax({
-			url: apiHost + '/spcs/transactions/' + id + '?oid=' + oid,
-			type: 'patch',
-			async: false,
-			dataType: 'json',
-			contentType: 'application/json',
-			data: JSON.stringify({
-				status: Number(newStatus),
-				status_changed_by: loginName,
-				status_changed_at: new Date()
-			})
-		}).done(function (json, textStatus, jqXHR) {
-			// console.log("success---", json)
-		}).fail(function (jqXHR, textStatus, errorThrown) {
-			errorMsg()
-			return false;
-		});
-	}
-
-	const submit = ({spcId, accNum}) => {
-		new Promise(resolve => {
-			$.ajax({
-				url: apiHost + '/spcs/' + spcId + '?oid=' + oid + '&includeGens=true',
-				type: 'GET',
-				success: (json, textStatus, jqXHR) => {
-					if (!isEmpty(json) && !isEmpty(json.data)) {
-						resolve(json);
-					} else {
-						new Error('SPC 정보 조회 내역이 없습니다.');
-					}
-				},
-				error: (jqXHR, textStatus, errorThrown) => {
-					console.error(textStatus);
-					new Error('SPC 정보 조회 중 오류가 발생했습니다.');
-				}
-			})
-		}).then(json => {
-			(json.data).forEach(data => {
-				const spcGens = data.spcGens
-					, promiseItem = new Array();
-
-				if (isEmpty(spcGens)) {
-					new Error('SPC 정보 조회 내역이 없습니다.');
-				} else {
-					spcGens.forEach(element => {
-						promiseItem.push(Promise.resolve(JSON.parse(element.finance_info)));
-					});
-
-					Promise.all(promiseItem).then(res => {
-						res.map(x => {
-							Object.entries(x).map(item => {
-								const accHolder = '예금주';
-								if (typeof accNum === 'number') {
-									accNum = String(accNum);
-								} else {
-									accNum = accNum.replace(/[^0-9]/g, '');
-								}
-
-								if (typeof item[1] === 'string') {
-									const itmeAcc = item[1].replace(/[^0-9]/g, '');
-
-									if (itmeAcc === accNum) {
-										let txt = item[0]
-										  , newTxt = txt.replace(/계좌_번호/g, '');
-
-										document.getElementById('reqDetailAccHolder').value = '  (' + x[accHolder + newTxt] + ')';
-										setTimeout(function () {
-											document.getElementById('reqDetailForm').submit();
-										}, 300);
-									}
-								}
-							});
-						});
-					}).catch(error => {
-						errorMsg(error);
-					});
-				}
-			});
-		}).catch(error => {
-			errorMsg(error);
-		});
-	}
-
-	$(document).on('click', '#approvalBtn', function(e) {
-		e.preventDefault();
-		let agree = true;
-		let checkedList = new Array();
-
-		const checkedArray = document.querySelectorAll('[name="table_checkbox"]:checked');
-		if (checkedArray.length <= 0) {
-			errorMsg('하나이상의 항목을 선택해 주세요.');
-		} else {
-			checkedArray.forEach(checkBox => {
-				const index = checkBox.value
-					, rowData = withdrawReqStatus.row(index).data()
-					, statusValue = rowData.statusVal
-					, withdrawDay = rowData.withdrawDay
-					, spcName = rowData.spcName
-					, totalAmount = rowData.totalAmount;
+			$(':checkbox[name="reviewOpt"]:checked').each(function() {
+				let statusValue = $(this).parents('tr').find('td:nth-child(8)').data('value');
+				let withdrawDay = $(this).parents('tr').find('td:nth-child(2)').text();
+				let spcName = $(this).parents('tr').find('td:nth-child(3)').text();
+				let totalAmount = $(this).parents('tr').find('td:nth-child(4)').text();
 
 				checkedList.push({
 					statusValue: statusValue,
@@ -471,48 +68,46 @@
 					totalAmount: totalAmount
 				});
 
-				if (statusValue !== 4) {
+				if (statusValue != 4) {
 					agree = false;
 				}
 			});
 
-			if (agree === false) {
-				errorMsg('출금 가승인 항목만 선택해 주세요.');
-			} else {
-				$('#approvalModal .modal-body .row').empty();
+			if (agree == false) {
+				$("#warningMsg").text('출금 가승인 항목만 선택해 주세요.');
+				$("#warningModal").modal("show");
+				setTimeout(function(){
+					$("#warningModal").modal("hide");
+				}, 1800);
 
-				checkedList.forEach(el => {
-					let temp = `<div class="col-12">${'${el.withdrawDay}'} ${'${el.spcName}'} ${'${el.totalAmount}'}</div>`
-					$('#approvalModal .modal-body .row').append(temp);
-				});
-
-				$('#approvalModal .modal-header h2').text('다음 ' + checkedList.length + '건의 출금을 최종승인 합니다.');
-				$('#approvalModal').modal('show');
+				return false;
 			}
-		}
-	});
 
-	$(document).on('click', '#approvalBtn', function(e) {
-		e.preventDefault();
+			$('#approvalModal .modal-body .row').empty();
+			checkedList.forEach(el => {
+				let temp = `<div class="col-12">${'${el.withdrawDay}'} ${'${el.spcName}'} ${'${el.totalAmount}'}</div>`
+				$('#approvalModal .modal-body .row').append(temp);
+			});
 
-		let finalArray = new Array();
-		const checkedArray = document.querySelectorAll('[name="table_checkbox"]:checked');
-		if (checkedArray.length <= 0) {
-			errorMsg('하나이상의 항목을 선택해 주세요.');
-		} else {
-			checkedArray.forEach(checkBox => {
-				const index = checkBox.value
-					, rowData = withdrawReqStatus.row(index).data()
-					, statusValue = rowData.statusVal
-					, reqId = rowData.transactionReqId;
+			$('#approvalModal .modal-header h2').text('다음 ' + checkedList.length + '건의 출금을 최종승인 합니다.');
+			$('#approvalModal').modal('show');
+		});
 
-				if (statusValue === 4) {
-					updateStatus('5', reqId);
-					finalArray.push(reqId);
+		$('#finalApprovalBtn').on('click', function(e) {
+			e.preventDefault();
+
+			let finalArray = new Array();
+			$(':checkbox[name="reviewOpt"]:checked').each(function() {
+				const statusValue = $(this).parents('tr').find('td:nth-child(8)').data('value');
+				const id = $(this).parents('tr').find('td:nth-child(8) button').data('req-id');
+
+				if (statusValue == 4) {
+					updateStatus('5', id);
+					finalArray.push(id);
 				}
 			});
 
-			$.ajax({
+			let option = {
 				url: apiHost + '/spcs/transactions/data_send?oid=' + oid,
 				type: 'post',
 				async: false,
@@ -521,12 +116,14 @@
 				data: JSON.stringify({
 					reqIds: finalArray
 				})
-			}).done(function (json, textStatus, jqXHR) {
+			}
+
+			$.ajax(option).done(function (json, textStatus, jqXHR) {
 				$('#approvalModal').modal('hide');
 
 				let searchOpt = {};
 				let status= [];
-				document.querySelectorAll('input[name="review_status"]:checked').forEach(chk => {
+				document.querySelectorAll('input[type="checkbox"]:checked').forEach(chk => {
 					status.push(chk.value);
 				});
 
@@ -550,93 +147,584 @@
 					});
 				}
 			});
+		});
+
+		function pageInit() {
+			tableBody.find("template").remove();
+			tableFooter.find("template").remove();
+
+			if (task != 3) {
+				$('#approvalBtn').remove();
+			}
+
+			unCheckAll($('#tableBody').parents(".sort_table "));
+
+			return new Promise((resolve, reject) => {
+				$.ajax({
+					url: apiHost + "/spcs?oid="+oid,
+					type: 'get',
+				}).done(function (json, callBack, param) {
+					let spcInfoList = [];
+					json.data.forEach((item, index) => {
+						let obj = {
+							spc_id: item.spc_id,
+							spc_name: item.name
+						}
+						spcArr.push(obj);
+					});
+
+					resolve('');
+				}).fail(function (jqXHR, textStatus, errorThrown) {
+					reject('처리 중 오류가 발생했습니다.');
+				});
+			}).then(resolve => {
+				const status = window.sessionStorage.getItem(pathName + '_status');
+				const keyword = window.sessionStorage.getItem(pathName + '_keyword');
+
+				if (!isEmpty(status)) {
+					if (status.match(',')) {
+						const statusArray = status.split(',');
+						document.querySelectorAll('[name="review_status"]').forEach(chk => {
+							if (statusArray.includes(chk.value)) {
+								chk.checked = true;
+							}
+						});
+					} else {
+						document.querySelectorAll('[name="review_status"]').forEach(chk => {
+							if (chk.value === status) {
+								chk.checked = true;
+							}
+						});
+					}
+				} else {
+					document.querySelectorAll('[name="review_status"]').forEach(chk => {
+						chk.checked = true;
+					});
+				}
+				displayDropdown($("#reqStatus"));
+
+				if (!isEmpty(keyword)) {
+					document.getElementById('keyword').value = keyword;
+				}
+
+				$("#searchForm").submit();
+			}).catch(error => {
+				alert(error);
+				return false;
+			});
 		}
-	});
 
-	function goToEdit(rowIndex) {
-		const rowData = withdrawReqStatus.row(rowIndex).data()
-			, spcId = rowData.transactionSpcId
-			, spcName = rowData.spcName
-			, reqId = rowData.transactionReqId;
+		function getDataList(page, searchOpt, sortOpt) {
+			var sortList = [];
+			var currentPage = '';
+			let action = 'get';
+			let syncOpt = true;
+			let option= {
+				url: apiHost + '/spcs/transactions',
+				type: action,
+				data: {
+					'oid' : oid
+				},
+				async: syncOpt
+			}
+			var filter = searchOpt;
+			page == undefined ? currentPage = "1" : currentPage = page;
 
-		document.getElementById('reqEditSpcId').value = spcId;
-		document.getElementById('reqEditSpcName').value = spcName;
-		document.getElementById('reqEditReqId').value = reqId;
-		document.getElementById('reqEditForm').submit();
-	}
+			$.ajax(option).done(function (json, textStatus, jqXHR) {
+				if (json.data.length > 0) {
+					let data = json.data;
 
+					if (filter) {
+						data = data.filter(item => {
+							if (!isEmpty(filter.status)) {
+								let found = spcArr.findIndex(x => x.spc_id === item.spc_id);
+								let spc_name = spcArr[found].spc_name;
+								if (!isEmpty(filter.keyword)) {
+									return $.inArray(String(item.status), filter.status) >= 0 && spc_name.toLowerCase().match((filter.keyword)) ;
+								} else {
+									return ($.inArray(String(item.status), filter.status) >= 0);
+								}
+							} else {
+								let found = spcArr.findIndex(x => x.spc_id === item.spc_id);
+								let spc_name = spcArr[found].spc_name;
+								return spc_name.toLowerCase().match((filter.keyword));
+							}
+						});
+					}
 
-	function deleteRow(rowIndex) {
-		const rowData = withdrawReqStatus.row(rowIndex).data();
+					makeNavigation(Number(currentPage), data.length)
+					var totalAmount = 0;
+					let perPage = 14;
+					let startNum = (Number(currentPage) - 1) * perPage;
+					let endNum = Number(currentPage) * perPage + 1;
 
-		let modal = $('#comDeleteModal')
-		  , deleteBtn = $('#comDeleteBtn')
-		  , confirmTitle = $('#confirmTitle')
-		  , reqId = rowData.transactionReqId;
+					tableBody.empty();
+					tableFooter.empty();
 
-		$('#comDeleteSuccessMsg span').text('삭제').data('reqId', reqId);
-		modal.find('.modal-body').removeClass('hidden');
-		modal.modal('show').data('reqId', reqId);
+					let refineList = new Array();
+					data.map((item, index) => {
+						totalAmount += item.total_amount;
+						// console.log("item---", item)
+						let found = spcArr.findIndex(x => x.spc_id === item.spc_id);
+						let perPage = 14;
+						let spc_name = ''
+						let total_amount = '';
+						let transaction_spc_id = item.spc_id;
+						let transaction_req_id = item.request_id;
+						let bank_name = item.withdraw_bank;
+						let withdraw_acc_num = item.withdraw_account_no;
 
-		confirmTitle.on('input keyp', function() {
-			if($(this).val() !== '삭제') {
-				deleteBtn.prop('disabled', true);
-				return false
+						// person
+						let requested_by = '';
+						let transfer_agent = '';
+						let status_changed_by = '';
+						// status
+						let status = '';
+						let status_val = '';
+						let link_attr = '';
+						// dates
+						// console.log("e----", item.withdraw_day)
+						let withdraw_day = item.withdraw_day.substring(0, 4) + '-' + item.withdraw_day.substring(4, 6) + '-' + item.withdraw_day.substring(6, 8);
+						let requested_at = ''
+						let status_changed_at = '';
+
+						let dataArr = [
+							item.total_amount,
+							spcArr[found].spc_name,
+							item.status,
+
+							item.requested_at,
+							item.status_changed_at,
+
+							item.requested_by,
+							item.status_changed_by,
+							item.transfer_agent,
+						];
+
+						$.each(dataArr, function(index, element){
+							if((!isEmpty(element)) && element != "string") {
+								if(index==0) {
+									total_amount = item.total_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' 원'
+								} else if(index==1){
+									spc_name = spcArr[found].spc_name;
+								} else if(index==2) {
+									if (item.status == 0 ) {
+										status="반송";
+										link_attr = "text-link";
+										status_val = 0;
+									} else if (item.status == 1) {
+										status="검토 대기";
+										link_attr = "text-link";
+										status_val = 1;
+									} else if (item.status == 2) {
+										status="검토 중";
+										link_attr = "text-link";
+										status_val = 2;
+									} else if (item.status == 3) {
+										status="승인 완료";
+										link_attr = "text-blue";
+										status_val = 3;
+									} else if (item.status == 4) {
+										status="출금 가승인";
+										link_attr = "text-link";
+										status_val = 4;
+									} else if (item.status == 5) {
+										status="출금 최종승인";
+										link_attr = "text-blue";
+										status_val = 5;
+									}
+								} else if(index == 3) {
+									requested_at = new Date(item.requested_at).format('yyyy-MM-dd HH:mm:ss');
+								} else if(index == 4) {
+									status_changed_at = new Date(item.status_changed_at).format('yyyy-MM-dd HH:mm:ss');
+								} else if(index == 5){
+									requested_by = item.requested_by;
+								} else if(index == 6) {
+									status_changed_by = item.status_changed_by;
+								} else if(index == 7) {
+									transfer_agent = item.transfer_agent;
+								}
+							} else {
+								if(index==0) {
+									total_amount = '-';
+								} else if(index==1){
+									spc_name = '-'
+								} else if(index==2) {
+									status = '-';
+									link_attr = '-';
+								} else if(index == 3) {
+									requested_at = '-';
+								} else if(index == 4) {
+									status_changed_at = '-'
+								} else if(index == 5){
+									requested_by = '-'
+								} else if(index == 6) {
+									status_changed_by = '-'
+								} else if(index == 7) {
+									transfer_agent = '-'
+								}
+							}
+						});
+
+						refineList.push({
+							transactionSpcId: transaction_spc_id,
+							spcName: spc_name,
+							transactionReqId: transaction_req_id,
+							bankName: bank_name,
+							accNum: withdraw_acc_num,
+							chkOpt: 'chkOpt_'+ index,
+							reviewOpt: 'review_opt_'+ index,
+							withdrawDay: withdraw_day,
+							statusVal: status_val,
+							totalAmount: total_amount,
+							requestedAt: requested_at,
+							statusChangedAt: status_changed_at,
+							transferAgent: transfer_agent,
+							requestedBy: requested_by,
+							statusChangedBy: status_changed_by,
+							status: status,
+							linkAttr: link_attr
+						});
+					});
+
+					if (sortOpt) {
+						refineList.sort(function(a, b) {
+							var cell1 = a[sortOpt.column];
+							var cell2 = b[sortOpt.column];
+
+							if (sortOpt.column == 'totalAmount') {
+								cell1 = cell1.replace('원', '').trim();
+								cell2 = cell2.replace('원', '').trim();
+							}
+
+							cell1 = String(cell1).replace(/^\s+|\s+$/g, '');
+							cell2 = String(cell2).replace(/^\s+|\s+$/g, '');
+
+							if (isNumberic(cell1) && isNumberic(cell2)) {
+								cell1 = Number(cell1.replace(/[^0-9]/g, ''));
+								cell2 = Number(cell2.replace(/[^0-9]/g, ''));
+							}
+
+							if (sortOpt.sort == 'up') {
+								if (cell1 < cell2) return -1;
+								if (cell1 > cell2) return 1;
+							} else {
+								if (cell1 < cell2) return 1;
+								if (cell1 > cell2) return -1;
+							}
+
+							return 0;
+						});
+					}
+
+					refineList = refineList.slice(startNum, endNum);
+					refineList.forEach(refine => {
+						let str = '';
+						str = tableCloned.replace(/\*transactionSpcId\*/g, refine.transactionSpcId)
+						.replace(/\*spcName\*/g, refine.spcName)
+						.replace(/\*transactionReqId\*/g, refine.transactionReqId)
+						.replace(/\*bankName\*/g, refine.bankName).replace(/\*accNum\*/g, refine.accNum)
+						.replace(/\*chkOpt\*/g, refine.chkOpt).replace(/\*reviewOpt\*/g, refine.reviewOpt)
+						.replace(/\*withdrawDay\*/g, refine.withdrawDay)
+						.replace(/\*statusVal\*/g, refine.statusVal)
+						.replace(/\*totalAmount\*/g, refine.totalAmount)
+						.replace(/\*requestedAt\*/g, refine.requestedAt).replace(/\*statusChangedAt\*/g, refine.statusChangedAt)
+						.replace(/\*transferAgent\*/g, refine.transferAgent).replace(/\*requestedBy\*/g, refine.requestedBy)
+						.replace(/\*statusChangedBy\*/g, refine.statusChangedBy).replace(/\*status\*/g, refine.status).replace(/\*linkAttr\*/g, refine.linkAttr)
+						tableBody.append($(str));
+					});
+
+					let str = totalAmount.toString();
+					let tfootStr = '';
+					tfootStr = tfootClone.replace(/\*total\*/g, totalAmount.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,'))
+					tableFooter.append($(tfootStr));
+				} else {
+					return false;
+				}
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				alert('처리 중 오류가 발생했습니다.');
+				return false;
+			});
+		}
+
+		function makeNavigation (currentPage, dataLength) {
+			// console.log("spc===", spcId)
+			$('#pagination').empty();
+			let pageStr = '';
+			let totalPage = Math.ceil( dataLength / perPage );
+			let navGroup = Math.floor((page - 1) / perPage) + 1;
+			let startPage = ((navGroup - 1) * perPage) + 1;
+			let totalNav = Math.ceil(totalPage / perPage);
+			let endPage = ((startPage + perPage - 1) > totalPage) ? totalPage : (startPage + navCount - 1);
+
+			if (navGroup == 1) {
+				pageStr += '<a href="javascript:void(0);" data-value="1" class="btn-prev first-arrow"></a>';
 			} else {
-				deleteBtn.prop('disabled', false);
+				let current = startPage -1;
+				pageStr += '<a href="javascript:void(0);" data-value="' + (startPage - 1) + '" class="btn-prev last-arrow"></a>';
+			}
+
+			for (let i = startPage ; i <= endPage; i++) {
+				// console.log("startPage===", startPage)
+				if (i==currentPage) {
+					pageStr += '<a href="javascript:void(0);" class="active" data-value="'+ i +'">'+i+'</a>';
+				} else {
+					pageStr += '<a href="javascript:void(0)" class="" data-value="'+ i +'">'+i+'</a>';
+				}
+			}
+
+			if (navGroup < totalNav) {
+				let current = endPage + 1;
+				pageStr += '<a href="javascript:void(0);" class="btn-next" data-value="'+ current +'"></a>';
+			} else {
+				pageStr += '<a href="javascript:void(0);" class="btn-next" data-value="' + endPage + '"></a>';
+			}
+			$('#pagination').append(pageStr);
+
+			$('#pagination a').on("click", function(){
+				let page = $(this).data("value");
+				if(currentPage == page) {
+					return false;
+				}
+
+				let searchOpt = {};
+				let checkbox = $("#reqStatus").find("input[type='checkbox']");
+				var status= [];
+
+				if (checkbox.first().is(':checked')) {
+					checkbox.each(function(){
+						status.push($(this).val())
+					});
+				} else {
+					checkbox.each(function(){
+						if($(this).is(":checked")){
+							status.push($(this).val())
+						}
+					});
+				}
+				searchOpt.status = status;
+				searchOpt.keyword = $("#keyword").val().trim().toLowerCase();
+
+				let sortOption = new Object();
+				$('.sort-table th button').each(function() {
+					if ($(this).hasClass('up') || $(this).hasClass('down')) {
+						let columnName = $(this).data('column');
+						if ($(this).hasClass('up')) {
+							sortOption['column'] = columnName;
+							sortOption['sort'] = 'up';
+						} else {
+							sortOption['column'] = columnName;
+							sortOption['sort'] = 'down';
+						}
+					}
+				});
+
+				if (isEmpty(searchOpt.status) && isEmpty(searchOpt.keyword)) {
+					getDataList(page, null, sortOption);
+				} else {
+					getDataList(page, searchOpt, sortOption);
+				}
+				return false;
+			});
+
+		}
+
+		function getNumberIndex(index) {
+			return index + 1;
+		}
+
+		function comparer(index) {
+			return function(a, b) {
+				var valA = getCellValue(a, index), valB = getCellValue(b, index);
+				if (index == 3) {
+					valA = valA.replace(/[^0-9]/g, ''), valB = valB.replace(/[^0-9]/g, '')
+				}
+				return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
+			}
+		}
+
+		function getCellValue(row, index){
+			return $(row).children('td').eq(index).text()
+		}
+
+		$("#selectAll").on("click", function(){
+			$("#tableBody").find('input:checkbox').prop('checked', this.checked);
+		});
+
+		$('.sort-table th').click(function(){
+			let thisBtn = $(this).find('button');
+			if (thisBtn.length > 0) {
+				let column = thisBtn.data('column');
+				// var table = $(this).parents("table");
+				// var rows = tableBody.find('tr').toArray().sort(comparer($('.sort-table th').index(this)));
+
+				let searchOpt = {};
+				let checkbox = $("#reqStatus").find("input[type='checkbox']");
+				var status= [];
+
+				if (checkbox.first().is(':checked')) {
+					checkbox.each(function(){
+						status.push($(this).val())
+					});
+				} else {
+					checkbox.each(function(){
+						if($(this).is(":checked")){
+							status.push($(this).val())
+						}
+					});
+				}
+				searchOpt.status = status;
+				searchOpt.keyword = $("#keyword").val().trim().toLowerCase();
+
+				if (isEmpty(searchOpt.status) && isEmpty(searchOpt.keyword)) {
+					searchOpt = null;
+				}
+
+				if (thisBtn.hasClass('up')) {
+					thisBtn.addClass('down').removeClass('up');
+					getDataList(1, searchOpt, {column: column, sort: 'down'});
+				} else {
+					thisBtn.removeClass('down').addClass('up');
+					getDataList(1, searchOpt, {column: column, sort: 'up'});
+				}
+
+
+				// for (var i = 0, rowLength = rows.length; i < rowLength; i++) {
+				// 	// TO DO !!!!! sorting json data
+				// 	tableBody.append(rows[i])
+				// }
 			}
 		});
-	}
-
-	/**
-	 * 삭제 처리
-	 */
-	$(document).on('click', '#comDeleteBtn', function() {
-		const reqId = $('#comDeleteModal').data('reqId');
-		$('#comDeleteModal').modal('hide').removeData('reqId');
-		$('#confirmTitle').val('');
-
-		$.ajax({
-			url: apiHost + '/spcs/transactions/' + reqId + '?oid=' + oid,
-			type: 'DELETE',
-			async: true
-		}).done(function (json, textStatus, jqXHR) {
-			document.getElementById('searchForm').submit();
-		}).fail(function (jqXHR, textStatus, errorThrown) {
-			console.error(textStatus);
-			errorMsg('처리중 오류가 발생했습니다.');
-			return false;
-		});
 	});
 
-	/**
-	 * 에러 처리
-	 *
-	 * @param msg
-	 */
-	const errorMsg = msg => {
-		$('#errMsg').text(msg);
-		$('#errorModal').modal('show');
-		setTimeout(function(){
-			$('#errorModal').modal('hide');
-		}, 1800);
+	function goToDetail(self) {
+		let spcId = $(self).parent().data("id");
+		let spcName = $(self).parent().data("name");
+		let reqId = self.data("req-id");
+		let bankName = self.data("name")
+		let accNum = self.data("value");
+		let status = self.text();
+		let statusVal = self.parent().data("value");
+		let accInfo = bankName + ' ' + accNum;
+		// console.log("accInfo===", accInfo);
+
+		$("#reviewStatus").val(status);
+		if(statusVal == 1 && task == 2){
+			status = "검토 중";
+			statusVal = 2;
+			$("#reviewStatus").val(status);
+			$("#reviewStatusVal").val(statusVal);
+			// console.log("reqId===", reqId)
+			updateStatus(statusVal, reqId)
+		} else {
+			$("#reviewStatus").val(status);
+			$("#reviewStatusVal").val(statusVal);
+		}
+		$("#reviewSpcId").val(spcId);
+		$("#reviewSpcName").val(spcName);
+		$("#reviewReqId").val(reqId);
+		$("#reviewAccountInfo").val(accInfo);
+
+
+		let action = 'get';
+		let syncOpt = true;
+		let option = {
+			url: apiHost + '/spcs/' + spcId + '?oid=' + oid + "&includeGens=true",
+			type: action,
+			async: syncOpt
+		}
+		submit(option, accInfo, accNum, statusVal);
+		// [자산 운용사]
+		// "반송" : 0, "검토 중" : "2", "승인완료": "3"	 => /spc/withdrawReqStatusDetail.do
+		// "검토 대기" : 1" 						  => /spc/withdrawReqEdit.do
 	}
+
+	function updateStatus(newStatus, id) {
+		let jsonData = {};
+		jsonData.status = Number(newStatus);
+		jsonData.status_changed_by = loginName;
+		jsonData.status_changed_at = new Date();
+		jsonData = JSON.stringify(jsonData);
+
+		let action = 'patch';
+		let syncOpt = true;
+		let option = {
+			url: apiHost + '/spcs/transactions/' + id + '?oid=' + oid,
+			type: 'patch',
+			async: false,
+			dataType: 'json',
+			contentType: "application/json",
+			data: jsonData
+		}
+		$.ajax(option).done(function (json, textStatus, jqXHR) {
+			// console.log("success---", json)
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			// console.log("error==", jqXHR)
+			return false;
+		});
+
+	}
+
+	function submit(opt, accInfo, accNum, statusVal){
+		let option = opt;
+		let statusValue = statusVal;
+		let accountInfo = accInfo;
+		$.ajax(option).done(function (json, textStatus, jqXHR) {
+			if (json.data[0].spcGens && json.data[0].spcGens.length > 0 ) {
+				let gensInfo = json.data[0].spcGens;
+				var promises = [];
+
+				$.each(gensInfo, function(index, element){
+					promises.push(Promise.resolve(JSON.parse(element.finance_info)));
+				});
+
+				Promise.all(promises).then(res => {
+					res.map(x => {
+						Object.entries(x).map((item, index) => {
+							const strAccNum = "계좌_번호";
+							const accHolder = "예금주";
+
+							if (typeof accNum == 'number') {
+								accNum = String(accNum);
+							}
+							const num = accNum.replace(/[^0-9]/g, '');
+
+							if (typeof item[1] === 'string') {
+								const itmeAcc = item[1].replace(/[^0-9]/g, '');
+
+								if(itmeAcc == num.toString()){
+									let txt = item[0];
+									let newTxt = txt.replace(/계좌_번호/g, '');
+									let name = '  (' + x[accHolder+newTxt] + ')';
+									$("#reviewAccountHolder").val(name);
+									setTimeout(function(){
+										$("#reviewDetailForm").submit();
+									}, 300);
+								}
+							}
+						});
+					});
+				});
+			}
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			return false;
+		});
+
+		// console.log("submit===", $(self))
+		// let accInfo = self.data("name") + '  ' + self.data("value") + '  (' + name + ')';
+	}
+
+
 </script>
 
-<form id="reqEditForm" class="" action="/spc/withdrawReqEdit.do" method="post">
-	<input type="hidden" id="reqEditSpcId" name="req_edit_spc_id" value=''/>
-	<input type="hidden" id="reqEditSpcName" name="req_edit_spc_name" value=''/>
-	<input type="hidden" id="reqEditReqId" name="req_edit_req_id" value=''/>
-</form>
-
-<form id="reqDetailForm" method="post" action="/spc/withdrawReqStatusDetail.do">
-	<input type="hidden" id="reqDetailSpcId" name="req_detail_spc_id" value=''/>
-	<input type="hidden" id="reqDetailSpcName" name="req_detail_spc_name" value=''/>
-	<input type="hidden" id="reqDetailReqId" name="req_detail_req_id" value=''/>
-	<input type="hidden" id="reqDetailAccHolder" name="req_detail_acc_holder" value=''/>
-	<input type="hidden" id="reqDetailAccountInfo" name="req_detail_acc_info" value=''/>
-	<input type="hidden" id="reqDetailStatus" name="req_detail_status" value=''/>
-	<input type="hidden" id="reqDetailStatusVal" name="req_detail_status_val" value=''/>
+<form id="reviewDetailForm" class="" action="/spc/withdrawReqStatusDetail.do" method="post">
+	<input type="hidden" id="reviewSpcId" name="req_detail_spc_id" value=''/>
+	<input type="hidden" id="reviewSpcName" name="req_detail_spc_name" value=''/>
+	<input type="hidden" id="reviewReqId" name="req_detail_req_id" value=''/>
+	<input type="hidden" id="reviewAccountHolder" name="req_detail_acc_holder" value=''/>
+	<input type="hidden" id="reviewAccountInfo" name="req_detail_acc_info" value=''/>
+	<input type="hidden" id="reviewStatus" name="req_detail_status" value=''/>
+	<input type="hidden" id="reviewStatusVal" name="req_detail_status_val" value=''/>
 </form>
 
 <div class="row header-wrapper">
@@ -675,26 +763,104 @@
 </form>
 <div class="row content-wrapper">
 	<div class="col-lg-12">
-		<div class="indiv spc-transaction">
-			<table id="withdrawReqStatus" class="chk-type">
+		<div class="indiv no-border spc-tbl">
+			<div class="btn-wrap-type01">
+<%--				<button type="button" class="btn-type">선택 인쇄</button>--%>
+			</div>
+			<table class="sort-table table-footer transaction-table">
 				<colgroup>
-					<col style="width:4%"> <!-- 체크박스 -->
-					<col style="width:8%"> <!-- 출금일자 -->
-					<col style="width:12%"> <!-- SPC 명 -->
-					<col style="width:10%"> <!-- 금 액 -->
-					<col style="width:8%"> <!-- 입출금 구분 -->
-					<col style="width:10%"> <!-- 용도 구분 -->
-					<col style="width:12%"> <!-- 요청/수정일 -->
-					<col style="width:8%"> <!-- 요청자 -->
-					<col style="width:8%"> <!-- 상태 -->
-					<col style="width:8%"> <!-- 승인자 -->
-					<col style="width:12%"> <!-- 승인일 -->
+					<col style="width:5%">
+					<col style="width:8%">
+					<col style="width:12%">
+					<col style="width:10%">
+					<col style="width:15%">
+					<col style="width:10%">
+					<col style="width:9%">
+					<col style="width:7%">
+					<col style="width:9%">
+					<col style="width:15%">
+					<col>
 				</colgroup>
+				<thead>
+				<tr>
+					<th>
+						<a class="chk-type select_row">
+							<input type="checkbox" id="selectAll" name="select_all">
+							<label for="selectAll"></label>
+						</a>
+					</th>
+					<th>
+						<button type="button" class="btn-align" data-column="withdrawDay">출금 일자</button>
+					</th>
+					<th>
+						<button type="button" class="btn-align" data-column="spcName">SPC 명</button>
+					</th>
+					<th class="right">
+						<button type="button" class="btn-align" data-column="totalAmount">금액</button>
+					</th>
+					<th>
+						<button type="button" class="btn-align" data-column="requestedAt">요청/수정일</button>
+					</th>
+					<th>
+						<button type="button" class="btn-align" data-column="requestedBy">사무 수탁사</button>
+					</th>
+					<th>
+						<button type="button" class="btn-align" data-column="transferAgent">담당자</button>
+					</th>
+					<th>
+						<button type="button" class="btn-align" data-column="status">상태</button>
+					</th>
+
+					<th>
+						<button type="button" class="btn-align" data-column="statusChangedBy">승인자</button>
+					</th>
+					<th>
+						<button type="button" class="btn-align" data-column="statusChangedAt">승인일</button>
+					</th>
+				</tr>
+				</thead>
+				<tbody id='tableBody'>
+					<tr><td colspan='10' class='no-data center'>데이터가 없습니다.</td></tr></tr>
+					<template class='table-body'>
+						<tr>
+							<td><a class="chk-type select_row"><input type="checkbox" id="*chkOpt*" name="reviewOpt"><label for="*chkOpt*"></label></a></td>
+							<td>*withdrawDay*</td>
+							<td>*spcName*</td>
+							<td class="right">*totalAmount*</td>
+							<td>*requestedAt*</td>
+							<td>*requestedBy*</td>
+							<td>*transferAgent*</td>
+							<td data-id="*transactionSpcId*" data-name="*spcName*" data-value="*statusVal*"><button type="button" data-name="*bankName*" data-value="*accNum*" data-req-id="*transactionReqId*" onclick="goToDetail($(this))" class="*linkAttr* clear-btn">*status*</button></td>
+							<td>*statusChangedBy*</td>
+							<td>*statusChangedAt*</td>
+						</tr>
+					</template>
+				</tbody>
+				<tfoot id="tableFooter">
+					<template class='table-footer'>
+						<tr>
+							<td></td>
+							<td>합계</td>
+							<td></td>
+							<td>*total* 원</td>
+							<td colspan="6"></td>
+						</tr>
+					</template>
+				</tfoot>
 			</table>
+			<div class='pagination' id='pagination'></div>
 		</div>
 	</div>
 </div>
-
+<div class="modal fade" id="warningModal" role="dialog" aria-labelledby="warningModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content collect-modal-content">
+			<div class="modal-body">
+				<h2 id="warningMsg" class="warning"></h2>
+			</div>
+		</div>
+	</div>
+</div>
 <div class="modal fade in" id="approvalModal" role="dialog">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content device_modal_content">

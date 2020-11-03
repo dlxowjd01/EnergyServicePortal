@@ -270,21 +270,15 @@
 				$('#confirmModal').modal('hide');
 			}
 
-			let jobText = jobId === undefined ? '' : '&jobId=' + jobId;
 			option = {
-				url: apiHost + '/spcs/maintenance/' + jobId + '?oid=' + oid + jobText,
-				type: action,
-				data: {
-					oid: oid,
-					jobId: jobId,
-					cascade: cascade
-				}
+				url: apiHost + '/spcs/maintenance/' + jobId + '?oid=' + oid + '&cascade=' + cascade,
+				type: action
 			};
 		}
 
 		$.ajax(option).done(function (data, textStatus, jqXHR) {
-			if (action == 'get') {
-				if (jobId != undefined) {
+			if (action === 'get') {
+				if (jobId !== undefined) {
 					modalPopInit(data.data);
 				} else {
 					checkCalendar(data.data);

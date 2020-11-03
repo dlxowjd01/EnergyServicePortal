@@ -112,57 +112,7 @@
 					bVisible: false
 				}
 			],
-			'dom': 'Btip',
-			'buttons':[
-				{
-					text: '템플릿 다운로드',
-					className: 'btn-type fl',
-					attr: {
-						id: 'template',
-						target: '_blank',
-						onclick: 'location.href="/excel/alarmSettingTemplate.xlsx"'
-					}
-				},
-				{
-					text: '적용',
-					className: 'btn-type fr my-offset-28',
-					action: function ( e, dt, node, config ) {
-						register();
-					},
-					attr: {
-						id: 'regist',
-						disabled: true
-					}
-				},
-				{
-					extend: 'excel',
-					text: '엑셀 내보내기',
-					className: 'btn-type03 fr my-offset-28 mr-8',
-					title: '',
-					messageTop: ' ',
-					exportOptions: {
-						columns: [1, 2, 3, 4, 5, 6, 7, 8, 9]
-					},
-					customize: (xlsx) => {
-						let sheet = xlsx.xl.worksheets['sheet1.xml'];
-						$('c[r=A1] t', sheet).text('작성 방법  (본 항목 삭제 금지)\n\n' +
-							'기존에 등록된 설비타압/제조사/모델명/펌웨어 버전에 대해서 동일하게 등록시 기존 항목은 모두 삭제 후 엑셀의 내용이 등록됩니다. 기존에 데이터가 있는 경우 유의하여 주시기 바랍니다. 설비타입과 알람레벨은 아래를 참고하여 값을 넣어주세요.\n\n' +
-							'1. 설비 타입: 태양광 인버터 (INV_PV), 배터리 PCS (PCS_ESS), 배터리 BMS (BMS_SYS) \n' +
-							'2. 알람 레벨: 0: 정보, 1: 경고, 2: 이상, 3: 트립, 4: 긴급, 9: 미상');
-						$('row c[r*=1]', sheet).attr('s', '55');
-						$('row', sheet).first().attr('ht', '130').attr('customHeight', "1");
-						$('row c[r*=2]', sheet).attr('s', '30');
-					},
-					filename: '알람 메시지 레벨 설정'
-				},
-				{
-					text: '엑셀 업로드',
-					className: 'btn-type03 fr my-offset-28',
-					action: function ( e, dt, node, config ) {
-						document.getElementById('excelUploadBtn').click();
-					}
-				}
-			],
+			'dom': 'tip',
 			select: {
 				style: 'multi',
 				selector: 'td:first-child > :checkbox, tr'
@@ -194,9 +144,38 @@
 			}
 		}).columns.adjust().draw();
 
-		$("#comDeleteBtn").click(function(){
-			$("#comDeleteModal").modal('hide');
-			$("#confirmTitle").val('');
+		new $.fn.dataTable.Buttons(alarmTable, {
+			name: 'commands',
+			buttons: [
+				{
+					extend: 'excel',
+					text: '엑셀 내보내기',
+					className: 'btn-save',
+					title: '',
+					messageTop: ' ',
+					exportOptions: {
+						columns: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+					},
+					customize: (xlsx) => {
+						let sheet = xlsx.xl.worksheets['sheet1.xml'];
+						$('c[r=A1] t', sheet).text('작성 방법  (본 항목 삭제 금지)\n\n' +
+							'기존에 등록된 설비타압/제조사/모델명/펌웨어 버전에 대해서 동일하게 등록시 기존 항목은 모두 삭제 후 엑셀의 내용이 등록됩니다. 기존에 데이터가 있는 경우 유의하여 주시기 바랍니다. 설비타입과 알람레벨은 아래를 참고하여 값을 넣어주세요.\n\n' +
+							'1. 설비 타입: 태양광 인버터 (INV_PV), 배터리 PCS (PCS_ESS), 배터리 BMS (BMS_SYS) \n' +
+							'2. 알람 레벨: 0: 정보, 1: 경고, 2: 이상, 3: 트립, 4: 긴급, 9: 미상');
+						$('row c[r*=1]', sheet).attr('s', '55');
+						$('row', sheet).first().attr('ht', '130').attr('customHeight', "1");
+						$('row c[r*=2]', sheet).attr('s', '30');
+					},
+					filename: '알람 메시지 레벨 설정'
+				}
+			]
+		});
+
+		alarmTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup");
+
+		$('#comDeleteBtn').click(function(){
+			$('#comDeleteModal').modal('hide');
+			$('#confirmTitle').val('');
 
 			const alarmTable = $('#alarmTable').DataTable();
 			const checkedArray = document.querySelectorAll('[name="table_checkbox"]:checked');
@@ -780,50 +759,62 @@
 </div>
 
 <div class="row">
-	<div class="col-12">
-		<div class="flex-group">
-			<span class="tx-tit">설비 타입</span>
-			<div class="dropdown" id="deviceType">
-				<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
-					선택 <span class="caret"></span>
-				</button>
-				<ul class="dropdown-menu chk-type" role="menu"></ul>
+	<div class="col-12 clear input-align">
+		<div class="fl">
+			<div class="flex-group">
+				<span class="tx-tit">설비 타입</span>
+				<div class="dropdown" id="deviceType">
+					<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
+						선택 <span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu chk-type" role="menu"></ul>
+				</div>
+			</div>
+			<div class="flex-group">
+				<span class="tx-tit">제조사</span>
+				<div class="dropdown" id="manufacturer">
+					<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
+						선택 <span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu chk-type" role="menu"></ul>
+				</div>
+			</div>
+			<div class="flex-group">
+				<span class="tx-tit">모델명</span>
+				<div class="dropdown" id="model">
+					<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
+						선택<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu"></ul>
+				</div>
+			</div>
+			<div class="flex-group">
+				<span class="tx-tit">펌웨어 버전</span>
+				<div class="dropdown" id="version">
+					<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
+						선택<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu"></ul>
+				</div>
+				<button type="button" class="btn-type ml-16" onclick="schAlarmList();">검색</button>
 			</div>
 		</div>
-		<div class="flex-group">
-			<span class="tx-tit">제조사</span>
-			<div class="dropdown" id="manufacturer">
-				<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
-					선택 <span class="caret"></span>
-				</button>
-				<ul class="dropdown-menu chk-type" role="menu"></ul>
-			</div>
-		</div>
-		<div class="flex-group">
-			<span class="tx-tit">모델명</span>
-			<div class="dropdown" id="model">
-				<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
-					선택<span class="caret"></span>
-				</button>
-				<ul class="dropdown-menu"></ul>
-			</div>
-		</div>
-		<div class="flex-group">
-			<span class="tx-tit">펌웨어 버전</span>
-			<div class="dropdown" id="version">
-				<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
-					선택<span class="caret"></span>
-				</button>
-				<ul class="dropdown-menu"></ul>
-			</div>
-			<button type="button" class="btn-type ml-16" onclick="schAlarmList();">검색</button>
-		</div>
+		<div id="exportBtnGroup" class="fr"></div>
 	</div>
 </div>
 
 <div class="row content-wrapper">
 	<div class="col-12">
 		<div class="indiv">
+			<div class="flex-wrapper mb-20">
+				<div>
+					<button type="button" class="btn-type03 big" onclick="location.href='/excel/alarmSettingTemplate.xlsx'">템플릿 다운로드</button>
+				</div>
+				<div>
+					<button type="button" class="btn-type03 big" onclick="document.getElementById('excelUploadBtn').click();">엑셀 업로드</button>
+					<button type="button" class="btn-type" id="regist" onclick="register();" disabled>적용</button>
+				</div>
+			</div>
 			<table id="alarmTable" class="chk-type">
 				<colgroup>
 					<col style="width:5%">
