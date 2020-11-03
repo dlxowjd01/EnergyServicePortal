@@ -1191,7 +1191,13 @@
 						return newVal;
 					},
 				}
-			}
+			},
+			maskFill: 'var(--clear)',
+            series: {
+                color: '#26ccc8',
+                fillOpacity: 0.00,
+                lineWidth: 2
+            }
 		},
 		plotOptions: {
 			series: {
@@ -1336,9 +1342,15 @@
 					this.points ?
 						this.points.map(function (point) {
 							let suffix  = '';
+							let val;
+							if(point.series.name == "일사량"){
+								val = Math.round(point.point.y);
+							} else {
+								val = point.point.y;
+							}
 							point.series.options.tooltip.valueSuffix ? (suffix = point.series.options.tooltip.valueSuffix) : (suffix = "");
 
-							return "<br/><span style='color:" + point.series.color + "'>\u25CF</span> " + point.series.name + ": " + point.point.y + " " + suffix;
+							return "<br/><span style='color:" + point.series.color + "'>\u25CF</span> " + point.series.name + ": " + val + " " + suffix;
 						}) : []
 				);
 			},
@@ -2370,7 +2382,6 @@
 						sortedData = Object.values(data);
 						sortedData.sortOn("dname");
 					}
-					console.log("")
 					$.map(sortedData, function(val, key) {
 						if ($.inArray(val.device_type, deviceType) === -1) {
 							// TODO!!!! api device type : SM_ISMART not available 
@@ -3035,6 +3046,7 @@
 				formId: 'v2'
 			}
 		}
+
 		const nowMonth = {
 			url: apiHost + apiEnergyNowSite,
 			type: 'get',
@@ -3118,16 +3130,28 @@
 						let capacity = 0;
 
 						if (monthlyData[1] == 'success') {
-							let resultData = flattenObject(monthlyData[0].data)
-
-							if (!isEmpty(resultData) && resultData[0].items.length > 0) {
-								chartItems1 = resultData[0].items;
-
-								chartItems1.forEach(el => {
-									if (!isEmpty(el.money)) {
-										el.money = Math.floor(el.money / 1000);
+							let resultData = monthlyData[0].data;
+							let targetData;
+							if (!isEmpty(resultData)){
+								Object.values(resultData).forEach( x => {
+									for(let i = 0, arrLength = x.length; i<arrLength; i++){
+										if(x[i].metering_type == "2"){
+											targetData = x[i].items;
+											break;
+										}
 									}
 								});
+				
+								if(!isEmpty(targetData)){
+									if (targetData.length > 0) {
+										chartItems1 = targetData;
+										chartItems1.forEach(el => {
+											if (!isEmpty(el.money)) {
+												el.money = Math.floor(el.money / 1000);
+											}
+										});
+									}
+								}
 							}
 						}
 
@@ -3169,7 +3193,6 @@
 								});
 							}
 						}
-
 						setChargeChartData(chartItems1, chartItems2, chartItems3);
 					}).fail(function () {
 						console.error('rejected');
@@ -3181,16 +3204,30 @@
 						let chartItems2 = new Array();
 
 						if (monthlyData[1] == 'success') {
-							let resultData = flattenObject(monthlyData[0].data)
+							let resultData = monthlyData[0].data;
+							let targetData;
 
-							if (!isEmpty(resultData) && resultData[0].items.length > 0) {
-								chartItems1 = resultData[0].items;
-
-								chartItems1.forEach(el => {
-									if (!isEmpty(el.money)) {
-										el.money = Math.floor(el.money / 1000);
+							if (!isEmpty(resultData)){
+								Object.values(resultData).forEach( x => {
+									for(let i = 0, arrLength = x.length; i<arrLength; i++){
+										if(x[i].metering_type == "2"){
+											targetData = x[i].items;
+											break;
+										}
 									}
 								});
+				
+								if(!isEmpty(targetData)){
+									if (targetData.length > 0) {
+										chartItems1 = targetData;
+										chartItems1.forEach(el => {
+											if (!isEmpty(el.money)) {
+												el.money = Math.floor(el.money / 1000);
+											}
+										});
+									}
+								}
+
 							}
 						}
 
@@ -3255,23 +3292,38 @@
 
 				if (result1A[1] == 'success') {
 					let v = Object.values(result1A[0].data);
-					if (!isEmpty(v) &&  v.flat()[0]["items"].length > 0) {
-						let chartData1 = v.flat()[0]["items"];
-						let initData = 0;
 
-						chartItems1 = chartData1;
-						chartData1.forEach(function(item, index){
-							initData += item.energy;
-							chartItems1[index].money = Math.floor(item.money / 1000);
+					let resultData = result1A[0].data;
+					let targetData;
+
+					if (!isEmpty(resultData)){
+						Object.values(resultData).forEach( x => {
+							for(let i = 0, arrLength = x.length; i<arrLength; i++){
+								if(x[i].metering_type == "2"){
+									targetData = x[i].items;
+									break;
+								}
+							}
 						});
 
-						monthGen = displayNumberFixedUnit(initData, 'Wh', 'MWh', 1, "round");
+						if(!isEmpty(targetData)){
+							if (targetData.length > 0) {
+								let initData = 0;
+								chartItems1 = targetData;
+								chartItems1.forEach((item, index) => {
+									initData += item.energy;
 
-						el.eq(4).text(monthGen[0]);
-						el.eq(4).next().text(monthGen[1]);
-					} else {
-						el.eq(4).text("-");
-						chartItems1 = null;
+									chartItems1[index].money = Math.floor(item.money / 1000);
+								});
+								monthGen = displayNumberFixedUnit(initData, 'Wh', 'MWh', 1, "round");
+								monthGen = displayNumberFixedUnit(initData, 'Wh', 'MWh', 1, "round");
+								el.eq(4).text(monthGen[0]);
+								el.eq(4).next().text(monthGen[1]);
+							} else {
+								el.eq(4).text("-");
+								chartItems1 = null;
+							}
+						}
 					}
 				} else {
 					el.eq(4).text("-");
@@ -3296,7 +3348,6 @@
 				if (result2[1] == 'success') {
 					let tempIrrList = [];
 					let data = result2[0];
-					let v = Object.values(result3[0].data);
 
 					$.each(data, function(index, el){
 						if(!isEmpty(el.sensor_solar.irradiationPoa)){
@@ -3310,18 +3361,30 @@
 				}
 
 				if (result3[1] == 'success') {
-					let v = Object.values(result3[0].data);
+					let resultData = result3[0].data;
+					let targetData;
 
-					if (!isEmpty(v) &&  v.flat()[0]["items"].length > 0) {
-						let val = v.flat()[0]["items"];
-						chartItems3 = addToDateList(30, val, "energy");
-						if(flagDetail[1].energyFlag == "0"){
-							flagDetail[1].energyFlag = "1";
+					if (!isEmpty(resultData)){
+						Object.values(resultData).forEach( x => {
+							for(let i = 0, arrLength = x.length; i<arrLength; i++){
+								if(x[i].metering_type == "2"){
+									targetData = x[i].items;
+									break;
+								}
+							}
+						});
+		
+						if(!isEmpty(targetData)){
+							if (targetData.length > 0) {
+								chartItems3 = addToDateList(30, targetData, "energy");
+								if(flagDetail[1].energyFlag == "0"){
+									flagDetail[1].energyFlag = "1";
+								}
+							}
 						}
-						// chartItems3 = addToDateList(d, 11, val);
+
 					}
 				}
-
 				setChargeChartData(chartItems1, chartItems2, chartItems3, flagDetail);
 			}).fail(function () {
 				console.error('rejected');
@@ -3338,10 +3401,10 @@
 		let totalMonthEnergy = 0;
 		let totalPrevYearEnergy = 0;
 		let totalPrevMonthEnergy = 0;
-		let energyData = [];
+		let energyData = new Array();
 		let energyMaxVal = 0;
-		let irradiationData = [];
-		let billingData = [];
+		let irradiationData = new Array();
+		let billingData = new Array();
 
 		if (isEmpty(flagDetail)) {		
 			sList.forEach(site => {
@@ -3394,6 +3457,7 @@
 							}
 
 							totalYearEnergy += chartItems1[d].energy / 1000;
+						
 							if (i + 1 == nowMonth) {
 								totalMonthEnergy = chartItems1[d].energy / 1000;
 							}
@@ -3401,29 +3465,27 @@
 						}
 					}
 				}
-								
+					
 				if (!matchMonth) {
 					energyData[i] = [i, null];
 					billingData[i] = [i, null];
 				}
 				
-				if(!isEmpty(chartItems2)) {
-					for (let d = 0, dLength = chartItems2.length; d < dLength; d++) {
-						let dataMonth = parseInt(("" + chartItems2[d].basetime).substring(4, 6));
-						let energyData = chartData2[d].energy / 1000;
+				for (let d = 0, dLength = chartItems2.length; d < dLength; d++) {
+					let dataMonth = parseInt(("" + chartItems2[i].basetime).substring(4, 6));
+					let energyData = chartData2[d].energy / 1000;
+					// console.log("chartItems2===", chartData2[d].energy);
+					// console.log("dataMonth===", dataMonth)
+					if (i + 1 == dataMonth) {
+						totalPrevYearEnergy += energyData;
 
-						if (i + 1 == dataMonth) {
-							totalPrevYearEnergy += energyData;
-
-							if (i + 1 == nowMonth) {
-								totalPrevMonthEnergy = energyData;
-							}
+						if (i + 1 == nowMonth) {
+							totalPrevMonthEnergy = energyData;
 						}
 					}
 				}
-
 			}
-			
+
 			monthlyChart.series[0].setData(energyData);
 
 			if (!oid.match('testkpx')) {
@@ -3437,19 +3499,15 @@
 					newSuffix = '%';
 
 					monthlyChart.update({
-						yAxis: [{
-							title: {
-								text: displayNumberFixedDecimal(energyMaxVal, 'kWh', 3, 2)[1]
+						yAxis: [
+							{
+								title: { text: displayNumberFixedDecimal(energyMaxVal, 'kWh', 3, 2)[1] }
+							},
+							{
+								title:{ text: newSuffix, x: -20 }
 							}
-						}, {
-							title:{
-								text: newSuffix,
-								x: -20
-							}
-						}],
-						legend: {
-							x: 20,
-						}
+						],
+						legend: { x: 20 }
 					});
 				} else if ($(':radio[name="radio_t"]:checked').val() == 2) {
 					seriesName = '발전시간';
@@ -3545,19 +3603,18 @@
 				tooltip: {
 					valueSuffix: 'kWh',
 				},
-				marker: {
-					symbol: "circle"
-				},
 				data: chartItems3,
 			});
 			dailySolarTrendChart.yAxis[0].update({
 				title:{
 					text: "kWh"
-				}
+				},
+				max: dailySolarMaxVal
 			});
 			for (let i = 0, dLength = chartItems2.length; i < dLength; i++) {
 				if(!isEmpty(chartItems2[i])) {
-					let energyData = chartItems2[i];
+					let energyData = Math.round(chartItems2[i]);
+
 					if(energyData>dailyInvMaxVal){
 						dailyInvMaxVal = energyData;
 					}
@@ -3578,10 +3635,11 @@
 				data: chartItems2,
 			});
 
-			dailySolarTrendChart.yAxis[0].update({
+			dailySolarTrendChart.yAxis[1].update({
 				title:{
 					text: "W/m\xB2"
-				}
+				},
+				max: dailySolarMaxVal
 			});
 			dailySolarTrendChart.redraw();
 		}
@@ -4325,12 +4383,10 @@
 						for(let i=0, arrLength = insolationData[0].length; i<arrLength; i++){
 							let irrPoa = insolationData[0][i].sensor_solar.irradiationPoa;
 							if(!isEmpty(irrPoa)){
-								console.log("irrPoa===", irrPoa)
 								energyData3[i] = numberComma(irrPoa);
 								if( energyData3[i] > invMaxVal ){
 									invMaxVal = energyData3[i];
-								}
-																
+								}								
 							}
 						}
 					}
