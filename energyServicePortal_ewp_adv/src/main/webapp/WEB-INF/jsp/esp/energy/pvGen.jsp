@@ -711,6 +711,7 @@
 			'var(--malibu)',
 			'var(--vivid-blue)',
 		];
+		let chartStandard = new Array();
 
 		const chartStyle = $('#chartStyle button').data('value'); //현재 선택된 스타일
 		const chartStyle2 = $('#chartStyle2 button').data('value'); //현재 선택된 스타일
@@ -726,7 +727,7 @@
 
 			if (['15min', 'hour'].includes(interval) && chartStyle2 === 'overlap') {
 				const standard2 = makeStandard(interval, 'overlap');
-
+				chartStandard = standard2;
 				standard2.forEach((std, index) => {
 					let timeValue = null;
 					if (!isEmpty(items)) {
@@ -742,6 +743,7 @@
 					deivceEnergy.push([std, timeValue]);
 				});
 			} else {
+				chartStandard = standard;
 				standard.forEach((std, index) => {
 					let suffix = '';
 					if (interval === '15min' || interval === 'hour') {
@@ -805,7 +807,7 @@
 			num++;
 		});
 
-		chartDraw(standard, seriesData);
+		chartDraw(chartStandard, seriesData);
 
 		//발전량 합계
 		document.querySelector('.value-wrapper').innerHTML = '';
@@ -876,7 +878,7 @@
 		document.querySelector('.text-time').innerHTML = (new Date()).format('yyyy-MM-dd HH:mm:ss');
 	}
 
-	const chartDraw = function (standard, seriesData) {
+	const chartDraw = function (chartStandard, seriesData) {
 		let chart = $('#chart2').highcharts();
 		$('#chart2').parents().closest('.clear.hidden').removeClass('hidden');
 		$('.indiv.chart-pv').addClass('fixed');
@@ -919,7 +921,7 @@
 					enabled: true,
 					rotation: -45
 				},
-				categories: standard,
+				categories: chartStandard,
 				title: {
 					text: null
 				},
