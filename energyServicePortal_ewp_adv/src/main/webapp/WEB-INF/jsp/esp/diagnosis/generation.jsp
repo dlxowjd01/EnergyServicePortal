@@ -51,7 +51,7 @@
 						</div>
 						<div class="text-input-type unit w-100">
 							<input type="text" name="capacity">
-							<span>kWh</span>
+							<span>kW</span>
 						</div>
 					</div>
 
@@ -778,6 +778,7 @@
 			// 순서대로 모아진 결과를 화면에 출력하기
 			if (!dup) {
 				dup = true;
+				$('input[name="capacity"]').val('');
 				drawPage();
 			}
 		});
