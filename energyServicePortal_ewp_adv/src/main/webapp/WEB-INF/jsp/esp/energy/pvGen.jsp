@@ -11,6 +11,7 @@
 			<button type="button" class="dropdown-toggle w-100" data-toggle="dropdown" data-name="<fmt:message key="renewablesgen.3.multipleselection" />"><fmt:message key="renewablesgen.1.select" /><span class="caret"></span></button>
 			<ul class="dropdown-menu chk-type"></ul>
 		</div>
+		<small class="warning hidden">사이트 선택은 필수입니다.</small>
 	</div>
 </div>
 <div class="row">
@@ -40,6 +41,7 @@
 									</div>
 								</div>
 							</div>
+							<small class="warning hidden">계량값 선택은 필수입니다.</small>
 						</div>
 					</div>
 					<div class="flex-group period">
@@ -58,7 +60,7 @@
 					</div>
 					<div class="flex-group duration" id="dateArea">
 						<span class="tx-tit">날짜입력</span>
-						<div class="sel-calendar">
+						<div class="sel-calendar dateField">
 							<label for="fromDate" class="sr-only">시작 날짜</label>
 							<input type="text" id="fromDate" class="sel fromDate" value="" autocomplete="off" readonly>
 							<em></em>
@@ -80,6 +82,7 @@
 									<li data-value="month"><a href="#"><fmt:message key="renewablesgen.3.1month" /></a></li>
 								</ul>
 							</div>
+							<small class="warning hidden">단위 선택은 필수입니다.</small>
 						</div>
 						<button type="button" class="btn-type" id="renderBtn"><fmt:message key="renewablesgen.3.update" /></button>
 					</div>
@@ -93,6 +96,17 @@
 							--><li data-value="allSum"><a href="#"><fmt:message key="renewablesgen.3.sumtotal" /></a></li><!--
 							--><li data-value="siteSum"><a href="#"><fmt:message key="renewablesgen.3.sumplant" /></a></li><!--
 							--><li data-value="each" class="on"><a href="#"><fmt:message key="renewablesgen.3.individualbar" /></a></li><!--
+						--></ul>
+						</div>
+					</div><!--
+				--><div class="sa-select hidden">
+						<div class="dropdown" id="chartStyle2"><!--
+						--><button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="dayBy">
+								일자별 보기<span class="caret"></span>
+							</button><!--
+						--><ul class="dropdown-menu"><!--
+							--><li data-value="dayBy"><a href="#">일자별 보기</a></li><!--
+							--><li data-value="overlap"><a href="#">겹쳐 보기</a></li><!--
 						--></ul>
 						</div>
 					</div>
@@ -121,34 +135,34 @@
 					<div class="chart-table">
 						<table>
 							<thead>
-								<tr>
-									<th>2020-08-01</th>
-									<th>01:00</th>
-									<th>02:00</th>
-									<th>03:00</th>
-									<th>04:00</th>
-									<th>05:00</th>
-									<th>06:00</th>
-									<th>07:00</th>
-									<th>08:00</th>
-									<th>09:00</th>
-									<th>10:00</th>
-									<th>11:00</th>
-									<th>12:00</th>
-									<th>13:00</th>
-									<th>14:00</th>
-									<th>15:00</th>
-									<th>16:00</th>
-									<th>17:00</th>
-									<th>18:00</th>
-									<th>19:00</th>
-									<th>20:00</th>
-									<th>21:00</th>
-									<th>22:00</th>
-									<th>23:00</th>
-									<th>24:00</th>
-									<th>합계</th>
-								</tr>
+							<tr>
+								<th>2020-08-01</th>
+								<th>01:00</th>
+								<th>02:00</th>
+								<th>03:00</th>
+								<th>04:00</th>
+								<th>05:00</th>
+								<th>06:00</th>
+								<th>07:00</th>
+								<th>08:00</th>
+								<th>09:00</th>
+								<th>10:00</th>
+								<th>11:00</th>
+								<th>12:00</th>
+								<th>13:00</th>
+								<th>14:00</th>
+								<th>15:00</th>
+								<th>16:00</th>
+								<th>17:00</th>
+								<th>18:00</th>
+								<th>19:00</th>
+								<th>20:00</th>
+								<th>21:00</th>
+								<th>22:00</th>
+								<th>23:00</th>
+								<th>24:00</th>
+								<th>합계</th>
+							</tr>
 							</thead>
 							<tbody>
 							</tbody>
@@ -161,34 +175,13 @@
 </div>
 
 <script type="text/javascript">
-	let standard = new Array(); //기준일
-	let accociation = new Map(); //응답 데이터
-	let responseCnt = 0; //응답 갯수
-	let dup = false; //중복처리 방지
+	const sites = JSON.parse('${siteList}');
+	let generationData = new Object()
+	  , standard = new Array()
+	  , interval = '';
 
-	function rtnDropdown($dropdownId) {
-		if ($dropdownId == 'siteList') {
-			device();
-		} else if ($dropdownId == 'period') {
-			let period = $('#period button').data('value');
-			if (period == 'today') { //오늘
-				// $('#cycle').
-				$('#fromDate').datepicker('setDate', 'today'); //데이트 피커 기본
-				$('#toDate').datepicker('setDate', 'today'); //데이트 피커 기본
-			} else if (period == 'week') { //이번주
-				$('#fromDate').datepicker('setDate', '-6'); //데이트 피커 기본
-				$('#toDate').datepicker('setDate', 'today'); //데이트 피커 기본
-			} else { //이번달
-				$('#fromDate').datepicker('setDate', '-30'); //데이트 피커 기본
-				$('#toDate').datepicker('setDate', 'today'); //데이트 피커 기본
-			}
-		} else if ($dropdownId == 'chartStyle') {
-			chartDataDraw();
-		}
-	}
-
-	$(function () {
-		siteList(); //사이트 조회
+	$(function() {
+		makeSiteList();
 
 		//전체 선택/전체 해제
 		$('#deviceType button.btn-type03').on('click', function (e) {
@@ -203,7 +196,7 @@
 		});
 
 		$('#renderBtn').on('click', function () {
-			fetchGenData();
+			searchGenData();
 		});
 
 		$('.btn-save').on('click', function (e) {
@@ -225,134 +218,188 @@
 	});
 
 	//사업소 호출
-	const siteList = function () {
-		$('#siteList ul').empty();
+	const makeSiteList = async () => {
+		const siteList = document.querySelector('#siteList ul');
+		while (siteList.firstChild) siteList.removeChild(siteList.firstChild);
 
-		let str = '';
-		let sites = JSON.parse('${siteList}');
+		let liStr = ``;
 		sites.forEach((site, index) => {
-			str += `<li>
+			liStr += `<li>
 						<a href="javascript:void(0);" data-value="${'${site.sid}'}" tabindex="-1">
 							<input type="checkbox" id="${'${site.sid}'}" value="${'${site.sid}'}" name="site">
 							<label for="${'${site.sid}'}">${'${site.name}'}</label>
 						</a>
 					</li>`;
 		});
-		$('#siteList ul').append(str);
+		siteList.innerHTML = liStr;
 	};
 
-	const device = function () {
-		$('#devices .dropdown-toggle').text().replace(/<[^>]+>/g, '복수 선택');
-		if ($(':checkbox[name="site"]:checked').length > 0) {
-			$('#deviceType .sec-li-box').remove();
-			$(':checkbox[name="site"]:checked').each(function () {
-				let sid = $(this).val()
-				let sNm = $(this).next('label').text();
+	const makeDeviceList = () => {
+		const selectedSite = document.querySelectorAll('input[name="site"]:checked');
 
-				$.ajax({
+		if (!isEmpty(selectedSite)) {
+			const deviceList = document.querySelectorAll('#deviceType .selectDevices');
+			while (deviceList.firstChild) deviceList.removeChild(deviceList.firstChild);
+
+			let deviceUrl = new Array();
+			selectedSite.forEach(site => {
+				const sid = site.value;
+				deviceUrl.push($.ajax({
 					url: apiHost + '/config/devices/',
-					type: 'get',
-					async: false,
+					type: 'GET',
 					data: {
 						oid: 'spower',
 						sid: sid
-					},
-					success: function (result) {
-						let devices = result;
-						if (devices.length > 0) {
-							let siteGrp = $('<li>').addClass('sec-li-box');
-							siteGrp.append('<p>');
-							siteGrp.find('p').addClass('tx-li-title').text(sNm);
-							siteGrp.append('<ul>');
+					}
+				}));
+			});
 
-							let chargeArr = new Array();
-							let dashArr = new Array();
-							let deviceType = ['SM', 'SM_ISMART', 'SM_KPX', 'SM_CRAWLING', 'SM_MANUAL', 'INV_PV', 'INV_WIND', 'PCS_ESS', 'BMS_SYS',
-								'BMS_RACK', 'SENSOR_SOLAR', 'SENSOR_FLAME', 'SENSOR_TEMP_HUMIDITY', 'CCTV', 'COMBINER_BOX', 'CIRCUIT_BREAKER'
-							];
-							$.each(devices, function (i, el) {
-								$.each(deviceType, function (j, tp) {
-									if (tp == el.device_type && (el.dashboard || el.billing)) {
-										let deviceHtml = $('<li>').append('<a>');
-										deviceHtml.find('a').attr('href', '#').attr('tabindex', '-1');
-										deviceHtml.find('a').append('<input id="' + el.did + '" name="device" type="checkbox" value="' + el.did + '" data-sid="' + el.sid + '" data-name="' + sNm + '_' + el.name + '">').append('<label>');
-										deviceHtml.find('label').attr('for', el.did).append('<span>').append('&nbsp;' + el.name);
-										siteGrp.find('ul').append(deviceHtml);
-									}
-								});
-							});
+			Promise.all(deviceUrl).then(response => {
+				const deviceList = document.querySelector('#deviceType .selectDevices');
 
-							$('#deviceType .selectDevices').prepend(siteGrp);
+				let liStr = ``;
+				response.forEach(devices => {
+					let targetSite = sites.find(site => site['sid'] === devices[0]['sid']);
 
-							let deviceHtml1 = $('<li>').append('<a>');
-							deviceHtml1.find('a').attr('href', '#').attr('tabindex', '-1');
-							deviceHtml1.find('a').append('<input id="device_billing_' + sid + '" name="device" type="checkbox" value="' + sid + '" data-name="' + sNm + '_매전">').append('<label>');
-							deviceHtml1.find('label').attr('for', 'device_billing_' + sid).append('<span>').append('&nbsp;매전량');
-							siteGrp.find('ul').prepend(deviceHtml1);
+					let deviceStr = ``;
+					if (!isEmpty(devices)) {
 
-							let deviceHtml2 = $('<li>').append('<a>');
-							deviceHtml2.find('a').attr('href', '#').attr('tabindex', '-1');
-							deviceHtml2.find('a').append('<input id="device_dash_' + sid + '" name="device" type="checkbox" value="' + sid + '" data-name="' + sNm + '_대시보드">').append('<label>');
-							deviceHtml2.find('label').attr('for', 'device_dash_' + sid).append('<span>').append('&nbsp;대시보드');
-							siteGrp.find('ul').prepend(deviceHtml2);
+						deviceStr +=
+							`   <li>
+									<a href="javascript:void(0);" tabindex="-1">
+										<input id="device_dashboard_${'${targetSite[\'sid\']}'}" name="device" type="checkbox" value="${'${targetSite[\'sid\']}'}" data-sid="${'${targetSite[\'sid\']}'}" data-name="${'${targetSite[\'name\']}'}_대시보드">
+										<label for="${'${targetSite[\'sid\']}'}"><span></span>대시보드</label>
+									</a>
+								</li>
+							`;
 
-						}
-					},
-					dataType: "json"
+						deviceStr +=
+							`   <li>
+									<a href="javascript:void(0);" tabindex="-1">
+										<input id="device_billing_${'${targetSite[\'sid\']}'}" name="device" type="checkbox" value="${'${targetSite[\'sid\']}'}" data-sid="${'${targetSite[\'sid\']}'}" data-name="${'${targetSite[\'name\']}'}_매전">
+										<label for="${'${targetSite[\'sid\']}'}"><span></span>매전량</label>
+									</a>
+								</li>
+							`;
+
+						deviceStr += `<li class="btn-wrap-border"></li>`;
+						devices.forEach(device => {
+							if (device.dashboard || device.billing) {
+								deviceStr +=
+									`   <li>
+											<a href="javascript:void(0);" tabindex="-1">
+												<input id="${'${device[\'did\']}'}" name="device" type="checkbox" value="${'${device[\'did\']}'}" data-sid="${'${targetSite[\'sid\']}'}" data-name="${'${targetSite[\'name\']}'}_${'${device[\'name\']}'}">
+												<label for="${'${device[\'did\']}'}"><span></span>${'${device[\'name\']}'}</label>
+											</a>
+										</li>
+									`;
+							}
+						});
+
+						liStr +=
+							`   <li class="sec-li-box">
+									<p class="tx-li-title">${'${targetSite[\'name\']}'}</p>
+									<ul>${'${deviceStr}'}</ul>
+								</li>
+							`;
+					}
 				});
+
+				deviceList.innerHTML = liStr;
+			}).catch(error => {
+				console.error(error);
+				errorMsg(error);
 			});
 		}
 	};
 
-	function fetchGenData() {
+	function rtnDropdown($dropdownId) {
+		if ($dropdownId === 'siteList') {
+			makeDeviceList();
+		} else if ($dropdownId === 'period') {
+			let period = $('#period button').data('value');
+			if (period === 'today') { //오늘
+				$('#fromDate').datepicker('setDate', 'today'); //데이트 피커 기본
+				$('#toDate').datepicker('setDate', 'today'); //데이트 피커 기본
+			} else if (period === 'week') { //이번주
+				$('#fromDate').datepicker('setDate', '-6'); //데이트 피커 기본
+				$('#toDate').datepicker('setDate', 'today'); //데이트 피커 기본
+			} else { //이번달
+				$('#fromDate').datepicker('setDate', '-30'); //데이트 피커 기본
+				$('#toDate').datepicker('setDate', 'today'); //데이트 피커 기본
+			}
+		} else if ($dropdownId.match('chartStyle')) {
+			chartDataDraw();
+		}
+	}
+
+	/**
+	 * 데이터 조회
+	 *
+	 * @returns {boolean}
+	 */
+	const searchGenData = () => {
 		//기간 설정 확인
 		let startTime = $('#fromDate').val().replace(/-/g, '') + "000000";
 		let endTime = $('#toDate').val().replace(/-/g, '') + "235959";
 		//주기 확인
-		const interval = $('#interval button').data('value');
+		interval = $('#interval button').data('value');
 
-		const billingSites = $.makeArray($(':checkbox[id^="device_billing_"]:checked').map(
-			function () {
-				return $(this).val();
+		if (['15min', 'hour'].includes(interval)) {
+			$('#chartStyle2').parent().removeClass('hidden');
+		} else {
+			$('#chartStyle2').parent().addClass('hidden');
+			$('#chartStyle2 button').data('value', 'dayBy').html('일자별 보기 <span class="caret"></span>');
+		}
+
+		const billingSites = new Array();
+		const dashSites = new Array();
+		const checkedDevices = new Array();
+
+		document.querySelectorAll('input[name="device"]:checked').forEach(device => {
+			const deviceId = device.getAttribute('id');
+			if (deviceId.match('billing')) {
+				billingSites.push(device.value);
+			} else if (deviceId.match('dashboard')) {
+				dashSites.push(device.value);
+			} else {
+				checkedDevices.push(device.value);
 			}
-		));
+		});
 
-		const dashSites = $.makeArray($(':checkbox[id^="device_dash_"]:checked').map(
-			function () {
-				return $(this).val();
-			}
-		));
+		const siteWarning = document.getElementById('siteList').nextElementSibling;
+		if (document.querySelectorAll('input[name="site"]:checked').length <= 0) {
+			siteWarning.classList.remove('hidden');
+		} else {
+			if (!siteWarning.className.match(/\bhidden\b/)) siteWarning.classList.add('hidden');
+		}
 
-		//체크된 디바이스
-		const checkedDevices = $.makeArray($('input[name="device"]:checked').map(
-			function () {
-				if (!$(this).attr('id').match('device')) {
-					return $(this).attr('id');
-				}
-			}
-		));
-
+		const deviceWarning = document.getElementById('deviceType').children[1].children[1];
 		if (billingSites.length <= 0 && dashSites.length <= 0 && checkedDevices.length <= 0) {
-			alert('계량값을 선택해 주세요.');
+			deviceWarning.classList.remove('hidden');
+		} else {
+			if (!deviceWarning.className.match(/\bhidden\b/)) deviceWarning.classList.add('hidden');
+		}
+
+		const intervalWarning = document.getElementById('interval').nextElementSibling;
+		if (isEmpty($('#interval button').data('value'))) {
+			intervalWarning.classList.remove('hidden');
+		} else {
+			if ($('#interval button').data('value') === 'month') startTime = startTime.substr(0, 6) + '01000000';
+			if (!intervalWarning.className.match(/\bhidden\b/)) intervalWarning.classList.add('hidden');
+		}
+
+		if (document.querySelectorAll('.warning:not(.hidden)').length > 0) {
 			return false;
 		}
 
-		if (isEmpty(interval)) {
-			alert('단위를 선택해 주세요.');
-			return false;
-		} else if (interval == 'month') {
-			startTime = startTime.substr(0, 6) + '01000000';
-		}
-
-		responseCnt = 0;
-		accociation = new Map();
+		const promiseUrl = new Array();
 
 		//매전량
 		if (billingSites.length > 0) {
-			//API 호출
-			$.ajax({
+			promiseUrl.push($.ajax({
 				url: apiHost + '/energy/sites',
-				type: "get",
+				type: 'GET',
 				async: false,
 				data: {
 					sid: billingSites.toString(),
@@ -361,25 +408,15 @@
 					interval: interval,
 					displayType: 'billing',
 					formId: 'v2'
-				},
-				success: function (data) {
-					association(data, '1');
-				},
-				error: function (error) {
-					console.error(error);
-					association(null, '1');
 				}
-			})
-		} else {
-			association(null, '1');
+			}));
 		}
 
 		//대시보드
 		if (dashSites.length > 0) {
-			//API 호출
-			$.ajax({
+			promiseUrl.push($.ajax({
 				url: apiHost + '/energy/sites',
-				type: "get",
+				type: 'GET',
 				async: false,
 				data: {
 					sid: dashSites.toString(),
@@ -388,749 +425,419 @@
 					interval: interval,
 					displayType: 'dashboard',
 					formId: 'v2'
-				},
-				success: function (data) {
-					association(data, '2');
-				},
-				error: function (error) {
-					console.error(error);
-					association(null, '2');
 				}
-			})
-		} else {
-			association(null, '2');
+			}));
 		}
 
 		if (checkedDevices.length > 0) {
-			//API 호출
-			$.ajax({
+			promiseUrl.push($.ajax({
 				url: apiHost + '/energy/devices',
-				type: "get",
+				type: 'GET',
 				async: false,
 				data: {
 					dids: checkedDevices.toString(),
 					startTime: startTime,
 					endTime: endTime,
 					interval: interval
-				},
-				success: function (data) {
-					association(data, '3');
-				},
-				error: function (error) {
-					console.error(error);
-					association(null, '3');
 				}
-			});
-		} else {
-			association(null, '3');
+			}));
 		}
+
+		Promise.all(promiseUrl).then(response => {
+			generationData = new Object();
+			if (!isEmpty(response)) {
+				response.forEach(res => {
+					const datas = res.data;
+					Object.entries(datas).forEach(([did, data]) => {
+						document.querySelectorAll('input[name="device"]:checked').forEach(device => {
+							if (device.value === did) {
+								data.name = device.dataset.name;
+								data.sid = device.dataset.sid;
+							}
+						});
+
+						generationData[did] = data;
+					});
+				});
+			}
+
+			drawPage();
+		}).catch(error => {
+			console.error(error);
+		});
 	}
 
-	function association(map, key) {
-		//사이트별 구분할수 있는 값 확인필요.
-		responseCnt++;
-		if (map != null) {
-			if (key == '1') {
-				let data = map.data;
-				$.map(data, function (v, k) {
-					$(':checkbox[id^="device_billing_"]').each(function () {
-						if ($(this).val() == k) {
-							v[0].sid = $(this).val();
-							v[0].name = $(this).data('name');
-						}
-					});
+	/**
+	 * 데이터 그리드 작성
+	 */
+	const drawPage = () => {
+		document.getElementById('tableDesktop').innerHTML = '';
+
+		standard = makeStandard(interval);
+		let gridData = gridDataMake();
+
+		//기준일 && 이름 순으로 정렬
+		gridData.sort(
+			firstBy(function(a, b) {return Number(String(a['std']).replace(/[^0-9]/g, '')) - Number(String(b['std']).replace(/[^0-9]/g, ''));})
+			.thenBy(function(a, b) {return String(b['deviceNm']) - String(a['deviceNm']);})
+		);
+
+		let stdLength = 8;
+		let colLength = 4;
+		if (interval === '15min' || interval === 'hour') {
+			stdLength = 8;
+			colLength = 4;
+		} else if (interval === 'day') {
+			stdLength = 6;
+			colLength = 2;
+		} else {
+			stdLength = 4;
+			colLength = 2;
+		}
+
+		let std = '';
+		let div = document.createElement('div');
+		div.className = 'chart-table';
+		gridData.forEach((grid, index) => {
+			const items = grid.data;
+
+			if (isEmpty(std) || std !== grid.std) {
+				if (std !== grid.std) {
+					document.querySelector('div.fold-box').appendChild(div);
+
+					div = document.createElement('div');
+					div.className = 'chart-table';
+				}
+
+				std = grid.std;
+
+				let table = document.createElement('table');
+				table.className = 'table-desktop';
+
+				let tHead = document.createElement('thead')
+				  , tBody = document.createElement('tbody')
+				  , theadTr = document.createElement('tr')
+				  , tbodyTr = document.createElement('tr')
+				  , span = document.createElement('span');
+
+				span.classList = grid.color;
+
+				let totalSum = 0;
+				items.forEach((item, index) => {
+					let th = document.createElement('th')
+					  , td = document.createElement('td')
+
+					if (index === 0) {
+						let standardDate = item.standard.substr(0, stdLength);
+
+						th.innerHTML = (standardDate.length === 8) ? standardDate.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3') : (standardDate.length === 6) ? standardDate.replace(/(\d{4})(\d{2})/, '$1-$2') : standardDate;
+						theadTr.appendChild(th);
+
+						span.innerHTML = grid.deviceNm
+						td.className = 'bullet';
+						td.appendChild(span);
+						tbodyTr.appendChild(td);
+
+						th = document.createElement('th');
+						td = document.createElement('td');
+					}
+
+					th.innerHTML = (colLength > 2) ? (item.standard.substr(stdLength, colLength)).replace(/(\d{2})(\d{2})/, '$1:$2') : Number(item.standard);
+					theadTr.appendChild(th);
+
+					td.innerHTML = (item.timeValue !== '-') ? displayNumberFixedUnit(item.timeValue, 'Wh', 'kWh', 0)[0] : item.timeValue;
+					tbodyTr.appendChild(td);
+
+					totalSum += (item.timeValue !== '-') ? item.timeValue : 0;
+
+					if ((items.length - 1) === index) {
+						th = document.createElement('th');
+						td = document.createElement('td');
+
+						th.innerHTML = '합계';
+						theadTr.appendChild(th);
+						td.innerHTML = displayNumberFixedUnit(totalSum, 'Wh', 'kWh', 0)[0];
+						tbodyTr.appendChild(td);
+					}
 				});
-				accociation.set('billing', map.data);
-			} else if (key == '2') {
-				let data = map.data;
-				$.map(data, function (v, k) {
-					$(':checkbox[id^="device_dash_"]').each(function () {
-						if ($(this).val() == k) {
-							v[0].sid = $(this).val();
-							v[0].name = $(this).data('name');
-						}
-					});
-				});
-				accociation.set('dashboard', map.data);
-			} else if (key == '3') {
-				let data = map.data;
-				$.map(data, function (v, k) {
-					$(':checkbox[name="device"]').each(function () {
-						if ($(this).data('sid') != undefined) {
-							if ($(this).val() == k) {
-								v[0].sid = $(this).data('sid');
-								v[0].name = $(this).data('name');
-							}
-						}
-					});
-				});
-				accociation.set('devices', map.data);
+
+				tHead.appendChild(theadTr);
+				tBody.appendChild(tbodyTr);
+
+				table.appendChild(tHead);
+				table.appendChild(tBody);
+
+				div.appendChild(table);
 			} else {
-				accociation.set('devices', map.data);
-			}
-		}
+				let tbodyTr = document.createElement('tr')
+				  , totalSum = 0
+				  , span = document.createElement('span');
 
-		if (responseCnt == 3) {
-			if (!dup) {
-				dup = true;
-				drawPage();
-			}
-		}
-	}
+				span.classList = grid.color;
 
-	function drawPage() {
-		$('table.table-desktop tbody').empty();
-		$('.no-data').addClass('hidden');
-		let sDate = $('#fromDate').val().replace(/-/g, '');
-		let eDate = $('#toDate').val().replace(/-/g, '');
-		let interval = $('#interval button').data('value');
+				items.forEach((item, index) => {
+					let td = document.createElement('td');
 
-		standard = new Array();
-		if (interval == 'day') {
-			let diffDay = getDiff(eDate, sDate, 'day');
-			for (let j = 0; j < diffDay; j++) {
-				let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) - 1, Number(sDate.substring(6, 8)));
-				sDateTime.setDate(Number(sDateTime.getDate()) + j);
-				let toDate = sDateTime.format('yyyyMMdd');
-				standard.push(toDate);
-			}
-		} else if (interval == 'month') {
-			let diffMonth = getDiff(eDate, sDate, 'month');
-			for (let j = 0; j < diffMonth; j++) {
-				let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) + j - 1, 1);
-				let toDate = sDateTime.format('yyyyMM');
-				standard.push(toDate);
-			}
-		} else {
-			let diffDay = getDiff(eDate, sDate, 'day');
-			//diffDay 1보다 크면 시작일과 종료일이 다르다.
-			for (let j = 0; j < diffDay; j++) {
-				let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) - 1, Number(sDate.substring(6, 8)));
-				sDateTime.setDate(sDateTime.getDate() + j);
-				let toDate = sDateTime.format('yyyyMMdd');
+					if (index === 0) {
+						span.innerHTML = grid.deviceNm
+						td.className = 'bullet';
+						td.appendChild(span);
+						tbodyTr.appendChild(td);
 
-				for (let i = 0; i < 24; i++) {
-					if (interval == '15min') { //15분
-						if (String(i).length == 1) {
-							standard.push(toDate + '0' + i + '0000');
-							standard.push(toDate + '0' + i + '1500');
-							standard.push(toDate + '0' + i + '3000');
-							standard.push(toDate + '0' + i + '4500');
-						} else {
-							standard.push(toDate + i + '0000');
-							standard.push(toDate + i + '1500');
-							standard.push(toDate + i + '3000');
-							standard.push(toDate + i + '4500');
-						}
-					} else if (interval == '30min') { //30분
-						if (String(i).length == 1) {
-							standard.push(toDate + '0' + i + '0000');
-							standard.push(toDate + '0' + i + '3000');
-						} else {
-							standard.push(toDate + i + '0000');
-							standard.push(toDate + i + '3000');
-						}
-					} else { //시간
-						if (String(i).length == 1) {
-							standard.push(toDate + '0' + i + '0000');
-						} else {
-							standard.push(toDate + i + '0000');
-						}
-					}
-				}
-			}
-		}
+						td = document.createElement('td');
 
-		let gridData = gridDataMake(standard, interval);
-		let totalArr = new Array();
-		gridData.sortOn("deviceNm");
-		if (interval == '15min' || interval == 'hour') {
-			let dateVal = '';
-			let tableTemp = $('<div class="chart-table">').append('<table class="table-desktop">');
-			let tr = $('<tr>');
-			$('div.chart-table').remove();
-
-			$.each(standard, function (i, el) {
-				let th = $('<th>');
-				if (dateVal == '') {
-					dateVal = el.substring(0, 8);
-					th.text(dateVal.substring(0, 4) + '-' + dateVal.substring(4, 6) + '-' + dateVal.substring(6, 8));
-					tr.append(th);
-
-					th = $('<th>');
-					let time = el.substring(8, 10) + ':' + el.substring(10, 12);
-					th.text(time);
-					tr.append(th);
-				} else if (dateVal != el.substring(0, 8) || standard.length == (i + 1)) {
-					if (standard.length == (i + 1)) {
-						let time = el.substring(8, 10) + ':' + el.substring(10, 12);
-						th.text(time);
-						tr.append(th);
+						td.innerHTML = displayNumberFixedUnit(item.timeValue, 'Wh', 'kWh', 0)[0];
+						tbodyTr.appendChild(td);
 					}
 
-					th = $('<th>').html('합계');
-					tr.append(th);
+					td.innerHTML = (item.timeValue !== '-') ? displayNumberFixedUnit(item.timeValue, 'Wh', 'kWh', 0)[0] : item.timeValue;
+					tbodyTr.appendChild(td);
 
-					tableTemp.find('table').append('<thead>');
-					tableTemp.find('thead').append(tr);
-					tableTemp.find('table').append('<tbody>');
+					totalSum += (item.timeValue !== '-') ? item.timeValue : 0;
 
-					let color = 1;
-					$.each(gridData, function (q, grid) {
-						if (grid.std == dateVal) {
-							let $dataTr;
-							if(gridData.length === 1){
-								$dataTr = $('<tr>').append('<td class="bullet"><span class="color2">' + grid.deviceNm + '</span></td>');
-							} else {
-								$dataTr = $('<tr>').append('<td class="bullet"><span class="color' + color + '">' + grid.deviceNm + '</span></td>');
-							}
-							$.each(grid.data, function (w, data) {
-								let $dataTd = $('<td>');
-								if (isNaN(data)) {
-									$dataTd.html(data);
-								} else {
-									$dataTd.html(numberComma(Math.round(parseFloat(data))));
-								}
-								$dataTr.append($dataTd);
-							});
+					if ((items.length - 1) === index) {
+						td = document.createElement('td');
 
-							tableTemp.find('tbody').append($dataTr);
-							color++;
-						}
-					});
-					$('div.fold-box').append(tableTemp);
-
-					//값 초기화.
-					tableTemp = $('<div class="chart-table">').append('<table class="table-desktop">');
-					tr = $('<tr>');
-					th = $('<th>');
-					dateVal = el.substring(0, 8);
-					th.text(el.substring(0, 4) + '-' + el.substring(4, 6) + '-' + el.substring(6, 8));
-					tr.append(th);
-
-					th = $('<th>');
-					th.text(el.substring(8, 10) + ':' + el.substring(10, 12));
-					tr.append(th);
-				} else {
-
-					let time = el.substring(8, 10) + ':' + el.substring(10, 12);
-					th.text(time);
-					tr.append(th);
-				}
-			});
-		} else if (interval == 'day') {
-			let dateVal = '';
-			let tableTemp = $('<div class="chart-table">').append('<table class="table-desktop">');
-			let tr = $('<tr>');
-			$('div.chart-table').remove();
-
-			$.each(standard, function (i, el) {
-				let th = $('<th>');
-				if (dateVal == '') {
-					dateVal = el.substring(0, 6);
-					th.text(dateVal.substring(0, 4) + '-' + dateVal.substring(4, 6));
-					tr.append(th);
-
-					th = $('<th>');
-					let time = el.substring(6, 8);
-					th.text(time);
-					tr.append(th);
-
-					if (standard.length == (i + 1)) {
-						th = $('<th>').html('합계');
-						tr.append(th);
-
-						tableTemp.find('table').append('<thead>');
-						tableTemp.find('thead').append(tr);
-						tableTemp.find('table').append('<tbody>');
-
-						let color = 1;
-						$.each(gridData, function (q, grid) {
-							if (grid.std == dateVal) {
-								let $dataTr = $('<tr>').append('<td class="bullet"><span class="color' + color + '">' + grid.deviceNm + '</span></td>');
-								$.each(grid.data, function (w, data) {
-									let $dataTd = $('<td>');
-									if (isNaN(data)) {
-										$dataTd.html(data);
-									} else {
-										$dataTd.html(numberComma(Math.round(parseFloat(data))));
-									}
-									$dataTr.append($dataTd);
-								});
-
-								tableTemp.find('tbody').append($dataTr);
-								color++;
-							}
-						});
-						$('div.fold-box').append(tableTemp);
+						td.innerHTML = displayNumberFixedUnit(totalSum, 'Wh', 'kWh', 0)[0];
+						tbodyTr.appendChild(td);
 					}
-				} else if (dateVal != el.substring(0, 6) || standard.length == (i + 1)) {
-					if (standard.length == (i + 1)) {
-						let time = el.substring(6, 8);
-						th.text(time);
-						tr.append(th);
-					}
-
-					th = $('<th>').html('합계');
-					tr.append(th);
-
-					tableTemp.find('table').append('<thead>');
-					tableTemp.find('thead').append(tr);
-					tableTemp.find('table').append('<tbody>');
-
-					let color = 1;
-					$.each(gridData, function (q, grid) {
-						if (grid.std == dateVal) {
-							let $dataTr = $('<tr>').append('<td class="bullet"><span class="color' + color + '">' + grid.deviceNm + '</span></td>');
-							$.each(grid.data, function (w, data) {
-								let $dataTd = $('<td>');
-								if (isNaN(data)) {
-									$dataTd.html(data);
-								} else {
-									$dataTd.html(numberComma(Math.round(parseFloat(data))));
-								}
-
-								$dataTr.append($dataTd);
-							});
-
-							tableTemp.find('tbody').append($dataTr);
-							color++;
-						}
-					});
-					$('div.fold-box').append(tableTemp);
-
-					//값 초기화.
-					tableTemp = $('<div class="chart-table">').append('<table class="table-desktop">');
-					tr = $('<tr>');
-					th = $('<th>');
-					dateVal = el.substring(0, 6);
-					th.text(el.substring(0, 4) + '-' + el.substring(4, 6));
-					tr.append(th);
-
-					th = $('<th>');
-					th.text(el.substring(6, 8));
-					tr.append(th);
-				} else {
-					let time = el.substring(6, 8);
-					th.text(time);
-					tr.append(th);
-				}
-			});
-		} else if (interval == 'month') {
-			let dateVal = '';
-			let tableTemp = $('<div class="chart-table">').append('<table class="table-desktop">');
-			let tr = $('<tr>');
-			$('div.chart-table').remove();
-
-			$.each(standard, function (i, el) {
-				let th = $('<th>');
-				if (dateVal == '') {
-					dateVal = el.substring(0, 4);
-					th.text(dateVal.substring(0, 4));
-					tr.append(th);
-
-					th = $('<th>');
-					let time = el.substring(4, 6);
-					th.text(time);
-					tr.append(th);
-
-					if (standard.length == (i + 1)) {
-						th = $('<th>').html('합계');
-						tr.append(th);
-
-						tableTemp.find('table').append('<thead>');
-						tableTemp.find('thead').append(tr);
-						tableTemp.find('table').append('<tbody>');
-
-						let color = 1;
-						$.each(gridData, function (q, grid) {
-							if (grid.std == dateVal) {
-								let $dataTr = $('<tr>').append('<td class="bullet"><span class="color' + color + '">' + grid.deviceNm + '</span></td>');
-								$.each(grid.data, function (w, data) {
-									let $dataTd = $('<td>');
-									if (isNaN(data)) {
-										$dataTd.html(data);
-									} else {
-										$dataTd.html(numberComma(Math.round(parseFloat(data))));
-									}
-									$dataTr.append($dataTd);
-								});
-
-								tableTemp.find('tbody').append($dataTr);
-								color++;
-							}
-						});
-						$('div.fold-box').append(tableTemp);
-					}
-				} else if (dateVal != el.substring(0, 4) || standard.length == (i + 1)) {
-					if (standard.length == (i + 1)) {
-						let time = el.substring(4, 6);
-						th.text(time);
-						tr.append(th);
-					}
-
-					th = $('<th>').html('합계');
-					tr.append(th);
-
-					tableTemp.find('table').append('<thead>');
-					tableTemp.find('thead').append(tr);
-					tableTemp.find('table').append('<tbody>');
-
-					let color = 1;
-					$.each(gridData, function (q, grid) {
-						if (grid.std == dateVal) {
-							let $dataTr = $('<tr>').append('<td class="bullet"><span class="color' + color + '">' + grid.deviceNm + '</span></td>');
-							$.each(grid.data, function (w, data) {
-								let $dataTd = $('<td>');
-								if (isNaN(data)) {
-									$dataTd.html(data);
-								} else {
-									$dataTd.html(numberComma(Math.round(parseFloat(data))));
-								}
-								$dataTr.append($dataTd);
-							});
-
-							tableTemp.find('tbody').append($dataTr);
-							color++;
-						}
-					});
-					$('div.fold-box').append(tableTemp);
-
-					//값 초기화.
-					tableTemp = $('<div class="chart-table">').append('<table class="table-desktop">');
-					tr = $('<tr>');
-					th = $('<th>');
-					dateVal = el.substring(0, 4);
-					th.text(el.substring(0, 4));
-					tr.append(th);
-
-					th = $('<th>');
-					time = el.substring(4, 6);
-					th.text(time);
-					tr.append(th);
-				} else {
-					let time = el.substring(4, 6);
-					th.text(time);
-					tr.append(th);
-				}
-			});
-		}
-
-		chartDataDraw();
-
-		responseCnt = 0;
-		dup = false;
-	}
-
-	//그리드 데이터 만들기
-	const gridDataMake = function (standard, type) {
-		let dataArr = new Array();
-
-		accociation.forEach(function (val, key) {
-			if (val != undefined) {
-				$.each(val, function (k, elk) {
-					let arr = elk[0].items;
-					arr.sort(function (a, b) {
-						return a['basetime'] - b['basetime'];
-					});
-
-					let arrDevice = new Array();
-					let deviceId = '';
-					let deviceNm = '';
-					let total = 0;
-					let stdDate = '';
-
-					$(':checkbox[name="device"]:checked').each(function () {
-						if ($(this).val() == k) {
-							if (key == 'billing') {
-								if ($(this).attr('id').match('billing')) {
-									deviceNm = $(this).data('name');
-								}
-							} else if (key == 'dashboard') {
-								if ($(this).attr('id').match('dash')) {
-									deviceNm = $(this).data('name');
-								}
-							} else {
-								deviceNm = $(this).data('name');
-							}
-						}
-					});
-
-					$.each(standard, function (j, stnd) {
-						let timeValue = '-';
-						if (type == '15min' || type == 'hour') {
-							if (stdDate == '') {
-								stdDate = stnd.substring(0, 8);
-							} else if (stdDate != '' && stdDate != stnd.substring(0, 8)) {
-								let totalValue = numberComma(Math.round(total));
-								arrDevice.push(totalValue); //합계.
-
-								let tempMap = {
-									deviceId: deviceId,
-									deviceNm: deviceNm,
-									std: stdDate,
-									data: arrDevice
-								}
-
-								dataArr.push(tempMap);
-
-								stdDate = stnd.substring(0, 8);
-								total = 0;
-								arrDevice = new Array();
-							}
-
-							$.each(arr, function (i, el) {
-								let base = String(el.basetime);
-								if (base.match(stnd)) {
-									timeValue = displayNumberFixedUnit(el.energy, 'Wh', 'kWh', 0);;
-									if (timeValue[0] != '-') {
-										total += el.energy / 1000;
-									}
-								}
-							});
-						} else if (type == 'day') {
-							if (stdDate == '') {
-								stdDate = stnd.substring(0, 6);
-							} else if (stdDate != '' && stdDate != stnd.substring(0, 6)) {
-								let totalValue = numberComma(Math.round(total));
-								arrDevice.push(totalValue); //합계.
-
-								let tempMap = {
-									deviceId: deviceId,
-									deviceNm: deviceNm,
-									std: stdDate,
-									data: arrDevice
-								}
-
-								dataArr.push(tempMap);
-
-								stdDate = stnd.substring(0, 6);
-								total = 0;
-								arrDevice = new Array();
-							}
-
-							$.each(arr, function (i, el) {
-								let base = String(el.basetime);
-								if (base.match(stnd)) {
-									timeValue = displayNumberFixedUnit(el.energy, 'Wh', 'kWh', 0);
-									if (timeValue[0] != '-') {
-										total += el.energy / 1000;
-									}
-								}
-							});
-						} else {
-							if (stdDate == '') {
-								stdDate = stnd.substring(0, 4);
-							} else if (stdDate != '' && stdDate != stnd.substring(0, 4)) {
-								let totalValue = numberComma(Math.round(total));
-								arrDevice.push(totalValue); //합계.
-
-								let tempMap = {
-									deviceId: deviceId,
-									deviceNm: deviceNm,
-									std: stdDate,
-									data: arrDevice
-								}
-
-								dataArr.push(tempMap);
-
-								stdDate = stnd.substring(0, 4);
-								total = 0;
-								arrDevice = new Array();
-							}
-
-							$.each(arr, function (i, el) {
-								let base = String(el.basetime);
-								if (base.match(stnd)) {
-									timeValue = displayNumberFixedUnit(el.energy, 'Wh', 'kWh', 0);
-									if (timeValue[0] != '-') {
-										total += el.energy / 1000;
-									}
-								}
-							});
-						}
-						arrDevice.push(timeValue[0]);
-					});
-					arrDevice.push(total); //합계.
-
-					let tempMap = {
-						deviceId: deviceId,
-						deviceNm: deviceNm,
-						std: stdDate,
-						data: arrDevice
-					}
-
-					dataArr.push(tempMap);
 				});
+				div.querySelector('tbody').appendChild(tbodyTr);
+			}
+
+			if ((gridData.length - 1) === index) {
+				document.querySelector('div.fold-box').appendChild(div);
 			}
 		});
+
+		chartDataDraw(generationData, standard, interval);
+	}
+
+	/**
+	 * 그리드 데이터 정제
+	 *
+	 * @returns {any[]}
+	 */
+	const gridDataMake = function () {
+		let dataArr = new Array();
+
+		Object.entries(generationData).forEach(([id, data], dataIdx) => {
+			const items = data[0].items
+				, stdLength = standard.length - 1;
+			let deivceEnergy = new Array()
+			  , stdDate = '';
+
+			standard.forEach((std, index) => {
+				let lastLength = 8;
+				let suffix = '';
+				if (interval === '15min' || interval === 'hour') {
+					lastLength = 8;
+					suffix = '';
+				} else if (interval === 'day') {
+					lastLength = 6;
+					suffix = '000000';
+				} else {
+					lastLength = 4;
+					suffix = '01000000';
+				}
+
+				if (isEmpty(stdDate)) {
+					stdDate = std.substr(0, lastLength);
+				} else {
+					if (stdDate !== std.substr(0, lastLength)) {
+						dataArr.push({
+							deviceId: id,
+							deviceNm: data.name,
+							color: 'color' + String(dataIdx + 1),
+							std: stdDate,
+							data: deivceEnergy
+						});
+
+						stdDate = std.substring(0, lastLength);
+						deivceEnergy = new Array();
+					}
+				}
+
+				let timeValue = '-';
+				if (!isEmpty(items)) {
+					items.forEach(item => {
+						if (String(item.basetime) === std + suffix) {
+							timeValue = item.energy;
+						}
+					});
+				}
+
+				deivceEnergy.push({
+					standard: std,
+					timeValue: timeValue
+				});
+
+				if (stdLength === index) {
+					dataArr.push({
+						deviceId: id,
+						deviceNm: data.name,
+						color: 'color' + String(dataIdx + 1),
+						std: stdDate,
+						data: deivceEnergy
+					});
+				}
+			});
+		})
+
 		return dataArr;
 	}
 
-	//두기간 사이 차이 구하기.
-	const getDiff = function (eDate, sDate, type) {
-		eDate = new Date(eDate.substring(2, 4), eDate.substring(4, 6) - 1, eDate.substring(6, 8));
-		sDate = new Date(sDate.substring(2, 4), sDate.substring(4, 6) - 1, sDate.substring(6, 8));
-		if (type == 'day') {
-			return (((((eDate - sDate) / 1000) / 60) / 60) / 24) + 1;
-		} else if (type == 'month') {
-			if (eDate.format('yyyyMMdd').substring(0, 4) == sDate.format('yyyyMMdd').substring(0, 4)) {
-				return (eDate.format('yyyyMMdd').substring(4, 6) * 1 - sDate.format('yyyyMMdd').substring(4, 6) * 1) + 1;
-			} else {
-				return Math.round((eDate - sDate) / (1000 * 60 * 60 * 24 * 365 / 12)) + 1;
-			}
-		}
-	}
-
-	//차트
+	/**
+	 * 차트 데이터 정제
+	 */
 	const chartDataDraw = function () {
 		let num = 0;
 		let stack = 0;
 		let seriesData = new Array();
 		let colorArr = [
-			"var(--powder-blue)",
-			"var(--turquoise)",
-			"var(--teal)",
-			"var(--light-blue)",
-			"var(--blueberry)",
-			"var(--royal-blue)",
-			"var(--blue-yonder)",
-			"var(--circle-solar-power)",
-			"var(--deep-lilac)",
-			"var(--yellow-green)",
-			"var(--green)",
-			"var(--eucalyptus)",
-			"var(--french-pass)",
-			"var(--malibu)",
-			"var(--vivid-blue)",
+			'var(--powder-blue)',
+			'var(--turquoise)',
+			'var(--teal)',
+			'var(--light-blue)',
+			'var(--blueberry)',
+			'var(--royal-blue)',
+			'var(--blue-yonder)',
+			'var(--circle-solar-power)',
+			'var(--deep-lilac)',
+			'var(--yellow-green)',
+			'var(--green)',
+			'var(--eucalyptus)',
+			'var(--french-pass)',
+			'var(--malibu)',
+			'var(--vivid-blue)',
 		];
-		let chartStyle = $('#chartStyle button').data('value'); //현재 선택된 스타일
 
-		accociation.forEach(function (v, k) {
-			if (JSON.stringify(v) != '{}') {
-				let sorted = Object.entries(v);
-				sorted.sortOn("name", 1);
+		const chartStyle = $('#chartStyle button').data('value'); //현재 선택된 스타일
+		const chartStyle2 = $('#chartStyle2 button').data('value'); //현재 선택된 스타일
 
-				$.each(sorted, function (i, el) {
-					let itm = el[1][0].items;
-					let deviceNm = el[1][0].name;
-					let arrDevice = new Array();
-					let sid = el[1][0].sid;
-					let totalCurrent = 0;
-					let dup = false;
+		Object.entries(generationData).forEach(([id, data]) => {
+			const items = data[0].items
+				, name = data.name
+				, sid = data.sid;
 
-					itm.sort(function (a, b) {
-						return a['localtime'] - b['localtime'];
-					});
+			let deivceEnergy = new Array()
+			  , totalSum = 0
+			  , dup = false;
 
-					$.each(standard, function (j, stnd) {
-						let timeValue = 0;
-						$.each(itm, function (i, el) {
-							let base = String(el.basetime);
-							if (base.match(stnd)) {
-								timeValue = el.energy;
+			if (['15min', 'hour'].includes(interval) && chartStyle2 === 'overlap') {
+				const standard2 = makeStandard(interval, 'overlap');
+
+				standard2.forEach((std, index) => {
+					let timeValue = null;
+					if (!isEmpty(items)) {
+						items.forEach(item => {
+							if (String(item.basetime).substr(8, 6) === std) {
+								console.log(std, item.energy);
+								timeValue += Math.round(item.energy / 1000) ;
+							}
+						});
+					}
+
+					totalSum += (timeValue === null) ? 0 : timeValue;
+					deivceEnergy.push([std, timeValue]);
+				});
+			} else {
+				standard.forEach((std, index) => {
+					let suffix = '';
+					if (interval === '15min' || interval === 'hour') {
+						suffix = '';
+					} else if (interval === 'day') {
+						suffix = '000000';
+					} else {
+						suffix = '01000000';
+					}
+
+					let timeValue = null;
+					if (!isEmpty(items)) {
+						items.forEach(item => {
+							if (String(item.basetime) === std + suffix) {
+								timeValue = Math.round(item.energy / 1000) ;
+							}
+						});
+					}
+
+					totalSum += (timeValue === null) ? 0 : timeValue;
+					deivceEnergy.push([std, timeValue]);
+				});
+			}
+
+			if (chartStyle === 'allSum') {
+				stack = 0;
+			} else {
+				if (chartStyle === 'siteSum') {
+					if (seriesData.length > 0) {
+						seriesData.forEach((sData) => {
+							if (sid === sData.sid) {
+								dup = true;
+								stack = sData.stack;
 							}
 						});
 
-						if (timeValue == null || timeValue == '') {
-							timeValue = 0;
-						}
-
-						const chartTimeValue = Number(String(displayNumberFixedUnit(timeValue, 'Wh', 'kWh', 0)[0]).replace(/[^0-9]/g, ''));
-						arrDevice.push([
-							stnd, chartTimeValue
-						]);
-						totalCurrent += timeValue;
-					});
-
-					if (chartStyle == 'allSum') {
-						stack = 0;
-					} else {
-						if (chartStyle == 'siteSum') {
-							if (seriesData.length > 0) {
-								$.each(seriesData, function (k, elm) {
-									if (sid == elm.sid) {
-										dup = true;
-										stack = elm.stack;
-									}
-								});
-
-								if (!dup) {
-									stack++;
-								}
-							} else {
-								stack = 0;
-							}
-						} else {
+						if (!dup) {
 							stack++;
 						}
-					}
-
-					let $temp = {};
-
-					if( accociation.size === 1 && v.length === 1){
-						$temp = {
-							name: deviceNm,
-							type: 'column',
-							stack: stack,
-							sid: sid,
-							tooltip: {
-								valueSuffix: 'Wh',
-							},
-							total: totalCurrent,
-							color: colorArr[1],
-							data: arrDevice
-						};
 					} else {
-						$temp = {
-							name: deviceNm,
-							type: 'column',
-							stack: stack,
-							sid: sid,
-							tooltip: {
-								valueSuffix: 'Wh',
-							},
-							total: totalCurrent,
-							color: colorArr[num],
-							data: arrDevice
-						};
+						stack = 0;
 					}
-					seriesData.push($temp);
-					num++;
-				});
+				} else {
+					stack++;
+				}
 			}
+
+			seriesData.push({
+				name: name,
+				type: 'column',
+				stack: stack,
+				sid: sid,
+				tooltip: {
+					valueSuffix: 'Wh',
+				},
+				total: totalSum,
+				color: colorArr[num],
+				data: deivceEnergy
+			});
+
+			num++;
 		});
 
 		chartDraw(standard, seriesData);
 
 		//발전량 합계
-		$('.value-wrapper').empty();
-		$('#pvTable').removeClass("hidden");
-		if (seriesData.length > 0) {
+		document.querySelector('.value-wrapper').innerHTML = '';
+		document.getElementById('pvTable').classList.remove('hidden');
+
+		if (!isEmpty(seriesData)) {
 			let totalArr = new Array();
-			$.each(seriesData, function (i, el) {
-				if (chartStyle == 'allSum') {
+
+			seriesData.forEach(data => {
+				if (chartStyle === 'allSum') {
 					if (totalArr.length > 0) {
-						totalArr[0].totVal += el.total;
+						totalArr[0].totVal += data.total;
 					} else {
 						totalArr.push({
 							name: '전체',
-							totVal: el.total
+							totVal: data.total
 						});
 					}
 				} else {
-					if (chartStyle == 'siteSum') {
-						let siteNm = (el.name).split('_');
-						let sid = el.sid;
-						let totVal = el.total;
-						if (totalArr.length > 0) {
+					if (chartStyle === 'siteSum') {
+						let siteNm = (data.name).split('_');
+						let sid = data.sid;
+						let totVal = data.total;
+						if (!isEmpty(totalArr)) {
 							let dup = false;
-							$.each(totalArr, function (j, element) {
-								if (el.sid == element.sid) {
+
+							totalArr.forEach(element => {
+								if (data.sid === element.sid) {
 									dup = true;
 									element.totVal += totVal;
 								}
-							});
+							})
 
 							if (!dup) {
 								totalArr.push({
@@ -1148,30 +855,31 @@
 						}
 					} else {
 						totalArr.push({
-							name: el.name,
-							totVal: el.total
+							name: data.name,
+							totVal: data.total
 						});
 					}
 				}
 			});
 
-			$.each(totalArr, function (i, el) {
-				let totTitle = '<h3 class="value-title">' + el.name + '</h3>';
-				let refined = displayNumberFixedUnit(el.totVal, 'Wh', 'kWh', 0);
-				// console.log("el.totVal---", el.totVal)
-				totTitle += '<p class="value-num"><span class="num">' + refined[0] + '</span>' + refined[1] + '</p>';
-				$('.value-wrapper').append(totTitle);
-			});
+			if (!isEmpty(totalArr)) {
+				let totalTemp = ``;
+				totalArr.forEach(total => {
+					totalTemp += `<h3 class="value-title">${'${total.name}'}</h3>
+								<p class="value-num"><span class="num">${'${numberComma(total.totVal)}'}</span> kWh</p>`;
+				});
+
+				document.querySelector('.value-wrapper').innerHTML = totalTemp;
+			}
 		}
 
-		const now = new Date();
-		$('.text-time').text(now.format('yyyy-MM-dd HH:mm:ss'));
+		document.querySelector('.text-time').innerHTML = (new Date()).format('yyyy-MM-dd HH:mm:ss');
 	}
 
 	const chartDraw = function (standard, seriesData) {
 		let chart = $('#chart2').highcharts();
-		$('#chart2').parents().closest(".clear.hidden").removeClass("hidden");
-		$(".indiv.chart-pv").addClass("fixed");
+		$('#chart2').parents().closest('.clear.hidden').removeClass('hidden');
+		$('.indiv.chart-pv').addClass('fixed');
 
 		if (chart) {
 			chart.destroy();
@@ -1301,18 +1009,24 @@
 	}
 
 	const dateFormat = function (val) {
+		const chartStyle2 = $('#chartStyle2 button').data('value'); //현재 선택된 스타일
+
 		let date = '';
-		if (val != undefined) {
-			if (String(val).length == 4) {
+
+		if (!isEmpty(val)) {
+			if (String(val).length === 4) {
 				date = val.substring(0, 4)
-			} else if (String(val).length == 6) {
+			} else if (String(val).length === 6 && chartStyle2 === 'dayBy') {
 				date = val.substring(0, 4) + '-' + val.substring(4, 6);
+			} else if (String(val).length === 6 && chartStyle2 === 'overlap') {
+				date = val.substring(0, 2) + ':' + val.substring(2, 4);
 			} else if (String(val).length > 8) {
 				date = val.substring(0, 4) + '-' + val.substring(4, 6) + '-' + val.substring(6, 8) + ' ' + val.substring(8, 10) + ':' + val.substring(10, 12);
 			} else {
 				date = val.substring(0, 4) + '-' + val.substring(4, 6) + '-' + val.substring(6, 8);
 			}
 		}
+
 		return date;
 	}
 </script>

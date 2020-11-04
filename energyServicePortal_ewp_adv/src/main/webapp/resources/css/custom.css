@@ -9092,7 +9092,7 @@ table.table-footer tfoot td.light {
 	overflow: visible;
 }
 
-.spc-search-bar .btn-wrap-border {
+.btn-wrap-border {
 	margin-top: 24px;
 	padding-top: 18px;
 	border-top: 1px solid var(--white20)

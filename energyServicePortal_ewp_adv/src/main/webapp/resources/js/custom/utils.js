@@ -1786,61 +1786,93 @@ function makeNavigation (page, totalPage) {
  * @param interval
  * @returns {any[]}
  */
-const makeStandard = (interval) => {
+const makeStandard = (interval, type) => {
 	let standard = new Array();
 	let sDate = $('#fromDate').datepicker('getDate').format('yyyyMMdd')
 	let eDate = $('#toDate').datepicker('getDate').format('yyyyMMdd')
 
-	if (interval == 'day') {
-		let diffDay = dateDiff(eDate, sDate, 'day');
-		for (let j = 0; j < diffDay; j++) {
-			let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) - 1, Number(sDate.substring(6, 8)));
-			sDateTime.setDate(Number(sDateTime.getDate()) + j);
-			let toDate = sDateTime.format('yyyyMMdd');
-			standard.push(toDate);
-		}
-	} else if (interval == 'month') {
-		let diffMonth = dateDiff(eDate, sDate, 'month');
-		for (let j = 0; j < diffMonth; j++) {
-			let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) + j - 1, 1);
-			let toDate = sDateTime.format('yyyyMM');
-			standard.push(toDate);
+	if (isEmpty(type) || type === 'dayBy') {
+		if (interval == 'day') {
+			let diffDay = dateDiff(eDate, sDate, 'day');
+			for (let j = 0; j < diffDay; j++) {
+				let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) - 1, Number(sDate.substring(6, 8)));
+				sDateTime.setDate(Number(sDateTime.getDate()) + j);
+				let toDate = sDateTime.format('yyyyMMdd');
+				standard.push(toDate);
+			}
+		} else if (interval == 'month') {
+			let diffMonth = dateDiff(eDate, sDate, 'month');
+			for (let j = 0; j < diffMonth; j++) {
+				let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) + j - 1, 1);
+				let toDate = sDateTime.format('yyyyMM');
+				standard.push(toDate);
+			}
+		} else {
+			let diffDay = dateDiff(eDate, sDate, 'day');
+			//diffDay 1보다 크면 시작일과 종료일이 다르다.
+			for (let j = 0; j < diffDay; j++) {
+				let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) - 1, Number(sDate.substring(6, 8)));
+				sDateTime.setDate(sDateTime.getDate() + j);
+				let toDate = sDateTime.format('yyyyMMdd');
+
+				for (let i = 0; i < 24; i++) {
+					if (interval == '15min') { //15분
+						if (String(i).length == 1) {
+							standard.push(toDate + '0' + i + '0000');
+							standard.push(toDate + '0' + i + '1500');
+							standard.push(toDate + '0' + i + '3000');
+							standard.push(toDate + '0' + i + '4500');
+						} else {
+							standard.push(toDate + i + '0000');
+							standard.push(toDate + i + '1500');
+							standard.push(toDate + i + '3000');
+							standard.push(toDate + i + '4500');
+						}
+					} else if (interval == '30min') { //30분
+						if (String(i).length == 1) {
+							standard.push(toDate + '0' + i + '0000');
+							standard.push(toDate + '0' + i + '3000');
+						} else {
+							standard.push(toDate + i + '0000');
+							standard.push(toDate + i + '3000');
+						}
+					} else { //시간
+						if (String(i).length == 1) {
+							standard.push(toDate + '0' + i + '0000');
+						} else {
+							standard.push(toDate + i + '0000');
+						}
+					}
+				}
+			}
 		}
 	} else {
-		let diffDay = dateDiff(eDate, sDate, 'day');
-		//diffDay 1보다 크면 시작일과 종료일이 다르다.
-		for (let j = 0; j < diffDay; j++) {
-			let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) - 1, Number(sDate.substring(6, 8)));
-			sDateTime.setDate(sDateTime.getDate() + j);
-			let toDate = sDateTime.format('yyyyMMdd');
-
-			for (let i = 0; i < 24; i++) {
-				if (interval == '15min') { //15분
-					if (String(i).length == 1) {
-						standard.push(toDate + '0' + i + '0000');
-						standard.push(toDate + '0' + i + '1500');
-						standard.push(toDate + '0' + i + '3000');
-						standard.push(toDate + '0' + i + '4500');
-					} else {
-						standard.push(toDate + i + '0000');
-						standard.push(toDate + i + '1500');
-						standard.push(toDate + i + '3000');
-						standard.push(toDate + i + '4500');
-					}
-				} else if (interval == '30min') { //30분
-					if (String(i).length == 1) {
-						standard.push(toDate + '0' + i + '0000');
-						standard.push(toDate + '0' + i + '3000');
-					} else {
-						standard.push(toDate + i + '0000');
-						standard.push(toDate + i + '3000');
-					}
-				} else { //시간
-					if (String(i).length == 1) {
-						standard.push(toDate + '0' + i + '0000');
-					} else {
-						standard.push(toDate + i + '0000');
-					}
+		for (let i = 0; i < 24; i++) {
+			if (interval === '15min') { //15분
+				if (String(i).length === 1) {
+					standard.push('0' + i + '0000');
+					standard.push('0' + i + '1500');
+					standard.push('0' + i + '3000');
+					standard.push('0' + i + '4500');
+				} else {
+					standard.push(i + '0000');
+					standard.push(i + '1500');
+					standard.push(i + '3000');
+					standard.push(i + '4500');
+				}
+			} else if (interval === '30min') { //30분
+				if (String(i).length === 1) {
+					standard.push('0' + i + '0000');
+					standard.push('0' + i + '3000');
+				} else {
+					standard.push(i + '0000');
+					standard.push(i + '3000');
+				}
+			} else { //시간
+				if (String(i).length === 1) {
+					standard.push('0' + i + '0000');
+				} else {
+					standard.push(i + '0000');
 				}
 			}
 		}
@@ -2018,3 +2050,23 @@ function navigationType(){
     }
     return result;
 }
+
+/**
+ * 이중 정렬 처리
+ *
+ * @type {function(*): *}
+ */
+const firstBy = (function() {
+	function extend(f) {
+		f.thenBy = tb;
+		return f;
+	}
+
+	function tb(y) {
+		var x = this;
+		return extend(function(a, b) {
+			return x(a, b) || y(a, b);
+		});
+	}
+	return extend;
+})();

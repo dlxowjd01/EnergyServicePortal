@@ -36,19 +36,25 @@
 					<button type="button" class="btn-caret fr">펼치기</button>
 				</div>
 				<div class="table-fold-container">
-					<div class="dropdown" id="measure">
-						<button type="button" class="dropdown-toggle w8" data-toggle="dropdown"
-							data-value="NMAE">
-							NMAE<span class="caret"></span>
-						</button>
-						<ul class="dropdown-menu">
-							<li data-value="NMAE" class="on">
-								<a href="javascript:void(0);">NMAE</a>
-							</li>
-							<li data-value="MAPE"><a href="javascript:void(0);">MAPE</a></li>
-							<li data-value="RRMSE"><a href="javascript:void(0);">RRMSE</a></li>
-						</ul>
+					<div class="flex-wrapper">
+						<div id="measure" class="dropdown">
+							<button type="button" class="dropdown-toggle w8" data-toggle="dropdown" data-value="NMAE">
+								NMAE<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu">
+								<li data-value="NMAE" class="on">
+									<a href="javascript:void(0);">NMAE</a>
+								</li>
+								<li data-value="MAPE"><a href="javascript:void(0);">MAPE</a></li>
+								<li data-value="RRMSE"><a href="javascript:void(0);">RRMSE</a></li>
+							</ul>
+						</div>
+						<div class="text-input-type unit w-100">
+							<input type="text" name="capacity">
+							<span>kWh</span>
+						</div>
 					</div>
+
 					<p class="table-text">오차 계산 데이터 필터</p>
 					<div class="dropdown mb-16" id="ignore_ref">
 						<button type="button" class="dropdown-toggle w-100" data-toggle="dropdown">
@@ -68,11 +74,11 @@
 					</div>
 					<div class="flex-wrapper">
 						<div class="text-input-type unit w-100">
-							<input type="number" name="ignore_tolerance1" />
+							<input type="number" name="ignore_tolerance1">
 							<span>&#37;</span>
 						</div>
 						<div class="text-input-type unit t1 w-100">
-							<input type="number" name="ignore_tolerance2" />
+							<input type="number" name="ignore_tolerance2">
 							<span>kWh</span>
 						</div>
 					</div>
@@ -325,6 +331,13 @@
 			}
 		} else if ($dropdownId == 'chartStyle') {
 			chartDataDraw();
+		} else if ($dropdownId === 'measure') {
+			const data = $('#' + $dropdownId + ' button').data('value');
+			if (data === 'NMAE') {
+				$('input[name="capacity"]').prop('readonly', false);
+			} else {
+				$('input[name="capacity"]').prop('readonly', true);
+			}
 		}
 	}
 
@@ -337,8 +350,10 @@
 
 		//체크된 디바이스
 		const checkedDevices = new Array();
+		let capacity = 0;
 		document.querySelectorAll('input[name="device"]:checked').forEach(chk => {
-			const did = chk.dataset['did'];
+			const did = chk.dataset['did']
+				, deviceCapacity = chk.dataset.capacity;
 			if (!isEmpty(did)) {
 				if (did.match(',')) {
 					const dids = did.split(',');
@@ -401,10 +416,24 @@
 					if (result != null && result != '' && result.message == 'OK') {
 						let calWat = result.value;
 						if (calWat != null) {
-							$('.value-num').eq(2).append('<span class="num">' + calWat.toFixed(2) + '</span>%');
+							$('.value-num').eq(2).empty().append('<span class="num">' + calWat.toFixed(2) + '</span>%');
+
+							if (!isEmpty(result.info) && !isEmpty(result.info.capacity)) {
+								let resultCapacity = Math.round(result.info.capacity / 10) / 100
+								let inputCapacity = $('input[name="capacity"]').val();
+
+								if (!isEmpty(inputCapacity) && inputCapacity !== resultCapacity) {
+									calWat = (calWat * resultCapacity) / inputCapacity;
+									$('.value-num').eq(2).empty().append('<span class="num">' + calWat.toFixed(2) + '</span>%');
+								} else {
+									$('input[name="capacity"]').val(resultCapacity);
+								}
+							} else {
+								$('input[name="capacity"]').val('');
+							}
 						} else {
 							alert('예측 오차 계산의 비교 대상 데이터가 없습니다.');
-							$('.value-num').eq(2).append('<span class="num"> </span>%');
+							$('.value-num').eq(2).empty().append('<span class="num"> </span>%');
 						}
 					}
 				},
@@ -472,7 +501,7 @@
 									if (tp == el.device_type && (el.dashboard || el.billing)) {
 										let deviceHtml = $('<li>').append('<a>');
 										deviceHtml.find('a').attr('href', '#').attr('tabindex', '-1');
-										deviceHtml.find('a').append('<input id="' + el.did + '" name="device" type="checkbox" value="' + el.did + '" data-name="' + sNm + '_' + el.name + '" data-did="' + el.did + '">').append('<label>');
+										deviceHtml.find('a').append('<input id="' + el.did + '" name="device" type="checkbox" value="' + el.did + '" data-name="' + sNm + '_' + el.name + '" data-did="' + el.did + '" data-capacity="' + el.capacity + '">').append('<label>');
 										deviceHtml.find('label').attr('for', el.did).append('<span>').append('&nbsp;' + el.name);
 										siteGrp.find('ul').append(deviceHtml);
 									}

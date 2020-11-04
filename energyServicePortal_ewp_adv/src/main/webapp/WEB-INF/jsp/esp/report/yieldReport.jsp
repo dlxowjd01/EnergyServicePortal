@@ -9,12 +9,7 @@
 
 	const yieldReportType = new Object();
 
-	let reportType = {
-		regular_mm: '월간 실적',
-		regular_qt: '분기 실적',
-		regular_yy: '년간 실적',
-		profit_mm: '수익보고서'
-	}
+	let reportType = new Object();
 
 	$(function () {
 		yieldTable = $('#yieldTable').DataTable({
@@ -337,7 +332,7 @@
 
 			$('#reportModal').modal();
 		}).catch(error => {
-			console.log(error);
+			console.error(error);
 			errorMsg('처리중 오류가 발생했습니다.');
 		});
 	}
@@ -383,7 +378,7 @@
 								</ul>
 							</div>
 							<div class="text-input-type fl">
-								<input type="text" id="report_variable_val_${'${liIndex}'}" name="report_variable_val_${'${liIndex}'}" placeholder="입력">
+								<input type="text" id="report_variable_val_${'${liIndex}'}" name="report_variable_val_${'${liIndex}'}" placeholder="입력" autocomplete="off">
 							</div>
 							<button type="button" class="btn-type07" onclick="$(this).parents('li').remove();">삭제</button>
 						</li>`;
@@ -798,7 +793,6 @@
 			</div>
 		</div>
 	</div>
-
 </div>
 
 
@@ -816,10 +810,6 @@
 					<button type="button" class="dropdown-toggle w7" data-toggle="dropdown"><fmt:message key="revenuereport.1.all" /><span class="caret"></span></button>
 					<ul class="dropdown-menu" role="menu">
 						<li data-value=""><a href="javascript:void(0);"><fmt:message key="revenuereport.1.all" /></a></li>
-						<li data-value="regular_mm"><a href="javascript:void(0);">월간실적</a></li>
-						<li data-value="regular_qt"><a href="javascript:void(0);">분기실적</a></li>
-						<li data-value="regular_yy"><a href="javascript:void(0);">년간실적</a></li>
-						<li data-value="profit_mm"><a href="javascript:void(0);">수익보고서</a></li>
 					</ul>
 				</div>
 			</div>
@@ -859,7 +849,7 @@
 			</div>
 		</div>
 		<div class="fl">
-			<div class="text-input-type"><input type="text" id="key_word" placeholder="입력"></div>
+			<div class="text-input-type"><input type="text" id="key_word" placeholder="입력" autocomplete="off"></div>
 		</div>
 		<div class="fl">
 			<button type="button" class="btn-type" onclick="getDataList();">

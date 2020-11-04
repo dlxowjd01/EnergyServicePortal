@@ -1573,23 +1573,3 @@ const getWeatherIconClass = (weatherId) => {
 	}
 	return weatherIconClass
 }
-
-/**
- * 이중 정렬 처리
- *
- * @type {function(*): *}
- */
-const firstBy = (function() {
-	function extend(f) {
-		f.thenBy = tb;
-		return f;
-	}
-
-	function tb(y) {
-		var x = this;
-		return extend(function(a, b) {
-			return x(a, b) || y(a, b);
-		});
-	}
-	return extend;
-})();
