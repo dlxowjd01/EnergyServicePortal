@@ -480,7 +480,7 @@
 			}
 		}
 
-		if ($('#report_data_start').datapicker('getDate') === null || $('#report_data_end').datapicker('getDate') === null) {
+		if ($('#report_data_start').datepicker('getDate') === null || $('#report_data_end').datepicker('getDate') === null) {
 			errorMsg('적용기간 입력은 필수입니다.');
 			return;
 		}
