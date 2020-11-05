@@ -628,6 +628,18 @@
 	</ul>
 </nav>
 
+
+<div class="modal fade stack" id="ajaxResultModal" tabindex="-1" role="dialog" aria-labelledby="ajaxResultModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header"><h4></h4></div>
+			<div class="btn-wrap-type05"><!--
+			--><button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close">확인</button><!--
+		--></div>
+		</div>
+	</div>
+</div>
+
 <div class="modal fade stack" id="errorModal" role="dialog" aria-labelledby="errorModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-warning">
 		<div class="modal-content">

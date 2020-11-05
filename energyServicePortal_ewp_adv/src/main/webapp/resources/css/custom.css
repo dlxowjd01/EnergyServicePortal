@@ -3797,6 +3797,7 @@ li[data-alarm="urgent"]:before,
 /* addUserModal */
 
 .user-modal-content {
+	width: 80vw;
 	padding: 40px 48px 42px;
 }
 

@@ -142,12 +142,6 @@
 			}, 1600);
 		});
 
-		$("#resultModal").on("hide.bs.modal", function() {
-			// console.log("resultModal closed===");
-			$(this).find("h4").addClass("hidden");
-		});
-
-
 		// Form Submission
 		$("#updateGroupForm").on("submit", function(e){
 			e.preventDefault();
@@ -160,9 +154,22 @@
 			let newGroupDesc = $("#newGroupDesc").val();
 			let selectedSiteId = $("#newSiteList input:checked");
 			let siteArr = [];
+			let callbackOption = {
+				callback: "showAjaxResultModal",
+				loop: false,
+				id: "ajaxResultModal",
+				siblingId: null,
+				type: "",
+				successMsg: "",
+				FailMsg: ""
+			}
 
 			// 1. Add group info
 			if(!$("#addGroupModal").hasClass("edit")) {
+				let resultSuccessText = "그룹 추가에 성공 하였습니다.";
+				let resultFailText = "그룹 추가에 실패 하였습니다.<br>";
+				callbackOption.type = "0";
+
 				obj.name = newGroupName;
 				if(!isEmpty(newGroupDesc)){
 					obj.description = newGroupDesc;
@@ -183,9 +190,11 @@
 						contentType: 'application/json; charset=UTF-8',
 						data: JSON.stringify(obj)
 					}
+					
+					callbackOption.FailMsg = "사이트 그룹 추가에 실패하였습니다.<br>";
 
-					Promise.resolve(returnAjaxRes(option)).then(res => {
-						console.log("res---", res)
+					makeAjaxCall(option, callbackOption ).then(res => {
+						console.log("add site group res===", res);
 						if(!isEmpty(res)){
 							$.each(selectedSiteId, function(index, el){
 								siteArr.push($(this).data("value") );
@@ -203,29 +212,19 @@
 							};
 
 							$.ajax(siteOpt).done(function (json, textStatus, jqXHR) {
-								$("#addGroupModal").modal("hide");
-								$("#resultSuccessMsg").text("사이트 그룹이 추가 되었습니다.").removeClass("hidden");
-								$("#resultBtn").parent().addClass("hidden");
-								$("#resultModal").modal("show");
+								let resultMsg = "사이트 " + resultSuccessText;
+								showAjaxResultModal("ajaxResultModal", "addGroupModal", "1", resultMsg);
 								getGroupData(initModal);
-								setTimeout(function(){
-									$("#resultModal").modal("hide");
-								}, 1600);
 							}).fail(function (jqXHR, textStatus, errorThrown) {
-								console.log("fail==", jqXHR);
-							});
-														
-						} else {
-							$("#resultSuccessMsg").addClass("hidden");
-							$("#resultFailureMsg").text("사이트 그룹이 추가에 실패하였습니다. 다시 시도해 주세요").removeClass("hidden");
-							$("#resultBtn").parent().addClass("hidden");
-							$("#resultModal").modal("show");
-							setTimeout(function(){
-								$("#resultModal").modal("hide");
-							}, 1600);
+								let errorMsg = resultFailText + "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText;
+								showAjaxResultModal("ajaxResultModal", "addGroupModal", "0", errorMsg);
+							});								
 						}
-					}).catch( err => console.log("cannot get user data", err));
+					});
 				} else {
+					let resultSuccessText = "그룹 추가에 성공 하였습니다.";
+					let resultFailText = "그룹 추가에 실패 하였습니다.<br>";
+
 					obj.resourceId = newResId;
 					if(newGroupType == "vpp_group"){
 						let option = {
@@ -236,9 +235,9 @@
 							contentType: 'application/json; charset=UTF-8',
 							data: JSON.stringify(obj)
 						}
+						callbackOption.FailMsg = "VPP(중개 거래) 추가에 실패하였습니다.<br>";
 
-						Promise.resolve(returnAjaxRes(option)).then(res => {
-							console.log("res---", res);
+						makeAjaxCall(option, callbackOption).then(res => {
 							if(!isEmpty(res)){
 								let promises = [];
 								let vgid = res.vgid;
@@ -256,29 +255,20 @@
 											contentType: 'application/json; charset=UTF-8',
 											data: JSON.stringify(siteObj),
 										};
-										promises.push(Promise.resolve(makeAjaxCall(siteOpt)));
+										promises.push(makeAjaxCall(siteOpt));
 									});
 									Promise.all(promises).then(finalRes => {
-										$("#addGroupModal").modal("hide");
-										$("#resultSuccessMsg").text("VPP(중개 거래) 그룹이 추가 되었습니다.").removeClass("hidden");
-										$("#resultBtn").parent().addClass("hidden");
-										$("#resultModal").modal("show");
+										let resultMsg = "VPP(중개 거래) " + resultSuccessText;
+										showAjaxResultModal("ajaxResultModal", "addGroupModal", "1", resultMsg);
 										getGroupData(initModal);
-										setTimeout(function(){
-											$("#resultModal").modal("hide");
-										}, 1600);
-									}).catch( err => console.log("cannot get user data", err));					
+									}).catch( err => {
+										console.log("cannot edit Vpp Site info", err);
+										let errorMsg = "VPP(중개 거래) " + resultFailText + "에러 메세지:" + err;
+										showAjaxResultModal("ajaxResultModal", "addGroupModal", "0", errorMsg);
+									});
 								}
-							} else {
-								$("#resultSuccessMsg").addClass("hidden");
-								$("#resultFailureMsg").text("VPP(중개 거래) 그룹 추가에 실패하였습니다. 다시 시도해 주세요").removeClass("hidden");
-								$("#resultBtn").parent().addClass("hidden");
-								$("#resultModal").modal("show");
-								setTimeout(function(){
-									$("#resultModal").modal("hide");
-								}, 1600);
 							}
-						}).catch( err => console.log("cannot get user data", err));
+						});
 					}
 					
 					// if (newGroupType == "dr_group"){
@@ -291,7 +281,7 @@
 					// 		data: JSON.stringify(obj)
 					// 	}
 
-					// 	Promise.resolve(returnAjaxRes(option)).then(res => {
+					// 	makeAjaxCall(option).then(res => {
 					// 		if(!isEmpty(res)){
 					// 			let promises = [];
 					// 			let dgid = res.dgid;
@@ -308,7 +298,7 @@
 					// 						contentType: 'application/json; charset=UTF-8',
 					// 						data: JSON.stringify(siteObj),
 					// 					};
-					// 					promises.push(Promise.resolve(returnAjaxRes(siteOpt)));
+					// 					promises.push(makeAjaxCall(siteOpt));
 					// 				});
 					// 				return Promise.all(promises).then(finalRes => {
 					// 					$("#addGroupModal").modal("hide");
@@ -324,12 +314,13 @@
 					// 		}
 					// 	});
 					// }	
-				
-				
+
 				}
 			
 			} else {
 			// 2. Edit existing user info
+				let resultSuccessText = "그룹 정보 변경에 성공 하였습니다.";
+				let resultFailText = "그룹 정보 변경에 실패 하였습니다.<br>";
 				let dTable = $("#groupTable").DataTable();
 				let tr = $("#groupTable").find("tbody tr.selected");
 				let td = tr.find("td");
@@ -375,8 +366,10 @@
 						}
 					];
 
-					Promise.all([ returnAjaxRes(editOptionList[0]), returnAjaxRes(editOptionList[1]) ]).then( res => {
-						console.log("tag group res---", res)	
+					Promise.all([ makeAjaxCall(editOptionList[0]), makeAjaxCall(editOptionList[1]) ]).then( res => {
+						console.log("tag group res---", res);
+						let resultMsg = "사이트 " + resultSuccessText;
+
 						if(!isEmpty(res[0].group_sites)){
 							let deletePromises = [];
 							let groupSites = res[0].group_sites;
@@ -386,11 +379,12 @@
 									type: 'delete',
 									async: true,
 								}
-								deletePromises.push(Promise.resolve(returnAjaxRes(gSidOption)));
+								deletePromises.push( makeAjaxCall(gSidOption) );
 							});
 
 							Promise.all(deletePromises).then(res => {
 								console.log("delete promise done===", res);
+
 								if(!isEmpty(siteNameStr)){
 									let newSiteArr = [];
 									$.each(siteNameStr, function(index, el){
@@ -406,27 +400,13 @@
 										data: JSON.stringify(siteObj),
 										contentType: 'application/json; charset=UTF-8'
 									};
-									Promise.resolve(returnAjaxRes(siteOpt)).then( finalRes => {
-										console.log("finalRes===", finalRes);
-										$("#addGroupModal").modal("hide");
-										$("#resultSuccessMsg").text("그룹 정보가 수정 되었습니다.").removeClass("hidden");
-										$("#resultBtn").parent().addClass("hidden");
-										$("#resultModal").modal("show");
+									makeAjaxCall(siteOpt).then( finalRes => {
+										showAjaxResultModal("ajaxResultModal", "addGroupModal", "1", resultMsg);
 										getGroupData(initModal);
-										setTimeout(function(){
-											$("#resultModal").modal("hide");
-										}, 1600);
 									});
-
 								} else {
-									$("#addGroupModal").modal("hide");
-									$("#resultSuccessMsg").text("그룹 정보가 수정 되었습니다.").removeClass("hidden");
-									$("#resultBtn").parent().addClass("hidden");
-									$("#resultModal").modal("show");
+									showAjaxResultModal("ajaxResultModal", "addGroupModal", "1", resultMsg);
 									getGroupData(initModal);
-									setTimeout(function(){
-										$("#resultModal").modal("hide");
-									}, 1600);
 								}
 							});
 						} else {
@@ -445,26 +425,13 @@
 									data: JSON.stringify(siteObj),
 									contentType: 'application/json; charset=UTF-8'
 								};
-								Promise.resolve(returnAjaxRes(siteOpt)).then( finalRes => {
-									console.log("finalRes===", finalRes);
-									$("#addGroupModal").modal("hide");
-									$("#resultSuccessMsg").text("그룹 정보가 수정 되었습니다.").removeClass("hidden");
-									$("#resultBtn").parent().addClass("hidden");
-									$("#resultModal").modal("show");
+								makeAjaxCall(siteOpt).then(finalRes => {
+									showAjaxResultModal("ajaxResultModal", "addGroupModal", "1", resultMsg);
 									getGroupData(initModal);
-									setTimeout(function(){
-										$("#resultModal").modal("hide");
-									}, 1600);
 								});								
 							} else {
-								$("#addGroupModal").modal("hide");
-								$("#resultSuccessMsg").text("그룹 정보가 수정 되었습니다.").removeClass("hidden");
-								$("#resultBtn").parent().addClass("hidden");
-								$("#resultModal").modal("show");
+								showAjaxResultModal("ajaxResultModal", "addGroupModal", "1", resultMsg);
 								getGroupData(initModal);
-								setTimeout(function(){
-									$("#resultModal").modal("hide");
-								}, 1600);
 							}
 						}
 					
@@ -483,10 +450,11 @@
 							contentType: 'application/json; charset=UTF-8',
 							data: JSON.stringify(obj)
 						}
+						let resultMsg = "VPP(중개거래) " + resultSuccessText;
 
 						if(!isEmpty(obj)) {
 							// console.log("vpp_group ====", editOption);
-							Promise.resolve(returnAjaxRes(editOption)).then(res => {
+							makeAjaxCall(editOption).then(res => {
 								// console.log("res====", res);
 								let patchSitePromises = [];
 								$.each(rowData.sites, function(index, el){
@@ -501,7 +469,7 @@
 										contentType: 'application/json; charset=UTF-8',
 										data: JSON.stringify(emptyObj),
 									}
-									patchSitePromises.push(Promise.resolve(returnAjaxRes(option)));
+									patchSitePromises.push(makeAjaxCall(option));
 								});
 
 								Promise.all(patchSitePromises).then( res => {
@@ -518,19 +486,16 @@
 											contentType: 'application/json; charset=UTF-8',
 											data: JSON.stringify(siteObj),
 										}
-										newSitePromises.push(Promise.resolve(returnAjaxRes(option)));
+										newSitePromises.push(makeAjaxCall(option));
 									});
 									Promise.all(newSitePromises).then( finalRes => {
-										$("#addGroupModal").modal("hide");
-										$("#resultSuccessMsg").text("그룹 정보가 수정 되었습니다.").removeClass("hidden");
-										$("#resultBtn").parent().addClass("hidden");
-										$("#resultModal").modal("show");
+										showAjaxResultModal("ajaxResultModal", "addGroupModal", "1", resultMsg);
 										getGroupData(initModal);
-										setTimeout(function(){
-											$("#resultModal").modal("hide");
-										}, 1600);
+									}).catch( err => {
+										console.log("cannot edit site info", err);
+										let errorMsg = "VPP(중개거래) " + resultFailText + "에러 메세지:" + err;
+										showAjaxResultModal("ajaxResultModal", "addUserModal", "0", errorMsg);
 									});
-
 								});
 
 							});
@@ -550,7 +515,7 @@
 										contentType: 'application/json; charset=UTF-8',
 										data: JSON.stringify({ vpp_group_id: rowData.vgid })
 									}
-									newSitePromises.push( Promise.resolve(makeAjaxCall(editSiteOpt) ));
+									newSitePromises.push(makeAjaxCall(editSiteOpt));
 								}
 							});
 
@@ -564,7 +529,7 @@
 										contentType: 'application/json; charset=UTF-8',
 										data: JSON.stringify( { vpp_group_id: null}),
 									}
-									deleteSitePromises.push( Promise.resolve(makeAjaxCall(patchOption) ) );
+									deleteSitePromises.push(makeAjaxCall(patchOption));
 								}
 
 							});
@@ -586,28 +551,15 @@
 							} else {
 								if(newSitePromises.length>0){
 									Promise.all(newSitePromises).then( res => {
-										console.log("newSitePromises---", res);
-										$("#addGroupModal").modal("hide");
-										$("#resultSuccessMsg").text("그룹 정보가 수정 되었습니다.").removeClass("hidden");
-										$("#resultBtn").parent().addClass("hidden");
-										$("#resultModal").modal("show");
+										showAjaxResultModal("ajaxResultModal", "addGroupModal", "1", resultMsg);
 										getGroupData(initModal);
-										setTimeout(function(){
-											$("#resultModal").modal("hide");
-										}, 1600);
 									});
 								}
 
 								if(deleteSitePromises.length>0){
 									Promise.all(deleteSitePromises).then( res => {
-										$("#addGroupModal").modal("hide");
-										$("#resultSuccessMsg").text("그룹 정보가 수정 되었습니다.").removeClass("hidden");
-										$("#resultBtn").parent().addClass("hidden");
-										$("#resultModal").modal("show");
+										showAjaxResultModal("ajaxResultModal", "addGroupModal", "1", resultMsg);
 										getGroupData(initModal);
-										setTimeout(function(){
-											$("#resultModal").modal("hide");
-										}, 1600);
 									});
 								}
 							}
@@ -615,6 +567,7 @@
 						
 					}
 					// if(newGroupType === "dr_group"){
+					// let resultMsg = "DR " + resultSuccessText;
 					// 	let editOption = {
 					// 		url:  apiHost + "/config/dr-groups/" + rowData.dgid,
 					// 		type: 'patch',
@@ -624,7 +577,7 @@
 					// 		data: JSON.stringify(obj)
 					// 	}
 
-					// 	Promise.resolve(returnAjaxRes(editOption)).then(res => {
+					// 	makeAjaxCall(editOption).then(res => {
 					// 		let sitePromises = [];
 					// 		$.each(rowData.sites, function(index, el){
 					// 			// newSiteArr.push($(this).data("value"));
@@ -638,7 +591,7 @@
 					// 				contentType: 'application/json; charset=UTF-8',
 					// 				data: JSON.stringify(emptyObj),
 					// 			}
-					// 			sitePromises.push(Promise.resolve(returnAjaxRes(option)));
+					// 			sitePromises.push(makeAjaxCall(option));
 					// 		});
 
 					// 		Promise.all(sitePromises).then( res => {
@@ -655,18 +608,16 @@
 					// 					contentType: 'application/json; charset=UTF-8',
 					// 					data: JSON.stringify(siteObj),
 					// 				}
-					// 				newSitePromises.push(Promise.resolve(returnAjaxRes(option)));
+					// 				newSitePromises.push(makeAjaxCall(option));
 					// 			});
-					// 			Promise.all(newSitePromises).then( finalRes => {
-					// 				$("#addGroupModal").modal("hide");
-					// 				$("#resultSuccessMsg").text("그룹 정보가 수정 되었습니다.").removeClass("hidden");
-					// 				$("#resultBtn").parent().addClass("hidden");
-					// 				$("#resultModal").modal("show");
-					// 				getGroupData(initModal);
-					// 				setTimeout(function(){
-					// 					$("#resultModal").modal("hide");
-					// 				}, 1600);
-					// 			});
+								// Promise.all(newSitePromises).then( finalRes => {
+								// 	showAjaxResultModal("ajaxResultModal", "addGroupModal", "1", resultMsg);
+								// 	getGroupData(initModal);
+								// }).catch( err => {
+									// 	console.log("cannot edit site info", err);
+									// 	let errorMsg = resultFailText + "에러 메세지:" + err;
+									// 	showAjaxResultModal("ajaxResultModal", "addUserModal", "0", errorMsg);
+								// });
 					// 		});
 					// 	});
 
@@ -714,7 +665,7 @@
 				}
 			}
 
-			Promise.resolve(returnAjaxRes(optDelete)).then( res => {
+			makeAjaxCall(optDelete).then( res => {
 				Promise.resolve(dTable.row(tr).remove().draw()).then( res => {
 					modalBody.addClass("hidden");
 					$("#deleteSuccessMsg").text("사이트가 삭제 되었습니다.").removeClass("hidden");
@@ -758,8 +709,8 @@
 			}
 		];
 
-		// 	Promise.all([ Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])) ]).then( res => {
-		Promise.resolve(returnAjaxRes(optionList[0])).then( res => {
+		// 	Promise.all([ makeAjaxCall(optionList[0]), makeAjaxCall(optionList[1]) ]).then( res => {
+		makeAjaxCall(optionList[0]).then( res => {
 			console.log("vpp_group===", res.vpp_group);
 			console.log("tag_group===", res.tag_group);
 			let flat = [];
@@ -1760,22 +1711,6 @@
 		</div>
 	</div>
 </div>
-
-
-<div class="modal fade stack" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
-	<div class="modal-dialog modal-sm">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4 id="resultSuccessMsg" class="text-blue hidden">그룹 추가가 성공적으로<br>완료 되었습니다.</h4>
-				<h4 id="resultFailureMsg" class="warning-text hidden">그룹 추가에 실패하였습니다.<br>다시 시도해 주세요.</h4>
-			</div>
-			<div class="btn-wrap-type05"><!--
-			--><button type="button" id="resultBtn" class="btn-type03" data-dismiss="modal" aria-label="Close">확인</button><!--
-		--></div>
-		</div>
-	</div>
-</div>
-
 
 <div class="modal fade stack" id="deleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-sm">

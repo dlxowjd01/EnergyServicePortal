@@ -4149,7 +4149,7 @@
 				},		
 			];
 
-			let promises = [Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])),  Promise.resolve(returnAjaxRes(optionList[2]))];
+			let promises = [ makeAjaxCall(optionList[0]), makeAjaxCall(optionList[1]),  makeAjaxCall(optionList[2]) ];
 
 			Promise.all(promises).then(res => {
 				let el = $("#solarDashboard .mini .data-num");

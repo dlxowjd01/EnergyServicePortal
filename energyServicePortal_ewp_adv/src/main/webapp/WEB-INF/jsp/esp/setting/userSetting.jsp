@@ -217,12 +217,7 @@
 			$("#deleteConfirmBtn").prop("disabled", true);
 			setTimeout(function(){
 				$(this).find(".modal-body").removeClass("hidden");
-			}, 1600);
-		});
-
-		$("#resultModal").on("hide.bs.modal", function() {
-			// console.log("resultModal closed===");
-			$(this).find("h4").addClass("hidden");
+			}, 1500);
 		});
 
 		// Form Submission
@@ -253,6 +248,9 @@
 
 			// 1. Add user info
 			if(!$("#addUserModal").hasClass("edit")) {
+				let resultSuccessText = "사용자 추가에 성공 하였습니다.";
+				let resultFailText = "사용자 추가에 실패 하였습니다.<br>";
+
 				userObj.login_id = newId;
 				userObj.name = newFullName;
 				userObj.password = newPwd;
@@ -288,24 +286,11 @@
 
 				if( siteItemList.length <= 0 && spcItemList.length <= 0 ){
 					$.ajax(option).done(function (json, textStatus, jqXHR) {
-						$("#addUserModal").modal("hide");
-						$("#resultSuccessMsg").text("사용자가 추가 되었습니다.").removeClass("hidden");
-						$("#resultBtn").parent().addClass("hidden");
-						$("#resultModal").modal("show");
 						refreshUserList();
-						setTimeout(function(){
-							$("#resultModal").modal("hide");
-						}, 1600);
+						showAjaxResultModal("ajaxResultModal", "addUserModal", "1", resultSuccessText);
 					}).fail(function (jqXHR, textStatus, errorThrown) {
-						$("#addUserModal").modal("hide");
-						$("#resultFailureMsg").removeClass("hidden");
-						$("#resultBtn").parent().removeClass("hidden");
-						$("#resultModal").modal("show");
-						setTimeout(function(){
-							$("#resultModal").modal("hide");
-						}, 1600);
-						console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
-						return false;
+						let errorMsg = resultFailText + "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText;
+						showAjaxResultModal("ajaxResultModal", "addUserModal", "0", errorMsg);
 					});
 				} else {
 					let siteObj = {};
@@ -338,7 +323,7 @@
 								siteObj.sid = $(element).data("sid");
 								siteObj.role = Number($(element).data("role"));
 								siteOption.data = JSON.stringify(siteObj);
-								multiPromises.push(Promise.resolve(makeAjaxCall(siteOption)));
+								multiPromises.push(makeAjaxCall(siteOption));
 							});
 
 							$.each(spcItemList, function(index, element){
@@ -348,40 +333,34 @@
 								};
 								// console.log("opcObj===", spcObj)
 								spcOption.data = JSON.stringify(spcObj);
-								multiPromises.push(Promise.resolve(makeAjaxCall(spcOption)));
+								multiPromises.push(makeAjaxCall(spcOption));
 							});
 
 							Promise.all(multiPromises).then(res => {
-								// console.log("altogether---", res);
-								$("#addUserModal").modal("hide");
-								$("#resultSuccessMsg").text("SPC, 사이트 정보 모두 추가 되었습니다.").removeClass("hidden");
-								$("#resultBtn").parent().addClass("hidden");
-								$("#resultModal").modal("show");
 								refreshUserList();
-								setTimeout(function(){
-									$("#resultModal").modal("show");
-								}, 1300);
+								showAjaxResultModal("ajaxResultModal", "addUserModal", "1", resultSuccessText);
+							}).catch( err => {
+								console.log("cannot edit site info", err);
+								let errorMsg = resultFailText + "에러 메세지:" + err;
+								showAjaxResultModal("ajaxResultModal", "addUserModal", "0", errorMsg);
 							});
-
 						} else {
 							if(siteItemList.length > 0) {
 								var sitePromises = [];
 								$.each(siteItemList, function(index, element){
-									console.log("element====", element)
+									// console.log("element====", element)
 									siteObj.sid = $(element).data("sid");
 									siteObj.role = Number($(element).data("role"));
 									siteOption.data = JSON.stringify(siteObj);
-									sitePromises.push(Promise.resolve(makeAjaxCall(siteOption)));
+									sitePromises.push(makeAjaxCall(siteOption));
 								});
 								Promise.all(sitePromises).then(res => {
-									$("#addUserModal").modal("hide");
-									$("#resultSuccessMsg").text("사이트 정보가 추가 되었습니다.").removeClass("hidden");
-									$("#resultBtn").parent().addClass("hidden");
-									$("#resultModal").modal("show");
 									refreshUserList();
-									setTimeout(function(){
-										$("#resultModal").modal("hide");
-									}, 1300);
+									showAjaxResultModal("ajaxResultModal", "addUserModal", "1", resultSuccessText);
+								}).catch( err => {
+									console.log("cannot edit site info", err);
+									let errorMsg = resultFailText + "에러 메세지:" + err;
+									showAjaxResultModal("ajaxResultModal", "addUserModal", "0", errorMsg);
 								});
 							}
 
@@ -394,29 +373,29 @@
 									};
 									// console.log("opcObj===", spcObj)
 									spcOption.data = JSON.stringify(spcObj);
-									spcPromises.push(Promise.resolve(makeAjaxCall(spcOption)));
+									spcPromises.push(makeAjaxCall(spcOption));
 								});
 								Promise.all(spcPromises).then(res => {
-									// console.log("res---", res);
-									$("#addUserModal").modal("hide");
-									$("#resultSuccessMsg").text("SPC 정보가 추가 되었습니다.").removeClass("hidden");
-									$("#resultBtn").parent().addClass("hidden");
-									$("#resultModal").modal("show");
 									refreshUserList();
-									setTimeout(function(){
-										$("#resultModal").modal("hide");
-									}, 1300);
+									showAjaxResultModal("ajaxResultModal", "addUserModal", "1", resultSuccessText);
+								}).catch( err => {
+									console.log("cannot edit spc info ====> ", err);
+									let errorMsg = resultFailText + "에러 메세지:" + err;
+									showAjaxResultModal("ajaxResultModal", "addUserModal", "0", errorMsg);
 								});
 							}
 						}
 					}).fail(function (jqXHR, textStatus, errorThrown) {
-						let r = JSON.parse(jqXHR.responseText);
-						console.log("에러코드:" + jqXHR.status + "\n" + "메세지: " + r);
-						return false;
+						let errorMsg = resultFailText + "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText;
+						showAjaxResultModal("ajaxResultModal", "addUserModal", "0", errorMsg);
 					});
 				}
 			} else {
 			// 2. Edit existing user info
+				let resultSuccessText = "사용자 정보 변경에 성공 하였습니다.";
+				let resultFailText = "사용자 정보 변경에 실패 하였습니다.<br>";
+				let emptyMsg = "변경하신 정보가 없습니다. 정보를 입력후 다시 시도해 주세요";
+
 				let dTable = $("#userTable").DataTable();
 				let tr = $("#userTable").find("tbody tr.selected");
 				let td = tr.find("td");
@@ -458,7 +437,7 @@
 				}
 
 				if( !isEmpty(newUseOpt) && (newUswOptName != td.eq(9).text() ) ) {
-					console.log("newUseOpt===", newUseOpt, "newUswOptName===", newUswOptName)
+					// console.log("newUseOpt===", newUseOpt, "newUswOptName===", newUswOptName);
 					editUserObj.valid_yn = newUseOpt;
 				}
 
@@ -514,90 +493,46 @@
 				// console.log("flagArr--", flagArr)
 				if( isEmpty($("#newUserPwd").val()) && isEmpty(editUserObj) && (flagIndex < 0) ) {
 					// if no changes have been made
-					$("#resultFailureMsg").text("변경하실 사용자, 사이트, SPC 정보를 입력해 주세요").removeClass("hidden");
-					$("#resultBtn").parent().addClass("hidden");
-					$("#resultModal").modal("show");
-					setTimeout(function(){
-						$("#resultModal").modal("hide");
-					}, 1800);
+					let errorMsg = "변경하실 사용자, 사이트, SPC 정보를 입력해 주세요";
+					showAjaxResultModal("ajaxResultModal", null, null, errorMsg);
 				} else {
 					if( (flagIndex < 0) ){
 						// if pwd && editUserObj values are present but no userSpc && userSite info
 						if( !isEmpty($("#newUserPwd").val()) && !isEmpty(editUserObj) ){
 							$.when($.ajax(optionPwd),$.ajax(option)).done(function (result1, result2) {
-								console.log("editUserObj===", editUserObj, "newUser Pwd====", $("#newUserPwd").val() )
-								console.log("result1===", result1, "result2====", result2)
-								$("#addUserModal").modal("hide");
-								$("#resultSuccessMsg").text("사용자 정보가 성공적으로 변경 되었습니다.").removeClass("hidden");
-								$("#resultBtn").parent().addClass("hidden");
-								$("#resultModal").modal("show");
+								// console.log("editUserObj===", editUserObj, "newUser Pwd====", $("#newUserPwd").val() )
 								refreshUserList();
-								setTimeout(function(){
-									$("#resultModal").modal("hide");
-								}, 1200);
+								showAjaxResultModal("ajaxResultModal", "addUserModal", "1", resultSuccessText);
 							}).fail(function (jqXHR, textStatus, errorThrown) {
-								console.log("result1===", jqXHR);
-								$("#addUserModal").modal("hide");
-								$("#resultFailureMsg").text("사용자 정보 변경에 실패하였습니다. 다시 시도해 주세요.").removeClass("hidden");
-								$("#resultBtn").parent().removeClass("hidden");
-								$("#resultModal").modal("show");
-								setTimeout(function(){
-									$("#resultModal").modal("hide");
-								}, 1200);
-								return false;
+								let errorMsg = resultFailText + "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText;
+								showAjaxResultModal("ajaxResultModal", "addUserModal", "0", errorMsg);
 							});
-
 						} else {
 							// if either pwd && editUserObj values are present (YES), but (NO) userSpc && userSite info
 							if( !isEmpty($("#newUserPwd").val()) ){
-								console.log("optionPwd===", optionPwd)
+								console.log("optionPwd===", optionPwd);
 								$.ajax(optionPwd).done(function (json, textStatus, jqXHR) {
-									console.log("only password has been changed=====", optionPwd);
-									$("#addUserModal").modal("hide");
-									$("#resultSuccessMsg").multiline("사용자 정보가\n성공적으로 변경 되었습니다.").removeClass("hidden");
-									$("#resultBtn").parent().addClass("hidden");
-									$("#resultModal").modal("show");
 									refreshUserList();
-									setTimeout(function(){
-										$("#resultModal").modal("hide");
-									}, 1200);
-									console.log("newUserPwd edit success===", json)
+									showAjaxResultModal("ajaxResultModal", "addUserModal", "1", resultSuccessText);
 								}).fail(function (jqXHR, textStatus, errorThrown) {
-									let errorMsg = "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText +"\n" + "에러: " + errorThrown;
-									$("#addUserModal").modal("hide");
-									$("#resultFailureMsg").multiline(errorMsg).removeClass("hidden");
-									$("#resultBtn").parent().removeClass("hidden");
-									$("#resultModal").modal("show");
-									console.log("newUserPwd edit error===", errorMsg);
-									return false;
+									let errorMsg = resultFailText + "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText;
+									showAjaxResultModal("ajaxResultModal", "addUserModal", "0", errorMsg);
 								});
 							}
 
 							if( !isEmpty(editUserObj) ){
-								console.log("editUserObj===", editUserObj)
+								// console.log("editUserObj===", editUserObj);
 								$.ajax(option).done(function (json, textStatus, jqXHR) {
-									$("#addUserModal").modal("hide");
-									$("#resultSuccessMsg").multiline("사용자 정보가\n성공적으로 변경 되었습니다.").removeClass("hidden");
-									$("#resultBtn").parent().addClass("hidden");
-									$("#resultModal").modal("show");
 									refreshUserList();
-									setTimeout(function(){
-										$("#resultModal").modal("hide");
-									}, 1200);
+									showAjaxResultModal("ajaxResultModal", "addUserModal", "1", resultSuccessText);st();
 								}).fail(function (jqXHR, textStatus, errorThrown) {
-									let errorMsg = "에러코드:" + jqXHR.status + "\n" + "메세지: " + jqXHR.responseText +"\n" + "에러: " + errorThrown;
-									$("#addUserModal").modal("hide");
-									$("#resultFailureMsg").text(errorMsg).removeClass("hidden");
-									$("#resultBtn").parent().removeClass("hidden");
-									$("#resultModal").modal("show");
-									console.log("editUserObj EDIT FAIL===", errorMsg);
-									return false;
+									let errorMsg = resultFailText + "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText;
+									showAjaxResultModal("ajaxResultModal", "addUserModal", "0", errorMsg);
 								});
 							}
 						}
 					} else {
 						let nestedPromises = [];
-						
 						if(flagArr[0] === 1) {
 							for(let i = 0, length = siteDeleteItem; i < siteDeleteItem.length; i++) {
 								if($(siteDeleteItem[i]).hasClass("active")){
@@ -658,9 +593,7 @@
 
 								nestedPromises.push(makeAjaxCall(spcEditOption));
 							}
-
 						}
-						// console.log("nestedPromises===", nestedPromises)
 
 						// if pwd && editUserObj are present
 						if( !isEmpty($("#newUserPwd").val()) && !isEmpty(editUserObj) ){
@@ -676,74 +609,48 @@
 							$.when($.ajax(optionPwd),$.ajax(option)).done(function (result1, result2) {
 								if(nestedPromises.length>0){
 									Promise.all(nestedPromises).then(res => {
-										$("#addUserModal").modal("hide");
-										$("#resultSuccessMsg").text("사용자 정보가 성공적으로 변경 되었습니다.").removeClass("hidden");
-										$("#resultBtn").parent().addClass("hidden");
-										$("#resultModal").modal("show");
 										refreshUserList();
-										setTimeout(function(){
-											$("#resultModal").modal("hide");
-										}, 1500);
+										showAjaxResultModal("ajaxResultModal", "addUserModal", "1", resultSuccessText);
+									}).catch( err => {
+										console.log("cannot delete existing alarm info", err);
+										let errorMsg = resultFailText + "에러 메세지:" + err;
+										showAjaxResultModal("ajaxResultModal", "addUserModal", "0", errorMsg);
 									});
 								}
 							}).fail(function (jqXHR, textStatus, errorThrown) {
-								console.log("result1===", jqXHR);
-								$("#addUserModal").modal("hide");
-								$("#resultFailureMsg").text("사용자 정보 변경에 실패하였습니다. 다시 시도해 주세요.").removeClass("hidden");
-								$("#resultBtn").parent().removeClass("hidden");
-								$("#resultModal").modal("show");
-								return false;
+								let errorMsg = resultFailText + "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText;
+								showAjaxResultModal("ajaxResultModal", "addUserModal", "0", errorMsg);
 							});
-
 						} else {
 							// only flagArr is present
 							if( isEmpty(editUserObj) && isEmpty($("#newUserPwd").val())) {
 								// console.log("only flagArr is present---");
 								if(nestedPromises.length>0){
 									Promise.all(nestedPromises).then(res => {
-										console.log("res---", res);
-										$("#addUserModal").modal("hide");
-										$("#resultSuccessMsg").text("사이트/SPC 정보가 성공적으로 변경 되었습니다.").removeClass("hidden");
-										$("#resultBtn").parent().addClass("hidden");
-										$("#resultModal").modal("show");
 										refreshUserList();
-										setTimeout(function(){
-											$("#resultModal").modal("hide");
-										}, 1500);
+										showAjaxResultModal("ajaxResultModal", "addUserModal", "1", resultSuccessText);
+									}).catch( err => {
+										console.log("cannot delete existing alarm info", err);
+										let errorMsg = resultFailText + "에러 메세지:" + err;
+										showAjaxResultModal("ajaxResultModal", "addUserModal", "0", errorMsg);
 									});
+								} else {
+									showAjaxResultModal("ajaxResultModal", "addUserModal", "0", emptyMsg);
 								}
 							} else {
 								if( !isEmpty($("#newUserPwd").val()) ){
 									$.ajax(optionPwd).done(function (json, textStatus, jqXHR) {
 										if(nestedPromises.length>0){
 											Promise.all(nestedPromises).then(res => {
-												$("#addUserModal").modal("hide");
-												$("#resultSuccessMsg").text("사용자 정보가 성공적으로 변경 되었습니다.").removeClass("hidden");
-												$("#resultBtn").parent().addClass("hidden");
-												$("#resultModal").modal("show");
 												refreshUserList();
-												setTimeout(function(){
-													$("#resultModal").modal("hide");
-												}, 1500);
+												showAjaxResultModal("ajaxResultModal", "addUserModal", "1", resultSuccessText);
 											});
 										} else {
-											$("#addUserModal").modal("hide");
-											$("#resultSuccessMsg").text("사용자 정보가 성공적으로 변경 되었습니다.").removeClass("hidden");
-											$("#resultBtn").parent().addClass("hidden");
-											$("#resultModal").modal("show");
-											setTimeout(function(){
-												$("#resultModal").modal("hide");
-											}, 1500);
+											showAjaxResultModal("ajaxResultModal", "addUserModal", "0", emptyMsg);
 										}
-									
 									}).fail(function (jqXHR, textStatus, errorThrown) {
-										let errorMsg = "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText +"\n" + "에러: " + errorThrown;
-										$("#resultFailureMsg").multiline(errorMsg).removeClass("hidden");
-										$("#resultBtn").parent().removeClass("hidden");
-										$("#resultModal").modal("show");
-
-										console.log('newUserPwd===', errorMsg)
-										return false;
+										let errorMsg = resultFailText + "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText;
+										showAjaxResultModal("ajaxResultModal", "addUserModal", "0", errorMsg);	
 									});
 								}
 								if( !isEmpty(editUserObj) ){
@@ -751,24 +658,13 @@
 									$.ajax(option).done(function (json, textStatus, jqXHR) {
 										if(nestedPromises.length>0){
 											Promise.all(nestedPromises).then(res => {
-												$("#addUserModal").modal("hide");
-												$("#resultSuccessMsg").text("사용자 정보가 성공적으로 변경 되었습니다.").removeClass("hidden");
-												$("#resultBtn").parent().addClass("hidden");
-												$("#resultModal").modal("show");
 												refreshUserList();
-												setTimeout(function(){
-													$("#resultModal").modal("hide");
-												}, 1500);
+												showAjaxResultModal("ajaxResultModal", "addUserModal", "1", resultSuccessText);
 											});
 										}
 									}).fail(function (jqXHR, textStatus, errorThrown) {
-										let errorMsg = "에러코드:" + jqXHR.status + "\n" + "메세지: " + jqXHR.responseText +"\n" + "에러: " + errorThrown;
-										$("#addUserModal").modal("hide");
-										$("#resultFailureMsg").text(errorMsg).removeClass("hidden");
-										$("#resultBtn").parent().removeClass("hidden");
-										$("#resultModal").modal("show");
-										console.log("user Obj available===", errorMsg);
-										return false;
+										let errorMsg = resultFailText + "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText;
+										showAjaxResultModal("ajaxResultModal", "addUserModal", "0", errorMsg);
 									});
 								}
 							}
@@ -780,20 +676,6 @@
 				}
 			}
 		});
-
-
-		// Table Row Select event
-		// $('#userTable tbody').on('click', 'tr', function () {
-		// 	if ( $(this).hasClass('selected') ) {
-		// 		$(this).removeClass('selected');
-		// 	}
-		// 	else {
-		// 		$('#userTable tr.selected').removeClass('selected');
-		// 		$(this).addClass('selected');
-		// 	}
-		// });
-
-
 	});
 
 
@@ -1473,7 +1355,7 @@
 		$('div.tab-content > div.tab-pane').eq(0).addClass('active in').siblings().removeClass('active in');
 
 		id.parent().next().prop("disabled", true);
-		// ADD !!!!!
+		// updateModal ADD !!!!!
 		if(option == 'add'){
 			initModal();
 			if(id.parent().next().hasClass("hidden")) {
@@ -1492,7 +1374,7 @@
 			let uid = dTable.row(tr).data().uid;
 			let prevDesc = dTable.row(tr).data().desc;
 
-			// EDIT!!!!!
+			// updateModal EDIT!!!!!
 			if(option == "edit") {
 				let optSpc = {
 					url: apiHost + "/config/user_spcs?oid=" + oid,
@@ -1869,20 +1751,6 @@
 </script>
 
 <c:set var="siteList" value="${siteHeaderList}"/> <!-- 사이트 별 -->
-
-<div class="modal fade stack" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
-	<div class="modal-dialog modal-sm">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4 id="resultSuccessMsg" class="text-blue hidden">사용자가 성공적으로<br>추가 되었습니다.</h4>
-				<h4 id="resultFailureMsg" class="warning-text hidden">사용자 추가에 실패하였습니다.<br>다시 시도해 주세요.</h4>
-			</div>
-			<div class="btn-wrap-type05"><!--
-			--><button type="button" id="resultBtn" class="btn-type03" data-dismiss="modal" aria-label="Close">확인</button><!--
-		--></div>
-		</div>
-	</div>
-</div>
 
 <div class="modal fade stack" id="deleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-sm">

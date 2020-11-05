@@ -137,11 +137,6 @@
 				$(this).find(".modal-body").removeClass("hidden");
 			}, 1600);
 		});
-
-		$("#resultModal").on("hide.bs.modal", function() {
-			$(this).find("h4").addClass("hidden");
-		});
-
 	});
 
 	function getData(option, input){
@@ -172,7 +167,7 @@
 		} else if(option === "log") {
 			getLogData(input, defList);
 		} else {
-			Promise.all([ Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])) ]).then(res => {
+			Promise.all([ makeAjaxCall(optionList[0]), makeAjaxCall(optionList[1]) ]).then(res => {
 				let definitionData = res[0];
 				let scheduleData = res[1];
 				let str = '';
@@ -840,6 +835,9 @@
 
 		if(!$("#updateScheduleForm").hasClass("edit")) {
 			// 1. ADD schedule info
+			let resultSuccessText = "배치 스케줄 추가 성공 하였습니다.";
+			let resultFailText = "배치 스케줄 추가 실패 하였습니다.<br>다시 시도해 주세요.";
+
 			obj.schedule = newScheduleCycle;
 
 			if(!isEmpty(newArgumentParam)){
@@ -881,24 +879,17 @@
 
 				console.log("obj---", obj);
 				$.ajax(option).done(function (json, textStatus, jqXHR) {
-					$("#resultSuccessMsg").removeClass("hidden");
-					$("#resultModal").modal("show");
-					setTimeout(function(){
-						getData("schedule");
-						$("#resultModal").modal("hide");
-					}, 1600);
+					showAjaxResultModal("ajaxResultModal", null, "1", resultSuccessText, 1600);
+					getData("schedule");
 				}).fail(function (jqXHR, textStatus, errorThrown) {
-					$("#resultFailureMsg").text("배치 스케줄 추가에 실패했습니다. 다시 시도해 주세요.").removeClass("hidden");
-					$("#resultModal").modal("show");
-					setTimeout(function(){
-						$("#resultModal").modal("hide");
-					}, 1600);
-					console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
-					return false;
-				});
-									
+					let errorMsg = resultFailText + "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText;
+					showAjaxResultModal("ajaxResultModal", null, "0", errorMsg);
+				});					
 			}
 		} else {
+			let resultSuccessText = "배치 스케줄 수정에 성공 하였습니다.";
+			let resultFailText = "배치 스케줄 수정에 실패 하였습니다.<br>다시 시도해 주세요.";
+
 			let dTable = $("#scheduleTable").DataTable();
 			let tr = $("#scheduleTable").find("tbody tr.selected");
 			let rowData = dTable.row(tr).data();
@@ -946,20 +937,11 @@
 					data: JSON.stringify(obj)
 				}
 				$.ajax(option).done(function (json, textStatus, jqXHR) {
-					$("#resultSuccessMsg").html("배치 스케줄 성공적으로 수정 되었습니다.").removeClass("hidden");
-					$("#resultModal").modal("show");
+					showAjaxResultModal("ajaxResultModal", null, "1", resultSuccessText, 1600);
 					getData("schedule");
-					setTimeout(function(){
-						$("#resultModal").modal("hide");
-					}, 1600);
 				}).fail(function (jqXHR, textStatus, errorThrown) {
-					$("#resultFailureMsg").html("배치 스케줄 수정에 실패했습니다. <br>다시 시도해 주세요.").removeClass("hidden");
-					$("#resultModal").modal("show");
-					setTimeout(function(){
-						$("#resultModal").modal("hide");
-					}, 1600);
-					console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
-					return false;
+					let errorMsg = resultFailText + "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText;
+					showAjaxResultModal("ajaxResultModal", null, "0", errorMsg);
 				});
 			}
 		}
@@ -1185,17 +1167,6 @@
 				--><button type="button" class="btn-type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
 				--><button type="submit" id="deleteConfirmBtn" class="btn-type w80 ml-12" disabled>확인</button><!--
 			--></div>
-		</div>
-	</div>
-</div>
-
-<div class="modal fade stack" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
-	<div class="modal-dialog modal-sm">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4 id="resultSuccessMsg" class="text-blue hidden">배치 스케줄이 성공적으로<br>추가 되었습니다.</h4>
-				<h4 id="resultFailureMsg" class="warning-text hidden">배치 스케줄 추가에 실패하였습니다.<br>다시 시도해 주세요.</h4>
-			</div>
 		</div>
 	</div>
 </div>

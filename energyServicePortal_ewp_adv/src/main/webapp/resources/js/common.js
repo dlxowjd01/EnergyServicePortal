@@ -677,24 +677,63 @@ Array.prototype.sortOn = function(key, depth){
 }
 
 
-// Ajax call
-function makeAjaxCall(option){
-	return $.ajax(option).done(function (json, textStatus, jqXHR) {
-	}).fail(function (jqXHR, textStatus, errorThrown) {
-		console.log("siteInfo/spcInfo Ajax Error:", jqXHR.responseJSON.error.message)
-		return false;
-	});
+// return ajaxCall with response => A. resolve(json) + return json,  B. reject(responseJson)
+function makeAjaxCall(option, callbackOption){
+	return new Promise((resolve, reject) => {
+		$.ajax(option).done(function (json, textStatus, jqXHR) {
+			if( isEmpty(json) && !isEmpty(callbackOption) ){
+				let callback = callbackOption.callback;
+				if(callbackOption.loop == false){
+					let errorMsg = callbackOption.FailMsg + "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText;
+					callback(callbackOption.id, callbackOption.siblingId, callbackOption.type, errorMsg)
+				}
+			} else {
+				resolve(json);		
+			}
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			console.log("promiseAjaxCall Error message ===>", jqXHR.responseJSON.error.message);
+			console.log("promiseAjaxCall responseJSON Error ===>:", jqXHR.responseJSON);
+			if(!isEmpty(callbackOption)){
+				let callback = callbackOption.callback;
+				if(callbackOption.loop == false){
+					let errorMsg = callbackOption.FailMsg + "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText;
+					callback(callbackOption.id, callbackOption.siblingId, callbackOption.type, errorMsg)
+				}
+			}
+			reject(jqXHR);
+		});
+	})
 }
 
-// Ajax call response
-function returnAjaxRes(option){
-	return $.ajax(option).done(function (json, textStatus, jqXHR) {
-		return json;
-	}).fail(function (jqXHR, textStatus, errorThrown) {
-		console.log("err===", jqXHR)
-		console.log("siteInfo/spcInfo Ajax Error:", jqXHR.responseJSON.error.message)
-		return false;
-	});
+function showAjaxResultModal(id, siblingId, type, result, timeLimit){
+	let modal = $("#" + id);
+	let modalHeader = modal.find(".modal-header");
+	let button = modalHeader.next();
+	let h4 = modalHeader.find("h4");
+	let fadeOutTime;
+	timeLimit ? (fadeOutTime = timeLimit) : (fadeOutTime = 1200);
+
+	if(!isEmpty(siblingId)){
+		$("#" + siblingId).modal("hide");
+	}
+
+	if(type === "0"){
+		button.removeClass("hidden");
+		h4.attr("class", "warning-text").text(result);
+		modal.modal("show");
+	} else {
+		if(type === null){
+			h4.attr("class", "warning-text").text(result);
+		} else {
+			h4.attr("class", "text-blue").text(result);
+		}
+		button.addClass("hidden");
+		modal.modal("show");
+
+		setTimeout(function(){
+			modal.modal("hide");
+		}, fadeOutTime);
+	}
 }
 
 $.fn.multiline = function(text){

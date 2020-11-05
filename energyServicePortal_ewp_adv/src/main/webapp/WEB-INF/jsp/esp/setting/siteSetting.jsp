@@ -7,6 +7,7 @@
 	var deleteAlarmList = [];
 
 	$(function () {
+
 		let optionList = [
 			{
 				url: apiHost + "/config/sites?oid=" + oid,
@@ -38,12 +39,12 @@
 		initModal();
 
 		if(role == 1){
-			Promise.all([ Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])), Promise.resolve(returnAjaxRes(optionList[4])) ]).then( res => {
+			Promise.all([ makeAjaxCall(optionList[0]), makeAjaxCall(optionList[1]), makeAjaxCall(optionList[4]) ]).then( res => {
 				deviceNameList = res[2];
 				adminTable(res[0], res[1]);
 			});
 		} else {
-			Promise.all( [ Promise.resolve(returnAjaxRes(optionList[2])), Promise.resolve(returnAjaxRes(optionList[1])), Promise.resolve(returnAjaxRes(optionList[4]) ) , Promise.resolve(returnAjaxRes(optionList[3]))] ).then( res => {
+			Promise.all([ makeAjaxCall(optionList[2]), makeAjaxCall(optionList[1]), makeAjaxCall(optionList[4]) , makeAjaxCall(optionList[3]) ]).then( res => {
 				nonAdminTable( res[0], res[1], res[3].user_sites );
 			});
 		}
@@ -191,11 +192,7 @@
 			$("#alarmTable").DataTable().clear().destroy();
 		});
 
-		$("#resultModal").on("hide.bs.modal", function() {
-			$(this).find("h4").addClass("hidden");
-		});
-
-		// Form Submission !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		// Site Form Submission !!!!!!!!!!!!!!!!!!!!!!!
 		$("#updateSiteForm").on("submit", function(e){
 			e.preventDefault();
 
@@ -291,6 +288,9 @@
 
 			// 1. ADD site info
 			if(!$("#addSiteModal").hasClass("edit")) {
+				let resultSuccessText = "사업소 추가에 성공 하였습니다.";
+				let resultFailText = "사업소 추가에 실패 하였습니다.<br>";
+
 				siteObj.name = newSiteName;
 				siteObj.location = newCity;
 				siteObj.resource_type = newResType;
@@ -418,28 +418,18 @@
 				}
 
 				$.ajax(option).done(function (json, textStatus, jqXHR) {
-					$("#addSiteModal").modal("hide");
-					$("#resultSuccessMsg").text("사이트가 추가 되었습니다.").removeClass("hidden");
-					$("#resultBtn").parent().addClass("hidden");
-					$("#resultModal").modal("show");
+					showAjaxResultModal("ajaxResultModal", "addSiteModal", "1", resultSuccessText);
 					refreshSiteList();
-					setTimeout(function(){
-						$("#resultModal").modal("hide");
-					}, 1600);
 				}).fail(function (jqXHR, textStatus, errorThrown) {
-					$("#addSiteModal").modal("hide");
-					$("#resultFailureMsg").removeClass("hidden");
-					$("#resultBtn").parent().removeClass("hidden");
-					$("#resultModal").modal("show");
-					setTimeout(function(){
-						$("#resultModal").modal("hide");
-					}, 1600);
-					console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
-					return false;
+					let errorMsg = resultFailText + "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText;
+					showAjaxResultModal("ajaxResultModal", "addSiteModal", "0", errorMsg);
 				});
 
 			} else {
 				// 2. EDIT site info
+				let resultSuccessText = "사업소 정보 변경에 성공 하였습니다.";
+				let resultFailText = "사업소 정보 변경에 실패 하였습니다.<br>";
+
 				let dTable = $("#siteTable").DataTable();
 				let tr = $("#siteTable").find("tbody tr.selected");
 				let td = tr.find("td");
@@ -582,35 +572,52 @@
 				}
 
 				$.ajax(option).done(function (json, textStatus, jqXHR) {
-					$("#addSiteModal").modal("hide");
-					$("#resultSuccessMsg").text("사이트 정보가 변경 되었습니다.").removeClass("hidden");
-					$("#resultBtn").parent().addClass("hidden");
-					$("#resultModal").modal("show");
+					showAjaxResultModal("ajaxResultModal", "addSiteModal", "1", resultSuccessText);
 					refreshSiteList();
-
-					setTimeout(function(){
-						$("#resultModal").modal("hide");
-					}, 1600);
 				}).fail(function (jqXHR, textStatus, errorThrown) {
-					$("#resultFailureMsg").removeClass("hidden");
-					$("#resultBtn").parent().removeClass("hidden");
-					$("#resultModal").modal("show");
-					setTimeout(function(){
-						$("#resultModal").modal("hide");
-					}, 1600);
-					console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
-					return false;
+					let errorMsg = resultFailText + "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText;
+					showAjaxResultModal("ajaxResultModal", "addSiteModal", "0", errorMsg);
 				});
 
 			}
 		});
 
+		// Alarm Form Submission !!!!!!!!!!!!!!!!!!!!!!
 		$("#updateAlarmForm").on("submit", function(e){
 			e.preventDefault();
+			let resultSuccessText = "알람 설정에 성공 하였습니다.";
+			let resultFailText = "알람 설정에 실패 하였습니다.<br>";
+
 			let aTable = $("#alarmTable").DataTable();
 			let tr = $("#alarmTable tbody tr:not(.hidden)");
-			let dvcArr = [];
 
+			let urlPrefix = apiHost + "/config/devices/";
+			let deviceOpt = {
+				type: 'patch',
+				async: true,
+				contentType: 'application/json; charset=UTF-8',
+			};
+			let dvcArr = [];		
+			let ajaxPromises = [];
+			let deletePromises = [];
+
+			// A. [DELETE] existing alarm data
+			if(deleteAlarmList.length>0){
+				let obj = {...deviceOpt};
+
+				deleteAlarmList.forEach(function(item, index){
+					obj.url = apiHost + "/config/devices/" + item.deviceId;
+					obj.data = JSON.stringify({ alarm_to : null });
+					deletePromises.push(makeAjaxCall(obj));
+				});
+				Promise.all(deletePromises).then(res => {
+					console.log("existing alarm info successfully deleted ====>", res);
+				}).catch( err => {
+					console.log("cannot delete existing alarm info", err);
+				});
+			}
+
+			// B-1. [Loop through] newly edited/added alarm data && [PUSH] to [dvcArr]
 			for(let i=0, arrLength = tr.length; i < arrLength; i++){
 				let td = tr.eq(i).find("td"); 
 				let secondTd = td.eq(1); 
@@ -804,96 +811,42 @@
 				}
 			}
 
-			// [FINAL] JSON stringify Data
-
-			let urlPrefix = apiHost + "/config/devices/";
-			let deviceOpt = {
-				type: 'patch',
-				async: true,
-				contentType: 'application/json; charset=UTF-8',
-			};
-			let ajaxPromises = [];
-
-			if(deleteAlarmList.length>0){
-			// A. tr has been deleted
-				deleteAlarmList.forEach((item, index) => {
-					let found = dvcArr.findIndex( x => x.deviceId === item.deviceId);
-
-					if(found > -1){
-						let foundAlarmTo = dvcArr[found].alarm_to;
-
-						if(JSON.stringify(foundAlarmTo) != JSON.stringify(item.alarm_to)) {
-							let deleteArrUser = item.alarm_to.user;
-							let deleteArrNonUser = item.alarm_to.non_user;
-								
-							if(!isEmpty(foundAlarmTo.user) && foundAlarmTo.user.length>0){
-								foundAlarmTo = foundAlarmTo.user.filter( (val, index, arr) => {
-									if(!isEmpty(deleteArrUser) && deleteArrUser.length>0){
-										let found = deleteArrUser.findIndex( x => x.uid == val.uid);
-										if(found == -1){
-											return val;
-										}
-									}
-								});
-							}
-
-							if(!isEmpty(foundAlarmTo.non_user) && foundAlarmTo.non_user.length>0){
-								foundAlarmTo.non_user.filter( (val, index, arr) => {
-									if(!isEmpty(deleteArrNonUser) && deleteArrNonUser.length>0){
-										let foundName = deleteArrNonUser.findIndex( x => x.name == val.name);
-										let foundPhone = deleteArrNonUser.findIndex( x => x.phone == val.phone);
-										if(found == -1 || foundPhone == -1){
-											return val;
-										}
-									}
-								})
-							}
-
-							dvcArr[found].alarm_to = foundAlarmTo;
-						} else {
-							dvcArr.push({ deviceId: item.deviceId, alarm_to: null });
-						}
-						dvcArr.push({ deviceId: item.deviceId, alarm_to: foundAlarmTo });
-					} else {
-						dvcArr.push({ deviceId: item.deviceId, alarm_to: null });
-					}
-				})
-
+			if(dvcArr.length>0){
+			// B-2. [JSON stringify] newly edited/added alarm data	
 				dvcArr.forEach(function(item, index){
 					deviceOpt.url = urlPrefix + item.deviceId;
 					deviceOpt.data = JSON.stringify({ alarm_to: JSON.stringify(item.alarm_to) });
-					ajaxPromises.push(Promise.resolve(makeAjaxCall(deviceOpt)));
+					ajaxPromises.push(makeAjaxCall(deviceOpt));
 				});
+				// B-3. [RESULT] CLOSE Alarm modal & refresh data
+				Promise.all(ajaxPromises).then(res => {
+					showAjaxResultModal("ajaxResultModal", "addAlarmModal", "1", resultSuccessText);
+					
+					$("#siteTable").DataTable().destroy();
+					$("#alarmTable").DataTable().destroy();
 
+					setTimeout(function(){
+						refreshSiteList();
+					}, 200);
+				}).catch( err => {
+					console.log("cannot delete existing alarm info", err);
+					let errorMsg = resultFailText + "에러 메세지:" + err;
+					showAjaxResultModal("ajaxResultModal", "addUserModal", "0", errorMsg);
+				});
 			} else {
-			// B. None of tr has been deleted
-				dvcArr.forEach(function(item, index){
-					deviceOpt.url = urlPrefix + item.deviceId;
-					deviceOpt.data = JSON.stringify({ alarm_to: JSON.stringify(item.alarm_to) });
-					ajaxPromises.push(Promise.resolve(makeAjaxCall(deviceOpt)));
-				});	
-			}
-
-			Promise.all(ajaxPromises).then(res => {
-				$("#addAlarmModal").modal("hide");
-				$("#resultSuccessMsg").text("알람 설정이 완료 되었습니다.").removeClass("hidden");
-				$("#resultBtn").parent().addClass("hidden");
-				$("#resultModal").modal("show");
-
+			// C. [[RESULT] CLOSE Alarm modal & refresh data
+				showAjaxResultModal("ajaxResultModal", "addAlarmModal", "1", resultSuccessText);
+						
 				$("#siteTable").DataTable().destroy();
 				$("#alarmTable").DataTable().destroy();
 
 				setTimeout(function(){
 					refreshSiteList();
 				}, 200);
-
-				setTimeout(function(){
-					$("#resultModal").modal("hide");
-				}, 1600);
-			});
-
+			}
 		});
-		
+
+
 	});
 
 	
@@ -922,13 +875,11 @@
 		];
 
 		if(role == 1){
-			Promise.all([ Promise.resolve(returnAjaxRes(optionList[0])), Promise.resolve(returnAjaxRes(optionList[1])) ]).then( res => {
-				// Promise.resolve(returnAjaxRes(optionList[0])).then( res => {
-				
+			Promise.all([ makeAjaxCall(optionList[0]), makeAjaxCall(optionList[1]) ]).then( res => {
 				adminTable(res[0], res[1], initModal);
 			});
 		} else {
-			Promise.all([ Promise.resolve(returnAjaxRes(optionList[2])), Promise.resolve(returnAjaxRes(optionList[1])) ]).then( res => {
+			Promise.all([ makeAjaxCall(optionList[2]), makeAjaxCall(optionList[1]) ]).then( res => {
 				nonAdminTable( res[0], res[1], res[2].user_sites, initModal);
 			});
 		}
@@ -1275,10 +1226,6 @@
 					$(".dataTables_scrollHeadInner").css( "width", "100%" );
 				});
 
-				// siteTable.rows( function ( idx, data, node ) {
-				// 	console.log("sid===", data.sid)
-				// }).data();
-
 				$('#siteTable').on( 'click', 'td .btn-type-sm', function () {
 					let dTable = $('#siteTable').DataTable();
 					let tr = $(this).parents().closest("tr");
@@ -1294,10 +1241,10 @@
 								oid: oid,
 							}
 						}
-						Promise.resolve(makeAjaxCall(userOpt)).then(res => {
+						makeAjaxCall(userOpt).then(res => {
 							rowData.sortOn("name");
 							getAlarmData(rowData, res);
-						}).catch( err => console.log("cannot get user data", err));
+						});
 					// }
 				});
 
@@ -2468,8 +2415,6 @@
 				} else {
 					$('#newVppResIdList').prev().data("value", "").html('선택<span class="caret"></span>');
 				}
-
-
 				$("#addSiteModal").addClass("edit").modal("show");
 			}
 			// DELETE MODAL!!!
@@ -2688,7 +2633,7 @@
 						}
 					}
 				} catch (exception) {
-					console.error(`Failed to retrieve user information: (${exception})`);
+					console.error(`getAlarmData() : failed to JSON.parse() ====> (${exception})`);
 				}
 			} else {
 				return item.alarmToUser = null;
@@ -3487,7 +3432,7 @@
 					});
 					let str = `<div id="btnGroup" class="right-end2"><!--
 								--><button type="button" class="btn-type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
-								--><button type="submit" class="btn-type w80 ml-12">추가</button><!--
+								--><button type="submit" class="btn-type w80 ml-12">확인</button><!--
 							--></div>`;
 					$('#alarmTable_wrapper').append($(str));
 					// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
@@ -3559,18 +3504,17 @@
 		let dataIdx = self.data("index");
 		let tr = self.parents().closest("tr");
 		let td = tr.find("td");
+
 		let dTable = $("#alarmTable").DataTable();	
 		let rowData = dTable.row(tr).data();	
 		let btnSiblings = $(self).parent(".flex-start").siblings();
 
 		if(option == "add"){
 			let copy = tr.clone(true);
-			let tempIdx = tr.find("td:nth-of-type(6) .flex-start:last-of-type .icon-edit").data("index") + 1;
-
 			copy.find("td").each(function(index, el){
 				if(index<=2){
 					$(this).find(".dropdown:not(:last-of-type)").remove();
-					$(this).find(".dropdown-toggle").html('선택<span class="caret"></span>').attr({"data-index": tempIdx, "data-value": ""});
+					$(this).find(".dropdown-toggle").html('선택<span class="caret"></span>').attr({"data-index": dataIdx, "data-value": ""});
 					$(this).find("input[type='checkbox']").prop("checked", false);
 					if(index === 0 || index === 2){
 						if(index === 0) {
@@ -3582,22 +3526,22 @@
 					if(index<=4){
 						if(index===3){
 							$(this).find(".user-group:not(:last-of-type)").remove();
-							$(this).find(".user-group").attr("data-index", tempIdx);
+							$(this).find(".user-group").attr("data-index", dataIdx);
 							$(this).find("input[type='checkbox']").prop("checked", false);
-							$(this).find(".dropdown-toggle").prop("disabled", false).html('선택<span class="caret"></span>').attr({"data-index": tempIdx, "data-value": ""});
+							$(this).find(".dropdown-toggle").prop("disabled", false).html('선택<span class="caret"></span>').attr({"data-index": dataIdx, "data-value": ""});
 							$(this).find("input[type='text']").prop("disabled", false).val("").parent().removeClass("disabled");
 						}  else if(index===4){
 							$(this).find(".phone-group:not(:last-of-type)").remove();
-							$(this).find(".phone-group").attr("data-index", tempIdx);
+							$(this).find(".phone-group").attr("data-index", dataIdx);
 							$(this).find(".text-input-type:nth-of-type(1) input[type='text']").val("");
 							$(this).find(".text-input-type:nth-of-type(2) input[type='text']").prop("disabled", false).val("").parent().removeClass("disabled");
 						}
 						
 					} else {
 						$(this).find(".flex-start:not(:last-of-type)").remove();
-						$(this).find(".flex-start .icon-add").attr("data-index", tempIdx);
-						$(this).find(".flex-start .icon-edit").attr("data-index", tempIdx).prop("disabled", true);
-						$(this).find(".flex-start .icon-delete").attr("data-index", tempIdx).attr("onclick", "updateAlarmTable($(this), 'delete')");
+						$(this).find(".flex-start .icon-add").attr("data-index", dataIdx);
+						$(this).find(".flex-start .icon-edit").attr("data-index", dataIdx).prop("disabled", true);
+						$(this).find(".flex-start .icon-delete").attr("data-index", dataIdx).attr("onclick", "updateAlarmTable($(this), 'delete')");
 					}
 				}
 			});
@@ -3635,15 +3579,7 @@
 				$(this).attr("data-parent-id", newName);
 			});
 
-
-			let newTd = copy.find("td"); 
-
-			td.eq(0).append(newTd.eq(0).children());
-			td.eq(1).append(newTd.eq(1).children());
-			td.eq(2).append(newTd.eq(2).children());
-			td.eq(3).append(newTd.eq(3).children());
-			td.eq(4).append(newTd.eq(4).children());
-			td.eq(5).append(newTd.eq(5).children());
+			$("#alarmTable tbody").append(copy);
 
 		} else {
 			if(option == "edit"){
@@ -3713,10 +3649,11 @@
 						tr.eq(btnSiblings.length).addClass("hidden");
 					} else {
 						td.each(function(index, el){
-							let dropdown = $(el).find(".dropdown-toggle[data-index='" + dataIdx + "']");
 							if(index >= 0 && index <= 2){
+								let dropdown = $(el).find(".dropdown-toggle[data-index='" + dataIdx + "']");
 								dropdown.parent().remove();
 							} else if(index === 3){
+								let dropdown = $(el).find(".dropdown-toggle[data-index='" + dataIdx + "']");
 								dropdown.parent().remove();
 								$(el).find(".user-group[data-index='" + dataIdx + "']").remove();
 							} else if(index === 4){
@@ -3752,7 +3689,6 @@
 	}
 
 	function insertRowCopy(){
-		let aTable = $("#alarmTable").DataTable();
 		let tr = $("#alarmTable tbody tr");
 
 		if(tr.hasClass("hidden")){
@@ -3835,7 +3771,6 @@
 				$(this).attr("data-parent-id", newName);
 			});
 			
-			// aTable.rows().add(copy).draw(false);
 			$("#alarmTable tbody").append(copy);
 		}	
 
@@ -4044,22 +3979,6 @@
 		</div>
 	</div>
 </div>
-
-
-<div class="modal fade stack" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
-	<div class="modal-dialog modal-sm">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h4 id="resultSuccessMsg" class="text-blue hidden">사용자가 성공적으로<br>추가 되었습니다.</h4>
-				<h4 id="resultFailureMsg" class="warning-text hidden">사업소 추가에 실패하였습니다.<br>다시 시도해 주세요.</h4>
-			</div>
-			<div class="btn-wrap-type05"><!--
-			--><button type="button" id="resultBtn" class="btn-type03" data-dismiss="modal" aria-label="Close">확인</button><!--
-		--></div>
-		</div>
-	</div>
-</div>
-
 
 <div class="modal fade stack" id="deleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-sm">
