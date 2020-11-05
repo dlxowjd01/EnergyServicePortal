@@ -5,14 +5,183 @@
 	const spcURL = '/spcs';
 	const prop = ['subject', 'contents', 'level', 'spc_id'];
 
+	let noticeTable = null;
 	$(function() {
-		setInitList('listData');
 		setInitList('spcList');
 		setInitList('view_attachement_info');
 		setInitList('modi_attachement_info');
 
-		getNoticeList(1);
+		noticeTable = $('#noticeTable').DataTable({
+			'table-layout': 'fixed',
+			autoWidth: true,
+			fixedHeader: true,
+			scrollCollapse: true,
+			scrollY: '720px',
+			paging: true,
+			pageLength: 15,
+			serverSide: true,
+			processing: true,
+			order: [],
+			ajax: {
+				type: 'GET',
+				url: apiHost + '/board',
+				data: function(d) {
+					let param = new Object();
+					param.oid = oid;
+					param.kind = 1;
+					param.limit = 15;
+					param.page = (d.start / 15) + 1;
+					param.includeDeleted = false;
+					param.range = 0;
+					param.search = document.getElementById('search').value
+					return param;
+				},
+				contentType: 'application/x-www-form-urlencoded',
+				dataFilter: function (json) {
+					json = JSON.parse(json);
+
+					json.data.forEach(notice => {
+						const attachment = isEmpty(notice.attachement_info) ? new Array() : JSON.parse(notice.attachement_info);
+						notice['attachment'] = attachment.length;
+						notice['updatedAt'] = (new Date(notice.updated_at)).format('yyyy-MM-dd HH:mm:ss');
+					});
+
+					return JSON.stringify({
+						recordsTotal: json.count,
+						recordsFiltered: json.count,
+						data: json.data
+					}); // return JSON string
+				}
+			},
+			columns: [
+				{
+					title: 'SPC 명',
+					data: 'spc_name',
+					render: function (data, type, full, rowIndex) {
+						if (!isEmpty(data)) {
+							return `<a href="javascript:void(0);" onclick="getDetailNotice('${'${full.id}'}');" class="table-link">${'${data}'}</a>`;
+						} else {
+							return '';
+						}
+					},
+					className: 'dt-left',
+					orderable: false
+				},
+				{
+					title: '제목',
+					data: 'subject',
+					render: function (data, type, full, rowIndex) {
+						if (!isEmpty(data)) {
+							return `<a href="javascript:void(0);" onclick="getDetailNotice('${'${full.id}'}');" class="table-link">${'${data}'}</a>`;
+						} else {
+							return '';
+						}
+					},
+					className: 'dt-left',
+					orderable: false
+				},
+				{
+					title: '첨부 파일',
+					data: 'attachment',
+					render: function (data, type, full, rowIndex) {
+						if (isEmpty(data) || data === 0) {
+							return '-';
+						} else {
+							return data + ' 건';
+						}
+					},
+					className: 'dt-center',
+					orderable: false
+				},
+				{
+					title: '작성자',
+					data: 'created_by',
+					className: 'dt-center',
+					orderable: false
+				},
+				{
+					title: '작성일',
+					data: 'updatedAt',
+					className: 'dt-center',
+					orderable: false
+				}
+			],
+			dom: 'tip',
+		}).columns.adjust();
 	});
+
+	const getDetailNotice = (viewId) => {
+		$.ajax({
+			url: apiHost + boardURL,
+			type: 'get',
+			dataType: 'json',
+			data: {
+				oid: oid,
+				kind: 1,
+				id: viewId,
+				includeDeleted: false
+			}
+		}).done(function (data, textStatus, jqXHR) {
+			const result = data.data[0];
+			if (userInfoId === result.created_by_uid || role === 1) {
+				$('#delBtn').removeClass('hidden');
+				$('#chgBtn').removeClass('hidden');
+				$('#view_level').parents('div.row').removeClass('hidden');
+			} else {
+				$('#delBtn').addClass('hidden');
+				$('#chgBtn').addClass('hidden');
+				$('#view_level').parents('div.row').addClass('hidden');
+			}
+
+			Object.entries(result).forEach(([key, val]) => {
+				const $view = $('#viewNotice'),
+					$viewObj = $view.find('#view_' + key);
+				if ($viewObj.length > 0) {
+					if(key == 'level') {
+						let levelText = '';
+						switch (val) {
+							case 0:
+								levelText = '전체';
+								break;
+							case 1:
+								levelText = '자산 운용사';
+								break;
+							case 2:
+								levelText = 'SPC 담당 사무수탁사';
+								break;
+							default:
+								levelText = '전체';
+						}
+						$viewObj.text(levelText);
+					} else if (key == 'attachement_info') {
+						if (!isEmpty(val)) {
+							let attach = JSON.parse(val);
+							setMakeList(attach, 'view_' + key, {'dataFunction': {}});
+						} else {
+							setMakeList(new Array(), 'view_' + key, {'dataFunction': {}});
+						}
+					} else if (key == 'spc_name') {
+						if (isEmpty(val)) {
+							$('#view_' + key).parents('.input-group').addClass('hidden');
+						} else {
+							$('#view_' + key).text(val).parents('.input-group').removeClass('hidden');
+						}
+					} else {
+						val.replace(/\n/g, '<br/>');
+						$viewObj.html(val);
+					}
+				}
+			})
+
+			$('#delBtn').attr('onclick', 'delNotice("' + result.id + '")');
+			$('#chgBtn').attr('onclick', 'modalOpen("' + result.id + '")');
+			$('#viewNotice').modal('show');
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			console.error(jqXHR);
+			console.error(textStatus);
+			console.error(errorThrown);
+		});
+	}
 
 	function modalOpen(boardId) {
 		$('#addNotice input').val('');
@@ -163,134 +332,8 @@
 
 	function pressEnter() {
 		if (event.keyCode == 13) {
-			getNoticeList(1);
+			noticeTable.ajax.reload();
 		}
-	}
-
-	function getNoticeList(page) {
-		const searchWord = $('#search').val().trim();
-
-		let data = {
-			oid: oid,
-			kind: 1,
-			limit: pagePerData,
-			page: page,
-			includeDeleted: false,
-			range: 0,
-			search: searchWord
-		}
-
-		if (!isEmpty(searchWord)) {
-			data['range'] = 0;
-			data['search'] = searchWord;
-		}
-
-
-		$.ajax({
-			url: apiHost + boardURL,
-			type: 'get',
-			dataType: 'json',
-			data: data
-		}).done(function (data, textStatus, jqXHR) {
-			const result = data.data;
-
-			result.forEach(function(el, idx) {
-				const attachment = isEmpty(el.attachement_info) ? new Array() : JSON.parse(el.attachement_info);
-				result[idx]['attachment'] = attachment.length;
-
-				const update = new Date(el.updated_at);
-				result[idx]['updatedAt'] = update.format('yyyy-MM-dd HH:mm:ss');
-			});
-			setMakeList(result, 'listData', {'dataFunction': {}});
-
-
-			const now = new Date();
-			$('.dbTime').text(now.format('yyyy-MM-dd HH:mm:ss'));
-
-			makeNavigation(page, data.count)
-		}).fail(function (jqXHR, textStatus, errorThrown) {
-			console.error(jqXHR);
-			console.error(textStatus);
-			console.error(errorThrown);
-		});
-	}
-
-	function getDetailNotice(viewId) {
-		$.ajax({
-			url: apiHost + boardURL,
-			type: 'get',
-			dataType: 'json',
-			data: {
-				oid: oid,
-				kind: 1,
-				id: viewId,
-				includeDeleted: false
-			}
-		}).done(function (data, textStatus, jqXHR) {
-			const result = data.data[0];
-			if (userInfoId == result.created_by_uid || role == 1) {
-				$('#delBtn').removeClass('hidden');
-				$('#chgBtn').removeClass('hidden');
-				$('#view_level').parents('div.row').removeClass('hidden');
-			} else {
-				$('#delBtn').addClass('hidden');
-				$('#chgBtn').addClass('hidden');
-				$('#view_level').parents('div.row').addClass('hidden');
-			}
-
-			$.map(result, function(val, key) {
-				const $view = $('#viewNotice'),
-					$viewObj = $view.find('#view_' + key);
-				if ($viewObj.length > 0) {
-					if(key == 'level') {
-						let levelText = '';
-						switch (val) {
-							case 0:
-								levelText = '전체';
-								break;
-							case 1:
-								levelText = '자산 운용사';
-								break;
-							case 2:
-								levelText = 'SPC 담당 사무수탁사';
-								break;
-							default:
-								levelText = '전체';
-						}
-						$viewObj.text(levelText);
-					} else if (key == 'attachement_info') {
-						if (!isEmpty(val)) {
-							let attach = JSON.parse(val);
-							setMakeList(attach, 'view_' + key, {'dataFunction': {}});
-						} else {
-							setMakeList(new Array(), 'view_' + key, {'dataFunction': {}});
-						}
-					} else if (key == 'spc_name') {
-						console.log(val);
-						if (isEmpty(val)) {
-							$('#view_' + key).parents('.input-group').addClass('hidden');
-						} else {
-							$('#view_' + key).text(val).parents('.input-group').removeClass('hidden');
-						}
-					} else {
-						val.replace(/\n/g, '<br/>');
-						$viewObj.html(val);
-					}
-				}
-			});
-
-			$('#delBtn').attr('onclick', 'delNotice("' + result.id + '")');
-			$('#chgBtn').attr('onclick', 'modalOpen("' + result.id + '")');
-
-			const now = new Date();
-			$('.dbTime').text(now.format('yyyy-MM-dd HH:mm:ss'));
-
-			$('#viewNotice').modal('show');
-		}).fail(function (jqXHR, textStatus, errorThrown) {
-			console.error(jqXHR);
-			console.error(textStatus);
-			console.error(errorThrown);
-		});
 	}
 
 	function delNotice(viewId) {
@@ -312,38 +355,6 @@
 		});
 	}
 
-	function makeNavigation(page, totalCount) {
-		$('#paging').empty();
-
-		let pageStr = '';
-		let totalPage = Math.ceil(totalCount / pagePerData);
-		let navgroup = Math.floor((page - 1) / navCount) + 1;
-		let startPage = ((navgroup - 1) * navCount) + 1;
-		let totalnav = Math.ceil(totalPage / navCount);
-		let endPage = ((startPage + navCount - 1) > totalPage) ? totalPage : (startPage + navCount - 1);
-
-		if (navgroup == 1) {
-			pageStr += '<a href="javascript:void(0);" class="btn-prev first_prev">prev</a>';
-		} else{
-			pageStr += '<a href="javascript:getNoticeList(\'' + (startPage -1) + '\');" class="btn-prev">prev</a>';
-		}
-
-		for (let i = startPage ; i <= endPage; i++) {
-			if (i==page) {
-				pageStr += '<a href="javascript:getNoticeList(\'' + i + '\');"><strong>'+i+'</strong></a>';
-			} else {
-				pageStr += '<a href="javascript:getNoticeList(\'' + i + '\');">'+i+'</a>';
-			}
-		}
-
-		if (navgroup <totalnav) {
-			pageStr += '<a href="javascript:getNoticeList(\'' + (endPage +1) + '\');"  class="btn-next">next</a>';
-		} else {
-			pageStr += '<a href="javascript:void(0);"  class="btn-next larst_next">next</a>';
-		}
-		$('#paging').append(pageStr);
-	}
-
 	function rtnDropdown($dropdownId) {
 		if ($dropdownId == 'level') {
 			if($('#level button').data('value') == '2') {
@@ -363,10 +374,12 @@
 		setMakeList(jsonList, fileId, {'dataFunction' : {}});
 	}
 </script>
-<div class="modal fade" id="addNotice" role="dialog">
-	<div class="modal-dialog modal-lg">
-		<form id="addNoticeForm" name="addNoticeForm">
-			<div class="modal-content device_modal_content">
+
+
+<div class="modal fade" id="addNotice" tabindex="-1" role="dialog" aria-labelledby="addNotice" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog modal-lg no-flex">
+		<form id="addNoticeForm" name="addNoticeForm" autocomplete="off">
+			<div class="modal-content group-modal-content">
 				<div class="modal-header stit">
 					<h2>공지 사항 작성</h2>
 				</div>
@@ -453,10 +466,10 @@
 	</div>
 </div>
 
-<div class="modal fade" id="viewNotice" role="dialog">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content device_modal_content">
-			<div class="modal-header stit">
+<div class="modal fade" id="viewNotice" tabindex="-1" role="dialog" aria-labelledby="viewNotice" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog modal-lg no-flex">
+		<div class="modal-content group-modal-content">
+			<div class="modal-header mb-10">
 				<h2>공지 사항 상세</h2>
 			</div>
 			<div class="modal-body">
@@ -523,7 +536,7 @@
 			<div class="text-input-type mr-12">
 				<input type="text" id="search" name="search" placeholder="입력" onKeyDown="pressEnter()">
 			</div>
-			<button type="button" class="btn-type" onclick="getNoticeList(1);">검색</button>
+			<button type="button" class="btn-type" onclick="noticeTable.ajax.reload();">검색</button>
 		</div>
 	</div>
 </div>
@@ -535,46 +548,16 @@
 					<button type="button" class="btn-type big" onclick="modalOpen()">작성</button>
 				</c:if>
 			</div>
-			<div class="spc-tbl align-type left">
-				<table class="sort-table chk-type">
-					<colgroup>
-						<col style="width:15%">
-						<col style="width:40%">
-						<col style="width:12%">
-						<col style="width:15%">
-						<col style="width:18%">
-						<col>
-					</colgroup>
-					<thead>
-						<tr>
-							<th>SPC명</th>
-							<th>제목</th>
-							<th>첨부 파일</th>
-							<th>작성자 </th>
-							<th>작성일</th>
-						</tr>
-					</thead>
-					<tbody id="listData">
-						<tr>
-							<td>
-								<a href="javascript:void(0);" onclick="getDetailNotice('[id]');" class="table-link">
-									[spc_name]
-								</a>
-							</td>
-							<td>
-								<a href="javascript:void(0);" onclick="getDetailNotice('[id]');" class="table-link">
-									[subject]
-								</a>
-							</td>
-							<td>[attachment] 건</td>
-							<td>[created_by]</td>
-							<td>[updatedAt]</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div class="pagination-wrapper" id="paging">
-			</div>
+			<table id="noticeTable" class="chk-type">
+				<colgroup>
+					<col style="width:15%">
+					<col style="width:40%">
+					<col style="width:12%">
+					<col style="width:15%">
+					<col style="width:18%">
+					<col>
+				</colgroup>
+			</table>
 		</div>
 	</div>
 </div>
