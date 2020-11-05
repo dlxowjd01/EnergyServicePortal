@@ -364,7 +364,12 @@
 
 		let inp = $('input').attr('type', 'hidden').attr('name', key).attr('value', value);
 		if(type == 'group') {
-			$('#dashboardForm').append(inp).attr('action', '/dashboard/gmain.do').submit();
+			if (isEmpty(key) && isEmpty(value)) {
+				let sysInp = $('<input>').attr('type', 'hidden').attr('name', 'systemValue').val('system');
+				$('form[name="menuform"]').append(sysInp).attr('action', '/dashboard/gmain.do').submit();
+			} else {
+				$('#dashboardForm').append(inp).attr('action', '/dashboard/gmain.do').submit();
+			}
 		} else if(type == 'site') {
 			$('#dashboardForm').append(inp).attr('action', '/dashboard/smain.do').submit();
 		} else if(type == 'vpp') {

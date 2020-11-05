@@ -320,17 +320,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 				} else {
 					jsonArray = (JSONArray) session.getAttribute("sessionSiteList");
 
-					if ("/dashboard/gmain.do".equals(request.getRequestURI())) {
-						jsonArray = new JSONArray();
-						for (Map<String, Object> refineMap : siteOriginList) {
-							jsonArray.put(jsonParser(refineMap));
-						}
-
-						//그룹 대시보드는 처음 진입시 들어오는 화면이라 파라미터가 없을경우는 사용자가 볼수있는 모든 사이트가 대상이다.
-						request.setAttribute("sgid", "");
-						request.setAttribute("siteName", "전체");
-						session.setAttribute("sessionSiteList", jsonArray);
-					} else if ("/dashboard/jmain.do".equals(request.getRequestURI())) {
+					if ("/dashboard/jmain.do".equals(request.getRequestURI())) {
 						session.removeAttribute("systemLoc");
 						session.removeAttribute("systemTp");
 						session.removeAttribute("sessionSiteList");
