@@ -328,7 +328,7 @@
 						$(this).prop("disabled", false);
 					}
 				} else {
-					$(this).prop("disabled", false).html("수정<span class='caret'></span>");
+					$(this).prop("disabled", false).contents().get(0).nodeValue = "수정";
 				}
 
 			});
@@ -406,7 +406,7 @@
 				startHHMMSS: newStartTime,
 				endDate: newEndDate,
 				endHHMMSS: newEndTime,
-				limit: 100
+				limit: 20
 			},
 			beforeSend: function (jqXHR, settings) {
 				$('#loadingCircle').show();
@@ -414,7 +414,6 @@
 		}
 		
 		$.ajax(option).done(function (json, textStatus, jqXHR) {
-			console.log("json=----", json)
 			var logTable = $('#logTable').DataTable({
 				"aaData": json.log,
 				"destroy": true,

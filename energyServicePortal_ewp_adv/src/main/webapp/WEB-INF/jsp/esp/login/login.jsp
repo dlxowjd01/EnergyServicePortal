@@ -97,7 +97,6 @@
 
 			$("#loginUserId").val("");
 			$("#loginUserPw").val("");
-
 			$("#loginBtn").prop("disabled", true);
 
 			$("#loginUserId").bind("change keypress", function(){
@@ -105,11 +104,17 @@
 					$("#loginBtn").prop("disabled", false);
 				}
 			});
+			$("#loginUserId").bind("change keyup", function(){
+				$(this).val($(this).val().replace(/\s/g, ''));
+			});
 
 			$("#loginUserPw").bind("change keypress", function(){
 				if(!isEmpty($("#loginUserId").val())){
 					$("#loginBtn").prop("disabled", false);
 				}
+			});
+			$("#loginUserPw").bind("change keyup", function(){
+				$(this).val($(this).val().replace(/\s/g, ''));
 			});
 
 			// User input event

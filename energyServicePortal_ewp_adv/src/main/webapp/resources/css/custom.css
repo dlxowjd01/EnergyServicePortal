@@ -3759,6 +3759,13 @@ li[data-alarm="urgent"]:before,
 	display: flex;
 }
 
+.device-form .input-label.asterisk:after {
+	position: absolute;
+	margin: -1% 0 0 2%;
+	content: "*";
+	color: var(--vivid-blue);
+}
+
 .setting-form .input-label.asterisk:after {
 	display: flex;
 	margin: -55% 0 0 110%;
@@ -3914,6 +3921,10 @@ li[data-alarm="urgent"]:before,
 					[setting] siteSetting.do
  ========================================================= */
 
+.site-modal-content {
+	width: 80vw;
+}
+
 .site-modal-content .row .pl-0 {
 	padding-left: 0;
 }
@@ -3976,7 +3987,7 @@ li[data-alarm="urgent"]:before,
 	margin-top: 50px;
 }
 
-.modal-content.alarm-modal-content {
+.alarm-modal-content {
 	width: 70vw;
 }
 
@@ -5475,8 +5486,8 @@ input.inp[readonly]:focus {
 	height: 343px;
 }
 
-.smain-device .no-data {
-	height: 332px;
+.smain-table .no-data {
+	padding-top: 50%;
 }
 
 .alarm .no-device {
@@ -9351,6 +9362,13 @@ table.table-footer tfoot td.light {
 
 .spc-modal-content .textarea {
 	padding: 12px 10px;
+}
+
+.spc-modal-content .input-label.asterisk:after {
+	position: absolute;
+	margin: -1% 0 0 2%;
+	content: "*";
+	color: var(--vivid-blue);
 }
 
 .spc-modal-content .warning {

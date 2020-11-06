@@ -961,6 +961,7 @@
 	 * @param seriesData
 	 */
 	const chartDraw = function (seriesData, standard) {
+		console.log("seriesData===", seriesData);
 		let chart = $('#chart_analysis').highcharts();
 		if (chart) {
 			chart.destroy();

@@ -1457,8 +1457,8 @@
 					}
 
 					let val = $("#newAccLevel").prev().data("value");
-					$("#siteAccOpt").prev().prop("disabled", false).html("선택<span class='caret'></span>");
-					$("#spcAccOpt").prev().prop("disabled", false).html("선택<span class='caret'></span>");
+					$("#siteAccOpt").prev().prop("disabled", false).contents().get(0).nodeValue = "선택";
+					$("#spcAccOpt").prev().prop("disabled", false).contents().get(0).nodeValue = "선택";
 				}).fail(function (jqXHR, textStatus, errorThrown) {
 					console.log("optSite error===", jqXHR)
 					return false;

@@ -691,7 +691,6 @@ function makeAjaxCall(option, callbackOption){
 				resolve(json);		
 			}
 		}).fail(function (jqXHR, textStatus, errorThrown) {
-			console.log("promiseAjaxCall Error message ===>", jqXHR.responseJSON.error.message);
 			console.log("promiseAjaxCall responseJSON Error ===>:", jqXHR.responseJSON);
 			if(!isEmpty(callbackOption)){
 				let callback = callbackOption.callback;
@@ -710,8 +709,7 @@ function showAjaxResultModal(id, siblingId, type, result, timeLimit){
 	let modalHeader = modal.find(".modal-header");
 	let button = modalHeader.next();
 	let h4 = modalHeader.find("h4");
-	let fadeOutTime;
-	timeLimit ? (fadeOutTime = timeLimit) : (fadeOutTime = 1200);
+	let fadeOutTime = timeLimit ? timeLimit : 1200;
 
 	if(!isEmpty(siblingId)){
 		$("#" + siblingId).modal("hide");

@@ -456,7 +456,7 @@
 		$('#repeat_end').parent().removeClass('sel-calendar').addClass('text-input-type');
 
 		if (data == undefined) {
-			title.text('점검계획 등록');
+			title.contents().get(0).nodeValue = '점검계획 등록';
 			//팝업 오픈시 value 초기화
 			input.each(function () {
 				$(this).val('');
@@ -472,7 +472,7 @@
 			deleteScheduleBtn.addClass('hidden');
 			addScheduleBtn.attr('onclick', 'maintenance(\'post\');').text('등록');
 		} else {
-			title.text('점검계획 수정');
+			title.contents().get(0).nodeValue = '점검계획 수정';
 			setJsonAutoMapping(data[0], 'registerModal');
 			setJsonAutoMapping(JSON.parse(data[0].job_info), 'registerModal');
 
@@ -623,7 +623,7 @@
 	<div class="modal-dialog spc-modal-lg" role="modal">
 		<div class="modal-content spc-modal-content">
 			<div class="modal-header">
-				<h2>점검계획 등록</h2>
+				<h2>점검계획 등록<span class="required fr">필수 입력 항목</span></h2>
 			</div>
 			<div class="modal-body">
 				<div class="container-fluid">
@@ -639,11 +639,11 @@
 					</div>
 					<div class="row">
 						<div class="col-lg-2 col-md-2 col-sm-3">
-							<span class="input-label">점검 구분</span>
+							<span class="input-label asterisk">점검 구분</span>
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex-start">
 							<div class="dropdown placeholder" id="job_type">
-								<button type="button" class="dropdown-toggle required" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 								<ul class="dropdown-menu">
 									<li data-value="1"><a href="javascript:void(0);">정기 점검</a></li>
 									<li data-value="2"><a href="javascript:void(0);">구조물 안전진단</a></li>
@@ -663,11 +663,11 @@
 							</div>
 						</div>
 						<div class="col-lg-2 col-md-2 col-sm-3">
-							<span class="input-label">점검 주기</span>
+							<span class="input-label asterisk">점검 주기</span>
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex-start3">
 							<div id="repeat_yn" class="dropdown w-100">
-								<button type="button" class="dropdown-toggle required" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 								<ul class="dropdown-menu">
 									<li data-value="Y"><a href="javascript:void(0);">정기 점검</a></li>
 									<li data-value="N"><a href="javascript:void(0);">일시 점검</a></li>
@@ -690,29 +690,29 @@
 					</div>
 					<div class="row dateField">
 						<div class="col-lg-2 col-md-2 col-sm-3">
-							<span class="input-label">기준 일자</span>
+							<span class="input-label asterisk">기준 일자</span>
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex-start">
 							<div class="sel-calendar">
-								<input type="text" id="job_date" name="job_date" class="sel fromDate required w-100" placeholder="기준 일자" value="" autocomplete="off" readonly>
+								<input type="text" id="job_date" name="job_date" class="sel fromDate w-100" placeholder="기준 일자" value="" autocomplete="off" readonly>
 							</div>
 						</div>
 						<div class="col-lg-2 col-md-2 col-sm-3">
-							<span class="input-label">반복 종료일</span>
+							<span class="input-label asterisk">반복 종료일</span>
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex-start">
 							<div class="text-input-type w-100">
-								<input type="text" id="repeat_end" name="repeat_end" class="required toDate" placeholder="반복 종료일" value="" readonly>
+								<input type="text" id="repeat_end" name="repeat_end" class="toDate" placeholder="반복 종료일" value="" readonly>
 							</div>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-lg-2 col-md-2 col-sm-3">
-							<span class="input-label">공휴일 처리</span>
+							<span class="input-label asterisk">공휴일 처리</span>
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex-start">
 							<div class="dropdown placeholder" id="repeat_before_after_holiday">
-								<button type="button" class="dropdown-toggle required" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 								<ul class="dropdown-menu">
 									<li data-value="N"><a href="javascript:void(0);">처리 안함</a></li>
 									<li data-value="B"><a href="javascript:void(0);">공휴일 직전 영업일</a></li>

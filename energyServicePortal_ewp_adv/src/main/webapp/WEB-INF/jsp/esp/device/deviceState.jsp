@@ -99,11 +99,11 @@
 		<div class="modal-content new_device">
 			<div class="modal-header">설비 정보 수정</div>
 			<div class="modal-body">
-				<form id="deviceForm1" action="#" method="post" name="deviceForm" novalidate>
+				<form id="deviceForm1" class="device-form" action="#" method="post" name="deviceForm" novalidate>
 					<div class="row">
 						<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
 							<div class="input-group inline-flex">
-								<label for="addSiteList" class="input-label required">사업소</label>
+								<label for="addSiteList" class="input-label asterisk">사업소</label>
 								<div class="dropdown" id="addSiteList">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="사업소 선택">
 										사업소 선택<span class="caret"></span>
@@ -116,11 +116,11 @@
 								</div>
 							</div>
 							<div class="input-group inline-flex">
-								<label for="name" class="input-label required">장치명</label>
+								<label for="name" class="input-label asterisk">장치명</label>
 								<input class="input text-input-type" type="text" name="name" id="name" placeholder="입력" autocomplete="off">
 							</div>
 							<div class="input-group inline-flex">
-								<label for="device_type" class="input-label required">장치 타입</label>
+								<label for="device_type" class="input-label asterisk">장치 타입</label>
 								<div class="dropdown" id="device_type">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="타입 선택">
 										타입 선택<span class="caret"></span>
@@ -133,7 +133,7 @@
 								</div>
 							</div>
 							<div class="input-group inline-flex">
-								<label for="metering_type" class="input-label required">계량 유형</label>
+								<label for="metering_type" class="input-label asterisk">계량 유형</label>
 								<div class="dropdown" id="metering_type">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="유형 선택">
 										유형 선택<span class="caret"></span>
@@ -848,16 +848,16 @@
 						if(liData.match("activePower") || liData.match("dcPower")){
 							let rounded = Math.round(resultData[liData]);
 							if(rounded < 1000){
-								let tempVal = displayNumberFixedUnit(resultData[liData], suffix, suffix, 2, "round");
+								let tempVal = displayNumberFixedUnit(resultData[liData], suffix, suffix, 2);
 								tempVal[0] != '-' ? ( dValue = tempVal[0] + ' ' + tempVal[1] ) : ( dValue = tempVal[0] );
 							} else if(rounded >= 1000 && rounded < 1000000){
-								let tempVal = displayNumberFixedUnit(resultData[liData], suffix, "kW", 0, "round");
+								let tempVal = displayNumberFixedUnit(resultData[liData], suffix, "kW", 0);
 								tempVal[0] != '-' ? ( dValue = tempVal[0] + ' ' + tempVal[1] ) : ( dValue = tempVal[0] );
 							} else if(rounded >= 1000000 && rounded < 1000000000){
-								let tempVal = displayNumberFixedUnit(resultData[liData], suffix, "MW", 2, "round");
+								let tempVal = displayNumberFixedUnit(resultData[liData], suffix, "MW", 2);
 								tempVal[0] != '-' ? ( dValue = tempVal[0] + ' ' + tempVal[1] ) : ( dValue = tempVal[0] );
 							} else if(rounded >= 1000000000){
-								let tempVal = displayNumberFixedUnit(resultData[liData], suffix, "GW", 2, "round");
+								let tempVal = displayNumberFixedUnit(resultData[liData], suffix, "GW", 2);
 								tempVal[0] != '-' ? ( dValue = tempVal[0] + ' ' + tempVal[1] ) : ( dValue = tempVal[0] );
 							}
 						} else {
@@ -880,16 +880,16 @@
 					if(liData.match("accumActiveEnergy")){
 						let rounded = Math.round(resultData[liData]);
 						if(rounded < 1000){
-							let tempVal = displayNumberFixedUnit(resultData[liData], suffix, suffix, 2, "round");
+							let tempVal = displayNumberFixedUnit(resultData[liData], suffix, suffix, 2);
 							tempVal[0] != '-' ? ( dValue = tempVal[0] + ' ' + tempVal[1] ) : ( dValue = tempVal[0] );
 						} else if(rounded >= 1000 && rounded < 1000000){
-							let tempVal = displayNumberFixedUnit(resultData[liData], suffix, "kWh", 0, "round");
+							let tempVal = displayNumberFixedUnit(resultData[liData], suffix, "kWh", 0);
 							tempVal[0] != '-' ? ( dValue = tempVal[0] + ' ' + tempVal[1] ) : ( dValue = tempVal[0] );
 						} else if(rounded >= 1000000 && rounded < 1000000000){
-							let tempVal = displayNumberFixedUnit(resultData[liData], suffix, "MWh", 2, "round");
+							let tempVal = displayNumberFixedUnit(resultData[liData], suffix, "MWh", 2);
 							tempVal[0] != '-' ? ( dValue = tempVal[0] + ' ' + tempVal[1] ) : ( dValue = tempVal[0] );
 						} else if(rounded >= 1000000000){
-							let tempVal = displayNumberFixedUnit(resultData[liData], suffix, "GWh", 2, "round");
+							let tempVal = displayNumberFixedUnit(resultData[liData], suffix, "GWh", 2);
 							tempVal[0] != '-' ? ( dValue = tempVal[0] + ' ' + tempVal[1] ) : ( dValue = tempVal[0] );
 						}
 					} else {

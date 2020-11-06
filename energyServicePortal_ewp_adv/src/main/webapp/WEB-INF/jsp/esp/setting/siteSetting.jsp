@@ -123,14 +123,14 @@
 			$("#newEssList").prev().data("value", val);
 
 			// if(val == "0"){
-			// 	$("#newSiteType").prev().data({"value": "", "name" : ""}).html("해당 사항 없음<span class='caret'></span>").prop("disabled", true);
+			// 	$("#newSiteType").prev().data({"value": "", "name" : ""}).prop("disabled", true).contents().get(0).nodeValue = "해당 사항 없음";
 			// 	$("#newResList li").removeClass("hidden");
 			// } else {
 			// 	$("#newSiteType").prev().prop("disabled", false);
 			// }
 			
 			// else {
-			// 	$("#newSiteType").prev().html("선택<span class='caret'></span>").prop("disabled", false);
+			// 	$("#newSiteType").prev().prop("disabled", false).contents().get(0).nodeValue = "선택";
 			// }
 		});
 
@@ -1876,15 +1876,22 @@
 				let vArr = [];
 				let utilArr = [];
 
-				newContractList.prev().data({ "plan-id": planId, "vol-type": voltType });
-				subOpt.empty().prev().data("value", "").html("선택<span class='caret'></span>");
+				console.log("voltType====", voltType);
+				if(!isEmpty(voltType)){
+					newContractList.prev().data({ "plan-id": planId, "vol-type": voltType });
+				} else {
+					newContractList.prev().data("plan-id", planId);
+				}
+				$("#newVoltWarning").addClass("hidden");
 
+				subOpt.empty().prev().data("value", "").contents().get(0).nodeValue = "선택";
+				
 				if(!isEmpty($(this).data("vol-type"))){
 					let str = '';
 					idArr = [...$(this).data("plan-id").split(",")];
 					vArr = [...$(this).data("vol-type").split(",")];
 					utilArr = [...$(this).data("util-name").split(",")];
-					$("#newVoltWarning").removeClass("hidden");
+
 					if(btn.is(":disabled")){
 						btn.prop("disabled", false)
 					}
@@ -1892,17 +1899,14 @@
 						str += `<li data-util-name="${'${utilArr[i]}'}" data-id="${'${idArr[i]}'}" data-value="${'${vArr[i]}'}"><a href="#">${'${vArr[i]}'}</a></li>`;
 					}
 					subOpt.append(str);
-					setTimeout(function(){
-						validateForm();
-					}, 600);
 					subOpt.find("li").click(function(){
-						$("#newVoltWarning").addClass("hidden");
+
 						setTimeout(function(){
 							validateForm();
 						}, 600);
 					});
 				} else {
-					btn.html("<span class='caret'></span>")
+					btn.contents().get(0).nodeValue = "선택";
 					if(btn.not(":disabled")){
 						btn.prop("disabled", true);
 					}
@@ -1955,10 +1959,10 @@
 
 			// 	if(val == "0") {
 			// 		let target = items.eq(0);
-			// 		newSiteType.prev().data({ "name" : target.data("name"), "value":  target.data("value") }).html(target.data("name") + "<span class='caret'></span>");
+			// 		newSiteType.prev().data({ "name" : target.data("name"), "value":  target.data("value") }).contents().get(0).nodeValue = target.data("name");
 			// 	} else {
 			// 		let target = items.eq(1);
-			// 		newSiteType.prev().data({ "name" : target.data("name"), "value": target.data("value") }).html(target.data("name") + "<span class='caret'></span>");
+			// 		newSiteType.prev().data({ "name" : target.data("name"), "value": target.data("value") }).contents().get(0).nodeValue = target.data("name");
 			// 	}
 			// });
 
@@ -2010,7 +2014,7 @@
 				let newRes = $("#newResList");
 				let items = newRes.find("li");
 
-				newRes.prev().data({ "name" : "", "value": "" }).html("선택<span class='caret'></span>");
+				newRes.prev().data({ "name" : "", "value": "" }).contents().get(0).nodeValue = "선택";
 				if(val == "0") {
 					items.eq(0).removeClass("hidden").siblings().addClass("hidden");
 				} else if(val == "1"){
@@ -2125,11 +2129,11 @@
 		// 	});
 		// 	$("#newCblList").prev().prop("disabled", false);
 		// } else {
-		// 	newDrResIdList.prev().prop("disabled", true).html("등록된 DR거래 자원 ID가 없습니다.<span class='caret'></span>");
+		// 	newDrResIdList.prev().prop("disabled", true).contents().get(0).nodeValue = "등록된 DR거래 자원 ID가 없습니다.";
 		// 	$("#sectionDRInfo input").each(function(){
 		// 		$(this).prop('disabled', true).val("-");
 		// 	})
-		// 	$("#newCblList").prev().prop("disabled", true).html("-<span class='caret'></span>");
+		// 	$("#newCblList").prev().prop("disabled", true).contents().get(0).nodeValue = "-"";
 		// }
 
 		// modal VPP info!!!
@@ -2142,7 +2146,7 @@
 			// dropdown
 			newVppResIdList.append(strVpp);
 		} else {
-			newVppResIdList.prev().prop('disabled', true).html("등록된 중개거래 자원 ID가 없습니다.<span class='caret'></span>");
+			newVppResIdList.prev().prop('disabled', true).contents().get(0).nodeValue = "등록된 중개거래 자원 ID가 없습니다.";
 			$("#newVppRevShare").prop('disabled', true).val("-");
 		}
 		let propertyDropdown = $("#propertyRow").find(".dropdown-menu");
@@ -2199,7 +2203,7 @@
 			required.hasClass("no-symbol") ? required.removeClass("no-symbol") : null;
 			addBtn.text("추가");
 			newSiteName.prop('disabled', false).parent().removeClass("disabled");
-			$("#newVoltTypeList").prev().prop("disabled", true).data("value", "").html("선택<span class='caret'></span>");
+			$("#newVoltTypeList").prev().prop("disabled", true).data("value", "").contents().get(0).nodeValue = "선택";
 			$("#addSiteModal").removeClass("edit").modal("show");
 		} else {
 			let dTable = $("#siteTable").DataTable();
@@ -2243,23 +2247,23 @@
 				// 사업소 명
 				newSiteName.val( td.eq(2).text() ).prop("disabled", true).parent().addClass("disabled");
 				// 지역
-				$('#newCityList').prev().data({"name": td.eq(3).text(), "value" : td.eq(3).data("value") }).html(td.eq(3).text() + "<span class='caret'></span>");
+				$('#newCityList').prev().data({"name": td.eq(3).text(), "value" : td.eq(3).data("value") }).contents().get(0).nodeValue = td.eq(3).text();
 				// Address
 				if( !isEmpty(rowData.address)) {
 					$('#newStreetAddr').val(rowData.address);
 				}
 				// 사업소 유형
-				$('#newSiteType').prev().data({"name": td.eq(1).text(), "value" : td.eq(1).data("value") }).html(td.eq(1).text() + "<span class='caret'></span>");
+				$('#newSiteType').prev().data({"name": td.eq(1).text(), "value" : td.eq(1).data("value") }).contents().get(0).nodeValue = td.eq(1).text();
 				// 발전원
-				$("#newResList").prev().data({"name": td.eq(4).text(), "value" : td.eq(4).data("value") }).html(td.eq(4).text() + "<span class='caret'></span>");
+				$("#newResList").prev().data({"name": td.eq(4).text(), "value" : td.eq(4).data("value") }).contents().get(0).nodeValue = td.eq(4).text();
 				// ESS 유무
 				if( isEmpty(rowData.ess) || rowData.ess === 0 ) {
-					$('#newEssList').prev().data("value", "0").html("무<span class='caret'></span>");
+					$('#newEssList').prev().data("value", "0").contents().get(0).nodeValue = "무";
 				} else {
 					if (rowData.ess === '-') {
-						$('#newEssList').prev().data("value", "0").html("무<span class='caret'></span>");
+						$('#newEssList').prev().data("value", "0").contents().get(0).nodeValue = "무";
 					} else {
-						$('#newEssList').prev().data("value", "1").html("유<span class='caret'></span>");
+						$('#newEssList').prev().data("value", "1").contents().get(0).nodeValue = "유";
 					}
 				}
 				// 위경도
@@ -2347,7 +2351,7 @@
 // 				let sectionDrInput = sectionDRInfo.find("input[type='text']");
 //				let newDrVol = $("#newDrVol");
 // 				if( !isEmpty(rowData.dr_group_id)) {
-// 					$("#newDrResIdList").prev().data("value", rowData.dr_group_id).html(rowData.drName + "<span class='caret'></span>");
+// 					$("#newDrResIdList").prev().data("value", rowData.dr_group_id).contents().get(0).nodeValue = rowData.drName;
 // 					sectionDrDropdown.each(function(item, index){
 // 						$(this).prop("disabled", false);
 // 					});
@@ -2365,7 +2369,7 @@
 						// }
 
 // 						if( !isEmpty(dr.cbl_method)) {
-// 							$("#newCblList").prev().html(dr.cbl_method + "<span class='caret'></span>");
+// 							$("#newCblList").prev().contents().get(0).nodeValue = dr.cbl_method;
 // 						}
 // 						if( !isEmpty(dr.profile_share)) {
 // 							$("#newDrRevShare").val(dr.profile_share);
@@ -2374,7 +2378,7 @@
 // 				} else {
 // 					console.log("no dr grou id---")
 // 					sectionDrDropdown.each(function(item, index){
-// 						$(this).prop("disabled", true).html("선택<span class='caret'></span>");
+// 						$(this).prop("disabled", true).contents().get(0).nodeValue = "선택";
 // 					});
 // 					sectionDrInput.each(function(item, index){
 // 						$(this).prop("disabled", true).val("");
@@ -2387,7 +2391,7 @@
 				let sectionVppInput = sectionVppInfo.find("input[type='text']");
 
 				if( !isEmpty(rowData.vpp_group_id)) {
-					$("#newVppResIdList").prev().data("value", rowData.vpp_group_id).html(rowData.vppName + "<span class='caret'></span>");
+					$("#newVppResIdList").prev().data("value", rowData.vpp_group_id).contents().get(0).nodeValue = rowData.vppName;
 					sectionVppDropdown.each(function(item, index){
 						$(this).prop("disabled", false);
 					});
@@ -2403,7 +2407,7 @@
 					}
 				} else {
 					sectionVppDropdown.each(function(item, index){
-						$(this).prop("disabled", true).html("선택<span class='caret'></span>");
+						$(this).prop("disabled", true).contents().get(0).nodeValue = "선택";
 					});
 					sectionVppInput.each(function(item, index){
 						$(this).prop("disabled", true).val("").parent().addClass("disabled");
@@ -2411,7 +2415,7 @@
 				}
 
 				if( td.eq(9).text() != '-' ) {
-					$('#newVppResIdList').prev().data("value", td.eq(9).text() ).html(td.eq(9).text() + '<span class="caret"></span>');
+					$('#newVppResIdList').prev().data("value", td.eq(9).text() ).contents().get(0).nodeValue = td.eq(9).text();
 				} else {
 					$('#newVppResIdList').prev().data("value", "").html('선택<span class="caret"></span>');
 				}
@@ -2476,15 +2480,23 @@
 
 	function validateForm(){
 		if(!$("#addSiteModal").hasClass('edit')){
-			if(!isEmpty($("#newContractList").prev().data("vol-type"))){
-				if( ( !isEmpty($("#newVoltTypeList").prev().data("value")) ) &&  ($("#validSite:not('.hidden')").length > 0 ) && (!isEmpty($("#newCityList").prev().data("value"))) && (!isEmpty($("#newResList").prev().data("value"))) ){
+			let voltType = $("#newContractList").prev().data("vol-type");
+			let subVoltType = $("#newVoltTypeList").prev().data("value");
+			let newCityList = $("#newCityList").prev().data("value");
+			let newResList = $("#newResList").prev().data("value")
+			let validSite = $("#validSite:not('.hidden')").length;
+			if(!isEmpty(voltType)){
+				if( !isEmpty(subVoltType) && validSite > 0 && !isEmpty(newCityList) && !isEmpty(newResList) ){
 					$("#addSiteBtn").prop("disabled", false);
 				} else {
-					$("#newVoltWarning").removeClass("hidden");
+					if(isEmpty(subVoltType)){
+						$("#newVoltWarning").removeClass("hidden");
+					}
 					$("#addSiteBtn").prop("disabled", true);
 				}
 			} else {
-				if( ($("#validSite:not('.hidden')").length > 0 ) && (!isEmpty($("#newCityList").prev().data("value"))) && (!isEmpty($("#newResList").prev().data("value"))) ){
+				$("#newVoltWarning").addClass("hidden");
+				if( validSite > 0 && !isEmpty(newCityList) && !isEmpty(newResList) ){
 					$("#addSiteBtn").prop("disabled", false);
 				} else {
 					$("#addSiteBtn").prop("disabled", true);
@@ -2509,7 +2521,7 @@
 		menuItem.each(function(index, item){
 			let val = $(this).data("parent");
 			if(val == typeName){
-				target.prop("disabled", false).data("value", "").html("선택<span class='caret'></span>");
+				target.prop("disabled", false).data("value", "").contents().get(0).nodeValue = "선택";
 				$(this).removeClass("hidden");
 			}
 		});

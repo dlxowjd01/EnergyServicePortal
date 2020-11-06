@@ -1331,7 +1331,6 @@
 			required.hasClass("no-symbol") ? required.removeClass("no-symbol") : null;
 			addBtn.text("추가");
 			$('#newGroupName').prop('disabled', false);
-			$("#newVoltTypeList").prev().prop("disabled", true).data("value", "").html("선택<span class='caret'></span>");
 			$("#addGroupModal").removeClass("edit").modal("show");
 		} else {
 			let dTable = $("#groupTable").DataTable();
@@ -1369,7 +1368,7 @@
 					if(rowData.sgid){
 						let sharedOpt = '';
 						let shareOptGroup = $("#shareOptGroup");
-						newGroupType.prev().data("value", "tag_group").html("사업소 그룹<span class='caret'></span>").prop("disabled", true);
+						newGroupType.prev().data("value", "tag_group").prop("disabled", true).contents().get(0).nodeValue = "사업소 그룹";
 						shareOptGroup.find(".warning").addClass("hidden");
 						shareOptGroup.removeClass("hidden").prev().removeClass("hidden");
 						resIdWrapper.addClass("hidden").prev().addClass("hidden");
@@ -1398,9 +1397,9 @@
 
 								if(index === 0){
 									if( s.length > 1) {
-										newSiteList.prev().html(el.name + "&nbsp;외" + String(s.length-1) + "<span class='caret'></span>");
+										newSiteList.prev().contents().get(0).nodeValue = (el.name + " 외 +" + String(s.length-1) );
 									} else {
-										newSiteList.prev().html(el.name + "<span class='caret'></span>");
+										newSiteList.prev().contents().get(0).nodeValue = el.name;
 									}
 									
 								}
@@ -1424,9 +1423,9 @@
 
 								if(index === 0){
 									if( s.length > 1) {
-										newSiteList.prev().html(el.name + "&nbsp;외" + String(s.length-1) + "<span class='caret'></span>");
+										newSiteList.prev().contents().get(0).nodeValue = (el.name + " 외 +" + String(s.length-1));
 									} else {
-										newSiteList.prev().html(el.name + "<span class='caret'></span>");
+										newSiteList.prev().contents().get(0).nodeValue = el.name;
 									}
 									
 								}
@@ -1437,12 +1436,12 @@
 
 						if (rowData.vgid){
 							resIdWrapper.removeClass("hidden").prev().removeClass("hidden").find(".input-label").text("거래 ID");
-							newGroupType.prev().data("value", "vpp_group").html("VPP 그룹<span class='caret'></span>").prop("disabled", true);
+							newGroupType.prev().data("value", "vpp_group").prop("disabled", true).contents().get(0).nodeValue = "VPP 그룹";
 
 						}
 						// else if(rowData.dgid){
 						// 	resIdWrapper.removeClass("hidden").prev().removeClass("hidden").find(".input-label").text("자원 ID");
-						// 	newGroupType.prev().data("value", "dr_group").html("DR 그룹<span class='caret'></span>").prop("disabled", true);
+						// 	newGroupType.prev().data("value", "dr_group").prop("disabled", true).contents().get(0).nodeValue = "DR 그룹";
 						
 						// }
 					}

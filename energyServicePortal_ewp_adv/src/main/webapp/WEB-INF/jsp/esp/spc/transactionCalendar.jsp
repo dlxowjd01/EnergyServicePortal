@@ -1135,7 +1135,7 @@
 		<div class="modal-content spc-modal-content">
 			<form id="spcAlarmForm">
 				<div class="modal-header">
-					<h2>주요 일정 알림 등록</h2>
+					<h2>주요 일정 알림 등록<span class="required fr">필수 입력 항목</span></h2>
 				</div>
 				<div class="modal-body">
 					<div class="container-fluid">
@@ -1158,11 +1158,11 @@
 						</div>
 						<div class="row">
 							<div class="col-lg-2 col-md-2 col-sm-3">
-								<span class="input-label">알림 항목</span>
+								<span class="input-label asterisk">알림 항목</span>
 							</div>
 							<div class="col-lg-4 col-md-4 col-sm-9 flex-start">
 								<div class="dropdown placeholder" id="job_type">
-									<button type="button" class="dropdown-toggle required" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 									<ul class="dropdown-menu">
 										<li data-value="6"><a href="javascript:void(0);">이자 지급일</a></li>
 										<li data-value="7"><a href="javascript:void(0);">보장발전시간 정산일</a></li>
@@ -1182,11 +1182,11 @@
 								</div>
 							</div>
 							<div class="col-lg-2 col-md-2 col-sm-3">
-								<span class="input-label">알림 주기</span>
+								<span class="input-label asterisk">알림 주기</span>
 							</div>
 							<div class="col-lg-4 col-md-4 col-sm-9 flex-start3">
 								<div id="repeat_yn" class="dropdown w-100">
-									<button type="button" class="dropdown-toggle required" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 									<ul class="dropdown-menu">
 										<li data-value="Y"><a href="javascript:void(0);">정기 알림</a></li>
 										<li data-value="N"><a href="javascript:void(0);">일시 알림</a></li>
@@ -1209,7 +1209,7 @@
 						</div>
 						<div class="row dateField">
 							<div class="col-lg-2 col-md-2 col-sm-3">
-								<span class="input-label">기준 일자</span>
+								<span class="input-label asterisk">기준 일자</span>
 							</div>
 							<div class="col-lg-4 col-md-4 col-sm-9 flex-start">
 								<div class="sel-calendar">
@@ -1228,11 +1228,11 @@
 						</div>
 						<div class="row">
 							<div class="col-lg-2 col-md-2 col-sm-3">
-								<span class="input-label">공휴일 처리</span>
+								<span class="input-label asterisk">공휴일 처리</span>
 							</div>
 							<div class="col-lg-4 col-md-4 col-sm-9 flex-start">
 								<div class="dropdown placeholder" id="repeat_before_after_holiday">
-									<button type="button" class="dropdown-toggle required" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 									<ul class="dropdown-menu">
 										<li data-value="N"><a href="javascript:void(0);">처리 안함</a></li>
 										<li data-value="B"><a href="javascript:void(0);">공휴일 직전 영업일</a></li>

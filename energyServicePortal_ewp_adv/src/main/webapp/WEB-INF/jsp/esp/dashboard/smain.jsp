@@ -18,7 +18,7 @@
 		<div class="col-12">
 			<div class="flex-start">
 				<div class="dropdown">
-					<button type="button" class="dropdown-toggle" data-toggle="dropdown" disabled><span class="caret"></span></button>
+					<button type="button" class="dropdown-toggle" data-toggle="dropdown" disabled>선택<span class="caret"></span></button>
 					<ul id="viewOptList" class="dropdown-menu" role="menu">
 						<li data-value="1" data-name="사이트 대시보드 #1"><a href="#" tabindex="-1">사이트 대시보드 #1</a></li>
 						<li data-value="2" data-name="태양광 대시보드 #2"><a href="#" tabindex="-1">태양광 대시보드 #2</a></li>
@@ -576,8 +576,8 @@
 
 		if( !isEmpty( getCookie("sMainView")) ){
 			if(cookie == "2"){
-				let selected = viewOptList.find("li:last-of-type");
-				viewOptList.prev().data("value", "2").html(selected.data("name") + "<span class='caret'></span>");
+				let selected = viewOptList.find("li:last-of-type").data("name");
+				viewOptList.prev().data("value", "2").selected;
 				$('#defaultDashboard').addClass("hidden");
 				$('#solarDashboard').removeClass("hidden");
 				setInitList('invList');
@@ -594,7 +594,7 @@
 
 			} else {
 				let selected = viewOptList.find("li:first-of-type").data("name");
-				viewOptList.prev().html(selected + "<span class='caret'></span>");
+				viewOptList.prev().data("value", "1").contents().get(0).nodeValue = selected;
 				$('#defaultDashboard').removeClass("hidden");
 				$('#solarDashboard').addClass("hidden");
 				setInitList('typeList');
@@ -621,7 +621,7 @@
 				}, 15 * 60 * 1000);
 			} else {
 				let selected = viewOptList.find("li:first-of-type").data("name");
-				viewOptList.prev().html(selected + "<span class='caret'></span>");
+				viewOptList.prev().contents().get(0).nodeValue = selected;
 				$('#defaultDashboard').removeClass("hidden");
 				$('#solarDashboard').addClass("hidden");
 				setInitList('typeList');
@@ -736,30 +736,23 @@
 	const apiStatusRaw = '/status/raw';
 	const apiConfigDevice = '​/config/devices';
 	const apiGetDvcProperties = '/config/view/device_properties';
-	const featureProperties = new Object();
-	const featurePropertiesSub = new Object();
+	const featureProperties = {};
+	const featurePropertiesSub = {};
 
 	let cookie = getCookie("sMainView");
 	let first = true;
 	// let invFlag = true;
 
-	var num12List = [];
-	var num24List = [];
-	var num31List = [];
-
+	var num12List = [...Array(12)].map((item, index) => {
+		return String(index + 1)
+	});
+	var num24List = [...Array(24)].map((item, index) => {
+		return String(index + 1)
+	});
+	var num31List = [...Array(31)].map((item, index) => {
+		return String(index + 1)
+	});
 	var date31List = addToDateList(30);
-
-	// console.log("date31List===", date31List);
-	
-	for(let i=0; i<12; i++){
-		num12List.push(String(i+1));
-	}
-	for(let i=0; i<24; i++){
-		num24List.push(String(i));
-	}
-	for(let i=0; i<31; i++){
-		num31List.push(String(i+1));
-	}
 
 	// var groupingUnits = [
 	// 	[
@@ -971,7 +964,7 @@
 				labels: {
 					formatter: function () {
 						let suffix = this.chart.yAxis[0].userOptions.title.text;
-						return displayNumberFixedUnit(this.value, 'kWh', suffix, 0, "round")[0];
+						return displayNumberFixedUnit(this.value, 'kWh', suffix, 0)[0];
 					},
 					style: {
 						color: 'var(--grey)',
@@ -1272,15 +1265,6 @@
 						color: 'var(--grey)',
 						fontSize: '12px',
 					},
-					// formatter: function () {
-					// 	if (String(this.value).length >= 7) {
-					// 		return numberComma(this.value / 1000000) + ' G';
-					// 	} else if (String(this.value).length >= 5) {
-					// 		return numberComma(this.value / 1000) + ' M';
-					// 	} else {
-					// 		return this.value;
-					// 	}
-					// },
 				},
 			},
 			{
@@ -1313,15 +1297,6 @@
 						color: 'var(--grey)',
 						fontSize: '12px',
 					},
-					formatter: function () {
-						if (String(this.value).length >= 7) {
-							return numberComma(this.value / 1000000) + ' G';
-						} else if (String(this.value).length >= 5) {
-							return numberComma(this.value / 1000) + ' M';
-						} else {
-							return this.value;
-						}
-					},
 				},
 			},
 		],
@@ -1347,7 +1322,7 @@
 							if(point.series.name == "일사량"){
 								val = Math.round(point.point.y);
 							} else {
-								val = point.point.y;
+								val = displayNumberFixedUnit(point.point.y, 'kWh', 'kWh', 0)[0];
 							}
 							point.series.options.tooltip.valueSuffix ? (suffix = point.series.options.tooltip.valueSuffix) : (suffix = "");
 
@@ -1968,7 +1943,7 @@
 				interval: 'day'
 			}
 		}
-		let weekWeatherTime = new Object();
+		let weekWeatherTime = {};
 
 		if (oid.match('testkpx')) {
 			let did = '';
@@ -2030,7 +2005,7 @@
 				if (weekWeatherTimeData[1] == 'success') {
 					let items = weekWeatherTimeData[0];
 					if (items.length > 0) {
-						let tempArray = new Array();
+						let tempArray = [];
 						$.each(items, function (i, el) {
 							if (el.observed != undefined && el.observed) {
 								tempArray.push(el);
@@ -2135,7 +2110,7 @@
 					let items = weekWeatherTimeData[0];
 					
 					if (items.length > 0) {
-						let tempArray = new Array();
+						let tempArray = [];
 						$.each(items, function (i, el) {
 							if (el.observed != undefined && el.observed) {
 								tempArray.push(el);
@@ -2290,15 +2265,19 @@
 			data: {},
 		}).done(function (data, textStatus, jqXHR) {
 			$.map(data, function (val, key) {
+				let propList;
+				if(!isEmpty(val.properties)) {
+					propList = val.properties;
+				} else {
+					return false;
+				}
 				let deviceName = key;
-				let propList = val.properties;
-				let tempFeature = new Array();
-				let tempFeature2 = new Array();
-				let devicePropName = (langStatus == 'KO') ? val.name.kr : val.name.en
-
+				let tempFeature = [];
+				let tempFeature2 = [];
+				let devicePropName = (langStatus == 'KO') ? val.name.kr : val.name.en;
 				$.map(propList, function (v, k) {
 					if (v.dashboard_head) {
-						let tempObj = new Object();
+						let tempObj = {};
 						let unit = (v.unit != null && v.unit != '') ? '' + v.unit + '' : '';
 						let propName = (langStatus == 'KO') ? v.name.kr : v.name.en;
 
@@ -2315,7 +2294,7 @@
 					}
 
 					if (v.dashboard_detail) {
-						let tempObj2 = new Object();
+						let tempObj2 = {};
 						let unit = (v.unit != null && v.unit != '') ? '' + v.unit + '' : '';
 						let subPropName = (langStatus == 'KO') ? v.name.kr : v.name.en;
 						// let propName = (langStatus == 'KO') ? val.name.kr : val.name.en;
@@ -2334,9 +2313,8 @@
 				});
 			});
 
-
-			// console.log("featureProperties===", featureProperties)
-			// console.log("featurePropertiesSub===", featurePropertiesSub)
+			// console.log("featureProperties===", featureProperties);
+			// console.log("featurePropertiesSub===", featurePropertiesSub);
 			
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			let r = JSON.parse(jqXHR.responseText);
@@ -2358,7 +2336,7 @@
 	};
 
 	function getDvcInfo(option) {
-		let deviceArray = new Array();
+		let deviceArray = [];
 		if (!isEmpty(sList[0].devices)) {
 			sList[0].devices.forEach(el => {
 				deviceArray.push(el.did);
@@ -2376,7 +2354,7 @@
 			}).done(function (data, textStatus, jqXHR) {
 				if (isEmpty(option)){
 					// #1 site Dashboard
-					let deviceType = new Array();
+					let deviceType = [];
 					let sortedData;
 
 					if(!isEmpty(data) && Object.values(data)){
@@ -2384,9 +2362,7 @@
 						sortedData.sortOn("dname");
 					}
 					$.map(sortedData, function(val, key) {
-						if ($.inArray(val.device_type, deviceType) === -1) {
-							// TODO!!!! api device type : SM_ISMART not available 
-							if (val.device_type == 'SM_MANUAL' || val.device_type == 'SM_ISMART') return false;
+						if ($.inArray(val.device_type, deviceType) === -1 && !isEmpty(val.properties)) {
 							deviceType.push(val.device_type);
 						}
 					});
@@ -2394,7 +2370,6 @@
 					deviceType.sort();
 
 					$.each(deviceType, function (i, el) {
-						if (el == 'SM_MANUAL') return false;
 						deviceType[i] = {
 							name: featureProperties[el].name,
 							type: el,
@@ -2409,16 +2384,16 @@
 					setMakeList(deviceType, 'typeList', { 'dataFunction': { 'head': makeHeadTable, 'body': makeBodyTable } });
 					
 					$.each(deviceType, function (i, el) {
+						if (isEmpty(el.properties)) return false;
+
 						let dvcType = el.type;
 						let operationNormal = 0;
 						let operationError = 0;
 						let operationAlert = 0;
+						let headerDataObject = {};
 
-						let headerDataObject = new Object();
-
-						if (el.type == 'SM_MANUAL') return false;
 						setInitList('table_' + dvcType);
-						let tableArray = new Array();
+						let tableArray = [];
 
 						$.map(sortedData, function(val, key) {
 							let dname = val.dname;
@@ -2514,14 +2489,14 @@
 												} else {
 													if( el.key.match('activePower') || el.key.match('dcPower') ) {
 														// Unit: W => kW,  Wh => kWh
-														let strVal = displayNumberFixedUnit(value, 'W', 'kW', 0, "round");
+														let strVal = displayNumberFixedUnit(value, 'W', 'kW', 0);
 														rowData[0][el.key] = strVal[0] + " " + strVal[1];
 													} else if( el.key.match('accumActiveEnergy') ){
 														// Unit: Wh => MWh
 														// Unit: Wh => kWh:(round), Wh, MWh, GWh
 														let rounded = Math.round(value);
 														if(rounded >= 1000 && rounded < 1000000){
-															let tempVal = displayNumberFixedUnit(value, 'Wh', "kWh", 0, "round");
+															let tempVal = displayNumberFixedUnit(value, 'Wh', "kWh", 0);
 															rowData[0][el.key] = tempVal[0] + ' ' + tempVal[1];
 														} else {
 															let tempVal = displayNumberFixedDecimal(value, 'Wh', 3, 2);
@@ -2569,7 +2544,7 @@
 											// Unit: Wh => kWh:(round), Wh, MWh, GWh
 											let rounded = Math.round(textValue);
 											if(rounded >= 1000 && rounded < 1000000){
-												textValue = displayNumberFixedUnit(textValue, 'Wh', "kWh", 0, "round");
+												textValue = displayNumberFixedUnit(textValue, 'Wh', "kWh", 0);
 											} else {
 												textValue = displayNumberFixedDecimal(textValue, 'Wh', 3, 2);
 											}
@@ -2578,7 +2553,7 @@
 											textValue = [tempVal[0], "&#8451;"];
 										} else {
 											if(suffix == "W" || suffix == "Wh"){
-												textValue = displayNumberFixedUnit(textValue, "W", "kW", 0, "round");
+												textValue = displayNumberFixedUnit(textValue, "W", "kW", 0);
 											} else {
 												textValue = displayNumberFixedDecimal(textValue, suffix, 3, 2);
 											}
@@ -2606,7 +2581,7 @@
 
 				} else {
 					// #2 solar Dashboard
-					let invType = new Array();
+					let invType = [];
 					let sortedData;
 					let seriesLength = hourlyINVChart.series.length;
 					let deviceLength = 0;
@@ -2731,17 +2706,16 @@
 					setMakeList(invType, 'invList', { 'dataFunction': { 'head': makeHeadTable, 'body': makeBodyTable } });
 					
 					$.each(invType, function (i, el) {
+						if (isEmpty(el.properties)) return false;
 						let newInvType = el.type;
 						let operationNormal = 0;
 						let operationError = 0;
 						let operationAlert = 0;
-						let headerDataObject = new Object();
-							
-						if (el.type == 'SM_MANUAL') return false;
+						let headerDataObject = {};
 
 						setInitList('table_' + newInvType + '2');
 
-						let tableArray = new Array();
+						let tableArray = [];
 
 						$.map(sortedData, function(val, key) {
 							let dname = val.dname;
@@ -2760,14 +2734,14 @@
 									rowData[0]['dname'] = dname;
 
 									$.map(featureProperties, function(val, key) {
-										let headerData = new Object();
+										let headerData = {};
 										if(!isEmpty(headerDataObject[key])) {
 											headerData = headerDataObject[key];
 										}
 										if (key == newInvType) {
 											$.each(val.prop, function(i, el) {
 												let value = rowData[0][el.key];
-												let tempObj = new Object();
+												let tempObj = {};
 												if(isEmpty(headerData[el.key])) {
 													tempObj['reducer'] = el.reducer;
 												} else {
@@ -2820,14 +2794,14 @@
 													rowData[0][el.key] = '-';
 												} else {
 													if( el.key.match('activePower') || el.key.match('dcPower') ) {
-														let strVal = displayNumberFixedUnit(value, 'W', 'kW', 0, "round");
+														let strVal = displayNumberFixedUnit(value, 'W', 'kW', 0);
 														rowData[0][el.key] = strVal[0] + " " + strVal[1];
 													} else if( el.key.match('accumActiveEnergy') ){
 														// Unit: Wh => kWh:(round), Wh, MWh, GWh
 														let rounded = Math.round(value);
 
 														if(rounded >= 1000 && rounded < 1000000){
-															let tempVal = displayNumberFixedUnit(value, 'Wh', "kWh", 0, "round");
+															let tempVal = displayNumberFixedUnit(value, 'Wh', "kWh", 0);
 															rowData[0][el.key] = tempVal[0] + ' ' + tempVal[1];
 														} else {
 															let tempVal = displayNumberFixedDecimal(value, 'Wh', 3, 2);
@@ -2874,13 +2848,13 @@
 											// Unit: Wh => kWh:(round), Wh, MWh, GWh
 											let rounded = Math.round(textValue);
 											if(rounded >= 1000 && rounded < 1000000){
-												textValue = displayNumberFixedUnit(textValue, 'Wh', "kWh", 0, "round");
+												textValue = displayNumberFixedUnit(textValue, 'Wh', "kWh", 0);
 											} else {
 												textValue = displayNumberFixedDecimal(textValue, 'Wh', 3, 2);
 											}
 										} else {
 											if(suffix == "W" || suffix == "Wh"){
-												textValue = displayNumberFixedUnit(textValue, "W", "kW", 0, "round");
+												textValue = displayNumberFixedUnit(textValue, "W", "kW", 0);
 											} else {
 												if(!isEmpty(textValue)){
 													textValue = displayNumberFixedDecimal(textValue, suffix, 3, 2);
@@ -3088,19 +3062,14 @@
 		if(isEmpty(option)){
 			if (oid.match('testkpx')) {
 				$.when($.ajax(monthEnergy), $.ajax(nowMonth), $.ajax(beforeYear)).done(function (monthlyData, currentMonthData, prevYearData) {
-					let chartItems1;
-					let chartItems2;
+					let chartItems1 = [];
+					let chartItems2 = [];
 
+					// ONLY 1 site => Object.keys(monthlyData[0]).length === 1
 					if (monthlyData[1] == 'success') {
-						let v = Object.values(monthlyData[0].data);
-						if (!isEmpty(v) &&  v.flat()[0]["items"].length > 0) {
-							let resultData = v.flat()[0]["items"];
-							chartItems1 = resultData;
-							resultData.forEach(el => {
-								if (!isEmpty(el.money)) {
-									el.money = Math.floor(el.money / 1000);
-								}
-							});
+						let v = Object.values(monthlyData[0].data).flat();
+						if (!isEmpty(v) && v[0]["items"].length > 0) {
+							v.filter( item => item.metering_type == "2").map( (item, index) => { return chartItems1 = item.items }).flat();
 						}
 					}
 
@@ -3108,8 +3077,8 @@
 						let resultNow = currentMonthData[0].data[siteId];
 						chartItems1.push({
 							basetime: monthFormData.startTime,
-							energy: resultNow.energy,
-							money: Math.floor(resultNow.money / 1000)
+							energy: isEmpty(resultNow.energy) ? 0 : resultNow.energy,
+							money: isEmpty(resultNow.money) ? 0 : Math.floor(resultNow.money / 1000)
 						});
 					}
 					
@@ -3125,41 +3094,22 @@
 				// A. radio option
 				if ($(':radio[name="radio_t"]:checked').val() == 1) {
 					$.when($.ajax(monthEnergy), $.ajax(nowMonth), $.ajax(beforeYear), $.ajax(weather)).done(function (monthlyData, currentMonthData, prevYearData, weatherData) {
-						let chartItems1 = new Array();
-						let chartItems2 = new Array();
-						let chartItems3 = new Array();
+						let chartItems1 = [];
+						let chartItems2 = [];
+						let chartItems3 = [];
 						let capacity = 0;
 
 						if (monthlyData[1] == 'success') {
-							let resultData = monthlyData[0].data;
-							let targetData;
-							if (!isEmpty(resultData)){
-								Object.values(resultData).forEach( x => {
-									for(let i = 0, arrLength = x.length; i<arrLength; i++){
-										if(x[i].metering_type == "2"){
-											targetData = x[i].items;
-											break;
-										}
-									}
-								});
-				
-								if(!isEmpty(targetData)){
-									if (targetData.length > 0) {
-										chartItems1 = targetData;
-										chartItems1.forEach(el => {
-											if (!isEmpty(el.money)) {
-												el.money = Math.floor(el.money / 1000);
-											}
-										});
-									}
-								}
+							let v = Object.values(monthlyData[0].data).flat();
+							if (!isEmpty(v) && v[0]["items"].length > 0) {
+								v.filter( item => item.metering_type == "2").map( (item, index) => { return chartItems1 = item.items }).flat();
 							}
 						}
 
 						if (currentMonthData[1] == 'success') {
 							let resultNow = currentMonthData[0].data[siteId];
 							chartItems1.push({
-								basetime: monthFormData.startTime,
+								basetime: Number(monthFormData.startTime),
 								energy: resultNow.energy,
 								money: Math.floor(resultNow.money / 1000)
 							});
@@ -3194,6 +3144,7 @@
 								});
 							}
 						}
+
 						setChargeChartData(chartItems1, chartItems2, chartItems3);
 					}).fail(function () {
 						console.error('rejected');
@@ -3201,8 +3152,8 @@
 				} else {
 				// B.C. radio option
 					$.when($.ajax(monthEnergy), $.ajax(nowMonth), $.ajax(beforeYear)).done(function (monthlyData, currentMonthData, prevYearData) {
-						let chartItems1 = new Array();
-						let chartItems2 = new Array();
+						let chartItems1 = [];
+						let chartItems2 = [];
 
 						if (monthlyData[1] == 'success') {
 							let resultData = monthlyData[0].data;
@@ -3287,45 +3238,31 @@
 
 			$.when($.ajax(monthEnergy), $.ajax(nowMonth), $.ajax(dailyWeather), $.ajax(dailyEnergy)).done(function (result1A, result1B, result2, result3) {
 				let el = $("#solarDashboard .mini .data-num");
-				let chartItems1;
-				let chartItems2;
-				let chartItems3;
+				let chartItems1 = [];
+				let chartItems2 = [];
+				let chartItems3 = [];
 
 				if (result1A[1] == 'success') {
-					let v = Object.values(result1A[0].data);
-
-					let resultData = result1A[0].data;
-					let targetData;
-
-					if (!isEmpty(resultData)){
-						Object.values(resultData).forEach( x => {
-							for(let i = 0, arrLength = x.length; i<arrLength; i++){
-								if(x[i].metering_type == "2"){
-									targetData = x[i].items;
-									break;
-								}
-							}
-						});
-
-						if(!isEmpty(targetData)){
-							if (targetData.length > 0) {
-								let initData = 0;
-								chartItems1 = targetData;
-								chartItems1.forEach((item, index) => {
-									initData += item.energy;
-
-									chartItems1[index].money = Math.floor(item.money / 1000);
-								});
-								monthGen = displayNumberFixedUnit(initData, 'Wh', 'MWh', 1, "round");
-								monthGen = displayNumberFixedUnit(initData, 'Wh', 'MWh', 1, "round");
-								el.eq(4).text(monthGen[0]);
-								el.eq(4).next().text(monthGen[1]);
-							} else {
-								el.eq(4).text("-");
-								chartItems1 = null;
-							}
-						}
+					let v = Object.values(result1A[0].data).flat();
+					if (!isEmpty(v) && v[0]["items"].length > 0) {
+						v.filter( item => item.metering_type == "2").map( (item, index) => { return chartItems1 = item.items }).flat();
 					}
+					
+					if (chartItems1.length > 0) {
+						let initData = 0;
+						chartItems1.forEach((item, index) => {
+							initData += item.energy;
+							chartItems1[index].money = Math.floor(item.money / 1000);
+						});
+						let monthGen = displayNumberFixedUnit(initData, 'Wh', 'MWh', 1);
+
+						el.eq(4).text(monthGen[0]);
+						el.eq(4).next().text(monthGen[1]);
+					} else {
+						el.eq(4).text("-");
+						chartItems1 = null;
+					}
+
 				} else {
 					el.eq(4).text("-");
 				}
@@ -3363,27 +3300,15 @@
 
 				if (result3[1] == 'success') {
 					let resultData = result3[0].data;
-					let targetData;
-
-					if (!isEmpty(resultData)){
-						Object.values(resultData).forEach( x => {
-							for(let i = 0, arrLength = x.length; i<arrLength; i++){
-								if(x[i].metering_type == "2"){
-									targetData = x[i].items;
-									break;
-								}
+					let v = Object.values(result3[0].data).flat();
+					if (!isEmpty(v) && v[0]["items"].length > 0) {
+						v.filter( item => item.metering_type == "2").map( (item, index) => {
+							item.energy ? item.energy = Math.round(item.energy/1000) : item.energy = 0
+							if(flagDetail[1].energyFlag == "0"){
+								flagDetail[1].energyFlag = "1";
 							}
-						});
-		
-						if(!isEmpty(targetData)){
-							if (targetData.length > 0) {
-								chartItems3 = addToDateList(30, targetData, "energy");
-								if(flagDetail[1].energyFlag == "0"){
-									flagDetail[1].energyFlag = "1";
-								}
-							}
-						}
-
+							return chartItems3 = addToDateList(30, item.items, "energy")
+						}).flat();
 					}
 				}
 				setChargeChartData(chartItems1, chartItems2, chartItems3, flagDetail);
@@ -3402,15 +3327,15 @@
 		let totalMonthEnergy = 0;
 		let totalPrevYearEnergy = 0;
 		let totalPrevMonthEnergy = 0;
-		let energyData = new Array();
+		let energyData = [];
 		let energyMaxVal = 0;
-		let irradiationData = new Array();
-		let billingData = new Array();
+		let irradiationData = [];
+		let billingData = [];
 
 		if (isEmpty(flagDetail)) {		
 			sList.forEach(site => {
 				if (site.devices != undefined) {
-					site.devices.forEach(device => {
+					site.devices.forEach(device => { 
 						itemChartCapacity += device.capacity;
 					});
 				}
@@ -3801,8 +3726,8 @@
 		const formData = getSiteMainSchCollection('day');
 		const formYesterData = getSiteMainSchCollection('yesterday');
 		let capacity = 0;
-		let urls = new Array();
-		let deferredList = new Array();
+		let urls = [];
+		let deferredList = [];
 
 		if(oid.match('testkpx')) {
 			$('#centerTbody tr td:nth-child(1)').html('<em>&nbsp;&nbsp;kW</em>');
@@ -3818,7 +3743,7 @@
 
 		if(isEmpty(option)){
 			if (oid.match('testkpx')) {
-				let rtus = new Array();
+				let rtus = [];
 				sList.forEach(site => {
 					if (!isEmpty(site.rtus)) {
 						site.rtus.forEach(rtu => {
@@ -3899,7 +3824,7 @@
 			});
 
 			//ajax 한번에 실행
-			deferredList = new Array();
+			deferredList = [];
 			urls.forEach(function (url) {
 				let deferred = $.Deferred();
 				deferredList.push(deferred);
@@ -3947,10 +3872,10 @@
 						}
 
 						if ((data.start) == formYesterData.startTime) {
-							$('#centerTbody tr td:nth-child(3) em').before(displayNumberFixedUnit(getNowEnergyDay, 'Wh', 'kWh', 0, "round")[0]);
+							$('#centerTbody tr td:nth-child(3) em').before(displayNumberFixedUnit(getNowEnergyDay, 'Wh', 'kWh', 0)[0]);
 							itemEnergyDay = getNowEnergyDay;
 						} else {
-							$('#centerTbody tr td:nth-child(2) em').before(displayNumberFixedUnit(getNowEnergyDay, 'Wh', 'kWh', 0, "round")[0]);
+							$('#centerTbody tr td:nth-child(2) em').before(displayNumberFixedUnit(getNowEnergyDay, 'Wh', 'kWh', 0)[0]);
 
 							if (!oid.match('testkpx')) {
 								$('#centerTbody tr td:nth-child(4) em').before(displayNumberFixedUnit(nowBillingDay, 'Wh', 'kWh', 2)[0]);
@@ -3962,7 +3887,7 @@
 							let getNowEnergyDay = rstData.energy;
 							let nowBillingDay = rstData.money;
 
-							$('#centerTbody tr td:nth-child(2) em').before(displayNumberFixedUnit(getNowEnergyDay, 'Wh', 'kWh', 0, "round")[0]);
+							$('#centerTbody tr td:nth-child(2) em').before(displayNumberFixedUnit(getNowEnergyDay, 'Wh', 'kWh', 0)[0]);
 							$('#centerTbody tr td:nth-child(4) em').before(displayNumberFixedUnit(nowBillingDay, 'Wh', 'kWh', 2)[0]);
 						}
 					} else if ((url).match(apiForecastingSite)) {
@@ -3978,7 +3903,7 @@
 								}
 							});
 						}
-						$('#centerTbody tr td:nth-child(3) em').before(displayNumberFixedUnit(todayForeEnergy, 'Wh', 'kWh', 0, "round")[0]);
+						$('#centerTbody tr td:nth-child(3) em').before(displayNumberFixedUnit(todayForeEnergy, 'Wh', 'kWh', 0)[0]);
 					
 					} else if ((url).match('/control/command_history')) {
 						if (!isEmpty(data.data)) {
@@ -4095,9 +4020,9 @@
 					});
 					pieChart.redraw();
 				} else {
-					$('#siteCapacity').text(displayNumberFixedUnit(itemCapacity, 'W', 'kW', 1, "round")[0]);
-					$('#siteDcPower').text(displayNumberFixedUnit(itemDcPower, 'W', 'kW', 0, "round")[0]);
-					$('#siteAcPower').text(displayNumberFixedUnit(itemAcPower, 'W', 'kW', 0, "round")[0]);
+					$('#siteCapacity').text(displayNumberFixedUnit(itemCapacity, 'W', 'kW', 1)[0]);
+					$('#siteDcPower').text(displayNumberFixedUnit(itemDcPower, 'W', 'kW', 0)[0]);
+					$('#siteAcPower').text(displayNumberFixedUnit(itemAcPower, 'W', 'kW', 0)[0]);
 
 					let pie1Data = Math.round(itemEfficiency);
 					let pie2Data = 100 - pie1Data;
@@ -4109,8 +4034,8 @@
 					pieChart.series[0].setData([pie1Data, pie2Data]);
 				}
 
-				$('#centerTbody tr td:nth-child(1) em').before(displayNumberFixedUnit(itemCapacity, 'W', 'kW', 1, "round")[0]);
-				pieChart.setTitle({text: displayNumberFixedUnit(itemAcPower, 'W', 'kW', 0, "round")[0] + 'kW'});
+				$('#centerTbody tr td:nth-child(1) em').before(displayNumberFixedUnit(itemCapacity, 'W', 'kW', 1)[0]);
+				pieChart.setTitle({text: displayNumberFixedUnit(itemAcPower, 'W', 'kW', 0)[0] + 'kW'});
 			});
 
 		} else {
@@ -4155,7 +4080,7 @@
 				let el = $("#solarDashboard .mini .data-num");
 
 				if(typeof res[0].INV_PV.activePower == "number"){
-					let activePower = displayNumberFixedUnit(res[0].INV_PV.activePower, 'W', 'kW', 1, "round");
+					let activePower = displayNumberFixedUnit(res[0].INV_PV.activePower, 'W', 'kW', 1);
 					el.eq(0).text(activePower[0]);
 					el.eq(0).next().text(activePower[1]);
 				} else {
@@ -4181,7 +4106,7 @@
 				if(!isEmpty(res[2].data) && v.flat()[0]["items"].length > 0 ){
 					let data = v.flat()[0]["items"];
 					if(typeof data[0].energy == "number"){
-						let yesterDayGen = displayNumberFixedUnit(data[0].energy,'Wh', 'kWh', 0, "round");
+						let yesterDayGen = displayNumberFixedUnit(data[0].energy,'Wh', 'kWh', 0);
 						el.eq(3).text(yesterDayGen[0]);
 						el.eq(3).next().text(yesterDayGen[1]);
 					} else {
@@ -4192,7 +4117,7 @@
 				}
 			
 				if(typeof res[0].INV_PV.accumActiveEnergy == "number"){
-					let accumVal = displayNumberFixedUnit(res[0].INV_PV.accumActiveEnergy, 'Wh', 'MWh', 1, "round");
+					let accumVal = displayNumberFixedUnit(res[0].INV_PV.accumActiveEnergy, 'Wh', 'MWh', 1);
 					el.eq(5).text(accumVal[0]);
 					el.eq(5).next().text(accumVal[1]);
 				} else {
@@ -4207,7 +4132,7 @@
 		const formData = getSiteMainSchCollection('day');
 		const formYesterData = getSiteMainSchCollection('yesterday');
 
-		let foreGen = new Object();
+		let foreGen = {};
 		let gen = {
 			url: apiHost + apiEnergySite,
 			type: 'get',
@@ -4458,7 +4383,7 @@
 
 	function getAlarmInfo () {
 		const formData = getSiteMainSchCollection('day');
-		let siteArray = new Array();
+		let siteArray = [];
 
 		$.ajax({
 			url: apiHost + '/alarms',
@@ -4475,7 +4400,7 @@
 				return a.localtime > b.localtime ? -1 : a.localtime < b.localtime ? 1 : 0;
 			});
 			
-			let alarmList = new Array();
+			let alarmList = [];
 			let alarmColor = "";
 			let alarmEl = $('.indiv[data-alarm]');
 			
@@ -4576,41 +4501,38 @@
 	}
 
 	function addToDateList(idx, data, option){
+		let dateList = [];
 		let now = new Date();
-		let dates = [];
-		let length = idx;
+		now.setDate(now.getDate()-idx-1);
 
-		while(idx--){
-			now.setDate(now.getDate()-1);
-			let newMmDd = now.format("yyyyMMdd").substring(4, 8);
-			if(!isEmpty(data)){
-				let val;
-				if(length != data.length){
-					let found = data.findIndex( x => ( parseInt(String(x.basetime).substring(4, 8)) == newMmDd) );
-					if(found > -1 ){
-						if(option == "energy"){
-							val =  Math.round(data[found].energy / 1000);
-						} else if(option == "irradiationPoa"){
-							val = parseFloat((data[found].sensor_solar.irradiationPoa).toFixed(2));
-						}
-					} else {
-						val = null;
-					}
+		if(!isEmpty(data)){
+			dateList = [...Array(idx)].map((item, index) => {
+				now.setDate(now.getDate()+1)
+				let mmDD = now.format("yyyyMMdd").substring(4, 8);
+		
+				if(index < data.length){
+					let found = data.find( x => (parseInt(String(x.basetime).substring(4, 8)) == mmDD) );
+					return found ? Math.round(found.energy / 1000) : null;
 				} else {
 					if(option == "energy"){
-						val = Math.round(data[idx].energy / 1000);
+						console.log("data==", data);
+						if(data[idx]){
+							return Math.round(data[idx].energy / 1000);
+						} else {
+							return 0;
+						}
 					} else if(option == "irradiationPoa"){
-						val = data[idx].sensor_solar.irradiationPoa;
+						return data[idx].sensor_solar.irradiationPoa;
 					}
 				}
-				dates.push(val);
-			} else {
-				dates.push(newMmDd);
-			}
-
+			});
+		} else {
+			dateList = [...Array(idx)].map(x => {
+				now.setDate(now.getDate()+1);
+				return now.format("yyyyMMdd").substring(4, 8);
+			});
 		}
-
-		return dates.reverse();
+		return dateList;
 	}
 
 
