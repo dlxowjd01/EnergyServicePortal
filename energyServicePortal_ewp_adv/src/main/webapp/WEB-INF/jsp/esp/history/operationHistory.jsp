@@ -1229,7 +1229,7 @@
 							<div class="dropdown">
 								<button type="button" class="dropdown-toggle w3" data-toggle="dropdown" data-value="15min" data-name="15분">15분<span class="caret"></span></button>
 								<ul class="dropdown-menu">
-									<li data-value="1min"><a href="javascript:void(0);">1분</a></li>
+<%--									<li data-value="1min"><a href="javascript:void(0);">1분</a></li>--%>
 									<li data-value="5min"><a href="javascript:void(0);">5분</a></li>
 									<li data-value="15min"><a href="javascript:void(0);">15분</a></li>
 									<li data-value="hour"><a href="javascript:void(0);">1시간</a></li>
