@@ -577,7 +577,7 @@
 		if( !isEmpty( getCookie("sMainView")) ){
 			if(cookie == "2"){
 				let selected = viewOptList.find("li:last-of-type").data("name");
-				viewOptList.prev().data("value", "2").selected;
+				viewOptList.prev().data("value", "2").contents().get(0).nodeValue = selected;
 				$('#defaultDashboard').addClass("hidden");
 				$('#solarDashboard').removeClass("hidden");
 				setInitList('invList');
@@ -954,7 +954,7 @@
 					text: '',
 					align: 'low',
 					rotation: 0,
-					x: 15,
+					// x: 15,
 					y: 25,
 					style: {
 						color: 'var(--grey)',
@@ -2265,12 +2265,8 @@
 			data: {},
 		}).done(function (data, textStatus, jqXHR) {
 			$.map(data, function (val, key) {
-				let propList;
-				if(!isEmpty(val.properties)) {
-					propList = val.properties;
-				} else {
-					return false;
-				}
+				if(isEmpty(val.properties)) return false;
+				let propList = val.properties
 				let deviceName = key;
 				let tempFeature = [];
 				let tempFeature2 = [];
@@ -2362,7 +2358,8 @@
 						sortedData.sortOn("dname");
 					}
 					$.map(sortedData, function(val, key) {
-						if ($.inArray(val.device_type, deviceType) === -1 && !isEmpty(val.properties)) {
+						if (val.device_type == 'SM_MANUAL' || val.device_type == 'SM_ISMART') return false;
+						if ($.inArray(val.device_type, deviceType) === -1) {
 							deviceType.push(val.device_type);
 						}
 					});
@@ -2370,6 +2367,8 @@
 					deviceType.sort();
 
 					$.each(deviceType, function (i, el) {
+						console.log("el---")
+						if (el == 'SM_MANUAL' || el == 'SM_ISMART') return false;
 						deviceType[i] = {
 							name: featureProperties[el].name,
 							type: el,
@@ -2391,9 +2390,11 @@
 						let operationError = 0;
 						let operationAlert = 0;
 						let headerDataObject = {};
+						let tableArray = [];
 
 						setInitList('table_' + dvcType);
-						let tableArray = [];
+
+						console.log("sortedData===", sortedData);
 
 						$.map(sortedData, function(val, key) {
 							let dname = val.dname;
@@ -2700,13 +2701,14 @@
 								type: el + '2',
 								prop: featurePropertiesSub[el].prop
 							}
-						}
+						}								
 					});
 
 					setMakeList(invType, 'invList', { 'dataFunction': { 'head': makeHeadTable, 'body': makeBodyTable } });
-					
+
 					$.each(invType, function (i, el) {
-						if (isEmpty(el.properties)) return false;
+						console.log("el----", el)
+
 						let newInvType = el.type;
 						let operationNormal = 0;
 						let operationError = 0;
@@ -3433,7 +3435,7 @@
 								title:{ text: newSuffix, x: -20 }
 							}
 						],
-						legend: { x: 20 }
+						legend: { x: 15 }
 					});
 				} else if ($(':radio[name="radio_t"]:checked').val() == 2) {
 					seriesName = '발전시간';
@@ -4079,22 +4081,31 @@
 			Promise.all(promises).then(res => {
 				let el = $("#solarDashboard .mini .data-num");
 
-				if(typeof res[0].INV_PV.activePower == "number"){
-					let activePower = displayNumberFixedUnit(res[0].INV_PV.activePower, 'W', 'kW', 1);
-					el.eq(0).text(activePower[0]);
-					el.eq(0).next().text(activePower[1]);
-				} else {
-					el.eq(0).text("-");
-				}
+				if(!isEmpty(res[0])){
+					if(typeof res[0].INV_PV.activePower == "number"){
+						let activePower = displayNumberFixedUnit(res[0].INV_PV.activePower, 'W', 'kW', 1);
+						el.eq(0).text(activePower[0]);
+						el.eq(0).next().text(activePower[1]);
+					} else {
+						el.eq(0).text("-");
+					}
+					if(typeof res[0].INV_PV.efficiency == "number"){
+						el.eq(1).text( Math.round(res[0].INV_PV.efficiency * 10)/10 )
+						el.eq(1).next().text("%");
+					} else {
+						el.eq(1).text("-");
+					}
+					if(typeof res[0].INV_PV.accumActiveEnergy == "number"){
+						let accumVal = displayNumberFixedUnit(res[0].INV_PV.accumActiveEnergy, 'Wh', 'MWh', 1);
+						el.eq(5).text(accumVal[0]);
+						el.eq(5).next().text(accumVal[1]);
+					} else {
+						el.eq(5).text("-");
+					}
+					
+				} 
 
-				if(typeof res[0].INV_PV.efficiency == "number"){
-					el.eq(1).text( Math.round(res[0].INV_PV.efficiency * 10)/10 )
-					el.eq(1).next().text("%");
-				} else {
-					el.eq(1).text("-");
-				}
-
-				if(typeof Object.entries(res[1].data)[0][1].energy == "number"){
+				if(!isEmpty(res[1].data) && typeof Object.entries(res[1].data)[0][1].energy == "number"){
 					let dailyGen = displayNumberFixedUnit( Object.entries(res[1].data)[0][1].energy, 'Wh', 'kWh', 0);
 					el.eq(2).text(dailyGen[0]);
 					el.eq(2).next().text(dailyGen[1]);
@@ -4115,15 +4126,6 @@
 				} else {
 					el.eq(3).text("-");
 				}
-			
-				if(typeof res[0].INV_PV.accumActiveEnergy == "number"){
-					let accumVal = displayNumberFixedUnit(res[0].INV_PV.accumActiveEnergy, 'Wh', 'MWh', 1);
-					el.eq(5).text(accumVal[0]);
-					el.eq(5).next().text(accumVal[1]);
-				} else {
-					el.eq(5).text("-");
-				}
-
 			});
 		}
 	}
@@ -4515,7 +4517,6 @@
 					return found ? Math.round(found.energy / 1000) : null;
 				} else {
 					if(option == "energy"){
-						console.log("data==", data);
 						if(data[idx]){
 							return Math.round(data[idx].energy / 1000);
 						} else {

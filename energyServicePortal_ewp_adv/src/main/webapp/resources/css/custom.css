@@ -5486,7 +5486,7 @@ input.inp[readonly]:focus {
 	height: 343px;
 }
 
-.smain-table .no-data {
+.type-list .no-data {
 	padding-top: 50%;
 }
 
@@ -6239,9 +6239,12 @@ input.inp[readonly]:focus {
 	text-align: center;
 }
 
+.smain-cal .calendar tbody tr {
+	height: 90px;
+}
+
 .smain-cal .calendar tbody td {
 	width: 92px;
-	height: 40px;
 	padding: 8px 12px;
 }
 

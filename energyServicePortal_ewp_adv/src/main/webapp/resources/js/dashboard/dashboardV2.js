@@ -530,13 +530,29 @@ const monthlyChartDraw = async () => {
 	}).then(() => {
 
 		let maxValue = 0;
+		let emptyObj = {};
+
 		chargeList.forEach(data => {
+			if(data===0){
+				if(isEmpty(emptyObj.chargeData)) {
+					emptyObj.chargeData = 0;
+				}
+			} else {
+				emptyObj.chargeData = 1;
+			}
 			if (data > maxValue) {
 				maxValue = data;
 			}
 		});
 
 		dischargeList.forEach(data => {
+			if(data===0){
+				if(isEmpty(emptyObj.disChargeData)) {
+					emptyObj.disChargeData = 0;
+				}
+			} else {
+				emptyObj.disChargeData = 1;
+			}
 			if (data > maxValue) {
 				maxValue = data;
 			}
@@ -556,7 +572,7 @@ const monthlyChartDraw = async () => {
 			monthlyChart.series[i].remove();
 		}
 
-		seriesArray.forEach(el => {
+		seriesArray.forEach(el => {	
 			let chartSeries = new Object();
 			chartSeries.name = el.name;
 			chartSeries.type = el.type;
@@ -567,7 +583,12 @@ const monthlyChartDraw = async () => {
 				chartSeries.dashStyle = 'ShortDash';
 				chartSeries.yAxis = 1;
 			}
-
+			if(el.name == "충전" && emptyObj.chargeData === 0){
+				chartSeries.showInLegend = false
+			}
+			if(el.name == "방전" && emptyObj.disChargeData === 0){
+				chartSeries.showInLegend = false
+			}
 			chartSeries.tooltip = {valueSuffix: el.suffix}
 			monthlyChart.addSeries(chartSeries, false);
 		});
@@ -692,19 +713,42 @@ const dailyChartDraw = async () => {
 	}).then(() => {
 
 		let maxValue = 0;
+		let emptyObj = {};
+
 		chargeList.forEach(data => {
+			if(data===0){
+				if(isEmpty(emptyObj.chargeData)) {
+					emptyObj.chargeData = 0;
+				}
+			} else {
+				emptyObj.chargeData = 1;
+			}
 			if (data > maxValue) {
 				maxValue = data;
 			}
 		});
 
 		dischargeList.forEach(data => {
+			if(data===0){
+				if(isEmpty(emptyObj.disChargeData)) {
+					emptyObj.disChargeData = 0;
+				}
+			} else {
+				emptyObj.disChargeData = 1;
+			}
 			if (data > maxValue) {
 				maxValue = data;
 			}
 		});
 
 		pvList.forEach(data => {
+			if(data===0){
+				if(isEmpty(emptyObj.pvData)) {
+					emptyObj.pvData = 0;
+				}
+			} else {
+				emptyObj.pvData = 1;
+			}
 			if (data > maxValue) {
 				maxValue = data;
 			}
@@ -728,8 +772,20 @@ const dailyChartDraw = async () => {
 			if (el.name == '정산금') {
 				chartSeries.dashStyle = 'ShortDash';
 				chartSeries.yAxis = 1;
+				let maxData = chartSeries.data.find( x => x >= 0 );
+				if(isEmpty(maxData)) {
+					chartSeries.showInLegend = false;
+				};
 			}
-
+			if(el.name == "태양광" && emptyObj.pvData === 0){
+				chartSeries.showInLegend = false;
+			}
+			if(el.name == "충전" && emptyObj.chargeData === 0){
+				chartSeries.showInLegend = false
+			}
+			if(el.name == "방전" && emptyObj.disChargeData === 0){
+				chartSeries.showInLegend = false
+			}
 			chartSeries.tooltip = {valueSuffix: el.suffix}
 			dailyChart.addSeries(chartSeries, false);
 		});

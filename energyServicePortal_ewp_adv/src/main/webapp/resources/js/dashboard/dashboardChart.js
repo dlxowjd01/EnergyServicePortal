@@ -115,8 +115,12 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 	tooltip: {
 		formatter: function () {
 			return this.points.reduce(function (s, point) {
-				let suffix = point.series.userOptions.tooltip.valueSuffix;
-				return s + '<br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + numberComma(Math.round(point.y)) + ' ' + suffix;
+				if(point.y !== 0){
+					let suffix = point.series.userOptions.tooltip.valueSuffix;
+					return s + '<br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + numberComma(Math.round(point.y)) + ' ' + suffix;
+				} else {
+					return s
+				}
 			}, '<span style="display:flex;"><b>' + this.x + '월</b></span>');
 		},
 		shared: true,
@@ -285,10 +289,15 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		showEmpty: false
 	}],
 	tooltip: {
+		hideDelay: 1,
 		formatter: function () {
 			return this.points.reduce(function (s, point) {
-				let suffix = point.series.userOptions.tooltip.valueSuffix;
-				return s + ' <br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + numberComma(Math.round(point.y)) + ' ' + suffix;
+				if(point.y !== 0){
+					let suffix = point.series.userOptions.tooltip.valueSuffix;
+					return s + ' <br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + numberComma(Math.round(point.y)) + ' ' + suffix;
+				} else {
+					return s
+				}
 			}, '<span style="display:flex;"><b>' + this.x + '일</b></span>');
 		},
 		shared: true,
