@@ -1149,7 +1149,7 @@
 		let date = '';
 		let interval = $('#interval button').data('value');
 		if (val != undefined) {
-			if (interval == '1min' || interval == '15min' || interval == 'hour') {
+			if (interval == '1min' || interval == '5min' || interval == '15min' || interval == 'hour') {
 				date = new Date(val).format('yyyy-MM-dd HH:mm:ss');
 			} else if (interval == 'day' || interval == 'week') {
 				date = new Date(val).format('yyyy-MM-dd');
@@ -1230,6 +1230,7 @@
 								<button type="button" class="dropdown-toggle w3" data-toggle="dropdown" data-value="15min" data-name="15분">15분<span class="caret"></span></button>
 								<ul class="dropdown-menu">
 									<li data-value="1min"><a href="javascript:void(0);">1분</a></li>
+									<li data-value="5min"><a href="javascript:void(0);">5분</a></li>
 									<li data-value="15min"><a href="javascript:void(0);">15분</a></li>
 									<li data-value="hour"><a href="javascript:void(0);">1시간</a></li>
 									<li data-value="day"><a href="javascript:void(0);">1일</a></li>

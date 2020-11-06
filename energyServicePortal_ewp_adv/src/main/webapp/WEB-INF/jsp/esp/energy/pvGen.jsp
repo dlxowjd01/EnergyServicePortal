@@ -76,6 +76,7 @@
 									선택 <span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu">
+									<li data-value="5min"><a href="#"><fmt:message key="renewablesgen.3.5min" /></a></li>
 									<li data-value="15min"><a href="#"><fmt:message key="renewablesgen.3.15min" /></a></li>
 									<li data-value="hour"><a href="#"><fmt:message key="renewablesgen.3.1hr" /></a></li>
 									<li data-value="day"><a href="#"><fmt:message key="renewablesgen.3.1day" /></a></li>
@@ -345,7 +346,7 @@
 		//주기 확인
 		interval = $('#interval button').data('value');
 
-		if (['15min', 'hour'].includes(interval)) {
+		if (['5min', '15min', 'hour'].includes(interval)) {
 			$('#chartStyle2').parent().removeClass('hidden');
 		} else {
 			$('#chartStyle2').parent().addClass('hidden');
@@ -484,7 +485,7 @@
 
 		let stdLength = 8;
 		let colLength = 4;
-		if (interval === '15min' || interval === 'hour') {
+		if (interval === '5min' ||interval === '15min' || interval === 'hour') {
 			stdLength = 8;
 			colLength = 4;
 		} else if (interval === 'day') {
@@ -630,7 +631,7 @@
 			standard.forEach((std, index) => {
 				let lastLength = 8;
 				let suffix = '';
-				if (interval === '15min' || interval === 'hour') {
+				if (interval === '5min' ||interval === '15min' || interval === 'hour') {
 					lastLength = 8;
 					suffix = '';
 				} else if (interval === 'day') {
@@ -725,7 +726,7 @@
 			  , totalSum = 0
 			  , dup = false;
 
-			if (['15min', 'hour'].includes(interval) && chartStyle2 === 'overlap') {
+			if (['5min', '15min', 'hour'].includes(interval) && chartStyle2 === 'overlap') {
 				const standard2 = makeStandard(interval, 'overlap');
 				chartStandard = standard2;
 				standard2.forEach((std, index) => {
@@ -746,7 +747,7 @@
 				chartStandard = standard;
 				standard.forEach((std, index) => {
 					let suffix = '';
-					if (interval === '15min' || interval === 'hour') {
+					if (interval === '5min' ||interval === '15min' || interval === 'hour') {
 						suffix = '';
 					} else if (interval === 'day') {
 						suffix = '000000';

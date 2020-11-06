@@ -1816,31 +1816,15 @@ const makeStandard = (interval, type) => {
 				let toDate = sDateTime.format('yyyyMMdd');
 
 				for (let i = 0; i < 24; i++) {
-					if (interval == '15min') { //15분
-						if (String(i).length == 1) {
-							standard.push(toDate + '0' + i + '0000');
-							standard.push(toDate + '0' + i + '1500');
-							standard.push(toDate + '0' + i + '3000');
-							standard.push(toDate + '0' + i + '4500');
-						} else {
-							standard.push(toDate + i + '0000');
-							standard.push(toDate + i + '1500');
-							standard.push(toDate + i + '3000');
-							standard.push(toDate + i + '4500');
-						}
-					} else if (interval == '30min') { //30분
-						if (String(i).length == 1) {
-							standard.push(toDate + '0' + i + '0000');
-							standard.push(toDate + '0' + i + '3000');
-						} else {
-							standard.push(toDate + i + '0000');
-							standard.push(toDate + i + '3000');
-						}
-					} else { //시간
-						if (String(i).length == 1) {
-							standard.push(toDate + '0' + i + '0000');
-						} else {
-							standard.push(toDate + i + '0000');
+					if (interval === 'hour') {
+						standard.push(toDate + ('0' + i).slice(-2) + '0000');
+					} else {
+						const minute = Number(interval.replace(/[^\d]/g, ''))
+							, timeCount = 60 / minute;
+						for (let j = 0; j < timeCount; j++) {
+							const h = ('0' + i).slice(-2)
+								, m = ('0' + (j * minute)).slice(-2);
+							standard.push(toDate + h + m + '00');
 						}
 					}
 				}
@@ -1848,31 +1832,16 @@ const makeStandard = (interval, type) => {
 		}
 	} else {
 		for (let i = 0; i < 24; i++) {
-			if (interval === '15min') { //15분
-				if (String(i).length === 1) {
-					standard.push('0' + i + '0000');
-					standard.push('0' + i + '1500');
-					standard.push('0' + i + '3000');
-					standard.push('0' + i + '4500');
-				} else {
-					standard.push(i + '0000');
-					standard.push(i + '1500');
-					standard.push(i + '3000');
-					standard.push(i + '4500');
-				}
-			} else if (interval === '30min') { //30분
-				if (String(i).length === 1) {
-					standard.push('0' + i + '0000');
-					standard.push('0' + i + '3000');
-				} else {
-					standard.push(i + '0000');
-					standard.push(i + '3000');
-				}
-			} else { //시간
-				if (String(i).length === 1) {
-					standard.push('0' + i + '0000');
-				} else {
-					standard.push(i + '0000');
+			if (interval === 'hour') {
+				standard.push(('0' + i).slice(-2) + '0000');
+			} else {
+				const minute = Number(interval.replace(/[^\d]/g, ''))
+					, timeCount = 60 / minute;
+				for (let j = 0; j < timeCount; j++) {
+					const h = ('0' + i).slice(-2)
+						, m = ('0' + (j * minute)).slice(-2) === '60' ? '00' : ('0' + (j * minute)).slice(-2);
+
+					standard.push(h + m + '00');
 				}
 			}
 		}
