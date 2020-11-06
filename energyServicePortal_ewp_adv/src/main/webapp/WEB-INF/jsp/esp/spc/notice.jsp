@@ -379,7 +379,7 @@
 <div class="modal fade" id="addNotice" tabindex="-1" role="dialog" aria-labelledby="addNotice" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-lg no-flex">
 		<form id="addNoticeForm" name="addNoticeForm" autocomplete="off">
-			<div class="modal-content group-modal-content">
+			<div class="modal-content">
 				<div class="modal-header stit">
 					<h2>공지 사항 작성</h2>
 				</div>
@@ -468,7 +468,7 @@
 
 <div class="modal fade" id="viewNotice" tabindex="-1" role="dialog" aria-labelledby="viewNotice" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-lg no-flex">
-		<div class="modal-content group-modal-content">
+		<div class="modal-content">
 			<div class="modal-header mb-10">
 				<h2>공지 사항 상세</h2>
 			</div>

@@ -654,6 +654,7 @@
 				//배열로 디바이스 상태 수집
 				if (!isEmpty(val)) {
 					val.forEach((el, index) => {
+						const targetSite = siteList.find(e => e.sid === el.sid);
 						let capacity = isEmpty(el.capacity) ? '-' : displayNumberFixedUnit(el.capacity, el.capacity_unit, 'kW', 0, 'round')[0] + 'kW',
 							activePower = isEmpty(el.activePower) ? '-' : displayNumberFixedUnit(el.activePower, 'W', 'kW', 0, 'round')[0] + 'kW',
 							dcPower = isEmpty(el.dcPower) ? '-' : displayNumberFixedUnit(el.dcPower, 'W', 'kW', 0, 'round')[0] + 'kW',
@@ -679,11 +680,12 @@
 						}
 
 						let deviceStr = `<li class="${'${operation}'}" onclick="deviceDetailView('${'${el.did}'}', '${'${el.operation}'}', $(this) )">
-										<span>${'${el.name}'}</span>
-										<span>${'${capacity}'}</span><em>${'${activePower}'}  ${'${dcPower}'}</em>
-										<button type="button" onclick="deviceProcess('delete', '${'${el.did}'}');" class="delete">삭제</button>
-										<a href="javascript:void(0);"></a>
-									</li>`;
+											<span>${'${targetSite.name}'}</span>
+											<span>${'${el.name}'}</span>
+											<span>${'${capacity}'}</span><em>${'${activePower}'}  ${'${dcPower}'}</em>
+											<button type="button" onclick="deviceProcess('delete', '${'${el.did}'}');" class="delete">삭제</button>
+											<a href="javascript:void(0);"></a>
+										</li>`;
 						deviceList.append(deviceStr);
 						if(index == 0) {
 							deviceDetailView(el.did, el.operation, $(this))

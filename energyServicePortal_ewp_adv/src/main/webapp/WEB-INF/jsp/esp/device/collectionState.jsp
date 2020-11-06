@@ -754,6 +754,7 @@
 		//RTU 등록/수정 초기화
 		dropDownInit($('#rtuSite'));
 		$('#rtuName').val('');
+		$('#rtuSecret').val('');
 		$('#serialNumber').val('');
 		$('#description').val('');
 		//RTU 등록/수정 초기화
