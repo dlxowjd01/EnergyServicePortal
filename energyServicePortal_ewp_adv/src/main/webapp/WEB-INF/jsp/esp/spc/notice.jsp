@@ -266,6 +266,11 @@
 		let urlSuffix = '';
 		let areaData = setAreaParamData('addNotice', 'dropdown');
 
+		if (isEmpty(areaData.subject.trim())) { errorMsg('제목은 필수 값입니다.'); return false; }
+		if (isEmpty(areaData.contents.trim())) { errorMsg('내용은 필수 값입니다.'); return false; }
+		if (isEmpty(areaData.level)) { errorMsg('공개 범위는 필수 값입니다.'); return false; }
+
+
 		if (method == 'patch') {
 			urlSuffix = '/' + id + '?oid=' + oid;
 			preffix = '수정';
@@ -372,6 +377,19 @@
 
 		jsonList.splice(idx, 1);
 		setMakeList(jsonList, fileId, {'dataFunction' : {}});
+	}
+
+	/**
+	 * 에러 처리
+	 *
+	 * @param msg
+	 */
+	const errorMsg = msg => {
+		$("#errMsg").text(msg);
+		$("#errorModal").modal("show");
+		setTimeout(function(){
+			$("#errorModal").modal("hide");
+		}, 1800);
 	}
 </script>
 

@@ -7,9 +7,7 @@
 
 	$(function () {
 		// task 1: 사무수탁사  2: 자산 운용사  3: 사업주  ||  role 1: encored  2: spc clients
-		if(task == 1) {
-			$("#requestBtnReview").remove();
-		} else if(task == 2 || task == 3) {
+		if(task == 2 || task == 3) {
 			$("#requestBtn").remove() 
 		} else if( task == 4) {
 			$("#requestBtnReview").remove();
