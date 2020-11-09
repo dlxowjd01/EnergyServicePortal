@@ -3281,11 +3281,11 @@
 
 				if (result2[1] == 'success') {
 					let tempIrrList = [];
-					let data = result2[0];
+					let result2Data = result2[0];
 
-					$.each(data, function(index, el){
-						if(!isEmpty(el.sensor_solar.irradiationPoa)){
-							tempIrrList.push(el);
+					result2Data.map((item, index) => {
+						if(!isEmpty(item.sensor_solar.irradiationPoa)){
+							tempIrrList.push(item);
 							if(flagDetail[0].irrSensorFlag === "0"){
 								flagDetail[0].irrSensorFlag = "1";
 							}
@@ -3295,16 +3295,20 @@
 				}
 
 				if (result3[1] == 'success') {
-					let resultData = result3[0].data;
+					let result3Data = result3[0].data;
 					let v = Object.values(result3[0].data).flat();
+
 					if (!isEmpty(v) && v[0]["items"].length > 0) {
-						v.filter( item => item.metering_type == "2").map( (item, index) => {
-							item.energy ? item.energy = Math.round(item.energy/1000) : item.energy = 0
+						result3Data = v.filter( item => item.metering_type == "2")[0].items;
+
+						result3Data = result3Data.map( (item, index) => {
+							!isEmpty(item.energy) ? item.energy = Math.round(item.energy / 1000): item.energy = 0;
 							if(flagDetail[1].energyFlag == "0"){
 								flagDetail[1].energyFlag = "1";
 							}
-							return chartItems3 = addToDateList(30, item.items, "energy")
-						}).flat();
+							return item;
+						});
+						chartItems3 = addToDateList(30, result3Data, "energy");
 					}
 				}
 				setChargeChartData(chartItems1, chartItems2, chartItems3, flagDetail);
@@ -3396,7 +3400,6 @@
 				for (let d = 0, dLength = chartItems2.length; d < dLength; d++) {
 					let dataMonth = parseInt(("" + chartItems2[i].basetime).substring(4, 6));
 					let energyData = chartData2[d].energy / 1000;
-					// console.log("chartItems2===", chartData2[d].energy);
 					// console.log("dataMonth===", dataMonth)
 					if (i + 1 == dataMonth) {
 						totalPrevYearEnergy += energyData;
@@ -3518,6 +3521,7 @@
 					}
 				}
 			}
+
 			dailySolarTrendChart.addSeries({
 				name: '발전량',
 				type: 'column',
@@ -3527,18 +3531,18 @@
 				},
 				data: chartItems3,
 			});
+
 			dailySolarTrendChart.yAxis[0].update({
 				title:{
 					text: "kWh"
 				},
 				max: dailySolarMaxVal
 			});
+
 			for (let i = 0, dLength = chartItems2.length; i < dLength; i++) {
 				if(!isEmpty(chartItems2[i])) {
-					let energyData = Math.round(chartItems2[i]);
-
-					if(energyData>dailyInvMaxVal){
-						dailyInvMaxVal = energyData;
+					if(chartItems2[i]>dailyInvMaxVal){
+						dailyInvMaxVal = chartItems2[i];
 					}
 				}
 			}
@@ -4502,22 +4506,24 @@
 		now.setDate(now.getDate()-idx-1);
 
 		if(!isEmpty(data)){
-			dateList = [...Array(idx)].map((item, index) => {
-				now.setDate(now.getDate()+1)
-				let mmDD = now.format("yyyyMMdd").substring(4, 8);
-		
-				if(index < data.length){
-					let found = data.find( x => (parseInt(String(x.basetime).substring(4, 8)) == mmDD) );
-					return found ? Math.round(found.energy / 1000) : null;
+			dateList = [...date31List];
+
+			data.map((item, index) => {
+				let dateNum = String(item.basetime).substring(4, 8);
+				let found = dateList.findIndex( x => x === dateNum);
+				if(found > -1) {
+					if(option == "energy"){
+						dateList[found] = item.energy;
+					}
+					if(option == "irradiationPoa"){
+						dateList[found] = Math.round(item.sensor_solar.irradiationPoa);
+					}
 				} else {
 					if(option == "energy"){
-						if(data[idx]){
-							return Math.round(data[idx].energy / 1000);
-						} else {
-							return 0;
-						}
-					} else if(option == "irradiationPoa"){
-						return data[idx].sensor_solar.irradiationPoa;
+						dateList[found] = null;
+					}
+					if(option == "irradiationPoa"){
+						dateList[found] = null;
 					}
 				}
 			});
