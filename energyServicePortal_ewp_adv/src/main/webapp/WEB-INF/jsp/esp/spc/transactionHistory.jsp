@@ -276,9 +276,9 @@
 
 			transactionHistory.clear();
 			transactionHistory.rows.add(refineList).draw();
-			console.log('refineList', refineList);
 			$($.fn.dataTable.tables(true)).DataTable().columns.adjust();
 		}).catch(error => {
+			transactionHistory.clear().draw();
 			errorMsg(error);
 		});
 	}
@@ -400,16 +400,6 @@
 				</ul>
 			</div>
 		</form>
-	</div>
-	<div class="col-1">
-		<div class="dropdown fr"><!--
-		--><button type="button" class="dropdown-toggle w-100" data-toggle="dropdown" value="" aria-expanded="true">건 별<span class="caret"></span></button><!-- 
-		--><ul id="sumOptList" class="dropdown-menu" role="menu"><!--
-			--><li data-value="noSum"><a href="javascript:void(0)" tabindex="-1">건 별</a></li><!--
-			--><li data-value="monthSum"><a href="javascript:void(0)" tabindex="-1">월 별</a></li><!--
-			--><li data-value="yearSum"><a href="javascript:void(0)" tabindex="-1">년 별</a></li><!--
-		--></ul>
-		</div>
 	</div>
 </div>
 

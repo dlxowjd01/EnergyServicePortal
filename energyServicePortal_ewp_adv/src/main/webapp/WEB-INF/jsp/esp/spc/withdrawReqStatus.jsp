@@ -328,6 +328,7 @@
 				}
 			});
 		}).catch(error => {
+			withdrawReqStatus.clear().draw();
 			errorMsg(error);
 		});
 	}
