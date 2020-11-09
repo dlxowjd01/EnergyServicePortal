@@ -211,8 +211,17 @@
 			}
 
 			const transType = ['전체', '입금', '출금'];
-			if (isNaN(type)) type = 0;
-			$('#transactionType').parent().find('.dropdown-toggle').data('value', type).html(transType[Number(type)] + '<span class="caret"></span>');
+			if (!isEmpty(type)) {
+				types = 0;
+			} else {
+				if (isNaN(type)) {
+					types = 0;
+				} else {
+					types = type;
+				}
+			}
+
+			$('#transactionType').parent().find('.dropdown-toggle').data('value', types).html(transType[Number(types)] + '<span class="caret"></span>');
 
 			$('#transactionForm').submit();
 		}).catch(() => {
