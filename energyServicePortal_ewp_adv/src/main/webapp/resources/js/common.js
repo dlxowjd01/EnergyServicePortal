@@ -681,6 +681,7 @@ Array.prototype.sortOn = function(key, depth){
 function makeAjaxCall(option, callbackOption){
 	return new Promise((resolve, reject) => {
 		$.ajax(option).done(function (json, textStatus, jqXHR) {
+			// Ajax request succeed with no response => callback (fail message) : DO NOT use for 'patch' request
 			if( isEmpty(json) && !isEmpty(callbackOption) ){
 				let callback = callbackOption.callback;
 				if(callbackOption.loop == false){

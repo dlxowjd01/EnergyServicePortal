@@ -2620,6 +2620,7 @@ nav .site.form-group .btn {
 
 .dropdown-menu>.no-data {
 	padding: 8px 5px 5px;
+	color: var(--white60);
 }
 
 .group-type03 .dropdown.edit .btn .caret {

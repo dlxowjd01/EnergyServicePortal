@@ -2528,72 +2528,6 @@
 	
 	}
 
-	//  using object mutation
-	// const uniqByProp = prop => arr =>
-	// 	Object.values(
-	// 		arr.reduce(
-	// 			(acc, item) => (
-	// 				item && item[prop] && (acc[item[prop]] = item), acc
-	// 			), // using object mutation (faster)
-	// 		{}
-	// 	)
-	// );
-
-	// const subGroup = copy.filter((v,i,a)=> a.findIndex(t=>(t.name === v.name))===i);
-
-
-	// function addNewInput(self){
-	// 	let td = $(self).parents().closest("td").eq(4);
-	// 	let num = $(self).parent().attr("id").match(/\d+/)[0];
-	// 	let deviceName = $(self).parents().closest("tr").find("td:nth-of-type(2) .dropdown");
-	// 	let alarmLvl = $(self).parents().closest("tr").find("td:nth-of-type(3) .dropdown");
-	// 	let phone = $(self).parents().closest("tr").find("td:nth-of-type(5) input[type='text']");
-	// 	let btnGroup = $(self).parents().closest("tr").find("td:nth-of-type(6) .flex-start");
-
-	// 	$(self).siblings().find("input:checked").prop("checked", false);
-	// 	phone.val("");
-
-	// 	$.each(phone, function(index, el){
-	// 		if($(this).attr("name").match(/\d+/)[0] == num){
-	// 			$(this).prop("disabled", false).val("").parent().removeClass("disabled");
-	// 		}
-	// 	});
-
-	// }
-
-	// function removeNewInput(self){
-	// 	let num = $(self).parent().attr("id").match(/\d+/)[0];
-	// 	let phone = $(self).parents().closest("tr").find("td:nth-of-type(5) input[type='text']");
-	// 	// let btnGroup = $(self).parents().closest("tr").find("td:nth-of-type(6) .flex-start");
-
-	// 	$(self).siblings().removeClass("hidden");
-
-	// 	$.each(phone, function(index, el){
-	// 		if($(this).attr("name").match(/\d+/)[0] == num){
-	// 			let displayText = "";
-	// 			let matchedNum = $(self).find("input[type='checkbox']").data("contact-num");
-	// 			let selected = $(self).parent().text();
-
-	// 			if(selected != "선택"){
-	// 				if($(self).siblings().find("input:checked").length>0){
-	// 					if(isEmpty(matchedNum)){
-	// 						displayText = "번호 없음" + " 외 +" + String($(self).siblings().find("input:checked").length) + "개";
-	// 					} else {
-	// 						displayText = matchedNum + " 외 +" + String($(self).siblings().find("input:checked").length) + "개";
-	// 					}
-	// 				} else {
-	// 					displayText = matchedNum;
-	// 				}
-	// 			} else {
-	// 				displayText = "";
-	// 			}
-
-	// 			$(this).prop("disabled", true).val(displayText).parent().addClass("disabled");
-	// 		}
-	// 	});
-
-	// }
-	
 	function getAlarmData(alarmData, userData){
 		// console.log("alarmData====", alarmData);
 		const uniqDvcType = groupBy(alarmData, "device_type");
@@ -2612,8 +2546,8 @@
 		// console.log("uniqDvcName---", uniqDvcName);
 		// console.log("userData---", userData);
 		// console.log("entries---", entries);
-		
 		// return false;
+
 		const promises = alarmData.map( async item => {
 			// global var deviceNameList => kr device_type_name 
 			if ($.inArray(item.device_type, alarmData) === -1) {
@@ -2670,7 +2604,7 @@
 				</li>`;
 			});
 
-			let alarmLvlArr = [
+			const alarmLvlArr = [
 				{  name : "정보", val: 0 },
 				{  name : "경고", val: 1 },
 				{  name : "이상", val: 2 },
@@ -3278,16 +3212,6 @@
 															nonUserNumberArr.push(el.alarmToUser.non_user[i].phone);
 														}
 													}		
-													
-													// if(!isEmpty(el.alarmToUser.non_user[i].name)){		
-													// 	if(isEmpty(displayText2)){
-													// 		displayText2 = el.alarmToUser.non_user[i].name;
-													// 	}
-													// 	nonUserArr.push(el.alarmToUser.non_user[i].name);
-													// }
-													// if(!isEmpty(el.alarmToUser.non_user[i].phone)){
-													// 	nonUserNumberArr.push(el.alarmToUser.non_user[i].phone);
-													// }
 												}
 
 												nonUserArr = [...nonUserArr];
@@ -3495,7 +3419,7 @@
 										if(val.indexOf(",") != -1){
 											newVal = val.split(",")[0];
 										} else {
-											newVal=Number(val);
+											newVal=val;
 										}
 										$(id).val(newVal)
 									}

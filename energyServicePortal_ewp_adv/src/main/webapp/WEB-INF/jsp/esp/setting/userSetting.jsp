@@ -1196,6 +1196,9 @@
 	function getSpcList(opt, cloned, callback) {
 		$.ajax(opt).done(function (json, textStatus, jqXHR) {
 			let data = json.data;
+			data.sortOn("name");
+			console.log("data===", data);
+			
 			data.map( x => {
 				let str = '';
 				str = cloned.replace(/\*spcId\*/g, x.spc_id)

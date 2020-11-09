@@ -2357,17 +2357,17 @@
 						sortedData = Object.values(data);
 						sortedData.sortOn("dname");
 					}
+
 					$.map(sortedData, function(val, key) {
-						if (val.device_type == 'SM_MANUAL' || val.device_type == 'SM_ISMART') return false;
+						// console.log("val---", val);
+						if (val.device_type == 'SM_MANUAL' || val.device_type == 'SM_ISMART' ) return false;
 						if ($.inArray(val.device_type, deviceType) === -1) {
 							deviceType.push(val.device_type);
 						}
 					});
 
-					deviceType.sort();
-
 					$.each(deviceType, function (i, el) {
-						console.log("el---")
+						// console.log("el---", el);
 						if (el == 'SM_MANUAL' || el == 'SM_ISMART') return false;
 						deviceType[i] = {
 							name: featureProperties[el].name,
@@ -2379,12 +2379,10 @@
 							}
 						}
 					});
-	
+
 					setMakeList(deviceType, 'typeList', { 'dataFunction': { 'head': makeHeadTable, 'body': makeBodyTable } });
 					
 					$.each(deviceType, function (i, el) {
-						if (isEmpty(el.properties)) return false;
-
 						let dvcType = el.type;
 						let operationNormal = 0;
 						let operationError = 0;
@@ -2393,8 +2391,6 @@
 						let tableArray = [];
 
 						setInitList('table_' + dvcType);
-
-						console.log("sortedData===", sortedData);
 
 						$.map(sortedData, function(val, key) {
 							let dname = val.dname;
@@ -2707,8 +2703,6 @@
 					setMakeList(invType, 'invList', { 'dataFunction': { 'head': makeHeadTable, 'body': makeBodyTable } });
 
 					$.each(invType, function (i, el) {
-						console.log("el----", el)
-
 						let newInvType = el.type;
 						let operationNormal = 0;
 						let operationError = 0;
