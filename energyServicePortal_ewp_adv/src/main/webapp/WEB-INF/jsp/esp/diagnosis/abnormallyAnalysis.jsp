@@ -1156,10 +1156,10 @@
 <div class="row">
 	<div id="siteList" class="dropdown-wrapper col-lg-2 col-md-4 col-sm-3">
 		<div class="dropdown" id="selectSiteList">
-			<button type="button" class="dropdown-toggle w-100" data-toggle="dropdown" data-name="선택해주세요.">
+			<button type="button" class="dropdown-toggle w-100 no-close" data-toggle="dropdown" data-name="선택해주세요.">
 				선택해주세요.<span class="caret"></span>
 			</button>
-			<ul class="dropdown-menu dropdown-menu-form chk-type" role="menu" id="siteULList">
+			<ul class="dropdown-menu chk-type" role="menu" id="siteULList">
 				<li data-value="[sid]">
 					<a href="javascript:void(0);" tabindex="-1">
 						<input type="checkbox" id="site_[INDEX]" value="[sid]" name="site">
@@ -1258,7 +1258,7 @@
 										</li>
 										<li>
 											<div class="dropdown placeholder" id="compareDeviceList">
-												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="설비 명">
+												<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="설비 명">
 													설비 명 <span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu chk-type" id="compareDeviceName">

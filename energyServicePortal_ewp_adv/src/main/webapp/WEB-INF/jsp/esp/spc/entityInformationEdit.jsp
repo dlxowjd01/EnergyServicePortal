@@ -1416,7 +1416,7 @@
 						<td class="addList_affiliation entity">
 							<div class="group-type">
 								<div class="dropdown placeholder edit" id="등기이사_소속[index]">
-									<button type="button" class="dropdown-toggle" data-toggle="dropdown">
+									<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown">
 										소속 선택<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu chk-type" role="menu">
@@ -1589,7 +1589,7 @@
 						<th>관리 계약 구분</th>
 						<td>
 							<div class="dropdown placeholder edit mr-12 w300" id="관리_계약_구분">
-								<button type="button" class="dropdown-toggle" data-toggle="dropdown">
+								<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown">
 									선택<span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu chk-type" role="menu">

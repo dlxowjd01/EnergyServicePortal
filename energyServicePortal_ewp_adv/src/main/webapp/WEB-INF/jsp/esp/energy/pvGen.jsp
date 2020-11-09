@@ -8,7 +8,7 @@
 <div class="row content-wrapper">
 	<div class="col-lg-2 col-md-4 col-sm-6 dropdown-wrapper">
 		<div class="dropdown" id="siteList">
-			<button type="button" class="dropdown-toggle w-100" data-toggle="dropdown" data-name="<fmt:message key="renewablesgen.3.multipleselection" />"><fmt:message key="renewablesgen.1.select" /><span class="caret"></span></button>
+			<button type="button" class="dropdown-toggle w-100 no-close" data-toggle="dropdown" data-name="<fmt:message key="renewablesgen.3.multipleselection" />"><fmt:message key="renewablesgen.1.select" /><span class="caret"></span></button>
 			<ul class="dropdown-menu chk-type"></ul>
 		</div>
 		<small class="warning hidden">사이트 선택은 필수입니다.</small>
@@ -29,7 +29,7 @@
 						<span class="tx-tit"><fmt:message key="renewablesgen.3.measureddata" /></span>
 						<div class="sa-select">
 							<div class="dropdown">
-								<button type="button" class="dropdown-toggle w7" data-toggle="dropdown" data-name="<fmt:message key="renewablesgen.3.multipleselection" />"><fmt:message key="renewablesgen.3.multipleselection" /><span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle w7 no-close" data-toggle="dropdown" data-name="<fmt:message key="renewablesgen.3.multipleselection" />"><fmt:message key="renewablesgen.3.multipleselection" /><span class="caret"></span></button>
 								<div class="dropdown-menu chk-type"><!--
 								--><ul class="dropdown-cov clear selectDevices"></ul><!--
 								 --><div class="li-btn-box clear">
@@ -222,17 +222,24 @@
 	const makeSiteList = async () => {
 		const siteList = document.querySelector('#siteList ul');
 		while (siteList.firstChild) siteList.removeChild(siteList.firstChild);
-
 		let liStr = ``;
-		sites.forEach((site, index) => {
-			liStr += `<li>
+
+		if (!isEmpty(sites)) {
+
+			sites.forEach((site, index) => {
+				liStr += `<li>
 						<a href="javascript:void(0);" data-value="${'${site.sid}'}" tabindex="-1">
 							<input type="checkbox" id="${'${site.sid}'}" value="${'${site.sid}'}" name="site">
 							<label for="${'${site.sid}'}">${'${site.name}'}</label>
 						</a>
 					</li>`;
-		});
-		siteList.innerHTML = liStr;
+			});
+
+			liStr += `<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16">적용</button></li>`;
+			siteList.innerHTML = liStr;
+		} else {
+			siteList.innerHTML = `<li class="no-data">선택가능한 사이트가 없습니다.</li>`;
+		}
 	};
 
 	const makeDeviceList = () => {

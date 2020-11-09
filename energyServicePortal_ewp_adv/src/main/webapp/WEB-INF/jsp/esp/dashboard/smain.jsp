@@ -325,7 +325,7 @@
 						<span class="tx-tit">설비 상태</span>
 						<div class="sa-select">
 							<div class="dropdown" id="statusDevice">
-								<button type="button" class="dropdown-toggle w8" data-toggle="dropdown" data-name="선택">
+								<button type="button" class="dropdown-toggle w8 no-close" data-toggle="dropdown" data-name="선택">
 									전체 <span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu chk-type" role="menu">

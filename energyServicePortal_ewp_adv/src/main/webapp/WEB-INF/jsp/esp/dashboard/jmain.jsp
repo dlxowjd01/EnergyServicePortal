@@ -147,8 +147,7 @@
 					<span class="tx-tit"><fmt:message key="vppdash.8.status" /></span>
 					<div class="sa-select">
 						<div class="dropdown" id="deviceStatus">
-							<button type="button" class="dropdown-toggle w8"
-									data-toggle="dropdown" data-name="설비 상태">
+							<button type="button" class="dropdown-toggle w8 no-close" data-toggle="dropdown" data-name="설비 상태">
 								전체<span class="caret"></span>
 							</button>
 							<ul class="dropdown-menu chk-type" role="menu">

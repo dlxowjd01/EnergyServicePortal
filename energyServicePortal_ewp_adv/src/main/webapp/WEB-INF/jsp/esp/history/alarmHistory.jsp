@@ -124,7 +124,7 @@
 		<form id="alarmHistorySearchForm">
 			<div class="sa-select">
 				<div class="dropdown" id="site">
-					<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택해주세요.">선택해주세요<span class="caret"></span></button>
+					<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택해주세요.">선택해주세요<span class="caret"></span></button>
 					<ul class="dropdown-menu chk-type" role="menu" id="siteList">
 						<li data-value="[sid]">
 							<a href="javascript:void(0);" tabindex="-1">
@@ -143,7 +143,7 @@
 						<div class="sa-select">
 							<h2 class="tx-tit"><fmt:message key="alertshistory.1.devicetype" /></h2>
 							<div id="equipmentList" class="dropdown">
-								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
+								<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택">
 									선택<span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu chk-type" role="menu" id="device">
@@ -161,7 +161,7 @@
 						<div class="sa-select">
 							<h2 class="tx-tit">알람 종류</h2>
 							<div class="dropdown">
-								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택"><fmt:message key="alertshistory.1.all" /><span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택"><fmt:message key="alertshistory.1.all" /><span class="caret"></span></button>
 								<ul class="dropdown-menu chk-type" role="menu">
 									<li>
 										<a href="javascript:void(0)" tabindex="-1">
@@ -205,7 +205,7 @@
 						<div class="sa-select">
 							<h2 class="tx-tit"><fmt:message key="alertshistory.4.alertstatus" /></h2>
 							<div class="dropdown short" id="alarmstatus">	
-								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">미확인<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택">미확인<span class="caret"></span></button>
 								<ul class="dropdown-menu chk-type" role="menu" id="alstatus">
 									<li>
 										<a href="javascript:void(0)" tabindex="-1">
@@ -225,7 +225,7 @@
 						<div class="sa-select">
 							<h2 class="tx-tit"><fmt:message key="alertshistory.4.acknowledgement" /></h2>
 							<div class="dropdown">
-								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">전체<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택">전체<span class="caret"></span></button>
 								<ul class="dropdown-menu chk-type" role="menu" id="status">
 									<li>
 										<a href="javascript:void(0)" tabindex="-1">
@@ -534,10 +534,10 @@
 	
 	const siteList = function (sidparam) {
 		let siteList = [];
-		setMakeList(sites, 'siteList', {
-			'dataFunction': {}
-		});	//list생성
-		
+		setMakeList(sites, 'siteList', { 'dataFunction': {} });	//list생성
+		$('#siteList').append(`<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16">적용</button></li>`);
+
+
 		if (sidparam == '' || sidparam == undefined) {
 			$(':checkbox[name="site"]').prop('checked', false);
 		} else if(sidparam == 'all'){
@@ -580,7 +580,7 @@
 		setMakeList(deviceList, 'device', {
 			'dataFunction': {}
 		});
-		
+
 		if (sidparam == '' || sidparam == undefined) {
 			$(':checkbox[name="deviceType"]').prop('checked', false);
 		} else {

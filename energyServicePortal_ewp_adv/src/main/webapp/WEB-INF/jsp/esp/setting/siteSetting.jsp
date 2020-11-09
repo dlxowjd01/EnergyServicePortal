@@ -3925,7 +3925,7 @@
 		<div class="flex-group">
 			<span class="inline-title">지역</span>
 			<div class="dropdown">
-				<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+				<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 				<ul id="countryList" class="dropdown-menu chk-type" role="menu">
 					<li><a href="#">전체</a></li>
 					<c:forEach var="country" items="${location}">

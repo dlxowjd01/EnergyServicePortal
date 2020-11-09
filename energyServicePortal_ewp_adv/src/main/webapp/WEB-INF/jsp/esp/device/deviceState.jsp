@@ -15,10 +15,10 @@
 	<div class="col-lg-3 col-md-4 col-sm-6">
 		<div class="dropdown-wrapper w-60">
 			<div class="dropdown" id="siteList">
-				<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="사업소 선택">
+				<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="사업소 선택">
 					사업소 선택<span class="caret"></span>
 				</button>
-				<ul class="dropdown-menu chk-type" role="menu" id="siteULList">
+				<ul class="dropdown-menu chk-type " role="menu" id="siteULList">
 					<li>
 						<a href="javascript:void(0);" tabindex="-1">
 							<input type="checkbox" id="site_[INDEX]" value="[sid]" name="site">
@@ -202,7 +202,7 @@
 							<div class="input-group inline-flex">
 								<label for="addDeviceDisplayType" class="input-label">표시 유형</label>
 								<div id="addDeviceDisplayType" class="dropdown">
-									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="유형 선택">
+									<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="유형 선택">
 										유형 선택<span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu chk-type">
@@ -241,7 +241,7 @@
 								<label for="alarm_code" class="input-label">알림 코드</label>
 								<div class="dropdown-wrapper w-80">
 									<div class="dropdown" id="alarm_code">
-										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="장치 알람 메세지 설정">
+										<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="장치 알람 메세지 설정">
 											장치 알람 메세지 설정<span class="caret"></span>
 										</button>
 										<ul class="dropdown-menu chk-type" id="alarm_codeList">
@@ -449,6 +449,7 @@
 	//사업소 조회
 	const siteMakeList = () => {
 		setMakeList(siteList, 'siteULList', {'dataFunction': {}}); //list생성
+		$('#siteULList').append(`<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16">적용</button></li>`);
 	};
 
 	//드롭다운 선택

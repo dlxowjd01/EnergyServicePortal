@@ -14,10 +14,10 @@
 <div class="row">
 	<div class="col-12">
 		<div class="dropdown fl" id="selectSiteList">
-			<button type="button" class="dropdown-toggle w10" data-toggle="dropdown" data-name="사업소 선택">
+			<button type="button" class="dropdown-toggle w10 no-close" data-toggle="dropdown" data-name="사업소 선택">
 				사업소 선택<span class="caret"></span>
 			</button>
-			<ul class="dropdown-menu dropdown-menu-form chk-type" role="menu" id="siteULList">
+			<ul class="dropdown-menu chk-type" role="menu" id="siteULList">
 				<li data-value="[sid]">
 					<a href="javascript:void(0);" tabindex="-1">
 						<input type="checkbox" id="site_[INDEX]" value="[sid]" name="site">
@@ -425,6 +425,7 @@
 	//사업소 조회
 	function siteMakeList () {
 		setMakeList(siteList, 'siteULList', {'dataFunction': {}}); //list생성
+		$('#siteULList').append(`<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16">적용</button></li>`);
 	};
 
 	function selectLog(rids, startTime, endTime, limit, page) {

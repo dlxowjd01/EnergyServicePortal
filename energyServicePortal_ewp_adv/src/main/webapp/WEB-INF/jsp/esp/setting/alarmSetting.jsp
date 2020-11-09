@@ -764,7 +764,7 @@
 			<div class="flex-group">
 				<span class="tx-tit">설비 타입</span>
 				<div class="dropdown" id="deviceType">
-					<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
+					<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택">
 						선택 <span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu chk-type" role="menu"></ul>
@@ -773,7 +773,7 @@
 			<div class="flex-group">
 				<span class="tx-tit">제조사</span>
 				<div class="dropdown" id="manufacturer">
-					<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
+					<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택">
 						선택 <span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu chk-type" role="menu"></ul>

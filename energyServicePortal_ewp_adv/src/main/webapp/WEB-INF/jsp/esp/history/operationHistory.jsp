@@ -640,6 +640,7 @@
 	//사업소 조회
 	const siteMakeList = function () {
 		setMakeList(siteList, 'siteULList', {'dataFunction': {}});
+		$('#siteULList').append(`<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16">적용</button></li>`);
 	};
 
 	//선택한 SID에 해당하는 유형의 타입을 보여준다.
@@ -1171,7 +1172,7 @@
 	<div class="col-12">
 		<form id="operationSearchForm">
 			<div class="dropdown sa-select" id="siteList">
-				<button type="button" class="dropdown-toggle w1" data-toggle="dropdown" data-name="사업소 선택">사업소 선택<span class="caret"></span></button>
+				<button type="button" class="dropdown-toggle w1 no-close" data-toggle="dropdown" data-name="사업소 선택">사업소 선택<span class="caret"></span></button>
 				<ul class="dropdown-menu chk-type" role="menu" id="siteULList">
 					<li data-value="[sid]">
 						<a href="javascript:void(0);" tabindex="-1">
@@ -1188,7 +1189,7 @@
 					<h2 class="tx-tit"><fmt:message key="statushistory.1.devicetype" /></h2>
 					<div class="flex-start">
 						<div class="dropdown" id="deviceType"><!--
-						--><button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="설비유형 선택">설비유형 선택<span class="caret"></span></button><!--
+						--><button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="설비유형 선택">설비유형 선택<span class="caret"></span></button><!--
 						--><ul class="dropdown-menu chk-type" role="menu" id="typeULList">
 								<li data-value="[type]">
 									<a href="javascript:void(0);" tabindex="-1">
@@ -1199,7 +1200,7 @@
 							</ul><!--
 					--></div>
 						<div class="dropdown ml-16" id="devices"><!--
-						--><button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="복수 선택"><fmt:message key="statushistory.1.multiple.select" /><span class="caret"></span></button><!--
+						--><button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="복수 선택"><fmt:message key="statushistory.1.multiple.select" /><span class="caret"></span></button><!--
 						--><div class="dropdown-menu dropdown-menu-form chk-type"><!--
 							 --><ul class="dropdown-cov clear"></ul>
 								<div class="li-btn-box clear"><!--

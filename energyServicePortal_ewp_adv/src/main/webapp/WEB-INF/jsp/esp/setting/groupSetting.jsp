@@ -1796,7 +1796,7 @@
 							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12"><span class="input-label">사업소 명</span></div>
 							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
 								<div class="dropdown">
-									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+									<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 									<ul id="newSiteList" class="dropdown-menu chk-type">
 										<c:forEach var="site" items="${siteList}" varStatus="siteName">
 											<li data-id="${site.name}" data-name="${site.name}" data-value="${site.sid}">

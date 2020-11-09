@@ -5,7 +5,7 @@
  *
  */
 //드롭 다운 공통 동작 작업 -- 디스에이블이 아닌 항목에 대해서 작동함.
-$(document).on('click', '.dropdown-menu:not(.unused) li:not(.disabled, .dropdown-cov .sec-li-box, .btn-wrap-type03, .lang)', function (e) {
+$(document).on('click', '.dropdown-menu:not(.unused) li:not(.disabled, .dropdown-cov .sec-li-box, .btn-wrap-type03, .lang, .no-data)', function (e) {
 	e.preventDefault(); //다른 드롭 다운 동작 막기
 	let $selector = $(this),
 		$dropdown = $selector.closest('.dropdown'),
@@ -36,12 +36,12 @@ $(document).on('click', '.dropdown-menu:not(.unused) li:not(.disabled, .dropdown
 		}
 	}
 
-	if ($displayButton.hasClass('no-close')) {
-		return false;
-	}
-
 	if (typeof (rtnDropdown) == 'function') {
 		rtnDropdown($dropdownId);
+	}
+
+	if ($displayButton.hasClass('no-close')) {
+		return false;
 	}
 });
 

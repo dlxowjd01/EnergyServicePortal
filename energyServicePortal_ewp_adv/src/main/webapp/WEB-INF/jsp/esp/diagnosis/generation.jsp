@@ -7,7 +7,7 @@
 	</div>
 	<div class="dropdown-wrapper col-lg-2">
 		<div class="dropdown" id="siteList">
-			<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name='<fmt:message key="genforecast.1.select" />'>
+			<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name='<fmt:message key="genforecast.1.select" />'>
 				<fmt:message key="genforecast.1.select" /><span class="caret"></span>
 			</button>
 			<ul class="dropdown-menu chk-type"></ul>
@@ -96,7 +96,7 @@
 					<span class="tx-tit"><fmt:message key="genforecast.3.measured_data" /></span>
 					<div class="sa-select">
 						<div class="dropdown">
-							<button type="button" class="dropdown-toggle w7" type="button" data-toggle="dropdown" data-name="복수 선택">
+							<button type="button" class="dropdown-toggle w7 no-close" type="button" data-toggle="dropdown" data-name="복수 선택">
 								<fmt:message key="genforecast.3.multiple_selection" /><span class="caret"></span>
 							</button>
 							<div class="dropdown-menu chk-type"><!--
@@ -450,14 +450,19 @@
 		$('#siteList ul').empty();
 
 		let str = '';
-		siteList.forEach((site, index) => {
-			str += `<li>
+		if (siteList.length > 0) {
+			siteList.forEach((site, index) => {
+				str += `<li>
 						<a href="javascript:void(0);" data-value="${'${site.sid}'}" tabindex="-1">
 							<input type="checkbox" id="${'${site.sid}'}" value="${'${site.sid}'}" name="site">
 							<label for="${'${site.sid}'}">${'${site.name}'}</label>
 						</a>
 					</li>`;
-		});
+			});
+			str += `<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16">적용</button></li>`;
+		} else {
+			str += `<li class="no-data">선택가능한 사이트가 없습니다.</li>`;
+		}
 		$('#siteList ul').append(str);
 	};
 
