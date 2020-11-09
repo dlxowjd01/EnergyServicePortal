@@ -7085,6 +7085,7 @@ input.inp[readonly]:focus {
 .device-list li.text-black span {
 	color: var(--black);
 	opacity: 0.87;
+	font-size: 14px;
 }
 
 .device-list li.text-black em {

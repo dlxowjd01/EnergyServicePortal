@@ -2952,7 +2952,6 @@
 														}
 														alarmArr = [...el.alarmToUser.non_user[i].level];
 													}
-													alarmArr = [...el.alarmToUser.user[i].level];
 												}
 
 												alarmArr = [...new Set([...alarmArr])];
@@ -3047,7 +3046,7 @@
 										if(length1 === length2 && length1 >0){
 											for(let i=0, arrLength = length1; i<arrLength; i++ ){
 												if(!isEmpty(el.alarmToUser.user[i].uid)){
-													if(i==0){
+													if(isEmpty(displayText)){
 														let found = userData.findIndex( x => x.uid == el.alarmToUser.user[i].uid);
 														if(found > -1){
 															displayText = userData[found].name;
@@ -3063,6 +3062,8 @@
 												}
 												
 												if(!isEmpty(el.alarmToUser.non_user[i].name)){
+													// console.log("name====", el.alarmToUser.non_user[i].name);
+													
 													if(isEmpty(displayText2)){
 														displayText2 = el.alarmToUser.non_user[i].name;
 													}
@@ -3075,7 +3076,7 @@
 										} else {
 											for(let i=0, arrLength = length1; i<arrLength; i++ ){
 												if(!isEmpty(el.alarmToUser.user[i].uid)){
-													if(i==0){
+													if(isEmpty(displayText)){
 														let found = userData.findIndex( x => x.uid == el.alarmToUser.user[i].uid);
 														if(found > -1){
 															displayText = userData[found].name;
@@ -3185,6 +3186,9 @@
 												joinedVal = userArr.toString();
 
 												let totalLength1 = userArr.length;
+												// console.log("displayText===", displayText);
+												// console.log("totalLength1===", totalLength1);
+												
 												if(totalLength1 >=2){
 													displayText = displayText + " 외 +" + String(totalLength1-1);
 													displayText1 = displayText1 + " 외 +" + String(totalLength1-1);
@@ -3217,6 +3221,7 @@
 												nonUserArr = [...nonUserArr];
 												nonUserNumberArr = [...nonUserNumberArr];
 
+												console.log("displayText2===", displayText2);
 												console.log("nonUserArr===", nonUserArr);
 												console.log("nonUserNumberArr===", nonUserNumberArr);
 
@@ -3232,7 +3237,7 @@
 												nonUserNumStr = nonUserNumberArr.toString();
 										
 												for(let i=0, arrLength = nonUserNumberArr.length; i<arrLength; i++){
-													if(nonUserNumberArr[i] !== ""){
+													if(!isEmpty(nonUserNumberArr[i])){
 														text = nonUserNumberArr[i];
 														break;
 													}
@@ -3248,6 +3253,7 @@
 										}
 									}
 									
+
 									dropdown4 += `<div class="user-group" data-index="${'${index}'}">`
 									if(displayText == "") {
 										dropdown4 += `<div class="dropdown">

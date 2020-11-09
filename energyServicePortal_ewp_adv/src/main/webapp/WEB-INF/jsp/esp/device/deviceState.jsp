@@ -656,10 +656,22 @@
 				if (!isEmpty(val)) {
 					val.forEach((el, index) => {
 						const targetSite = siteList.find(e => e.sid === el.sid);
-						let capacity = isEmpty(el.capacity) ? '-' : displayNumberFixedUnit(el.capacity, el.capacity_unit, 'kW', 0, 'round')[0] + 'kW',
-							activePower = isEmpty(el.activePower) ? '-' : displayNumberFixedUnit(el.activePower, 'W', 'kW', 0, 'round')[0] + 'kW',
-							dcPower = isEmpty(el.dcPower) ? '-' : displayNumberFixedUnit(el.dcPower, 'W', 'kW', 0, 'round')[0] + 'kW',
-							operation = el.operation;
+						let capacity = "";
+						let	activePower = "";
+						let dcPower = "";
+						let operation = el.operation;
+
+						if(el.device_type.toUpperCase().match("SENSOR_TEMPHUMID") || el.device_type.toUpperCase().match("SENSOR_WEATHER") ){
+							capacity = '';
+							activePower = isEmpty(el.temperature) ? '-' : displayNumberFixedDecimal(el.temperature, 'W', 'W', 1, 'round')[0] + '&#176;';
+							dcPower = isEmpty(el.humidity) ? '-' : displayNumberFixedDecimal(el.humidity, 'W', 'kW', 1, 'round')[0] + '&#37;';
+
+						} else {
+							capacity = isEmpty(el.capacity) ? '-' : displayNumberFixedUnit(el.capacity, el.capacity_unit, 'kW', 0, 'round')[0] + 'kW';
+							activePower = isEmpty(el.activePower) ? '-' : displayNumberFixedUnit(el.activePower, 'W', 'kW', 0, 'round')[0] + 'kW';
+							dcPower = isEmpty(el.dcPower) ? '-' : displayNumberFixedUnit(el.dcPower, 'W', 'kW', 0, 'round')[0] + 'kW';
+
+						}
 
 						switch (el.operation) {
 							case 0:
@@ -687,6 +699,12 @@
 											<button type="button" onclick="deviceProcess('delete', '${'${el.did}'}');" class="delete">삭제</button>
 											<a href="javascript:void(0);"></a>
 										</li>`;
+
+						if(el.dname == "공기청정기"){
+							console.log("deviceStr---", el.capacity)
+						}
+
+
 						deviceList.append(deviceStr);
 						if(index == 0) {
 							deviceDetailView(el.did, el.operation, $(this))
@@ -711,7 +729,7 @@
 						prop.forEach((el, idx) => {
 							if(el.key.startsWith('voltage') || el.key.match('accumActiveEnergy')){
 								featureBody1 += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><span class="di-li-title">' + el.value + '</span><span class="di-li-text"></span></li>';
-							} else if(el.key.startsWith('current') || el.key.match('temperature')){
+							} else if(el.key.startsWith('current')){
 								featureBody2 += '<li data-key="' + el.key + '" data-suffix="' + el.suffix + '"><span class="di-li-title">' + el.value + '</span><span class="di-li-text"></span></li>';
 							} else {
 								if (idx % 2 == 0) {
@@ -862,8 +880,12 @@
 								tempVal[0] != '-' ? ( dValue = tempVal[0] + ' ' + tempVal[1] ) : ( dValue = tempVal[0] );
 							}
 						} else {
-							let tempVal = displayNumberFixedDecimal(resultData[liData], suffix, 3, 2);
-							dValue = tempVal[0] != '-' ? tempVal[0] + ' ' + tempVal[1] : tempVal[0];
+							if(liData.match("temperature") || liData.match("humidity")){
+								dValue = resultData[liData] != '-' ? displayNumberFixedUnit(resultData[liData], suffix, suffix, 1)[0] + ' ' + suffix : resultData[liData];
+							} else {
+								let tempVal = displayNumberFixedDecimal(resultData[liData], suffix, 3, 2);
+								dValue = tempVal[0] != '-' ? tempVal[0] + ' ' + suffix : tempVal[0];
+							}
 						}
 						$(this).find('.t-value').text(dValue);
 					} else {
@@ -899,6 +921,9 @@
 							dValue = tempVal[0] != '-' ? tempVal[0] + ' ' + 'V' : tempVal[0];
 						} else if(liData.match("currentR") || liData.match("currentS") || liData.match("currentT")) {
 							dValue = tempVal[0] != '-' ? tempVal[0] + ' ' + 'A' : tempVal[0];
+						} else if(liData.match("temperature")){
+							console.log("temperature==", liData);
+							dValue = tempVal[0] + suffix;
 						} else {
 							dValue = tempVal[0] != '-' ? tempVal[0] + ' ' + tempVal[1] : tempVal[0];
 						}
