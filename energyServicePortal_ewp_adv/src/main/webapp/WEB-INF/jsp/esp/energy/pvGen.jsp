@@ -454,17 +454,28 @@
 		Promise.all(promiseUrl).then(response => {
 			generationData = new Object();
 			if (!isEmpty(response)) {
-				response.forEach(res => {
-					const datas = res.data;
-					Object.entries(datas).forEach(([did, data]) => {
+				response.forEach((res, index) => {
+					const database = res.data;
+					Object.entries(database).forEach(([id, data]) => {
 						document.querySelectorAll('input[name="device"]:checked').forEach(device => {
-							if (device.value === did) {
-								data.name = device.dataset.name;
+							if (billingSites.length > 0 && dashSites.length > 0) {
+								if (index === 0 && (device.getAttribute('id')).match('billing')) {
+									data.name = device.dataset.name;
+								} else if (index === 1 && (device.getAttribute('id')).match('dashboard')) {
+									data.name = device.dataset.name;
+								}
+
 								data.sid = device.dataset.sid;
+								id += index === 0 ? '_billing' : '_dashboard';
+							} else {
+								if (device.value === id) {
+									data.name = device.dataset.name;
+									data.sid = device.dataset.sid;
+								}
 							}
 						});
 
-						generationData[did] = data;
+						generationData[id] = data;
 					});
 				});
 			}
