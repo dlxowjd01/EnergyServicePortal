@@ -1759,6 +1759,27 @@ table tbody td .dropdown-menu {
 	z-index: 240;
 }
 
+.mini-loading {
+	width: 100%;
+	height: 100%;
+	top: 0px;
+	left: 0px;
+	position: absolute;
+	display: block;
+	opacity: 0.3;
+	background-color: var(--white);
+	z-index: 230;
+	text-align: center;
+}
+
+.mini-loading-image {
+	position: relative;
+	opacity: 0.3;
+	background-color: var(--white);
+	z-index: 240;
+	margin-top: 27%;
+}
+
 /* ellipsis */
 
 .ellipsis {
@@ -5533,6 +5554,7 @@ input.inp[readonly]:focus {
 }
 
 .gmain-table {
+	position: relative;
 	display: inline-flex;
 	width: 100%;
 	justify-content: space-between;
