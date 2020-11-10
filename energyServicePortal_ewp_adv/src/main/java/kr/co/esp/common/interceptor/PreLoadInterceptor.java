@@ -209,7 +209,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 
 			parameters.clear();
 			parameters.put("includeSites", "true");
-			parameters.put("includeDevices", "true");
+			parameters.put("includeDevices", "false");
 
 			Map<String, Object> userSiteGroupSearch = get("/auth/me/groups", mode, parameters, token); //그룹화되어있는 사이트 리스트 정보
 			if (200 == (int) userSiteGroupSearch.get("code")) {
