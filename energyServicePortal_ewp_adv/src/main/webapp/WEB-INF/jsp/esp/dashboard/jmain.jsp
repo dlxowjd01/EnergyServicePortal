@@ -316,6 +316,7 @@
 
 <script type="text/javascript">
 	const siteList = JSON.parse('${siteList}');
+	const sgid = '';
 	const vgid = '<c:out value="${vgid}" escapeXml="false" />';
 	const today = new Date();
 
