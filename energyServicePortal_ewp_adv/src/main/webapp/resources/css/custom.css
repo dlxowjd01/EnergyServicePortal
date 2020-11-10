@@ -6269,10 +6269,15 @@ input.inp[readonly]:focus {
 	overflow-y: hidden;
 }
 
+.smain-cal .chart-top {
+	margin: 0 0 12px;
+}
+
+
 .smain-cal .calendar-wrap {
 	display: flex;
-	margin: 12px 0 3px;
 	max-height: 487px;
+	overflow: auto;
 }
 
 .smain-cal .calendar tr {
