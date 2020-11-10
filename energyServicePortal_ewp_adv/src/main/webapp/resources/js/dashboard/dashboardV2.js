@@ -88,8 +88,7 @@ const firstAjax = () => {
 	dayData = getSiteMainSchCollection('day');
 	hourData = getSiteMainSchCollection('hour');
 
-	const siteSids = new Array();
-
+	let siteSids = new Array();
 	let urls = new Array();
 	let ess = false;
 
@@ -114,6 +113,8 @@ const firstAjax = () => {
 			});
 		}
 	});
+
+	if (isEmpty(sgid)) siteSids = 'all';
 
 	//중개거래 대시보드에서만 사용하는 항목
 	if (location.pathname.match('jmain')) {
@@ -287,7 +288,7 @@ const minAjax = () => {
 	dayData = getSiteMainSchCollection('day');
 	hourData = getSiteMainSchCollection('hour');
 
-	const siteSids = new Array();
+	let siteSids = new Array();
 	let urls = new Array();
 
 	siteList.forEach(site => {
@@ -302,6 +303,8 @@ const minAjax = () => {
 			}
 		});
 	});
+
+	if (isEmpty(sgid)) siteSids = 'all';
 
 	//중개거래 대시보드에서만 사용하는 항목
 	if (location.pathname.match('jmain')) {

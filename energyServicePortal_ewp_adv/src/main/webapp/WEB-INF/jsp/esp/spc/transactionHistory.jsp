@@ -71,9 +71,24 @@
 					className: 'dt-right'
 				},
 				{
-					title: '입금처',
-					data: 'accountFrom',
-					className: 'dt-head-center dt-body-left'
+					title: '설명1',
+					data: 'accountFrom1',
+					className: 'dt-center'
+				},
+				{
+					title: '설명2',
+					data: 'accountFrom2',
+					className: 'dt-center'
+				},
+				{
+					title: '설명3',
+					data: 'accountFrom3',
+					className: 'dt-center'
+				},
+				{
+					title: '설명4',
+					data: 'accountFrom4',
+					className: 'dt-center'
 				}
 			],
 			language: {
@@ -263,6 +278,8 @@
 			newData.map(item => {
 				const found = spcInfoArr.findIndex(x => x.spc_id === item.spc_id);
 
+				const accountFrom = [...item.account_from.split('/')];
+
 				refineList.push({
 					spcId: item.spc_id,
 					spcName: spcInfoArr[found].spc_name,
@@ -270,7 +287,10 @@
 					accountInfo: item.bank_name + ' ' + item.account_no + '(' +  item.account_owner + ')',
 					kind: item.kind,
 					amount: item.amount,
-					accountFrom: item.account_from
+					accountFrom1: isEmpty(accountFrom[0]) ? '-' : accountFrom[0],
+					accountFrom2: isEmpty(accountFrom[1]) ? '-' : accountFrom[1],
+					accountFrom3: isEmpty(accountFrom[2]) ? '-' : accountFrom[2],
+					accountFrom4: isEmpty(accountFrom[3]) ? '-' : accountFrom[3],
 				});
 			});
 
@@ -408,12 +428,15 @@
 		<div class="indiv">
 			<table id="transactionHistory">
 				<colgroup>
-					<col style="width:16%"> <!-- SPC명 -->
-					<col style="width:16%"> <!-- 최종 업데이트 -->
-					<col style="width:16%"> <!-- 입출금 구분 -->
-					<col style="width:16%"> <!-- 조회 계좌 정보 -->
-					<col style="width:16%"> <!-- 금액 -->
-					<col style="width:17%"> <!-- 입금처 -->
+					<col style="width:14%"> <!-- SPC명 -->
+					<col style="width:12%"> <!-- 최종 업데이트 -->
+					<col style="width:14%"> <!-- 입출금 구분 -->
+					<col style="width:14%"> <!-- 조회 계좌 정보 -->
+					<col style="width:14%"> <!-- 금액 -->
+					<col style="width:8%"> <!-- 설명1 -->
+					<col style="width:8%"> <!-- 설명2 -->
+					<col style="width:8%"> <!-- 설명3 -->
+					<col style="width:8%"> <!-- 설명4 -->
 				</colgroup>
 			</table>
 		</div>

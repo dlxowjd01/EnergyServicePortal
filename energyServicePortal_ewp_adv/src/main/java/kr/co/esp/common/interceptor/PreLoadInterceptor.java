@@ -191,7 +191,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			String sid = request.getParameter("sid");
 
 			parameters.clear();
-			parameters.put("includeDevices", "true");
+			parameters.put("includeDevices", "false");
 
 			Map<String, Object> siteMap = get("/auth/me/sites", mode, parameters, token); //사이트 리스트 정보
 			if (200 == (int) siteMap.get("code")) {
@@ -255,6 +255,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 				request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
 
 				session.setAttribute("sessionSiteList", jsonArray);
+				session.setAttribute("sessionSiteName", siteName);
 			} else if (vgid != null && !"".equals(vgid)) {
 				session.removeAttribute("systemLoc");
 				session.removeAttribute("systemTp");
@@ -284,6 +285,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 				request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
 
 				session.setAttribute("sessionSiteList", jsonArray);
+				session.setAttribute("sessionSiteName", siteName);
 			} else if ("/dashboard/smain.do".equals(request.getRequestURI()) && sid != null && !"".equals(sid)) {
 				String siteName = "";
 				for (Map<String, Object> site : siteOriginList) {
@@ -317,15 +319,17 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 
 					request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
 					session.setAttribute("sessionSiteList", jsonArray);
+					session.setAttribute("sessionSiteName", "전체");
 				} else {
 					jsonArray = (JSONArray) session.getAttribute("sessionSiteList");
+					String siteName = (String) session.getAttribute("sessionSiteName");
 
 					if ("/dashboard/jmain.do".equals(request.getRequestURI())) {
 						session.removeAttribute("systemLoc");
 						session.removeAttribute("systemTp");
 						session.removeAttribute("sessionSiteList");
 
-						String siteName = "";
+						siteName = "";
 						if (groupMap != null && !groupMap.isEmpty()) {
 							if (groupMap.get("vpp_group") != null) {
 								List<Map<String, Object>> vppList = (List<Map<String, Object>>) groupMap.get("vpp_group");
@@ -351,6 +355,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 						request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
 
 						session.setAttribute("sessionSiteList", jsonArray);
+						session.setAttribute("sessionSiteName", siteName);
 					} else if ("/dashboard/smain.do".equals(request.getRequestURI())) {
 						if (siteOriginList != null && siteOriginList.size() > 0) {
 							request.setAttribute("sid", siteOriginList.get(0).get("sid"));
@@ -383,9 +388,15 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 						}
 
 						session.setAttribute("sessionSiteList", jsonArray);
+						session.setAttribute("sessionSiteName", siteName);
 					}
 
 					request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
+
+					if (siteName == null || "".equals(siteName)) {
+						siteName = "전체";
+					}
+					request.setAttribute("siteName", siteName); //사이트 그룹명
 				}
 			}
 
