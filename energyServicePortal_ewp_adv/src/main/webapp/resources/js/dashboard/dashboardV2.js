@@ -875,13 +875,32 @@ const typeSiteDraw = async () => {
 		});
 	}).then(({siteGenArray, siteForeGenArray}) => {
 		let maxValue = 0;
+		let emptyObj = {};
+
 		Object.entries(siteGenArray).forEach(([siteId, data]) => {
+			if(data===0){
+				if(isEmpty(emptyObj.siteGenData)) {
+					emptyObj.siteGenData = 0;
+				}
+			} else {
+				emptyObj.siteGenData = 1;
+			}
 			if (data > maxValue) {
 				maxValue = data;
 			}
 		});
 
+		if( isEmpty(Object.values(siteForeGenArray)) ){
+			emptyObj.siteForeGenData = 0;
+		}
 		Object.entries(siteForeGenArray).forEach(([siteId, data]) => {
+			if(data===0){
+				if(isEmpty(emptyObj.siteForeGenData)) {
+					emptyObj.siteForeGenData = 0;
+				}
+			} else {
+				emptyObj.siteForeGenData = 1;
+			}
 			if (data > maxValue) {
 				maxValue = data;
 			}
@@ -922,6 +941,7 @@ const typeSiteDraw = async () => {
 			},
 			pointWidth: 9,
 			pointPadding: 0.25,
+			showInLegend: emptyObj.siteGenData == 0 ? false : true
 		});
 
 		typeSiteCurrent.addSeries({
@@ -933,6 +953,7 @@ const typeSiteDraw = async () => {
 			},
 			pointWidth: 9,
 			pointPadding: 0.25,
+			showInLegend: emptyObj.siteForeGenData == 0 ? false : true
 		});
 
 		if(categories.length > 4){
