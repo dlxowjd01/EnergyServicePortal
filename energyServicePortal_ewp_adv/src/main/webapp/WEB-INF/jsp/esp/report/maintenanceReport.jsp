@@ -6,7 +6,7 @@
 		reportTable = $('#reportTable').DataTable({
 			autoWidth: true,
 			fixedHeader: true,
-			"table-layout": "fixed",
+			'table-layout': 'fixed',
 			scrollY: '720px',
 			scrollCollapse: true,
 			sortable: true,
@@ -25,9 +25,9 @@
 					title: '<fmt:message key="workreportmain.2.reportType" />',
 					data: 'report_type',
 					render: function (data, type, full, rowIndex) {
-						if ('1' == data) {
+						if ('1' === data) {
 							result = '출장/조치 보고서';
-						} else if ('2' == data) {
+						} else if ('2' === data) {
 							result = 'QC 보고서';
 						}
 						return result;
@@ -102,7 +102,7 @@
 	});
 
 	$(document).on('keyup', '#key_word', function (e) {
-		if (e.keyCode == 13) { getDataList(); }
+		if (e.keyCode === 13) { getDataList(); }
 	});
 
 	function getDataList(page, n, sort) {
@@ -139,15 +139,11 @@
 			reportTable.clear();
 			reportTable.rows.add(refineList).draw();
 		}).fail((jqXHR, textStatus, errorThrown) => {
+			reportTable.clear().draw();
 			const r = formatErrorMessage(jqXHR, errorThrown);
-			$('#errMsg').text('처리 중 오류가 발생했습니다.' + r);
-			$('#errorModal').modal('show');
-			setTimeout(function(){
-				$('#errorModal').modal('hide');
-			}, 2000);
+			errorMsg('처리 중 오류가 발생했습니다.' + r)
 		});
 	}
-
 
 	function jsonDataFilter(rowData) {
 		const keyWord = $('#key_word').val().trim()
@@ -207,6 +203,19 @@
 		}
 
 		return bResult;
+	}
+
+	/**
+	 * 에러 처리
+	 *
+	 * @param msg
+	 */
+	const errorMsg = msg => {
+		$("#errMsg").text(msg);
+		$("#errorModal").modal("show");
+		setTimeout(function(){
+			$("#errorModal").modal("hide");
+		}, 1800);
 	}
 </script>
 <div class="row">

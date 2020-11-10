@@ -126,7 +126,7 @@
 	}
 
 	const getDataList = () => {
-		new Promise(resolve => {
+		new Promise((resolve, reject) => {
 			$.ajax({
 				url: apiHost + '/spcs',
 				type: 'GET',
@@ -139,17 +139,17 @@
 					if (result['status'] === 'success') {
 						const resultList = result['data'];
 						if (isEmpty(resultList)) {
-							throw new Error('조회된 내역이 없습니다.');
+							reject(new Error('조회된 내역이 없습니다.'));
 						} else {
 							resolve(resultList);
 						}
 					} else {
-						throw new Error('조회에 실패했습니다.');
+						reject(new Error('조회에 실패했습니다.'));
 					}
 				},
 				error: (error) => {
 					console.error(error);
-					throw new Error('조회에 실패했습니다.');
+					reject(new Error('조회에 실패했습니다.'));
 				}
 			});
 		}).then(resultList => {
@@ -265,6 +265,7 @@
 			spcEntityTable.clear();
 			spcEntityTable.rows.add(supplementList).draw();
 		}).catch(error => {
+			spcEntityTable.clear().draw();
 			errorMsg(error);
 		});
 	}

@@ -165,6 +165,7 @@
 				balanceTable.rows.add(refineList).draw();
 			},
 			error: function (request, status, error) {
+				balanceTable.clear().draw();
 				alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
 			}
 		});

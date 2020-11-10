@@ -228,6 +228,7 @@
 			yieldTable.clear();
 			yieldTable.rows.add(resultData).draw();
 		}).catch(error => {
+			yieldTable.clear().draw();
 			errorMsg(error);
 		});
 	}

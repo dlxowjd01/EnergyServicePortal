@@ -260,6 +260,7 @@
 			spcEntityTable.clear();
 			spcEntityTable.rows.add(refineList).draw();
 		}).catch(error => {
+			spcEntityTable.clear().draw();
 			errorMsg(error);
 		});
 	}

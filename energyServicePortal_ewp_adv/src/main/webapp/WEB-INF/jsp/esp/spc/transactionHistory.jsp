@@ -211,7 +211,7 @@
 			}
 
 			const transType = ['전체', '입금', '출금'];
-			if (!isEmpty(type)) {
+			if (isEmpty(type)) {
 				types = 0;
 			} else {
 				if (isNaN(type)) {
