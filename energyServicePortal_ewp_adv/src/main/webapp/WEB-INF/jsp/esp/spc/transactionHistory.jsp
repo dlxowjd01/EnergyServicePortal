@@ -265,7 +265,7 @@
 							searchOptArr: searchOptArr
 						});
 					} else {
-						reject(new Error('조회 내역이 없습니다.'));
+						reject('조회 내역이 없습니다.');
 					}
 				},
 				error: (jqXHR, textStatus, errorThrown) => {
