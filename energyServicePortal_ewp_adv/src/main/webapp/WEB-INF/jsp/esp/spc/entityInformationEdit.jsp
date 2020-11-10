@@ -1937,7 +1937,7 @@
 							<td class="addList_certificate_registration2 entity">
 								<div class="group-type flex-start">
 									<div class="text-input-type edit w300">
-										<input type="text" id="인증서_비밀번호[index]" name="인증서_비밀번호[index]" placeholder="비밀번호를 입력해 주세요.">
+										<input type="password" id="인증서_비밀번호[index]" name="인증서_비밀번호[index]" placeholder="비밀번호를 입력해 주세요.">
 									</div>
 									<div class="fr fixed-height mt5 mr-12">
 										<button type="button" class="btn-close hidden" onclick="removeList(this, 'dual')"></button>

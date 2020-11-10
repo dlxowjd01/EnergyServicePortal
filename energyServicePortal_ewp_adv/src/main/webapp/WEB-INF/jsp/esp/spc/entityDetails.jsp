@@ -353,6 +353,17 @@
 					} else {
 						setMakeList(new Array(), '공인인증서', {'dataFunction': {}});
 					}
+
+					Object.entries(finance_info).forEach(([key, val]) => {
+						if (key.match('인증서_비밀번호')) {
+							const length = String(val).length;
+							let temp = '';
+							for (let k = 0; k < length; k++) {
+								temp += '*';
+							}
+							finance_info[key] = temp;
+						}
+					});
 					setJsonAutoMapping(finance_info, 'financeInfo');
 
 					setJsonAutoMapping(contract_info, 'contractInfo'); //반복없음
