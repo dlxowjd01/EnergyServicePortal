@@ -597,7 +597,7 @@
 				async: true,
 				contentType: 'application/json; charset=UTF-8',
 			};
-			let dvcArr = [];		
+			var dvcArr = [];		
 			let ajaxPromises = [];
 			let deletePromises = [];
 
@@ -622,13 +622,12 @@
 				let td = tr.eq(i).find("td"); 
 				let secondTd = td.eq(1); 
 				let dvcNameDropdown = secondTd.find(".dropdown-toggle");
-
+		
 				if(!isEmpty(dvcNameDropdown)){
 					for(let j=0, arrLength = dvcNameDropdown.length; j < arrLength; j++){
-						let checkedDvc = dvcNameDropdown.find("input[type='checkbox']:checked");
-						let selectedDvcArr = dvcNameDropdown.next().find("input[type='checkbox']:checked");
-					
-						if(!dvcNameDropdown.eq(j).is(":disabled") && !isEmpty(selectedDvcArr.length <=0) ){ 
+						let selectedDvcArr = dvcNameDropdown.eq(j).next().find("input[type='checkbox']:checked");
+
+						if(!dvcNameDropdown.eq(j).is(":disabled") && selectedDvcArr.length >0 ){ 
 							let alarmToObj = {};
 							let alarmLvl = td.eq(2).find(".dropdown-toggle").eq(j);
 							let userGroup = td.eq(3).find(".user-group").eq(j);
@@ -641,7 +640,7 @@
 							let selectedUser = userGroup.find(".dropdown-menu input[type='checkbox']:checked");
 							
 							let nonUserObj = {};
-							let selectedNonUser = userGroup.find("input[type='text']");
+							let selectedNonUserName = userGroup.find("input[type='text']");
 							let selectedNonUserPhone = phoneGroup.find(".text-input-type[data-user-type='non-user'] input");
 
 							$.each(selectedLevel, function(){
@@ -658,16 +657,18 @@
 								});
 							}
 
+							// console.log("selectedNonUserName===", selectedNonUserName);
+
 							// 2. non_user (alarm_to)
-							if(!isEmpty(selectedNonUser.data("name-list")) || !isEmpty(selectedNonUser.data("phone-list")) ) {
+							if(!isEmpty(selectedNonUserName.data("name-list")) || !isEmpty(selectedNonUserName.data("phone-list")) ) {
 								let tempNameArr = [];
 								let tempPhoneArr = [];
 
-								if(!isEmpty(selectedNonUser.data("name-list"))){
-									tempNameArr = selectedNonUser.data("name-list").split(",");
+								if(!isEmpty(selectedNonUserName.data("name-list"))){
+									tempNameArr = selectedNonUserName.data("name-list").split(",");
 								}
-								if(!isEmpty(selectedNonUser.data("phone-list"))){
-									tempPhoneArr = selectedNonUser.data("phone-list").split(",");
+								if(!isEmpty(selectedNonUserName.data("phone-list"))){
+									tempPhoneArr = selectedNonUserName.data("phone-list").split(",");
 								}
 
 								if(tempNameArr.length>0 || tempPhoneArr.length>0){
@@ -678,14 +679,14 @@
 										nonUserArr.push(nonUserObj);
 									}
 								}
-								if( !isEmpty(selectedNonUser.val()) && !isEmpty(selectedNonUserPhone.val()) ) {
-									nonUserObj.name = selectedNonUser.val();
+								if( !isEmpty(selectedNonUserName.val()) && !isEmpty(selectedNonUserPhone.val()) ) {
+									nonUserObj.name = selectedNonUserName.val();
 									nonUserObj.phone = selectedNonUserPhone.val();
 									nonUserObj.level = alarmLvlArr;
 									nonUserArr.push(nonUserObj);
 								} else {
-									if(!isEmpty(selectedNonUser.val())){
-										nonUserObj.name = selectedNonUser.val();
+									if(!isEmpty(selectedNonUserName.val())){
+										nonUserObj.name = selectedNonUserName.val();
 										nonUserObj.level = alarmLvlArr;
 										nonUserArr.push(nonUserObj);
 									}
@@ -697,14 +698,14 @@
 								}
 								
 							} else {
-								if( !isEmpty(selectedNonUser.val()) && !isEmpty(selectedNonUserPhone.val()) ) {
-									nonUserObj.name = selectedNonUser.val();
+								if( !isEmpty(selectedNonUserName.val()) && !isEmpty(selectedNonUserPhone.val()) ) {
+									nonUserObj.name = selectedNonUserName.val();
 									nonUserObj.phone = selectedNonUserPhone.val();
 									nonUserObj.level = alarmLvlArr;
 									nonUserArr.push(nonUserObj);
 								} else {
-									if(!isEmpty(selectedNonUser.val())){
-										nonUserObj.name = selectedNonUser.val();
+									if(!isEmpty(selectedNonUserName.val())){
+										nonUserObj.name = selectedNonUserName.val();
 										nonUserObj.level = alarmLvlArr;
 										nonUserArr.push(nonUserObj);
 									}
@@ -715,52 +716,61 @@
 									}
 								}
 							}
-							console.log("dvcArr===", dvcArr);
+
 							// [Loop] selected devices
 							$.each(selectedDvcArr, function(index, el){
 								let checkedId = $(el).val();
 								if(dvcArr.length>0){
-									let found = dvcArr.findIndex( x =>  x.deviceId === checkedId);
+									let found = dvcArr.findIndex( x =>  x.deviceId == checkedId);
 									if(found > -1){
 										if(nonUserArr.length>0 && registeredUserArr.length>0){
 											let valArr1 = [];
 											let valArr2 = [];
-
+											// user of checked device
 											if(!isEmpty(dvcArr[found].alarm_to.user)){
 												let prevArr = dvcArr[found].alarm_to.user;
-												valArr1 = [...new Set([...prevArr, ...registeredUserArr])];
+												valArr1 = [...prevArr, ...registeredUserArr];
 											} else {
 												valArr1.push(...registeredUserArr);
 											}
-
+											// non_user of checked device
 											if(!isEmpty(dvcArr[found].alarm_to.non_user)){
 												let prevArr = dvcArr[found].alarm_to.non_user;
-												valArr2 = [...new Set([...prevArr, ...nonUserArr])];
+												valArr2 = [...prevArr, ...nonUserArr];
 											} else {
 												valArr2.push(...nonUserArr);
 											}
-
-											dvcArr[found] = {
-												deviceId: checkedId,
-												alarm_to: {
-													user: valArr1,
-													non_user: valArr2
+											if(!isEmpty(dvcArr[found].deviceId)){
+												dvcArr[found].alarm_to.push({ user: valArr1, non_user: valArr })
+											} else {
+												dvcArr[found] = {
+													deviceId: checkedId,
+													alarm_to: { non_user: valArr }
 												}
 											}
+											// dvcArr[found] = {
+											// 	deviceId: checkedId,
+											// 	alarm_to: {
+											// 		user: valArr1,
+											// 		non_user: valArr2
+											// 	}
+											// }
 										} else {
 											if(nonUserArr.length>0){
 												let valArr = [];
 												if(!isEmpty(dvcArr[found].alarm_to.non_user)){
 													let prevArr = dvcArr[found].alarm_to.non_user;
-													valArr = [...new Set([...prevArr, ...nonUserArr])];
+													valArr = [...prevArr, ...nonUserArr];
 												} else {
 													valArr.push(...nonUserArr);
 												}
-
-												dvcArr[found] = {
-													deviceId: checkedId,
-													alarm_to: {
-														non_user: valArr
+												// console.log("valArr===", valArr);
+												if(!isEmpty(dvcArr[found].deviceId)){
+													dvcArr[found].alarm_to.non_user = valArr;
+												} else {
+													dvcArr[found] = {
+														deviceId: checkedId,
+														alarm_to: { non_user: [...valArr] }
 													}
 												}
 											}
@@ -768,42 +778,73 @@
 												let valArr = [];
 												if(!isEmpty(dvcArr[found].alarm_to.user)){
 													let prevArr = dvcArr[found].alarm_to.user;
-													valArr = [...new Set([...prevArr, ...registeredUserArr])];
+													valArr = [...prevArr, ...registeredUserArr];
 												} else {
 													valArr.push(...registeredUserArr);
 												}
-												dvcArr[found]= {
-													deviceId: checkedId,
-													alarm_to: {
-														user: valArr
+												if(!isEmpty(dvcArr[found].deviceId)){
+													dvcArr[found].alarm_to.user = valArr;
+												} else {
+													dvcArr[found] = {
+														deviceId: checkedId,
+														alarm_to: { user: valArr }
 													}
 												}
+												// dvcArr[found] = {
+												// 	deviceId: checkedId,
+												// 	alarm_to: {
+												// 		user: valArr
+												// 	}
+												// }
 											}
 										}
-									} 								
+									} else {
+										if(nonUserArr.length>0 && registeredUserArr.length>0){
+											let obj = {
+												deviceId: checkedId,
+												alarm_to: { user: registeredUserArr, non_user: nonUserArr }
+											}
+											dvcArr.push(obj);
+										} else {
+										// if selected deviceId is not in the dvcArr
+											if(nonUserArr.length>0){
+												let obj = {
+													deviceId: checkedId,
+													alarm_to: { non_user: nonUserArr }
+												}
+												dvcArr.push(obj);
+											}
+
+											if(registeredUserArr.length>0){
+												let obj = {
+													deviceId: checkedId,
+													alarm_to: { user: registeredUserArr }
+												}
+												dvcArr.push(obj);
+											}
+										}
+									}								
 								} else {
 									let obj = {};
 									if(nonUserArr.length>0 && registeredUserArr.length>0) {
-										obj.deviceId = checkedId;
+										obj.deviceId = $(el).val();
 										obj.alarm_to = {
 											non_user: nonUserArr,
 											user: registeredUserArr
 										}
 									} else {
 										if(nonUserArr.length>0){
-											obj.deviceId = checkedId;
-											obj.alarm_to = {
-												non_user: nonUserArr
-											}	
+											obj.deviceId = $(el).val();
+											obj.alarm_to = { non_user: [...nonUserArr] }
 										}
 										if(registeredUserArr.length>0){
 											obj.deviceId = checkedId;
-											obj.alarm_to = {
-												user: registeredUserArr
-											}	
+											obj.alarm_to = { user: registeredUserArr }	
 										}
 									}
 									dvcArr.push(obj);
+									// console.log("checkedId===", checkedId);
+									// console.log("nonUserArr===", nonUserArr);
 								}
 							});
 						}
@@ -812,11 +853,12 @@
 			}
 
 			if(dvcArr.length>0){
-			// B-2. [JSON stringify] newly edited/added alarm data	
+			// B-2. [JSON stringify] newly edited/added alarm data
 				dvcArr.forEach(function(item, index){
 					deviceOpt.url = urlPrefix + item.deviceId;
 					deviceOpt.data = JSON.stringify({ alarm_to: JSON.stringify(item.alarm_to) });
 					ajaxPromises.push(makeAjaxCall(deviceOpt));
+					// console.log("deviceOpt===", deviceOpt);
 				});
 				// B-3. [RESULT] CLOSE Alarm modal & refresh data
 				Promise.all(ajaxPromises).then(res => {
@@ -2529,7 +2571,7 @@
 	}
 
 	function getAlarmData(alarmData, userData){
-		// console.log("alarmData====", alarmData);
+		console.log("alarmData====", alarmData);
 		const uniqDvcType = groupBy(alarmData, "device_type");
 		const uniqDvcName = Object.values(groupBy(alarmData, "name"));
 
@@ -2769,9 +2811,10 @@
 											} else if(col==3){
 												let parentEl = nonUserName.eq(i);
 												let userNameInput = parentEl.find("input");
-												let val = userNameInput.val();
-												if( !isEmpty(val)){
-													userNameInput.val(val);
+												let nameVal = userNameInput.val();
+												console.log("nameVal---", nameVal)
+												if( !isEmpty(nameVal)){
+													userNameInput.val(nameVal);
 												}
 											}
 										});
@@ -3028,8 +3071,8 @@
 									let joinedVal = "";
 									let displayText = "";
 									let displayText1 = "";
-									let displayText2 = "";
-									let displayText2b = "";
+									let textNonUserName = "";
+									let textNonUserPhone = "";
 									let nonUserNameStr = "";
 									let nonUserNumStr = "";
 
@@ -3064,8 +3107,8 @@
 												if(!isEmpty(el.alarmToUser.non_user[i].name)){
 													// console.log("name====", el.alarmToUser.non_user[i].name);
 													
-													if(isEmpty(displayText2)){
-														displayText2 = el.alarmToUser.non_user[i].name;
+													if(isEmpty(textNonUserName)){
+														textNonUserName = el.alarmToUser.non_user[i].name;
 													}
 													nonUserArr.push(el.alarmToUser.non_user[i].name);
 												}
@@ -3094,8 +3137,8 @@
 
 											for(let i=0, arrLength = length2; i<arrLength; i++ ){
 												if(!isEmpty(el.alarmToUser.non_user[i].name)){
-													if(isEmpty(displayText2)){
-														displayText2 = el.alarmToUser.non_user[i].name;
+													if(isEmpty(textNonUserName)){
+														textNonUserName = el.alarmToUser.non_user[i].name;
 													}
 													if(!isEmpty(el.alarmToUser.non_user[i].phone)){
 														nonUserNumberArr.push(el.alarmToUser.non_user[i].phone);
@@ -3131,16 +3174,16 @@
 
 										let tempNonUserNum ="";
 										let totalLength1 = userArr.length;
-										let totalLength2 = nonUserArr.length;
-										let totalLength2b = nonUserNumberArr.length;
+										let nonUserNameLength = nonUserArr.length;
+										let nonUserPhoneLength = nonUserNumberArr.length;
 
 										if(totalLength1 >=2){
 											displayText = displayText + " 외 +" + String(totalLength1-1);
 											displayText1 = displayText1 + " 외 +" + String(totalLength1-1);
 										}
 
-										if(totalLength2 >=2){
-											displayText2 = displayText2 + " 외 +" + String(totalLength2-1);
+										if(nonUserNameLength >=2){
+											textNonUserName = textNonUserName + " 외 +" + String(nonUserNameLength-1);
 										}
 
 										nonUserNameStr = nonUserArr.toString();
@@ -3153,10 +3196,10 @@
 											}
 										}	
 										
-										if(totalLength2b >=2){		
-											displayText2b = tempNonUserNum + " 외 +" + String(totalLength2b-1);
+										if(nonUserPhoneLength >=2){		
+											textNonUserPhone = tempNonUserNum + " 외 +" + String(nonUserPhoneLength-1);
 										} else {
-											displayText2b = tempNonUserNum;
+											textNonUserPhone = tempNonUserNum;
 										}
 									} else {
 									// either USER || NON USER
@@ -3200,8 +3243,8 @@
 											if(length2 > 0 ){
 												for(let i=0, arrLength = length2; i<arrLength; i++ ){
 													if(!isEmpty(el.alarmToUser.non_user[i].name)){
-														if(isEmpty(displayText2)){
-															displayText2 = el.alarmToUser.non_user[i].name;
+														if(isEmpty(textNonUserName)){
+															textNonUserName = el.alarmToUser.non_user[i].name;
 														}
 														if(!isEmpty(el.alarmToUser.non_user[i].phone)){
 															nonUserNumberArr.push(el.alarmToUser.non_user[i].phone);
@@ -3210,7 +3253,7 @@
 														}
 														nonUserArr.push(el.alarmToUser.non_user[i].name);
 													} else {
-														// nonUser does NOT have a name
+														// nonUser does NOT have name
 														if(!isEmpty(el.alarmToUser.non_user[i].phone)){
 															nonUserArr.push("");
 															nonUserNumberArr.push(el.alarmToUser.non_user[i].phone);
@@ -3221,16 +3264,18 @@
 												nonUserArr = [...nonUserArr];
 												nonUserNumberArr = [...nonUserNumberArr];
 
-												console.log("displayText2===", displayText2);
-												console.log("nonUserArr===", nonUserArr);
-												console.log("nonUserNumberArr===", nonUserNumberArr);
 
-												let tempNonUserNum = ""
-												let totalLength2 = nonUserArr.length;
-												let totalLength2b = nonUserNumberArr.length;
+												// console.log("only nonUserArr===", nonUserArr);
+												// console.log("only nonUserNumberArr===", nonUserNumberArr);
+												// console.log("only non user textNonUserName===", textNonUserName);
+												// console.log("only non user textNonUserPhone===", textNonUserPhone);
 												
-												if(totalLength2 >=2){
-													displayText2 = displayText2 + " 외 +" + String(totalLength2-1);
+												let tempNonUserNum = ""
+												let nonUserNameLength = nonUserArr.length;
+												let nonUserPhoneLength = nonUserNumberArr.length;
+												
+												if(nonUserNameLength >=2){
+													textNonUserName = textNonUserName + " 외 +" + String(nonUserNameLength-1);
 												}
 
 												nonUserNameStr = nonUserArr.toString();
@@ -3243,10 +3288,10 @@
 													}
 												}
 
-												if(totalLength2b >=2){		
-													displayText2b = tempNonUserNum + " 외 +" + String(totalLength2b-1);
+												if(nonUserPhoneLength >=2){		
+													textNonUserPhone = tempNonUserNum + " 외 +" + String(nonUserPhoneLength-1);
 												} else {
-													displayText2b = tempNonUserNum;
+													textNonUserPhone = tempNonUserNum;
 												}
 											}
 										
@@ -3255,6 +3300,7 @@
 									
 
 									dropdown4 += `<div class="user-group" data-index="${'${index}'}">`
+									
 									if(displayText == "") {
 										dropdown4 += `<div class="dropdown">
 												<button type="button" class="dropdown-toggle" 
@@ -3280,8 +3326,8 @@
 											<ul id="aDvcUserList${'${ newIdx }'}" class="dropdown-menu chk-type" role="menu">${'${ userNameStr }'}</ul>
 										</div>`;
 									}
-									// console.log("displayText===", displayText);
-									if(isEmpty(displayText2) && isEmpty(displayText2b)) {
+								
+									if(isEmpty(textNonUserName) && isEmpty(textNonUserPhone)) {
 										dropdown4 += `<div class="text-input-type disabled" 
 											data-child-id="aDvcPhoneNonUser${'${ newIdx }'}"
 											data-user-type="non-user">
@@ -3292,9 +3338,9 @@
 											data-child-id="aDvcPhoneNonUser${'${ newIdx }'}"
 											data-name-list="${'${ nonUserNameStr }'}"
 											data-phone-list="${'${ nonUserNumStr }'}"
-											data-phone="${'${ displayText2b }'}"
+											data-phone="${'${ textNonUserPhone }'}"
 											data-user-type="non-user">
-											<input type="text" name="aDvcNonUserList${'${ newIdx }'}" value="${'${ displayText2 }'}" disabled />
+											<input type="text" name="aDvcNonUserList${'${ newIdx }'}" value="${'${ textNonUserName }'}" disabled />
 										</div>`;
 									}
 									dropdown4 += `</div>`;
@@ -3408,26 +3454,27 @@
 
 						userNameBtn.each(function(index, el){
 							if(!isEmpty($(this).data("phone"))){
-								let id = "#" + $(this).data("child-id");
-								$(id).val($(this).data("phone"))			
+								let childId = "#" + $(this).data("child-id");
+								$(childId).val($(this).data("phone"))			
 							}
 						});
 						userNameInput.each(function(index, el){
 							if(!isEmpty($(this).data("phone")) || !isEmpty($(this).data("phone-list"))){
-								let id = "#" + $(this).data("child-id");
+								let childId = "#" + $(this).data("child-id");
 								let tempVal = "";
 								if(!isEmpty($(this).data("phone"))){
-									$(id).val($(this).data("phone"))
+									$(childId).val($(this).data("phone"))
 								} else {
 									if(!isEmpty($(this).data("phone-list"))){
 										let val = String($(this).data("phone-list"));
 										let newVal = "";
 										if(val.indexOf(",") != -1){
-											newVal = val.split(",")[0];
+											let tempVal = val.split(",");
+											newVal = tempVal[0] != "" ? tempVal[0] : tempVal[1];
 										} else {
 											newVal=val;
 										}
-										$(id).val(newVal)
+										$(childId).val(newVal)
 									}
 								}				
 							}

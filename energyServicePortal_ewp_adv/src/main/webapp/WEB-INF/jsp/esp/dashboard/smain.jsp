@@ -2266,7 +2266,7 @@
 		}).done(function (data, textStatus, jqXHR) {
 			$.map(data, function (val, key) {
 				if(isEmpty(val.properties)) return false;
-				let propList = val.properties
+				let propList = val.properties;
 				let deviceName = key;
 				let tempFeature = [];
 				let tempFeature2 = [];
@@ -2354,21 +2354,19 @@
 					let sortedData;
 
 					if(!isEmpty(data) && Object.values(data)){
-						sortedData = Object.values(data);
+						sortedData = Object.values(data).filter( x => x.data.length>0 );
 						sortedData.sortOn("dname");
 					}
 
 					$.map(sortedData, function(val, key) {
-						// console.log("val---", val);
-						if (val.device_type == 'SM_MANUAL' || val.device_type == 'SM_ISMART' ) return false;
-						if ($.inArray(val.device_type, deviceType) === -1) {
-							deviceType.push(val.device_type);
+						if (!isEmpty(val.data.length>0)) {
+							if ($.inArray(val.device_type, deviceType) === -1) {
+								deviceType.push(val.device_type);
+							}
 						}
 					});
 
 					$.each(deviceType, function (i, el) {
-						// console.log("el---", el);
-						if (el == 'SM_MANUAL' || el == 'SM_ISMART') return false;
 						deviceType[i] = {
 							name: featureProperties[el].name,
 							type: el,
@@ -2590,7 +2588,7 @@
 					}
 
 					if(!isEmpty(data) && Object.values(data)){
-						sortedData = Object.values(data);
+						sortedData = Object.values(data).filter( x => x.data.length>0 );
 						sortedData.sortOn("dname");
 						let found = sortedData.findIndex( x => x.device_type == "INV_PV");
 					}
