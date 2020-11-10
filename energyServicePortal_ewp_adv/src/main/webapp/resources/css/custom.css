@@ -1750,6 +1750,28 @@ table tbody td .dropdown-menu {
 	text-align: center;
 }
 
+.loading2 {
+	width: 100%;
+	height: 100%;
+	top: 0px;
+	left: 0px;
+	position: fixed;
+	display: block;
+	opacity: 0.1;
+	background-color: var(--white);
+	z-index: 280;
+	text-align: center;
+}
+
+.loading2 .loading-image {
+	position: absolute;
+	opacity: 0.3;
+	background-color: var(--white);
+	top: calc(50% - 96px);
+	left: calc(50% - 96px);
+	z-index: 300;
+}
+
 .loading-image {
 	position: absolute;
 	opacity: 0.3;
@@ -4033,6 +4055,7 @@ li[data-alarm="urgent"]:before,
 }
 
 .alarm-modal-content .dataTables_wrapper td .dropdown-toggle {
+	min-width: 150px;
 	width: 100%;
 }
 
@@ -6242,7 +6265,8 @@ input.inp[readonly]:focus {
 ========================================================= */
 .smain-cal {
 	height: 585px;
-	overflow: auto;
+	overflow-x: auto;
+	overflow-y: hidden;
 }
 
 .smain-cal .calendar-wrap {
@@ -7782,9 +7806,10 @@ input.inp[readonly]:focus {
 }
 
 .right-end2 {
+	display: flex;
 	position: absolute;
-	margin-top: 15px;
 	right: 0;
+	margin: -38px 0 0;
 }
 
 .btn-wrap-type {

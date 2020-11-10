@@ -121,6 +121,9 @@
 		if(!$('#loadingCircle').is(":hidden")){
 			$('#loadingCircle').hide();
 		}
+		if(!$('#loadingCircle2').is(":hidden")){
+			$('#loadingCircle2').hide();
+		}
 	});
 
 	//API 토큰 세팅

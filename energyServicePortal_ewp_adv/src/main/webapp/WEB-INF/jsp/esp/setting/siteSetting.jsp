@@ -1269,25 +1269,24 @@
 				});
 
 				$('#siteTable').on( 'click', 'td .btn-type-sm', function () {
+					console.log("alarmtable------", Date.now() );
+					$("#loadingCircle2").show();
 					let dTable = $('#siteTable').DataTable();
 					let tr = $(this).parents().closest("tr");
 					let idx = dTable.row(tr).index();
-
-					// if(!isEmpty(siteTable.row(tr).data().alarmData)){
-						let rowData = dTable.row(tr).data().alarmInfo;
-						let userOpt = {
-							url: apiHost + "/config/users",
-							type: 'get',
-							async: false,
-							data : {
-								oid: oid,
-							}
+					let rowData = dTable.row(tr).data().alarmInfo;
+					let userOpt = {
+						url: apiHost + "/config/users",
+						type: 'get',
+						async: false,
+						data : {
+							oid: oid,
 						}
-						makeAjaxCall(userOpt).then(res => {
-							rowData.sortOn("name");
-							getAlarmData(rowData, res);
-						});
-					// }
+					}
+					makeAjaxCall(userOpt).then(res => {
+						rowData.sortOn("name");
+						getAlarmData(rowData, res);
+					});
 				});
 
 				new $.fn.dataTable.Buttons( siteTable, {
@@ -2589,9 +2588,8 @@
 		// console.log("userData---", userData);
 		// console.log("entries---", entries);
 		// return false;
-
 		const promises = alarmData.map( async item => {
-			// global var deviceNameList => kr device_type_name 
+			// global var deviceNameList => kr device_type_name
 			if ($.inArray(item.device_type, alarmData) === -1) {
 				for (let property in deviceNameList) {
 					if(property == item.device_type){
@@ -2630,6 +2628,8 @@
 		});
 
 		Promise.all(promises).then( () => {
+			// let entriesLength = 0;
+			// $("#loadingCircle").show();
 			let entries = Object.entries(uniqDvcType);
 			entries.forEach(function(item, index){
 				dvcTypeStr += `<li data-did="${'${ item[1][0].did }'}" data-value="${'${ item[1][0].device_type }'}">
@@ -2638,6 +2638,7 @@
 			});
 
 			uniqDvcName.forEach(function(item, index){
+				// entriesLength += 1;
 				dvcNameStr += `<li class="hidden" data-parent="${'${ item[0].device_type }'}">
 					<a class="chk-type" href="#">
 						<input type="checkbox" name="${'${ item[0].name }'}" value="${'${ item[0].did }'}" data-device-type="${'${ item[0].device_type }'}">
@@ -2680,26 +2681,30 @@
 					<label>${'${ nameId }'}</label>
 				</a></li>`;
 			});
-			
 
 			var alarmTable = $('#alarmTable').DataTable({
 				"aaData": entries,
 				"destroy": true,
 				"table-layout": "fixed",
-				// "fixedHeader": true,
+				"fixedHeader": true,
 				// "autoWidth": true,
 				// "bAutoWidth": true,
-				"bSortable": true,
+				"ordering": false,
+				"bSortable": false,
 				"bSearchable" : true,
 				"scrollX": true,
 				"sScrollX": "100%",
 				// "retrieve": true,
-				// "sScrollY": true,	
-				// "scrollY": "40vh",
-				"pageLength": 6,
+				"sScrollY": true,	
+				"scrollY": "40vh",
+				"pageLength": 4,
+				"bPaginate": true,
+				// "sPaginationType": "custom",
+				"bLengthChange": false,
+				// "bInfo": false,
 				// "bScrollCollapse": true,
 				"bSearchable" : true,
-				"dom": 'tip',
+				"dom": 'tp',
 				"aoColumnDefs": [
 					{
 						"aTargets": [ 1 ],
@@ -2812,7 +2817,7 @@
 												let parentEl = nonUserName.eq(i);
 												let userNameInput = parentEl.find("input");
 												let nameVal = userNameInput.val();
-												console.log("nameVal---", nameVal)
+												
 												if( !isEmpty(nameVal)){
 													userNameInput.val(nameVal);
 												}
@@ -2828,6 +2833,7 @@
 				"aoColumns": [
 					{
 						"sTitle": "설비타입",
+						// "className": "no-sorting",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex ) {
 							let val1 = data[1];
@@ -2849,6 +2855,7 @@
 					},
 					{
 						"sTitle": "설비명",
+						// "className": "no-sorting",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex ) {
 							let val2 = data[1];
@@ -2877,6 +2884,7 @@
 					},
 					{
 						"sTitle": "알람레벨",
+						// "className": "no-sorting",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex ) {
 							let val3 = data[1];
@@ -3041,6 +3049,7 @@
 					},
 					{
 						"sTitle": "담당자 (이름 / ID)",
+						// "className": "no-sorting",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex ) {
 							const val4 = data[1];
@@ -3353,6 +3362,7 @@
 					},
 					{
 						"sTitle": "전화번호",
+						// "className": "no-sorting",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex ) {
 							let dropdown5 = ``;
@@ -3386,6 +3396,7 @@
 					},
 					{
 						"sTitle": "추가 / 수정 / 삭제",
+						// "className": "no-sorting",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex ) {
 							let dropdown6 = ``;
@@ -3405,17 +3416,17 @@
 				initComplete: function(){
 					this.api().columns().header().each ((el, i) => {
 						if(i == 0){
-							$(el).attr ('style', 'min-width: 170px;');
+							$(el).attr ('style', 'min-width: 140px; text-indent: 40px;');
 						} else if(i == 1){
-							$(el).attr ('style', 'min-width: 160px;');
+							$(el).attr ('style', 'min-width: 150px; text-indent: 10px;');
 						} else if(i == 2){
-							$(el).attr ('style', 'min-width: 120px;');
+							$(el).attr ('style', 'min-width: 150px; text-indent: 10px;');
 						} else if(i == 3){
-							$(el).attr ('style', 'min-width: 160px;');
+							$(el).attr ('style', 'min-width: 170px; text-indent: 10px;');
 						} else if(i == 4){
-							$(el).attr ('style', 'min-width: 200px;');
+							$(el).attr ('style', 'min-width: 170px; text-indent: 20px;');
 						} else if(i == 5){
-							$(el).attr ('style', 'min-width: 180px;');
+							$(el).attr ('style', 'min-width: 150px; text-indent: 40px;');
 						}
 					});
 					let str = `<div id="btnGroup" class="right-end2"><!--
@@ -3480,12 +3491,29 @@
 							}
 						});
 					}
-					$('#alarmTable_wrapper').addClass('fixed-width mb-10');
-				}
+					$('#alarmTable_wrapper').addClass('fixed-width');
+				},
+				// fnInfoCallback: function( oSettings, iStart, iEnd, iMax, iTotal, sPre ) {
+				// 	let td = $("#alarmTable tbody").find("td:first-child .dropdown");
+				// 	let length = td.toArray().length;
+				// 	let info = $("#alarmTable").DataTable().page.info();
+				
+				// 	console.log("info===", info);
+				// 	// console.log("info.page===", info.page);
+				// 	console.log("length===", length);
+				// 	return (info.page+1) + " - " + length + " / 총 " + entriesLength +  " 개"  
+
+				// 	// return iStart +" to "+ iEnd;
+				// }
 			}).columns.adjust();
-			$("#loadingCircle").hide();
-			$("#addAlarmModal").modal("show");
+			console.log("alarmtable00000", Date.now() );
+			setTimeout(function(){
+				$("#loadingCircle2").hide();
+				$("#addAlarmModal").modal("show");
+			}, 400)
+
 		});
+			
 
 	}
 

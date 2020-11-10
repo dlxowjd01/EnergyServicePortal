@@ -692,7 +692,8 @@ function makeAjaxCall(option, callbackOption){
 				resolve(json);		
 			}
 		}).fail(function (jqXHR, textStatus, errorThrown) {
-			console.log("promiseAjaxCall responseJSON Error ===>:", jqXHR.responseJSON);
+			// console.log("promiseAjaxCall responseJSON Error ===>:", jqXHR.responseJSON);
+			reject(jqXHR);
 			if(!isEmpty(callbackOption)){
 				let callback = callbackOption.callback;
 				if(callbackOption.loop == false){
@@ -700,9 +701,10 @@ function makeAjaxCall(option, callbackOption){
 					callback(callbackOption.id, callbackOption.siblingId, callbackOption.type, errorMsg)
 				}
 			}
-			reject(jqXHR);
 		});
-	})
+	}).catch(err => {
+		console.log("cannot delete existing alarm info", err);
+	});
 }
 
 function showAjaxResultModal(id, siblingId, type, result, timeLimit){

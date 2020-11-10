@@ -48,9 +48,9 @@ html.darkmode:root {
 	display: none;
 }
 
-.dataTable.no-footer.no-stripe thead th:first-of-type {
+/* .dataTable.no-footer.no-stripe thead th:first-of-type {
 	padding-left: 28px;
-}
+} */
 
 .dataTable.no-footer.no-stripe tbody tr td:first-of-type,
 .dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table.no-stripe>tbody>tr>td:first-of-type {
@@ -58,9 +58,9 @@ html.darkmode:root {
 	/* padding-left: 28px; */
 }
 
-.dataTable.no-footer.no-stripe thead th:last-of-type {
+/* .dataTable.no-footer.no-stripe thead th:last-of-type {
 	padding-right: 28px;
-}
+} */
 
 .dataTable.no-footer.no-stripe tbody tr td:last-of-type,
 .dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table.no-stripe>tbody>tr>td:last-of-type {
@@ -472,10 +472,21 @@ html.darkmode:root {
 	white-space: nowrap;
 }
 
+.dataTables_wrapper .dataTables_scroll {
+	padding-bottom: 50px;
+}
+
 .dataTables_wrapper.fixed-width div.dataTables_scrollBody>table>tbody>tr>td {
 	vertical-align: top;
 }
 
+.dataTables_wrapper.fixed-width div.dataTables_scrollBody>table>tbody>tr>td:first-child {
+	padding-left: 24px;
+}
+
+.dataTables_wrapper.fixed-width div.dataTables_scrollBody>table>tbody>tr>td:last-child {
+	padding-right: 24px;
+}
 
 .dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table>thead>tr>th>div.dataTables_sizing,
 .dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table>thead>tr>td>div.dataTables_sizing,
