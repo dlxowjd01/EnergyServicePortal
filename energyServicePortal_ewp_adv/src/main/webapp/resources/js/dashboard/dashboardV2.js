@@ -214,17 +214,6 @@ const firstAjax = () => {
 		}
 	});
 
-	urls.push({
-		url: apiHost + '/energy/forecasting/sites?interval=15min',
-		type: 'GET',
-		data: {
-			sid: siteSids.toString(),
-			startTime: dayData.startTime,
-			endTime: dayData.endTime,
-			formId: 'v2'
-		},
-	});
-
 	//현재 발전량
 	urls.push({
 		url: apiHost + '/energy/now/sites?interval=month',
@@ -1035,7 +1024,7 @@ const typeSiteDraw = async () => {
  * @returns {Promise<unknown>}
  */
 const getTodayTotalDetail = async function () {
-	const targetApi = [apiHost + '/energy/now/sites?interval=day', apiHost + '/energy/forecasting/sites?interval=15min', apiHost + '/status/raw/site'];
+	const targetApi = [apiHost + '/energy/now/sites?interval=day', apiHost + '/energy/forecasting/sites?interval=day&startTime=' + dayData.startTime + '&endTime=' +dayData.endTime, apiHost + '/status/raw/site'];
 
 	let targetArea = $('.gmain-chart4 .chart-info-right ul li');
 

@@ -194,6 +194,8 @@
 			});
 		});
 
+		if (isEmpty(sgid)) siteArray = 'all';
+
 		//오늘 발전
 		if (siteArray.length > 0) {
 			urls.push({
@@ -382,7 +384,7 @@
 						});
 					} else if (targetUrl.match('/weather/site')) {
 						const weatherData = result['data'];
-						if (result['interval'] == 'hour') { //오늘 날씨
+						if (result['interval'] === 'hour') { //오늘 날씨
 							if (!isEmpty(weatherData)) {
 								tableData.forEach((site, index) => {
 									const datas = weatherData[site.sid]['items'];
