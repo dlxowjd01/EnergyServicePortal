@@ -12,6 +12,9 @@
 				url: apiHost + "/config/sites?oid=" + oid + "&addCapacity=true",
 				type: "get",
 				async: true,
+				beforeSend: function (jqXHR, settings) {
+					$('#loadingCircle').show();
+				},
 			},
 			{
 				url: apiHost + "/auth/me/groups?includeSites=false&includeDevices=false",
@@ -936,8 +939,6 @@
 		}
 
 		if(siteData) {
-			// let newArr = [];
-
 			const newArr = siteData.map((item, index) => {
 				$("#loadingCircle").show();
 
@@ -992,7 +993,6 @@
 
 				item.updatedAt = new Date(item.updatedAt).format('yyyy-MM-dd HH:mm:ss');
 				return item
-				// newArr.push(item);
 			});
 
 				// console.log("response===", response)
@@ -1002,7 +1002,7 @@
 				// 4. 발전원 => 0: MicroGrid, 1: photovoltaic, 2: wind, 3: SmallHydro (hydroelectric power for local community)
 				// 5. 발전 용량
 				// 6. ESS 용량 (PCS)
-				// 7. ESS 용량(BMS)
+				// 7. ESS 용량 (BMS)
 				// 8. DR 자원 코드 => 이름
 				// 9. Vpp 자원 코드 ( virtual power plant )  => 이름
 				// 10. 수정/조회 권한
@@ -1138,11 +1138,7 @@
 							"mData": null,
 							"mRender": function ( data, type, full, rowIndex )  {
 								// return '<button type="button" class="btn-type-sm btn-type03">알람</button>'
-								if(!isEmpty(data.alarmInfo)){
-									return '<button type="button" class="btn-type-sm btn-type03">알람</button>'
-								} else {
-									return '<button type="button" disabled class="btn-type-sm btn-type03">알람</button>'
-								}
+								return '<button type="button" class="btn-type-sm btn-type03">알람</button>'
 							},
 						},
 						{
@@ -1222,23 +1218,44 @@
 				});
 
 				$('#siteTable').on( 'click', 'td .btn-type-sm', function () {
-					console.log("alarmtable------", Date.now() );
+					// console.log("alarmtable------", Date.now() );
 					$("#loadingCircle2").show();
 					let dTable = $('#siteTable').DataTable();
 					let tr = $(this).parents().closest("tr");
 					let idx = dTable.row(tr).index();
-					let rowData = dTable.row(tr).data().alarmInfo;
-					let userOpt = {
-						url: apiHost + "/config/users",
-						type: 'get',
-						async: false,
-						data : {
-							oid: oid,
+					let sid = dTable.row(tr).data().sid;
+					let optionArr = [
+						{
+							url: apiHost + "/config/devices?"+'oid='+oid,
+							type: 'get',
+							async: true,
+							data:{
+								sid: sid
+							}
+						},
+						{
+							url: apiHost + "/config/users",
+							type: 'get',
+							async: true,
+							data : {
+								oid: oid,
+							}
 						}
-					}
-					makeAjaxCall(userOpt).then(res => {
-						rowData.sortOn("name");
-						getAlarmData(rowData, res);
+					]
+					Promise.all([ makeAjaxCall(optionArr[0]), makeAjaxCall(optionArr[1]) ]).then(res => {
+						let dvcData = res[0];
+						if(!isEmpty(dvcData)){
+							dvcData.sortOn("name");
+							getAlarmData(dvcData, res[1]);
+						} else {
+							$(this).prop("disabled", true);
+							$("#errMsg").text("해당 사이트에 디바이스 정보가 없습니다.");
+							$("#errorModal").modal("show");
+							setTimeout(function(){
+								$("#errorModal").modal("hide");
+							}, 1200);
+						}
+
 					});
 				});
 
@@ -3408,7 +3425,7 @@
 				// 	// return iStart +" to "+ iEnd;
 				// }
 			}).columns.adjust();
-			console.log("alarmtable00000", Date.now() );
+
 			setTimeout(function(){
 				$("#loadingCircle2").hide();
 				$("#addAlarmModal").modal("show");

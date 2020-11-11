@@ -472,10 +472,6 @@ html.darkmode:root {
 	white-space: nowrap;
 }
 
-.dataTables_wrapper .dataTables_scroll {
-	padding-bottom: 50px;
-}
-
 .dataTables_wrapper.fixed-width div.dataTables_scrollBody>table>tbody>tr>td {
 	vertical-align: top;
 }
