@@ -2523,7 +2523,6 @@
 	}
 
 	function getAlarmData(alarmData, userData){
-		console.log("alarmData==", alarmData);
 		const uniqDvcType = groupBy(alarmData, "device_type");
 		const uniqDvcName = Object.values(groupBy(alarmData, "name"));
 
@@ -2617,23 +2616,24 @@
 			});
 
 			// userNameStr += `<li onclick='addNewInput(this)'><a href="#">직접 입력</a></li>`;
+			if(!isEmpty(userData)){
+				userData.forEach(function(item, index){
+					let nameId = `${'${ item.name }'}` + ` / ` + `${'${ item.login_id }'}`;
+					let phoneNum = "";
+					item.contact_phone ? (phoneNum = item.contact_phone) : null;
 
-			userData.forEach(function(item, index){
-				let nameId = `${'${ item.name }'}` + ` / ` + `${'${ item.login_id }'}`;
-				let phoneNum = "";
-				item.contact_phone ? (phoneNum = item.contact_phone) : null;
-
-				userNameStr += `<li onclick="showPhoneNum(this)"><a class="chk-type" href="#">
-					<input type="checkbox" 
-						data-id="${'${ item.login_id }'}${'${ index }'}"
-						name="aDvcContactPerson${'${ index }'}" 
-						value="${'${ item.uid }'}"
-						data-uid="${'${ item.uid }'}" 
-						data-name="${'${ item.name }'}"
-						data-contact-num="${'${ phoneNum }'}" />
-					<label>${'${ nameId }'}</label>
-				</a></li>`;
-			});
+					userNameStr += `<li onclick="showPhoneNum(this)"><a class="chk-type" href="#">
+						<input type="checkbox" 
+							data-id="${'${ item.login_id }'}${'${ index }'}"
+							name="aDvcContactPerson${'${ index }'}" 
+							value="${'${ item.uid }'}"
+							data-uid="${'${ item.uid }'}" 
+							data-name="${'${ item.name }'}"
+							data-contact-num="${'${ phoneNum }'}" />
+						<label>${'${ nameId }'}</label>
+					</a></li>`;
+				});	
+			}
 
 			var alarmTable = $('#alarmTable').DataTable({
 				"aaData": entries,
