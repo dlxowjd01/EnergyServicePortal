@@ -986,8 +986,17 @@ input[type="text"] {
 	padding-right: 20px;
 }
 
-input:disabled[type="text"],
-input.disabled[type="text"] {
+.text-input-type > input[type="text"]:disabled::placeholder {
+	color: var(--white);
+}
+
+.text-input-type > input[type="text"]::placeholder {
+	color: var(--white40);
+}
+
+
+input[type="text"]:disabled,
+input[type="text"].disabled {
 	color: var(--white60);
 	cursor: not-allowed;
 }
@@ -4092,6 +4101,10 @@ li[data-alarm="urgent"]:before,
 .alarm-modal-content .dataTables_wrapper td .icon-edit {
 	margin: 0 10px;
 	background-size: 14px;
+}
+
+.alarm-modal-content .dataTables_wrapper td .icon-edit:disabled {
+	opacity: 0.3;
 }
 
 .alarm-modal-content .dataTables_wrapper td .icon-delete {
