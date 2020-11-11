@@ -551,7 +551,7 @@
 			}
 		}));
 
-		if (today.getHours() > 8 && 20 > today.getHours()) {
+		if (today.getHours() > 8 && 23 > today.getHours()) {
 			promiseUrl.push($.ajax({
 				url: apiHost + '/energy/devices',
 				type: 'GET',
@@ -747,7 +747,7 @@
 		let today = new Date()
 		  , minute = new Date();
 		minute.setMinutes(minute.getMinutes() - 1);
-		if (today.getHours() > 8 && 20 > today.getHours()) {
+		if (today.getHours() > 8 && 23 > today.getHours()) {
 			const selectedData = drTable.rows('.selected').data()
 				, usage = todayConsumption.series[0].yData;
 
@@ -1211,7 +1211,7 @@
 		date.setMinutes(0);
 		date.setSeconds(0);
 
-		for (let i = 8; i <= 20; i++) {
+		for (let i = 8; i <= 23; i++) {
 			date.setHours(i);
 			category.push(date.format('yyyyMMddHHmmss'));
 		}
