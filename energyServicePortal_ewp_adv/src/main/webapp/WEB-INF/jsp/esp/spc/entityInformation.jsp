@@ -101,6 +101,30 @@
 					className: 'dt-right'
 				},
 				{
+					title: '보증 실적',
+					data: 'guaranteed_performance',
+					render: function (data, type, full, rowIndex) {
+						let suffix = ' %';
+						if (data === '-') {
+							suffix = '';
+						}
+						return data + suffix;
+					},
+					className: 'dt-right'
+				},
+				{
+					title: '보증 확률',
+					data: 'guaranteed_probability',
+					render: function (data, type, full, rowIndex) {
+						let suffix = ' %';
+						if (data === '-') {
+							suffix = '';
+						}
+						return data + suffix;
+					},
+					className: 'dt-right'
+				},
+				{
 					title: '감소율',
 					data: 'reduction_rate',
 					render: function (data, type, full, rowIndex) {
@@ -170,7 +194,6 @@
 			$.ajax({
 				url: apiHost + '/spcs',
 				type: 'GET',
-				async: true,
 				data: {
 					oid: oid,
 					includeGens: true
@@ -215,6 +238,61 @@
 							}
 						}
 
+						let guaranteed_value = '-'; //보증값
+						let guaranteed_performance = '-'; //보증실적
+						let guaranteed_probability = '-'; //보증확률
+						if (!isEmpty(warrantyInfo['보증_방식'])) {
+							if (warrantyInfo['보증_방식'] === 'PR') {
+								guaranteed_value = isEmpty(warrantyInfo['PR_보증치']) ? '-' : warrantyInfo['PR_보증치'];
+								if (!isEmpty(maintenanceInfo) && !isEmpty(maintenanceInfo['설치_용량'])) {
+									let capacity = Number((maintenanceInfo['설치_용량']).replace(/[^\d]/g, ''));
+									let today = new Date();
+									today.setMonth(today.getMonth() - 1);
+									let before = new Date();
+									before.setMonth(before.getMonth() - 1);
+									before.setFullYear(before.getFullYear() - 1);
+									let energy = energySearch(genId, before.format('yyyyMMdd') + '000000', today.format('yyyyMMdd') + '235959');
+									let insolation = insolationSearch(genId, before.format('yyyyMMdd') + '000000', today.format('yyyyMMdd') + '235959');
+
+									guaranteed_probability = Math.round((energy / insolation / capacity * 100 / Number(guaranteed_value)) * 100) / 100;
+
+									if (!isEmpty(maintenanceInfo) && !isEmpty(maintenanceInfo['관리_운영_기간_from'])) {
+										before = new Date(maintenanceInfo['관리_운영_기간_from']);
+										energy = energySearch(genId, before.format('yyyyMMdd') + '000000', today.format('yyyyMMdd') + '235959');
+										insolation = insolationSearch(genId, before.format('yyyyMMdd') + '000000', today.format('yyyyMMdd') + '235959');
+										guaranteed_performance = Math.round((energy / insolation / capacity * 100) * 100) / 100;
+									}
+								}
+
+
+							} else if (warrantyInfo['보증_방식'] === '발전 시간') {
+								guaranteed_value = isEmpty(warrantyInfo['발전시간_보증치']) ? '-' : warrantyInfo['발전시간_보증치'];
+								if (!isEmpty(maintenanceInfo) && !isEmpty(maintenanceInfo['설치_용량'])) {
+									let capacity = Number((maintenanceInfo['설치_용량']).replace(/[^\d]/g, ''));
+									let today = new Date();
+									today.setMonth(today.getMonth() - 1);
+									let before = new Date();
+									before.setFullYear(before.getFullYear() - 1);
+									let energy = energySearch(genId, before.format('yyyyMMdd') + '000000', today.format('yyyyMMdd') + '000000');
+
+									guaranteed_probability = Math.round((energy / 365 / capacity / Number(guaranteed_value)) * 100) / 100;
+
+									if (!isEmpty(maintenanceInfo) && !isEmpty(maintenanceInfo['관리_운영_기간_from'])) {
+										before = new Date(maintenanceInfo['관리_운영_기간_from']);
+										let energy = energySearch(genId, before.format('yyyyMMdd') + '000000', today.format('yyyyMMdd') + '235959');
+										let days = Math.round((today.getTime() - before.getTime()) / 1000 / 60 / 60 / 24);
+										guaranteed_performance = Math.round((energy / days /capacity) * 100) / 100;
+									}
+								}
+							} else {
+								guaranteed_value = '-';
+								guaranteed_performance = '-';
+								guaranteed_probability = '-';
+							}
+						} else {
+							guaranteed_value = '-';
+						}
+
 						refineList.push({
 							spc_id: rowData['spc_id'],
 							spc_name: rowData['name'],
@@ -223,7 +301,9 @@
 							operation_period: termDate,
 							annual: isEmpty(warrantyInfo['현재_적용_연차']) ? '-' : warrantyInfo['현재_적용_연차'],
 							guarantee: isEmpty(warrantyInfo['보증_방식']) ? '-' : warrantyInfo['보증_방식'],
-							guaranteed_value: isEmpty(warrantyInfo['PR_보증치']) ? '-' : warrantyInfo['PR_보증치'],
+							guaranteed_value: guaranteed_value,
+							guaranteed_performance: guaranteed_performance,
+							guaranteed_probability: guaranteed_probability,
 							reduction_rate: isEmpty(warrantyInfo['보증_감소율']) ? '-' : warrantyInfo['보증_감소율'],
 							additional_amount: isEmpty(warrantyInfo['추가_보수']) ? '-' : warrantyInfo['추가_보수'],
 							operation: maintenanceInfo['운영_여부'],
@@ -263,6 +343,74 @@
 			spcEntityTable.clear().draw();
 			errorMsg(error);
 		});
+	}
+
+	const energySearch = (sid, startTime, endTime) => {
+		let resultValue = 0;
+		$.ajax({
+			url: apiHost + '/energy/sites',
+			type: 'GET',
+			async: false,
+			data: {
+				sid: sid,
+				startTime: startTime,
+				endTime: endTime,
+				interval: 'month',
+				formId: 'v2'
+			},
+			success: (result) => {
+				if (!isEmpty(result) && !isEmpty(result.data)) {
+					Object.entries(result.data).forEach(([sid, data]) => {
+						const items = data[0].items;
+						if (!isEmpty(items)) {
+							items.map(e => resultValue += e.energy);
+						}
+					});
+				} else {
+					resultValue = 0;
+				}
+			},
+			error: (error) => {
+				console.error(error);
+				resultValue = 0;
+			}
+		});
+
+		return resultValue;
+	}
+
+	const insolationSearch = (sid, startTime, endTime) => {
+		let resultValue = 0;
+		$.ajax({
+			url: apiHost + '/weather/site',
+			type: 'GET',
+			async: false,
+			data: {
+				sid: sid,
+				startTime: startTime,
+				endTime: endTime,
+				interval: 'day',
+				formId: 'v2'
+			},
+			success: (result) => {
+				if (!isEmpty(result) && !isEmpty(result.data)) {
+					Object.entries(result.data).forEach(([sid, data]) => {
+						const items = data.items;
+						if (!isEmpty(items)) {
+							items.map(e => resultValue += e.sensor_solar.irradiationPoa);
+						}
+					});
+				} else {
+					resultValue = 0;
+				}
+			},
+			error: (error) => {
+				console.error(error);
+				resultValue = 0;
+			}
+		});
+
+		return resultValue;
 	}
 
 	/**
@@ -540,13 +688,15 @@
 				<colgroup>
 					<col style="width:4%">
 					<col style="width:4%">
-					<col style="width:16%">
-					<col style="width:16%">
-					<col style="width:8%">
-					<col style="width:16%">
-					<col style="width:8%">
+					<col style="width:12%">
+					<col style="width:12%">
 					<col style="width:8%">
 					<col style="width:12%">
+					<col style="width:8%">
+					<col style="width:8%">
+					<col style="width:8%">
+					<col style="width:8%">
+					<col style="width:8%">
 					<col style="width:8%">
 				</colgroup>
 			</table>

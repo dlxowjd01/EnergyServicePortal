@@ -5594,6 +5594,14 @@ input.inp[readonly]:focus {
 	display: block;
 }
 
+.dmain-table {
+	height: 1000px;
+}
+
+.dmain-chart {
+	height: 616px;
+}
+
 .table-top {
 	color: var(--white);
 	font-size: 13px;

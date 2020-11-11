@@ -135,4 +135,17 @@ public class DashboardController {
 		return "esp/dashboard/smain";
 	}
 
+	/**
+	 * DR 대시보드
+	 *
+	 * @param request
+	 * @param session
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/dashboard/dmain.do")
+	public String dmain(HttpServletRequest request, HttpSession session, Model model) {
+		return "esp/dashboard/dmain";
+	}
+
 }
