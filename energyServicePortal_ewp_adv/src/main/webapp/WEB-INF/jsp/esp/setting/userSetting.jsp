@@ -1710,7 +1710,6 @@
 		];
 
 		let password = $(this).val();
-		console.log("password==", password.length)
 		password.length >= 8 ? $("#isEightCharLong").addClass("checked") : $("#isEightCharLong").removeClass("checked");
 
 		for (var i = 0; i < rules.length; i++) {

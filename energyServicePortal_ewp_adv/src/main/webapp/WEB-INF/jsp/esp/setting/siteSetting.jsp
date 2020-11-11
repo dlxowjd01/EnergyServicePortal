@@ -7,10 +7,9 @@
 	var deleteAlarmList = [];
 
 	$(function () {
-
 		let optionList = [
 			{
-				url: apiHost + "/config/sites?oid=" + oid,
+				url: apiHost + "/config/sites?oid=" + oid + "&addCapacity=true",
 				type: "get",
 				async: true,
 			},
@@ -20,7 +19,7 @@
 				async: true
 			},
 			{
-				url: apiHost + "/auth/me/sites",
+				url: apiHost + "/auth/me/sites?addCapacity=true",
 				type: "get",
 				async: true,
 			},
@@ -895,7 +894,7 @@
 	function refreshSiteList(){
 		let optionList = [
 			{
-				url: apiHost + "/config/sites?oid=" + oid,
+				url: apiHost + "/config/sites?oid=" + oid + "&addCapacity=true",
 				type: "get",
 				async: true,
 			},
@@ -905,7 +904,7 @@
 				async: true
 			},
 			{
-				url: apiHost + "/auth/me/sites",
+				url: apiHost + "/auth/me/sites?addCapacity=true",
 				type: "get",
 				async: true,
 			},
@@ -937,11 +936,9 @@
 		}
 
 		if(siteData) {
-			let newArr = [];
-			let essDvcArr = ["KPX_EMS", "INV_PV", "PCS_ESS", "BMS_SYS"];
-			let newName = '';
+			// let newArr = [];
 
-			siteData.map((item, index) => {
+			const newArr = siteData.map((item, index) => {
 				$("#loadingCircle").show();
 
 				if(isEmpty(item.ess) || item.ess === 0){
@@ -992,66 +989,10 @@
 				} else {
 					item.vppName = "-"
 				}
-				
-				// console.log("sid-===", item.sid);
-				let deviceOpt = {
-					url: apiHost + "/config/devices?"+'oid='+oid,
-					type: 'get',
-					async: false,
-					data:{
-						sid: item.sid
-					}
-				}
 
-				$.ajax(deviceOpt).done(function (json, textStatus, jqXHR) {
-					if(json.length > 0 ){
-						// console.log("deviceOpt===", json)
-						let genCapacity = 0;
-						let pcsCapacity = 0;
-						let bmsCapacity = 0;
-
-						// console.log("alarmInfo===", json)
-						item.alarmInfo = json;
-						$.each(json, function( index, el ){
-							let hasDevType = essDvcArr.some( x => x.includes(el.device_type));
-
-							if(hasDevType == true){
-								if( (el.device_type == "INV_PV") || (el.device_type == "KPX_EMS") ) {
-									genCapacity += el.capacity;
-								}
-								if( el.device_type == "PCS_ESS" ) {
-									pcsCapacity += el.capacity;
-								}
-								if( el.device_type == "BMS_SYS" ) {
-									bmsCapacity += el.capacity;
-								}
-							} else {
-								genCapacity = 0;
-								pcsCapacity = 0;
-								bmsCapacity = 0;
-							}
-						});
-
-						genCapacity = displayNumberFixedDecimal(genCapacity, 'W', 3, 2);
-						item.genCapacity = genCapacity[0] + " " + genCapacity[1];
-					
-						pcsCapacity = displayNumberFixedDecimal(pcsCapacity, 'W', 3, 2);
-						item.pcsCapacity = pcsCapacity[0] + " " + pcsCapacity[1];
-						
-						bmsCapacity = displayNumberFixedDecimal(bmsCapacity, 'W', 3, 2);
-						item.bmsCapacity = bmsCapacity[0] + " " + bmsCapacity[1];
-
-					} else {
-						item.genCapacity = "-";
-						item.pcsCapacity = "-";
-						item.bmsCapacity = "-";
-					}
-					item.updatedAt = new Date(item.updatedAt).format('yyyy-MM-dd HH:mm:ss');
-					newArr.push(item);
-				}).fail(function (jqXHR, textStatus, errorThrown) {
-					console.log("deviceOpt error===", jqXHR);
-					return false;
-				});
+				item.updatedAt = new Date(item.updatedAt).format('yyyy-MM-dd HH:mm:ss');
+				return item
+				// newArr.push(item);
 			});
 
 				// console.log("response===", response)
@@ -1161,15 +1102,27 @@
 						},
 						{
 							"sTitle": "발전 용량",
-							"mData": "genCapacity",
+							"mData": null,
+							"mRender": function ( data, type, full, rowIndex )  {
+								let val = displayNumberFixedDecimal(full.capacities.gen, 'W', 3, 2);
+								return (data.capacities.gen != 0) ? (val[0] + ' ' + val[1]) : "0"
+							},
 						},
 						{
 							"sTitle": "ESS 용량 (PCS)",
-							"mData": "pcsCapacity",
+							"mData": null,
+							"mRender": function ( data, type, full, rowIndex )  {
+								let val = displayNumberFixedDecimal(full.capacities.bat_pcs, 'W', 3, 2);
+								return (full.capacities.bat_pcs != 0) ? (val[0] + ' ' + val[1]) : "0"
+							},
 						},
 						{
 							"sTitle": "ESS 용량 (BMS)",
-							"mData": "bmsCapacity",
+							"mData": null,
+							"mRender": function ( data, type, full, rowIndex )  {
+								let val = displayNumberFixedDecimal(full.capacities.bat_bms, 'W', 3, 2);
+								return (full.capacities.bat_bms != 0) ? (val[0] + ' ' + val[1]) : "0"
+							},
 						},
 						{
 							"sTitle": "DR 자원 ID",
@@ -1377,153 +1330,91 @@
 		} else {
 			callback();
 		}
-		let newArr = [];
-		let essDvcArr = ["KPX_EMS", "INV_PV", "PCS_ESS", "BMS_SYS"];
 
-		// Promise.resolve(mySites.map((item, index) => {
-		mySites.map((item, index) => {
+		const newArr = mySites.map((item, index) => {
 			let found = userSites.findIndex( x => x.sid === item.sid);
 
 			if(found > -1){
-				// let matchedData = item;
-				let deviceOpt = {
-					url: apiHost + "/config/devices?"+'oid='+oid,
-					type: 'get',
-					async: false,
-					data:{
-						sid: item.sid
+				$("#loadingCircle").show();
+				item.role = userSites[found].role;
+
+				if(!isEmpty(item.location)){
+					item.location = item.location;
+				} else {
+					item.location = "-";
+				}
+
+				if(isEmpty(item.ess) || item.ess === 0){
+					item.ess == "-"
+				} else {
+					if(item.ess === 1){
+						item.ess = "DemandESS"
+					} else if(item.ess === 2){
+						item.ess = "GenerationESS"
 					}
 				}
 
-				$("#loadingCircle").show();
+				if(isEmpty(item.resource_type)){
+					item.siteType = "-"
+				} else {
 
-				$.ajax(deviceOpt).done(function (json, textStatus, jqXHR) {
-					if(json.length > 0 ){
-						let genCapacity = 0;
-						let pcsCapacity = 0;
-						let bmsCapacity = 0;
-
-						$.each(json, function( index, el ){
-							let hasDevType = essDvcArr.some( x => x.includes(el.device_type));
-
-							if(hasDevType == true){
-								if( (el.device_type == "INV_PV") || (el.device_type == "KPX_EMS") ) {
-									genCapacity += el.capacity;
-								}
-								if( el.device_type == "PCS_ESS" ) {
-									pcsCapacity += el.capacity;
-								}
-								if( el.device_type == "BMS_SYS" ) {
-									bmsCapacity += el.capacity;
-								}
-							} else {
-								genCapacity = 0;
-								pcsCapacity = 0;
-								bmsCapacity = 0;
-							}
-						});
-
-						genCapacity = displayNumberFixedDecimal(genCapacity, 'W', 3, 2, "noComma");
-						item.genCapacity = genCapacity[0] + " " + genCapacity[1];
-					
-						pcsCapacity = displayNumberFixedDecimal(pcsCapacity, 'W', 3, 2, "noComma");
-						item.pcsCapacity = pcsCapacity[0] + " " + pcsCapacity[1];
-						
-						bmsCapacity = displayNumberFixedDecimal(bmsCapacity, 'W', 3, 2, "noComma");
-						item.bmsCapacity = bmsCapacity[0] + " " + bmsCapacity[1];
+					if(item.resource_type == 0) {
+						// Demand && ESS : pair
+						item.siteType = "수요자원"
+						item.powerSource = "부하"
 					} else {
-						item.genCapacity = "-";
-						item.pcsCapacity = "-";
-						item.bmsCapacity = "-";
-					}
-
-					item.role = userSites[found].role;
-
-					if(!isEmpty(item.location)){
-						item.location = item.location;
-					} else {
-						item.location = "-";
-					}
-
-
-					if(isEmpty(item.ess) || item.ess === 0){
-						item.ess == "-"
-					} else {
-						if(item.ess === 1){
-							item.ess = "DemandESS"
-						} else if(item.ess === 2){
-							item.ess = "GenerationESS"
+						item.siteType = "발전소"
+						if(item.resource_type === 1){
+							item.powerSource = "태양광"
+						} else if(item.resource_type === 2){
+							item.powerSource = "풍력"
+						} else if(item.resource_type === 3){
+							item.powerSource = "소수력"
 						}
 					}
-
-					console.log("item.resource_type===", item.resource_type)
-					if(isEmpty(item.resource_type)){
-						item.siteType = "-"
-					} else {
-
-						if(item.resource_type == 0) {
-							// Demand && ESS : pair
-							item.siteType = "수요자원"
-							item.powerSource = "부하"
-						} else {
-							item.siteType = "발전소"
-							if(item.resource_type === 1){
-								item.powerSource = "태양광"
-							} else if(item.resource_type === 2){
-								item.powerSource = "풍력"
-							} else if(item.resource_type === 3){
-								item.powerSource = "소수력"
-							}
-						}
+				}
+				// Match name with dr_group_id
+				if(!isEmpty(item.dr_group_id)){
+					let found = vppNameData.dr_group.findIndex( x => x.dgid == item.dr_group_id);
+					if(found > -1){
+						item.drName = vppNameData.dr_group[found].name;
 					}
-					// Match name with dr_group_id
-					if(!isEmpty(item.dr_group_id)){
-						let found = vppNameData.dr_group.findIndex( x => x.dgid == item.dr_group_id);
-						if(found > -1){
-							item.drName = vppNameData.dr_group[found].name;
-						}
-					} else {
-						item.drName = "-"
+				} else {
+					item.drName = "-"
+				}
+
+				// Match name with vpp_group_id
+				if(!isEmpty(item.vpp_group_id)){
+					let found = vppNameData.vpp_group.findIndex( x => x.vgid == item.vpp_group_id);
+					if(found > -1){
+						item.vppName = vppNameData.vpp_group[found].name;
 					}
+				} else {
+					item.vppName = "-"
+				}
 
-					// Match name with vpp_group_id
-					if(!isEmpty(item.vpp_group_id)){
-						let found = vppNameData.vpp_group.findIndex( x => x.vgid == item.vpp_group_id);
-						if(found > -1){
-							item.vppName = vppNameData.vpp_group[found].name;
-						}
-					} else {
-						item.vppName = "-"
-					}
+				// if(!isEmpty(matchedData.dr_group_id)){
+				// 	item.drId = item.dr_group_id;
+				// } else {
+				// 	item.drId = "-"
+				// }
 
-					// if(!isEmpty(matchedData.dr_group_id)){
-					// 	item.drId = item.dr_group_id;
-					// } else {
-					// 	item.drId = "-"
-					// }
+				// if(!isEmpty(matchedData.vpp_group_id)){
+				// 	item.vppId = item.vpp_group_id;
+				// } else {
+				// 	item.vppId = "-"
+				// }
 
-					// if(!isEmpty(matchedData.vpp_group_id)){
-					// 	item.vppId = item.vpp_group_id;
-					// } else {
-					// 	item.vppId = "-"
-					// }
-
-					item.updatedAt = new Date(item.updatedAt).format('yyyy-MM-dd') + '&ensp;' + new Date(item.updatedAt).toLocaleTimeString();
-					newArr.push(item);
-
-				}).fail(function (jqXHR, textStatus, errorThrown) {
-					console.log("error====", jqXHR);
-					return false;
-				});
-
+				item.updatedAt = new Date(item.updatedAt).format('yyyy-MM-dd') + '&ensp;' + new Date(item.updatedAt).toLocaleTimeString();
+				return item;
 			} else {
-				newArr = [];
+				return [];
 			}
 		});
-		// })).then( res => {
-			if(newArr.length === 0 ){
-				drawEmptyTable($("#siteTable"));
-			} else {
+
+		if(newArr.length === 0 ){
+			drawEmptyTable($("#siteTable"));
+		} else {
 				// 1. 사업소 유형
 				// 2. 사업소명
 				// 3. 지역
@@ -1593,15 +1484,27 @@
 						},
 						{
 							"sTitle": "발전 용량",
-							"mData": "genCapacity",
+							"mData": null,
+							"mRender": function ( data, type, full, rowIndex )  {
+								let val = displayNumberFixedDecimal(full.capacities.gen, 'W', 3, 2);
+								return (data.capacities.gen != 0) ? (val[0] + ' ' + val[1]) : "0"
+							},
 						},
 						{
 							"sTitle": "ESS 용량 (PCS)",
-							"mData": "pcsCapacity",
+							"mData": null,
+							"mRender": function ( data, type, full, rowIndex )  {
+								let val = displayNumberFixedDecimal(full.capacities.bat_pcs, 'W', 3, 2);
+								return (full.capacities.bat_pcs != 0) ? (val[0] + ' ' + val[1]) : "0"
+							},
 						},
 						{
 							"sTitle": "ESS 용량 (BMS)",
-							"mData": "bmsCapacity",
+							"mData": null,
+							"mRender": function ( data, type, full, rowIndex )  {
+								let val = displayNumberFixedDecimal(full.capacities.bat_bms, 'W', 3, 2);
+								return (full.capacities.bat_bms != 0) ? (val[0] + ' ' + val[1]) : "0"
+							},
 						},
 						{
 							"sTitle": "DR 자원 ID",
@@ -1753,7 +1656,6 @@
 					siteReadOnlyTable.columns(2).search( this.value ).draw();
 				});
 			}
-		// });
 	}
 
 	function drawEmptyTable(target){

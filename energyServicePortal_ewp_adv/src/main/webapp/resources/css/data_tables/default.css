@@ -288,7 +288,7 @@ html.darkmode:root {
 	margin: -3px 0 0 0;
 }
 
-.dataTable td button.text-link {
+.dataTable td button.text-link:not(.clear-btn) {
 	display: flex;
 	align-self: end;
 	color: var(--white87);
