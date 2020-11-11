@@ -396,7 +396,8 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 		categories: null,
 		title: {
 			text: ''
-		}
+		},
+		showEmpty: false
 	},
 	yAxis: {
 		y: 28,

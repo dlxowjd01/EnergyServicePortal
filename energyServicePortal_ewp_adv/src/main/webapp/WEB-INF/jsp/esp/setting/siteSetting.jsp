@@ -1012,9 +1012,9 @@
 				"fixedHeader": true,
 				"bAutoWidth": true,
 				"bSearchable" : true,
-				// "scrollX": true,
+				"scrollX": true,
 				"sScrollX": "100%",
-				// "sScrollXInner": "100%",
+				"sScrollXInner": "100%",
 				"sScrollY": true,
 				"scrollY": "720px",
 				"bScrollCollapse": true,
@@ -3891,7 +3891,6 @@
 				</colgroup>
 				<thead></thead>
 				<tbody></tbody>
-
 			</table>
 		</div>
 	</div>

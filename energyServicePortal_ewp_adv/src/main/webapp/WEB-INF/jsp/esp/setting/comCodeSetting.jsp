@@ -37,193 +37,7 @@
 				$('#loadingCircle').show();
 			},
 		}
-		$.ajax(option).done(function (json, textStatus, jqXHR) {
-			let data = json;
-			let newArr = [];
 
-			Promise.all(json.map( (x, index) => {
-				// console.log("x===", x)
-				let obj = {};
-				obj.sid = x.sid;
-				obj.idx = index;
-				obj.name = x.name;
-				obj.location = x.location;
-				obj.genVol = "TBA"
-				obj.pscVol = "TBA"
-				obj.bmsVol = "TBA"
-				obj.alarmState = "TBA"
-
-				if(x.resource_type === 0) {
-					obj.powerSource = "부하"
-				} else if(x.resource_type === 1){
-					obj.powerSource = "태양광"
-				} else if(x.resource_type === 2){
-					obj.powerSource = "풍력"
-				} else if(x.resource_type === 3){
-					obj.powerSource = "소수력"
-				}
-				if(x.ess){
-					if(x.ess === 0) {
-						obj.siteType = "-"
-					} else if(x.ess === 1){
-						obj.siteType = "Demand"
-					} else if(x.ess === 2){
-						obj.siteType = "Generation"
-					}
-				} else {
-					obj.siteType = "-"
-				}
-				if(x.dr_group_id){
-					obj.drId = x.dr_group_id;
-				} else {
-					obj.drId = "-"
-				}
-				if(x.vpp_group_id){
-					obj.vppId = x.vpp_group_id;
-				} else {
-					obj.vppId = "-"
-				}
-				newArr.push(obj);
-			}));
-
-			$('#example').dataTable({
-				"aaData": newArr,
-				// "fixedHeader": true,
-				"scrollX": false,
-				"scrollY": "400px",
-				// columnDefs: [ {
-				// 	orderable: true,
-					// className: 'select-checkbox',
-					// targets:   0
-				// }],
-				// order: [[ 1, 'asc' ]],
-				// colReorder: {
-				// 	realtime: false
-				// },
-				"lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-				// "columns": [
-				// 	{
-				// 		"data":  "",
-				// 		render: function ( data, type, row ) {
-				// 			// console.log("data--", row, "type===", type)
-				// 			return '<a class="chk-type" href="javascript:void(0); onclick=""><input type="checkbox" id="' + row.idx + '" name="' + row.sid + '"><label for="' + row.idx + '"></label></a>'
-				// 		},
-				// 		className: "dt-body-center"
-				// 	},
-				// 	{ "data": "siteType" },
-				// 	{ "data": "name"},
-				// 	{ "data": "location"},
-				// 	{ "data": "powerSource" },
-				// 	{ "data": "genVol" },
-				// 	{ "data": "pscVol" },
-				// 	{ "data": "bmsVol" },
-				// 	{ "data": "drId" },
-				// 	{ "data": "vppId"},
-				// 	{ "data": "alarmState" },
-				// ],
-
-				"aoColumns": [
-					{
-						"sTitle": "",
-						"mData": "",
-						"mRender": function ( data, type, row )  {
-							// console.log('row==', row)
-							return '<a class="chk-type" href="javascript:void(0); onclick=""><input type="checkbox" id="' + row.idx + '" name="' + row.sid + '"><label for="' + row.idx + '"></label></a>'
-						},
-						"className": "dt-body-center"
-					},
-					{
-						"sTitle": "그룹 타입",
-						"mData": "siteType",
-					
-					},
-					{
-						"sTitle": "그룹명",
-						"mData": "name"
-					},
-					{
-						"sTitle": "사업소",
-						"mData":"location",
-					},
-					{
-						"sTitle": "최종 작업자",
-						"mData":"powerSource",
-					},
-					{
-						"sTitle": "비고",
-						"mData":"genVol",
-					}
-				],
-				dom: 'Bfltip',
-				// dom: 'Bfrtip',
-				buttons: [
-					{
-						extend: 'copyHtml5',
-						className: "btn-type03",
-						text: '데이터 복사',
-					},
-					{
-						extend: 'print',
-						text: '전체 인쇄',
-						className: "btn-type03",
-						exportOptions: {
-							modifier: {
-								selected: null
-							}
-						}
-					},
-					{
-						extend: 'print',
-						className: "btn-type03",
-						text: '선택 인쇄'
-					},
-					{
-						extend: 'excelHtml5',
-						className: "btn-type03",
-						text: 'Excel'
-					},
-					{
-						extend: 'csvHtml5',
-						className: "btn-type03",
-						text: 'CSV'
-					},
-					{
-						extend: 'pdfHtml5',
-						className: "btn-type03",
-						text: 'PDF',
-					},
-					{
-						text: '추가',
-						className: "btn-type fr",
-						action: function (e, node, config){
-							console.log("node===", node, "e---", e, "config===", config)
-							$('#addUserModal').modal('show');
-						}
-					}
-				],
-				select: {
-					style: 'os',
-					items: 'cell'
-				},
-				// select: true,
-				// select: {
-				// 	style:    'os',
-				// 	selector: 'td:first-child'
-				// },
-				rowCallback: function ( row, data ) {
-					// console.log("row-selected--", row)
-					// $('input.editor-active', row).prop( 'checked', data.active == 1 );
-				}
-			});
-		}).fail(function (jqXHR, textStatus, errorThrown) {
-			if(textStatus == "error"){
-				if(jqXHR.statusText == "Unauthorized" || jqXHR.status == 401){
-					$("#oldPwdErr").removeClass("hidden");
-				}
-				console.log("jqXHR==", jqXHR )
-			}
-			return false;
-		});
 	}
 
 </script>
@@ -254,25 +68,22 @@
 	<div class="col-9">
 		<div class="indiv">
 			<h2 class="tx-tit"></h2>
-			<table id="example" class="stripe">
+			<table id="comCodeTable">
+				<colgroup>
+					<col style="width:5%">
+					<col style="width:12%">
+					<col style="width:16%">
+					<col style="width:5%">
+					<col style="width:6%">
+					<col style="width:8%">
+					<col style="width:8%">
+					<col style="width:8%">
+					<col style="width:8%">
+					<col style="width:12%">
+					<col style="width:12%">
+				</colgroup>
 				<thead></thead>
-				<tbody>
-				</tbody>
-				<tfoot>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-				</tfoot>
+				<tbody></tbody>
 			</table>
 		</div>
 	</div>

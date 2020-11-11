@@ -869,6 +869,9 @@ const typeSiteDraw = async () => {
 		let maxValue = 0;
 		let emptyObj = {};
 
+		if( isEmpty(Object.values(siteGenArray)) ){
+			emptyObj.siteGenData = 0;
+		}
 		Object.entries(siteGenArray).forEach(([siteId, data]) => {
 			if(data===0){
 				if(isEmpty(emptyObj.siteGenData)) {
