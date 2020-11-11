@@ -463,6 +463,9 @@ html.darkmode:root {
     height: 0px !important; */
 }
 
+.alarm-modal-content .dataTables_wrapper .dataTables_scroll {
+	padding-bottom: 50px;
+}
 
 .dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody>table>tbody>tr>th,
 .dataTables_wrapper:not(.fixed-width) .dataTables_scroll div.dataTables_scrollBody>table>tbody>tr>td {

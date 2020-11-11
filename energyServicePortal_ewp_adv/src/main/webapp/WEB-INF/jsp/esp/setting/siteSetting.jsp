@@ -9,7 +9,7 @@
 	$(function () {
 		let optionList = [
 			{
-				url: apiHost + "/config/sites?oid=" + oid + "&addCapacity=true",
+				url: apiHost + "/config/sites?oid=" + oid + "&addCapacity=true&includeDevices=true",
 				type: "get",
 				async: true,
 				beforeSend: function (jqXHR, settings) {
@@ -941,7 +941,6 @@
 		if(siteData) {
 			const newArr = siteData.map((item, index) => {
 				$("#loadingCircle").show();
-
 				if(isEmpty(item.ess) || item.ess === 0){
 					item.ess == "-"
 				} else {
@@ -990,149 +989,130 @@
 				} else {
 					item.vppName = "-"
 				}
-
 				item.updatedAt = new Date(item.updatedAt).format('yyyy-MM-dd HH:mm:ss');
 				return item
 			});
 
-				// console.log("response===", response)
-				// 1. 사업소 유형
-				// 2. 사업소명
-				// 3. 지역
-				// 4. 발전원 => 0: MicroGrid, 1: photovoltaic, 2: wind, 3: SmallHydro (hydroelectric power for local community)
-				// 5. 발전 용량
-				// 6. ESS 용량 (PCS)
-				// 7. ESS 용량 (BMS)
-				// 8. DR 자원 코드 => 이름
-				// 9. Vpp 자원 코드 ( virtual power plant )  => 이름
-				// 10. 수정/조회 권한
-				// 11. 알람 설정
-
-				var siteTable = $('#siteTable').DataTable({
-					"aaData": newArr,
-					"destroy": true,
-					"table-layout": "fixed",
-					"fixedHeader": true,
-					"bAutoWidth": true,
-					"bSearchable" : true,
-					// "scrollX": true,
-					// "sScrollX": "100%",
-					// "sScrollXInner": "110%",
-					"sScrollY": true,
-					"scrollY": "720px",
-					"bScrollCollapse": true,
-					"pageLength": 100,
-					// "bFilter": false, disabling this option will prevent table.search()
-					"aaSorting": [[ 0, 'asc' ]],
-					"bSortable": true,
-					"order": [[ 1, 'asc' ]],
-					"aoColumnDefs": [
-						{
-							"aTargets": [ 0 ],
-							"bSortable": false,
-							"orderable": false
-						},
-						{
-							"aTargets": [ 1 ],
-							"createdCell":  function (td, cellData, rowData, row, col) {
-								// if(row.siteType == "Demand"){
-								// 	$(td).attr('data-value', 0); 
-								// } else {
-								// 	$(td).attr('data-value', 1); 
-								// }
-									// console.log("td===", td)
-								if(rowData.resType == "Demand"){
-									$(td).attr('data-value', 0);
-								} else {
-									$(td).attr('data-value', 1);
-								}
-								// rowData.deviceTypeKr = rowData.device_type_kr;
+			// console.log("response===", response)
+			// 1. 사업소 유형
+			// 2. 사업소명
+			// 3. 지역
+			// 4. 발전원 => 0: MicroGrid, 1: photovoltaic, 2: wind, 3: SmallHydro (hydroelectric power for local community)
+			// 5. 발전 용량
+			// 6. ESS 용량 (PCS)
+			// 7. ESS 용량 (BMS)
+			// 8. DR 자원 코드 => 이름
+			// 9. Vpp 자원 코드 ( virtual power plant )  => 이름
+			// 10. 수정/조회 권한
+			// 11. 알람 설정
+			var siteTable = $('#siteTable').DataTable({
+				"aaData": newArr,
+				"destroy": true,
+				"table-layout": "fixed",
+				"fixedHeader": true,
+				"bAutoWidth": true,
+				"bSearchable" : true,
+				// "scrollX": true,
+				"sScrollX": "100%",
+				// "sScrollXInner": "100%",
+				"sScrollY": true,
+				"scrollY": "720px",
+				"bScrollCollapse": true,
+				"pageLength": 100,
+				// "bFilter": false, disabling this option will prevent table.search()
+				"aaSorting": [[ 0, 'asc' ]],
+				"bSortable": true,
+				"order": [[ 1, 'asc' ]],
+				"aoColumnDefs": [
+					{
+						"aTargets": [ 0 ],
+						"bSortable": false,
+						"orderable": false
+					},
+					{
+						"aTargets": [ 1 ],
+						"createdCell":  function (td, cellData, rowData, row, col) {
+							// if(row.siteType == "Demand"){
+							// 	$(td).attr('data-value', 0); 
+							// } else {
+							// 	$(td).attr('data-value', 1); 
+							// }
+								// console.log("td===", td)
+							if(rowData.resType == "Demand"){
+								$(td).attr('data-value', 0);
+							} else {
+								$(td).attr('data-value', 1);
 							}
-						},
-						{
-							"aTargets": [ 4 ],
-							"createdCell":  function (td, cellData, rowData, row, col) {
-								if(rowData.powerSource == "부하"){
-									$(td).attr('data-value', 0);
-								} else if(rowData.powerSource == "태양광"){
-									$(td).attr('data-value', 1);
-								} else if(rowData.powerSource == "풍력"){
-									$(td).attr('data-value', 2);
-								} else if(rowData.powerSource == "소수력"){
-									$(td).attr('data-value', 3);
-								}
+							// rowData.deviceTypeKr = rowData.device_type_kr;
+						}
+					},
+					{
+						"aTargets": [ 4 ],
+						"createdCell":  function (td, cellData, rowData, row, col) {
+							if(rowData.powerSource == "부하"){
+								$(td).attr('data-value', 0);
+							} else if(rowData.powerSource == "태양광"){
+								$(td).attr('data-value', 1);
+							} else if(rowData.powerSource == "풍력"){
+								$(td).attr('data-value', 2);
+							} else if(rowData.powerSource == "소수력"){
+								$(td).attr('data-value', 3);
 							}
+						}
+					},
+					// {
+					// 	"aTargets": [ 10 ],
+					// 	"createdCell":  function (td, cellData, rowData, row, col) {
+					// 		console.log('rowData---', rowData.deviceAlarm)
+					// 	}
+					// },
+				],
+				"aoColumns": [
+					{
+						"sTitle": "",
+						"mData": null,
+						"mRender": function ( data, type, full, rowIndex )  {
+							return '<a class="chk-type" href="#"><input type="checkbox" id="' + rowIndex.row + '" name="table_checkbox"><label for="' + rowIndex.row + '"></label></a>'
 						},
-						// {
-						// 	"aTargets": [ 10 ],
-						// 	"createdCell":  function (td, cellData, rowData, row, col) {
-						// 		console.log('rowData---', rowData.deviceAlarm)
-						// 	}
-						// },
-					],
-					"aoColumns": [
-						{
-							"sTitle": "",
-							"mData": null,
-							"mRender": function ( data, type, full, rowIndex )  {
-								return '<a class="chk-type" href="#"><input type="checkbox" id="' + rowIndex.row + '" name="table_checkbox"><label for="' + rowIndex.row + '"></label></a>'
-							},
-							"className": "dt-body-center no-sorting"
+						"className": "dt-body-center no-sorting"
+					},
+					// {
+					// 	"sTitle": "순번",
+					// 	"mData": null,
+					// 	"className": "dt-center no-sorting"
+					// },
+					{
+						"sTitle": "사업소 유형",
+						"mData": "siteType",
+					},
+					{
+						"sTitle": "사업소 명",
+						"mData": "name"
+					},
+					{
+						"sTitle": "지역",
+						"mData": "location",
+					},
+					{
+						"sTitle": "발전 자원",
+						"mData": "powerSource",
+					},
+					{
+						"sTitle": "발전 용량",
+						"mData": null,
+						"mRender": function ( data, type, full, rowIndex )  {
+							let val = displayNumberFixedDecimal(full.capacities.gen, 'W', 3, 2);
+							return (data.capacities.gen != 0) ? (val[0] + ' ' + val[1]) : "0"
 						},
-						// {
-						// 	"sTitle": "순번",
-						// 	"mData": null,
-						// 	"className": "dt-center no-sorting"
-						// },
-						{
-							"sTitle": "사업소 유형",
-							"mData": "siteType",
-						},
-						{
-							"sTitle": "사업소 명",
-							"mData": "name"
-						},
-						{
-							"sTitle": "지역",
-							"mData": "location",
-						},
-						{
-							"sTitle": "발전 자원",
-							"mData": "powerSource",
-						},
-						{
-							"sTitle": "발전 용량",
-							"mData": null,
-							"mRender": function ( data, type, full, rowIndex )  {
-								let val = displayNumberFixedDecimal(full.capacities.gen, 'W', 3, 2);
-								return (data.capacities.gen != 0) ? (val[0] + ' ' + val[1]) : "0"
-							},
-						},
-						{
-							"sTitle": "ESS 용량 (PCS)",
-							"mData": null,
-							"mRender": function ( data, type, full, rowIndex )  {
-								let val = displayNumberFixedDecimal(full.capacities.bat_pcs, 'W', 3, 2);
-								return (full.capacities.bat_pcs != 0) ? (val[0] + ' ' + val[1]) : "0"
-							},
-						},
-						{
-							"sTitle": "ESS 용량 (BMS)",
-							"mData": null,
-							"mRender": function ( data, type, full, rowIndex )  {
-								let val = displayNumberFixedDecimal(full.capacities.bat_bms, 'W', 3, 2);
-								return (full.capacities.bat_bms != 0) ? (val[0] + ' ' + val[1]) : "0"
-							},
-						},
-						{
-							"sTitle": "DR 자원 ID",
-							"mData": "drName",
-							visible: false
-						},
-						{
-							"sTitle": "VPP 자원 ID",
-							"mData": "vppName",
-						},
+<<<<<<< HEAD
+					},
+					{
+						"sTitle": "ESS 용량 (PCS)",
+						"mData": null,
+						"mRender": function ( data, type, full, rowIndex )  {
+							let val = displayNumberFixedDecimal(full.capacities.bat_pcs, 'W', 3, 2);
+							return (full.capacities.bat_pcs != 0) ? (val[0] + ' ' + val[1]) : "0"
+=======
 						{
 							"sTitle": "알람 수신",
 							"mData": null,
@@ -1140,83 +1120,130 @@
 								// return '<button type="button" class="btn-type-sm btn-type03">알람</button>'
 								return '<button type="button" class="btn-type-sm btn-type03">알람</button>'
 							},
+>>>>>>> 5e91fde5bc43fe50a9e728d25122ceaa05260bcb
 						},
-						{
-							"sTitle": "업데이트 일자",
-							"mData": "updatedAt",
-						},
-					],
-					"dom": 'tip',
-					"select": {
-						style: 'single',
-						// selector: 'td input[type="checkbox"], tr'
-						selector: 'td input[type="checkbox"], td:not(:nth-of-type(11))'
 					},
-					initComplete: function(settings, json ){
-						let str = `<div id="btnGroup" class="right-end"><!--
-							--><button type="button" disabled class="btn-type03" onclick="updateModal('edit')">선택 수정</button><!--
-							--><button type="button" disabled class="btn-type03" onclick="updateModal('delete')">선택 삭제</button><!--
-						--></div>`;
-
-						let addBtnStr = `<button type="button" class="btn-type fr mb-20" onclick="updateModal('add')">추가</button>`;
-						$("#siteTable_wrapper").append($(str)).prepend($(addBtnStr));
-						if(oid.match("testkpx")){
-							let colGroup = $("#siteTable").find("colgroup col");
-							this.api().columns([8,9]).visible( false );
-							colGroup.eq(8).addClass("hidden");
-							colGroup.eq(9).addClass("hidden");
-						}
-						this.api().columns().header().each ((el, i) => {
-							if(i == 0){
-								$(el).attr ('style', 'min-width: 50px');
+					{
+						"sTitle": "ESS 용량 (BMS)",
+						"mData": null,
+						"mRender": function ( data, type, full, rowIndex )  {
+							let val = displayNumberFixedDecimal(full.capacities.bat_bms, 'W', 3, 2);
+							return (full.capacities.bat_bms != 0) ? (val[0] + ' ' + val[1]) : "0"
+						},
+					},
+					{
+						"sTitle": "DR 자원 ID",
+						"mData": "drName",
+						visible: false
+					},
+					{
+						"sTitle": "VPP 자원 ID",
+						"mData": "vppName",
+					},
+					{
+						"sTitle": "알람 수신",
+						"mData": null,
+						"mRender": function ( data, type, full, rowIndex )  {
+							// return '<button type="button" class="btn-type-sm btn-type03">알람</button>'
+							if(!isEmpty(full.devices) && full.devices.length>0){
+								return '<button type="button" class="btn-type-sm btn-type03">알람</button>'
+							} else {
+								return '<button type="button" class="btn-type-sm btn-type03" disabled>알람</button>'
 							}
-						});
+						},
 					},
-					// every time DataTables performs a draw
-					drawCallback: function (settings) {
-						$('#siteTable_wrapper').addClass('mb-28');
+					{
+						"sTitle": "업데이트 일자",
+						"mData": "updatedAt",
+					},
+				],
+				"dom": 'tip',
+				"select": {
+					style: 'single',
+					// selector: 'td input[type="checkbox"], tr'
+					selector: 'td input[type="checkbox"], td:not(:nth-of-type(11))'
+				},
+				initComplete: function(settings, json ){
+					let str = `<div id="btnGroup" class="right-end"><!--
+						--><button type="button" disabled class="btn-type03" onclick="updateModal('edit')">선택 수정</button><!--
+						--><button type="button" disabled class="btn-type03" onclick="updateModal('delete')">선택 삭제</button><!--
+					--></div>`;
+
+					let addBtnStr = `<button type="button" class="btn-type fr mb-20" onclick="updateModal('add')">추가</button>`;
+					$("#siteTable_wrapper").append($(str)).prepend($(addBtnStr));
+					if(oid.match("testkpx")){
+						let colGroup = $("#siteTable").find("colgroup col");
+						this.api().columns([8,9]).visible( false );
+						colGroup.eq(8).addClass("hidden");
+						colGroup.eq(9).addClass("hidden");
 					}
-				}).on("select", function(e, dt, type, indexes) {
-					let btn = $("#btnGroup").find(".btn-type03");
-					btn.each(function(index, element){
-						if($(this).is(":disabled")){
-							$(this).prop("disabled", false);
+					this.api().columns().header().each ((el, i) => {
+						if(i == 0){
+							$(el).attr ('style', 'min-width: 50px');
 						}
 					});
-					siteTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
-					// console.log("dt---", siteTable[ type ]( indexes ).nodes())
-				}).on("deselect", function(e, dt, type, indexes) {
-					let btn = $("#btnGroup").find(".btn-type03");
-					btn.each(function(index, element){
-						if(!$(this).is(":disabled")){
-							$(this).prop("disabled", true);
-						}
-					});
-					siteTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", false);
-					// console.log("dt---", siteTable[ type ]( indexes ).nodes())
-				}).columns.adjust().draw();
-				// siteTable.on( 'order.dt search.dt', function () {
-				// 	siteTable.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-				// 		cell.innerHTML = i+1;
-				// 		$(cell).data("id", i)
-				// 	});
-				// }).draw();
-
-				$('#siteTable').find("input:checkbox").on('click', function() {
-					var $box = $(this);
-					if ($box.is(":checked")) {
-						var group = "input:checkbox[name='" + $box.attr("name") + "']";
-						$(group).prop("checked", false);
-						$box.prop("checked", true);
-					} else {
-						$box.prop("checked", false);
+				},
+				// every time DataTables performs a draw
+				drawCallback: function (settings) {
+					$('#siteTable_wrapper').addClass('mb-28');
+				}
+			}).on("select", function(e, dt, type, indexes) {
+				let btn = $("#btnGroup").find(".btn-type03");
+				btn.each(function(index, element){
+					if($(this).is(":disabled")){
+						$(this).prop("disabled", false);
 					}
 				});
-				
-				siteTable.on( 'column-sizing.dt', function ( e, settings ) {
-					$(".dataTables_scrollHeadInner").css( "width", "100%" );
+				siteTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
+				// console.log("dt---", siteTable[ type ]( indexes ).nodes())
+			}).on("deselect", function(e, dt, type, indexes) {
+				let btn = $("#btnGroup").find(".btn-type03");
+				btn.each(function(index, element){
+					if(!$(this).is(":disabled")){
+						$(this).prop("disabled", true);
+					}
 				});
+				siteTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", false);
+				// console.log("dt---", siteTable[ type ]( indexes ).nodes())
+			}).columns.adjust().draw();
+			// siteTable.on( 'order.dt search.dt', function () {
+			// 	siteTable.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+			// 		cell.innerHTML = i+1;
+			// 		$(cell).data("id", i)
+			// 	});
+			// }).draw();
 
+			$('#siteTable').find("input:checkbox").on('click', function() {
+				var $box = $(this);
+				if ($box.is(":checked")) {
+					var group = "input:checkbox[name='" + $box.attr("name") + "']";
+					$(group).prop("checked", false);
+					$box.prop("checked", true);
+				} else {
+					$box.prop("checked", false);
+				}
+			});
+			
+			siteTable.on( 'column-sizing.dt', function ( e, settings ) {
+				$(".dataTables_scrollHeadInner").css( "width", "100%" );
+			});
+
+<<<<<<< HEAD
+			$('#siteTable').on( 'click', 'td .btn-type-sm', function () {
+				$("#loadingCircle2").show();
+				let dTable = $('#siteTable').DataTable();
+				let tr = $(this).parents().closest("tr");
+				let idx = dTable.row(tr).index();
+				let rowData = dTable.row(tr).data();
+				let userOpt = {
+					url: apiHost + "/config/users",
+					type: 'get',
+					async: true,
+					data : {
+						oid: oid,
+					}
+				}
+=======
 				$('#siteTable').on( 'click', 'td .btn-type-sm', function () {
 					// console.log("alarmtable------", Date.now() );
 					$("#loadingCircle2").show();
@@ -1258,85 +1285,93 @@
 
 					});
 				});
+>>>>>>> 5e91fde5bc43fe50a9e728d25122ceaa05260bcb
 
-				new $.fn.dataTable.Buttons( siteTable, {
-					name: 'commands',
-					"buttons": [
-						{
-							extend: 'excelHtml5',
-							className: "btn-save",
-							text: '엑셀 다운로드',
-							filename: '사업소 관리' + new Date().format('yyyyMMddHHmmss'),
-							// exportOptions: {
-							// 	modifier: {
-							// 		page: 'current'
-							// 	}
-							// },
-							customize: function( xlsx ) {
-								var sheet = xlsx.xl.worksheets['sheet1.xml'];
-								$('row:first c', sheet).attr( 's', '42' );
-								var sheet = xlsx.xl.worksheets['sheet1.xml'];
-								// var lastCol = sheet.getElementsByTagName('col').length - 1;
-								// var colRange = createCellPos( lastCol ) + '1';
-								// //Has to be done this way to avoid creation of unwanted namespace atributes.
-								// var afSerializer = new XMLSerializer();
-								// var xmlString = afSerializer.serializeToString(sheet);
-								// var parser = new DOMParser();
-								// var xmlDoc = parser.parseFromString(xmlString,'text/xml');
-								// var xlsxFilter = xmlDoc.createElementNS('http://schemas.openxmlformats.org/spreadsheetml/2006/main','autoFilter');
-								// var filterAttr = xmlDoc.createAttribute('ref');
-								// filterAttr.value = 'A1:' + colRange;
-								// xlsxFilter.setAttributeNode(filterAttr);
-								// sheet.getElementsByTagName('worksheet')[0].appendChild(xlsxFilter);
-
-							}
-						},
-						// {
-						// 	extend: 'csvHtml5',
-						// 	className: "btn-type03",
-						// 	text: 'CSV'
-						// },
-						// {
-						// 	extend: 'pdfHtml5',
-						// 	className: "btn-type03",
-						// 	text: 'PDF',
-						// },
-					],
-				});
-
-				siteTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup");
-				// siteTable.container().addClass( 'fit' );
-
-				// siteTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup").addClass("hidden inline");
-
-				$("#siteType").find("li").on( 'click', function(){
-					if(!isEmpty($(this).data("name"))){
-						filterColumn("1", $(this).data("value"));
-						let tr = $("#siteTable").find("tbody tr.selected");
-						let btn = $("#btnGroup").find(".btn-type03");
-						if(tr.length <= 0){		
-							btn.each(function(index, element){
-								$(this).prop("disabled", true);
-							});
-						} else {
-							btn.each(function(index, element){
-								$(this).prop("disabled", false);
-							});
-						}
-					} else {
-						filterColumn("1", "");
+				makeAjaxCall(userOpt).then(res => {
+					if(!isEmpty(rowData.devices) && rowData.devices.length>0){
+						let dvcInfo = rowData.devices;
+						dvcInfo.sortOn("name");
+						getAlarmData(dvcInfo, res);
 					}
 				});
-				$("#siteSearchBox").on( 'keyup search input paste cut', function(){
-					siteTable.columns(2).search( this.value ).draw();
-				});
+			});
 
-				getVppDrData(vppNameData);
-				if(!$('#loadingCircle').is(":hidden")){
-					$("#loadingCircle").hide();
+			new $.fn.dataTable.Buttons( siteTable, {
+				name: 'commands',
+				"buttons": [
+					{
+						extend: 'excelHtml5',
+						className: "btn-save",
+						text: '엑셀 다운로드',
+						filename: '사업소 관리' + new Date().format('yyyyMMddHHmmss'),
+						// exportOptions: {
+						// 	modifier: {
+						// 		page: 'current'
+						// 	}
+						// },
+						customize: function( xlsx ) {
+							var sheet = xlsx.xl.worksheets['sheet1.xml'];
+							$('row:first c', sheet).attr( 's', '42' );
+							var sheet = xlsx.xl.worksheets['sheet1.xml'];
+							// var lastCol = sheet.getElementsByTagName('col').length - 1;
+							// var colRange = createCellPos( lastCol ) + '1';
+							// //Has to be done this way to avoid creation of unwanted namespace atributes.
+							// var afSerializer = new XMLSerializer();
+							// var xmlString = afSerializer.serializeToString(sheet);
+							// var parser = new DOMParser();
+							// var xmlDoc = parser.parseFromString(xmlString,'text/xml');
+							// var xlsxFilter = xmlDoc.createElementNS('http://schemas.openxmlformats.org/spreadsheetml/2006/main','autoFilter');
+							// var filterAttr = xmlDoc.createAttribute('ref');
+							// filterAttr.value = 'A1:' + colRange;
+							// xlsxFilter.setAttributeNode(filterAttr);
+							// sheet.getElementsByTagName('worksheet')[0].appendChild(xlsxFilter);
+
+						}
+					},
+					// {
+					// 	extend: 'csvHtml5',
+					// 	className: "btn-type03",
+					// 	text: 'CSV'
+					// },
+					// {
+					// 	extend: 'pdfHtml5',
+					// 	className: "btn-type03",
+					// 	text: 'PDF',
+					// },
+				],
+			});
+
+			siteTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup");
+
+			// siteTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup").addClass("hidden inline");
+
+			$("#siteType").find("li").on( 'click', function(){
+				if(!isEmpty($(this).data("name"))){
+					filterColumn("1", $(this).data("value"));
+					let tr = $("#siteTable").find("tbody tr.selected");
+					let btn = $("#btnGroup").find(".btn-type03");
+					if(tr.length <= 0){		
+						btn.each(function(index, element){
+							$(this).prop("disabled", true);
+						});
+					} else {
+						btn.each(function(index, element){
+							$(this).prop("disabled", false);
+						});
+					}
+				} else {
+					filterColumn("1", "");
 				}
+			});
+			$("#siteSearchBox").on( 'keyup search input paste cut', function(){
+				siteTable.columns(2).search( this.value ).draw();
+			});
 
-			// });
+			getVppDrData(vppNameData);
+
+			if(!$('#loadingCircle').is(":hidden")){
+				$("#loadingCircle").hide();
+			}
 		}
 	}
 
@@ -1432,247 +1467,247 @@
 		if(newArr.length === 0 ){
 			drawEmptyTable($("#siteTable"));
 		} else {
-				// 1. 사업소 유형
-				// 2. 사업소명
-				// 3. 지역
-				// 4. 발전원 => 0: MicroGrid, 1: photovoltaic, 2: wind, 3: SmallHydro (hydroelectric power for local community)
-				// 5. 발전 용량
-				// 6. ESS 용량 (PCS)
-				// 7. ESS 용량(BMS)
-				// 8. DR 자원 코드 => 이름
-				// 9. Vpp 자원 코드 ( virtual power plant ) => 이름
-				// 10. 수정/조회 권한
-				// 11. 알람 설정
-				var siteReadOnlyTable = $('#siteTable').DataTable({
-					"aaData": newArr,
-					"table-layout": "fixed",
-					"fixedHeader": true,
-					// "autoWidth": true,
-					"bAutoWidth": true,
-					"bSearchable" : true,
-					"sScrollY": true,
-					"scrollY": "720px",
-					"bScrollCollapse": true,
-					"pageLength": 100,
-					"aaSorting": [[ 0, 'asc' ]],
-					"bSortable": true,
-					"order": [[ 1, 'asc' ]],
-					// "bFilter": false, disabling this option will prevent table.search()
-		
-					"aoColumnDefs": [
-						{
-							"aTargets": [ 0 ],
-							"bSortable": false,
-							"orderable": false
-						},
-					],
-					"aoColumns": [
-						{
-							"sTitle": "",
-							"mData": null,
-							"mRender": function ( data, type, full, rowIndex )  {
-								return '<a class="chk-type" href="#"><input type="checkbox" id="' + rowIndex.row + '" name="table_checkbox"><label for="' + rowIndex.row + '"></label></a>'
-							},
-							"className": "dt-body-center no-sorting"
-						},
-						// {
-						// 	"sTitle": "순번",
-						// 	"mData": null,
-						// 	"mRender": function ( data, type, full, rowIndex )  {
-						// 		return rowIndex.row + 1;
-						// 	},
-						// 	"className": "dt-center no-sorting"
-						// },
-						{
-							"sTitle": "사업소 유형",
-							"mData": "siteType",
-						},
-						{
-							"sTitle": "사업소 명",
-							"mData": "name"
-						},
-						{
-							"sTitle": "지역",
-							"mData": "location",
-						},
-						{
-							"sTitle": "발전 자원",
-							"mData": "powerSource",
-						},
-						{
-							"sTitle": "발전 용량",
-							"mData": null,
-							"mRender": function ( data, type, full, rowIndex )  {
-								let val = displayNumberFixedDecimal(full.capacities.gen, 'W', 3, 2);
-								return (data.capacities.gen != 0) ? (val[0] + ' ' + val[1]) : "0"
-							},
-						},
-						{
-							"sTitle": "ESS 용량 (PCS)",
-							"mData": null,
-							"mRender": function ( data, type, full, rowIndex )  {
-								let val = displayNumberFixedDecimal(full.capacities.bat_pcs, 'W', 3, 2);
-								return (full.capacities.bat_pcs != 0) ? (val[0] + ' ' + val[1]) : "0"
-							},
-						},
-						{
-							"sTitle": "ESS 용량 (BMS)",
-							"mData": null,
-							"mRender": function ( data, type, full, rowIndex )  {
-								let val = displayNumberFixedDecimal(full.capacities.bat_bms, 'W', 3, 2);
-								return (full.capacities.bat_bms != 0) ? (val[0] + ' ' + val[1]) : "0"
-							},
-						},
-						{
-							"sTitle": "DR 자원 ID",
-							"mData": "drName",
-							visible: false
-						},
-						{
-							"sTitle": "VPP 자원 ID",
-							"mData": "vppName",
-						},
-						{
-							"sTitle": "알람 설정",
-							"mData": null,
-							"mRender": function ( data, type, full, rowIndex )  {
-								return ''
-							},
-						},
-						{
-							"sTitle": "업데이트 일자",
-							"mData": "updatedAt",
-						},
-					],
-					"language": {
-						"emptyTable": "조회된 데이터가 없습니다.",
-						"zeroRecords":  "검색된 결과가 없습니다."
+			// 1. 사업소 유형
+			// 2. 사업소명
+			// 3. 지역
+			// 4. 발전원 => 0: MicroGrid, 1: photovoltaic, 2: wind, 3: SmallHydro (hydroelectric power for local community)
+			// 5. 발전 용량
+			// 6. ESS 용량 (PCS)
+			// 7. ESS 용량(BMS)
+			// 8. DR 자원 코드 => 이름
+			// 9. Vpp 자원 코드 ( virtual power plant ) => 이름
+			// 10. 수정/조회 권한
+			// 11. 알람 설정
+			var siteReadOnlyTable = $('#siteTable').DataTable({
+				"aaData": newArr,
+				"table-layout": "fixed",
+				"fixedHeader": true,
+				// "autoWidth": true,
+				"bAutoWidth": true,
+				"bSearchable" : true,
+				"sScrollY": true,
+				"scrollY": "720px",
+				"bScrollCollapse": true,
+				"pageLength": 100,
+				"aaSorting": [[ 0, 'asc' ]],
+				"bSortable": true,
+				"order": [[ 1, 'asc' ]],
+				// "bFilter": false, disabling this option will prevent table.search()
+	
+				"aoColumnDefs": [
+					{
+						"aTargets": [ 0 ],
+						"bSortable": false,
+						"orderable": false
 					},
-					"dom": 'tip',
-					"select": {
-						style: 'single',
-						// selector: 'td:first-child > a',
-						selector: 'td input[type="checkbox"], tr'
-						// selector: 'td input[type="checkbox"], td:not(:nth-of-type(11))'
+				],
+				"aoColumns": [
+					{
+						"sTitle": "",
+						"mData": null,
+						"mRender": function ( data, type, full, rowIndex )  {
+							return '<a class="chk-type" href="#"><input type="checkbox" id="' + rowIndex.row + '" name="table_checkbox"><label for="' + rowIndex.row + '"></label></a>'
+						},
+						"className": "dt-body-center no-sorting"
 					},
-					initComplete: function(settings, json ){
-						// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-						// 	cell.innerHTML = i+1;
-						// 	$(cell).data("id", i);
-						// });		
-						let str = `<div id="btnGroup" class="right-end2"><!--
-							--><button type="button" disabled class="btn-type03" onclick="updateModal('edit')">선택 수정</button><!--
-							--><button type="button" disabled class="btn-type03" onclick="updateModal('delete')">선택 삭제</button><!--
-						--></div>`;
-						$("#siteTable_wrapper").append($(str)).addClass('mb-28');
-
-						// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-						// 	cell.innerHTML = i+1;
-						// 	$(cell).data("id", i);
-						// });
-						let colGroup = $("#siteTable").find("colgroup col");
-						if(oid.match("testkpx")){
-							this.api().columns(9).visible( false );
-							colGroup.eq(9).addClass("hidden");
-						}
-
-						this.api().columns(10).visible( false );
-						colGroup.eq(10).addClass("hidden");
-
-						this.api().columns().header().each ((el, i) => {
-							if(i == 0){
-								$(el).attr ('style', 'min-width: 50px');
-							}
-						});
+					// {
+					// 	"sTitle": "순번",
+					// 	"mData": null,
+					// 	"mRender": function ( data, type, full, rowIndex )  {
+					// 		return rowIndex.row + 1;
+					// 	},
+					// 	"className": "dt-center no-sorting"
+					// },
+					{
+						"sTitle": "사업소 유형",
+						"mData": "siteType",
 					},
-				}).on("select", function(e, dt, type, indexes) {
-					let btn = $("#btnGroup").find(".btn-type03");
-					let role = null;
-					if(!isEmpty(siteReadOnlyTable.row( indexes ).data())){
-						role = siteReadOnlyTable.row( indexes ).data().role;
+					{
+						"sTitle": "사업소 명",
+						"mData": "name"
+					},
+					{
+						"sTitle": "지역",
+						"mData": "location",
+					},
+					{
+						"sTitle": "발전 자원",
+						"mData": "powerSource",
+					},
+					{
+						"sTitle": "발전 용량",
+						"mData": null,
+						"mRender": function ( data, type, full, rowIndex )  {
+							let val = displayNumberFixedDecimal(full.capacities.gen, 'W', 3, 2);
+							return (data.capacities.gen != 0) ? (val[0] + ' ' + val[1]) : "0"
+						},
+					},
+					{
+						"sTitle": "ESS 용량 (PCS)",
+						"mData": null,
+						"mRender": function ( data, type, full, rowIndex )  {
+							let val = displayNumberFixedDecimal(full.capacities.bat_pcs, 'W', 3, 2);
+							return (full.capacities.bat_pcs != 0) ? (val[0] + ' ' + val[1]) : "0"
+						},
+					},
+					{
+						"sTitle": "ESS 용량 (BMS)",
+						"mData": null,
+						"mRender": function ( data, type, full, rowIndex )  {
+							let val = displayNumberFixedDecimal(full.capacities.bat_bms, 'W', 3, 2);
+							return (full.capacities.bat_bms != 0) ? (val[0] + ' ' + val[1]) : "0"
+						},
+					},
+					{
+						"sTitle": "DR 자원 ID",
+						"mData": "drName",
+						visible: false
+					},
+					{
+						"sTitle": "VPP 자원 ID",
+						"mData": "vppName",
+					},
+					{
+						"sTitle": "알람 설정",
+						"mData": null,
+						"mRender": function ( data, type, full, rowIndex )  {
+							return ''
+						},
+					},
+					{
+						"sTitle": "업데이트 일자",
+						"mData": "updatedAt",
+					},
+				],
+				"language": {
+					"emptyTable": "조회된 데이터가 없습니다.",
+					"zeroRecords":  "검색된 결과가 없습니다."
+				},
+				"dom": 'tip',
+				"select": {
+					style: 'single',
+					// selector: 'td:first-child > a',
+					selector: 'td input[type="checkbox"], tr'
+					// selector: 'td input[type="checkbox"], td:not(:nth-of-type(11))'
+				},
+				initComplete: function(settings, json ){
+					// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+					// 	cell.innerHTML = i+1;
+					// 	$(cell).data("id", i);
+					// });		
+					let str = `<div id="btnGroup" class="right-end2"><!--
+						--><button type="button" disabled class="btn-type03" onclick="updateModal('edit')">선택 수정</button><!--
+						--><button type="button" disabled class="btn-type03" onclick="updateModal('delete')">선택 삭제</button><!--
+					--></div>`;
+					$("#siteTable_wrapper").append($(str)).addClass('mb-28');
+
+					// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+					// 	cell.innerHTML = i+1;
+					// 	$(cell).data("id", i);
+					// });
+					let colGroup = $("#siteTable").find("colgroup col");
+					if(oid.match("testkpx")){
+						this.api().columns(9).visible( false );
+						colGroup.eq(9).addClass("hidden");
 					}
 
-					if(role === 1){
-						btn.each(function(index, element){
+					this.api().columns(10).visible( false );
+					colGroup.eq(10).addClass("hidden");
+
+					this.api().columns().header().each ((el, i) => {
+						if(i == 0){
+							$(el).attr ('style', 'min-width: 50px');
+						}
+					});
+				},
+			}).on("select", function(e, dt, type, indexes) {
+				let btn = $("#btnGroup").find(".btn-type03");
+				let role = null;
+				if(!isEmpty(siteReadOnlyTable.row( indexes ).data())){
+					role = siteReadOnlyTable.row( indexes ).data().role;
+				}
+
+				if(role === 1){
+					btn.each(function(index, element){
+						if($(this).is(":disabled")){
+							$(this).prop("disabled", false);
+						}
+					});
+				} else {	
+					btn.each(function(index, element){
+						if(index == 0){
 							if($(this).is(":disabled")){
 								$(this).prop("disabled", false);
 							}
-						});
-					} else {	
-						btn.each(function(index, element){
-							if(index == 0){
-								if($(this).is(":disabled")){
-									$(this).prop("disabled", false);
-								}
-							} else {
-								$(this).prop("disabled", true);
-							}
+						} else {
+							$(this).prop("disabled", true);
+						}
 
-						});
+					});
+				}
+
+				siteReadOnlyTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
+				// console.log("dt---", siteReadOnlyTable[ type ]( indexes ).nodes())
+			}).on("deselect", function(e, dt, type, indexes) {
+				let btn = $("#btnGroup").find(".btn-type03");
+				let role = null;
+
+				if(!isEmpty(siteReadOnlyTable.row( indexes ).data())){
+					role = siteReadOnlyTable.row( indexes ).data().role;
+				}
+
+				btn.each(function(index, element){
+					if(!$(this).is(":disabled")){
+						$(this).prop("disabled", true);
 					}
-
-					siteReadOnlyTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
-					// console.log("dt---", siteReadOnlyTable[ type ]( indexes ).nodes())
-				}).on("deselect", function(e, dt, type, indexes) {
-					let btn = $("#btnGroup").find(".btn-type03");
-					let role = null;
-
-					if(!isEmpty(siteReadOnlyTable.row( indexes ).data())){
-						role = siteReadOnlyTable.row( indexes ).data().role;
-					}
-
+				});
+				if(role === 1){
 					btn.each(function(index, element){
 						if(!$(this).is(":disabled")){
 							$(this).prop("disabled", true);
 						}
 					});
-					if(role === 1){
-						btn.each(function(index, element){
+				} else {	
+					btn.each(function(index, element){
+						if(index == 0){
 							if(!$(this).is(":disabled")){
 								$(this).prop("disabled", true);
 							}
-						});
-					} else {	
-						btn.each(function(index, element){
-							if(index == 0){
-								if(!$(this).is(":disabled")){
-									$(this).prop("disabled", true);
-								}
-							}
-						});
-					}
-					siteReadOnlyTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", false);
-					// console.log("dt---", siteReadOnlyTable[ type ]( indexes ).nodes())
-				}).columns.adjust();
-
-				if(!$('#loadingCircle').is(":hidden")){
-					$("#loadingCircle").hide();
+						}
+					});
 				}
-				
-				$('#siteTable').find("input:checkbox").on('click', function() {
-					var $box = $(this);
-					if ($box.is(":checked")) {
-						var group = "input:checkbox[name='" + $box.attr("name") + "']";
-						$(group).prop("checked", false);
-						$box.prop("checked", true);
-					} else {
-						$box.prop("checked", false);
-					}
-				});
-				
-				$("#siteType").find("li").on( 'click', function(){
-					if(!isEmpty($(this).data("name"))){
-						filterColumn("1", $(this).data("value"));
-					} else {
-						filterColumn("1", "");
-					}
-				});
-				
-				$("#siteSearchBox").on( 'keyup search input paste cut', function(){
-					console.log()
-					siteReadOnlyTable.columns(2).search( this.value ).draw();
-				});
+				siteReadOnlyTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", false);
+				// console.log("dt---", siteReadOnlyTable[ type ]( indexes ).nodes())
+			}).columns.adjust();
+
+			if(!$('#loadingCircle').is(":hidden")){
+				$("#loadingCircle").hide();
 			}
+			
+			$('#siteTable').find("input:checkbox").on('click', function() {
+				var $box = $(this);
+				if ($box.is(":checked")) {
+					var group = "input:checkbox[name='" + $box.attr("name") + "']";
+					$(group).prop("checked", false);
+					$box.prop("checked", true);
+				} else {
+					$box.prop("checked", false);
+				}
+			});
+			
+			$("#siteType").find("li").on( 'click', function(){
+				if(!isEmpty($(this).data("name"))){
+					filterColumn("1", $(this).data("value"));
+				} else {
+					filterColumn("1", "");
+				}
+			});
+			
+			$("#siteSearchBox").on( 'keyup search input paste cut', function(){
+				console.log()
+				siteReadOnlyTable.columns(2).search( this.value ).draw();
+			});
+		}
 	}
 
 	function drawEmptyTable(target){
