@@ -1104,7 +1104,6 @@
 							let val = displayNumberFixedDecimal(full.capacities.gen, 'W', 3, 2);
 							return (data.capacities.gen != 0) ? (val[0] + ' ' + val[1]) : "0"
 						},
-<<<<<<< HEAD
 					},
 					{
 						"sTitle": "ESS 용량 (PCS)",
@@ -1112,15 +1111,6 @@
 						"mRender": function ( data, type, full, rowIndex )  {
 							let val = displayNumberFixedDecimal(full.capacities.bat_pcs, 'W', 3, 2);
 							return (full.capacities.bat_pcs != 0) ? (val[0] + ' ' + val[1]) : "0"
-=======
-						{
-							"sTitle": "알람 수신",
-							"mData": null,
-							"mRender": function ( data, type, full, rowIndex )  {
-								// return '<button type="button" class="btn-type-sm btn-type03">알람</button>'
-								return '<button type="button" class="btn-type-sm btn-type03">알람</button>'
-							},
->>>>>>> 5e91fde5bc43fe50a9e728d25122ceaa05260bcb
 						},
 					},
 					{
@@ -1228,7 +1218,6 @@
 				$(".dataTables_scrollHeadInner").css( "width", "100%" );
 			});
 
-<<<<<<< HEAD
 			$('#siteTable').on( 'click', 'td .btn-type-sm', function () {
 				$("#loadingCircle2").show();
 				let dTable = $('#siteTable').DataTable();
@@ -1243,49 +1232,6 @@
 						oid: oid,
 					}
 				}
-=======
-				$('#siteTable').on( 'click', 'td .btn-type-sm', function () {
-					// console.log("alarmtable------", Date.now() );
-					$("#loadingCircle2").show();
-					let dTable = $('#siteTable').DataTable();
-					let tr = $(this).parents().closest("tr");
-					let idx = dTable.row(tr).index();
-					let sid = dTable.row(tr).data().sid;
-					let optionArr = [
-						{
-							url: apiHost + "/config/devices?"+'oid='+oid,
-							type: 'get',
-							async: true,
-							data:{
-								sid: sid
-							}
-						},
-						{
-							url: apiHost + "/config/users",
-							type: 'get',
-							async: true,
-							data : {
-								oid: oid,
-							}
-						}
-					]
-					Promise.all([ makeAjaxCall(optionArr[0]), makeAjaxCall(optionArr[1]) ]).then(res => {
-						let dvcData = res[0];
-						if(!isEmpty(dvcData)){
-							dvcData.sortOn("name");
-							getAlarmData(dvcData, res[1]);
-						} else {
-							$(this).prop("disabled", true);
-							$("#errMsg").text("해당 사이트에 디바이스 정보가 없습니다.");
-							$("#errorModal").modal("show");
-							setTimeout(function(){
-								$("#errorModal").modal("hide");
-							}, 1200);
-						}
-
-					});
-				});
->>>>>>> 5e91fde5bc43fe50a9e728d25122ceaa05260bcb
 
 				makeAjaxCall(userOpt).then(res => {
 					if(!isEmpty(rowData.devices) && rowData.devices.length>0){
