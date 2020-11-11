@@ -244,8 +244,12 @@
 						if (!isEmpty(warrantyInfo['보증_방식'])) {
 							if (warrantyInfo['보증_방식'] === 'PR') {
 								guaranteed_value = isEmpty(warrantyInfo['PR_보증치']) ? '-' : warrantyInfo['PR_보증치'];
+								if (!isEmpty(warrantyInfo['보증_감소율']) && !isEmpty(warrantyInfo['현재_적용_연차'])) {
+									guaranteed_value = guaranteed_value - (Number(warrantyInfo['보증_감소율']) *  Number(warrantyInfo['현재_적용_연차']));
+								}
+
 								if (!isEmpty(maintenanceInfo) && !isEmpty(maintenanceInfo['설치_용량'])) {
-									let capacity = Number((maintenanceInfo['설치_용량']).replace(/[^\d]/g, ''));
+									let capacity = Number((maintenanceInfo['설치_용량']).replace(/[^\d]/g, '')) / 1000;
 									let today = new Date();
 									today.setMonth(today.getMonth() - 1);
 									let before = new Date();
@@ -254,7 +258,7 @@
 									let energy = energySearch(genId, before.format('yyyyMMdd') + '000000', today.format('yyyyMMdd') + '235959');
 									let insolation = insolationSearch(genId, before.format('yyyyMMdd') + '000000', today.format('yyyyMMdd') + '235959');
 
-									guaranteed_probability = Math.round((energy / insolation / capacity * 100 / Number(guaranteed_value)) * 100) / 100;
+									guaranteed_probability = Math.round(((energy / insolation / capacity * 100 / Number(guaranteed_value)) * 100) * 100) / 100;
 
 									if (!isEmpty(maintenanceInfo) && !isEmpty(maintenanceInfo['관리_운영_기간_from'])) {
 										before = new Date(maintenanceInfo['관리_운영_기간_from']);
@@ -267,20 +271,26 @@
 
 							} else if (warrantyInfo['보증_방식'] === '발전 시간') {
 								guaranteed_value = isEmpty(warrantyInfo['발전시간_보증치']) ? '-' : warrantyInfo['발전시간_보증치'];
+								if (!isEmpty(warrantyInfo['보증_감소율']) && !isEmpty(warrantyInfo['현재_적용_연차'])) {
+									guaranteed_value = Math.round((guaranteed_value - (Number(warrantyInfo['보증_감소율']) *  Number(warrantyInfo['현재_적용_연차']))) * 100) / 100;
+								}
+
 								if (!isEmpty(maintenanceInfo) && !isEmpty(maintenanceInfo['설치_용량'])) {
-									let capacity = Number((maintenanceInfo['설치_용량']).replace(/[^\d]/g, ''));
+									let capacity = Number((maintenanceInfo['설치_용량']).replace(/[^\d]/g, '')) / 1000;
 									let today = new Date();
-									today.setMonth(today.getMonth() - 1);
+									today.setDate(-1);
 									let before = new Date();
 									before.setFullYear(before.getFullYear() - 1);
 									let energy = energySearch(genId, before.format('yyyyMMdd') + '000000', today.format('yyyyMMdd') + '000000');
-
-									guaranteed_probability = Math.round((energy / 365 / capacity / Number(guaranteed_value)) * 100) / 100;
+									console.log('guaranteed_probability_' + genName, energy);
+									guaranteed_probability = Math.round(((energy / 365 / capacity / Number(guaranteed_value)) * 100) * 100) / 100;
 
 									if (!isEmpty(maintenanceInfo) && !isEmpty(maintenanceInfo['관리_운영_기간_from'])) {
 										before = new Date(maintenanceInfo['관리_운영_기간_from']);
-										let energy = energySearch(genId, before.format('yyyyMMdd') + '000000', today.format('yyyyMMdd') + '235959');
-										let days = Math.round((today.getTime() - before.getTime()) / 1000 / 60 / 60 / 24);
+										let guaranteed_date = new Date(today.getFullYear(), before.getMonth(), 1);
+										let energy = energySearch(genId, guaranteed_date.format('yyyyMMdd') + '000000', today.format('yyyyMMdd') + '235959');
+										console.log('guaranteed_performance_' + genName, energy);
+										let days = Math.round((today.getTime() - guaranteed_date.getTime()) / 1000 / 60 / 60 / 24) + 1;
 										guaranteed_performance = Math.round((energy / days /capacity) * 100) / 100;
 									}
 								}
@@ -376,7 +386,7 @@
 			}
 		});
 
-		return resultValue;
+		return Math.round(resultValue / 1000);
 	}
 
 	const insolationSearch = (sid, startTime, endTime) => {
@@ -410,7 +420,7 @@
 			}
 		});
 
-		return resultValue;
+		return Math.round(resultValue / 1000);
 	}
 
 	/**

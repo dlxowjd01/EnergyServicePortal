@@ -2,6 +2,7 @@ package kr.co.esp.common.interceptor;
 
 import kr.co.esp.common.service.EgovProperties;
 import kr.co.esp.common.util.UserUtil;
+import org.apache.poi.ss.formula.functions.T;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -183,12 +184,9 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			//Menu조회
 
 			//아래 소스 postHandler로 이동해야됨.
-			String[] systemLoc = request.getParameterValues("systemLoc");
-			String[] systemType = request.getParameterValues("systemType");
-			String systemValue = request.getParameter("systemValue");
-			String sgid = request.getParameter("sgid");
-			String vgid = request.getParameter("vgid");
-			String sid = request.getParameter("sid");
+			String[] divisionLocation = request.getParameterValues("divisionLocation");
+			String[] divisionResourceType = request.getParameterValues("divisionResourceType");
+			String divisionProc = request.getParameter("divisionProc");
 
 			parameters.clear();
 			parameters.put("includeDevices", "false");
@@ -214,7 +212,6 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			Map<String, Object> userSiteGroupSearch = get("/auth/me/groups", mode, parameters, token); //그룹화되어있는 사이트 리스트 정보
 			if (200 == (int) userSiteGroupSearch.get("code")) {
 				groupMap = (Map<String, Object>) userSiteGroupSearch.get("data");
-
 				request.setAttribute("tag_group", groupMap.get("tag_group")); //태그그룹 별
 				request.setAttribute("vpp_group", groupMap.get("vpp_group")); //중개거래그룹 별
 				request.setAttribute("dr_group", groupMap.get("dr_group")); //DR그룹 별
@@ -224,93 +221,98 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 				request.setAttribute("dr_group", null); //DR그룹 별
 			}
 
-			//sgid -- 그룹코드 vgid -- VPP코드
-			if (sgid != null && !"".equals(sgid)) {
-				session.removeAttribute("systemLoc");
-				session.removeAttribute("systemTp");
-				session.removeAttribute("sessionSiteList");
 
-				String siteName = "";
-				if (groupMap != null && !groupMap.isEmpty()) {
-					for (Map<String, Object> tagGroup : (List<Map<String, Object>>) groupMap.get("tag_group")) {
-						if (sgid.equals(tagGroup.get("sgid"))) {
-							siteName = (String) tagGroup.get("name");
-							refineList = (List<Map<String, Object>>) tagGroup.get("sites");
-							break;
-						} else {
-							continue;
-						}
-					}
-				}
+			//구분에서 사이트리스트 정제하는 부분
+			if (divisionProc != null && !"".equals(divisionProc)) {
+				session.removeAttribute("divisionLocation");
+				session.removeAttribute("divisionResourceType");
+				session.removeAttribute("sgid");
+				session.removeAttribute("vgid");
 
-				if (refineList != null && refineList.size() > 0) {
+				if ("init".equals(divisionProc)) { //초기화
 					jsonArray = new JSONArray();
-					for (Map<String, Object> refineMap : refineList) {
+					for (Map<String, Object> refineMap : siteOriginList) {
 						jsonArray.put(jsonParser(refineMap));
 					}
-				}
-
-				request.setAttribute("sgid", sgid);
-				request.setAttribute("siteName", siteName);
-				request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
-
-				session.setAttribute("sessionSiteList", jsonArray);
-				session.setAttribute("sessionSiteName", siteName);
-			} else if (vgid != null && !"".equals(vgid)) {
-				session.removeAttribute("systemLoc");
-				session.removeAttribute("systemTp");
-				session.removeAttribute("sessionSiteList");
-
-				String siteName = "";
-				if (groupMap != null && !groupMap.isEmpty()) {
-					for (Map<String, Object> tagGroup : (List<Map<String, Object>>) groupMap.get("vpp_group")) {
-						if (request.getParameter("vgid").equals(tagGroup.get("vgid"))) {
-							siteName = (String) tagGroup.get("name");
-							refineList = (List<Map<String, Object>>) tagGroup.get("sites");
-							break;
-						} else {
-							continue;
+					request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
+					request.setAttribute("siteName", "전체"); //사이트 리스트 세팅
+				} else if ("group".equals(divisionProc)) { //그룹대시보드
+					String siteName = "";
+					String sgid = request.getParameter("sgid");
+					if (groupMap != null && !groupMap.isEmpty()) {
+						for (Map<String, Object> tagGroup : (List<Map<String, Object>>) groupMap.get("tag_group")) {
+							if (sgid.equals(tagGroup.get("sgid"))) {
+								siteName = (String) tagGroup.get("name");
+								refineList = (List<Map<String, Object>>) tagGroup.get("sites");
+								break;
+							} else {
+								continue;
+							}
 						}
 					}
-				}
 
-				if (refineList != null && refineList.size() > 0) {
-					jsonArray = new JSONArray();
-					for (Map<String, Object> refineMap : refineList) {
-						jsonArray.put(jsonParser(refineMap));
-					}
-				}
-				request.setAttribute("vgid", vgid);
-				request.setAttribute("siteName", siteName);
-				request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
-
-				session.setAttribute("sessionSiteList", jsonArray);
-				session.setAttribute("sessionSiteName", siteName);
-			} else if ("/dashboard/smain.do".equals(request.getRequestURI()) && sid != null && !"".equals(sid)) {
-				String siteName = "";
-				for (Map<String, Object> site : siteOriginList) {
-					if (sid.equals(site.get("sid"))) {
-						siteName = (String) site.get("name");
+					if (refineList != null && refineList.size() > 0) {
 						jsonArray = new JSONArray();
-						jsonArray.put(jsonParser(site));
-						break;
-					} else {
-						continue;
+						for (Map<String, Object> refineMap : refineList) {
+							jsonArray.put(jsonParser(refineMap));
+						}
 					}
-				}
 
-				request.setAttribute("sid", sid);
-				request.setAttribute("siteName", siteName);
-				request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
-			} else {
-				if (systemValue != null && !"".equals(systemValue)) {
-					session.removeAttribute("sessionSiteList");
+					request.setAttribute("sgid", sgid);
+					request.setAttribute("siteName", siteName);
+					request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
 
+					session.setAttribute("sgid", sgid);
+				} else if ("vpp".equals(divisionProc)) { //
+					String siteName = "";
+					String vgid = request.getParameter("vgid");
+					if (groupMap != null && !groupMap.isEmpty()) {
+						for (Map<String, Object> tagGroup : (List<Map<String, Object>>) groupMap.get("vpp_group")) {
+							if (vgid.equals(tagGroup.get("vgid"))) {
+								siteName = (String) tagGroup.get("name");
+								refineList = (List<Map<String, Object>>) tagGroup.get("sites");
+								break;
+							} else {
+								continue;
+							}
+						}
+					}
+
+					if (refineList != null && refineList.size() > 0) {
+						jsonArray = new JSONArray();
+						for (Map<String, Object> refineMap : refineList) {
+							jsonArray.put(jsonParser(refineMap));
+						}
+					}
+
+					request.setAttribute("vgid", vgid);
+					request.setAttribute("siteName", siteName);
+					request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
+
+					session.setAttribute("vgid", vgid);
+				} else if ("site".equals(divisionProc)) {
+					String siteName = "";
+					String sid = request.getParameter("sid");
+					for (Map<String, Object> site : siteOriginList) {
+						if (sid.equals(site.get("sid"))) {
+							siteName = (String) site.get("name");
+							jsonArray = new JSONArray();
+							jsonArray.put(jsonParser(site));
+							break;
+						} else {
+							continue;
+						}
+					}
+
+					request.setAttribute("sid", sid);
+					request.setAttribute("siteName", siteName);
+					request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
+				} else {
 					//그룹 대시보드는 처음 진입시 들어오는 화면이라 파라미터가 없을경우는 사용자가 볼수있는 모든 사이트가 대상이다.
 					request.setAttribute("sgid", "");
 					request.setAttribute("siteName", "전체");
 
-					refineList = makeSiteList(siteOriginList, groupMap, session, systemLoc, systemType, systemValue);
+					refineList = makeSiteList(siteOriginList, groupMap, session, divisionLocation, divisionResourceType, divisionProc);
 
 					jsonArray = new JSONArray();
 					for (Map<String, Object> refineMap : refineList) {
@@ -318,25 +320,40 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 					}
 
 					request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
-					session.setAttribute("sessionSiteList", jsonArray);
-					session.setAttribute("sessionSiteName", "전체");
+					request.setAttribute("siteName", "전체"); //사이트 리스트 세팅
+				}
+			} else {
+				String sgid = (String) session.getAttribute("sgid");
+				String vgid = (String) session.getAttribute("vgid");
+				String sid = request.getParameter("sid");
+
+				if (sid != null && !"".equals(sid) && "/dashboard/smain.do".equals(request.getRequestURI())) {
+					String siteName = "";
+					for (Map<String, Object> site : siteOriginList) {
+						if (sid.equals(site.get("sid"))) {
+							siteName = (String) site.get("name");
+							jsonArray = new JSONArray();
+							jsonArray.put(jsonParser(site));
+							break;
+						} else {
+							continue;
+						}
+					}
+
+					request.setAttribute("sid", sid);
+					request.setAttribute("siteName", siteName);
+					request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
 				} else {
-					jsonArray = (JSONArray) session.getAttribute("sessionSiteList");
-					String siteName = (String) session.getAttribute("sessionSiteName");
-
-					if ("/dashboard/jmain.do".equals(request.getRequestURI())) {
-						session.removeAttribute("systemLoc");
-						session.removeAttribute("systemTp");
-						session.removeAttribute("sessionSiteList");
-
-						siteName = "";
+					if (sgid != null && !"".equals(sgid)) {
+						String siteName = "";
 						if (groupMap != null && !groupMap.isEmpty()) {
-							if (groupMap.get("vpp_group") != null) {
-								List<Map<String, Object>> vppList = (List<Map<String, Object>>) groupMap.get("vpp_group");
-								if (vppList.size() > 0) {
-									vgid = (String) vppList.get(0).get("vgid");
-									siteName = (String) vppList.get(0).get("name");
-									refineList = (List<Map<String, Object>>) vppList.get(0).get("sites");
+							for (Map<String, Object> tagGroup : (List<Map<String, Object>>) groupMap.get("tag_group")) {
+								if (sgid.equals(tagGroup.get("sgid"))) {
+									siteName = (String) tagGroup.get("name");
+									refineList = (List<Map<String, Object>>) tagGroup.get("sites");
+									break;
+								} else {
+									continue;
 								}
 							}
 						}
@@ -346,60 +363,59 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 							for (Map<String, Object> refineMap : refineList) {
 								jsonArray.put(jsonParser(refineMap));
 							}
-						} else {
+						}
+
+						request.setAttribute("sgid", sgid);
+						request.setAttribute("siteName", siteName);
+						request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
+
+						session.setAttribute("sgid", sgid);
+					} else if (vgid != null && !"".equals(vgid)) {
+						String siteName = "";
+						if (groupMap != null && !groupMap.isEmpty()) {
+							for (Map<String, Object> tagGroup : (List<Map<String, Object>>) groupMap.get("vpp_group")) {
+								if (vgid.equals(tagGroup.get("vgid"))) {
+									siteName = (String) tagGroup.get("name");
+									refineList = (List<Map<String, Object>>) tagGroup.get("sites");
+									break;
+								} else {
+									continue;
+								}
+							}
+						}
+
+						if (refineList != null && refineList.size() > 0) {
 							jsonArray = new JSONArray();
+							for (Map<String, Object> refineMap : refineList) {
+								jsonArray.put(jsonParser(refineMap));
+							}
 						}
 
 						request.setAttribute("vgid", vgid);
 						request.setAttribute("siteName", siteName);
 						request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
 
-						session.setAttribute("sessionSiteList", jsonArray);
-						session.setAttribute("sessionSiteName", siteName);
-					} else if ("/dashboard/smain.do".equals(request.getRequestURI())) {
-						if (siteOriginList != null && siteOriginList.size() > 0) {
-							request.setAttribute("sid", siteOriginList.get(0).get("sid"));
-							request.setAttribute("siteName", siteOriginList.get(0).get("name"));
-							jsonArray = new JSONArray();
-							jsonArray.put(jsonParser(siteOriginList.get(0)));
-							request.setAttribute("siteList", new JSONArray()); //사이트 리스트 세팅
-						} else {
-							request.setAttribute("sid", "");
-							request.setAttribute("siteName", "");
-							request.setAttribute("siteList", new JSONArray()); //사이트 리스트 세팅
-						}
+						session.setAttribute("vgid", vgid);
 					} else {
-						if (jsonArray == null) {
-							jsonArray = new JSONArray();
-							for (Map<String, Object> refineMap : siteOriginList) {
-								jsonArray.put(jsonParser(refineMap));
-							}
-						} else {
-							for (int i = 0; i < jsonArray.length(); i++) {
-								int index = i;
-								JSONObject tempObj = (JSONObject) jsonArray.get(i);
+						divisionLocation = (String[]) session.getAttribute("divisionLocation");
+						divisionResourceType = (String[]) session.getAttribute("divisionResourceType");
 
-								for (Map<String, Object> refineMap : siteOriginList) {
-									if (refineMap.get("sid").equals(tempObj.get("sid"))) {
-										jsonArray.put(index, jsonParser(refineMap));
-									}
-								}
-							}
+						//그룹 대시보드는 처음 진입시 들어오는 화면이라 파라미터가 없을경우는 사용자가 볼수있는 모든 사이트가 대상이다.
+						request.setAttribute("sgid", "");
+						request.setAttribute("siteName", "전체");
+
+						refineList = makeSiteList(siteOriginList, groupMap, session, divisionLocation, divisionResourceType, divisionProc);
+
+						jsonArray = new JSONArray();
+						for (Map<String, Object> refineMap : refineList) {
+							jsonArray.put(jsonParser(refineMap));
 						}
 
-						session.setAttribute("sessionSiteList", jsonArray);
-						session.setAttribute("sessionSiteName", siteName);
+						request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
+						request.setAttribute("siteName", "전체"); //사이트 리스트 세팅
 					}
-
-					request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
-
-					if (siteName == null || "".equals(siteName)) {
-						siteName = "전체";
-					}
-					request.setAttribute("siteName", siteName); //사이트 그룹명
 				}
 			}
-
 			parameters.clear();
 			parameters.put("types", "resource,location");
 			Map<String, Object> typeProperties = get("/config/view/properties", mode, parameters, token); //그룹화되어있는 사이트 리스트 정보
@@ -466,26 +482,26 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 	 * @param systemValue
 	 * @return
 	 */
-	public List<Map<String, Object>> makeSiteList(List<Map<String, Object>> siteOriginList, Map<String, Object> userSiteGroupSearch, HttpSession session, String[] systemLoc, String[] systemType, String systemValue) {
+	public List<Map<String, Object>> makeSiteList(List<Map<String, Object>> siteOriginList, Map<String, Object> userSiteGroupSearch, HttpSession session, String[] divisionLocation, String[] divisionResourceType, String divisionProc) {
 		List<Map<String, Object>> siteLocationList = new ArrayList<Map<String, Object>>();
 		List<Map<String, Object>> siteResourceList = new ArrayList<Map<String, Object>>();
 		List<Map<String, Object>> refineList = new ArrayList<Map<String, Object>>();
 
-		if (systemValue != null && "system".equals(systemValue)) {
-			session.setAttribute("systemLoc", systemLoc);
-			session.setAttribute("systemTp", systemType);
+		if (divisionProc != null && "change".equals(divisionProc)) {
+			session.setAttribute("divisionLocation", divisionLocation);
+			session.setAttribute("divisionResourceType", divisionResourceType);
 		}
 
-		systemLoc = (String[]) session.getAttribute("systemLoc");
-		systemType = (String[]) session.getAttribute("systemTp");
+		divisionLocation = (String[]) session.getAttribute("divisionLocation");
+		divisionResourceType = (String[]) session.getAttribute("divisionResourceType");
 
-		if ((systemLoc != null && !"".equals(systemLoc)) || (systemType != null && !"".equals(systemType))) {
+		if ((divisionLocation != null && !"".equals(divisionLocation)) || (divisionResourceType != null && !"".equals(divisionResourceType))) {
 			if (userSiteGroupSearch != null && !userSiteGroupSearch.isEmpty()) {
-				refineSiteList(systemLoc, siteLocationList, (List<Map<String, Object>>) userSiteGroupSearch.get("location_group"), "location");
-				refineSiteList(systemType, siteResourceList, (List<Map<String, Object>>) userSiteGroupSearch.get("resource_group"), "resource_type");
+				refineSiteList(divisionLocation, siteLocationList, (List<Map<String, Object>>) userSiteGroupSearch.get("location_group"), "location");
+				refineSiteList(divisionResourceType, siteResourceList, (List<Map<String, Object>>) userSiteGroupSearch.get("resource_group"), "resource_type");
 			}
 
-			if ((systemLoc != null && systemLoc.length > 0) && (systemType != null && systemType.length > 0)) {
+			if ((divisionLocation != null && divisionLocation.length > 0) && (divisionResourceType != null && divisionResourceType.length > 0)) {
 				refineList = intersection(siteLocationList, siteResourceList);
 			} else {
 				if (siteLocationList.size() > 0) {

@@ -361,19 +361,20 @@
 	}
 
 	function dashboardMove(type, key, value) {
-
 		let inp = $('input').attr('type', 'hidden').attr('name', key).attr('value', value);
+		let sysInp = $('<input>').attr('type', 'hidden').attr('name', 'divisionProc');
+		if (isEmpty(key) && isEmpty(value)) {
+			sysInp.val('init');
+		} else {
+			sysInp.val(type);
+		}
+
 		if(type == 'group') {
-			if (isEmpty(key) && isEmpty(value)) {
-				let sysInp = $('<input>').attr('type', 'hidden').attr('name', 'systemValue').val('system');
-				$('form[name="menuform"]').append(sysInp).attr('action', '/dashboard/gmain.do').submit();
-			} else {
-				$('#dashboardForm').append(inp).attr('action', '/dashboard/gmain.do').submit();
-			}
+			$('#dashboardForm').append(sysInp).append(inp).attr('action', '/dashboard/gmain.do').submit();
 		} else if(type == 'site') {
-			$('#dashboardForm').append(inp).attr('action', '/dashboard/smain.do').submit();
+			$('#dashboardForm').append(sysInp).append(inp).attr('action', '/dashboard/smain.do').submit();
 		} else if(type == 'vpp') {
-			$('#dashboardForm').append(inp).attr('action', '/dashboard/jmain.do').submit();
+			$('#dashboardForm').append(sysInp).append(inp).attr('action', '/dashboard/jmain.do').submit();
 		} else {
 			$("#errMsg").text("아직 정의 되지않은 타입입니다.");
 			$("#errorModal").modal("show");
@@ -532,7 +533,7 @@
 								<dd>
 									<a href="#">지역별</a>
 									<ul class="overflow-list">
-										<c:set var="systemLoc" value="${sessionScope.systemLoc}"/>
+										<c:set var="divisionLocation" value="${sessionScope.divisionLocation}"/>
 										<c:forEach var="loc" items="${location}" varStatus="stat">
 											<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx') or (fn:contains(sessionScope.userInfo.oid, 'testkpx') and loc.value.code eq 'kr')}">
 												<li>
@@ -540,15 +541,15 @@
 													<ul>
 														<c:forEach var="country" items="${loc.value.locations}" varStatus="countryStat">
 															<c:set var="choice" value="false" />
-															<c:if test="${fn:length(systemLoc) > 0}">
-																<c:forEach var="selLoc" items="${systemLoc}">
+															<c:if test="${fn:length(divisionLocation) > 0}">
+																<c:forEach var="selLoc" items="${divisionLocation}">
 																	<c:if test="${country.value.code eq selLoc}">
 																		<c:set var="choice" value="true" />
 																	</c:if>
 																</c:forEach>
 															</c:if>
 															<li onclick="toggleMenu(this)">
-																<input type="checkbox" name="systemLoc" id="lo${countryStat.index}" value="${country.value.code}" <c:if test="${choice eq 'true'}">checked</c:if>>
+																<input type="checkbox" name="divisionLocation" id="lo${countryStat.index}" value="${country.value.code}" <c:if test="${choice eq 'true'}">checked</c:if>>
 																<label for="lo${countryStat.index}" class="sub-item" <c:if test="${choice eq 'true'}">class="on"</c:if>>${country.value.name.kr}</label>
 															</li>
 														</c:forEach>
@@ -566,7 +567,7 @@
 								<dd>
 									<a href="#">유형별</a>
 									<ul>
-										<c:set var="systemTp" value="${sessionScope.systemTp}"/>
+										<c:set var="systemTp" value="${sessionScope.divisionResourceType}"/>
 										<c:forEach var="type" items="${resource}" varStatus="stat">
 											<c:set var="choice" value="false" />
 											<c:if test="${fn:length(systemTp) > 0}">
@@ -577,7 +578,7 @@
 												</c:forEach>
 											</c:if>
 											<li onclick="toggleMenu(this)">
-												<input type="checkbox" name="systemType" id="tp${stat.index}" value="${type.value.code}" <c:if test="${choice eq 'true'}">checked</c:if>>
+												<input type="checkbox" name="divisionResourceType" id="tp${stat.index}" value="${type.value.code}" <c:if test="${choice eq 'true'}">checked</c:if>>
 												<label for="tp${stat.index}" class="sub-item" <c:if test="${choice eq 'true'}">class="on"</c:if>>${type.value.name.kr}</label>
 											</li>
 										</c:forEach>
@@ -589,19 +590,20 @@
 				</div>
 
 				<div class="menu-btn-wrapper">
+					${systemTp}
 					<button type="button" class="btn-type03" id="systemInit">초기화</button><!--
 					--><button type="button" class="btn-type ml-12" id="systemApply">적용</button>
 				</div>
 				<script type="text/javascript">
 					$('#systemInit').on('click', function() {
-						$(':checkbox[name="systemLoc"]').prop('checked', false);
-						$(':checkbox[name="systemType"]').prop('checked', false);
-						let sysInp = $('<input>').attr('type', 'hidden').attr('name', 'systemValue').val('system');
+						$(':checkbox[name="divisionLocaction"]').prop('checked', false);
+						$(':checkbox[name="divisionResourceType"]').prop('checked', false);
+						let sysInp = $('<input>').attr('type', 'hidden').attr('name', 'divisionProc').val('init');
 						$('form[name="menuform"]').append(sysInp).attr('action', '/dashboard/gmain.do').submit();
 					});
 
 					$('#systemApply').on('click', function() {
-						let sysInp = $('<input>').attr('type', 'hidden').attr('name', 'systemValue').val('system');
+						let sysInp = $('<input>').attr('type', 'hidden').attr('name', 'divisionProc').val('change');
 						$('form[name="menuform"]').append(sysInp).attr('action', '/dashboard/gmain.do').submit();
 					});
 				</script>
