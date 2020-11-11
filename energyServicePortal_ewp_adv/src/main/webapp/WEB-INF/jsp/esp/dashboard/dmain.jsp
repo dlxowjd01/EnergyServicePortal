@@ -519,7 +519,8 @@
 	 */
 	const detailDraw = (sids, dids) => {
 		clearInterval(realTime);
-		const categories = ['08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'];
+
+		const categories = dateTimeCategory();
 		let today = new Date();
 		let beforeDate = new Date();
 		let promiseUrl = new Array();
@@ -591,8 +592,8 @@
 
 		Promise.all(promiseUrl).then(response => {
 			const beforeCategories = new Array()
-				, cbl = new Array(categories.length).fill(0)
-				, usage = new Array(categories.length).fill(0)
+				, cbl = new Array()
+				, usage = new Array()
 				, beforeUsage = new Array();
 			response.forEach((res, index) => {
 				const apiData = res.data;
@@ -603,11 +604,19 @@
 						if (!isEmpty(items)) {
 							items.forEach(item => {
 								if (res.method === undefined) {
-									const findIdx = categories.findIndex(e => Number(e) === Number(String(item.basetime).substr(8, 2)));
-									usage[findIdx] += Math.round(item.energy / 10) / 100;
+									const findIdx = usage.findIndex(e => e[0] === item.basetime);
+									if (findIdx > -1) {
+										usage[findIdx][1] += Math.round(item.energy / 10) / 100;
+									} else {
+										usage.push([item.basetime, Math.round(item.energy / 10) / 100]);
+									}
 								} else {
-									const findIdx = categories.findIndex(e => Number(e) === Number(String(item.basetime).substr(8, 2)));
-									cbl[findIdx] += Math.round(item.cbl / 10) / 100;
+									const findIdx = usage.findIndex(e => e[0] === item.basetime);
+									if (findIdx > -1) {
+										cbl[findIdx][1] += Math.round(item.cbl / 10) / 100;
+									} else {
+										cbl.push([item.basetime, Math.round(item.cbl / 10) / 100]);
+									}
 								}
 							})
 						}
@@ -628,15 +637,17 @@
 						}
 					});
 				} else if (res.interval === '5min') {
-					console.log(apiData);
 					if (!isEmpty(apiData)) {
 						Object.entries(apiData).forEach(([id, data]) => {
 							const items = data[0].items;
 							if (!isEmpty(items)) {
 								items.forEach(item => {
-									const categoryIndex = categories.findIndex(e => Number(e) === today.getHours());
-									if (isEmpty(usage[categoryIndex])) usage.push(0);
-									usage[categoryIndex] += Math.round(item.energy / 10) / 100;
+									const findIdx = usage.findIndex(e => e[0] === item.basetime);
+									if (findIdx > -1) {
+										usage[findIdx][1] += Math.round((item.energy * 12) / 10) / 100;
+									} else {
+										usage.push([item.basetime, Math.round((item.energy * 12) / 10) / 100]);
+									}
 								})
 							}
 						});
@@ -647,9 +658,7 @@
 							if (!isEmpty(data.data[0])) {
 								const activePower = data.data[0].activePower;
 								if (!isEmpty(activePower)) {
-									const categoryIndex = categories.findIndex(e => Number(e) === today.getHours());
-									if (isEmpty(usage[categoryIndex])) usage.push(0);
-									usage[categoryIndex] += Math.round(activePower / 10) / 100;
+									usage.push([Number(today.format('yyyyMMddHHmmss')), Math.round(activePower / 10) / 100]);
 								}
 							}
 						});
@@ -740,7 +749,6 @@
 		minute.setMinutes(minute.getMinutes() - 1);
 		if (today.getHours() > 8 && 20 > today.getHours()) {
 			const selectedData = drTable.rows('.selected').data()
-				, categories = todayConsumption.xAxis[0].categories
 				, usage = todayConsumption.series[0].yData;
 
 			let dids = new Array();
@@ -752,22 +760,19 @@
 				url: apiHost + '/status/raw',
 				type: 'GET',
 				data: {
-					dids: dids.toString(),
-					startTime: minute.format('yyyyMMddHHmm') + '00',
-					endTime: today.format('yyyyMMddHHmm') + '00'
+					dids: dids.toString()
 				},
 				success: (result) => {
 					if (!isEmpty(result)) {
+						let rawData = 0;
 						Object.entries(result).forEach(([id, data]) => {
 							const activePower = data.data[0].activePower;
 							if (!isEmpty(activePower)) {
-								const categoryIndex = categories.findIndex(e => Number(e) === today.getHours());
-								if (isEmpty(usage[categoryIndex])) usage.push(0);
-								usage[categoryIndex] += Math.round(activePower / 10) / 100;
+								rawData += Math.round(activePower / 10) / 100;
 							}
 						});
 
-						todayConsumption.series[0].update({ data: usage });
+						todayConsumption.series[0].addPoint([Number(today.format('yyyyMMddHHmmss')), rawData]);
 					}
 				},
 				error: (jqXHR, textStatus, errorThrown) => {
@@ -977,6 +982,7 @@
 		},
 		xAxis: [
 			{
+				type: 'datetime',
 				lineColor: 'var(--grey)',
 				tickColor: 'var(--grey)',
 				tickInterval: 1,
@@ -988,11 +994,9 @@
 				labels: {
 					align: 'center',
 					y: 27,
-					// formatter: function () {
-					// 	let temp = date31List[this.value];
-					// 	let newVal = temp.substring(0,2) + "/" + temp.substring(2,4);
-					// 	return newVal;
-					// },
+					formatter: function () {
+						return Number(String(this.value).substr(8, 2));
+					},
 					style: {
 						color: 'var(--grey)',
 						fontSize: '12px'
@@ -1052,7 +1056,7 @@
 					} else {
 						return s
 					}
-				}, '<span style="display:flex;"><b>' + this.x + ' 시</b></span>');
+				}, '<span style="display:flex;"><b>' + String(this.x).substr(8, 4).replace(/(\d{2})(\d{2})/g, '$1:$2') + '</b></span>');
 			},
 		},
 		legend: {
@@ -1197,4 +1201,20 @@
 			enabled: false
 		},
 	});
+
+	/**
+	 *
+	 */
+	const dateTimeCategory = () => {
+		const category = new Array();
+		let date = new Date();
+		date.setMinutes(0);
+		date.setSeconds(0);
+
+		for (let i = 8; i <= 20; i++) {
+			date.setHours(i);
+			category.push(date.format('yyyyMMddHHmmss'));
+		}
+		return category;
+	}
 </script>
