@@ -155,6 +155,7 @@
 </div>
 <script type="text/javascript">
 	let drTable = null;
+	let realTime = null;
 
 	$(function() {
 		drTable = $('#drTable').DataTable({
@@ -272,7 +273,7 @@
 				}
 			],
 			select: {
-				style: 'single',
+				style: 'multi',
 				selector: 'td:first-child > :checkbox, tr'
 			},
 			language: {
@@ -282,18 +283,51 @@
 			dom: 'tip',
 		}).on('select', function(e, dt, type, indexes) {
 			drTable.rows(indexes).nodes().to$().find("input[type='checkbox']").prop("checked", true);
-			const selectedData = drTable.row(indexes).data();
-			alarmInfoList(selectedData.sid);
-			detailDraw(selectedData.sid, selectedData.dids);
+			const selectedData = drTable.rows('.selected').data();
+			if (selectedData.length > 0) {
+				let sids = new Array()
+				  , dids = new Array();
+
+				for (let i = 0; i < selectedData.length; i++) {
+					sids.push(selectedData[i].sid);
+					dids = dids.concat(selectedData[i].dids);
+				}
+
+				alarmInfoList(sids);
+				detailDraw(sids, dids);
+			}
 		}).on('deselect', function(e, dt, type, indexes) {
 			drTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", false);
-			detailDestroy();
+			const selectedData = drTable.rows('.selected').data();
+			if (selectedData.length > 0) {
+				let sids = new Array()
+					, dids = new Array();
+
+				for (let i = 0; i < selectedData.length; i++) {
+					sids.push(selectedData[i].sid);
+					dids = dids.concat(selectedData[i].dids);
+				}
+
+				alarmInfoList(sids);
+				detailDraw(sids, dids);
+			} else {
+				detailDestroy();
+			}
 		}).columns.adjust().draw();
 
 		$(':radio[name="consumptionOptions"]').on('change', function() {
-			const selectedData = drTable.row('.selected').data();
-			if (!isEmpty(selectedData)) {
-				detailDraw(selectedData.drName, selectedData.sid, selectedData.dids);
+			const selectedData = drTable.rows('.selected').data();
+			if (selectedData.length > 0) {
+				let sids = new Array()
+				  , dids = new Array();
+
+				for (let i = 0; i < selectedData.length; i++) {
+					sids.push(selectedData[i].sid);
+					dids = dids.concat(selectedData[i].dids);
+				}
+
+				alarmInfoList(sids);
+				detailDraw(sids, dids);
 			}
 		});
 
@@ -483,7 +517,9 @@
 	/**
 	 * CBL알람리스트
 	 */
-	const detailDraw = (sid, dids) => {
+	const detailDraw = (sids, dids) => {
+		clearInterval(realTime);
+		const categories = ['08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'];
 		let today = new Date();
 		let beforeDate = new Date();
 		let promiseUrl = new Array();
@@ -495,7 +531,7 @@
 			url: apiHost + '/cbl/sites',
 			type: 'GET',
 			data: {
-				sids: sid,
+				sids: sids.toString(),
 				method: 'max4/5',
 				interval: 'hour',
 				startTime: today.format('yyyyMMdd') + '080000',
@@ -515,25 +551,25 @@
 		}));
 
 		if (today.getHours() > 8 && 20 > today.getHours()) {
-			for (let i = 0; i < time; i++) {
-				promiseUrl.push($.ajax({
-					url: apiHost + '/energy/devices',
-					type: 'GET',
-					data: {
-						dids: dids.toString(),
-						startTime: today.format('yyyyMMddHH') + ('0' + String(i * 5) + '00').slice(-4),
-						endTime: today.format('yyyyMMddHH') + ('0' + String((i + 1) * 5) + '00').slice(-4),
-						interval: '5min'
-					}
-				}));
-			}
+			promiseUrl.push($.ajax({
+				url: apiHost + '/energy/devices',
+				type: 'GET',
+				data: {
+					dids: dids.toString(),
+					startTime: today.format('yyyyMMddHH') + ('0000').slice(-4),
+					endTime: today.format('yyyyMMddHH') + ('0' + String(time * 5) + '00').slice(-4),
+					interval: '5min'
+				}
+			}));
 
 			if (remainder > 0) {
 				promiseUrl.push($.ajax({
 					url: apiHost + '/status/raw',
 					type: 'GET',
 					data: {
-						dids: dids.toString()
+						dids: dids.toString(),
+						startTime: today.format('yyyyMMddHH') + ('0' + String(time * 5) + '00').slice(-4),
+						endTime: today.format('yyyyMMddHH') + ('0' + String((time * 5) + remainder) + '00').slice(-4),
 					}
 				}));
 			}
@@ -551,43 +587,73 @@
 					interval: 'day'
 				}
 			}));
-		} else {}
+		}
 
 		Promise.all(promiseUrl).then(response => {
-			const categories = new Array()
-				, beforeCategories = new Array()
-				, cbl = new Array()
-				, usage = new Array()
+			const beforeCategories = new Array()
+				, cbl = new Array(categories.length).fill(0)
+				, usage = new Array(categories.length).fill(0)
 				, beforeUsage = new Array();
 			response.forEach((res, index) => {
 				const apiData = res.data;
 
 				if (res.interval === 'hour') {
-					Object.entries(apiData).forEach(([sid, data]) => {
+					Object.entries(apiData).forEach(([id, data]) => {
 						const items = data[0].items;
 						if (!isEmpty(items)) {
 							items.forEach(item => {
 								if (res.method === undefined) {
-									usage.push(Math.round(item.energy / 10) / 100);
+									const findIdx = categories.findIndex(e => Number(e) === Number(String(item.basetime).substr(8, 2)));
+									usage[findIdx] += Math.round(item.energy / 10) / 100;
 								} else {
-									categories.push(String(item.basetime).substr(8, 2));
-									cbl.push(Math.round(item.cbl / 10) / 100);
+									const findIdx = categories.findIndex(e => Number(e) === Number(String(item.basetime).substr(8, 2)));
+									cbl[findIdx] += Math.round(item.cbl / 10) / 100;
 								}
 							})
 						}
 					});
 				} else if (res.interval === 'day') {
-					Object.entries(apiData).forEach(([sid, data]) => {
+					Object.entries(apiData).forEach(([id, data]) => {
 						const items = data[0].items;
 						if (!isEmpty(items)) {
 							items.forEach(item => {
-								beforeCategories.push(String(item.basetime).substr(4, 4));
-								beforeUsage.push(Math.round(item.energy / 10) / 100);
+								const findIdx = beforeCategories.findIndex(e => e === String(item.basetime).substr(4, 4))
+								if (findIdx > -1) {
+									beforeUsage[findIdx] += Math.round(item.energy / 10) / 100;
+								} else {
+									beforeCategories.push(String(item.basetime).substr(4, 4));
+									beforeUsage.push(Math.round(item.energy / 10) / 100);
+								}
 							})
 						}
 					});
+				} else if (res.interval === '5min') {
+					console.log(apiData);
+					if (!isEmpty(apiData)) {
+						Object.entries(apiData).forEach(([id, data]) => {
+							const items = data[0].items;
+							if (!isEmpty(items)) {
+								items.forEach(item => {
+									const categoryIndex = categories.findIndex(e => Number(e) === today.getHours());
+									if (isEmpty(usage[categoryIndex])) usage.push(0);
+									usage[categoryIndex] += Math.round(item.energy / 10) / 100;
+								})
+							}
+						});
+					}
 				} else {
-
+					if (!isEmpty(res)) {
+						Object.entries(res).forEach(([id, data]) => {
+							if (!isEmpty(data.data[0])) {
+								const activePower = data.data[0].activePower;
+								if (!isEmpty(activePower)) {
+									const categoryIndex = categories.findIndex(e => Number(e) === today.getHours());
+									if (isEmpty(usage[categoryIndex])) usage.push(0);
+									usage[categoryIndex] += Math.round(activePower / 10) / 100;
+								}
+							}
+						});
+					}
 				}
 			});
 
@@ -658,10 +724,57 @@
 						beforeConsumption.series[i].remove();
 					}
 				}
+
+				realTime = setInterval(() => {
+					activePowerSearch();
+				}, 60 * 1000); //1분에 한번 현재혆황 & 알림 갱신
 			}
 		}).catch(error => {
 			errorMsg(error);
 		});
+	}
+
+	const activePowerSearch = () => {
+		let today = new Date()
+		  , minute = new Date();
+		minute.setMinutes(minute.getMinutes() - 1);
+		if (today.getHours() > 8 && 20 > today.getHours()) {
+			const selectedData = drTable.rows('.selected').data()
+				, categories = todayConsumption.xAxis[0].categories
+				, usage = todayConsumption.series[0].yData;
+
+			let dids = new Array();
+			for (let i = 0; i < selectedData.length; i++) {
+				dids = dids.concat(selectedData[i].dids);
+			}
+
+			$.ajax({
+				url: apiHost + '/status/raw',
+				type: 'GET',
+				data: {
+					dids: dids.toString(),
+					startTime: minute.format('yyyyMMddHHmm') + '00',
+					endTime: today.format('yyyyMMddHHmm') + '00'
+				},
+				success: (result) => {
+					if (!isEmpty(result)) {
+						Object.entries(result).forEach(([id, data]) => {
+							const activePower = data.data[0].activePower;
+							if (!isEmpty(activePower)) {
+								const categoryIndex = categories.findIndex(e => Number(e) === today.getHours());
+								if (isEmpty(usage[categoryIndex])) usage.push(0);
+								usage[categoryIndex] += Math.round(activePower / 10) / 100;
+							}
+						});
+
+						todayConsumption.series[0].update({ data: usage });
+					}
+				},
+				error: (jqXHR, textStatus, errorThrown) => {
+					console.error(textStatus);
+				}
+			});
+		}
 	}
 
 	/**
@@ -669,7 +782,7 @@
 	 *
 	 * @returns {Promise<void>}
 	 */
-	const alarmInfoList = async (sid) => {
+	const alarmInfoList = async (sids) => {
 		let today = new Date();
 		$('#alarmNotice').empty();
 		//알람 이력
@@ -677,7 +790,7 @@
 			url: apiHost + '/alarms',
 			type: 'GET',
 			data: {
-				sids: sid,
+				sids: sids.toString(),
 				startTime: today.format('yyyyMMdd') + '000000',
 				endTime: today.format('yyyyMMdd') + '235959',
 				confirm: false
