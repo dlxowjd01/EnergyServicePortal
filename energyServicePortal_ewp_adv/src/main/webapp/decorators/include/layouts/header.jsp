@@ -590,7 +590,6 @@
 				</div>
 
 				<div class="menu-btn-wrapper">
-					${systemTp}
 					<button type="button" class="btn-type03" id="systemInit">초기화</button><!--
 					--><button type="button" class="btn-type ml-12" id="systemApply">적용</button>
 				</div>
