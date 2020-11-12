@@ -3539,20 +3539,19 @@ li[data-alarm="urgent"]:before,
 }
 
 .modal-dialog.modal-warning .warning-text {
-	margin: 30px 10px;
+	margin: 15px 10px;
 	font-size: 16px;
+	line-height: 24px;
 }
 
 .modal-dialog.modal-warning .warning-text:before {
-	display: block;
-	float: left;
-	margin-right: 12px;
-	width: 16px;
-	height: 16px;
+	margin: 0 0 8px;
+	width: 100%;
+	height: 18px;
 	content: '';
 	background: var(--ico-warning) center no-repeat;
+	background-size: 18px;
 }
-
 
 .modal-dialog.modal-xs {
 	max-width: 300px;

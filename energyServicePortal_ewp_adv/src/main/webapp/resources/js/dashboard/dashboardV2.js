@@ -958,8 +958,9 @@ const typeSiteDraw = async () => {
 					categories: categories,
 					scrollbar: {
 						enabled: true,
+						minWidth: 40,
 						barBackgroundColor: 'var(--white40)',
-						barBorderRadius: 7,
+						barBorderRadius: 5,
 						barBorderWidth: 0,
 						buttonBackgroundColor: 'none',
 						buttonBorderWidth: 0,

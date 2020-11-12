@@ -543,7 +543,6 @@
 		var switchFlag = false;
 		var refreshMinInterval;
 		var refreshQuarterInterval;
-		var invFlag = false;
 
 		$('input[name="keyword"]').on('keyup', function(e) {
 			if (e.which == '13') {
@@ -669,7 +668,7 @@
 
 	const siteId = '${sid}';
 	const sList = JSON.parse('${siteList}');
-	console.log("sList===", sList);
+
 	const apiEnergySite = '/energy/sites';
 	const apiEnergyNowSite = '/energy/now/sites';
 	const apiEnergyDvc = '/energy/devices';
@@ -684,6 +683,7 @@
 
 	let cookie = getCookie("sMainView");
 	let first = true;
+	let invFlag = false;
 
 	var num12List = [...Array(12)].map((item, index) => {
 		return String(index + 1)
@@ -727,8 +727,7 @@
 		return path;
 	};
 
-	
-	
+
 	var pieChart = Highcharts.chart('pie_chart', {
 		chart: {
 			marginTop: 0,
@@ -1673,7 +1672,7 @@
 
 	var hourlyINVChart = Highcharts.chart('hourlyINVChart', {
 		chart: {
-			marginTop: 40,
+			marginTop: 50,
 			marginLeft: 20,
 			marginRight: 55,
 			height: 320,
@@ -2615,13 +2614,10 @@
 							}
 							
 							$.ajax(hourlyINV).done(function (json, textStatus, jqXHR) {
-								let result = flattenObject(json.data);
-								let hourList = new Array(24).fill(0);
-								let temp;
-
-								if(!isEmpty(result) && Object.values(result)[0].items.length>0){
-									temp = Object.values(result)[0].items;
-									let length = temp.length;
+								let result = Object.values(json.data).flat().filter( x => x.metering_type ===2);
+								
+								if(!isEmpty(result) && result[0].items.length>0){
+									let temp = result[0].items;
 									let colorArr = [
 										"var(--powder-blue)",
 										"var(--turquoise)",
@@ -2640,27 +2636,17 @@
 										"var(--vivid-blue)",
 									];
 
-									for(let i=0; i<length;i++){
-										let index = Number(String(temp[i].basetime).substring(8, 10));
-										let tempData = Number((Math.round(temp[i].energy / 10) / 100).toFixed(2));
-										hourList[index] = tempData;
-									}
-									
-									if( length > 5 ){				
-										hourlyINVChart.update({
-											chart: {
-												marginTop: 70
+									let hourList = [...Array(24)].map((item, index) => {
+										let found = temp.findIndex( x => Number(String(x.basetime).substring(8, 10)) == index);
+										if(found > -1){
+											let val = temp[found].energy;
+											if(!isEmpty(val)) {
+												return Number(displayNumberFixedUnit(val, 'Wh', 'kWh', 0)[0]);
 											}
-										});
-									}
-
-									if(temp.length > 12 ){	
-										let chart = $('#hourlyINVChart').highcharts();
-										chart.margin[0]= 120;
-										chart.isDirtyBox = true;
-										chart.redraw();
-										// chart.render();
-									}
+										} else {
+											return 0;
+										}
+									});
 
 									hourlyINVChart.addSeries({
 										name: val.dname,
@@ -2678,7 +2664,6 @@
 											pointStart: 10,
 										}
 									});
-
 								}
 
 							}).fail(function (jqXHR, textStatus, errorThrown) {
@@ -2686,6 +2671,19 @@
 							});
 						}
 					});
+
+					if(deviceLength >= 10){
+						hourlyINVChart.update({
+							chart: {
+								marginTop: 120
+							}
+						});
+						hourlyINVChart.isDirtyBox = true;
+						hourlyINVChart.redraw();
+					} else {
+						hourlyINVChart.isDirtyBox = true;
+						hourlyINVChart.redraw();
+					}
 
 					$.each(invType, function (i, el) {
 						invType[i] = {
@@ -3199,9 +3197,9 @@
 			}
 		} else {
 			let d = new Date();
-			let tenDaysAgo = new Date(d.getTime() - (10 * 24 * 60 * 60 * 1000));
+			let startOfDay = new Date().format('yyyyMMdd000001');
+			let yesterday = getSiteMainSchCollection('yesterday');
 			let monthAgo = new Date(d.getTime() - (30 * 24 * 60 * 60 * 1000));
-			tenDaysAgo.setHours(0, 0, 0, 0);
 			monthAgo.setHours(0, 0, 0, 0);
 
 			const dailyEnergy = {
@@ -3218,6 +3216,20 @@
 				}
 			}
 
+			const dailyEnergyToday = {
+				url: apiHost + apiEnergySite,
+				type: 'get',
+				dataType: 'json',
+				data: {
+					sid: siteId,
+					startTime: startOfDay,
+					endTime: d.format("yyyyMMddHHmmss"),
+					interval: 'hour',
+					formId: 'v2'
+				}
+			}
+
+
 			const dailyWeather = {
 				url: apiHost + apiWeather,
 				type: 'get',
@@ -3225,24 +3237,40 @@
 				data: {
 					sid: siteId,
 					startTime: monthAgo.format("yyyyMMddHHmmss"),
-					endTime: new Date().format("yyyyMMddHHmmss"),
+					endTime: yesterday.endTime,
 					interval: 'day',
 				}
 			}
 
-			$.when($.ajax(monthEnergy), $.ajax(nowMonth), $.ajax(dailyWeather), $.ajax(dailyEnergy)).done(function (result1A, result1B, result2, result3) {
+			const dailyWeatherToday = {
+				url: apiHost + apiWeather,
+				type: 'get',
+				dataType: 'json',
+				data: {
+					sid: siteId,
+					startTime: startOfDay,
+					endTime: d.format("yyyyMMddHHmmss"),
+					interval: 'hour',
+				}
+			}
+
+			$.when(
+				$.ajax(monthEnergy), $.ajax(nowMonth),
+				$.ajax(dailyWeather), $.ajax(dailyWeatherToday),
+				$.ajax(dailyEnergy), $.ajax(dailyEnergyToday))
+			.done(function (result1A, result1B, result2A, result2B, result3A, result3B) {
 				let el = $("#solarDashboard .mini .data-num");
 				let chartItems1 = [];
 				let chartItems2 = [];
 				let chartItems3 = [];
 
-				if (result1A[1] == 'success') {
+				if(result1A[1] == 'success') {
 					let v = Object.values(result1A[0].data).flat();
-					if (!isEmpty(v) && v[0]["items"].length > 0) {
+					if(!isEmpty(v) && v[0]["items"].length > 0) {
 						v.filter( item => item.metering_type == "2").map( (item, index) => { return chartItems1 = item.items }).flat();
 					}
 					
-					if (chartItems1.length > 0) {
+					if(chartItems1.length > 0) {
 						let initData = 0;
 						chartItems1.forEach((item, index) => {
 							initData += item.energy;
@@ -3261,7 +3289,7 @@
 					el.eq(4).text("-");
 				}
 
-				if (result1B[1] == 'success') {
+				if(result1B[1] == 'success') {
 					let resultNow = result1B[0].data[siteId];
 					if(!isEmpty(chartItems1)){
 						chartItems1.push({
@@ -3277,36 +3305,72 @@
 					{ energyFlag: "0" }
 				];
 
-				if (result2[1] == 'success') {
+				if(result2A[1] == 'success' && result2B[1] == 'success') {
 					let tempIrrList = [];
-					let result2Data = result2[0];
 
-					result2Data.map((item, index) => {
-						if(!isEmpty(item.sensor_solar.irradiationPoa)){
-							tempIrrList.push(item);
-							if(flagDetail[0].irrSensorFlag === "0"){
-								flagDetail[0].irrSensorFlag = "1";
+					if(!isEmpty(result2A[0]) && result2A[0].length>0) {
+						result2A[0].map((item, index) => {
+							if(!isEmpty(item.sensor_solar.irradiationPoa)){
+								tempIrrList.push(item);
+								if(flagDetail[0].irrSensorFlag === "0"){
+									flagDetail[0].irrSensorFlag = "1";
+								}
 							}
-						}
-					});
+						});
+					}
+
+					if(!isEmpty(result2B[0]) && result2B[0].length>0) {
+						let sumOfToday = 0;
+						let lastIndex = result2B[0].length-1;
+
+						result2B[0].map((item, index) => {
+							if(!isEmpty(item.sensor_solar.irradiationPoa)){
+								sumOfToday += item.sensor_solar.irradiationPoa;
+							}
+							if(index === lastIndex){
+								let tempObj = item;
+								tempObj.sensor_solar.irradiationPoa = Math.round(sumOfToday/result2B[0].length);
+								tempIrrList.push(tempObj);
+							}
+						});
+					}
 					chartItems2 = addToDateList(30, tempIrrList, "irradiationPoa");
 				}
 
-				if (result3[1] == 'success') {
-					let result3Data = result3[0].data;
-					let v = Object.values(result3[0].data).flat();
+				if(result3A[1] == 'success' && result3B[1] == 'success') {
+					let result3aData = result3A[0].data;
+					let result3bData = result3B[0].data;
+					let v1 = Object.values(result3A[0].data).flat();
+					let v2 = Object.values(result3B[0].data).flat();
+	
+					if (!isEmpty(v1) && v1[0]["items"].length > 0) {
+						result3aData = v1.filter( item => item.metering_type == "2")[0].items;
 
-					if (!isEmpty(v) && v[0]["items"].length > 0) {
-						result3Data = v.filter( item => item.metering_type == "2")[0].items;
-
-						result3Data = result3Data.map( (item, index) => {
+						result3aData = result3aData.map( (item, index) => {
 							!isEmpty(item.energy) ? item.energy = Math.round(item.energy / 1000): item.energy = 0;
 							if(flagDetail[1].energyFlag == "0"){
 								flagDetail[1].energyFlag = "1";
 							}
 							return item;
 						});
-						chartItems3 = addToDateList(30, result3Data, "energy");
+
+						if (!isEmpty(v2) && v2[0]["items"].length > 0) {
+							let sumOfToday = 0;
+							let lastIndex = v2[0]["items"].length-1;
+
+							result3bData = v2.filter( item => item.metering_type == "2")[0].items;
+
+							result3bData.map( (item, index) => {
+								sumOfToday += item.energy;
+								if(index === lastIndex){
+									let tempObj = item;
+									tempObj.energy = Math.round(sumOfToday / 1000);
+									result3aData.push(tempObj);
+								}
+							});
+						}
+
+						chartItems3 = addToDateList(30, result3aData, "energy");
 					}
 				}
 				setChargeChartData(chartItems1, chartItems2, chartItems3, flagDetail);
@@ -4500,11 +4564,10 @@
 	function addToDateList(idx, data, option){
 		let dateList = [];
 		let now = new Date();
-		now.setDate(now.getDate()-idx-1);
+		now.setDate(now.getDate()-idx);
 
 		if(!isEmpty(data)){
 			dateList = [...date31List];
-
 			data.map((item, index) => {
 				let dateNum = String(item.basetime).substring(4, 8);
 				let found = dateList.findIndex( x => x === dateNum);
