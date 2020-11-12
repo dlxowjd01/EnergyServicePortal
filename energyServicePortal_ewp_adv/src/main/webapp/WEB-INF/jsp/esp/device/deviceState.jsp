@@ -117,7 +117,7 @@
 							</div>
 							<div class="input-group inline-flex">
 								<label for="name" class="input-label asterisk">장치명</label>
-								<input class="input text-input-type" type="text" name="name" id="name" placeholder="입력" autocomplete="off">
+								<input class="input text-input-type" type="text" name="name" id="name" placeholder="입력" autocomplete="off" onkeyup="$(this).val($(this).val().replace(/\s/g, ''))">
 							</div>
 							<div class="input-group inline-flex">
 								<label for="device_type" class="input-label asterisk">장치 타입</label>

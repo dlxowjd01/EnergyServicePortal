@@ -543,8 +543,7 @@
 		var switchFlag = false;
 		var refreshMinInterval;
 		var refreshQuarterInterval;
-		// var refreshMinInterval = setInterval(getMinuteData, 60 * 1000);
-		// var refreshQuarterInterval = setInterval(getQuarterData, 15 * 60 * 1000);
+		var invFlag = false;
 
 		$('input[name="keyword"]').on('keyup', function(e) {
 			if (e.which == '13') {
@@ -563,74 +562,18 @@
 
 			if(!isEmpty(sList[0].devices) && sList[0].devices.length>0){
 				let dList = sList[0].devices;
+				
 				for(let i=0, arrLength = dList.length; i<arrLength; i++){
 					if(dList[i].device_type == "INV_PV"){
 						viewOptList.prev().prop("disabled", false);
+						invFlag = true;
 						break;
 					}
 				};
+				toggleDropdown(invFlag, viewOptList);
 			} else {
-				viewOptList.prev().prop("disabled", true);
+				toggleDropdown(invFlag, viewOptList);
 			}
-		}
-
-		if( !isEmpty( getCookie("sMainView")) ){
-			if(cookie == "2"){
-				let selected = viewOptList.find("li:last-of-type").data("name");
-				viewOptList.prev().data("value", "2").contents().get(0).nodeValue = selected;
-				$('#defaultDashboard').addClass("hidden");
-				$('#solarDashboard').removeClass("hidden");
-				setInitList('invList');
-				getMinuteData("solarDashboard");
-				getQuarterData("solarDashboard");
-
-				refreshMinInterval = setInterval(function(){
-					getMinuteData("solarDashboard");
-				}, 60 * 1000);
-
-				refreshQuarterInterval = setInterval(function(){
-					getQuarterData("solarDashboard");
-				}, 15 * 60 * 1000);
-
-			} else {
-				let selected = viewOptList.find("li:first-of-type").data("name");
-				viewOptList.prev().data("value", "1").contents().get(0).nodeValue = selected;
-				$('#defaultDashboard').removeClass("hidden");
-				$('#solarDashboard').addClass("hidden");
-				setInitList('typeList');
-				setInitList('alarmNotice');
-				getMinuteData();
-				getQuarterData();
-
-				refreshMinInterval = setInterval(getMinuteData, 60 * 1000);
-				refreshQuarterInterval = setInterval(getQuarterData, 15 * 60 * 1000);
-			}			
-		} else {
-			if(viewOptList.prev().data("value") == "2"){
-				$('#defaultDashboard').addClass("hidden");
-				$('#solarDashboard').removeClass("hidden");
-				setInitList('invList');
-				getMinuteData("solarDashboard");
-				getQuarterData("solarDashboard");
-				refreshMinInterval = setInterval(function(){
-					getMinuteData("solarDashboard");
-				}, 60 * 1000);
-
-				refreshQuarterInterval = setInterval(function(){
-					getQuarterData("solarDashboard");
-				}, 15 * 60 * 1000);
-			} else {
-				let selected = viewOptList.find("li:first-of-type").data("name");
-				viewOptList.prev().contents().get(0).nodeValue = selected;
-				$('#defaultDashboard').removeClass("hidden");
-				$('#solarDashboard').addClass("hidden");
-				setInitList('typeList');
-				setInitList('alarmNotice');
-				getMinuteData();
-				getQuarterData();
-				refreshMinInterval = setInterval(getMinuteData, 60 * 1000);
-				refreshQuarterInterval = setInterval(getQuarterData, 15 * 60 * 1000);
-			}	
 		}
 
 		getWeatherData();
@@ -726,7 +669,7 @@
 
 	const siteId = '${sid}';
 	const sList = JSON.parse('${siteList}');
-	
+	console.log("sList===", sList);
 	const apiEnergySite = '/energy/sites';
 	const apiEnergyNowSite = '/energy/now/sites';
 	const apiEnergyDvc = '/energy/devices';
@@ -741,7 +684,6 @@
 
 	let cookie = getCookie("sMainView");
 	let first = true;
-	// let invFlag = true;
 
 	var num12List = [...Array(12)].map((item, index) => {
 		return String(index + 1)
@@ -2161,6 +2103,65 @@
 		}
 	}
 
+	function toggleDropdown(invFlag, viewOptList){
+
+		if( !isEmpty( getCookie("sMainView")) ){
+			if(cookie == "2" && invFlag == true){
+				let selected = viewOptList.find("li:last-of-type").data("name");
+				viewOptList.prev().prop("disabled", false).data("value", "2").contents().get(0).nodeValue = selected;
+				$('#defaultDashboard').addClass("hidden");
+				$('#solarDashboard').removeClass("hidden");
+				setInitList('invList');
+				getMinuteData("solarDashboard");
+				getQuarterData("solarDashboard");
+
+				refreshMinInterval = setInterval(function(){
+					getMinuteData("solarDashboard");
+				}, 60 * 1000);
+
+				refreshQuarterInterval = setInterval(function(){
+					getQuarterData("solarDashboard");
+				}, 15 * 60 * 1000);
+
+			} else {
+				let selected = viewOptList.find("li:first-of-type").data("name");
+				viewOptList.prev().data("value", "1").contents().get(0).nodeValue = selected;
+				if(invFlag == true){
+					viewOptList.prev().prop("disabled", false);
+				} else {
+					viewOptList.prev().prop("disabled", true);
+				}
+				$('#defaultDashboard').removeClass("hidden");
+				$('#solarDashboard').addClass("hidden");
+				setInitList('typeList');
+				setInitList('alarmNotice');
+				getMinuteData();
+				getQuarterData();
+
+				refreshMinInterval = setInterval(getMinuteData, 60 * 1000);
+				refreshQuarterInterval = setInterval(getQuarterData, 15 * 60 * 1000);
+			}			
+		} else {
+			// NO cookie has been set
+			let selected = viewOptList.find("li:first-of-type").data("name");
+			viewOptList.prev().contents().get(0).nodeValue = selected;
+			if(invFlag == true){
+				viewOptList.prev().prop("disabled", false);
+			} else {
+				viewOptList.prev().prop("disabled", true);
+			}
+			$('#defaultDashboard').removeClass("hidden");
+			$('#solarDashboard').addClass("hidden");
+			setInitList('typeList');
+			setInitList('alarmNotice');
+			getMinuteData();
+			getQuarterData();
+			refreshMinInterval = setInterval(getMinuteData, 60 * 1000);
+			refreshQuarterInterval = setInterval(getQuarterData, 15 * 60 * 1000);
+		}
+
+	}
+
 	function getMinuteData(option) {
 		if(isEmpty(option)){
 			getAlarmInfo();
@@ -2889,7 +2890,6 @@
 			});
 		}
 	}
-
 
 	function deviceSearch(dname, operation) {
 		let searchBoolean = true;
@@ -4077,7 +4077,7 @@
 			Promise.all(promises).then(res => {
 				let el = $("#solarDashboard .mini .data-num");
 
-				if(!isEmpty(res[0])){
+				if(!isEmpty(res[0]) && !isEmpty(res[0].INV_PV)){
 					if(typeof res[0].INV_PV.activePower == "number"){
 						let activePower = displayNumberFixedUnit(res[0].INV_PV.activePower, 'W', 'kW', 1);
 						el.eq(0).text(activePower[0]);
@@ -4474,7 +4474,6 @@
 
 		return rtnClass;
 	}
-
 
 	function rtnDropdown (id) {
 		if (id == 'chartType') {

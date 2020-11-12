@@ -72,9 +72,9 @@
 <script type="text/javascript" src="/js/data_tables/extensions/rowGroup.js"></script>
 
 <script type="text/javascript">
-	// role 1: 시스템관리자, 2: 일반
+	// role => 1: 시스템관리자, 2: 일반
 	const role = '${sessionScope.userInfo.role}';
-	// task 0: 일반, 1:사무수탁, 2:자산운용, 3:출금관리, 4:사업주
+	// task => 0: 일반, 1:사무수탁, 2:자산운용, 3:출금관리, 4:사업주
 	const task = '${sessionScope.userInfo.task}';
 	const oid = '${sessionScope.userInfo.oid}';
 	const loginId = '${sessionScope.userInfo.login_id}';
