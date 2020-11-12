@@ -189,7 +189,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			String divisionProc = request.getParameter("divisionProc");
 
 			parameters.clear();
-			parameters.put("includeDevices", "false");
+			parameters.put("includeDevices", "true");
 
 			Map<String, Object> siteMap = get("/auth/me/sites", mode, parameters, token); //사이트 리스트 정보
 			if (200 == (int) siteMap.get("code")) {
@@ -514,6 +514,12 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			}
 		} else {
 			refineList = siteOriginList;
+		}
+
+		if (refineList.size() > 0) {
+			for (int i = 0; i < refineList.size(); i++) {
+				refineList.get(i).remove("devices");
+			}
 		}
 
 		return refineList;
