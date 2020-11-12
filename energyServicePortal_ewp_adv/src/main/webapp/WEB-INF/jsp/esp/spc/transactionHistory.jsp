@@ -72,22 +72,22 @@
 				},
 				{
 					title: '설명1',
-					data: 'accountFrom1',
+					data: 'accountDesc1',
 					className: 'dt-center'
 				},
 				{
 					title: '설명2',
-					data: 'accountFrom2',
+					data: 'accountDesc2',
 					className: 'dt-center'
 				},
 				{
 					title: '설명3',
-					data: 'accountFrom3',
+					data: 'accountDesc3',
 					className: 'dt-center'
 				},
 				{
 					title: '설명4',
-					data: 'accountFrom4',
+					data: 'accountDesc4',
 					className: 'dt-center'
 				}
 			],
@@ -278,8 +278,6 @@
 			newData.map(item => {
 				const found = spcInfoArr.findIndex(x => x.spc_id === item.spc_id);
 
-				const accountFrom = [...item.account_from.split('/')];
-
 				refineList.push({
 					spcId: item.spc_id,
 					spcName: spcInfoArr[found].spc_name,
@@ -287,10 +285,10 @@
 					accountInfo: item.bank_name + ' ' + item.account_no + '(' +  item.account_owner + ')',
 					kind: item.kind,
 					amount: item.amount,
-					accountFrom1: isEmpty(accountFrom[0]) ? '-' : accountFrom[0],
-					accountFrom2: isEmpty(accountFrom[1]) ? '-' : accountFrom[1],
-					accountFrom3: isEmpty(accountFrom[2]) ? '-' : accountFrom[2],
-					accountFrom4: isEmpty(accountFrom[3]) ? '-' : accountFrom[3],
+					accountDesc1: isEmpty(item.account_desc1) ? '-' : item.account_desc1,
+					accountDesc2: isEmpty(item.account_desc2) ? '-' : item.account_desc2,
+					accountDesc3: isEmpty(item.account_desc3) ? '-' : item.account_desc3,
+					accountDesc4: isEmpty(item.account_desc4) ? '-' : item.account_desc4,
 				});
 			});
 
