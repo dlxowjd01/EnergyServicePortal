@@ -684,8 +684,8 @@
 			if (fileList.length > 0) {
 				let formData = new FormData($('#fileUploadForm')[0]),
 					filedName = $(this).attr('name') + '_' + genUuid();
-				fileList.forEach(function(file) {
-					formData.append(filedName, file);
+				fileList.forEach(function(file, index) {
+					formData.append(filedName + index, file);
 				});
 
 				$.ajax({

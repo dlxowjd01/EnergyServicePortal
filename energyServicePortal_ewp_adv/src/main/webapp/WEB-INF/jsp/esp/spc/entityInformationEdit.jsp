@@ -827,8 +827,8 @@
 			if (fileList.length > 0) {
 				let formData = new FormData($('#fileUploadForm')[0]),
 					filedName = $(this).attr('name') + '_' + genUuid();
-				fileList.forEach(function(file) {
-					formData.append(filedName, file);
+				fileList.forEach(function(file, index) {
+					formData.append(filedName + index, file);
 				});
 
 				$.ajax({
@@ -1237,7 +1237,7 @@
 							<td id="addList_registered_seal" class="entity">
 								<div class="group-type">
 									<div class="dropdown placeholder edit" id="spcSeal[index]">
-										<button type="button" class="dropdown-toggle" data-toggle="dropdown">인감 선택<span class="caret"></span></button>
+										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="인감 선택">인감 선택<span class="caret"></span></button>
 										<ul class="dropdown-menu" role="menu">
 											<li data-value="사용_인감">
 												<a href="#">사용 인감</a>
