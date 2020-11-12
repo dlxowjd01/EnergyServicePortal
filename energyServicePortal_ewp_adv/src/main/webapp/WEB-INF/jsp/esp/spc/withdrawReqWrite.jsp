@@ -80,6 +80,39 @@
 			purposeList.prev().data("value", val);
 		});
 
+		function getAmount() {
+			const spcId = $('#spcList').prev().data('value');
+			const account = $('#withdrawList').prev().data('value').replace(/[^\d]/g, '');
+
+			if (!isEmpty(spcId) && !isEmpty(account)) {
+				$.ajax({
+					url: apiHost + '/spcs/transactions/real/balance',
+					type: 'GET',
+					data: {
+						oid: oid,
+						spcIds: spcId
+					}
+				}).done(function (json, textStatus, jqXHR) {
+					if (!isEmpty(json) && !isEmpty(json.data) && !isEmpty(json.data.items)) {
+						const targetAccount = json.data.items.find(e => e.account_no === account);
+
+						if (isEmpty(targetAccount)) {
+							$('[name="availableAmount"]').val('');
+						} else {
+							$('[name="availableAmount"]').val(numberComma(targetAccount.account_balance));
+						}
+					} else {
+						$('[name="availableAmount"]').val('');
+					}
+				}).fail(function (jqXHR, textStatus, errorThrown) {
+					alert('처리 중 오류가 발생했습니다.');
+					return false;
+				});
+			} else {
+				$('[name="availableAmount"]').val('');
+			}
+		}
+
 		function getSpcList() {
 			let action = 'get';
 			let syncOpt = true;
@@ -218,6 +251,7 @@
 			setTimeout(function(){
 				withdrawList.find("li").on("click", function(){
 					withdrawList.prev().data({"value": $(this).data("value"), "name": $(this).data("name"), "acc-holder" : $(this).data("acc-holder") });
+					getAmount();
 				});
 				receiveList.find("li").on("click", function(){
 					receiveList.prev().data({"value": $(this).data("value"), "name": $(this).data("name") });

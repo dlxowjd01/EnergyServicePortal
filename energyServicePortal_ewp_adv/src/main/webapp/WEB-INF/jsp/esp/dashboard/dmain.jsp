@@ -693,7 +693,7 @@
 			//사용량 라인
 			todayConsumption.addSeries({
 				name: '사용량',
-				type: 'spline',
+				type: 'line',
 				color: 'var(--turquoise)',
 				tooltip: {
 					valueSuffix: 'kWh',
@@ -704,7 +704,7 @@
 			//CBL 라인
 			todayConsumption.addSeries({
 				name: 'CBL',
-				type: 'spline',
+				type: 'line',
 				color: 'var(--sandy-brown)',
 				tooltip: {
 					valueSuffix: 'kWh',
@@ -770,7 +770,9 @@
 							}
 						});
 
-						todayConsumption.series[0].addPoint([timeMake(today.format('yyyyMMddHHmmss')), rawData]);
+						if (!isNaN(rawData)) {
+							todayConsumption.series[0].addPoint([timeMake(today.format('yyyyMMddHHmmss')), rawData]);
+						}
 					}
 				},
 				error: (jqXHR, textStatus, errorThrown) => {
@@ -861,7 +863,7 @@
 					let alarmEl = $('.indiv[data-alarm]');
 					alarmEl.attr('data-alarm', '');
 					alarmEl.find('em').text('');
-					$('#alarmNotice').append(`<li class="no-data">조회된 내역이 없습니다.</li>`);
+					$('#alarmNotice').empty().append(`<li class="no-data">조회된 내역이 없습니다.</li>`);
 				}
 			},
 			error: (jqXHR, textStatus, errorThrown) => {
@@ -869,7 +871,7 @@
 				let alarmEl = $('.indiv[data-alarm]');
 				alarmEl.attr('data-alarm', '');
 				alarmEl.find('em').text('');
-				$('#alarmNotice').append(`<li class="no-data">조회된 내역이 없습니다.</li>`);
+				$('#alarmNotice').empty().append(`<li class="no-data">조회된 내역이 없습니다.</li>`);
 				errorMsg('조회 중 오류가 발생했습니다.');
 			}
 		});
@@ -964,7 +966,8 @@
 				// !!!!!!!!!!!!!!!!IMPORTANT
 				borderColor: 'var(--grey)',
 				borderWidth: 0,
-				showInLegend: true
+				showInLegend: true,
+				step: 'left'
 			},
 			borderColor: 'var(--grey)',
 			borderWidth: 0,

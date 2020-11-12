@@ -42,6 +42,38 @@
 			$('#fileInput').val('');
 		});
 
+		function getAmount() {
+			const account = $('#withdrawList').prev().data('value').replace(/[^\d]/g, '');
+
+			if (!isEmpty(account)) {
+				$.ajax({
+					url: apiHost + '/spcs/transactions/real/balance',
+					type: 'GET',
+					data: {
+						oid: oid,
+						spcIds: spcId
+					}
+				}).done(function (json, textStatus, jqXHR) {
+					if (!isEmpty(json) && !isEmpty(json.data) && !isEmpty(json.data.items)) {
+						const targetAccount = json.data.items.find(e => e.account_no === account);
+
+						if (isEmpty(targetAccount)) {
+							$('[name="availableAmount"]').val('');
+						} else {
+							$('[name="availableAmount"]').val(numberComma(targetAccount.account_balance));
+						}
+					} else {
+						$('[name="availableAmount"]').val('');
+					}
+				}).fail(function (jqXHR, textStatus, errorThrown) {
+					alert('처리 중 오류가 발생했습니다.');
+					return false;
+				});
+			} else {
+				$('[name="availableAmount"]').val('');
+			}
+		}
+
 		getData(spcId);
 
 		function getData (id) {
@@ -95,6 +127,7 @@
 				});
 				Promise.all(promises).then(res => {
 					withdrawList.prev().data({"value": transactionData.withdraw_account_no, "name": transactionData.withdraw_bank }).html(transactionData.withdraw_bank + '&nbsp;' + transactionData.withdraw_account_no + '<span class="caret"></span>');
+					getAmount();
 					if(transactionData.to_account){
 						var withdraw_day = transactionData.withdraw_day;
 						if (!isEmpty(withdraw_day) && withdraw_day.length == 8) {
@@ -264,6 +297,7 @@
 							withdrawList.find("li").on("click", function(){
 								// console.log("withdrawList clicking---")
 								withdrawList.prev().data({"value": $(this).data("value"), "name": $(this).data("name"), "acc-holder" : $(this).data("acc-holder") });
+								getAmount();
 							});
 						}).finally(() => {
 							setDatepicker();
