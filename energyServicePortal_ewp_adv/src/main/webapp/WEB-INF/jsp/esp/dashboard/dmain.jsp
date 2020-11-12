@@ -137,17 +137,16 @@
 			</div>
 			<div class="indiv dmain-chart">
 				<h2 class="ntit">사용량 현황</h2>
-				<div class="btn-group btn-group-toggle" data-toggle="buttons">
-					<label class="btn btn-secondary active">
-						<input type="radio" name="consumptionOptions" id="consumptionOptions1" checked> 실시간
-					</label>
-					<label class="btn btn-secondary">
-						<input type="radio" name="consumptionOptions" id="consumptionOptions2"> 월간 현황
-					</label>
+				<div class="sel-calendar">
+					<input type="text" id="fromDate" name="fromDate" class="sel w-20 fromDate" value="" autocomplete="off">
+					<em></em>
+					<input type="text" id="timepicker1" name="timepicker1" class="sel timepicker w-20"/>
+					<em></em>
+					<input type="text" id="toDate" name="toDate" class="sel w-20 toDate" value="" autocomplete="off">
+					<em></em>
+					<input type="text" id="timepicker2" name="timepicker2" class="sel timepicker w-20"/>
 				</div>
-				<div>
-					<div id="todayConsumption"></div>
-					<div id="beforeConsumption" style="height:100px;"></div>
+				<div id="todayConsumption">
 				</div>
 			</div>
 		</div>
@@ -315,27 +314,21 @@
 			}
 		}).columns.adjust().draw();
 
-		$(':radio[name="consumptionOptions"]').on('change', function() {
-			const selectedData = drTable.rows('.selected').data();
-			if (selectedData.length > 0) {
-				let sids = new Array()
-				  , dids = new Array();
-
-				for (let i = 0; i < selectedData.length; i++) {
-					sids.push(selectedData[i].sid);
-					dids = dids.concat(selectedData[i].dids);
-				}
-
-				alarmInfoList(sids);
-				detailDraw(sids, dids);
-			}
-		});
-
 		$('#keyword').on('keyup', function (e) {
 			if (e.keyCode === 13) {
 				getDataList();
 			}
 		});
+
+		let fromDate = new Date();
+		fromDate.setHours(fromDate.getHours() - 2);
+
+		let toDate = new Date();
+		toDate.setHours(toDate.getHours() + 2);
+		$('#timepicker1').wickedpicker({now: fromDate.format('HH:mm'), twentyFour: true});
+		$('#timepicker2').wickedpicker({now: toDate.format('HH:mm'), twentyFour: true});
+		$('#fromDate').datepicker({dateFormat: 'yy-mm-dd'}).datepicker('setDate', fromDate); //데이트 피커 기본
+		$('#toDate').datepicker({dateFormat: 'yy-mm-dd'}).datepicker('setDate', toDate); //데이트 피커 기본
 
 		getDataList();
 	});
@@ -344,6 +337,7 @@
 	 * dr리스트 조회
 	 */
 	const getDataList = () => {
+		$('#loadingCircleDashboard').show();
 		new Promise((resolve, reject) => {
 			$.ajax({
 				url: apiHost + '/config/dr-groups',
@@ -469,14 +463,17 @@
 						}
 					} else {
 						if (!isEmpty(apiData) && !isEmpty(apiData.data)) {
-							Object.entries(apiData.data).forEach(([sid, data]) => {
-								const siteIndex = refineList.findIndex(e => sid.match(e.sid))
-									, cblData = data[0].items.find(e => String(e.basetime) === today.format('yyyyMMddHH') + '0000');
-
-								if (!isEmpty(cblData)) {
-									refineList[siteIndex].cblData = cblData.cbl;
-								}
-							});
+							apiData.data.forEach(datas => {
+								Object.entries(datas).forEach(([sid, data]) => {
+									const siteIndex = refineList.findIndex(e => sid.match(e.sid));
+									if (!isEmpty(data[0].items)) {
+										const cblData = data[0].items.find(e => String(e.basetime) === today.format('yyyyMMddHH') + '0000');
+										if (!isEmpty(cblData)) {
+											refineList[siteIndex].cblData = cblData.cbl;
+										}
+									}
+								});
+							})
 						}
 					}
 				});
@@ -487,9 +484,11 @@
 			drTable.clear();
 			drTable.rows.add(refineList).draw();
 			$($.fn.dataTable.tables(true)).DataTable().columns.adjust();
+			$('#loadingCircleDashboard').hide();
 		}).catch(error => {
 			drTable.clear().draw();
 			errorMsg(error);
+			$('#loadingCircleDashboard').hide();
 		});
 	}
 
@@ -518,15 +517,24 @@
 	 * CBL알람리스트
 	 */
 	const detailDraw = (sids, dids) => {
-		clearInterval(realTime);
-
-		const categories = dateTimeCategory();
 		let today = new Date();
-		let beforeDate = new Date();
 		let promiseUrl = new Array();
 		let minutes = today.getMinutes();
 		let time = minutes / 5;
 		let remainder = minutes % 5
+
+		//시간 시간
+		const start = $('#fromDate').datepicker('getDate')
+			, end = $('#toDate').datepicker('getDate')
+			, startTimepicker = $('#timepicker1').wickedpicker('time').replace(/[^0-9]/g, '')
+			, endTimepicker = $('#timepicker2').wickedpicker('time').replace(/[^0-9]/g, '');
+
+		start.setHours(startTimepicker.substr(0, 2));
+		start.setMinutes(startTimepicker.substr(2, 2));
+
+		end.setHours(endTimepicker.substr(0, 2));
+		end.setMinutes(endTimepicker.substr(2, 2));
+		//시간 종료
 
 		promiseUrl.push($.ajax({
 			url: apiHost + '/cbl/sites',
@@ -535,8 +543,8 @@
 				sids: sids.toString(),
 				method: 'max4/5',
 				interval: 'hour',
-				startTime: today.format('yyyyMMdd') + '080000',
-				endTime: today.format('yyyyMMdd') + '205959'
+				startTime: start.format('yyyyMMddHH') + '0000',
+				endTime: end.format('yyyyMMddHHmm') + '59'
 			}
 		}));
 
@@ -545,13 +553,15 @@
 			type: 'GET',
 			data: {
 				dids: dids.toString(),
-				startTime: today.format('yyyyMMdd') + '080000',
-				endTime: today.format('yyyyMMdd') + '205959',
+				startTime: start.format('yyyyMMddHH') + '0000',
+				endTime: end.format('yyyyMMddHHmm') + '59',
 				interval: 'hour'
 			}
 		}));
 
-		if (today.getHours() > 8 && 23 > today.getHours()) {
+		//현재 시간이 시작일보다 크고 종료일보다 작으면
+		if (start.getTime() < today.getTime()
+		&& today.getTime() < end.getTime()) {
 			promiseUrl.push($.ajax({
 				url: apiHost + '/energy/devices',
 				type: 'GET',
@@ -576,20 +586,6 @@
 			}
 		}
 
-		if ($('#consumptionOptions2').is(':checked')) {
-			beforeDate.setDate(today.getDate() - 30);
-			promiseUrl.push($.ajax({
-				url: apiHost + '/energy/devices',
-				type: 'GET',
-				data: {
-					dids: dids.toString(),
-					startTime: beforeDate.format('yyyyMMdd') + '000000',
-					endTime: today.format('yyyyMMdd') + '235959',
-					interval: 'day'
-				}
-			}));
-		}
-
 		Promise.all(promiseUrl).then(response => {
 			const beforeCategories = new Array()
 				, cbl = new Array()
@@ -599,54 +595,49 @@
 				const apiData = res.data;
 
 				if (res.interval === 'hour') {
-					Object.entries(apiData).forEach(([id, data]) => {
-						const items = data[0].items;
-						if (!isEmpty(items)) {
-							items.forEach(item => {
-								if (res.method === undefined) {
-									const findIdx = usage.findIndex(e => e[0] === item.basetime);
+					if (res.method === undefined) {
+						Object.entries(apiData).forEach(([id, data]) => {
+							const items = data[0].items;
+							if (!isEmpty(items)) {
+								items.forEach(item => {
+									const findIdx = usage.findIndex(e => e[0] === timeMake(item.basetime));
 									if (findIdx > -1) {
 										usage[findIdx][1] += Math.round(item.energy / 10) / 100;
 									} else {
-										usage.push([item.basetime, Math.round(item.energy / 10) / 100]);
+										usage.push([timeMake(item.basetime), Math.round(item.energy / 10) / 100]);
 									}
-								} else {
-									const findIdx = usage.findIndex(e => e[0] === item.basetime);
-									if (findIdx > -1) {
-										cbl[findIdx][1] += Math.round(item.cbl / 10) / 100;
-									} else {
-										cbl.push([item.basetime, Math.round(item.cbl / 10) / 100]);
-									}
+								});
+							}
+						});
+					} else {
+						apiData.forEach(datas => {
+							Object.entries(datas).forEach(([id, data]) => {
+								const items = data[0].items;
+								if (!isEmpty(items)) {
+									items.forEach(item => {
+										console.log(item.basetime);
+										const findIdx = cbl.findIndex(e => e[0] === timeMake(item.basetime));
+										if (findIdx > -1) {
+											cbl[findIdx][1] += Math.round(item.cbl / 10) / 100;
+										} else {
+											cbl.push([timeMake(item.basetime), Math.round(item.cbl / 10) / 100]);
+										}
+									})
 								}
-							})
-						}
-					});
-				} else if (res.interval === 'day') {
-					Object.entries(apiData).forEach(([id, data]) => {
-						const items = data[0].items;
-						if (!isEmpty(items)) {
-							items.forEach(item => {
-								const findIdx = beforeCategories.findIndex(e => e === String(item.basetime).substr(4, 4))
-								if (findIdx > -1) {
-									beforeUsage[findIdx] += Math.round(item.energy / 10) / 100;
-								} else {
-									beforeCategories.push(String(item.basetime).substr(4, 4));
-									beforeUsage.push(Math.round(item.energy / 10) / 100);
-								}
-							})
-						}
-					});
+							});
+						});
+					}
 				} else if (res.interval === '5min') {
 					if (!isEmpty(apiData)) {
 						Object.entries(apiData).forEach(([id, data]) => {
 							const items = data[0].items;
 							if (!isEmpty(items)) {
 								items.forEach(item => {
-									const findIdx = usage.findIndex(e => e[0] === item.basetime);
+									const findIdx = usage.findIndex(e => e[0] === timeMake(item.basetime));
 									if (findIdx > -1) {
 										usage[findIdx][1] += Math.round((item.energy * 12) / 10) / 100;
 									} else {
-										usage.push([item.basetime, Math.round((item.energy * 12) / 10) / 100]);
+										usage.push([timeMake(item.basetime), Math.round((item.energy * 12) / 10) / 100]);
 									}
 								})
 							}
@@ -658,7 +649,7 @@
 							if (!isEmpty(data.data[0])) {
 								const activePower = data.data[0].activePower;
 								if (!isEmpty(activePower)) {
-									usage.push([Number(today.format('yyyyMMddHHmmss')), Math.round(activePower / 10) / 100]);
+									usage.push([timeMake(today.format('yyyyMMddHHmmss')), Math.round(activePower / 10) / 100]);
 								}
 							}
 						});
@@ -695,9 +686,9 @@
 				data: cbl,
 			});
 
-			todayConsumption.xAxis[0].update({
-				categories: categories
-			});
+			// todayConsumption.xAxis[0].update({
+			// 	categories: categories
+			// });
 
 			todayConsumption.yAxis[0].update({
 				title:{
@@ -707,37 +698,10 @@
 
 			todayConsumption.redraw();
 
-			if ($('#consumptionOptions2').is(':checked')) {
-				beforeConsumption.addSeries({
-					name: '사용량',
-					type: 'spline',
-					color: 'var(--turquoise)',
-					tooltip: {
-						valueSuffix: 'kWh',
-					},
-					data: beforeUsage,
-				});
-
-				beforeConsumption.xAxis[0].update({
-					categories: beforeCategories
-				});
-
-				beforeConsumption.redraw();
-
-				$('#beforeConsumption').removeClass('hidden');
-			} else {
-				$('#beforeConsumption').addClass('hidden');
-				let beforeConsumptionLength = beforeConsumption.series.length;
-				if(beforeConsumptionLength > 0){
-					for(let i = beforeConsumptionLength -1; i > -1; i--) {
-						beforeConsumption.series[i].remove();
-					}
-				}
-
-				realTime = setInterval(() => {
-					activePowerSearch();
-				}, 60 * 1000); //1분에 한번 현재혆황 & 알림 갱신
-			}
+			clearInterval(realTime);
+			realTime = setInterval(() => {
+				activePowerSearch();
+			}, 60 * 1000); //1분에 한번 현재혆황 & 알림 갱신
 		}).catch(error => {
 			errorMsg(error);
 		});
@@ -772,7 +736,7 @@
 							}
 						});
 
-						todayConsumption.series[0].addPoint([Number(today.format('yyyyMMddHHmmss')), rawData]);
+						todayConsumption.series[0].addPoint([timeMake(today.format('yyyyMMddHHmmss')), rawData]);
 					}
 				},
 				error: (jqXHR, textStatus, errorThrown) => {
@@ -787,7 +751,7 @@
 	 *
 	 * @returns {Promise<void>}
 	 */
-	const alarmInfoList = async (sids) => {
+	const alarmInfoList = (sids) => {
 		let today = new Date();
 		$('#alarmNotice').empty();
 		//알람 이력
@@ -985,7 +949,7 @@
 				type: 'datetime',
 				lineColor: 'var(--grey)',
 				tickColor: 'var(--grey)',
-				tickInterval: 1,
+				// tickInterval:3600 * 1000,
 				gridLineColor: 'var(--white25)',
 				plotLines: [{
 					color: 'var(--grey)',
@@ -995,7 +959,7 @@
 					align: 'center',
 					y: 27,
 					formatter: function () {
-						return Number(String(this.value).substr(8, 2));
+						return new Date(this.value).format('yyyy-MM-dd HH:mm');
 					},
 					style: {
 						color: 'var(--grey)',
@@ -1056,7 +1020,7 @@
 					} else {
 						return s
 					}
-				}, '<span style="display:flex;"><b>' + String(this.x).substr(8, 4).replace(/(\d{2})(\d{2})/g, '$1:$2') + '</b></span>');
+				}, '<span style="display:flex;"><b>' + new Date(this.x).format('yyyy-MM-dd HH:mm') + '</b></span>');
 			},
 		},
 		legend: {
@@ -1081,140 +1045,9 @@
 		},
 	});
 
-	const beforeConsumption = Highcharts.chart('beforeConsumption', {
-		chart: {
-			marginLeft: 65,
-			marginRight: 65,
-			spacingLeft: 0,
-			backgroundColor: 'transparent',
-			zoomType: 'xy',
-		},
-		lang: {
-			noData: '조회된 데이터가 없습니다.'
-		},
-		navigation: {
-			buttonOptions: {
-				enabled: false
-			}
-		},
-		plotOptions: {
-			series: {
-				label: {
-					connectorAllowed: false
-				},
-				// !!!!!!!!!!!!!!!!IMPORTANT
-				borderColor: 'var(--grey)',
-				borderWidth: 0,
-				showInLegend: true,
-				marker: {
-					enabled: false
-				}
-			},
-			borderColor: 'var(--grey)',
-			borderWidth: 0,
-			marker: {
-				lineWidth: 1
-			}
-		},
-		title: {
-			text: ''
-		},
-		subtitle: {
-			text: ''
-		},
-		xAxis: [
-			{
-				lineColor: 'var(--grey)',
-				tickColor: 'var(--grey)',
-				tickInterval: 1,
-				gridLineColor: 'var(--white25)',
-				plotLines: [{
-					color: 'var(--grey)',
-					width: 1
-				}],
-				labels: {
-					align: 'center',
-					y: 27,
-					formatter: function () {
-						return String(this.value).replace(/(\d{2})(\d{2})/g, '$1-$2');
-					},
-					style: {
-						color: 'var(--grey)',
-						fontSize: '12px'
-					}
-				},
-				title: { text: null },
-			}
-		],
-		yAxis: [
-			{
-				gridLineWidth: 0,
-				labels: {
-					enabled: false
-				},
-				title: {
-					text: null
-				},
-				min: 0.6,
-				showFirstLabel: false
-			}
-		],
-		tooltip: {
-			shared: true,
-			useHTML: true,
-			split: false,
-			borderColor: 'none',
-			backgroundColor: 'var(--bg-color)',
-			padding: 16,
-			style: {
-				color: 'var(--white)',
-			},
-			formatter: function () {
-				return this.points.reduce(function (s, point) {
-					if(point.y !== 0){
-						let suffix = point.series.userOptions.tooltip.valueSuffix;
-						return s + '<br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + numberComma(Math.round(point.y)) + ' ' + suffix;
-					} else {
-						return s
-					}
-				}, '<span style="display:flex;"><b>' + String(this.x).replace(/(\d{2})(\d{2})/g, '$1-$2') + '</b></span>');
-			}
-		},
-		legend: {
-			enabled: false,
-			align: 'right',
-			verticalAlign: 'top',
-			x: -55,
-			y: 0,
-			itemStyle: {
-				color: 'var(--white87)',
-				fontSize: '12px',
-				fontWeight: 400
-			},
-			itemHoverStyle: {
-				color: ''
-			},
-			symbolPadding: 3,
-			symbolHeight: 7
-		},
-		credits: {
-			enabled: false
-		},
-	});
-
-	/**
-	 *
-	 */
-	const dateTimeCategory = () => {
-		const category = new Array();
-		let date = new Date();
-		date.setMinutes(0);
-		date.setSeconds(0);
-
-		for (let i = 8; i <= 23; i++) {
-			date.setHours(i);
-			category.push(date.format('yyyyMMddHHmmss'));
-		}
-		return category;
+	const timeMake = (baseTime) => {
+		baseTime = String(baseTime).replace(/[^\d]/g, '');
+		const time = new Date(baseTime.substr(0, 4), Number(baseTime.substr(4, 2)) - 1 , baseTime.substr(6, 2), baseTime.substr(8, 2), baseTime.substr(10, 2)).getTime();
+		return time;
 	}
 </script>
