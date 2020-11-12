@@ -1282,7 +1282,9 @@ const searchSite = async function () {
 								capacity = (capacity != '-') ? capacity + deviceData['capacity'] : deviceData['capacity'];
 								inverterCount = (inverterCount != '-') ? inverterCount++ : 1;
 							} else if (deviceType === 'SENSOR_SOLAR') {
-								irradiationPoa = (deviceData['irradiationPoa']).toFixed(1);
+								if (!isEmpty(deviceData) && !isEmpty(deviceData['irradiationPoa'])) {
+									irradiationPoa = (deviceData['irradiationPoa']).toFixed(1);
+								}
 							}
 						}
 					});

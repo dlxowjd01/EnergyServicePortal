@@ -137,14 +137,21 @@
 			</div>
 			<div class="indiv dmain-chart">
 				<h2 class="ntit">사용량 현황</h2>
-				<div class="sel-calendar">
-					<input type="text" id="fromDate" name="fromDate" class="sel w-20 fromDate" value="" autocomplete="off">
-					<em></em>
-					<input type="text" id="timepicker1" name="timepicker1" class="sel timepicker w-20"/>
-					<em></em>
-					<input type="text" id="toDate" name="toDate" class="sel w-20 toDate" value="" autocomplete="off">
-					<em></em>
-					<input type="text" id="timepicker2" name="timepicker2" class="sel timepicker w-20"/>
+				<div class="flex-wrapper">
+					<div class="chart-top">
+						<div class="flex-group">
+							<div class="sel-calendar">
+								<input type="text" id="fromDate" name="fromDate" class="sel w-20 fromDate" value="" autocomplete="off">
+								<em></em>
+								<input type="text" id="timepicker1" name="timepicker1" class="sel timepicker w-20"/>
+								<em></em>
+								<input type="text" id="toDate" name="toDate" class="sel w-20 toDate" value="" autocomplete="off">
+								<em></em>
+								<input type="text" id="timepicker2" name="timepicker2" class="sel timepicker w-20"/>
+							</div>
+							<button class="btn-type" onclick="renewalChart();">기간 적용</button>
+						</div>
+					</div>
 				</div>
 				<div id="todayConsumption">
 				</div>
@@ -514,6 +521,25 @@
 	}
 
 	/**
+	 *  차트 갱신
+	 */
+	const renewalChart = () => {
+		const selectedData = drTable.rows('.selected').data();
+
+		if (selectedData.length > 0) {
+			let sids = new Array()
+			  , dids = new Array();
+
+			for (let i = 0; i < selectedData.length; i++) {
+				sids.push(selectedData[i].sid);
+				dids = dids.concat(selectedData[i].dids);
+			}
+
+			detailDraw(sids, dids);
+		}
+	}
+
+	/**
 	 * CBL알람리스트
 	 */
 	const detailDraw = (sids, dids) => {
@@ -710,8 +736,16 @@
 	const activePowerSearch = () => {
 		let today = new Date()
 		  , minute = new Date();
-		minute.setMinutes(minute.getMinutes() - 1);
-		if (today.getHours() > 8 && 23 > today.getHours()) {
+
+		//시간 시간
+		const end = $('#toDate').datepicker('getDate')
+			, endTimepicker = $('#timepicker2').wickedpicker('time').replace(/[^0-9]/g, '');
+
+		end.setHours(endTimepicker.substr(0, 2));
+		end.setMinutes(endTimepicker.substr(2, 2));
+
+		//종료일보다 현재 시간이 작을때만 실시간 조회한다.
+		if (today.getTime() < end.getTime()) {
 			const selectedData = drTable.rows('.selected').data()
 				, usage = todayConsumption.series[0].yData;
 
