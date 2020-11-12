@@ -3254,10 +3254,7 @@
 				}
 			}
 
-			$.when(
-				$.ajax(monthEnergy), $.ajax(nowMonth),
-				$.ajax(dailyWeather), $.ajax(dailyWeatherToday),
-				$.ajax(dailyEnergy), $.ajax(dailyEnergyToday))
+			$.when( $.ajax(monthEnergy), $.ajax(nowMonth), $.ajax(dailyWeather), $.ajax(dailyWeatherToday), $.ajax(dailyEnergy), $.ajax(dailyEnergyToday))
 			.done(function (result1A, result1B, result2A, result2B, result3A, result3B) {
 				let el = $("#solarDashboard .mini .data-num");
 				let chartItems1 = [];
@@ -3307,7 +3304,6 @@
 
 				if(result2A[1] == 'success' && result2B[1] == 'success') {
 					let tempIrrList = [];
-
 					if(!isEmpty(result2A[0]) && result2A[0].length>0) {
 						result2A[0].map((item, index) => {
 							if(!isEmpty(item.sensor_solar.irradiationPoa)){
@@ -3583,6 +3579,8 @@
 					}
 				}
 			}
+			// console.log("chartItems3===", chartItems3);
+			// console.log("dailySolarMaxVal===", dailySolarMaxVal);
 
 			dailySolarTrendChart.addSeries({
 				name: '발전량',
@@ -4578,13 +4576,11 @@
 					if(option == "irradiationPoa"){
 						dateList[found] = Math.round(item.sensor_solar.irradiationPoa);
 					}
-				} else {
-					if(option == "energy"){
-						dateList[found] = null;
-					}
-					if(option == "irradiationPoa"){
-						dateList[found] = null;
-					}
+				}
+			});
+			dateList.map( (item, index) => {
+				if(typeof item === "string"){
+					dateList[index] = null;
 				}
 			});
 		} else {
