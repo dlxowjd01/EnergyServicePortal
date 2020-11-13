@@ -671,14 +671,21 @@
 					}
 				} else {
 					if (!isEmpty(res)) {
+						let totalActivePower = 0;
 						Object.entries(res).forEach(([id, data]) => {
 							if (!isEmpty(data.data[0])) {
 								const activePower = data.data[0].activePower;
 								if (!isEmpty(activePower)) {
-									usage.push([timeMake(today.format('yyyyMMddHHmmss')), Math.round(activePower / 10) / 100]);
+									totalActivePower += activePower;
 								}
 							}
 						});
+
+						if (!isNaN(totalActivePower)) {
+							usage.push([timeMake(today.format('yyyyMMddHHmmss')), Math.round(totalActivePower / 10) / 100]);
+						} else {
+							console.error(totalActivePower);
+						}
 					}
 				}
 			});
@@ -770,9 +777,7 @@
 							}
 						});
 
-						if (!isNaN(rawData)) {
-							todayConsumption.series[0].addPoint([timeMake(today.format('yyyyMMddHHmmss')), rawData]);
-						}
+						todayConsumption.series[0].addPoint([timeMake(today.format('yyyyMMddHHmmss')), rawData]);
 					}
 				},
 				error: (jqXHR, textStatus, errorThrown) => {
