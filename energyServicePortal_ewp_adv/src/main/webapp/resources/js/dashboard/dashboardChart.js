@@ -407,19 +407,6 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 			color: 'var(--grey)',
 			width: 0
 		}],
-		// scrollbar: {
-		// 	enabled: true,
-		// 	barBackgroundColor: 'var(--white40)',
-		// 	barBorderRadius: 7,
-		// 	barBorderWidth: 0,
-		// 	buttonBackgroundColor: 'var(--white40)',
-		// 	buttonBorderWidth: 0,
-		// 	buttonBorderRadius: 7,
-		// 	trackBackgroundColor: 'none',
-		// 	trackBorderWidth: 3,
-		// 	trackBorderRadius: 0,
-		// 	trackBorderColor: 'none'
-		// },
 		gridLineWidth: 0,
 		min: 0,
 		title: {

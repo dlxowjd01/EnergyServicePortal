@@ -482,9 +482,29 @@
 			});
 
 			rchart1.update({
+				xAxis: {
+					max: 2,
+					scrollbar: {
+						enabled: seriesData.length<=2 ? false : true,
+						minWidth: 30,
+						barBackgroundColor: 'var(--white40)',
+						barBorderRadius: 5,
+						barBorderWidth: 0,
+						buttonBackgroundColor: 'none',
+						buttonBorderWidth: 0,
+						buttonBorderRadius: 7,
+						trackBackgroundColor: 'none',
+						trackBorderWidth: 3,
+						trackBorderRadius: 0,
+						trackBorderColor: 'none'
+					},
+
+				},
 				series: [{
 					name: '실시간 출력량',
 					data: seriesData,
+					minPointWidth: seriesData.length<=2 ? 50 : 12,
+					// maxPointWidth: seriesData.length<2 ? 50 : 30,
 					dataLabels: {
 						enabled: true,
 						inside: true,
@@ -646,7 +666,8 @@
 			marginRight: 10,
 			zoomType: 'xy',
 			backgroundColor: 'transparent',
-			type: 'variwide',
+			type: 'column',
+			// type: 'variwide',
 			height: 255
 		},
 		navigation: {
@@ -741,14 +762,29 @@
 					connectorAllowed: false
 				},
 				borderWidth: 0,
-				pointPadding: .2,
-				pointWidth: 28,
+				// pointWidth: 28,
 			},
 			column: {
 				stacking: 'percent',
 			},
 			variwide: {
-				colors: ['var(--powder-blue)', 'var(--persian-green)', 'var(--teal)', 'var(--aquamarine)']
+				colors: [
+					"var(--powder-blue)",
+					"var(--turquoise)",
+					"var(--teal)",
+					"var(--light-blue)",
+					"var(--blueberry)",
+					"var(--royal-blue)",
+					"var(--blue-yonder)",
+					"var(--circle-solar-power)",
+					"var(--deep-lilac)",
+					"var(--yellow-green)",
+					"var(--green)",
+					"var(--eucalyptus)",
+					"var(--french-pass)",
+					"var(--malibu)",
+					"var(--vivid-blue)",
+				]
 			}
 		},
 		series: [{
