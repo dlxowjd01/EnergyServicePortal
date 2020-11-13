@@ -548,7 +548,7 @@ function getCookie (name) {
 }
   
 function deleteCookie (name, path) {
-	setCookie(name, '', 0, path)
+	document.cookie = name + '=; expires=-1;path=' + path;
 }
 
 // DataTable search filter function
