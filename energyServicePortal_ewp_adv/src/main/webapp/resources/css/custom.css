@@ -3542,6 +3542,7 @@ li[data-alarm="urgent"]:before,
 	margin: 15px 10px;
 	font-size: 16px;
 	line-height: 24px;
+	word-break: break-word;
 }
 
 .modal-dialog.modal-warning .warning-text:before {
@@ -5545,6 +5546,7 @@ input.inp[readonly]:focus {
 
 .type-list .no-data {
 	padding-top: 50%;
+	color: var(--white60);
 }
 
 .alarm .no-device {

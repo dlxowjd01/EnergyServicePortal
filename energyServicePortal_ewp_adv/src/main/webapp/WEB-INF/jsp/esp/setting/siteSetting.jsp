@@ -2580,8 +2580,6 @@
 		});
 
 		Promise.all(promises).then( () => {
-			// let entriesLength = 0;
-			// $("#loadingCircle").show();
 			let entries = Object.entries(uniqDvcType);
 			entries.forEach(function(item, index){
 				dvcTypeStr += `<li data-did="${'${ item[1][0].did }'}" data-value="${'${ item[1][0].device_type }'}">
@@ -2590,7 +2588,6 @@
 			});
 
 			uniqDvcName.forEach(function(item, index){
-				// entriesLength += 1;
 				dvcNameStr += `<li class="hidden" data-parent="${'${ item[0].device_type }'}">
 					<a class="chk-type" href="#">
 						<input type="checkbox" name="${'${ item[0].name }'}" value="${'${ item[0].did }'}" data-device-type="${'${ item[0].device_type }'}">
@@ -2615,7 +2612,6 @@
 				</a></li>`;
 			});
 
-			// userNameStr += `<li onclick='addNewInput(this)'><a href="#">직접 입력</a></li>`;
 			if(!isEmpty(userData)){
 				userData.forEach(function(item, index){
 					let nameId = `${'${ item.name }'}` + ` / ` + `${'${ item.login_id }'}`;
@@ -2727,7 +2723,6 @@
 										// console.log("checkboxArr===", checkboxArr);
 										
 										$.each(userList, function(index, singleUser){
-
 											if(col==2){
 												// console.log("singleUser===", singleUser)
 												$.each(singleUser.level, function(index, item){
@@ -2739,13 +2734,11 @@
 											} else if(col==3){
 												let checkbox3 = dropdown3.eq(i).find("input[type='checkbox']");
 												let checkboxArr3 = checkbox3.toArray();
-												// console.log("singleUser===", singleUser)
 												let found = checkboxArr3.findIndex(x => $(x).val() == singleUser.uid);
 												if( found > -1 ){
 													$(checkboxArr3[found]).prop("checked", true);
 												}
 											}
-											// console.log("$(this).text()====", $(this).text())
 										});			
 									}
 
@@ -2809,7 +2802,6 @@
 					},
 					{
 						"sTitle": "설비명",
-						// "className": "no-sorting",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex ) {
 							let val2 = data[1];
@@ -2838,7 +2830,6 @@
 					},
 					{
 						"sTitle": "알람레벨",
-						// "className": "no-sorting",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex ) {
 							let val3 = data[1];
@@ -3003,13 +2994,11 @@
 					},
 					{
 						"sTitle": "담당자 (이름 / ID)",
-						// "className": "no-sorting",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex ) {
 							const val4 = data[1];
 							let dropdown4 = ``;
 
-							// let userIdx = '';
 							$.each(val4, function(index, el){
 								let newIdx = String(rowIndex.row+index);
 								if(isEmpty(el.userGroup)){
@@ -3234,13 +3223,6 @@
 													textNonUserName = !isEmpty(textNonUserName) ? textNonUserName : "";
 												}
 
-												// for(let i=0, arrLength = nonUserNumberArr.length; i<arrLength; i++){
-												// 	if(!isEmpty(nonUserNumberArr[i])){
-												// 		text = nonUserNumberArr[i];
-												// 		break;
-												// 	}
-												// }
-
 												if(nonUserPhoneLength >=2){		
 													textNonUserPhone = !isEmpty(tempNonUserNum) ? (tempNonUserNum + " 외 +" + String(nonUserPhoneLength-1) ) : "";
 												} else {
@@ -3309,7 +3291,6 @@
 					},
 					{
 						"sTitle": "전화번호",
-						// "className": "no-sorting",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex ) {
 							let dropdown5 = ``;
@@ -3343,12 +3324,10 @@
 					},
 					{
 						"sTitle": "추가 / 수정 / 삭제",
-						// "className": "no-sorting",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex ) {
 							let dropdown6 = ``;
 							$.each(data[1], function(index, el){
-								// let newIdx = String(rowIndex.row+index);
 								dropdown6 += `<div class="flex-start">
 									<button type="button" class="icon-add" data-index="${'${index}'}" onclick="updateAlarmTable($(this), 'add' )">추가</button>
 									<button type="button" class="icon-edit" data-index="${'${index}'}" onclick="updateAlarmTable($(this), 'edit')">수정</button>

@@ -293,14 +293,15 @@
 				(function (deferred) {
 					return deferred.resolve(data);
 				})(deferred);
-			}).fail(function (error) {
-				console.log(error);
-
+			}).fail(function (jqXHR, textStatus, errorThrown) {
 				document.getElementById('loadingCircleDashboard').style.display =  'none';
-				$('#errMsg').text("처리 중 오류가 발생했습니다.");
-				$('#errorModal').modal('show');
+				let errMsg = "처리 중 오류가 발생했습니다.<br/>에러 메세지:" + errorThrown;
+				let r = formatErrorMessage(jqXHR, errorThrown);
+				console.log("error===", r);
+				$("#errMsg").html(errMsg);
+				$("#errorModal").modal("show");
 				setTimeout(function(){
-					$('#errorModal').modal('hide');
+					$("#errorModal").modal("hide");
 				}, 2000);
 				return false;
 			});

@@ -10,6 +10,8 @@
 			menuItem = sideBar.find("li"),
 			menuItemLink = menuItem.find("a"),
 			upperMenu = sideBar.find("li.menu-item"),
+			logOutBtn = sideBar.find(".smn10 a"),
+			mobileLogOutBtn = $("#mobileNav .gmn10 a"),
 			subMenu = upperMenu.find("li"),
 			subMenuLink = subMenu.find("a"),
 			mobileMenu = $("#mobileNav").find(".menu-item"),
@@ -31,7 +33,6 @@
 			}
 		});
 
-
 		window.onload = function (e) {
 			let reloading = sessionStorage.getItem("reloading");
 			if (path.includes("dashboard")) {
@@ -49,6 +50,14 @@
 
 		sideBar.mouseleave(function () {
 			menuItem.removeClass('on');
+		});
+
+		logOutBtn.on("click", function () {
+			deleteCookie("sMainView", "/");
+		});
+
+		mobileLogOutBtn.on("click", function () {
+			deleteCookie("sMainView", "/");
 		});
 
 		mobileMenu.click(function (e) {

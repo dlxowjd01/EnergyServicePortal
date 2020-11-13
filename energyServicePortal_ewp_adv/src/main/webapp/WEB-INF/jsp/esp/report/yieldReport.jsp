@@ -36,7 +36,7 @@
 					render: function (data, type, full, rowIndex) {
 						return rowIndex.row + 1;
 					},
-					className: 'dt-center no-sorting fixed'
+					className: 'dt-center fixed'
 				},
 				{
 					title: 'SPC명',

@@ -531,9 +531,13 @@ function unCheckAll(data){
 	}
 }
 
-function setCookie (name, value, days = 7, path = '/') {
-	const expires = new Date(Date.now() + days * 864e5).toUTCString();
-	document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=' + path
+function setCookie (name, value, days = 7, secureOption, path = '/') {
+	const expires = new Date(Date.now() + days * 864e5).toISOString();
+	if(secureOption === true){
+		document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=' + path; + "Secure; HttpOnly;"
+	} else {
+		document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=' + path;
+	}
 }
   
 function getCookie (name) {
@@ -544,7 +548,7 @@ function getCookie (name) {
 }
   
 function deleteCookie (name, path) {
-	setCookie(name, '', -1, path)
+	setCookie(name, '', 0, path)
 }
 
 // DataTable search filter function

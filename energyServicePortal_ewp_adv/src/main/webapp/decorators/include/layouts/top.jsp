@@ -173,7 +173,7 @@
 			},
 			success: function (result) {
 				if (result == -1) {
-					$("#errMsg").text("세션 새로고침에 실패하였습니다.");
+					$("#errMsg").html("세션 새로고침에 실패하였습니다.");
 					$("#errorModal").modal("show");
 					setTimeout(function(){
 						$("#errorModal").modal("hide");
@@ -183,10 +183,8 @@
 
 			},
 			error: function (request, status, error) {
-				// alert("오류가 발생하였습니다. \n관리자에게 문의하세요.");
-				let r = JSON.parse(jqxhr.responseText);
-				console.log("에러코드:" + request.status + "\n" + "메세지: " + r);
-				$("#errMsg").text("오류가 발생하였습니다. \n" + r);
+				console.log("에러코드:" + request.status + "\n" + "에러: " + errorThrown);
+				$("#errMsg").html("오류가 발생하였습니다.<br/>" + "에러: " + errorThrown);
 				$("#errorModal").modal("show");
 				setTimeout(function(){
 					$("#errorModal").modal("hide");

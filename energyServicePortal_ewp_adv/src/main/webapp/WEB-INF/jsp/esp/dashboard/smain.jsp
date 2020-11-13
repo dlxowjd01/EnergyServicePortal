@@ -659,7 +659,7 @@
 
 		$(window).on("unload", function(e) {
 			let selected = $("#viewOptList").prev().data("value");
-			setCookie("sMainView", selected, 1);
+			setCookie("sMainView", selected, 0.5);
 			clearInterval(refreshMinInterval);
 			clearInterval(refreshQuarterInterval);
 		});
@@ -694,7 +694,7 @@
 	var num31List = [...Array(31)].map((item, index) => {
 		return String(index + 1)
 	});
-	var date31List = addToDateList(30);
+	var date30List = addToDateList(30);
 
 	// var groupingUnits = [
 	// 	[
@@ -842,6 +842,9 @@
 			height: 280,
 			backgroundColor: 'transparent',
 			zoomType: 'xy'
+		},
+		lang: {
+			noData: "조회된 데이터가 없습니다."
 		},
 		navigation: {
 			buttonOptions: {
@@ -1120,8 +1123,11 @@
 				labels: {
 					// enabled: false,
 					formatter: function () {
-						let temp = date31List[this.value];
-						let newVal = temp.substring(0,2) + "/" + temp.substring(2,4);
+						let temp = date30List[this.value];
+						let newVal = "";
+						if(!isEmpty(temp)){
+							newVal = temp.substring(0,2) + "/" + temp.substring(2,4);
+						}
 						return newVal;
 					},
 				}
@@ -1159,7 +1165,7 @@
 					align: 'center',
 					y: 27,
 					formatter: function () {
-						let temp = date31List[this.value];
+						let temp = date30List[this.value];
 						let newVal = temp.substring(0,2) + "/" + temp.substring(2,4);
 						return newVal;
 					},
@@ -1252,7 +1258,7 @@
 				color: 'var(--white)',
 			},
 			formatter: function () {
-				let temp = date31List[this.x];
+				let temp = date30List[this.x];
 				let newVal = temp.substring(0,2) + "/" + temp.substring(2,4);
 			
 				return ['<span style="display:flex; margin-bottom:-10px;"><b>' + newVal + '</b></span>'].concat(
@@ -1497,6 +1503,9 @@
 			backgroundColor: 'transparent',
 			zoomType: 'xy',
 		},
+		lang: {
+			noData: "조회된 데이터가 없습니다."
+		},
 		navigation: {
 			buttonOptions: {
 				enabled: false
@@ -1681,6 +1690,9 @@
 			lang: {
 				noData: "데이터가 없습니다."
 			},
+		},
+		lang: {
+			noData: "조회된 데이터가 없습니다."
 		},
 		navigation: {
 			buttonOptions: {
@@ -2244,15 +2256,14 @@
 			}
 
 		}).fail(function (jqXHR, textStatus, errorThrown) {
-			console.error(jqXHR);
-			console.error(textStatus);
-			console.error(errorThrown);
-			$("#errMsg").text("처리 중 오류가 발생했습니다.");
+			let errMsg = "처리 중 오류가 발생했습니다.<br/>에러 메세지:" + errorThrown;
+			let r = formatErrorMessage(jqXHR, errorThrown);
+			console.log("error===", r);
+			$("#errMsg").html(errMsg);
 			$("#errorModal").modal("show");
 			setTimeout(function(){
 				$("#errorModal").modal("hide");
 			}, 2000);
-			// alert('처리 중 오류가 발생했습니다.');
 			return false;
 		});
 	}
@@ -2313,13 +2324,14 @@
 			// console.log("featurePropertiesSub===", featurePropertiesSub);
 			
 		}).fail(function (jqXHR, textStatus, errorThrown) {
-			let r = JSON.parse(jqXHR.responseText);
-			$("#errMsg").text("처리 중 오류가 발생했습니다.");
+			let errMsg = "처리 중 오류가 발생했습니다.<br/>에러 메세지:" + errorThrown;
+			let r = formatErrorMessage(jqXHR, errorThrown);
+			console.log("error===", r);
+			$("#errMsg").html(errMsg);
 			$("#errorModal").modal("show");
 			setTimeout(function(){
 				$("#errorModal").modal("hide");
 			}, 2000);
-			// alert('처리 중 오류가 발생했습니다.');
 			return false;
 		}).always(function(jqXHR, textStatus) {
 			if(cookie == "2"){
@@ -2879,11 +2891,14 @@
 
 				}
 			}).fail(function (jqXHR, textStatus, errorThrown) {
-				console.error(jqXHR);
-				console.error(textStatus);
-				console.error(errorThrown);
-
-				alert('처리 중 오류가 발생했습니다.');
+				let errMsg = "처리 중 오류가 발생했습니다.<br/>에러 메세지:" + errorThrown;
+				let r = formatErrorMessage(jqXHR, errorThrown);
+				console.log("error===", r);
+				$("#errMsg").html(errMsg);
+				$("#errorModal").modal("show");
+				setTimeout(function(){
+					$("#errorModal").modal("hide");
+				}, 2000);
 				return false;
 			});
 		}
@@ -3325,7 +3340,7 @@
 							}
 							if(index === lastIndex){
 								let tempObj = item;
-								tempObj.sensor_solar.irradiationPoa = Math.round(sumOfToday/result2B[0].length);
+								tempObj.sensor_solar.irradiationPoa = Math.round(sumOfToday/(lastIndex+1));
 								tempIrrList.push(tempObj);
 							}
 						});
@@ -3353,14 +3368,13 @@
 						if (!isEmpty(v2) && v2[0]["items"].length > 0) {
 							let sumOfToday = 0;
 							let lastIndex = v2[0]["items"].length-1;
-
+			
 							result3bData = v2.filter( item => item.metering_type == "2")[0].items;
-
 							result3bData.map( (item, index) => {
 								sumOfToday += item.energy;
 								if(index === lastIndex){
 									let tempObj = item;
-									tempObj.energy = Math.round(sumOfToday / 1000);
+									tempObj.energy = Math.round(sumOfToday / 1000 );
 									result3aData.push(tempObj);
 								}
 							});
@@ -4320,8 +4334,15 @@
 					});
 				}
 
-			}).fail(function () {
-				console.error('rejected');
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				let errMsg = "처리 중 오류가 발생했습니다.<br/>에러 메세지:" + errorThrown;
+				let r = formatErrorMessage(jqXHR, errorThrown);
+				console.log("error===", r);
+				$("#errMsg").html(errMsg);
+				$("#errorModal").modal("show");
+				setTimeout(function(){
+					$("#errorModal").modal("hide");
+				}, 2000);
 			});
 		} else {
 			$.when($.ajax(gen), $.ajax(foreGen), $.ajax(nowGen), $.ajax(hourlyInsolation)).done(function (genData, foreGenData, nowGenData, insolationData) {
@@ -4503,11 +4524,14 @@
 			setMakeList(alarmList, 'alarmNotice', {'dataFunction': {'level': levelClass}});
 
 		}).fail(function (jqXHR, textStatus, errorThrown) {
-			console.error(jqXHR);
-			console.error(textStatus);
-			console.error(errorThrown);
-
-			alert('처리 중 오류가 발생했습니다.');
+			let errMsg = "처리 중 오류가 발생했습니다.<br/>에러 메세지:" + errorThrown;
+			let r = formatErrorMessage(jqXHR, errorThrown);
+			console.log("error===", r);
+			$("#errMsg").html(errMsg);
+			$("#errorModal").modal("show");
+			setTimeout(function(){
+				$("#errorModal").modal("hide");
+			}, 2000);
 			return false;
 		})
 	}
@@ -4561,11 +4585,9 @@
 
 	function addToDateList(idx, data, option){
 		let dateList = [];
-		let now = new Date();
-		now.setDate(now.getDate()-idx);
 
 		if(!isEmpty(data)){
-			dateList = [...date31List];
+			dateList = [...date30List];
 			data.map((item, index) => {
 				let dateNum = String(item.basetime).substring(4, 8);
 				let found = dateList.findIndex( x => x === dateNum);
@@ -4584,6 +4606,8 @@
 				}
 			});
 		} else {
+			let now = new Date();
+			now.setDate(now.getDate()-idx);
 			dateList = [...Array(idx)].map(x => {
 				now.setDate(now.getDate()+1);
 				return now.format("yyyyMMdd").substring(4, 8);

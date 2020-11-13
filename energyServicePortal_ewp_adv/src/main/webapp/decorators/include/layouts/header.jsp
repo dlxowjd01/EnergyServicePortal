@@ -198,14 +198,14 @@
 				}, 2500);
 
 			}).fail(function (jqXHR, textStatus, errorThrown) {
+				let errMsg = "처리 중 오류가 발생했습니다.<br/>에러 메세지:" + errorThrown;
 				let r = formatErrorMessage(jqXHR, errorThrown);
-				$("#errMsg").text("처리 중 오류가 발생했습니다." + r);
+				console.log("error===", r);
+				$("#errMsg").html(errMsg);
 				$("#errorModal").modal("show");
 				setTimeout(function(){
 					$("#errorModal").modal("hide");
 				}, 2000);
-				// alert('처리 중 오류가 발생했습니다.');
-				console.log("에러:", r )
 				return false;
 			});
 		});
