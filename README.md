@@ -1,4 +1,11 @@
-Folder Tree Structure
+iDERMS-SAAS
+
+![CircleCI]
+https://circleci.com/gh/EncoredTech/EWPServicePortal/tree/iDERMS-SaaS.svg?style=svg&circle-token=65974ecc3ab2fdbe30572287aa426ac40394a9dc
+
+
+
+Folder Tree Structure (work in progress)
 
 energyServicePortal_ewp_adv
    |-- .factorypath
@@ -292,87 +299,7 @@ energyServicePortal_ewp_adv
    |   |   |   |   |-- font (...)
    |   |   |   |   |-- fonts (...)
    |   |   |   |   |-- img (...)
-
-   |   |   |   |   |   |-- expand_arrow.svg
-   |   |   |   |   |   |-- expand_arrow_dark.png
-   |   |   |   |   |   |-- expand_arrow_up_dark.png
-   |   |   |   |   |   |-- glyphicons-halflings-white.png
-   |   |   |   |   |   |-- glyphicons-halflings.png
-   |   |   |   |   |   |-- gnb_close.png
-   |   |   |   |   |   |-- ico_add2_wh.png
-   |   |   |   |   |   |-- ico_add_sm.svg
-   |   |   |   |   |   |-- ico_add_svg.svg
-   |   |   |   |   |   |-- ico_circle_close.svg
-   |   |   |   |   |   |-- ico_delete.svg
-   |   |   |   |   |   |-- ico_download.svg
-   |   |   |   |   |   |-- ico_edit.svg
-   |   |   |   |   |   |-- ico_eye.svg
-   |   |   |   |   |   |-- ico_eye_close.svg
-   |   |   |   |   |   |-- ico_line_graph.svg
-   |   |   |   |   |   |-- ico_nav.svg
-   |   |   |   |   |   |-- ico_nav_wh.svg
-   |   |   |   |   |   |-- ico_trash.svg
-   |   |   |   |   |   |-- ico_upload.svg
-   |   |   |   |   |   |-- ico_warning.svg
-   |   |   |   |   |   |-- loading_icon.gif
-   |   |   |   |   |   |-- loc_config.png
-   |   |   |   |   |   |-- loc_main.png
-   |   |   |   |   |   |-- logo_encored.svg
-   |   |   |   |   |   |-- logo_encored_wh.svg
-   |   |   |   |   |   |-- logo_iderms.svg
-   |   |   |   |   |   |-- logo_login_spower.svg
-   |   |   |   |   |   |-- logo_only_iderms.svg
-   |   |   |   |   |   |-- logo_spower.svg
-   |   |   |   |   |   |-- logo_spower_wh.svg
-   |   |   |   |   |   |-- logo_wpsolar.svg
-   |   |   |   |   |   |-- notification.svg
-   |   |   |   |   |   |-- notification_new.svg
-   |   |   |   |   |   |-- notification_off.svg
-   |   |   |   |   |   |-- reportSample01.png
-   |   |   |   |   |   |-- reportSample02.png
-   |   |   |   |   |   |-- reportSample03.png
-   |   |   |   |   |   |-- reportSample04.png
-   |   |   |   |   |   |-- resource_icons
-   |   |   |   |   |   |   |-- ico_solar.svg
-   |   |   |   |   |   |   |-- ico_water.svg
-   |   |   |   |   |   |   └── ico_wind.svg
-   |   |   |   |   |   |-- sel_down_dark.png
-   |   |   |   |   |   |-- sidebar_icons
-   |   |   |   |   |   |   |-- sidebar_ico1.svg
-   |   |   |   |   |   |   |-- sidebar_ico10.svg
-   |   |   |   |   |   |   |-- sidebar_ico2.svg
-   |   |   |   |   |   |   |-- sidebar_ico3.svg
-   |   |   |   |   |   |   |-- sidebar_ico4.svg
-   |   |   |   |   |   |   |-- sidebar_ico5.svg
-   |   |   |   |   |   |   |-- sidebar_ico6.svg
-   |   |   |   |   |   |   |-- sidebar_ico7.svg
-   |   |   |   |   |   |   |-- sidebar_ico8.svg
-   |   |   |   |   |   |   └── sidebar_ico9.svg
-   |   |   |   |   |   |-- sorting_down.png
-   |   |   |   |   |   |-- sorting_up.png
-   |   |   |   |   |   |-- status_drv.png
-   |   |   |   |   |   |-- status_err.png
-   |   |   |   |   |   |-- status_hld.png
-   |   |   |   |   |   |-- status_icons
-   |   |   |   |   |   |   |-- ico_battery_discharging.svg
-   |   |   |   |   |   |   |-- ico_battery_full.svg
-   |   |   |   |   |   |   |-- ico_status_drive.svg
-   |   |   |   |   |   |   |-- ico_status_error.svg
-   |   |   |   |   |   |   |-- ico_status_hold.svg
-   |   |   |   |   |   |   └── ico_status_stop.svg
-   |   |   |   |   |   |-- status_stp.png
-   |   |   |   |   |   |-- ui-icons_ffffff_256x240.png
-   |   |   |   |   |   |-- weather_icons
-   |   |   |   |   |   |   |-- ico10_cloud_snow.svg
-   |   |   |   |   |   |   |-- ico1_sun.svg
-   |   |   |   |   |   |   |-- ico2_wind.svg
-   |   |   |   |   |   |   |-- ico3_fog.svg
-   |   |   |   |   |   |   |-- ico4_cloud.svg
-   |   |   |   |   |   |   |-- ico5_rain.svg
-   |   |   |   |   |   |   |-- ico6_mixed_rain.svg
-   |   |   |   |   |   |   |-- ico7_windy_rain.svg
-   |   |   |   |   |   |   |-- ico8_snow.svg
-   |   |   |   |   |   |   └── ico9_thunder_rain.svg
+   
    |   |   |   |   |-- js
    |   |   |   |   |   |-- bootstrap.js
    |   |   |   |   |   |-- bootstrap.min.js
