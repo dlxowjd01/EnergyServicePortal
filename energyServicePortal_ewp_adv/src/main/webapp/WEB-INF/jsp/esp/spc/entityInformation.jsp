@@ -251,10 +251,10 @@
 								if (!isEmpty(maintenanceInfo) && !isEmpty(maintenanceInfo['설치_용량'])) {
 									let capacity = Number((maintenanceInfo['설치_용량']).replace(/[^\d]/g, '')) / 1000;
 									let today = new Date();
-									today.setMonth(today.getMonth() - 1);
+									today.setDate(-1);
 
 									let before = new Date();
-									before.setMonth(before.getMonth() - 1);
+									before.setDate(-1);
 									before.setFullYear(before.getFullYear() - 1);
 
 									let energy = energySearch(genId, before.format('yyyyMMdd') + '000000', today.format('yyyyMMdd') + '235959');

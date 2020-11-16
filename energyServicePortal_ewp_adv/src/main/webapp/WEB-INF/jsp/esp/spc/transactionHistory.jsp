@@ -123,7 +123,7 @@
 				}
 			});
 
-			window.sessionStorage.setItem(pathName + '_spc', selectedSpc); //세션스토리지에 저장한다.
+			window.sessionStorage.setItem(pathName + '_spc', selectedSpc.toString()); //세션스토리지에 저장한다.
 			window.sessionStorage.setItem(pathName + '_start', startDate); //세션스토리지에 저장한다.
 			window.sessionStorage.setItem(pathName + '_end', endDate); //세션스토리지에 저장한다.
 			window.sessionStorage.setItem(pathName + '_type', $('#transactionType').prev().data('value')); //세션스토리지에 저장한다.
@@ -302,6 +302,40 @@
 	}
 
 	/**
+	 * 입출금 내역 갱신
+	 */
+	$(document).on('click', '#refresh', function () {
+		let selectedSpc = new Array();
+		document.querySelectorAll('#spcList input:checked').forEach(inp => {
+			selectedSpc.push(inp.dataset.value);
+		});
+
+		if (selectedSpc.length > 0) {
+			$('#loadingCircle').show();
+
+			$.ajax({
+				url: apiHost + '/spcs/transactions/real/refresh',
+				type: 'GET',
+				data: {
+					oid: oid,
+					spc_ids: selectedSpc.toString()
+				}
+			}).done(function(data, textStatus, jqXHR) {
+				if (!isEmpty(data) && !isEmpty(data.data)) {
+					$('#transactionForm').submit();
+				}
+			}).fail(function(jqXHR, textStatus, errorThrown) {
+				console.error(textStatus);
+				errorMsg('입출금 내역 갱신에 실패했습니다.');
+				return false;
+			})
+		} else {
+			errorMsg('선택된 SPC가 없습니다.');
+			return false;
+		}
+	});
+
+	/**
 	 * 에러 처리
 	 *
 	 * @param msg
@@ -398,7 +432,6 @@
 				--></li><!--
 				--><li class="">
 						<div class="row align-group3">
-
 							<div class="box-align dropdown">
 								<h2 class="compare-title">입출금 구분</h2>
 								<button type="button" class="dropdown-toggle" data-toggle="dropdown" value="" data-value="0">전체<span class="caret"></span></button>
@@ -418,6 +451,9 @@
 				</ul>
 			</div>
 		</form>
+	</div>
+	<div class="col-1">
+		<button type="button" id="refresh" class="btn-type03">입출금 내역 갱신</button>
 	</div>
 </div>
 
