@@ -131,43 +131,8 @@
 				<span class="fr"><a href="#;" class="btn-fold">표접기</a></span>
 			</div>
 			<div class="table-wrapper">
-				<div class="fold-box" id="tableDesktop">
-					<!-- PC 버전용 테이블 -->
-					<div class="chart-table">
-						<table>
-							<thead>
-							<tr>
-								<th>2020-08-01</th>
-								<th>01:00</th>
-								<th>02:00</th>
-								<th>03:00</th>
-								<th>04:00</th>
-								<th>05:00</th>
-								<th>06:00</th>
-								<th>07:00</th>
-								<th>08:00</th>
-								<th>09:00</th>
-								<th>10:00</th>
-								<th>11:00</th>
-								<th>12:00</th>
-								<th>13:00</th>
-								<th>14:00</th>
-								<th>15:00</th>
-								<th>16:00</th>
-								<th>17:00</th>
-								<th>18:00</th>
-								<th>19:00</th>
-								<th>20:00</th>
-								<th>21:00</th>
-								<th>22:00</th>
-								<th>23:00</th>
-								<th>24:00</th>
-								<th>합계</th>
-							</tr>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
+				<div class="fold-box">
+					<div class="chart-table" id="table-desktop">
 					</div>
 				</div>
 			</div>
@@ -202,7 +167,7 @@
 
 		$('.btn-save').on('click', function (e) {
 			let excelName = '발전이력';
-			let $val = $('#tableDesktop').find('tbody');
+			let $val = $('#table-desktop').find('tbody');
 			let cnt = $val.length;
 
 			if (cnt < 1) {
@@ -490,7 +455,7 @@
 	 * 데이터 그리드 작성
 	 */
 	const drawPage = () => {
-		document.getElementById('tableDesktop').innerHTML = '';
+		document.getElementById('table-desktop').innerHTML = '';
 
 		standard = makeStandard(interval);
 		let gridData = gridDataMake();
@@ -515,23 +480,20 @@
 		}
 
 		let std = '';
-		let div = document.createElement('div');
-		div.className = 'chart-table';
+		let table = document.createElement('table');
+		table.className = 'table-desktop';
 		gridData.forEach((grid, index) => {
 			const items = grid.data;
 
 			if (isEmpty(std) || std !== grid.std) {
-				if (std !== grid.std) {
-					document.querySelector('div.fold-box').appendChild(div);
+				if (!isEmpty(std) && std !== grid.std) {
+					document.getElementById('table-desktop').appendChild(table);
 
-					div = document.createElement('div');
-					div.className = 'chart-table';
+					table = document.createElement('table');
+					table.className = 'table-desktop';
 				}
 
 				std = grid.std;
-
-				let table = document.createElement('table');
-				table.className = 'table-desktop';
 
 				let tHead = document.createElement('thead')
 				  , tBody = document.createElement('tbody')
@@ -585,8 +547,6 @@
 
 				table.appendChild(tHead);
 				table.appendChild(tBody);
-
-				div.appendChild(table);
 			} else {
 				let tbodyTr = document.createElement('tr')
 				  , totalSum = 0
@@ -621,11 +581,11 @@
 						tbodyTr.appendChild(td);
 					}
 				});
-				div.querySelector('tbody').appendChild(tbodyTr);
+				table.querySelector('tbody').appendChild(tbodyTr);
 			}
 
 			if ((gridData.length - 1) === index) {
-				document.querySelector('div.fold-box').appendChild(div);
+				document.getElementById('table-desktop').appendChild(table);
 			}
 		});
 

@@ -360,6 +360,9 @@
 </div>
 
 <script type="text/javascript">
+	const sgid = '${sessionScope.sgid}';
+	const vgid = '${sessionScope.vgid}';
+
 	let dataList = [];
 	let changeTablegird = null;
 	let ticketFileList = new Array();
@@ -603,7 +606,8 @@
 
 		$('.history-table tbody').empty();
 
-		let alarmData = "";
+		let alarmData = '';
+		let siteArray = '';
 		let deviceArray = new Array();
 		let alarmArray = new Array();
 		let statusArray = new Array();
@@ -617,9 +621,16 @@
 		$(':checkbox[name="status"]:checked').each(function () {
 			statusArray.push($(this).val());
 		});
+
+		if (!isEmpty(sgid) || !isEmpty(vgid)) {
+			siteArray = dataList[1].join(',')
+		} else {
+			siteArray = 'all';
+		}
+
 		if ($(':checkbox[name="confirm"]:checked').length == 2) {
 			alarmData = {
-				sids: dataList[1].join(','),
+				sids: siteArray,
 				deviceTypes: deviceArray.join(','),
 				startTime: $('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000',
 				endTime: $('#toDate').datepicker('getDate').format('yyyyMMdd') + '235959',
@@ -632,7 +643,7 @@
 				confirm = true;
 			}
 			alarmData = {
-				sids: dataList[1].join(','),
+				sids: siteArray,
 				deviceTypes: deviceArray.join(','),
 				confirm: confirm,
 				startTime: $('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000',

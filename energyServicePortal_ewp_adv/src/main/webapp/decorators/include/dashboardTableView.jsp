@@ -13,10 +13,11 @@
 					<col style="width:7%">
 					<col style="width:6%">
 					<col style="width:7%">
-					<col style="width:6%">
-					<col style="width:8%">
-					<col style="width:8%">
-					<col style="width:8%">
+					<col style="width:4%">
+					<col style="width:5%">
+					<col style="width:7%">
+					<col style="width:7%">
+					<col style="width:7%">
 				</colgroup>
 				<thead></thead>
 				<tbody></tbody>
@@ -107,6 +108,21 @@
 						return isEmpty(data) ? '-' : data;
 					},
 					className: 'dt-head-right dt-body-right'
+				},
+				{
+					title: '발전 시간',
+					data: null,
+					render: function (data, type, full, rowIndex) {
+						if (isEmpty(full['yesterEnergy']) || isEmpty(full['capacity'])) {
+							return '-'
+						} else {
+							const yesterEnergy = Number((full['yesterEnergy']).replace(/[^\d]/g, ''));
+							const capacity = Number((full['capacity']).replace(/[^\d]/g, ''));
+							const genHour = Math.round(yesterEnergy / capacity);
+							return genHour;
+						}
+					},
+					className: 'dt-center'
 				},
 				{
 					title: '전일 날씨',
@@ -362,7 +378,7 @@
 									}
 								}
 
-								tableData[index]['capacity'] = (capacity / 1000).toFixed(2);
+								tableData[index]['capacity'] = numberComma(Math.round(capacity / 1000));
 								//tableData[index]['deviceFault'] = deviceFault;
 							}
 						});

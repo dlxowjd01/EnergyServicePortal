@@ -232,8 +232,10 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 				if ("init".equals(divisionProc)) { //초기화
 					jsonArray = new JSONArray();
 					for (Map<String, Object> refineMap : siteOriginList) {
+						refineMap.remove("devices");
 						jsonArray.put(jsonParser(refineMap));
 					}
+
 					request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
 					request.setAttribute("siteName", "전체"); //사이트 리스트 세팅
 				} else if ("group".equals(divisionProc)) { //그룹대시보드

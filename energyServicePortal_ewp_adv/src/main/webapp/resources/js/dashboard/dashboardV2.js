@@ -1082,6 +1082,7 @@ const getTodayTotalDetail = async function () {
 							if (deviceType.match('INV') && !isEmpty(deviceData)) {
 								acPowerSum += (isEmpty(deviceData['activePower'])) ? 0 : deviceData['activePower'];
 								capacitySum += (isEmpty(deviceData['capacity'])) ? 0 : deviceData['capacity'];
+								invertorCount += (isEmpty(deviceData['devices'])) ? 0 : deviceData['devices'].length;
 
 								if ($('.dbTime').data('timestamp') === undefined || ($('.dbTime').data('timestamp') != undefined && Number($('.dbTime').data('timestamp')) < deviceData['timestamp'])) {
 									const dbTime = new Date(deviceData['timestamp']);
@@ -1096,17 +1097,17 @@ const getTodayTotalDetail = async function () {
 
 		const resolveData = {
 			activePower: acPowerSum,
-			capacity: capacitySum
+			capacity: capacitySum,
+			invertorCount: invertorCount
 		}
 
 		resolve(resolveData);
 	}).then(resolveData => {
 		const acPowerSum = resolveData['activePower']
 			, capacitySum = resolveData['capacity']
+			, invertorCount = resolveData['invertorCount']
 			, usage = Math.floor((acPowerSum / capacitySum) * 100)
 			, other = 100 - usage;
-
-		let invertorCount = 0;
 
 		pieChart.setTitle({text: Math.floor(acPowerSum / 1000) + 'kW'});
 		pieChart.series[0].data.forEach((e, idx) => {
@@ -1119,17 +1120,6 @@ const getTodayTotalDetail = async function () {
 			}
 		});
 		pieChart.redraw();
-
-		siteList.forEach(site => {
-			if (!isEmpty(site.devices)) {
-				const devices = site.devices;
-				devices.forEach(device => {
-					if (device.device_type.match('INV')) {
-						invertorCount++;
-					}
-				});
-			}
-		});
 
 		$('#centerTbody tr td:nth-child(2)').html(numberComma(invertorCount) + '<em>&nbsp;&nbsp;대</em>');
 		$('#centerTbody tr td:nth-child(3)').html(numberComma(Math.round(capacitySum / 1000)) + '<em>&nbsp;&nbsp;kW</em>');
@@ -1281,7 +1271,7 @@ const searchSite = async function () {
 
 								activePower = (activePower != '-') ? activePower + deviceData['activePower'] : deviceData['activePower'];
 								capacity = (capacity != '-') ? capacity + deviceData['capacity'] : deviceData['capacity'];
-								inverterCount = (inverterCount != '-') ? inverterCount++ : 1;
+								inverterCount = (!isEmpty(deviceData['devices'])) ? deviceData['devices'].length : '-';
 							} else if (deviceType === 'SENSOR_SOLAR') {
 								if (!isEmpty(deviceData) && !isEmpty(deviceData['irradiationPoa'])) {
 									irradiationPoa = (deviceData['irradiationPoa']).toFixed(1);
