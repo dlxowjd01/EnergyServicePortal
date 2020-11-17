@@ -3,6 +3,7 @@
 <c:set var="oid" value="${userInfo.oid}"/> <%-- 메뉴 관리용 OID --%>
 <c:set var="task" value="${userInfo.task}"/> <%-- 메뉴 관리용 Task --%>
 <c:set var="userRole" value="${userInfo.role}"/> <%-- 메뉴 관리용 Role --%>
+<c:set var="loginId" value="${userInfo.login_id}"/> <%-- 메뉴 관리용 Role --%>
 
 <script type="text/javascript">
 	$(function () {
@@ -26,7 +27,7 @@
 		subMenuLink.on("click", function(e){
 			let current = window.location.pathname;
 			let link = $(this).attr("href");
-			
+
 			if (current == link) {
 				$(this).on('click', false);
 				e.preventDefault();
@@ -82,7 +83,7 @@
 			}
 			$("#mobileNav").hide();
 		}
-		
+
 		$('#mobileNavBtn').click(function(){
 			$('#mask').fadeTo("slow", 0.8);
 			$('body').addClass("sidenav-no-scroll");
@@ -95,7 +96,7 @@
 			$('#mobileNav').hide();
 		});
 
-		
+
 		$('#sidebar:after').css('display', 'none') ? menuItemLink.removeClass('on') : null;
 
 		// document.getElementsByTagName('body')[0].onscroll = function() {
@@ -107,6 +108,7 @@
 
 <div id="sidebar" class="side-nav">
 	<ul>
+	<c:set var="denyCondition" value="${oid}.${loginId}"/>
 	<c:forEach var="menu" items="${menuList}" varStatus="status">
 		<c:set var="menuMap" value="${menu.value}"/>
 		<c:set var="allow" value="${menuMap.access.allow}"/>
@@ -116,6 +118,7 @@
 						and (((allow.task eq null or fn:contains(allow.task, task)) and (allow.role eq null or fn:contains(allow.role, userRole)))
 							and ((deny.task eq null or !fn:contains(deny.task, task)) and (deny.role eq null or !fn:contains(deny.role, userRole))) or userRole eq '1')
 						and ((allow.oid eq null or fn:contains(allow.oid, oid)) and (deny.oid eq null or !fn:contains(deny.oid, oid)))
+						and (deny.uid eq null or !fn:contains(deny.uid, denyCondition))
 			}">
 				<c:set var="thisCode" value="${menuMap.code}"/>
 				<c:choose>
@@ -148,6 +151,7 @@
 														and (((subAllow.task eq null or fn:contains(subAllow.task, task)) and (subAllow.role eq null or fn:contains(subAllow.role, userRole)))
 															and ((subDeny.task eq null or !fn:contains(subDeny.task, task)) and (subDeny.role eq null or !fn:contains(subDeny.role, userRole))) or userRole eq '1')
 														and ((subAllow.oid eq null or fn:contains(subAllow.oid, oid)) and (subDeny.oid eq null or !fn:contains(subDeny.oid, oid)))
+														and (subDeny.uid eq null or !fn:contains(subDeny.uid, denyCondition))
 											}">
 												<c:choose>
 													<c:when test="${cookieLang eq 'KO'}">
@@ -197,6 +201,7 @@
 						and (((allow.task eq null or fn:contains(allow.task, task)) and (allow.role eq null or fn:contains(allow.role, userRole)))
 							and ((deny.task eq null and !fn:contains(deny.task, task)) and (deny.role eq null and !fn:contains(deny.role, userRole))) or userRole eq '1')
 						and ((allow.oid eq null or fn:contains(allow.oid, oid)) and (deny.oid eq null and !fn:contains(deny.oid, oid)))
+						and (deny.uid eq null or !fn:contains(deny.uid, denyCondition))
 					}">
 						<c:set var="thisCode" value="${menuMap.code}"/>
 						<c:choose>
@@ -235,6 +240,7 @@
 														and (((subAllow.task eq null or fn:contains(subAllow.task, task)) and (subAllow.role eq null or fn:contains(subAllow.role, userRole)))
 															and ((subDeny.task eq null and !fn:contains(subDeny.task, task)) and (subDeny.role eq null and !fn:contains(subDeny.role, userRole))) or userRole eq '1')
 														and ((subAllow.oid eq null or fn:contains(subAllow.oid, oid)) and (subDeny.oid eq null and !fn:contains(subDeny.oid, oid)))
+														and (subDeny.uid eq null or !fn:contains(subDeny.uid, denyCondition))
 												}">
 													<c:choose>
 														<c:when test="${cookieLang eq 'KO'}">

@@ -419,19 +419,24 @@
 		Promise.all(promiseUrl).then(response => {
 			generationData = new Object();
 			if (!isEmpty(response)) {
+				console.log(response);
 				response.forEach((res, index) => {
 					const database = res.data;
 					Object.entries(database).forEach(([id, data]) => {
 						document.querySelectorAll('input[name="device"]:checked').forEach(device => {
 							if (billingSites.length > 0 && dashSites.length > 0) {
-								if (index === 0 && (device.getAttribute('id')).match('billing')) {
-									data.name = device.dataset.name;
-								} else if (index === 1 && (device.getAttribute('id')).match('dashboard')) {
-									data.name = device.dataset.name;
+								if (device.value === id) {
+									if (index === 0 && (device.getAttribute('id')).match('billing')) {
+										data.name = device.dataset.name;
+									} else if (index === 1 && (device.getAttribute('id')).match('dashboard')) {
+										data.name = device.dataset.name;
+									} else {
+										console.log()
+										data.name = device.dataset.name;
+									}
+									data.sid = device.dataset.sid;
+									id += index === 0 ? '_billing' : index === 1 ?'_dashboard' : '';
 								}
-
-								data.sid = device.dataset.sid;
-								id += index === 0 ? '_billing' : '_dashboard';
 							} else {
 								if (device.value === id) {
 									data.name = device.dataset.name;
