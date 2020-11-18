@@ -347,7 +347,7 @@
 			document.getElementById('reqDetailStatus').value = '검토 중';
 			document.getElementById('reqDetailStatusVal').value = 2;
 
-			updateStatus(statusVal, reqId);
+			updateStatus(2, reqId);
 		} else {
 			document.getElementById('reqDetailStatus').value = status;
 			document.getElementById('reqDetailStatusVal').value = statusVal;
