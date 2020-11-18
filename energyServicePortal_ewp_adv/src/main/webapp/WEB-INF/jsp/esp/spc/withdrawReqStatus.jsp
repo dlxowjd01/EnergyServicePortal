@@ -107,8 +107,12 @@
 					render: function (data, type, full, rowIndex) {
 						let statusButton = `<button class="${'${full.statusClass}'} clear-btn" onclick="goToDetail(\'${'${rowIndex.row}'}\')">${'${data}'}</button>`;
 						if (task !== '2') {
-							statusButton += `<a href="javascript:void(0);" onclick="goToEdit(\'${'${rowIndex.row}'}\')" class="icon-edit"></a>
-											<a href="javascript:void(0);" onclick="deleteRow(\'${'${rowIndex.row}'}\')" class="icon-delete"></a>`;
+							if (!isEmpty(full['statusVal']) && full['statusVal'] === 0) {
+								statusButton += `<a href="javascript:void(0);" onclick="deleteRow(\'${'${rowIndex.row}'}\')" class="icon-delete"></a>`;
+							} else if (!isEmpty(full['statusVal']) && full['statusVal'] === 1) {
+								statusButton += `<a href="javascript:void(0);" onclick="goToEdit(\'${'${rowIndex.row}'}\')" class="icon-edit"></a>
+												<a href="javascript:void(0);" onclick="deleteRow(\'${'${rowIndex.row}'}\')" class="icon-delete"></a>`;
+							}
 						}
 						return statusButton;
 					},
