@@ -72,7 +72,6 @@
 
 		});
 
-
 		//헤더 클릭
 		$('.history-table thead th').on('click', function (e) {
 			e.preventDefault();
@@ -558,24 +557,25 @@
 
 		window.onload = function() {
 			if (!isEmpty(searchDid)) {
-				siteList.forEach(function(site) {
-					let devices = site.devices;
-					if (!isEmpty(devices)) {
-						devices.forEach(function(device) {
-							if(device.did == searchDid) {
-								let choiceSid = device.sid,
-									deviceTp = device.device_type;
-								$(':checkbox[name="site"]').each(function() {
-									if($(this).val() == choiceSid) {
-										$(this).prop('checked', true);
-										displayDropdown($('#siteList'));
-										deviceType(deviceTp);
-									}
-								});
-							}
-						});
+				$.ajax({
+					url: apiHost + '/config/devices',
+					type: 'get',
+					data: {
+						oid: oid,
 					}
-				});
+				}).done(function(data, textStatus, jqXHR) {
+					const targetDevice = data.find(e => e.did === searchDid);
+					$(':checkbox[name="site"]').each(function() {
+						if($(this).val() == targetDevice.sid) {
+							$(this).prop('checked', true);
+							displayDropdown($('#siteList'));
+							deviceType(targetDevice.device_type);
+						}
+					});
+				}).fail(function(jqXHR, textStatus, errorThrown) {
+					console.error(textStatus);
+					return false;
+				})
 			}
 		}
 	});

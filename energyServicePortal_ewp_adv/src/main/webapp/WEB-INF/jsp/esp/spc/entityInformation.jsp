@@ -96,7 +96,7 @@
 						if (data === '-') {
 							suffix = '';
 						}
-						return data + suffix;
+						return numberComma(data) + suffix;
 					},
 					className: 'dt-right'
 				},
@@ -105,10 +105,15 @@
 					data: 'guaranteed_performance',
 					render: function (data, type, full, rowIndex) {
 						let suffix = ' %';
+
+						if (isNaN(data) || data === Infinity) {
+							data = '-'
+						}
+
 						if (data === '-') {
 							suffix = '';
 						}
-						return data + suffix;
+						return numberComma(data) + suffix;
 					},
 					className: 'dt-right'
 				},
@@ -117,10 +122,15 @@
 					data: 'guaranteed_probability',
 					render: function (data, type, full, rowIndex) {
 						let suffix = ' %';
+
+						if (isNaN(data) || data === Infinity) {
+							data = '-'
+						}
+
 						if (data === '-') {
 							suffix = '';
 						}
-						return data + suffix;
+						return numberComma(data) + suffix;
 					},
 					className: 'dt-right'
 				},
@@ -245,7 +255,7 @@
 							if (warrantyInfo['보증_방식'] === 'PR') {
 								guaranteed_value = isEmpty(warrantyInfo['PR_보증치']) ? '-' : warrantyInfo['PR_보증치'];
 								if (!isEmpty(warrantyInfo['보증_감소율']) && !isEmpty(warrantyInfo['현재_적용_연차'])) {
-									guaranteed_value = guaranteed_value - (Number(warrantyInfo['보증_감소율']) *  Number(warrantyInfo['현재_적용_연차']));
+									guaranteed_value = Math.round((guaranteed_value * (1 - Number(warrantyInfo['보증_감소율'] / 100) ** (Number(warrantyInfo['현재_적용_연차']) - 1))) * 100) / 100;
 								}
 
 								if (!isEmpty(maintenanceInfo) && !isEmpty(maintenanceInfo['설치_용량'])) {
@@ -271,7 +281,7 @@
 							} else if (warrantyInfo['보증_방식'] === '발전 시간') {
 								guaranteed_value = isEmpty(warrantyInfo['발전시간_보증치']) ? '-' : warrantyInfo['발전시간_보증치'];
 								if (!isEmpty(warrantyInfo['보증_감소율']) && !isEmpty(warrantyInfo['현재_적용_연차'])) {
-									guaranteed_value = Math.round((guaranteed_value - (Number(warrantyInfo['보증_감소율']) *  Number(warrantyInfo['현재_적용_연차']))) * 100) / 100;
+									guaranteed_value = Math.round((guaranteed_value * (1 - Number(warrantyInfo['보증_감소율'] / 100) ** (Number(warrantyInfo['현재_적용_연차']) - 1))) * 100) / 100;
 								}
 
 								if (!isEmpty(maintenanceInfo) && !isEmpty(maintenanceInfo['설치_용량'])) {
