@@ -14,6 +14,8 @@ $(function() {
 		firstDay : 0,
 		isRTL : false,
 		showMonthAfterYear : true,
+		changeMonth: true,
+		changeYear: true,
 		yearSuffix : '년'
 	};
 	$.datepicker.setDefaults($.datepicker.regional['ko']);
@@ -35,7 +37,6 @@ $(function() {
 		/*buttonImage: "../2016img/search_calendar.gif", */
 		buttonImageOnly: true,
 		dateFormat: 'yy-mm'
-
 	});
 
 	$('.fromDate').datepicker({
