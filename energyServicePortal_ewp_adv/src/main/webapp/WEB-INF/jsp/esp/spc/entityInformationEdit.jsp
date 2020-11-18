@@ -455,13 +455,10 @@
 							let dataId = file['fieldname'].replace('공인인증서_등록_이미지', '공인인증서');
 							let dataText = dataId.split('_');
 							let dupIdx = Number(dataText[0].replace('공인인증서', ''));
-							finance_info['공인인증서'][dupIdx]['fieldname'] = dataId;
 
 							if (dupIdx > 0 && (dupIdx + 1) > fileInputList.length) {
 								addRow('addList_certificate_registration', 'class');
 								addRow('addList_certificate_registration2', 'class');
-							} else {
-								fileInputList[dupIdx].dataset.dataId = dataId;
 							}
 
 							let use = '';
@@ -1925,8 +1922,8 @@
 										</ul>
 									</div>
 									<div class="flex-baseline mt10">
-										<input type="file" id="공인인증서[index]" class="hidden" name="공인인증서[index]" accept=".der, .key" multiple>
-										<label for="공인인증서[index]" class="btn file-upload">파일 선택</label>
+										<input type="file" id="공인인증서_등록_이미지[index]" class="hidden" name="공인인증서_등록_이미지[index]" accept=".der, .key" multiple>
+										<label for="공인인증서_등록_이미지[index]" class="btn file-upload">파일 선택</label>
 										<ul class="file_list ml-16">
 											<li>등록 파일 이름</li>
 										</ul>
