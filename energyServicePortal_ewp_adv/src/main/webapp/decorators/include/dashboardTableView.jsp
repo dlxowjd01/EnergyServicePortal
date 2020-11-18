@@ -116,8 +116,8 @@
 						if (isEmpty(full['yesterEnergy']) || isEmpty(full['capacity'])) {
 							return '-'
 						} else {
-							const yesterEnergy = Number((full['yesterEnergy']).replace(/[^\d]/g, ''));
-							const capacity = Number((full['capacity']).replace(/[^\d]/g, ''));
+							const yesterEnergy = Number(String(full['yesterEnergy']).replace(/[^\d]/g, ''));
+							const capacity = Number(String(full['capacity']).replace(/[^\d]/g, ''));
 							const genHour = Math.round(yesterEnergy / capacity);
 							return genHour;
 						}
