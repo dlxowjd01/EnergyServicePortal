@@ -239,6 +239,7 @@ html.darkmode:root {
 	--btn-upload: url("/img/btn_upload.svg");
 	--btn-download: url("/img/btn_download.svg");
 	--ico-delete: url("/img/close_btn_md.svg");
+	--ico-open: url("/img/ico_open.svg");
 
 	/* ********* Weather images ********* */
 	--ico1_sun: url('/img/weather_icons/ico1_sun.svg');
@@ -7988,6 +7989,18 @@ input.inp[readonly]:focus {
 	text-indent: -9999px;
 	vertical-align: middle;
 	background: var(--btn-trash) no-repeat center center;
+	outline: none;
+}
+
+.icon-open {
+	display: inline-block;
+	margin-left: 16px;
+	width: 16px;
+	height: 16px;
+	border: 0;
+	text-indent: -9999px;
+	vertical-align: middle;
+	background: var(--ico-open) no-repeat center center;
 	outline: none;
 }
 

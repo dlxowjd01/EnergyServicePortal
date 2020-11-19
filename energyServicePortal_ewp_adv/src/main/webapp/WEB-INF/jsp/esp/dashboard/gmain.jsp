@@ -640,11 +640,17 @@
 		}
 	}
 
-	const pageMove = (id, action) => {
+	const pageMove = (id, action, target) => {
 		let $form = $('#linkSiteForm');
 		let $inp = $('<input>').attr('type', 'hidden').attr('name', 'sid').val(id);
 
 		$form.append($inp);
+
+		if (!isEmpty(target) || target === 'blank') {
+			let targetWin = window.open('about:blank', 'targetWin');
+			$form.attr('target', 'targetWin');
+		}
+
 		if (action == 'alarm') {
 			$form.attr('action', '/history/alarmHistory.do').submit();
 		} else {

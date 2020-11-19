@@ -691,7 +691,7 @@
 									--><button type="button" id="provisionalBtn" class="btn-type">출금 가승인</button><!--
 								--></div>
 								</c:when>
-								<c:when test="${userInfo.task eq 3 and param.req_detail_status_val eq 4}">
+								<c:when test="${userInfo.task eq 3 and (param.req_detail_status_val eq 4 or param.req_detail_status_val eq 5)}">
 									<div class="spc-btn-group my-20"><!--
 									--><button type="button" id="finalApprovalBtn" class="btn-type">승인완료로 변경</button><!--
 								--></div>

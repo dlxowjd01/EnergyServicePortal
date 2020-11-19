@@ -51,7 +51,8 @@
 					title: '발전소 명',
 					data: 'siteName',
 					render: function (data, type, full, rowIndex) {
-						return '<a href="javascript:pageMove(\'' + full['sid'] + '\', \'siteMain\')">' + data + '</a>';
+						return '<a href="javascript:pageMove(\'' + full['sid'] + '\', \'siteMain\'), \'self\'">' + data + '</a>' +
+								'<a href="javascript:pageMove(\'' + full['sid'] + '\', \'siteMain\', \'blank\')" class="icon-open"></a>';
 					},
 					className: 'dt-head-left dt-body-left'
 				},
