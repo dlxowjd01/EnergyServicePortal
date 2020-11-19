@@ -190,14 +190,20 @@
 		let liStr = ``;
 
 		if (!isEmpty(sites)) {
+			liStr += `<li>
+						<a href="javascript:void(0);" data-value="all" tabindex="-1">
+							<input type="checkbox" id="all" value="all" name="site">
+							<label for="all">전체</label>
+						</a>
+					</li>`;
 
 			sites.forEach((site, index) => {
 				liStr += `<li>
-						<a href="javascript:void(0);" data-value="${'${site.sid}'}" tabindex="-1">
-							<input type="checkbox" id="${'${site.sid}'}" value="${'${site.sid}'}" name="site">
-							<label for="${'${site.sid}'}">${'${site.name}'}</label>
-						</a>
-					</li>`;
+							<a href="javascript:void(0);" data-value="${'${site.sid}'}" tabindex="-1">
+								<input type="checkbox" id="${'${site.sid}'}" value="${'${site.sid}'}" name="site">
+								<label for="${'${site.sid}'}">${'${site.name}'}</label>
+							</a>
+						</li>`;
 			});
 
 			liStr += `<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16">적용</button></li>`;
@@ -208,15 +214,24 @@
 	};
 
 	const makeDeviceList = () => {
-		const selectedSite = document.querySelectorAll('input[name="site"]:checked');
+		let selectedSite = new Array();
+		if ($(':checkbox[name="site"]:checked').val() === 'all') {
+			document.querySelectorAll('[name="site"]').forEach(check => {
+				if (check.value !== 'all') {
+					selectedSite.push(check.value);
+				}
+			});
+		} else {
+			document.querySelectorAll('[name="site"]:checked').forEach(checked => {
+				selectedSite.push(checked.value);
+			});
+		}
+
+		document.querySelector('#deviceType .selectDevices').innerHTML = '';
 
 		if (!isEmpty(selectedSite)) {
-			const deviceList = document.querySelectorAll('#deviceType .selectDevices');
-			while (deviceList.firstChild) deviceList.removeChild(deviceList.firstChild);
-
 			let deviceUrl = new Array();
-			selectedSite.forEach(site => {
-				const sid = site.value;
+			selectedSite.forEach(sid => {
 				deviceUrl.push($.ajax({
 					url: apiHost + '/config/devices/',
 					type: 'GET',
@@ -232,10 +247,9 @@
 
 				let liStr = ``;
 				response.forEach(devices => {
-					let targetSite = sites.find(site => site['sid'] === devices[0]['sid']);
-
 					let deviceStr = ``;
 					if (!isEmpty(devices)) {
+						let targetSite = sites.find(site => site['sid'] !== undefined && site['sid'] === devices[0]['sid']);
 
 						deviceStr +=
 							`   <li>

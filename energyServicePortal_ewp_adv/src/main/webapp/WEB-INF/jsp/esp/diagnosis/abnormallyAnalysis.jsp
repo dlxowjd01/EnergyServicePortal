@@ -114,7 +114,10 @@
 
 	//사업소 조회
 	const siteMakeList = () => {
-		setMakeList(siteList, 'siteULList', {'dataFunction': {}}); //list생성
+		const makeSite = Array.from(siteList);
+		makeSite.unshift({ sid: 'all', name: '전체' });
+		setMakeList(makeSite, 'siteULList', {'dataFunction': {}}); //list생성
+		$('#siteULList').append(`<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16">적용</button></li>`);
 	};
 
 	// 추후에도 쓸일 없다면 삭제 요망. 2020.06.12
@@ -137,12 +140,18 @@
 	//설비유형 리스트 그리기
 	const deviceType = () => {
 		let deviceType = new Array();
-		const siteArray = $.makeArray($(':checkbox[name="site"]:checked').map(
-			function () {
-				return $(this).val();
-			}
-			)
-		);
+		let siteArray = new Array();
+		if ($(':checkbox[name="site"]:checked').val() === 'all') {
+			document.querySelectorAll('[name="site"]').forEach(check => {
+				if (check.value !== 'all') {
+					siteArray.push(check.value);
+				}
+			});
+		} else {
+			document.querySelectorAll('[name="site"]:checked').forEach(checked => {
+				siteArray.push(checked.value);
+			});
+		}
 
 		if (siteArray.length > 0) {
 			$.ajax({
@@ -206,9 +215,28 @@
 
 		if (deviceList.length > 0) {
 			//선택된 사이트를 기준으로 한다.
-			$(':checkbox[name="site"]:checked').each(function () {
-				let siteNm = $(this).next().text(),
-					siteId = $(this).val();
+			let siteArray = new Array();
+			if ($(':checkbox[name="site"]:checked').val() === 'all') {
+				document.querySelectorAll('[name="site"]').forEach(check => {
+					if (check.value !== 'all') {
+						siteArray.push({
+							siteNm: check.nextElementSibling.textContent,
+							siteId: check.value
+						});
+					}
+				});
+			} else {
+				document.querySelectorAll('[name="site"]:checked').forEach(checked => {
+					siteArray.push({
+						siteNm: checked.nextElementSibling.textContent,
+						siteId: checked.value
+					});
+				});
+			}
+
+			siteArray.forEach(site => {
+				let siteNm = site.siteNm,
+					siteId = site.siteId;
 
 				deviceList.forEach(el => {
 					if (el.sid == siteId) {
@@ -339,9 +367,17 @@
 		let compDeviceArray = new Array();
 
 		// 사이트
-		$(':checkbox[name="site"]:checked').each(function () {
-			siteArray.push($(this).val());
-		});
+		if ($(':checkbox[name="site"]:checked').val() === 'all') {
+			document.querySelectorAll('[name="site"]').forEach(check => {
+				if (check.value !== 'all') {
+					siteArray.push(check.value);
+				}
+			});
+		} else {
+			document.querySelectorAll('[name="site"]:checked').forEach(checked => {
+				siteArray.push(checked.value);
+			});
+		}
 
 		// 검증설비
 		$(':radio[name="deviceNm"]:checked').each(function () {

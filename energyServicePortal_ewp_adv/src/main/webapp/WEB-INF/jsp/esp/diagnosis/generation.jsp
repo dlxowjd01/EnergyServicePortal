@@ -451,6 +451,13 @@
 
 		let str = '';
 		if (siteList.length > 0) {
+			str += `<li>
+						<a href="javascript:void(0);" data-value="all" tabindex="-1">
+							<input type="checkbox" id="all" value="all" name="site">
+							<label for="all">전체</label>
+						</a>
+					</li>`;
+
 			siteList.forEach((site, index) => {
 				str += `<li>
 						<a href="javascript:void(0);" data-value="${'${site.sid}'}" tabindex="-1">
@@ -468,12 +475,32 @@
 
 	const device = function () {
 		$('#deviceType .dropdown-toggle').empty().append('복수 선택').append('<span class="caret"></span>');
+		$('#deviceType .sec-li-box').remove();
 
 		if ($(':checkbox[name="site"]:checked').length > 0) {
-			$('#deviceType .sec-li-box').remove();
-			$(':checkbox[name="site"]:checked').each(function () {
-				const sid = $(this).val()
-					, sNm = $(this).next('label').text()
+
+			let selectedSite = new Array();
+			if ($(':checkbox[name="site"]:checked').val() === 'all') {
+				document.querySelectorAll('[name="site"]').forEach(check => {
+					if (check.value !== 'all') {
+						selectedSite.push({
+							sid: check.value,
+							sNm: check.nextElementSibling.textContent
+						});
+					}
+				});
+			} else {
+				document.querySelectorAll('[name="site"]:checked').forEach(checked => {
+					selectedSite.push({
+						sid: checked.value,
+						sNm: checked.nextElementSibling.textContent
+					});
+				});
+			}
+
+			selectedSite.forEach(site => {
+				const sid = site.sid
+					, sNm = site.sNm
 					, dashboardArray = new Array()
 					, billingArray = new Array();
 
@@ -531,6 +558,9 @@
 					},
 					dataType: "json"
 				});
+			});
+			$(':checkbox[name="site"]:checked').each(function () {
+
 			});
 		}
 	};

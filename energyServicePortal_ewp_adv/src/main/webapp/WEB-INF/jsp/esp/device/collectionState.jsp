@@ -424,7 +424,9 @@
 
 	//사업소 조회
 	function siteMakeList () {
-		setMakeList(siteList, 'siteULList', {'dataFunction': {}}); //list생성
+		const makeSite = Array.from(siteList);
+		makeSite.unshift({ sid: 'all', name: '전체'});
+		setMakeList(makeSite, 'siteULList', {'dataFunction': {}}); //list생성
 		$('#siteULList').append(`<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16">적용</button></li>`);
 	};
 
@@ -656,10 +658,18 @@
 	const getRtuDataList = function () {
 		initTable();
 
-		const siteArray = $.makeArray($(':checkbox[name="site"]:checked').map(function () {
-				return $(this).val();
-			})
-		);
+		let siteArray = new Array();
+		if ($(':checkbox[name="site"]:checked').val() === 'all') {
+			document.querySelectorAll('[name="site"]').forEach(check => {
+				if (check.value !== 'all') {
+					siteArray.push(check.value);
+				}
+			});
+		} else {
+			document.querySelectorAll('[name="site"]:checked').forEach(checked => {
+				siteArray.push(checked.value);
+			});
+		}
 
 		if (siteArray.length > 0) {
 			$.ajax({
@@ -760,14 +770,24 @@
 		$('#description').val('');
 		//RTU 등록/수정 초기화
 
-		const siteArray = $.makeArray($(':checkbox[name="site"]:checked').map(
-			function () {
-				return {
-					sid: $(this).val(),
-					name: $(this).next('label').text()
+		let siteArray = new Array();
+		if ($(':checkbox[name="site"]:checked').val() === 'all') {
+			document.querySelectorAll('[name="site"]').forEach(check => {
+				if (check.value !== 'all') {
+					siteArray.push({
+						sid: check.value,
+						name: check.nextElementSibling.textContent.trim()
+					});
 				}
-			})
-		);
+			});
+		} else {
+			document.querySelectorAll('[name="site"]:checked').forEach(checked => {
+				siteArray.push({
+					sid: checked.value,
+					name: checked.nextElementSibling.textContent.trim()
+				});
+			});
+		}
 
 		if (siteArray.length > 0) {
 			dropDownInit($('#rtuSite'));

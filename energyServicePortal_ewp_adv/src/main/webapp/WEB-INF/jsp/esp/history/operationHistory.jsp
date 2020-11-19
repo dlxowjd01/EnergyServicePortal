@@ -639,19 +639,30 @@
 
 	//사업소 조회
 	const siteMakeList = function () {
-		setMakeList(siteList, 'siteULList', {'dataFunction': {}});
+		const makeSite = Array.from(siteList);
+		makeSite.unshift({ sid: 'all', name: '전체'});
+		setMakeList(makeSite, 'siteULList', {'dataFunction': {}}); //list생성
 		$('#siteULList').append(`<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16">적용</button></li>`);
 	};
 
 	//선택한 SID에 해당하는 유형의 타입을 보여준다.
 	const deviceType = function (deviceTp) {
 		$('#deviceType button').empty().append('설비유형<span class="caret"></span>');
+		$('#devices .dropdown-toggle').text().replace(/<[^>]+>/g, '복수 선택');
+		$('#devices .dropdown-cov').empty();
 
-		const siteArray = $.makeArray($(':checkbox[name="site"]:checked').map(
-			function () {
-				return $(this).val();
-			}
-		));
+		let siteArray = new Array();
+		if ($(':checkbox[name="site"]:checked').val() === 'all') {
+			document.querySelectorAll('[name="site"]').forEach(check => {
+				if (check.value !== 'all') {
+					siteArray.push(check.value);
+				}
+			});
+		} else {
+			document.querySelectorAll('[name="site"]:checked').forEach(checked => {
+				siteArray.push(checked.value);
+			});
+		}
 
 		if (siteArray.length > 0) {
 			$.ajax({
@@ -714,17 +725,34 @@
 			$('#devices .dropdown-cov').empty();
 
 			//선택된 사이트를 기준으로 한다.
-			$(':checkbox[name="site"]:checked').each(function () {
-				let siteNm = $(this).next().text(),
-					siteId = $(this).val(),
-					siteGrp = $('<li>').addClass('sec-li-box');
+			let siteArray = new Array();
+			if ($(':checkbox[name="site"]:checked').val() === 'all') {
+				document.querySelectorAll('[name="site"]').forEach(check => {
+					if (check.value !== 'all') {
+						siteArray.push({
+							siteId: check.value,
+							siteNm: check.nextElementSibling.textContent
+						});
+					}
+				});
+			} else {
+				document.querySelectorAll('[name="site"]:checked').forEach(checked => {
+					siteArray.push({
+						siteId: check.value,
+						siteNm: check.nextElementSibling.textContent
+					});
+				});
+			}
+
+			siteArray.forEach(site => {
+				let siteGrp = $('<li>').addClass('sec-li-box');
 
 				siteGrp.append('<p>');
-				siteGrp.find('p').addClass('tx-li-title').text(siteNm);
+				siteGrp.find('p').addClass('tx-li-title').text(site.siteNm);
 				siteGrp.append('<ul>');
 
 				$.each(deviceList, function (i, el) {
-					if (el.sid == siteId) {
+					if (el.sid == site.siteId) {
 						$.each(typeArray, function (k, elm) {
 							if (elm == el.device_type) {
 								let str = `<li>
@@ -834,9 +862,17 @@
 		let siteArray = new Array();
 		let deviceArray = new Array();
 
-		$(':checkbox[name="site"]:checked').each(function () {
-			siteArray.push($(this).val());
-		});
+		if ($(':checkbox[name="site"]:checked').val() === 'all') {
+			document.querySelectorAll('[name="site"]').forEach(check => {
+				if (check.value !== 'all') {
+					siteArray.push(check.value);
+				}
+			});
+		} else {
+			document.querySelectorAll('[name="site"]:checked').forEach(checked => {
+				siteArray.push(checked.value);
+			});
+		}
 
 		$(':checkbox[name="device"]:checked').each(function () {
 			deviceArray.push($(this).val());

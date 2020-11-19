@@ -1875,6 +1875,14 @@
 									</ul>
 								</div>
 							</div>
+							<div class="col-lg-2 col-sm-3"><span class="input-label offset">이중 인증</span></div>
+							<div class="col-lg-4 col-sm-9">
+								<label class="switch switch-slide">
+									<input type="checkbox" value="showTable" id="switchBtn" class="switch-input">
+									<span class="switch-label" data-on="Y" data-off="N"></span>
+									<span class="switch-handle"></span>
+								</label>
+							</div>
 						</div>
 						<div class="row">
 							<div class="col-lg-2 col-sm-3"><span class="input-label">설명</span></div>

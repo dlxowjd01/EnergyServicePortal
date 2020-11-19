@@ -536,22 +536,16 @@
 	}
 	
 	const siteList = function (sidparam) {
-		let siteList = [];
-		setMakeList(sites, 'siteList', { 'dataFunction': {} });	//list생성
+		const makeSite = Array.from(sites);
+		makeSite.unshift({ sid: 'all', name: '전체'});
+		setMakeList(makeSite, 'siteList', {'dataFunction': {}}); //list생성
 		$('#siteList').append(`<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16">적용</button></li>`);
 
 
 		if (sidparam == '' || sidparam == undefined) {
 			$(':checkbox[name="site"]').prop('checked', false);
-		} else if(sidparam == 'all'){
-			$(':checkbox[name="site"]').prop('checked', true);
 		} else{
-			$.each(sites, function(i, el){
-				let checkcnt = '';
-				if(el.sid == sidparam){
-					$(':checkbox[name="site"]').eq(i).prop('checked', true);
-				}
-			});
+			$(':checkbox[name="site"][value="' + sidparam + '"]').prop('checked', true);
 		}
 
 		displayDropdown($('#site'));
@@ -1236,11 +1230,19 @@
 		} else {
 			$('#equipmentList button').empty().append('설비유형<span class="caret"></span>');
 		}
-		const siteArray = $.makeArray($(':checkbox[name="site"]:checked').map(
-			function () {
-				return $(this).val();
-			}
-		));
+		let siteArray = new Array();
+		if ($(':checkbox[name="site"]:checked').val() === 'all') {
+			document.querySelectorAll('[name="site"]').forEach(check => {
+				if (check.value !== 'all') {
+					siteArray.push(check.value);
+				}
+			});
+		} else {
+			document.querySelectorAll('[name="site"]:checked').forEach(checked => {
+				siteArray.push(checked.value);
+			});
+		}
+
 		let deviceTypes = [];
 		const siteOid = sites[0].oid;
 		if (siteArray.length > 0) {

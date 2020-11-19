@@ -21,8 +21,25 @@ $(document).on('click', '.dropdown-menu:not(.unused) li:not(.disabled, .dropdown
 			$selector.find(':checkbox').prop('checked', true);
 		}
 	}
-	
-	if ($selector.find(':radio').length > 0 || $selector.find(':checkbox').length > 0) {
+
+	if ($selector.find(':checkbox').length > 0) {
+		let $selectorName = $selector.find(':checkbox').prop('name');
+		if ($selector.find(':checkbox').val() === 'all') {
+			$(':checkbox[name="' + $selectorName + '"]').each(function() {
+				if ($(this).val() !== 'all') {
+					$(this).prop('checked', false);
+				}
+			});
+		} else {
+			$(':checkbox[name="' + $selectorName + '"]').each(function() {
+				if ($(this).val() === 'all') {
+					$(this).prop('checked', false);
+				}
+			});
+		}
+
+		displayDropdown($dropdown);
+	} else if ($selector.find(':radio').length > 0) {
 		displayDropdown($dropdown);
 	} else {
 		let $displayData = $selector.data();
@@ -60,7 +77,7 @@ const displayDropdown = ($selector) => {
 	} else if ($selector.find(':checkbox').length > 0) {
 		let checkedItems = $selector.find('input[type="checkbox"]:checked');
 		let checkedboxLength = checkedItems.length;
-		let checkboxLength = $selector.find('input[type="checkbox"]').length;
+		let checkboxLength = $selector.find('input[type="checkbox"]:not([value="all"])').length;
 
 		if(checkedboxLength == checkboxLength){
 			$displayText = '전체';
