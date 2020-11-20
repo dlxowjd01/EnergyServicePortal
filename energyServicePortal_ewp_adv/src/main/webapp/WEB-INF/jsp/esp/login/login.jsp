@@ -292,7 +292,8 @@
 						data: $('#loginForm').serialize()
 					}).done(function (json, textStatus, jqXHR) {
 						if (isEmpty(json.rtnUrl)) {
-							location.reload();
+							alertMsg(json.msg);
+							//location.reload();
 						} else {
 							if (json.rtnUrl === 'verify') {
 								$('#loginForm').find('.input-field').eq(2).removeClass('hidden');
@@ -311,7 +312,7 @@
 						data: $('#loginForm').serialize()
 					}).done(function (json, textStatus, jqXHR) {
 						if (isEmpty(json.rtnUrl)) {
-							location.reload();
+							alertMsg(json.msg);
 						} else {
 							location.href = json.rtnUrl;
 						}

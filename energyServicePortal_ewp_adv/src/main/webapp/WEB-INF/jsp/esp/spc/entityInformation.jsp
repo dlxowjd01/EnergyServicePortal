@@ -95,6 +95,10 @@
 						let suffix = ' %';
 						if (data === '-') {
 							suffix = '';
+						} else {
+							if (full['guarantee'] === '발전 시간') {
+								suffix = ' H';
+							}
 						}
 						return numberComma(data) + suffix;
 					},
@@ -112,6 +116,10 @@
 
 						if (data === '-') {
 							suffix = '';
+						} else {
+							if (full['guarantee'] === '발전 시간') {
+								suffix = ' H';
+							}
 						}
 						return numberComma(data) + suffix;
 					},

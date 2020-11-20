@@ -3,6 +3,7 @@ package kr.co.esp.common.interceptor;
 import kr.co.esp.common.service.EgovProperties;
 import kr.co.esp.common.util.UserUtil;
 import org.apache.poi.ss.formula.functions.T;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -13,6 +14,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -593,17 +595,21 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 				}
 			} else if (elem.getValue() instanceof String) {
 				String dataValue = (String) elem.getValue();
-				if (dataValue.startsWith("{") && dataValue.endsWith("}")) {
-					try {
-						jo.put(elem.getKey(), new JSONObject((String) elem.getValue()));
-					} catch (JSONException e) {
-						jo.remove(elem.getKey());
-					}
-				} else if (dataValue.contains(System.getProperty("line.separator"))){
-					try {
-						jo.put(elem.getKey(), new JSONObject(((String) elem.getValue()).replaceAll(System.getProperty("line.separator"), "")));
-					} catch (JSONException e) {
-						jo.remove(elem.getKey());
+				if ("description".equals(elem.getKey())) {
+					jo.remove(elem.getKey());
+				} else {
+					if (dataValue.startsWith("{") && dataValue.endsWith("}")) {
+						try {
+							jo.put(elem.getKey(), new JSONObject((String) elem.getValue()));
+						} catch (JSONException e) {
+							jo.remove(elem.getKey());
+						}
+					} else if (dataValue.contains(System.getProperty("line.separator"))){
+						try {
+							jo.put(elem.getKey(), new JSONObject(((String) elem.getValue()).replaceAll(System.getProperty("line.separator"), "")));
+						} catch (JSONException e) {
+							jo.remove(elem.getKey());
+						}
 					}
 				}
 			}

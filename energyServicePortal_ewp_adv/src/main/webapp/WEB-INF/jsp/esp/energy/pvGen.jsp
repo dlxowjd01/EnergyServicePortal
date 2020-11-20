@@ -270,6 +270,9 @@
 							`;
 
 						deviceStr += `<li class="btn-wrap-border"></li>`;
+						devices.sort((a, b) => {
+							return a['name'] > b['name'] ? 1 : a['name'] < b['name'] ? -1 : 0;
+						});
 						devices.forEach(device => {
 							if (device.dashboard || device.billing) {
 								deviceStr +=

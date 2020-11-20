@@ -81,11 +81,16 @@ public class LoginController {
 		return "redirect:/login.do";
 	}
 
+	@ResponseBody
 	@RequestMapping("/loginFailure.do")
-	public String loginFailure(HttpSession session, RedirectAttributes redirect) throws Exception {
+	public Map<String, Object> loginFailure(HttpSession session, RedirectAttributes redirect) throws Exception {
+		Map<String, Object> returnMap = new HashMap<String, Object>();
+
 		Locale locale = (Locale) session.getAttribute("sessionLocale");
-		redirect.addFlashAttribute("msg", egovMessageSource.getMessage("ewp.error.login_no_correct", locale));
-		return "redirect:/login.do";
+
+		returnMap.put("rtnUrl", "");
+		returnMap.put("msg", egovMessageSource.getMessage("ewp.error.login_no_correct", locale));
+		return returnMap;
 	}
 
 	@ResponseBody
@@ -137,10 +142,12 @@ public class LoginController {
 				}
 			} else {
 				returnMap.put("rtnUrl", "");
+				returnMap.put("msg", "인증번호 확인에 실패했습니다.");
 			}
 		} catch (Exception e) {
 			logger.error("LoginController - twoFactorAuth : " + e.toString());
 			returnMap.put("rtnUrl", "");
+			returnMap.put("msg", "인증번호 확인에 실패했습니다.");
 		}
 
 		return returnMap;
