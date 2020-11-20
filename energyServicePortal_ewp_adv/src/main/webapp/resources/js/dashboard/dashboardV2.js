@@ -1340,7 +1340,6 @@ const searchSite = async function () {
 					refineList.push(site);
 				}
 			} else {
-				console.log("no operation====", site)
 				site['status'] = 'null';
 				site['statusClass'] = 'status-null';
 			}

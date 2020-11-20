@@ -56,7 +56,7 @@
 
 <!-- dataTable -->
 <script type="text/javascript" src="/js/data_tables/default.js"></script>
-
+<script type="text/javascript" src="/js/data_tables/extensions/buttons.js"></script>
 <!-- <script type="text/javascript" src="/js/data_tables/extensions/select.js"></script>
 <script type="text/javascript" src="/js/data_tables/extensions/fixed_header.js"></script>
 <script type="text/javascript" src="/js/data_tables/extensions/buttons.js"></script>

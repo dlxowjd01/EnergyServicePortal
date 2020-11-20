@@ -27,7 +27,7 @@
 					loadScripts([
 						'/js/data_tables/extensions/select.js',
 						'/js/data_tables/extensions/pdf_make.js',
-						'/js/data_tables/extensions/buttons.js',
+						// '/js/data_tables/extensions/buttons.js',
 						'/js/data_tables/extensions/fixed_header.js',
 						'/js/data_tables/extensions/responsive.js',
 						'/js/data_tables/extensions/rowGroup.js',

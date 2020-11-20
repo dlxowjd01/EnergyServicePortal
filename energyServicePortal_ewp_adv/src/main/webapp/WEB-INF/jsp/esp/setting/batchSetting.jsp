@@ -174,7 +174,6 @@
 				defList = definitionData;
 
 				getScheduleData(definitionData, scheduleData);
-				getLogData(null, definitionData);
 
 				definitionData.forEach((item, index) => {
 					let found = scheduleData.findIndex( x => x.batchJobDefinition.id === item.id);
@@ -333,7 +332,8 @@
 
 			});
 			scheduleTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
-			updateInfo('edit');			
+			updateInfo('edit');
+			$("#getLogBtn").prop("disabled", false);
 			// console.log("dt---", scheduleTable[ type ]( indexes ).nodes())
 		}).on("deselect", function(e, dt, type, indexes) {		
 			let btn = $("#btnGroup").find(".btn-type03");
@@ -347,6 +347,7 @@
 				}
 			});
 			scheduleTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", false);
+			$("#getLogBtn").prop("disabled", true);
 			// console.log("dt---", scheduleTable[ type ]( indexes ).nodes())
 		}).columns.adjust().draw();
 
@@ -368,7 +369,13 @@
 		let newEndDate = '';
 		let newEndTime = '';
 		let dropdownStr = '';
+		let dTable = $("#scheduleTable").DataTable();
+		let tr = $("#scheduleTable").find("tbody tr.selected");
+		let rowData = dTable.row(tr).data();
+		let selectedJobId = rowData.batchJobDefinition.id;
 
+		// console.log("selectedJobId---", selectedJobId);
+		// return false;
 		if(isEmpty(dateElement)){
 			let today = new Date();
 			newStartDate = new Date(today.getFullYear(), today.getMonth(), today.getDate()-1).format('yyyyMMdd');
@@ -406,7 +413,8 @@
 				startHHMMSS: newStartTime,
 				endDate: newEndDate,
 				endHHMMSS: newEndTime,
-				limit: 20
+				limit: 50,
+				jobId: selectedJobId
 			},
 			beforeSend: function (jqXHR, settings) {
 				$('#loadingCircle').show();
@@ -521,7 +529,7 @@
 								str2 = `
 									<div class="flex-start">${'${ trimmed2 }'}&ensp;
 										<a href="#" role="button" data-toggle="popover" data-placement="bottom" rel="popover" onclick='return false' onmouseover="updateInfo('detail', null, this)" class="text-link">more</a>
-										<button type="button" class="text-link" onclick='copyText(this, "stdout")'>복사</button>
+										<button type="button" class="text-link" onclick='copyText(this, "stdout")'>다운로드</button>
 									</div>`
 							} else {
 								str2 = full.stdout;
@@ -1131,7 +1139,7 @@
 					<em></em>
 					<input type="text" id="timepicker2" name="timepicker2" class="sel timepicker hasWickedpicker" onkeypress="return false;" aria-showingpicker="false" tabindex="0">
 				</div>
-				<button type="button" class="btn-type ml-16" onclick="getData('log', $(this).prev().find('input'));">검색</button>
+				<button type="button" id="getLogBtn" class="btn-type ml-16" onclick="getData('log', $(this).prev().find('input'));" disabled>검색</button>
 			</div>
 
 			<div id="exportBtnGroup" class="fr"></div>
