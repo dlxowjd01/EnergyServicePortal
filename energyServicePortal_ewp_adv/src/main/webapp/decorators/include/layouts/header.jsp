@@ -4,10 +4,7 @@
 <c:set var="task" value="${userInfo.task}"/> <%-- 메뉴 관리용 Task --%>
 
 <script type="text/javascript">
-	var lazyLoadFlag = false;
-
 	$(function () {
-
 		updateHeaderModal();
 
 		$("#updateUserInfoModal").on("show.bs.modal", function() {
@@ -17,28 +14,9 @@
 		$(".nav-brand a").each(function(index, element) {
 			// console.log("window.href===", window.location.pathname)
 			let current = window.location.pathname;
-			let gmainPage ='/dashboard/gmain.do'
-			let smainPage ='/dashboard/smain.do'
-			// console.log("current===", current);
-			if (current == gmainPage && current == smainPage) {
+			let mainPage ='/dashboard/gmain.do'
+			if (current == mainPage) {
 				$(this).on('click', false);
-			} else {
-				if(lazyLoadFlag === false){
-					loadScripts([
-						'/js/data_tables/extensions/pdf_make.js',
-						// '/js/data_tables/extensions/select.js',
-						// '/js/data_tables/extensions/buttons.js',
-						'/js/data_tables/extensions/fixed_header.js',
-						'/js/data_tables/extensions/responsive.js',
-						'/js/data_tables/extensions/rowGroup.js',
-						'/js/data_tables/extensions/jszip.js',
-						'/js/data_tables/extensions/vfs_fonts_kr.js',
-					], () => {
-						console.log('Scripts loaded');
-					});
-				}
-
-				lazyLoadFlag = true;
 			}
 		});
 
@@ -46,7 +24,7 @@
 
 		$("#fullName").on('keyup', function(evt) {
 			let value = $(this).val().trim();
-			
+
 			if(!isEmpty(value)){
 				let kr = /[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uAC00-\uD7AF\uD7B0-\uD7FF]/g
 				let letters = /^[a-zA-Z ]+$/
@@ -120,7 +98,7 @@
 				$("#updateProfileBtn").removeClass("disabled");
 			}
 		});
-		
+
 		$("#closeBtn").on("click", function(){
 			$("#closeModal").modal("show");
 		});
@@ -171,7 +149,7 @@
 						$("#oldPwdErr").removeClass("hidden");
 					}
 					console.log("에러:", formatErrorMessage(jqXHR, errorThrown) )
-					
+
 				}
 				return false;
 			});
@@ -416,29 +394,6 @@
 			$(self).find("label").removeClass("on");
 		}
 
-	}
-
-	function loadScript(url, callback) {
-		let script = document.createElement('script');
-		script.type = 'text/javascript';
-		script.src = url;
-		script.onreadystatechange = callback;
-		script.onload = callback;
-		document.head.appendChild(script);
-		console.log("docuemnt head====", document.head);
-	}
-
-	function loadScripts(urls, callback) {
-		let loadedCount = 0;
-		let multiCallback = () => {
-			loadedCount++;
-			if (loadedCount >= urls.length) {
-				callback.call(this, arguments);
-			}
-		};
-		for (let url of urls) {
-			loadScript(url, multiCallback);
-		}
 	}
 </script>
 
@@ -701,7 +656,7 @@
 		<div class="modal-content narrow">
 			<div class="modal-body">
 				<h2>확인을 누르시면, 변경하지 않은 정보는 모두 사라집니다.</h2>
-				<p class="mt-8">정말 닫으시겠습니까?</p>
+				<p class="mt8">정말 닫으시겠습니까?</p>
 			</div>
 			<div class="modal-footer">
 				<div class="btn-wrap-type mb-0">
@@ -724,8 +679,8 @@
 				<div class="text-input-type"><input type="text" name="confirm_title" id="confirmTitle" placeholder="사이트 이름 입력"/></div>
 			</div>
 			<div class="btn-wrap-type05"><!--
-				--><button type="button" class="btn-type03 w-80px" data-dismiss="modal" aria-label="Close">취소</button><!--
-				--><button type="submit" id="comDeleteBtn" class="btn-type w-80px ml-12" disabled>확인</button><!--
+				--><button type="button" class="btn-type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
+				--><button type="submit" id="comDeleteBtn" class="btn-type w80 ml-12" disabled>확인</button><!--
 			--></div>
 		</div>
 	</div>

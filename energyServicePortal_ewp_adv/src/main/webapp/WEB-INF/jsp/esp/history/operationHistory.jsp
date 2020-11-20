@@ -738,8 +738,8 @@
 			} else {
 				document.querySelectorAll('[name="site"]:checked').forEach(checked => {
 					siteArray.push({
-						siteId: check.value,
-						siteNm: check.nextElementSibling.textContent
+						siteId: checked.value,
+						siteNm: checked.nextElementSibling.textContent
 					});
 				});
 			}
