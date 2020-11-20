@@ -54,10 +54,12 @@
 		});
 
 		logOutBtn.on("click", function () {
+			deleteCookie("switch", "/");
 			deleteCookie("sMainView", "/");
 		});
 
 		mobileLogOutBtn.on("click", function () {
+			deleteCookie("switch", "/");
 			deleteCookie("sMainView", "/");
 		});
 

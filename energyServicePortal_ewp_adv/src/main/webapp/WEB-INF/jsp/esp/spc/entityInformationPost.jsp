@@ -927,7 +927,7 @@
 	<div class="col-12">
 		<div class="indiv panel panel-default" id="basicInfo">
 			<div class="table-top panel-heading">
-				<h2 class="ntit mt25">기본 정보</h2>
+				<h2 class="ntit mt-25">기본 정보</h2>
 				<a role="button" href="#basicInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse-arrow"></a>
 			</div>
 			<div id="basicInfoToggle" class="spc-table-row st-edit panel-collapse collapse in" role="tabpanel">
@@ -1130,7 +1130,7 @@
 
 		<div class="indiv panel panel-default" id="addressInfo">
 			<div class="table-top panel-heading">
-				<h2 class="ntit mt25">발전소 정보</h2>
+				<h2 class="ntit mt-25">발전소 정보</h2>
 				<a role="button" href="#addressInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse-arrow"></a>
 			</div>
 			<div id="addressInfoToggle" class="spc-table-row st-edit panel-collapse collapse in" role="tabpanel">
@@ -1200,7 +1200,7 @@
 
 		<div class="indiv panel panel-default" id="maintenanceInfo">
 			<div class="table-top panel-heading">
-				<h2 class="ntit mt25">관리 운영 정보</h2>
+				<h2 class="ntit mt-25">관리 운영 정보</h2>
 				<a href="#maintenanceInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse-arrow"></a>
 			</div>
 			<div id="maintenanceInfoToggle" class="spc-table-row st-edit panel-collapse collapse in">
@@ -1316,7 +1316,7 @@
 									<input type="text" id="등기_기간_to[index]" name="등기_기간_to[index]" class="sel toDate" value="" autocomplete="off" placeholder="종료일" readonly>
 								</fieldset>
 
-								<div class="fr fixed-height mt5 mr-12">
+								<div class="fr fixed-height mt-5 mr-12">
 									<button type="button" class="btn-close hidden" onclick="removeList(this, 'dual')"></button>
 								</div>
 							</div>
@@ -1449,7 +1449,7 @@
 						</td>
 						<th>관리 계약 구분</th>
 						<td>
-							<div class="dropdown placeholder edit mr-12 w300" id="관리_계약_구분">
+							<div class="dropdown placeholder edit mr-12 w-300px" id="관리_계약_구분">
 								<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown">
 									선택<span class="caret"></span>
 								</button>
@@ -1500,7 +1500,7 @@
 
 		<div class="indiv panel panel-default" id="accountInfo">
 			<div class="table-top panel-heading">
-				<h2 class="ntit mt25">계정 정보</h2>
+				<h2 class="ntit mt-25">계정 정보</h2>
 				<a role="button" href="#accountInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse-arrow"></a>
 			</div>
 			<div id="accountInfoToggle" class="spc-table-row st-edit panel-collapse collapse in" role="tabpanel">
@@ -1559,7 +1559,7 @@
 
 		<div class="indiv panel panel-default" id="financeInfo">
 			<div class="table-top panel-heading">
-				<h2 class="ntit mt25">금융 정보</h2>
+				<h2 class="ntit mt-25">금융 정보</h2>
 				<a role="button" href="#financeInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse-arrow"></a>
 			</div>
 			<div id="financeInfoToggle" class="spc-table-row st-edit panel-collapse collapse in" role="tabpanel">
@@ -1769,7 +1769,7 @@
 							</th>
 							<td class="addList_certificate_registration entity">
 								<div class="group-type flex-start">
-									<div id="용도[index]" class="dropdown placeholder edit mxw100">
+									<div id="용도[index]" class="dropdown placeholder edit mxw-100px">
 										<button type="button" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 											용도 선택<span class="caret"></span>
 										</button>
@@ -1782,7 +1782,7 @@
 											</li>
 										</ul>
 									</div>
-									<div class="flex-baseline mt10">
+									<div class="flex-baseline mt-10">
 										<input type="file" id="공인인증서_등록_이미지[index]" class="hidden" name="공인인증서_등록_이미지[index]" accept=".der, .key" multiple>
 										<label for="공인인증서_등록_이미지[index]" class="btn file-upload">파일 선택</label>
 										<ul class="file_list ml-16">
@@ -1797,7 +1797,7 @@
 									<div class="text-input-type edit">
 										<input type="password" id="인증서_비밀번호[index]" name="인증서_비밀번호[index]" placeholder="비밀번호를 입력해 주세요.">
 									</div>
-									<div class="fr fixed-height mt5 mr-12">
+									<div class="fr fixed-height mt-5 mr-12">
 										<button type="button" class="btn-close hidden" onclick="removeList(this, 'dual')"></button>
 									</div>
 								</div>
@@ -1926,7 +1926,7 @@
 		</div>
 
 		<div class="indiv panel panel-default" id="contractInfo">
-			<div class="table-top panel-heading"><h2 class="ntit mt25">시공 계약 정보</h2><a role="button" href="#contractInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse-arrow"></a></div>
+			<div class="table-top panel-heading"><h2 class="ntit mt-25">시공 계약 정보</h2><a role="button" href="#contractInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse-arrow"></a></div>
 			<div id="contractInfoToggle" class="spc-table-row st-edit panel-collapse collapse in" role="tabpanel">
 				<table>
 					<colgroup>
@@ -2048,7 +2048,7 @@
 									<input type="text" id="지급금액_3차" name="지급금액_3차" placeholder="직접 입력" onkeyup="sumUnpaid();">
 								</div>
 							</div>
-							<div class="fixed-height w300">
+							<div class="fixed-height w-300px">
 								<span class="text" id="미지급_금액">자동 계산</span>
 								<span class="fr">원</span>
 							</div>
@@ -2086,7 +2086,7 @@
 
 		<div class="indiv panel panel-default" id="insuranceInfo">
 			<div class="table-top panel-heading">
-				<h2 class="ntit mt25">보험 정보<a role="button" href="javascript:addRow('insuranceInfoToggle');" class="btn-add ml-24">추가</a></h2>
+				<h2 class="ntit mt-25">보험 정보<a role="button" href="javascript:addRow('insuranceInfoToggle');" class="btn-add ml-24">추가</a></h2>
 				<a role="button" href="#insuranceInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse-arrow"></a>
 			</div>
 			<div id="insuranceInfoToggle" class="spc-table-row st-edit panel-collapse collapse in" role="tabpanel">
@@ -2197,7 +2197,7 @@
 		</div>
 
 		<div class="indiv panel panel-default" id="deviceInfo">
-			<div class="table-top panel-heading"><h2 class="ntit mt25">설비 정보</h2><a role="button" href="#deviceInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse-arrow"></a></div>
+			<div class="table-top panel-heading"><h2 class="ntit mt-25">설비 정보</h2><a role="button" href="#deviceInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse-arrow"></a></div>
 			<div id="deviceInfoToggle" class="spc-table-row st-edit panel-collapse collapse in" role="tabpanel">
 				<table>
 					<colgroup>
@@ -2371,7 +2371,7 @@
 		</div>
 
 		<div class="indiv panel panel-default" id="warrantyInfo">
-			<div class="table-top panel-heading"><h2 class="ntit mt25">보증 정보</h2><a role="button" href="#warrantyInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse-arrow"></a></div>
+			<div class="table-top panel-heading"><h2 class="ntit mt-25">보증 정보</h2><a role="button" href="#warrantyInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse-arrow"></a></div>
 			<div id="warrantyInfoToggle" class="spc-table-row st-edit panel-collapse collapse in" role="tabpanel">
 				<table>
 					<colgroup>
@@ -2481,7 +2481,7 @@
 		</div>
 
 		<div class="indiv panel panel-default" id="coefficientInfo">
-			<div class="table-top panel-heading"><h2 class="ntit mt25">환경 변수</h2><a href="#coefficientInfoToggle" data-toggle="collapse" class="collapse-arrow"></a></div>
+			<div class="table-top panel-heading"><h2 class="ntit mt-25">환경 변수</h2><a href="#coefficientInfoToggle" data-toggle="collapse" class="collapse-arrow"></a></div>
 			<div id="coefficientInfoToggle" class="spc-table-row st-edit panel-collapse collapse in" role="tabpanel">
 				<table>
 					<colgroup>
@@ -2541,7 +2541,7 @@
 		</div>
 
 		<div class="indiv panel panel-default" id="associatedInfo">
-			<div class="table-top panel-heading"><h2 class="ntit mt25">관련 정보</h2><a href="#associatedInfoToggle" data-toggle="collapse" class="collapse-arrow"></a></div>
+			<div class="table-top panel-heading"><h2 class="ntit mt-25">관련 정보</h2><a href="#associatedInfoToggle" data-toggle="collapse" class="collapse-arrow"></a></div>
 			<div id="associatedInfoToggle" class="spc-table-row st-edit panel-collapse collapse in" role="tabpanel">
 				<table>
 					<colgroup>
@@ -2594,7 +2594,7 @@
 		<!-- TO 개발자님 : 아래 파일 선택은 multi-select 로 파일 업로드 -->
 		<div class="indiv panel panel-default attachment">
 			<div class="table-top panel-heading">
-				<h2 class="ntit mt25">첨부 파일</h2>
+				<h2 class="ntit mt-25">첨부 파일</h2>
 				<a href="#attachementInfoToggle" data-toggle="collapse" class="collapse-arrow"></a>
 			</div>
 			<form id="attachement_info" name="attachement_info" class="mt-25">

@@ -1797,8 +1797,8 @@
 				<div class="text-input-type"><input type="text" id="confirmUserId" name="confirm_user_id" placeholder="사용자 아이디 입력"/></div>
 				</div>
 				<div class="btn-wrap-type05"><!--
-				--><button type="button" class="btn-type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
-				--><button type="button" id="deleteConfirmBtn" class="btn-type w80 ml-12" disabled>확인</button><!--
+				--><button type="button" class="btn-type03 w-80px" data-dismiss="modal" aria-label="Close">취소</button><!--
+				--><button type="button" id="deleteConfirmBtn" class="btn-type w-80px ml-12" disabled>확인</button><!--
 			--></div>
 		</div>
 	</div>

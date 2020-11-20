@@ -304,7 +304,7 @@
 			},
 			initComplete: function(settings, json ){
 				let addBtnStr = `
-				<div class="flex-wrapper mt15 mb-28">
+				<div class="flex-wrapper mt-15 mb-28">
 					<h2 class="ntit">배치 스케줄</h2>
 					<button type="button" class="btn-type" onclick="updateInfo('add')">신규 등록</button>
 				</div>
@@ -992,7 +992,7 @@
 	</div>
 	<div class="col-xl-5 col-lg-5 col-md-6 col-sm-12">
 		<div class="indiv schedule-content">
-			<div class="row mt15 mb-28">
+			<div class="row mt-15 mb-28">
 				<div class="col-12">
 					<h2 class="ntit">스케줄 상세 정보<span class="required fr">필수 입력 항목</span></h2>
 				</div>
@@ -1163,8 +1163,8 @@
 				<div class="text-input-type"><input type="text" name="confirm_schedule" id="confirmSchedule" placeholder="사이트 이름 입력"/></div>
 			</div>
 			<div class="btn-wrap-type05"><!--
-				--><button type="button" class="btn-type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
-				--><button type="submit" id="deleteConfirmBtn" class="btn-type w80 ml-12" disabled>확인</button><!--
+				--><button type="button" class="btn-type03 w-80px" data-dismiss="modal" aria-label="Close">취소</button><!--
+				--><button type="submit" id="deleteConfirmBtn" class="btn-type w-80px ml-12" disabled>확인</button><!--
 			--></div>
 		</div>
 	</div>

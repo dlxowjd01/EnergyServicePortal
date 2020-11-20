@@ -183,7 +183,7 @@
 	<div class="col-lg-12">
 		<div class="indiv report-post" id="work_info">
 			<div class="table-top">
-				<h2 class="ntit mt25">출장 이력</h2>
+				<h2 class="ntit mt-25">출장 이력</h2>
 			</div>
 			<div class="spc-table-row">
 				<table>
@@ -259,9 +259,9 @@
 			</div>
 		</div>
 		<form id="work_detail_info" name="work_detail_info">
-			<div class="indiv mt25 report-post02">
+			<div class="indiv mt-25 report-post02">
 				<div class="table-top">
-					<h2 class="ntit mt25">처리 내역</h2>
+					<h2 class="ntit mt-25">처리 내역</h2>
 				</div>
 				<div class="spc-table-row">
 					<table>

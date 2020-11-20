@@ -548,7 +548,7 @@
 					</tbody>
 				</table>
 			</div>
-			<div class="btn-wrap-type02 mt30">
+			<div class="btn-wrap-type02 mt-30">
 				<c:set var="siteId" value="${param.site_id}"/>
 				<c:if test="${not empty siteId}">
 				<button type="button" class="btn-type03" onclick="setCheckedDataModify();">수정</button>

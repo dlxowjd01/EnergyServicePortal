@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
 <c:if test="${dashboardMap eq 'google'}">
+	<script src="https://unpkg.com/@googlemaps/markerclustererplus/dist/index.min.js"></script>
+	<!-- <script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"></script> -->
 	<script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyAgEDjSwQWd_Q9RF_owO8WkMtf-6lmVSpc"></script>
 </c:if>
 
@@ -469,7 +471,7 @@
 
 	<c:if test="${dashboardMap eq 'google'}">
 	let makerObject = new Object();
-
+	let markers = [];
 	let map = new google.maps.Map(document.getElementById('gMainMap'), {
 		mapTypeId: 'satellite',
 		zoom: 7.3,
@@ -484,7 +486,9 @@
 
 	$(function () {
 		let target = $("#innerBody").find(".content-wrapper");
-
+		var refreshMinInterval;
+		var refreshHourInterval;
+		var dashboardViewFlag = true;
 		if ($("#switchBtn").is(":checked")) {
 			target.eq(0).addClass("hidden").next().removeClass("hidden");
 			// $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
@@ -494,9 +498,9 @@
 
 			if (!isEmpty(siteList) && siteList.length > 0) {
 				firstAjax();
-
-				setInterval(() => firstAjax(), 60 * 60 * 1000); // 한시간에 한번 화면갱신
-				setInterval(() => {
+				refreshHourInterval = setInterval(firstAjax, 60 * 60 * 1000); // 한시간에 한번 화면갱신
+				// setInterval(() => firstAjax(), 60 * 60 * 1000); // 한시간에 한번 화면갱신
+				refreshMinInterval = setInterval(() => {
 					minIntervalCount++;
 					if ((minIntervalCount % 60) !== 0) {
 						minAjax();
@@ -514,31 +518,65 @@
 
 		$('#switchBtn').on('click', function () {
 			if ($(this).is(':checked')) {
-				document.cookie = 'switch=checked; path=/';
+				// document.cookie = 'switch=checked; path=/';
+				setCookie("switch", "checked");
 				target.eq(0).addClass('hidden').next().removeClass('hidden');
 				$($.fn.dataTable.tables(true)).DataTable().columns.adjust();
 				getDashboardTable('gmainTable');
-				clearInterval();
+				// clearInterval(refreshMinInterval);
+				// clearInterval(refreshHourInterval);
 			} else {
-				document.cookie = 'switch=; path=/';
+				let pathName = window.location.pathname;
 				target.eq(0).removeClass('hidden').next().addClass('hidden');
-				firstAjax();
-
-				minIntervalCount = 0
-				setInterval(() => firstAjax(), 60 * 60 * 1000); // 한시간에 한번 화면갱신
-				setInterval(() => {
-					minIntervalCount++;
-					if ((minIntervalCount % 60) !== 0) {
-						minAjax();
+				setCookie("switch", "");
+				// document.cookie = 'switch=; path=/';
+				
+				if (!isEmpty(siteList) && siteList.length > 0) {
+					if( pathName.includes('gmain') && dashboardViewFlag === true){
+						firstAjax();
+						refreshHourInterval = setInterval(firstAjax, 60 * 60 * 1000); // 한시간에 한번 화면갱신
+						// setInterval(() => firstAjax(), 60 * 60 * 1000); // 한시간에 한번 화면갱신
+						refreshMinInterval = setInterval(() => {
+							minIntervalCount++;
+							if ((minIntervalCount % 60) !== 0) {
+								minAjax();
+							}
+						}, 60 * 1000); //1분에 한번 현재혆황 & 알림 갱신
+					} else {
+						if( pathName.includes('jmain')){
+							console.log("pathName===", pathName)
+							firstAjax();
+							refreshHourInterval = setInterval(firstAjax, 60 * 60 * 1000); // 한시간에 한번 화면갱신
+							// setInterval(() => firstAjax(), 60 * 60 * 1000); // 한시간에 한번 화면갱신
+							refreshMinInterval = setInterval(() => {
+								minIntervalCount++;
+								if ((minIntervalCount % 60) !== 0) {
+									minAjax();
+								}
+							}, 60 * 1000); //1분에 한번 현재혆황 & 알림 갱신
+						}
 					}
-				}, 60 * 1000); //1분에 한번 현재혆황 & 알림 갱신
+				} else {
+					$('#errMsg').text("해당 그룹에 등록 된 사이트가 존재하지 않습니다.");
+					$('#errorModal').modal('show');
+					setTimeout(function () {
+						$('#errorModal').modal('hide');
+					}, 2000);
+					return false;
+				}
+
 			}
+		});
+
+		$(window).on("unload", function(e) {
+			clearInterval(refreshMinInterval);
+			clearInterval(refreshHourInterval);
 		});
 
 	});
 
 	<c:if test="${dashboardMap eq 'google'}">
-	const geocodeAddress = (siteAddr, siteId, siteName, siteLatlng, siteColor) => {
+	const geocodeAddress = (siteAddr, siteId, siteName, siteLatlng, siteColor, operationText) => {
 		let latLng = new Object(),
 			dummy = siteLatlng.split(',');
 		latLng['lat'] = Number(dummy[0]);
@@ -552,11 +590,14 @@
 			icon: pinSymbol(siteColor),
 		});
 
+		let infoWIndowContent = '<div class="gmap-content"><span style="color:' + siteColor + '">' + operationText + '</span>' + siteName + '</div>';
 		marker.infowindow = new google.maps.InfoWindow({
-			content: siteName
+			content: infoWIndowContent
 		});
 
+		markers.push(marker);
 		makerObject[siteId] = marker;
+
 		google.maps.event.addListener(makerObject[siteId], 'click', (function (makerArray, siteId) {
 			return function () {
 				$.map(makerObject, function (val, key) {
@@ -564,27 +605,52 @@
 						val.infowindow.close();
 					}
 				});
-
 				makerObject[siteId].infowindow.open(map, makerObject[siteId]);
-
 				list_detail_open_main(siteId);
 			}
 		})(makerObject, siteId));
+
+
 	}
 
 	const pinSymbol = (color) => {
-		return {
-			path: 'M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0 1,1 10,-30 C 10,-22 2,-20 0,0 z M -2,-30 a 2,2 0 1,1 4,0 2,2 0 1,1 -4,0',
-			fillColor: color,
-			fillOpacity: 1,
-			strokeColor: 'var(--white87)',
-			strokeWeight: 1,
-			scale: 1,
-		};
+		if(color == "#f2a363"){
+			return {
+				url: '/img/map_icons/marker_orange.png',
+				height: 20,
+				width: 14
+			}
+		} else if(color == "#90caf3"){
+			return {
+				url: '/img/map_icons/marker_blue.png',
+				height: 20,
+				width: 14
+			}
+		} else if(color == "#ffd954"){
+			return {
+				url: '/img/map_icons/marker_yellow.png',
+				height: 20,
+				width: 14
+			}
+		} else if(color == "#878787"){
+			return {
+				url: '/img/map_icons/marker_grey.png',
+				height: 20,
+				width: 14
+			}
+		} else {
+			return {
+				url: '/img/map_icons/marker_red.png',
+				height: 20,
+				width: 14
+			}
+		}
 	}
 
 	const list_detail_open_main = (sid) => {
-		$('.dbclickopen').each(function () {
+		$('.dbclickopen').each(function (item, index) {
+			var touchtime = 0;
+
 			if ($(this).data('sid') == sid) {
 				let target = $(this);
 				target.next().find('.di-wrap').slideDown(function () {
@@ -593,7 +659,7 @@
 			}
 		});
 	}
-
+	
 	const smoothZoom = (map, max, cnt, zoom) => {
 		if (zoom) {
 			if (cnt == 18) {
@@ -656,5 +722,11 @@
 		} else {
 			$form.attr('action', '/dashboard/smain.do').submit();
 		}
+	}
+
+	function hideAllInfoWindows(map) {
+		markers.forEach(function(marker) {
+			marker.infowindow.close(map, marker);
+		}); 
 	}
 </script>

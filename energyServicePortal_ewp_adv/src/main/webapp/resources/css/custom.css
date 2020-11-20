@@ -38,9 +38,9 @@
 	src: url(../font/NanumBarunGothicBold.ttf) format("truetype");
 } */
 
-/*  ===============================
-				z-index
-	===============================
+/* ==================================
+							z-index
+	==================================
 
 
 .chart-type { z-index: 1; }
@@ -84,11 +84,14 @@ bootstrap default
 
 */
 
+/* ==================================
+							Variable
+==================================== */
+
 :root {
-	/* **************************************************************
-				 		RENAMING IN PROGRESS(NEW)
-	************************************************************** */
-	/* White */
+	/* TO DO!!!!!  : REMOVE OPACITY in color (for performance improvement and browser compatibility) */
+
+	/* ********* Neutral colors ********* */
 	--clear: rgba(255,255,255,0);
 	--white10: rgba(255, 255, 255, 0.1);
 	--white12: rgba(255, 255, 255, 0.12);
@@ -98,14 +101,8 @@ bootstrap default
 	--white25: rgba(255, 255, 255, 0.25);
 	--white40: rgba(255, 255, 255, 0.4);
 	--white50: rgba(255, 255, 255, 0.5);
-	--white60: rgba(255, 255, 255, 0.6);
-	/*
-		#aeaeae;
-		#a4aebf;
-		#9e9e9e;
-	*/
-	--white87: rgba(255, 255, 255, 0.87);
-	/* #c8c8c8; */
+	--white60: rgba(255, 255, 255, 0.6); /* #aeaeae; #a4aebf; #9e9e9e; */
+	--white87: rgba(255, 255, 255, 0.87); /* #c8c8c8; */
 	--white: #fff;
 	/* Black */
 	--black50: rgba(0, 0, 0, 0.5);
@@ -124,12 +121,13 @@ bootstrap default
 	--dove-gray: #6b6b6b;
 	--grey: #878787;
 	--quick-silver: #9e9e9e;
+
 	/* ********* Box, Navbar, Menu ********* */
 	--nav-menu-color: rgba(255, 255, 255, 0.5);
 	--nav-border: rgba(255, 255, 255, 0.15);
 	--box-shadow: 3px 4px 14px 1px rgba(0, 0, 0, 0.5);
 
-	/* ********* Supplementary ********* */
+	/* ********* Chart, table Colors ********* */
 	--circle-charge: #2BEEE9;
 	--circle-solar-power: #9363fd;
 	--mustard: #ffd954;
@@ -166,7 +164,8 @@ bootstrap default
 	--blue-yonder: #7e89c9;
 	--blueberry: #5269ef;
 	--royal-blue: #274dea;
-	/* ********* login page & logo images ********* */
+
+	/* ********* Images (logo) ********* */
 	--encored-logo: url("/img/logo_encored_wh.svg");
 	--iderms-logo: url("/img/logo_iderms.svg");
 	--spower-logo: url("/img/logo_spower.svg");
@@ -184,7 +183,8 @@ html.darkmode:root {
 	--bg-color2: #4e4e4e;
 	--box-color: #363636;
 	--box-darker: #282828;
-	/* ********* Sidebar images ********* */
+
+	/* ********* Images (sidebar icons) ********* */
 	--hamburger-menu: url("/img/ico_nav.svg");
 	--sidebar-ico1: url("/img/sidebar_icons/sidebar_ico1.svg");
 	--sidebar-ico2: url("/img/sidebar_icons/sidebar_ico2.svg");
@@ -200,7 +200,6 @@ html.darkmode:root {
 	--ico-eye-close: url("/img/ico_eye_close.svg");
 
 	/* ********* Status images ********* */
-
 	--status-drive: url("/img/status_icons/ico_status_drive.svg");
 	--status-hold: url("/img/status_icons/ico_status_hold.svg");
 	--status-error: url("/img/status_icons/ico_status_error.svg");
@@ -215,12 +214,14 @@ html.darkmode:root {
 	--collapse-arrow: url("/img/sel_down_dark.png");
 	--ico-sort-up: url("/img/sorting_up.png");
 	--ico-sort-down: url("/img/sorting_down.png");
-	/* add icon!!!! */
+
+	/* + icon */
 	--ico-add: url("/img/ico_add2_wh.png");
 	--ico-add-svg: url("/img/ico_add_svg.svg");
 	--ico-add-blue: url("/img/btn_blue_add.png");
 	--btn-add: url("/img/ico_add_sm.svg");
 	/* ********* */
+
 	--ico-warning: url("/img/ico_warning.svg");
 	--ico-notification: url("/img/notification.svg");
 	--ico-notification-new: url("/img/notification_active.svg");
@@ -229,6 +230,7 @@ html.darkmode:root {
 	--ico-prev-page: url("/img/btn-prev.svg");
 	--ico-next-page: url("/img/btn-next.svg");
 	--ico-line-graph: url("/img/ico_line_graph.svg");
+	--ico-new-window: url("/img/ico_new_window.svg");
 	--bg-battery-cover: url("/img/battery_cover_lg.svg");
 
 	--btn-edit: url("/img/ico_edit.svg");
@@ -459,6 +461,14 @@ strong {
 	font-weight: 600;
 }
 
+.mobile-visible {
+	display: none !important;
+}
+
+/* ==================================
+	   [link]
+======================================= */
+
 a:link,
 a:visited,
 a:hover,
@@ -467,8 +477,6 @@ a:active {
 	outline: none;
 	color: inherit;
 }
-
-/* link */
 
 a:link:hover {
 	opacity: 0.8;
@@ -536,8 +544,9 @@ a.disabled:focus {
 	background-color: var(--vivid-blue);
 }
 
-/* buttons */
-
+/* ==================================
+	[buttons]
+======================================= */
 button,
 button:hover,
 button:active {
@@ -565,10 +574,10 @@ button:disabled {
 .btn-primary:active,
 .btn-primary:active:hover,
 .btn-primary:active:focus,
-.open>.dropdown-toggle,
-.open>.dropdown-toggle:hover,
-.open>.dropdown-toggle:focus,
-.open>.dropdown-toggle.alarm-item {
+.open > .dropdown-toggle,
+.open > .dropdown-toggle:hover,
+.open > .dropdown-toggle:focus,
+.open > .dropdown-toggle.alarm-item {
 	background: var(--white20);
 	border: none;
 	border-radius: 2px;
@@ -776,6 +785,20 @@ a.btn-add:active,
 	color: var(--vivid-blue);
 }
 
+a.btn-new-window,
+.btn-new-window {
+	display: inline-block;
+	padding: 0 10px 0 28px;
+	outline-style: none;
+	border: 0;
+	line-height: 24px;
+	background: var(--ico-new-window) no-repeat 0 3px;
+	color: var(--white60);
+	font-size: 13px;
+	font-weight: 500;
+	cursor: pointer;
+}
+
 a.btn-text-blue,
 .btn-text-blue {
 	padding: 0 10px 0 0;
@@ -920,6 +943,7 @@ a.btn-text-blue,
 	padding: 0 0 0 20px;
 }
 
+/* NOT iN USE : show/hide password icon */
 input[type="text"]+.pwd-icon {
 	padding-right: 32px;
 }
@@ -941,8 +965,10 @@ input[type="text"]+.pwd-icon {
 	background: var(--ico-eye-close) no-repeat center;
 }
 
-/* select */
 
+/* ==================================
+	[select, input, text-area]
+==================================== */
 select::-ms-expand {
 	display: none;
 }
@@ -960,8 +986,6 @@ select {
 	border-radius: 4px;
 	border-image: initial;
 }
-
-/* input, text-area */
 
 input::placeholder,
 textarea::placeholder {
@@ -1168,8 +1192,9 @@ table tbody td .dropdown-menu {
 	background: none;
 }
 
-/* select calendar */
-
+/* ==================================
+						select calendar
+==================================== */
 .sel {
 	padding: 0 40px 0 15px;
 	height: 36px;
@@ -1200,8 +1225,9 @@ table tbody td .dropdown-menu {
 	display: none !important;
 }
 
-/* text alignment  */
-
+/* ==================================
+			[Alignment]
+====================================== */
 .right {
 	text-align: right;
 }
@@ -1232,8 +1258,9 @@ table tbody td .dropdown-menu {
 	float: right;
 }
 
-/* margin, padding  */
-
+/* ==================================
+			[margin, padding]
+==================================== */
 .mt-offset-10 {
 	margin-top: -10px;
 }
@@ -1242,80 +1269,40 @@ table tbody td .dropdown-menu {
 	margin-top: 0;
 }
 
-.mt5 {
+.mt-5 {
 	margin-top: 5px;
 }
 
-.mt8 {
+.mt-8 {
 	margin-top: 8px;
 }
 
-.mt10 {
+.mt-10 {
 	margin-top: 10px;
 }
 
-.mt12 {
+.mt-12 {
 	margin-top: 12px;
 }
 
-.mt15 {
+.mt-15 {
 	margin-top: 15px;
 }
 
-.mt20 {
+.mt-20 {
 	margin-top: 20px;
 }
 
-.mt25 {
+.mt-25 {
 	margin-top: 25px;
 }
 
-.mt30 {
+.mt-30 {
 	margin-top: 30px;
 }
 
-.mt40 {
+.mt-40 {
 	margin-top: 40px;
-}
-
-.mt45 {
-	margin-top: 45px;
-}
-
-.mt50 {
-	margin-top: 50px;
-}
-
-.mt55 {
-	margin-top: 55px;
-}
-
-.mt60 {
-	margin-top: 60px;
-}
-
-.mt65 {
-	margin-top: 65px;
-}
-
-.mt70 {
-	margin-top: 70px;
-}
-
-.mt75 {
-	margin-top: 75px;
-}
-
-.mt80 {
-	margin-top: 80px;
-}
-
-.mt90 {
-	margin-top: 90px;
-}
-
-.mt100 {
-	margin-top: 100px;
 }
 
 .mb-10 {
@@ -1496,14 +1483,9 @@ table tbody td .dropdown-menu {
 	padding-bottom: 0 !important;
 }
 
-/* =========================================================
-			[common] max-width, width
-========================================================= */
-.mxw100 {
-	max-width: 100px;
-}
-
-/* width: percentage (%) */
+/* ==================================
+				[common] max-width, width
+==================================== */
 
 .w-5 {
 	width: 5% !important;
@@ -1569,23 +1551,25 @@ table tbody td .dropdown-menu {
 	width: 100% !important;
 }
 
-/* width: pixels(px) */
-
-.w50 {
+.w-50px {
 	width: 50px !important;
 }
 
-.w80 {
+.w-80px {
 	width: 80px !important;
 }
 
-.w300 {
+.w-300px {
 	width: 300px !important;
 }
 
-/* =========================================================
-				TO DO!!!!!!! width: 100%
- ========================================================= */
+.mxw-100px {
+	max-width: 100px;
+}
+
+/* ==================================
+		TO DO!!!!!!! width: 100%
+ ==================================== */
 
 .yield-list .dropdown .dropdown-toggle,
 .yield-list,
@@ -1634,9 +1618,9 @@ table tbody td .dropdown-menu {
 	width: 100%;
 }
 
-/* =========================================================
-						[common]
- ========================================================= */
+/* ==================================
+				[common]
+ ==================================== */
 
 #mask {
 	display: none;
@@ -1686,7 +1670,6 @@ table tbody td .dropdown-menu {
 	font-size: 13px;
 	font-weight: 500;
 	color: var(--sandy-brown);
-	/* color: var(--white87); */
 }
 
 .warning:before,
@@ -1698,6 +1681,15 @@ table tbody td .dropdown-menu {
 	height: 14px;
 	content: '';
 	background: var(--ico-warning) center no-repeat;
+}
+
+.warning-text.d-table {
+	display: table;
+	margin: 1.5% 0 0 30.5%;
+}
+
+.warning-text.d-table:before {
+	height: 18px;
 }
 
 .warning-wrapper {
@@ -1812,7 +1804,9 @@ table tbody td .dropdown-menu {
 	margin-top: 27%;
 }
 
-/* ellipsis */
+/* ==================================
+						[ellipsis]
+ ==================================== */
 
 .ellipsis {
 	max-width: 400px;
@@ -1835,6 +1829,10 @@ table tbody td .dropdown-menu {
 	color: var(--sandy-brown);
 }
 
+.text-light-blue {
+	color: var(--jordy-blue);
+}
+
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
@@ -1844,7 +1842,10 @@ input:-webkit-autofill:active {
 	transition: background-color 5000s ease-in-out 0s;
 }
 
-/* wrapper, container, footer */
+/* ==================================
+	[wrapper, container, footer]
+ ==================================== */
+
 .outer-wrapper {
 	position: relative;
 	height: 100%;
@@ -1857,8 +1858,6 @@ input:-webkit-autofill:active {
 	min-height: 100vh;
 	padding-top: 64px;
 	margin: 0 58px 0 68px;
-	/* padding-bottom: 63px; */
-	/* height: calc(100% - 63px); */
 }
 
 .container-fluid {
@@ -1868,7 +1867,6 @@ input:-webkit-autofill:active {
 footer {
 	flex-shrink: 0;
 	width: 100%;
-	/* padding: 25px 75px 25px 0; */
 	padding: 13px 2px 0;
 	height: 53px;
 }
@@ -1895,12 +1893,9 @@ footer .copyright a + a:before {
 	content: "";
 }
 
-
-.mobile-visible {
-	display: none !important;
-}
-
-/* sidebar */
+/* ==================================
+				[sidebar]
+ ==================================== */
 
 .mobile-nav {
 	display: none;
@@ -2788,9 +2783,9 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 	background-color: var(--grey);
 }
 
-/* =========================================================
+/* ==================================
 				[common] radio button
-========================================================= */
+==================================== */
 
 input[type="radio"] {
 	display: none;
@@ -2950,9 +2945,9 @@ input[type="radio"]:checked+label:after {
 	border-radius: 2px;
 } */
 
-/* ==========================================================
-							checkbox
-========================================================== */
+/* ===================================
+			[default checkbox]
+===================================== */
 
 .chk-type input[type="checkbox"] {
 	display: none;
@@ -2985,9 +2980,9 @@ input[type="radio"]:checked+label:after {
 	border-radius: 2px;
 }
 
-/* *******************************************************
-				[ color ] NOT checked
-********************************************************** */
+/* ===================================
+			:not(:checked)
+=================================== */
 
 .chk-type.c1 input[type="checkbox"]+label:before {
 	border-color: var(--turquoise);
@@ -3045,9 +3040,9 @@ input[type="radio"]:checked+label:after {
 	border-color: var(--royal-blue);
 }
 
-/* =======================================================
-					[ color ] :checked
-========================================================== */
+/* ====================================
+	 			:checked
+===================================== */
 
 .chk-type input[type="checkbox"]:checked+label:before {
 	background: var(--white);
@@ -3208,9 +3203,9 @@ input[type="radio"]:checked+label:after {
 	border-color: var(--white);
 }
 
-
-
-/* dashboard : alarm */
+/* ====================================
+			[dashboard] alarm
+===================================== */
 
 .indiv.gmain-alarm,
 .indiv.smain-alarm,
@@ -3306,8 +3301,14 @@ input[type="radio"]:checked+label:after {
 	white-space: nowrap;
 }
 
-/* 9: 미정의(undefined) : default, 0: 정보(info), 1: 경고(warning), 2: 이상(critical), 3: 트립(shutoff), 4: 긴급 (urgent) */
-
+/* ====================================
+	9: 미정의(undefined) <<< default,
+	0: 정보(info),
+	1: 경고(warning),
+	2: 이상(critical),
+	3: 트립(shutoff),
+	4: 긴급 (urgent)
+===================================== */
 .indiv[data-alarm]:before {
 	position: absolute;
 	top: 0;
@@ -3320,7 +3321,7 @@ input[type="radio"]:checked+label:after {
 }
 
 
-/* default */
+/* 미정의 9 */
 .alarm-notice li a:before {
 	display: inline-block;
 	float: none;
@@ -3391,8 +3392,9 @@ li[data-alarm="urgent"]:before,
 	color: var(--white60);
 }
 
-/* popover */
-
+/* ====================================
+				[popover]
+===================================== */
 .popover {
 	background-color: var(--box-color);
 	box-shadow: var(--box-shadow);
@@ -3436,8 +3438,9 @@ li[data-alarm="urgent"]:before,
 	border-bottom-color: var(--box-color);
 }
 
-/* Modal */
-
+/* ====================================
+				[Modal]
+===================================== */
 .modal .wickedpicker {
 	z-index: 300;
 }
@@ -3615,9 +3618,6 @@ li[data-alarm="urgent"]:before,
 	height: 1px;
 	background: var(--white12);
 	vertical-align: top;
-	/* margin-top: 24px;
-	padding-top: 10px;
-	border-top: 1px solid var(--white12); */
 }
 
 .modal-body {
@@ -3855,8 +3855,9 @@ li[data-alarm="urgent"]:before,
 	width: calc(100% - 74px);
 }
 
-/* addUserModal */
-
+/* ====================================
+	   [setting] userSettings.do
+===================================== */
 .user-modal-content {
 	width: 80vw;
 	padding: 40px 48px 42px;
@@ -3971,9 +3972,9 @@ li[data-alarm="urgent"]:before,
 	white-space: nowrap;
 }
 
-/* =========================================================
-					[setting] siteSetting.do
- ========================================================= */
+/* ==================================
+		[setting] siteSetting.do
+ ==================================== */
 
 .site-modal-content {
 	width: 80vw;
@@ -4186,9 +4187,9 @@ li[data-alarm="urgent"]:before,
 	color: var(--white60);
 }
 
-/* =========================================================
-			[common] input, pagination, layout box
- ========================================================= */
+/* ===============================================
+		[common] input, pagination, layout box
+ ================================================= */
 
 .inp {
 	border: 1px solid var(--silver);
@@ -4348,7 +4349,7 @@ input.inp[readonly]:focus {
 }
 
 .indiv.narrow .ntit {
-	margin: 6px 18px 10px;
+	margin: 6px 28px 10px 18px;
 }
 
 .ntit span.time {
@@ -4360,7 +4361,7 @@ input.inp[readonly]:focus {
 	font-weight: normal;
 }
 
-.ntit.mt25 {
+.ntit.mt-25 {
 	margin-top: 25px;
 }
 
@@ -4379,9 +4380,9 @@ input.inp[readonly]:focus {
 	word-wrap: break-word;
 }
 
-/* =========================================================
-						chart title, table-top
- ========================================================= */
+/* ==================================
+				[chart]
+ ==================================== */
 
 .chart-top:after {
 	clear: both;
@@ -4468,62 +4469,6 @@ input.inp[readonly]:focus {
 	color: var(--grey);
 	letter-spacing: 0.3px;
 }
-
-.chart-middle {
-	margin-top: 21px;
-	font-weight: normal;
-	color: var(--white60);
-}
-
-.chart-middle+.smain.inchart {
-	height: 270px;
-}
-
-.chart-middle .box {
-	float: left;
-	margin-right: 15px;
-}
-
-.chart-middle .box.type {
-	float: right;
-	margin: -10px 0 0;
-}
-
-.chart-middle .box.type .dropdown ul li {
-	text-align: left;
-}
-
-.chart-middle .line1 {
-	font-size: 14px;
-	height: 24px;
-}
-
-.chart-middle .line2 {
-	height: 37px;
-}
-
-.chart-middle .line3 {
-	font-size: 12px;
-	height: 20px;
-}
-
-.chart-middle .line3 span {
-	padding-left: 5px;
-}
-
-.chart-middle .pv {
-	font-size: 28px;
-	padding-right: 5px;
-	color: var(--white);
-}
-
-.chart-middle em {
-	font-size: 12px;
-}
-
-/* =========================================================
-				[common] chart-top
- ========================================================= */
 
 .chart-top .date-today {
 	margin-left: 10px;
@@ -4616,6 +4561,64 @@ input.inp[readonly]:focus {
 	vertical-align: middle;
 }
 
+.chart-middle {
+	margin-top: 21px;
+	font-weight: normal;
+	color: var(--white60);
+}
+
+.chart-middle+.smain.inchart {
+	/* height: 270px; */
+	height: 317px;
+}
+
+.chart-middle .box {
+	float: left;
+	margin-right: 15px;
+}
+
+.chart-middle .box.type {
+	float: right;
+	margin: -10px 0 0;
+}
+
+.chart-middle .box.type {
+	float: right;
+	margin: -10px 0 0;
+}
+
+.chart-middle .box.type .dropdown ul li {
+	text-align: left;
+}
+
+.chart-middle .line1 {
+	font-size: 14px;
+	height: 24px;
+}
+
+.chart-middle .line2 {
+	height: 37px;
+}
+
+.chart-middle .line3 {
+	font-size: 12px;
+	height: 20px;
+}
+
+.chart-middle .line3 span {
+	padding-left: 5px;
+}
+
+.chart-middle .pv {
+	font-size: 28px;
+	padding-right: 5px;
+	color: var(--white);
+}
+
+.chart-middle em {
+	font-size: 12px;
+}
+
 .inchart {
 	position: relative;
 }
@@ -4660,6 +4663,10 @@ input.inp[readonly]:focus {
 	color: var(--vivid-blue);
 }
 
+/* ==================================
+				[table]
+ ==================================== */
+
 .table-top {
 	padding-bottom: 28px;
 }
@@ -4676,6 +4683,10 @@ input.inp[readonly]:focus {
 .table-top .btn-fold.on::after {
 	margin-top: 13px;
 }
+
+/* ==================================
+				[panel]
+ ==================================== */
 
 .panel-default {
 	border: 1px solid var(--white10);
@@ -4956,9 +4967,9 @@ input.inp[readonly]:focus {
 }
 
 
-/* =========================================================
+/* ==================================
 				[diagnosis] generation.do
-========================================================= */
+==================================== */
 
 .indiv.table-diagnosis {
 	display: none;
@@ -5040,9 +5051,9 @@ input.inp[readonly]:focus {
 	display: inline-flex;
 }
 
-/* =========================================================
-				[history] operationHistory.do
-========================================================= */
+/* ==================================
+	[history] operationHistory.do
+==================================== */
 
 .indiv.usage-chart #chart2 {
 	height: 560px;
@@ -5053,9 +5064,9 @@ input.inp[readonly]:focus {
 }
 
 
-/* =========================================================
-					[components] button
-========================================================= */
+/* ==================================
+			[button] save
+==================================== */
 
 .btn-save {
 	display: inline-block;
@@ -5369,9 +5380,9 @@ input.inp[readonly]:focus {
 
 
 
-/* =========================================================
-						[dashboard]
- ========================================================= */
+/* ==================================
+				[dashboard]
+ ==================================== */
 
 .battery {
 	width: 120px;
@@ -5467,19 +5478,13 @@ input.inp[readonly]:focus {
 	text-align: center;
 }
 
-.device li span.dmemo {
-	font-size: 12px;
-	color: var(--white);
-	text-align: center;
-}
-
 .charge {
 	min-height: 417px;
 }
 
-/* =========================================================
-				[common] no data, no text
- ========================================================= */
+/* ==================================
+		[common] no data, no text
+ ==================================== */
 
 .no-text {
 	font-size: 0;
@@ -5585,6 +5590,38 @@ input.inp[readonly]:focus {
 	height: 100%;
 }
 
+.gm-style .gm-style-iw-c {
+	background-color: var(--box-darker);
+	box-shadow: 0 1px 6px var(--box-shadow);
+	border-radius: 4px;
+	padding: 20px;
+}
+
+.gm-style .gm-style-iw-c .gmap-content {
+	color: var(--white87);
+	padding: 5px 7px 0;
+}
+
+.gm-style .gm-style-iw-t:after {
+	background: var(--box-darker);
+	box-shadow: none;
+}
+
+.gm-ui-hover-effect {
+	background: none;
+}
+
+.gm-ui-hover-effect:after {
+	display: block;
+	content: "\00d7";
+	color: var(--white);
+	padding: 3px 7px 0 0;
+	font-size: 24px;
+}
+
+.gm-ui-hover-effect img {
+    display: none !important;
+}
 /* 기간별/지역별 사업소별 테이블 */
 
 .gmain-map2-content {
@@ -5973,9 +6010,9 @@ input.inp[readonly]:focus {
 	line-height: 1.1;
 }
 
-/* =========================================================
-				[gMain] error/warning color
-========================================================= */
+/* ==================================
+		[gMain] error/warning color
+==================================== */
 .gmain-wrap .status,
 .gtbl-wrap-kpx .status {
 	display: inline-block;
@@ -6137,13 +6174,14 @@ input.inp[readonly]:focus {
 	line-height: 26px;
 }
 
-/* =========================================================
-				[sMain] device table
-========================================================= */
+/* ==================================
+		[sMain] device table
+==================================== */
 
 .type-list {
 	overflow-y: auto;
-	height: 608px;
+	height: 636px;
+	/* height: 608px; */
 }
 
 .type-list .chart-top {
@@ -6283,9 +6321,9 @@ input.inp[readonly]:focus {
 	font-weight: 500;
 }
 
-/* =========================================================
-			 [sMain] power generation calendar
-========================================================= */
+/* ==================================================
+		[sMain] power generation calendar
+==================================================== */
 .smain-cal {
 	height: 585px;
 }
@@ -6319,7 +6357,7 @@ input.inp[readonly]:focus {
 
 .smain-cal .calendar tbody td {
 	width: 92px;
-	padding: 8px 12px;
+	padding: 8px 10px;
 }
 
 .smain-cal .calendar tbody td.today {
@@ -6421,9 +6459,9 @@ input.inp[readonly]:focus {
 }
 
 
-/* =========================================================
-					[sMain] weather calendar
-========================================================= */
+/* ==================================
+		[sMain] weather calendar
+==================================== */
 
 .smain.weather .chart-top .real-time {
 	float: right;
@@ -6596,7 +6634,7 @@ input.inp[readonly]:focus {
 	color: var(--light-grey)
 }
 
-/* ========================================================= */
+/* ==================================== */
 
 .gmain-table.smain .gmain-wrap {
 	height: 122px;
@@ -6657,9 +6695,9 @@ input.inp[readonly]:focus {
 }
 
 
-/* =========================================================
-							[jMain]
-========================================================= */
+/* ==================================
+				[jMain]
+==================================== */
 
 .jmain-center2 {
 	height: 360px;
@@ -6747,9 +6785,9 @@ input.inp[readonly]:focus {
 	bottom: -5px;
 }
 
-/* =========================================================
-						[gMain table]
-========================================================= */
+/* ==================================
+			[gMain table]
+==================================== */
 
 
 .gmain-table .table-top .check-option.chk-type label {
@@ -6858,9 +6896,9 @@ input.inp[readonly]:focus {
 }
 
 
-/* =========================================================
-						[history]
-========================================================= */
+/* ==================================
+				[history]
+==================================== */
 
 .search-dropdown:not(.unused) {
 	margin: 15px 0 0 12px;
@@ -7009,9 +7047,9 @@ input.inp[readonly]:focus {
 	cursor: pointer;
 }
 
-/* =========================================================
-				[device] deviceState.do
-========================================================= */
+/* ==================================
+		[device] deviceState.do
+==================================== */
 
 .equip-icon {
 	font-size: 0;
@@ -7546,7 +7584,7 @@ input.inp[readonly]:focus {
 	position: relative;
 }
 
-.di-top-sec .ico {
+.dbclickopen + .detail-info .ico {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -7554,27 +7592,27 @@ input.inp[readonly]:focus {
 	height: 48px;
 }
 
-.di-top-sec .ico.battery {
-	filter: invert(1);
+.dbclickopen + .detail-info .ico.battery {
+	filter: invert(0);
 	background: var(--ico-battery-full) no-repeat center;
 }
 
-.di-top-sec .ico.solar {
+.dbclickopen + .detail-info .ico.solar {
 	filter: invert(0);
 	background: var(--ico-pv) no-repeat center;
 }
 
-.di-top-sec .ico.water {
-	filter: invert(1);
+.dbclickopen + .detail-info .ico.water {
+	filter: invert(0);
 	background: var(--ico-water) no-repeat center;
 }
 
-.di-top-sec .ico.wind {
-	filter: invert(1);
+.dbclickopen + .detail-info .ico.wind {
+	filter: invert(0);
 	background: var(--ico-wind) no-repeat center;
 }
 
-.di-top-sec .text-wrapper {
+.dbclickopen + .detail-info .text-wrapper {
 	margin-left: 48px;
 	border-bottom: 1px solid var(--dove-gray);
 }
@@ -7824,8 +7862,9 @@ input.inp[readonly]:focus {
 	right: 0;
 }
 
-/* button alignment */
-
+/* ================================
+		button alignment 
+================================ */
 .right-end {
 	position: absolute;
 	margin-top: 20px;
@@ -8143,9 +8182,9 @@ button.text-file {
 	text-align: left;
 }
 
-/* **************************************************************
+/* ===================================*******
 							chart bullet
-************************************************************** */
+===================================******* */
 
 .bullet span {
 	display: inline-block;
@@ -8248,9 +8287,9 @@ button.text-file {
  */
 
 
-/* **************************************************************
-			SPC transaction calendar, maintenance bullet
-************************************************************** */
+/* ===============================================================
+		[SPC transaction calendar, maintenance bullet]
+=============================================================== */
 
 .bu.t1:before {
 	background: var(--turquoise);
@@ -8516,7 +8555,9 @@ button.text-file {
 	padding-top: 25px;
 }
 
-/* 수집현황 */
+/* ====================================
+		[device] collectionState.do
+====================================*/
 
 .collect-box {
 	overflow: hidden;
@@ -8671,9 +8712,9 @@ button.text-file {
 
 
 
-/* =========================================================
+/* ========================================================
 		[spc] balanceSheetEdit, balanceSheetPost.do
- ========================================================= */
+ ========================================================== */
 
  .income {
 	min-height: 357px;
@@ -9165,13 +9206,13 @@ table.table-footer tfoot td.light {
 }
 
 
-/* =========================================================
-				[spc]
-				transactionHistory.do,
-				withdrawReqEdit.do,
-				withdrawReqStatus.do,
-				withdrawReqWrite.do
- ========================================================= */
+/* ==================================
+		[spc]
+		transactionHistory.do,
+		withdrawReqEdit.do,
+		withdrawReqStatus.do,
+		withdrawReqWrite.do
+ ==================================== */
 
 .spc-search-bar .sa-select .dropdown-toggle {
 	width: 280px;
@@ -9338,9 +9379,9 @@ table.table-footer tfoot td.light {
 	right: 20px;
 }
 
-/* =========================================================
-				[spc] transactionCalendar.do,
- ========================================================= */
+/* ==================================
+	[spc] transactionCalendar.do
+ ==================================== */
 
 .dropdown-modal {
 	display: none;
@@ -9554,9 +9595,9 @@ table.table-footer tfoot td.light {
 }
 
 
-/* =========================================================
-					[spc] notice.do,
- ========================================================= */
+/* ==================================
+			[spc] notice.do
+ ==================================== */
 
 .indiv.supplementary-docs {
 	padding-top: 56px;
@@ -9616,11 +9657,11 @@ table.table-footer tfoot td.light {
 }
 
 
-/* =========================================================
-				[spc]
-				entityInformationEdit.do,
-				entityInformationPost.do
- ========================================================= */
+/* ==================================
+		[spc]
+		entityInformationEdit.do,
+		entityInformationPost.do
+ ==================================== */
 
 .row.entity-header {
 	margin: 4px 0 -7px;
@@ -9908,9 +9949,9 @@ table.table-footer tfoot td.light {
 }
 
 
-/* =========================================================
-			[diagnosis] abnormallyAnalysis.do
- ========================================================= */
+/* =========================================
+		[diagnosis] abnormallyAnalysis.do
+ =========================================== */
 
 .compare-box {
 	padding: 24px;
@@ -10021,9 +10062,9 @@ table.table-footer tfoot td.light {
 }
 
 
-/* =========================================================
-					[report] yieldReport.do
- ========================================================= */
+/* ==================================
+		[report] yieldReport.do
+ ==================================== */
 
 .yield-list>li {
 	margin-top: 20px;

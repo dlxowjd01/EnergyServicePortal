@@ -19,13 +19,11 @@
 </c:choose>
 
 <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css">
-
-<link type="text/css" rel="stylesheet" href="/css/custom.css">
 <link type="text/css" rel="stylesheet" href="/css/custom-grid.min.css">
+<link type="text/css" rel="stylesheet" href="/css/custom.css">
 <link type="text/css" rel="stylesheet" href="/css/custom-mquery.css">
-<link type="text/css" rel="stylesheet" href="/css/jquery-ui.css" media="all" >
-<link type="text/css" rel="stylesheet" href="/css/wickedpicker.css" media="all">
-
+<link type="text/css" rel="stylesheet" href="/css/jquery-ui.min.css" media="all" >
+<link type="text/css" rel="stylesheet" href="/css/wickedpicker.min.css" media="all">
 <link type="text/css" rel="stylesheet" href="/css/data_tables/default.css"/>
 <!--[if lt IE 9]>
 <script type="text/javascript" src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -36,41 +34,39 @@
 <script type="text/javascript" src="/js/jquery-ui.js"></script>
 <script type="text/javascript" src="/js/jquery-ui-1.12.1.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/common.js"></script>
 
-<!-- high-chart -->
+<!-- high-stock -->
 <script type="text/javascript" src="/js/highstock.js"></script>
 <script type="text/javascript" src="/js/modules/variwide.js"></script>
 <script type="text/javascript" src="/js/modules/data.js"></script>
-
-<!-- <script type="text/javascript" src="/js/modules/highstock-exporting.js"></script> -->
 <script type="text/javascript" src="/js/modules/exporting.js"></script>
-<script type="text/javascript" src="/js/modules/export-data.js"></script>
-<script type="text/javascript" src="/js/common.js"></script>
 
 <script type="text/javascript" src="/js/custom/utils.js"></script>
 <script type="text/javascript" src="/js/custom/numberFormat.js"></script>
-
 <script type="text/javascript" src='/js/commonDropdown.js'></script>
-
 <script type="text/javascript" src="/js/html2canvas.js"></script>
 
 <!-- 화면 엑셀 다운로드용 -->
 <script type="text/javascript" src="/js/sheetJs/xlsx.full.min.js"></script>
 <script type="text/javascript" src="/js/fileSaver/FileSaver.min.js"></script>
 
-<!-- timepicker -->
+<!-- timePicker -->
 <script type="text/javascript" src="/js/wickedpicker.js"></script>
-<script type="text/javascript" src="/js/data_tables/default.js"></script>
-<script type="text/javascript" src="/js/data_tables/extensions/responsive.js"></script>
-<script type="text/javascript" src="/js/data_tables/extensions/buttons.js"></script>
-<script type="text/javascript" src="/js/data_tables/extensions/col_reorder.js"></script>
-<script type="text/javascript" src="/js/data_tables/extensions/pdf_make.js"></script>
-<script type="text/javascript" src="/js/data_tables/extensions/jszip.js"></script>
-<script type="text/javascript" src="/js/data_tables/extensions/vfs_fonts_kr.js"></script>
-<script type="text/javascript" src="/js/data_tables/extensions/select.js"></script>
-<script type="text/javascript" src="/js/data_tables/extensions/fixed_header.js"></script>
-<script type="text/javascript" src="/js/data_tables/extensions/rowGroup.js"></script>
 
+<!-- dataTable -->
+<script type="text/javascript" src="/js/data_tables/default.js"></script>
+
+<!-- <script type="text/javascript" src="/js/data_tables/extensions/select.js"></script>
+<script type="text/javascript" src="/js/data_tables/extensions/fixed_header.js"></script>
+<script type="text/javascript" src="/js/data_tables/extensions/buttons.js"></script>
+<script type="text/javascript" src="/js/data_tables/extensions/pdf_make.js"></script> -->
+
+<!-- <script type="text/javascript" src="/js/data_tables/extensions/responsive.js"></script>
+<script type="text/javascript" src="/js/data_tables/extensions/rowGroup.js"></script>
+<script type="text/javascript" src="/js/data_tables/extensions/jszip.js"></script> -->
+
+<!-- <script type="text/javascript" src="/js/data_tables/extensions/col_reorder.js"></script> -->
 <script type="text/javascript">
 	// role => 1: 시스템관리자, 2: 일반
 	const role = '${sessionScope.userInfo.role}';
@@ -258,3 +254,6 @@
 		return this.toString().zf(len);
 	};
 </script>
+
+<!-- 
+<script type="text/javascript" src="/js/data_tables/extensions/vfs_fonts_kr.js"></script> -->

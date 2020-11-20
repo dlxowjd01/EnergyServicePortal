@@ -30,7 +30,7 @@
 
 	<link rel="stylesheet" href="/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/css/custom-grid.min.css">
-	<link rel="stylesheet" href="/css/custom-login.css">
+	<link rel="stylesheet" href="/css/custom-login.min.css">
 
 	<script type="text/javascript" src="/js/jquery.min.js"></script>
 	<script type="text/javascript" src="/js/bootstrap.min.js"></script>

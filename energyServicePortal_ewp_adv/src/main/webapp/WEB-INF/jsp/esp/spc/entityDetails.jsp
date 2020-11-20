@@ -578,7 +578,7 @@
 	<div class="col-12">
 		<div class="indiv panel panel-default" id="basicInfo">
 			<div class="table-top panel-heading">
-				<h2 class="ntit mt25">기본 정보</h2>
+				<h2 class="ntit mt-25">기본 정보</h2>
 				<a role="button" href="#basicInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse-arrow"></a>
 			</div>
 			<div id="basicInfoToggle" class="spc-table-row st-edit panel-collapse collapse in" role="tabpanel">
@@ -668,7 +668,7 @@
 
 		<div class="indiv panel panel-default" id="addressInfo">
 			<div class="table-top panel-heading">
-				<h2 class="ntit mt25">발전소 정보</h2>
+				<h2 class="ntit mt-25">발전소 정보</h2>
 				<a role="button" href="#addressInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse-arrow"></a>
 			</div>
 			<div id="addressInfoToggle" class="spc-table-row st-edit panel-collapse collapse in" role="tabpanel">
@@ -703,7 +703,7 @@
 
 		<div class="indiv panel panel-default" id="maintenanceInfo">
 			<div class="table-top panel-heading">
-				<h2 class="ntit mt25">관리 운영 정보</h2>
+				<h2 class="ntit mt-25">관리 운영 정보</h2>
 				<a href="#maintenanceInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse-arrow"></a>
 			</div>
 			<div id="maintenanceInfoToggle" class="spc-table-row st-edit panel-collapse collapse in">
@@ -801,7 +801,7 @@
 
 		<div class="indiv panel panel-default" id="accountInfo">
 			<div class="table-top panel-heading">
-				<h2 class="ntit mt25">계정 정보</h2>
+				<h2 class="ntit mt-25">계정 정보</h2>
 				<a role="button" href="#accountInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse-arrow"></a>
 			</div>
 			<div id="accountInfoToggle" class="spc-table-row st-edit panel-collapse collapse in" role="tabpanel">
@@ -840,7 +840,7 @@
 
 		<div class="indiv panel panel-default" id="financeInfo">
 			<div class="table-top panel-heading">
-				<h2 class="ntit mt25">금융 정보</h2>
+				<h2 class="ntit mt-25">금융 정보</h2>
 				<a role="button" href="#financeInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse-arrow"></a>
 			</div>
 			<div id="financeInfoToggle" class="spc-table-row st-edit panel-collapse collapse in" role="tabpanel">
@@ -1041,7 +1041,7 @@
 
 		<div class="indiv panel panel-default" id="contractInfo">
 			<div class="table-top panel-heading">
-				<h2 class="ntit mt25">시공 계약 정보</h2>
+				<h2 class="ntit mt-25">시공 계약 정보</h2>
 				<a role="button" href="#contractInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse-arrow"></a>
 			</div>
 			<div id="contractInfoToggle" class="spc-table-row st-edit panel-collapse collapse in" role="tabpanel">
@@ -1141,7 +1141,7 @@
 									</div>
 								</span>
 							</div>
-							<div class="fixed-height w300">
+							<div class="fixed-height w-300px">
 								<span class="text" id="미지급_금액">자동 계산</span>
 								<span class="fr">원</span>
 							</div>
@@ -1190,7 +1190,7 @@
 
 		<div class="indiv panel panel-default" id="insuranceInfo">
 			<div class="table-top panel-heading">
-				<h2 class="ntit mt25">보험 정보</h2>
+				<h2 class="ntit mt-25">보험 정보</h2>
 				<a role="button" href="#insuranceInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse-arrow"></a>
 			</div>
 			<div id="insuranceInfoToggle" class="spc-table-row st-edit panel-collapse collapse in" role="tabpanel">
@@ -1268,7 +1268,7 @@
 
 		<div class="indiv panel panel-default" id="deviceInfo">
 			<div class="table-top panel-heading">
-				<h2 class="ntit mt25">설비 정보</h2>
+				<h2 class="ntit mt-25">설비 정보</h2>
 				<a role="button" href="#deviceInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse-arrow"></a>
 			</div>
 			<div id="deviceInfoToggle" class="spc-table-row st-edit panel-collapse collapse in" role="tabpanel">
@@ -1365,7 +1365,7 @@
 
 		<div class="indiv panel panel-default" id="warrantyInfo">
 			<div class="table-top panel-heading">
-				<h2 class="ntit mt25">보증 정보</h2>
+				<h2 class="ntit mt-25">보증 정보</h2>
 				<a role="button" href="#warrantyInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse-arrow"></a>
 			</div>
 			<div id="warrantyInfoToggle" class="spc-table-row st-edit panel-collapse collapse in" role="tabpanel">
@@ -1440,7 +1440,7 @@
 
 		<div class="indiv panel panel-default" id="coefficientInfo">
 			<div class="table-top panel-heading">
-				<h2 class="ntit mt25">환경 변수</h2>
+				<h2 class="ntit mt-25">환경 변수</h2>
 				<a href="#coefficientInfoToggle" data-toggle="collapse" class="collapse-arrow"></a>
 			</div>
 			<div id="coefficientInfoToggle" class="spc-table-row st-edit panel-collapse collapse in" role="tabpanel">
@@ -1497,7 +1497,7 @@
 
 		<div class="indiv panel panel-default" id="associatedInfo">
 			<div class="table-top panel-heading">
-				<h2 class="ntit mt25">관련 정보</h2>
+				<h2 class="ntit mt-25">관련 정보</h2>
 				<a href="#associatedInfoToggle" data-toggle="collapse" class="collapse-arrow"></a>
 			</div>
 			<div id="associatedInfoToggle" class="spc-table-row st-edit panel-collapse collapse in" role="tabpanel">
@@ -1552,7 +1552,7 @@
 
 		<div class="indiv panel panel-default attachment">
 			<div class="table-top panel-heading">
-				<h2 class="ntit mt25">첨부 파일</h2>
+				<h2 class="ntit mt-25">첨부 파일</h2>
 				<a href="#attachementInfoToggle" data-toggle="collapse" class="collapse-arrow"></a>
 			</div>
 			<form id="attachement_info" name="attachement_info" class="mt-25">

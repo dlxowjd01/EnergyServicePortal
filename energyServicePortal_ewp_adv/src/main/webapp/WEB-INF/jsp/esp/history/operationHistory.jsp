@@ -1250,7 +1250,7 @@
 						</div>
 					</div>
 
-					<div class="flex-start2 mt20">
+					<div class="flex-start2 mt-20">
 						<div>
 							<h2 class="tx-tit"><fmt:message key="statushistory.1.timeframe" /></h2>
 							<label for="fromDate" class="tx-tit sr-only">시작일</label>
@@ -1279,8 +1279,8 @@
 					</div>
 					
 					<div class="btn-wrap-type05">
-						<button type="button" class="btn-type03 w80" onclick="$('#searchDetail').removeClass('open')">취소</button><!--
-					--><button type="button" class="btn-type w80 ml-12" onclick="$('#searchDetail').removeClass('open')">적용</button>
+						<button type="button" class="btn-type03 w-80px" onclick="$('#searchDetail').removeClass('open')">취소</button><!--
+					--><button type="button" class="btn-type w-80px ml-12" onclick="$('#searchDetail').removeClass('open')">적용</button>
 					</div>
 				</div>
 			</div>

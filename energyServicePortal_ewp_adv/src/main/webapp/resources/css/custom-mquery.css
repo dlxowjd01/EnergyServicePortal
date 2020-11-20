@@ -55,6 +55,11 @@
 	}
 }
 
+@media all and (max-width: 1492px) {
+	.gmain-table .gmain-wrap {
+		max-height: 625px;
+	}
+}
 
 @media all and (max-width: 1280px) {
 	.indiv.chart-diagnosis .chart-top .inline-flex .duration {
@@ -199,7 +204,6 @@
 	.all-menu .menu-wrapper>ul>li:nth-child(3),
 	.all-menu .menu-wrapper>ul>li:nth-child(4) {
 		display: inline-block;
-		float: left;
 		width: auto;
 	}
 
@@ -338,7 +342,7 @@
 	.page-wrapper {
 		margin: 0;
 		/* padding: 0 16px; */
-        padding: 64px 16px 0;
+		padding: 64px 16px 0;
 		/* for sticky nav padding: 64px 16px 0; */
 	}
 

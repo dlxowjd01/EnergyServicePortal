@@ -367,7 +367,7 @@
 					</tbody>
 				</table>
 			</div>
-			<div class="clear mt30">
+			<div class="clear mt-30">
 				<div class="fl">
 					<span class="tx-tit">기준</span>
 					<div class="sa-select">
@@ -530,7 +530,7 @@
 					</tr>
 				</table>
 			</div>
-			<div class="btn-wrap-type02 mt30">
+			<div class="btn-wrap-type02 mt-30">
 				<button type="button" class="btn-type03" onclick="list()">목록</button>
 				<button type="button" class="btn-type" onclick="register()">수정</button>
 			</div>

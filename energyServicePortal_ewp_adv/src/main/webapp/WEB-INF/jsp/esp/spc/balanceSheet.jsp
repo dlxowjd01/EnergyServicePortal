@@ -307,7 +307,7 @@
 					<col width="15%">
 				</colgroup>
 			</table>
-			<div class="btn-wrap-type02 mt30">
+			<div class="btn-wrap-type02 mt-30">
 				<button type="button" class="btn-type03" id="deleteBtn" onclick="deleteRow();" disabled="disabled">선택 삭제</button>
 			</div>
 		</div>

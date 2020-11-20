@@ -415,7 +415,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="row mt8">
+						<div class="row mt-8">
 							<div class="col-lg-6 col-sm-12">
 								<div class="input-group inline-flex">
 									<h2 class="input-label">공개 범위</h2>
@@ -503,7 +503,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="row mt8">
+				<div class="row mt-8">
 					<div class="col-lg-6 col-sm-12">
 						<div class="input-group inline-flex">
 							<h2 class="input-label">공개 범위</h2>

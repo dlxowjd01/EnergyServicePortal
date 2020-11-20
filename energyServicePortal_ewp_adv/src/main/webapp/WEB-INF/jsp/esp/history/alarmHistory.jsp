@@ -7,7 +7,7 @@
 	<div class="modal-dialog modal-s">
 		<div class="modal-content">
 			<h2 class="modal-title">알람 상태</h2>
-			<p class="text-line1 mt20 mb-24">"확인" 처리 하시겠습니까?</p>
+			<p class="text-line1 mt-20 mb-24">"확인" 처리 하시겠습니까?</p>
 			<div class="btn-wrap-type05"><!--
 			--><button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close">아니오</button><!--
 			--><button type="button" class="btn-type ml-12" onclick="alarmConfirmProcess();">예</button><!--
@@ -303,8 +303,8 @@
 					</div>
 
 					<div class="btn-wrap-type02">
-						<button type="button" class="btn-type03 w80" onclick="$('#searchDetail').removeClass('open')">취소</button><!--
-					--><button type="button" class="btn-type w80" onclick="$('#searchDetail').removeClass('open')">적용</button>
+						<button type="button" class="btn-type03 w-80px" onclick="$('#searchDetail').removeClass('open')">취소</button><!--
+					--><button type="button" class="btn-type w-80px" onclick="$('#searchDetail').removeClass('open')">적용</button>
 					</div>
 				</div>
 

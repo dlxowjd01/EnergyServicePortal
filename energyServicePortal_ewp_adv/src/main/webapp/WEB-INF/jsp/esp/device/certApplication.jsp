@@ -260,7 +260,7 @@
 	<div class="col-lg-12">
 		<form id="form1" name="form1" method="get" enctype="multipart/form-data">
 			<div class="indiv">
-				<div class="flex-wrapper mb-20 mt30">
+				<div class="flex-wrapper mb-20 mt-30">
 					<h2 class="ntit">인증서 정보 입력</h2>
 				</div>
 				<div class="spc-table-row st-edit">
@@ -315,7 +315,7 @@
 						</tbody>
 					</table>
 				</div>
-				<div class="flex-wrapper mb-20 mt30">
+				<div class="flex-wrapper mb-20 mt-30">
 					<h2 class="ntit">기기 정보 입력</h2>
 				</div>
 				<div class="table-wrap-type collect-wrap">
@@ -329,7 +329,7 @@
 					</ul>
 					<div class="tab-content">
 						<div class="tab-pane fade active in spc-table-row st-edit panel-collapse collapse" id="manual">
-							<table class="mt30">
+							<table class="mt-30">
 								<colgroup>
 									<col style="width:15%">
 									<col style="width:35%">
@@ -350,7 +350,7 @@
 							</table>
 						</div>
 						<div class="tab-pane fade spc-table-row st-edit panel-collapse collapse" id="excel">
-							<table class="mt30">
+							<table class="mt-30">
 								<colgroup>
 									<col style="width:15%">
 									<col style="width:35%">

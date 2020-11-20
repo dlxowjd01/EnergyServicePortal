@@ -3356,8 +3356,8 @@
 						}
 					});
 					let str = `<div id="btnGroup" class="right-end2"><!--
-								--><button type="button" class="btn-type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
-								--><button type="submit" class="btn-type w80 ml-12">확인</button><!--
+								--><button type="button" class="btn-type03 w-80px" data-dismiss="modal" aria-label="Close">취소</button><!--
+								--><button type="submit" class="btn-type w-80px ml-12">확인</button><!--
 							--></div>`;
 					$('#alarmTable_wrapper').append($(str));
 					// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
@@ -3922,8 +3922,8 @@
 				<div class="text-input-type"><input type="text" name="confirm_site" id="confirmSite" placeholder="사이트 이름 입력"/></div>
 			</div>
 			<div class="btn-wrap-type05"><!--
-				--><button type="button" class="btn-type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
-				--><button type="submit" id="deleteConfirmBtn" class="btn-type w80 ml-12" disabled>확인</button><!--
+				--><button type="button" class="btn-type03 w-80px" data-dismiss="modal" aria-label="Close">취소</button><!--
+				--><button type="submit" id="deleteConfirmBtn" class="btn-type w-80px ml-12" disabled>확인</button><!--
 			--></div>
 		</div>
 	</div>
@@ -3940,8 +3940,8 @@
 				<div class="text-input-type"><input type="text" name="confirm_alarm" id="confirmAlarm" placeholder="장치명 입력"/></div>
 			</div>
 			<div class="btn-wrap-type05"><!--
-				--><button type="button" class="btn-type03 w80" data-dismiss="modal" aria-label="Close">취소</button><!--
-				--><button type="submit" id="alarmDeleteConfirmBtn" class="btn-type w80 ml-12" disabled>확인</button><!--
+				--><button type="button" class="btn-type03 w-80px" data-dismiss="modal" aria-label="Close">취소</button><!--
+				--><button type="submit" id="alarmDeleteConfirmBtn" class="btn-type w-80px ml-12" disabled>확인</button><!--
 			--></div>
 		</div>
 	</div>
@@ -3957,7 +3957,7 @@
 				--><small id="duplicatedGroup" class="warning hidden">해당 설비는 이미 선택 되었습니다.</small><!--
 				--><small id="noIdWarning" class="warning hidden">중복되지 않는 설비 타입/ 설비명은 필수입니다.</small><!--
 			--></div>
-			<div class="modal-body mt10">
+			<div class="modal-body mt-10">
 				<form name="add_alarm_form" id="updateAlarmForm">
 					<table id="alarmTable" class="no-stripe w-100">
 						<colgroup>
@@ -4082,7 +4082,7 @@
 									<div class="text-input-type">
 										<input type="text" name="gridX" id="gridX" placeholder="X값 입력" minlength="1" maxlength="4" onkeydown="onlyNum(event)">
 									</div>
-									<div class="text-input-type mt5">
+									<div class="text-input-type mt-5">
 										<input type="text" name="gridY" id="gridY" placeholder="Y값 입력" minlength="1" maxlength="4" onkeydown="onlyNum(event)">
 									</div>
 								</div>

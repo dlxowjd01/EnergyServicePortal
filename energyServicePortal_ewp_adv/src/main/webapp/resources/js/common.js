@@ -91,50 +91,37 @@ $(function() {
 
 /* [메인] 리스트 더블클릭 */
 $(function() {
-	var touchtime = 0;
 	$(document).on('click','.dbclickopen', function () {
-
+		
 		if(typeof(smoothZoom) == 'function') {
-			let idx = $('.dbclickopen').index($(this)),
-				sid = $(this).data('sid');
-			let marker = makerObject[sid];
-			if(!isEmpty(marker)) {
-				map = marker.getMap();
+			let self = $(this);
+			// let idx = $('.dbclickopen').index(self);
+			let sid = self.data('sid');
+			let markerIcon = makerObject[sid];
+			let target = self.next(".detail-info");
+			let siblings = $(".detail-info").not(target).find(".di-wrap");
 
-				if($(this).next().find('.di-wrap').css('display') == 'block') {
-					map.setCenter({lat: 37.549012, lng: 126.988546});
-					smoothZoom(map, 6, map.getZoom(), false);
+			if(!isEmpty(markerIcon) || Object.keys(markerIcon).length >0 ) {
+				siblings.hide();
+				target.find(".di-wrap").slideToggle();
+				if(target.is(":visible")) {
+					let current = target.find(".di-wrap");
+
+					if(!current.hasClass("open") ){
+						map.setCenter(markerIcon.position);
+						smoothZoom(map, 18, map.getZoom(), true);
+						google.maps.event.trigger(markerIcon, 'click');
+						
+						current.addClass("open");
+					}
 				} else {
-					map.setCenter(marker.position); // set map center to marker position
-					smoothZoom(map, 18, map.getZoom(), true);
-				}
-			}
-		}
-
-		if(touchtime == 0) {
-			//set first click
-			touchtime = new Date().getTime();
-			//$('.dbclickopen').removeClass("click");
-			$(this).toggleClass("click");
-			$(this).next(".detail-info").find(".di-wrap").slideToggle();
-		} else {
-			//compare first click to this click and see if they occurred within double click threshold
-			if(((new Date().getTime())-touchtime) < 800) {
-				//double click occurred
-				touchtime = 0;
-				if(!isEmpty(href)) {
-					window.location = $(this).find("a").attr(href);
+					current.removeClass("open");
+					return false;
 				}
 			} else {
-				//not a double click so set as a new first click
-				touchtime = new Date().getTime();
-				//$('.dbclickopen').removeClass("click");
-				$(this).toggleClass("click");
-				$(this).next(".detail-info").find(".di-wrap").slideToggle();
+				return false;
 			}
 		}
-
-
 		return false;
 	});
 });

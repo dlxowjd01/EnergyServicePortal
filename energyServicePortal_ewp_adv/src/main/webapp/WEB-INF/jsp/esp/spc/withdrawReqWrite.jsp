@@ -661,7 +661,7 @@
 				--><button type="button" id="addRowBtn" class="btn-text-blue">열 추가</button><!--
 			--></div>
 			</div>
-			<div class="indiv mt25">
+			<div class="indiv mt-25">
 				<div class="spc-table-row">
 					<table id="secondTable">
 						<colgroup>
@@ -682,7 +682,7 @@
 				</div>
 
 				<div class="btn-wrap-type05"><!--
-				--><button type="button" onclick="location.href='/spc/transactionCalendar.do'" class="btn btn-type03 w80 mr-12">목록</button><!--
+				--><button type="button" onclick="location.href='/spc/transactionCalendar.do'" class="btn btn-type03 w-80px mr-12">목록</button><!--
 				--><button type="submit" class="btn btn-type">제출</button><!--
 			--></div>
 			</div>

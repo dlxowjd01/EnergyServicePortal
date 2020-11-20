@@ -31,7 +31,6 @@
   position: absolute;
   top: 25%;
   right: 10px;
-  color: #;
   cursor: pointer;
   font-size: 18px;
 }
@@ -46,7 +45,7 @@
   margin: 0;
 }
 .wickedpicker__controls >* span {
-  color: #aeaeae;
+  color: var(--white60);
 }
 .wickedpicker__controls__control, .wickedpicker__controls__control--separator {
   vertical-align: middle;
@@ -58,7 +57,7 @@
 }
 
 .wickedpicker__controls__control-up, .wickedpicker__controls__control-down {
-  color: #aeaeae;
+  color: var(--white60);
   position: relative;
   display: block;
   margin: 3px auto;
@@ -94,7 +93,7 @@
   font-family: 'fontello';
   font-style: normal;
   font-weight: normal;
-  color: #aeaeae;
+  color: var(--white60);
   speak: none;
   display: inline-block;
   text-decoration: inherit;

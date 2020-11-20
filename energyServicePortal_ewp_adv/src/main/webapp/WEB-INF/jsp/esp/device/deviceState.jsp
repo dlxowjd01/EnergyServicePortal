@@ -329,7 +329,7 @@
 										<button type="button" class="btn-type" onclick="setManualForm();">데이터 확인</button>
 										<button type="button" class="btn-type03 end" onclick="initManualForm();">입력 초기화</button>
 									</div>
-									<div class="spc-tbl mt20">
+									<div class="spc-tbl mt-20">
 										<table class="ly-type">
 											<thead>
 											<th>15분 단위</th>
@@ -358,7 +358,7 @@
 		<div class="modal-content narrow">
 			<div class="modal-body">
 				<h2>확인을 누르시면, 변경하지 않은 정보는 모두 사라집니다.</h2>
-				<p class="mt8">정말 닫으시겠습니까?</p>
+				<p class="mt-8">정말 닫으시겠습니까?</p>
 			</div>
 			<div class="modal-footer">
 				<div class="btn-wrap-type mb-0">
@@ -375,7 +375,7 @@
 		<div class="modal-content narrow">
 			<div class="modal-body">
 				<h2>저장을 누르시면, 수정하신 정보로 수정이 됩니다.</h2>
-				<p class="mt8">정말 수정하시겠습니까?</p>
+				<p class="mt-8">정말 수정하시겠습니까?</p>
 			</div>
 			<div class="modal-footer">
 				<div class="btn-wrap-type mb-0">

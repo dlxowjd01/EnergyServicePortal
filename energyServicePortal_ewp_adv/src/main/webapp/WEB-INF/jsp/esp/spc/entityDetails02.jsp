@@ -41,9 +41,9 @@
 					</table>
 				</div>
 			</div>
-			<div class="indiv mt25">
+			<div class="indiv mt-25">
 				<div class="table-top">
-					<h2 class="ntit mt25">운영 정보</h2>
+					<h2 class="ntit mt-25">운영 정보</h2>
 				</div>
 				<div class="spc-table-row">
 					<table>
@@ -102,9 +102,9 @@
 					<button type="button" class="btn-type03">목록</button>
 				</div>
 			</div>
-			<div class="indiv mt25">
+			<div class="indiv mt-25">
 				<div class="table-top">
-					<h2 class="ntit mt25">설비 정보</h2>
+					<h2 class="ntit mt-25">설비 정보</h2>
 				</div>
 				<div class="spc-table-row">
 					<table>
@@ -157,9 +157,9 @@
 					<button type="button" class="btn-type03">목록</button>
 				</div>
 			</div>
-			<div class="indiv mt25">
+			<div class="indiv mt-25">
 				<div class="table-top">
-					<h2 class="ntit mt25">금융 정보</h2>
+					<h2 class="ntit mt-25">금융 정보</h2>
 				</div>
 				<div class="spc-table-row">
 					<table>
@@ -182,9 +182,9 @@
 					<button type="button" class="btn-type03">목록</button>
 				</div>
 			</div>
-			<div class="indiv mt25">
+			<div class="indiv mt-25">
 				<div class="table-top">
-					<h2 class="ntit mt25">보증 정보</h2>
+					<h2 class="ntit mt-25">보증 정보</h2>
 				</div>
 				<div class="spc-table-row">
 					<table>
@@ -237,9 +237,9 @@
 					<button type="button" class="btn-type03">목록</button>
 				</div>
 			</div>
-			<div class="indiv mt25">
+			<div class="indiv mt-25">
 				<div class="table-top">
-					<h2 class="ntit mt25">환경 변수</h2>
+					<h2 class="ntit mt-25">환경 변수</h2>
 				</div>
 				<div class="spc-table-row">
 					<table>
@@ -280,9 +280,9 @@
 					<button type="button" class="btn-type03">목록</button>
 				</div>
 			</div>
-			<div class="indiv mt25">
+			<div class="indiv mt-25">
 				<div class="table-top">
-					<h2 class="ntit mt25">관련 정보</h2>
+					<h2 class="ntit mt-25">관련 정보</h2>
 				</div>
 				<div class="spc-table-row">
 					<table>
@@ -323,9 +323,9 @@
 					<button type="button" class="btn-type03">목록</button>
 				</div>
 			</div>
-			<div class="indiv spc-detail02 mt25">
+			<div class="indiv spc-detail02 mt-25">
 				<div class="table-top">
-					<h2 class="ntit mt25">첨부 파일</h2>
+					<h2 class="ntit mt-25">첨부 파일</h2>
 				</div>
 				<div class="spc-table-row">
 					<table>

@@ -572,7 +572,7 @@
 				<span class="tx-tit">${param.req_detail_acc_info} ${param.req_detail_acc_holder}</span>
 			</div>
 
-			<div class="table-wrap-type collect-wrap mt30">
+			<div class="table-wrap-type collect-wrap mt-30">
 				<table class="history-table table-footer">
 					<thead>
 						<tr>
@@ -635,20 +635,20 @@
 					--><button type="button" class="btn-type ml-12" onclick="downloadFile(this)" data-name="downloadMergeDocs" >다운로드</button><!--
 				--></div>
 				</div>
-				<div class="flex-wrapper mt20">
+				<div class="flex-wrapper mt-20">
 					<h2 class="heading">메모 히스토리</h2>
 				</div>
-				<div class="flex-wrapper border mt12">
+				<div class="flex-wrapper border mt-12">
 					<textarea id="txt1" class="textarea w-100" readonly></textarea>
 				</div>
 				<!-- 사무수탁 && 출금관리 -->
 				<c:choose>
 					<c:when test="${userInfo.role eq 1}">
-						<div class="flex-wrapper mt20">
+						<div class="flex-wrapper mt-20">
 							<h2 class="heading">메모</h2><!--
 						--><a class="chk-type" href="javascript:void(0);"><input type="checkbox" id="memoOpt" name="memo_opt"><label for="memoOpt">사무수탁사 함께 보기</label></a><!--
 					--></div>
-						<div class="textarea-container mt12">
+						<div class="textarea-container mt-12">
 							<button type="button" id="saveBtn" class="btn-type03 btn-fixed">저장</button>
 							<textarea placeholder="직접입력" id="txt2" class="textarea w-100"></textarea>
 						</div>
@@ -668,7 +668,7 @@
 								<c:if test="${(param.req_detail_status_val ne 4 and param.req_detail_status_val ne 5)}">
 									<div class="spc-btn-group my-20"><!--
 										--><button type="button" id="reviewBtn" class="btn-type mr-16">검토대기로 변경</button><!--
-										--><button type="button" id="rejectBtn" class="btn-type03 w80">반송</button><!--
+										--><button type="button" id="rejectBtn" class="btn-type03 w-80px">반송</button><!--
 										--><button type="submit" class="btn-type ml-12">승인</button><!--
 									--></div>
 								</c:if>
@@ -677,11 +677,11 @@
 					</c:when>
 					<c:otherwise>
 						<c:if test="${userInfo.task ne 1}">
-							<div class="flex-wrapper mt20">
+							<div class="flex-wrapper mt-20">
 								<h2 class="heading">메모</h2><!--
 							--><a class="chk-type" href="javascript:void(0);"><input type="checkbox" id="memoOpt" name="memo_opt"><label for="memoOpt">사무수탁사 함께 보기</label></a><!--
 						--></div>
-							<div class="textarea-container mt12">
+							<div class="textarea-container mt-12">
 								<button type="button" id="saveBtn" class="btn-type03 btn-fixed">저장</button>
 								<textarea placeholder="직접입력" id="txt2" class="textarea w-100"></textarea>
 							</div>
@@ -700,7 +700,7 @@
 									<c:if test="${userInfo.task eq 2 and (param.req_detail_status_val ne 4 and param.req_detail_status_val ne 5)}">
 										<div class="spc-btn-group my-20"><!--
 										--><button type="button" id="reviewBtn" class="btn-type mr-16">검토대기로 변경</button><!--
-										--><button type="button" id="rejectBtn" class="btn-type03 w80">반송</button><!--
+										--><button type="button" id="rejectBtn" class="btn-type03 w-80px">반송</button><!--
 										--><button type="submit" class="btn-type ml-12">승인</button><!--
 									--></div>
 									</c:if>
@@ -712,7 +712,7 @@
 			</div>
 		</form>
 		<div class="btn-wrap-type05 my-20"><!--
-		--><button type="button" id="backList" class="btn-type03 w80">목록</button><!--
+		--><button type="button" id="backList" class="btn-type03 w-80px">목록</button><!--
 	--></div>
 	</div>
 </div>

@@ -235,7 +235,7 @@
 							</tbody>
 						</table>
 					</div>
-					<div class="flex-wrapper mb-20 mt30">
+					<div class="flex-wrapper mb-20 mt-30">
 						<h2 class="ntit">기기인증서 리스트</h2>
 					</div>
 					<div class="spc-tbl align-type">

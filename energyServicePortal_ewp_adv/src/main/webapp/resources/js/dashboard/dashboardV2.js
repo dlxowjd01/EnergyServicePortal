@@ -424,6 +424,8 @@ const ajaxData = (urls, target) => {
 						}
 					}
 				}
+			} else {
+				document.getElementById('loadingCircleDashboard').style.display =  'none';
 			}
 		});
 
@@ -446,8 +448,8 @@ const ajaxData = (urls, target) => {
 				setRealtimeRecord();
 			}
 		}
-
 		document.getElementById('loadingCircleDashboard').style.display =  'none';
+		dashboardViewFlag = false;
 	});
 }
 
@@ -666,10 +668,10 @@ const dailyChartDraw = async () => {
 									const items = siteEnergy['items'];
 									if (!isEmpty(items)) {
 										items.forEach(item => {
-											// (인코어드 데이터 모니터링 용) 지우지 말아주세요.
-											if(item.energy > 8000000){
-												console.log("사이트 아이디===>", siteId, "에너지===>", item, "사이트 에너지 상세 ===>", siteEnergyItem )
-											}
+											// (인코어드 데이터 모니터링 용) 지우지 말아주세요. 발전량이 과도하게 많이 들어온 경우
+											// if(item.energy > 10000000){
+											// 	console.log("사이트 아이디===>", siteId, "에너지===>", item, "사이트 에너지 상세 ===>", siteEnergyItem )
+											// }
 											const index = Number(String(item['basetime']).slice(6, 8)) - 1;
 											pvList[index] += Math.floor(item['energy'] / 1000);
 											sumObj['pvSum'] += Math.floor(item['energy'] / 1000);
@@ -1310,30 +1312,37 @@ const searchSite = async function () {
 			} else {
 				searchSite = true;
 			}
-
-			if (targetOperation && searchSite) {
-				if (operation.includes('0')) {
-					site['status'] = '중지';
-					site['statusClass'] = 'status-stop';
-				} else if (operation.includes('1')) {
-					site['status'] = '정상';
-					site['statusClass'] = 'status-drv';
-				} else if (operation.includes('2')) {
-					site['status'] = '트립';
-					site['statusClass'] = 'status-error';
-				} else {
-					site['status'] = '에러';
-					site['statusClass'] = 'status-error';
+			
+			if(!isEmpty(operation)){
+				if (targetOperation && searchSite) {
+					
+					if (operation.includes('0')) {
+						site['status'] = '중지';
+						site['statusClass'] = 'status-stop';
+					} else if (operation.includes('1')) {
+						site['status'] = '정상';
+						site['statusClass'] = 'status-drv';
+					} else if (operation.includes('2')) {
+						site['status'] = '트립';
+						site['statusClass'] = 'status-error';
+					} else {
+						site['status'] = '이상';
+						site['statusClass'] = 'status-error';
+					}
+				
+					site['inverterCount'] = inverterCount //사이트에 속한 인버터 갯수.
+					site['operation'] = operation; //사이트 상태 정보.
+					site['capacity'] = capacity;   //사이트에 속한 인버터 설비 용량 정보.
+					site['capacityView'] = (isEmpty(capacity) || capacity === '-') ? '-' : displayNumberFixedUnit(capacity, 'W', 'kW', 0)[0];   //사이트에 속한 인버터 설비 용량 정보.
+					site['activePower'] = activePower;   //사이트에 속한 인버터.
+					site['activePowerView'] =(isEmpty(activePower) || activePower === '-') ? '-' : displayNumberFixedUnit(activePower, 'W', 'kW', 0)[0];   //사이트에 속한 인버터.
+					site['irradiationPoa'] = irradiationPoa;   //사이트에 속한 인버터 설비 용량 정보.
+					refineList.push(site);
 				}
-
-				site['inverterCount'] = inverterCount //사이트에 속한 인버터 갯수.
-				site['operation'] = operation; //사이트 상태 정보.
-				site['capacity'] = capacity;   //사이트에 속한 인버터 설비 용량 정보.
-				site['capacityView'] = (isEmpty(capacity) || capacity === '-') ? '-' : displayNumberFixedUnit(capacity, 'W', 'kW', 0)[0];   //사이트에 속한 인버터 설비 용량 정보.
-				site['activePower'] = activePower;   //사이트에 속한 인버터.
-				site['activePowerView'] =(isEmpty(activePower) || activePower === '-') ? '-' : displayNumberFixedUnit(activePower, 'W', 'kW', 0)[0];   //사이트에 속한 인버터.
-				site['irradiationPoa'] = irradiationPoa;   //사이트에 속한 인버터 설비 용량 정보.
-				refineList.push(site);
+			} else {
+				console.log("no operation====", site)
+				site['status'] = 'null';
+				site['statusClass'] = 'status-null';
 			}
 		});
 
@@ -1446,8 +1455,8 @@ const searchSite = async function () {
 		);
 
 		setMakeList(refineList, 'siteList', {'dataFunction': {'align': alignFunc}}); //list생성
-		return refineList;
-	}).then(refineList => {
+		// return refineList;
+	// }).then(refineList => {
 		if (typeof (geocodeAddress) == 'function') {
 			map = new google.maps.Map(document.getElementById('gMainMap'), {
 				mapTypeId: 'satellite',
@@ -1461,22 +1470,125 @@ const searchSite = async function () {
 			if (refineList.length > 0) {
 				makerObject = new Object();
 
+				// 0: '중지' <  1: '정상'  <<  2: '트립'  <<<  "undefined": '이상' (나오면 안되기 때문에 발견시 rtu에서 데이터 수정 필요!!!)
 				refineList.forEach((site, idx) => {
 					if (site.latlng != null) {
-						let operationColor = '#90caf3';
-						if(site.operation == '0') {
-							operationColor = '#f2a363';
-						} else if(site.operation == '1') {
-							operationColor = '#90caf3';
-						} else {
-							operationColor = '#e97373';
-						}
+						let operationText = "";
+						let operationColor = "";
 
-						geocodeAddress(site.address, site.sid, site.name, site.latlng, operationColor);
+						if(site.operation != "null"){
+							if(site.operation == '0') {
+								operationText = "[ 중지 ]&ensp;";
+								operationColor = '#f2a363';
+							} else if(site.operation == '1') {
+								operationText = "[ 정상 ]&ensp;";
+								operationColor = '#90caf3';
+							} else if(site.operation == '2') {
+								operationText = "[ 트립 ]&ensp;";
+								operationColor = '#e97373';
+							} else {
+								operationText = "[ 이상 ]&ensp;";
+								operationColor = '#ffd954';
+							}
+						} else {
+							operationText = "[ 발전량 없음 ]&ensp;";
+							operationColor = '#878787';
+						}
+						// console.log("site.latlng====", site.latlng);
+						
+						if(site.latlng.includes(",")){
+							geocodeAddress(site.address, site.sid, site.name, site.latlng, operationColor, operationText);
+						}
 					} else {
 						makerObject[site.sid] = new Object();
 					}
 				});
+				
+				let clusterStyles = [
+					{
+						textColor: 'black',
+						textSize: 15,
+						anchorText: [9, 16],
+						fontWeight: 'normal',
+						url: '/img/map_icons/cluster_blue.png',
+						height: 45,
+						width: 32
+					},
+				];
+
+				let clusterOptions = {
+					gridSize: 45,
+					styles: clusterStyles,
+					maxZoom: 15
+				};
+
+				var markerCluster = new MarkerClusterer(map, markers, clusterOptions);
+				markerCluster.addMarkers(markers);
+
+				google.maps.event.addListener(markerCluster, "clusteringend", function (c) {
+					let clusters = c.getClusters();
+					clusters.forEach((item, index) => {
+
+						let styleOptions = {
+							textColor: 'black',
+							textSize: 15,
+							anchorText: [9, 16],
+							fontWeight: 'normal',
+							height: 45,
+							width: 32
+						};
+						let newUrl = [
+							'/img/map_icons/cluster_grey.png',
+							'/img/map_icons/cluster_blue.png',
+							'/img/map_icons/cluster_orange.png',
+							'/img/map_icons/cluster_red.png',
+							'/img/map_icons/cluster_yellow.png',
+						];
+						let maxVal = 0;
+
+						item.markerClusterer_.clusters_.forEach(x => {
+							
+							x.markers_.forEach((el, idx) => {
+								let url = el.icon.url;
+
+								if(!isEmpty(url)){
+									if(url.endsWith("marker_yellow.png") && maxVal<4){
+										maxVal = 4;
+									}
+									if(url.endsWith("marker_red.png") && maxVal<3){
+										maxVal = 3;
+									}
+									if(url[3].endsWith("marker_orange.png") && maxVal<2){
+										maxVal = 2;
+									}
+									if(url[3].endsWith("marker_blue.png") && maxVal<1){
+										maxVal = 1;
+									}
+
+									// if(url[3].endsWith("marker_blue.png") && maxVal<1){
+									// 	newUrl = '/img/map_icons/cluster_blue.png';
+									// }
+								}
+							});
+						});
+
+						styleOptions.url = newUrl[maxVal];
+					
+						if(!isEmpty(clusters[index].clusterIcon_.style)){
+						 	item.clusterIcon_.style.url = newUrl[maxVal];
+						}
+					});
+				});
+
+				google.maps.event.addListener(markerCluster, "mouseover", function (c) {
+					// console.log("mouseover====" + c.getCenter());
+					// console.log("&mdash;Number of managed markers in cluster: " + c.getSize());
+				});
+
+				google.maps.event.addListener(markerCluster, "mouseout", function (c) {
+					// console.log("mouseout===" + c.getCenter());
+				});
+
 			}
 		}
 
@@ -1516,10 +1628,13 @@ const searchSite = async function () {
 
 				siteListChart('type_chart' + siteIdx, series, title);
 			});
-		}, 500);
+		}, 400);
+		
+		document.getElementById('loadingCircleDashboard').style.display =  'none';
+		return refineList;
 	}).catch(error => {
 		console.error(error);
-
+		document.getElementById('loadingCircleDashboard').style.display =  'none';
 		$('#errMsg').text(error);
 		$('#errorModal').modal('show');
 		setTimeout(function(){
@@ -1637,4 +1752,9 @@ const getWeatherIconClass = (weatherId) => {
 			break;
 	}
 	return weatherIconClass
+}
+
+function setMarker (){
+	console.log("markers===", markers);
+	return '/img/map_icons/cluster_yellow.png'
 }

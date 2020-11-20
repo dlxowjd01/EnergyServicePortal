@@ -1346,7 +1346,7 @@
 					<label for="chk_op05">출금 - 최종승인</label>
 				</div>
 
-				<div class="flex-wrapper mt40">
+				<div class="flex-wrapper mt-40">
 					<h2 class="ntit">주요 일정</h2>
 					<button type="button" id="addAlarmBtn" class="btn-add">알림 등록</button>
 				</div>

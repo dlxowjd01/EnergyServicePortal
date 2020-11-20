@@ -26,7 +26,7 @@
 		<div class="col-lg-12">
 			<div class="indiv">
 				<div class="table-top">
-					<h2 class="ntit mt25">출장 이력</h2>
+					<h2 class="ntit mt-25">출장 이력</h2>
 				</div>
 				<div class="spc-table-row">			
 					<table>
@@ -61,9 +61,9 @@
 					<button type="button" class="btn-type03">목록</button>
 				</div>
 			</div>
-			<div class="indiv mt25">
+			<div class="indiv mt-25">
 				<div class="table-top">
-					<h2 class="ntit mt25">처리 내역</h2>
+					<h2 class="ntit mt-25">처리 내역</h2>
 				</div>
 				<div class="spc-table-row">			
 					<table>
