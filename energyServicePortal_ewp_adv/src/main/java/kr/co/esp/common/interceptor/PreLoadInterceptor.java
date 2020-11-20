@@ -31,7 +31,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 		Map<String, Object> userInfo = UserUtil.getUserInfo(request);
 		JSONArray jsonArray = new JSONArray();
 
-		if (userInfo != null) {
+		if (userInfo != null && (userInfo.get("token") != null && !"".equals(userInfo.get("token")))) {
 			String token = (String) userInfo.get("token");
 			String mode = (String) session.getAttribute("mode");
 

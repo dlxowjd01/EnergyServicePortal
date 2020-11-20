@@ -246,6 +246,8 @@
 			let siteItemList = $("#selectedSiteList").find("li");
 			let spcItemList = $("#selectedSpcList").find("li");
 
+			let verify_level = $('#switchBtn').is(':checked') ? '1' : '0';
+
 			// 1. Add user info
 			if(!$("#addUserModal").hasClass("edit")) {
 				let resultSuccessText = "사용자 추가에 성공 하였습니다.";
@@ -255,6 +257,7 @@
 				userObj.name = newFullName;
 				userObj.password = newPwd;
 				userObj.role = newAccVal;
+				userObj.verify_level = Number(verify_level);
 
 				if( !isEmpty(newPhoneNum)){
 					userObj.contact_phone = newPhoneNum;
@@ -441,6 +444,10 @@
 					editUserObj.valid_yn = newUseOpt;
 				}
 
+				if( !isEmpty(verify_level) && (verify_level != td.eq(10).text() ) ) {
+					editUserObj.verify_level = Number(verify_level);
+				}
+
 				if( !isEmpty(newUserDesc) ) {
 					// if( newUserDesc.replace("\t", "") != prevDesc.replace("\t", "") ) {
 						editUserObj.description = newUserDesc;
@@ -524,7 +531,7 @@
 								// console.log("editUserObj===", editUserObj);
 								$.ajax(option).done(function (json, textStatus, jqXHR) {
 									refreshUserList();
-									showAjaxResultModal("ajaxResultModal", "addUserModal", "1", resultSuccessText);st();
+									showAjaxResultModal("ajaxResultModal", "addUserModal", "1", resultSuccessText);
 								}).fail(function (jqXHR, textStatus, errorThrown) {
 									let errorMsg = resultFailText + "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText;
 									showAjaxResultModal("ajaxResultModal", "addUserModal", "0", errorMsg);
@@ -760,6 +767,7 @@
 					}
 					obj.uid = item.uid;
 					obj.idx = index + 1;
+					obj.verify_level = item.verify_level;
 					newArr.push(obj);
 					// console.log("uid---", item.uid)
 				})).then( () => {
@@ -836,6 +844,11 @@
 									"sTitle": "사용 여부",
 									"mData": "valid_yn",
 								},
+								{
+									"sTitle": "이중 인증",
+									"mData": "verify_level",
+									visible: false,
+								}
 							],
 							"dom": 'tip',
 							"select": {
@@ -994,6 +1007,11 @@
 									"sTitle": "사용 여부",
 									"mData": "valid_yn",
 								},
+								{
+									"sTitle": "이중 인증",
+									"mData": "verify_level",
+									visible: false,
+								}
 							],
 
 							"dom": 'tip',
@@ -1275,6 +1293,11 @@
 				{
 					"title": "사용 여부",
 					"data": null,
+				},
+				{
+					"sTitle": "",
+					"data": null,
+					visible: false,
 				}
 			],
 			"dom": 'tip',
@@ -1528,6 +1551,17 @@
 
 				if(!isEmpty(prevDesc)){
 					$('#newUserDesc').val(prevDesc);
+				}
+
+				if (!isEmpty(dTable.row('.selected').data().verify_level)) {
+					let textVal = dTable.row('.selected').data().verify_level;
+					if (textVal === 1) {
+						$('#switchBtn').prop('checked', true);
+					} else {
+						$('#switchBtn').prop('checked', false);
+					}
+				} else {
+					$('#switchBtn').prop('checked', false);
 				}
 
 				$("#addUserModal").addClass("edit").modal("show");

@@ -281,46 +281,6 @@
 				}
 			});
 
-			$('#loginForm').on("submit", function(e) {
-				e.preventDefault();
-
-				if ($('#loginForm').find('.input-field').eq(2).hasClass('hidden')) {
-					$.ajax({
-						url: '/loginUser.do',
-						type: 'post',
-						async: false,
-						data: $('#loginForm').serialize()
-					}).done(function (json, textStatus, jqXHR) {
-						if (isEmpty(json.rtnUrl)) {
-							location.reload();
-						} else {
-							if (json.rtnUrl === 'verify') {
-								$('#loginForm').find('.input-field').eq(2).removeClass('hidden');
-							} else {
-								location.href = json.rtnUrl;
-							}
-						}
-					}).fail(function (jqXHR, textStatus, errorThrown) {
-						console.error(textStatus);
-					});
-				} else {
-					$.ajax({
-						url: '/twoFactorAuth.do',
-						type: 'post',
-						async: false,
-						data: $('#loginForm').serialize()
-					}).done(function (json, textStatus, jqXHR) {
-						if (isEmpty(json.rtnUrl)) {
-							location.reload();
-						} else {
-							location.href = json.rtnUrl;
-						}
-					}).fail(function (jqXHR, textStatus, errorThrown) {
-						console.error(textStatus);
-					});
-				}
-			});
-
 			// Modal event
 			$("#signUpModal, #findIdModal, #changePwdModal").on("hide.bs.modal", function(){
 				initModal(this);
@@ -530,7 +490,6 @@
 				<div class="input-field"><input type="password" id="loginUserPw" name="password" class="clear-input" placeholder=<fmt:message key="ewp.login.Password"/>>
 <%--					<button type="button" class="clear-btn" onclick="showPwd( 'loginUserPw', this)">show</button>--%> <%-- 일부 브라우져 오작동으로 주석 --%>
 				</div>
-				<div class="input-field hidden"><input type="password" id="verify_code" name="verify_code" class="clear-input" placeholder="인증번호"></div>
 				<div class="input-field no-border"><a class="chk-type"><input type="checkbox" id="saveLogin" name="save_login"><label for="saveLogin">로그인 유지</label></a></div>
 
 				<div class="btn-wrapper">

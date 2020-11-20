@@ -10,4 +10,6 @@ public interface LoginService {
 
 	Map<String, Object> selectAuthLogin(String mode, JSONObject obj) throws Exception;
 
+	Map<String, Object> selectTwoFactorAuthLogin(String mode, JSONObject obj) throws Exception;
+
 }
