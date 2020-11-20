@@ -25,8 +25,8 @@
 			} else {
 				if(lazyLoadFlag === false){
 					loadScripts([
-						'/js/data_tables/extensions/select.js',
 						'/js/data_tables/extensions/pdf_make.js',
+						// '/js/data_tables/extensions/select.js',
 						// '/js/data_tables/extensions/buttons.js',
 						'/js/data_tables/extensions/fixed_header.js',
 						'/js/data_tables/extensions/responsive.js',
@@ -425,6 +425,7 @@
 		script.onreadystatechange = callback;
 		script.onload = callback;
 		document.head.appendChild(script);
+		console.log("docuemnt head====", document.head);
 	}
 
 	function loadScripts(urls, callback) {
@@ -432,7 +433,7 @@
 		let multiCallback = () => {
 			loadedCount++;
 			if (loadedCount >= urls.length) {
-			callback.call(this, arguments);
+				callback.call(this, arguments);
 			}
 		};
 		for (let url of urls) {
