@@ -166,6 +166,7 @@
 				type: 'GET',
 				success: (json, textStatus, jqXHR) => {
 					spcList.empty();
+					(json.data).sortOn('name');
 					(json.data).forEach((item, index) => {
 						let listItem = '';
 						let uniq = item.spc_id + '_' + index;

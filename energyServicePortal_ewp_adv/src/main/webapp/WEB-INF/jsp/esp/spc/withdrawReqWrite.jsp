@@ -124,6 +124,7 @@
 
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
 				spcList.empty();
+				(json.data).sortOn('name');
 				json.data.forEach((item, index) => {
 					let listItem = '';
 					if(item.name == ""){

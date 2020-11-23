@@ -362,6 +362,7 @@
 						});
 					}
 
+					refineSpcList.sortOn('name');
 					refineSpcList.unshift({spc_id: '', name: '직접입력'});
 					setMakeList(refineSpcList, 'spcList', {'dataFunction': {}});
 				}
@@ -371,6 +372,7 @@
 			});
 		} else {
 			$.ajax(spcSearch).done(function (data, textStatus, jqXHR) {
+				data.data.sortOn('name');
 				data.data.unshift({spc_id: '', name: '직접입력'});
 
 				setMakeList(data.data, 'spcList', {'dataFunction': {}});
@@ -394,20 +396,18 @@
 				data: {oid: oid},
 				success: function (json) {
 					let spcGens = new Array();
-					if (!isEmpty(json)) {
-						spcGens = json;
-					}
+					if (!isEmpty(json)) { spcGens = json; }
 
+					spcGens.sortOn('name');
 					spcGens.unshift({sid: '', name: '직접입력', location: '', address: ''});
 					setMakeList(spcGens, 'genList', {'dataFunction': {}});
 
 				},
-				error: function (request, status, error) {
-
-				}
+				error: function (request, status, error) {}
 			});
 		} else {
 			let spcGens = Array.from(siteList);
+			spcGens.sortOn('name');
 			spcGens.unshift({sid: '', name: '직접입력', location: '', address: ''});
 			setMakeList(spcGens, 'genList', {'dataFunction': {}});
 		}

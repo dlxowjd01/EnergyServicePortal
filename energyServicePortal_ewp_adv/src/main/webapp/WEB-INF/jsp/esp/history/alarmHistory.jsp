@@ -537,6 +537,7 @@
 	
 	const siteList = function (sidparam) {
 		const makeSite = Array.from(sites);
+		makeSite.sortOn('name');
 		makeSite.unshift({ sid: 'all', name: '전체'});
 		setMakeList(makeSite, 'siteList', {'dataFunction': {}}); //list생성
 		$('#siteList').append(`<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16">적용</button></li>`);
@@ -561,22 +562,9 @@
 			const kdeviceName = eval('deviceTemplate.' + deviceName);
 			deviceList.push({name:kdeviceName, type:deviceName});
 		});
-		
-		deviceList.sort(function(a, b){
-			let atype = a['type'].toUpperCase();
-			let btype = b['type'].toUpperCase();
-			if(atype > btype){
-				return 1;
-			}
-			if(btype > atype){
-				return -1;
-			}
-			return 0;
-		});
-		
-		setMakeList(deviceList, 'device', {
-			'dataFunction': {}
-		});
+
+		deviceList.sortOn('name');
+		setMakeList(deviceList, 'device', { 'dataFunction': {} });
 
 		if (sidparam == '' || sidparam == undefined) {
 			$(':checkbox[name="deviceType"]').prop('checked', false);

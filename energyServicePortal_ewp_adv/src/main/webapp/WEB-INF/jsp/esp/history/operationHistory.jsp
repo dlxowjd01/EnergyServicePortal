@@ -640,6 +640,7 @@
 	//사업소 조회
 	const siteMakeList = function () {
 		const makeSite = Array.from(siteList);
+		makeSite.sortOn('name');
 		makeSite.unshift({ sid: 'all', name: '전체'});
 		setMakeList(makeSite, 'siteULList', {'dataFunction': {}}); //list생성
 		$('#siteULList').append(`<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16">적용</button></li>`);
@@ -690,6 +691,7 @@
 						}
 					})
 
+					deviceType.sortOn('name');
 					setMakeList(deviceType, 'typeULList', {'dataFunction': {}});
 
 					if (!isEmpty(deviceTp)) {
@@ -712,7 +714,8 @@
 	//설비타입 디바이스타입 설정한다.
 	const device = function () {
 		$('#devices .dropdown-toggle').text().replace(/<[^>]+>/g, '복수 선택');
-
+		$('#devices .dropdown-cov').empty();
+		
 		const typeArray = $.makeArray(
 			$(':checkbox[name="type"]:checked').map(
 				function () {
@@ -722,7 +725,6 @@
 		);
 
 		if (typeArray.length > 0 && deviceList.length > 0) {
-			$('#devices .dropdown-cov').empty();
 
 			//선택된 사이트를 기준으로 한다.
 			let siteArray = new Array();
@@ -751,6 +753,7 @@
 				siteGrp.find('p').addClass('tx-li-title').text(site.siteNm);
 				siteGrp.append('<ul>');
 
+				deviceList.sortOn('name');
 				$.each(deviceList, function (i, el) {
 					if (el.sid == site.siteId) {
 						$.each(typeArray, function (k, elm) {

@@ -121,11 +121,19 @@
 					className: 'dt-center'
 				}
 			],
+			select: {
+				style: 'multi',
+				selector: 'td:first-child > :checkbox, tr'
+			},
 			language: {
 				emptyTable: '조회된 데이터가 없습니다.',
 				zeroRecords: '검색된 결과가 없습니다.'
 			},
 			dom: 'tip',
+		}).on('select', function(e, dt, type, indexes) {
+			yieldTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
+		}).on('deselect', function(e, dt, type, indexes) {
+			yieldTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", false);
 		}).columns.adjust().draw();
 
 		getProperties();

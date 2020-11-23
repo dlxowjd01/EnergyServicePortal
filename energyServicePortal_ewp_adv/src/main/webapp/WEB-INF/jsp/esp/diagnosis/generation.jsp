@@ -450,6 +450,7 @@
 		$('#siteList ul').empty();
 
 		let str = '';
+		siteList.sortOn('name');
 		if (siteList.length > 0) {
 			str += `<li>
 						<a href="javascript:void(0);" data-value="all" tabindex="-1">
@@ -526,6 +527,8 @@
 							let deviceType = ['SM', 'SM_ISMART', 'SM_KPX', 'SM_CRAWLING', 'SM_MANUAL', 'INV_PV', 'INV_WIND', 'PCS_ESS', 'BMS_SYS',
 								'BMS_RACK', 'SENSOR_SOLAR', 'SENSOR_FLAME', 'SENSOR_TEMP_HUMIDITY', 'CCTV', 'COMBINER_BOX', 'CIRCUIT_BREAKER'
 							];
+
+							devices.sortOn('name');
 							$.each(devices, function (i, el) {
 								if (el.billing) billingArray.push(el.did);
 								if (el.dashboard) dashboardArray.push(el.did);

@@ -115,6 +115,7 @@
 	//사업소 조회
 	const siteMakeList = () => {
 		const makeSite = Array.from(siteList);
+		makeSite.sortOn('name');
 		makeSite.unshift({ sid: 'all', name: '전체' });
 		setMakeList(makeSite, 'siteULList', {'dataFunction': {}}); //list생성
 		$('#siteULList').append(`<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16">적용</button></li>`);
@@ -168,8 +169,6 @@
 					}
 				});
 
-				deviceType.sort(); //정렬
-
 				deviceType.forEach((el, idx) => {
 					deviceType[idx] = {
 						name: deviceTemplate[el],
@@ -177,6 +176,7 @@
 					}
 				});
 
+				deviceType.sortOn('name');
 				setMakeList(deviceType, 'typeULList', {'dataFunction': {}});
 				setMakeList(deviceType, 'compareTypeULList', {'dataFunction': {}});
 			}).fail(function (jqXHR, textStatus, errorThrown) {
@@ -260,6 +260,10 @@
 			});
 		}
 
+		deviceList.sort((a, b) => {
+			firstBy(function(a, b) { return a['siteName'] > b['siteName'] ? 1 : a['siteName'] < b['siteName'] ? -1 : 0; })
+			.thenBy(function(a, b) { return a['name'] > b['name'] ? 1 : a['name'] < b['name'] ? -1 : 0 });
+		}); //정렬
 		setMakeList(deviceNameArr, targetId, {'dataFunction': {}});
 	}
 

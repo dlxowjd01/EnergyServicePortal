@@ -343,6 +343,7 @@
 		dropDownInit($('#spc'));
 
 		if (spcList.length > 0) {
+			spcList.sortOn('name');
 			for (let i in spcList) {
 				let temp = spcList[i];
 				const html = `<li data-value="${'${temp.spc_id}'}"><a href="javascript:void(0);">${'${temp.name}'}</a></li>`;
@@ -360,6 +361,7 @@
 		dropDownInit($('#spcGen'));
 
 		if (siteList.length > 0) {
+			siteList.sortOn('name');
 			for (let i in siteList) {
 				let temp = siteList[i];
 				const html = `<li data-value="${'${temp.gen_id}'}"><a href="javascript:void(0);">${'${temp.name}'}</a></li>`;

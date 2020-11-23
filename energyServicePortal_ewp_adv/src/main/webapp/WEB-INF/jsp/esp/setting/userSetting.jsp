@@ -1295,7 +1295,7 @@
 					"data": null,
 				},
 				{
-					"sTitle": "",
+					"sTitle": "이중 인증",
 					"data": null,
 					visible: false,
 				}
@@ -1428,6 +1428,7 @@
 						let siteOptList = $("#siteOptList li").toArray();
 						let siteStr = ``;
 
+						siteData.sortOn("name");
 						$.each(siteData, function( index, item ) {
 							siteOptList.some( x => {
 								if($(x).data("value") === item.sid) {
