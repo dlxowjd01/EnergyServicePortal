@@ -2,7 +2,7 @@
 <%@ include file="/decorators/include/taglibs.jsp"%>
 <div class="row header-wrapper">
 	<div class="col-12">
-		<h1 class="page-header">발전 이력</h1>
+		<h1 class="page-header"><fmt:message key="pvGen.pageTitle" /></h1>
 	</div>
 </div>
 <div class="row content-wrapper">
@@ -11,7 +11,7 @@
 			<button type="button" class="dropdown-toggle w-100 no-close" data-toggle="dropdown" data-name="<fmt:message key="renewablesgen.3.multipleselection" />"><fmt:message key="renewablesgen.1.select" /><span class="caret"></span></button>
 			<ul class="dropdown-menu chk-type"></ul>
 		</div>
-		<small class="warning hidden">사이트 선택은 필수입니다.</small>
+		<small class="warning hidden"><fmt:message key="pvGen.siteSelectWarning" /></small>
 	</div>
 </div>
 <div class="row">
@@ -34,18 +34,18 @@
 								--><ul class="dropdown-cov clear selectDevices"></ul><!--
 								 --><div class="li-btn-box clear">
 										<div class="fl"><!--
-										--><button type="button" class="btn-type03">모두 선택</button><!--
-										--><button type="button" class="btn-type03">모두 해제</button><!--
+										--><button type="button" class="btn-type03"><fmt:message key="pvGen.graph.mensuration.selectAll" /></button><!--
+										--><button type="button" class="btn-type03"><fmt:message key="pvGen.graph.mensuration.deselectAll" /></button><!--
 									--></div>
-										<div class="fr"><button type="button" class="btn-type">적용</button></div>
+										<div class="fr"><button type="button" class="btn-type"><fmt:message key="pvGen.graph.mensuration.apply" /></button></div>
 									</div>
 								</div>
 							</div>
-							<small class="warning hidden">계량값 선택은 필수입니다.</small>
+							<small class="warning hidden"><fmt:message key="pvGen.graph.mensuration.warn" /></small>
 						</div>
 					</div>
 					<div class="flex-group period">
-						<span class="tx-tit">기간</span>
+						<span class="tx-tit"><fmt:message key="pvGen.graph.date" /></span>
 						<div class="sa-select">
 							<div class="dropdown" id="period">
 								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key="renewablesgen.3.today" />"><fmt:message key="renewablesgen.3.today" /><span class="caret"></span></button>
@@ -53,27 +53,27 @@
 									<li data-value="today" class="on"><a href="#"><fmt:message key="renewablesgen.3.today" /></a></li>
 									<li data-value="week"><a href="#"><fmt:message key="renewablesgen.3.thisweek" /></a></li>
 									<li data-value="month"><a href="#"><fmt:message key="renewablesgen.3.thismonth" /></a></li>
-									<li data-value="setup"><a href="#">직접 선택</a></li>
+									<li data-value="setup"><a href="#"><fmt:message key="pvGen.graph.date.select" /></a></li>
 								</ul>
 							</div>
 						</div>
 					</div>
 					<div class="flex-group duration" id="dateArea">
-						<span class="tx-tit">날짜입력</span>
+						<span class="tx-tit"><fmt:message key="pvGen.graph.date.input" /></span>
 						<div class="sel-calendar dateField">
-							<label for="fromDate" class="sr-only">시작 날짜</label>
+							<label for="fromDate" class="sr-only"><fmt:message key="pvGen.graph.date.start" /></label>
 							<input type="text" id="fromDate" class="sel fromDate" value="" autocomplete="off" readonly>
 							<em></em>
-							<label for="toDate" class="sr-only">종료 날짜</label>
+							<label for="toDate" class="sr-only"><fmt:message key="pvGen.graph.date.end" /></label>
 							<input type="text" id="toDate" class="sel toDate" value="" autocomplete="off" readonly>
 						</div>
 					</div>
 					<div class="flex-group unit" id="cycle">
-						<span class="tx-tit">단위</span>
+						<span class="tx-tit"><fmt:message key="pvGen.graph.unit" /></span>
 						<div class="sa-select">
 							<div class="dropdown" id="interval">
-								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
-									선택 <span class="caret"></span>
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key="pvGen.graph.unit.select" />">
+									<fmt:message key="pvGen.graph.unit.select" /> <span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu">
 									<li data-value="5min"><a href="#"><fmt:message key="renewablesgen.3.5min" /></a></li>
@@ -83,13 +83,13 @@
 									<li data-value="month"><a href="#"><fmt:message key="renewablesgen.3.1month" /></a></li>
 								</ul>
 							</div>
-							<small class="warning hidden">단위 선택은 필수입니다.</small>
+							<small class="warning hidden"><fmt:message key="pvGen.graph.unit.warn" /></small>
 						</div>
 						<button type="button" class="btn-type" id="renderBtn"><fmt:message key="renewablesgen.3.update" /></button>
 					</div>
 				</div>
 				<div class="end"><!--
-				--><span class="tx-tit">그래프</span><!--
+				--><span class="tx-tit"><fmt:message key="pvGen.graph.style" /></span><!--
 				--><div class="sa-select">
 						<div class="dropdown" id="chartStyle"><!--
 							--><button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="each"><fmt:message key="renewablesgen.3.individualbar" /><span class="caret"></span></button><!--
@@ -103,11 +103,11 @@
 				--><div class="sa-select hidden">
 						<div class="dropdown" id="chartStyle2"><!--
 						--><button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="dayBy">
-								일자별 보기<span class="caret"></span>
+								<fmt:message key="pvGen.graph.style.dayBy" /><span class="caret"></span>
 							</button><!--
 						--><ul class="dropdown-menu"><!--
-							--><li data-value="dayBy"><a href="#">일자별 보기</a></li><!--
-							--><li data-value="overlap"><a href="#">겹쳐 보기</a></li><!--
+							--><li data-value="dayBy"><a href="#"><fmt:message key="pvGen.graph.style.dayBy" /></a></li><!--
+							--><li data-value="overlap"><a href="#"><fmt:message key="pvGen.graph.style.overlap" /></a></li><!--
 						--></ul>
 						</div>
 					</div>
@@ -128,7 +128,7 @@
 			<div class="table-save-box"><a href="#;" class="btn-save"><fmt:message key="renewablesgen.4.dataextracts" /></a></div>
 			<div class="table-top clear">
 				<h2 class="ntit fl"><fmt:message key="renewablesgen.4.powergenerationchart" /></h2>
-				<span class="fr"><a href="#;" class="btn-fold">표접기</a></span>
+				<span class="fr"><a href="#;" class="btn-fold"><fmt:message key="pvGen.table.fold" /></a></span>
 			</div>
 			<div class="table-wrapper">
 				<div class="fold-box">
@@ -143,8 +143,8 @@
 <script type="text/javascript">
 	const sites = JSON.parse('${siteList}');
 	let generationData = new Object()
-	  , standard = new Array()
-	  , interval = '';
+		, standard = new Array()
+		, interval = '';
 
 	$(function() {
 		makeSiteList();
@@ -518,17 +518,17 @@
 				std = grid.std;
 
 				let tHead = document.createElement('thead')
-				  , tBody = document.createElement('tbody')
-				  , theadTr = document.createElement('tr')
-				  , tbodyTr = document.createElement('tr')
-				  , span = document.createElement('span');
+					, tBody = document.createElement('tbody')
+					, theadTr = document.createElement('tr')
+					, tbodyTr = document.createElement('tr')
+					, span = document.createElement('span');
 
 				span.classList = grid.color;
 
 				let totalSum = 0;
 				items.forEach((item, index) => {
 					let th = document.createElement('th')
-					  , td = document.createElement('td')
+						, td = document.createElement('td')
 
 					if (index === 0) {
 						let standardDate = item.standard.substr(0, stdLength);
@@ -571,8 +571,8 @@
 				table.appendChild(tBody);
 			} else {
 				let tbodyTr = document.createElement('tr')
-				  , totalSum = 0
-				  , span = document.createElement('span');
+					, totalSum = 0
+					, span = document.createElement('span');
 
 				span.classList = grid.color;
 
@@ -626,7 +626,7 @@
 			const items = data[0].items
 				, stdLength = standard.length - 1;
 			let deivceEnergy = new Array()
-			  , stdDate = '';
+				, stdDate = '';
 
 			standard.forEach((std, index) => {
 				let lastLength = 8;
@@ -723,8 +723,8 @@
 				, sid = data.sid;
 
 			let deivceEnergy = new Array()
-			  , totalSum = 0
-			  , dup = false;
+				, totalSum = 0
+				, dup = false;
 
 			if (['5min', '15min', 'hour'].includes(interval) && chartStyle2 === 'overlap') {
 				const standard2 = makeStandard(interval, 'overlap');
