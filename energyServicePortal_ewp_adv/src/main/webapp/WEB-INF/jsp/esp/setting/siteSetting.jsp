@@ -1205,6 +1205,19 @@
 					// selector: 'td input[type="checkbox"], tr'
 					selector: 'td input[type="checkbox"], td:not(:nth-of-type(11))'
 				},
+				"language": {
+					"paginate": {
+						"previous": "",
+						"next": "",
+					},
+					"info": "_PAGE_ - _PAGES_ " + " / 총 _PAGES_ 개",
+					"select": {
+						"rows": {
+							_: "",
+							1: ""
+						}
+					}
+				},
 				initComplete: function(settings, json ){
 					let str = `<div id="btnGroup" class="right-end"><!--
 						--><button type="button" disabled class="btn-type03" onclick="updateModal('edit')">선택 수정</button><!--
@@ -1580,7 +1593,13 @@
 				],
 				"language": {
 					"emptyTable": "조회된 데이터가 없습니다.",
-					"zeroRecords":  "검색된 결과가 없습니다."
+					"zeroRecords":  "검색된 결과가 없습니다.",
+					"paginate": {
+						// "previous": "",
+						// "next": ""
+						"sPrevious": "",
+						"sNext": ""
+					},
 				},
 				"dom": 'tip',
 				"select": {
@@ -3339,6 +3358,14 @@
 						"className": "dt-body-center no-sorting",
 					},
 				],
+				"language": {
+					"paginate": {
+						"previous": "",
+						"next": "",
+						// "sPrevious": "",
+						// "sNext": ""
+					},
+				},
 				initComplete: function(){
 					this.api().columns().header().each ((el, i) => {
 						if(i == 0){

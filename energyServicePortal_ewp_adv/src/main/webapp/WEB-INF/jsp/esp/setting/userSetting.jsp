@@ -772,7 +772,7 @@
 					// console.log("uid---", item.uid)
 				})).then( () => {
 					if(!callback) {
-						$.fn.dataTable.ext.order.intl();
+						// $.fn.dataTable.ext.order.intl();
 						var userTable = $('#userTable').DataTable({
 							"aaData": newArr,
 							// "bDeferRender": true,
@@ -851,6 +851,19 @@
 								}
 							],
 							"dom": 'tip',
+							"language": {
+								"paginate": {
+									"previous": "",
+									"next": "",
+								},
+								"info": "_PAGE_ - _PAGES_ " + " / 총 _PAGES_ 개",
+								"select": {
+									"rows": {
+										_: "",
+										1: ""
+									}
+								}
+							},
 							"select": {
 								style: 'single',
 								selector: 'td input[type="checkbox"], tr'
@@ -1013,8 +1026,20 @@
 									visible: false,
 								}
 							],
-
 							"dom": 'tip',
+							"language": {
+								"paginate": {
+									"previous": "",
+									"next": "",
+								},
+								"info": "_PAGE_ - _PAGES_ " + " / 총 _PAGES_ 개",
+								"select": {
+									"rows": {
+										_: "",
+										1: ""
+									}
+								}
+							},
 							"select": {
 								style: 'single',
 								selector: 'td input[type="checkbox"], tr',
@@ -1111,52 +1136,18 @@
 						$(".dataTables_scrollHeadInner").css( "width", "100%" );
 					});
 
-					new $.fn.dataTable.Buttons( userTable, {
-						name: 'commands',
-						"buttons": [
-							{
-								extend: 'excelHtml5',
-								className: "btn-save",
-								text: '엑셀 다운로드',
-								filename: '사용자관리_' + new Date().format('yyyyMMddHHmmss'),
-								// exportOptions: {
-								// 	modifier: {
-								// 		page: 'current'
-								// 	}
-								// },
-								customize: function( xlsx ) {
-									var sheet = xlsx.xl.worksheets['sheet1.xml'];
-									$('row:first c', sheet).attr( 's', '42' );
-									var sheet = xlsx.xl.worksheets['sheet1.xml'];
-									// var lastCol = sheet.getElementsByTagName('col').length - 1;
-									// var colRange = createCellPos( lastCol ) + '1';
-									// //Has to be done this way to avoid creation of unwanted namespace atributes.
-									// var afSerializer = new XMLSerializer();
-									// var xmlString = afSerializer.serializeToString(sheet);
-									// var parser = new DOMParser();
-									// var xmlDoc = parser.parseFromString(xmlString,'text/xml');
-									// var xlsxFilter = xmlDoc.createElementNS('http://schemas.openxmlformats.org/spreadsheetml/2006/main','autoFilter');
-									// var filterAttr = xmlDoc.createAttribute('ref');
-									// filterAttr.value = 'A1:' + colRange;
-									// xlsxFilter.setAttributeNode(filterAttr);
-									// sheet.getElementsByTagName('worksheet')[0].appendChild(xlsxFilter);
+					// new $.fn.dataTable.Buttons( userTable, {
+					// 	name: 'commands',
+					// 	"buttons": [
+					// 		{
+					// 			extend: 'excelHtml5',
+					// 			className: "btn-save",
+					// 			text: '엑셀 다운로드',
+					// 			filename: '사용자관리_' + new Date().format('yyyyMMddHHmmss'),
+					// 	],
+					// });
 
-								}
-							},
-							// {
-							// 	extend: 'csvHtml5',
-							// 	className: "btn-type03",
-							// 	text: 'CSV'
-							// },
-							// {
-							// 	extend: 'pdfHtml5',
-							// 	className: "btn-type03",
-							// 	text: 'PDF',
-							// },
-						],
-					});
-
-					userTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup");
+					// userTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup");
 					
 					$("#newAffiliation").autocomplete({
 						source : affiliationList,
@@ -2025,7 +2016,7 @@
 
 
 <div class="row">
-	<div class="col-10">
+	<div class="col-12">
 		<div class="flex-group">
 			<span class="tx-tit">사용자 유형</span>
 			<div class="dropdown">
@@ -2043,10 +2034,12 @@
 			</div>
 		</div>
 	</div>
+<!-- 
 	<div class="col-2">
 		<div id="exportBtnGroup" class="fr"></div>
-		<!-- <button type="button" class="btn-save ml-16 fr" onclick="$(this).prev().toggleClass('hidden')">데이터 다운로드</button>--> 
+		<button type="button" class="btn-save ml-16 fr" onclick="$(this).prev().toggleClass('hidden')">데이터 다운로드</button> 
 	</div>
+-->
 </div>
 
 <div class="row content-wrapper">

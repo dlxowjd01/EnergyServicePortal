@@ -31,13 +31,121 @@
 <script type="text/javascript" src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 <script type="text/javascript" src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
+
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/jquery.blockUI.js"></script>
 <script type="text/javascript" src="/js/jquery-ui.js"></script>
 <script type="text/javascript" src="/js/jquery-ui-1.12.1.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.min.js"></script>
 
-<!-- high-chart -->
+
+<script type="text/javascript">
+	const currentPath = window.location.pathname;
+
+	/*
+		### pages with DataTable plugins ###
+
+		1. /dashboard/gmain.do => dashboardTableView ONLY
+		2. /dashboard/dmain.do
+
+		3. /device/certManageDetail.do
+		4. /device/certManageList.do
+
+		5. TO DO!!! /diagnosis/abnormallyAnalysis.do (NOT IN USE ATM)
+		6. TO DO!!! /diagnosis/generation.do (NOT IN USE ATM)
+
+		7. TO DO!!! /history/operationHistory.do  (NOT IN USE ATM)
+
+		8. /report/maintenanceReport.do
+		9. /report/yieldReport.do
+
+		10. /spc/balanceSheet.do
+		11. /spc/entityInformation.do
+		12. /spc/supplementaryDocuments.do
+		13. /spc/transactionHistory.do
+
+		14. /spc/withdrawReqStatus.do
+		15. /spc/notice.do
+		
+		16. /setting/alarmSetting.do
+		17. /setting/batchSetting.do
+		18. /setting/comCodeSetting.do
+		19. /setting/userSetting.do
+		20. /setting/siteSetting.do
+		21. /setting/groupSetting.do
+	*/
+	
+	let excludeMenu = [
+		'/dashboard/gmain.do',
+		'/dashboard/smain.do',
+		'/dashboard/jmain.do',
+		'/dashboard/dmain.do',
+		'/diagnosis/generation.do',
+		'/diagnosis/abnormallyAnalysis.do',
+		'/energy/pvGen.do',
+		'/history/operationHistory.do'
+	];
+	let excludeOption = [
+		'/report/maintenanceReport.do',
+		'/setting/alarmSetting.do',
+	];
+	
+	let isInExcludeList = excludeMenu.some( x => x == currentPath);
+	let pluginOption = excludeOption.some( x => x == currentPath);
+
+	if (isInExcludeList == false ) {
+		console.log("isInExcludeList == false");
+		let importList = [];
+
+		if(pluginOption == false){
+			importList = ['/js/data_tables/include_basic.min.js'];
+		} else {
+			importList = ['/js/data_tables/include_all.min.js'];
+		}
+		console.log("importList==", importList)
+
+		loadScripts(importList, () => {
+			console.log('1-A ===> Scripts loaded');
+		});
+
+
+	} else {
+		if(currentPath == excludeMenu[0]){
+			loadScripts([
+				'/js/data_tables/include_dashboard.min.js'
+			], () => {
+				console.log('Gmain Scripts loaded');
+			});
+		}
+	}
+
+	function loadScript (url, callback) {
+		let script = document.createElement('script');
+		script.type = 'text/javascript';
+		script.src = url;
+		script.onreadystatechange = callback;
+		script.onload = callback;
+		// console.log("script==", script)
+		document.head.appendChild(script);
+		console.log('script=====', script);
+	}
+	function loadScripts (urls, callback) {
+		let loadedCount = 0;
+		let multiCallback = () => {
+			loadedCount++;
+			if (loadedCount >= urls.length) {
+				callback.call(this, arguments);
+			}
+		};
+		for (let url of urls) {
+			loadScript(url, multiCallback);
+		}
+	}
+
+</script>
+
+
+<!-- high-stock -->
 <script type="text/javascript" src="/js/highstock.js"></script>
 <script type="text/javascript" src="/js/modules/variwide.js"></script>
 <script type="text/javascript" src="/js/modules/data.js"></script>
@@ -60,16 +168,6 @@
 
 <!-- timepicker -->
 <script type="text/javascript" src="/js/wickedpicker.js"></script>
-<script type="text/javascript" src="/js/data_tables/default.js"></script>
-<script type="text/javascript" src="/js/data_tables/extensions/responsive.js"></script>
-<script type="text/javascript" src="/js/data_tables/extensions/buttons.js"></script>
-<script type="text/javascript" src="/js/data_tables/extensions/col_reorder.js"></script>
-<script type="text/javascript" src="/js/data_tables/extensions/pdf_make.js"></script>
-<script type="text/javascript" src="/js/data_tables/extensions/jszip.js"></script>
-<script type="text/javascript" src="/js/data_tables/extensions/vfs_fonts_kr.js"></script>
-<script type="text/javascript" src="/js/data_tables/extensions/select.js"></script>
-<script type="text/javascript" src="/js/data_tables/extensions/fixed_header.js"></script>
-<script type="text/javascript" src="/js/data_tables/extensions/rowGroup.js"></script>
 
 <script type="text/javascript">
 	// role => 1: 시스템관리자, 2: 일반
@@ -101,7 +199,6 @@
 			document.head.appendChild($favicon)
 		}
 	};
-
 
 	$(document).ready(function () {
 
@@ -144,6 +241,14 @@
 		}
 	});
 
+	$(".nav-brand a").each(function(index, element) {
+		// console.log("window.href===", window.location.pathname)
+		if (currentPath == excludeMenu[0]) {
+			$(this).on('click', false);
+		}
+	});
+
+	
 	function formatErrorMessage(jqXHR, exception) {
 		if (jqXHR.status === 0) {
 			return ('Not connected.\nPlease verify your network connection.');

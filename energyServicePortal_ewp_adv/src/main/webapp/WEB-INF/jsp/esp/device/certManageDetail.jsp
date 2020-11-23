@@ -110,6 +110,19 @@
 				style: 'multi',
 				selector: 'td:first-child > :checkbox'
 			},
+			"language": {
+				"paginate": {
+					"previous": "",
+					"next": "",
+				},
+				"info": "_PAGE_ - _PAGES_ " + " / 총 _PAGES_ 개",
+				"select": {
+					"rows": {
+						_: "",
+						1: ""
+					}
+				}
+			},
 		}).columns.adjust();
 	});
 

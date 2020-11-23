@@ -1685,7 +1685,7 @@ table tbody td .dropdown-menu {
 
 .warning-text.d-table {
 	display: table;
-	margin: 1.5% 0 0 30.5%;
+	margin: 12px 0 0 320px;
 }
 
 .warning-text.d-table:before {

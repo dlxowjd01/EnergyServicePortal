@@ -1,104 +1,113 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
+
 <script type="text/javascript">
 	let reportTable = null;
 	$(function () {
-		reportTable = $('#reportTable').DataTable({
-			autoWidth: true,
-			fixedHeader: true,
-			'table-layout': 'fixed',
-			scrollY: '720px',
-			scrollCollapse: true,
-			sortable: true,
-			paging: true,
-			pageLength: 10,
-			columns: [
-				{
-					title: '<fmt:message key="workreportmain.2.number" />',
-					data: null,
-					render: function (data, type, full, rowIndex) {
-						return rowIndex.row + 1;
+		var len = $('script[src="/js/data_tables/extensions/buttons.min.js"]').length;
+		if(len>0) {
+			reportTable = $('#reportTable').DataTable({
+				autoWidth: true,
+				fixedHeader: true,
+				'table-layout': 'fixed',
+				scrollY: '720px',
+				scrollCollapse: true,
+				sortable: true,
+				paging: true,
+				pageLength: 10,
+				columns: [
+					{
+						title: '<fmt:message key="workreportmain.2.number" />',
+						data: null,
+						render: function (data, type, full, rowIndex) {
+							return rowIndex.row + 1;
+						},
+						className: 'dt-center no-sorting fixed'
 					},
-					className: 'dt-center no-sorting fixed'
-				},
-				{
-					title: '<fmt:message key="workreportmain.2.reportType" />',
-					data: 'report_type',
-					render: function (data, type, full, rowIndex) {
-						if ('1' === data) {
-							result = '출장/조치 보고서';
-						} else if ('2' === data) {
-							result = 'QC 보고서';
-						}
-						return result;
+					{
+						title: '<fmt:message key="workreportmain.2.reportType" />',
+						data: 'report_type',
+						render: function (data, type, full, rowIndex) {
+							if ('1' === data) {
+								result = '출장/조치 보고서';
+							} else if ('2' === data) {
+								result = 'QC 보고서';
+							}
+							return result;
+						},
+						className: 'dt-center'
 					},
-					className: 'dt-center'
-				},
-				{
-					title: '<fmt:message key="workreportmain.2.documentNumber" />',
-					data: 'report_id',
-					className: 'dt-center'
-				},
-				{
-					title: '<fmt:message key="workreportmain.2.reportName" />',
-					data: 'report_name',
-					render: function (data, type, full, rowIndex) {
-						return '<a href="/report/maintenanceReportDetails.do?report_id=' + full['report_id'] + '" class="table-link">' + data + '</a>';
+					{
+						title: '<fmt:message key="workreportmain.2.documentNumber" />',
+						data: 'report_id',
+						className: 'dt-center'
 					},
-					className: 'dt-center'
-				},
-				{
-					title: '<fmt:message key="workreportmain.2.writer" />',
-					data: 'updated_by',
-					className: 'dt-center'
-				},
-				{
-					title: '<fmt:message key="workreportmain.2.dateOfIssue" />',
-					data: 'write_date',
-					render: function (data, type, full, rowIndex) {
-						if (data != null) {
-							return data.format('yyyy-MM-dd');
-						} else {
-							return '-';
-						}
+					{
+						title: '<fmt:message key="workreportmain.2.reportName" />',
+						data: 'report_name',
+						render: function (data, type, full, rowIndex) {
+							return '<a href="/report/maintenanceReportDetails.do?report_id=' + full['report_id'] + '" class="table-link">' + data + '</a>';
+						},
+						className: 'dt-center'
 					},
-					className: 'dt-center'
-				},
-				{
-					title: '등록상태',
-					data: null,
-					render: function (data, type, full, rowIndex) {
-						return '<fmt:message key="workreportmain.2.saved" />'
+					{
+						title: '<fmt:message key="workreportmain.2.writer" />',
+						data: 'updated_by',
+						className: 'dt-center'
 					},
-					className: 'dt-center'
-				}
-			],
-			language: {
-				emptyTable: "조회된 데이터가 없습니다.",
-				zeroRecords:  "검색된 결과가 없습니다."
-			},
-			dom: 'tip',
-		}).columns.adjust().draw();
-
-		new $.fn.dataTable.Buttons(reportTable, {
-			name: 'commands',
-			buttons: [
-				{
-					extend: 'excelHtml5',
-					className: "btn-save",
-					text: '<fmt:message key="workreportmain.1.dataExtracts" />',
-					filename: '작업보고서_' + new Date().format('yyyyMMddHHmmss'),
-					customize: function( xlsx ) {
-						var sheet = xlsx.xl.worksheets['sheet1.xml'];
-						$('row:first c', sheet).attr( 's', '42' );
-						var sheet = xlsx.xl.worksheets['sheet1.xml'];
+					{
+						title: '<fmt:message key="workreportmain.2.dateOfIssue" />',
+						data: 'write_date',
+						render: function (data, type, full, rowIndex) {
+							if (data != null) {
+								return data.format('yyyy-MM-dd');
+							} else {
+								return '-';
+							}
+						},
+						className: 'dt-center'
+					},
+					{
+						title: '등록상태',
+						data: null,
+						render: function (data, type, full, rowIndex) {
+							return '<fmt:message key="workreportmain.2.saved" />'
+						},
+						className: 'dt-center'
 					}
-				}
-			]
-		});
+				],
+				language: {
+					emptyTable: "조회된 데이터가 없습니다.",
+					zeroRecords:  "검색된 결과가 없습니다.",
+					paginate: {
+						previous: "",
+						next: "",
+					},
+					info: "_PAGE_ - _PAGES_ " + " / 총 _PAGES_ 개",
+				},
+				dom: 'tip',
+			}).columns.adjust().draw();
 
-		reportTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup");
-		getDataList();
+			new $.fn.dataTable.Buttons(reportTable, {
+				name: 'commands',
+				buttons: [
+					{
+						extend: 'excelHtml5',
+						className: "btn-save",
+						text: '<fmt:message key="workreportmain.1.dataExtracts" />',
+						filename: '작업보고서_' + new Date().format('yyyyMMddHHmmss'),
+						customize: function( xlsx ) {
+							var sheet = xlsx.xl.worksheets['sheet1.xml'];
+							$('row:first c', sheet).attr( 's', '42' );
+							var sheet = xlsx.xl.worksheets['sheet1.xml'];
+						}
+					}
+				]
+			});
+
+			reportTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup");
+			getDataList();
+		}
 	});
 
 	$(document).on('keyup', '#key_word', function (e) {

@@ -113,13 +113,31 @@
 				}
 			],
 			'dom': 'tip',
+			"language": {
+				"paginate": {
+					"previous": "",
+					"next": "",
+				},
+				"info": "_PAGE_ - _PAGES_ " + " / 총 _PAGES_ 개",
+				"select": {
+					"rows": {
+						_: "",
+						1: ""
+					}
+				}
+			},
 			select: {
 				style: 'multi',
 				selector: 'td:first-child > :checkbox, tr'
 			},
 			language: {
 				emptyTable: "조회된 데이터가 없습니다.",
-				zeroRecords:  "검색된 결과가 없습니다."
+				zeroRecords:  "검색된 결과가 없습니다.",
+				paginate: {
+					previous: "",
+					next: "",
+				},
+				info: "_PAGE_ - _PAGES_ " + " / 총 _PAGES_ 개",
 			},
 			initComplete: function(settings, json) {
 				let str = `<div id="btnGroup" class="right-end"><!--

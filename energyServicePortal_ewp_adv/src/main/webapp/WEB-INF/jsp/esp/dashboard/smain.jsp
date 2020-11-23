@@ -227,7 +227,7 @@
 						<thead>
 						<tr>
 							<th>PV 용량</th>
-							<th>금일 누적 발전량</th>
+							<th>금일 누적 발전량/시간</th>
 							<th>금일 발전 예측량</th>
 							<th>SMP 수익 예상</th>
 						</tr>
@@ -537,7 +537,7 @@
 							<span class="tx-tit">기간</span>
 							<div class="sa-select mr-12">
 								<div id="period" class="dropdown">
-									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="1달">1달<span class="caret"></span></button>
+									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="">최근 1달<span class="caret"></span></button>
 									<ul id="durationFilter" class="dropdown-menu">
 										<li data-value="60"><a href="#">최근 2달</a></li>
 										<li data-value="90"><a href="#">최근 3달</a></li>
@@ -556,7 +556,6 @@
 							<button type="button" class="btn-type" onclick="chargeChartPoll('solarDashboard', 'datepicker')">조회</button>
 						</div>
 						<small id="isInvalidPeriod" class="warning-text d-table hidden">검색 시작 일자를 종료일 기준 최소 1일 전으로 선택해 주세요.</small>
-
 					</div>
 					<div id="dailySolarTrendChart"></div>
 				</div>
@@ -610,7 +609,6 @@
 		$('#durationFilter li').on("click", function(){
 			let val = $(this).data("value");
 			let minus = String(-Math.abs(val));
-			console.log("minus===", minus);
 
 			$('#fromDate').datepicker('setDate', minus  );
 			$('#toDate').datepicker('setDate', 'today' )
@@ -1003,12 +1001,13 @@
 				},
 				labels: {
 					formatter: function () {
-						if (String(this.value).length >= 7) {
-							return numberComma(this.value / 1000000) + ' G';
-						} else if (String(this.value).length >= 5) {
-							return numberComma(this.value / 1000) + ' M';
+						let length = String(this.value).length;
+						if (length >= 7) {
+							return numberComma(this.value / 1000000) + 'M';
+						} else if ( (length >= 4) ){
+							return numberComma(this.value / 1000) + 'K';
 						} else {
-							return this.value;
+							return numberComma(this.value);
 						}
 					},
 					style: {
@@ -1156,25 +1155,30 @@
 			noData: "조회된 데이터가 없습니다."
 		},
 		exporting: {
-			buttons: {
-				contextButton: {
-					x: -10,
-					y: 0,
-					symbol: 'download',
-					symbolStroke: "var(--vivid-blue)",
-					symbolStrokeWidth: 2,
-					theme: {
-						fill: "none"
-					},
-					_titleKey: 'downloadTitle',
-					// menuItems: [
-					// 	'JPEG 다운로드',
-					// 	'PDF 다운로드',
-					// 	'SVG 다운로드'
-					// ],
-					align: 'right',
-				}
-			}
+			enabled: false,
+			// buttons: {
+			// 	contextButton: {
+			// 		x: -10,
+			// 		y: 0,
+			// 		symbol: 'download',
+			// 		symbolStroke: "var(--vivid-blue)",
+			// 		symbolStrokeWidth: 2,
+			// 		theme: {
+			// 			fill: "none"
+			// 		},
+			// 		_titleKey: 'downloadTitle',
+			// 		menuItems: [
+			// 			"viewFullscreen",
+			// 			"printChart",
+			// 		// 	"separator",
+			// 		// 	"downloadPNG",
+			// 			// "downloadJPEG",
+			// 			// "downloadPDF",
+			// 		// 	"downloadSVG"
+			// 		],
+			// 		align: 'right',
+			// 	}
+			// }
 		},
 		rangeSelector: {
 			enabled: false,
@@ -1452,12 +1456,13 @@
 				labels: {
 					overflow: 'justify',
 					formatter: function () {
-						if (String(this.value).length  >= 7) {
-							return numberComma(this.value / 1000000) + ' G';
-						} else if (String(this.value).length >= 5) {
-							return numberComma(this.value / 1000) + ' M';
+						let length = String(this.value).length;
+						if (length >= 7) {
+							return numberComma(this.value / 1000000) + 'M';
+						} else if ( (length >= 4) ){
+							return numberComma(this.value / 1000) + 'K';
 						} else {
-							return this.value;
+							return numberComma(this.value);
 						}
 					},
 					x: -10,
@@ -1636,12 +1641,13 @@
 				},
 				labels: {
 					formatter: function () {
-						if (String(this.value).length >= 7) {
-							return numberComma(this.value / 1000000) + ' G';
-						} else if (String(this.value).length >= 5) {
-							return numberComma(this.value / 1000) + ' M';
+						let length = String(this.value).length;
+						if (length >= 7) {
+							return numberComma(this.value / 1000000) + 'M';
+						} else if ( (length >= 4) ){
+							return numberComma(this.value / 1000) + 'K';
 						} else {
-							return this.value;
+							return numberComma(this.value);
 						}
 					},
 					style: {
@@ -1676,12 +1682,13 @@
 				},
 				labels: {
 					formatter: function () {
-						if (String(this.value).length >= 7) {
-							return numberComma(this.value / 1000000) + ' G';
-						} else if (String(this.value).length >= 5) {
-							return numberComma(this.value / 1000) + ' M';
+						let length = String(this.value).length;
+						if (length >= 7) {
+							return numberComma(this.value / 1000000) + 'M';
+						} else if ( (length >= 4) ){
+							return numberComma(this.value / 1000) + 'K';
 						} else {
-							return this.value;
+							return numberComma(this.value);
 						}
 					},
 					style: {
@@ -1824,12 +1831,13 @@
 				},
 				labels: {
 					formatter: function () {
-						if (String(this.value).length >= 7) {
-							return numberComma(this.value / 1000000) + ' G';
-						} else if (String(this.value).length >= 5) {
-							return numberComma(this.value / 1000) + ' M';
+						let length = String(this.value).length;
+						if (length >= 7) {
+							return numberComma(this.value / 1000000) + 'M';
+						} else if ( (length >= 4) ){
+							return numberComma(this.value / 1000) + 'K';
 						} else {
-							return this.value;
+							return numberComma(this.value);
 						}
 					},
 					style: {
@@ -1859,12 +1867,13 @@
 				},
 				labels: {
 					formatter: function () {
-						if (String(this.value).length >= 7) {
-							return numberComma(this.value / 1000000) + ' G';
-						} else if (String(this.value).length >= 5) {
-							return numberComma(this.value / 1000) + ' M';
+						let length = String(this.value).length;
+						if (length >= 7) {
+							return numberComma(this.value / 1000000) + 'M';
+						} else if ( (length >= 4) ){
+							return numberComma(this.value / 1000) + 'K';
 						} else {
-							return this.value;
+							return numberComma(this.value);
 						}
 					},
 					style: {
@@ -2615,6 +2624,9 @@
 										} else if(key.match("temperature")){
 											let tempVal = displayNumberFixedDecimal(textValue, suffix, 3, 2);
 											textValue = [tempVal[0], "&#8451;"];
+										} else if(key.match("humidity")){
+											let tempVal = displayNumberFixedDecimal(textValue, suffix, 3, 2);
+											textValue = [tempVal[0], "&#37;"];
 										} else {
 											if(suffix == "W" || suffix == "Wh"){
 												textValue = displayNumberFixedUnit(textValue, "W", "kW", 0);
@@ -3834,7 +3846,7 @@
 					});
 				}
 			});
-			itemChartCapacity = Number((itemChartCapacity / 1000).toFixed(1));
+			itemChartCapacity = Math.round(itemChartCapacity / 100) / 10;
 
 			for (let i = 0; i < 12; i++) {	
 				let matchMonth = false;
@@ -3861,10 +3873,6 @@
 									if (iRRSum > 0) {
 										resultValue = parseFloat(((energy / itemChartCapacity / (iRRSum / 1000 * 24)) * 100).toFixed(2));
 									}
-									if (i + 1 == nowMonth) {
-										let monthlyGenHr = (energy / itemChartCapacity) ? (energy / itemChartCapacity).toFixed(2) : "-";
-										$('#monthGenHours').html('<span class="pv">' + monthlyGenHr  + '</span><em>hrs</em>');
-									}
 									billingData[i] = [i, resultValue];
 								} else if ($(':radio[name="radio_t"]:checked').val() == 2) {
 								// 2. 발전 시간
@@ -3876,20 +3884,11 @@
 									}
 									let energy = chartItems1[d].energy / 1000;
 									let tempAver = (energy / itemChartCapacity / lastDate).toFixed(2);
-									let monthlyGenHr = tempAver ? tempAver : "-"; 
 
 									billingData[i] = [i, parseFloat(tempAver)];
-
-									if (i + 1 == nowMonth) {
-										$('#monthGenHours').html('<span class="pv">' + monthlyGenHr + '</span><em>hrs</em>');
-									}
 								} else {
 								// 3. 매전량
 									billingData[i] = [i, chartItems1[d].money];
-									if (i + 1 == nowMonth) {
-										let monthlyGenHr = ( chartItems1[d].energy / 1000 / itemChartCapacity) ? ( chartItems1[d].energy / 1000 / itemChartCapacity).toFixed(2) : "-";
-										$('#monthGenHours').html('<span class="pv">' + monthlyGenHr  + '</span><em>시간</em>');
-									}
 								}
 							}
 
@@ -3897,6 +3896,9 @@
 							
 							if (i + 1 == nowMonth) {
 								totalMonthEnergy = chartItems1[d].energy / 1000;
+								let numOfDays = today.getDate() - 1;
+								let monthlyGenHr = totalMonthEnergy ? (Math.round(totalMonthEnergy / itemChartCapacity / numOfDays * 100) / 100) : "-";
+								$('#monthGenHours').html('<span class="pv">' + monthlyGenHr  + '</span><em>hrs</em>');
 							}
 							matchMonth = true;
 						}
@@ -4319,9 +4321,20 @@
 			$('#centerTbody tr td:nth-child(2)').html('<em>&nbsp;&nbsp;kWh</em>');
 			$('#centerTbody tr td:nth-child(3)').html('<em>&nbsp;&nbsp;kWh</em>');
 			$('#centerTbody tr td:nth-child(4)').html('<em>&nbsp;&nbsp;천원</em>');
+			
 		}
 
 		if(isEmpty(option)){
+
+			urls.push({
+				url: apiHost + apiStatusRawSite,
+				type: 'GET',
+				data: {
+					sid: siteId,
+					formId: 'v2'
+				}
+			});
+
 			if (oid.match('testkpx')) {
 				let rtus = [];
 				sList.forEach(site => {
@@ -4394,15 +4407,6 @@
 				});
 			}
 
-			urls.push({
-				url: apiHost + apiStatusRawSite,
-				type: 'GET',
-				data: {
-					sid: siteId,
-					formId: 'v2'
-				}
-			});
-
 			//ajax 한번에 실행
 			deferredList = [];
 			urls.forEach(function (url) {
@@ -4433,79 +4437,7 @@
 					const data = arg[1];
 					const url = data.url;
 
-					if ((url).match(apiEnergySite)) {
-						let getNowEnergyDay = 0;
-						let nowBillingDay = 0;
-						let v = Object.values(data.data);
- 
-						if(!isEmpty(v) && v.flat()[0]["items"].length>0){
-							const rstData = v.flat()[0]["items"];
-							rstData.forEach(rst => {
-								if (!isEmpty(rst.energy)) {
-									getNowEnergyDay += rst.energy;
-									nowBillingDay += rst.money;
-								}
-							});
-						} else {
-							getNowEnergyDay = 0;
-							nowBillingDay = 0;
-						}
-
-						if ((data.start) == formYesterData.startTime) {
-							$('#centerTbody tr td:nth-child(3) em').before(displayNumberFixedUnit(getNowEnergyDay, 'Wh', 'kWh', 0)[0]);
-							itemEnergyDay = getNowEnergyDay;
-						} else {
-							$('#centerTbody tr td:nth-child(2) em').before(displayNumberFixedUnit(getNowEnergyDay, 'Wh', 'kWh', 0)[0]);
-
-							if (!oid.match('testkpx')) {
-								$('#centerTbody tr td:nth-child(4) em').before(displayNumberFixedUnit(nowBillingDay, 'Wh', 'kWh', 2)[0]);
-							}
-						}
-					} else if ((url).match(apiEnergyNowSite)) {
-						if(!isEmpty(data.data[siteId])) {
-							let rstData = data.data[siteId];
-							let getNowEnergyDay = rstData.energy;
-							let nowBillingDay = rstData.money;
-
-							$('#centerTbody tr td:nth-child(2) em').before(displayNumberFixedUnit(getNowEnergyDay, 'Wh', 'kWh', 0)[0]);
-							$('#centerTbody tr td:nth-child(4) em').before(displayNumberFixedUnit(nowBillingDay, 'Wh', 'kWh', 2)[0]);
-						}
-					} else if ((url).match(apiForecastingSite)) {
-						let todayForeEnergy = 0;
-						
-						if (!isEmpty(data.data) && Object.values(data.data).flat()[0]["items"].length > 0) {
-							let v = Object.values(data.data).flat()[0]["items"];
-
-							v.forEach(rst => {
-								const generation = rst.energy;
-								if (!isEmpty(rst.energy)) {
-									todayForeEnergy += rst.energy;
-								}
-							});
-						}
-						$('#centerTbody tr td:nth-child(3) em').before(displayNumberFixedUnit(todayForeEnergy, 'Wh', 'kWh', 0)[0]);
-					
-					} else if ((url).match('/control/command_history')) {
-						if (!isEmpty(data.data)) {
-							if (!isEmpty(lastTargetActivePowerReqDate)) {
-								let statusDate = new Date(lastTargetActivePowerReqDate.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$3/$2/$1 $4:$5:$6'));
-								let historyData = new Date(data.data[0].requested_at.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$3/$2/$1 $4:$5:$6'));
-								if (statusDate.getTime() < historyData.getTime()) {
-									lastTargetActivePowerReqDate = historyData.format('yyyyMMddHHmmss');
-									lastTargetActivePowerRecvDate = '-';
-
-									const cmdBody = JSON.parse(data.data[0].cmd_body);
-									targetActivePower = cmdBody.targetPower;
-								}
-							} else {
-								lastTargetActivePowerReqDate = data.data[0].requested_at;
-								lastTargetActivePowerRecvDate = '-'
-
-								const cmdBody = JSON.parse(data.data[0].cmd_body);
-								targetActivePower = cmdBody.targetPower;
-							}
-						}
-					} else {
+					if ((url).match(apiStatusRawSite)) {
 						// url : apiStatusRawSite
 						if (!isEmpty(data)) {
 							Object.entries(data).forEach(rawData => {
@@ -4557,7 +4489,86 @@
 							});
 						}
 					}
-				
+
+					if ((url).match(apiEnergySite)) {
+						let getNowEnergyDay = 0;
+						let nowBillingDay = 0;
+						let v = Object.values(data.data);
+
+						if(!isEmpty(v) && v.flat()[0]["items"].length>0){
+							const rstData = v.flat()[0]["items"];
+							rstData.forEach(rst => {
+								if (!isEmpty(rst.energy)) {
+									getNowEnergyDay += rst.energy;
+									nowBillingDay += rst.money;
+								}
+							});
+						} else {
+							getNowEnergyDay = 0;
+							nowBillingDay = 0;
+						}
+
+						if ((data.start) == formYesterData.startTime) {
+							$('#centerTbody tr td:nth-child(3) em').before(displayNumberFixedUnit(getNowEnergyDay, 'Wh', 'kWh', 0)[0]);
+							itemEnergyDay = getNowEnergyDay;
+						} else {
+						// KPX
+							$('#centerTbody tr td:nth-child(2) em').before(displayNumberFixedUnit(getNowEnergyDay, 'Wh', 'kWh', 0)[0]);
+							$('#centerTbody tr td:nth-child(2) em').removeClass("hidden");
+							if (!oid.match('testkpx')) {
+								$('#centerTbody tr td:nth-child(4) em').before(displayNumberFixedUnit(nowBillingDay, 'Wh', 'kWh', 2)[0]);
+							}
+						}
+					} else if ((url).match(apiEnergyNowSite)) {
+					// NOT KPX
+						if(!isEmpty(data.data[siteId])) {
+							let rstData = data.data[siteId];
+							let getNowEnergyDay = rstData.energy;
+							let nowBillingDay = rstData.money;
+							let tempEnergy = displayNumberFixedUnit(getNowEnergyDay, 'Wh', 'kWh', 0);
+							let tempEnergyHours = (( getNowEnergyDay / itemCapacity / 1000 * 24 ) * 100).toFixed(2);
+					
+							$('#centerTbody tr td:nth-child(2) em').before(tempEnergy[0] + tempEnergy[1] + " / " + tempEnergyHours + "hrs");
+							$('#centerTbody tr td:nth-child(2) em').addClass("hidden");
+							$('#centerTbody tr td:nth-child(4) em').before(displayNumberFixedUnit(nowBillingDay, 'Wh', 'kWh', 2)[0]);
+						}
+					} else if ((url).match(apiForecastingSite)) {
+						let todayForeEnergy = 0;
+						
+						if (!isEmpty(data.data) && Object.values(data.data).flat()[0]["items"].length > 0) {
+							let v = Object.values(data.data).flat()[0]["items"];
+
+							v.forEach(rst => {
+								const generation = rst.energy;
+								if (!isEmpty(rst.energy)) {
+									todayForeEnergy += rst.energy;
+								}
+							});
+						}
+						$('#centerTbody tr td:nth-child(3) em').before(displayNumberFixedUnit(todayForeEnergy, 'Wh', 'kWh', 0)[0]);
+					
+					} else if ((url).match('/control/command_history')) {
+						if (!isEmpty(data.data)) {
+							if (!isEmpty(lastTargetActivePowerReqDate)) {
+								let statusDate = new Date(lastTargetActivePowerReqDate.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$3/$2/$1 $4:$5:$6'));
+								let historyData = new Date(data.data[0].requested_at.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$3/$2/$1 $4:$5:$6'));
+								if (statusDate.getTime() < historyData.getTime()) {
+									lastTargetActivePowerReqDate = historyData.format('yyyyMMddHHmmss');
+									lastTargetActivePowerRecvDate = '-';
+
+									const cmdBody = JSON.parse(data.data[0].cmd_body);
+									targetActivePower = cmdBody.targetPower;
+								}
+							} else {
+								lastTargetActivePowerReqDate = data.data[0].requested_at;
+								lastTargetActivePowerRecvDate = '-'
+
+								const cmdBody = JSON.parse(data.data[0].cmd_body);
+								targetActivePower = cmdBody.targetPower;
+							}
+						}
+					}
+
 				});
 
 				if (oid.match('testkpx')) {

@@ -1524,60 +1524,60 @@ const searchSite = async function () {
 				var markerCluster = new MarkerClusterer(map, markers, clusterOptions);
 				markerCluster.addMarkers(markers);
 
-				google.maps.event.addListener(markerCluster, "clusteringend", function (c) {
-					let clusters = c.getClusters();
-					clusters.forEach((item, index) => {
+				// google.maps.event.addListener(markerCluster, "clusteringend", function (c) {
+				// 	let clusters = c.getClusters();
+				// 	clusters.forEach((item, index) => {
 
-						let styleOptions = {
-							textColor: 'black',
-							textSize: 15,
-							anchorText: [9, 16],
-							fontWeight: 'normal',
-							height: 45,
-							width: 32
-						};
-						let newUrl = [
-							'/img/map_icons/cluster_grey.png',
-							'/img/map_icons/cluster_blue.png',
-							'/img/map_icons/cluster_orange.png',
-							'/img/map_icons/cluster_red.png',
-							'/img/map_icons/cluster_yellow.png',
-						];
-						let maxVal = 0;
+				// 		let styleOptions = {
+				// 			textColor: 'black',
+				// 			textSize: 15,
+				// 			anchorText: [9, 16],
+				// 			fontWeight: 'normal',
+				// 			height: 45,
+				// 			width: 32
+				// 		};
+				// 		let newUrl = [
+				// 			'/img/map_icons/cluster_grey.png',
+				// 			'/img/map_icons/cluster_blue.png',
+				// 			'/img/map_icons/cluster_orange.png',
+				// 			'/img/map_icons/cluster_red.png',
+				// 			'/img/map_icons/cluster_yellow.png',
+				// 		];
+				// 		let maxVal = 0;
 
-						item.markerClusterer_.clusters_.forEach(x => {
+				// 		item.markerClusterer_.clusters_.forEach(x => {
 							
-							x.markers_.forEach((el, idx) => {
-								let url = el.icon.url;
+				// 			x.markers_.forEach((el, idx) => {
+				// 				let url = el.icon.url;
+				// 				// console.log("maxVal===", maxVal, "url===", url )
+				// 				if(!isEmpty(url)){
+				// 					if(url.endsWith("marker_yellow.png") && maxVal<4){
+				// 						maxVal = 4;
+				// 					}
+				// 					if(url.endsWith("marker_red.png") && maxVal<3){
+				// 						maxVal = 3;
+				// 					}
+				// 					if(url.endsWith("marker_orange.png") && maxVal<2){
+				// 						maxVal = 2;
+				// 					}
+				// 					if(url.endsWith("marker_blue.png") && maxVal<1){
+				// 						maxVal = 1;
+				// 					}
 
-								if(!isEmpty(url)){
-									if(url.endsWith("marker_yellow.png") && maxVal<4){
-										maxVal = 4;
-									}
-									if(url.endsWith("marker_red.png") && maxVal<3){
-										maxVal = 3;
-									}
-									if(url[3].endsWith("marker_orange.png") && maxVal<2){
-										maxVal = 2;
-									}
-									if(url[3].endsWith("marker_blue.png") && maxVal<1){
-										maxVal = 1;
-									}
+				// 					// if(url.endsWith("marker_blue.png") && maxVal<1){
+				// 					// 	newUrl = '/img/map_icons/cluster_blue.png';
+				// 					// }
+				// 				}
+				// 			});
+				// 		});
 
-									// if(url[3].endsWith("marker_blue.png") && maxVal<1){
-									// 	newUrl = '/img/map_icons/cluster_blue.png';
-									// }
-								}
-							});
-						});
-
-						styleOptions.url = newUrl[maxVal];
+				// 		styleOptions.url = newUrl[maxVal];
 					
-						if(!isEmpty(clusters[index].clusterIcon_.style)){
-						 	item.clusterIcon_.style.url = newUrl[maxVal];
-						}
-					});
-				});
+				// 		if(!isEmpty(clusters[index].clusterIcon_.style)){
+				// 		 	item.clusterIcon_.style.url = newUrl[maxVal];
+				// 		}
+				// 	});
+				// });
 
 				google.maps.event.addListener(markerCluster, "mouseover", function (c) {
 					// console.log("mouseover====" + c.getCenter());

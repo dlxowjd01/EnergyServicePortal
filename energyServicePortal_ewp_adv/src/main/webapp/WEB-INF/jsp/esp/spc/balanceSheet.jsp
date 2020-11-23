@@ -75,7 +75,12 @@
 			},
 			language: {
 				emptyTable: "조회된 데이터가 없습니다.",
-				zeroRecords:  "검색된 결과가 없습니다."
+				zeroRecords:  "검색된 결과가 없습니다.",
+				paginate: {
+					previous: "",
+					next: "",
+				},
+				info: "_PAGE_ - _PAGES_ " + " / 총 _PAGES_ 개",
 			},
 			dom: 'tip',
 		}).on('select', function(e, dt, type, indexes) {

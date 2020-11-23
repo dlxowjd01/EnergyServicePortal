@@ -681,6 +681,19 @@ function makeAjaxCall(option, callbackOption){
 }
 
 function showAjaxResultModal(id, siblingId, type, result, timeLimit){
+	/* 
+	[siblingId]
+		=> if other modal is open (such as settings modal) and to be closed
+	[type] 
+		=> 0: show warning text(orange) with button
+		=> null: show warning text(orange) without hiding button
+		=> if NOT  0 || null, SHOW success text(blue) without hiding button
+	[result]
+		=> result text such as "successfully done, failed to get response"
+	[timeLimit]
+		=> default: fadeOutTime(1200)
+		=> timeLimit to hide result modal
+	*/
 	let modal = $("#" + id);
 	let modalHeader = modal.find(".modal-header");
 	let button = modalHeader.next();
@@ -692,11 +705,13 @@ function showAjaxResultModal(id, siblingId, type, result, timeLimit){
 	}
 
 	if(type === "0"){
+	// show relevant Button (such as confirm button);
 		button.removeClass("hidden");
 		h4.attr("class", "warning-text").text(result);
 		modal.modal("show");
 	} else {
 		if(type === null){
+		// warning text
 			h4.attr("class", "warning-text").text(result);
 		} else {
 			h4.attr("class", "text-blue").text(result);

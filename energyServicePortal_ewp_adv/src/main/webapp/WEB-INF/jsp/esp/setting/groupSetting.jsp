@@ -936,6 +936,19 @@
 					}
 				],
 				"dom": 'tip',
+				"language": {
+					"paginate": {
+						"previous": "",
+						"next": "",
+					},
+					"info": "_PAGE_ - _PAGES_ " + " / 총 _PAGES_ 개",
+					"select": {
+						"rows": {
+							_: "",
+							1: ""
+						}
+					}
+				},
 				"select": {
 					style: 'single',
 					selector: 'td input[type="checkbox"], tr',

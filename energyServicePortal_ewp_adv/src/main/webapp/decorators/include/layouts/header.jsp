@@ -11,15 +11,6 @@
 			updateHeaderModal();
 		});
 
-		$(".nav-brand a").each(function(index, element) {
-			// console.log("window.href===", window.location.pathname)
-			let current = window.location.pathname;
-			let mainPage ='/dashboard/gmain.do'
-			if (current == mainPage) {
-				$(this).on('click', false);
-			}
-		});
-
 		$("#newPwd").on('keyup', validatePassword);
 
 		$("#fullName").on('keyup', function(evt) {
