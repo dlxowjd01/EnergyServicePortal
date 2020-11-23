@@ -2,7 +2,7 @@
 <%@ include file="/decorators/include/taglibs.jsp" %>
 <div class="row header-wrapper">
 	<div class="col-12">
-		<h1 class="page-header fl">설비 구성</h1>
+		<h1 class="page-header fl"><fmt:message key="deviceState.title" /></h1>
 		<div class="time fr">
 			<span>CURRENT TIME</span>
 			<em class="currTime"></em>
@@ -15,8 +15,8 @@
 	<div class="col-lg-3 col-md-4 col-sm-6">
 		<div class="dropdown-wrapper w-60">
 			<div class="dropdown" id="siteList">
-				<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="사업소 선택">
-					사업소 선택<span class="caret"></span>
+				<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="<fmt:message key="deviceState.search.site" />">
+					<fmt:message key="deviceState.search.site" /><span class="caret"></span>
 				</button>
 				<ul class="dropdown-menu chk-type " role="menu" id="siteULList">
 					<li>
@@ -36,7 +36,7 @@
 			<div class="col-lg-12">
 				<div class="indiv clear">
 					<div class="chart-top">
-						<h2 class="ntit fl">설비 추가</h2>
+						<h2 class="ntit fl"><fmt:message key="deviceState.addSite" /></h2>
 					</div>
 					<ul class="device-list">
 						<li class="equip-add">
@@ -55,9 +55,9 @@
 					<div class="chart-top">
 						<h2 class="ntit fl">[typeName]</h2>
 						<div class="equip-icon fr">
-							<span class="equip-normal">정상([normal])</span>
-							<span class="equip-alert">중지([alert])</span>
-							<span class="equip-error">트립([error])</span>
+							<span class="equip-normal"><fmt:message key="deviceState.view.normal" />([normal])</span>
+							<span class="equip-alert"><fmt:message key="deviceState.view.stop" />([alert])</span>
+							<span class="equip-error"><fmt:message key="deviceState.view.trip" />([error])</span>
 						</div>
 					</div>
 					<ul class="device-list [typeClass]" id="[typeId]_List">
@@ -85,8 +85,8 @@
 						</ul>
 					</div>
 					<div class="eq-btn-box">
-						<button type="button" class="btn-type04" onclick="alert('선택된 설비가 없습니다.'); return false;">설비 정보 수정</button>
-						<button type="button" class="btn-type04" onclick="alert('선택된 설비가 없습니다.'); return false;">운영 이력 조회</button>
+						<button type="button" class="btn-type04" onclick="alert('선택된 설비가 없습니다.'); return false;"><fmt:message key="deviceState.view.modify" /></button>
+						<button type="button" class="btn-type04" onclick="alert('선택된 설비가 없습니다.'); return false;"><fmt:message key="deviceState.view.history" /></button>
 					</div>
 				</div>
 			</div>
@@ -97,16 +97,16 @@
 <div class="modal fade" id="addDeviceModal" role="dialog">
 	<div class="modal-dialog device-modal modal-lg">
 		<div class="modal-content new_device">
-			<div class="modal-header">설비 정보 수정</div>
+			<div class="modal-header"><fmt:message key="deviceState.view.modify" /></div>
 			<div class="modal-body">
 				<form id="deviceForm1" class="device-form" action="#" method="post" name="deviceForm" novalidate>
 					<div class="row">
 						<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
 							<div class="input-group inline-flex">
-								<label for="addSiteList" class="input-label asterisk">사업소</label>
+								<label for="addSiteList" class="input-label asterisk"><fmt:message key="deviceState.popup.site" /></label>
 								<div class="dropdown" id="addSiteList">
-									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="사업소 선택">
-										사업소 선택<span class="caret"></span>
+									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='deviceState.search.site' />">
+										<fmt:message key="deviceState.search.site" /><span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu" id="addSiteUlList">
 										<li data-value="[sid]">
@@ -116,14 +116,14 @@
 								</div>
 							</div>
 							<div class="input-group inline-flex">
-								<label for="name" class="input-label asterisk">장치명</label>
+								<label for="name" class="input-label asterisk"><fmt:message key="deviceState.popup.deviceNe" /></label>
 								<input class="input text-input-type" type="text" name="name" id="name" placeholder="입력" autocomplete="off" onkeyup="$(this).val($(this).val().replace(/^\s+|\s+$/g, ''))">
 							</div>
 							<div class="input-group inline-flex">
-								<label for="device_type" class="input-label asterisk">장치 타입</label>
+								<label for="device_type" class="input-label asterisk"><fmt:message key="deviceState.popup.deviceType" /></label>
 								<div class="dropdown" id="device_type">
-									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="타입 선택">
-										타입 선택<span class="caret"></span>
+									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='deviceState.popup.deviceSelect' />">
+										<fmt:message key="deviceState.popup.deviceSelect" /><span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu" id="device_typeList">
 										<li data-value="[type]">
@@ -133,51 +133,51 @@
 								</div>
 							</div>
 							<div class="input-group inline-flex">
-								<label for="metering_type" class="input-label asterisk">계량 유형</label>
+								<label for="metering_type" class="input-label asterisk"><fmt:message key="deviceState.popup.metering" /></label>
 								<div class="dropdown" id="metering_type">
-									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="유형 선택">
-										유형 선택<span class="caret"></span>
+									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='deviceState.popup.meteringSelect' />">
+										<fmt:message key="deviceState.popup.meteringSelect" /><span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu">
 										<li data-value="0">
-											<a href="javascript:void(0);" tabindex="-1">없음</a>
+											<a href="javascript:void(0);" tabindex="-1"><fmt:message key="deviceState.popup.metering.none" /></a>
 										</li>
 										<li data-value="1">
-											<a href="javascript:void(0);" tabindex="-1">소모계량</a>
+											<a href="javascript:void(0);" tabindex="-1"><fmt:message key="deviceState.popup.metering.load" /></a>
 										</li>
 										<li data-value="2">
-											<a href="javascript:void(0);" tabindex="-1">발전계량</a>
+											<a href="javascript:void(0);" tabindex="-1"><fmt:message key="deviceState.popup.metering.gen" /></a>
 										</li>
 										<li data-value="3">
-											<a href="javascript:void(0);" tabindex="-1">충/방전계량</a>
+											<a href="javascript:void(0);" tabindex="-1"><fmt:message key="deviceState.popup.metering.ess" /></a>
 										</li>
 									</ul>
 								</div>
 							</div>
 							<div class="input-group inline-flex">
-								<label for="manufacturer" class="input-label">제조사</label>
-								<input type="text" id="manufacturer" name="manufacturer" class="input text-input-type" placeholder="제조사" autocomplete="off">
+								<label for="manufacturer" class="input-label"><fmt:message key="deviceState.popup.producer" /></label>
+								<input type="text" id="manufacturer" name="manufacturer" class="input text-input-type" placeholder="<fmt:message key='deviceState.popup.producer' />" autocomplete="off">
 							</div>
 							<div class="input-group inline-flex">
-								<label for="capacity" class="input-label">설비 용량(kW)</label>
+								<label for="capacity" class="input-label"><fmt:message key="deviceState.popup.size" /></label>
 								<input class="input text-input-type" type="text" name="capacity" id="capacity" autocomplete="off">
 							</div>
 							<div class="input-group inline-flex">
-								<label for="manager" class="input-label">담당자</label>
+								<label for="manager" class="input-label"><fmt:message key="deviceState.popup.person" /></label>
 								<input class="input text-input-type" type="text" name="manager" id="manager" autocomplete="off">
 							</div>
 						</div>
 						<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
 							<div class="input-group inline-flex chk-type">
-								<label for="forecasting" class="input-label">예측</label>
+								<label for="forecasting" class="input-label"><fmt:message key="deviceState.popup.forecast" /></label>
 								<input type="checkbox" class="input text-input-type" id="forecasting" value="true" name="forecasting">
 								<label for="forecasting"></label>
 							</div>
 							<div class="input-group inline-flex">
-								<label for="rid" class="input-label">RTU명</label>
+								<label for="rid" class="input-label"><fmt:message key="deviceState.popup.rtu" /></label>
 								<div id="rid" class="dropdown">
-									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="장치 선택">
-										장치 선택<span class="caret"></span>
+									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='deviceState.popup.device' />">
+										<fmt:message key="deviceState.popup.device" /><span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu" id="ridList">
 										<li data-value="[rid]">
@@ -187,10 +187,10 @@
 								</div>
 							</div>
 							<div class="input-group inline-flex">
-								<label for="parent_did" class="input-label">상위 장치</label>
+								<label for="parent_did" class="input-label"><fmt:message key="deviceState.popup.top" /></label>
 								<div id="parent_did" class="dropdown">
-									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="장치 선택">
-										장치 선택<span class="caret"></span>
+									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='deviceState.popup.device' />">
+									<fmt:message key='deviceState.popup.device' /><span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu" id="parent_didList">
 										<li data-value="[did]">
@@ -200,37 +200,37 @@
 								</div>
 							</div>
 							<div class="input-group inline-flex">
-								<label for="addDeviceDisplayType" class="input-label">표시 유형</label>
+								<label for="addDeviceDisplayType" class="input-label"><fmt:message key="deviceState.popup.view" /></label>
 								<div id="addDeviceDisplayType" class="dropdown">
-									<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="유형 선택">
-										유형 선택<span class="caret"></span>
+									<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="<fmt:message key='deviceState.popup.meteringSelect' />">
+										<fmt:message key='deviceState.popup.meteringSelect' /><span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu chk-type">
 										<li>
 											<a href="javascript:void(0);" tabindex="-1">
 												<input type="checkbox" id="dashboard" value="true" name="dashboard">
-												<label for="dashboard">대시보드</label>
+												<label for="dashboard"><fmt:message key="deviceState.popup.view.dashboard " /></label>
 											</a>
 										</li>
 										<li>
 											<a href="javascript:void(0);" tabindex="-1">
 												<input type="checkbox" id="billing" value="true" name="billing">
-												<label for="billing">매전량</label>
+												<label for="billing"><fmt:message key="deviceState.popup.view.rev" /></label>
 											</a>
 										</li>
 									</ul>
 								</div>
 							</div>
 							<div class="input-group inline-flex">
-								<label for="product_name" class="input-label">제품명</label>
-								<input type="text" id="product_name" name="product_name" class="input text-input-type" value="" placeholder="제품명" autocomplete="off">
+								<label for="product_name" class="input-label"><fmt:message key="deviceState.popup.name" /></label>
+								<input type="text" id="product_name" name="product_name" class="input text-input-type" value="" placeholder="<fmt:message key='deviceState.popup.name' />" autocomplete="off">
 							</div>
 							<div class="input-group inline-flex">
-								<label for="serial_id" class="input-label">시리얼 ID</label>
+								<label for="serial_id" class="input-label"><fmt:message key="deviceState.popup.serial" /></label>
 								<input class="input text-input-type" type="text" name="serial_id" id="serial_id" autocomplete="off">
 							</div>
 							<div class="input-group inline-flex">
-								<label for="contact" class="input-label">담당자 연락처</label>
+								<label for="contact" class="input-label"><fmt:message key="deviceState.popup.contact" /></label>
 								<input class="input text-input-type" type="text" name="contact" id="contact" autocomplete="off">
 							</div>
 						</div>
@@ -238,11 +238,11 @@
 					<div class="row">
 						<div class="col-12">
 							<div class="input-group inline-flex">
-								<label for="alarm_code" class="input-label">알림 코드</label>
+								<label for="alarm_code" class="input-label"><fmt:message key="deviceState.popup.alarm" /></label>
 								<div class="dropdown-wrapper w-80">
 									<div class="dropdown" id="alarm_code">
-										<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="장치 알람 메세지 설정">
-											장치 알람 메세지 설정<span class="caret"></span>
+										<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="<fmt:message key='deviceState.popup.alarmSelect' />">
+											<fmt:message key="deviceState.popup.alarmSelect" /><span class="caret"></span>
 										</button>
 										<ul class="dropdown-menu chk-type" id="alarm_codeList">
 											<li data-value="[val]">
@@ -256,15 +256,15 @@
 								</div>
 							</div>
 							<div class="input-group inline-flex">
-								<label for="description" class="input-label">설명</label>
+								<label for="description" class="input-label"><fmt:message key="deviceState.popup.desc" /></label>
 								<textarea name="addDeviceDescription" id="description" class="textarea"></textarea>
 							</div>
 						</div>
 					</div>
 				</form>
 				<div class="btn-wrap-type02">
-					<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close">취소</button>
-					<button type="button" class="btn-type" id="addDevice">등록</button>
+					<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close"><fmt:message key="deviceState.manual.cancel" /></button>
+					<button type="button" class="btn-type" id="addDevice"><fmt:message key="deviceState.popup.confirm" /></button>
 				</div>
 			</div>
 		</div>
@@ -274,41 +274,41 @@
 <div class="modal fade" id="manualAddDeviceModal" role="dialog">
 	<div class="modal-dialog device-modal">
 		<div class="modal-content manual_input">
-			<div class="modal-header">수기 입력</div>
+			<div class="modal-header"><fmt:message key="deviceState.manual" /></div>
 			<div class="modal-body">
 				<div class="container-fluid dateField">
 					<form id="manualForm" action="#" method="post" name="deviceForm" class="setting-form">
 						<section>
 							<div class="row">
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">구분</span></div>
+								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label"><fmt:message key="deviceState.manual.type" /></span></div>
 								<div class="col-xl-6 col-lg-6 col-md-10 col-sm-10 pl-0">
 									<div id="deviceType" class="dropdown">
-										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='deviceState.manual.select' />"><fmt:message key="deviceState.manual.select" /><span class="caret"></span></button>
 										<ul class="dropdown-menu">
-											<li data-value="PV"><a href="javascript:void(0)">태양광</a></li>
-											<li data-value="WIND"><a href="javascript:void(0)">풍력</a></li>
+											<li data-value="PV"><a href="javascript:void(0)"><fmt:message key="deviceState.manual.solar" /></a></li>
+											<li data-value="WIND"><a href="javascript:void(0)"><fmt:message key="deviceState.manual.wind" /></a></li>
 										</ul>
 									</div>
-									<small class="warning hidden">구분을 선택해 주세요.</small>
+									<small class="warning hidden"><fmt:message key="deviceState.manual.selectType" /></small>
 								</div>
 							</div>
 							<div class="row">
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">입력단위</span></div>
+								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label"><fmt:message key="deviceState.manual.unit" /></span></div>
 								<div class="col-xl-6 col-lg-6 col-md-10 col-sm-10 pl-0">
 									<div id="timeInterval" class="dropdown">
-										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='deviceState.manual.select' />"><fmt:message key="deviceState.manual.select" /><span class="caret"></span></button>
 										<ul class="dropdown-menu">
-											<li data-value="15min"><a href="javascript:void(0)">15분</a></li>
-											<li data-value="hour"><a href="javascript:void(0)">1시간</a></li>
-											<li data-value="day"><a href="javascript:void(0)">1일</a></li>
-											<li data-value="month"><a href="javascript:void(0)">1개월</a></li>
+											<li data-value="15min"><a href="javascript:void(0)"><fmt:message key="deviceState.manual.15min" /></a></li>
+											<li data-value="hour"><a href="javascript:void(0)"><fmt:message key="deviceState.manual.1h" /></a></li>
+											<li data-value="day"><a href="javascript:void(0)"><fmt:message key="deviceState.manual.1d" /></a></li>
+											<li data-value="month"><a href="javascript:void(0)"><fmt:message key="deviceState.manual.1m" /></a></li>
 										</ul>
 									</div>
-									<small class="warning hidden">입력단위를 선택해 주세요.</small>
+									<small class="warning hidden"><fmt:message key="deviceState.manual.selectUnit" /></small>
 								</div>
 							</div>
 							<div class="row">
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">시작</span></div>
+								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label"><fmt:message key="deviceState.manual.start" /></span></div>
 								<div class="col-xl-6 col-lg-6 col-md-10 col-sm-10 pl-0">
 									<div class="sel-calendar">
 										<input type="text" id="start" name="start" class="sel customFromDate" value="" autocomplete="off" readonly>
@@ -316,7 +316,7 @@
 								</div>
 							</div>
 							<div class="row">
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">종료</span></div>
+								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label"><fmt:message key="deviceState.manual.end" /></span></div>
 								<div class="col-xl-6 col-lg-6 col-md-10 col-sm-10 pl-0">
 									<div class="sel-calendar">
 										<input type="text" id="end" name="end"class="sel customToDate" value="" autocomplete="off" readonly>
@@ -326,14 +326,14 @@
 							<div class="row">
 								<div class="col-12">
 									<div class="input-group inline-flex">
-										<button type="button" class="btn-type" onclick="setManualForm();">데이터 확인</button>
-										<button type="button" class="btn-type03 end" onclick="initManualForm();">입력 초기화</button>
+										<button type="button" class="btn-type" onclick="setManualForm();"><fmt:message key="deviceState.manual.input" /></button>
+										<button type="button" class="btn-type03 end" onclick="initManualForm();"><fmt:message key="deviceState.manual.reset" /></button>
 									</div>
 									<div class="spc-tbl mt-20">
 										<table class="ly-type">
 											<thead>
-											<th>15분 단위</th>
-											<th>데이터 값</th>
+											<th><fmt:message key="deviceState.manual.15min.val" /></th>
+											<th><fmt:message key="deviceState.manual.value" /></th>
 											</thead>
 											<tbody id="manualModalTable">
 											</tbody>
@@ -345,8 +345,8 @@
 					</form>
 				</div>
 				<div class="btn-wrap-type02">
-					<button type="button" class="btn-type03" onclick="closeManualForm('cancel');">취소</button>
-					<button type="button" class="btn-type" onclick="closeManualForm('save');">저장</button>
+					<button type="button" class="btn-type03" onclick="closeManualForm('cancel');"><fmt:message key="deviceState.manual.cancel" /></button>
+					<button type="button" class="btn-type" onclick="closeManualForm('save');"><fmt:message key="deviceState.manual.submit" /></button>
 				</div>
 			</div>
 		</div>
@@ -357,13 +357,13 @@
 	<div class="modal-dialog modal-sm">
 		<div class="modal-content narrow">
 			<div class="modal-body">
-				<h2>확인을 누르시면, 변경하지 않은 정보는 모두 사라집니다.</h2>
-				<p class="mt-8">정말 닫으시겠습니까?</p>
+				<h2><fmt:message key="deviceState.close.confirm1" /></h2>
+				<p class="mt-8"><fmt:message key="deviceState.close.confirm2" /></p>
 			</div>
 			<div class="modal-footer">
 				<div class="btn-wrap-type mb-0">
-					<button type="button" class="btn-type03" data-dismiss="modal">취소</button>
-					<button type="button" class="btn-type" onclick="closeModal();">확인</button>
+					<button type="button" class="btn-type03" data-dismiss="modal"><fmt:message key="deviceState.manual.cancel" /></button>
+					<button type="button" class="btn-type" onclick="closeModal();"><fmt:message key="deviceState.close.button" /></button>
 				</div>
 			</div>
 		</div>
@@ -374,13 +374,13 @@
 	<div class="modal-dialog modal-sm">
 		<div class="modal-content narrow">
 			<div class="modal-body">
-				<h2>저장을 누르시면, 수정하신 정보로 수정이 됩니다.</h2>
-				<p class="mt-8">정말 수정하시겠습니까?</p>
+				<h2><fmt:message key="deviceState.save.confirm1" /></h2>
+				<p class="mt-8"><fmt:message key="deviceState.save.confirm2" /></p>
 			</div>
 			<div class="modal-footer">
 				<div class="btn-wrap-type mb-0">
-					<button type="button" class="btn-type03" data-dismiss="modal">취소</button>
-					<button type="button" class="btn-type" onclick="saveManualForm();">저장</button>
+					<button type="button" class="btn-type03" data-dismiss="modal"><fmt:message key="deviceState.manual.cancel" /></button>
+					<button type="button" class="btn-type" onclick="saveManualForm();"><fmt:message key="deviceState.save.button" /></button>
 				</div>
 			</div>
 		</div>
