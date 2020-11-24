@@ -39,6 +39,7 @@
 <script type="text/javascript" src="/js/bootstrap.min.js"></script>
 
 
+<!-- 
 <script type="text/javascript">
 	const currentPath = window.location.pathname;
 
@@ -104,7 +105,7 @@
 		}
 
 		loadScripts(importList, () => {
-			// console.log('1-A ===> Scripts loaded');
+			console.log('1-A ===> Scripts loaded', importList);
 		});
 	} else {
 		if(currentPath == excludeMenu[0]){
@@ -129,7 +130,7 @@
 				}
 
 				loadScripts(importList, () => {
-					// console.log('1-A ===> Scripts loaded');
+					console.log('1-A ===> Scripts loaded', importList);
 				});
 			} else {
 				if(currentPath == excludeMenu[0]){
@@ -164,7 +165,7 @@
 		}
 	}
 
-</script>
+</script> -->
 
 
 <!-- high-stock -->
@@ -173,7 +174,6 @@
 <!-- <script type="text/javascript" src="/js/modules/data.min.js"></script> -->
 
 <script type="text/javascript" src="/js/common.js"></script>
-
 <script type="text/javascript" src="/js/custom/utils.js"></script>
 <script type="text/javascript" src="/js/custom/numberFormat.js"></script>
 
@@ -187,6 +187,7 @@
 
 <!-- timepicker -->
 <script type="text/javascript" src="/js/wickedpicker.js"></script>
+<script type="text/javascript" src="/js/data_tables/include_all.min.js"></script>
 
 <script type="text/javascript">
 	// role => 1: 시스템관리자, 2: 일반

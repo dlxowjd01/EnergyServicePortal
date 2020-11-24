@@ -402,7 +402,6 @@
 	}
 </script>
 
-
 <div class="modal fade" id="addNotice" tabindex="-1" role="dialog" aria-labelledby="addNotice" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-lg no-flex">
 		<form id="addNoticeForm" name="addNoticeForm" autocomplete="off">

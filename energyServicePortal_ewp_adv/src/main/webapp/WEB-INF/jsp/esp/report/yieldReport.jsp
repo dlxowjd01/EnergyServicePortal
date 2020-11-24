@@ -11,7 +11,6 @@
 	let reportType = new Object();
 
 	$(function () {
-		console.log("yield===")
 		yieldTable = $('#yieldTable').DataTable({
 			autoWidth: true,
 			fixedHeader: true,

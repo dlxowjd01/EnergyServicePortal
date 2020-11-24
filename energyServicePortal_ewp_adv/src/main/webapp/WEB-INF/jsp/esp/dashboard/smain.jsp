@@ -969,7 +969,26 @@
 				labels: {
 					formatter: function () {
 						let suffix = this.chart.yAxis[0].userOptions.title.text;
-						return displayNumberFixedUnit(this.value, 'kWh', suffix, 0)[0];
+						if(suffix == "MWh"){
+							let length = String(this.value).length;
+							console.log("length===", length);
+							console.log("this.value===", this.value);
+							if(length >= 7 && length < 10){
+								return displayNumberFixedUnit(this.value, 'kWh', suffix, 0)[0];
+							} else if(length >= 10){
+								return displayNumberFixedUnit(this.value, 'kWh', "Gwh", 0)[0] + "k";
+							} else {
+								// NOT Mwh BUT longer enough to convert into floating number
+								if(length >= 3){
+									return displayNumberFixedUnit(this.value, 'kWh', suffix, 0)[0];
+								} else {
+									return displayNumberFixedUnit(this.value, 'kWh', 'kWh', 0)[0];
+								}
+							}
+							 
+						} else {
+							return displayNumberFixedUnit(this.value, 'kWh', suffix, 0)[0];
+						}
 					},
 					style: {
 						color: 'var(--grey)',
@@ -1469,7 +1488,7 @@
 				gridLineWidth: 1,
 				min: 0,
 				title: {
-					x: 8,
+					x: 10,
 					y: 27,
 					text: 'kWh',
 					align: 'low',
@@ -1485,7 +1504,7 @@
 						let length = String(this.value).length;
 						if (length >= 7) {
 							return numberComma(this.value / 1000000) + 'M';
-						} else if ( (length >= 4) ){
+						} else if ( (length >= 3) ){
 							return numberComma(this.value / 1000) + 'K';
 						} else {
 							return numberComma(this.value);
@@ -3951,6 +3970,7 @@
 			}
 
 			monthlyChart.series[0].setData(energyData);
+			console.log("energyData===", energyData);
 
 			if (!oid.match('testkpx')) {
 				let seriesName = '';
@@ -4948,7 +4968,7 @@
 
 					hourlyChart.update({
 						chart: {
-							marginLeft: 36,
+							marginLeft: 38,
 							marginRight: 36
 						},
 					});

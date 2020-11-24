@@ -503,6 +503,12 @@ a.disabled {
 	cursor: text;
 }
 
+a.btn-type04.text-blue.disabled {
+	color: var(--vivid-blue);
+	border: 1px solid var(--vivid-blue);
+	opacity: 0.6;
+}
+
 a.disabled:hover,
 a.disabled:focus {
 	opacity: 1;
@@ -717,7 +723,8 @@ a.btn.btn-type03:hover {
 	margin-left: 12px;
 }
 
-.btn-type04 {
+.btn-type04,
+a.btn-type04.text-blue {
 	outline-style: none;
 	border: 1px solid var(--vivid-blue);
 	background: none;
