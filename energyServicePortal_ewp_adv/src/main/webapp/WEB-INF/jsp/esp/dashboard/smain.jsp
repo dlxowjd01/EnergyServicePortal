@@ -971,8 +971,6 @@
 						let suffix = this.chart.yAxis[0].userOptions.title.text;
 						if(suffix == "MWh"){
 							let length = String(this.value).length;
-							console.log("length===", length);
-							console.log("this.value===", this.value);
 							if(length >= 7 && length < 10){
 								return displayNumberFixedUnit(this.value, 'kWh', suffix, 0)[0];
 							} else if(length >= 10){
@@ -4506,8 +4504,6 @@
 									if (deviceType.toLowerCase() === 'kpx_ems') {
 										itemCapacity = deviceData.capacity ? deviceData.capacity : 0;
 										itemAcPower = deviceData.activePower ? deviceData.activePower : 0;
-										console.log("deviceData===", deviceData);
-
 										if (!isEmpty(lastTargetActivePowerReqDate)) {
 											let historyData = new Date(lastTargetActivePowerReqDate.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$3/$2/$1 $4:$5:$6'));
 											let statusDate = new Date(String(deviceData.lastTargetActivePowerReqDate).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$3/$2/$1 $4:$5:$6'));

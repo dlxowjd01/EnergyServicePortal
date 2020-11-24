@@ -1294,7 +1294,14 @@
 			"dom": 'tip',
 			"language": {
 				"emptyTable": "조회된 데이터가 없습니다.",
-				"zeroRecords":  "검색된 결과가 없습니다."
+				"zeroRecords":  "검색된 결과가 없습니다.",
+				"infoEmpty": "",
+				"paginate": {
+					// "previous": "",
+					// "next": ""
+					"sPrevious": "",
+					"sNext": ""
+				},
 			},
 			initComplete: function(){
 				this.addClass("no-stripe");
