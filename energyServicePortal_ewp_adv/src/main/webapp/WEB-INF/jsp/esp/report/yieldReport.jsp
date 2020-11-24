@@ -739,7 +739,7 @@
 	<div class="modal-dialog spc-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h2>수익 보고서 신규</h2>
+				<h2><fmt:message key='yieldReport.title' /></h2>
 			</div>
 			<div class="modal-body">
 				<div class="report-modal-content container-fluid">
@@ -749,7 +749,7 @@
 								<span class="input-label">SPC</span>
 								<div id="spc_id" class="dropdown placeholder">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
-										선택<span class="caret"></span>
+										<fmt:message key='yieldReport.select' /><span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu"></ul>
 								</div>
@@ -758,34 +758,34 @@
 								<span class="input-label"><fmt:message key="revenuereport.2.report_classification" /></span>
 								<div id="report_type" class="dropdown placeholder">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
-										선택<span class="caret"></span>
+										<fmt:message key='yieldReport.select' /><span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu">
-										<li data-value="regular_mm"><a href="javascript:void(0);">월간 발전량</a></li>
-										<li data-value="regular_qt"><a href="javascript:void(0);">분기 발전량</a></li>
-										<li data-value="regular_yy"><a href="javascript:void(0);">년간 발전량</a></li>
-										<li data-value="profit_mm"><a href="javascript:void(0);">수익보고서</a></li>
+										<li data-value="regular_mm"><a href="javascript:void(0);"><fmt:message key='yieldReport.gen.month' /></a></li>
+										<li data-value="regular_qt"><a href="javascript:void(0);"><fmt:message key='yieldReport.gen.qt' /></a></li>
+										<li data-value="regular_yy"><a href="javascript:void(0);"><fmt:message key='yieldReport.gen.year' /></a></li>
+										<li data-value="profit_mm"><a href="javascript:void(0);"><fmt:message key='yieldReport.report' /></a></li>
 									</ul>
 								</div>
 							</div>
 							<div class="flex-start"><!--
-								--><span class="input-label short">적용 변수</span><!--
-								--><a href="javascript:void(0);" class="btn-text-blue" onclick="addOption();">추가</a><!--
+								--><span class="input-label short"><fmt:message key='yieldReport.var' /></span><!--
+								--><a href="javascript:void(0);" class="btn-text-blue" onclick="addOption();"><fmt:message key='yieldReport.add' /></a><!--
 						--></div>
 						</div>
 
 						<div class="col-lg-6 col-sm-12">
 							<div class="flex-start">
-								<span class="input-label">발전소</span>
+								<span class="input-label"><fmt:message key='yieldReport.plant' /></span>
 								<div class="dropdown placeholder" id="site_id">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
-										선택<span class="caret"></span>
+										<fmt:message key='yieldReport.select' /><span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu"></ul>
 								</div>
 							</div>
 							<div class="flex-start dateField">
-								<span class="input-label">적용 기간</span>
+								<span class="input-label"><fmt:message key='yieldReport.period' /></span>
 								<div class="sel-calendar">
 									<input type="text" id="report_data_start" name="report_data_start" value="" class="sel fromDate" autocomplete="off" readonly="" placeholder="날짜 선택">
 								</div>
@@ -799,8 +799,8 @@
 					<ul id="yieldList" class="yield-list">
 					</ul>
 					<div class="btn-wrap-type02">
-						<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close">취소</button>
-						<button type="button" class="btn-type" onclick="reportCreate();">생성</button>
+						<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close"><fmt:message key='yieldReport.cancle' /></button>
+						<button type="button" class="btn-type" onclick="reportCreate();"><fmt:message key='yieldReport.create' /></button>
 					</div>
 				</div>
 			</div>
@@ -811,7 +811,7 @@
 
 <div class="row header-wrapper">
 	<div class="col-12">
-		<h1 class="page-header fl">수익 보고서</h1>
+		<h1 class="page-header fl"><fmt:message key='yieldReport.report' /></h1>
 	</div>
 </div>
 <div class="row">
@@ -828,7 +828,7 @@
 			</div>
 		</div>
 		<div class="fl">
-			<span class="tx-tit">적용 시작 월</span>
+			<span class="tx-tit"><fmt:message key='yieldReport.startMonth' /></span>
 			<div class="sa-select">
 				<div class="dropdown" id="year">
 					<button type="button" class="dropdown-toggle w7" data-toggle="dropdown"><fmt:message key="revenuereport.1.2020" /><span class="caret"></span></button>
@@ -862,7 +862,7 @@
 			</div>
 		</div>
 		<div class="fl">
-			<div class="text-input-type"><input type="text" id="key_word" placeholder="입력" autocomplete="off"></div>
+			<div class="text-input-type"><input type="text" id="key_word" placeholder="<fmt:message key='yieldReport.input' />" autocomplete="off"></div>
 		</div>
 		<div class="fl">
 			<button type="button" class="btn-type" onclick="getDataList();">
@@ -876,23 +876,23 @@
 		<div class="indiv">
 			<div class="flex-wrapper mb-20">
 				<div><!-- 
-					--><button type="button" class="btn-type03 big" onclick="setCheckedDataExcelDown();">선택 다운로드</button><!-- 
-					--><button type="button" class="btn-type03 big" onclick="setCheckedDataRemove();">선택 삭제</button><!-- 
+					--><button type="button" class="btn-type03 big" onclick="setCheckedDataExcelDown();"><fmt:message key='yieldReport.selected.download' /></button><!-- 
+					--><button type="button" class="btn-type03 big" onclick="setCheckedDataRemove();"><fmt:message key='yieldReport.selected.delete' /></button><!-- 
 				--></div>
-				<div><button type="button" class="btn-type" onclick="modalInit();">신규 생성</button></div>
+				<div><button type="button" class="btn-type" onclick="modalInit();"><fmt:message key='yieldReport.new' /></button></div>
 			</div>
 			<table id="yieldTable" class="chk-type">
 				<colgroup>
-					<col style="width:5%"> <!-- 체크박스 -->
-					<col style="width:5%"> <!-- 순번 -->
-					<col style="width:10%"> <!-- SPC명 -->
-					<col style="width:10%"> <!-- 발전소명 -->
-					<col style="width:8%"> <!-- 보고서 유형 -->
-					<col style="width:15%"> <!-- 적용기간 -->
-					<col style="width:8%"> <!-- 다운로드 -->
-					<col style="width:15%"> <!-- 보고서 생성 시간 -->
-					<col style="width:16%"> <!-- 보고서 확정 -->
-					<col style="width:8%"> <!-- 최종 작업자 -->
+					<col style="width:5%"> <!-- 체크박스 <fmt:message key='yieldReport.checkbox' /> -->
+					<col style="width:5%"> <!-- 순번 <fmt:message key='yieldReport.index' /> -->
+					<col style="width:10%"> <!-- SPC명 <fmt:message key='yieldReport.SPC' /> -->
+					<col style="width:10%"> <!-- 발전소명 <fmt:message key='yieldReport.plantName' /> -->
+					<col style="width:8%"> <!-- 보고서 유형 <fmt:message key='yieldReport.type' /> -->
+					<col style="width:15%"> <!-- 적용기간 <fmt:message key='yieldReport.period' /> -->
+					<col style="width:8%"> <!-- 다운로드 <fmt:message key='yieldReport.download' /> -->
+					<col style="width:15%"> <!-- 보고서 생성 시간 <fmt:message key='yieldReport.createdTime' /> -->
+					<col style="width:16%"> <!-- 보고서 확정 <fmt:message key='yieldReport.reportEnd' /> -->
+					<col style="width:8%"> <!-- 최종 작업자 <fmt:message key='yieldReport.person' /> -->
 				</colgroup>
 			</table>
 		</div>

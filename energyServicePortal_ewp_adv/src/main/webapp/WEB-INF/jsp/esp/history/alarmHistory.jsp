@@ -6,11 +6,11 @@
 <div id="alarmConfirm" class="modal fade" role="dialog">
 	<div class="modal-dialog modal-s">
 		<div class="modal-content">
-			<h2 class="modal-title">알람 상태</h2>
-			<p class="text-line1 mt-20 mb-24">"확인" 처리 하시겠습니까?</p>
+			<h2 class="modal-title"><fmt:message key='alarm.table.confirm' /></h2>
+			<p class="text-line1 mt-20 mb-24"><fmt:message key='alarm.confirm.YN' /></p>
 			<div class="btn-wrap-type05"><!--
-			--><button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close">아니오</button><!--
-			--><button type="button" class="btn-type ml-12" onclick="alarmConfirmProcess();">예</button><!--
+			--><button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close"><fmt:message key='alarm.confirm.N' /></button><!--
+			--><button type="button" class="btn-type ml-12" onclick="alarmConfirmProcess();"><fmt:message key='alarm.confirm.Y' /></button><!--
 		--></div>
 		</div>
 	</div>
@@ -24,17 +24,17 @@
 			</div>
 			<div class="modal-body">
 				<div class="flex-align-top">
-					<span class="input-label">조치 이력</span>
+					<span class="input-label"><fmt:message key='alarm.popup.history' /></span>
 					<textarea id="ticket_log" name="ticket_log" class="textarea" readonly></textarea>
 				</div>
 				<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
 				<div class="flex-start">
-					<span class="input-label">사진 올리기</span>
+					<span class="input-label"><fmt:message key='alarm.popup.image' /></span>
 					<div class="text-input-type">
-						<input type="text" id="photoFile" name="photoFile" placeholder="사진 파일 이름" readonly="" autocomplete="off" accept="image/*">
+						<input type="text" id="photoFile" name="photoFile" placeholder="<fmt:message key='alarm.popup.filename' />" readonly="" autocomplete="off" accept="image/*">
 					</div>
 					<div class="btn-wrapper ml-6">
-						<button type="button" id="fileUpload" class="btn-type">업로드</button>
+						<button type="button" id="fileUpload" class="btn-type"><fmt:message key='alarm.popup.upload' /></button>
 						<input type="file" id="picture" name="filename" class="btn-upload hidden"/>
 						<span class="upload-text ml-16 hidden"></span>
 					</div>
@@ -51,25 +51,25 @@
 				</c:if>
 
 				<div class="flex-start">
-					<span class="input-label">조치 여부</span>
+					<span class="input-label"><fmt:message key='alarm.popup.status.current' /></span>
 					<div id="ticket_status" class="dropdown">
-						<button type="button" class="dropdown-toggle required" placeholder="선택" data-toggle="dropdown"><span class="caret"></span></button>
+						<button type="button" class="dropdown-toggle required" placeholder="<fmt:message key='alarm.popup.status.select' />" data-toggle="dropdown"><span class="caret"></span></button>
 						<ul class="dropdown-menu">
-							<li data-value="new"><a href="javascript:void(0);">신규</a></li>
-							<li data-value="open"><a href="javascript:void(0);">작업 처리 중</a></li>
-							<li data-value="on-hold"><a href="javascript:void(0);">추가 정보 대기</a></li>
-							<li data-value="resolved"><a href="javascript:void(0);">현장 조치 완료</a></li>
-							<li data-value="pending"><a href="javascript:void(0);">처리 결과 확인</a></li>
-							<li data-value="closed"><a href="javascript:void(0);">처리 완료</a></li>
+							<li data-value="new"><a href="javascript:void(0);"><fmt:message key='alarm.popup.status.new' /></a></li>
+							<li data-value="open"><a href="javascript:void(0);"><fmt:message key='alarm.popup.status.working' /></a></li>
+							<li data-value="on-hold"><a href="javascript:void(0);"><fmt:message key='alarm.popup.status.pending' /></a></li>
+							<li data-value="resolved"><a href="javascript:void(0);"><fmt:message key='alarm.popup.status.sitework' /></a></li>
+							<li data-value="pending"><a href="javascript:void(0);"><fmt:message key='alarm.popup.status.confirm' /></a></li>
+							<li data-value="closed"><a href="javascript:void(0);"><fmt:message key='alarm.popup.status.done' /></a></li>
 						</ul>
 					</div>
 				</div>
 				<hr>
 
 				<div class="flex-start">
-					<span class="input-label">담당자</span>
+					<span class="input-label"><fmt:message key='alarm.popup.person' /></span>
 					<div id="userlist" class="dropdown w-20">
-						<button type="button" class="dropdown-toggle required" data-toggle="dropdown">선택<span class="caret"></span></button>
+						<button type="button" class="dropdown-toggle required" data-toggle="dropdown"><fmt:message key='alarm.popup.status.select' /><span class="caret"></span></button>
 						<ul class="dropdown-menu"></ul>
 					</div>
 					<div class="text-input-type w-20 ml-6">
@@ -81,7 +81,7 @@
 				<hr>
 
 				<div class="flex-align-top">
-					<span class="input-label">조치 메모</span>
+					<span class="input-label"><fmt:message key='alarm.popup.memo' /></span>
 					<textarea id="memo" name="memo" class="textarea"></textarea>
 				</div>
 
@@ -90,7 +90,7 @@
 				<div class="flex-start">
 					<span class="input-label">작업보고서</span>
 					<div id="maintenanceReportList" class="dropdown">
-						<button type="button" class="dropdown-toggle" placeholder="선택" data-toggle="dropdown">선택<span class="caret"></span></button>
+						<button type="button" class="dropdown-toggle" placeholder="<fmt:message key='alarm.popup.status.select' />" data-toggle="dropdown"><fmt:message key='alarm.popup.status.select' /><<span class="caret"></span></button>
 						<ul class="dropdown-menu"></ul>
 					</div>
 				</div>
@@ -105,8 +105,8 @@
 				<hr>
 
 				<div class="btn-wrap-type02"><!--
-				--><button type="button" class="btn-type03" data-dismiss="modal">취소</button><!--
-				--><button type="button" class="btn-type ml-12" onclick="ackProcess();">확인</button><!--
+				--><button type="button" class="btn-type03" data-dismiss="modal"><fmt:message key='alarm.popup.cancel' /></button><!--
+				--><button type="button" class="btn-type ml-12" onclick="ackProcess();"><fmt:message key='alarm.popup.confirm' /></button><!--
 			--></div>
 			</div>
 		</div>
@@ -115,7 +115,7 @@
 
 <div class="row header-wrapper">
 	<div class="col-12">
-		<h1 class="page-header fl">알람 이력</h1>
+		<h1 class="page-header fl"><fmt:message key='alarm.popup.history' /></h1>
 	</div>
 </div>
 
@@ -124,7 +124,7 @@
 		<form id="alarmHistorySearchForm">
 			<div class="sa-select">
 				<div class="dropdown" id="site">
-					<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택해주세요.">선택해주세요<span class="caret"></span></button>
+					<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택해주세요."><fmt:message key='alarm.search.select' /><span class="caret"></span></button>
 					<ul class="dropdown-menu chk-type" role="menu" id="siteList">
 						<li data-value="[sid]">
 							<a href="javascript:void(0);" tabindex="-1">
@@ -144,7 +144,7 @@
 							<h2 class="tx-tit"><fmt:message key="alertshistory.1.devicetype" /></h2>
 							<div id="equipmentList" class="dropdown">
 								<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택">
-									선택<span class="caret"></span>
+									<fmt:message key='alarm.popup.status.select' /><span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu chk-type" role="menu" id="device">
 									<li data-value="[type]">
@@ -159,44 +159,44 @@
 					</div>
 					<div class="flex-start3">
 						<div class="sa-select">
-							<h2 class="tx-tit">알람 종류</h2>
+							<h2 class="tx-tit"><fmt:message key='alarm.search.alarmType' /></h2>
 							<div class="dropdown">
 								<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택"><fmt:message key="alertshistory.1.all" /><span class="caret"></span></button>
 								<ul class="dropdown-menu chk-type" role="menu">
 									<li>
 										<a href="javascript:void(0)" tabindex="-1">
 											<input type="checkbox" id="alarm1" value="9" name="alarm" checked>
-											<label for="alarm1">알수없음</label>
+											<label for="alarm1"><fmt:message key='alarm.search.level.unknown' /></label>
 										</a>
 									</li>
 									<li>
 										<a href="javascript:void(0)" tabindex="-1">
 											<input type="checkbox" id="alarm2" value="0" name="alarm" checked>
-											<label for="alarm2">정보</label>
+											<label for="alarm2"><fmt:message key='alarm.search.level.info' /></label>
 										</a>
 									</li>
 									<li>
 										<a href="javascript:void(0)" tabindex="-1">
 											<input type="checkbox" id="alarm3" value="1" name="alarm" checked>
-											<label for="alarm3">경고</label>
+											<label for="alarm3"><fmt:message key='alarm.search.level.warn' /></label>
 										</a>
 									</li>
 									<li>
 										<a href="javascript:void(0)" tabindex="-1">
 											<input type="checkbox" id="alarm4" value="2" name="alarm" checked>
-											<label for="alarm4">이상</label>
+											<label for="alarm4"><fmt:message key='alarm.search.level.abnornal' /></label>
 										</a>
 									</li>
 									<li>
 										<a href="javascript:void(0)" tabindex="-1">
 											<input type="checkbox" id="alarm5" value="3" name="alarm" checked>
-											<label for="alarm5">트립</label>
+											<label for="alarm5"><fmt:message key='alarm.search.level.trip' /></label>
 										</a>
 									</li>
 									<li>
 										<a href="javascript:void(0)" tabindex="-1">
 											<input type="checkbox" id="alarm6" value="4" name="alarm" checked>
-											<label for="alarm6">정상</label>
+											<label for="alarm6"><fmt:message key='alarm.search.level.normal' /></label>
 										</a>
 									</li>
 								</ul>
@@ -205,18 +205,18 @@
 						<div class="sa-select">
 							<h2 class="tx-tit"><fmt:message key="alertshistory.4.alertstatus" /></h2>
 							<div class="dropdown short" id="alarmstatus">	
-								<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택">미확인<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택"><fmt:message key='alarm.search.confirm.N' /><span class="caret"></span></button>
 								<ul class="dropdown-menu chk-type" role="menu" id="alstatus">
 									<li>
 										<a href="javascript:void(0)" tabindex="-1">
 											<input type="checkbox" id="alstatus1" name="confirm">
-											<label for="alstatus1">확인</label>
+											<label for="alstatus1"><fmt:message key='alarm.search.confirm.Y' /></label>
 										</a>
 									</li>
 									<li>
 										<a href="javascript:void(0)" tabindex="-1">
 											<input type="checkbox" id="alstatus2" name="confirm" checked>
-											<label for="alstatus2">미확인</label>
+											<label for="alstatus2"><fmt:message key='alarm.search.confirm.N' /></label>
 										</a>
 									</li>
 								</ul>
@@ -225,42 +225,42 @@
 						<div class="sa-select">
 							<h2 class="tx-tit"><fmt:message key="alertshistory.4.acknowledgement" /></h2>
 							<div class="dropdown">
-								<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택">전체<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택"><fmt:message key='alarm.search.all' /><span class="caret"></span></button>
 								<ul class="dropdown-menu chk-type" role="menu" id="status">
 									<li>
 										<a href="javascript:void(0)" tabindex="-1">
 											<input type="checkbox" id="status1" name="status" value="new" checked>
-											<label for="status1">신규</label>
+											<label for="status1"><fmt:message key='alarm.popup.status.new' /></label>
 										</a>
 									</li>
 									<li>
 										<a href="javascript:void(0)" tabindex="-1">
 											<input type="checkbox" id="status2" name="status" value="open" checked>
-											<label for="status2">작업처리중</label>
+											<label for="status2"><fmt:message key='alarm.popup.status.working' /></label>
 										</a>
 									</li>
 									<li>
 										<a href="javascript:void(0)" tabindex="-1">
 											<input type="checkbox" id="status3" name="status" value="on-hold" checked>
-											<label for="status3">추가 정보 대기</label>
+											<label for="status3"><fmt:message key='alarm.popup.status.pending' /></label>
 										</a>
 									</li>
 									<li>
 										<a href="javascript:void(0)" tabindex="-1">
 											<input type="checkbox" id="status4" name="status" value="resolved" checked>
-											<label for="status4">현장 조치 완료</label>
+											<label for="status4"><fmt:message key='alarm.popup.status.sitework' /></label>
 										</a>
 									</li>
 									<li>
 										<a href="javascript:void(0)" tabindex="-1">
 											<input type="checkbox" id="status5" name="status" value="pending" checked>
-											<label for="status5">처리 결과 확인</label>
+											<label for="status5"><fmt:message key='alarm.popup.status.confirm' /></label>
 										</a>
 									</li>
 									<li>
 										<a href="javascript:void(0)" tabindex="-1">
 											<input type="checkbox" id="status7" name="status" value="closed" checked>
-											<label for="status7">처리 완료</label>
+											<label for="status7"><fmt:message key='alarm.popup.status.done' /></label>
 										</a>
 									</li>
 								</ul>
@@ -271,12 +271,12 @@
 						<div class="sa-select">
 							<h2 class="tx-tit"><fmt:message key="alertshistory.1.timeframe" /></h2>
 							<div class="dropdown short">
-								<button type="button" class="dropdown-toggle" data-toggle="dropdown">1일<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown"><fmt:message key='alarm.search.period.day' /><span class="caret"></span></button>
 								<ul class="dropdown-menu" role="menu" id="term">
-									<li data-value="day"><a href="javascript:void(0)">1일</a></li>
-									<li class="on" data-value="week"><a href="javascript:void(0)">1주</a></li>
-									<li data-value="month"><a href="javascript:void(0)">1월</a></li>
-									<li data-value="setup"><a href="javascript:void(0)">기간설정</a></li>
+									<li data-value="day"><a href="javascript:void(0)"><fmt:message key='alarm.search.period.day' /></a></li>
+									<li class="on" data-value="week"><a href="javascript:void(0)"><fmt:message key='alarm.search.period.week' /></a></li>
+									<li data-value="month"><a href="javascript:void(0)"><fmt:message key='alarm.search.period.month' /></a></li>
+									<li data-value="setup"><a href="javascript:void(0)"><fmt:message key='alarm.search.period.manual' /></a></li>
 								</ul>
 							</div>
 						</div>
@@ -289,22 +289,22 @@
 							<input type="text" id="toDate" name="toDate" class="sel toDate" value="" autocomplete="off">
 						</div>
 						<div class="sa-select">
-							<h2 class="tx-tit">단위</h2>
+							<h2 class="tx-tit"><fmt:message key='alarm.search.unit' /></h2>
 							<div id="cycle" class="dropdown short">
-								<button type="button" class="dropdown-toggle interval" data-toggle="dropdown">선택<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle interval" data-toggle="dropdown"><fmt:message key='alarm.popup.status.select' /><span class="caret"></span></button>
 								<ul class="dropdown-menu" id="detailterm">
-									<li data-value="15min"><a href="javascript:void(0);">15분</a></li>
-									<li data-value="hour"><a href="javascript:void(0);">1시간</a></li>
-									<li data-value="day"><a href="javascript:void(0);">1일</a></li>
-									<li data-value="month"><a href="javascript:void(0);">1월</a></li>
+									<li data-value="15min"><a href="javascript:void(0);"><fmt:message key='alarm.search.unit.15min' /></a></li>
+									<li data-value="hour"><a href="javascript:void(0);"><fmt:message key='alarm.search.unit.1h' /></a></li>
+									<li data-value="day"><a href="javascript:void(0);"><fmt:message key='alarm.search.period.day' /></a></li>
+									<li data-value="month"><a href="javascript:void(0);"><fmt:message key='alarm.search.period.month' /></a></li>
 								</ul>
 							</div>
 						</div>
 					</div>
 
 					<div class="btn-wrap-type02">
-						<button type="button" class="btn-type03 w-80px" onclick="$('#searchDetail').removeClass('open')">취소</button><!--
-					--><button type="button" class="btn-type w-80px" onclick="$('#searchDetail').removeClass('open')">적용</button>
+						<button type="button" class="btn-type03 w-80px" onclick="$('#searchDetail').removeClass('open')"><fmt:message key='alarm.popup.cancel' /></button><!--
+					--><button type="button" class="btn-type w-80px" onclick="$('#searchDetail').removeClass('open')"><fmt:message key='alarm.apply' /></button>
 					</div>
 				</div>
 

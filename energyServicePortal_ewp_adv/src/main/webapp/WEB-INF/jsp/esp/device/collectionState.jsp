@@ -2,7 +2,7 @@
 <%@ include file="/decorators/include/taglibs.jsp" %>
 <div class="row header-wrapper">
 	<div class="col-12">
-		<h1 class="page-header fl">수집 현황</h1>
+		<h1 class="page-header fl"><fmt:message key='colState.title' /></h1>
 		<div class="time fr">
 			<span>CURRENT TIME</span>
 			<em class="currTime"></em>
@@ -15,7 +15,7 @@
 	<div class="col-12">
 		<div class="dropdown fl" id="selectSiteList">
 			<button type="button" class="dropdown-toggle w10 no-close" data-toggle="dropdown" data-name="사업소 선택">
-				사업소 선택<span class="caret"></span>
+				<fmt:message key='colState.search.site' /><span class="caret"></span>
 			</button>
 			<ul class="dropdown-menu chk-type" role="menu" id="siteULList">
 				<li data-value="[sid]">
@@ -33,13 +33,13 @@
 <div class="modal fade" id="addRtuModal" aria-labelledby="RTU_Register" role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content collect-modal-content">
-			<div id="RTU_Register" class="modal-header">RTU 등록</div>
+			<div id="RTU_Register" class="modal-header"><fmt:message key='colState.register.title' /></div>
 			<div class="modal-body">
 				<div class="input-group inline-flex">
-					<label for="rtuSite" class="input-label">사이트</label>
+					<label for="rtuSite" class="input-label"><fmt:message key='colState.register.site' /></label>
 					<div class="dropdown" id="rtuSite">
 						<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="사업소 선택">
-							사업소 선택<span class="caret"></span>
+							<fmt:message key='colState.register.sitSelect' /><span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu chk-type" id="rtuSiteULList">
 							<li data-value="[sid]">
@@ -49,24 +49,24 @@
 					</div>
 				</div>
 				<div class="input-group inline-flex">
-					<label for="serialNumber" class="input-label">시리얼 번호</label>
+					<label for="serialNumber" class="input-label"><fmt:message key='colState.register.number' /></label>
 					<input type="text" name="serialNumber" id="serialNumber" class="text-input-type text-input">
 				</div>
 				<div class="input-group inline-flex">
-					<label for="rtuName" class="input-label">RTU 이름</label>
+					<label for="rtuName" class="input-label"><fmt:message key='colState.register.name' /></label>
 					<input type="text" name="rtuName" id="rtuName" class="text-input-type text-input">
 				</div>
 				<div class="input-group inline-flex">
-					<label for="rtuSecret" class="input-label">RTU 비밀키</label>
+					<label for="rtuSecret" class="input-label"><fmt:message key='colState.register.password' /></label>
 					<input type="text" name="rtuSecret" id="rtuSecret" class="text-input-type text-input">
 				</div>
 				<div class="input-group inline-flex">
-					<label for="description" class="input-label">메모</label>
+					<label for="description" class="input-label"><fmt:message key='colState.register.memo' /></label>
 					<textarea class="textarea" id="description" name="description"></textarea>
 				</div>
 				<div class="btn-wrap-type02">
-					<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close">취소</button>
-					<button type="button" class="btn-type" onclick="registerRtu(); return false">확인</button>
+					<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close"><fmt:message key='colState.register.cancle' /></button>
+					<button type="button" class="btn-type" onclick="registerRtu(); return false"><fmt:message key='colState.register.ok' /></button>
 				</div>
 			</div>
 		</div>
@@ -92,7 +92,7 @@
 					</thead>
 					<tbody>
 					<tr>
-						<td colspan="4">해당 RTU 사이트를 위에서 선택해 주세요.</td>
+						<td colspan="4"><fmt:message key='colState.table.info' /></td>
 					</tr>
 					</tbody>
 				</table>
@@ -103,27 +103,27 @@
 	<div class="col-xl-7 col-lg-6 col-md-6 col-sm-12">
 		<div class="indiv collect-box">
 			<div class="table-top clear">
-				<h2 class="ntit fl"><span id="selectedRTU">RTU</span> 상세정보</h2>
+				<h2 class="ntit fl"><span id="selectedRTU">RTU</span> <fmt:message key='colState.table.detail' /></h2>
 				<div class="btn-wrap-type02 fr">
-					<button type="button" class="btn-type03 delete_btn">삭제</button>
-					<button type="button" class="btn-type modify_btn">수정</button>
+					<button type="button" class="btn-type03 delete_btn"><fmt:message key='colState.table.del' /></button>
+					<button type="button" class="btn-type modify_btn"><fmt:message key='colState.table.update' /></button>
 				</div>
 			</div>
 			<div class="row">
 				<div class="w-50">
-					<h2 class="list-title">기기정보</h2>
+					<h2 class="list-title"><fmt:message key='colState.detail.title' /></h2>
 					<ul id="rtuDeviceInfo" class="device-list">
-						<li>시리얼 번호<span class="data-val"></span></li>
-						<li>코드 버전<span class="data-val"></span></li>
+						<li><fmt:message key='colState.detail.number' /><span class="data-val"></span></li>
+						<li><fmt:message key='colState.detail.version' /><span class="data-val"></span></li>
 					</ul>
 				</div>
 				<div class="w-50">
-					<h2 class="list-title">기기상태</h2>
+					<h2 class="list-title"><fmt:message key='colState.detail.status' /></h2>
 					<ul id="deviceStatus" class="device-list">
-						<li>CPU 사용량<span class="data-val"></span></li>
-						<li>메모리 사용량<span class="data-val"></span></li>
-						<li>디스크 사용량<span class="data-val"></span></li>
-						<li>기기 온도<span class="data-val"></span></li>
+						<li><fmt:message key='colState.detail.cpu' /><span class="data-val"></span></li>
+						<li><fmt:message key='colState.detail.memory' /><span class="data-val"></span></li>
+						<li><fmt:message key='colState.detail.disk' /><span class="data-val"></span></li>
+						<li><fmt:message key='colState.detail.temperature' /><span class="data-val"></span></li>
 					</ul>
 				</div>
 			</div>
@@ -131,10 +131,10 @@
 			<div class="table-wrap-type collect-wrap">
 				<ul class="nav nav-tabs">
 					<li class="nav-item active">
-						<a class="nav-link" data-toggle="tab" href="#deviceList">연결 설비</a>
+						<a class="nav-link" data-toggle="tab" href="#deviceList"><fmt:message key='colState.detail.connected' /></a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" data-toggle="tab" href="#commandSend">커맨드 전달</a>
+						<a class="nav-link" data-toggle="tab" href="#commandSend"><fmt:message key='colState.detail.command' /></a>
 					</li>
 				</ul>
 				<div class="tab-content">
@@ -144,17 +144,17 @@
 							<table id="detailInfoTable" class="history-table">
 								<thead>
 								<tr>
-									<th>설비 타입</th>
-									<th>설비 명</th>
-									<th>통신 유형</th>
+									<th><fmt:message key='colState.detail.type' /></th>
+									<th><fmt:message key='colState.detail.name' /></th>
+									<th><fmt:message key='colState.detail.networkType' /></th>
 									<th>Baud Rate</th>
-									<th>설비 용량</th>
-									<th>상세 정보</th>
+									<th><fmt:message key='colState.detail.size' /></th>
+									<th><fmt:message key='colState.detail.info' /></th>
 								</tr>
 								</thead>
 								<tbody>
 								<tr>
-									<td colspan="6">왼쪽 표에서 조회하고자 하는 RTU를 클릭해 주세요.</td>
+									<td colspan="6"><fmt:message key='colState.detail.alert' /></td>
 								</tr>
 								</tbody>
 							</table>
@@ -165,28 +165,28 @@
 							<div class="w-100">
 								<div id="rtuCommand" class="command-list">
 									<div class="flex-group">
-										<span class="sm-title">커멘드</span>
+										<span class="sm-title"><fmt:message key='colState.detail.sendCmd.command' /></span>
 										<div class="dropdown" id="command">
-											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택"><fmt:message key='colState.detail.sendCmd.select' /><span class="caret"></span></button>
 											<ul class="dropdown-menu" role="menu">
 												<li data-value="kpx_targetPower"><a href="javascript:void(0);" tabindex="-1">kpx_targetPower</a></li>
 											</ul>
 										</div>
 									</div>
 									<div class="flex-group">
-										<span class="sm-title">옵션</span>
+										<span class="sm-title"><fmt:message key='colState.detail.sendCmd.option' /></span>
 										<div class="dropdown" id="commandKey">
-											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택"><fmt:message key='colState.detail.sendCmd.select' /><span class="caret"></span></button>
 											<ul class="dropdown-menu" role="menu" id="selectCmdOptList">
-												<li data-value="targetPower"><a href="javascript:void(0);" tabindex="-1">목표출력</a></li>
+												<li data-value="targetPower"><a href="javascript:void(0);" tabindex="-1"><fmt:message key='colState.detail.sendCmd.target' /></a></li>
 											</ul>
 										</div>
 										<div class="text-input-type">
 											<input type="text" id="optionVal" name="optionVal" placeholder="">
 										</div>
 										<div class="btn-wrap-type02 flex-start">
-											<%--								<button type="button" class="btn-type03">삭제</button>--%>
-											<button type="button" class="btn-type" onclick="commandModal();">보내기</button>
+											<%--								<button type="button" class="btn-type03"><fmt:message key='colState.detail.sendCmd.del' /></button>--%>
+											<button type="button" class="btn-type" onclick="commandModal();"><fmt:message key='colState.detail.sendCmd.send' /></button>
 										</div>
 									</div>
 								</div>
@@ -208,16 +208,16 @@
 				</div>
 				<div class="clear input-align">
 					<div class="fl">
-						<span class="tx-tit">로그타입</span>
+						<span class="tx-tit"><fmt:message key='colState.log.type' /></span>
 						<div class="sel-calendar">
 							<div class="dropdown" id="logType">
-								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="상태">상태<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="상태"><fmt:message key='colState.log.status' /><span class="caret"></span></button>
 								<ul class="dropdown-menu" role="menu">
 									<li data-value="상태">
-										<a href="javascript:void(0);" tabindex="-1">상태</a>
+										<a href="javascript:void(0);" tabindex="-1"><fmt:message key='colState.log.status' /></a>
 									</li>
 									<li data-value="제어">
-										<a href="javascript:void(0);" tabindex="-1">제어</a>
+										<a href="javascript:void(0);" tabindex="-1"><fmt:message key='colState.log.control' /></a>
 									</li>
 								</ul>
 							</div>
@@ -253,8 +253,8 @@
 						<thead>
 						<tr>
 							<th><fmt:message key="datacolleciton.3.siteid" /></th>
-							<th>RTU명</th>
-							<th>설비명</th>
+							<th><fmt:message key='colState.log.rtuName' /></th>
+							<th><fmt:message key='colState.log.name' /></th>
 							<th><fmt:message key="datacolleciton.3.trans.time" /></th>
 							<th><fmt:message key="datacolleciton.3.receptiontime" /></th>
 							<th><fmt:message key="datacolleciton.3.status" /></th>
@@ -263,7 +263,7 @@
 						</thead>
 						<tbody>
 						<tr>
-							<td colspan="7">위의 표에서 조회하고자 사이트 혹은 RTU를 클릭해 주세요.</td>
+							<td colspan="7"><fmt:message key='colState.log.alert' /></td>
 						</tr>
 						</tbody>
 					</table>
@@ -279,16 +279,16 @@
 	<form id="passForm" name="passForm" method="GET">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content device_modal_content">
-				<div class="modal-header">비밀번호 확인</div>
+				<div class="modal-header"><fmt:message key='colState.log.checkPass' /></div>
 				<div class="modal-body">
 					<div class="row">
 						<div class="col-12">
-							<input type="password" id="certPass" name="certPass" class="input text-input-type w-100" value="" placeholder="패스워드" autocomplete="off">
+							<input type="password" id="certPass" name="certPass" class="input text-input-type w-100" value="" placeholder="<fmt:message key='colState.log.pasword' />" autocomplete="off">
 						</div>
 					</div>
 					<div class="btn-wrap-type02">
-						<button type="button" class="btn-type" onclick="commandSend();">확인</button>
-						<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close">취소</button>
+						<button type="button" class="btn-type" onclick="commandSend();"><fmt:message key='colState.log.ok' /></button>
+						<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close"><fmt:message key='colState.log.cancle' /></button>
 					</div>
 				</div>
 			</div>

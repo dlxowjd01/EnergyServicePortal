@@ -1203,7 +1203,7 @@
 
 <div class="row header-wrapper">
 	<div class="col-12">
-		<h1 class="page-header">상태 이력</h1>
+		<h1 class="page-header"><fmt:message key='operHistory.title' /></h1>
 	</div>
 </div>
 
@@ -1211,7 +1211,7 @@
 	<div class="col-12">
 		<form id="operationSearchForm">
 			<div class="dropdown sa-select" id="siteList">
-				<button type="button" class="dropdown-toggle w1 no-close" data-toggle="dropdown" data-name="사업소 선택">사업소 선택<span class="caret"></span></button>
+				<button type="button" class="dropdown-toggle w1 no-close" data-toggle="dropdown" data-name="사업소 선택"><fmt:message key='operHistory.selectSite' /><span class="caret"></span></button>
 				<ul class="dropdown-menu chk-type" role="menu" id="siteULList">
 					<li data-value="[sid]">
 						<a href="javascript:void(0);" tabindex="-1">
@@ -1223,12 +1223,12 @@
 			</div>
 
 			<div id="searchDetail" class="search-expand sa-select">
-				<button type="button" class="btn clear-btn" data-target="#searchDropdown" data-name="상세 검색" onclick="$('#searchDetail').toggleClass('open')">상세 검색<span class="caret"></span></button>
+				<button type="button" class="btn clear-btn" data-target="#searchDropdown" data-name="상세 검색" onclick="$('#searchDetail').toggleClass('open')"><fmt:message key='operHistory.detailSearch' /><span class="caret"></span></button>
 				<div id="searchDropdown" class="dropdown-menu search-dropdown">
 					<h2 class="tx-tit"><fmt:message key="statushistory.1.devicetype" /></h2>
 					<div class="flex-start">
 						<div class="dropdown" id="deviceType"><!--
-						--><button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="설비유형 선택">설비유형 선택<span class="caret"></span></button><!--
+						--><button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="설비유형 선택"><fmt:message key='operHistory.detailSearch.type' /><span class="caret"></span></button><!--
 						--><ul class="dropdown-menu chk-type" role="menu" id="typeULList">
 								<li data-value="[type]">
 									<a href="javascript:void(0);" tabindex="-1">
@@ -1256,40 +1256,40 @@
 					<div class="flex-start2 mt-20">
 						<div>
 							<h2 class="tx-tit"><fmt:message key="statushistory.1.timeframe" /></h2>
-							<label for="fromDate" class="tx-tit sr-only">시작일</label>
+							<label for="fromDate" class="tx-tit sr-only"><fmt:message key='operHistory.detailSearch.start' /></label>
 							<input type="text" id="fromDate" name="fromDate" class="sel fromDate" value="" autocomplete="off">
 						</div>
 						<div>
 							<h2 class="tx-tit"></h2>
-							<label for="toDate" class="tx-tit sr-only">마지막일</label>
+							<label for="toDate" class="tx-tit sr-only"><fmt:message key='operHistory.detailSearch.end' /></label>
 							<input type="text" id="toDate" name="toDate" class="sel toDate" value="" autocomplete="off">
 						</div>
 						<div id="interval">
-							<h2 class="tx-tit">단위</h2>
+							<h2 class="tx-tit"><fmt:message key='operHistory.detailSearch.unit' /></h2>
 							<div class="dropdown">
-								<button type="button" class="dropdown-toggle w3" data-toggle="dropdown" data-value="15min" data-name="15분">15분<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle w3" data-toggle="dropdown" data-value="15min" data-name="15분"><fmt:message key='operHistory.detailSearch.unit.15i' /><span class="caret"></span></button>
 								<ul class="dropdown-menu">
-<%--									<li data-value="1min"><a href="javascript:void(0);">1분</a></li>--%>
-									<li data-value="5min"><a href="javascript:void(0);">5분</a></li>
-									<li data-value="15min"><a href="javascript:void(0);">15분</a></li>
-									<li data-value="hour"><a href="javascript:void(0);">1시간</a></li>
-									<li data-value="day"><a href="javascript:void(0);">1일</a></li>
-	<%--								<li data-value="week"><a href="javascript:void(0);">1주</a></li>--%>
-	<%--								<li data-value="month"><a href="javascript:void(0);">1월</a></li>--%>
+<%--									<li data-value="1min"><a href="javascript:void(0);"><fmt:message key='operHistory.detailSearch.unit.1i' /></a></li>--%>
+									<li data-value="5min"><a href="javascript:void(0);"><fmt:message key='operHistory.detailSearch.unit.5i' /></a></li>
+									<li data-value="15min"><a href="javascript:void(0);"><fmt:message key='operHistory.detailSearch.unit.15i' /></a></li>
+									<li data-value="hour"><a href="javascript:void(0);"><fmt:message key='operHistory.detailSearch.unit.1h' /></a></li>
+									<li data-value="day"><a href="javascript:void(0);"><fmt:message key='operHistory.detailSearch.unit.1d' /></a></li>
+	<%--								<li data-value="week"><a href="javascript:void(0);"><fmt:message key='operHistory.detailSearch.unit.1w' /></a></li>--%>
+	<%--								<li data-value="month"><a href="javascript:void(0);"><fmt:message key='operHistory.detailSearch.unit.1m' /></a></li>--%>
 								</ul>
 							</div>
 						</div>
 					</div>
 					
 					<div class="btn-wrap-type05">
-						<button type="button" class="btn-type03 w-80px" onclick="$('#searchDetail').removeClass('open')">취소</button><!--
-					--><button type="button" class="btn-type w-80px ml-12" onclick="$('#searchDetail').removeClass('open')">적용</button>
+						<button type="button" class="btn-type03 w-80px" onclick="$('#searchDetail').removeClass('open')"><fmt:message key='operHistory.detailSearch.cancle' /></button><!--
+					--><button type="button" class="btn-type w-80px ml-12" onclick="$('#searchDetail').removeClass('open')"><fmt:message key='operHistory.detailSearch.apply' /></button>
 					</div>
 				</div>
 			</div>
 		
 			<button type="button" id="search" class="btn-type ml-6"><fmt:message key="statushistory.1.update" /></button>
-			<a href="#;" class="btn-save fr">데이터저장</a>
+			<a href="#;" class="btn-save fr"><fmt:message key='operHistory.saveData' /></a>
 		</form>
 	</div>
 </div>
@@ -1300,7 +1300,7 @@
 			<div class="row">
 				<div class="col-12">
 					<h2 class="sm-title"><fmt:message key="statushistory.2.selectdevice" /></h2>
-					<%-- <a href="javascript:void(0);" class="btn-type02 fr">분석 조건 저장</a> --%>
+					<%-- <a href="javascript:void(0);" class="btn-type02 fr"><fmt:message key='operHistory.saveCond' /></a> --%>
 				</div>
 			</div>
 			
@@ -1310,13 +1310,13 @@
 					<div id="analyzeDiv1" class="sa-select mb-10">
 						<div class="sa-select mb-10">
 							<div class="dropdown" id="chartDid">
-								<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="설비명 선택">설비명 선택<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="설비명 선택"><fmt:message key='operHistory.graph.name' /><span class="caret"></span></button>
 								<ul class="dropdown-menu" id="chartDidUl"><li data-value="[val]" data-sid="[sid]" data-type="[type]"><a href="javascript:void(0);">[siteDevice]</a></li></ul>
 							</div>
 						</div>
 						<div class="sa-select mb-10">
 							<div class="dropdown">
-								<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="설비속성 선택">설비속성 선택<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="설비속성 선택"><fmt:message key='operHistory.graph.type' /><span class="caret"></span></button>
 								<ul class="dropdown-menu radio-type" role="menu" id="columnLi"><li data-value="[key]"><a href="javascript:void(0);" tabindex="-1"><input type="radio" id="column[INDEX]" name="column" value="[key]"><label for="column[INDEX]">[value]</label></a></li></ul>
 							</div>
 						</div>
@@ -1347,7 +1347,7 @@
 						</div>
 						<div class="sa-select mb-10">
 							<div class="dropdown" id="way">
-								<button type="button" class="dropdown-toggle w5" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle w5" data-toggle="dropdown" data-name="선택"><fmt:message key='operHistory.graphseeg' /><span class="caret"></span></button>
 								<ul class="dropdown-menu">
 									<li data-value="l"><a href="javascript:void(0);"><fmt:message key="statushistory.2.y_left" /></a></li>
 									<li data-value="r"><a href="javascript:void(0);"><fmt:message key="statushistory.2.y_right" /></a></li>
@@ -1357,10 +1357,10 @@
 					</div>
 
 					<div id="analyzeDiv2" class="sa-select" style="display:none;">
-						<span class="tx-tit">x축</span>
+						<span class="tx-tit"><fmt:message key='operHistory.graph.gridX' /></span>
 						<div class="sa-select mb-10">
 							<div id="chartDid2" class="dropdown">
-								<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="설비명 선택">설비명 선택<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="설비명 선택"><fmt:message key='operHistory.graph.name' /><span class="caret"></span></button>
 								<ul class="dropdown-menu" id="chartDidUl2">
 									<li data-value="[val]" data-sid="[sid]" data-type="[type]"><a>[siteDevice]</a></li>
 								</ul>
@@ -1368,7 +1368,7 @@
 						</div>
 						<div class="sa-select mb-10">
 							<div id="columnDrop2" class="dropdown">
-								<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="설비속성 선택">설비속성 선택<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="설비속성 선택"><fmt:message key='operHistory.graph.type' /><span class="caret"></span></button>
 								<ul id="columnLi2" class="dropdown-menu radio-type" role="menu">
 									<li data-value="[key]">
 										<a href="javascript:void(0);" tabindex="-1">
@@ -1405,11 +1405,11 @@
 							</div>
 						</div>
 
-						<span class="tx-tit">y축</span>
+						<span class="tx-tit"><fmt:message key='operHistory.graph.gridY' /></span>
 						<div class="sa-select mb-10">
 							<div id="chartDid3" class="dropdown">
 								<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="설비명 선택">
-									설비명 선택<span class="caret"></span>
+									<fmt:message key='operHistory.graph.name' /><span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu" id="chartDidUl3">
 									<li data-value="[val]" data-sid="[sid]" data-type="[type]"><a href="javascript:void(0);">[siteDevice]</a></li>
@@ -1418,7 +1418,7 @@
 						</div>
 						<div class="sa-select mb-10">
 							<div id="columnDrop3" class="dropdown">
-								<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="설비속성 선택">설비속성 선택<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="설비속성 선택"><fmt:message key='operHistory.graph.type' /><span class="caret"></span></button>
 								<ul id="columnLi3" class="dropdown-menu radio-type" role="menu">
 									<li>
 										<a href="javascript:void(0);" data-value="[key]" tabindex="-1">
@@ -1486,7 +1486,7 @@
 								<%--											<li>--%>
 								<%--												<a href="javascript:void(0);" data-value="option2" tabindex="-1">--%>
 								<%--													<input type="radio" id="summation2" name="summation" value="siteAverage">--%>
-								<%--													<label for="summation2">사이트별 평균</label>--%>
+								<%--													<label for="summation2"><fmt:message key='operHistory.avg1' /></label>--%>
 								<%--												</a>--%>
 								<%--											</li>--%>
 								<li>
@@ -1498,7 +1498,7 @@
 								<%--											<li>--%>
 								<%--												<a href="javascript:void(0);" data-value="option4" tabindex="-1">--%>
 								<%--													<input type="radio" id="summation4" name="summation" value="deviceAverage">--%>
-								<%--													<label for="summation4">설비별 평균</label>--%>
+								<%--													<label for="summation4"><fmt:message key='operHistory.avg2' /></label>--%>
 								<%--												</a>--%>
 								<%--											</li>--%>
 								<li>
