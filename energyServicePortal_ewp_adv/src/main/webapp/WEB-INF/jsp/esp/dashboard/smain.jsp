@@ -565,7 +565,9 @@
 
 </div>
 
-<script type="text/javascript" src="/js/modules/highstock-exporting.js"></script>
+
+<script type="text/javascript" src="/js/modules/exporting.min.js"></script>
+<script type="text/javascript" src="/js/modules/highstock-exporting.min.js"></script>
 <script type="text/javascript">
 
 	$(function () {
@@ -1156,29 +1158,51 @@
 		},
 		exporting: {
 			enabled: false,
-			// buttons: {
-			// 	contextButton: {
-			// 		x: -10,
-			// 		y: 0,
-			// 		symbol: 'download',
-			// 		symbolStroke: "var(--vivid-blue)",
-			// 		symbolStrokeWidth: 2,
-			// 		theme: {
-			// 			fill: "none"
-			// 		},
-			// 		_titleKey: 'downloadTitle',
-			// 		menuItems: [
-			// 			"viewFullscreen",
-			// 			"printChart",
-			// 		// 	"separator",
-			// 		// 	"downloadPNG",
-			// 			// "downloadJPEG",
-			// 			// "downloadPDF",
-			// 		// 	"downloadSVG"
-			// 		],
-			// 		align: 'right',
-			// 	}
-			// }
+			buttons: {
+				contextButton: {
+					x: -10,
+					y: 0,
+					symbol: 'download',
+					symbolStroke: "var(--vivid-blue)",
+					symbolStrokeWidth: 2,
+					theme: {
+						fill: "none"
+					},
+					_titleKey: 'downloadTitle',
+					// menuItems: null,
+					// onclick: function () {
+					// 	this.exportChart();
+					// },
+					menuItems: [
+						"viewFullscreen",
+						"downloadCSV",
+					// 	"separator",
+					// 	"downloadPNG",
+						// "downloadJPEG",
+						// "downloadPDF",
+					// 	"downloadSVG"
+					],
+					align: 'right',
+				}
+			},
+			options: {
+				xAxis: {
+					categories: date31List
+				},
+			},
+			csv: {
+				columnHeaderFormatter: function(item, key) {
+					console.log("item coll---",  item.coll);
+					
+					if (item.name) {
+						return item.name
+					} else {
+						return "날짜"
+					}
+					return item.coll
+				},
+				dateFormat: new Date().getFullYear()
+			}
 		},
 		rangeSelector: {
 			enabled: false,
@@ -1350,7 +1374,7 @@
 			enabled: true,
 			align: 'right',
 			verticalAlign: 'top',
-			x: -55,
+			x: -10,
 			y: 0,
 			itemStyle: {
 				color: 'var(--white87)',
@@ -4042,7 +4066,7 @@
 
 			if(!isEmpty(searchOption)){
 				let newDateList = addToDateList(searchOption);
-
+				console.log("newDateList===", newDateList)
 				dailySolarTrendChart.update({
 					navigator: {
 						xAxis: {
@@ -4105,6 +4129,13 @@
 							);
 						},
 					},
+					// exporting: {
+					// 	options: {
+					// 		xAxis: {
+					// 			categories: newDateList
+					// 		},
+					// 	}
+					// }
 				});
 			}
 

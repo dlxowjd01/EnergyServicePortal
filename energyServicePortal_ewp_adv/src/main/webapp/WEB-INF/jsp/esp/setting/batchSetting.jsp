@@ -1072,8 +1072,7 @@
 
 				let queueOpt = {
 					url: apiHost + "/batch-job-queues",
-					// type: "post",
-					type: "patch",
+					type: "post",
 					async: true,
 					dataType: 'json',
 					contentType: "application/json",

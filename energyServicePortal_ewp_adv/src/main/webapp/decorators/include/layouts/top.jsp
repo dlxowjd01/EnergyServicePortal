@@ -98,17 +98,14 @@
 		let importList = [];
 
 		if(pluginOption == false){
-			importList = ['/js/data_tables/include_basic.min.js'];
-		} else {
 			importList = ['/js/data_tables/include_all.min.js'];
+		} else {
+			importList = ['/js/data_tables/include_basic.min.js'];
 		}
-		console.log("importList==", importList)
 
 		loadScripts(importList, () => {
 			console.log('1-A ===> Scripts loaded');
 		});
-
-
 	} else {
 		if(currentPath == excludeMenu[0]){
 			loadScripts([
@@ -147,12 +144,9 @@
 
 <!-- high-stock -->
 <script type="text/javascript" src="/js/highstock.js"></script>
-<script type="text/javascript" src="/js/modules/variwide.js"></script>
-<script type="text/javascript" src="/js/modules/data.js"></script>
+<!-- <script type="text/javascript" src="/js/modules/variwide.js"></script> -->
+<!-- <script type="text/javascript" src="/js/modules/data.min.js"></script> -->
 
-<!-- <script type="text/javascript" src="/js/modules/highstock-exporting.js"></script> -->
-<script type="text/javascript" src="/js/modules/exporting.js"></script>
-<script type="text/javascript" src="/js/modules/export-data.js"></script>
 <script type="text/javascript" src="/js/common.js"></script>
 
 <script type="text/javascript" src="/js/custom/utils.js"></script>
