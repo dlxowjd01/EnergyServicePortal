@@ -167,6 +167,7 @@
 			language: {
 				emptyTable: "조회된 데이터가 없습니다.",
 				zeroRecords:  "검색된 결과가 없습니다.",
+				infoEmpty: "",
 				paginate: {
 					previous: "",
 					next: "",
@@ -206,6 +207,7 @@
 		});
 
 		spcEntityTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup");
+		$('#loadingCircle2').show();
 		getDataList();
 	});
 
@@ -371,9 +373,11 @@
 
 			spcEntityTable.clear();
 			spcEntityTable.rows.add(refineList).draw();
+			$("#loadingCircle2").hide();
 		}).catch(error => {
 			spcEntityTable.clear().draw();
 			errorMsg(error);
+			$("#loadingCircle2").hide();
 		});
 	}
 
@@ -389,7 +393,7 @@
 				endTime: endTime,
 				interval: 'month',
 				displayType: 'dashboard',
-				formId: 'v2'
+				formId: 'v2',
 			},
 			success: (result) => {
 				if (!isEmpty(result) && !isEmpty(result.data)) {
@@ -404,7 +408,7 @@
 				}
 			},
 			error: (error) => {
-				console.error(error);
+				console.error("/energy/sites====", error);
 				resultValue = 0;
 			}
 		});
@@ -438,7 +442,7 @@
 				}
 			},
 			error: (error) => {
-				console.error(error);
+				console.error("/weather/site====", error);
 				resultValue = 0;
 			}
 		});

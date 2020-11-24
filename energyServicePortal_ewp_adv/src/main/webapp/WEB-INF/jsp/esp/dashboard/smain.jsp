@@ -4379,7 +4379,6 @@
 		}
 
 		if(isEmpty(option)){
-
 			urls.push({
 				url: apiHost + apiStatusRawSite,
 				type: 'GET',
@@ -4505,8 +4504,9 @@
 
 								if (oid.match('testkpx')) {
 									if (deviceType.toLowerCase() === 'kpx_ems') {
-										itemCapacity = deviceData.capacity;
-										itemAcPower = deviceData.activePower;
+										itemCapacity = deviceData.capacity ? deviceData.capacity : 0;
+										itemAcPower = deviceData.activePower ? deviceData.activePower : 0;
+										console.log("deviceData===", deviceData);
 
 										if (!isEmpty(lastTargetActivePowerReqDate)) {
 											let historyData = new Date(lastTargetActivePowerReqDate.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$3/$2/$1 $4:$5:$6'));
@@ -4517,9 +4517,9 @@
 												targetActivePower = deviceData.targetActivePower;
 											}
 										} else {
-											lastTargetActivePowerReqDate = String(deviceData.lastTargetActivePowerReqDate);
-											lastTargetActivePowerRecvDate = String(deviceData.lastTargetActivePowerReqDate);
-											targetActivePower = deviceData.targetActivePower;
+											lastTargetActivePowerReqDate = deviceData.lastTargetActivePowerReqDate ? String(deviceData.lastTargetActivePowerReqDate) : "-";
+											lastTargetActivePowerRecvDate = deviceData.lastTargetActivePowerReqDate ? String(deviceData.lastTargetActivePowerReqDate) : "-";
+											targetActivePower = deviceData.targetActivePower ? deviceData.targetActivePower : 0;
 										}
 									}
 								} else {
@@ -4864,7 +4864,7 @@
 			.done(function (genData, foreGenData, nowGenData, capacityData) {
 				if (capacityData[1] == 'success') {
 					capacityData[0].forEach(data => {
-						itemChartCapacity = data.capacities.gen ? data.capacities.gen : 0;
+						itemChartCapacity = ( !isEmpty(data.capacities) && !isEmpty(data.capacities.gen) ) ? data.capacities.gen : 0;
 					});
 				}
 
