@@ -714,6 +714,8 @@
 		if (!isEmpty(target) || target === 'blank') {
 			let targetWin = window.open('about:blank', 'targetWin');
 			$form.attr('target', 'targetWin');
+		} else {
+			$form.removeAttr('target');
 		}
 
 		if (action == 'alarm') {
