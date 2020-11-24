@@ -94,7 +94,7 @@
 	let pluginOption = excludeOption.some( x => x == currentPath);
 
 	if (isInExcludeList == false ) {
-		console.log("isInExcludeList == false");
+		// console.log("isInExcludeList == false");
 		let importList = [];
 
 		if(pluginOption == false){
@@ -104,18 +104,44 @@
 		}
 
 		loadScripts(importList, () => {
-			console.log('1-A ===> Scripts loaded');
+			// console.log('1-A ===> Scripts loaded');
 		});
 	} else {
 		if(currentPath == excludeMenu[0]){
 			loadScripts([
 				'/js/data_tables/include_dashboard.min.js'
 			], () => {
-				console.log('Gmain Scripts loaded');
+				// console.log('Gmain Scripts loaded');
 			});
 		}
 	}
 
+	$(document).ready(function () {
+		$(".menu-item ul a").on("click", function(){
+			if (isInExcludeList == false ) {
+				// console.log("isInExcludeList == false");
+				let importList = [];
+
+				if(pluginOption == false){
+					importList = ['/js/data_tables/include_all.min.js'];
+				} else {
+					importList = ['/js/data_tables/include_basic.min.js'];
+				}
+
+				loadScripts(importList, () => {
+					// console.log('1-A ===> Scripts loaded');
+				});
+			} else {
+				if(currentPath == excludeMenu[0]){
+					loadScripts([
+						'/js/data_tables/include_dashboard.min.js'
+					], () => {
+						// console.log('Gmain Scripts loaded');
+					});
+				}
+			}
+		});
+	});
 	function loadScript (url, callback) {
 		let script = document.createElement('script');
 		script.type = 'text/javascript';
@@ -124,7 +150,6 @@
 		script.onload = callback;
 		// console.log("script==", script)
 		document.head.appendChild(script);
-		console.log('script=====', script);
 	}
 	function loadScripts (urls, callback) {
 		let loadedCount = 0;

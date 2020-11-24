@@ -226,16 +226,18 @@
 							<c:otherwise>
 						<thead>
 						<tr>
-							<th>PV 용량</th>
-							<th>금일 누적 발전량/시간</th>
-							<th>금일 발전 예측량</th>
-							<th>SMP 수익 예상</th>
+							<th>발전 용량</th>
+							<th>금일 발전</th>
+							<th>발전 시간</th>
+							<th>금일 예측</th>
+							<th>SMP 예상</th>
 						</tr>
 						</thead>
 						<tbody id="centerTbody">
 						<tr>
 							<td><em>&nbsp;&nbsp;kW</em></td>
 							<td><em>&nbsp;&nbsp;kWh</em></td>
+							<td><em>&nbsp;&nbsp;H</em></td>
 							<td><em>&nbsp;&nbsp;kWh</em></td>
 							<td><em>&nbsp;&nbsp;천원</em></td>
 						</tr>
@@ -4350,8 +4352,9 @@
 		} else {
 			$('#centerTbody tr td:nth-child(1)').html('<em>&nbsp;&nbsp;kW</em>');
 			$('#centerTbody tr td:nth-child(2)').html('<em>&nbsp;&nbsp;kWh</em>');
-			$('#centerTbody tr td:nth-child(3)').html('<em>&nbsp;&nbsp;kWh</em>');
-			$('#centerTbody tr td:nth-child(4)').html('<em>&nbsp;&nbsp;천원</em>');
+			$('#centerTbody tr td:nth-child(3)').html('<em>&nbsp;&nbsp;H</em>');
+			$('#centerTbody tr td:nth-child(4)').html('<em>&nbsp;&nbsp;kWh</em>');
+			$('#centerTbody tr td:nth-child(5)').html('<em>&nbsp;&nbsp;천원</em>');
 			
 		}
 
@@ -4545,7 +4548,6 @@
 						} else {
 						// KPX
 							$('#centerTbody tr td:nth-child(2) em').before(displayNumberFixedUnit(getNowEnergyDay, 'Wh', 'kWh', 0)[0]);
-							$('#centerTbody tr td:nth-child(2) em').removeClass("hidden");
 							if (!oid.match('testkpx')) {
 								$('#centerTbody tr td:nth-child(4) em').before(displayNumberFixedUnit(nowBillingDay, 'Wh', 'kWh', 2)[0]);
 							}
@@ -4559,9 +4561,9 @@
 							let tempEnergy = displayNumberFixedUnit(getNowEnergyDay, 'Wh', 'kWh', 0);
 							let tempEnergyHours = (( getNowEnergyDay / itemCapacity / 1000 * 24 ) * 100).toFixed(2);
 					
-							$('#centerTbody tr td:nth-child(2) em').before(tempEnergy[0] + tempEnergy[1] + " / " + tempEnergyHours + "hrs");
-							$('#centerTbody tr td:nth-child(2) em').addClass("hidden");
-							$('#centerTbody tr td:nth-child(4) em').before(displayNumberFixedUnit(nowBillingDay, 'Wh', 'kWh', 2)[0]);
+							$('#centerTbody tr td:nth-child(2) em').before(tempEnergy[0]);
+							$('#centerTbody tr td:nth-child(3) em').before(tempEnergyHours);
+							$('#centerTbody tr td:nth-child(5) em').before(displayNumberFixedUnit(nowBillingDay, 'Wh', 'kWh', 2)[0]);
 						}
 					} else if ((url).match(apiForecastingSite)) {
 						let todayForeEnergy = 0;
@@ -4576,7 +4578,7 @@
 								}
 							});
 						}
-						$('#centerTbody tr td:nth-child(3) em').before(displayNumberFixedUnit(todayForeEnergy, 'Wh', 'kWh', 0)[0]);
+						$('#centerTbody tr td:nth-child(4) em').before(displayNumberFixedUnit(todayForeEnergy, 'Wh', 'kWh', 0)[0]);
 					
 					} else if ((url).match('/control/command_history')) {
 						if (!isEmpty(data.data)) {
