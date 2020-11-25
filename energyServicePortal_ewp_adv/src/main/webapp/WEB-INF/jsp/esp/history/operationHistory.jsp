@@ -1228,7 +1228,7 @@
 					<h2 class="tx-tit"><fmt:message key="statushistory.1.devicetype" /></h2>
 					<div class="flex-start">
 						<div class="dropdown" id="deviceType"><!--
-						--><button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="설비유형 선택"><fmt:message key='operHistory.detailSearch.type' /><span class="caret"></span></button><!--
+						--><button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="<fmt:message key='operHistory.detailSearch.type' />"><fmt:message key='operHistory.detailSearch.type' /><span class="caret"></span></button><!--
 						--><ul class="dropdown-menu chk-type" role="menu" id="typeULList">
 								<li data-value="[type]">
 									<a href="javascript:void(0);" tabindex="-1">
@@ -1239,7 +1239,7 @@
 							</ul><!--
 					--></div>
 						<div class="dropdown ml-16" id="devices"><!--
-						--><button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="복수 선택"><fmt:message key="statushistory.1.multiple.select" /><span class="caret"></span></button><!--
+						--><button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="<fmt:message key='statushistory.1.multiple.select' />"><fmt:message key="statushistory.1.multiple.select" /><span class="caret"></span></button><!--
 						--><div class="dropdown-menu dropdown-menu-form chk-type"><!--
 							 --><ul class="dropdown-cov clear"></ul>
 								<div class="li-btn-box clear"><!--
@@ -1267,7 +1267,7 @@
 						<div id="interval">
 							<h2 class="tx-tit"><fmt:message key='operHistory.detailSearch.unit' /></h2>
 							<div class="dropdown">
-								<button type="button" class="dropdown-toggle w3" data-toggle="dropdown" data-value="15min" data-name="15분"><fmt:message key='operHistory.detailSearch.unit.15i' /><span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle w3" data-toggle="dropdown" data-value="15min" data-name="<fmt:message key='operHistory.detailSearch.unit.15i' />"><fmt:message key='operHistory.detailSearch.unit.15i' /><span class="caret"></span></button>
 								<ul class="dropdown-menu">
 <%--									<li data-value="1min"><a href="javascript:void(0);"><fmt:message key='operHistory.detailSearch.unit.1i' /></a></li>--%>
 									<li data-value="5min"><a href="javascript:void(0);"><fmt:message key='operHistory.detailSearch.unit.5i' /></a></li>

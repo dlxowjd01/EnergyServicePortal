@@ -21,8 +21,8 @@
 				<div class="dropdown">
 					<button type="button" class="dropdown-toggle" data-toggle="dropdown" disabled>선택<span class="caret"></span></button>
 					<ul id="viewOptList" class="dropdown-menu" role="menu">
-						<li data-value="1" data-name="사이트 대시보드 #1"><a href="#" tabindex="-1">사이트 대시보드 #1</a></li>
-						<li data-value="2" data-name="태양광 대시보드 #2"><a href="#" tabindex="-1">태양광 대시보드 #2</a></li>
+						<li data-value="1" data-name="사이트 대시보드 #1"><a href="#" tabindex="-1"><fmt:message key='smain.dashboard1' /> #1</a></li>
+						<li data-value="2" data-name="태양광 대시보드 #2"><a href="#" tabindex="-1"><fmt:message key='smain.dashboard2' /> #2</a></li>
 					</ul>
 				</div>
 			</div>
@@ -33,7 +33,7 @@
 		<div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
 			<div class="indiv smain-pv clear">
 				<div class="chart-top">
-					<h2 class="ntit">월별 발전량 종합</h2>
+					<h2 class="ntit"><fmt:message key='smain.monthDevSynthesis' /></h2>
 					<h1 class="stit">
 						<fmt:parseDate var="startPrint" value="${startMonth }" pattern="yyyyMMddHHmmss"/>
 						<fmt:parseDate var="endPrint" value="${startTime }" pattern="yyyyMMddHHmmss"/>
@@ -45,15 +45,15 @@
 				</div>
 				<div class="chart-middle clear">
 					<div class="box">
-						<div class="line1">이번달 총 발전량</div>
+						<div class="line1"><fmt:message key='smain.totalMonthDev' /></div>
 						<div class="line2" id="monthEnergyValue"></div>
 					</div>
 					<div class="box">
-						<div class="line1">올해 누적 발전량</div>
+						<div class="line1"><fmt:message key='smain.totalYearDev' /></div>
 						<div class="line2" id="yearEnergyValue"></div>
 					</div>
 					<div class="box">
-						<div class="line1">이번달 발전시간</div>
+						<div class="line1"><fmt:message key='smain.totalMonthDevTime' /></div>
 						<div class="line2" id="monthGenHours"></div>
 					</div>
 					<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
@@ -73,13 +73,13 @@
 									<li>
 										<a href="javascript:void(0);" tabindex="-1">
 											<input type="radio" id="radio_t2" name="radio_t" value="2">
-											<label for="radio_t2">시간</label>
+											<label for="radio_t2"><fmt:message key='smain.time' /></label>
 										</a>
 									</li>
 									<li>
 										<a href="javascript:void(0);" tabindex="-1">
 											<input type="radio" id="radio_t3" name="radio_t" value="3">
-											<label for="radio_t3">매전량</label>
+											<label for="radio_t3"><fmt:message key='smain.sales' /></label>
 										</a>
 									</li>
 								</ul>
@@ -94,7 +94,7 @@
 			</div>
 			<div class="indiv smain-cal">
 				<div class="chart-top">
-					<h2 class="ntit">이 달의 발전 달력</h2>
+					<h2 class="ntit"><fmt:message key='smain.monthDevCalendar' /></h2>
 					<h1 class="stit">
 						<fmt:parseDate var="sDate" value="${startDate}" pattern="yyyyMMddHHmmss"/>
 						<fmt:parseDate var="eDate" value="${startTime}" pattern="yyyyMMddHHmmss"/>
@@ -107,13 +107,13 @@
 					<table class="calendar">
 						<thead>
 							<tr>
-								<th>일</th>
-								<th>월</th>
-								<th>화</th>
-								<th>수</th>
-								<th>목</th>
-								<th>금</th>
-								<th>토</th>
+								<th><fmt:message key='smain.sun' /></th>
+								<th><fmt:message key='smain.mon' /></th>
+								<th><fmt:message key='smain.tue' /></th>
+								<th><fmt:message key='smain.wed' /></th>
+								<th><fmt:message key='smain.thu' /></th>
+								<th><fmt:message key='smain.fri' /></th>
+								<th><fmt:message key='smain.sat' /></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -161,7 +161,7 @@
 		<div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
 			<div class="indiv smain-circle">
 				<div class="chart-top">
-					<h2 class="ntit">${siteName} <c:if test="${empty siteName }">사업소 현황</c:if></h2>
+					<h2 class="ntit">${siteName} <c:if test="${empty siteName }"><fmt:message key='smain.siteStatus' /></c:if></h2>
 					<!-- <div class="btn-bx-type">
 						<a href="javascript:void(0);" class="btn btn-cancel" id="cctv">CCTV 보기</a>
 					</div> -->
@@ -180,7 +180,7 @@
 						</div> -->
 						<div class="legend-wrap">
 							<c:if test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-								<span class="bu2">풍력</span>
+								<span class="bu2"><fmt:message key='smain.windPower' /></span>
 							</c:if>
 							<span class="bu1"><fmt:message key="gdash.4.gen" /></span>
 							<span class="bu4"><fmt:message key="gdash.4.idle" /></span>
@@ -188,14 +188,14 @@
 						<ul>
 							<c:choose>
 								<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-									<li><strong>목표출력</strong> <span id="siteCapacity">-</span><em>kW</em></li>
-									<li><strong>수신시간</strong> <span id="siteDcPower">-</span></li>
-									<li><strong>송신시간</strong> <span id="siteAcPower">-</span></li>
+									<li><strong><fmt:message key='smain.aimedOutput' /></strong> <span id="siteCapacity">-</span><em>kW</em></li>
+									<li><strong><fmt:message key='smain.receptionTime' /></strong> <span id="siteDcPower">-</span></li>
+									<li><strong><fmt:message key='smain.sendTime' /></strong> <span id="siteAcPower">-</span></li>
 								</c:when>
 								<c:otherwise>
-									<li><strong>총 설비용량</strong> <span id="siteCapacity">-</span><em>kW</em></li>
-									<li><strong>실시간 DC입력</strong> <span id="siteDcPower">-</span><em>kW</em></li>
-									<li><strong>실시간 AC출력</strong> <span id="siteAcPower">-</span><em>kW</em></li>
+									<li><strong><fmt:message key='smain.totalSize' /></strong> <span id="siteCapacity">-</span><em>kW</em></li>
+									<li><strong><fmt:message key='smain.rtDCinput' /></strong> <span id="siteDcPower">-</span><em>kW</em></li>
+									<li><strong><fmt:message key='smain.rtACoutput' /></strong> <span id="siteAcPower">-</span><em>kW</em></li>
 								</c:otherwise>
 							</c:choose>
 
@@ -208,10 +208,10 @@
 							<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
 								<thead>
 								<tr>
-									<th>설비 용량</th>
-									<th>금일 누적 발전량</th>
-									<th>전일 누적 발전량</th>
-									<th>금일 발전 시간</th>
+									<th><fmt:message key='smain.size' /></th>
+									<th><fmt:message key='smain.totalTodayDev' /></th>
+									<th><fmt:message key='smain.totalYesterdayDev' /></th>
+									<th><fmt:message key='smain.todayDevTime' /></th>
 								</tr>
 								</thead>
 								<tbody id="centerTbody">
@@ -226,11 +226,11 @@
 							<c:otherwise>
 						<thead>
 						<tr>
-							<th>발전 용량</th>
-							<th>금일 발전</th>
-							<th>발전 시간</th>
-							<th>금일 예측</th>
-							<th>SMP 예상</th>
+							<th><fmt:message key='smain.devSize' /></th>
+							<th><fmt:message key='smain.todayDev1' /></th>
+							<th><fmt:message key='smain.todayDevTime' /></th>
+							<th><fmt:message key='smain.todayPrediction' /></th>
+							<th><fmt:message key='smain.smpPrediction' /></th>
 						</tr>
 						</thead>
 						<tbody id="centerTbody">
@@ -239,7 +239,7 @@
 							<td><em>&nbsp;&nbsp;kWh</em></td>
 							<td><em>&nbsp;&nbsp;H</em></td>
 							<td><em>&nbsp;&nbsp;kWh</em></td>
-							<td><em>&nbsp;&nbsp;천원</em></td>
+							<td><em>&nbsp;&nbsp;<fmt:message key='smain.1000won' /></em></td>
 						</tr>
 						</tbody>
 							</c:otherwise>
@@ -249,7 +249,8 @@
 			</div>
 			<div class="indiv smain-circle">
 				<div class="flex-wrapper mb-24">
-					<h2 class="ntit">금일 발전현황</h2>
+					<h2 class="ntit"><fmt:message key='smain.todayDevStatus' /></h2>
+					<div class="stit fr" id="dayGenHours"></div>
 				</div>
 				<div class="search-wrap">
 					<div class="inchart">
@@ -259,7 +260,7 @@
 			</div>
 			<div class="indiv smain weather">
 				<div class="chart-top">
-					<h2 class="ntit">기상 정보</h2>
+					<h2 class="ntit"><fmt:message key='smain.weather' /></h2>
 					<h1 id="currentTimeA" class="stit">${nowTime}</h1>
 				</div>
 				<div class="weather-wrap">
@@ -271,9 +272,9 @@
 
 						<table>
 							<tr>
-								<th>오늘</th>
-								<th>내일</th>
-								<th>모레</th>
+								<th><fmt:message key='smain.today' /></th>
+								<th><fmt:message key='smain.tomorrow' /></th>
+								<th><fmt:message key='smain.dayAfterTomorrow' /></th>
 							</tr>
 							<tr>
 								<td><span id="weekIcon1"></span></td>
@@ -293,10 +294,10 @@
 					</div>
 					<div class="wt-list-wrap">
 						<ul class="list-type">
-							<li class="hidden"><strong>일사량</strong><span id="weekIrradiation">-</span> W/m&#13217;</li>
-							<li><strong>풍향</strong><span id="weekWindDirection">-</span> &deg;</li>
-							<li><strong>풍속</strong><span id="weekWindVelocity"></span></li>
-							<li><strong>습도</strong><span id="weekHum"></span></li>
+							<li class="hidden"><strong><fmt:message key='smain.sunPower' /></strong><span id="weekIrradiation">-</span> W/m&#13217;</li>
+							<li><strong><fmt:message key='smain.windDirection' /></strong><span id="weekWindDirection">-</span> &deg;</li>
+							<li><strong><fmt:message key='smain.windSpeed' /></strong><span id="weekWindVelocity"></span></li>
+							<li><strong><fmt:message key='smain.humidity' /></strong><span id="weekHum"></span></li>
 						</ul>
 					</div>
 				</div>
@@ -305,8 +306,8 @@
 		<div class="col-xl-4 col-lg-12 col-md-12 col-sm-12">
 			<div class="indiv smain-alarm" data-alarm="">
 				<div class="alarm-status clear">
-					<div class="alarm-alert"><span>금일 발생 오류</span><em>0</em></div>
-					<div class="alarm-warning"><a href="javascript:void(0);" onclick="pageMove('', 'alarm');" class="btn btn-cancel">상세보기</a></div>
+					<div class="alarm-alert"><span><fmt:message key='smain.todayError' /></span><em>0</em></div>
+					<div class="alarm-warning"><a href="javascript:void(0);" onclick="pageMove('', 'alarm');" class="btn btn-cancel"><fmt:message key='smain.viewDetail' /></a></div>
 				</div>
 				<div class="alarm-notice">
 					<ul id="alarmNotice">
@@ -323,32 +324,32 @@
 			<div class="indiv smain-table">
 				<div class="table-top clear">
 					<div class="fl">
-						<input type="text" class="input" name="keyword" value="" placeholder="키워드">
+						<input type="text" class="input" name="keyword" value="" placeholder="<fmt:message key='smain.keyword' />">
 					</div>
 					<div class="fr">
-						<span class="tx-tit">설비 상태</span>
+						<span class="tx-tit"><fmt:message key='smain.deviceStatus' /></span>
 						<div class="sa-select">
 							<div class="dropdown" id="statusDevice">
 								<button type="button" class="dropdown-toggle w8 no-close" data-toggle="dropdown" data-name="선택">
-									전체 <span class="caret"></span>
+									<fmt:message key='smain.all' /> <span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu chk-type" role="menu">
 									<li>
 										<a href="javascript:void(0);" tabindex="-1">
 											<input type="checkbox" id="deviceStatus1" name="deviceStatus" value="0" checked>
-											<label for="deviceStatus1">중지</label>
+											<label for="deviceStatus1"><fmt:message key='smain.stop' /></label>
 										</a>
 									</li>
 									<li>
 										<a href="javascript:void(0);" tabindex="-1">
 											<input type="checkbox" id="deviceStatus2" name="deviceStatus" value="1" checked>
-											<label for="deviceStatus2">정상</label>
+											<label for="deviceStatus2"><fmt:message key='smain.normal' /></label>
 										</a>
 									</li>
 									<li>
 										<a href="javascript:void(0);" tabindex="-1">
 											<input type="checkbox" id="deviceStatus3" name="deviceStatus" value="2" checked>
-											<label for="deviceStatus3">트립</label>
+											<label for="deviceStatus3"><fmt:message key='smain.trip' /></label>
 										</a>
 									</li>
 								</ul>
@@ -361,9 +362,9 @@
 						<div class="chart-top">
 							<h2 class="ntit">[name] (<span>0</span>)</h2>
 							<div class="alert-icon fr">
-								<span class="inv-normal">정상 (<span>0</span>)</span>
-								<span class="inv-error">트립 (<span>0</span>)</span>
-								<span class="inv-alert">중지 (<span>0</span>)</span>
+								<span class="inv-normal"><fmt:message key='smain.normal' /> (<span>0</span>)</span>
+								<span class="inv-error"><fmt:message key='smain.trip' /> (<span>0</span>)</span>
+								<span class="inv-alert"><fmt:message key='smain.stop' /> (<span>0</span>)</span>
 							</div>
 						</div>
 						<div class="type-list-detail">
@@ -386,37 +387,37 @@
 		<div class="row">
 			<div class="col-xl-2 col-lg-2 col-md-3 col-sm-4">
 				<div class="indiv mini">
-					<h3 class="ntit">현재 발전</h3>
+					<h3 class="ntit"><fmt:message key='smain.currentDev' /></h3>
 					<p class="word-wrap"><span class="data-num"></span><span class="data-unit"></span></p>
 				</div>
 			</div>
 			<div class="col-xl-2 col-lg-2 col-md-3 col-sm-4">
 				<div class="indiv mini">
-					<h3 class="ntit">현재 발전 효율</h3>
+					<h3 class="ntit"><fmt:message key='smain.currentEfficiency' /></h3>
 					<p class="word-wrap"><span class="data-num"></span><span class="data-unit"></span></p>
 				</div>
 			</div>
 			<div class="col-xl-2 col-lg-2 col-md-3 col-sm-4">
 				<div class="indiv mini">
-					<h3 class="ntit">금일 발전량</h3>
+					<h3 class="ntit"><fmt:message key='smain.todayDev2' /></h3>
 					<p class="word-wrap"><span class="data-num"></span><span class="data-unit"></span></p>
 				</div>
 			</div>
 			<div class="col-xl-2 col-lg-2 col-md-3 col-sm-4">
 				<div class="indiv mini">
-					<h3 class="ntit">전일 발전량</h3>
+					<h3 class="ntit"><fmt:message key='smain.yesterdayDev' /></h3>
 					<p class="word-wrap"><span class="data-num"></span><span class="data-unit"></span></p>
 				</div>
 			</div>
 			<div class="col-xl-2 col-lg-2 col-md-3 col-sm-4">
 				<div class="indiv mini">
-					<h3 class="ntit">월간 발전량</h3>
+					<h3 class="ntit"><fmt:message key='smain.monthDev' /></h3>
 					<p class="word-wrap"><span class="data-num"></span><span class="data-unit"></span></p>
 				</div>
 			</div>
 			<div class="col-xl-2 col-lg-2 col-md-3 col-sm-4">
 				<div class="indiv mini">
-					<h3 class="ntit">누적 발전량</h3>
+					<h3 class="ntit"><fmt:message key='smain.totalDev' /></h3>
 					<p class="word-wrap"><span class="data-num"></span><span class="data-unit"></span></p>
 				</div>
 			</div>
@@ -425,14 +426,14 @@
 		<div class="row">
 			<div class="col-xl-4 col-lg-5 col-md-6 col-sm-12">
 				<div class="indiv narrow">
-					<h2 class="ntit">금일 발전현황</h2>
+					<h2 class="ntit"><fmt:message key='smain.todayDevStatus' /></h2>
 					<div id="hourlySolarChart"></div>
 				</div>
 			</div>
 
 			<div class="col-xl-4 col-lg-7 col-md-6 col-sm-12">
 				<div class="indiv narrow">
-					<h2 class="ntit">인버터별 출력 현황</h2>
+					<h2 class="ntit"><fmt:message key='smain.inverterOutputStatus' /></h2>
 					<div id="hourlyINVChart"></div>
 				</div>
 			</div>
@@ -440,16 +441,16 @@
 			<div class="col-xl-4 col-lg-12 col-md-12 col-sm-12">
 				<div class="indiv smain-table unset">
 					<div class="table-top clear">
-						<h2 class="tx-tit">인버터 상태</h2>
+						<h2 class="tx-tit"><fmt:message key='smain.inverterStatus' /></h2>
 					</div>
 					<ul class="inverter_list" id="invList">
 						<li class="[type]">
 							<div class="chart-top">
 								<h2 class="ntit">[name] (<span>0</span>)</h2>
 								<div class="alert-icon fr">
-									<span class="inv-normal">정상 (<span>0</span>)</span>
-									<span class="inv-error">트립 (<span>0</span>)</span>
-									<span class="inv-alert">중지 (<span>0</span>)</span>
+									<span class="inv-normal"><fmt:message key='smain.normal' /> (<span>0</span>)</span>
+									<span class="inv-error"><fmt:message key='smain.trip' /> (<span>0</span>)</span>
+									<span class="inv-alert"><fmt:message key='smain.stop' /> (<span>0</span>)</span>
 								</div>
 							</div>
 							<div class="type-list-detail">
@@ -473,10 +474,10 @@
 				<div class="indiv smain-tab-box">
 					<ul class="nav nav-tabs w-60">
 						<li class="nav-item active">
-							<a href="#weatherInfo" class="nav-link" data-toggle="tab" >기상 정보</a>
+							<a href="#weatherInfo" class="nav-link" data-toggle="tab" ><fmt:message key='smain.weather' /></a>
 						</li>
 						<li class="nav-item">
-							<a href="#powerConnctor" class="nav-link" data-toggle="tab">접속반</a>
+							<a href="#powerConnctor" class="nav-link" data-toggle="tab"><fmt:message key='smain.connecter' /></a>
 						</li>
 					</ul>
 					<span id="currentTimeB" class="stit">${nowTime}</span>
@@ -491,9 +492,9 @@
 									</div>
 									<table>
 										<tr>
-											<th>오늘</th>
-											<th>내일</th>
-											<th>모레</th>
+											<th><fmt:message key='smain.today' /></th>
+											<th><fmt:message key='smain.tomorrow' /></th>
+											<th><fmt:message key='smain.dayAfterTomorrow' /></th>
 										</tr>
 										<tr>
 											<td><span id="sWeatherIcon1"></span></td>
@@ -513,17 +514,17 @@
 								</div>
 								<div class="wt-list-wrap">
 									<ul class="list-type">
-										<li class="hidden"><strong>일사량</strong><span id="sIrradiation">-</span> W/m&#13217;</li>
-										<li><strong>풍향</strong> <span id="sWindDirection">-</span> &deg;</li>
-										<li><strong>풍속</strong> <span id="sWindVelocity"></span></li>
-										<li><strong>습도</strong> <span id="sHumidity"></span></li>
+										<li class="hidden"><strong><fmt:message key='smain.sunPower' /></strong><span id="sIrradiation">-</span> W/m&#13217;</li>
+										<li><strong><fmt:message key='smain.windDirection' /></strong> <span id="sWindDirection">-</span> &deg;</li>
+										<li><strong><fmt:message key='smain.windSpeed' /></strong> <span id="sWindVelocity"></span></li>
+										<li><strong><fmt:message key='smain.humidity' /></strong> <span id="sHumidity"></span></li>
 									</ul>
 								</div>
 							</div>
 							
 						</div>
 						<div class="tab-pane fade" id="powerConnctor">
-							<h2 class="no-data">현재 데이터가 없습니다.</h2>
+							<h2 class="no-data"><fmt:message key='smain.warning.noCurData' /></h2>
 						</div>
 					</div>
 				</div>
@@ -532,31 +533,31 @@
 			<div class="col-xl-8 col-lg-7 col-md-6 col-sm-12">
 				<div class="indiv narrow">
 					<div class="chart-top clear">
-						<h2 class="ntit fl">일별 발전량</h2>
+						<h2 class="ntit fl"><fmt:message key='smain.dayDev' /></h2>
 
 						<div class="flex-start">
-							<span class="tx-tit">기간</span>
+							<span class="tx-tit"><fmt:message key='smain.period' /></span>
 							<div class="sa-select mr-12">
 								<div id="period" class="dropdown">
-									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="">최근 1달<span class="caret"></span></button>
+									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name=""><fmt:message key='smain.recent1m' /><span class="caret"></span></button>
 									<ul id="durationFilter" class="dropdown-menu">
-										<li data-value="60"><a href="#">최근 2달</a></li>
-										<li data-value="90"><a href="#">최근 3달</a></li>
-										<li data-value="120"><a href="#">최근 4달</a></li>
+										<li data-value="60"><a href="#"><fmt:message key='smain.recent2m' /></a></li>
+										<li data-value="90"><a href="#"><fmt:message key='smain.recent3m' /></a></li>
+										<li data-value="120"><a href="#"><fmt:message key='smain.recent4m' /></a></li>
 									</ul>
 								</div>
 							</div>
 
-							<span class="tx-tit">날짜 입력</span>
+							<span class="tx-tit"><fmt:message key='smain.inputDate' /></span>
 							<div class="sel-calendar mr-24">
-								<label for="fromDate" class="sr-only">시작 날짜</label>
+								<label for="fromDate" class="sr-only"><fmt:message key='smain.startDate' /></label>
 								<input type="text" name="from_date" id="fromDate" class="sel fromDate" value="" autocomplete="off"><em></em>
-								<label for="toDate" class="sr-only">종료 날짜</label>
+								<label for="toDate" class="sr-only"><fmt:message key='smain.endDate' /></label>
 								<input type="text" name="to_date" id="toDate" class="sel toDate" value="" autocomplete="off">
 							</div>
-							<button type="button" class="btn-type" onclick="chargeChartPoll('solarDashboard', 'datepicker')">조회</button>
+							<button type="button" class="btn-type" onclick="chargeChartPoll('solarDashboard', 'datepicker')"><fmt:message key='smain.lookup' /></button>
 						</div>
-						<small id="isInvalidPeriod" class="warning-text d-table hidden">검색 시작 일자를 종료일 기준 최소 1일 전으로 선택해 주세요.</small>
+						<small id="isInvalidPeriod" class="warning-text d-table hidden"><fmt:message key='smain.warning.date' /></small>
 					</div>
 					<div id="dailySolarTrendChart"></div>
 				</div>

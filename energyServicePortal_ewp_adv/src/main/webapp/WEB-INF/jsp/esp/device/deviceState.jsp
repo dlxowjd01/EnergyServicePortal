@@ -85,7 +85,7 @@
 						</ul>
 					</div>
 					<div class="eq-btn-box">
-						<button type="button" class="btn-type04" onclick="alert('선택된 설비가 없습니다.'); return false;"><fmt:message key="deviceState.view.modify" /></button>
+						<button type="button" class="btn-type04" onclick="alert('선택된 설비가 없습니다.'); return false;"><fmt:message key="deviceState.update.title" /></button>
 						<button type="button" class="btn-type04" onclick="alert('선택된 설비가 없습니다.'); return false;"><fmt:message key="deviceState.view.history" /></button>
 					</div>
 				</div>
@@ -97,7 +97,7 @@
 <div class="modal fade" id="addDeviceModal" role="dialog">
 	<div class="modal-dialog device-modal modal-lg">
 		<div class="modal-content new_device">
-			<div class="modal-header"><fmt:message key="deviceState.view.modify" /></div>
+			<div class="modal-header"><fmt:message key="deviceState.update.title" /></div>
 			<div class="modal-body">
 				<form id="deviceForm1" class="device-form" action="#" method="post" name="deviceForm" novalidate>
 					<div class="row">
@@ -1496,11 +1496,12 @@
 				return false;
 			});
 
-			$('#addDeviceModal .modal-header').text('설비 정보 수정');
-			$('#addDevice').attr('onclick', 'deviceProcess("patch", "' + did + '")').text('수정');
+			// 설비 정보 수정 팝업창
+			$('#addDeviceModal .modal-header').text("<fmt:message key='deviceState.update.title' /> ");
+			$('#addDevice').attr('onclick', 'deviceProcess("patch", "' + did + '")').text("<fmt:message key='deviceState.update.button' />");
 		} else {
-			$('#addDeviceModal .modal-header').text('설비 정보 등록');
-			$('#addDevice').attr('onclick', 'deviceProcess("post")').text('등록');
+			$('#addDeviceModal .modal-header').text("<fmt:message key='deviceState.register.title' />");
+			$('#addDevice').attr('onclick', 'deviceProcess("post")').text("<fmt:message key='deviceState.register.button' />");
 		}
 
 		$('#addDeviceModal').modal('show');

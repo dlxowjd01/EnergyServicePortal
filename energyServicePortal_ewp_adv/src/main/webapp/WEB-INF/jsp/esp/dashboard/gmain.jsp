@@ -35,7 +35,7 @@
 				<ul id="monthlySum" class="sum-list mobile-visible"></ul>
 			</div>
 			<%--					<div class="no-data">--%>
-			<%--						<span>올해 발전량 정보를 가져올 수 없습니다.</span>--%>
+			<%--						<span><fmt:message key='gmain.warning.power' /></span>--%>
 			<%--					</div>--%>
 			<div class="inchart mobile-hidden">
 				<div id="monthlyChart"></div>
@@ -76,7 +76,7 @@
 						<div class="legend-wrap">
 							<span class="bu1"><fmt:message key="gdash.4.gen"/></span>
 							<c:if test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-								<span class="bu2">풍력</span>
+								<span class="bu2"><fmt:message key='gmain.windPower' /></span>
 							</c:if>
 							<span class="bu4"><fmt:message key="gdash.4.idle"/></span>
 						</div>
@@ -84,8 +84,8 @@
 							<c:choose>
 								<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
 									<li><strong><fmt:message key="gdash.4.active_power"/></strong> <span> 0 </span><em>&nbsp;&nbsp;kW</em></li>
-									<li><strong>목표전력</strong> <span> 0 </span><em>&nbsp;&nbsp;kW</em></li>
-									<li><strong>설비용량</strong> <span> 0 </span><em>&nbsp;&nbsp;kW</em></li>
+									<li><strong><fmt:message key='gmain.aimedPower' /></strong> <span> 0 </span><em>&nbsp;&nbsp;kW</em></li>
+									<li><strong><fmt:message key='gmain.size' /></strong> <span> 0 </span><em>&nbsp;&nbsp;kW</em></li>
 								</c:when>
 								<c:otherwise>
 									<li><strong><fmt:message key="gdash.4.today_gen"/></strong> <span> 0 </span><em>&nbsp;&nbsp;kWh</em></li>
@@ -102,20 +102,20 @@
 						<c:choose>
 						<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
 						<tr>
-							<th>구분</th>
-							<th>사업소</th>
-							<th>설비용량</th>
-							<th>구분</th>
-							<th>사업소</th>
-							<th>설비용량</th>
+							<th><fmt:message key='gmain.catrgory' /></th>
+							<th><fmt:message key='gmain.site' /></th>
+							<th><fmt:message key='gmain.size' /></th>
+							<th><fmt:message key='gmain.category' /></th>
+							<th><fmt:message key='gmain.site' /></th>
+							<th><fmt:message key='gmain.size' /></th>
 						</tr>
 						</thead>
 						<tbody id="centerTbody">
 						<tr>
-							<td> 풍력</td>
+							<td> <fmt:message key='gmain.windPower' /></td>
 							<td> -</td>
 							<td> -</td>
-							<td> 태양광</td>
+							<td> <fmt:message key='gmain.sunPower' /></td>
 							<td> -</td>
 							<td> -</td>
 						</tr>
@@ -131,11 +131,11 @@
 						</thead>
 						<tbody id="centerTbody">
 						<tr>
-							<td><em>&nbsp;&nbsp;개소</em></td>
-							<td><em>&nbsp;&nbsp;대</em></td>
+							<td><em>&nbsp;&nbsp;<fmt:message key='gmain.totalCount.site' /></em></td>
+							<td><em>&nbsp;&nbsp;<fmt:message key='gmain.totalCount.device' /></em></td>
 							<td><em>&nbsp;&nbsp;kW</em></td>
 							<td><em>&nbsp;&nbsp;kg</em></td>
-							<td><em>&nbsp;&nbsp;천원</em></td>
+							<td><em>&nbsp;&nbsp;<fmt:message key='gmain.1000won' /></em></td>
 						</tr>
 						</c:otherwise>
 						</c:choose>
@@ -171,19 +171,19 @@
 								<div class="input-group1">
 									<div class="sa-select">
 										<div class="dropdown" id="rowCount">
-											<button type="button" class="dropdown-toggle w8" data-toggle="dropdown" data-value="-1" data-name="전체">전체<span class="caret"></span></button>
+											<button type="button" class="dropdown-toggle w8" data-toggle="dropdown" data-value="-1" data-name="전체"><fmt:message key='gmain.all' /><span class="caret"></span></button>
 											<ul class="dropdown-menu chk-type" role="menu">
 												<li data-value="25">
-													<a href="javascript:void(0);" tabindex="-1">25 개</a>
+													<a href="javascript:void(0);" tabindex="-1"><fmt:message key='gmain.25' /></a>
 												</li>
 												<li data-value="50">
-													<a href="javascript:void(0);" tabindex="-1">50 개</a>
+													<a href="javascript:void(0);" tabindex="-1"><fmt:message key='gmain.50' /></a>
 												</li>
 												<li data-value="50">
-													<a href="javascript:void(0);" tabindex="-1">100 개</a>
+													<a href="javascript:void(0);" tabindex="-1"><fmt:message key='gmain.100' /></a>
 												</li>
 												<li data-value="-1">
-													<a href="javascript:void(0);" tabindex="-1">전체</a>
+													<a href="javascript:void(0);" tabindex="-1"><fmt:message key='gmain.all' /></a>
 												</li>
 											</ul>
 										</div>
@@ -192,7 +192,7 @@
 								<div class="input-group1">
 									<div class="sa-select">
 										<div class="dropdown" id="resourceList">
-											<button type="button" class="dropdown-toggle w8" data-toggle="dropdown" data-name="발전원">전체<span class="caret"></span></button>
+											<button type="button" class="dropdown-toggle w8" data-toggle="dropdown" data-name="발전원"><fmt:message key='gmain.all' /><span class="caret"></span></button>
 											<ul class="dropdown-menu chk-type" role="menu" id="resourceULList">
 													<%-- 동적 생성 --%>
 												<li data-value="[resourceCode]">
@@ -208,7 +208,7 @@
 								<div class="input-group1">
 									<div class="sa-select">
 										<div class="dropdown" id="locationList">
-											<button type="button" class="dropdown-toggle w8" data-toggle="dropdown" data-name="지역">전체<span class="caret"></span></button>
+											<button type="button" class="dropdown-toggle w8" data-toggle="dropdown" data-name="지역"><fmt:message key='gmain.all' /><span class="caret"></span></button>
 											<ul class="dropdown-menu chk-type" role="menu" id="locationULList">
 												<li data-value="[loc]">
 													<a href="javascript:void(0);" tabindex="-1">
@@ -223,18 +223,18 @@
 								<div class="input-group1">
 									<div class="sa-select">
 										<div class="dropdown" id="deviceStatus">
-											<button type="button" class="dropdown-toggle w8" data-toggle="dropdown" data-name="상태">전체<span class="caret"></span></button>
+											<button type="button" class="dropdown-toggle w8" data-toggle="dropdown" data-name="상태"><fmt:message key='gmain.all' /><span class="caret"></span></button>
 											<ul class="dropdown-menu chk-type" role="menu">
 												<li data-value="1">
 													<a href="javascript:void(0);" tabindex="-1">
 														<input type="checkbox" id="deviceStatus1" name="deviceStatus" value="1" checked>
-														<label for="deviceStatus1">정상</label>
+														<label for="deviceStatus1"><fmt:message key='gmain.normal' /></label>
 													</a>
 												</li>
 												<li data-value="2">
 													<a href="javascript:void(0);" tabindex="-1">
 														<input type="checkbox" id="deviceStatus2" name="deviceStatus" value="2" checked>
-														<label for="deviceStatus2">오류</label>
+														<label for="deviceStatus2"><fmt:message key='gmain.error' /></label>
 													</a>
 												</li>
 											</ul>
@@ -242,7 +242,7 @@
 									</div>
 								</div>
 								<div class="input-group2">
-									<input type="text" class="input" id="searchName" name="searchName" value="" placeholder="사업소 검색" onkeyup="if (event.keyCode == 13) searchSite();">
+									<input type="text" class="input" id="searchName" name="searchName" value="" placeholder="<fmt:message key='gmain.searchSite' />" onkeyup="if (event.keyCode == 13) searchSite();">
 								</div>
 							</div>
 
@@ -277,31 +277,31 @@
 						<div class="gmain-map2-content">
 							<div class="table-top clear">
 								<div class="input-group1">
-									<input type="text" class="input" id="searchName" name="searchName" value="" placeholder="사업소 검색" onkeyup="if (event.keyCode == 13) searchSite();">
+									<input type="text" class="input" id="searchName" name="searchName" value="" placeholder="<fmt:message key='gmain.searchSite' />" onkeyup="if (event.keyCode == 13) searchSite();">
 									<button type="button" class="btn-type" onclick="searchSite();"><fmt:message key="gdash.7.apply"/></button>
 								</div>
 								<div class="input-group2">
 									<span class="tx-tit"><fmt:message key="gdash.7.status"/></span>
 									<div class="sa-select">
 										<div class="dropdown" id="deviceStatus">
-											<button type="button" class="dropdown-toggle w8 no-close" data-toggle="dropdown" data-name="설비 상태">전체<span class="caret"></span></button>
+											<button type="button" class="dropdown-toggle w8 no-close" data-toggle="dropdown" data-name="설비 상태"><fmt:message key='gmain.all' /><span class="caret"></span></button>
 											<ul class="dropdown-menu chk-type" role="menu">
 												<li data-value="0">
 													<a href="javascript:void(0);" tabindex="-1">
 														<input type="checkbox" id="deviceStatus1" name="deviceStatus" value="0" checked>
-														<label for="deviceStatus1">중지</label>
+														<label for="deviceStatus1"><fmt:message key='gmain.stop' /></label>
 													</a>
 												</li>
 												<li data-value="1">
 													<a href="javascript:void(0);" tabindex="-1">
 														<input type="checkbox" id="deviceStatus2" name="deviceStatus" value="1" checked>
-														<label for="deviceStatus2">정상</label>
+														<label for="deviceStatus2"><fmt:message key='gmain.normal' /></label>
 													</a>
 												</li>
 												<li data-value="2">
 													<a href="javascript:void(0);" tabindex="-1">
 														<input type="checkbox" id="deviceStatus3" name="deviceStatus" value="2" checked>
-														<label for="deviceStatus3">트립</label>
+														<label for="deviceStatus3"><fmt:message key='gmain.trip' /></label>
 													</a>
 												</li>
 											</ul>
@@ -312,7 +312,7 @@
 							<div class="gmain-wrap">
 								<div class="intable" id="statusSiteList">
 									<table class="dashboard-sort">
-										<caption>(단위: kWh)</caption>
+										<caption>(<fmt:message key='gmain.unit' />)</caption>
 										<thead>
 										<tr>
 											<th>

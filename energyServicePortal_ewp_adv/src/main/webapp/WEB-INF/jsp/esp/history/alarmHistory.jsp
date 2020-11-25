@@ -73,8 +73,8 @@
 						<ul class="dropdown-menu"></ul>
 					</div>
 					<div class="text-input-type w-20 ml-6">
-						<input type="hidden" id="ticket_user_id" name="ticket_user_id" placeholder="직접 입력" readonly autocomplete="off">
-						<input type="text" id="ticket_phone" name="ticket_phone" placeholder="직접 입력" autocomplete="off">
+						<input type="hidden" id="ticket_user_id" name="ticket_user_id" placeholder="<fmt:message key='alarm.selfInput' />" readonly autocomplete="off">
+						<input type="text" id="ticket_phone" name="ticket_phone" placeholder="<fmt:message key='alarm.selfInput' />" autocomplete="off">
 					</div>
 				</div>
 
@@ -88,7 +88,7 @@
 				<hr>
 
 				<div class="flex-start">
-					<span class="input-label">작업보고서</span>
+					<span class="input-label"><fmt:message key='alarm.report' /></span>
 					<div id="maintenanceReportList" class="dropdown">
 						<button type="button" class="dropdown-toggle" placeholder="<fmt:message key='alarm.popup.status.select' />" data-toggle="dropdown"><fmt:message key='alarm.popup.status.select' /><<span class="caret"></span></button>
 						<ul class="dropdown-menu"></ul>
@@ -124,7 +124,7 @@
 		<form id="alarmHistorySearchForm">
 			<div class="sa-select">
 				<div class="dropdown" id="site">
-					<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택해주세요."><fmt:message key='alarm.search.select' /><span class="caret"></span></button>
+					<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="<fmt:message key='alarm.search.select' />"><fmt:message key='alarm.search.select' /><span class="caret"></span></button>
 					<ul class="dropdown-menu chk-type" role="menu" id="siteList">
 						<li data-value="[sid]">
 							<a href="javascript:void(0);" tabindex="-1">
@@ -137,7 +137,7 @@
 			</div>
 
 			<div id="searchDetail" class="search-expand sa-select">
-				<button type="button" class="btn clear-btn" data-target="#searchDropdown" data-name="상세 조건" onclick="$('#searchDetail').toggleClass('open')">상세 검색<span class="caret"></span></button>
+				<button type="button" class="btn clear-btn" data-target="#searchDropdown" data-name="상세 조건" onclick="$('#searchDetail').toggleClass('open')"><fmt:message key='alarm.detailSearch' /><span class="caret"></span></button>
 				<div id="searchDropdown" class="dropdown-menu search-dropdown">
 					<div class="flex-start3">
 						<div class="sa-select">
@@ -713,7 +713,7 @@
 	const makeTableHead = function (deviceType) {
 		let newContainer = document.createElement('Div');
 		let newHeadTable = document.createElement('table');
-		let colList = ['사업소', '장치명', '알람 시간', '알람 타입', '알람 메세지', '확인 여부', '조치 상태', '최종 업데이트 시간'];
+		let colList = ['사업소', '장치명', '알람 시간', '알람 타입', '알람 메세지', '확인 여부', '조치 상태', '최종 업데이트 시간']; // 테이블
 		let tdList = ['[site_name]', '[device_name]', '[tlocaltime]', '[alarmtype]', '[message]', '[confirm]', '[status]', '[status_timestamp]'];
 		let thead = newHeadTable.createTHead();
 		let tbody = newHeadTable.createTBody();
