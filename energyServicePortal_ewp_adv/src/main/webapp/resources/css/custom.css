@@ -5607,7 +5607,7 @@ input.inp[readonly]:focus {
 
 .gm-style .gm-style-iw-c > div {
 	overflow: hidden !important;
-	min-height: 40px;
+	min-height: 20px;
 	padding-right: 20px;
 }
 
@@ -6288,11 +6288,6 @@ input.inp[readonly]:focus {
 
 .smain-circle {
 	margin-bottom: 24px;
-}
-
-.smain-circle .ntit + .stit{
-	margin: 8px 0 16px;
-	font-size: 11px;
 }
 
 .smain-pv {

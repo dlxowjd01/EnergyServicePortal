@@ -250,7 +250,6 @@
 			<div class="indiv smain-circle">
 				<div class="flex-wrapper mb-24">
 					<h2 class="ntit">금일 발전현황</h2>
-					<div class="stit fr" id="dayGenHours"></div>
 				</div>
 				<div class="search-wrap">
 					<div class="inchart">
@@ -571,7 +570,6 @@
 <script type="text/javascript" src="/js/modules/exporting.min.js"></script>
 <script type="text/javascript" src="/js/modules/highstock-exporting.min.js"></script>
 <script type="text/javascript">
-
 	$(function () {
 		var viewOptList = $('#viewOptList');
 		var switchFlag = false;
@@ -2045,7 +2043,7 @@
 			}
 
 			$.when($.ajax(weekWeather), $.ajax(weekWeatherTime), $.ajax(statusRaw)).done(function (weekWeatherData, weekWeatherTimeData, statusRawData) {
-
+				// KPX ONLY
 				if (weekWeatherData[1] == 'success') {
 					let weekWeather = weekWeatherData[0];
 					// console.log("weekWeatherData[0]===", weekWeatherData)
@@ -2074,34 +2072,40 @@
 							}
 						});
 
-						console.log("tempArray===", tempArray);
-
+						console.log("KPX getWeatherData tempArray===", tempArray);
+						console.log("weekWeatherData===", weekWeatherData);
+						
 						if (tempArray.length > 0) {
 							let weatherIconClass = getWeatherIcons(tempArray[tempArray.length - 1].sky);
+							let deviceIrrData = tempArray[tempArray.length - 1].sensor_solar.irradiationPoa;
+
 							if($('#viewOptList').prev().data("value") == "2"){
 								$('#sTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + '&nbsp;' + '&#8451;');
 								$('#weekSolarIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i><strong>' + sList[0].location + '</strong>');
-								if(weekWeatherData[0].length <= 0){						
+								if(!isEmpty(deviceIrrData)){						
 									$("#sIrradiation").parents().closest('li').removeClass('hidden');
+									$("#sIrradiation").text(deviceIrrData);
 								}
 							} else {
 								$('#weekTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + '&nbsp;' + '&#8451;');
 								$('#weekIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i><strong>' + sList[0].location + '</strong>');
-								if(weekWeatherData[0].length <= 0){	
+								if(!isEmpty(deviceIrrData)){	
 									$("#weekIrradiation").parents().closest('li').removeClass('hidden');
+									$("#weekIrradiation").text(deviceIrrData)
 								}
 							}
 						}
 					}
 				}
-
+				console.log("statusRawData[1]---", statusRawData[1])
 				if (statusRawData[1] == 'success') {
 					let items = statusRawData[0];
 					if (!isEmpty(items)) {
 						Object.entries(items).map(obj => {
 							let deviceData = obj[1].data;
-
+							console.log("deviceData---", deviceData)
 							deviceData.forEach(di => {
+		
 								let humidity = isEmpty(di.humidity) ? '-' : di.humidity;
 								let windDirection = isEmpty(di.windDirection) ? '-' : di.windDirection;
 								let windSpeed = isEmpty(di.windSpeed) ? '-' : di.windSpeed;
@@ -2178,9 +2182,11 @@
 								tempArray.push(el);
 							}
 						});
-
+						console.log("NOT KPX getWeatherData tempArray===", tempArray)
 						if (tempArray.length > 0) {
 							let weatherIconClass = getWeatherIcons(tempArray[tempArray.length - 1].sky);
+							let deviceIrrData = tempArray[tempArray.length - 1].sensor_solar.irradiationPoa;
+
 							if($('#viewOptList').prev().data("value") == "2") {
 								$('#sTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + '&#8451;');
 								$('#weekSolarIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i><strong>' + sList[0].location + '</strong>');
@@ -2189,13 +2195,10 @@
 								$('#sHumidity').html((tempArray[tempArray.length - 1].humidity).toFixed(1) + ' ' + '&#37;');
 								$('#currentTimeB').html(String(tempArray[tempArray.length - 1].basetime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6'));
 
-								if(isEmpty(tempArray[tempArray.length - 1].sensor_solar) || isEmpty(tempArray[tempArray.length - 1].sensor_solar.irradiationPoa) ){						
-									if(!isEmpty(tempArray[tempArray.length - 1].irradiationPoa)){
-										$("#sIrradiation").parents().closest('li').removeClass('hidden');
-										$("#sIrradiation").text(tempArray[tempArray.length - 1])
-									}
+								if(!isEmpty(deviceIrrData)){
+									$("#sIrradiation").parents().closest('li').removeClass('hidden');
+									$("#sIrradiation").text(deviceIrrData)
 								}
-
 							} else {
 								$('#weekTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + '&#8451;');
 								$('#weekIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i><strong>' + sList[0].location + '</strong>');
@@ -2204,13 +2207,10 @@
 								$('#weekHum').html((tempArray[tempArray.length - 1].humidity).toFixed(1) + ' ' + '&#37;');
 								$('#currentTimeA').html(String(tempArray[tempArray.length - 1].basetime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6'));
 								
-								if(isEmpty(tempArray[tempArray.length - 1].sensor_solar) || isEmpty(tempArray[tempArray.length - 1].sensor_solar.irradiationPoa) ){					
-									if(!isEmpty(tempArray[tempArray.length - 1].irradiationPoa)){
-										$("#weekIrradiation").parents().closest('li').removeClass('hidden');
-										$("#weekIrradiation").text(tempArray[tempArray.length - 1])
-									}
+								if(!isEmpty(deviceIrrData)){
+									$("#weekIrradiation").parents().closest('li').removeClass('hidden');
+									$("#weekIrradiation").text(deviceIrrData)
 								}
-
 							}
 						}
 					}
@@ -3968,7 +3968,6 @@
 			}
 
 			monthlyChart.series[0].setData(energyData);
-			console.log("energyData===", energyData);
 
 			if (!oid.match('testkpx')) {
 				let seriesName = '';
@@ -4575,7 +4574,7 @@
 							let getNowEnergyDay = rstData.energy;
 							let nowBillingDay = rstData.money;
 							let tempEnergy = displayNumberFixedUnit(getNowEnergyDay, 'Wh', 'kWh', 0);
-							let tempEnergyHours = (( getNowEnergyDay / itemCapacity / 1000 * 24 ) * 100).toFixed(2);
+							let tempEnergyHours = (itemCapacity > 0) ? (( getNowEnergyDay / itemCapacity / 1000 * 24 ) * 100).toFixed(2) : [0];
 					
 							$('#centerTbody tr td:nth-child(2) em').before(tempEnergy[0]);
 							$('#centerTbody tr td:nth-child(3) em').before(tempEnergyHours);
@@ -4892,7 +4891,7 @@
 					let today = new Date();
 					let hour = today.getHours();
 					if(!isEmpty(nowGenData[0].data[siteId])) {
-						// energyData1[index] === energyData[hour] ( current time E: NOW 에만 있는 데이터!!!!)
+						// energyData1[index] === energyData[hour] ( current time Energy: NOW 에만 있는 데이터!!!!)
 						energyData1[hour] = nowGenData[0].data[siteId].energy;
 					}
 				}
@@ -4900,8 +4899,6 @@
 				energyData1.forEach((el, index) => {
 					energyData1[index] = Math.round(el / 1000);
 				});
-				let genHourStr = (dayPvSum/itemChartCapacity) ? Math.round((dayPvSum/itemChartCapacity) * 10000)/100 : 0
-				$('#dayGenHours').html('금일 발전 시간:&ensp;<span class="pv">' + genHourStr + '&ensp;hrs</span>');
 
 				energyData2.forEach((el, index) => {
 					energyData2[index] = el;
