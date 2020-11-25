@@ -1449,6 +1449,18 @@
 												<label for="등기이사_소속2_[index]">대표 이사</label>
 											</a>
 										</li>
+										<li>
+											<a href="javascript:void(0);" tabindex="-1">
+												<input type="checkbox" id="등기이사_소속3_[index]" value="감사" name="등기이사_소속_[index]">
+												<label for="등기이사_소속3_[index]">감사</label>
+											</a>
+										</li>
+										<li>
+											<a href="javascript:void(0);" tabindex="-1">
+												<input type="checkbox" id="등기이사_소속4_[index]" value="기타비상무이사" name="등기이사_소속_[index]">
+												<label for="등기이사_소속4_[index]">기타비상무이사</label>
+											</a>
+										</li>
 									</ul>
 								</div>
 								<div class="text-input-type edit">
