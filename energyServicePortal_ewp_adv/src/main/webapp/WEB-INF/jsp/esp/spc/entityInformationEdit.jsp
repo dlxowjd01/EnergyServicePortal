@@ -1176,6 +1176,20 @@
 							</td>
 						</tr>
 						<tr>
+							<th><label for="금융사_대리기관">금융사 대리기관</label></th>
+							<td>
+								<div class="text-input-type edit">
+									<input type="text" id="금융사_대리기관" name="금융사_대리기관" placeholder="직접 입력">
+								</div>
+							</td>
+							<th><label for="금융사_대리기관_담당자(연락처)">담당자(연락처)</label></th>
+							<td>
+								<div class="text-input-type edit">
+									<input type="text" id="금융사_대리기관_담당자(연락처)" name="금융사_대리기관_담당자(연락처)" placeholder="직접 입력">
+								</div>
+							</td>
+						</tr>
+						<tr>
 							<th><label for="시공사">시공사</label></th>
 							<td>
 								<div class="text-input-type edit">
@@ -1795,6 +1809,7 @@
 								<div class="fixed-height">은행 계좌</div>
 								<a href="javascript:addRow('addList_account_holder', 'next'); setDefaultAccList();" class="btn-add fr mt-offset-10">추가</a>
 								<div class="fixed-height"><label for="예금주[index]">예금주</label></div>
+								<div class="fixed-height"><label for="빠른조회_비밀번호[index]">빠른조회_비밀번호</label></div>
 							</th>
 							<td>
 								<div class="fixed-height group-type short">
@@ -1876,6 +1891,9 @@
 											<input type="text" id="은행_직접입력[index]" name="은행_직접입력[index]" placeholder="직접 입력">
 										</div>
 									</div>
+								</div>
+								<div class="text-input-type edit">
+									<input type="text" id="빠른조회_비밀번호[index]" name="빠른조회_비밀번호[index]" placeholder="직접 입력">
 								</div>
 							</td>
 							<th>

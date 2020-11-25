@@ -335,10 +335,12 @@
 						{name: '공인인증서_등록', id: 'addList_certificate_registration', next: 'next'},
 						{name: '임대료_지급일', id: 'addList_rental_deduction', next: 'next'},
 					];
+
 					setMakeTag(financeRepeatItem, finance_info, 'financeInfo'); //금융태그 생성
 					if (finance_info['공인인증서'] === undefined && finance_info['SPC_법인_인감'] != null) {
 						finance_info['공인인증서'] = finance_info['SPC_법인_인감'];
 					}
+
 					if(!isEmpty(finance_info['공인인증서']) && finance_info['공인인증서'].length > 0) {
 						finance_info['공인인증서'].forEach((target, index) => {
 							if (isEmpty(target['용도'])) {
@@ -355,7 +357,7 @@
 					}
 
 					Object.entries(finance_info).forEach(([key, val]) => {
-						if (key.match('인증서_비밀번호')) {
+						if (key.match('인증서_비밀번호') || key.match('빠른조회_비밀번호')) {
 							const length = String(val).length;
 							let temp = '';
 							for (let k = 0; k < length; k++) {
@@ -623,6 +625,12 @@
 						<td id="금융사"></td>
 						<th>담당자(연락처)</th>
 						<td id="금융사_담당자(연락처)"></td>
+					</tr>
+					<tr>
+						<th>금융사 대리기관</th>
+						<td id="금융사_대리기관"></td>
+						<th>담당자(연락처)</th>
+						<td id="금융사_대리기관_담당자(연락처)"></td>
 					</tr>
 					<tr>
 						<th>시공사</th>
@@ -896,6 +904,7 @@
 						<th>
 							<div class="fixed-height">은행 계좌</div>
 							<div class="fixed-height">예금주</div>
+							<div class="fixed-height">빠른조회 비밀번호</div>
 						</th>
 						<td>
 							<div class="fixed-height group-type short">
@@ -905,6 +914,9 @@
 							</div>
 							<div class="fixed-height">
 								<span id="예금주[index]"></span>
+							</div>
+							<div class="fixed-height">
+								<span id="빠른조회_비밀번호[index]"></span>
 							</div>
 						</td>
 						<th>

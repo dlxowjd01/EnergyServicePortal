@@ -1226,7 +1226,7 @@ function setAreaParamData(areaId, type) {
 
 	$area.find("textarea").each(function(){
 		var obj = this;
-		param[obj.getAttribute("id")] = obj.value;	// \n 특수기호 처리해야함
+		param[obj.getAttribute("id")] = escapeHtml(obj.value);	// \n 특수기호 처리해야함
 
 	});
 
@@ -2039,3 +2039,12 @@ const firstBy = (function() {
 	}
 	return extend;
 })();
+
+function escapeHtml (text) {
+	return text.replace(/[\"&'\/<>]/g, function (a) {
+		return {
+			'"': '&quot;', '&': '&amp;', "'": '&#39',
+			'/': '&#48;', '<': '&lt;', '>': '&gt;'
+		}[a];
+	});
+}

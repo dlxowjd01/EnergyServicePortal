@@ -711,9 +711,9 @@
 
 		$form.append($inp);
 
-		if (!isEmpty(target) || target === 'blank') {
-			let targetWin = window.open('about:blank', 'targetWin');
-			$form.attr('target', 'targetWin');
+		if (!isEmpty(target) && target === 'blank') {
+			let targetWin = window.open('about:blank', 'targetWin_' + id);
+			$form.attr('target', 'targetWin_' + id);
 		} else {
 			$form.removeAttr('target');
 		}

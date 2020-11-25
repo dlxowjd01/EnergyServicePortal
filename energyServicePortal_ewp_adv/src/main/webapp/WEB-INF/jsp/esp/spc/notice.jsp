@@ -178,7 +178,7 @@
 						}
 					} else {
 						val.replace(/\n/g, '<br/>');
-						$viewObj.html(val);
+						$viewObj.text(val).html();
 					}
 				}
 			})
