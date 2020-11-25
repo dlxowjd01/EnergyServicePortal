@@ -209,7 +209,7 @@
 										<li>
 											<a href="javascript:void(0);" tabindex="-1">
 												<input type="checkbox" id="dashboard" value="true" name="dashboard">
-												<label for="dashboard"><fmt:message key="deviceState.popup.view.dashboard " /></label>
+												<label for="dashboard"><fmt:message key="deviceState.popup.view.dashboard" /></label>
 											</a>
 										</li>
 										<li>
