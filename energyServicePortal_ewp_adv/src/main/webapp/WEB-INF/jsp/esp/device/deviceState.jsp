@@ -694,7 +694,7 @@
 								break;
 							default:
 								// alert++;
-								operation = '';
+								operation = 'text-white';
 								break;
 						}
 

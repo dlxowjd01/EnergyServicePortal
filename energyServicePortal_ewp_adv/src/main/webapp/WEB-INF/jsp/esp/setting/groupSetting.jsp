@@ -711,8 +711,8 @@
 
 		// 	Promise.all([ makeAjaxCall(optionList[0]), makeAjaxCall(optionList[1]) ]).then( res => {
 		makeAjaxCall(optionList[0]).then( res => {
-			console.log("vpp_group===", res.vpp_group);
-			console.log("tag_group===", res.tag_group);
+			// console.log("vpp_group===", res.vpp_group);
+			// console.log("tag_group===", res.tag_group);
 			let flat = [];
 			// flat = [...res.dr_group, ...res.vpp_group, ...res.tag_group];
 			flat = [...res.vpp_group, ...res.tag_group];
@@ -1063,7 +1063,6 @@
 			$("#groupSearchBox").on( 'keyup search input paste cut', function(){
 				groupTable.search( this.value ).draw();
 			});
-
 		}
 	}
 
@@ -1484,6 +1483,9 @@
 					let checkBoxList = siteItem.toArray();
 					let popOverSites = popOverRowData.sites;
 					let desc = "";
+					let title = "";
+					let popOverStr = "";
+					let content = "";
 
 					if(popOverRowData.sgid){
 						groupType = "사업소 그룹";
@@ -1494,19 +1496,19 @@
 					// else if(popOverRowData.dgid){
 					// 	groupType = "DR 그룹";
 					// }
-					let title = '';
+					
 					if(popOverRowData.shared == false){
 						title = "사업소 상세 정보 (공유)"
 					} else {
 						title = "사업소 상세 정보 (미공유)"
 					}
-					let popOverStr = '';
+					
 					$.each(popOverSites, function(index, el){ 
 						let selected = checkBoxList.some( x => $(x).data("value") === el.sid );
 						popOverStr += '<li>' + el.name + '</li>';
 					});
-					let content = '<div class="word-wrap"><ul class="selected-list">' + popOverStr + '</ul></div>';
-				
+					content = '<div class="word-wrap"><ul class="selected-list">' + popOverStr + '</ul></div>';
+
 					// <h4 class="sm-title">그룹 유형 : ${'${groupType}'}</h4>
 					// 	<h4 class="sm-title">그룹 명 : ${'${groupName}'}</h4>	
 					// 	<h4 class="sm-title">사업소 명</h4>
@@ -1524,26 +1526,23 @@
 						animation: false,
 						title: title,
 						content: content
-					}).on("mouseover", function () {
-						var _this = this;
-						$(this).popover("show");
-						$(this).siblings(".popover").on("mouseleave", function () {
-							if ($(".popover:visible").length > 1) {
-								$(_this).popover('hide');
+					})
+
+					let popoverLink = $("#groupTable td a.text-link");
+					$(popoverLink).on('mouseover', function (e) {
+						$('[data-toggle="popover"]').each(function () {
+							if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+								$(this).popover('hide');
 							}
 						});
-					}).on("mouseleave", function(){
-						var _this = this;
-						setTimeout(function() {
-							if ($(".popover:visible").length > 1) {
-								$(".popover").not(_this).popover('hide');
-							}
-							if($("#logTable").find("tbody tr.selected").length > 0){
-								$(".popover").popover('hide');
-							}
-						}, 200);
 					});
 
+					$('#innerBody').on('mouseover click', function(e) {
+						if(!$(e.target).is(".popover") && !$(e.target).is("#groupTable td .text-link") ) {
+							$('.popover').popover("hide");
+						}
+					});
+				
 					popWindow.popover("show");
 
 				}

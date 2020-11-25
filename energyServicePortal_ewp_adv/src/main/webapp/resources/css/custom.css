@@ -57,6 +57,7 @@
 
 .dropdown-modal.active,
 .popover-modal.active { z-index: 100; }
+.popover { z-index: 120; }
 .loading { z-index: 230 }
 .loading-image { z-index: 240 }
 
@@ -230,7 +231,6 @@ html.darkmode:root {
 	--ico-prev-page: url("/img/btn-prev.svg");
 	--ico-next-page: url("/img/btn-next.svg");
 	--ico-line-graph: url("/img/ico_line_graph.svg");
-	--ico-new-window: url("/img/ico_new_window.svg");
 	--bg-battery-cover: url("/img/battery_cover_lg.svg");
 
 	--btn-edit: url("/img/ico_edit.svg");
@@ -790,20 +790,6 @@ a.btn-add:active,
 .btn-add:hover,
 .btn-add:active {
 	color: var(--vivid-blue);
-}
-
-a.btn-new-window,
-.btn-new-window {
-	display: inline-block;
-	padding: 0 10px 0 28px;
-	outline-style: none;
-	border: 0;
-	line-height: 24px;
-	background: var(--ico-new-window) no-repeat 0 3px;
-	color: var(--white60);
-	font-size: 13px;
-	font-weight: 500;
-	cursor: pointer;
 }
 
 a.btn-text-blue,
@@ -3405,6 +3391,7 @@ li[data-alarm="urgent"]:before,
 .popover {
 	background-color: var(--box-color);
 	box-shadow: var(--box-shadow);
+	z-index: 120;
 }
 
 .popover-title {
@@ -7170,6 +7157,10 @@ input.inp[readonly]:focus {
 
 .device-list li.text-black.active {
 	border: 2px solid var(--white87);
+}
+
+.device-list li.text-white.active {
+	border: 2px solid var(--white60);
 }
 
 .device-list li.text-black:before {

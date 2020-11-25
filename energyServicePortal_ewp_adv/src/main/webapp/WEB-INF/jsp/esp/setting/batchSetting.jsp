@@ -812,26 +812,21 @@
 					animation: false,
 					title: '',
 					content: content
-				}).on("mouseover", function () {
-					var _this = this;
-					$(this).popover("show");
-					$(this).siblings(".popover").on("mouseleave", function () {
-						if ($(".popover:visible").length > 1) {
-							$(_this).popover('hide');
-						}
-					});
-				}).on("mouseleave", function(){
-					var _this = this;
-					setTimeout(function() {
-						if ($(".popover:visible").length > 1) {
-							$(".popover").not(_this).popover('hide');
-						}
-						if($("#logTable").find("tbody tr.selected").length > 0){
-							$(".popover").popover('hide');
-						}
-					}, 200);
 				});
 
+				let popoverLink = $("#batchTable td a.text-link");
+				$(popoverLink).on('mouseover', function (e) {
+					$('[data-toggle="popover"]').each(function () {
+						if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+							$(this).popover('hide');
+						}
+					});
+				});
+				$('#innerBody').on('mouseover click', function(e) {
+					if(!$(e.target).is(".popover") && !$(e.target).is("#batchTable td .text-link") ) {
+						$('.popover').popover("hide");
+					}
+				});
 				popWindow.popover("show");
 			}
 

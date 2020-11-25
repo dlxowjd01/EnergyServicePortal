@@ -20,6 +20,7 @@
 
 <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css">
 <link type="text/css" rel="stylesheet" href="/css/custom.min.css">
+<!-- <link type="text/css" rel="stylesheet" href="/css/custom.css"> -->
 <link type="text/css" rel="stylesheet" href="/css/custom-grid.min.css">
 <link type="text/css" rel="stylesheet" href="/css/custom-mquery.min.css">
 <link type="text/css" rel="stylesheet" href="/css/jquery-ui.min.css" media="all" >
@@ -31,7 +32,7 @@
 <![endif]-->
 
 <script type="text/javascript" src="/js/jquery.min.js"></script>
-<script type="text/javascript" src="/js/jquery.blockUI.min.js"></script>
+<!-- <script type="text/javascript" src="/js/jquery.blockUI.min.js"></script> -->
 <script type="text/javascript" src="/js/jquery-ui.js"></script>
 <script type="text/javascript" src="/js/jquery-ui-1.12.1.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.min.js"></script>
