@@ -811,7 +811,7 @@
 
 		// 	rows = rows.map(row => {
 		// 		if (row.x) {
-		// 			row[0] = Highcharts.dateFormat('%d-%b-%y', row.x * 1000);
+		// 			row[0] = Highcharts.dateFormat('%Y/%m/%d', row.x * 1000);
 		// 		}
 		// 		return row;
 		// 	});
@@ -1332,8 +1332,9 @@
 			downloadJPEG: 'JPEG 다운로드'
 		},
 		exporting: {
-			enabled: false,
+			enabled: true,
 			tableCaption: '일별 발전량',
+			filename: setExportFileName(),
 			buttons: {
 				contextButton: {
 					x: -10,
@@ -1346,40 +1347,36 @@
 					},
 					_titleKey: 'downloadTitle',
 					// menuItems: null,
-					// onclick: function () {
-					// 	this.exportChart();
-					// },
-					menuItems: [
-						"viewFullscreen",
-						"downloadCSV",
-					// 	"separator",
-					// 	"downloadPNG",
-						// "downloadJPEG",
-						// "downloadPDF",
-					// 	"downloadSVG"
-					],
+					onclick: function () {
+						this.downloadCSV();
+					},
+					menuItems: null,
+					// menuItems: [
+					// // "viewFullscreen",
+					// 	"downloadCSV",
+					// // 	"separator",
+					// // 	"downloadPNG",
+					// //	 "downloadJPEG",
+					// // 	"downloadPDF",
+					// // 	"downloadSVG"
+					// ],
 					align: 'right',
 				}
 			},
-			// options: {
-			// 	xAxis: {
-			// 		categories: date31List
-			// 	},
-			// },
-			// csv: {
-			// 	columnHeaderFormatter: function(item, key, keyLength) {
-			// 		if (item.axisTitle) {
-			// 			console.log("item---", item)
-			// 			return item.axisTitle.textStr; // x axis label
-			// 		} else if (key === 'y') {
-			// 			return item.yAxis.axisTitle.textStr; // y axis label
-			// 		} else if (key === 'z') {
-			// 			return 'Obesity (adults)'; // z axis label
-			// 		}
-			// 	}
-			// }
+			csv: {
+				dateFormat: '%m/%d',
+				columnHeaderFormatter: function (item, key) {
+					if (!item || item instanceof Highcharts.Axis) {
+						// return item.options.title.text;
+						return "닐짜"
+					}
+					return {
+						topLevelColumnTitle: '일별 발전량',
+						columnTitle: key === 'y' ? item.name : ''
+					};
+				},
+			}
 			// dateFormat: '%Y-%m-%d'
-
 		},
 		rangeSelector: {
 			enabled: false,
@@ -1392,27 +1389,26 @@
 				labels: {
 					enabled: true,
 					formatter: function () {
-						let temp = date31List[this.value];
-						let newVal = "";
-						if(!isEmpty(temp)){
-							newVal = temp.substring(0,2) + "/" + temp.substring(2,4);
-						}
+						let temp = new Date(this.value);
+						let newVal = temp.format("MM") + "/" + temp.format("dd");
 						return newVal;
 					},
 				}
 			},
 			maskFill: 'var(--clear)',
             series: {
-				// 변수 적용시 라인에 fill이 되어 버림
+				// DO NOT USE css variable!!!!
                 color: '#26ccc8',
                 fillOpacity: 0.00,
-                lineWidth: 2
+				lineWidth: 2,
+				// pointRange: null,
+				// threshold: 0
             }
 		},
 		plotOptions: {
 			series: {
 				showInLegend: true,
-				// pointIntervalUnit: 'day'
+				pointIntervalUnit: 'day'
 			}
 		},
 		title: {
@@ -1423,8 +1419,11 @@
 		},
 		xAxis: [
 			{
-				// type: 'datetime',
-				// format: '{value:%m/%d}',
+				type: 'datetime',
+				format: '{value:%m/%d}',
+				// dateTimeLabelFormats: {
+				// 	day: '%m/%d',
+				// },
 				lineColor: 'var(--grey)',
 				tickColor: 'var(--grey)',
 				tickInterval: 1,
@@ -1437,10 +1436,7 @@
 					align: 'center',
 					y: 27,
 					formatter: function () {
-						// return  Highcharts.dateFormat('%m/%d',  this.value);
-						let temp = date31List[this.value];
-						let newVal = temp.substring(0,2) + "/" + temp.substring(2,4);
-						return newVal;
+						return  Highcharts.dateFormat('%m/%d',  this.value);
 					},
 					style: {
 						color: 'var(--grey)',
@@ -1531,9 +1527,12 @@
 				color: 'var(--white)',
 			},
 			formatter: function () {
-				let temp = date31List[this.x];
-				let newVal = temp.substring(0,2) + "/" + temp.substring(2,4);
-			
+				// let temp = date31List[this.x];
+				let temp = this.x ? (new Date(this.x)) : null;
+				let newVal = "";
+
+				newVal = temp ? (temp.format("MM") + "/" + temp.format("dd")) : "";
+
 				return ['<span style="display:flex; margin-bottom:-10px;"><b>' + newVal + '</b></span>'].concat(
 					this.points ?
 						this.points.map(function (point) {
@@ -1555,8 +1554,8 @@
 			enabled: true,
 			align: 'right',
 			verticalAlign: 'top',
-			// x: -35,
-			x: -10,
+			x: -35,
+			// x: -10,
 			y: 0,
 			itemStyle: {
 				color: 'var(--white87)',
@@ -3432,7 +3431,6 @@
 								});
 							}
 						}
-
 						setChargeChartData(chartItems1, chartItems2, chartItems3);
 					}).fail(function () {
 						console.error('rejected');
@@ -3828,13 +3826,8 @@
 										}
 									});
 								}
-								
-								console.log("chartItems2===", chartItems2);
+
 								chartItems3 = addToDateList((duration+1), result3aData, "energy", customDateList);
-
-								console.log("chartItems3===", chartItems3);
-
-
 							}
 						}
 
@@ -4013,7 +4006,6 @@
 									}
 								});
 							}
-
 							chartItems3 = addToDateList(31, result3aData, "energy");
 						}
 					}
@@ -4232,8 +4224,9 @@
 			let dailySolarMaxVal = 0;
 			let dailyInvMaxVal = 0;
 			let trendChartLength = dailySolarTrendChart.series.length;
+			let targetDate;
 			let startDate;
-			let aMonthAgo;
+			let d = new Date();
 
 			dailySolarMaxVal =  Math.max(...chartItems3);
 			dailyInvMaxVal =  Math.max(...chartItems2);
@@ -4245,84 +4238,13 @@
 			}
 
 			if(!isEmpty(searchOption)){
-				let newDateList = addToDateList(searchOption);
-				// console.log("newDateList===", newDateList)
-				dailySolarTrendChart.update({
-					navigator: {
-						xAxis: {
-							labels: {
-								// enabled: false,
-								formatter: function () {
-									let temp = newDateList[this.value];
-									let newVal = "";
-									if(!isEmpty(temp)){
-										newVal = temp.substring(0,2) + "/" + temp.substring(2,4);
-									}
-									return newVal;
-								},
-							}
-						},
-					},
-					xAxis: [{
-						labels: {
-							align: 'center',
-							y: 27,
-							formatter: function () {
-								let temp = newDateList[this.value];
-								let newVal = temp.substring(0,2) + "/" + temp.substring(2,4);
-								return newVal;
-							},
-							style: {
-								color: 'var(--grey)',
-								fontSize: '12px'
-							}
-						},
-					}],
-					tooltip: {
-						shared: true,
-						useHTML: true,
-						split: false,
-						borderColor: 'none',
-						backgroundColor: 'var(--bg-color)',
-						padding: 16,
-						style: {
-							color: 'var(--white)',
-						},
-						formatter: function () {
-							let temp = newDateList[this.x];
-							let newVal = temp.substring(0,2) + "/" + temp.substring(2,4);
-						
-							return ['<span style="display:flex; margin-bottom:-10px;"><b>' + newVal + '</b></span>'].concat(
-								this.points ?
-									this.points.map(function (point) {
-										let suffix  = '';
-										let val;
-										if(point.series.name == "일사량"){
-											val = Math.round(point.point.y);
-										} else {
-											val = displayNumberFixedUnit(point.point.y, 'kWh', 'kWh', 0)[0];
-										}
-										point.series.options.tooltip.valueSuffix ? (suffix = point.series.options.tooltip.valueSuffix) : (suffix = "");
-
-										return "<br/><span style='color:" + point.series.color + "'>\u25CF</span> " + point.series.name + ": " + val + " " + suffix;
-									}) : []
-							);
-						},
-					},
-					// exporting: {
-					// 	options: {
-					// 		xAxis: {
-					// 			categories: newDateList
-					// 		},
-					// 	}
-					// }
-				});
+				targetDate = new Date(d.getTime() - ((searchOption-1) * 24 * 60 * 60 * 1000));
+				startDate = Date.UTC(targetDate.getFullYear(), targetDate.getMonth() , targetDate.getDay());
 			} else {
-				let d = new Date();
-				aMonthAgo = new Date(d.getTime() - (30 * 24 * 60 * 60 * 1000));
+				targetDate = new Date(d.getTime() - (30 * 24 * 60 * 60 * 1000));
+				startDate = Date.UTC(targetDate.getFullYear(), targetDate.getMonth() , targetDate.getDay());
 			}
 
-			// 10/27
 			dailySolarTrendChart.addSeries({
 				name: '발전량',
 				type: 'column',
@@ -4331,13 +4253,10 @@
 					valueSuffix: 'kWh',
 				},
 				data: chartItems3,
-				// pointStart: Date.UTC(aMonthAgo.getFullYear(), aMonthAgo.getMonth() , aMonthAgo.getDay()),
-				// // pointInterval: 24 * 60 * 60 * 1000
-				// pointInterval: 86400000,
+				pointStart: startDate,
+				pointInterval: (24 * 60 * 60 * 1000)
 			});
 
-			// let tempStart = Date.UTC(aMonthAgo.getFullYear(), aMonthAgo.getMonth() , aMonthAgo.getDay());
-			// console.log("tempStart==", tempStart)
 
 			dailySolarTrendChart.addSeries({
 				name: '일사량',
@@ -4352,37 +4271,30 @@
 					symbol: "circle"
 				},
 				data: chartItems2,
-				// pointStart: Date.UTC(aMonthAgo.getFullYear(), aMonthAgo.getMonth() , aMonthAgo.getDay()),
-				// // pointInterval: 24 * 60 * 60 * 1000,
-				// pointInterval: 86400000,
+				pointStart: startDate,
+				pointInterval: (24 * 60 * 60 * 1000)
 			});
 
 			// let formattedDate31List = addToDateList(31, null, "date");
 			// console.log("formattedDate31List===", formattedDate31List);
 			
 			dailySolarTrendChart.update({
-				// xAxis: [
-				// 	{
-				// 		format: '{value:%m/%d}',
-				// 		tickInterval: 24 * 3600 * 1000
-				// 	}
-				// ],
+				xAxis: [
+					{
+						format: '{value:%m/%d}',
+						tickInterval: (24 * 60 * 60 * 1000)
+					}
+				],
 				yAxis: [
 					{
 						title:{ text: "kWh" },
-						max: dailySolarMaxVal
+						// max: dailySolarMaxVal
 					},
 					{
 						title:{ text: "W/m\xB2" },
-						max: dailyInvMaxVal
+						// max: dailyInvMaxVal
 					},
-				],
-				// plotOptions: {
-				// 	series: {
-				// 		pointStart: Date.UTC(aMonthAgo.getFullYear(), aMonthAgo.getMonth() , aMonthAgo.getDay()),
-				// 		pointInterval: 24 * 60 * 60 * 1000
-				// 	}
-				// }	
+				],	
 			});
 
 			dailySolarTrendChart.isDirtyBox = true;
@@ -5420,11 +5332,14 @@
 				let dateNum = String(item.basetime).substring(4, 8);
 				let found = dateList.findIndex( x => x === dateNum);
 				if(found > -1) {
+					let tempDate = Date.UTC(Number(String(item.basetime).substring(0, 4)), Number(String(item.basetime).substring(4, 6)), Number(String(item.basetime).substring(6, 8)) );
 					if(option == "energy"){
-						dateList[found] = item.energy;
+						dateList[found] = [tempDate, item.energy];
+						// dateList[found] = item.energy;
 					}
 					if(option == "irradiationPoa"){
-						dateList[found] = Math.round(item.sensor_solar.irradiationPoa);
+						dateList[found] = [tempDate, Math.round(item.sensor_solar.irradiationPoa)];
+						// dateList[found] = Math.round(item.sensor_solar.irradiationPoa);
 					}
 				}
 			});
@@ -5452,5 +5367,11 @@
 		return dateList;
 	}
 
+	function setExportFileName(){
+		let d = new Date();
+		let tempDate = d.format("yyyyMMddHHmmss");
+		let newName = sList[0].name.replace(/\s/g, "") + "_" + "일별발전량" + "_" + tempDate;
+		return newName
+	}
 
 </script>
