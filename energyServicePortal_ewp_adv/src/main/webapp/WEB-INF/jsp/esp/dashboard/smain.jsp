@@ -1281,10 +1281,10 @@
 			{
 				<c:choose>
 				<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-					name: '발전 실적',
+					name: '<fmt:message key="generationResults" />',
 				</c:when>
 				<c:otherwise>
-					name: 'PV발전량',
+					name: '<fmt:message key='smain.PVGeneratedAmount' />',
 				</c:otherwise>
 				</c:choose>
 				type: 'column',
@@ -1735,10 +1735,10 @@
 				type: 'column',
 				<c:choose>
 					<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-				name: '발전 실적',
+				name: '<fmt:message key="generationResults" />',
 					</c:when>
 					<c:otherwise>
-				name: 'PV발전량',
+				name: '<fmt:message key='smain.PVGeneratedAmount' />',
 					</c:otherwise>
 				</c:choose>
 				color: 'var(--turquoise)', /* PV발전량 */
@@ -1754,7 +1754,7 @@
 				name: '전일 발전량',
 					</c:when>
 					<c:otherwise>
-				name: '발전 예측',
+				name: '<fmt:message key="generationPrediction" />',
 					</c:otherwise>
 				</c:choose>
 
@@ -5006,7 +5006,7 @@
 
 				if (!oid.match('testkpx')) {
 					let tempObj = {
-						name: "발전효율",
+						name: "<fmt:message key='smain.generationPrediction' />",
 						type: 'spline',
 						dashStyle: 'ShortDash',
 						color: 'var(--white60)',
@@ -5144,7 +5144,7 @@
 
 				if(energyData1.length>0){
 					hourlySolarChart.addSeries({
-						name: '발전 실적',
+						name: '<fmt:message key="generationResults" />',
 						type: 'column',
 						color: 'var(--turquoise)',
 						tooltip: {
@@ -5162,7 +5162,7 @@
 
 				if(energyData2.length>0){
 					hourlySolarChart.addSeries({
-						name: '발전 예측',
+						name: '<fmt:message key="generationPrediction" />',
 						type: 'column',
 						color: 'var(--white25)',
 						tooltip: {
