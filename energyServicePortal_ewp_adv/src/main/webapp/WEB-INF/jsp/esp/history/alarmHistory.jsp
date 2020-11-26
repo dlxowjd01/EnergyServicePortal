@@ -1040,7 +1040,7 @@
 			let beforeData = ticketLogList[ticketLogList.length - 1];
 
 			if (beforeData.person_at_memo == $('#ticket_user_id').val() && beforeData.status_at_memo == $('#ticket_status button').data('value')) {
-				if (!confirm('변경 사항이 없습니다. 정말 계속 진행 하시겠습니까?')) {
+				if (!confirm('<fmt:message key="alarm.confirm.1" />')) {
 					return false;
 				}
 			}
@@ -1150,7 +1150,7 @@
 					$('#maintenanceReportList ul').append(`<li data-value=${'${rowData.report_id}'}><a href="javascript:void(0);"> ${'${rowData.report_name}'}</a></li>`);
 				});
 			} else {
-				$('#maintenanceReportList ul').append(`<li><a href="javascript:void(0);">조회 내역이 없습니다.</a></li>`);
+				$('#maintenanceReportList ul').append(`<li><a href="javascript:void(0);"><fmt:message key="alarm.noReslt" /></a></li>`);
 			}
 		}).fail((jqXHR, textStatus, errorThrown) => {
 			const r = formatErrorMessage(jqXHR, errorThrown);
@@ -1160,7 +1160,7 @@
 				$('#errorModal').modal('hide');
 			}, 2000);
 
-			$('#maintenanceReportList ul').append(`<li><a href="javascript:void(0);">조회 내역이 없습니다.</a></li>`);
+			$('#maintenanceReportList ul').append(`<li><a href="javascript:void(0);"><fmt:message key="alarm.noReslt" /></a></li>`);
 		});
 	};
 
