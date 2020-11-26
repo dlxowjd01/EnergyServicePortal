@@ -4,8 +4,8 @@
 <div class="lang dropdown"><!--
 --><button type="button" class="dropdown-toggle" data-toggle="dropdown">${cookieLang}<span class="caret"></span></button><!--
 --><ul class="dropdown-menu"><!--
-	--><li class="lang"><a href="javascript:addParameterUrl('KO');">KO</a></li><!--
-	--><li class="lang"><a href="javascript:addParameterUrl('EN');">EN</a></li><!--
+	--><li class="lang"><a href="#" onclick="addParameterUrl(this, 'KO')">KO</a></li><!--
+	--><li class="lang"><a href="#" onclick="addParameterUrl(this, 'EN')">EN</a></li><!--
 --></ul>
 </div>
 <script type="text/javascript">
@@ -13,9 +13,11 @@
 		let tempLang = '${cookieLang}';
 		$("html").attr('lang', tempLang.toLowerCase());
 	});
-	function addParameterUrl(v) {
-		document.cookie = 'lang' + '=' + v + '; path=/';
+	function addParameterUrl(self, v) {
+		let langBtnText = $(self).parents().closest(".dropdown-menu").prev().text();
+		if(langBtnText == v) return false;
 
+		document.cookie = 'lang' + '=' + v + '; path=/';
 		const f = document.dashboardForm;
 		let inp = document.createElement('input');
 		inp.id = 'language';

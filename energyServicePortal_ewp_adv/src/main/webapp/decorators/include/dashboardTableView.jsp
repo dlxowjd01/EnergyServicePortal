@@ -111,7 +111,7 @@
 					className: 'dt-head-right dt-body-right'
 				},
 				{
-					title: '발전 시간',
+					title: '발전 시간(H)',
 					data: null,
 					render: function (data, type, full, rowIndex) {
 						if (isEmpty(full['yesterEnergy']) || isEmpty(full['capacity'])) {
@@ -119,12 +119,8 @@
 						} else {
 							const yesterEnergy = Number(String(full['yesterEnergy']).replace(/[^\d]/g, ''));
 							const capacity = Number(String(full['capacity']).replace(/[^\d]/g, ''));
-							if(capacity === 0 ){
-								return "0";
-							} else {
-								return (Math.round((yesterEnergy / capacity) * 100) / 100).toFixed(2);
-							}
 
+							return (capacity === 0) ? "0" : (Math.round(yesterEnergy/capacity * 10) / 10);
 						}
 					},
 					className: 'dt-center'
@@ -202,8 +198,9 @@
 		let urls = new Array();
 		let deferreds = new Array();
 		let siteArray = new Array();
-
+		
 		siteList.forEach(site => {
+
 			//사이트정보
 			urls.push({
 				url: apiHost + '/status/raw/site',
@@ -217,6 +214,7 @@
 			siteArray.push(site.sid);
 			tableData.push({
 				sid: site.sid,
+				capacity: site.capacities.gen ? numberComma(Math.round(site.capacities.gen / 1000)): "-",
 				siteName: site.name
 			});
 		});
@@ -351,7 +349,8 @@
 								, deviceData = detail[1];
 							if (deviceType !== 'url' && deviceType.match('INV')) {
 								targetSid = deviceData.sid;
-								capacity += deviceData.capacity;
+								// capacity += deviceData.capacity;
+			
 								if (!isEmpty(deviceData.faultDesc)) {
 									deviceFault = deviceData.dname;
 									Object.entries(deviceData.faultDesc).forEach(fault => {
@@ -378,6 +377,7 @@
 						});
 
 						tableData.forEach((site, index) => {
+
 							if (site.sid === targetSid) {
 								if (totalCount == 0) {
 									tableData[index]['invCount'] = '-';
@@ -388,8 +388,6 @@
 										tableData[index]['invCount'] = 'INV (' + runCount + '/' + stopCount + '/' + totalCount + ')';;
 									}
 								}
-
-								tableData[index]['capacity'] = numberComma(Math.round(capacity / 1000));
 								//tableData[index]['deviceFault'] = deviceFault;
 							}
 						});

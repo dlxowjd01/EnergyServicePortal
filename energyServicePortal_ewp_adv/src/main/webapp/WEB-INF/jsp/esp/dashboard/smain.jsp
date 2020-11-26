@@ -188,14 +188,14 @@
 						<ul>
 							<c:choose>
 								<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-									<li><strong><fmt:message key='smain.aimedOutput' /></strong> <span id="siteCapacity">-</span><em>kW</em></li>
+									<li><strong><fmt:message key='smain.aimedOutput' /></strong> <span id="siteCapacity">-</span></li>
 									<li><strong><fmt:message key='smain.receptionTime' /></strong> <span id="siteDcPower">-</span></li>
 									<li><strong><fmt:message key='smain.sendTime' /></strong> <span id="siteAcPower">-</span></li>
 								</c:when>
 								<c:otherwise>
-									<li><strong><fmt:message key='smain.totalSize' /></strong> <span id="siteCapacity">-</span><em>kW</em></li>
-									<li><strong><fmt:message key='smain.rtDCinput' /></strong> <span id="siteDcPower">-</span><em>kW</em></li>
-									<li><strong><fmt:message key='smain.rtACoutput' /></strong> <span id="siteAcPower">-</span><em>kW</em></li>
+									<li><strong><fmt:message key='smain.totalSize' /></strong> <span id="siteCapacity">-</span></li>
+									<li><strong><fmt:message key='smain.rtDCinput' /></strong> <span id="siteDcPower">-</span></li>
+									<li><strong><fmt:message key='smain.rtACoutput' /></strong> <span id="siteAcPower">-</span></li>
 								</c:otherwise>
 							</c:choose>
 
@@ -216,10 +216,10 @@
 								</thead>
 								<tbody id="centerTbody">
 								<tr>
-									<td><em>&nbsp;&nbsp;kW</em></td>
-									<td><em>&nbsp;&nbsp;kWh</em></td>
-									<td><em>&nbsp;&nbsp;kWh</em></td>
-									<td><em>&nbsp;&nbsp;H</em></td>
+									<td></td>
+									<td></td>
+									<td></td>
+									<td></td>
 								</tr>
 								</tbody>
 							</c:when>
@@ -235,11 +235,11 @@
 						</thead>
 						<tbody id="centerTbody">
 						<tr>
-							<td><em>&nbsp;&nbsp;kW</em></td>
-							<td><em>&nbsp;&nbsp;kWh</em></td>
-							<td><em>&nbsp;&nbsp;H</em></td>
-							<td><em>&nbsp;&nbsp;kWh</em></td>
-							<td><em>&nbsp;&nbsp;<fmt:message key='smain.1000won' /></em></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td><em>&nbsp;<fmt:message key='smain.1000won' /></em></td>
 						</tr>
 						</tbody>
 							</c:otherwise>
@@ -1424,7 +1424,7 @@
 		xAxis: [
 			{
 				// type: 'datetime',
-				// format: '{value:%Y-%m-%d}',
+				// format: '{value:%Y/%m/%d}',
 				lineColor: 'var(--grey)',
 				tickColor: 'var(--grey)',
 				tickInterval: 1,
@@ -1436,12 +1436,12 @@
 				labels: {
 					align: 'center',
 					y: 27,
-					// formatter: function () {
-					// 	// return  Highcharts.dateFormat('%M %Y',  this.value);
-					// 	// let temp = date31List[this.value];
-					// 	// let newVal = temp.substring(0,2) + "/" + temp.substring(2,4);
-					// 	// return newVal;
-					// },
+					formatter: function () {
+						// return  Highcharts.dateFormat('%m/%d',  this.value);
+						let temp = date31List[this.value];
+						let newVal = temp.substring(0,2) + "/" + temp.substring(2,4);
+						return newVal;
+					},
 					style: {
 						color: 'var(--grey)',
 						fontSize: '12px'
@@ -1530,26 +1530,26 @@
 			style: {
 				color: 'var(--white)',
 			},
-			// formatter: function () {
-			// 	let temp = date31List[this.x];
-			// 	let newVal = temp.substring(0,2) + "/" + temp.substring(2,4);
+			formatter: function () {
+				let temp = date31List[this.x];
+				let newVal = temp.substring(0,2) + "/" + temp.substring(2,4);
 			
-			// 	return ['<span style="display:flex; margin-bottom:-10px;"><b>' + newVal + '</b></span>'].concat(
-			// 		this.points ?
-			// 			this.points.map(function (point) {
-			// 				let suffix  = '';
-			// 				let val;
-			// 				if(point.series.name == "일사량"){
-			// 					val = Math.round(point.point.y);
-			// 				} else {
-			// 					val = displayNumberFixedUnit(point.point.y, 'kWh', 'kWh', 0)[0];
-			// 				}
-			// 				point.series.options.tooltip.valueSuffix ? (suffix = point.series.options.tooltip.valueSuffix) : (suffix = "");
+				return ['<span style="display:flex; margin-bottom:-10px;"><b>' + newVal + '</b></span>'].concat(
+					this.points ?
+						this.points.map(function (point) {
+							let suffix  = '';
+							let val;
+							if(point.series.name == "일사량"){
+								val = Math.round(point.point.y);
+							} else {
+								val = displayNumberFixedUnit(point.point.y, 'kWh', 'kWh', 0)[0];
+							}
+							point.series.options.tooltip.valueSuffix ? (suffix = point.series.options.tooltip.valueSuffix) : (suffix = "");
 
-			// 				return "<br/><span style='color:" + point.series.color + "'>\u25CF</span> " + point.series.name + ": " + val + " " + suffix;
-			// 			}) : []
-			// 	);
-			// },
+							return "<br/><span style='color:" + point.series.color + "'>\u25CF</span> " + point.series.name + ": " + val + " " + suffix;
+						}) : []
+				);
+			},
 		},
 		legend: {
 			enabled: true,
@@ -4318,8 +4318,8 @@
 					// }
 				});
 			} else {
-				// let d = new Date();
-				// aMonthAgo = new Date(d.getTime() - (30 * 24 * 60 * 60 * 1000));
+				let d = new Date();
+				aMonthAgo = new Date(d.getTime() - (30 * 24 * 60 * 60 * 1000));
 			}
 
 			// 10/27
@@ -4331,8 +4331,6 @@
 					valueSuffix: 'kWh',
 				},
 				data: chartItems3,
-				// pointStart: Date.UTC(aMonthAgo.getFullYear(), aMonthAgo.getMonth() , aMonthAgo.getDay()),
-				// pointInterval: 24 * 60 * 60 * 1000
 			});
 
 
@@ -4350,7 +4348,6 @@
 					symbol: "circle"
 				},
 				data: chartItems2,
-				// pointStart: startDate,
 				// pointStart: Date.UTC(aMonthAgo.getFullYear(), aMonthAgo.getMonth() , aMonthAgo.getDay()),
 				// pointInterval: 24 * 60 * 60 * 1000
 			});
@@ -4361,7 +4358,7 @@
 			dailySolarTrendChart.update({
 				// xAxis: [
 				// 	{
-				// 		format: '{value:%Y-%m-%d}',
+				// 		format: '{value:%m/%d}',
 				// 		tickInterval: 24 * 3600 * 1000
 				// 	}
 				// ],
@@ -4374,7 +4371,13 @@
 						title:{ text: "W/m\xB2" },
 						max: dailyInvMaxVal
 					},
-				],		
+				],
+				// plotOptions: {
+				// 	series: {
+				// 		pointStart: Date.UTC(aMonthAgo.getFullYear(), aMonthAgo.getMonth() , aMonthAgo.getDay()),
+				// 		pointInterval: 24 * 60 * 60 * 1000
+				// 	}
+				// }	
 			});
 
 			dailySolarTrendChart.isDirtyBox = true;
@@ -4541,17 +4544,15 @@
 		let deferredList = [];
 
 		if(oid.match('testkpx')) {
-			$('#centerTbody tr td:nth-child(1)').html('<em>&nbsp;&nbsp;kW</em>');
-			$('#centerTbody tr td:nth-child(2)').html('<em>&nbsp;&nbsp;kWh</em>');
-			$('#centerTbody tr td:nth-child(3)').html('<em>&nbsp;&nbsp;kWh</em>');
-			$('#centerTbody tr td:nth-child(4)').html('<em>&nbsp;&nbsp;H</em>');
+			$('#centerTbody tr td:nth-child(1)').html('<em>&nbsp;kW</em>');
+			$('#centerTbody tr td:nth-child(2)').html('<em>&nbsp;kWh</em>');
+			$('#centerTbody tr td:nth-child(3)').html('<em>&nbsp;kWh</em>');
+			$('#centerTbody tr td:nth-child(4)').html('<em>&nbsp;H</em>');
 		} else {
-			$('#centerTbody tr td:nth-child(1)').html('<em>&nbsp;&nbsp;kW</em>');
-			$('#centerTbody tr td:nth-child(2)').html('<em>&nbsp;&nbsp;kWh</em>');
-			$('#centerTbody tr td:nth-child(3)').html('<em>&nbsp;&nbsp;H</em>');
-			$('#centerTbody tr td:nth-child(4)').html('<em>&nbsp;&nbsp;kWh</em>');
-			$('#centerTbody tr td:nth-child(5)').html('<em>&nbsp;&nbsp;천원</em>');
-			
+			$('#centerTbody tr td:nth-child(1)').html('<em>&nbsp;kW</em>');
+			$('#centerTbody tr td:nth-child(2)').html('<em>&nbspkWh</em>');
+			$('#centerTbody tr td:nth-child(3)').html('<em>&nbsp;H</em>');
+			$('#centerTbody tr td:nth-child(4)').html('<em>&nbsp;kWh</em>');
 		}
 
 		if(isEmpty(option)){
@@ -4702,9 +4703,7 @@
 											const key = di[0];
 											const value = di[1];
 
-											if(key == 'capacity') {
-												itemCapacity += value;
-											} else if(key == 'dcPower') {
+											if(key == 'dcPower') {
 												itemDcPower += value;
 											} else if(key == 'activePower') {
 												itemAcPower += value;
@@ -4714,6 +4713,7 @@
 										});
 									}
 								}
+								itemCapacity = sList[0].capacities.gen;
 							});
 						}
 					}
