@@ -170,7 +170,7 @@
 			},
 			error: (jqXHR, textStatus, errorThrown) => {
 				console.error(textStatus);
-				errorMsg('처리중 오류가 발생했습니다.');
+				errorMsg('<fmt:message key="yieldReport.error.1" />');
 			}
 		});
 	}
@@ -188,12 +188,12 @@
 					if (!isEmpty(result) && !isEmpty(result['data'])) {
 						resolve(result['data']);
 					} else {
-						throw Error('조회된 내역이 없습니다.');
+						throw Error('<fmt:message key="yieldReport.error.19" />');
 					}
 				},
 				error: (request, status, error) => {
 					console.error(error);
-					throw Error('조회중 오류가 발생했습니다.');
+					throw Error('<fmt:message key="yieldReport.error.20" />');
 				}
 			});
 		}).then(resultData => {
@@ -275,7 +275,7 @@
 				}, 200);
 			},
 			fail: function(){
-				errorMsg('다운로드중 오류가 발생했습니다.');
+				errorMsg('<fmt:message key="yieldReport.error.2" />');
 			}
 		});
 	}
@@ -320,7 +320,7 @@
 			$('#yieldList').empty(); // 적용변수 초기화
 
 			if (isEmpty(spcData)) {
-				$('#spc_id ul').append(`<li><a href="javascript:void(0);">조회된 내역이 없습니다.</a></li>`);
+				$('#spc_id ul').append(`<li><a href="javascript:void(0);"><fmt:message key="yieldReport.error.19" /></a></li>`);
 			} else {
 				spcData.forEach(spc => {
 					$('#spc_id ul').append(`<li data-value="${'${spc[\'spc_id\']}'}"><a href="javascript:void(0);">${'${spc[\'name\']}'}</a></li>`);
@@ -328,7 +328,7 @@
 			}
 
 			if (isEmpty(yieldTemplate)) {
-				$('#report_type ul').append(`<li><a href="javascript:void(0);">조회된 내역이 없습니다.</a></li>`);
+				$('#report_type ul').append(`<li><a href="javascript:void(0);"><fmt:message key="yieldReport.error.19" /></a></li>`);
 			} else {
 				Object.entries(yieldTemplate).forEach(([index, yield]) => {
 					const name = (langStatus == 'KO') ? yield['name']['kr'] : yield['name']['en'];
@@ -347,7 +347,7 @@
 			$('#reportModal').modal();
 		}).catch(error => {
 			console.error(error);
-			errorMsg('처리중 오류가 발생했습니다.');
+			errorMsg('<fmt:message key="yieldReport.error.3" />');
 		});
 	}
 
@@ -360,12 +360,12 @@
 			, reportValue = $('#report_type button').data('value');
 
 		if (isEmpty(reportValue)) {
-			errorMsg('보고서 유형을 선택해주세요.');
+			errorMsg('<fmt:message key="yieldReport.error.4" />');
 			return false;
 		}
 
 		if (isEmpty(reportOption)) {
-			errorMsg('해당 보고서 유형에서는 적용할 변수가 없습니다.');
+			errorMsg('<fmt:message key="yieldReport.error.5" />');
 		} else {
 			let options = new Array()
 			  , liIndex = 1;
@@ -392,9 +392,9 @@
 								</ul>
 							</div>
 							<div class="text-input-type fl">
-								<input type="text" id="report_variable_val_${'${liIndex}'}" name="report_variable_val_${'${liIndex}'}" placeholder="입력" autocomplete="off">
+								<input type="text" id="report_variable_val_${'${liIndex}'}" name="report_variable_val_${'${liIndex}'}" placeholder="<fmt:message key="yieldReport.enter" />" autocomplete="off">
 							</div>
-							<button type="button" class="btn-type07" onclick="$(this).parents('li').remove();">삭제</button>
+							<button type="button" class="btn-type07" onclick="$(this).parents('li').remove();"><fmt:message key="yieldReport.delete" /></button>
 						</li>`;
 			$('#yieldList').append(liStr);
 
@@ -435,12 +435,12 @@
 							$('#site_id ul').append(liStr);
 						});
 					} else {
-						$('#site_id ul').append(`<li><a href="javascript:void(0);">조회된 내역이 없습니다.</a></li>`);
+						$('#site_id ul').append(`<li><a href="javascript:void(0);"><fmt:message key="yieldReport.error.19" /></a></li>`);
 					}
 				},
 				fail: function(){
-					errorMsg('조회중 오류가 발생했습니다.');
-					$('#site_id ul').append(`<li><a href="javascript:void(0);">조회된 내역이 없습니다.</a></li>`);
+					errorMsg('<fmt:message key="yieldReport.error.6" />');
+					$('#site_id ul').append(`<li><a href="javascript:void(0);"><fmt:message key="yieldReport.error.19" /></a></li>`);
 				}
 			});
 		} else if ($selector === 'site_id') {
@@ -478,24 +478,24 @@
 			report_variable = new Array();
 
 		if (isEmpty($('#spc_id button').data('value'))) {
-			errorMsg('SPC 선택은 필수입니다.');
+			errorMsg('<fmt:message key="yieldReport.error.7" />');
 			return;
 		}
 
 		if (isEmpty($('#report_type button').data('value'))) {
-			errorMsg('보고서 유형 선택은 필수입니다.');
+			errorMsg('<fmt:message key="yieldReport.error.8" />');
 			return;
 		}
 
 		if (!($('#report_type button').data('value')).match('quaterly')) {
 			if (isEmpty($('#site_id button').data('value'))) {
-				errorMsg('발전소 선택은 필수입니다.');
+				errorMsg('<fmt:message key="yieldReport.error.9" />');
 				return;
 			}
 		}
 
 		if ($('#report_data_start').datepicker('getDate') === null || $('#report_data_end').datepicker('getDate') === null) {
-			errorMsg('적용기간 입력은 필수입니다.');
+			errorMsg('<fmt:message key="yieldReport.error.10" />');
 			return;
 		}
 
@@ -528,11 +528,11 @@
 			data: JSON.stringify(data),
 			success: () => {
 				$('#reportModal').modal('hide');
-				errorMsg('보고서 등록이 완료되었습니다.');
+				errorMsg('<fmt:message key="yieldReport.error.11" />');
 				getDataList();
 			},
 			fail: () => {
-				errorMsg('보고서 등록중 오류가 발생했습니다.');
+				errorMsg('<fmt:message key="yieldReport.error.12" />');
 				return false;
 			}
 		});
@@ -557,13 +557,13 @@
 				timeout: 600000,
 				success: (data) => {
 					if (isEmpty(data) && isEmpty(data.files)) {
-						errorMsg('업로드에 실패하였습니다.');
+						errorMsg('<fmt:message key="yieldReport.error.13" />');
 					} else {
 						resolve(data.files);
 					}
 				},
 				fail: () => {
-					errorMsg('업로드 중 오류가 발생했습니다.');
+					errorMsg('<fmt:message key="yieldReport.error.14" />');
 				}
 			})
 		}).then(files => {
@@ -585,11 +585,11 @@
 					confirmed_at: new Date().toISOString()
 				}),
 				success: (data) => {
-					errorMsg('확정 보고서 업로드가 완료되었습니다.');
+					errorMsg('<fmt:message key="yieldReport.error.15" />');
 					getDataList();
 				},
 				fail: () => {
-					errorMsg('업로드 중 오류가 발생했습니다.');
+					errorMsg('<fmt:message key="yieldReport.error.16" />');
 				}
 			});
 		}).catch(error => {
@@ -602,7 +602,7 @@
 
 		let zipArr = new Array()
 		if (checkedArray.length === 0) {
-			errorMsg('다운로드할 목록을 선택하세요.');
+			errorMsg('<fmt:message key="yieldReport.error.17" />');
 		} else {
 			checkedArray.forEach(checkBox => {
 				const chkIndex = Number((checkBox.getAttribute('id')).replace(/[^0-9]/g, ''))
@@ -664,13 +664,13 @@
 		const checkedArray = document.querySelectorAll('[name="table_checkbox"]:checked');
 
 		if (checkedArray.length === 0) {
-			errorMsg('삭제 할 목록을 선택하세요.');
+			errorMsg('<fmt:message key="yieldReport.error.18" />');
 		} else {
 			let modal = $("#comDeleteModal");
 			let deleteBtn = $("#comDeleteBtn");
 			let confirmTitle = $("#confirmTitle");
 
-			$("#comDeleteSuccessMsg span").text('삭제');
+			$("#comDeleteSuccessMsg span").text('<fmt:message key="yieldReport.delete" />');
 			modal.find(".modal-body").removeClass("hidden");
 			modal.modal("show");
 
@@ -788,10 +788,10 @@
 							<div class="flex-start dateField">
 								<span class="input-label"><fmt:message key='yieldReport.period' /></span>
 								<div class="sel-calendar">
-									<input type="text" id="report_data_start" name="report_data_start" value="" class="sel fromDate" autocomplete="off" readonly="" placeholder="날짜 선택">
+									<input type="text" id="report_data_start" name="report_data_start" value="" class="sel fromDate" autocomplete="off" readonly="" placeholder="<fmt:message key='yieldReport.dateSelect' />">
 								</div>
 								<div class="sel-calendar ml-22">
-									<input type="text" id="report_data_end" name="report_data_end" value="" class="sel toDate" autocomplete="off" readonly="" placeholder="날짜 선택">
+									<input type="text" id="report_data_end" name="report_data_end" value="" class="sel toDate" autocomplete="off" readonly="" placeholder="<fmt:message key='yieldReport.dateSelect' />">
 								</div>
 							</div>
 						</div>
