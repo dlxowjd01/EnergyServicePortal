@@ -1,5 +1,7 @@
 const enTranslation =
 {
+  "commonDropdown.total": "(en) 전체",
+  "commonDropdown.etc": "(en) 외",
   "edash.output_capacity": "Output Capacity",
   "edash.current_output": "Current Output",
   "edash.unused": "Unused",

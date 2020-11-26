@@ -1,5 +1,7 @@
 const koTranslation = 
 {
+  "commonDropdown.total": "전체",
+  "commonDropdown.etc": "외",
   "edash.output_capacity": "출력용량",
   "edash.current_output": "현재출력",
   "edash.unused": "미사용량",

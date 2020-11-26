@@ -80,7 +80,7 @@ const displayDropdown = ($selector) => {
 		let checkboxLength = $selector.find('input[type="checkbox"]:not([value="all"])').length;
 
 		if(checkedboxLength == checkboxLength){
-			$displayText = '전체';
+			$displayText = i18nManager.tr('commonDropdown.total');
 			if( $selector.data("function", "concat") ){
 				let concatArr = [];
 				let concatStr = '';
@@ -97,7 +97,7 @@ const displayDropdown = ($selector) => {
 					$displayButton.data("value", checkedItems.val());
 				}
 			} else if (checkedboxLength > 1) {
-				$displayText = checkedItems.first().next().text() + ' 외 +' + (checkedboxLength - 1);
+				$displayText = checkedItems.first().next().text() + ' ' + i18nManager.tr('commonDropdown.etc') + ' +' + (checkedboxLength - 1);
 
 				if( $selector.data("function", "concat") ){
 					let concatArr = [];
