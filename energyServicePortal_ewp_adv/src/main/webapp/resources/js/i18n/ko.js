@@ -448,6 +448,7 @@ const koTranslation =
   "dashboard_date": "일",
   "dashboard_generation_forecast": "발전 예측",
   "dashboard_generation": "발전",
+  "gdash.4.gen": "태양광",
   "dashboard_unused_amount": "미사용량",
   "dashboard_units": "대",
   "dashboard_generated_amount": "발전량",

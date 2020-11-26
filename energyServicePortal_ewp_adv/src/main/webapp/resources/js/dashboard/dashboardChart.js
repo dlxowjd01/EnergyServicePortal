@@ -567,7 +567,7 @@ const pieChart = Highcharts.chart('pie_chart', {
 		colorByPoint: true,
 		data: [{
 			color: 'var(--circle-solar-power)',
-			name: i18nManager.tr("dashboard_photovoltaic"),
+			name: i18nManager.tr("gdash.4.gen"),
 			dataLabels: {
 				enabled: false
 			},
