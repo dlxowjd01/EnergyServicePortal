@@ -188,7 +188,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 
 			parameters.clear();
 			parameters.put("includeDevices", "true");
-
+			parameters.put("addCapacity", "true");
 			Map<String, Object> siteMap = get("/auth/me/sites", mode, parameters, token); //사이트 리스트 정보
 			if (200 == (int) siteMap.get("code")) {
 				siteOriginList = (List<Map<String, Object>>) siteMap.get("data");
@@ -585,7 +585,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 				}
 			} else if (elem.getValue() instanceof HashMap) {
 				try {
-					jo.put(elem.getKey(), jsonParser((Map<String, Object>) elem));
+					jo.put(elem.getKey(), jsonParser((Map<String, Object>) elem.getValue()));
 				} catch (JSONException e) {
 					jo.remove(elem.getKey());
 				}
