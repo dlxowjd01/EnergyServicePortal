@@ -410,7 +410,7 @@
 	<c:set var="drList" value="${dr_group}"/> <!-- DR거래 별 -->
 
 	<div class="all-menu">
-		<a href="#"><fmt:message key='menu.top.division' \></a>
+		<a href="#">구분</a>
 		<form name="menuform" method="post">
 			<div class="menu-group">
 				<div class="menu-wrapper">
