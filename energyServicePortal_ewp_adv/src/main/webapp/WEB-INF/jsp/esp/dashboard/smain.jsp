@@ -1004,7 +1004,7 @@
 		series: [{
 			type: 'pie',
 			innerSize: '70%',
-			name: '발전량',
+			name: '<fmt:message key="smain.generation" />',
 			colorByPoint: true,
 			data: [
 				{
@@ -1297,7 +1297,7 @@
 			},
 			<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
 			{
-				name: '일사량',
+				name: '<fmt:message key="smain.irradiance" />',
 				type: 'spline',
 				dashStyle: 'ShortDash',
 				color: 'var(--white60)',
@@ -4246,7 +4246,7 @@
 			}
 
 			dailySolarTrendChart.addSeries({
-				name: '발전량',
+				name: '<fmt:message key="smain.generation" />',
 				type: 'column',
 				color: 'var(--turquoise)',
 				tooltip: {
@@ -4259,7 +4259,7 @@
 
 
 			dailySolarTrendChart.addSeries({
-				name: '일사량',
+				name: '<fmt:message key="smain.irradiance" />',
 				type: 'spline',
 				yAxis: 1,
 				dashStyle: 'ShortDash',
@@ -5174,7 +5174,7 @@
 
 				if(energyData3.length>0){
 					hourlySolarChart.addSeries({
-						name: '일사량',
+						name: '<fmt:message key="smain.irradiance" />',
 						type: 'spline',
 						dashStyle: 'ShortDash',
 						yAxis: 1,
