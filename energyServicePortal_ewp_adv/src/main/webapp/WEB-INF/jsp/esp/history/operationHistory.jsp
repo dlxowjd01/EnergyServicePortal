@@ -119,17 +119,17 @@
 
 			if ($(':radio[name="analyze"]:checked').val() == '시계열 분석') {
 				if ($('#chartDid button').data('value') == '') {
-					alert('추가 하시려는 설비명을 선택 해 주세요.');
+					alert('<fmt:message key="operHistory.alert.1" />');
 					return false;
 				}
 
 				if ($(':radio[name="column"]').is(':checked') == false) {
-					alert('추가 하시려는 항목을 선택 해 주세요.');
+					alert('<fmt:message key="operHistory.alert.2" />');
 					return false;
 				}
 
 				if ($(':radio[name="rdValue"]').is(':checked') == false) {
-					alert('선택 해 주세요.');
+					alert('<fmt:message key="operHistory.alert.3" />');
 					return false;
 				}
 
@@ -147,7 +147,7 @@
 						}
 					}
 				} else {
-					alert('선택 해 주세요.');
+					alert('<fmt:message key="operHistory.alert.3" />');
 					return false;
 				}
 
@@ -166,32 +166,32 @@
 				}
 			} else {
 				if ($('#chartDid2 button').data('value') == '') {
-					alert('X축에 추가 하시려는 설비명을 선택 해 주세요.');
+					alert('<fmt:message key="operHistory.alert.4" />');
 					return false;
 				}
 
 				if ($(':radio[name="column2"]').is(':checked') == false) {
-					alert('X축에 추가 하시려는 항목을 선택 해 주세요.');
+					alert('<fmt:message key="operHistory.alert.5" />');
 					return false;
 				}
 
 				if ($(':radio[name="rdValue2"]').is(':checked') == false) {
-					alert('X축에 선택 해 주세요.');
+					alert('<fmt:message key="operHistory.alert.6" />');
 					return false;
 				}
 
 				if ($('#chartDid3 button').data('value') == '') {
-					alert('Y축에 추가 하시려는 설비명을 선택 해 주세요.');
+					alert('<fmt:message key="operHistory.alert.7" />');
 					return false;
 				}
 
 				if ($(':radio[name="column3"]').is(':checked') == false) {
-					alert('Y축에 추가 하시려는 항목을 선택 해 주세요.');
+					alert('<fmt:message key="operHistory.alert.8" />');
 					return false;
 				}
 
 				if ($(':radio[name="rdValue3"]').is(':checked') == false) {
-					alert('Y축에 선택 해 주세요.');
+					alert('<fmt:message key="operHistory.alert.9" />');
 					return false;
 				}
 
@@ -257,7 +257,7 @@
 				let timeCategory = new Array();
 				show = true;
 				if ($('#analyzeTag1 span').length <= 0) {
-					alert('한개이상 항목을 선택해 주세요.');
+					alert('<fmt:message key="operHistory.alert.10" />');
 					return false;
 				}
 
@@ -439,7 +439,7 @@
 				categories = new Array();
 
 				if ($('#analyzeTag2 span').length <= 0) {
-					alert('한개이상 항목을 선택해 주세요.');
+					alert('<fmt:message key="operHistory.alert.10" />');
 					return false;
 				}
 
@@ -545,9 +545,9 @@
 			let cnt = $val.length;
 
 			if (cnt < 1) {
-				alert('다운받을 데이터가 없습니다.');
+				alert('<fmt:message key="operHistory.alert.11" />');
 			} else {
-				if (confirm('엑셀로 저장하시겠습니까?')) {
+				if (confirm('<fmt:message key="operHistory.confirm.1" />')) {
 					tableToExcel('datatable', excelName, e);
 				}
 			}
@@ -648,8 +648,8 @@
 
 	//선택한 SID에 해당하는 유형의 타입을 보여준다.
 	const deviceType = function (deviceTp) {
-		$('#deviceType button').empty().append('설비유형<span class="caret"></span>');
-		$('#devices .dropdown-toggle').text().replace(/<[^>]+>/g, '복수 선택');
+		$('#deviceType button').empty().append('<fmt:message key="operHistory.deviceType" /><span class="caret"></span>');
+		$('#devices .dropdown-toggle').text().replace(/<[^>]+>/g, '<fmt:message key="operHistory.multiple" />');
 		$('#devices .dropdown-cov').empty();
 
 		let siteArray = new Array();
@@ -713,7 +713,7 @@
 
 	//설비타입 디바이스타입 설정한다.
 	const device = function () {
-		$('#devices .dropdown-toggle').text().replace(/<[^>]+>/g, '복수 선택');
+		$('#devices .dropdown-toggle').text().replace(/<[^>]+>/g, '<fmt:message key="operHistory.multiple" />');
 		$('#devices .dropdown-cov').empty();
 		
 		const typeArray = $.makeArray(
@@ -848,17 +848,17 @@
 	const searchGrid = function () {
 
 		if ($(':checkbox[name="site"]:checked').length == 0) {
-			alert('사이트를 한개이상 선택해 주세요.');
+			alert('<fmt:message key="operHistory.alert.12" />');
 			return false;
 		}
 
 		if ($(':checkbox[name="type"]:checked').length == 0) {
-			alert('설비타입을 한개이상 선택해 주세요.');
+			alert('<fmt:message key="operHistory.alert.13" />');
 			return false;
 		}
 
 		if ($(':checkbox[name="device"]:checked').length == 0) {
-			alert('설비를 한개이상 선택해 주세요.');
+			alert('<fmt:message key="operHistory.alert.14" />');
 			return false;
 		}
 
@@ -909,7 +909,7 @@
 				if (chart) {
 					chart.destroy();
 
-					$('[id^=columnLi]').empty().prev().html('선택 <span class="caret"></span>');
+					$('[id^=columnLi]').empty().prev().html('<fmt:message key="operHistory.graphseeg" /> <span class="caret"></span>');
 				}
 
 				$.map(result, function (value, key) {
@@ -995,7 +995,7 @@
 				if ($('#chartDid2 button').data('value') == spanDidX && $(':radio[name="column2"]:checked').val() == spanColumnX && $(':radio[name="rdValue2"]:checked').val() == spanRdValX &&
 					$('#chartDid3 button').data('value') == spanDidY && $(':radio[name="column3"]:checked').val() == spanColumnY && $(':radio[name="rdValue3"]:checked').val() == spanRdValY
 				) {
-					alert('중복된 항목이 존재합니다.');
+					alert('<fmt:message key="operHistory.alert.15" />');
 					dup = true;
 				}
 			});
@@ -1009,7 +1009,7 @@
 					$(':radio[name="column"]:checked').val() == spanColumn &&
 					$(':radio[name="rdValue"]:checked').val() == spanRdVal
 				) {
-					alert('중복된 항목이 존재합니다.');
+					alert('<fmt:message key="operHistory.alert.15" />');
 					dup = true;
 				}
 			});
@@ -1211,7 +1211,7 @@
 	<div class="col-12">
 		<form id="operationSearchForm">
 			<div class="dropdown sa-select" id="siteList">
-				<button type="button" class="dropdown-toggle w1 no-close" data-toggle="dropdown" data-name="사업소 선택"><fmt:message key='operHistory.selectSite' /><span class="caret"></span></button>
+				<button type="button" class="dropdown-toggle w1 no-close" data-toggle="dropdown" data-name="<fmt:message key='operHistory.selectSite' />"><fmt:message key='operHistory.selectSite' /><span class="caret"></span></button>
 				<ul class="dropdown-menu chk-type" role="menu" id="siteULList">
 					<li data-value="[sid]">
 						<a href="javascript:void(0);" tabindex="-1">
@@ -1310,13 +1310,13 @@
 					<div id="analyzeDiv1" class="sa-select mb-10">
 						<div class="sa-select mb-10">
 							<div class="dropdown" id="chartDid">
-								<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="설비명 선택"><fmt:message key='operHistory.graph.name' /><span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="<fmt:message key='operHistory.graph.name' />"><fmt:message key='operHistory.graph.name' /><span class="caret"></span></button>
 								<ul class="dropdown-menu" id="chartDidUl"><li data-value="[val]" data-sid="[sid]" data-type="[type]"><a href="javascript:void(0);">[siteDevice]</a></li></ul>
 							</div>
 						</div>
 						<div class="sa-select mb-10">
 							<div class="dropdown">
-								<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="설비속성 선택"><fmt:message key='operHistory.graph.type' /><span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="<fmt:message key='operHistory.graph.type' />"><fmt:message key='operHistory.graph.type' /><span class="caret"></span></button>
 								<ul class="dropdown-menu radio-type" role="menu" id="columnLi"><li data-value="[key]"><a href="javascript:void(0);" tabindex="-1"><input type="radio" id="column[INDEX]" name="column" value="[key]"><label for="column[INDEX]">[value]</label></a></li></ul>
 							</div>
 						</div>
@@ -1347,7 +1347,7 @@
 						</div>
 						<div class="sa-select mb-10">
 							<div class="dropdown" id="way">
-								<button type="button" class="dropdown-toggle w5" data-toggle="dropdown" data-name="선택"><fmt:message key='operHistory.graphseeg' /><span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle w5" data-toggle="dropdown" data-name="<fmt:message key='operHistory.graphseeg' />"><fmt:message key='operHistory.graphseeg' /><span class="caret"></span></button>
 								<ul class="dropdown-menu">
 									<li data-value="l"><a href="javascript:void(0);"><fmt:message key="statushistory.2.y_left" /></a></li>
 									<li data-value="r"><a href="javascript:void(0);"><fmt:message key="statushistory.2.y_right" /></a></li>
@@ -1360,7 +1360,7 @@
 						<span class="tx-tit"><fmt:message key='operHistory.graph.gridX' /></span>
 						<div class="sa-select mb-10">
 							<div id="chartDid2" class="dropdown">
-								<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="설비명 선택"><fmt:message key='operHistory.graph.name' /><span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="<fmt:message key='operHistory.graph.name' />"><fmt:message key='operHistory.graph.name' /><span class="caret"></span></button>
 								<ul class="dropdown-menu" id="chartDidUl2">
 									<li data-value="[val]" data-sid="[sid]" data-type="[type]"><a>[siteDevice]</a></li>
 								</ul>
@@ -1368,7 +1368,7 @@
 						</div>
 						<div class="sa-select mb-10">
 							<div id="columnDrop2" class="dropdown">
-								<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="설비속성 선택"><fmt:message key='operHistory.graph.type' /><span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="<fmt:message key='operHistory.graph.type' />"><fmt:message key='operHistory.graph.type' /><span class="caret"></span></button>
 								<ul id="columnLi2" class="dropdown-menu radio-type" role="menu">
 									<li data-value="[key]">
 										<a href="javascript:void(0);" tabindex="-1">
@@ -1408,7 +1408,7 @@
 						<span class="tx-tit"><fmt:message key='operHistory.graph.gridY' /></span>
 						<div class="sa-select mb-10">
 							<div id="chartDid3" class="dropdown">
-								<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="설비명 선택">
+								<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="<fmt:message key='operHistory.graph.name' />">
 									<fmt:message key='operHistory.graph.name' /><span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu" id="chartDidUl3">
@@ -1418,7 +1418,7 @@
 						</div>
 						<div class="sa-select mb-10">
 							<div id="columnDrop3" class="dropdown">
-								<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="설비속성 선택"><fmt:message key='operHistory.graph.type' /><span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="<fmt:message key='operHistory.graph.type' />"><fmt:message key='operHistory.graph.type' /><span class="caret"></span></button>
 								<ul id="columnLi3" class="dropdown-menu radio-type" role="menu">
 									<li>
 										<a href="javascript:void(0);" data-value="[key]" tabindex="-1">
