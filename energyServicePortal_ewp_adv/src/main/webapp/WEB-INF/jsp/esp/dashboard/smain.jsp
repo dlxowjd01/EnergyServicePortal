@@ -1390,7 +1390,7 @@
 		navigator: {
 			xAxis: {
 				labels: {
-					// enabled: false,
+					enabled: true,
 					formatter: function () {
 						let temp = date31List[this.value];
 						let newVal = "";
@@ -1424,7 +1424,7 @@
 		xAxis: [
 			{
 				// type: 'datetime',
-				// format: '{value:%Y/%m/%d}',
+				// format: '{value:%m/%d}',
 				lineColor: 'var(--grey)',
 				tickColor: 'var(--grey)',
 				tickInterval: 1,
@@ -4331,9 +4331,13 @@
 					valueSuffix: 'kWh',
 				},
 				data: chartItems3,
+				// pointStart: Date.UTC(aMonthAgo.getFullYear(), aMonthAgo.getMonth() , aMonthAgo.getDay()),
+				// // pointInterval: 24 * 60 * 60 * 1000
+				// pointInterval: 86400000,
 			});
 
-
+			// let tempStart = Date.UTC(aMonthAgo.getFullYear(), aMonthAgo.getMonth() , aMonthAgo.getDay());
+			// console.log("tempStart==", tempStart)
 
 			dailySolarTrendChart.addSeries({
 				name: '일사량',
@@ -4349,7 +4353,8 @@
 				},
 				data: chartItems2,
 				// pointStart: Date.UTC(aMonthAgo.getFullYear(), aMonthAgo.getMonth() , aMonthAgo.getDay()),
-				// pointInterval: 24 * 60 * 60 * 1000
+				// // pointInterval: 24 * 60 * 60 * 1000,
+				// pointInterval: 86400000,
 			});
 
 			// let formattedDate31List = addToDateList(31, null, "date");
