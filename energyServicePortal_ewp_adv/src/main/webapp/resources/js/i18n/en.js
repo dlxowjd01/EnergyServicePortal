@@ -435,7 +435,7 @@ const enTranslation =
   "dashboard_discharge": "Discharge",
   "dashboard_photovoltaic": "Solar",
   "dashboard_payment": "Payment",
-  "dashboard_in_thousands_of_won": "In Thousands of Won",
+  "dashboard_in_thousands_of_won": "$",
   "dashboard_an_error_occurred_during_processing": "An error occurred during processing.",
   "dashboard_date": "Date",
   "dashboard_generation_forecast": "Generation Forecast",

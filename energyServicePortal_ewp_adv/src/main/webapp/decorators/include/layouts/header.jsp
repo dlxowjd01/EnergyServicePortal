@@ -410,16 +410,16 @@
 	<c:set var="drList" value="${dr_group}"/> <!-- DR거래 별 -->
 
 	<div class="all-menu">
-		<a href="#">구분</a>
+		<a href="#"><fmt:message key='menu.top.division' \></a>
 		<form name="menuform" method="post">
 			<div class="menu-group">
 				<div class="menu-wrapper">
 					<ul>
 						<li>
 							<dl>
-								<dt>사업소 분석</dt>
+								<dt><fmt:message key='menu.top.plantAnalysis' \></dt>
 								<dd>
-									<a href="#">사업소별</a>
+									<a href="#"><fmt:message key='menu.top.plantAnalysis.site' \></a>
 									<ul class="overflow-list">
 										<li><a href="#" class="group-title" onclick="dashboardMove('group', '', ''); return false">전체</a></li>
 										<c:if test="${fn:length(siteList) > 0}">
@@ -438,7 +438,7 @@
 								<dl>
 									<dt></dt>
 									<dd>
-										<a href="#">그룹별</a>
+										<a href="#"><fmt:message key='menu.top.plantAnalysis.group' \></a>
 										<ul class="overflow-list">
 											<c:forEach var="group" items="${tagList}">
 												<li>
@@ -464,9 +464,9 @@
 							<c:if test="${oid ne 'trust' and fn:length(vppList) > 0}">
 								<li>
 									<dl>
-										<dt>에너지 거래</dt>
+										<dt><fmt:message key='menu.top.energytrans' \></dt>
 										<dd>
-											<a href="#">중개거래</a>
+											<a href="#"><fmt:message key='menu.top.energytrans.vpp' \></a>
 											<ul class="overflow-list">
 												<c:forEach var="vpp" items="${vppList}">
 													<li>
@@ -493,7 +493,7 @@
 									<dl>
 										<dt></dt>
 										<dd>
-											<a href="#">DR 거래</a>
+											<a href="#"><fmt:message key='menu.top.energytrans.dr' \></a>
 											<ul class="overflow-list">
 												<c:forEach var="dr" items="${drList}">
 													<li>
@@ -520,9 +520,9 @@
 					<ul>
 						<li class="lo-type lo">
 							<dl>
-								<dt>지역 및 유형 선택</dt>
+								<dt><fmt:message key='menu.top.regionOrType' \></dt>
 								<dd>
-									<a href="#">지역별</a>
+									<a href="#"><fmt:message key='menu.top.regionOrType.region' \></a>
 									<ul class="overflow-list">
 										<c:set var="divisionLocation" value="${sessionScope.divisionLocation}"/>
 										<c:forEach var="loc" items="${location}" varStatus="stat">
@@ -556,7 +556,7 @@
 							<dl>
 								<dt></dt>
 								<dd>
-									<a href="#">유형별</a>
+									<a href="#"><fmt:message key='menu.top.regionOrType.type' \></a>
 									<ul>
 										<c:set var="systemTp" value="${sessionScope.divisionResourceType}"/>
 										<c:forEach var="type" items="${resource}" varStatus="stat">

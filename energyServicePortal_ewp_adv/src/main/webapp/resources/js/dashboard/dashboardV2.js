@@ -573,14 +573,14 @@ const monthlyChartDraw = async () => {
 			chartSeries.color = el.color;
 			chartSeries.data = eval(el.data);
 
-			if (el.name == '정산금') {
+			if (el.name == i18nManager.tr("dashboard_payment")) {
 				chartSeries.dashStyle = 'ShortDash';
 				chartSeries.yAxis = 1;
 			}
-			if(el.name == "충전" && emptyObj.chargeData === 0){
+			if(el.name == i18nManager.tr("dashboard_charge") && emptyObj.chargeData === 0){
 				chartSeries.showInLegend = false
 			}
-			if(el.name == "방전" && emptyObj.disChargeData === 0){
+			if(el.name == i18nManager.tr("dashboard_discharge") && emptyObj.disChargeData === 0){
 				chartSeries.showInLegend = false
 			}
 			chartSeries.tooltip = {valueSuffix: el.suffix}
