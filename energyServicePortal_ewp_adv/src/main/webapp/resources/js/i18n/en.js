@@ -643,7 +643,7 @@ const enTranslation =
   "dashboard.table.6": "Current energy(kW)",
   "dashboard.table.7": "Weather",
   "dashboard.table.8": "Energy yesterday",
-  "dashboard.table.9": "Weather yesterday",
+  "dashboard.table.9": "Weather(-1)",
   "dashboard.table.10": "Generation(H)",
   "dashboard.table.11": "This month (MWh)",
   "dashboard.table.12": "- Last year (MWh)",

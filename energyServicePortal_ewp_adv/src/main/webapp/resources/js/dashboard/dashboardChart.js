@@ -563,18 +563,18 @@ const pieChart = Highcharts.chart('pie_chart', {
 	series: [{
 		type: 'pie',
 		innerSize: '70%',
-		name: '발전량',
+		name: '<fmt:message key="smain.power.amount" />',
 		colorByPoint: true,
 		data: [{
 			color: 'var(--circle-solar-power)',
-			name: '태양광',
+			name: '<fmt:message key="smain.power.pv.inv" />',
 			dataLabels: {
 				enabled: false
 			},
 			y: 60 //60% -- 아래로 총합 100%
 		}, {
 			color: 'var(--grey)',
-			name: '미사용량',
+			name: '<fmt:message key="smain.power.unused" />',
 			dataLabels: {
 				enabled: false
 			},

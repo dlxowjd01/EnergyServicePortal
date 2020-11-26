@@ -1009,7 +1009,7 @@
 			data: [
 				{
 					color: 'var(--blueberry)',
-					name: "풍력",
+					name: '<fmt:message key="smain.power.wind.inv" />',
 					dataLabels: {
 						enabled: false
 					},
@@ -1017,7 +1017,7 @@
 				},
 				{
 					color: 'var(--circle-solar-power)',
-					name: '태양광',
+					name: '<fmt:message key="smain.power.pv.inv" />',
 					dataLabels: {
 						enabled: false
 					},
@@ -1025,7 +1025,7 @@
 				},
 				{
 					color: 'var(--grey)',
-					name: '미사용량',
+					name: '<fmt:message key="smain.power.unused" />',
 					dataLabels: {
 						enabled: false
 					},
@@ -1281,7 +1281,7 @@
 			{
 				<c:choose>
 				<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-					name: '<fmt:message key="generationResults" />',
+					name: '<fmt:message key='smain.generationResults' />',
 				</c:when>
 				<c:otherwise>
 					name: '<fmt:message key='smain.PVGeneratedAmount' />',
@@ -1735,7 +1735,7 @@
 				type: 'column',
 				<c:choose>
 					<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-				name: '<fmt:message key="generationResults" />',
+				name: '<fmt:message key="smain.generationResults" />',
 					</c:when>
 					<c:otherwise>
 				name: '<fmt:message key='smain.PVGeneratedAmount' />',
@@ -1751,10 +1751,10 @@
 				type: 'column',
 				<c:choose>
 					<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-				name: '전일 발전량',
+				name: '<fmt:message key="smain.yesterdayDev" />',
 					</c:when>
 					<c:otherwise>
-				name: '<fmt:message key="generationPrediction" />',
+				name: '<fmt:message key="smain.generationPrediction" />',
 					</c:otherwise>
 				</c:choose>
 
@@ -5144,7 +5144,7 @@
 
 				if(energyData1.length>0){
 					hourlySolarChart.addSeries({
-						name: '<fmt:message key="generationResults" />',
+						name: '<fmt:message key="smain.generationResults" />',
 						type: 'column',
 						color: 'var(--turquoise)',
 						tooltip: {
@@ -5162,7 +5162,7 @@
 
 				if(energyData2.length>0){
 					hourlySolarChart.addSeries({
-						name: '<fmt:message key="generationPrediction" />',
+						name: '<fmt:message key="smain.generationPrediction" />',
 						type: 'column',
 						color: 'var(--white25)',
 						tooltip: {

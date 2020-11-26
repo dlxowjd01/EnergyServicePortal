@@ -930,7 +930,7 @@ const typeSiteDraw = async () => {
 		});
 
 		typeSiteCurrent.addSeries({
-			name: '발전',
+			name: '<fmt:message key="gmain.generation" />',
 			color: 'var(--turquoise)',
 			data: tmepGenArray,
 			tooltip: {
@@ -942,7 +942,7 @@ const typeSiteDraw = async () => {
 		});
 
 		typeSiteCurrent.addSeries({
-			name: '발전 예측',
+			name: '<fmt:message key="gmain.generation.forecast" />',
 			color: 'var(--grey)',
 			data: tempForeArray,
 			tooltip: {

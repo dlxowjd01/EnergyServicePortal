@@ -976,16 +976,16 @@ function setInitList(listId) {
 		sEmptyMsg = "";
 
 	if ("TBODY" == sTagName || "TABLE" == sTagName) {
-		sEmptyMsg = "<tr><td colspan='" + tdCount + "' style='text-align:center;'>조회 데이터가 없습니다.</td></tr>";
+		sEmptyMsg = "<tr><td colspan='" + tdCount + "' style='text-align:center;'><fmt:message key='smain.noQueryData' \></td></tr>";
 	} else if ("UL" == sTagName) {
-		sEmptyMsg = '<li class=' + '"no-data"'+ '>조회 데이터가 없습니다.</li>';
+		sEmptyMsg = '<li class=' + '"no-data"'+ '><fmt:message key="smain.noQueryData" \></li>';
 	} else if ("SELECT" == sTagName) {
 		sEmptyMsg = "";
 	} else {
 		if($("#" + listId).is(".hide-no-data")) {
 			sEmptyMsg = sEmptyMsg;
 		} else {
-			sEmptyMsg = '<div class=' + '"no-data"'+ '>조회 데이터가 없습니다.</div>';
+			sEmptyMsg = '<div class=' + '"no-data"'+ '><fmt:message key="smain.noQueryData" \></div>';
 		}
 	}
 
@@ -1017,16 +1017,16 @@ function setMakeList(jsonData, listId, opts) {
 		arr_column.push("INDEX");
 	} else {
 		if ("TBODY" == sTagName || "TABLE" == sTagName) {
-			arrTagInfo.push("<tr><td colspan='" + tdCount + "' style='text-align:center;'>조회 데이터가 없습니다.</td></tr>");
+			arrTagInfo.push("<tr><td colspan='" + tdCount + "' style='text-align:center;'><fmt:message key='smain.noQueryData' \></td></tr>");
 		} else if ("UL" == sTagName) {
-			arrTagInfo.push('<li class=' + '"no-data"'+ '>조회 데이터가 없습니다.</li>');
+			arrTagInfo.push('<li class=' + '"no-data"'+ '><fmt:message key="smain.noQueryData" \></li>');
 		} else if ("SELECT" == sTagName) {
 			arrTagInfo.push("");
 		} else {
 			if($("#" + listId).is(".hide-no-data")) {
 				// arrTagInfo.push("");
 			} else {
-				arrTagInfo.push('<div class=' + '"no-data"'+ '>조회 데이터가 없습니다.</div>');
+				arrTagInfo.push('<div class=' + '"no-data"'+ '><fmt:message key="smain.noQueryData" \></div>');
 			}
 		}
 	}

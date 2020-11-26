@@ -111,7 +111,7 @@
 					className: 'dt-head-right dt-body-right'
 				},
 				{
-					title: '발전 시간(H)',
+					title: i18nManager.tr("dashboard.table.10"),
 					data: null,
 					render: function (data, type, full, rowIndex) {
 						if (isEmpty(full['yesterEnergy']) || isEmpty(full['capacity'])) {
