@@ -319,7 +319,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 					//그룹 대시보드는 처음 진입시 들어오는 화면이라 파라미터가 없을경우는 사용자가 볼수있는 모든 사이트가 대상이다.
 					request.setAttribute("sgid", "");
 					request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
-					request.setAttribute("siteName", I18nManager.getInstance().tr(request, "gdash_entire")); //사이트 리스트 세팅
+					request.setAttribute("siteName", I18nManager.getInstance().tr(request, "gdash.entire")); //사이트 리스트 세팅
 				}
 			} else {
 				String sgid = (String) session.getAttribute("sgid");
@@ -409,7 +409,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 						//그룹 대시보드는 처음 진입시 들어오는 화면이라 파라미터가 없을경우는 사용자가 볼수있는 모든 사이트가 대상이다.
 						request.setAttribute("sgid", "");
 						request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
-						request.setAttribute("siteName", I18nManager.getInstance().tr(request, "gdash_entire"));
+						request.setAttribute("siteName", I18nManager.getInstance().tr(request, "gdash.entire"));
 					}
 				}
 			}
