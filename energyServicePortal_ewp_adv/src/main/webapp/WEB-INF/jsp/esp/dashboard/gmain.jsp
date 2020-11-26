@@ -12,7 +12,7 @@
 		<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
 			<label class="switch switch-slide fl">
 				<input type="checkbox" value="showTable" id="switchBtn" class="switch-input" ${cookie['switch'].value}/>
-				<span class="switch-label" data-on="테이블" data-off="대시보드"></span>
+				<span class="switch-label" data-on="<fmt:message key='gmain.switch.table' />" data-off="<fmt:message key='gmain.switch.dashboard' />"></span>
 				<span class="switch-handle"></span>
 			</label>
 		</c:if>
@@ -171,7 +171,7 @@
 								<div class="input-group1">
 									<div class="sa-select">
 										<div class="dropdown" id="rowCount">
-											<button type="button" class="dropdown-toggle w8" data-toggle="dropdown" data-value="-1" data-name="전체"><fmt:message key='gmain.all' /><span class="caret"></span></button>
+											<button type="button" class="dropdown-toggle w8" data-toggle="dropdown" data-value="-1" data-name="<fmt:message key='gmain.all' />"><fmt:message key='gmain.all' /><span class="caret"></span></button>
 											<ul class="dropdown-menu chk-type" role="menu">
 												<li data-value="25">
 													<a href="javascript:void(0);" tabindex="-1"><fmt:message key='gmain.25' /></a>
@@ -284,7 +284,7 @@
 									<span class="tx-tit"><fmt:message key="gdash.7.status"/></span>
 									<div class="sa-select">
 										<div class="dropdown" id="deviceStatus">
-											<button type="button" class="dropdown-toggle w8 no-close" data-toggle="dropdown" data-name="설비 상태"><fmt:message key='gmain.all' /><span class="caret"></span></button>
+											<button type="button" class="dropdown-toggle w8 no-close" data-toggle="dropdown" data-name="<fmt:message key='gmain.deviceStatus' />"><fmt:message key='gmain.all' /><span class="caret"></span></button>
 											<ul class="dropdown-menu chk-type" role="menu">
 												<li data-value="0">
 													<a href="javascript:void(0);" tabindex="-1">
