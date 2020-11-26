@@ -417,9 +417,9 @@
 					<ul>
 						<li>
 							<dl>
-								<dt><fmt:message key='menu.top.plantAnalysis' \></dt>
+								<dt>사업소 분석</dt>
 								<dd>
-									<a href="#"><fmt:message key='menu.top.plantAnalysis.site' \></a>
+									<a href="#">사업소별</a>
 									<ul class="overflow-list">
 										<li><a href="#" class="group-title" onclick="dashboardMove('group', '', ''); return false">전체</a></li>
 										<c:if test="${fn:length(siteList) > 0}">
@@ -438,7 +438,7 @@
 								<dl>
 									<dt></dt>
 									<dd>
-										<a href="#"><fmt:message key='menu.top.plantAnalysis.group' \></a>
+										<a href="#">그룹별</a>
 										<ul class="overflow-list">
 											<c:forEach var="group" items="${tagList}">
 												<li>
@@ -464,9 +464,9 @@
 							<c:if test="${oid ne 'trust' and fn:length(vppList) > 0}">
 								<li>
 									<dl>
-										<dt><fmt:message key='menu.top.energytrans' \></dt>
+										<dt>에너지 거래</dt>
 										<dd>
-											<a href="#"><fmt:message key='menu.top.energytrans.vpp' \></a>
+											<a href="#">중개거래</a>
 											<ul class="overflow-list">
 												<c:forEach var="vpp" items="${vppList}">
 													<li>
@@ -493,7 +493,7 @@
 									<dl>
 										<dt></dt>
 										<dd>
-											<a href="#"><fmt:message key='menu.top.energytrans.dr' \></a>
+											<a href="#">DR 거래</a>
 											<ul class="overflow-list">
 												<c:forEach var="dr" items="${drList}">
 													<li>
@@ -520,9 +520,9 @@
 					<ul>
 						<li class="lo-type lo">
 							<dl>
-								<dt><fmt:message key='menu.top.regionOrType' \></dt>
+								<dt>지역 및 유형 선택</dt>
 								<dd>
-									<a href="#"><fmt:message key='menu.top.regionOrType.region' \></a>
+									<a href="#">지역별</a>
 									<ul class="overflow-list">
 										<c:set var="divisionLocation" value="${sessionScope.divisionLocation}"/>
 										<c:forEach var="loc" items="${location}" varStatus="stat">
@@ -556,7 +556,7 @@
 							<dl>
 								<dt></dt>
 								<dd>
-									<a href="#"><fmt:message key='menu.top.regionOrType.type' \></a>
+									<a href="#">유형별</a>
 									<ul>
 										<c:set var="systemTp" value="${sessionScope.divisionResourceType}"/>
 										<c:forEach var="type" items="${resource}" varStatus="stat">
