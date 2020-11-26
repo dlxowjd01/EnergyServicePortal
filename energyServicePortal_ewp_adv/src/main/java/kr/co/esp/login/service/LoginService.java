@@ -8,8 +8,8 @@ public interface LoginService {
 
 	Map<String, Object> selectOid(String serverName) throws Exception;
 
-	Map<String, Object> selectAuthLogin(boolean secure, JSONObject obj) throws Exception;
+	Map<String, Object> selectAuthLogin(String mode, JSONObject obj) throws Exception;
 
-	Map<String, Object> selectTwoFactorAuthLogin(boolean secure, JSONObject obj) throws Exception;
+	Map<String, Object> selectTwoFactorAuthLogin(String mode, JSONObject obj) throws Exception;
 
 }

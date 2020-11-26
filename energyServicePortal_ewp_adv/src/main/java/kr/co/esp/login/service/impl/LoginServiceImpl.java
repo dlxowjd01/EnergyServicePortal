@@ -54,20 +54,25 @@ public class LoginServiceImpl extends EgovAbstractServiceImpl implements LoginSe
 
 					if (targetHost.contains("-")) {
 						rtnMap.put("oid", targetHost.split("-")[0]);
+						rtnMap.put("mode", "test");
 					} else {
 						if (targetHost.matches("^[0-9]")) {
 							rtnMap.put("oid", defualtOid);
+							rtnMap.put("mode", "test");
 						} else {
 							rtnMap.put("oid", targetHost);
+							rtnMap.put("mode", "");
 						}
 					}
 				} else {
 					rtnMap.put("oid", defualtOid);
+					rtnMap.put("mode", "test");
 				}
 			}
 		} catch (Exception e) {
 			LOGGER.error("LoginService - selectOid - Exception : " + e.getMessage());
 			rtnMap.put("oid", defualtOid);
+			rtnMap.put("mode", "test");
 		}
 		return rtnMap;
 	}
@@ -75,20 +80,20 @@ public class LoginServiceImpl extends EgovAbstractServiceImpl implements LoginSe
 	/**
 	 * API로 로그인 처리를 진행한다.
 	 *
-	 * @param secure
+	 * @param mode
 	 * @param obj
 	 * @return
 	 * @throws Exception
 	 */
 	@Override
-	public Map<String, Object> selectAuthLogin(boolean secure, JSONObject obj) throws Exception {
+	public Map<String, Object> selectAuthLogin(String mode, JSONObject obj) throws Exception {
 		Map<String, Object> rtnMap = new HashMap<String, Object>();
 		try {
-			Map<String, Object> tokenMap = restApiUtil.post("/auth/login", secure, obj.toString()); //토큰 발급
+			Map<String, Object> tokenMap = restApiUtil.post("/auth/login", mode, obj.toString()); //토큰 발급
 			if (200 == (int) tokenMap.get("code")) {
 				rtnMap.putAll((Map<String, Object>) tokenMap.get("data"));
 
-				Map<String, Object> meMap = RestApiUtil.get("/auth/me", secure,null, (String) rtnMap.get("token"));
+				Map<String, Object> meMap = RestApiUtil.get("/auth/me", mode,null, (String) rtnMap.get("token"));
 				if(200 == (int) meMap.get("code")) {
 					rtnMap.putAll((Map<String, Object>) meMap.get("data"));
 				}
@@ -102,20 +107,20 @@ public class LoginServiceImpl extends EgovAbstractServiceImpl implements LoginSe
 	/**
 	 * API로 로그인 처리를 진행한다.
 	 *
-	 * @param secure
+	 * @param mode
 	 * @param obj
 	 * @return
 	 * @throws Exception
 	 */
 	@Override
-	public Map<String, Object> selectTwoFactorAuthLogin(boolean secure, JSONObject obj) throws Exception {
+	public Map<String, Object> selectTwoFactorAuthLogin(String mode, JSONObject obj) throws Exception {
 		Map<String, Object> rtnMap = new HashMap<String, Object>();
 		try {
-			Map<String, Object> tokenMap = restApiUtil.post("/auth/login/2fa", secure, obj.toString()); //토큰 발급
+			Map<String, Object> tokenMap = restApiUtil.post("/auth/login/2fa", mode, obj.toString()); //토큰 발급
 			if (200 == (int) tokenMap.get("code")) {
 				rtnMap.putAll((Map<String, Object>) tokenMap.get("data"));
 
-				Map<String, Object> meMap = RestApiUtil.get("/auth/me", secure,null, (String) rtnMap.get("token"));
+				Map<String, Object> meMap = RestApiUtil.get("/auth/me", mode,null, (String) rtnMap.get("token"));
 				if(200 == (int) meMap.get("code")) {
 					rtnMap.putAll((Map<String, Object>) meMap.get("data"));
 				}

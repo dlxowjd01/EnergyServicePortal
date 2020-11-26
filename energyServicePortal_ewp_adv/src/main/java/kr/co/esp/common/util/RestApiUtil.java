@@ -36,15 +36,15 @@ public class RestApiUtil {
 	 * GET
 	 *
 	 * @param strUrl
-	 * @param secure
+	 * @param mode
 	 * @param parameters
 	 * @return
 	 */
-	public static Map<String, Object> get(String strUrl, boolean secure, Map<String, Object> parameters) {
-		if (secure) {
-			return secureGet(strUrl, toStringParameter(parameters), null);
-		} else {
+	public static Map<String, Object> get(String strUrl, String mode, Map<String, Object> parameters) {
+		if ("test".equals(mode)) {
 			return basicGet(strUrl, parameters, null);
+		} else {
+			return secureGet(strUrl, toStringParameter(parameters), null);
 		}
 	}
 
@@ -52,16 +52,16 @@ public class RestApiUtil {
 	 * GET
 	 *
 	 * @param strUrl
-	 * @param secure
+	 * @param mode
 	 * @param parameters
 	 * @param token
 	 * @return
 	 */
-	public static Map<String, Object> get(String strUrl, boolean secure, Map<String, Object> parameters, String token) {
-		if (secure) {
-			return secureGet(strUrl, toStringParameter(parameters), token);
-		} else {
+	public static Map<String, Object> get(String strUrl, String mode, Map<String, Object> parameters, String token) {
+		if ("test".equals(mode)) {
 			return basicGet(strUrl, parameters, token);
+		} else {
+			return secureGet(strUrl, toStringParameter(parameters), token);
 		}
 	}
 
@@ -186,14 +186,15 @@ public class RestApiUtil {
 	 * Post
 	 *
 	 * @param strUrl
+	 * @param mode
 	 * @param jsonMessage
 	 * @return
 	 */
-	public static Map<String, Object> post(String strUrl, boolean secure, String jsonMessage) {
-		if (secure) {
-			return securePost(strUrl, jsonMessage, null);
-		} else {
+	public static Map<String, Object> post(String strUrl, String mode, String jsonMessage) {
+		if ("test".equals(mode)) {
 			return basicPost(strUrl, jsonMessage, null);
+		} else {
+			return securePost(strUrl, jsonMessage, null);
 		}
 	}
 

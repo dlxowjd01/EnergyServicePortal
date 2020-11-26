@@ -31,7 +31,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 
 		if (userInfo != null && (userInfo.get("token") != null && !"".equals(userInfo.get("token")))) {
 			String token = (String) userInfo.get("token");
-			Boolean secure = request.isSecure();
+			String mode = (String) session.getAttribute("mode");
 
 			String oid = (String) userInfo.get("oid");
 			int role = (int) userInfo.get("role");
@@ -41,7 +41,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			//Menu조회
 			Map<String,Object> parameters = new HashMap<String, Object>();
 			parameters.put("types", "menu");
-			Map<String, Object> menuProperties = get("/config/view/properties", secure, parameters, token); //그룹화되어있는 사이트 리스트 정보
+			Map<String, Object> menuProperties = get("/config/view/properties", mode, parameters, token); //그룹화되어있는 사이트 리스트 정보
 			if (200 == (int) menuProperties.get("code")) {
 				Map<String, Object> menuMap = (Map<String, Object>) menuProperties.get("data");
 				Map<String, Object> menuList = (Map<String, Object>) menuMap.get("menu");
@@ -189,7 +189,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			parameters.clear();
 			parameters.put("includeDevices", "true");
 
-			Map<String, Object> siteMap = get("/auth/me/sites", secure, parameters, token); //사이트 리스트 정보
+			Map<String, Object> siteMap = get("/auth/me/sites", mode, parameters, token); //사이트 리스트 정보
 			if (200 == (int) siteMap.get("code")) {
 				siteOriginList = (List<Map<String, Object>>) siteMap.get("data");
 				request.setAttribute("siteHeaderList", siteOriginList); //사이트 리스트 세팅
@@ -207,7 +207,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			parameters.put("includeSites", "true");
 			parameters.put("includeDevices", "false");
 
-			Map<String, Object> userSiteGroupSearch = get("/auth/me/groups", secure, parameters, token); //그룹화되어있는 사이트 리스트 정보
+			Map<String, Object> userSiteGroupSearch = get("/auth/me/groups", mode, parameters, token); //그룹화되어있는 사이트 리스트 정보
 			if (200 == (int) userSiteGroupSearch.get("code")) {
 				groupMap = (Map<String, Object>) userSiteGroupSearch.get("data");
 				request.setAttribute("tag_group", groupMap.get("tag_group")); //태그그룹 별
@@ -418,7 +418,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			}
 			parameters.clear();
 			parameters.put("types", "resource,location");
-			Map<String, Object> typeProperties = get("/config/view/properties", secure, parameters, token); //그룹화되어있는 사이트 리스트 정보
+			Map<String, Object> typeProperties = get("/config/view/properties", mode, parameters, token); //그룹화되어있는 사이트 리스트 정보
 			if (200 == (int) typeProperties.get("code")) {
 				Map<String, Object> typeMap = (Map<String, Object>) typeProperties.get("data");
 
@@ -440,13 +440,13 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView mav) throws Exception {
 		HttpSession session = request.getSession();
 
-		boolean secure = request.isSecure();
 		String gitVersion = EgovProperties.getGitProperty("git.commit.id.abbrev");
 		String certApiHost = EgovProperties.getProperty("certApiHost"); //인증서 HOST
 		String activateSPC = EgovProperties.getProperty("activateSPC"); //activateSPC True/False
+		String mode = (String) session.getAttribute("mode"); // TEST 서버 여부
 
 		String apiHost;//API HOST
-		if (secure) {
+		if ("test".equals(mode)) {
 			apiHost = EgovProperties.getProperty("jsApiHostSecure");
 		} else {
 			apiHost = EgovProperties.getProperty("jsApiHost");

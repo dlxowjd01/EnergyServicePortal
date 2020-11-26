@@ -123,7 +123,6 @@ public class LoginController {
 		Map<String, Object> returnMap = new HashMap<String, Object>();
 		try {
 			String serverName = req.getServerName();
-			boolean secure = req.isSecure();
 			Map<String, Object> oid = loginService.selectOid(serverName);
 
 			JSONObject obj = new JSONObject();
@@ -132,7 +131,7 @@ public class LoginController {
 			obj.put("password", req.getParameter("password"));
 			obj.put("verify_code", req.getParameter("verify_code"));
 
-			Map<String, Object> userInfoMap = loginService.selectTwoFactorAuthLogin(secure, obj);
+			Map<String, Object> userInfoMap = loginService.selectTwoFactorAuthLogin((String) oid.get("mode"), obj);
 			if (userInfoMap != null && !userInfoMap.isEmpty()) {
 				session.setAttribute(UserUtil.USER_SESSION_ID, userInfoMap);
 

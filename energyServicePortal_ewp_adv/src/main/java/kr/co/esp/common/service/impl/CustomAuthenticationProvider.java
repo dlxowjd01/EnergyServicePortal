@@ -32,15 +32,17 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 		HttpSession session = request.getSession();
 		boolean secure = request.isSecure();
-		String oid = "encored";
+		String oid = "encored", mode = "test";
 
 		try  {
 			Map<String, Object> oidMap = loginService.selectOid(request.getServerName());
 			if (oidMap != null && !oidMap.isEmpty()) {
 				oid = (String) oidMap.get("oid");
+				mode = (String) oidMap.get("mode");
 			}
 		} catch (Exception e) {
 			oid = "encored";
+			mode = "test";
 		}
 
 		try {
@@ -49,7 +51,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 			obj.put("login_id", name);
 			obj.put("password", password);
 
-			Map<String, Object> userInfoMap = loginService.selectAuthLogin(secure, obj);
+			Map<String, Object> userInfoMap = loginService.selectAuthLogin(mode, obj);
 			if (userInfoMap != null && !userInfoMap.isEmpty()) {
 				session.setAttribute(UserUtil.USER_SESSION_ID, userInfoMap);
 

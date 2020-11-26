@@ -2,7 +2,7 @@
 <%@ include file="/decorators/include/taglibs.jsp" %>
 <c:if test="${dashboardMap eq 'google'}">
 	<script src="https://unpkg.com/@googlemaps/markerclustererplus/dist/index.min.js"></script>
-	<script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyAgEDjSwQWd_Q9RF_owO8WkMtf-6lmVSpc"></script>
+	<script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyAgEDjSwQWd_Q9RF_owO8WkMtf-6lmVSpc"></script>
 </c:if>
 
 <form id="linkSiteForm" name="linkSiteForm" method="post"></form>
