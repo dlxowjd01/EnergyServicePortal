@@ -458,6 +458,7 @@ const koTranslation =
   "dashboard_equipment_capacity": "설비용량",
   "dashboard_total_equipment_capacity": "총 설비용량",
   "dashboard_non-equipment_capacity": "미설비용량",
+
   "gdash.priority": "순번",
   "gdash.name_of_power_generation_site": "발전소 명",
   "gdash.power_generation_amount": "발전용량",
@@ -471,6 +472,7 @@ const koTranslation =
   "gdash.monthly_power_generation_amount": "월간 발전량",
   "gdash.power_generation_amount_in_the_same_month_previous_year": "전년 동월 발전량",
   "gdash.power_generation_rate_compared_to_the_same_month_previous_year": "전년 동월 대비 발전 비율",
+
   "gdash.the_data_you_have_queried_does_not_exist": "조회된 데이터가 없습니다.",
   "gdash.your_search_has_not_returned_results": "검색된 결과가 없습니다.",
   "gdash.no_registered_site_in_the_group": "해당 그룹에 등록 된 사이트가 존재하지 않습니다.",
@@ -649,13 +651,14 @@ const koTranslation =
   "dashboard.table.3": "발전용량(kWh)",
   "dashboard.table.4": "인버터 가동 상태",
   "dashboard.table.5": "경고 알람",
-  "dashboard.table.6": "현재 발전량 (kW)",
+  "dashboard.table.6": "현재 발전량(kW)",
   "dashboard.table.7": "현재 날씨",
   "dashboard.table.8": "전일 발전",
-  "dashboard.table.9": "발전 시간(H)",
-  "dashboard.table.10": "월간 발전량(MWh)",
-  "dashboard.table.11": "전년 동월 발전량(MWh)",
-  "dashboard.table.12": "전년 동월 대비 발전 비율(%)",
+  "dashboard.table.9": "전일 날씨",
+  "dashboard.table.10": "발전 시간(H)",
+  "dashboard.table.11": "월간 발전량(MWh)",
+  "dashboard.table.12": "전년 동월 발전량(MWh)",
+  "dashboard.table.13": "전년 동월 대비 발전 비율(%)",
   "dashboard.EA": "개소",
 
 }

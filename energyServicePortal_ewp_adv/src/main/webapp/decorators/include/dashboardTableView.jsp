@@ -40,7 +40,7 @@
 			sortable: true,
 			columns: [
 				{
-					title: i18nManager.tr("gdash.priority"),
+					title: i18nManager.tr("dashboard.table.1"),
 					data: null,
 					render: function (data, type, full, rowIndex) {
 						return rowIndex.row + 1;
@@ -48,7 +48,7 @@
 					className: 'dt-center no-sorting fixed'
 				},
 				{
-					title: i18nManager.tr("gdash.name_of_power_generation_site"),
+					title: i18nManager.tr("dashboard.table.2"),
 					data: 'siteName',
 					render: function (data, type, full, rowIndex) {
 						return '<a href="javascript:pageMove(\'' + full['sid'] + '\', \'siteMain\'), \'self\'">' + data + '</a>' +
@@ -57,7 +57,7 @@
 					className: 'dt-head-left dt-body-left'
 				},
 				{
-					title: i18nManager.tr("gdash.power_generation_amount") + ' (kWh)',
+					title: i18nManager.tr("dashboard.table.3"),
 					data: 'capacity',
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
@@ -65,7 +65,7 @@
 					className: 'dt-head-right dt-body-right'
 				},
 				{
-					title: i18nManager.tr("gdash.status_of_inverter"),
+					title: i18nManager.tr("dashboard.table.4"),
 					data: 'invCount',
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
@@ -73,7 +73,7 @@
 					className: 'dt-center'
 				},
 				{
-					title: i18nManager.tr("gdash.warning_alarm"),
+					title: i18nManager.tr("dashboard.table.5"),
 					data: 'deviceFault',
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
@@ -81,7 +81,7 @@
 					className: 'dt-center'
 				},
 				{
-					title: i18nManager.tr("gdash.current_power_generation_rate") + ' (kW)',
+					title: i18nManager.tr("dashboard.table.6"),
 					data: 'nowEnergy',
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
@@ -89,7 +89,7 @@
 					className: 'dt-head-right dt-body-right'
 				},
 				{
-					title: i18nManager.tr("gdash.current_weather"),
+					title: i18nManager.tr("dashboard.table.7"),
 					data: 'toDaySky',
 					render: function (data, type, full, rowIndex) {
 						if (data != null && data === '-') {
@@ -103,7 +103,7 @@
 					className: 'dt-center'
 				},
 				{
-					title: i18nManager.tr("gdash.previous_day_power_generation_amount"),
+					title: i18nManager.tr("dashboard.table.8"),
 					data: 'yesterEnergy',
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
@@ -126,7 +126,7 @@
 					className: 'dt-center'
 				},
 				{
-					title: i18nManager.tr("gdash_previous_day_weather"),
+					title: i18nManager.tr("dashboard.table.9"),
 					data: 'yesterDaySky',
 					render: function (data, type, full, rowIndex) {
 						if (data != null && data === '-') {
@@ -140,7 +140,7 @@
 					className: 'dt-center'
 				},
 				{
-					title: i18nManager.tr("gdash.monthly_power_generation_amount") + ' (MWh)',
+					title: i18nManager.tr("dashboard.table.11"),
 					data: 'monthGen',
 					render: function (data, type, full, rowIndex) {
 						if (isEmpty(data)) {
@@ -152,7 +152,7 @@
 					className: 'dt-head-right dt-body-right'
 				},
 				{
-					title: i18nManager.tr("gdash.power_generation_amount_in_the_same_month_previous_year") + ' (MWh)',
+					title: i18nManager.tr("dashboard.table.12"),
 					data: 'beforeYearGen',
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
@@ -160,7 +160,7 @@
 					className: 'dt-head-right dt-body-right'
 				},
 				{
-					title: i18nManager.tr("gdash.power_generation_rate_compared_to_the_same_month_previous_year") + '(%)',
+					title: i18nManager.tr("dashboard.table.13"),
 					data: 'proportion',
 					render: function (data, type, full, rowIndex) {
 						return data;
@@ -169,8 +169,8 @@
 				},
 			],
 			language: {
-				emptyTable: i18nManager.tr("gdash_the_data_you_have_queried_does_not_exist"),
-				zeroRecords:  i18nManager.tr("gdash_your_search_has_not_returned_results"),
+				emptyTable: i18nManager.tr("gdash.the_data_you_have_queried_does_not_exist"),
+				zeroRecords:  i18nManager.tr("gdash.your_search_has_not_returned_results"),
 				infoEmpty: "",
 				paginate: {
 					previous: "",
