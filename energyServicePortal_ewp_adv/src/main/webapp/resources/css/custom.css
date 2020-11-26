@@ -694,6 +694,16 @@ button.big {
 	border-radius: 4px;
 }
 
+html[lang="en"] .btn-type,
+html[lang="en"] .btn-type02,
+html[lang="en"] .btn-type03,
+html[lang="en"] .btn-type04,
+html[lang="en"] .btn-type05,
+html[lang="en"] .btn-type06,
+html[lang="en"] .btn-type07 {
+	font-size: 14px;
+}
+
 .btn-type02 {
 	font-size: 13px;
 	font-weight: 500;
@@ -5073,6 +5083,9 @@ input.inp[readonly]:focus {
 	font-weight: 500;
 	white-space: nowrap;
 	border: 0;
+}
+html[lang="en"] .btn-save {
+	font-size: 14px;
 }
 
 .btn-save:link,

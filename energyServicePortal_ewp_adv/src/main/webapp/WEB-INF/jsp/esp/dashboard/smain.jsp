@@ -2183,7 +2183,7 @@
 								tempArray.push(el);
 							}
 						});
-						console.log("NOT KPX getWeatherData tempArray===", tempArray)
+						// console.log("NOT KPX getWeatherData tempArray===", tempArray)
 						if (tempArray.length > 0) {
 							let weatherIconClass = getWeatherIcons(tempArray[tempArray.length - 1].sky);
 							let deviceIrrData = tempArray[tempArray.length - 1].sensor_solar.irradiationPoa;
@@ -3474,8 +3474,7 @@
 											}
 										});
 									}
-									
-									console.log("chartItems2===", chartItems2);
+								
 									chartItems3 = addToDateList((dateDiff+1), result3aData, "energy", customDateList);
 								}
 							}
@@ -3527,10 +3526,6 @@
 
 
 									chartItems3 = addToDateList((dateDiff+1), result3Data, "energy", customDateList);
-
-									console.log("chartItems3===", chartItems3);
-
-
 								}
 							}
 
@@ -4086,7 +4081,7 @@
 
 			if(!isEmpty(searchOption)){
 				let newDateList = addToDateList(searchOption);
-				console.log("newDateList===", newDateList)
+				// console.log("newDateList===", newDateList)
 				dailySolarTrendChart.update({
 					navigator: {
 						xAxis: {

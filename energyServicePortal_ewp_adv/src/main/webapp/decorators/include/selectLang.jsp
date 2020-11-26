@@ -9,6 +9,10 @@
 --></ul>
 </div>
 <script type="text/javascript">
+	$(function () {
+		let tempLang = '${cookieLang}';
+		$("html").attr('lang', tempLang.toLowerCase());
+	});
 	function addParameterUrl(v) {
 		document.cookie = 'lang' + '=' + v + '; path=/';
 
