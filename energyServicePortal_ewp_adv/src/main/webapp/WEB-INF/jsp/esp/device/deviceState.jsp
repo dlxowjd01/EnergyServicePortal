@@ -1558,7 +1558,7 @@
 			if (method == 'delete') {
 				alertPreffix = '삭제';
 				let delPrompt = prompt('<fmt:message key="deviceState.prompt.1" /> \n<fmt:message key="deviceState.prompt.2" />', '<fmt:message key="deviceState.prompt.answer" />');
-				if (delPrompt != '삭제') {
+				if (delPrompt != '<fmt:message key="deviceState.prompt.answer" />') {
 					return false;
 				}
 			}
