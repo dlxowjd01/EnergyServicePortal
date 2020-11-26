@@ -943,7 +943,6 @@
 	// };
 
 
-
 	var pieChart = Highcharts.chart('pie_chart', {
 		chart: {
 			marginTop: 0,
@@ -1333,7 +1332,7 @@
 			downloadJPEG: 'JPEG 다운로드'
 		},
 		exporting: {
-			// enabled: false,
+			enabled: false,
 			tableCaption: '일별 발전량',
 			buttons: {
 				contextButton: {
@@ -1367,18 +1366,18 @@
 			// 		categories: date31List
 			// 	},
 			// },
-			csv: {
-				columnHeaderFormatter: function(item, key, keyLength) {
-					if (item.axisTitle) {
-						console.log("item---", item)
-						return item.axisTitle.textStr; // x axis label
-					} else if (key === 'y') {
-						return item.yAxis.axisTitle.textStr; // y axis label
-					} else if (key === 'z') {
-						return 'Obesity (adults)'; // z axis label
-					}
-				}
-			}
+			// csv: {
+			// 	columnHeaderFormatter: function(item, key, keyLength) {
+			// 		if (item.axisTitle) {
+			// 			console.log("item---", item)
+			// 			return item.axisTitle.textStr; // x axis label
+			// 		} else if (key === 'y') {
+			// 			return item.yAxis.axisTitle.textStr; // y axis label
+			// 		} else if (key === 'z') {
+			// 			return 'Obesity (adults)'; // z axis label
+			// 		}
+			// 	}
+			// }
 			// dateFormat: '%Y-%m-%d'
 
 		},
@@ -1413,7 +1412,7 @@
 		plotOptions: {
 			series: {
 				showInLegend: true,
-				pointIntervalUnit: 'day'
+				// pointIntervalUnit: 'day'
 			}
 		},
 		title: {
@@ -1556,8 +1555,8 @@
 			enabled: true,
 			align: 'right',
 			verticalAlign: 'top',
-			x: -35,
-			// x: -10,
+			// x: -35,
+			x: -10,
 			y: 0,
 			itemStyle: {
 				color: 'var(--white87)',
