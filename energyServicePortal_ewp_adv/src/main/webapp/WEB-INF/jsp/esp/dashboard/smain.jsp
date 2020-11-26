@@ -769,23 +769,179 @@
 	// 		'month', [1]]
 	// ];
 
-	Highcharts.SVGRenderer.prototype.symbols.download = function (x, y, w, h, z) {
-		var path = [
-			// Arrow stem
-			'M', x + w * 0.5, y,
-			'L', x + w * 0.5, y + h * 0.7,
-			// Arrow head
-			'M', x + w * 0.3, y + h * 0.5,
-			'L', x + w * 0.5, y + h * 0.7,
-			'L', x + w * 0.7, y + h * 0.5,
-			// Box
-			'M', x, y + h * 0.9,
-			'L', x, y + h,
-			'L', x + w, y + h,
-			'L', x + w, y + h * 0.9
-		];
-		return path;
-	};
+	// Highcharts.SVGRenderer.prototype.symbols.download = function (x, y, w, h, z) {
+	// 	var path = [
+	// 		// Arrow stem
+	// 		'M', x + w * 0.5, y,
+	// 		'L', x + w * 0.5, y + h * 0.7,
+	// 		// Arrow head
+	// 		'M', x + w * 0.3, y + h * 0.5,
+	// 		'L', x + w * 0.5, y + h * 0.7,
+	// 		'L', x + w * 0.7, y + h * 0.5,
+	// 		// Box
+	// 		'M', x, y + h * 0.9,
+	// 		'L', x, y + h,
+	// 		'L', x + w, y + h,
+	// 		'L', x + w, y + h * 0.9
+	// 	];
+	// 	return path;
+	// };
+	(function (H) {
+		H.SVGRenderer.prototype.symbols.download = function (x, y, w, h, z) {
+			var path = [
+				// Arrow stem
+				'M', x + w * 0.5, y,
+				'L', x + w * 0.5, y + h * 0.7,
+				// Arrow head
+				'M', x + w * 0.3, y + h * 0.5,
+				'L', x + w * 0.5, y + h * 0.7,
+				'L', x + w * 0.7, y + h * 0.5,
+				// Box
+				'M', x, y + h * 0.9,
+				'L', x, y + h,
+				'L', x + w, y + h,
+				'L', x + w, y + h * 0.9
+			];
+			return path;
+		};
+
+		// H.wrap(H.Chart.prototype, 'getDataRows', function(proceed, multiLevelHeaders) {
+
+		// 	var rows = proceed.call(this, multiLevelHeaders);
+
+		// 	rows = rows.map(row => {
+		// 		if (row.x) {
+		// 			row[0] = Highcharts.dateFormat('%d-%b-%y', row.x * 1000);
+		// 		}
+		// 		return row;
+		// 	});
+
+		// 	return rows;
+		// });
+
+	}(Highcharts));
+
+
+	// Highcharts.Chart.prototype.getDataRows = function() {
+	// 	var options = (this.options.exporting || {}).csv || {},
+	// 		xAxis = this.xAxis[0],
+	// 		yAxis = this.yAxis[0],
+	// 		rows = {},
+	// 		rowArr = [],
+	// 		dataRows,
+	// 		names = [],
+	// 		i,
+	// 		pick = Highcharts.pick,
+	// 		each = Highcharts.each,
+	// 		x,
+	// 		xTitle = xAxis.options.title && xAxis.options.title.text,
+
+	// 		// Options
+	// 		dateFormat = options.dateFormat || '%Y-%m-%d %H:%M:%S',
+	// 		columnHeaderFormatter = options.columnHeaderFormatter || function(series, key, keyLength) {
+	// 			return series.name + (keyLength > 1 ? ' (' + key + ')' : '');
+	// 		};
+
+	// 	// Loop the series and index values
+	// 	i = 0;
+	// 	each(this.series, function(series) {
+	// 		if(series.hasOwnProperty("legendItem")){
+	// 			var keys = series.options.keys,
+	// 				pointArrayMap = keys || series.pointArrayMap || ['y'],
+	// 				valueCount = pointArrayMap.length,
+	// 				requireSorting = series.requireSorting,
+	// 				categoryMap = {},
+	// 				j;
+
+	// 			// Map the categories for value axes
+	// 			each(pointArrayMap, function(prop) {
+	// 				categoryMap[prop] = (series[prop + 'Axis'] && series[prop + 'Axis'].categories) || [];
+	// 			});
+
+	// 			if (series.options.includeInCSVExport !== false && series.visible !== false) { // #55
+	// 				j = 0;
+
+	// 				while (j < valueCount) {
+	// 					names.push(columnHeaderFormatter(series, pointArrayMap[j], pointArrayMap.length));
+	// 					j = j + 1;
+	// 				}
+
+	// 				each(series.points, function(point, pIdx) {
+	// 					if (point.x >= xAxis.min && point.x <= xAxis.max && point.y >= yAxis.min && point.y <= yAxis.max) {
+	// 						var key = requireSorting ? point.x : pIdx,
+	// 							prop,
+	// 							val;
+	// 						j = 0;
+
+	// 						if (!rows[key]) {
+	// 							rows[key] = [];
+	// 						}
+
+	// 						// rows[key].x = point.x + 1;
+	// 						console.log("series====", series, "xAxis===", xAxis)
+	// 						rows[key].x = rows[key].x;
+	
+					
+	// 						// Pies, funnels etc. use point name in X row
+	// 						if (!series.xAxis) {
+	// 							rows[key].name = point.name;
+	// 						}
+
+	// 						while (j < valueCount) {
+	// 							prop = pointArrayMap[j]; // y, z etc
+	// 							val = point[prop];
+	// 							rows[key][i + j] = pick(categoryMap[prop][val], val); // Pick a Y axis category if present
+	// 							j = j + 1;
+	// 						}
+	// 					}
+	// 				});
+	// 				i = i + j;
+	// 			}
+	// 		}
+	// 	});
+
+
+	// 	// Make a sortable array
+	// 	for (x in rows) {
+	// 		if (rows.hasOwnProperty(x)) {
+	// 			// console.log("x===", x, "rows[x]====", rows[x])
+	// 			rowArr.push(rows[x]);
+	// 		}
+	// 	}
+	// 	// Sort it by X values
+	// 	rowArr.sort(function(a, b) {
+	// 		return a.x - b.x;
+	// 	});
+
+	// 	// Add header row
+	// 	if (!xTitle) {
+	// 		xTitle = xAxis.isDatetimeAxis ? 'DateTime' : '순서';
+	// 	}
+	// 	dataRows = [
+	// 		[xTitle].concat(names)
+	// 	];
+
+	// 	// Transform the rows to CSV
+	// 	each(rowArr, function(row) {
+	// 		var category = row.name;
+	// 		if (!category) {
+	// 			if (xAxis.isDatetimeAxis) {
+	// 				category = Highcharts.dateFormat(dateFormat, row.x);
+	// 			} else if (xAxis.categories) {
+	// 				category = pick(xAxis.names[row.x], xAxis.categories[row.x], row.x);
+	// 			} else {
+	// 				category = row.x;
+	// 			}
+	// 		}
+
+	// 		// Add the X/date/category
+	// 		row.unshift(category);
+	// 		dataRows.push(row);
+	// 	});
+
+	// 	return dataRows;
+	// };
+
 
 
 	var pieChart = Highcharts.chart('pie_chart', {
@@ -1172,10 +1328,13 @@
 		lang: {
 			contextButtonTitle: "다운로드",
 			downloadTitle: "다운로드",
-			noData: "조회된 데이터가 없습니다."
+			noData: "조회된 데이터가 없습니다.",
+			downloadCSV: 'CSV 다운로드',
+			downloadJPEG: 'JPEG 다운로드'
 		},
 		exporting: {
-			enabled: false,
+			// enabled: false,
+			tableCaption: '일별 발전량',
 			buttons: {
 				contextButton: {
 					x: -10,
@@ -1203,24 +1362,25 @@
 					align: 'right',
 				}
 			},
-			options: {
-				xAxis: {
-					categories: date31List
-				},
-			},
+			// options: {
+			// 	xAxis: {
+			// 		categories: date31List
+			// 	},
+			// },
 			csv: {
-				columnHeaderFormatter: function(item, key) {
-					console.log("item coll---",  item.coll);
-					
-					if (item.name) {
-						return item.name
-					} else {
-						return "날짜"
+				columnHeaderFormatter: function(item, key, keyLength) {
+					if (item.axisTitle) {
+						console.log("item---", item)
+						return item.axisTitle.textStr; // x axis label
+					} else if (key === 'y') {
+						return item.yAxis.axisTitle.textStr; // y axis label
+					} else if (key === 'z') {
+						return 'Obesity (adults)'; // z axis label
 					}
-					return item.coll
-				},
-				dateFormat: new Date().getFullYear()
+				}
 			}
+			// dateFormat: '%Y-%m-%d'
+
 		},
 		rangeSelector: {
 			enabled: false,
@@ -1252,7 +1412,8 @@
 		},
 		plotOptions: {
 			series: {
-				showInLegend: true
+				showInLegend: true,
+				pointIntervalUnit: 'day'
 			}
 		},
 		title: {
@@ -1263,6 +1424,8 @@
 		},
 		xAxis: [
 			{
+				// type: 'datetime',
+				// format: '{value:%Y-%m-%d}',
 				lineColor: 'var(--grey)',
 				tickColor: 'var(--grey)',
 				tickInterval: 1,
@@ -1274,11 +1437,12 @@
 				labels: {
 					align: 'center',
 					y: 27,
-					formatter: function () {
-						let temp = date31List[this.value];
-						let newVal = temp.substring(0,2) + "/" + temp.substring(2,4);
-						return newVal;
-					},
+					// formatter: function () {
+					// 	// return  Highcharts.dateFormat('%M %Y',  this.value);
+					// 	// let temp = date31List[this.value];
+					// 	// let newVal = temp.substring(0,2) + "/" + temp.substring(2,4);
+					// 	// return newVal;
+					// },
 					style: {
 						color: 'var(--grey)',
 						fontSize: '12px'
@@ -1367,32 +1531,33 @@
 			style: {
 				color: 'var(--white)',
 			},
-			formatter: function () {
-				let temp = date31List[this.x];
-				let newVal = temp.substring(0,2) + "/" + temp.substring(2,4);
+			// formatter: function () {
+			// 	let temp = date31List[this.x];
+			// 	let newVal = temp.substring(0,2) + "/" + temp.substring(2,4);
 			
-				return ['<span style="display:flex; margin-bottom:-10px;"><b>' + newVal + '</b></span>'].concat(
-					this.points ?
-						this.points.map(function (point) {
-							let suffix  = '';
-							let val;
-							if(point.series.name == "일사량"){
-								val = Math.round(point.point.y);
-							} else {
-								val = displayNumberFixedUnit(point.point.y, 'kWh', 'kWh', 0)[0];
-							}
-							point.series.options.tooltip.valueSuffix ? (suffix = point.series.options.tooltip.valueSuffix) : (suffix = "");
+			// 	return ['<span style="display:flex; margin-bottom:-10px;"><b>' + newVal + '</b></span>'].concat(
+			// 		this.points ?
+			// 			this.points.map(function (point) {
+			// 				let suffix  = '';
+			// 				let val;
+			// 				if(point.series.name == "일사량"){
+			// 					val = Math.round(point.point.y);
+			// 				} else {
+			// 					val = displayNumberFixedUnit(point.point.y, 'kWh', 'kWh', 0)[0];
+			// 				}
+			// 				point.series.options.tooltip.valueSuffix ? (suffix = point.series.options.tooltip.valueSuffix) : (suffix = "");
 
-							return "<br/><span style='color:" + point.series.color + "'>\u25CF</span> " + point.series.name + ": " + val + " " + suffix;
-						}) : []
-				);
-			},
+			// 				return "<br/><span style='color:" + point.series.color + "'>\u25CF</span> " + point.series.name + ": " + val + " " + suffix;
+			// 			}) : []
+			// 	);
+			// },
 		},
 		legend: {
 			enabled: true,
 			align: 'right',
 			verticalAlign: 'top',
-			x: -10,
+			x: -35,
+			// x: -10,
 			y: 0,
 			itemStyle: {
 				color: 'var(--white87)',
@@ -1410,7 +1575,6 @@
 				label: {
 					connectorAllowed: false
 				},
-				// !!!!!!!!!!!!!!!!IMPORTANT
 				borderColor: 'var(--grey)',
 				borderWidth: 0
 			},
@@ -4069,7 +4233,9 @@
 			let dailySolarMaxVal = 0;
 			let dailyInvMaxVal = 0;
 			let trendChartLength = dailySolarTrendChart.series.length;
-			
+			let startDate;
+			let aMonthAgo;
+
 			dailySolarMaxVal =  Math.max(...chartItems3);
 			dailyInvMaxVal =  Math.max(...chartItems2);
 
@@ -4099,7 +4265,7 @@
 						},
 					},
 					xAxis: [{
-							labels: {
+						labels: {
 							align: 'center',
 							y: 27,
 							formatter: function () {
@@ -4111,7 +4277,7 @@
 								color: 'var(--grey)',
 								fontSize: '12px'
 							}
-						}
+						},
 					}],
 					tooltip: {
 						shared: true,
@@ -4152,8 +4318,12 @@
 					// 	}
 					// }
 				});
+			} else {
+				// let d = new Date();
+				// aMonthAgo = new Date(d.getTime() - (30 * 24 * 60 * 60 * 1000));
 			}
 
+			// 10/27
 			dailySolarTrendChart.addSeries({
 				name: '발전량',
 				type: 'column',
@@ -4162,14 +4332,11 @@
 					valueSuffix: 'kWh',
 				},
 				data: chartItems3,
+				// pointStart: Date.UTC(aMonthAgo.getFullYear(), aMonthAgo.getMonth() , aMonthAgo.getDay()),
+				// pointInterval: 24 * 60 * 60 * 1000
 			});
 
-			dailySolarTrendChart.yAxis[0].update({
-				title:{
-					text: "kWh"
-				},
-				max: dailySolarMaxVal
-			});
+
 
 			dailySolarTrendChart.addSeries({
 				name: '일사량',
@@ -4184,15 +4351,32 @@
 					symbol: "circle"
 				},
 				data: chartItems2,
+				// pointStart: startDate,
+				// pointStart: Date.UTC(aMonthAgo.getFullYear(), aMonthAgo.getMonth() , aMonthAgo.getDay()),
+				// pointInterval: 24 * 60 * 60 * 1000
 			});
 
-			dailySolarTrendChart.yAxis[1].update({
-				title:{
-					text: "W/m\xB2"
-				},
-				max: dailyInvMaxVal
+			// let formattedDate31List = addToDateList(31, null, "date");
+			// console.log("formattedDate31List===", formattedDate31List);
+			
+			dailySolarTrendChart.update({
+				// xAxis: [
+				// 	{
+				// 		format: '{value:%Y-%m-%d}',
+				// 		tickInterval: 24 * 3600 * 1000
+				// 	}
+				// ],
+				yAxis: [
+					{
+						title:{ text: "kWh" },
+						max: dailySolarMaxVal
+					},
+					{
+						title:{ text: "W/m\xB2" },
+						max: dailyInvMaxVal
+					},
+				],		
 			});
-
 
 			dailySolarTrendChart.isDirtyBox = true;
 			dailySolarTrendChart.redraw();
@@ -4655,7 +4839,6 @@
 					});
 					pieChart.redraw();
 				} else {
-					$('#siteCapacity').text(displayNumberFixedUnit(itemCapacity, 'W', 'kW', 1)[0]);
 					$('#siteDcPower').text(displayNumberFixedUnit(itemDcPower, 'W', 'kW', 0)[0]);
 					$('#siteAcPower').text(displayNumberFixedUnit(itemAcPower, 'W', 'kW', 0)[0]);
 
@@ -4669,7 +4852,6 @@
 					pieChart.series[0].setData([pie1Data, pie2Data]);
 				}
 
-				$('#centerTbody tr td:nth-child(1) em').before(displayNumberFixedUnit(itemCapacity, 'W', 'kW', 1)[0]);
 				pieChart.setTitle({text: displayNumberFixedUnit(itemAcPower, 'W', 'kW', 0)[0] + 'kW'});
 			});
 
@@ -4855,6 +5037,9 @@
 			.done(function (genData, foreGenData, nowGenData, capacityData) {
 				if (capacityData[1] == 'success') {
 					capacityData[0].forEach(data => {
+						let temp = data.capacities.gen ? displayNumberFixedUnit(data.capacities.gen, 'W', 'kW', 0)[0] : "-";
+						$('#centerTbody tr td:nth-child(1)').html(temp + ' ' + '<em> kW</em>');
+						$('#siteCapacity').html(temp + ' ');
 						itemChartCapacity = ( !isEmpty(data.capacities) && !isEmpty(data.capacities.gen) ) ? data.capacities.gen : 0;
 					});
 				}
@@ -5247,11 +5432,19 @@
 		} else {
 			let now = new Date();
 			now.setDate(now.getDate()-idx);
-			dateList = [...Array(idx)].map(x => {
-				now.setDate(now.getDate()+1);
-				return now.format("yyyyMMdd").substring(4, 8);
-			});
+			if(!isEmpty(option)){
+				dateList = [...Array(idx)].map(x => {
+					now.setDate(now.getDate()+1);
+					return now;
+				});
+			} else {
+				dateList = [...Array(idx)].map(x => {
+					now.setDate(now.getDate()+1);
+					return now.format("yyyyMMdd").substring(4, 8);
+				});
+			}
 		}
+
 		return dateList;
 	}
 
