@@ -642,5 +642,20 @@ const koTranslation =
   "yieldReport.only_files_with_a_pdf_extension_can_be_uploaded": "확장자가 pdf인 파일만 업로드가 가능 합니다.",
   "yieldReport.the_report_has_been_finalized": "보고서가 확정 처리 되었습니다.",
   "certManageDetail.issue": "발급",
-  "certManageDetail.register": "등록"
+  "certManageDetail.register": "등록",
+  "calendar.lang": "ko",
+  "dashboard.table.1": "순번",
+  "dashboard.table.2": "발전소 명",
+  "dashboard.table.3": "발전용량(kWh)",
+  "dashboard.table.4": "인버터 가동 상태",
+  "dashboard.table.5": "경고 알람",
+  "dashboard.table.6": "현재 발전량 (kW)",
+  "dashboard.table.7": "현재 날씨",
+  "dashboard.table.8": "전일 발전",
+  "dashboard.table.9": "발전 시간(H)",
+  "dashboard.table.10": "월간 발전량(MWh)",
+  "dashboard.table.11": "전년 동월 발전량(MWh)",
+  "dashboard.table.12": "전년 동월 대비 발전 비율(%)",
+  "dashboard.EA": "개소",
+
 }

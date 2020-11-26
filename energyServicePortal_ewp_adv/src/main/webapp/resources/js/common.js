@@ -18,7 +18,7 @@ $(function() {
 		changeYear: true,
 		yearSuffix : '년'
 	};
-	$.datepicker.setDefaults($.datepicker.regional['ko']);
+	$.datepicker.setDefaults($.datepicker.regional[`${i18nManager.tr('calendar.lang')}`]);
 
 
 	$("#datepicker1, #datepicker2, #datepicker5, #datepicker10, #datepicker12, .datepicker").datepicker({
