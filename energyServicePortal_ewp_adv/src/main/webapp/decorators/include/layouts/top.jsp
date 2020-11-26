@@ -37,6 +37,11 @@
 <script type="text/javascript" src="/js/jquery-ui-1.12.1.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.min.js"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+<script type="text/javascript" src="/js/i18n/en.js"></script>
+<script type="text/javascript" src="/js/i18n/ko.js"></script>
+<script type="text/javascript" src="/js/i18n/i18nManager.js"></script>
+
 <!-- high-stock -->
 <script type="text/javascript" src="/js/highstock.min.js"></script>
 <!-- <script type="text/javascript" src="/js/modules/variwide.js"></script> -->

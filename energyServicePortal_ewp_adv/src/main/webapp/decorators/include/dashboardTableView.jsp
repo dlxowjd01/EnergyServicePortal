@@ -40,7 +40,7 @@
 			sortable: true,
 			columns: [
 				{
-					title: '순번',
+					title: i18nManager.tr("gdash.priority"),
 					data: null,
 					render: function (data, type, full, rowIndex) {
 						return rowIndex.row + 1;
@@ -48,7 +48,7 @@
 					className: 'dt-center no-sorting fixed'
 				},
 				{
-					title: '발전소 명',
+					title: i18nManager.tr("gdash.name_of_power_generation_site"),
 					data: 'siteName',
 					render: function (data, type, full, rowIndex) {
 						return '<a href="javascript:pageMove(\'' + full['sid'] + '\', \'siteMain\'), \'self\'">' + data + '</a>' +
@@ -57,7 +57,7 @@
 					className: 'dt-head-left dt-body-left'
 				},
 				{
-					title: '발전용량 (kW)',
+					title: i18nManager.tr("gdash.power_generation_amount") + ' (kWh)',
 					data: 'capacity',
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
@@ -65,7 +65,7 @@
 					className: 'dt-head-right dt-body-right'
 				},
 				{
-					title: '인버터 가동 상태',
+					title: i18nManager.tr("gdash.status_of_inverter"),
 					data: 'invCount',
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
@@ -73,7 +73,7 @@
 					className: 'dt-center'
 				},
 				{
-					title: '경고 알람',
+					title: i18nManager.tr("gdash.warning_alarm"),
 					data: 'deviceFault',
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
@@ -81,7 +81,7 @@
 					className: 'dt-center'
 				},
 				{
-					title: '금일 누적(kWh)',
+					title: i18nManager.tr("gdash.current_power_generation_rate") + ' (kW)',
 					data: 'nowEnergy',
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
@@ -89,7 +89,7 @@
 					className: 'dt-head-right dt-body-right'
 				},
 				{
-					title: "현재 날씨",
+					title: i18nManager.tr("gdash.current_weather"),
 					data: 'toDaySky',
 					render: function (data, type, full, rowIndex) {
 						if (data != null && data === '-') {
@@ -103,7 +103,7 @@
 					className: 'dt-center'
 				},
 				{
-					title: '전일 발전(kWh)',
+					title: i18nManager.tr("gdash.previous_day_power_generation_amount"),
 					data: 'yesterEnergy',
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
@@ -126,7 +126,7 @@
 					className: 'dt-center'
 				},
 				{
-					title: '전일 날씨',
+					title: i18nManager.tr("gdash_previous_day_weather"),
 					data: 'yesterDaySky',
 					render: function (data, type, full, rowIndex) {
 						if (data != null && data === '-') {
@@ -140,7 +140,7 @@
 					className: 'dt-center'
 				},
 				{
-					title: '월간 발전(MWh)',
+					title: i18nManager.tr("gdash.monthly_power_generation_amount") + ' (MWh)',
 					data: 'monthGen',
 					render: function (data, type, full, rowIndex) {
 						if (isEmpty(data)) {
@@ -152,7 +152,7 @@
 					className: 'dt-head-right dt-body-right'
 				},
 				{
-					title: '전년 동월(MWh)',
+					title: i18nManager.tr("gdash.power_generation_amount_in_the_same_month_previous_year") + ' (MWh)',
 					data: 'beforeYearGen',
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
@@ -160,7 +160,7 @@
 					className: 'dt-head-right dt-body-right'
 				},
 				{
-					title: '동월 대비(%)',
+					title: i18nManager.tr("gdash.power_generation_rate_compared_to_the_same_month_previous_year") + '(%)',
 					data: 'proportion',
 					render: function (data, type, full, rowIndex) {
 						return data;
@@ -169,8 +169,8 @@
 				},
 			],
 			language: {
-				emptyTable: "조회된 데이터가 없습니다.",
-				zeroRecords:  "검색된 결과가 없습니다.",
+				emptyTable: i18nManager.tr("gdash_the_data_you_have_queried_does_not_exist"),
+				zeroRecords:  i18nManager.tr("gdash_your_search_has_not_returned_results"),
 				infoEmpty: "",
 				paginate: {
 					previous: "",

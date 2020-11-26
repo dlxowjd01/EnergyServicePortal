@@ -451,10 +451,9 @@
 		}
 
 		$('#search').on('click', function () {
-			let period = $('#term').prev().text();
-			let detailperiod = $('#detailterm').prev().text().trim();
-			if (detailperiod == '선택' || detailperiod == '' || detailperiod == "undefined") {
-				alert('<fmt:message key="alarm.alert.1" />');
+			let term = $('#term').prev().data('value');
+			if (isEmpty(term)) {
+				alert('시간단위를 선택해주세요.');
 				return false;
 			} else {
 				periodData();

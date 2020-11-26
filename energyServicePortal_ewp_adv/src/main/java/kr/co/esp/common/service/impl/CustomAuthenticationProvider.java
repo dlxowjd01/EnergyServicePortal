@@ -54,7 +54,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 			Map<String, Object> userInfoMap = loginService.selectAuthLogin(mode, obj);
 			if (userInfoMap != null && !userInfoMap.isEmpty()) {
 				session.setAttribute(UserUtil.USER_SESSION_ID, userInfoMap);
-
+				session.setAttribute("mode", mode);
 				return new UsernamePasswordAuthenticationToken(secure, password, new ArrayList<>());
 			} else {
 				return null;

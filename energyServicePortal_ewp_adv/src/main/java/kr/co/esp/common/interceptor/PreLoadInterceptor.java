@@ -1,6 +1,7 @@
 package kr.co.esp.common.interceptor;
 
 import kr.co.esp.common.service.EgovProperties;
+import kr.co.esp.common.util.I18nManager;
 import kr.co.esp.common.util.UserUtil;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
@@ -308,10 +309,6 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 					request.setAttribute("siteName", siteName);
 					request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
 				} else {
-					//그룹 대시보드는 처음 진입시 들어오는 화면이라 파라미터가 없을경우는 사용자가 볼수있는 모든 사이트가 대상이다.
-					request.setAttribute("sgid", "");
-					request.setAttribute("siteName", "전체");
-
 					refineList = makeSiteList(siteOriginList, groupMap, session, divisionLocation, divisionResourceType, divisionProc);
 
 					jsonArray = new JSONArray();
@@ -319,8 +316,10 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 						jsonArray.put(jsonParser(refineMap));
 					}
 
+					//그룹 대시보드는 처음 진입시 들어오는 화면이라 파라미터가 없을경우는 사용자가 볼수있는 모든 사이트가 대상이다.
+					request.setAttribute("sgid", "");
 					request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
-					request.setAttribute("siteName", "전체"); //사이트 리스트 세팅
+					request.setAttribute("siteName", I18nManager.getInstance().tr(request, "gdash_entire")); //사이트 리스트 세팅
 				}
 			} else {
 				String sgid = (String) session.getAttribute("sgid");
@@ -400,10 +399,6 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 						divisionLocation = (String[]) session.getAttribute("divisionLocation");
 						divisionResourceType = (String[]) session.getAttribute("divisionResourceType");
 
-						//그룹 대시보드는 처음 진입시 들어오는 화면이라 파라미터가 없을경우는 사용자가 볼수있는 모든 사이트가 대상이다.
-						request.setAttribute("sgid", "");
-						request.setAttribute("siteName", "전체");
-
 						refineList = makeSiteList(siteOriginList, groupMap, session, divisionLocation, divisionResourceType, divisionProc);
 
 						jsonArray = new JSONArray();
@@ -411,8 +406,10 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 							jsonArray.put(jsonParser(refineMap));
 						}
 
+						//그룹 대시보드는 처음 진입시 들어오는 화면이라 파라미터가 없을경우는 사용자가 볼수있는 모든 사이트가 대상이다.
+						request.setAttribute("sgid", "");
 						request.setAttribute("siteList", jsonArray); //사이트 리스트 세팅
-						request.setAttribute("siteName", "전체"); //사이트 리스트 세팅
+						request.setAttribute("siteName", I18nManager.getInstance().tr(request, "gdash_entire"));
 					}
 				}
 			}
@@ -446,10 +443,10 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 		String mode = (String) session.getAttribute("mode"); // TEST 서버 여부
 
 		String apiHost;//API HOST
-		if ("test".equals(mode)) {
-			apiHost = EgovProperties.getProperty("jsApiHostSecure");
-		} else {
+		if (mode != null && "test".equals(mode)) {
 			apiHost = EgovProperties.getProperty("jsApiHost");
+		} else {
+			apiHost = EgovProperties.getProperty("jsApiHostSecure");
 		}
 		mav.addObject("apiHost", apiHost);
 
