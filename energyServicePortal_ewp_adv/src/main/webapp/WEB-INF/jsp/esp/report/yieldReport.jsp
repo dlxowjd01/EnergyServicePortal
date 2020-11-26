@@ -30,7 +30,7 @@
 					className: 'dt-center no-sorting'
 				},
 				{
-					title: '<fmt:message key="revenuereport.2.number" />',
+					title: '<fmt:message key="yieldReport.index" />',
 					data: null,
 					render: function (data, type, full, rowIndex) {
 						return rowIndex.row + 1;
@@ -38,7 +38,7 @@
 					className: 'dt-center fixed'
 				},
 				{
-					title: 'SPC명',
+					title: '<fmt:message key="yieldReport.SPC" />',
 					data: 'spc_name',
 					render: function (data, type, full, rowIndex) {
 						if (isEmpty(data)) {
@@ -50,7 +50,7 @@
 					className: 'dt-center'
 				},
 				{
-					title: '<fmt:message key="revenuereport.2.plant" />',
+					title: '<fmt:message key="yieldReport.plantName" />',
 					data: 'site_name',
 					render: function (data, type, full, rowIndex) {
 						if (isEmpty(data)) {
@@ -62,7 +62,7 @@
 					className: 'dt-center'
 				},
 				{
-					title: '<fmt:message key="revenuereport.2.report_classification" />',
+					title: '<fmt:message key="yieldReport.type" />',
 					data: 'reportTypeName',
 					render: function (data, type, full, rowIndex) {
 						if (isEmpty(data)) {
@@ -74,12 +74,12 @@
 					className: 'dt-center'
 				},
 				{
-					title: '적용기간',
+					title: '<fmt:message key="yieldReport.period" />',
 					data: 'report_date',
 					className: 'dt-center'
 				},
 				{
-					title: '<fmt:message key="revenuereport.2.download" />',
+					title: '<fmt:message key="yieldReport.download" />',
 					data: 'file_link',
 					render: function (data, type, full, rowIndex) {
 						return '<button type="button" class="text-file" onclick="' + data + '">EXCEL</button>';
@@ -88,7 +88,7 @@
 					className: 'dt-center'
 				},
 				{
-					title: '<fmt:message key="workreportmain.2.saved" />',
+					title: '<fmt:message key="yieldReport.createdTime" />',
 					data: 'generated_at',
 					render: function (data, type, full, rowIndex) {
 						if (data === null) {
@@ -100,7 +100,7 @@
 					className: 'dt-center'
 				},
 				{
-					title: '<fmt:message key="revenuereport.2.report_confirmation" />',
+					title: '<fmt:message key="yieldReport.reportEnd" />',
 					data: 'confirmed_at',
 					render: function (data, type, full, rowIndex) {
 						if (isEmpty(data)) {
@@ -115,7 +115,7 @@
 					className: 'dt-center'
 				},
 				{
-					title: '최종 작업자',
+					title: '<fmt:message key="yieldReport.person" />',
 					data: 'updated_by',
 					className: 'dt-center'
 				}
