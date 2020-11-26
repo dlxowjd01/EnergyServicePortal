@@ -85,8 +85,8 @@
 						</ul>
 					</div>
 					<div class="eq-btn-box">
-						<button type="button" class="btn-type04" onclick="alert('선택된 설비가 없습니다.'); return false;"><fmt:message key="deviceState.update.title" /></button>
-						<button type="button" class="btn-type04" onclick="alert('선택된 설비가 없습니다.'); return false;"><fmt:message key="deviceState.view.history" /></button>
+						<button type="button" class="btn-type04" onclick="alert(`<fmt:message key='deviceState.alert.1' />`); return false;"><fmt:message key="deviceState.update.button" /></button>
+						<button type="button" class="btn-type04" onclick="alert(`<fmt:message key='deviceState.alert.1' />`); return false;"><fmt:message key="deviceState.view.history" /></button>
 					</div>
 				</div>
 			</div>
@@ -117,7 +117,7 @@
 							</div>
 							<div class="input-group inline-flex">
 								<label for="name" class="input-label asterisk"><fmt:message key="deviceState.popup.deviceNe" /></label>
-								<input class="input text-input-type" type="text" name="name" id="name" placeholder="입력" autocomplete="off" onkeyup="$(this).val($(this).val().replace(/^\s+|\s+$/g, ''))">
+								<input class="input text-input-type" type="text" name="name" id="name" placeholder="<fmt:message key='deviceState.register.placeholder' />" autocomplete="off" onkeyup="$(this).val($(this).val().replace(/^\s+|\s+$/g, ''))">
 							</div>
 							<div class="input-group inline-flex">
 								<label for="device_type" class="input-label asterisk"><fmt:message key="deviceState.popup.deviceType" /></label>
@@ -546,7 +546,7 @@
 			console.error(textStatus);
 			console.error(errorThrown);
 
-			alert('처리 중 오류가 발생했습니다.');
+			alert('<fmt:message key="deviceState.alert.2" />');
 			return false;
 		});
 	};
@@ -633,7 +633,7 @@
 					console.error(textStatus);
 					console.error(errorThrown);
 
-					alert('처리 중 오류가 발생했습니다.');
+					alert('<fmt:message key="deviceState.alert.2" />');
 					return false;
 				}).always(function(jqXHR, textStatus) {
 					promiseCnt++;
@@ -821,7 +821,7 @@
 
 		$('#deviceStateTypeList div.row').each(function() {
 			if ($(this).prop('id') == 'SM_MANUAL') {
-				$(this).find('.equip-card .eq-btn-box button').eq(1).html('데이터 입력');
+				$(this).find('.equip-card .eq-btn-box button').eq(1).html('<fmt:message key="deviceState.inputDevice" />');
 			}
 		});
 
@@ -1186,11 +1186,11 @@
 				console.error(textStatus);
 				console.error(errorThrown);
 
-				alert('처리 중 오류가 발생했습니다.');
+				alert('<fmt:message key="deviceState.alert.2" />');
 				return false;
 			});
 		} else {
-			alert('입력 단위를 선택해 주세요.');
+			alert('<fmt:message key="deviceState.alert.3" />');
 			return false;
 		}
 	}
@@ -1250,7 +1250,7 @@
 				$('#loadingCircle').show();
 			}
 		}).done(function (data, textStatus, jqXHR) {
-			alert('등록되었습니다.');
+			alert('<fmt:message key="deviceState.alert.4" />');
 			$('#manualAddDeviceModal').modal('hide');
 			return false;
 		}).fail(function (jqXHR, textStatus, errorThrown) {
@@ -1258,7 +1258,7 @@
 			console.error(textStatus);
 			console.error(errorThrown);
 
-			alert('처리 중 오류가 발생했습니다.');
+			alert('<fmt:message key="deviceState.alert.2" />');
 			return false;
 		});
 	}
@@ -1277,7 +1277,7 @@
 		if (manualItems === undefined) {
 			if ($('#manualModalTable tr').length === 0) {
 				if (mode === 'save') {
-					alert('저장할 정보가 없습니다.');
+					alert('<fmt:message key="deviceState.alert.5" />');
 				} else {
 					$('#manualAddDeviceModal').modal('hide');
 				}
@@ -1297,7 +1297,7 @@
 					}
 				} else {
 					if (mode === 'save') {
-						alert('저장할 정보가 없습니다.');
+						alert('<fmt:message key="deviceState.alert.5" />');
 					} else {
 						$('#manualAddDeviceModal').modal('hide');
 					}
@@ -1306,7 +1306,7 @@
 		} else {
 			if (isEmpty(manualItems) || (objectAreEqual(manualItems, data))) {
 				if (mode === 'save') {
-					alert('변경된 내역이 없습니다.');
+					alert('<fmt:message key="deviceState.alert.6" />');
 				} else {
 					$('#manualAddDeviceModal').modal('hide');
 				}
@@ -1492,7 +1492,7 @@
 				console.error(textStatus);
 				console.error(errorThrown);
 
-				alert('처리 중 오류가 발생했습니다.');
+				alert('<fmt:message key="deviceState.alert.2" />');
 				return false;
 			});
 
@@ -1516,22 +1516,22 @@
 		if (method != 'delete') {
 
 			if (isEmpty(areaData['addSiteList'])) {
-				alert('사업소 선택은 필수 입니다.');
+				alert('<fmt:message key="deviceState.alert.7" />');
 				return false;
 			}
 
 			if (isEmpty(areaData['name'].trim())) {
-				alert('장치명은 필수 입니다.');
+				alert('<fmt:message key="deviceState.alert.8" />');
 				return false;
 			}
 
 			if (isEmpty(areaData['device_type'])) {
-				alert('장치 타입은 필수 입니다.');
+				alert('<fmt:message key="deviceState.alert.9" />');
 				return false;
 			}
 
 			if (isEmpty(areaData['metering_type'])) {
-				alert('계량 유형은 필수 입니다.');
+				alert('<fmt:message key="deviceState.alert.10" />');
 				return false;
 			}
 		}
@@ -1550,14 +1550,14 @@
 				}
 
 				alertPreffix = '수정';
-				if (!confirm('설비정보를 수정하시겠습니까?')) {
+				if (!confirm('<fmt:message key="deviceState.confirm.1" />')) {
 					return false;
 				}
 			}
 
 			if (method == 'delete') {
 				alertPreffix = '삭제';
-				let delPrompt = prompt('해당설비를 삭제하시겠습니까? \n삭제를 원하시면 아래 "삭제"라고 입력하고 확인을 눌러 주세요.', '');
+				let delPrompt = prompt('<fmt:message key="deviceState.prompt.1" /> \n<fmt:message key="deviceState.prompt.2" />', '<fmt:message key="deviceState.prompt.answer" />');
 				if (delPrompt != '삭제') {
 					return false;
 				}
@@ -1597,7 +1597,21 @@
 			contentType: 'application/json',
 			data: JSON.stringify(areaData),
 		}).done(function (data, textStatus, jqXHR) {
-			alert(alertPreffix + ' 되었습니다.');
+			if (langStatus === `KO`) {
+				alert(alertPreffix + ' 되었습니다.');
+			} else {
+				switch (alertPreffix) {
+					case `등록`:
+						alert(`Device has been registerd`);
+					break;
+					case `수정`:
+						alert(`Device has been modified`);
+					break;
+					case `삭제`:
+						alert(`Device has been deleted`);
+					break;
+				}
+			}
 
 			$('#addDeviceModal').modal('hide');
 			getDeviceList();
@@ -1607,7 +1621,7 @@
 			console.error(textStatus);
 			console.error(errorThrown);
 
-			alert('처리 중 오류가 발생했습니다.');
+			alert('<fmt:message key="deviceState.alert.2" />');
 			return false;
 		});
 	}

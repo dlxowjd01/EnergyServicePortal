@@ -14,7 +14,7 @@
 <div class="row">
 	<div class="col-12">
 		<div class="dropdown fl" id="selectSiteList">
-			<button type="button" class="dropdown-toggle w10 no-close" data-toggle="dropdown" data-name="사업소 선택">
+			<button type="button" class="dropdown-toggle w10 no-close" data-toggle="dropdown" data-name="<fmt:message key='colState.register.siteSelect' />">
 				<fmt:message key='colState.search.site' /><span class="caret"></span>
 			</button>
 			<ul class="dropdown-menu chk-type" role="menu" id="siteULList">
@@ -38,8 +38,8 @@
 				<div class="input-group inline-flex">
 					<label for="rtuSite" class="input-label"><fmt:message key='colState.register.site' /></label>
 					<div class="dropdown" id="rtuSite">
-						<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="사업소 선택">
-							<fmt:message key='colState.register.sitSelect' /><span class="caret"></span>
+						<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='colState.register.siteSelect' />">
+							<fmt:message key='colState.register.siteSelect' /><span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu chk-type" id="rtuSiteULList">
 							<li data-value="[sid]">
@@ -167,7 +167,7 @@
 									<div class="flex-group">
 										<span class="sm-title"><fmt:message key='colState.detail.sendCmd.command' /></span>
 										<div class="dropdown" id="command">
-											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택"><fmt:message key='colState.detail.sendCmd.select' /><span class="caret"></span></button>
+											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='colState.select' />"><fmt:message key='colState.detail.sendCmd.select' /><span class="caret"></span></button>
 											<ul class="dropdown-menu" role="menu">
 												<li data-value="kpx_targetPower"><a href="javascript:void(0);" tabindex="-1">kpx_targetPower</a></li>
 											</ul>
@@ -176,7 +176,7 @@
 									<div class="flex-group">
 										<span class="sm-title"><fmt:message key='colState.detail.sendCmd.option' /></span>
 										<div class="dropdown" id="commandKey">
-											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택"><fmt:message key='colState.detail.sendCmd.select' /><span class="caret"></span></button>
+											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='colState.select' />"><fmt:message key='colState.detail.sendCmd.select' /><span class="caret"></span></button>
 											<ul class="dropdown-menu" role="menu" id="selectCmdOptList">
 												<li data-value="targetPower"><a href="javascript:void(0);" tabindex="-1"><fmt:message key='colState.detail.sendCmd.target' /></a></li>
 											</ul>
@@ -211,7 +211,7 @@
 						<span class="tx-tit"><fmt:message key='colState.log.type' /></span>
 						<div class="sel-calendar">
 							<div class="dropdown" id="logType">
-								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="상태"><fmt:message key='colState.log.status' /><span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='colState.log.status' />"><fmt:message key='colState.log.status' /><span class="caret"></span></button>
 								<ul class="dropdown-menu" role="menu">
 									<li data-value="상태">
 										<a href="javascript:void(0);" tabindex="-1"><fmt:message key='colState.log.status' /></a>
@@ -327,11 +327,11 @@
 			const rid = $('#selectedRTU').data('rid');
 
 			if (isEmpty(rid)) {
-				alert('RTU 정보가 확인되지 않습니다.');
+				alert('<fmt:message key="colState.alert.1" />');
 				return false;	
 			}
 
-			if (!confirm('RTU 정보를 삭제하시겠습니까?')) {
+			if (!confirm('<fmt:message key="colState.confirm.1" />')) {
 				return false;
 			}
 
@@ -342,13 +342,13 @@
 				contentType: 'application/json',
 				data: {},
 				success: function (data) {
-					alert('RTU 삭제에 성공했습니다.');
+					alert('<fmt:message key="colState.alert.2" />');
 
 					getRtuDataList();
 				},
 				error: function (error) {
 					console.error(error);
-					alert('RTU 삭제에 실패했습니다. 값을 다시 확인해 주세요.');
+					alert('<fmt:message key="colState.alert.3" />');
 					return false;
 				}
 			});
@@ -377,7 +377,7 @@
 				},
 				success: function (result) {
 					var column = ['sName','rName','dName','dTimestamp','dLocaltime','dOperation','log'], //json Key
-						header = ['사이트ID','수집 타입 ID','수집기 ID','송신 시간','수신 시간' ,'상태', '수신 데이터']; //csv 파일 헤더
+						header = ['<fmt:message key="colState.thead.1" />','<fmt:message key="colState.thead.2" />','<fmt:message key="colState.thead.3" />','<fmt:message key="colState.thead.4" />','<fmt:message key="colState.thead.5" />' ,'<fmt:message key="colState.thead.6" />', '<fmt:message key="colState.thead.7" />']; //csv 파일 헤더
 
 					let logList = result.logs;
 
@@ -386,8 +386,8 @@
 						logList[logIdx]['dLocaltime'] = String(log.dLocaltime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
 					})
 
-					if(confirm('저장 하시겠습니까?')) {
-						getJsonExcelDownload(logList, column, header, '수집현황.xls'); // json list, 컬럼, 헤더명, 파일명
+					if(confirm('<fmt:message key="colState.confirm.2" />')) {
+						getJsonExcelDownload(logList, column, header, '<fmt:message key="colState.xlsName" />'); // json list, 컬럼, 헤더명, 파일명
 					}
 				},
 				error: function (error) {
@@ -401,7 +401,7 @@
 			const rid = $('#selectedRTU').data('rid');
 
 			if (isEmpty(rid)) {
-				alert('RTU 정보가 확인되지 않습니다.');
+				alert('<fmt:message key="colState.alert.4" />');
 				return false;
 			}
 
@@ -415,7 +415,7 @@
 				},
 				error: function (error) {
 					console.error(error);
-					alert('RTU 삭제에 실패했습니다. 값을 다시 확인해 주세요.');
+					alert('<fmt:message key="colState.alert.5" />');
 					return false;
 				}
 			});
@@ -428,7 +428,7 @@
 		makeSite.sortOn('name');
 		makeSite.unshift({ sid: 'all', name: '전체'});
 		setMakeList(makeSite, 'siteULList', {'dataFunction': {}}); //list생성
-		$('#siteULList').append(`<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16">적용</button></li>`);
+		$('#siteULList').append(`<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16"><fmt:message key="colState.apply" /></button></li>`);
 	};
 
 	function selectLog(rids, startTime, endTime, limit, page) {
@@ -738,7 +738,7 @@
 
 								selectLog(rtu.rid, startDate, endDate);
 							} else {
-								alert('검색 시작일과 종료일을 확인해 주세요.');
+								alert('<fmt:message key="colState.alert.6" />');
 								return false;
 							}
 						});
@@ -794,7 +794,7 @@
 			dropDownInit($('#rtuSite'));
 			setMakeList(siteArray, 'rtuSiteULList', {'dataFunction': {}});
 		} else {
-			alert('한 개 이상의 사업소를 선택해 주세요.');
+			alert('<fmt:message key="colState.alert.7" />');
 			return false;
 		}
 
@@ -814,10 +814,10 @@
 			$('#description').val(data.description);
 
 			const rid = $('#selectedRTU').data('rid');
-			$('#RTU_Register').text('RTU 수정');
+			$('#RTU_Register').text('<fmt:message key="colState.modify.title" />');
 			$('#addRtuModal .btn-wrap-type02 button').eq(1).attr('onclick', 'registerRtu("patch", "' + rid + '"); return false');
 		} else {
-			$('#RTU_Register').text('RTU 등록');
+			$('#RTU_Register').text('<fmt:message key="colState.register.title" />');
 			$('#addRtuModal .btn-wrap-type02 button').eq(1).attr('onclick', 'registerRtu("post"); return false');
 		}
 
@@ -834,21 +834,21 @@
 			typeName = '';
 
 		if (isEmpty(sid)) {
-			alert('사업소를 선택해 주세요.');
+			alert('<fmt:message key="colState.alert.8" />');
 			return false;
 		}
 
 		if (isEmpty(name)) {
-			alert('RTU이름을 입력해 주세요.');
+			alert('<fmt:message key="colState.alert.9" />');
 			return false;
 		}
 
 		if (type == 'post') {
 			ajaxUrl = apiHost + '/config/rtus?oid=' + oid + '&sid=' + sid;
-			typeName = '등록';
+			typeName = langStatus === `KO` ? '등록' : `register`;
 		} else {
 			ajaxUrl = apiHost + '/config/rtus/' + rid;
-			typeName = '수정';
+			typeName = langStatus === `KO` ? '수정' : `modify`;
 		}
 
 		$.ajax({
@@ -863,14 +863,14 @@
 				description: description
 			}),
 			success: function (data) {
-				alert('RTU ' + typeName + '에 성공했습니다.');
+				alert(`RTU ${typeName} <fmt:message key="colState.alert.10" />`);
 
 				getRtuDataList();
 				$('#addRtuModal').modal('hide');
 			},
 			error: function (error) {
 				console.error(error);
-				alert('RTU ' + typeName + '에 실패했습니다. 값을 다시 확인해 주세요.');
+				alert(`RTU ${typeName} <fmt:message key="colState.alert.11" />`);
 				return false;
 			}
 		});
@@ -933,7 +933,7 @@
 
 					selectLog(rtu.rid, startDate, endDate);
 				} else {
-					alert('검색 시작일과 종료일을 확인해 주세요.');
+					alert('<fmt:message key="colState.alert.12" />');
 					return false;
 				}
 			});
@@ -980,17 +980,17 @@
 		let bodyCommand = new Object();
 
 		if (isEmpty(rid)) {
-			alert('RTU를 선택해주세요.');
+			alert('<fmt:message key="colState.alert.13" />');
 			return false;
 		}
 
 		if (isEmpty(command)) {
-			alert('커맨드를 선택해주세요.');
+			alert('<fmt:message key="colState.alert.14" />');
 			return false;
 		}
 
 		if (isEmpty(optionVal)) {
-			alert('옵션을 입력해주세요.');
+			alert('<fmt:message key="colState.alert.15" />');
 			return false;
 		}
 
@@ -1006,17 +1006,17 @@
 		let bodyCommand = new Object();
 
 		if (isEmpty(rid)) {
-			alert('RTU를 선택해주세요.');
+			alert('<fmt:message key="colState.alert.16" />');
 			return false;
 		}
 
 		if (isEmpty(command)) {
-			alert('커맨드를 선택해주세요.');
+			alert('<fmt:message key="colState.alert.17" />');
 			return false;
 		}
 
 		if (isEmpty(optionVal)) {
-			alert('옵션을 입력해주세요.');
+			alert('<fmt:message key="colState.alert.18" />');
 			return false;
 		}
 
@@ -1048,24 +1048,24 @@
 					contentType: 'application/json',
 					data: JSON.stringify(bodyCommand),
 					success: function (data) {
-						alert('RTU 커맨드가 입력 됐습니다.');
+						alert('<fmt:message key="colState.alert.19" />');
 						$('#certModal').modal('hide');
 						return false;
 					},
 					error: function (error) {
 						console.error(error);
-						alert('RTU 커맨드 입력에 실패했습니다. 값을 다시 확인해 주세요.');
+						alert('<fmt:message key="colState.alert.20" />');
 						$('#certModal').modal('hide');
 						return false;
 					}
 				});
 			} else {
-				alert('패스워드가 일치하지 않습니다.');
+				alert('<fmt:message key="colState.alert.21" />');
 				$('#certModal').modal('hide');
 				return false;
 			}
 		}).catch(error => {
-			alert('RTU 커맨드 입력에 실패했습니다. 값을 다시 확인해 주세요.');
+			alert('<fmt:message key="colState.alert.22" />');
 			$('#certModal').modal('hide');
 			return false;
 		});
