@@ -89,7 +89,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 	}, {
 		gridLineWidth: 0,
 		title: {
-			text: '천원',
+			text: '<fmt:message key="smain.1000won" />',
 			align: 'low',
 			rotation: 0,
 			y: 25,
@@ -265,7 +265,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 	}, {
 		gridLineWidth: 0,
 		title: {
-			text: '천원',
+			text: '<fmt:message key="smain.1000won" />',
 			align: 'low',
 			rotation: 0,
 			y: 25,

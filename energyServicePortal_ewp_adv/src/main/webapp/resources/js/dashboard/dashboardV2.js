@@ -8,10 +8,10 @@ let minIntervalCount = 0;
 
 //대시보드 먼슬리 && 데일리 차트 시리증 설정.
 const seriesArray = [
-	{name: "충전", type: 'column', color: 'var(--circle-charge)', data: 'chargeList', suffix: 'kWh'},
-	{name: "방전", type: 'column', color: 'var(--grey)', data: 'dischargeList', suffix: 'kWh'},
-	{name: "태양광", type: 'column', color: 'var(--circle-solar-power)', data: 'pvList', suffix: 'kWh'},
-	{name: "정산금", type: 'spline', color: 'var(--white)', data: 'payList', suffix: '천원'},
+	{name: "<fmt:message key='smain.power.charge' />", type: 'column', color: 'var(--circle-charge)', data: 'chargeList', suffix: 'kWh'},
+	{name: "<fmt:message key='smain.power.discharge' />", type: 'column', color: 'var(--grey)', data: 'dischargeList', suffix: 'kWh'},
+	{name: "<fmt:message key='smain.power.pv.inv' />", type: 'column', color: 'var(--circle-solar-power)', data: 'pvList', suffix: 'kWh'},
+	{name: "<fmt:message key='gmain.payments' />", type: 'spline', color: 'var(--white)', data: 'payList', suffix: '천원'},
 ];
 
 // 특수문자 정규식 변수(공백 미포함)
@@ -1010,11 +1010,11 @@ const typeSiteDraw = async () => {
 
 		if(!isEmpty(tmepGenArray)){
 			genSum = tmepGenArray.reduce((acc, val) => { return acc + val } , 0);
-			str += '<li class="charge">발전 : ' + displayNumberFixedDecimal(genSum, 'kWh', 3, 2).join(' ') + '</li>';
+			str += '<li class="charge"><fmt:message key="gmain.generation" /> : ' + displayNumberFixedDecimal(genSum, 'kWh', 3, 2).join(' ') + '</li>';
 		}
 		if(!isEmpty(tempForeArray)){
 			genForecastSum = tempForeArray.reduce((acc, val) => { return acc + val } , 0);
-			str += '<li class="discharge">발전 예측 : ' + displayNumberFixedDecimal(genForecastSum, 'kWh', 3, 2).join(' ') + '</li>';
+			str += '<li class="discharge"><fmt:message key="gmain.generation.forecast" /> : ' + displayNumberFixedDecimal(genForecastSum, 'kWh', 3, 2).join(' ') + '</li>';
 		}
 		$("#yesterdaySum").append(str);
 	}).catch((error) => {

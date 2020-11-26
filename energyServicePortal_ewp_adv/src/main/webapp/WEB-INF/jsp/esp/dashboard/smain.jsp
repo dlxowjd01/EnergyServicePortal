@@ -1165,7 +1165,7 @@
 				],
 				gridLineWidth: 1,
 				title: {
-					text: '천원',
+					text: '<fmt:message key="smain.1000won" />',
 					align: 'low',
 					rotation: 0,
 					y: 25,
@@ -4173,7 +4173,7 @@
 					});
 				} else {
 					seriesName = '매전량';
-					newSuffix = '천원';
+					newSuffix = '<fmt:message key="smain.1000won" />';
 
 					monthlyChart.update({
 						yAxis: [{

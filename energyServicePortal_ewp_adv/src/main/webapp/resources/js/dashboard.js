@@ -766,7 +766,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		}
 	},
 	series: [{
-		name: '충전',
+		name: '<fmt:message key="smain.power.charge" \>',
 		type: 'column',
 		color: 'var(--circle-charge)',
 		tooltip: {
@@ -774,7 +774,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		}
 
 	}, {
-		name: '방전',
+		name: '<fmt:message key="smain.power.discharge" \>',
 		type: 'column',
 		color: 'var(--grey)',
 		tooltip: {
@@ -782,7 +782,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		}
 
 	}, {
-		name: '태양광',
+		name: '<fmt:message key="smain.power.pv.inv" \>',
 		type: 'column',
 		color: 'var(--circle-solar-power)',
 		tooltip: {
@@ -790,13 +790,13 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		}
 
 	}, {
-		name: '정산금',
+		name: '<fmt:message key="gmain.payments" \>',
 		type: 'spline',
 		color: 'var(--white87)',
 		dashStyle: 'ShortDash',
 		yAxis: 1,
 		tooltip: {
-			valueSuffix: '천원'
+			valueSuffix: '<fmt:message key="smain.1000won" />'
 		}
 	}],
 	credits: {
@@ -930,7 +930,7 @@ const setGenDataBySiteYesterday = function (type, siteGenArray, siteForeGenArray
 		}
 
 		typeSiteCurrent.addSeries({
-			name: '발전',
+			name: '<fmt:message key="gmain.generation" \>',
 			color: 'var(--turquoise)',
 			data: tmepGenArray,
 			tooltip: {
@@ -939,7 +939,7 @@ const setGenDataBySiteYesterday = function (type, siteGenArray, siteForeGenArray
 		});
 
 		typeSiteCurrent.addSeries({
-			name: '발전 예측',
+			name: '<fmt:message key="gmain.generation.forecast" \>',
 			color: 'var(--grey)',
 			data: tempForeArray,
 			tooltip: {

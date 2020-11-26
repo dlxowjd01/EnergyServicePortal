@@ -85,7 +85,7 @@
 						<td><em>&nbsp;&nbsp;대</em></td>
 						<td><em>&nbsp;&nbsp;kW</em></td>
 						<td><em>&nbsp;&nbsp;kg</em></td>
-						<td><em>&nbsp;&nbsp;천원</em></td>
+						<td><em>&nbsp;&nbsp;<fmt:message key="smain.1000won" /></em></td>
 					</tr>
 					</tbody>
 				</table>
