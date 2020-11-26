@@ -171,9 +171,9 @@
 			let cnt = $val.length;
 
 			if (cnt < 1) {
-				alert('다운받을 데이터가 없습니다.');
+				alert('<fmt:message key="pvGen.alert.1" />');
 			} else {
-				if (confirm('엑셀로 저장하시겠습니까?')) {
+				if (confirm('<fmt:message key="pvGen.confirm.1" />')) {
 					tableToExcel('table-desktop', excelName, e);
 				}
 			}
@@ -193,7 +193,7 @@
 			liStr += `<li>
 						<a href="javascript:void(0);" data-value="all" tabindex="-1">
 							<input type="checkbox" id="all" value="all" name="site">
-							<label for="all">전체</label>
+							<label for="all"><fmt:message key='pvGen.all' /></label>
 						</a>
 					</li>`;
 
@@ -209,7 +209,7 @@
 			liStr += `<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16">적용</button></li>`;
 			siteList.innerHTML = liStr;
 		} else {
-			siteList.innerHTML = `<li class="no-data">선택가능한 사이트가 없습니다.</li>`;
+			siteList.innerHTML = `<li class="no-data"><fmt:message key='pvGen.cannotSelectSite' /></li>`;
 		}
 	};
 
@@ -255,7 +255,7 @@
 							`   <li>
 									<a href="javascript:void(0);" tabindex="-1">
 										<input id="device_dashboard_${'${targetSite[\'sid\']}'}" name="device" type="checkbox" value="${'${targetSite[\'sid\']}'}" data-sid="${'${targetSite[\'sid\']}'}" data-name="${'${targetSite[\'name\']}'}_대시보드">
-										<label for="${'${targetSite[\'sid\']}'}"><span></span>대시보드</label>
+										<label for="${'${targetSite[\'sid\']}'}"><span></span><fmt:message key='pvGen.dashboard' /></label>
 									</a>
 								</li>
 							`;
@@ -264,7 +264,7 @@
 							`   <li>
 									<a href="javascript:void(0);" tabindex="-1">
 										<input id="device_billing_${'${targetSite[\'sid\']}'}" name="device" type="checkbox" value="${'${targetSite[\'sid\']}'}" data-sid="${'${targetSite[\'sid\']}'}" data-name="${'${targetSite[\'name\']}'}_매전">
-										<label for="${'${targetSite[\'sid\']}'}"><span></span>매전량</label>
+										<label for="${'${targetSite[\'sid\']}'}"><span></span><fmt:message key='pvGen.sales' /></label>
 									</a>
 								</li>
 							`;
@@ -339,7 +339,7 @@
 			$('#chartStyle2').parent().removeClass('hidden');
 		} else {
 			$('#chartStyle2').parent().addClass('hidden');
-			$('#chartStyle2 button').data('value', 'dayBy').html('일자별 보기 <span class="caret"></span>');
+			$('#chartStyle2 button').data('value', 'dayBy').html('<fmt:message key="pvGen.viewByDay" /> <span class="caret"></span>');
 		}
 
 		const billingSites = new Array();
@@ -557,7 +557,7 @@
 						th = document.createElement('th');
 						td = document.createElement('td');
 
-						th.innerHTML = '합계';
+						th.innerHTML = '<fmt:message key="pvGen.total" />';
 						theadTr.appendChild(th);
 						td.innerHTML = displayNumberFixedUnit(totalSum, 'Wh', 'kWh', 0)[0];
 						tbodyTr.appendChild(td);

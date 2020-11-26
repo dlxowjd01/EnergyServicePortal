@@ -188,14 +188,14 @@
 						<ul>
 							<c:choose>
 								<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-									<li><strong><fmt:message key='smain.aimedOutput' /></strong> <span id="siteCapacity">-</span></li>
+									<li><strong><fmt:message key='smain.aimedOutput' /></strong> <span id="siteCapacity">-</span><em>kW</em></li>
 									<li><strong><fmt:message key='smain.receptionTime' /></strong> <span id="siteDcPower">-</span></li>
 									<li><strong><fmt:message key='smain.sendTime' /></strong> <span id="siteAcPower">-</span></li>
 								</c:when>
 								<c:otherwise>
-									<li><strong><fmt:message key='smain.totalSize' /></strong> <span id="siteCapacity">-</span></li>
-									<li><strong><fmt:message key='smain.rtDCinput' /></strong> <span id="siteDcPower">-</span></li>
-									<li><strong><fmt:message key='smain.rtACoutput' /></strong> <span id="siteAcPower">-</span></li>
+									<li><strong><fmt:message key='smain.totalSize' /></strong> <span id="siteCapacity">-</span><em>kW</em></li>
+									<li><strong><fmt:message key='smain.rtDCinput' /></strong> <span id="siteDcPower">-</span><em>kW</em></li>
+									<li><strong><fmt:message key='smain.rtACoutput' /></strong> <span id="siteAcPower">-</span><em>kW</em></li>
 								</c:otherwise>
 							</c:choose>
 
@@ -235,11 +235,11 @@
 						</thead>
 						<tbody id="centerTbody">
 						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td></td>
-							<td><em>&nbsp;<fmt:message key='smain.1000won' /></em></td>
+							<td><em>&nbsp;&nbsp;kW</em></td>
+							<td><em>&nbsp;&nbsp;kWh</em></td>
+							<td><em>&nbsp;&nbsp;H</em></td>
+							<td><em>&nbsp;&nbsp;kWh</em></td>
+							<td><em>&nbsp;&nbsp;<fmt:message key='smain.1000won' /></em></td>
 						</tr>
 						</tbody>
 							</c:otherwise>

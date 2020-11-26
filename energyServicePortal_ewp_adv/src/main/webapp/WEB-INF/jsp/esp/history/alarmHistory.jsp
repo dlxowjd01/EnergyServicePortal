@@ -143,7 +143,7 @@
 						<div class="sa-select">
 							<h2 class="tx-tit"><fmt:message key="alertshistory.1.devicetype" /></h2>
 							<div id="equipmentList" class="dropdown">
-								<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택">
+								<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="<fmt:message key='alarm.popup.status.select' />">
 									<fmt:message key='alarm.popup.status.select' /><span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu chk-type" role="menu" id="device">
@@ -203,7 +203,7 @@
 							</div>
 						</div>
 						<div class="sa-select">
-							<h2 class="tx-tit"><fmt:message key="alertshistory.4.alertstatus" /></h2>
+							<h2 class="tx-tit"><fmt:message key="alarm.search.repairStatus" /></h2>
 							<div class="dropdown short" id="alarmstatus">	
 								<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택"><fmt:message key='alarm.search.confirm.N' /><span class="caret"></span></button>
 								<ul class="dropdown-menu chk-type" role="menu" id="alstatus">
@@ -223,9 +223,9 @@
 							</div>
 						</div>
 						<div class="sa-select">
-							<h2 class="tx-tit"><fmt:message key="alertshistory.4.acknowledgement" /></h2>
+							<h2 class="tx-tit"><fmt:message key="alarm.search.alarmType" /></h2>
 							<div class="dropdown">
-								<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택"><fmt:message key='alarm.search.all' /><span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="<fmt:message key='alarm.search.all' />"><fmt:message key='alarm.search.all' /><span class="caret"></span></button>
 								<ul class="dropdown-menu chk-type" role="menu" id="status">
 									<li>
 										<a href="javascript:void(0)" tabindex="-1">
@@ -454,7 +454,7 @@
 			let period = $('#term').prev().text();
 			let detailperiod = $('#detailterm').prev().text().trim();
 			if (detailperiod == '선택' || detailperiod == '' || detailperiod == "undefined") {
-				alert('시간단위를 선택해주세요.');
+				alert('<fmt:message key="alarm.alert.1" />');
 				return false;
 			} else {
 				periodData();
@@ -538,9 +538,9 @@
 	const siteList = function (sidparam) {
 		const makeSite = Array.from(sites);
 		makeSite.sortOn('name');
-		makeSite.unshift({ sid: 'all', name: '전체'});
+		makeSite.unshift({ sid: 'all', name: '<fmt:message key="alarm.search.all" />'});
 		setMakeList(makeSite, 'siteList', {'dataFunction': {}}); //list생성
-		$('#siteList').append(`<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16">적용</button></li>`);
+		$('#siteList').append(`<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16"><fmt:message key='alarm.apply' /></button></li>`);
 
 
 		if (sidparam == '' || sidparam == undefined) {
@@ -577,12 +577,12 @@
 		$('.table-wrap-type').empty();
 
 		if ($(':checkbox[name="deviceType"]:checked').length == 0) {
-			alert('설비유형을 한개이상 선택해 주세요.');
+			alert('<fmt:message key="alarm.alert.2" />');
 			return false;
 		}
 
 		if ($(':checkbox[name="alarm"]:checked').length == 0) {
-			alert('알람유형을 한개이상 선택해 주세요.');
+			alert('<fmt:message key="alarm.alert.3" />');
 			return false;
 		}
 
@@ -705,7 +705,7 @@
 		let divStr = '';
 		divStr += '<div class="table-top clear">';
 		divStr += '<h2 class="ntit fl">' + deviceTemplate[deviceType] + '</h2>';
-		divStr += '<button type="button" class="btn-type03 fr" onclick="alarmConfirmAll(\'' + deviceType + '\');">일괄 확인</button>';
+		divStr += '<button type="button" class="btn-type03 fr" onclick="alarmConfirmAll(\'' + deviceType + '\');"><fmt:message key="alarm.checkAll" /></button>';
 		divStr += '</div>';
 		$(".table-wrap-type").append(divStr);
 	}
@@ -713,7 +713,7 @@
 	const makeTableHead = function (deviceType) {
 		let newContainer = document.createElement('Div');
 		let newHeadTable = document.createElement('table');
-		let colList = ['사업소', '장치명', '알람 시간', '알람 타입', '알람 메세지', '확인 여부', '조치 상태', '최종 업데이트 시간']; // 테이블
+		let colList = ['<fmt:message key="alarm.table.site" />', '<fmt:message key="alarm.table.deviceName" />', '<fmt:message key="alarm.table.alarmTime" />', '<fmt:message key="alarm.table.alarmType" />', '<fmt:message key="alarm.table.alarmMsg" />', '<fmt:message key="alarm.table.isChecked" />', '<fmt:message key="alarm.table.status" />', '<fmt:message key="alarm.table.finalUpdated" />']; // 테이블
 		let tdList = ['[site_name]', '[device_name]', '[tlocaltime]', '[alarmtype]', '[message]', '[confirm]', '[status]', '[status_timestamp]'];
 		let thead = newHeadTable.createTHead();
 		let tbody = newHeadTable.createTBody();
@@ -937,12 +937,12 @@
 		let ticketPerson = "";
 		let ticketPhone = "";
 		if (isEmpty($('#ticket_status button').data('value'))) {
-			alert('조치 여부가 선택되지 않았습니다.');
+			alert('<fmt:message key="alarm.alert.4" />');
 			return false;
 		}
 
 		if (isEmpty($('#ticket_user_id').val())) {
-			alert('담당자가 입력되지 않았습니다.');
+			alert('<fmt:message key="alarm.alert.5" />');
 			$('#ticket_user_id').focus();
 			return false;
 		}
@@ -1014,7 +1014,7 @@
 			};
 
 			if (alarmData.ticket_status == '' || alarmData.ticket_user_id == '') {
-				alert('알람상태와 회원 아이디를 꼭 입력해주세요');
+				alert('<fmt:message key="alarm.alert.6" />');
 			} else if (alarmData.ticket_log == '') {
 				return false;
 			} else {
@@ -1026,7 +1026,7 @@
 					contentType: 'application/json',
 					data: JSON.stringify(alarmData),
 					success: function (result) {
-						alert('저장에 성공했습니다.', '저장');
+						alert('<fmt:message key="alarm.alert.7" />', '<fmt:message key="alarm.alert.7.1" />');
 						$('#alarmMeasure').modal('hide');
 						periodData();
 					},
@@ -1098,7 +1098,7 @@
 					contentType: 'application/json',
 					data: JSON.stringify(upAlarmData),
 					success: function (result) {
-						alert('저장에 성공했습니다.');
+						alert('<fmt:message key="alarm.alert.7" />');
 						$('#alarmMeasure').modal('hide');
 						periodData();
 					},
@@ -1214,9 +1214,9 @@
 	
 	const deviceType = function (sites, sidparam) {
 		if (sidparam != undefined && sidparam != "") {
-			$('#equipmentList button').empty().append('전체<span class="caret"></span>');
+			$('#equipmentList button').empty().append('<fmt:message key="alarm.search.all" /><span class="caret"></span>');
 		} else {
-			$('#equipmentList button').empty().append('설비유형<span class="caret"></span>');
+			$('#equipmentList button').empty().append('<fmt:message key="alarm.popup.status.select" /><span class="caret"></span>');
 		}
 		let siteArray = new Array();
 		if ($(':checkbox[name="site"]:checked').val() === 'all') {
@@ -1417,7 +1417,7 @@
 
 			vMap.forEach(function (val, key) {
 				if (val.length > 1000) {
-					alert('조회 단위 대비 조회기간이 너무 길어 차트가 생성이 안될 수 있으니 기간을 조정하여 다시 조회 해주세요');
+					alert('<fmt:message key="alarm.alert.8" />');
 				}
 				var typeNm = key;
 
@@ -1836,7 +1836,7 @@
 
 	const alarmConfirmAll = function (tableId) {
 		if ($('#' + tableId + 'Table > tbody tr :checkbox:checked').length == 0) {
-			alert('확인할 알람이 선택되지않았습니다.');
+			alert('<fmt:message key="alarm.alert.9" />');
 			return false;
 		} else {
 			let cnt = 0;
@@ -1951,7 +1951,7 @@
 				manager: loginName + ',' + loginId
 			}),
 			success: function (result) {
-				alert('확인 처리 되었습니다.');
+				alert('<fmt:message key="alarm.alert.10" />');
 				$('#alarmConfirm').modal('hide').data('value', '');
 				$('#search').trigger('click');
 			},
