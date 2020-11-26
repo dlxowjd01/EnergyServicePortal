@@ -89,7 +89,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 	}, {
 		gridLineWidth: 0,
 		title: {
-			text: '<fmt:message key="smain.1000won" />',
+			text: i18nManager.tr("gmain.1000won"),
 			align: 'low',
 			rotation: 0,
 			y: 25,
@@ -265,7 +265,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 	}, {
 		gridLineWidth: 0,
 		title: {
-			text: '<fmt:message key="smain.1000won" />',
+			text: i18nManager.tr("gmain.1000won"),
 			align: 'low',
 			rotation: 0,
 			y: 25,
@@ -563,18 +563,18 @@ const pieChart = Highcharts.chart('pie_chart', {
 	series: [{
 		type: 'pie',
 		innerSize: '70%',
-		name: '<fmt:message key="smain.power.amount" />',
+		name: i18nManager.tr("dashboard_generated_amount"),
 		colorByPoint: true,
 		data: [{
 			color: 'var(--circle-solar-power)',
-			name: '<fmt:message key="smain.power.pv.inv" />',
+			name: i18nManager.tr("dashboard_photovoltaic"),
 			dataLabels: {
 				enabled: false
 			},
 			y: 60 //60% -- 아래로 총합 100%
 		}, {
 			color: 'var(--grey)',
-			name: '<fmt:message key="smain.power.unused" />',
+			name: i18nManager.tr("dashboard_unused_amount"),
 			dataLabels: {
 				enabled: false
 			},

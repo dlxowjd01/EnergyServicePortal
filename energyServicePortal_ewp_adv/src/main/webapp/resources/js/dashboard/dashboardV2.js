@@ -8,10 +8,10 @@ let minIntervalCount = 0;
 
 //대시보드 먼슬리 && 데일리 차트 시리증 설정.
 const seriesArray = [
-	{name: "<fmt:message key='smain.power.charge' />", type: 'column', color: 'var(--circle-charge)', data: 'chargeList', suffix: 'kWh'},
-	{name: "<fmt:message key='smain.power.discharge' />", type: 'column', color: 'var(--grey)', data: 'dischargeList', suffix: 'kWh'},
-	{name: "<fmt:message key='smain.power.pv.inv' />", type: 'column', color: 'var(--circle-solar-power)', data: 'pvList', suffix: 'kWh'},
-	{name: "<fmt:message key='gmain.payments' />", type: 'spline', color: 'var(--white)', data: 'payList', suffix: '천원'},
+	{name: i18nManager.tr("dashboard_charge"), type: 'column', color: 'var(--circle-charge)', data: 'chargeList', suffix: 'kWh'},
+	{name: i18nManager.tr("dashboard_discharge"), type: 'column', color: 'var(--grey)', data: 'dischargeList', suffix: 'kWh'},
+	{name: i18nManager.tr("dashboard_photovoltaic"), type: 'column', color: 'var(--circle-solar-power)', data: 'pvList', suffix: 'kWh'},
+	{name: i18nManager.tr("dashboard_payment"), type: 'spline', color: 'var(--white)', data: 'payList', suffix: i18nManager.tr("gmain.1000won")},
 ];
 
 // 특수문자 정규식 변수(공백 미포함)
@@ -604,13 +604,13 @@ const monthlyChartDraw = async () => {
 			let str = '';
 			Object.entries(sumObj).forEach(([key, value]) => {
 				if(key == "chargeSum"){
-					str += '<li class="charge">충전 : ' + displayNumberFixedDecimal(value, 'kWh', 3, 2).join(' ') + '</li>';
+					str += '<li class="charge">' + i18nManager.tr("dashboard_charge") + ' : ' + displayNumberFixedDecimal(value, 'kWh', 3, 2).join(' ') + '</li>';
 				}
 				if(key == "dischargeSum"){
-					str += '<li class="discharge">방전 : ' + displayNumberFixedDecimal(value, 'kWh', 3, 2).join(' ') + '</li>';
+					str += '<li class="discharge">' + i18nManager.tr("dashboard_discharge") + ' : ' + displayNumberFixedDecimal(value, 'kWh', 3, 2).join(' ') + '</li>';
 				}
 				if(key == "pvSum"){
-					str += '<li class="pv">태양광 : ' + displayNumberFixedDecimal(value, 'kWh', 3, 2).join(' ') + '</li>';
+					str += '<li class="pv">' + i18nManager.tr("dashboard_photovoltaic") + ' : ' + displayNumberFixedDecimal(value, 'kWh', 3, 2).join(' ') + '</li>';
 				}
 			});
 
@@ -771,13 +771,13 @@ const dailyChartDraw = async () => {
 					chartSeries.showInLegend = false;
 				};
 			}
-			if(el.name == "태양광" && emptyObj.pvData === 0){
+			if(el.name == i18nManager.tr("dashboard_photovoltaic") && emptyObj.pvData === 0){
 				chartSeries.showInLegend = false;
 			}
-			if(el.name == "충전" && emptyObj.chargeData === 0){
+			if(el.name == i18nManager.tr("dashboard_charge") && emptyObj.chargeData === 0){
 				chartSeries.showInLegend = false
 			}
-			if(el.name == "방전" && emptyObj.disChargeData === 0){
+			if(el.name == i18nManager.tr("dashboard_discharge") && emptyObj.disChargeData === 0){
 				chartSeries.showInLegend = false
 			}
 			chartSeries.tooltip = {valueSuffix: el.suffix}
@@ -803,13 +803,13 @@ const dailyChartDraw = async () => {
 			Object.entries(sumObj).forEach(([key, value]) => {
 				if(key == 'chargeSum'){
 				
-					str += '<li class="charge">충전 : ' + displayNumberFixedDecimal(value, 'kWh', 3, 2).join(' ') + '</li>';
+					str += '<li class="charge">' + i18nManager.tr("dashboard_charge") + ' : ' + displayNumberFixedDecimal(value, 'kWh', 3, 2).join(' ') + '</li>';
 				}
 				if(key == 'dischargeSum'){
-					str += '<li class="discharge">방전 : ' + displayNumberFixedDecimal(value, 'kWh', 3, 2).join(' ') + '</li>';
+					str += '<li class="discharge">' + i18nManager.tr("dashboard_discharge") + ' : ' + displayNumberFixedDecimal(value, 'kWh', 3, 2).join(' ') + '</li>';
 				}
 				if(key == 'pvSum'){
-					str += '<li class="pv">태양광 : ' + displayNumberFixedDecimal(value, 'kWh', 3, 2).join(' ') + '</li>';
+					str += '<li class="pv">' + i18nManager.tr("dashboard_photovoltaic") + ' : ' + displayNumberFixedDecimal(value, 'kWh', 3, 2).join(' ') + '</li>';
 				}
 			});
 			resolve(str);
@@ -930,7 +930,7 @@ const typeSiteDraw = async () => {
 		});
 
 		typeSiteCurrent.addSeries({
-			name: '<fmt:message key="gmain.generation" />',
+			name: i18nManager.tr("dashboard_generation"),
 			color: 'var(--turquoise)',
 			data: tmepGenArray,
 			tooltip: {
@@ -942,7 +942,7 @@ const typeSiteDraw = async () => {
 		});
 
 		typeSiteCurrent.addSeries({
-			name: '<fmt:message key="gmain.generation.forecast" />',
+			name: i18nManager.tr("dashboard_generation_forecast"),
 			color: 'var(--grey)',
 			data: tempForeArray,
 			tooltip: {
@@ -1010,11 +1010,11 @@ const typeSiteDraw = async () => {
 
 		if(!isEmpty(tmepGenArray)){
 			genSum = tmepGenArray.reduce((acc, val) => { return acc + val } , 0);
-			str += '<li class="charge"><fmt:message key="gmain.generation" /> : ' + displayNumberFixedDecimal(genSum, 'kWh', 3, 2).join(' ') + '</li>';
+			str += '<li class="charge">'+ i18nManager.tr("dashboard_generation") + ' : ' + displayNumberFixedDecimal(genSum, 'kWh', 3, 2).join(' ') + '</li>';
 		}
 		if(!isEmpty(tempForeArray)){
 			genForecastSum = tempForeArray.reduce((acc, val) => { return acc + val } , 0);
-			str += '<li class="discharge"><fmt:message key="gmain.generation.forecast" /> : ' + displayNumberFixedDecimal(genForecastSum, 'kWh', 3, 2).join(' ') + '</li>';
+			str += '<li class="discharge">' + i18nManager.tr("dashboard_generation_forecast") + ' : ' + displayNumberFixedDecimal(genForecastSum, 'kWh', 3, 2).join(' ') + '</li>';
 		}
 		$("#yesterdaySum").append(str);
 	}).catch((error) => {
@@ -1113,9 +1113,9 @@ const getTodayTotalDetail = async function () {
 
 		pieChart.setTitle({text: Math.floor(acPowerSum / 1000) + 'kW'});
 		pieChart.series[0].data.forEach((e, idx) => {
-			if (e.name === "태양광") {
+			if (e.name === i18nManager.tr("dashboard_photovoltaic")) {
 				e.update({y: usage});
-			} else if (e.name === "미사용량") {
+			} else if (e.name === i18nManager.tr("dashboard_unused_amount")) {
 				e.update({y: other});
 			} else {
 				e.update({y: 0});

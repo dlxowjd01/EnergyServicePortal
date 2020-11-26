@@ -433,7 +433,7 @@ const enTranslation =
   "userSetting.deletion": "Deletion",
   "dashboard_charge": "Charge",
   "dashboard_discharge": "Discharge",
-  "dashboard_photovoltaic": "Photovoltaic",
+  "dashboard_photovoltaic": "Solar",
   "dashboard_payment": "Payment",
   "dashboard_in_thousands_of_won": "In Thousands of Won",
   "dashboard_an_error_occurred_during_processing": "An error occurred during processing.",
@@ -649,4 +649,5 @@ const enTranslation =
   "dashboard.table.12": "- Last year (MWh)",
   "dashboard.table.13": "/ Last year (%)",
   "dashboard.EA": "EA",
+  "gmain.1000won": "$",
 }

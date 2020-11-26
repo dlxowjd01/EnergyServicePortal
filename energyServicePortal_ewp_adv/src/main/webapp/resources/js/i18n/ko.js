@@ -660,5 +660,6 @@ const koTranslation =
   "dashboard.table.12": "전년 동월 발전량(MWh)",
   "dashboard.table.13": "전년 동월 대비 발전 비율(%)",
   "dashboard.EA": "개소",
+  "gmain.1000won": "천원",
 
 }
