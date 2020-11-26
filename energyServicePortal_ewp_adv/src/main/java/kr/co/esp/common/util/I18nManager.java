@@ -1,23 +1,15 @@
 package kr.co.esp.common.util;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
-import java.util.Properties;
+import egovframework.com.cmm.EgovWebUtil;
+import kr.co.esp.common.service.EgovProperties;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Properties;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-import egovframework.com.cmm.EgovWebUtil;
-import egovframework.com.cmm.service.Globals;
-import kr.co.esp.common.service.EgovProperties;
 
 public class I18nManager {
 	static I18nManager instance;
@@ -32,23 +24,22 @@ public class I18nManager {
 	}
 	
 	public String tr(HttpServletRequest request, String key) {
-		HttpSession session = request.getSession();
-		String sessionLang = (String) session.getAttribute("sessionLang");
-		
+		Cookie[] cookies = request.getCookies();
 		String lang = request.getParameter("lang");
+
 		if (lang == null || "".equals(lang)) {
-			if (sessionLang == null || "".equals(sessionLang)) {
-				lang = "ko";
-			} 
-			else {
-				lang = sessionLang;
+			if (cookies.length > 0) {
+				for (Cookie cookie : cookies) {
+					if ("lang".equals(cookie.getName())) {
+						lang = cookie.getValue();
+					}
+				}
 			}
 		}
 
-		if (lang == "ko") {
+		if ("ko".equalsIgnoreCase(lang)) {
 			return koDict.getProperty(key);
-		}
-		else {
+		} else {
 			return enDict.getProperty(key);
 		}
 	}
