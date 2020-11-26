@@ -19,10 +19,10 @@
 		<div class="col-12">
 			<div class="flex-start">
 				<div class="dropdown">
-					<button type="button" class="dropdown-toggle" data-toggle="dropdown" disabled>선택<span class="caret"></span></button>
+					<button type="button" class="dropdown-toggle" data-toggle="dropdown" disabled><fmt:message key='default.dataNameSelect' /><span class="caret"></span></button>
 					<ul id="viewOptList" class="dropdown-menu" role="menu">
-						<li data-value="1" data-name="사이트 대시보드 #1"><a href="#" tabindex="-1"><fmt:message key='smain.dashboard1' /> #1</a></li>
-						<li data-value="2" data-name="태양광 대시보드 #2"><a href="#" tabindex="-1"><fmt:message key='smain.dashboard2' /> #2</a></li>
+						<li data-value="1" data-name="<fmt:message key='smain.dashboard1' /> #1"><a href="#" tabindex="-1"><fmt:message key='smain.dashboard1' /> #1</a></li>
+						<li data-value="2" data-name="<fmt:message key='smain.dashboard2' /> #2"><a href="#" tabindex="-1"><fmt:message key='smain.dashboard2' /> #2</a></li>
 					</ul>
 				</div>
 			</div>
@@ -330,7 +330,7 @@
 						<span class="tx-tit"><fmt:message key='smain.deviceStatus' /></span>
 						<div class="sa-select">
 							<div class="dropdown" id="statusDevice">
-								<button type="button" class="dropdown-toggle w8 no-close" data-toggle="dropdown" data-name="선택">
+								<button type="button" class="dropdown-toggle w8 no-close" data-toggle="dropdown" data-name="<fmt:message key='default.dataNameSelect' />">
 									<fmt:message key='smain.all' /> <span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu chk-type" role="menu">
@@ -711,9 +711,9 @@
 
 		Highcharts.setOptions({
 			lang : {
-				resetZoom : '확대/축소 초기화',
-				loading : '로딩 중...',
-				noData: '조회된 데이터가 없습니다.'
+				resetZoom : "<fmt:message key='smain.resetZoom' />",
+				loading : "<fmt:message key='smain.loading' />",
+				noData: "<fmt:message key='smain.noSearchData' />"
 			},
 		});
 
@@ -1059,7 +1059,7 @@
 			zoomType: 'xy'
 		},
 		lang: {
-			noData: "조회된 데이터가 없습니다."
+			noData: "<fmt:message key='smain.noSearchData' />"
 		},
 		navigation: {
 			buttonOptions: {
@@ -1325,15 +1325,15 @@
 			zoomType: 'xy',
 		},
 		lang: {
-			contextButtonTitle: "다운로드",
-			downloadTitle: "다운로드",
-			noData: "조회된 데이터가 없습니다.",
-			downloadCSV: 'CSV 다운로드',
-			downloadJPEG: 'JPEG 다운로드'
+			contextButtonTitle: "<fmt:message key='smain.download' />",
+			downloadTitle: "<fmt:message key='smain.download' />",
+			noData: "<fmt:message key='smain.noSearchData' />",
+			downloadCSV: "CSV <fmt:message key='smain.download' />",
+			downloadJPEG: "JPEG <fmt:message key='smain.download' />"
 		},
 		exporting: {
 			enabled: true,
-			tableCaption: '일별 발전량',
+			tableCaption: '<fmt:message key="smain.dayDev" />',
 			filename: setExportFileName(),
 			buttons: {
 				contextButton: {
@@ -1371,7 +1371,7 @@
 						return "닐짜"
 					}
 					return {
-						topLevelColumnTitle: '일별 발전량',
+						topLevelColumnTitle: '<fmt:message key="smain.dayDev" />',
 						columnTitle: key === 'y' ? item.name : ''
 					};
 				},
@@ -1780,7 +1780,7 @@
 			zoomType: 'xy',
 		},
 		lang: {
-			noData: "조회된 데이터가 없습니다."
+			noData: "<fmt:message key='smain.noSearchData' />"
 		},
 		navigation: {
 			buttonOptions: {
@@ -1967,11 +1967,11 @@
 			zoomType: 'xy',
 			type: "column",
 			lang: {
-				noData: "데이터가 없습니다."
+				noData: "<fmt:message key='smain.noData' />"
 			},
 		},
 		lang: {
-			noData: "조회된 데이터가 없습니다."
+			noData: "<fmt:message key='smain.noSearchData' />"
 		},
 		navigation: {
 			buttonOptions: {
@@ -2528,7 +2528,7 @@
 			}
 
 		}).fail(function (jqXHR, textStatus, errorThrown) {
-			let errMsg = "처리 중 오류가 발생했습니다.<br/>에러 메세지:" + errorThrown;
+			let errMsg = "<fmt:message key='smain.error.1' /> <br/><fmt:message key='smain.error.2' />" + errorThrown;
 			let r = formatErrorMessage(jqXHR, errorThrown);
 			console.log("error===", r);
 			$("#errMsg").html(errMsg);
@@ -2596,7 +2596,7 @@
 			// console.log("featurePropertiesSub===", featurePropertiesSub);
 			
 		}).fail(function (jqXHR, textStatus, errorThrown) {
-			let errMsg = "처리 중 오류가 발생했습니다.<br/>에러 메세지:" + errorThrown;
+			let errMsg = "<fmt:message key='smain.error.1' /> <br/><fmt:message key='smain.error.2' />" + errorThrown;
 			let r = formatErrorMessage(jqXHR, errorThrown);
 			console.log("error===", r);
 			$("#errMsg").html(errMsg);
@@ -3171,7 +3171,7 @@
 
 				}
 			}).fail(function (jqXHR, textStatus, errorThrown) {
-				let errMsg = "처리 중 오류가 발생했습니다.<br/>에러 메세지:" + errorThrown;
+				let errMsg = "<fmt:message key='smain.error.1' /> <br/><fmt:message key='smain.error.2' />" + errorThrown;
 				let r = formatErrorMessage(jqXHR, errorThrown);
 				console.log("error===", r);
 				$("#errMsg").html(errMsg);
@@ -5068,7 +5068,7 @@
 				$("#loadingCircle").hide();
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				$("#loadingCircle").hide();
-				let errMsg = "처리 중 오류가 발생했습니다.<br/>에러 메세지:" + errorThrown;
+				let errMsg = "<fmt:message key='smain.error.1' /> <br/><fmt:message key='smain.error.2' />" + errorThrown;
 				let r = formatErrorMessage(jqXHR, errorThrown);
 				console.log("error===", r);
 				$("#errMsg").html(errMsg);
@@ -5259,7 +5259,7 @@
 			setMakeList(alarmList, 'alarmNotice', {'dataFunction': {'level': levelClass}});
 
 		}).fail(function (jqXHR, textStatus, errorThrown) {
-			let errMsg = "처리 중 오류가 발생했습니다.<br/>에러 메세지:" + errorThrown;
+			let errMsg = "<fmt:message key='smain.error.1' /> <br/><fmt:message key='smain.error.2' />" + errorThrown;
 			let r = formatErrorMessage(jqXHR, errorThrown);
 			console.log("error===", r);
 			$("#errMsg").html(errMsg);
@@ -5370,7 +5370,7 @@
 	function setExportFileName(){
 		let d = new Date();
 		let tempDate = d.format("yyyyMMddHHmmss");
-		let newName = sList[0].name.replace(/\s/g, "") + "_" + "일별발전량" + "_" + tempDate;
+		let newName = sList[0].name.replace(/\s/g, "") + "_" + "<fmt:message key='smain.DownloadName.dayDev' />" + "_" + tempDate;
 		return newName
 	}
 

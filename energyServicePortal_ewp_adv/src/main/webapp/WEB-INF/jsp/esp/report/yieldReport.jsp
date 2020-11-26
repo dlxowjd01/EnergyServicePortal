@@ -711,7 +711,7 @@
 				totalDelete += Number(count);
 			});
 
-			errorMsg(totalDelete + '건 삭제 처리되었습니다.');
+			errorMsg(totalDelete + '<fmt:message key="yieldReport.countDelete" />');
 			getDataList();
 		}).catch(error => {
 			errorMsg(error);
