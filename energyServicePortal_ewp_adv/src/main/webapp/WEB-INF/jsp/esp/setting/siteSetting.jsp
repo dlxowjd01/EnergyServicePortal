@@ -1210,7 +1210,7 @@
 						"previous": "",
 						"next": "",
 					},
-					"info": "_PAGE_ - _PAGES_ " + " / 총 _PAGES_ 개",
+					"info": "_PAGE_ - _PAGES_ " + " / 총 _TOTAL_ 개",
 					"select": {
 						"rows": {
 							_: "",

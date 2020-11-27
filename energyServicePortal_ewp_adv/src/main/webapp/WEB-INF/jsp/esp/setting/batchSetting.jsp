@@ -3,6 +3,7 @@
 
 <script type="text/javascript">
 	var defList = [];
+
 	$(function () {
 		let d = new Date();
 		let yesterday = new Date(d.getFullYear(), d.getMonth(), d.getDate()-1);
@@ -157,8 +158,7 @@
 				async: true,
 			},
 			{
-				url: apiHost + "/batch-job-submit-rules?includeBatchJobDefinition=true&limit=50",
-				// url: apiHost + "/batch-job-submit-rules?limit=100",
+				url: apiHost + "/batch-job-submit-rules?includeBatchJobDefinition=true",
 				type: "get",
 				async: true,
 				beforeSend: function (jqXHR, settings) {
@@ -266,9 +266,9 @@
 			// "sScrollX": "100%",
 			// "sScrollXInner": "110%",
 			"sScrollY": true,
-			"scrollY": "530px",
+			"scrollY": "580px",
 			"bScrollCollapse": true,
-			"pageLength": 20,
+			"pageLength": 50,
 			// "bFilter": false, disabling this option will prevent table.search()
 			"aaSorting": [[ 0, 'asc' ]],
 			"bSortable": true,
@@ -283,10 +283,9 @@
 			"aoColumns": [
 				{
 					"sTitle": "",
-					"mData": "",
-					"mRender": function ( data, type, full, rowIndex ) {
-						return '<a class="chk-type" href="#" onclick="return false"><input type="checkbox" id="' +
-							full.id + '" name="' + full.id + '"><label for="' + full.id + '"></label></a>'
+					"mData": null,
+					"mRender": function ( data, type, full, rowIndex )  {
+						return '<a class="chk-type" href="#"><input type="checkbox" id="' + rowIndex.row + '" name="table_checkbox"><label for="' + rowIndex.row + '"></label></a>'
 					},
 					"className": "dt-body-center"
 				},
@@ -335,7 +334,7 @@
 					"previous": "",
 					"next": "",
 				},
-				"info": "_PAGE_ - _PAGES_ " + " / 총 _PAGES_ 개",
+				"info": "_PAGE_ - _PAGES_ " + " / 총 _TOTAL_ 개",
 				"select": {
 					"rows": {
 						_: "",
@@ -345,7 +344,7 @@
 			},
 			"select": {
 				style: 'single',
-				selector: 'td:not(:first-child)'
+				selector: 'td input[type="checkbox"], tr'
 			},
 			initComplete: function(settings, json ){
 				let addBtnStr = `
@@ -400,6 +399,7 @@
 		}).columns.adjust().draw();
 
 		$('#scheduleTable').find("input:checkbox").on('click', function() {
+			console.log("clicking0000")
 			var $box = $(this);
 			if ($box.is(":checked")) {
 				var group = "input:checkbox[name='" + $box.attr("name") + "']";
@@ -452,36 +452,228 @@
 				startHHMMSS: newStartTime,
 				endDate: newEndDate,
 				endHHMMSS: newEndTime,
-				limit: isEmpty(dateElement) ? 10 : 50,
 			},
 			beforeSend: function (jqXHR, settings) {
 				$('#loadingCircle').show();
 			}
 		}
-
-
+		if(isEmpty(dateElement)){
+			option.data.limit = 10;
+		}
 		if(tr.length > 0) {
 			rowData = dTable.row(tr).data();
 			submitRulesId = Number(rowData.id);
 			option.data.submit_rule_id = submitRulesId;
 		}
 
+		// var logTable = $('#logTable').DataTable({
+		// 	"destroy": true,
+		// 	"table-layout": "fixed",
+		// 	"scrollY": "720px",
+		// 	"scrollCollapse": true,
+		// 	"paging": true,
+		// 	"pageLength": 50,
+		// 	"serverSide": true,
+		// 	// "serverSide": true,
+		// 	"processing": true,
+		// 	"order": [],
+		// 	"ajax": {
+		// 		type: 'GET',
+		// 		url: apiHost + "/batch-job-logs",
+		// 		beforeSend: function (jqXHR, settings) {
+		// 			$('#loadingCircle').show();
+		// 		},
+		// 		data: function(d) {
+		// 			let param = {};
+		// 			param.startDate = newStartDate;
+		// 			param.startHHMMSS = newStartTime;
+		// 			param.endDate = newEndDate;
+		// 			param.endHHMMSS = newEndTime;
+		// 			if(isEmpty(dateElement)){
+		// 				console.log("no date===")
+		// 				param.limit = 10;
+		// 			}
+
+		// 			if(tr.length > 0) {
+		// 				rowData = dTable.row(tr).data();
+		// 				submitRulesId = Number(rowData.id);
+		// 				param.submit_rule_id = submitRulesId;
+		// 			}
+		// 			// param.page = (d.start / 50) + 1;
+		// 			return param;
+		// 		},
+		// 		// contentType: 'application/x-www-form-urlencoded',
+		// 		contentType: "application/json; charset=utf-8",
+		// 		dataFilter: function(data){
+        //             var jData = JSON.parse(data);
+		// 			var dtData =JSON.stringify( {"data": jData.log});
+        //             return dtData
+        //         },
+		// 		// dataSrc: function (json) {
+		// 		// 	console.log("json===", json.log.length);
+		// 		// 	return json.log;
+		// 		// }
+		// 	},
+		// 	"columns": [
+		// 		{
+		// 			"title": "",
+		// 			"data": null,
+		// 			"render": function ( data, type, full, rowIndex ) {
+		// 				return '<a class="chk-type" href="javascript:void(0); onclick=""><input type="checkbox" id="' + full.job_id + '" name="' + full.job_id + '"><label for="' + full.job_id + '"></label></a>'
+		// 			},
+		// 			"className": "dt-body-center"
+		// 		},
+		// 		{
+		// 			"title": "순번",
+		// 			"data": "",
+		// 			"render": function ( data, type, full, rowIndex ) {
+		// 				return rowIndex.row + 1
+		// 			},
+		// 			"className": "dt-body-center"
+		// 		},
+		// 		// {
+		// 		// 	"sTitle": "작업명",
+		// 		// 	"mData": "",
+		// 		// 	"mRender": function ( data, type, full, rowIndex ) {
+		// 		// 		return full.name;
+		// 		// 	},
+		// 		// 	"className": "dt-body-center"
+		// 		// },
+		// 		{
+		// 			"title": "작업자",
+		// 			"data": "",
+		// 			"render": function ( data, type, full, rowIndex ) {
+		// 				let personOnDuty = '';			
+		// 				let found = definitionData.findIndex( x => x.id === full.definition_id);
+
+		// 				if(found > -1){
+		// 					let scheduleName = definitionData[found].name;
+		// 					personOnDuty = scheduleName + ' (id: ' + full.definition_id + ')';
+		// 				} else {
+		// 					personOnDuty = 'id: ' + full.definition_id;
+		// 				}
+		// 				return personOnDuty;
+		// 			} 
+		// 		},
+		// 		{
+		// 			"title": "실행시간",
+		// 			"data": "",
+		// 			"render": function ( data, type, full, rowIndex ) {
+		// 				let temp = new Date(full.started_at).format('yyyy-MM-dd HH:mm:ss');
+		// 				return temp;
+		// 			},
+		// 		},
+		// 		{
+		// 			"title": "결과",
+		// 			"data":"",
+		// 			"render": function ( data, type, full, rowIndex ) {
+		// 				let result = '';
+		// 				if( full.was_successful == true ){
+		// 					result = "성공"
+		// 				} else {
+		// 					result = "실패"
+		// 				}
+		// 				return result;
+		// 			}
+		// 		},
+		// 		{
+		// 			"title": "실행 명령어",
+		// 			"data":"",
+		// 			"render": function ( data, type, full, rowIndex ) {
+		// 				let str1 = '';
+		// 				if( full.executed_command.length > 50 ){
+		// 					let trimmed1 = full.executed_command.substring(0, 51) + ' ...'
+		// 					str1 = `
+		// 						<div class="flex-start">${'${ trimmed1 }'}&ensp;
+		// 							<a href="#" role="button" data-toggle="popover" data-placement="bottom" rel="popover" onclick='return false' onmouseover="updateInfo('detail', null, this)" class="text-link">more</a>
+		// 							<button type="button" class="text-link" onclick='copyText(this, "executed_command")'>복사</button>
+		// 						</div>`
+		// 				} else {
+		// 					str1 = full.executed_command;
+		// 				}
+		// 				return str1;
+		// 			}
+		// 		},
+		// 		{
+		// 			"title": "로그",
+		// 			"data":"",
+		// 			"render": function ( data, type, full, rowIndex ) {
+		// 				let str2 = '';
+		// 				if( full.stdout.length > 50 ){
+		// 					let trimmed2 = full.stdout.substring(0, 51) + ' ...'
+		// 					str2 = `
+		// 						<div class="flex-start">${'${ trimmed2 }'}&ensp;
+		// 							<a href="#" role="button" data-toggle="popover" data-placement="bottom" rel="popover" onclick='return false' onmouseover="updateInfo('detail', null, this)" class="text-link">more</a>
+		// 							<button type="button" class="text-link" onclick='downloadLog(event, this, "stdout")'>다운로드</button>
+		// 						</div>`
+		// 				} else {
+		// 					str2 = full.stdout;
+		// 				}
+		// 				return str2;
+		// 			}
+		// 		},
+		// 	],
+		// 	"dom": 'tip',
+		// 	"language": {
+		// 		"paginate": {
+		// 		 	"previous": "",
+		// 		 	"next": "",
+		// 		},
+		// 		"info": "_PAGE_ - _PAGES_ " + " / 총 _TOTAL_ 개",
+		// 		"select": {
+		// 			"rows": {
+		// 				_: "",
+		// 				1: ""
+		// 			}
+		// 		}
+		// 	},
+		// 	"select": {
+		// 		style: 'single',
+		// 		selector: 'td input[type="checkbox"], td:not(:nth-child(6))'
+		// 	},
+		// 	initComplete: function(settings, json ){
+		// 		let addBtnStr = `<button type="button" class="btn-type fr mb-20" onclick="updateInfo('add')">로그 저장</button>`;
+		// 		this.api().columns().header().each ((el, i) => {
+		// 			if(i == 0){
+		// 				$(el).attr ('style', 'min-width: 50px');
+		// 			}
+		// 		});
+		// 	},
+		// 	// every time DataTables performs a draw
+		// 	drawCallback: function (settings) {
+		// 		$('#logTable_wrapper').addClass('my-20');
+		// 	}
+		// }).on("select", function(e, dt, type, indexes) {
+		// 	let btn = $("#btnGroup").find(".btn-type03");
+		// 	btn.each(function(index, element){
+		// 		if($(this).is(":disabled")){
+		// 			$(this).prop("disabled", false);
+		// 		}
+		// 	});
+		// 	logTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
+		// 	// console.log("dt---", scheduleTable[ type ]( indexes ).nodes())
+		// }).on("deselect", function(e, dt, type, indexes) {
+		// 	let btn = $("#btnGroup").find(".btn-type03");
+		// 	btn.each(function(index, element){
+		// 		if(!$(this).is(":disabled")){
+		// 			$(this).prop("disabled", true);
+		// 		}
+		// 	});
+		// 	logTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", false);
+		// 	// console.log("dt---", scheduleTable[ type ]( indexes ).nodes())
+		// }).columns.adjust().draw();
+
+		
 		$.ajax(option).done(function (json, textStatus, jqXHR) {
 			var logTable = $('#logTable').DataTable({
 				"aaData": json.log,
 				"destroy": true,
-				// "table-layout": "fixed",
-				// "autoWidth": true,
-				// "bAutoWidth": true,
+				"table-layout": "fixed",
 				"bSearchable" : true,
-				// "scrollX": true,
-				// "sScrollX": "100%",
-				// "sScrollXInner": "110%",
 				"sScrollY": true,
 				"scrollY": "720px",
 				"bScrollCollapse": true,
-				"pageLength": 100,
-				// "bFilter": false, disabling this option will prevent table.search()
+				"pageLength": 50,
 				"aaSorting": [[ 0, 'asc' ]],
 				"bSortable": true,
 				"order": [[ 1, 'asc' ]],
@@ -597,7 +789,7 @@
 						"previous": "",
 						"next": "",
 					},
-					"info": "_PAGE_ - _PAGES_ " + " / 총 _PAGES_ 개",
+					"info": "_PAGE_ - _PAGES_ " + " / 총 _TOTAL_ 개",
 					"select": {
 						"rows": {
 							_: "",
@@ -607,7 +799,7 @@
 				},
 				"select": {
 					style: 'single',
-					selector: 'td input[type="checkbox"], td:not(:nth-child(6))'
+					selector: 'td input[type="checkbox"], td:not(:nth-child(5)):not(:nth-child(6))'
 				},
 				initComplete: function(settings, json ){
 					let addBtnStr = `<button type="button" class="btn-type fr mb-20" onclick="updateInfo('add')">로그 저장</button>`;
@@ -660,12 +852,6 @@
 			});
 
 			logTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup");
-
-			$('#logTable').parent().on('scroll', function() {
-				console.log("scrolling===")
-				let popOver = $(".popover");
-				popOver.popover('hide');
-			});
 			
 			$('#logTable').find("input:checkbox").on('click', function() {
 				var $box = $(this);
@@ -688,12 +874,6 @@
 			showAjaxResultModal("ajaxResultModal", null, null, errorMsg);
 			return false;
 		});
-		// }).fail(function (jqXHR, textStatus, errorThrown) {
-		// 	let resultFailText = "해당 스케쥴 queue 데이터 호출에 실패하였습니다.";
-		// 	let errorMsg = resultFailText + "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText;
-		// 	showAjaxResultModal("ajaxResultModal", null, null, errorMsg);
-		// 	return false;
-		// });
 	}
 
 	function initDetails(){
