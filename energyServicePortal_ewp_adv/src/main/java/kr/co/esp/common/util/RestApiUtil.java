@@ -42,7 +42,11 @@ public class RestApiUtil {
 	 */
 	public static Map<String, Object> get(String strUrl, String mode, Map<String, Object> parameters) {
 		if ("test".equals(mode)) {
-			return basicGet(strUrl, parameters, null);
+			if (apiHost.startsWith("https")) {
+				return secureGet(strUrl, toStringParameter(parameters), null);
+			} else {
+				return basicGet(strUrl, parameters, null);
+			}
 		} else {
 			return secureGet(strUrl, toStringParameter(parameters), null);
 		}
@@ -59,7 +63,11 @@ public class RestApiUtil {
 	 */
 	public static Map<String, Object> get(String strUrl, String mode, Map<String, Object> parameters, String token) {
 		if ("test".equals(mode)) {
-			return basicGet(strUrl, parameters, token);
+			if (apiHost.startsWith("https")) {
+				return secureGet(strUrl, toStringParameter(parameters), token);
+			} else {
+				return basicGet(strUrl, parameters, token);
+			}
 		} else {
 			return secureGet(strUrl, toStringParameter(parameters), token);
 		}
@@ -192,7 +200,11 @@ public class RestApiUtil {
 	 */
 	public static Map<String, Object> post(String strUrl, String mode, String jsonMessage) {
 		if ("test".equals(mode)) {
-			return basicPost(strUrl, jsonMessage, null);
+			if (apiHost.startsWith("https")) {
+				return securePost(strUrl, jsonMessage, null);
+			} else {
+				return basicPost(strUrl, jsonMessage, null);
+			}
 		} else {
 			return securePost(strUrl, jsonMessage, null);
 		}
