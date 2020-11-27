@@ -203,9 +203,9 @@
 							</div>
 						</div>
 						<div class="sa-select">
-							<h2 class="tx-tit"><fmt:message key="alarm.search.repairStatus" /></h2>
+							<h2 class="tx-tit"><fmt:message key="alarm.table.isChecked" /></h2>
 							<div class="dropdown short" id="alarmstatus">	
-								<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택"><fmt:message key='alarm.search.confirm.N' /><span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택"><fmt:message key="alarm.search.confirm.N" /><span class="caret"></span></button>
 								<ul class="dropdown-menu chk-type" role="menu" id="alstatus">
 									<li>
 										<a href="javascript:void(0)" tabindex="-1">
@@ -223,7 +223,7 @@
 							</div>
 						</div>
 						<div class="sa-select">
-							<h2 class="tx-tit"><fmt:message key="alarm.search.alarmType" /></h2>
+							<h2 class="tx-tit"><fmt:message key='alarm.search.repairStatus' /></h2>
 							<div class="dropdown">
 								<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="<fmt:message key='alarm.search.all' />"><fmt:message key='alarm.search.all' /><span class="caret"></span></button>
 								<ul class="dropdown-menu chk-type" role="menu" id="status">
@@ -303,8 +303,8 @@
 					</div>
 
 					<div class="btn-wrap-type02">
-						<button type="button" class="btn-type03 w-80px" onclick="$('#searchDetail').removeClass('open')"><fmt:message key='alarm.popup.cancel' /></button><!--
-					--><button type="button" class="btn-type w-80px" onclick="$('#searchDetail').removeClass('open')"><fmt:message key='alarm.apply' /></button>
+						<button style="padding: 0px 12px;" type="button" class="btn-type03 w-80px" onclick="$('#searchDetail').removeClass('open')"><fmt:message key='alarm.popup.cancel' /></button><!--
+					--><button style="padding: 0px 12px;" type="button" class="btn-type w-80px" onclick="$('#searchDetail').removeClass('open')"><fmt:message key='alarm.apply' /></button>
 					</div>
 				</div>
 
@@ -390,7 +390,7 @@
 		'closed': '처리 완료',
 	};
 
-	<!-- properties 조회 -->
+	// <!-- properties 조회 -->
 	const deviceProperties = async () => {
 		$.ajax({
 			url: apiHost + '/config/view/device_properties',

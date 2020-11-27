@@ -441,7 +441,7 @@
 			<div class="col-xl-4 col-lg-12 col-md-12 col-sm-12">
 				<div class="indiv smain-table unset">
 					<div class="table-top clear">
-						<h2 class="tx-tit"><fmt:message key='smain.inverterStatus' /></h2>
+						<!-- <h2 class="tx-tit"><fmt:message key='smain.inverterStatus' /></h2> -->
 					</div>
 					<ul class="inverter_list" id="invList">
 						<li class="[type]">
