@@ -373,27 +373,6 @@
 			}
 		}
 
-		function addParameterUrl(v) {
-			document.cookie = 'lang' + '=' + v + '; path=/';
-
-			const f = document.loginForm;
-			document.getElementById('language').value = v;
-			f.method = "post";
-			f.action = "/login.do";
-			f.submit();
-		}
-
-		// function showPwd(inputId, btn) {
-		// 	var target = document.getElementById(inputId);
-		// 	if (target.type === "password") {
-		// 		target.type = "text";
-		// 		btn.classList.add("eye-close");
-		// 	} else {
-		// 		target.type = "password";
-		// 		btn.classList.remove("eye-close");
-		// 	}
-		// }
-
 		function openUserModal(option) {
 			const modal = $('#' + option);
 			modal.modal("show");
