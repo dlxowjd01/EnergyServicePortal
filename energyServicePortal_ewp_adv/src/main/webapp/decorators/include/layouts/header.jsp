@@ -520,9 +520,9 @@
 					<ul>
 						<li class="lo-type lo">
 							<dl>
-								<dt>지역 및 유형 선택</dt>
+								<dt><fmt:message key="menu.top.regionOrType" /></dt>
 								<dd>
-									<a href="#"><fmt:message key="menu.top.regionOrType" /></a>
+									<a href="#"><fmt:message key="menu.top.regionOrType.region" /></a>
 									<ul class="overflow-list">
 										<c:set var="divisionLocation" value="${sessionScope.divisionLocation}"/>
 										<c:forEach var="loc" items="${location}" varStatus="stat">
