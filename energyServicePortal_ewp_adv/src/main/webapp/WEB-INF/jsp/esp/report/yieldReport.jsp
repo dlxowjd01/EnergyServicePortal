@@ -386,7 +386,7 @@
 			let liStr = `<li>
 							<div class="dropdown placeholder" id="report_variable_key_${'${liIndex}'}">
 								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="">
-									선택<span class="caret"></span>
+									<fmt:message key="default.dataNameSelect" /><span class="caret"></span>
 								</button>
 								<ul class="dropdown-menu">
 								</ul>
@@ -749,7 +749,7 @@
 							<div class="flex-start">
 								<span class="input-label">SPC</span>
 								<div id="spc_id" class="dropdown placeholder">
-									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
+									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='default.dataNameSelect' />">
 										<fmt:message key='yieldReport.select' /><span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu"></ul>
@@ -758,7 +758,7 @@
 							<div class="flex-start">
 								<span class="input-label"><fmt:message key="revenuereport.2.report_classification" /></span>
 								<div id="report_type" class="dropdown placeholder">
-									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
+									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='default.dataNameSelect' />">
 										<fmt:message key='yieldReport.select' /><span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu">
@@ -779,7 +779,7 @@
 							<div class="flex-start">
 								<span class="input-label"><fmt:message key='yieldReport.plant' /></span>
 								<div class="dropdown placeholder" id="site_id">
-									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
+									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='default.dataNameSelect' />">
 										<fmt:message key='yieldReport.select' /><span class="caret"></span>
 									</button>
 									<ul class="dropdown-menu"></ul>
@@ -801,7 +801,7 @@
 					</ul>
 					<div class="btn-wrap-type02">
 						<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close"><fmt:message key='yieldReport.cancle' /></button>
-						<button type="button" class="btn-type" onclick="reportCreate();"><fmt:message key='yieldReport.create' /></button>
+						<button style="padding: 0px;" type="button" class="btn-type" onclick="reportCreate();"><fmt:message key='yieldReport.create' /></button>
 					</div>
 				</div>
 			</div>

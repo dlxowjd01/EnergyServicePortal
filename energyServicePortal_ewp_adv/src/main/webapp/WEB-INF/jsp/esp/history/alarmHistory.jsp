@@ -161,7 +161,7 @@
 						<div class="sa-select">
 							<h2 class="tx-tit"><fmt:message key='alarm.search.alarmType' /></h2>
 							<div class="dropdown">
-								<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택"><fmt:message key="alertshistory.1.all" /><span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="<fmt:message key='default.dataNameSelect' />"><fmt:message key="alertshistory.1.all" /><span class="caret"></span></button>
 								<ul class="dropdown-menu chk-type" role="menu">
 									<li>
 										<a href="javascript:void(0)" tabindex="-1">
@@ -205,7 +205,7 @@
 						<div class="sa-select">
 							<h2 class="tx-tit"><fmt:message key="alarm.table.isChecked" /></h2>
 							<div class="dropdown short" id="alarmstatus">	
-								<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택"><fmt:message key="alarm.search.confirm.N" /><span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="<fmt:message key='default.dataNameSelect' />"><fmt:message key="alarm.search.confirm.N" /><span class="caret"></span></button>
 								<ul class="dropdown-menu chk-type" role="menu" id="alstatus">
 									<li>
 										<a href="javascript:void(0)" tabindex="-1">
@@ -453,7 +453,7 @@
 		$('#search').on('click', function () {
 			let term = $('#term').prev().data('value');
 			if (isEmpty(term)) {
-				alert('시간단위를 선택해주세요.');
+				alert('<fmt:message key="alarm.alert.1" />');
 				return false;
 			} else {
 				periodData();
@@ -813,10 +813,10 @@
 		});
 		$('#ticket_log').empty();
 
-		$('#userlist button').html('선택 &nbsp;<span class="caret"></span>');
-		$('#ticket_status button').html('선택 &nbsp;<span class="caret"></span>');
-		$('#ticket_report button').html('선택 &nbsp;<span class="caret"></span>');
-		$('#maintenanceReportList button').html('선택 &nbsp;<span class="caret"></span>');
+		$('#userlist button').html('<fmt:message key="default.dataNameSelect" /> &nbsp;<span class="caret"></span>');
+		$('#ticket_status button').html('<fmt:message key="default.dataNameSelect" /> &nbsp;<span class="caret"></span>');
+		$('#ticket_report button').html('<fmt:message key="default.dataNameSelect" /> &nbsp;<span class="caret"></span>');
+		$('#maintenanceReportList button').html('<fmt:message key="default.dataNameSelect" /> &nbsp;<span class="caret"></span>');
 
 		userListRender(oid); //OID에 속한 사용자 리스트
 		reportList();
