@@ -43,12 +43,12 @@ public class RestApiUtil {
 	public static Map<String, Object> get(String strUrl, String mode, Map<String, Object> parameters) {
 		if ("test".equals(mode)) {
 			if (apiHost.startsWith("https")) {
-				return secureGet(strUrl, toStringParameter(parameters), null);
+				return secureGet(strUrl, toStringParameter(parameters), null, apiHost);
 			} else {
-				return basicGet(strUrl, parameters, null);
+				return basicGet(strUrl, parameters, null, apiHost);
 			}
 		} else {
-			return secureGet(strUrl, toStringParameter(parameters), null);
+			return secureGet(strUrl, toStringParameter(parameters), null, apiHostSecure);
 		}
 	}
 
@@ -64,20 +64,20 @@ public class RestApiUtil {
 	public static Map<String, Object> get(String strUrl, String mode, Map<String, Object> parameters, String token) {
 		if ("test".equals(mode)) {
 			if (apiHost.startsWith("https")) {
-				return secureGet(strUrl, toStringParameter(parameters), token);
+				return secureGet(strUrl, toStringParameter(parameters), token, apiHost);
 			} else {
-				return basicGet(strUrl, parameters, token);
+				return basicGet(strUrl, parameters, token, apiHost);
 			}
 		} else {
-			return secureGet(strUrl, toStringParameter(parameters), token);
+			return secureGet(strUrl, toStringParameter(parameters), token, apiHostSecure);
 		}
 	}
 
-	public static Map<String, Object> basicGet(String strUrl, Map<String, Object> parameters, String token) {
+	public static Map<String, Object> basicGet(String strUrl, Map<String, Object> parameters, String token, String host) {
 		Map<String, Object> rtnMap = new HashMap<String, Object>();
 
 		try {
-			URI uri = new URI(apiHost + strUrl);
+			URI uri = new URI(host + strUrl);
 			if (parameters != null) {
 				uri = applyParameters(uri, parameters);
 			}
@@ -129,7 +129,7 @@ public class RestApiUtil {
 		return rtnMap;
 	}
 
-	public static Map<String, Object> secureGet(String strUrl, String parameters, String token) {
+	public static Map<String, Object> secureGet(String strUrl, String parameters, String token, String host) {
 		Map<String, Object> rtnMap = new HashMap<String, Object>();
 
 		try {
@@ -143,7 +143,7 @@ public class RestApiUtil {
 			sc.init(null, trustAllCerts, new SecureRandom());
 
 			HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-			HttpsURLConnection con = (HttpsURLConnection) new URL(apiHostSecure + strUrl + "?" + parameters).openConnection();
+			HttpsURLConnection con = (HttpsURLConnection) new URL(host + strUrl + "?" + parameters).openConnection();
 			con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정
 			con.setReadTimeout(5000); // InputStream 읽어 오는 Timeout 시간 설정
 			con.setRequestMethod("GET");
@@ -201,12 +201,12 @@ public class RestApiUtil {
 	public static Map<String, Object> post(String strUrl, String mode, String jsonMessage) {
 		if ("test".equals(mode)) {
 			if (apiHost.startsWith("https")) {
-				return securePost(strUrl, jsonMessage, null);
+				return securePost(strUrl, jsonMessage, null, apiHost);
 			} else {
-				return basicPost(strUrl, jsonMessage, null);
+				return basicPost(strUrl, jsonMessage, null, apiHost);
 			}
 		} else {
-			return securePost(strUrl, jsonMessage, null);
+			return securePost(strUrl, jsonMessage, null, apiHostSecure);
 		}
 	}
 
@@ -218,11 +218,11 @@ public class RestApiUtil {
 	 * @param token
 	 * @return
 	 */
-	public static Map<String, Object> basicPost(String strUrl, String jsonMessage, String token) {
+	public static Map<String, Object> basicPost(String strUrl, String jsonMessage, String token, String host) {
 		Map<String, Object> rtnMap = new HashMap<String, Object>();
 
 		try {
-			URL url = new URL(apiHost + strUrl);
+			URL url = new URL(host + strUrl);
 			HttpURLConnection con = (HttpURLConnection) url.openConnection();
 			con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정
 			con.setReadTimeout(5000); // InputStream 읽어 오는 Timeout 시간 설정
@@ -286,11 +286,11 @@ public class RestApiUtil {
 	 * @param jsonMessage
 	 * @return
 	 */
-	public static Map<String, Object> securePost(String strUrl, String jsonMessage, String token) {
+	public static Map<String, Object> securePost(String strUrl, String jsonMessage, String token, String host) {
 		Map<String, Object> rtnMap = new HashMap<String, Object>();
 
 		try {
-			URL url = new URL(apiHostSecure + strUrl);
+			URL url = new URL(host + strUrl);
 			HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
 			con.setConnectTimeout(5000); //서버에 연결되는 Timeout 시간 설정
 			con.setReadTimeout(5000); // InputStream 읽어 오는 Timeout 시간 설정
