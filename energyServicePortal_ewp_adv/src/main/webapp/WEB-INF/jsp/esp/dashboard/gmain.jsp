@@ -709,7 +709,7 @@
 		let $form = $('#linkSiteForm');
 		let $inp = $('<input>').attr('type', 'hidden').attr('name', 'sid').val(id);
 
-		$form.append($inp);
+		$form.empty().append($inp);
 
 		if (!isEmpty(target) && target === 'blank') {
 			let targetWin = window.open('about:blank', 'targetWin_' + id);
