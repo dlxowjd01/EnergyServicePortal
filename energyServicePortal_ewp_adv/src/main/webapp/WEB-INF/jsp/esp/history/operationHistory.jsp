@@ -113,6 +113,8 @@
 			} else {
 				$('[id^="device_"]').prop('checked', false);
 			}
+
+			displayDropdown($('#devices'));
 		});
 
 		$('#chartAdd').on('click', function () {
