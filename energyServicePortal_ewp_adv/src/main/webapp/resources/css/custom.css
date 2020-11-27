@@ -2271,6 +2271,19 @@ nav .site.form-group .btn {
 	transform: rotate(45deg);
 }
 
+html[lang="en"] .all-menu>a:after {
+	display: block;
+	position: relative;
+	margin: -17px 0 0 75px;
+	width: 9px;
+	height: 9px;
+	border: 2px solid var(--white87);
+	border-left: 0;
+	border-top: 0;
+	content: "";
+	transform: rotate(45deg);
+}
+
 .all-menu>a.on:after {
 	margin-top: -14px;
 	transform: rotate(225deg);
@@ -5278,6 +5291,10 @@ html[lang="en"] .btn-save {
 	cursor: pointer;
 }
 
+html[lang="en"] .switch-slide {
+	width: 110px;
+}
+
 .switch-slide .switch-label {
 	box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12), inset 0 0 2px rgba(0, 0, 0, 0.15);
 	-webkit-transition: 0.15s ease-out;
@@ -5319,6 +5336,14 @@ html[lang="en"] .btn-save {
 	color: var(--white87);
 }
 
+html[lang="en"] .switch-slide .switch-label:after {
+	color: var(--white);
+	background: var(--vivid-blue);
+	content: attr(data-on);
+	left: 150px;
+	color: var(--white87);
+}
+
 .switch-slide .switch-handle {
 	position: absolute;
 	top: 0;
@@ -5352,6 +5377,11 @@ html[lang="en"] .btn-save {
 }
 
 .switch-input:checked~.switch-handle {
+	left: 95px;
+	box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+html[lang="en"] .switch-input:checked~.switch-handle {
 	left: 65px;
 	box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.2);
 }

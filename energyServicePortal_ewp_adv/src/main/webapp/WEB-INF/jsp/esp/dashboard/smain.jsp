@@ -4467,7 +4467,7 @@
 			$('#centerTbody tr td:nth-child(4)').html('<em>&nbsp;H</em>');
 		} else {
 			$('#centerTbody tr td:nth-child(1)').html('<em>&nbsp;kW</em>');
-			$('#centerTbody tr td:nth-child(2)').html('<em>&nbspkWh</em>');
+			$('#centerTbody tr td:nth-child(2)').html('<em>&nbsp;kWh</em>');
 			$('#centerTbody tr td:nth-child(3)').html('<em>&nbsp;H</em>');
 			$('#centerTbody tr td:nth-child(4)').html('<em>&nbsp;kWh</em>');
 		}
@@ -4652,15 +4652,14 @@
 							getNowEnergyDay = 0;
 							nowBillingDay = 0;
 						}
-
 						if ((data.start) == formYesterData.startTime) {
 							$('#centerTbody tr td:nth-child(3) em').before(displayNumberFixedUnit(getNowEnergyDay, 'Wh', 'kWh', 0)[0]);
 							itemEnergyDay = getNowEnergyDay;
 						} else {
 						// KPX
-							$('#centerTbody tr td:nth-child(2) em').before(displayNumberFixedUnit(getNowEnergyDay, 'Wh', 'kWh', 0)[0]);
+							$('#centerTbody tr td:nth-child(2)').html(displayNumberFixedUnit(getNowEnergyDay, 'Wh', 'kWh', 0)[0] + '<em>&nbsp;kWh</em>');
 							if (!oid.match('testkpx')) {
-								$('#centerTbody tr td:nth-child(4) em').before(displayNumberFixedUnit(nowBillingDay, 'Wh', 'kWh', 2)[0]);
+								$('#centerTbody tr td:nth-child(4)').html(displayNumberFixedUnit(nowBillingDay, 'Wh', 'kWh', 2)[0] + '<em>&nbsp;kWh</em>');
 							}
 						}
 					} else if ((url).match(apiEnergyNowSite)) {
@@ -4670,11 +4669,12 @@
 							let getNowEnergyDay = rstData.energy;
 							let nowBillingDay = rstData.money;
 							let tempEnergy = displayNumberFixedUnit(getNowEnergyDay, 'Wh', 'kWh', 0);
-							let tempEnergyHours = (itemCapacity > 0) ? (( getNowEnergyDay / itemCapacity / 1000 * 24 ) * 100).toFixed(2) : [0];
-					
-							$('#centerTbody tr td:nth-child(2) em').before(tempEnergy[0]);
-							$('#centerTbody tr td:nth-child(3) em').before(tempEnergyHours);
-							$('#centerTbody tr td:nth-child(5) em').before(displayNumberFixedUnit(nowBillingDay, 'Wh', 'kWh', 2)[0]);
+							let tempEnergyHours = (itemCapacity > 0) ? ( Math.round( getNowEnergyDay / itemCapacity * 100) / 100 ) : [0];
+							let tempSMP = displayNumberFixedUnit(nowBillingDay, 'Wh', 'kWh', 2)[0];
+							let tempSmpUnit = $('#centerTbody tr td:nth-child(5) em').text().trim();
+							$('#centerTbody tr td:nth-child(2)').html(tempEnergy[0] + '<em>&nbsp;kWh</em>');
+							$('#centerTbody tr td:nth-child(3)').html(tempEnergyHours + '<em>&nbsp;H</em>');
+							$('#centerTbody tr td:nth-child(5)').empty().html(tempSMP + '<em>&nbsp;' + tempSmpUnit + '</em>');
 						}
 					} else if ((url).match(apiForecastingSite)) {
 						let todayForeEnergy = 0;
@@ -4689,8 +4689,8 @@
 								}
 							});
 						}
-						$('#centerTbody tr td:nth-child(4) em').before(displayNumberFixedUnit(todayForeEnergy, 'Wh', 'kWh', 0)[0]);
-					
+						$('#centerTbody tr td:nth-child(4)').html(displayNumberFixedUnit(todayForeEnergy, 'Wh', 'kWh', 0)[0] + '<em>&nbsp;kWh</em>');
+
 					} else if ((url).match('/control/command_history')) {
 						if (!isEmpty(data.data)) {
 							if (!isEmpty(lastTargetActivePowerReqDate)) {
@@ -4719,9 +4719,9 @@
 					let genHour = isNaN(itemEnergyDay / itemCapacity) ? '-' : (itemEnergyDay / itemCapacity);
 
 					if (genHour === '-') {
-						$('#centerTbody tr td:nth-child(4) em').before(genHour);
+						$('#centerTbody tr td:nth-child(4)').html(genHour + '<em></em>');
 					} else {
-						$('#centerTbody tr td:nth-child(4) em').before(genHour.toFixed(1));
+						$('#centerTbody tr td:nth-child(4)').html(genHour.toFixed(1) + '<em>&nbsp;kWh</em>');
 					}
 
 					$('#siteCapacity').text(displayNumberFixedUnit(targetActivePower, 'W', 'kW', 2)[0]);

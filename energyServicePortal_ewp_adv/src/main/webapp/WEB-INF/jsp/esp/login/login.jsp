@@ -498,6 +498,8 @@
 	</script>
 </head>
 <body>
+	<form id="dashboardForm" name="dashboardForm" method="post"></form>
+
 	<div class="container-fluid login">
 		<nav class="clear">
 			<c:choose>
@@ -513,6 +515,7 @@
 			</c:choose>
 			<%@ include file="/decorators/include/selectLang.jsp" %>
 		</nav>
+
 		<form action="/loginUser.do" method="post" name="loginForm" id="loginForm" class="login-form">
 			<input type="hidden" id="language" name="language" value="${cookieLang}"/>
 			<div class="inner-wrapper">
@@ -993,4 +996,5 @@
 		</div>
 	</div>
 </body>
+
 </html>
