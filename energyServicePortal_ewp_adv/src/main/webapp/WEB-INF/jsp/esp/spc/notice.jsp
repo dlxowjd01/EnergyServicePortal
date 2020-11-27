@@ -178,7 +178,7 @@
 						}
 					} else {
 						val.replace(/\n/g, '<br/>');
-						$viewObj.text(val).html();
+						$viewObj.html(val);
 					}
 				}
 			})
@@ -334,7 +334,7 @@
 			alert(preffix + '되었습니다.');
 
 			$('#addNotice').modal('hide');
-			getNoticeList(1);
+			noticeTable.ajax.reload();
 			return false;
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);
@@ -362,7 +362,7 @@
 			$('.dbTime').text(now.format('yyyy-MM-dd HH:mm:ss'));
 
 			$('#viewNotice').modal('hide');
-			getNoticeList(1);
+			noticeTable.ajax.reload();
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			console.error(jqXHR);
 			console.error(textStatus);
