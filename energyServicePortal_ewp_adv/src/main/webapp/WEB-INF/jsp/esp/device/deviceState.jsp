@@ -857,7 +857,7 @@
 				}
 
 			$('#' + dType + ' .equip-card .ntit').text(dName);
-			$('#' + dType + ' .equip-card .inv-title').text(dName + ' 현황');
+			$('#' + dType + ' .equip-card .inv-title').text(dName + ' <fmt:message key="deviceState.status" />');
 
 			$('#' + dType + ' .equip-card .equip-card-ul li').each(function () {
 				let liData = $(this).data('key'),

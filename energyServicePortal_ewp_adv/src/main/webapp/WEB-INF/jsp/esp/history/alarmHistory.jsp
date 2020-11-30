@@ -373,21 +373,21 @@
 	const deviceTemplate = new Array();
 
 	const levelTemplate = {
-		9: '알수없음',
-		0: '정보',
-		1: '경고',
-		2: '이상',
-		3: '트립',
-		4: '정상'
+		9: '<fmt:message key="alarm.search.level.unknown" />',//알수없음
+		0: '<fmt:message key="alarm.search.level.info" />',//정보
+		1: '<fmt:message key="alarm.search.level.warn" />',//경고
+		2: '<fmt:message key="alarm.search.level.abnornal" />',//이상
+		3: '<fmt:message key="alarm.search.level.trip" />',//트립
+		4: '<fmt:message key="alarm.search.level.normal" />',//정상
 	};
 	const statusTemplate = {
-		'null': '신규',
-		'new': '신규',
-		'open': '작업처리중',
-		'on-hold': '추가 정보 대기',
-		'resolved': '현장 조치 완료',
-		'pending': '처리 결과 확인',
-		'closed': '처리 완료',
+		'null': '<fmt:message key="alarm.popup.status.new" />', //신규
+		'new': '<fmt:message key="alarm.popup.status.new" />', //신규
+		'open': '<fmt:message key="alarm.popup.status.working" />', //작업처리중
+		'on-hold': '<fmt:message key="alarm.popup.status.pending" />', //추가 정보 대기
+		'resolved': '<fmt:message key="alarm.popup.status.sitework" />', //현장 조치 완료
+		'pending': '<fmt:message key="alarm.popup.status.confirm" />', //처리 결과 확인
+		'closed': '<fmt:message key="alarm.popup.status.done" />', //처리 완료
 	};
 
 	// <!-- properties 조회 -->

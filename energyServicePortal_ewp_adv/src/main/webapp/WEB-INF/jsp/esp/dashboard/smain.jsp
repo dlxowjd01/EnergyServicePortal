@@ -3219,11 +3219,11 @@
 	function setOperation(operation) {
 		let rtnText = '';
 		if (operation == '1') {
-			rtnText = '정상';
+			rtnText = '<fmt:message key="smain.normal" />'; // 정상
 		} else if (operation == '2') {
-			rtnText = '트립';
+			rtnText = '<fmt:message key="smain.trip" />'; // 트립
 		} else {
-			rtnText = '중지';
+			rtnText = '<fmt:message key="smain.stop" />'; // 중지
 		}
 		return rtnText;
 	}
@@ -4150,7 +4150,7 @@
 						legend: { x: 15 }
 					});
 				} else if ($(':radio[name="radio_t"]:checked').val() == 2) {
-					seriesName = '발전시간';
+					seriesName = '<fmt:message key="smain.todayDevTime" />';
 					newSuffix = 'hr';
 					monthlyChart.update({
 						yAxis: [
@@ -4172,7 +4172,7 @@
 						}
 					});
 				} else {
-					seriesName = '매전량';
+					seriesName = '<fmt:message key="smain.sales" />';
 					newSuffix = '<fmt:message key="smain.1000won" />';
 
 					monthlyChart.update({
