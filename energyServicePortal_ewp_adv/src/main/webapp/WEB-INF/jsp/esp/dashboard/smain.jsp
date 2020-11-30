@@ -5006,7 +5006,7 @@
 
 				if (!oid.match('testkpx')) {
 					let tempObj = {
-						name: "<fmt:message key='smain.generationPrediction' />",
+						name: "<fmt:message key='smain.CapacityFactor' />",
 						type: 'spline',
 						dashStyle: 'ShortDash',
 						color: 'var(--white60)',
@@ -5162,7 +5162,7 @@
 
 				if(energyData2.length>0){
 					hourlySolarChart.addSeries({
-						name: '<fmt:message key="smain.generationPrediction" />',
+						name: '<fmt:message key="smain.CapacityFactor" />',
 						type: 'column',
 						color: 'var(--white25)',
 						tooltip: {
