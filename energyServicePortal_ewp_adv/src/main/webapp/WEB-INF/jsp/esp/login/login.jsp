@@ -514,7 +514,7 @@
 <%--					<button type="button" class="clear-btn" onclick="showPwd( 'loginUserPw', this)">show</button>--%> <%-- 일부 브라우져 오작동으로 주석 --%>
 				</div>
 				<div class="input-field hidden"><input type="password" id="verify_code" name="verify_code" class="clear-input" placeholder="인증번호"></div>
-				<div class="input-field no-border"><a class="chk-type"><input type="checkbox" id="saveLogin" name="save_login"><label for="saveLogin">로그인 유지</label></a></div>
+				<div class="input-field no-border"><a class="chk-type"><input type="checkbox" id="saveLogin" name="save_login"><label for="saveLogin"><fmt:message key='login.keepLogin' /></label></a></div>
 
 				<div class="btn-wrapper">
 					<input type="submit" id="loginBtn" name="login" value="<fmt:message key="ewp.login.Signin" />">
@@ -541,11 +541,11 @@
 				<div class="desc">
 					<div class="row center">
 						<div class="col-6">
-							<h3 class="mb-10">카카오톡 문의</h3>
-							<a href="http://pf.kakao.com/_YDihK" target="_blank"><strong class="link-bold">아이덤스</strong> 채널&amp;친구 추가</a>
+							<h3 class="mb-10"><fmt:message key='login.kakaotalk' /></h3>
+							<a href="http://pf.kakao.com/_YDihK" target="_blank"><fmt:message key='login.channel' /></a>
 						</div>
 						<div class="col-6 divider">
-							<h3 class="mb-10">데모 요청 이메일</h3>
+							<h3 class="mb-10"><fmt:message key='login.demoReq' /></h3>
 							<a href="javascript:void(0)" class="link-bold">esolution@encoredtech.com</a>
 							<!-- <a href="#" target="_blank" class="link-bold">esolution@encoredtech.com</a> -->
 						</div>
