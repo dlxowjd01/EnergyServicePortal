@@ -51,10 +51,6 @@
 .popover-modal.active { z-index: 2; }
 .site .input-group .form-control { z-index: 2 }
 
-
-
-#layerbox { z-index: 60; }
-
 .dropdown-modal.active,
 .popover-modal.active { z-index: 100; }
 .popover { z-index: 120; }
@@ -4723,6 +4719,12 @@ input.inp[readonly]:focus {
 	border: none;
 }
 
+.panel-default>.panel-heading.no-data {
+	color: var(--white60);
+	text-align: center;
+	padding: 22px 10px;
+}
+
 .panel-group .panel+.panel {
 	margin-top: 25px;
 }
@@ -5377,12 +5379,12 @@ html[lang="en"] .switch-slide .switch-label:after {
 }
 
 .switch-input:checked~.switch-handle {
-	left: 95px;
+	left: 65px;
 	box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.2);
 }
 
 html[lang="en"] .switch-input:checked~.switch-handle {
-	left: 65px;
+	left: 95px;
 	box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.2);
 }
 

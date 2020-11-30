@@ -216,6 +216,7 @@ nav .dropdown {
 
 .lang .dropdown-menu {
 	padding: 0;
+	z-index: 1000;
 }
 
 .lang .dropdown-menu > li > a {

@@ -33,8 +33,9 @@
 	<link rel="stylesheet" href="/css/custom-login.min.css">
 
 	<script type="text/javascript" src="/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/js/jquery-ui.min.js"></script>
+	<!-- <script type="text/javascript" src="/js/jquery-ui-1.12.1.min.js"></script> -->
 	<script type="text/javascript" src="/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="/js/jquery-ui-1.12.1.min.js"></script>
 	<script type="text/javascript" src="/js/commonDropdown.js"></script>
 
 	<script type="text/javascript">

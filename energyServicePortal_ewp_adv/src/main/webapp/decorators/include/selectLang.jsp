@@ -3,7 +3,7 @@
 
 <div class="lang dropdown"><!--
 --><button type="button" class="dropdown-toggle" data-toggle="dropdown">${cookieLang}<span class="caret"></span></button><!--
---><ul class="dropdown-menu"><!--
+--><ul id="selectLangList" class="dropdown-menu"><!--
 	--><li class="lang"><a href="#">KO</a></li><!--
 	--><li class="lang"><a href="#">EN</a></li><!--
 --></ul>
@@ -13,8 +13,9 @@
 		let tempLang = '${cookieLang}';
 		$("html").attr('lang', tempLang.toLowerCase());
 
+		let dropdownList = $("#selectLangList li");
 
-        $('li.lang').on('click touchend', function(e) {
+        $('#selectLangList li').on('click touchend', function(e) {
             e.preventDefault();
 
             let selectLangText = $(this).find('a').text();
@@ -63,5 +64,4 @@
             f.submit();
         });
 	});
-
 </script>

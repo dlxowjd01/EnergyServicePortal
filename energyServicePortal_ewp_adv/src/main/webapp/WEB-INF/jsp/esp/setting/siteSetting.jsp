@@ -52,23 +52,22 @@
 		}
 
 		// Validations
-		$("#newSiteName").on("keydown", function() {
+		$("#newSiteName").on("keydown", function(e) {;
 			$("#invalidSite").addClass("hidden");
 			validateForm();
 		});
 
 		$("#newSiteName").on("keyup", function() {
 			let warning = $("#validSite").parent().find(".warning");
+			let val = $(this).val();
 
-			$("#validSite").addClass("hidden")
-
-			if( $(this).val().trim().match(/^[.!#$%&'*+/=?^`{|}~]/) ) {
+			if(val.trim().match(/[.!#$%&'*+/=?^`{|}~]/g, "") ) {
 				warning.eq(2).removeClass("hidden");
 			} else {
 				warning.eq(2).addClass("hidden");
 			}
 
-			if( $(this).val().trim().length <= 1 || $(this).val().trim().length > 15) {
+			if(val.length <= 1 || val.length > 30) {
 				warning.eq(1).removeClass("hidden");
 			} else {
 				warning.eq(1).addClass("hidden");
@@ -4027,7 +4026,7 @@
 								<div class="col-xl-3 col-lg-6 col-md-4 col-sm-10 pl-0">
 									<div class="flex-start">
 										<div class="text-input-type offset-73">
-											<input type="text" name="new_site_name" id="newSiteName" placeholder="입력" minlength="2" maxlength="15">
+											<input type="text" name="new_site_name" id="newSiteName" placeholder="입력" minlength="2" maxlength="30">
 										</div>
 										<button type="button" class="btn-type fr" onclick="checkSiteId($('#newSiteName').val().trim())" disabled>중복 체크</button>
 									</div>

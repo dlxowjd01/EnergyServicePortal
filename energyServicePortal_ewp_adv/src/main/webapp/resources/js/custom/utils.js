@@ -621,29 +621,6 @@ var excelHandler = {
 	}
 }
 
-function tableToArr(tableObj) { // table -> Array 변환 함수
-	var arr = [];
-	var allTRs = tableObj.getElementsByTagName("tr");
-	for (var trCounter = 0; trCounter < allTRs.length; trCounter++) {
-		var tmpArr = [];
-		var allTHsInTR = allTRs[trCounter].getElementsByTagName("th");
-		var allTDsInTR = allTRs[trCounter].getElementsByTagName("td");
-		for (var thCounter = 0; thCounter < allTHsInTR.length; thCounter++) {
-			var spanInTH = allTHsInTR[thCounter].getElementsByTagName("span");
-			if (spanInTH.length > 0) {
-				tmpArr.push(spanInTH[0].innerHTML);
-			} else {
-				tmpArr.push(allTHsInTR[thCounter].innerHTML);
-			}
-		}
-		for (var tdCounter = 0; tdCounter < allTDsInTR.length; tdCounter++) {
-			tmpArr.push(allTDsInTR[tdCounter].innerHTML);
-		}
-		arr.push(tmpArr);
-	}
-	return arr;
-}
-
 function s2ab(s) {  //2진 버퍼 생성
 	var buf = new ArrayBuffer(s.length);
 	var view = new Uint8Array(buf);

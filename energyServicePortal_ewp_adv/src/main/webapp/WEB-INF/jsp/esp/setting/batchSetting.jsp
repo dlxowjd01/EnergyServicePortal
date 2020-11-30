@@ -421,7 +421,7 @@
 		let tr = $("#scheduleTable").find("tbody tr.selected");
 		let rowData;
 		let submitRulesId;
-
+		let perPageNum = 50;
 
 		dateElement.each(function(index, el){
 			if(index === 0){
@@ -443,437 +443,201 @@
 			}
 		});
 
-		let option = {
-			url: apiHost + "/batch-job-logs",
-			type: "get",
-			async: true,
-			data: {
-				startDate: newStartDate,
-				startHHMMSS: newStartTime,
-				endDate: newEndDate,
-				endHHMMSS: newEndTime,
-			},
-			beforeSend: function (jqXHR, settings) {
-				$('#loadingCircle').show();
-			}
-		}
-		if(isEmpty(dateElement)){
-			option.data.limit = 10;
-		}
-		if(tr.length > 0) {
-			rowData = dTable.row(tr).data();
-			submitRulesId = Number(rowData.id);
-			option.data.submit_rule_id = submitRulesId;
-		}
+		var logTable = $('#logTable').DataTable({
+			"destroy": true,
+			"table-layout": "fixed",
+			"scrollY": "720px",
+			"scrollCollapse": true,
+			"paging": true,
+			"pageLength": perPageNum,
+			"processing": true,
+			"serverSide": true,
+			"ordering": false,
+			"ajax": {
+				type: 'GET',
+				url: apiHost + "/batch-job-logs",
+				beforeSend: function (jqXHR, settings) {
+					$('#loadingCircle').show();
+				},
+				data: function(d) {
+					let param = {};
+					param.startDate = newStartDate;
+					param.startHHMMSS = newStartTime;
+					param.endDate = newEndDate;
+					param.endHHMMSS = newEndTime;
+					param.page = (d.start / perPageNum) + 1;
+					param.limit = perPageNum;
 
-		// var logTable = $('#logTable').DataTable({
-		// 	"destroy": true,
-		// 	"table-layout": "fixed",
-		// 	"scrollY": "720px",
-		// 	"scrollCollapse": true,
-		// 	"paging": true,
-		// 	"pageLength": 50,
-		// 	"serverSide": true,
-		// 	// "serverSide": true,
-		// 	"processing": true,
-		// 	"order": [],
-		// 	"ajax": {
-		// 		type: 'GET',
-		// 		url: apiHost + "/batch-job-logs",
-		// 		beforeSend: function (jqXHR, settings) {
-		// 			$('#loadingCircle').show();
-		// 		},
-		// 		data: function(d) {
-		// 			let param = {};
-		// 			param.startDate = newStartDate;
-		// 			param.startHHMMSS = newStartTime;
-		// 			param.endDate = newEndDate;
-		// 			param.endHHMMSS = newEndTime;
-		// 			if(isEmpty(dateElement)){
-		// 				console.log("no date===")
-		// 				param.limit = 10;
-		// 			}
-
-		// 			if(tr.length > 0) {
-		// 				rowData = dTable.row(tr).data();
-		// 				submitRulesId = Number(rowData.id);
-		// 				param.submit_rule_id = submitRulesId;
-		// 			}
-		// 			// param.page = (d.start / 50) + 1;
-		// 			return param;
-		// 		},
-		// 		// contentType: 'application/x-www-form-urlencoded',
-		// 		contentType: "application/json; charset=utf-8",
-		// 		dataFilter: function(data){
-        //             var jData = JSON.parse(data);
-		// 			var dtData =JSON.stringify( {"data": jData.log});
-        //             return dtData
-        //         },
-		// 		// dataSrc: function (json) {
-		// 		// 	console.log("json===", json.log.length);
-		// 		// 	return json.log;
-		// 		// }
-		// 	},
-		// 	"columns": [
-		// 		{
-		// 			"title": "",
-		// 			"data": null,
-		// 			"render": function ( data, type, full, rowIndex ) {
-		// 				return '<a class="chk-type" href="javascript:void(0); onclick=""><input type="checkbox" id="' + full.job_id + '" name="' + full.job_id + '"><label for="' + full.job_id + '"></label></a>'
-		// 			},
-		// 			"className": "dt-body-center"
-		// 		},
-		// 		{
-		// 			"title": "순번",
-		// 			"data": "",
-		// 			"render": function ( data, type, full, rowIndex ) {
-		// 				return rowIndex.row + 1
-		// 			},
-		// 			"className": "dt-body-center"
-		// 		},
-		// 		// {
-		// 		// 	"sTitle": "작업명",
-		// 		// 	"mData": "",
-		// 		// 	"mRender": function ( data, type, full, rowIndex ) {
-		// 		// 		return full.name;
-		// 		// 	},
-		// 		// 	"className": "dt-body-center"
-		// 		// },
-		// 		{
-		// 			"title": "작업자",
-		// 			"data": "",
-		// 			"render": function ( data, type, full, rowIndex ) {
-		// 				let personOnDuty = '';			
-		// 				let found = definitionData.findIndex( x => x.id === full.definition_id);
-
-		// 				if(found > -1){
-		// 					let scheduleName = definitionData[found].name;
-		// 					personOnDuty = scheduleName + ' (id: ' + full.definition_id + ')';
-		// 				} else {
-		// 					personOnDuty = 'id: ' + full.definition_id;
-		// 				}
-		// 				return personOnDuty;
-		// 			} 
-		// 		},
-		// 		{
-		// 			"title": "실행시간",
-		// 			"data": "",
-		// 			"render": function ( data, type, full, rowIndex ) {
-		// 				let temp = new Date(full.started_at).format('yyyy-MM-dd HH:mm:ss');
-		// 				return temp;
-		// 			},
-		// 		},
-		// 		{
-		// 			"title": "결과",
-		// 			"data":"",
-		// 			"render": function ( data, type, full, rowIndex ) {
-		// 				let result = '';
-		// 				if( full.was_successful == true ){
-		// 					result = "성공"
-		// 				} else {
-		// 					result = "실패"
-		// 				}
-		// 				return result;
-		// 			}
-		// 		},
-		// 		{
-		// 			"title": "실행 명령어",
-		// 			"data":"",
-		// 			"render": function ( data, type, full, rowIndex ) {
-		// 				let str1 = '';
-		// 				if( full.executed_command.length > 50 ){
-		// 					let trimmed1 = full.executed_command.substring(0, 51) + ' ...'
-		// 					str1 = `
-		// 						<div class="flex-start">${'${ trimmed1 }'}&ensp;
-		// 							<a href="#" role="button" data-toggle="popover" data-placement="bottom" rel="popover" onclick='return false' onmouseover="updateInfo('detail', null, this)" class="text-link">more</a>
-		// 							<button type="button" class="text-link" onclick='copyText(this, "executed_command")'>복사</button>
-		// 						</div>`
-		// 				} else {
-		// 					str1 = full.executed_command;
-		// 				}
-		// 				return str1;
-		// 			}
-		// 		},
-		// 		{
-		// 			"title": "로그",
-		// 			"data":"",
-		// 			"render": function ( data, type, full, rowIndex ) {
-		// 				let str2 = '';
-		// 				if( full.stdout.length > 50 ){
-		// 					let trimmed2 = full.stdout.substring(0, 51) + ' ...'
-		// 					str2 = `
-		// 						<div class="flex-start">${'${ trimmed2 }'}&ensp;
-		// 							<a href="#" role="button" data-toggle="popover" data-placement="bottom" rel="popover" onclick='return false' onmouseover="updateInfo('detail', null, this)" class="text-link">more</a>
-		// 							<button type="button" class="text-link" onclick='downloadLog(event, this, "stdout")'>다운로드</button>
-		// 						</div>`
-		// 				} else {
-		// 					str2 = full.stdout;
-		// 				}
-		// 				return str2;
-		// 			}
-		// 		},
-		// 	],
-		// 	"dom": 'tip',
-		// 	"language": {
-		// 		"paginate": {
-		// 		 	"previous": "",
-		// 		 	"next": "",
-		// 		},
-		// 		"info": "_PAGE_ - _PAGES_ " + " / 총 _TOTAL_ 개",
-		// 		"select": {
-		// 			"rows": {
-		// 				_: "",
-		// 				1: ""
-		// 			}
-		// 		}
-		// 	},
-		// 	"select": {
-		// 		style: 'single',
-		// 		selector: 'td input[type="checkbox"], td:not(:nth-child(6))'
-		// 	},
-		// 	initComplete: function(settings, json ){
-		// 		let addBtnStr = `<button type="button" class="btn-type fr mb-20" onclick="updateInfo('add')">로그 저장</button>`;
-		// 		this.api().columns().header().each ((el, i) => {
-		// 			if(i == 0){
-		// 				$(el).attr ('style', 'min-width: 50px');
-		// 			}
-		// 		});
-		// 	},
-		// 	// every time DataTables performs a draw
-		// 	drawCallback: function (settings) {
-		// 		$('#logTable_wrapper').addClass('my-20');
-		// 	}
-		// }).on("select", function(e, dt, type, indexes) {
-		// 	let btn = $("#btnGroup").find(".btn-type03");
-		// 	btn.each(function(index, element){
-		// 		if($(this).is(":disabled")){
-		// 			$(this).prop("disabled", false);
-		// 		}
-		// 	});
-		// 	logTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
-		// 	// console.log("dt---", scheduleTable[ type ]( indexes ).nodes())
-		// }).on("deselect", function(e, dt, type, indexes) {
-		// 	let btn = $("#btnGroup").find(".btn-type03");
-		// 	btn.each(function(index, element){
-		// 		if(!$(this).is(":disabled")){
-		// 			$(this).prop("disabled", true);
-		// 		}
-		// 	});
-		// 	logTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", false);
-		// 	// console.log("dt---", scheduleTable[ type ]( indexes ).nodes())
-		// }).columns.adjust().draw();
-
-		
-		$.ajax(option).done(function (json, textStatus, jqXHR) {
-			var logTable = $('#logTable').DataTable({
-				"aaData": json.log,
-				"destroy": true,
-				"table-layout": "fixed",
-				"bSearchable" : true,
-				"sScrollY": true,
-				"scrollY": "720px",
-				"bScrollCollapse": true,
-				"pageLength": 50,
-				"aaSorting": [[ 0, 'asc' ]],
-				"bSortable": true,
-				"order": [[ 1, 'asc' ]],
-				"aoColumnDefs": [
-					{
-						"aTargets": [ 0 ],
-						"bSortable": false,
-						"orderable": false
-					},
-				],
-				"aoColumns": [
-					{
-						"sTitle": "",
-						"mData": "",
-						"mRender": function ( data, type, full, rowIndex ) {
-							return '<a class="chk-type" href="javascript:void(0); onclick=""><input type="checkbox" id="' + full.job_id + '" name="' + full.job_id + '"><label for="' + full.job_id + '"></label></a>'
-						},
-						"className": "dt-body-center"
-					},
-					{
-						"sTitle": "순번",
-						"mData": "",
-						"mRender": function ( data, type, full, rowIndex ) {
-							return rowIndex.row + 1
-						},
-						"className": "dt-body-center"
-					},
-					// {
-					// 	"sTitle": "작업명",
-					// 	"mData": "",
-					// 	"mRender": function ( data, type, full, rowIndex ) {
-					// 		return full.name;
-					// 	},
-					// 	"className": "dt-body-center"
-					// },
-					{
-						"sTitle": "작업자",
-						"mData": "",
-						"mRender": function ( data, type, full, rowIndex ) {
-							let personOnDuty = '';			
-							let found = definitionData.findIndex( x => x.id === full.definition_id);
-
-							if(found > -1){
-								let scheduleName = definitionData[found].name;
-								personOnDuty = scheduleName + ' (id: ' + full.definition_id + ')';
-							} else {
-								personOnDuty = 'id: ' + full.definition_id;
-							}
-							return personOnDuty;
-						} 
-					},
-					{
-						"sTitle": "실행시간",
-						"mData": "",
-						"mRender": function ( data, type, full, rowIndex ) {
-							let temp = new Date(full.started_at).format('yyyy-MM-dd HH:mm:ss');
-							return temp;
-						},
-					},
-					{
-						"sTitle": "결과",
-						"mData":"",
-						"mRender": function ( data, type, full, rowIndex ) {
-							let result = '';
-							if( full.was_successful == true ){
-								result = "성공"
-							} else {
-								result = "실패"
-							}
-							return result;
-						}
-					},
-					{
-						"sTitle": "실행 명령어",
-						"mData":"",
-						"mRender": function ( data, type, full, rowIndex ) {
-							let str1 = '';
-							if( full.executed_command.length > 50 ){
-								let trimmed1 = full.executed_command.substring(0, 51) + ' ...'
-								str1 = `
-									<div class="flex-start">${'${ trimmed1 }'}&ensp;
-										<a href="#" role="button" data-toggle="popover" data-placement="bottom" rel="popover" onclick='return false' onmouseover="updateInfo('detail', null, this)" class="text-link">more</a>
-										<button type="button" class="text-link" onclick='copyText(this, "executed_command")'>복사</button>
-									</div>`
-							} else {
-								str1 = full.executed_command;
-							}
-							return str1;
-						}
-					},
-					{
-						"sTitle": "로그",
-						"mData":"",
-						"mRender": function ( data, type, full, rowIndex ) {
-							let str2 = '';
-							if( full.stdout.length > 50 ){
-								let trimmed2 = full.stdout.substring(0, 51) + ' ...'
-								str2 = `
-									<div class="flex-start">${'${ trimmed2 }'}&ensp;
-										<a href="#" role="button" data-toggle="popover" data-placement="bottom" rel="popover" onclick='return false' onmouseover="updateInfo('detail', null, this)" class="text-link">more</a>
-										<button type="button" class="text-link" onclick='downloadLog(event, this, "stdout")'>다운로드</button>
-									</div>`
-							} else {
-								str2 = full.stdout;
-							}
-							return str2;
-						}
-					},
-				],
-				"dom": 'tip',
-				"language": {
-					"paginate": {
-						"previous": "",
-						"next": "",
-					},
-					"info": "_PAGE_ - _PAGES_ " + " / 총 _TOTAL_ 개",
-					"select": {
-						"rows": {
-							_: "",
-							1: ""
-						}
+					if(tr.length > 0) {
+						rowData = dTable.row(tr).data();
+						submitRulesId = Number(rowData.id);
+						param.submit_rule_id = submitRulesId;
 					}
+					return param;
 				},
-				"select": {
-					style: 'single',
-					selector: 'td input[type="checkbox"], td:not(:nth-child(5)):not(:nth-child(6))'
-				},
-				initComplete: function(settings, json ){
-					let addBtnStr = `<button type="button" class="btn-type fr mb-20" onclick="updateInfo('add')">로그 저장</button>`;
-					this.api().columns().header().each ((el, i) => {
-						if(i == 0){
-							$(el).attr ('style', 'min-width: 50px');
-						}
+				contentType: "application/json; charset=utf-8",
+				dataFilter: function (json) {
+					// let failText = "데이터를 가져 오는 데 실패 하였습니다.";
+					json = JSON.parse(json);
+					return JSON.stringify({
+						// "draw": 1,
+						"recordsTotal": json.count,
+						"recordsFiltered": json.count,
+						"data": json.log,
+						"length": perPageNum,
+						// "error": failText
 					});
-				},
-				// every time DataTables performs a draw
-				drawCallback: function (settings) {
-					$('#logTable_wrapper').addClass('my-20');
 				}
-			}).on("select", function(e, dt, type, indexes) {
-				let btn = $("#btnGroup").find(".btn-type03");
-				btn.each(function(index, element){
-					if($(this).is(":disabled")){
-						$(this).prop("disabled", false);
-					}
-				});
-				logTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
-				// console.log("dt---", scheduleTable[ type ]( indexes ).nodes())
-			}).on("deselect", function(e, dt, type, indexes) {
-				let btn = $("#btnGroup").find(".btn-type03");
-				btn.each(function(index, element){
-					if(!$(this).is(":disabled")){
-						$(this).prop("disabled", true);
-					}
-				});
-				logTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", false);
-				// console.log("dt---", scheduleTable[ type ]( indexes ).nodes())
-			}).columns.adjust().draw();
-
-			new $.fn.dataTable.Buttons( logTable, {
-				name: 'commands',
-				"buttons": [
-					{
-						extend: 'excelHtml5',
-						className: "btn-save",
-						text: '엑셀 다운로드',
-						filename: '사용자관리_' + new Date().format('yyyyMMddHHmmss'),
-
-						customize: function( xlsx ) {
-							var sheet = xlsx.xl.worksheets['sheet1.xml'];
-							$('row:first c', sheet).attr( 's', '42' );
-							var sheet = xlsx.xl.worksheets['sheet1.xml'];
-						}
+			},
+			"columns": [
+				{
+					"title": "",
+					"data": null,
+					"render": function ( data, type, full, rowIndex ) {
+						return '<a class="chk-type" href="javascript:void(0); onclick=""><input type="checkbox" id="' + full.job_id + '" name="' + full.job_id + '"><label for="' + full.job_id + '"></label></a>'
 					},
-				],
-			});
+					"className": "dt-body-center"
+				},
+				{
+					"title": "순번",
+					"data": "",
+					"render": function ( data, type, full, rowIndex ) {
+						return rowIndex.settings._iDisplayStart + rowIndex.row + 1;
+					},
+					"className": "dt-body-center"
+				},
+				// {
+				// 	"sTitle": "작업명",
+				// 	"mData": "",
+				// 	"mRender": function ( data, type, full, rowIndex ) {
+				// 		return full.name;
+				// 	},
+				// 	"className": "dt-body-center"
+				// },
+				{
+					"title": "작업자",
+					"data": "",
+					"render": function ( data, type, full, rowIndex ) {
+						let personOnDuty = '';			
+						let found = definitionData.findIndex( x => x.id === full.definition_id);
 
-			logTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup");
-			
-			$('#logTable').find("input:checkbox").on('click', function() {
-				var $box = $(this);
-				if ($box.is(":checked")) {
-					var group = "input:checkbox[name='" + $box.attr("name") + "']";
-					$(group).prop("checked", false);
-					$box.prop("checked", true);
-				} else {
-					$box.prop("checked", false);
+						if(found > -1){
+							let scheduleName = definitionData[found].name;
+							personOnDuty = scheduleName + ' (id: ' + full.definition_id + ')';
+						} else {
+							personOnDuty = 'id: ' + full.definition_id;
+						}
+						return personOnDuty;
+					} 
+				},
+				{
+					"title": "실행시간",
+					"data": "",
+					"render": function ( data, type, full, rowIndex ) {
+						let temp = new Date(full.started_at).format('yyyy-MM-dd HH:mm:ss');
+						return temp;
+					},
+				},
+				{
+					"title": "결과",
+					"data":"",
+					"render": function ( data, type, full, rowIndex ) {
+						let result = '';
+						if( full.was_successful == true ){
+							result = "성공"
+						} else {
+							result = "실패"
+						}
+						return result;
+					}
+				},
+				{
+					"title": "실행 명령어",
+					"data":"",
+					"render": function ( data, type, full, rowIndex ) {
+						let str1 = '';
+						if( full.executed_command.length > 50 ){
+							let trimmed1 = full.executed_command.substring(0, 51) + ' ...'
+							str1 = `
+								<div class="flex-wrapper">
+									<span>${'${ trimmed1 }'}&ensp;<a href="#" role="button" data-toggle="popover" data-placement="bottom" rel="popover" onclick='return false' onmouseover="updateInfo('detail', null, this)" class="text-link">more</a></span>					
+									<button type="button" class="text-link" onclick='copyText(this, "executed_command")'>복사</button>
+								</div>`
+						} else {
+							str1 = full.executed_command;
+						}
+						return str1;
+					}
+				},
+				{
+					"title": "로그",
+					"data":"",
+					"render": function ( data, type, full, rowIndex ) {
+						let str2 = '';
+						if( full.stdout.length > 50 ){
+							let trimmed2 = full.stdout.substring(0, 51) + ' ...'
+							str2 = `
+								<div class="flex-wrapper">
+									<span>${'${ trimmed2 }'}&ensp;<a href="#" role="button" data-toggle="popover" data-placement="bottom" rel="popover" onclick='return false' onmouseover="updateInfo('detail', null, this)" class="text-link">more</a></span>
+									<button type="button" class="text-link" onclick='downloadLog(event, this, "stdout")'>다운로드</button>
+								</div>`
+						} else {
+							str2 = full.stdout;
+						}
+						return str2;
+					}
+				},
+			],
+			"dom": 'tip',
+			"language": {
+				"paginate": {
+				 	"previous": "",
+				 	"next": "",
+				},
+				"info": "_PAGE_ - _PAGES_ " + " / 총 _TOTAL_ 개",
+				"select": {
+					"rows": {
+						_: "",
+						1: ""
+					}
+				}
+			},
+			"select": {
+				style: 'single',
+				selector: 'td input[type="checkbox"], td:not(:nth-child(6))'
+			},
+			initComplete: function(settings, json ){
+				let addBtnStr = `<button type="button" class="btn-type fr mb-20" onclick="updateInfo('add')">로그 저장</button>`;
+				this.api().columns().header().each ((el, i) => {
+					if(i == 0){
+						$(el).attr ('style', 'min-width: 50px');
+					}
+				});
+			},
+			// every time DataTables performs a draw
+			drawCallback: function (settings) {
+				$('#logTable_wrapper').addClass('my-20');
+			}
+		}).on("select", function(e, dt, type, indexes) {
+			let btn = $("#btnGroup").find(".btn-type03");
+			btn.each(function(index, element){
+				if($(this).is(":disabled")){
+					$(this).prop("disabled", false);
 				}
 			});
-			
-			logTable.on( 'column-sizing.dt', function ( e, settings ) {
-				$(".dataTables_scrollHeadInner").css( "width", "100%" );
+			logTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
+			// console.log("dt---", scheduleTable[ type ]( indexes ).nodes())
+		}).on("deselect", function(e, dt, type, indexes) {
+			let btn = $("#btnGroup").find(".btn-type03");
+			btn.each(function(index, element){
+				if(!$(this).is(":disabled")){
+					$(this).prop("disabled", true);
+				}
 			});
+			logTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", false);
+			// console.log("dt---", scheduleTable[ type ]( indexes ).nodes())
+		}).columns.adjust().draw();
 
-		}).fail(function (jqXHR, textStatus, errorThrown) {
-			let resultFailText = "로그데이터를 가져 오는 데, 실패하였습니다.";
-			let errorMsg = resultFailText + "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText;
-			showAjaxResultModal("ajaxResultModal", null, null, errorMsg);
-			return false;
-		});
 	}
 
 	function initDetails(){
@@ -994,7 +758,10 @@
 					content: content
 				});
 
-				let popoverLink = $("#batchTable td a.text-link");
+				let popoverLink = $("#logTable td a.text-link");
+				console.log("updateInfo===",option);
+		
+
 				$(popoverLink).on('mouseover', function (e) {
 					$('[data-toggle="popover"]').each(function () {
 						if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
@@ -1003,7 +770,7 @@
 					});
 				});
 				$('#innerBody').on('mouseover click', function(e) {
-					if(!$(e.target).is(".popover") && !$(e.target).is("#batchTable td .text-link") ) {
+					if(!$(e.target).is(".popover") && !$(e.target).is("#logTable td .text-link") ) {
 						$('.popover').popover("hide");
 					}
 				});
@@ -1103,7 +870,7 @@
 					}, 1500);
 					return false;
 				}
-
+				// 즉시 실행 (새로 추가 할 경우: 아직은 구현 안됐으나 추후 필요할 수 있으므로 삭제 하지 말 것!!!)
 				// let queObj = {
 				// 	definition_id: obj.definition_id,
 				// 	submit_rule_id: submitRulesId
@@ -1568,11 +1335,11 @@
 			<table id="logTable">
 				<colgroup>
 					<col style="width:5%">
-					<col style="width:6%">
+					<col style="width:5%">
 					<!-- <col style="width:8%"> -->
 					<col style="width:12%">
 					<col style="width:12%">
-					<col style="width:5%">
+					<col style="width:6%">
 					<!-- <col style="width:26%">
 					<col style="width:26%"> -->
 					<col style="width:30%">

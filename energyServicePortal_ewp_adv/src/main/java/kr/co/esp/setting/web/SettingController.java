@@ -41,5 +41,5 @@ public class SettingController {
 	public String batchSetting(HttpServletRequest request, HttpSession session, Model model) {
 		return "esp/setting/batchSetting";
 	}
-
+	
 }

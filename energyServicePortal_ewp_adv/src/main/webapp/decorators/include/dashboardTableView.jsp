@@ -3,7 +3,7 @@
 <div class="row content-wrapper hidden">
 	<div class="col-12">
 		<div class="indiv">
-			<table id="gmainTable" style="table-layout: fixed; width:100%;">
+			<table id="gmainTable">
 				<colgroup>
 					<col style="width:5%">
 					<col style="width:10%">
@@ -33,6 +33,7 @@
 			autoWidth: true,
 			fixedHeader: true,
 			"table-layout": "fixed",
+			scrollX: true,
 			scrollY: '720px',
 			scrollCollapse: true,
 			paging: false,
