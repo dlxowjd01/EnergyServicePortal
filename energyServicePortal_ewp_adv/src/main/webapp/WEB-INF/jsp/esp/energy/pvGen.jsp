@@ -436,29 +436,36 @@
 		Promise.all(promiseUrl).then(response => {
 			generationData = new Object();
 			if (!isEmpty(response)) {
-				console.log(response);
-				response.forEach((res, index) => {
+				response.forEach((res, idx) => {
 					const database = res.data;
 					Object.entries(database).forEach(([id, data]) => {
 						document.querySelectorAll('input[name="device"]:checked').forEach(device => {
-							if (billingSites.length > 0 && dashSites.length > 0) {
-								if (device.value === id) {
-									if (index === 0 && (device.getAttribute('id')).match('billing')) {
-										data.name = device.dataset.name;
-									} else if (index === 1 && (device.getAttribute('id')).match('dashboard')) {
-										data.name = device.dataset.name;
-									} else {
-										console.log()
-										data.name = device.dataset.name;
-									}
-									data.sid = device.dataset.sid;
-									id += index === 0 ? '_billing' : index === 1 ?'_dashboard' : '';
-								}
-							} else {
+							if (billingSites.length > 0 && dashSites.length <= 0) {
 								if (device.value === id) {
 									data.name = device.dataset.name;
 									data.sid = device.dataset.sid;
+									id += idx === 0 ? '_billing' : '';
 								}
+							} else if (billingSites.length <= 0 && dashSites.length > 0) {
+								if (device.value === id) {
+									data.name = device.dataset.name;
+									data.sid = device.dataset.sid;
+									id += idx === 0 ? '_dashboard' : '';
+								}
+							} else if (billingSites.length > 0 && dashSites.length > 0) {
+								if (idx === 0 && /billing/.test(device.id) && device.value === id) {
+									data.name = device.dataset.name;
+									id += '_billing';
+								} else if (idx === 1 && /dashboard/.test(device.id) && device.value === id) {
+									data.name = device.dataset.name;
+									id += '_dashboard';
+								} else if (idx !== 0 && idx !== 1) {
+									data.name = device.dataset.name;
+								}
+								data.sid = device.dataset.sid;
+							} else {
+								data.name = device.dataset.name;
+								data.sid = device.dataset.sid;
 							}
 						});
 
