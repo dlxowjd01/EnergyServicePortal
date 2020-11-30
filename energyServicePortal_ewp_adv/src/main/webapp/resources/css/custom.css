@@ -9288,6 +9288,10 @@ table.table-footer tfoot td.light {
 	border-top: 1px solid var(--white20)
 }
 
+.btn-wrap-border-min {
+	border-top: 1px solid var(--white20)
+}
+
 .spc-search-bar .align-group2 input:not([type="checkbox"]),
 .spc-search-bar .align-group2 .dropdown-toggle {
 	width: 243px;

@@ -540,6 +540,7 @@
 		makeSite.unshift({ sid: 'all', name: '<fmt:message key="alarm.search.all" />'});
 		setMakeList(makeSite, 'siteList', {'dataFunction': {}}); //list생성
 		$('#siteList').append(`<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16"><fmt:message key='alarm.apply' /></button></li>`);
+		$('#siteList').find('input[value="all"]').parent().after('<li class="btn-wrap-border-min"></li>');
 
 
 		if (sidparam == '' || sidparam == undefined) {

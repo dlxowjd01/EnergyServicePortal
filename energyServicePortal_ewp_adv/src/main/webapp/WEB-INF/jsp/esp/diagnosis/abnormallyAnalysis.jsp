@@ -119,6 +119,7 @@
 		makeSite.unshift({ sid: 'all', name: '전체' });
 		setMakeList(makeSite, 'siteULList', {'dataFunction': {}}); //list생성
 		$('#siteULList').append(`<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16">적용</button></li>`);
+		$('#siteULList').find('input[value="all"]').parent().after('<li class="btn-wrap-border-min"></li>');
 	};
 
 	// 추후에도 쓸일 없다면 삭제 요망. 2020.06.12

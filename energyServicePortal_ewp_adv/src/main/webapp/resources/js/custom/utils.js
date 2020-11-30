@@ -1226,8 +1226,11 @@ function setAreaParamData(areaId, type) {
 
 	$area.find("textarea").each(function(){
 		var obj = this;
-		param[obj.getAttribute("id")] = escapeHtml(obj.value);	// \n 특수기호 처리해야함
-
+		if (obj.getAttribute('id') === 'contents') {
+			param[obj.getAttribute("id")] = escapeHtml(obj.value);	// \n 특수기호 처리해야함
+		} else {
+			param[obj.getAttribute("id")] = obj.value;
+		}
 	});
 
 	if(type != undefined && type == 'dropdown') {

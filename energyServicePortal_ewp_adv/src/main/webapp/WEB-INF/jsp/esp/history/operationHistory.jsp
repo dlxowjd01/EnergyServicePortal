@@ -646,6 +646,7 @@
 		makeSite.unshift({ sid: 'all', name: '전체'});
 		setMakeList(makeSite, 'siteULList', {'dataFunction': {}}); //list생성
 		$('#siteULList').append(`<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16">적용</button></li>`);
+		$('#siteULList').find('input[value="all"]').parent().after('<li class="btn-wrap-border-min"></li>');
 	};
 
 	//선택한 SID에 해당하는 유형의 타입을 보여준다.

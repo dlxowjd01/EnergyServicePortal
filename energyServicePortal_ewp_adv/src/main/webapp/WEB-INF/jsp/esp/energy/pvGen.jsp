@@ -196,7 +196,7 @@
 							<label for="all"><fmt:message key='pvGen.all' /></label>
 						</a>
 					</li>`;
-
+			liStr += `<li class="btn-wrap-border-min"></li>`;
 			sites.forEach((site, index) => {
 				liStr += `<li>
 							<a href="javascript:void(0);" data-value="${'${site.sid}'}" tabindex="-1">
@@ -269,7 +269,7 @@
 								</li>
 							`;
 
-						deviceStr += `<li class="btn-wrap-border"></li>`;
+						deviceStr += `<li class="btn-wrap-border-min"></li>`;
 						devices.sort((a, b) => {
 							return a['name'] > b['name'] ? 1 : a['name'] < b['name'] ? -1 : 0;
 						});

@@ -458,7 +458,7 @@
 							<label for="all">전체</label>
 						</a>
 					</li>`;
-
+			str += `<li class="btn-wrap-border-min"></li>`;
 			siteList.forEach((site, index) => {
 				str += `<li>
 						<a href="javascript:void(0);" data-value="${'${site.sid}'}" tabindex="-1">
