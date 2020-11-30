@@ -451,8 +451,8 @@
 		}
 
 		$('#search').on('click', function () {
-			let term = $('#term').prev().data('value');
-			if (isEmpty(term)) {
+			let interval = $('#cycle').find('button').data('value');
+			if (isEmpty(interval)) {
 				alert('<fmt:message key="alarm.alert.1" />');
 				return false;
 			} else {

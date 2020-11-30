@@ -477,8 +477,6 @@
 	</script>
 </head>
 <body>
-	<form id="dashboardForm" name="dashboardForm" method="post"></form>
-
 	<div class="container-fluid login">
 		<nav class="clear">
 			<c:choose>

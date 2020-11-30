@@ -14,7 +14,7 @@
 		$("html").attr('lang', tempLang.toLowerCase());
 
 
-        $('li.lang').on('click', function(e) {
+        $('li.lang').on('click touchend', function(e) {
             e.preventDefault();
 
             let selectLangText = $(this).find('a').text();

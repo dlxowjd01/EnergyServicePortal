@@ -2,6 +2,7 @@ package kr.co.esp.login.web;
 
 import kr.co.esp.common.service.EgovMessageSource;
 import kr.co.esp.common.service.EgovProperties;
+import kr.co.esp.common.util.I18nManager;
 import kr.co.esp.common.util.UserUtil;
 import kr.co.esp.login.service.LoginService;
 import org.codehaus.jettison.json.JSONObject;
@@ -83,13 +84,10 @@ public class LoginController {
 
 	@ResponseBody
 	@RequestMapping("/loginFailure.do")
-	public Map<String, Object> loginFailure(HttpSession session, RedirectAttributes redirect) throws Exception {
+	public Map<String, Object> loginFailure(HttpServletRequest request, HttpSession session, RedirectAttributes redirect) throws Exception {
 		Map<String, Object> returnMap = new HashMap<String, Object>();
-
-		Locale locale = (Locale) session.getAttribute("sessionLocale");
-
 		returnMap.put("rtnUrl", "");
-		returnMap.put("msg", egovMessageSource.getMessage("ewp.error.login_no_correct", locale));
+		returnMap.put("msg", I18nManager.getInstance().tr(request, "ewp.error.login_no_correct"));
 		return returnMap;
 	}
 
