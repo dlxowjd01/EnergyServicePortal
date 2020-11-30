@@ -7,7 +7,7 @@
 
 <form id="linkSiteForm" name="linkSiteForm" method="post"></form>
 <div class="row header-wrapper">
-	<div class="col-6">
+	<div class="col-9">
 		<h1 class="page-header fl">${siteName}</h1>
 		<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
 			<label class="switch switch-slide fl">
@@ -17,7 +17,7 @@
 			</label>
 		</c:if>
 	</div>
-	<div class="col-6">
+	<div class="col-3">
 		<div class="time fr">
 			<span>CURRENT TIME</span>
 			<em class="currTime">${nowTime}</em>

@@ -621,7 +621,7 @@
 
 <div class="modal fade" id="registerModal" tabindex="-1" role="form" aria-labelledby="myModalLabel">
 	<div class="modal-dialog spc-modal-lg" role="modal">
-		<div class="modal-content spc-modal-content">
+		<div class="modal-content spc-modal-content full-width">
 			<div class="modal-header">
 				<h2>점검계획 등록<span class="required fr">필수 입력 항목</span></h2>
 			</div>

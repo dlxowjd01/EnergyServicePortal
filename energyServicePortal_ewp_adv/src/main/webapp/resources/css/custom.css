@@ -67,7 +67,7 @@
 
 nav { z-index: 170 }
 .all-menu .menu-group { z-index: 180 }
-.mobile-nav { z-index: 180 }
+.mobile-nav { z-index: 1250 }
 .modal-backdrop { z-index: 180; }
 
 
@@ -1601,9 +1601,10 @@ table tbody td .dropdown-menu {
 .spc-transaction .table-footer .sa-select .dropdown,
 .spc-transaction .table-footer .sa-select .dropdown-toggle,
 .spc-search-bar .align-group3 .dropdown-toggle,
-.spc-modal-content .modal-body .dropdown-toggle,
+.spc-modal-content .dropdown-toggle,
 .spc-modal-content .flex-start .text-input-type>input[type="text"],
 .spc-modal-content .flex-start2 .sel,
+.spc-modal-content .sel,
 .spc-modal-content .flex-start .textarea,
 .spc-modal-content,
 .indiv.spc-detail02 .img-wrapper>*,
@@ -1905,7 +1906,7 @@ footer .copyright a + a:before {
 	height: 100%;
 	background: var(--mobile-nav-bg);
 	overflow-y: auto !important;
-	z-index: 180;
+	z-index: 1250;
 }
 
 .side-nav {
@@ -9469,7 +9470,7 @@ table.table-footer tfoot td.light {
 }
 
 .modal-content.spc-detail-content .modal-header {
-	padding: 30px 7px 15px;
+	padding: 10px 7px 15px;
 }
 
 .modal-content.spc-detail-content {
@@ -9523,24 +9524,28 @@ table.table-footer tfoot td.light {
 	width: 200px;
 }
 
-.spc-modal-content .modal-body .row:first-of-type {
+.spc-modal-content .row:first-of-type {
 	padding: 0;
 }
 
-.spc-modal-content .modal-body .row:not(:last-of-type) {
+.spc-modal-content .row:not(:last-of-type) {
 	padding: 5px 0;
 }
 
-.spc-modal-content .modal-body .row:not(.end) .dropdown,
-.spc-modal-content .modal-body .row:not(.end) .text-input-type:not(.mr-12) {
+.spc-modal-content .row:not(.end) .dropdown,
+.spc-modal-content .dropdown .btn,
+.spc-modal-content.full-width .sel-calendar,
+.spc-modal-content .row:not(.end) .text-input-type:not(.mr-12) {
 	width: calc(100% - 67px);
 }
-.spc-modal-content .modal-body .row:not(.end) .text-input-type.mr-12 {
+
+.spc-modal-content .row:not(.end) .text-input-type.mr-12 {
 	width: calc( 100% - 154px );
 }
 
-.spc-modal-content .modal-body .row.end .dropdown,
-.spc-modal-content .modal-body .row.end .dropdown + .sel-calendar {
+.spc-modal-content .row.end .dropdown,
+.spc-modal-content.full-width .row.end .dropdown + .sel-calendar,
+.spc-modal-content .row.end .dropdown + .sel-calendar {
 	width: calc(45% - 24px);
 }
 
@@ -9601,9 +9606,9 @@ table.table-footer tfoot td.light {
 	margin-top: 12px;
 }
 
-.spc-modal-content .flex-start .sel-calendar,
-.spc-modal-content .flex-start .text-input-type,
-.spc-modal-content .flex-start .dropdown .btn {
+.spc-modal-content:not(.full-width) .flex-start .sel-calendar,
+.spc-modal-content:not(.full-width) .flex-start .text-input-type,
+.spc-modal-content:not(.full-width) .flex-start .dropdown .btn {
 	width: 250px;
 }
 
@@ -9615,7 +9620,10 @@ table.table-footer tfoot td.light {
 	width: 95px;
 }
 
-.spc-modal-content .flex-start2 .text-input-type,
+.spc-modal-content .flex-start2 .text-input-type {
+	width: calc(55% + 13px);
+}
+
 .spc-modal-content .flex-start3 .dropdown .btn,
 .spc-modal-content .flex-start2 .sel-calendar {
 	width: 143px;
