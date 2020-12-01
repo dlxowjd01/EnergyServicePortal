@@ -1389,8 +1389,7 @@
 				labels: {
 					enabled: true,
 					formatter: function () {
-						let temp = new Date(this.value);
-						let newVal = temp.format("MM") + "/" + temp.format("dd");
+						let newVal =  Highcharts.dateFormat('%m/%d',  this.value);
 						return newVal;
 					},
 				}
@@ -1401,8 +1400,6 @@
                 color: '#26ccc8',
                 fillOpacity: 0.00,
 				lineWidth: 2,
-				// pointRange: null,
-				// threshold: 0
             }
 		},
 		plotOptions: {
@@ -1421,9 +1418,6 @@
 			{
 				type: 'datetime',
 				format: '{value:%m/%d}',
-				// dateTimeLabelFormats: {
-				// 	day: '%m/%d',
-				// },
 				lineColor: 'var(--grey)',
 				tickColor: 'var(--grey)',
 				tickInterval: 1,
@@ -1436,7 +1430,8 @@
 					align: 'center',
 					y: 27,
 					formatter: function () {
-						return  Highcharts.dateFormat('%m/%d',  this.value);
+						let newVal = Highcharts.dateFormat('%m/%d',  this.value);
+						return newVal;
 					},
 					style: {
 						color: 'var(--grey)',
@@ -1447,9 +1442,9 @@
 					text: null
 				},
 			},
-			{
-				visible: false,
-			}
+			// {
+			// 	visible: false,
+			// }
 		],
 		yAxis: [
 			{
@@ -2554,6 +2549,7 @@
 				let tempFeature = [];
 				let tempFeature2 = [];
 				let devicePropName = (langStatus == 'KO') ? val.name.kr : val.name.en;
+
 				$.map(propList, function (v, k) {
 					if (v.dashboard_head) {
 						let tempObj = {};
@@ -2576,7 +2572,6 @@
 						let tempObj2 = {};
 						let unit = (v.unit != null && v.unit != '') ? '' + v.unit + '' : '';
 						let subPropName = (langStatus == 'KO') ? v.name.kr : v.name.en;
-						// let propName = (langStatus == 'KO') ? val.name.kr : val.name.en;
 
 						tempObj2['key'] = k;
 						tempObj2['value'] = subPropName;
@@ -2586,15 +2581,11 @@
 						featurePropertiesSub[deviceName] = {
 							name: subPropName,
 							prop: tempFeature2
-						};
+						}
 					}
 
 				});
 			});
-
-			// console.log("featureProperties===", featureProperties);
-			// console.log("featurePropertiesSub===", featurePropertiesSub);
-			
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			let errMsg = "<fmt:message key='smain.error.1' /> <br/><fmt:message key='smain.error.2' />" + errorThrown;
 			let r = formatErrorMessage(jqXHR, errorThrown);
@@ -2624,6 +2615,7 @@
 		}
 
 		if(deviceArray.length > 0) {
+			// currentR,S,T, voltage R,S,T reactivePower 등의 값들 때문에 /status/raw api 호출
 			$.ajax({
 				url: apiHost + apiStatusRaw,
 				type: 'get',
@@ -2641,7 +2633,6 @@
 						sortedData = Object.values(data).filter( x => x.data.length>0 );
 						sortedData.sortOn("dname");
 					}
-
 					$.map(sortedData, function(val, key) {
 						if (!isEmpty(val.data.length>0)) {
 							if ($.inArray(val.device_type, deviceType) === -1) {
@@ -2661,7 +2652,7 @@
 							}
 						}
 					});
-
+					
 					setMakeList(deviceType, 'typeList', { 'dataFunction': { 'head': makeHeadTable, 'body': makeBodyTable } });
 					
 					$.each(deviceType, function (i, el) {
@@ -2690,18 +2681,17 @@
 									}
 									rowData[0]['dname'] = dname;
 
+									// console.log("featureProperties===", featureProperties);
+									
 									$.map(featureProperties, function(val, key) {
 										let headerData = {};
-						
+										let unitList = [];
+
 										if(!isEmpty(headerDataObject[key])) {
 											headerData = headerDataObject[key];
 										}
-										
-										if (key == dvcType) {
-											let sumActivePower = 0;
-											let sumDcPower = 0;
-											let sumAccumEnergy = 0;
 
+										if (key == dvcType) {
 											$.each(val.prop, function(i, el) {
 												let value = rowData[0][el.key];
 												let tempObj = {};
@@ -2715,11 +2705,8 @@
 												if(isEmpty(value)) {
 													value = '-';
 												} else {
-													let unitList = ['W', 'Wh', 'humidity', 'irradiationPoa', 'temperature', '%', 'V'];
-													if(unitList.indexOf(el.suffix) > -1){
-														if(value != '-' && typeof value == 'number') {
-															value = Number(value);
-														}
+													if(value != '-' && typeof value == 'number') {
+														value = Number(value);
 													}
 												}
 
@@ -2743,7 +2730,7 @@
 														}
 													
 													} else {
-														if( typeof tempObj['value'] == 'number') {
+														if(typeof tempObj['value'] == 'number') {
 															tempObj['value'] = Number(value);
 															tempObj['cnt'] = 1;
 														} else {
@@ -2767,9 +2754,9 @@
 													rowData[0][el.key] = "-";
 												} else {
 													if( el.key.match('activePower') || el.key.match('dcPower') ) {
-														// Unit: W => kW,  Wh => kWh
+														// Unit: W => kW,  Wh => kWh, Var => no change
 														let strVal = displayNumberFixedUnit(value, 'W', 'kW', 0);
-														rowData[0][el.key] = strVal[0] + " " + strVal[1];
+														rowData[0][el.key] = el.key.startsWith("reactive") ? (strVal[0] + " " + el.suffix) : (strVal[0] + " " + strVal[1]);
 													} else if( el.key.match('accumActiveEnergy') ){
 														// Unit: Wh => MWh
 														// Unit: Wh => kWh:(round), Wh, MWh, GWh
@@ -2784,7 +2771,7 @@
 													} else if(el.suffix.match('%') || el.key.match('temperature') || el.key.match("irradiationPoa") ) {
 														// Unit: percentage, celsius, meter square
 														rowData[0][el.key] = displayNumberFixedDecimal(value, el.suffix, 3, 2)[0] + " " + el.suffix;
-													} else {
+													}  else {
 														rowData[0][el.key] = value;
 													}
 												}
@@ -2803,6 +2790,7 @@
 											tableArray = tableArray.concat(rowData);
 										}
 									}
+
 								}
 							}
 						});
@@ -2813,7 +2801,6 @@
 							$.map(el, function(element, key) {
 								let textValue = element.value;
 								let suffix = element.suffix;
-
 								if(textValue != '-' && !isEmpty(textValue)) {
 									if(element.reducer == 'avg') {
 										textValue = (textValue / element.cnt);
@@ -2857,7 +2844,6 @@
 						$('#typeList').find('.' + dvcType).find('.alert-icon .inv-normal span').html(operationNormal);
 						$('#typeList').find('.' + dvcType).find('.alert-icon .inv-error span').html(operationError);
 						$('#typeList').find('.' + dvcType).find('.alert-icon .inv-alert span').html(operationAlert);
-
 						setMakeList(tableArray, 'table_' + dvcType, {'dataFunction': {'operation': setOperation}});
 					});
 					$("#loadingCircle").hide();
@@ -3080,7 +3066,7 @@
 												} else {
 													if( el.key.match('activePower') || el.key.match('dcPower') ) {
 														let strVal = displayNumberFixedUnit(value, 'W', 'kW', 0);
-														rowData[0][el.key] = strVal[0] + " " + strVal[1];
+														rowData[0][el.key] = el.key.startsWith("reactive") ? (strVal[0] + " " + el.suffix) : (strVal[0] + " " + strVal[1]);
 													} else if( el.key.match('accumActiveEnergy') ){
 														// Unit: Wh => kWh:(round), Wh, MWh, GWh
 														let rounded = Math.round(value);
@@ -4090,8 +4076,8 @@
 							
 							if (i + 1 == nowMonth) {
 								totalMonthEnergy = chartItems1[d].energy / 1000;
-								let numOfDays = today.getDate() - 1;
-								let monthlyGenHr = totalMonthEnergy ? (Math.round(totalMonthEnergy / itemChartCapacity / numOfDays * 100) / 100) : "-";
+
+								let monthlyGenHr = (!isEmpty(totalMonthEnergy) && totalMonthEnergy != 0 ) ? (Math.round(totalMonthEnergy / itemChartCapacity / today.getDate() * 100) / 100) : "-";
 								$('#monthGenHours').html('<span class="pv">' + monthlyGenHr  + '</span><em>hrs</em>');
 							}
 							matchMonth = true;
@@ -4239,10 +4225,10 @@
 
 			if(!isEmpty(searchOption)){
 				targetDate = new Date(d.getTime() - ((searchOption-1) * 24 * 60 * 60 * 1000));
-				startDate = Date.UTC(targetDate.getFullYear(), targetDate.getMonth() , targetDate.getDay());
+				startDate = Date.UTC(targetDate.getFullYear(), targetDate.getMonth() , targetDate.getDate());
 			} else {
 				targetDate = new Date(d.getTime() - (30 * 24 * 60 * 60 * 1000));
-				startDate = Date.UTC(targetDate.getFullYear(), targetDate.getMonth() , targetDate.getDay());
+				startDate = Date.UTC(targetDate.getFullYear(), targetDate.getMonth() , targetDate.getDate());
 			}
 
 			dailySolarTrendChart.addSeries({
@@ -4256,7 +4242,6 @@
 				pointStart: startDate,
 				pointInterval: (24 * 60 * 60 * 1000)
 			});
-
 
 			dailySolarTrendChart.addSeries({
 				name: '<fmt:message key="smain.irradiance" />',
@@ -4279,12 +4264,6 @@
 			// console.log("formattedDate31List===", formattedDate31List);
 			
 			dailySolarTrendChart.update({
-				xAxis: [
-					{
-						format: '{value:%m/%d}',
-						tickInterval: (24 * 60 * 60 * 1000)
-					}
-				],
 				yAxis: [
 					{
 						title:{ text: "kWh" },
@@ -4294,7 +4273,14 @@
 						title:{ text: "W/m\xB2" },
 						// max: dailyInvMaxVal
 					},
-				],	
+				],
+				// plotOptions: {
+				// 	series: {
+				// 		pointStart: startDate,
+				// 		pointInterval: 24 * 60 * 60 * 1000
+				// 	}
+				// },
+
 			});
 
 			dailySolarTrendChart.isDirtyBox = true;
@@ -5334,12 +5320,12 @@
 				if(found > -1) {
 					let tempDate = Date.UTC(Number(String(item.basetime).substring(0, 4)), Number(String(item.basetime).substring(4, 6)), Number(String(item.basetime).substring(6, 8)) );
 					if(option == "energy"){
-						dateList[found] = [tempDate, item.energy];
-						// dateList[found] = item.energy;
+						// dateList[found] = [tempDate, item.energy];
+						dateList[found] = item.energy;
 					}
 					if(option == "irradiationPoa"){
-						dateList[found] = [tempDate, Math.round(item.sensor_solar.irradiationPoa)];
-						// dateList[found] = Math.round(item.sensor_solar.irradiationPoa);
+						// dateList[found] = [tempDate, Math.round(item.sensor_solar.irradiationPoa)];
+						dateList[found] = Math.round(item.sensor_solar.irradiationPoa);
 					}
 				}
 			});
@@ -5363,14 +5349,13 @@
 				});
 			}
 		}
-
 		return dateList;
 	}
 
 	function setExportFileName(){
 		let d = new Date();
 		let tempDate = d.format("yyyyMMddHHmmss");
-		let newName = sList[0].name.replace(/\s/g, "") + "_" + "<fmt:message key='smain.DownloadName.dayDev' />" + "_" + tempDate;
+		let newName = sList[0].name.replace(/\s/g, "") + "_" + tempDate;
 		return newName
 	}
 

@@ -190,8 +190,11 @@
 						let found = submitRulesData.findIndex( x => x.definition_id === item.id);
 						if(found > -1){
 							if(!isEmpty(option)){		
-								str += '<li data-value="' + item.id + '" data-schedule-name="' + submitRulesData[found].batchJobDefinition.name 
-								+ '" data-definition-id="' + submitRulesData[found].definition_id + '"><a href="#">' + submitRulesData[found].batchJobDefinition.name + '</a></li>'
+								str += '<li data-value="' + submitRulesData[found].id 
+									+ '" data-definition-id="' + submitRulesData[found].definition_id 
+									+ '" data-schedule-name="' + submitRulesData[found].batchJobDefinition.name 
+									+ '"><a href="#">' + submitRulesData[found].batchJobDefinition.name 
+									+ '</a></li>'
 							}
 						} else {
 							// console.log("NO matching definition_id from submit rules data====", item)
@@ -231,17 +234,7 @@
 				// 3. refresh rendering after form submission => NO update on Schedule dropdown list
 				$.ajax(optionList[1]).done(function (json, textStatus, jqXHR) {
 					$('#scheduleTable').DataTable().destroy();
-					getSubmitRulesData(json);
-					let target = $('#scheduleList').prev().text();
-					let td = $('#scheduleTable tbody td:nth-of-type(3)');
-
-					td.each(function(index, el){
-						if($(el).text().startsWith(target)){
-							let closestTr = $(el).parents().closest("tr");
-							closestTr.addClass("selected").find("input[type='checkbox']").prop("checked", true);
-
-						}
-					})
+					getSubmitRulesData(json, "selected");
 					// getLogData(definitionData);
 				}).fail(function (jqXHR, textStatus, errorThrown) {
 					console.log("fail==", jqXHR)
@@ -252,7 +245,7 @@
 	}
 
 	// function getSubmitRulesData(definitionData, submitRulesData) {
-	function getSubmitRulesData(submitRulesData) {
+	function getSubmitRulesData(submitRulesData, option) {
 		// console.log("submitRulesData===", submitRulesData);
 	
 		var scheduleTable = $('#scheduleTable').DataTable({
@@ -278,7 +271,7 @@
 					"aTargets": [ 0 ],
 					"bSortable": false,
 					"orderable": false
-				},
+				}
 			],
 			"aoColumns": [
 				{
@@ -363,14 +356,26 @@
 			// every time DataTables performs a draw
 			drawCallback: function (settings) {
 				$('#scheduleTable_wrapper').addClass('mb-10');
-			}
+			},
+			// createdRow:  function (row, data, dataIndex, cells) {
+			// 	if(!isEmpty(option)){
+			// 		let targetVal = $('#scheduleList').prev().data("value");
+			// 		// console.log("targetVal---", targetVal);
+			// 		if(targetVal == data.id) {
+			// 			row.select();
+			// 			// $(row).addClass("selected");
+			// 			$(row).find("input[type='checkbox']").prop("checked", true);
+			// 		}
+			// 	}
+			// }
 		}).on("select", function(e, dt, type, indexes) {
 			let btn = $("#btnGroup").find("button");
 			let btnLink = $("#btnGroup").find("a");
+
+			btnLink.prop("disabled", false).removeClass("disabled");
 			btn.each(function(index, element){
 				if(index === 1){
 					$(this).prop("disabled", false).contents().get(0).nodeValue = "수정";
-					btnLink.prop("disabled", false).removeClass("disabled");
 				}
 				if($(this).is(":disabled")){
 					$(this).prop("disabled", false);
@@ -384,10 +389,9 @@
 		}).on("deselect", function(e, dt, type, indexes) {		
 			let btn = $("#btnGroup").find(".btn-type03");
 			let btnLink = $("#btnGroup").find("a");
+
+			btnLink.prop("disabled", true).addClass("disabled");
 			btn.each(function(index, element){
-				if(index === 1){
-					btnLink.prop("disabled", true).addClass("disabled");
-				}
 				if(!$(this).is(":disabled")){
 					$(this).prop("disabled", true);
 				}
@@ -397,6 +401,17 @@
 			// $("#getLogBtn").prop("disabled", true);
 			// console.log("dt---", scheduleTable[ type ]( indexes ).nodes())
 		}).columns.adjust().draw();
+
+		if(!isEmpty(option)){
+			scheduleTable.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
+				let data = this.data();
+				let targetVal = $('#scheduleList').prev().data("value");
+				if(targetVal == data.id) {
+					this.select();
+					$(this).find("input[type='checkbox']").prop("checked", true);
+				}
+			});
+		}
 
 		$('#scheduleTable').find("input:checkbox").on('click', function() {
 			console.log("clicking0000")
@@ -560,7 +575,7 @@
 							let trimmed1 = full.executed_command.substring(0, 51) + ' ...'
 							str1 = `
 								<div class="flex-wrapper">
-									<span>${'${ trimmed1 }'}&ensp;<a href="#" role="button" data-toggle="popover" data-placement="bottom" rel="popover" onclick='return false' onmouseover="updateInfo('detail', null, this)" class="text-link">more</a></span>					
+									<span>${'${ trimmed1 }'}&ensp;<a href="#" role="button" data-toggle="popover" data-placement="bottom" rel="popover" onclick='return false' onmouseover="updateInfo('detail', this)" class="text-link">more</a></span>					
 									<button type="button" class="text-link" onclick='copyText(this, "executed_command")'>복사</button>
 								</div>`
 						} else {
@@ -578,7 +593,7 @@
 							let trimmed2 = full.stdout.substring(0, 51) + ' ...'
 							str2 = `
 								<div class="flex-wrapper">
-									<span>${'${ trimmed2 }'}&ensp;<a href="#" role="button" data-toggle="popover" data-placement="bottom" rel="popover" onclick='return false' onmouseover="updateInfo('detail', null, this)" class="text-link">more</a></span>
+									<span>${'${ trimmed2 }'}&ensp;<a href="#" role="button" data-toggle="popover" data-placement="bottom" rel="popover" onclick='return false' onmouseover="updateInfo('detail', this)" class="text-link">more</a></span>
 									<button type="button" class="text-link" onclick='downloadLog(event, this, "stdout")'>다운로드</button>
 								</div>`
 						} else {
@@ -674,7 +689,7 @@
 		});
 	}
 	
-	function updateInfo(option, callback, popOverLink){
+	function updateInfo(option, popOverLink){
 		let form = $("#updateScheduleForm");
 		let required = form.find(".asterisk");
 		let addBtn = $("#addScheduleBtn");
@@ -759,8 +774,6 @@
 				});
 
 				let popoverLink = $("#logTable td a.text-link");
-				console.log("updateInfo===",option);
-		
 
 				$(popoverLink).on('mouseover', function (e) {
 					$('[data-toggle="popover"]').each(function () {
@@ -829,8 +842,8 @@
 		}
 	}
 
-	function submitSchedule(event, self) {
-		event.preventDefault();
+	function updateSubmitSchedule(e, self) {
+		e.preventDefault();
 
 		let elAttr = !isEmpty(self) ? $(elAttr).is("a") : null;
 		let newScheduleCycle = $("#scheduleCycle").val().replaceAll("\\s+$", "");
@@ -976,106 +989,117 @@
 			let tr = $("#scheduleTable").find("tbody tr.selected");
 			let rowData = dTable.row(tr).data();
 
-			if(elAttr == true) {
-			// 2-A. Add to a BATCH QUEUE: RUN NOW
-				if(isEmpty(obj.definition_id) || isEmpty(submitRulesId)) {
-					$("#isRequiredMissing").removeClass("hidden");
-					setTimeout(function(){
-						$("#isRequiredMissing").addClass("hidden");
-					}, 1500);
-					return false;
-				}
 
-				let queObj = {
-					definition_id: obj.definition_id,
-					submit_rule_id: submitRulesId,
-					was_manual_submit: 1,
-					command: rowData.batchJobDefinition.command,
-					server_group_id: rowData.batchJobDefinition.server_group_id,
-					priority: rowData.priority
-				};
+			let modal = $("#comDeleteModal");
+			let confirmMsg = $("#comDeleteSuccessMsg");
+			let comDeleteBtn = $("#comDeleteBtn");
+			elAttr == true ? confirmMsg.text("즉시 실행을 계속 진행 하시겠습니까?") : confirmMsg.text("배치 스케줄 수정을 계속 진행 하시겠습니까?");
+			comDeleteBtn.prop("disabled", false);
+			modal.find(".modal-body").hide();
+			modal.modal("show");
 
-				if(!isEmpty(newCpuVol)){
-					queObj.cpu = newCpuVol;
-				} else {
-					$("#hasCpu").parent().removeClass("hidden");
-					setTimeout(function(){
-						$("#hasCpu").parent().addClass("hidden");
-					}, 1200);
-					return false;
-				}
-
-				if(!isEmpty(newRamVol)){
-					queObj.mem = newRamVol;
-				} else {
-					$("#hasRam").parent().removeClass("hidden");
-					setTimeout(function(){
-						$("#hasRam").parent().addClass("hidden");
-					}, 1200);
-					return false;
-				}
-
-				if(!isEmpty(newGpuVol)){
-					queObj.gpu = newGpuVol;
-				} else {
-					$("#hasGpu").parent().removeClass("hidden");
-					setTimeout(function(){
-						$("#hasGpu").parent().addClass("hidden");
-					}, 1200);
-					return false;
-				}
-
-				let queueOpt = {
-					url: apiHost + "/batch-job-queues",
-					type: "post",
-					async: true,
-					dataType: 'json',
-					contentType: "application/json",
-					data: JSON.stringify(queObj)
-				}
-
-				$.ajax(queueOpt).done(function (json, textStatus, jqXHR) {
-					showAjaxResultModal("ajaxResultModal", null, "1", resultSuccessText, 1600);
-					getData("refresh");
-				}).fail(function (jqXHR, textStatus, errorThrown) {
-					let errorMsg = resultFailText + "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText;
-					showAjaxResultModal("ajaxResultModal", null, "0", errorMsg);
-				});	
-			} else {
-			// 2-B. Edit schedule info
-				if(isEmpty(submitRulesId)) return false;
-				
-				if(rowData.batchJobDefinition.is_distribution_needed != newOptionDistributed ) {
-					obj.batchJobDefinition = {
-						is_distribution_needed: newOptionDistributed
+			comDeleteBtn.on("click", function(){
+				modal.modal("hide");
+				if(elAttr == true) {
+				// 2-A. Add to a BATCH QUEUE: RUN NOW
+					if(isEmpty(obj.definition_id) || isEmpty(submitRulesId)) {
+						$("#isRequiredMissing").removeClass("hidden");
+						setTimeout(function(){
+							$("#isRequiredMissing").addClass("hidden");
+						}, 1500);
+						return false;
 					}
-				}
-				
-				if(rowData.args != newArgumentParam){
-					obj.args = newArgumentParam;
-				}
-				if(rowData.schedule != newScheduleCycle){
-					obj.schedule = newScheduleCycle;
-				}
-				
-				let scheduleOption = {
-					url: apiHost + "/batch-job-submit-rules/" + submitRulesId,
-					type: "patch",
-					async: true,
-					dataType: 'json',
-					contentType: "application/json",
-					data: JSON.stringify(obj)
-				}
 
-				$.ajax(scheduleOption).done(function (json, textStatus, jqXHR) {
-					showAjaxResultModal("ajaxResultModal", null, "1", resultSuccessText, 1600);
-					getData("refresh");
-				}).fail(function (jqXHR, textStatus, errorThrown) {
-					let errorMsg = resultFailText + "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText;
-					showAjaxResultModal("ajaxResultModal", null, "0", errorMsg);
-				});
+					let queObj = {
+						definition_id: obj.definition_id,
+						submit_rule_id: submitRulesId,
+						was_manual_submit: 1,
+						command: rowData.batchJobDefinition.command,
+						server_group_id: rowData.batchJobDefinition.server_group_id,
+						priority: rowData.priority
+					};
 
-			}
+					if(!isEmpty(newCpuVol)){
+						queObj.cpu = newCpuVol;
+					} else {
+						$("#hasCpu").parent().removeClass("hidden");
+						setTimeout(function(){
+							$("#hasCpu").parent().addClass("hidden");
+						}, 1200);
+						return false;
+					}
+
+					if(!isEmpty(newRamVol)){
+						queObj.mem = newRamVol;
+					} else {
+						$("#hasRam").parent().removeClass("hidden");
+						setTimeout(function(){
+							$("#hasRam").parent().addClass("hidden");
+						}, 1200);
+						return false;
+					}
+
+					if(!isEmpty(newGpuVol)){
+						queObj.gpu = newGpuVol;
+					} else {
+						$("#hasGpu").parent().removeClass("hidden");
+						setTimeout(function(){
+							$("#hasGpu").parent().addClass("hidden");
+						}, 1200);
+						return false;
+					}
+
+					let queueOpt = {
+						url: apiHost + "/batch-job-queues",
+						type: "post",
+						async: true,
+						dataType: 'json',
+						contentType: "application/json",
+						data: JSON.stringify(queObj)
+					}
+
+					$.ajax(queueOpt).done(function (json, textStatus, jqXHR) {
+						showAjaxResultModal("ajaxResultModal", null, "1", resultSuccessText, 1600);
+						getData("refresh");
+					}).fail(function (jqXHR, textStatus, errorThrown) {
+						let errorMsg = resultFailText + "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText;
+						showAjaxResultModal("ajaxResultModal", null, "0", errorMsg);
+					});	
+				} else {
+				// 2-B. Edit schedule info
+					if(isEmpty(submitRulesId)) return false;
+					
+					if(rowData.batchJobDefinition.is_distribution_needed != newOptionDistributed ) {
+						obj.batchJobDefinition = {
+							is_distribution_needed: newOptionDistributed
+						}
+					}
+					
+					if(rowData.args != newArgumentParam){
+						obj.args = newArgumentParam;
+					}
+					if(rowData.schedule != newScheduleCycle){
+						obj.schedule = newScheduleCycle;
+					}
+					
+					let scheduleOption = {
+						url: apiHost + "/batch-job-submit-rules/" + submitRulesId,
+						type: "patch",
+						async: true,
+						dataType: 'json',
+						contentType: "application/json",
+						data: JSON.stringify(obj)
+					}
+
+					$.ajax(scheduleOption).done(function (json, textStatus, jqXHR) {
+						showAjaxResultModal("ajaxResultModal", null, "1", resultSuccessText, 1600);
+						getData("refresh");
+					}).fail(function (jqXHR, textStatus, errorThrown) {
+						let errorMsg = resultFailText + "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText;
+						showAjaxResultModal("ajaxResultModal", null, "0", errorMsg);
+					});
+				}
+			});
 		}
 	};
 
@@ -1297,10 +1321,10 @@
 				<div class="row pt-20">
 					<div class="col-12">
 						<div id="btnGroup" class="flex-wrapper">
-							<a href="#" class="btn-type04 text-blue disabled" onclick="submitSchedule(event, this)"  disabled>즉시 실행</a>
+							<a href="#" class="btn-type04 text-blue disabled" onclick="updateSubmitSchedule(event, this)"  disabled>즉시 실행</a>
 							<div class="btn-wrap-type02"><!--
 							--><button type="button" class="btn-type03" onclick="updateInfo('delete')" disabled>삭제</button><!--
-							--><button type="button" id="addScheduleBtn" class="btn-type" onclick="submitSchedule(event)" disabled>추가</button><!--
+							--><button type="button" id="addScheduleBtn" class="btn-type" onclick="updateSubmitSchedule(event)" disabled>추가</button><!--
 						--></div>
 						</div>
 					</div>
