@@ -2891,6 +2891,7 @@
 								
 								if(!isEmpty(result) && result[0].items.length>0){
 									let temp = result[0].items;
+								
 									let colorArr = [
 										"var(--powder-blue)",
 										"var(--turquoise)",
@@ -2910,14 +2911,16 @@
 									];
 
 									let hourList = [...Array(24)].map((item, index) => {
-										let found = temp.findIndex( x => Number(String(x.basetime).substring(8, 10)) == index);
+										let found = temp.findIndex( x => {
+											let baseTime = String(x.basetime).substring(8, 10);
+											if(baseTime == index) return Number(baseTime);
+										});
+
 										if(found > -1){
-											let val = temp[found].energy;
-											if(!isEmpty(val)) {
-												return Number(displayNumberFixedUnit(val, 'Wh', 'kWh', 0)[0]);
-											}
+											console.log("found==", found)
+											return temp[found].energy ? temp[found].energy/1000 : 0;
 										} else {
-											return 0;
+											return null;
 										}
 									});
 
