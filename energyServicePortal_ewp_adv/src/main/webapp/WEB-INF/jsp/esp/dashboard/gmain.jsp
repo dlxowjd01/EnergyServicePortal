@@ -422,7 +422,7 @@
 																		<a href="javascript:void(0);"
 																		   onclick="pageMove('[sid]', 'alarm')">
 																			<p class="tx"><fmt:message key="gdash.7.num_no_ack"/> :
-																				<span>[alarmTotal] 건</span></p>
+																				<span>[alarmTotal] <fmt:message key='gmain.cases' /></span></p>
 																		</a>
 																			<%--<p class="tx">2020-02-10 12:00:01 데이터 disconnected</p>--%>
 																			<%--<p class="tx">2020-02-09 11:41:26 인버터#1 이상 감지</p>--%>

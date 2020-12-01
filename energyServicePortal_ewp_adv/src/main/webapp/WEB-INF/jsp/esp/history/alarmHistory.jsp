@@ -619,7 +619,7 @@
 			}
 		} else {
 			let confirm = "";
-			if ($(':checkbox[name="confirm"]:checked').next('label').text() === '미확인') {
+			if ($(':checkbox[name="confirm"]:checked').next('label').text() === '<fmt:message key="alarm.confirm.N" />') {
 				confirm = false;
 			} else {
 				confirm = true;
@@ -661,7 +661,7 @@
 					data[i].message = ((isEmpty(temp.message)) ? "" : temp.message); // 알람메시지
 					
 					if (temp.confirm == false) {
-						data[i].confirm  = '<a href="javascript:alarmConfirm(\'' + temp.alarm_id + '\',\'' + temp.ticket_id + '\');" class="table-link" >미확인</a>'; // 알람상태
+						data[i].confirm  = '<a href="javascript:alarmConfirm(\'' + temp.alarm_id + '\',\'' + temp.ticket_id + '\');" class="table-link" ><fmt:message key="alarm.confirm.N" /></a>'; // 알람상태
 					} else {
 						data[i].confirm = '확인'; // 알람상태
 					}
@@ -669,7 +669,7 @@
 					if (!(isEmpty(temp.status))) {
 						data[i].status = '<a href="javascript:updateAck(\'' + temp.alarm_id + '\',\'' + temp.ticket_id + '\');" class="table-link" >' + statusTemplate[temp.status] + '</a>'; // 조치상태
 					} else {
-						data[i].status = '<a href="javascript:createAck(\'' + temp.alarm_id + '\');" class="table-link" >신규</a>'; // 조치상태
+						data[i].status = '<a href="javascript:createAck(\'' + temp.alarm_id + '\');" class="table-link" ><fmt:message key="alarm.popup.status.new" /></a>'; // 조치상태
 					}
 					
 					if (!(isEmpty(temp.status_timestamp))) {
@@ -1433,7 +1433,7 @@
 						type: 'column',
 						stack: k,
 						tooltip: {
-							valueSuffix: '건'
+							valueSuffix: '<fmt:message key="alarm.cases" />'
 						},
 						color: colorArr[num],
 						data: val
@@ -1446,7 +1446,7 @@
 						type: 'column',
 						stack: k,
 						tooltip: {
-							valueSuffix: '건'
+							valueSuffix: '<fmt:message key="alarm.cases" />'
 						},
 						color: colorArr[key],
 						data: val
@@ -1529,7 +1529,7 @@
 						color: typeColorArr[num2],
 						y: val
 					};
-					liStr = '<li data-alarm="' + (num2+1) + '">' + key + '<span class="legend-value">' + val + '건</span></li>';
+					liStr = '<li data-alarm="' + (num2+1) + '">' + key + '<span class="legend-value">' + val + '<fmt:message key="alarm.cases" /></span></li>';
 
 				} else {
 					$temp = {
@@ -1540,7 +1540,7 @@
 						color: colorArr[colorNum],
 						y: val
 					};
-					liStr = '<li data-alarm="' + enName + '">' + key + '<span class="legend-value">' + val + '건</span></li>';
+					liStr = '<li data-alarm="' + enName + '">' + key + '<span class="legend-value">' + val + '<fmt:message key="alarm.cases" /></span></li>';
 				}
 				num2++;
 				pieSeriesData.push($temp);
@@ -1615,7 +1615,7 @@
 					width: 1
 				}],
 				title: {
-					text: '건',
+					text: '<fmt:message key="alarm.cases" />',
 					align: 'low',
 					rotation: 0,
 					y: 25,
@@ -1656,7 +1656,7 @@
 						let displayValue = displayNumberFixedDecimal(point.y, '', 3, 0);
 						// let displayValue = [point.y, "unit"];
 						let displayNumber = displayValue[0] == undefined ? '' : displayValue[0];
-						let displayUnit = displayValue[1] == undefined ? '' : '건';
+						let displayUnit = displayValue[1] == undefined ? '' : '<fmt:message key="alarm.cases" />';
 						return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + displayNumber + displayUnit;
 					}, '<b>' + dateFormat(this.points[0].point.name) + '</b>');
 				},

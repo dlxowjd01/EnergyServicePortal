@@ -5162,7 +5162,7 @@
 
 				if(energyData2.length>0){
 					hourlySolarChart.addSeries({
-						name: '<fmt:message key="smain.CapacityFactor" />',
+						name: '<fmt:message key="smain.forecasts" />',
 						type: 'column',
 						color: 'var(--white25)',
 						tooltip: {

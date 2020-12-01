@@ -254,7 +254,7 @@
 						deviceStr +=
 							`   <li>
 									<a href="javascript:void(0);" tabindex="-1">
-										<input id="device_dashboard_${'${targetSite[\'sid\']}'}" name="device" type="checkbox" value="${'${targetSite[\'sid\']}'}" data-sid="${'${targetSite[\'sid\']}'}" data-name="${'${targetSite[\'name\']}'}_대시보드">
+										<input id="device_dashboard_${'${targetSite[\'sid\']}'}" name="device" type="checkbox" value="${'${targetSite[\'sid\']}'}" data-sid="${'${targetSite[\'sid\']}'}" data-name="${'${targetSite[\'name\']}'}_<fmt:message key='pvGen.dashboard' />">
 										<label for="${'${targetSite[\'sid\']}'}"><span></span><fmt:message key='pvGen.dashboard' /></label>
 									</a>
 								</li>
@@ -263,7 +263,7 @@
 						deviceStr +=
 							`   <li>
 									<a href="javascript:void(0);" tabindex="-1">
-										<input id="device_billing_${'${targetSite[\'sid\']}'}" name="device" type="checkbox" value="${'${targetSite[\'sid\']}'}" data-sid="${'${targetSite[\'sid\']}'}" data-name="${'${targetSite[\'name\']}'}_매전">
+										<input id="device_billing_${'${targetSite[\'sid\']}'}" name="device" type="checkbox" value="${'${targetSite[\'sid\']}'}" data-sid="${'${targetSite[\'sid\']}'}" data-name="${'${targetSite[\'name\']}'}_<fmt:message key='pvGen.sales' />">
 										<label for="${'${targetSite[\'sid\']}'}"><span></span><fmt:message key='pvGen.sales' /></label>
 									</a>
 								</li>
