@@ -82,7 +82,7 @@
 					title: '<fmt:message key="yieldReport.download" />',
 					data: 'file_link',
 					render: function (data, type, full, rowIndex) {
-						return '<button type="button" class="text-file" onclick="' + data + '">EXCEL</button>';
+						return '<button type="button" class="btn-type-sm btn-type03" onclick="' + data + '">EXCEL</button>';
 					},
 					sortable: false,
 					className: 'dt-center'
@@ -122,7 +122,7 @@
 			],
 			select: {
 				style: 'multi',
-				selector: 'td:first-child > :checkbox, tr'
+				selector: 'td:first-child > :checkbox, tr > td:not(:has(button))'
 			},
 			language: {
 				emptyTable: '조회된 데이터가 없습니다.',

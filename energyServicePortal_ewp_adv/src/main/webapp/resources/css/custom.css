@@ -8094,16 +8094,19 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 	width: 24px;
 	height: 24px;
 	background: none;
-	border: 0;
+	border: 1px solid var(--white60);
+	border-radius: 4px;
 	text-indent: -9999px;
 }
 
-.btn-file.down {
-	background: var(--btn-download) no-repeat;
+.btn-type-sm.btn-file.down {
+	background: var(--btn-download) no-repeat var(--active);
+	background-position: center;
 }
 
-.btn-file.up {
-	background: var(--btn-upload) no-repeat;
+.btn-type-sm.btn-file.up {
+	background: var(--btn-upload) no-repeat var(--active);
+	background-position: center;
 }
 
 .text-file {
