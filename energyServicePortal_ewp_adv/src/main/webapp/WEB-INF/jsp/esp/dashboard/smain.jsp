@@ -2917,7 +2917,6 @@
 										});
 
 										if(found > -1){
-											console.log("found==", found)
 											return temp[found].energy ? temp[found].energy/1000 : 0;
 										} else {
 											return null;

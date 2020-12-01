@@ -354,6 +354,23 @@
 		overflow: hidden !important;
 	}
 
+	.row.header-wrapper {
+		height: auto;
+	}
+
+	.row.header-wrapper .time.fr {
+		float: none;
+		text-align: left;
+	}
+
+	.row.header-wrapper .time.fr > span {
+		margin-left: 0;
+	}
+
+	.chart-wrapper .sum-list {
+		width: 80%;
+	}
+
 	.g-menu .menu-list {
 		margin: 12px 0 0 0;
 	}
@@ -379,7 +396,7 @@
 	.g-menu .menu-list>li>a:before {
 		content: '';
 		display: block;
-		margin-right: 26px;
+		margin-right: 20px;
 		width: 24px;
 		height: 45px;
 		filter: invert(0.4);
@@ -469,7 +486,7 @@
 		font-size: 14px;
 		color: var(--white60);
 		display: block;
-		padding-left: 88px;
+		padding-left: 70px;
 	}
 
 	.g-menu .sub-menu-list li a~div a {
@@ -582,7 +599,7 @@
 		position: absolute;
 		display: block;
 		top: 0;
-		left: 70px;
+		left: 60px;
 	}
 
 	.all-menu .menu-group {
@@ -614,7 +631,11 @@
 	}
 
 	.all-menu>a:after {
-		margin: -17px 0 0 45px;
+		margin: -17px 0 0 40px;
+	}
+
+	html[lang="en"] .all-menu>a:after {
+		margin: -17px 0 0 55px;
 	}
 
 	.all-menu .menu-group {

@@ -926,7 +926,6 @@
 						} else if(liData.match("currentR") || liData.match("currentS") || liData.match("currentT")) {
 							dValue = tempVal[0] != '-' ? tempVal[0] + ' ' + 'A' : tempVal[0];
 						} else if(liData.match("temperature")){
-							console.log("temperature==", liData);
 							dValue = tempVal[0] + suffix;
 						} else {
 							dValue = tempVal[0] != '-' ? tempVal[0] + ' ' + tempVal[1] : tempVal[0];

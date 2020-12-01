@@ -845,7 +845,7 @@
 	function updateSubmitSchedule(e, self) {
 		e.preventDefault();
 
-		let elAttr = !isEmpty(self) ? $(elAttr).is("a") : null;
+		let elAttr = $(self).is("a") ? $(self).is("a") : null;
 		let newScheduleCycle = $("#scheduleCycle").val().replaceAll("\\s+$", "");
 		let newOptionDistributed = $("input[name='option_distributed']:checked").val();
 		let newOptionHold = Number($("input[name='option_hold']:checked").val());
@@ -993,14 +993,14 @@
 			let modal = $("#comDeleteModal");
 			let confirmMsg = $("#comDeleteSuccessMsg");
 			let comDeleteBtn = $("#comDeleteBtn");
-			elAttr == true ? confirmMsg.text("즉시 실행을 계속 진행 하시겠습니까?") : confirmMsg.text("배치 스케줄 수정을 계속 진행 하시겠습니까?");
+			!isEmpty(elAttr) ? confirmMsg.text("즉시 실행을 계속 진행 하시겠습니까?") : confirmMsg.text("배치 스케줄 수정을 계속 진행 하시겠습니까?");
 			comDeleteBtn.prop("disabled", false);
 			modal.find(".modal-body").hide();
 			modal.modal("show");
 
 			comDeleteBtn.on("click", function(){
 				modal.modal("hide");
-				if(elAttr == true) {
+				if(!isEmpty(elAttr)) {
 				// 2-A. Add to a BATCH QUEUE: RUN NOW
 					if(isEmpty(obj.definition_id) || isEmpty(submitRulesId)) {
 						$("#isRequiredMissing").removeClass("hidden");
