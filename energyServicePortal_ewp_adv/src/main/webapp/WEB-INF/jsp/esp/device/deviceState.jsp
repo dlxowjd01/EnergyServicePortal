@@ -706,9 +706,6 @@
 											<a href="javascript:void(0);"></a>
 										</li>`;
 
-						if(el.dname == "공기청정기"){
-							console.log("deviceStr---", el.capacity)
-						}
 
 						deviceList.append(deviceStr);
 						if(index == 0) {

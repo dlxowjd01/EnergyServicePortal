@@ -348,7 +348,7 @@
 										<!-- [D] 상태별 배경 : 't1' or 't2' 클래스 추가 -->
 										<tr class="dbclickopen flag[INDEX]" data-sid="[sid]">
 											<td class="first-td">
-												<span class="status status-drv" title="[status]">[status]</span>
+												<span class="status [statusClass]" title="[status]">[status]</span>
 												<span class="status-bar"></span>
 											</td>
 											<td>[alarmError]</td>
@@ -488,6 +488,7 @@
 		var refreshMinInterval;
 		var refreshHourInterval;
 		var dashboardViewFlag = true;
+
 		if ($("#switchBtn").is(":checked")) {
 			target.eq(0).addClass("hidden").next().removeClass("hidden");
 			// $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
@@ -504,7 +505,7 @@
 					if ((minIntervalCount % 60) !== 0) {
 						minAjax();
 					}
-				}, 60 * 1000); //1분에 한번 현재혆황 & 알림 갱신
+				}, 60 * 1000); //1분에 한번 현재현황 & 알림 갱신
 			} else {
 				$('#errMsg').text("해당 그룹에 등록 된 사이트가 존재하지 않습니다.");
 				$('#errorModal').modal('show');
@@ -517,20 +518,23 @@
 
 		$('#switchBtn').on('click', function () {
 			if ($(this).is(':checked')) {
+			// B. TableView
 				// document.cookie = 'switch=checked; path=/';
 				setCookie("switch", "checked");
 				target.eq(0).addClass('hidden').next().removeClass('hidden');
 				$($.fn.dataTable.tables(true)).DataTable().columns.adjust();
 				getDashboardTable('gmainTable');
-				// clearInterval(refreshMinInterval);
-				// clearInterval(refreshHourInterval);
+				clearInterval(refreshMinInterval);
+				clearInterval(refreshHourInterval);
 			} else {
-				let pathName = window.location.pathname;
+			// A. DashboardView
 				target.eq(0).removeClass('hidden').next().addClass('hidden');
 				setCookie("switch", "");
 				// document.cookie = 'switch=; path=/';
 				
 				if (!isEmpty(siteList) && siteList.length > 0) {
+					let pathName = window.location.pathname;
+
 					if( pathName.includes('gmain') && dashboardViewFlag === true){
 						firstAjax();
 						refreshHourInterval = setInterval(firstAjax, 60 * 60 * 1000); // 한시간에 한번 화면갱신
@@ -540,10 +544,10 @@
 							if ((minIntervalCount % 60) !== 0) {
 								minAjax();
 							}
-						}, 60 * 1000); //1분에 한번 현재혆황 & 알림 갱신
+						}, 60 * 1000); //1분에 한번 현재현황 & 알림 갱신
 					} else {
 						if( pathName.includes('jmain')){
-							console.log("pathName===", pathName)
+
 							firstAjax();
 							refreshHourInterval = setInterval(firstAjax, 60 * 60 * 1000); // 한시간에 한번 화면갱신
 							// setInterval(() => firstAjax(), 60 * 60 * 1000); // 한시간에 한번 화면갱신
@@ -589,8 +593,6 @@
 			icon: pinSymbol(siteColor),
 		});
 		
-		console.log(operationText)
-
 		if (langStatus === "EN") {
 			operationText = operationText.replace(`정상`, `Normal`);
 			operationText = operationText.replace(`트립`, `Trip`);

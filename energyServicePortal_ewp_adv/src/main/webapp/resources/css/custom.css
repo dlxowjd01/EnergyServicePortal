@@ -4336,7 +4336,8 @@ input.inp[readonly]:focus {
 }
 
 .indiv.schedule-content {
-	min-height: 785px;
+	height: 830px;
+	overflow: auto;
 }
 
 .stit {
@@ -5636,6 +5637,7 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 	box-shadow: 0 1px 6px var(--box-shadow);
 	border-radius: 4px;
 	padding: 20px;
+	min-height: 60px;
 }
 
 .gm-style .gm-style-iw-c > div {
@@ -6076,22 +6078,22 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 	background: var(--status-drive) no-repeat center center;
 }
 
-/* 대기 */
-.gmain-wrap .status-hold,
-.gtbl-wrap-kpx .status.status-hold {
-	background: var(--status-hold) no-repeat center center;
-}
-
 /* 정지 */
 .gmain-wrap .status-stop,
 .gtbl-wrap-kpx .status-stop {
 	background: var(--status-stop) no-repeat center center;
 }
 
-/* 통신이상 */
+/* 트립: 이상 */
 .gmain-wrap .status-error,
 .gtbl-wrap-kpx .status-error {
 	background: var(--status-error) no-repeat center center;
+}
+
+/* 대기 (현재 미 사용) */
+.gmain-wrap .status-hold,
+.gtbl-wrap-kpx .status.status-hold {
+	background: var(--status-hold) no-repeat center center;
 }
 
 .gmain-wrap .icon-battery {
@@ -6125,7 +6127,7 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 .chart-wrapper2 .chart-top .ntit {
 	margin: 6px 0 20px;
 	font-size: 16px;
-	font-weight: bold;
+	font-weight: 500;
 }
 
 .chart-wrapper .sum-list {
@@ -7696,11 +7698,7 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 
 .di-bottom-sec .box-top {
 	width: auto;
-	height: 160px;
-}
-
-.di-bottom-sec .box-top .inchart {
-	height: 240px;
+	height: 110px;
 }
 
 .di-list li {
@@ -7737,7 +7735,7 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 }
 
 .di-text-box .tx span {
-	font-weight: 300;
+	font-weight: 500;
 	color: var(--salmon-pearl);
 }
 

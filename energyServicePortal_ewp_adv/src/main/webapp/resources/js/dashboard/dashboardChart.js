@@ -198,10 +198,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		lineColor: 'var(--grey)',
 		tickWidth: 1,
 		tickColor: 'var(--grey)',
-		plotLines: [{
-			color: 'var(--grey)',
-			width: 1
-		}],
+		gridLineColor: 'var(--white25)',
 		type: 'datetime',
 		dateTimeLabelFormats: {
 			millisecond: '%H:%M:%S.%L',
@@ -233,7 +230,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 	yAxis: [{
 		lineColor: 'var(--grey)',
 		tickColor: 'var(--grey)',
-		gridLineColor: 'var(--grey)',
+		gridLineColor: 'var(--white25)',
 		gridLineWidth: 1,
 		plotLines: [{
 			color: 'var(--grey)',
@@ -355,7 +352,9 @@ const dailyChart = Highcharts.chart('dailyChart', {
 	}
 });
 
-// 전날: bar chart option
+/**
+ * 전날: bar chart option
+ */
 const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 	chart: {
 		renderTo: 'typeSiteCurrent',
@@ -614,15 +613,12 @@ const siteListChart = (selector, seriesData, title) => {
 
 	let option = {
 		chart: {
-			marginTop: -50,
-			marginLeft: 0,
-			marginRight: 0,
-			// marginBottom: 20,
+			margin: [0,0,0,0],
 			backgroundColor: 'transparent',
 			renderTo: selector,
 			plotBorderWidth: 0,
 			plotShadow: false,
-			// height: 190
+			height: 180
 		},
 		navigation: {
 			buttonOptions: {
@@ -638,7 +634,7 @@ const siteListChart = (selector, seriesData, title) => {
 			// y: 200,
 			style: {
 				fontSize: '14px',
-				color: 'var(--grey)'
+				color: 'var(--white87)'
 			}
 		},
 		subtitle: {
@@ -662,9 +658,9 @@ const siteListChart = (selector, seriesData, title) => {
 				},
 				startAngle: -90,
 				endAngle: 90,
-				center: ['50%', '72%'],
+				center: ['50%', '51%'],
 				borderWidth: 0,
-				size: '100%'
+				size: '90%'
 			}
 		},
 		series: seriesData,

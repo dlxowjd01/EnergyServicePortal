@@ -1887,7 +1887,7 @@ const searchSite = function () {
 			let etc = 100 - activePercent;
 			let series = [{
 				type: 'pie',
-				innerSize: '50%',
+				innerSize: '70%',
 				name: '설비용량',
 				colorByPoint: true,
 				data: [{

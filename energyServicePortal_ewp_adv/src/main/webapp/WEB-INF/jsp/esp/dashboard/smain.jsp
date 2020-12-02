@@ -2754,9 +2754,27 @@
 													rowData[0][el.key] = "-";
 												} else {
 													if( el.key.match('activePower') || el.key.match('dcPower') ) {
-														// Unit: W => kW,  Wh => kWh, Var => no change
-														let strVal = displayNumberFixedUnit(value, 'W', 'kW', 0);
-														rowData[0][el.key] = el.key.startsWith("reactive") ? (strVal[0] + " " + el.suffix) : (strVal[0] + " " + strVal[1]);
+														let strVal = '';
+														if(el.key.startsWith("reactive")){
+															// console.log("el.key222==", el.key, "value===", value)
+														// Unit: Var => kVAR, mVAR, gVAR, tVAR)
+															if(value < 1000) {
+																// strVal = "-";
+															// } else if(value >= 0 && value < 1000) {
+																strVal = (strVal% 1 === 0) ? [value, "VAR"] : displayNumberFixedDecimal(value, 'VAR', 3, 2);
+															} else if(value >= 1000 && value < 1000000) {
+																strVal = displayNumberFixedUnit(value, 'VAR', 'kVAR', 0);
+															} else {
+																strVal = displayNumberFixedDecimal(value, 'VAR', 3, 2);
+																// console.log("strVal===", strVal)
+															}
+															// rowData[0][el.key] = strVal[0] + " " + strVal[1];
+														} else {
+														// Unit: W => kW,  Wh => kWh	
+															strVal = displayNumberFixedUnit(value, 'W', 'kW', 0);
+															// rowData[0][el.key] = strVal[0] + " " + strVal[1];
+														}
+														rowData[0][el.key] = strVal[0] + " " + strVal[1];
 													} else if( el.key.match('accumActiveEnergy') ){
 														// Unit: Wh => MWh
 														// Unit: Wh => kWh:(round), Wh, MWh, GWh
@@ -3067,8 +3085,22 @@
 													rowData[0][el.key] = '-';
 												} else {
 													if( el.key.match('activePower') || el.key.match('dcPower') ) {
-														let strVal = displayNumberFixedUnit(value, 'W', 'kW', 0);
-														rowData[0][el.key] = el.key.startsWith("reactive") ? (strVal[0] + " " + el.suffix) : (strVal[0] + " " + strVal[1]);
+														let strVal = "";
+														
+														if(el.key.startsWith("reactive")){
+															// console.log("el.key11111==", el.key, "value===", value)
+														// Unit: Var => kVAR, mVAR, gVAR, tVAR)
+															if(value >= 1000 && value < 1000000 ) {
+																strVal = displayNumberFixedUnit(value, 'VAR', 'kVAR', 0);
+																console.log("strVal==", strVal)
+															} else {
+																strVal = displayNumberFixedDecimal(value, 'VAR', 3, 2);
+															}
+														} else {
+														// Unit: W => kW,  Wh => kWh
+															strVal = displayNumberFixedUnit(value, 'W', 'kW', 0);
+														}
+														rowData[0][el.key] = strVal[0] + " " + strVal[1];
 													} else if( el.key.match('accumActiveEnergy') ){
 														// Unit: Wh => kWh:(round), Wh, MWh, GWh
 														let rounded = Math.round(value);
@@ -4078,9 +4110,13 @@
 							
 							if (i + 1 == nowMonth) {
 								totalMonthEnergy = chartItems1[d].energy / 1000;
-
-								let monthlyGenHr = (!isEmpty(totalMonthEnergy) && totalMonthEnergy != 0 ) ? (Math.round(totalMonthEnergy / itemChartCapacity / today.getDate() * 100) / 100) : "-";
-								$('#monthGenHours').html('<span class="pv">' + monthlyGenHr  + '</span><em>hrs</em>');
+								if(!isEmpty(chartItems1[d].energy) && itemChartCapacity>0){
+									let monthlyGenHr = String(Math.round(totalMonthEnergy / itemChartCapacity / today.getDate() * 100) / 100);
+									$('#monthGenHours').html('<span class="pv">' + monthlyGenHr  + '</span><em>hrs</em>');
+								} else {
+									monthlyGenHr = "-";
+									$('#monthGenHours').html('<span class="pv">-</span>');
+								}
 							}
 							matchMonth = true;
 						}
@@ -4607,7 +4643,7 @@
 										Object.entries(deviceData).map(di => {
 											const key = di[0];
 											const value = di[1];
-
+								
 											if(key == 'dcPower') {
 												itemDcPower += value;
 											} else if(key == 'activePower') {
@@ -4743,10 +4779,9 @@
 					});
 					pieChart.redraw();
 				} else {
-					$('#siteDcPower').text(displayNumberFixedUnit(itemDcPower, 'W', 'kW', 0)[0]);
-					$('#siteAcPower').text(displayNumberFixedUnit(itemAcPower, 'W', 'kW', 0)[0]);
-
-					let pie1Data = Math.round(itemEfficiency);
+					isEmpty(itemDcPower) ? $('#siteDcPower').html("-&nbsp;").next().text("") : $('#siteDcPower').html(displayNumberFixedUnit(itemDcPower, 'W', 'kW', 0)[0] + "&nbsp;").next().text("kW");
+					isEmpty(itemAcPower) ? $('#siteAcPower').html("-&nbsp;").next().text("") : $('#siteAcPower').html(displayNumberFixedUnit(itemAcPower, 'W', 'kW', 0)[0] + "&nbsp;").next().text("kW");
+					let pie1Data = Math.round(itemAcPower/itemCapacity * 100);
 					let pie2Data = 100 - pie1Data;
 
 					if(pieChart.series[0].data.length == 3){
@@ -4897,10 +4932,7 @@
 				interval: 'hour'
 			}
 		}
-		let siteCapacity = {
-			url: apiHost + "/config/sites?oid=" + oid +"&sid=" + siteId + "&addCapacity=true&includeDevices=false",
-			type: 'GET',
-		}
+
 		let energyData1 = new Array(24).fill(0);
 		let energyData2 = new Array(24).fill(0);
 		let energyData3 = new Array(24).fill(0);
@@ -4937,16 +4969,17 @@
 		if(isEmpty(option)){
 			let itemChartCapacity = 0;
 			let dayPvSum = 0;
-			$.when($.ajax(gen), $.ajax(foreGen), $.ajax(nowGen), $.ajax(siteCapacity))
-			.done(function (genData, foreGenData, nowGenData, capacityData) {
-				if (capacityData[1] == 'success') {
-					capacityData[0].forEach(data => {
-						let temp = data.capacities.gen ? displayNumberFixedUnit(data.capacities.gen, 'W', 'kW', 0)[0] : "-";
-						$('#centerTbody tr td:nth-child(1)').html(temp + ' ' + '<em> kW</em>');
-						$('#siteCapacity').html(temp + ' ');
-						itemChartCapacity = ( !isEmpty(data.capacities) && !isEmpty(data.capacities.gen) ) ? data.capacities.gen : 0;
-					});
-				}
+			$.when($.ajax(gen), $.ajax(foreGen), $.ajax(nowGen))
+			.done(function (genData, foreGenData, nowGenData) {
+				itemChartCapacity = sList[0].capacities.gen ? sList[0].capacities.gen : 0;
+				let temp = itemChartCapacity ? displayNumberFixedUnit(itemChartCapacity, 'W', 'kW', 0)[0] : "-";
+				if(temp == "-") {
+					$('#centerTbody tr td:nth-child(1)').html(temp);
+					$('#siteCapacity').html("-&nbsp;").next().text("");
+				} else {
+					$('#centerTbody tr td:nth-child(1)').html(temp + ' ' + '<em> kW</em>');
+					$('#siteCapacity').html(temp + "&nbsp;").next().text("kW");
+				} 
 
 				if (genData[1] == 'success') {
 					if (!isEmpty(genData[0].data) &&  Object.values(genData[0].data).flat()[0]["items"].length > 0) {

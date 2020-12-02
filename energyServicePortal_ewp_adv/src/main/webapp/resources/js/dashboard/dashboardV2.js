@@ -1312,17 +1312,17 @@ const searchSite = async function () {
 			} else {
 				searchSite = true;
 			}
-			
+
 			if(!isEmpty(operation)){
 				if (targetOperation && searchSite) {
-					
-					if (operation.includes('0')) {
+			
+					if (operation.includes(0)) {
 						site['status'] = '중지';
 						site['statusClass'] = 'status-stop';
-					} else if (operation.includes('1')) {
+					} else if (operation.includes(1)) {
 						site['status'] = '정상';
 						site['statusClass'] = 'status-drv';
-					} else if (operation.includes('2')) {
+					} else if (operation.includes(2)) {
 						site['status'] = '트립';
 						site['statusClass'] = 'status-error';
 					} else {
@@ -1506,17 +1506,17 @@ const searchSite = async function () {
 				let clusterStyles = [
 					{
 						textColor: 'black',
-						textSize: 15,
-						anchorText: [9, 16],
+						textSize: 16,
+						anchorText: [24, 32], // [yPos, xPos]
 						fontWeight: 'normal',
 						url: '/img/map_icons/cluster_blue.png',
-						height: 45,
-						width: 32
+						height: 64,
+						width: 64
 					},
 				];
 
 				let clusterOptions = {
-					gridSize: 45,
+					gridSize: 64,
 					styles: clusterStyles,
 					maxZoom: 15
 				};
@@ -1524,7 +1524,7 @@ const searchSite = async function () {
 				var markerCluster = new MarkerClusterer(map, markers, clusterOptions);
 				markerCluster.addMarkers(markers);
 
-				// google.maps.event.addListener(markerCluster, "clusteringend", function (c) {
+				// google.maps.event.addListener(markerCluster, "clusteringbegin", function (c) {
 				// 	let clusters = c.getClusters();
 				// 	clusters.forEach((item, index) => {
 
@@ -1537,7 +1537,6 @@ const searchSite = async function () {
 				// 			width: 32
 				// 		};
 				// 		let newUrl = [
-				// 			'/img/map_icons/cluster_grey.png',
 				// 			'/img/map_icons/cluster_blue.png',
 				// 			'/img/map_icons/cluster_orange.png',
 				// 			'/img/map_icons/cluster_red.png',
@@ -1605,7 +1604,7 @@ const searchSite = async function () {
 				let etc = capacity - activePower;
 				let series = [{
 					type: 'pie',
-					innerSize: '50%',
+					innerSize: '70%',
 					name: '설비용량',
 					colorByPoint: true,
 					data: [{
@@ -1616,7 +1615,7 @@ const searchSite = async function () {
 						},
 						y: activePower
 					}, {
-						color: 'var(--grey)',
+						color: 'var(--dove-gray)',
 						name: '미설비용량',
 						dataLabels: {
 							enabled: false

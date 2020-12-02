@@ -64,13 +64,12 @@ const displayNumberFixedDecimal = function(number, unit, intChipher, decimalChip
 	if(isEmpty(number)) {
 		return ['-', unit];
 	} else {
-		if (unit.match('원')) {
-			if (isEmpty(intChipher)) {
-				intChipher = 3;
+		if( (unit.match('W')) || (unit === 'VAR') ) {
+			if(isEmpty(intChipher)) {
+				decimalChipher = 3;
 			}
-
-			if (isEmpty(decimalChipher)) {
-				decimalChipher = 0;
+			if(isEmpty(decimalChipher)) {
+				decimalChipher = 2;
 			}
 
 			/* 시작 unit 단위가 w보다 클경우 */
@@ -83,15 +82,21 @@ const displayNumberFixedDecimal = function(number, unit, intChipher, decimalChip
 			}
 			/* 시작 unit 단위가 w보다 클경우 */
 
-			moneyUnit.some((money, index) => {
-				const mUnit = money['unit'];
-				const mChipher = money['chipher'];
-				if(String(Math.round(number / mChipher)).length <= intChipher || mUnit == '억') {
+			if (unit.match('h')) {
+				suffix = 'h';
+			}
+
+			whUnit.some(function(v, k) {
+				let str = String(Math.floor(number));
+				if(str.length > intChipher && v != 'T') {
+					number = number / 1000;
+				} else {
+					let endUnit = unit.endsWith("VAR") ? "VAR" : "W";
 					if(decimalChipher === 0){
-						rtnValue = [numberComma(Math.round(number)), mUnit + '원'];
+						rtnValue = [numberComma(Math.round(number)), v + endUnit + suffix];
 					} else {
 						let pFraction = Math.pow(10, decimalChipher);
-						rtnValue = [numberComma(( Math.round(number * pFraction) / pFraction ).toFixed(decimalChipher)), mUnit + '원'];
+						rtnValue = [numberComma(( Math.round(number * pFraction) / pFraction ).toFixed(decimalChipher)), v + endUnit + suffix];
 					}
 					return rtnValue;
 				}
@@ -175,7 +180,7 @@ const displayNumberFixedUnit = function (input_num, input_unit, fixed_unit, num_
 			return rtnValue;
 		}
 
-		if(input_unit.match('W')) {
+		if(input_unit.match('W') || input_unit.endsWith('VAR')) {
 			/* 시작 unit 단위가 w보다 클경우 */
 			const standardUnit = (input_unit.substr(0, 1)).replace(/W/i, '');
 			if (!isEmpty(standardUnit)) {
@@ -184,7 +189,7 @@ const displayNumberFixedUnit = function (input_num, input_unit, fixed_unit, num_
 					whUnit = whUnit.splice(findIndex, whUnit.length);
 				}
 			}
-			/* 시작 unit 단위가 w보다 클경우 */
+			/* 시작 unit 단위가 w보다 클경우 ?? */
 			if (input_unit.match('h')) {
 				suffix = 'h';
 			}
@@ -200,15 +205,16 @@ const displayNumberFixedUnit = function (input_num, input_unit, fixed_unit, num_
 
 			whUnit.some(function(v, k) {
 				if(fixed_unit === v + 'W' + suffix) {
+					let endUnit = input_unit.endsWith("VAR") ? "VAR" : "W";
 					input_num = input_num / Math.pow(1000, k);
 					if(Math.floor(input_num * 100) === 0) {
-						rtnValue = [0, v + 'W' +  suffix];
+						rtnValue = [0, v + endUnit +  suffix];
 					} else {
 						if(num_frac === 0){
-							rtnValue = [numberComma(Math.round(input_num)), v + 'W' +  suffix];
+							rtnValue = [numberComma(Math.round(input_num)), v + endUnit +  suffix];
 						} else {
 							let pFraction = Math.pow(10, num_frac);
-							rtnValue = [numberComma(( Math.round(input_num * pFraction) / pFraction ).toFixed(num_frac)), v + 'W' +  suffix];
+							rtnValue = [numberComma(( Math.round(input_num * pFraction) / pFraction ).toFixed(num_frac)), v + endUnit +  suffix];
 						}
 					}
 					return rtnValue;

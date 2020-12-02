@@ -3,17 +3,17 @@
 <div class="row content-wrapper hidden">
 	<div class="col-12">
 		<div class="indiv">
-			<table id="gmainTable">
+			<table id="gmainTable" style="width:100%;">
 				<colgroup>
 					<col style="width:5%">
 					<col style="width:10%">
 					<col style="width:7%">
-					<col style="width:13%">
-					<col style="width:14%">
+					<col style="width:12%">
+					<col style="width:15%">
 					<col style="width:7%">
 					<col style="width:6%">
 					<col style="width:7%">
-					<col style="width:4%">
+					<col style="width:5%">
 					<col style="width:5%">
 					<col style="width:7%">
 					<col style="width:7%">
@@ -31,7 +31,7 @@
 	$(function () {
 		gmainTable = $('#gmainTable').DataTable({
 			autoWidth: true,
-			fixedHeader: true,
+			// fixedHeader: true,
 			"table-layout": "fixed",
 			scrollX: true,
 			scrollY: '720px',
@@ -181,6 +181,7 @@
 			},
 			dom: 'tip',
 		}).columns.adjust().draw();
+
 	});
 
 	/**
