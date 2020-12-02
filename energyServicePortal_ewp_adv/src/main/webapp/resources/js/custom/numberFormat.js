@@ -204,7 +204,7 @@ const displayNumberFixedUnit = function (input_num, input_unit, fixed_unit, num_
 			}
 
 			whUnit.some(function(v, k) {
-				if(fixed_unit === v + 'W' + suffix) {
+				if((fixed_unit === (v + 'W' + suffix)) || (fixed_unit === (v + 'VAR' + suffix))) {
 					let endUnit = input_unit.endsWith("VAR") ? "VAR" : "W";
 					input_num = input_num / Math.pow(1000, k);
 					if(Math.floor(input_num * 100) === 0) {

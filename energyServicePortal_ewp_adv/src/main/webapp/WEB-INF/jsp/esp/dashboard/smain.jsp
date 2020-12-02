@@ -2756,23 +2756,22 @@
 													if( el.key.match('activePower') || el.key.match('dcPower') ) {
 														let strVal = '';
 														if(el.key.startsWith("reactive")){
-															// console.log("el.key222==", el.key, "value===", value)
+														// console.log("el.key222==", el.key, "value===", value)
 														// Unit: Var => kVAR, mVAR, gVAR, tVAR)
-															if(value < 1000) {
-																// strVal = "-";
-															// } else if(value >= 0 && value < 1000) {
-																strVal = (value % 1 === 0) ? [value, "VAR"] : displayNumberFixedDecimal(value, 'VAR', 3, 2);
-															} else if(value >= 1000 && value < 1000000) {
-																strVal = displayNumberFixedUnit(value, 'VAR', 'kVAR', 0);
+															if(!isEmpty(value)) {
+																if(value < 1000) {
+																	strVal = (value % 1 === 0) ? [value, "VAR"] : displayNumberFixedDecimal(value, 'VAR', 3, 2);
+																} else if(value >= 1000 && value < 1000000) {
+																	strVal = displayNumberFixedUnit(value, 'VAR', 'kVAR', 0);
+																} else {
+																	strVal = displayNumberFixedDecimal(value, 'VAR', 3, 2);
+																}
 															} else {
-																strVal = displayNumberFixedDecimal(value, 'VAR', 3, 2);
-																// console.log("strVal===", strVal)
+																strVal = ["-", ""];
 															}
-															// rowData[0][el.key] = strVal[0] + " " + strVal[1];
 														} else {
 														// Unit: W => kW,  Wh => kWh	
 															strVal = displayNumberFixedUnit(value, 'W', 'kW', 0);
-															// rowData[0][el.key] = strVal[0] + " " + strVal[1];
 														}
 														rowData[0][el.key] = strVal[0] + " " + strVal[1];
 													} else if( el.key.match('accumActiveEnergy') ){
@@ -3089,14 +3088,17 @@
 														
 														if(el.key.startsWith("reactive")){
 															// console.log("el.key11111==", el.key, "value===", value)
-														// Unit: Var => kVAR, mVAR, gVAR, tVAR)
-															if(value < 1000) {
-																strVal = (value % 1 === 0) ? [value, "VAR"] : displayNumberFixedDecimal(value, 'VAR', 3, 2);
-															} else if(value >= 1000 && value < 1000000) {
-																strVal = displayNumberFixedUnit(value, 'VAR', 'kVAR', 0);
+															// Unit: Var => kVAR, mVAR, gVAR, tVAR)
+															if(!isEmpty(value)) {
+																if(value < 1000) {
+																	strVal = (value % 1 === 0) ? [value, "VAR"] : displayNumberFixedDecimal(value, 'VAR', 3, 2);
+																} else if(value >= 1000 && value < 1000000) {
+																	strVal = displayNumberFixedUnit(value, 'VAR', 'kVAR', 0);
+																} else {
+																	strVal = displayNumberFixedDecimal(value, 'VAR', 3, 2);
+																}
 															} else {
-																strVal = displayNumberFixedDecimal(value, 'VAR', 3, 2);
-																// console.log("strVal===", strVal)
+																strVal = ["-", ""];
 															}
 														} else {
 														// Unit: W => kW,  Wh => kWh
