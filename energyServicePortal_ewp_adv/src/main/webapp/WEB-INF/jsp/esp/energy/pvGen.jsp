@@ -830,7 +830,7 @@
 						totalArr[0].totVal += data.total;
 					} else {
 						totalArr.push({
-							name: '전체',
+							name: '<fmt:message key="pvGen.all" />',
 							totVal: data.total
 						});
 					}

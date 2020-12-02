@@ -104,7 +104,7 @@
 					data: 'confirmed_at',
 					render: function (data, type, full, rowIndex) {
 						if (isEmpty(data)) {
-							return `확정 보고서 업로드 <label for="confirmFile${'${full[\'id\']}'}" class="btn-file fr up">업로드</label>
+							return `<fmt:message key="yieldReport.confirmReport" /> <label for="confirmFile${'${full[\'id\']}'}" class="btn-file fr up"><fmt:message key="yieldReport.upload" /></label>
 									<input type="file" id="confirmFile${'${full[\'id\']}'}" name="confirmFile${'${full[\'id\']}'}" class="btn-upload hidden" accept="application/pdf">`;
 						} else {
 							const linkData = JSON.parse(full['confirmed_file_link'])

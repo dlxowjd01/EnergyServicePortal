@@ -588,6 +588,14 @@
 			title: siteName,
 			icon: pinSymbol(siteColor),
 		});
+		
+		console.log(operationText)
+
+		if (langStatus === "EN") {
+			operationText = operationText.replace(`정상`, `Normal`);
+			operationText = operationText.replace(`트립`, `Trip`);
+			operationText = operationText.replace(`중지`, `Stop`);
+		}
 
 		let infoWIndowContent = '<div class="gmap-content"><span style="color:' + siteColor + '">' + operationText + '</span>' + siteName + '</div>';
 		marker.infowindow = new google.maps.InfoWindow({
