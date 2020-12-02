@@ -450,9 +450,9 @@
 	const siteMakeList = () => {
 		const makeSite = Array.from(siteList);
 		makeSite.sortOn('name');
-		makeSite.unshift({ sid: 'all', name: '전체'});
+		makeSite.unshift({ sid: 'all', name: '<fmt:message key="deviceState.all" />'});
 		setMakeList(makeSite, 'siteULList', {'dataFunction': {}}); //list생성
-		$('#siteULList').append(`<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16">적용</button></li>`);
+		$('#siteULList').append(`<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16"><fmt:message key="deviceState.apply" /></button></li>`);
 		$('#siteULList').find('input[value="all"]').parent().after('<li class="btn-wrap-border-min"></li>');
 	};
 

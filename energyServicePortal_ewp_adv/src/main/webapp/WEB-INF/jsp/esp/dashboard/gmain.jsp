@@ -21,7 +21,7 @@
 		<div class="time fr">
 			<span>CURRENT TIME</span>
 			<em class="currTime">${nowTime}</em>
-			<span>DATA BASE TIME</span>
+			<span>DATABASE TIME</span>
 			<em class="dbTime"></em>
 		</div>
 	</div>

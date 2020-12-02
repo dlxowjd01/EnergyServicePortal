@@ -206,7 +206,7 @@
 						</li>`;
 			});
 
-			liStr += `<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16">적용</button></li>`;
+			liStr += `<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16"><fmt:message key="pvGen.apply" /></button></li>`;
 			siteList.innerHTML = liStr;
 		} else {
 			siteList.innerHTML = `<li class="no-data"><fmt:message key='pvGen.cannotSelectSite' /></li>`;
