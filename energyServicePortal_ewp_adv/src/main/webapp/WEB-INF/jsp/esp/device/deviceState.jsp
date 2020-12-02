@@ -247,8 +247,8 @@
 										<ul class="dropdown-menu chk-type" id="alarm_codeList">
 											<li data-value="[val]">
 												<a href="javascript:void(0);" tabindex="-1">
-													<input type="checkbox" id="alarm_codeset[index]" value="[val]" name="alarm_codeset">
-													<label for="alarm_codeset[index]">[name]</label>
+													<input type="checkbox" id="alarm_codeset[INDEX]" value="[val]" name="alarm_codeset">
+													<label for="alarm_codeset[INDEX]">[name]</label>
 												</a>
 											</li>
 										</ul>
@@ -399,6 +399,7 @@
 	const apiConfigRtus = '/config/rtus';
 	const apiConfigDevices = '/config/devices';
 	const apiAlarmCodeSets = '/alarms/code_sets';
+	const apiDeviceSetIds = '/config/devices/set_ids';
 	const apiEnergyManual = '/energy/manual/input';
 	const apiEnergyConvertor = '/energy/manual/energy_converter';
 	const apiEnergyDevices = '/energy/devices';
@@ -672,12 +673,10 @@
 							capacity = '';
 							activePower = isEmpty(el.temperature) ? '-' : displayNumberFixedDecimal(el.temperature, 'W', 'W', 1, 'round')[0] + '&#176;';
 							dcPower = isEmpty(el.humidity) ? '-' : displayNumberFixedDecimal(el.humidity, 'W', 'kW', 1, 'round')[0] + '&#37;';
-
 						} else {
 							capacity = isEmpty(el.capacity) ? '-' : displayNumberFixedUnit(el.capacity, el.capacity_unit, 'kW', 0, 'round')[0] + 'kW';
 							activePower = isEmpty(el.activePower) ? '-' : displayNumberFixedUnit(el.activePower, 'W', 'kW', 0, 'round')[0] + 'kW';
 							dcPower = isEmpty(el.dcPower) ? '-' : displayNumberFixedUnit(el.dcPower, 'W', 'kW', 0, 'round')[0] + 'kW';
-
 						}
 
 						switch (el.operation) {
@@ -699,18 +698,17 @@
 								break;
 						}
 
-						let deviceStr = `<li class="${'${operation}'}" onclick="deviceDetailView('${'${el.did}'}', '${'${el.operation}'}', $(this) )">
+						let deviceStr = `<li class="${'${operation}'}" onclick="deviceDetailView('${'${el.did}'}', '${'${el.operation}'}', $(this))">
 											<span>${'${targetSite.name}'}</span>
 											<span>${'${el.name}'}</span>
 											<span>${'${capacity}'}</span><em>${'${activePower}'}  ${'${dcPower}'}</em>
-											<button type="button" onclick="deviceProcess('delete', '${'${el.did}'}');" class="delete">삭제</button>
+											<button type="button" onclick="deviceProcess('delete', '${'${el.did}'}', event);" class="delete">삭제</button>
 											<a href="javascript:void(0);"></a>
 										</li>`;
 
 						if(el.dname == "공기청정기"){
 							console.log("deviceStr---", el.capacity)
 						}
-
 
 						deviceList.append(deviceStr);
 						if(index == 0) {
@@ -869,20 +867,8 @@
 					if (!isEmpty(resultData) && !isEmpty(resultData[liData])) {
 						let dValue = '';
 						if(liData.match("activePower") || liData.match("dcPower")){
-							let rounded = Math.round(resultData[liData]);
-							if(rounded < 1000){
-								let tempVal = displayNumberFixedUnit(resultData[liData], suffix, suffix, 2);
-								tempVal[0] != '-' ? ( dValue = tempVal[0] + ' ' + tempVal[1] ) : ( dValue = tempVal[0] );
-							} else if(rounded >= 1000 && rounded < 1000000){
-								let tempVal = displayNumberFixedUnit(resultData[liData], suffix, "kW", 0);
-								tempVal[0] != '-' ? ( dValue = tempVal[0] + ' ' + tempVal[1] ) : ( dValue = tempVal[0] );
-							} else if(rounded >= 1000000 && rounded < 1000000000){
-								let tempVal = displayNumberFixedUnit(resultData[liData], suffix, "MW", 2);
-								tempVal[0] != '-' ? ( dValue = tempVal[0] + ' ' + tempVal[1] ) : ( dValue = tempVal[0] );
-							} else if(rounded >= 1000000000){
-								let tempVal = displayNumberFixedUnit(resultData[liData], suffix, "GW", 2);
-								tempVal[0] != '-' ? ( dValue = tempVal[0] + ' ' + tempVal[1] ) : ( dValue = tempVal[0] );
-							}
+							let tempVal = displayNumberFixedDecimal(resultData[liData], suffix, 3, 2);
+							tempVal[0] != '-' ? ( dValue = tempVal.join(' ')) : ( dValue = tempVal[0] );
 						} else {
 							if(liData.match("temperature") || liData.match("humidity")){
 								dValue = resultData[liData] != '-' ? displayNumberFixedUnit(resultData[liData], suffix, suffix, 1)[0] + ' ' + suffix : resultData[liData];
@@ -904,21 +890,10 @@
 
 				if (!isEmpty(resultData) && !isEmpty(resultData[liData])) {
 					let dValue = '';
+					console.log('suffix', suffix);
 					if(liData.match("accumActiveEnergy")){
-						let rounded = Math.round(resultData[liData]);
-						if(rounded < 1000){
-							let tempVal = displayNumberFixedUnit(resultData[liData], suffix, suffix, 2);
-							tempVal[0] != '-' ? ( dValue = tempVal[0] + ' ' + tempVal[1] ) : ( dValue = tempVal[0] );
-						} else if(rounded >= 1000 && rounded < 1000000){
-							let tempVal = displayNumberFixedUnit(resultData[liData], suffix, "kWh", 0);
-							tempVal[0] != '-' ? ( dValue = tempVal[0] + ' ' + tempVal[1] ) : ( dValue = tempVal[0] );
-						} else if(rounded >= 1000000 && rounded < 1000000000){
-							let tempVal = displayNumberFixedUnit(resultData[liData], suffix, "MWh", 2);
-							tempVal[0] != '-' ? ( dValue = tempVal[0] + ' ' + tempVal[1] ) : ( dValue = tempVal[0] );
-						} else if(rounded >= 1000000000){
-							let tempVal = displayNumberFixedUnit(resultData[liData], suffix, "GWh", 2);
-							tempVal[0] != '-' ? ( dValue = tempVal[0] + ' ' + tempVal[1] ) : ( dValue = tempVal[0] );
-						}
+						let tempVal = displayNumberFixedDecimal(resultData[liData], suffix, 3, 2);
+						tempVal[0] != '-' ? ( dValue = tempVal.join(' ')) : ( dValue = tempVal[0] );
 					} else {
 						let tempVal = displayNumberFixedDecimal(resultData[liData], suffix, 3, 2);
 						if(liData.match("voltageR") || liData.match("voltageS") || liData.match("voltageT")) {
@@ -928,7 +903,7 @@
 						} else if(liData.match("temperature")){
 							dValue = tempVal[0] + suffix;
 						} else {
-							dValue = tempVal[0] != '-' ? tempVal[0] + ' ' + tempVal[1] : tempVal[0];
+							dValue = tempVal[0] != '-' ? tempVal.join(' ') : tempVal[0];
 						}
 					}
 					$(this).find('.di-li-text').text(dValue);
@@ -1089,7 +1064,6 @@
 			});
 			$('#manualModalTable').data('startDate', startDate.format('yyyyMMdd'));
 			$('#manualModalTable').data('endDate', endDate.format('yyyyMMdd'));
-
 
 			if (timeInterval === 'month') {
 				startDate.setDate(1);
@@ -1471,22 +1445,31 @@
 				displayDropdown($('#addDeviceDisplayType'));
 
 				costSetList();
-				if (!isEmpty(data['alarm_code'])) {
-					let codeSetArray = new Array();
-					if (data['alarm_code'].match(',')) {
-						codeSetArray = data['alarm_code'].split(',');
-					} else {
-						codeSetArray.push(data['alarm_code']);
-					}
 
-					document.querySelectorAll('#alarm_codeList input').forEach(el => {
-						if (codeSetArray.includes(el.value)) {
-							el.checked = true;
+				$.ajax({
+					url: apiHost + apiDeviceSetIds,
+					type: 'get',
+					async: false,
+					data: {
+						oid: oid,
+						dids: did
+					},
+					success: (data) => {
+						const resultData = data.data[did];
+						if (!isEmpty(resultData)) {
+							document.querySelectorAll('#alarm_codeList input').forEach(el => {
+								if (resultData.includes(Number(el.value))) {
+									el.checked = true;
+								}
+							});
+
+							displayDropdown($('#alarm_code'));
 						}
-					});
-
-					displayDropdown($('#alarm_code'));
-				}
+					},
+					error: (jqXHR, textStatus, errorThrown) => {
+						console.log(textStatus);
+					}
+				});
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				console.error(jqXHR);
 				console.error(textStatus);
@@ -1508,7 +1491,11 @@
 	}
 
 	//등록&수정&삭제
-	const deviceProcess = (method, did) => {
+	const deviceProcess = (method, did, event) => {
+		if (event !== undefined) {
+			event.stopPropagation(); //버블링 방지
+		}
+
 		let areaData = setAreaParamData('addDeviceModal', 'dropdown');
 		let alertPreffix = '등록';
 		let urlSufffix = '';
@@ -1541,13 +1528,8 @@
 			urlSufffix = '/' + did;
 
 			if (method == 'patch') {
-
 				delete areaData['alarm_codeset'];
-				if (isEmpty(areaData['alarm_code'])) {
-					delete areaData['alarm_code'];
-				} else {
-					areaData['alarm_code'] = areaData['alarm_code'].toString();
-				}
+				delete areaData['alarm_code'];
 
 				alertPreffix = '수정';
 				if (!confirm('<fmt:message key="deviceState.confirm.1" />')) {
@@ -1572,11 +1554,7 @@
 			areaData['billing'] = $('#billing').is(':checked');
 
 			delete areaData['alarm_codeset'];
-			if (isEmpty(areaData['alarm_code'])) {
-				delete areaData['alarm_code'];
-			} else {
-				areaData['alarm_code'] = areaData['alarm_code'].toString();
-			}
+			delete areaData['alarm_code'];
 
 			areaData['capacity'] = Number(areaData['capacity']) * 1000;
 			areaData['capacity_unit'] = 'W';
@@ -1589,40 +1567,76 @@
 			delete areaData['addSiteList'];
 		}
 
-		$.ajax({
-			url: apiHost + apiConfigDevices + urlSufffix,
-			type: method,
-			dataType: 'json',
-			async: false,
-			contentType: 'application/json',
-			data: JSON.stringify(areaData),
-		}).done(function (data, textStatus, jqXHR) {
-			if (langStatus === `KO`) {
+		new Promise(resolve => {
+			$.ajax({
+				url: apiHost + apiConfigDevices + urlSufffix,
+				type: method,
+				dataType: 'json',
+				async: false,
+				contentType: 'application/json',
+				data: JSON.stringify(areaData),
+				success: (data) => {
+					resolve(data);
+				}
+			});
+		}).then(data => {
+			return new Promise(resolve => {
+				if (method !== 'delete') {
+					let setIdsData = new Object();
+					let codeSet = new Array();
+					$(':checked[name="alarm_codeset"]').each(function() {
+						codeSet.push(Number($(this).val()));
+					});
+
+					if (!isEmpty(data) && !isEmpty(data.did)) {
+						setIdsData = {
+							did: data.did,
+							set_id: codeSet
+						}
+					} else {
+						setIdsData = {
+							did: did,
+							set_id: codeSet
+						}
+					}
+
+					$.ajax({
+						url: apiHost + apiDeviceSetIds,
+						type: 'post',
+						dataType: 'json',
+						async: false,
+						contentType: 'application/json',
+						data: JSON.stringify(new Array(setIdsData)),
+						success: (data) => {
+							resolve(data);
+						}
+					});
+				} else {
+					resolve();
+				}
+			});
+		}).then(() => {
+			if (langStatus === 'KO') {
 				alert(alertPreffix + ' 되었습니다.');
 			} else {
 				switch (alertPreffix) {
-					case `등록`:
-						alert(`Device has been registerd`);
-					break;
-					case `수정`:
-						alert(`Device has been modified`);
-					break;
-					case `삭제`:
-						alert(`Device has been deleted`);
-					break;
+					case '등록':
+						alert('Device has been registerd');
+						break;
+					case '수정':
+						alert('Device has been modified');
+						break;
+					case '삭제':
+						alert('Device has been deleted');
+						break;
 				}
 			}
 
 			$('#addDeviceModal').modal('hide');
 			getDeviceList();
 			return false;
-		}).fail(function (jqXHR, textStatus, errorThrown) {
-			console.error(jqXHR);
-			console.error(textStatus);
-			console.error(errorThrown);
-
-			alert('<fmt:message key="deviceState.alert.2" />');
-			return false;
+		}).catch(error => {
+			console.error(error);
 		});
 	}
 

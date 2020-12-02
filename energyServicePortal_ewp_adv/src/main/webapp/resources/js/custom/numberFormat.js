@@ -64,46 +64,7 @@ const displayNumberFixedDecimal = function(number, unit, intChipher, decimalChip
 	if(isEmpty(number)) {
 		return ['-', unit];
 	} else {
-		if(unit.match('W')) {
-
-			if(isEmpty(intChipher)) {
-				decimalChipher = 3;
-			}
-
-			if(isEmpty(decimalChipher)) {
-				decimalChipher = 2;
-			}
-
-			/* 시작 unit 단위가 w보다 클경우 */
-			const standardUnit = (unit.substr(0, 1)).replace(/W/i, '');
-			if (!isEmpty(standardUnit)) {
-				const findIndex = whUnit.findIndex(targetUnit => targetUnit.match(standardUnit));
-				if (findIndex > 0) {
-					whUnit = whUnit.splice(findIndex, whUnit.length);
-				}
-			}
-
-			/* 시작 unit 단위가 w보다 클경우 */
-
-			if (unit.match('h')) {
-				suffix = 'h';
-			}
-
-			whUnit.some(function(v, k) {
-				let str = String(Math.floor(number));
-				if(str.length > intChipher && v != 'T') {
-					number = number / 1000;
-				} else {
-					if(decimalChipher === 0){
-						rtnValue = [numberComma(Math.round(number)), v + 'W' + suffix];
-					} else {
-						let pFraction = Math.pow(10, decimalChipher);
-						rtnValue = [numberComma(( Math.round(number * pFraction) / pFraction ).toFixed(decimalChipher)), v + 'W' + suffix];
-					}
-					return rtnValue;
-				}
-			});
-		} else {
+		if (unit.match('원')) {
 			if (isEmpty(intChipher)) {
 				intChipher = 3;
 			}
@@ -131,6 +92,40 @@ const displayNumberFixedDecimal = function(number, unit, intChipher, decimalChip
 					} else {
 						let pFraction = Math.pow(10, decimalChipher);
 						rtnValue = [numberComma(( Math.round(number * pFraction) / pFraction ).toFixed(decimalChipher)), mUnit + '원'];
+					}
+					return rtnValue;
+				}
+			});
+		} else {
+			if(isEmpty(intChipher)) {
+				decimalChipher = 3;
+			}
+
+			if(isEmpty(decimalChipher)) {
+				decimalChipher = 2;
+			}
+
+			if (unit.match('W')) {
+				/* 시작 unit 단위가 w보다 클경우 */
+				const standardUnit = (unit.substr(0, 1)).replace(/W/i, '');
+				if (!isEmpty(standardUnit)) {
+					const findIndex = whUnit.findIndex(targetUnit => targetUnit.match(standardUnit));
+					if (findIndex > 0) {
+						whUnit = whUnit.splice(findIndex, whUnit.length);
+					}
+				}
+			}
+
+			whUnit.some(function(v, k) {
+				let str = String(Math.floor(number)).replace(/[^\d]/, '');
+				if(str.length > intChipher && v != 'T') {
+					number = number / 1000;
+				} else {
+					if(decimalChipher === 0){
+						rtnValue = [numberComma(Math.round(number)), v + unit + suffix];
+					} else {
+						let pFraction = Math.pow(10, decimalChipher);
+						rtnValue = [numberComma(( Math.round(number * pFraction) / pFraction ).toFixed(decimalChipher)), v + unit];
 					}
 					return rtnValue;
 				}
