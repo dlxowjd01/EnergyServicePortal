@@ -38,7 +38,7 @@
 					str += `
 						<div class="panel panel-default">
 							<div class="panel-heading active" role="tab" id="heading_${'${ index + 1 }'}">
-								<h4 class="panel-heading">
+								<h4 class="panel-title">
 									${'${ dvcCategory }'}
 									<a href="#collapseOne" role="button" data-toggle="collapse" data-parent="#panelGroup" aria-expanded="true" aria-controls="collapseOne" class="panel-fold"></a>
 								</h4>
@@ -54,15 +54,27 @@
 				});
 				$("#panelGroup").append(str);
 			} else {
-				console.log("res222===", res);
-
 				str = `
 					<div class="panel panel-default">
-						<div class="panel-heading no-data active" role="tab">
-							<h4 class="panel-heading ">디바이스 정보가 없습니다.</h4>
+						<div class="panel-heading active" role="tab" id="heading_1">
+							<h4 class="panel-title">
+								sampleTitle1
+								<a href="#collapseOne" role="button" data-toggle="collapse" data-parent="#panelGroup" aria-expanded="true" aria-controls="collapseOne" class="panel-fold"></a>
+							</h4>
 						</div>
-					</div>
-				`;
+						<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby=id="heading_1">
+							<div class="panel-body">
+								<a href="#" role="button" class="" onclick="getComCodeData(this)"></a>
+							</div>
+						</div>
+					</div>`;
+				// str = `
+				// 	<div class="panel panel-default">
+				// 		<div class="panel-heading no-data active">
+				// 			<h4 class="panel-title">디바이스 정보가 없습니다.</h4>
+				// 		</div>
+				// 	</div>
+				// `;
 				$("#panelGroup").append(str);
 			}
 			// if(!isEmpty(callbackOption)) {
@@ -110,7 +122,7 @@
 </div>
 
 
-<div class="modal fade" id="addSiteModal" tabindex="-1" role="dialog">
+<div class="modal fade" id="addComCodeModal" tabindex="-1" role="dialog">
 	<div class="modal-dialog">
 		<div class="setting-modal-content modal-content">
 			<div class="modal-header"><h1>공통 코드 추가</h1></div>

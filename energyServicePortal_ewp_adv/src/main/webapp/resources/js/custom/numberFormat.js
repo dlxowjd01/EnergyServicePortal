@@ -189,7 +189,7 @@ const displayNumberFixedUnit = function (input_num, input_unit, fixed_unit, num_
 					whUnit = whUnit.splice(findIndex, whUnit.length);
 				}
 			}
-			/* 시작 unit 단위가 w보다 클경우 ?? */
+			/* 시작 unit 단위가 wh 같이 h를 포함할 경우 */
 			if (input_unit.match('h')) {
 				suffix = 'h';
 			}

@@ -1,5 +1,4 @@
 @charset "utf-8";
-
 @font-face {
 	font-family: "Roboto";
 	font-style: normal;
@@ -24,6 +23,7 @@
 	src: url(../font/Roboto-Medium.eot?#iefix) format("embedded-opentype"), url(../font/Roboto-Medium.woff) format("woff"), url(../font/Roboto-Medium.ttf) format("truetype");
 }
 
+
 /* @font-face {
 	font-family: "NanumBarunGothic";
 	font-style: normal;
@@ -33,10 +33,11 @@
 
 @font-face {
 	font-family: "NanumBarunGothic";
-	font-style: bold;
+	font-style: 500;
 	font-weight: 600;
 	src: url(../font/NanumBarunGothicBold.ttf) format("truetype");
 } */
+
 
 /* ==================================
 							z-index
@@ -81,15 +82,15 @@ bootstrap default
 
 */
 
+
 /* ==================================
-							Variable
+			Variable
 ==================================== */
 
 :root {
 	/* TO DO!!!!!  : REMOVE OPACITY in color (for performance improvement and browser compatibility) */
-
 	/* ********* Neutral colors ********* */
-	--clear: rgba(255,255,255,0);
+	--clear: rgba(255, 255, 255, 0);
 	--white10: rgba(255, 255, 255, 0.1);
 	--white12: rgba(255, 255, 255, 0.12);
 	--white15: rgba(255, 255, 255, 0.15);
@@ -98,8 +99,10 @@ bootstrap default
 	--white25: rgba(255, 255, 255, 0.25);
 	--white40: rgba(255, 255, 255, 0.4);
 	--white50: rgba(255, 255, 255, 0.5);
-	--white60: rgba(255, 255, 255, 0.6); /* #aeaeae; #a4aebf; #9e9e9e; */
-	--white87: rgba(255, 255, 255, 0.87); /* #c8c8c8; */
+	--white60: rgba(255, 255, 255, 0.6);
+	/* #aeaeae; #a4aebf; #9e9e9e; */
+	--white87: rgba(255, 255, 255, 0.87);
+	/* #c8c8c8; */
 	--white: #fff;
 	/* Black */
 	--black50: rgba(0, 0, 0, 0.5);
@@ -118,12 +121,10 @@ bootstrap default
 	--dove-gray: #6b6b6b;
 	--grey: #878787;
 	--quick-silver: #9e9e9e;
-
 	/* ********* Box, Navbar, Menu ********* */
 	--nav-menu-color: rgba(255, 255, 255, 0.5);
 	--nav-border: rgba(255, 255, 255, 0.15);
 	--box-shadow: 3px 4px 14px 1px rgba(0, 0, 0, 0.5);
-
 	/* ********* Chart, table Colors ********* */
 	--circle-charge: #2BEEE9;
 	--circle-solar-power: #9363fd;
@@ -148,7 +149,7 @@ bootstrap default
 	--turquoise: #26ccc8;
 	--green: #13af67;
 	--teal: #009389;
-	--persian-green : #00b2aa;
+	--persian-green: #00b2aa;
 	--powder-blue: #b0e9e8;
 	--french-pass: #bcdfff;
 	--jordy-blue: #90caf3;
@@ -161,7 +162,6 @@ bootstrap default
 	--blue-yonder: #7e89c9;
 	--blueberry: #5269ef;
 	--royal-blue: #274dea;
-
 	/* ********* Images (logo) ********* */
 	--encored-logo: url("/img/logo_encored_wh.svg");
 	--iderms-logo: url("/img/logo_iderms.svg");
@@ -180,7 +180,6 @@ html.darkmode:root {
 	--bg-color2: #4e4e4e;
 	--box-color: #363636;
 	--box-darker: #282828;
-
 	/* ********* Images (sidebar icons) ********* */
 	--hamburger-menu: url("/img/ico_nav.svg");
 	--sidebar-ico1: url("/img/sidebar_icons/sidebar_ico1.svg");
@@ -195,30 +194,25 @@ html.darkmode:root {
 	--sidebar-ico10: url("/img/sidebar_icons/sidebar_ico10.svg");
 	--ico-eye: url("/img/ico_eye.svg");
 	--ico-eye-close: url("/img/ico_eye_close.svg");
-
 	/* ********* Status images ********* */
 	--status-drive: url("/img/status_icons/ico_status_drive.svg");
 	--status-hold: url("/img/status_icons/ico_status_hold.svg");
 	--status-error: url("/img/status_icons/ico_status_error.svg");
 	--status-stop: url("/img/status_icons/ico_status_stop.svg");
-
 	--status-charging: url("/img/status_icons/ico_battery_full.svg");
 	--status-discharging: url("/img/status_icons/ico_battery_discharging.svg");
-
 	--nav-arrow-down: url("/img/expand_arrow_dark.png");
 	--expand-arrow-down: url("/img/expand_arrow_dark.png");
 	--expand-arrow-up: url('/img/expand_arrow_up_dark.png');
 	--collapse-arrow: url("/img/sel_down_dark.png");
 	--ico-sort-up: url("/img/sorting_up.png");
 	--ico-sort-down: url("/img/sorting_down.png");
-
 	/* + icon */
 	--ico-add: url("/img/ico_add2_wh.png");
 	--ico-add-svg: url("/img/ico_add_svg.svg");
 	--ico-add-blue: url("/img/btn_blue_add.png");
 	--btn-add: url("/img/ico_add_sm.svg");
 	/* ********* */
-
 	--ico-warning: url("/img/ico_warning.svg");
 	--ico-notification: url("/img/notification.svg");
 	--ico-notification-new: url("/img/notification_active.svg");
@@ -228,7 +222,6 @@ html.darkmode:root {
 	--ico-next-page: url("/img/btn-next.svg");
 	--ico-line-graph: url("/img/ico_line_graph.svg");
 	--bg-battery-cover: url("/img/battery_cover_lg.svg");
-
 	--btn-edit: url("/img/ico_edit.svg");
 	--btn-circle-close: url("/img/ico_circle_close.svg");
 	--btn-close: url("/img/ico_delete.svg");
@@ -238,7 +231,6 @@ html.darkmode:root {
 	--btn-download: url("/img/btn_download.svg");
 	--ico-delete: url("/img/close_btn_md.svg");
 	--ico-open: url("/img/ico_open.svg");
-
 	/* ********* Weather images ********* */
 	--ico1_sun: url('/img/weather_icons/ico1_sun.svg');
 	--ico2-wind: url('/img/weather_icons/ico2_wind.svg');
@@ -250,8 +242,6 @@ html.darkmode:root {
 	--ico8-snow: url('/img/weather_icons/ico8_snow.svg');
 	--ico9-thunder-rain: url('/img/weather_icons/ico9_thunder_rain.svg');
 	--ico10-cloud-snow: url('/img/weather_icons/ico10_cloud_snow.svg');
-
-
 	/* ********* Device icons ********* */
 	--ico-ami: url('/img/device_icons/icon_ami.svg');
 	--ico-bms: url('/img/device_icons/ico_bms.svg');
@@ -259,10 +249,8 @@ html.darkmode:root {
 	--ico-meter: url('/img/device_icons/ico_meter.svg');
 	--ico-inverter: url('/img/device_icons/ico_inverter.svg');
 	--ico-pcs: url('/img/device_icons/ico_pcs_ess.svg');
-
 	--ico-battery-full: url("/img/device_icons/ico_battery_full.svg");
 	--ico-battery-discharging: url("/img/status_icons/ico_battery_discharging.svg");
-
 	--ico-sensor: url('/img/device_icons/ico_sensor.svg');
 	--ico-disconnect: url("/img/device_icons/ico_disconnector.svg");
 	--ico-connector: url('/img/device_icons/ico_connector.svg');
@@ -291,7 +279,7 @@ html.darkmode:root {
 }
 
 ::-webkit-scrollbar-corner {
-	background:var(--box-color);
+	background: var(--box-color);
 }
 
 *::-webkit-scrollbar-thumb {
@@ -319,6 +307,7 @@ body {
 	font-family: "AppleSDGothicNeo", "Roboto", sans-serif !important;
 	line-height: normal;
 }
+
 
 /* HTML5 display-role reset for older browsers */
 
@@ -461,6 +450,7 @@ strong {
 	display: none !important;
 }
 
+
 /* ==================================
 	   [link]
 ======================================= */
@@ -546,9 +536,11 @@ a.disabled:focus {
 	background-color: var(--vivid-blue);
 }
 
+
 /* ==================================
 	[buttons]
 ======================================= */
+
 button,
 button:hover,
 button:active {
@@ -576,10 +568,10 @@ button:disabled {
 .btn-primary:active,
 .btn-primary:active:hover,
 .btn-primary:active:focus,
-.open > .dropdown-toggle,
-.open > .dropdown-toggle:hover,
-.open > .dropdown-toggle:focus,
-.open > .dropdown-toggle.alarm-item {
+.open>.dropdown-toggle,
+.open>.dropdown-toggle:hover,
+.open>.dropdown-toggle:focus,
+.open>.dropdown-toggle.alarm-item {
 	background: var(--white20);
 	border: none;
 	border-radius: 2px;
@@ -942,7 +934,9 @@ a.btn-text-blue,
 	padding: 0 0 0 20px;
 }
 
+
 /* NOT iN USE : show/hide password icon */
+
 input[type="text"]+.pwd-icon {
 	padding-right: 32px;
 }
@@ -968,6 +962,7 @@ input[type="text"]+.pwd-icon {
 /* ==================================
 	[select, input, text-area]
 ==================================== */
+
 select::-ms-expand {
 	display: none;
 }
@@ -1010,14 +1005,13 @@ input[type="text"] {
 	padding-right: 20px;
 }
 
-.text-input-type > input[type="text"]:disabled::placeholder {
+.text-input-type>input[type="text"]:disabled::placeholder {
 	color: var(--white);
 }
 
-.text-input-type > input[type="text"]::placeholder {
+.text-input-type>input[type="text"]::placeholder {
 	color: var(--white40);
 }
-
 
 input[type="text"]:disabled,
 input[type="text"].disabled {
@@ -1034,7 +1028,7 @@ input[type="file"]+.file-upload {
 	padding: 0 6px;
 	border: 1px solid var(--white);
 	font-size: 11px;
-	font-weight: bold;
+	font-weight: 500;
 	line-height: 15px;
 	color: var(--dark-grey);
 	background-color: var(--white);
@@ -1078,12 +1072,12 @@ table tbody td .dropdown-menu {
 	position: absolute;
 }
 
-.semi-bold {
+.semi-500 {
 	font-weight: 500;
 }
 
-.bold {
-	font-weight: bold;
+.500 {
+	font-weight: 500;
 }
 
 .clear-btn {
@@ -1191,9 +1185,11 @@ table tbody td .dropdown-menu {
 	background: none;
 }
 
+
 /* ==================================
 						select calendar
 ==================================== */
+
 .sel {
 	padding: 0 40px 0 15px;
 	height: 36px;
@@ -1224,9 +1220,11 @@ table tbody td .dropdown-menu {
 	display: none !important;
 }
 
+
 /* ==================================
 			[Alignment]
 ====================================== */
+
 .right {
 	text-align: right;
 }
@@ -1257,9 +1255,11 @@ table tbody td .dropdown-menu {
 	float: right;
 }
 
+
 /* ==================================
 			[margin, padding]
 ==================================== */
+
 .mt-offset-10 {
 	margin-top: -10px;
 }
@@ -1482,6 +1482,7 @@ table tbody td .dropdown-menu {
 	padding-bottom: 0 !important;
 }
 
+
 /* ==================================
 				[common] max-width, width
 ==================================== */
@@ -1566,6 +1567,7 @@ table tbody td .dropdown-menu {
 	max-width: 100px;
 }
 
+
 /* ==================================
 		TO DO!!!!!!! width: 100%
  ==================================== */
@@ -1593,7 +1595,7 @@ table tbody td .dropdown-menu {
 .img-wrapper .img-group img,
 .search-select-item .dropdown-toggle,
 .alarm-modal-content .flex-align-top,
-.alarm-modal-content .flex-start .input-label + .dropdown>.dropdown-toggle,
+.alarm-modal-content .flex-start .input-label+.dropdown>.dropdown-toggle,
 .report-modal-content .flex-start .dropdown-toggle,
 .report-modal-content .dropdown,
 .report-modal-content .sel,
@@ -1617,6 +1619,7 @@ table tbody td .dropdown-menu {
 .device-modal .modal-content .textarea {
 	width: 100%;
 }
+
 
 /* ==================================
 				[common]
@@ -1804,6 +1807,7 @@ table tbody td .dropdown-menu {
 	margin-top: 27%;
 }
 
+
 /* ==================================
 						[ellipsis]
  ==================================== */
@@ -1841,6 +1845,7 @@ input:-webkit-autofill:active {
 	-webkit-text-fill-color: var(--white87) !important;
 	transition: background-color 5000s ease-in-out 0s;
 }
+
 
 /* ==================================
 	[wrapper, container, footer]
@@ -1883,7 +1888,7 @@ footer .copyright {
 	letter-spacing: 0.3px;
 }
 
-footer .copyright a + a:before {
+footer .copyright a+a:before {
 	display: inline-block;
 	margin: 2px 8px 0 8px;
 	width: 1px;
@@ -1892,6 +1897,7 @@ footer .copyright a + a:before {
 	vertical-align: top;
 	content: "";
 }
+
 
 /* ==================================
 				[sidebar]
@@ -1947,7 +1953,9 @@ footer .copyright a + a:before {
 	content: "";
 }
 
+
 /* TEST ONLY !!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
 
 /* .side-nav:after { */
 
@@ -1963,6 +1971,7 @@ footer .copyright a + a:before {
 	box-shadow: 0 4px 12px 8px var(--black50);
 }
 
+
 /* .side-nav>ul>li>a { */
 
 .side-nav:hover>ul>li>a {
@@ -1971,7 +1980,7 @@ footer .copyright a + a:before {
 	line-height: 28px;
 	color: var(--white87);
 	font-size: 16px;
-	font-weight: bold;
+	font-weight: 500;
 }
 
 .side-nav>ul>li>a,
@@ -1984,6 +1993,7 @@ footer .copyright a + a:before {
 .side-nav>ul>li.on .sub-layer>ul>li>a {
 	opacity: 1;
 }
+
 
 /* .side-nav>ul>li>a:before { */
 
@@ -2053,6 +2063,7 @@ footer .copyright a + a:before {
 	background-color: var(--white15);
 }
 
+
 /* sidebar sub-menu */
 
 .side-nav li.on .sub-layer {
@@ -2103,6 +2114,7 @@ li.on .sub-layer>ul {
 	font-size: 13px;
 	padding-left: 20px;
 }
+
 
 /* navbar */
 
@@ -2422,7 +2434,7 @@ html[lang="en"] .all-menu>a:after {
 	border: solid 1px var(--vivid-blue);
 }
 
-.all-menu .menu-wrapper>ul>li>dl>dd ul li .group-title + ul li a:hover:before {
+.all-menu .menu-wrapper>ul>li>dl>dd ul li .group-title+ul li a:hover:before {
 	border: 1px solid var(--white);
 }
 
@@ -2465,6 +2477,7 @@ html[lang="en"] .all-menu>a:after {
 	color: var(--white87);
 }
 
+
 /* alignment */
 
 .flex-wrapper {
@@ -2505,7 +2518,6 @@ html[lang="en"] .all-menu>a:after {
 .alarm-history .flex-end {
 	flex-wrap: nowrap;
 }
-
 
 .nav-right li.member .fr:after {
 	display: inline-block;
@@ -2721,6 +2733,7 @@ html[lang="en"] .all-menu>a:after {
 	background: none;
 }
 
+
 /* jquery auto-complete customization */
 
 ul.ui-autocomplete.highlight {
@@ -2796,6 +2809,7 @@ ul.ui-autocomplete.highlight>li>.ui-menu-item-wrapper.ui-state-active {
 	background-color: var(--grey);
 }
 
+
 /* ==================================
 				[common] radio button
 ==================================== */
@@ -2866,11 +2880,7 @@ input[type="radio"]:checked+label:after {
 	transition: all 0.2s ease;
 }
 
-.radio-type.fixed-height {
-
-}
-
-.flex-end input[type="radio"] + label {
+.flex-end input[type="radio"]+label {
 	font-size: 14px;
 }
 
@@ -2935,7 +2945,9 @@ input[type="radio"]:checked+label:after {
 	overflow: scroll;
 }
 
+
 /*** test ***/
+
 
 /* 
 .chk-type.styled label > input[type="checkbox"] {
@@ -2957,6 +2969,7 @@ input[type="radio"]:checked+label:after {
 	border: 2px solid var(--white60);
 	border-radius: 2px;
 } */
+
 
 /* ===================================
 			[default checkbox]
@@ -2993,8 +3006,9 @@ input[type="radio"]:checked+label:after {
 	border-radius: 2px;
 }
 
+
 /* ===================================
-			:not(:checked)
+		checkbox:not(:checked)
 =================================== */
 
 .chk-type.c1 input[type="checkbox"]+label:before {
@@ -3053,8 +3067,9 @@ input[type="radio"]:checked+label:after {
 	border-color: var(--royal-blue);
 }
 
+
 /* ====================================
-	 			:checked
+			checkbox:checked
 ===================================== */
 
 .chk-type input[type="checkbox"]:checked+label:before {
@@ -3216,6 +3231,7 @@ input[type="radio"]:checked+label:after {
 	border-color: var(--white);
 }
 
+
 /* ====================================
 			[dashboard] alarm
 ===================================== */
@@ -3297,7 +3313,7 @@ input[type="radio"]:checked+label:after {
 .alarm-notice h2 {
 	font-size: 16px;
 	color: var(--white);
-	font-weight: bold;
+	font-weight: 500;
 	padding: 20px 0 15px;
 }
 
@@ -3314,6 +3330,7 @@ input[type="radio"]:checked+label:after {
 	white-space: nowrap;
 }
 
+
 /* ====================================
 	9: 미정의(undefined) <<< default,
 	0: 정보(info),
@@ -3322,6 +3339,7 @@ input[type="radio"]:checked+label:after {
 	3: 트립(shutoff),
 	4: 긴급 (urgent)
 ===================================== */
+
 .indiv[data-alarm]:before {
 	position: absolute;
 	top: 0;
@@ -3335,6 +3353,7 @@ input[type="radio"]:checked+label:after {
 
 
 /* 미정의 9 */
+
 .alarm-notice li a:before {
 	display: inline-block;
 	float: none;
@@ -3352,35 +3371,45 @@ li[data-alarm=""]:before {
 	content: "";
 }
 
+
 /* 정보 0 */
+
 .indiv[data-alarm="info"]:before,
 li[data-alarm="info"]:before,
 .alarm-notice li a.info:before {
 	background: var(--jordy-blue);
 }
 
+
 /* 경고 1 */
+
 .indiv[data-alarm="warning"]:before,
 li[data-alarm="warning"]:before,
 .alarm-notice li a.warning:before {
 	background: var(--sandy-brown);
 }
 
+
 /* 이상 2 */
+
 .indiv[data-alarm="critical"]:before,
 li[data-alarm="critical"]:before,
 .alarm-notice li a.critical:before {
 	background: var(--mustard);
 }
 
+
 /* 트립 3 */
+
 .indiv[data-alarm="shutoff"]:before,
 li[data-alarm="shutoff"]:before,
 .alarm-notice li a.shutoff:before {
 	background: var(--sunglow);
 }
 
+
 /* 긴급 4 */
+
 .indiv[data-alarm="urgent"]:before,
 li[data-alarm="urgent"]:before,
 .alarm-notice li a.urgent:before {
@@ -3405,9 +3434,11 @@ li[data-alarm="urgent"]:before,
 	color: var(--white60);
 }
 
+
 /* ====================================
 				[popover]
 ===================================== */
+
 .popover {
 	background-color: var(--box-color);
 	box-shadow: var(--box-shadow);
@@ -3452,9 +3483,11 @@ li[data-alarm="urgent"]:before,
 	border-bottom-color: var(--box-color);
 }
 
+
 /* ====================================
 				[Modal]
 ===================================== */
+
 .modal .wickedpicker {
 	z-index: 300;
 }
@@ -3586,7 +3619,6 @@ li[data-alarm="urgent"]:before,
 	align-items: center;
 }
 
-
 .modal-content {
 	margin: auto;
 	padding: 38px 40px;
@@ -3687,7 +3719,7 @@ li[data-alarm="urgent"]:before,
 
 .modal-body .sub-title {
 	font-size: 14px;
-	font-weight: bold;
+	font-weight: 500;
 	color: var(--white87);
 }
 
@@ -3845,7 +3877,7 @@ li[data-alarm="urgent"]:before,
 .no-flex .setting-form .input-label.asterisk:after {
 	margin: -3% 0 0 6%
 }
-	
+
 .setting-form .input-label.asterisk.no-symbol:after {
 	content: none;
 }
@@ -3869,9 +3901,11 @@ li[data-alarm="urgent"]:before,
 	width: calc(100% - 74px);
 }
 
+
 /* ====================================
 	   [setting] userSettings.do
 ===================================== */
+
 .user-modal-content {
 	width: 80vw;
 	padding: 40px 48px 42px;
@@ -3986,6 +4020,7 @@ li[data-alarm="urgent"]:before,
 	white-space: nowrap;
 }
 
+
 /* ==================================
 		[setting] siteSetting.do
  ==================================== */
@@ -4065,7 +4100,7 @@ li[data-alarm="urgent"]:before,
 	background-size: 8px;
 }
 
-.alarm-modal-content .flex-start .input-label + .dropdown {
+.alarm-modal-content .flex-start .input-label+.dropdown {
 	width: calc(40% + 12px);
 }
 
@@ -4074,7 +4109,7 @@ li[data-alarm="urgent"]:before,
 	width: calc(100% - 100px);
 }
 
-.alarm-modal-content .flex-wrapper .input-label + .text-input-type {
+.alarm-modal-content .flex-wrapper .input-label+.text-input-type {
 	width: 200px;
 	margin: 0;
 }
@@ -4087,24 +4122,26 @@ li[data-alarm="urgent"]:before,
 .alarm-modal-content .dataTables_wrapper td .flex-start {
 	margin: 12px 0 0;
 }
+
 .alarm-modal-content .dataTables_wrapper td .flex-start+.flex-start {
 	margin: 84px 0 0;
 }
-.alarm-modal-content .dataTable td .dropdown + .dropdown {
+
+.alarm-modal-content .dataTable td .dropdown+.dropdown {
 	margin: 64px 0 0;
 }
 
-.alarm-modal-content .dataTable td .dropdown + .text-input-type {
+.alarm-modal-content .dataTable td .dropdown+.text-input-type {
 	margin: 8px 0 0;
 }
 
-.alarm-modal-content .dataTable td .user-group >*,
-.alarm-modal-content .dataTable td .phone-group >* {
+.alarm-modal-content .dataTable td .user-group>*,
+.alarm-modal-content .dataTable td .phone-group>* {
 	min-width: 150px;
 }
 
-.alarm-modal-content .dataTable td .user-group + .user-group,
-.alarm-modal-content .dataTable td .phone-group + .phone-group {
+.alarm-modal-content .dataTable td .user-group+.user-group,
+.alarm-modal-content .dataTable td .phone-group+.phone-group {
 	margin-top: 20px;
 }
 
@@ -4140,8 +4177,6 @@ li[data-alarm="urgent"]:before,
 	margin: 8px 0 0;
 }
 
-
-
 .site-modal-content .text-sm,
 .group-modal-content .text-sm {
 	margin: 10px 0 0;
@@ -4172,13 +4207,13 @@ li[data-alarm="urgent"]:before,
 }
 
 .group-modal-content .radio-type,
-.schedule-content .radio-type{
+.schedule-content .radio-type {
 	height: 36px;
 	line-height: 36px;
 }
 
 .group-modal-content .radio-group+.radio-group,
-.schedule-content .radio-type + .radio-type {
+.schedule-content .radio-type+.radio-type {
 	margin-left: 28px;
 }
 
@@ -4200,6 +4235,7 @@ li[data-alarm="urgent"]:before,
 	font-size: 13px;
 	color: var(--white60);
 }
+
 
 /* ===============================================
 		[common] input, pagination, layout box
@@ -4241,7 +4277,7 @@ input.inp[readonly]:focus {
 }
 
 .pagination a.active {
-	font-weight: bold;
+	font-weight: 500;
 	color: var(--white87);
 }
 
@@ -4255,7 +4291,8 @@ input.inp[readonly]:focus {
 	opacity: 0.4;
 }
 
-/* old pagination TO BE DELETED!!! */
+
+/* NONE DataTable pagination  */
 
 .pagination-wrapper {
 	margin: 34px 0 0;
@@ -4279,7 +4316,7 @@ input.inp[readonly]:focus {
 
 .pagination-wrapper a strong,
 .pagination-wrapper a:hover {
-	font-weight: bold;
+	font-weight: 500;
 	color: var(--white87);
 }
 
@@ -4295,6 +4332,9 @@ input.inp[readonly]:focus {
 .pagination-wrapper .btn-next {
 	background: var(--ico-next-page) no-repeat center center;
 }
+
+
+/* layout component */
 
 .row.header-wrapper {
 	height: 60px;
@@ -4350,7 +4390,7 @@ input.inp[readonly]:focus {
 	margin: 6px 0 10px;
 	font-size: 16px;
 	color: var(--white87);
-	font-weight: bold;
+	font-weight: 500;
 }
 
 .ntit.my-auto {
@@ -4395,6 +4435,7 @@ input.inp[readonly]:focus {
 	word-wrap: break-word;
 }
 
+
 /* ==================================
 				[chart]
  ==================================== */
@@ -4402,7 +4443,7 @@ input.inp[readonly]:focus {
 .chart-top:after {
 	clear: both;
 	content: "";
-	display: block;	
+	display: block;
 }
 
 .chart-top .ntit {
@@ -4435,7 +4476,7 @@ input.inp[readonly]:focus {
 	line-height: 36px;
 	font-size: 14px;
 	color: var(--dark-grey);
-	font-weight: bold;
+	font-weight: 500;
 }
 
 .chart-top .sel-calendar span:first-child {
@@ -4455,7 +4496,7 @@ input.inp[readonly]:focus {
 	background: var(--vivid-blue);
 	font-size: 14px;
 	color: var(--white);
-	font-weight: bold;
+	font-weight: 500;
 	border: 0;
 	outline-style: none;
 	text-align: center;
@@ -4473,7 +4514,7 @@ input.inp[readonly]:focus {
 	line-height: 36px;
 	font-size: 14px;
 	color: var(--dark-grey);
-	font-weight: bold;
+	font-weight: 500;
 	margin-right: 15px;
 }
 
@@ -4505,7 +4546,7 @@ input.inp[readonly]:focus {
 	line-height: 36px;
 	font-size: 14px;
 	color: var(--dark-grey);
-	font-weight: bold;
+	font-weight: 500;
 }
 
 .chart-top .date-today span:first-child {
@@ -4533,7 +4574,7 @@ input.inp[readonly]:focus {
 	line-height: 36px;
 	font-size: 14px;
 	color: var(--dark-grey);
-	font-weight: bold;
+	font-weight: 500;
 }
 
 .chart-top .search-option span:first-child {
@@ -4553,7 +4594,7 @@ input.inp[readonly]:focus {
 	background: var(--vivid-blue);
 	font-size: 14px;
 	color: var(--white);
-	font-weight: bold;
+	font-weight: 500;
 	border: 0;
 	outline-style: none;
 	text-align: center;
@@ -4678,6 +4719,7 @@ input.inp[readonly]:focus {
 	color: var(--vivid-blue);
 }
 
+
 /* ==================================
 				[table]
  ==================================== */
@@ -4699,6 +4741,7 @@ input.inp[readonly]:focus {
 	margin-top: 13px;
 }
 
+
 /* ==================================
 				[panel]
  ==================================== */
@@ -4719,6 +4762,7 @@ input.inp[readonly]:focus {
 	align-items: center;
 	background: none;
 	border: none;
+	color: var(--white87);
 }
 
 .panel-default>.panel-heading.no-data {
@@ -4840,6 +4884,7 @@ input.inp[readonly]:focus {
 	margin-top: 30px;
 }
 
+
 /* PC용 */
 
 .chart-table .table-desktop thead {
@@ -4883,7 +4928,6 @@ input.inp[readonly]:focus {
 	text-align: left;
 	padding: 0 24px 0 12px;
 }
-
 
 .chart-table .table-desktop tbody tr:nth-child(2n) th,
 .chart-table .table-desktop tbody tr:nth-child(2n) td {
@@ -5072,6 +5116,7 @@ input.inp[readonly]:focus {
 	display: inline-flex;
 }
 
+
 /* ==================================
 	[history] operationHistory.do
 ==================================== */
@@ -5080,7 +5125,7 @@ input.inp[readonly]:focus {
 	height: 560px;
 }
 
-.section + .section {
+.section+.section {
 	margin-top: 50px;
 }
 
@@ -5101,6 +5146,7 @@ input.inp[readonly]:focus {
 	white-space: nowrap;
 	border: 0;
 }
+
 html[lang="en"] .btn-save {
 	font-size: 14px;
 }
@@ -5122,7 +5168,7 @@ html[lang="en"] .btn-save {
 	background: var(--light-blue) !important;
 	font-size: 13px;
 	color: var(--white);
-	font-weight: bold;
+	font-weight: 500;
 	border: 0;
 	outline-style: none;
 	border-radius: 4px;
@@ -5420,7 +5466,6 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 }
 
 
-
 /* ==================================
 				[dashboard]
  ==================================== */
@@ -5515,13 +5560,14 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 .device li span.dname {
 	font-size: 18px;
 	color: var(--white);
-	font-weight: bold;
+	font-weight: 500;
 	text-align: center;
 }
 
 .charge {
 	min-height: 417px;
 }
+
 
 /* ==================================
 		[common] no data, no text
@@ -5550,10 +5596,10 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 
 .tab-content .no-data {
 	position: absolute;
-    float: left;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%) !important;
+	float: left;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%) !important;
 	color: var(--white60);
 }
 
@@ -5609,7 +5655,8 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 }
 
 
-/* 지도 */	
+/* 지도 */
+
 .gmain-map2 {
 	width: 50%;
 	height: 100%;
@@ -5640,7 +5687,7 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 	min-height: 60px;
 }
 
-.gm-style .gm-style-iw-c > div {
+.gm-style .gm-style-iw-c>div {
 	overflow: hidden !important;
 	min-height: 20px;
 	padding-right: 20px;
@@ -5669,8 +5716,10 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 }
 
 .gm-ui-hover-effect img {
-    display: none !important;
+	display: none !important;
 }
+
+
 /* 기간별/지역별 사업소별 테이블 */
 
 .gmain-map2-content {
@@ -5842,7 +5891,7 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 	border-bottom: 1px solid var(--dove-gray);
 }
 
-.gmain-wrap table + table thead th {
+.gmain-wrap table+table thead th {
 	border-top: 1px solid var(--dove-gray);
 }
 
@@ -5909,6 +5958,7 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 .gmain-wrap table tbody td .cname {
 	text-align: left;
 }
+
 
 /* 사업소별 상세정보 */
 
@@ -6059,9 +6109,11 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 	line-height: 1.1;
 }
 
+
 /* ==================================
 		[gMain] error/warning color
 ==================================== */
+
 .gmain-wrap .status,
 .gtbl-wrap-kpx .status {
 	display: inline-block;
@@ -6072,25 +6124,33 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 	margin: 2px 2px auto 10px;
 }
 
+
 /* 운전 ?????? */
+
 .gmain-wrap .status-drv,
 .gtbl-wrap-kpx .status-drv {
 	background: var(--status-drive) no-repeat center center;
 }
 
+
 /* 정지 */
+
 .gmain-wrap .status-stop,
 .gtbl-wrap-kpx .status-stop {
 	background: var(--status-stop) no-repeat center center;
 }
 
+
 /* 트립: 이상 */
+
 .gmain-wrap .status-error,
 .gtbl-wrap-kpx .status-error {
 	background: var(--status-error) no-repeat center center;
 }
 
+
 /* 대기 (현재 미 사용) */
+
 .gmain-wrap .status-hold,
 .gtbl-wrap-kpx .status.status-hold {
 	background: var(--status-hold) no-repeat center center;
@@ -6162,7 +6222,7 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 	margin-right: 12px;
 }
 
-.gmain-row1 .indiv.gmain-chart4 + .gmain-alarm {
+.gmain-row1 .indiv.gmain-chart4+.gmain-alarm {
 	margin-left: 12px;
 }
 
@@ -6222,6 +6282,7 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 	color: var(--white87);
 	line-height: 26px;
 }
+
 
 /* ==================================
 		[sMain] device table
@@ -6283,7 +6344,7 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 	vertical-align: bottom;
 }
 
-.chart-info .chart-info-left > div {
+.chart-info .chart-info-left>div {
 	width: 100%;
 }
 
@@ -6370,9 +6431,11 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 	font-weight: 500;
 }
 
+
 /* ==================================================
 		[sMain] power generation calendar
 ==================================================== */
+
 .smain-cal {
 	height: 585px;
 }
@@ -6380,7 +6443,6 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 .smain-cal .chart-top {
 	margin: 0 0 12px;
 }
-
 
 .smain-cal .calendar-wrap {
 	display: flex;
@@ -6414,7 +6476,6 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 	border-radius: 4px;
 }
 
-
 .smain-cal .calendar tbody td>div {
 	margin-bottom: 8px;
 	color: var(--white);
@@ -6430,13 +6491,13 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 
 .smain-cal .calendar tbody td div em .day {
 	margin-right: 16px;
-	font-weight: bold;
+	font-weight: 500;
 	color: var(--white);
 }
 
 .smain-cal .calendar tbody td div .wicon {
 	padding: 15px 0px 10px;
-	color: var(--white); 
+	color: var(--white);
 }
 
 .smain-cal .calendar tbody td span {
@@ -6534,8 +6595,7 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 	text-align: center;
 }
 
-
-.weather-table{
+.weather-table {
 	width: 40%;
 	margin-right: 2%
 }
@@ -6551,13 +6611,13 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 	font-size: 14px;
 }
 
-.weather-table .today >* {
+.weather-table .today>* {
 	color: var(--white);
 	line-height: 24px;
 	font-size: 14px;
 }
 
-.weather-wrap .today span >* {
+.weather-wrap .today span>* {
 	display: inline-block;
 	vertical-align: middle;
 }
@@ -6565,7 +6625,6 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 .weather-wrap .today span strong {
 	padding: 0 10px;
 }
-
 
 .weather-table table {
 	width: 100%;
@@ -6683,6 +6742,7 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 	color: var(--light-grey)
 }
 
+
 /* ==================================== */
 
 .gmain-table.smain .gmain-wrap {
@@ -6727,6 +6787,7 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 	border-bottom: 0;
 	font-size: 13px;
 }
+
 .local-info.smain td span {
 	font-size: 16px;
 }
@@ -6753,7 +6814,8 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 }
 
 .jmain-center3 {
-	height: 400px;;
+	height: 400px;
+	;
 }
 
 .jmain-center3 .realtime-wrap .inchart {
@@ -6775,7 +6837,7 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 
 .realtime-site {
 	float: left;
-	width: calc( 78% - 16px );
+	width: calc( 78% - 16px);
 	padding-left: 16px;
 }
 
@@ -6834,10 +6896,10 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 	bottom: -5px;
 }
 
+
 /* ==================================
 			[gMain table]
 ==================================== */
-
 
 .gmain-table .table-top .check-option.chk-type label {
 	color: var(--white60);
@@ -6905,7 +6967,7 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 
 .table-type td {
 	color: var(--white87);
-	font-weight: bold;
+	font-weight: 500;
 }
 
 .ntit+.alert-icon {
@@ -6927,10 +6989,11 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 	color: var(--vivid-blue);
 	font-size: 13px;
 }
+
 .sm-title {
 	font-size: 14px;
 	color: var(--white87);
-} 
+}
 
 .alarm-header {
 	margin-bottom: 20px;
@@ -6998,7 +7061,6 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 .sa-select:not([style*="display: none"])+.sa-select {
 	margin-left: 8px;
 }
-
 
 .list-title {
 	font-size: 16px;
@@ -7083,13 +7145,14 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 	margin-top: 0;
 }
 
-.indiv.alarm-detail-wrapper .history-table + .table-top {
+.indiv.alarm-detail-wrapper .history-table+.table-top {
 	margin-top: 20px;
 }
 
 #PV_INVERTER tbody tr {
 	cursor: pointer;
 }
+
 
 /* ==================================
 		[device] deviceState.do
@@ -7109,19 +7172,25 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 	border-radius: 4px;
 }
 
+
 /* operation: 정상 */
+
 .alert-icon>.inv-normal,
 .equip-icon>span.equip-normal {
 	background: var(--jordy-blue);
 }
 
+
 /* operation: 트립 */
+
 .alert-icon>.inv-error,
 .equip-icon>span.equip-error {
 	background: var(--sunglow);
 }
 
+
 /* operation: 중지 */
+
 .alert-icon>.inv-alert,
 .equip-icon>span.equip-alert {
 	background: var(--sandy-brown);
@@ -7417,14 +7486,13 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 	margin-left: 8px;
 }
 
-
 .operation-history .flex-end .radio-type {
 	line-height: 36px;
 	white-space: nowrap;
 }
 
-.flex-end .radio-type + .radio-type,
-.flex-end .radio-type + .dropdown {
+.flex-end .radio-type+.radio-type,
+.flex-end .radio-type+.dropdown {
 	margin-left: 24px;
 }
 
@@ -7463,15 +7531,15 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 	border-radius: 12px;
 	line-height: 1;
 	height: 28px;
-	color: var(--white87);	
-	font-size: 12px;	
+	color: var(--white87);
+	font-size: 12px;
 }
 
 .tag-box .axis-label {
 	margin: -10px 6px 0;
 }
 
-.tag-box .axis-label + .tx-tit {
+.tag-box .axis-label+.tx-tit {
 	display: flex;
 	flex-wrap: wrap;
 	height: auto;
@@ -7485,7 +7553,6 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 	font-weight: 300;
 	padding: 0 5px 0 7px;
 }
-
 
 .tx-li-title {
 	margin-bottom: 10px;
@@ -7521,6 +7588,7 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 .li-btn-box {
 	margin: 0 0 10px;
 }
+
 
 /* 발전 */
 
@@ -7587,7 +7655,7 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 	background: var(--vivid-blue);
 	font-size: 14px;
 	color: var(--white);
-	font-weight: bold;
+	font-weight: 500;
 	border: 0;
 	outline-style: none;
 	text-align: center;
@@ -7632,7 +7700,7 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 	position: relative;
 }
 
-.dbclickopen + .detail-info .ico {
+.dbclickopen+.detail-info .ico {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -7640,27 +7708,27 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 	height: 48px;
 }
 
-.dbclickopen + .detail-info .ico.battery {
+.dbclickopen+.detail-info .ico.battery {
 	filter: invert(0);
 	background: var(--ico-battery-full) no-repeat center;
 }
 
-.dbclickopen + .detail-info .ico.solar {
+.dbclickopen+.detail-info .ico.solar {
 	filter: invert(0);
 	background: var(--ico-pv) no-repeat center;
 }
 
-.dbclickopen + .detail-info .ico.water {
+.dbclickopen+.detail-info .ico.water {
 	filter: invert(0);
 	background: var(--ico-water) no-repeat center;
 }
 
-.dbclickopen + .detail-info .ico.wind {
+.dbclickopen+.detail-info .ico.wind {
 	filter: invert(0);
 	background: var(--ico-wind) no-repeat center;
 }
 
-.dbclickopen + .detail-info .text-wrapper {
+.dbclickopen+.detail-info .text-wrapper {
 	margin-left: 48px;
 	border-bottom: 1px solid var(--dove-gray);
 }
@@ -7756,7 +7824,9 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 	min-width: 74px;
 }
 
+
 /* 예측진단 발전 */
+
 .toggle-box {
 	margin-top: 20px;
 }
@@ -7828,6 +7898,7 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 	margin-top: 24px;
 }
 
+
 /* alarmHistory */
 
 .chart-legend-wrapper {
@@ -7873,7 +7944,7 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 }
 
 .table-wrap-type .tab-content,
-.table-wrap-type .table-top + .table-scroll {
+.table-wrap-type .table-top+.table-scroll {
 	overflow-y: auto;
 }
 
@@ -7881,8 +7952,7 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 	max-height: 360px;
 }
 
-
-.table-wrap-type .table-scroll + .table-top {
+.table-wrap-type .table-scroll+.table-top {
 	margin-top: 40px;
 }
 
@@ -7906,9 +7976,11 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 	right: 0;
 }
 
+
 /* ================================
 		button alignment 
 ================================ */
+
 .right-end {
 	position: absolute;
 	margin-top: 20px;
@@ -8037,7 +8109,7 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 
 .details-control .icon-add {
 	background-size: 14px;
-	opacity: 0.87;	
+	opacity: 0.87;
 }
 
 .icon-edit {
@@ -8115,7 +8187,6 @@ html[lang="en"] .switch-input:checked~.switch-handle {
 .text-file:hover {
 	padding: 0;
 }
-
 
 .text-file>a {
 	display: block;
@@ -8229,6 +8300,7 @@ button.text-file {
 	text-align: left;
 }
 
+
 /* ===================================*******
 							chart bullet
 ===================================******* */
@@ -8323,6 +8395,8 @@ button.text-file {
 .bullet .color15:before {
 	background: var(--vivid-blue);
 }
+
+
 /* 
 .bullet  .color16:before {
 	
@@ -8393,7 +8467,6 @@ button.text-file {
 .bu.t14:before {
 	background: var(--royal-blue);
 }
-
 
 .search-select-wrapper {
 	display: flex;
@@ -8571,7 +8644,7 @@ button.text-file {
 	width: 125px;
 }
 
-.report-modal-content .input-label.short + .btn-text-blue {
+.report-modal-content .input-label.short+.btn-text-blue {
 	margin: 0 3px 0 -30px;
 }
 
@@ -8602,6 +8675,7 @@ button.text-file {
 	padding-top: 25px;
 }
 
+
 /* ====================================
 		[device] collectionState.do
 ====================================*/
@@ -8624,7 +8698,7 @@ button.text-file {
 	padding: 0 16px;
 }
 
-.collect-box .w-50 + .w-50 {
+.collect-box .w-50+.w-50 {
 	padding: 0 8px;
 }
 
@@ -8655,7 +8729,7 @@ button.text-file {
 	background: none;
 }
 
-.collect-box .device-list li:nth-child(odd){
+.collect-box .device-list li:nth-child(odd) {
 	margin: 0;
 }
 
@@ -8715,8 +8789,8 @@ button.text-file {
 	margin-top: 0;
 }
 
-.collect-wrap.table-scroll table tbody tr:nth-child(odd){
-    background: none;
+.collect-wrap.table-scroll table tbody tr:nth-child(odd) {
+	background: none;
 }
 
 .collect-wrap .history-table.scroll {
@@ -8758,14 +8832,14 @@ button.text-file {
 }
 
 
-
 /* ========================================================
 		[spc] balanceSheetEdit, balanceSheetPost.do
  ========================================================== */
 
- .income {
+.income {
 	min-height: 357px;
 }
+
 
 /* 원가관리 수정 */
 
@@ -8892,11 +8966,12 @@ button.text-file {
 	width: 250px;
 }
 
+
 /* 보고서 maintenanceReport.jsp && yieldReport.jsp */
 
 .ly-title {
 	font-size: 40px;
-	font-weight: bold;
+	font-weight: 500;
 	color: var(--white87);
 }
 
@@ -8911,6 +8986,7 @@ button.text-file {
 .indiv.report .sort-table {
 	table-layout: auto;
 }
+
 
 /* TO DO !!!!!!!! */
 
@@ -8929,7 +9005,7 @@ button.text-file {
 
 .spc-dialog {
 	font-size: 20px;
-	font-weight: bold;
+	font-weight: 500;
 	color: var(--white87);
 }
 
@@ -9061,6 +9137,7 @@ th .btn-align {
 	cursor: pointer;
 }
 
+
 /* SPC 테이블 */
 
 .spc-table-row th {
@@ -9112,7 +9189,7 @@ th .btn-align {
 	padding: 0 0 0 28px;
 }
 
-form[name="basicForm"] tr > th:first-child {
+form[name="basicForm"] tr>th:first-child {
 	padding: 0 0 0 56px;
 }
 
@@ -9124,11 +9201,13 @@ form[name="basicForm"] tr > th:first-child {
 	background: var(--box-darker);
 }
 
+
 /* spc 입출금 */
 
 .indiv.spc-transaction {
 	padding: 48px 30px 36px
 }
+
 .spc-transaction .indiv {
 	margin-bottom: 0;
 	padding: 30px;
@@ -9147,6 +9226,7 @@ form[name="basicForm"] tr > th:first-child {
 	font-size: 12px;
 	color: var(--white60);
 }
+
 
 /* spc 출금 요청서 작성||수정 */
 
@@ -9206,7 +9286,7 @@ table.table-footer tfoot tr:first-child td {
 }
 
 table.table-footer tfoot td:not(.light) {
-	font-weight: bold;
+	font-weight: 500;
 	color: var(--white87);
 }
 
@@ -9360,7 +9440,7 @@ table.table-footer tfoot td.light {
 
 .indiv.spc-detail .history-table tfoot td {
 	text-align: center;
-	font-weight: bold;
+	font-weight: 500;
 }
 
 .indiv.spc-detail .history-table tfoot td.right {
@@ -9429,6 +9509,7 @@ table.table-footer tfoot td.light {
 	bottom: 10px;
 	right: 20px;
 }
+
 
 /* ==================================
 	[spc] transactionCalendar.do
@@ -9518,7 +9599,6 @@ table.table-footer tfoot td.light {
 	content: "";
 }
 
-
 .spc-modal-content .dropdown .btn,
 .spc-modal-content .sel-calendar {
 	clear: both;
@@ -9541,12 +9621,12 @@ table.table-footer tfoot td.light {
 }
 
 .spc-modal-content .row:not(.end) .text-input-type.mr-12 {
-	width: calc( 100% - 154px );
+	width: calc( 100% - 154px);
 }
 
 .spc-modal-content .row.end .dropdown,
-.spc-modal-content.full-width .row.end .dropdown + .sel-calendar,
-.spc-modal-content .row.end .dropdown + .sel-calendar {
+.spc-modal-content.full-width .row.end .dropdown+.sel-calendar,
+.spc-modal-content .row.end .dropdown+.sel-calendar {
 	width: calc(45% - 24px);
 }
 
@@ -9785,8 +9865,8 @@ table.table-footer tfoot td.light {
 	color: var(--white60);
 }
 
-.entity-wrapper.post table .text-file a + button,
-.entity-wrapper.post table .text-file + button {
+.entity-wrapper.post table .text-file a+button,
+.entity-wrapper.post table .text-file+button {
 	float: right;
 	margin-top: -23px;
 }
@@ -10098,6 +10178,7 @@ table.table-footer tfoot td.light {
 	width: 200px;
 }
 
+
 /* file input */
 
 .fileBox .fileName {
@@ -10130,7 +10211,7 @@ table.table-footer tfoot td.light {
 	flex-shrink: 0;
 }
 
-.yield-list>li:nth-child(odd){
+.yield-list>li:nth-child(odd) {
 	margin-right: 100px;
 }
 
@@ -10177,7 +10258,7 @@ table.table-footer tfoot td.light {
 .upload-photo .photo-load,
 .report-select .report-load {
 	margin-right: 16px;
-	font-weight: bold;
+	font-weight: 500;
 }
 
 .upload-photo .photo-text,
@@ -10188,6 +10269,7 @@ table.table-footer tfoot td.light {
 	color: var(--white87);
 	line-height: 36px;
 }
+
 
 /* TO DELETE!!!!! */
 

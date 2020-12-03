@@ -1507,16 +1507,16 @@ const searchSite = async function () {
 					{
 						textColor: 'black',
 						textSize: 16,
-						anchorText: [10, 19], // [yPos, xPos]
+						anchorText: [11, 20], // [yPos, xPos]
 						fontWeight: 'normal',
 						url: '/img/map_icons/cluster_blue.png',
-						height: 41,
-						width: 41
+						height: 40,
+						width: 40
 					},
 				];
 
 				let clusterOptions = {
-					gridSize: 41,
+					gridSize: 40,
 					styles: clusterStyles,
 					maxZoom: 15
 				};
