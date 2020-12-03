@@ -421,7 +421,7 @@
 								<dd>
 									<a href="#"><fmt:message key="menu.top.plantAnalysis.site" /></a>
 									<ul class="overflow-list">
-										<li><a href="#" class="group-title" onclick="dashboardMove('group', '', ''); return false">전체</a></li>
+										<li><a href="#" class="group-title" onclick="dashboardMove('group', '', ''); return false"><fmt:message key="header.select.all" /></a></li>
 										<c:if test="${fn:length(siteList) > 0}">
 											<c:forEach var="site" items="${siteList}">
 												<li>

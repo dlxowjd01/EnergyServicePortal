@@ -1,8 +1,11 @@
 const standardSuffix = 'MWh';
+const monthEN = [`Jan`, `Feb`, `Mar`, `Apr`, `May`, `Jun`, `Jul`, `Aug`, `Sep`, `Oct`, `Nov`, `Dec`];
+const dayEN = [`1st`, `2nd`, `3rd`, `4th`, `5th`, `6th`, `7th`, `8th`, `9th`, `10th`, `11th`, `12th`, `13th`, `14th`, `15th`, `16th`, `17th`, `18th`, `19th`, `20th`, `21st`, `22nd`, `23rd`, `24th`, `25th`, `26th`, `27th`, `28th`, `29th`, `30th`, `31st`];
 
 /**
  * 월간차트 선언부
  */
+console.log(langStatus)
 const monthlyChart = Highcharts.chart('monthlyChart', {
 	chart: {
 		marginTop: 40,
@@ -121,7 +124,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 				} else {
 					return s
 				}
-			}, '<span style="display:flex;"><b>' + this.x + '월</b></span>');
+			}, `<span style="display:flex;"><b>${langStatus === `KO` ? this.x+'월' : monthEN[this.x - 1]}</b></span>`);
 		},
 		shared: true,
 		useHTML: true,
@@ -295,7 +298,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 				} else {
 					return s
 				}
-			}, '<span style="display:flex;"><b>' + this.x + '일</b></span>');
+			}, `<span style="display:flex;"><b>${langStatus === `KO` ? this.x+'일' : dayEN[this.x - 1]}</b></span>`);
 		},
 		shared: true,
 		useHTML: true,
