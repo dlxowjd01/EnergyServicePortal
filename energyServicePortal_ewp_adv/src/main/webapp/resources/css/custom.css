@@ -751,9 +751,9 @@ a.btn-type04.text-blue {
 }
 
 .btn-type06 {
-	padding: 0 12px 0 6px;
+	padding: 4px 12px 0 6px;
 	font-size: 12px;
-	line-height: 22px;
+	line-height: 18px;
 	color: var(--white60);
 	border: 0;
 	background: none;

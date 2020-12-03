@@ -3,236 +3,188 @@
 <script type="text/javascript">
 	let today = new Date();
 	let date = new Date();
-	var spcPairArr = [];
+	let spcPairArr = [];
 
-	$(function () {
-		// task 1: 사무수탁사  2: 자산 운용사  3: 사업주  ||  role 1: encored  2: spc clients
-		if(task == 2 || task == 3) {
-			$("#requestBtn").remove() 
-		} else if( task == 4) {
-			$("#requestBtnReview").remove();
-			$("#requestBtn").remove();
-		}
-		const modalForm = $("#spcAlarmForm");
-		const clone = $("#spcList").clone().html();
-		$("#spcList").empty();
-
-		getSpcList();
+	document.addEventListener('DOMContentLoaded', () => {
+		const spcList = document.querySelector('#spcList li');
+		while (spcList.firstChild) spcList.removeChild(spcList.firstChild);
 
 		pageInit();
 
-		setTimeout(function(){
-			maintenance(spcPairArr, 'get');
-		}, 300);
+		<%-- 날짜 셀렉트 박스 --%>
+		const searchDate = document.querySelectorAll('.search-select-wrapper ul li');
+		[].forEach.call(searchDate, (target) => {
+			target.addEventListener('click', (e) => {
+				let targetDate = e.currentTarget;
+				let thisVal = targetDate.dataset.value;
+				let thisId = targetDate.closest('div.dropdown').getAttribute('id');
 
-
-		function getSpcList (){
-			$.ajax({
-				url: apiHost + '/spcs?oid=' + oid + '&includeGens=true',
-				dataType: 'json',
-				type: 'get',
-				async: false,
-				contentType: "application/json",
-				beforeSend: function(){
-					$('#loadingCircle').show();
-				},
-				success: function (json) {
-					let data = json.data;
-					var promise = [];
-					var spcIdList = [];
-					var gensInfoList = [];
-					var spcNameArr = [];
-
-					data.map(x => {
-						spcIdList.push(x.spc_id);
-						const spcInfo = JSON.parse(x.spc_info);
-						if (isEmpty(spcInfo.spcName)) {
-							spcInfo.spcName = x.name;
-							promise.push(Promise.resolve(spcInfo));
-						} else {
-							promise.push(Promise.resolve(JSON.parse(x.spc_info)));
-						}
-					});
-					// setTimeout(function(){
-						Promise.all(promise).then(res => {
-							var length = res.length;
-							// console.log("length", length)
-							res.map((n, i) => {
-								let str = '';
-								let obj = {};
-								if(n.name) {
-									obj.spcName = n.name;
-								} else if(n.spcName) {
-									obj.spcName = n.spcName;
-								} else if(isEmpty(n.name) && isEmpty(n.spcName)) {
-									obj.spcName = "no_name";
-								}
-								obj.spcId = spcIdList[i];
-								spcPairArr.push(obj);
-								str = clone.replace(/\*spcName\*/g, obj.spcName).replace(/\*spcId\*/g, spcIdList[i]);
-								$("#spcList").append($(str));
-							});
-							setDropdownValue($("#spcList"));
-						});
-
-					// }, 300);
-				},
-				error: function(request, status, error) {
-					console.log("error===", error)
+				if (thisId === 'year') {
+					today = new Date(Number(thisVal), today.getMonth(), today.getDate());
+				} else {
+					today = new Date(today.getFullYear(), thisVal - 1, today.getDate());
 				}
+
+				buildCalendar();
 			});
-		}
-
-		//날짜 셀렉트박스 클릭 시
-		$('.search-select-wrapper ul li').on('click', function () {
-			var thisVal = $(this).data('value');
-			var thisId = $(this).parent().parent().attr('id');
-			if (thisId == 'year') {
-				today = new Date(thisVal, today.getMonth(), today.getDate());
-			} else {
-				today = new Date(today.getFullYear(), thisVal - 1, today.getDate());
-			}
-			buildCalendar();
-			maintenance(spcPairArr, 'get');
 		});
 
-		//전월
-		$('.btn-prev-month').click(function () {
-			let prevMonth = today.getMonth() - 1;
-			today = new Date(today.getFullYear(), prevMonth, today.getDate());
-			$('#modalTitle').text(prevMonth);
-			$('#popoverModal').find("h2").text(prevMonth);
-			buildCalendar();
-			maintenance(spcPairArr, 'get');
-			// return false;
+		<%-- 전월 이동 --%>
+		const prevMonth = document.querySelector('.btn-prev-month');
+		prevMonth.addEventListener('click', changeMonth, false);
+
+		<%-- 익월 이동 --%>
+		const nextMonth = document.querySelector('.btn-next-month');
+		nextMonth.addEventListener('click', changeMonth, false);
+
+		<%-- 금월 이동 --%>
+		const nowMonth = document.querySelector('.btn-type03.active');
+		nowMonth.addEventListener('click', changeMonth, false);
+
+		<%-- 반복 기간 --%>
+		const repeatInterval = document.querySelectorAll('#repeat_interval, #repeat_unit');
+		[].forEach.call(repeatInterval, (target) => {
+			target.addEventListener('click change', repeatEnd, false);
 		});
 
-		//다음월
-		$('.btn-next-month').click(function () {
-			let nextMonth = today.getMonth() + 1;
-			today = new Date(today.getFullYear(), nextMonth, today.getDate());
-			$('#modalTitle').text(nextMonth);
-			buildCalendar();
-			maintenance(spcPairArr, 'get');
-			// return false;
+		<%-- 입출금 상태 && 주요일정 선택 --%>
+		const typeInput = document.querySelectorAll('input[name="type"]');
+		[].forEach.call(typeInput, (target) => {
+			target.addEventListener('change', searchBySpcName, false);
 		});
 
-		//요번달
-		$('.btn-type03.active').click(function () {
-			today = new Date();
-			buildCalendar();
-			maintenance(spcPairArr, 'get');
-			// return false;
-		});
+		<%-- 검색어 입력 --%>
+		const searchInput = document.getElementById('searchName');
+		searchInput.addEventListener('keyup', searchBySpcName, false);
 
-		$('#repeat_interval, #repeat_unit').on('click change', function () {
-			repeatEnd();
-			// return false;
-		});
+		<%-- 모달팝업 열기 --%>
+		const modalPopBtn = document.getElementById('addAlarmBtn');
+		modalPopBtn.addEventListener('click', function() { modalPopInit() }, false);
 
-		// $('#spcAlarmModal li').on('click', function () {
-		// 	let value = $(this).data('value');
-		// 	let buttonId = $(this).parents('div').prop('id');
-		// 	$(this).parents('div.dropdown').find('button').data('value', value);
+		<%-- 확인버튼 클릭 --%>
+		const confirmBtn = document.getElementById('confirmBtn');
+		confirmBtn.addEventListener('click', () => {
+			document.getElementById('detailInfoModal').classList.remove('active');
+		}, false);
 
-		// 	if (buttonId == 'repeat_yn') {
-		// 		if (value == 'Y') {
-		// 			$(this).parents('.flex-start3').addClass('short');
-		// 			$(this).parents('div.dropdown').siblings().removeClass('hidden');
-
-		// 			$('#repeat_end').addClass('sel').parent().removeClass('text-input-type').addClass('sel-calendar');
-		// 		} else {
-		// 			$(this).parents('.flex-start3').removeClass('short');
-		// 			$(this).parents('div.dropdown').siblings().addClass('hidden');
-
-		// 			$('#repeat_end').removeClass('sel').parent().removeClass('sel-calendar').addClass('text-input-type');
-		// 		}
-		// 		repeatEnd();
-		// 	} else if (buttonId == 'alarmSetup') {
-		// 		if ($('#alarmDate').hasClass('hasDatepicker')) {
-		// 			$('#alarmDate').datepicker('destroy').removeClass('hasDatepicker');
-		// 		}
-		// 		if (value != '직접 설정') {
-		// 			let jobDate = $('#job_date').datepicker('getDate');
-		// 			if (isEmpty($('#job_date').val())) {
-		// 				$('#alarmDate').val('');
-		// 			} else {
-		// 				jobDate.setDate(jobDate.getDate() - value);
-		// 				$('#alarmDate').val(jobDate.format('yyyy-MM-dd'));
-		// 			}
-		// 		} else {
-		// 			$('#alarmDate').datepicker({
-		// 				showOn: "both",
-		// 				buttonImageOnly: true,
-		// 				dateFormat: 'yy-mm-dd',
-		// 				beforeShow: function () {
-		// 					let minDate = $('#job_date').datepicker('getDate');
-		// 					if (minDate != '') {
-		// 						$('#alarmDate').datepicker('option', 'minDate', minDate);
-		// 					}
-
-		// 					let maxDate = $('#repeat_end').datepicker('getDate');
-		// 					if (maxDate != '') {
-		// 						$('#alarmDate').datepicker('option', 'maxDate', maxDate);
-		// 					}
-		// 				}
-		// 			})
-		// 			$('#alarmDate').val('');
-		// 		}
-		// 	}
-		// });
-
-		$(':checkbox[name="type"]').on('change', function () {
-			searchBySpcName();
-		});
-
-		$('#searchName').on('keyup', function () {
-			searchBySpcName();
-		});
-		
-		$('body').click(function() {
-
-		});
-
-		$('#confirmBtn').on("click", function(){
-			$("#detailInfoModal").removeClass("active");
-		});
+		 <%-- 더보기 레이어 확인 클릭 --%>
+		const etcBtn = document.getElementById('dateEtcBtn');
+		etcBtn.addEventListener('click', () => {
+			document.getElementById('dateEtcModal').classList.remove('active');
+		}, false);
 	});
 
-		
-	//기본세팅
+	<%-- 월별 이동 --%>
+	const changeMonth = (e) => {
+		const target = e.currentTarget
+			, targetClass = target.getAttribute('class');
+		let symbol = '';
+
+		if (targetClass === 'btn-prev-month') symbol = '-';
+		else if (targetClass === 'btn-next-month') symbol = '+';
+		else symbol = '';
+
+		if (isEmpty(symbol)) {
+			today = new Date();
+		} else {
+			today = new Date(today.getFullYear(), eval('today.getMonth() ' + symbol + ' 1'), today.getDate());
+		}
+
+		buildCalendar();
+	}
+
+	/**
+	 * 페이지 초기화
+	 */
 	const pageInit = function () {
+		<%-- task 1: 사무수탁사  2: 자산 운용사  3: 사업주  ||  role 1: encored  2: spc clients --%>
+		if (task === '1') {
+			document.getElementById('requestBtnReview').remove();
+		} else if(task === '3') {
+			document.getElementById('requestBtn').remove();
+		} else if( task === '4') {
+			document.getElementById('requestBtnReview').remove();
+			document.getElementById('requestBtn').remove();
+		}
+
 		let html = '';
 		let year = today.getFullYear();
 		let month = today.getMonth() + 1;
 
-		$('#datepicker1').datepicker('setDate', 'today');
-		$('#year > button').html(year + '년<span class="caret"></span>').data('value', year);
-		$('#month > button').html(month + '월<span class="caret"></span>').data('value', month);
+		let yearDropdown = document.getElementById('year');
+		let monthDropdown = document.getElementById('month');
+
+		yearDropdown.querySelector('button').innerHTML = year + '년<span class="caret"></span>';
+		yearDropdown.querySelector('button').dataset.value = String(year);
+		monthDropdown.querySelector('button').innerHTML = month + '년<span class="caret"></span>';
+		monthDropdown.querySelector('button').dataset.value = String(month);
 
 		for (let i = 0; i < 5; i++) {
 			let bfYear = new Date(year - i, month + 1);
-			let select = i == 0 ? 'on' : '';
+			let select = i === 0 ? 'on' : '';
 			html += '<li data-value="' + bfYear.getFullYear() + '" class="' + select + '"><a href="#">' + bfYear.getFullYear() + '년 </a></li>';
 		}
-		$('#year ul').empty().append(html);
+
+		const yearList = yearDropdown.querySelector('li');
+		while (yearList.firstChild) yearList.removeChild(yearList.firstChild);
+		yearDropdown.querySelector('ul').innerHTML = html;
+
+		getSpcList();
 		buildCalendar();
 	};
+
+	/**
+	 * spc 리스트 조회
+	 */
+	const getSpcList = () => {
+		new Promise(resolve =>  {
+			$.ajax({
+				url: apiHost + '/spcs?oid=' + oid + '&includeGens=true',
+				type: 'GET',
+				beforeSend: function(){
+					document.getElementById('loadingCircle').display = 'block';
+				},
+				success: function (json) {
+					let data = json.data;
+					if (!isEmpty(data)) { resolve(data); }
+					else { new Error('SPC 조회 내역이 없습니다.') }
+				},
+				error: function(request, status, error) {
+					console.error(status);
+					new Error('SPC 조회 중 오류가 발생했습니다.');
+				}
+			});
+		}).then(data => {
+			let liStr = ``;
+			data.forEach(x => {
+				let spcInfo = JSON.parse(x.spc_info)
+					, spcId = x.spc_id
+					, spcName = !isEmpty(x.name) ? x.name : !isEmpty(spcInfo.name) ? spcInfo.name : !isEmpty(spcInfo.spcName) ? spcInfo.spcName : 'no_name';
+
+				spcPairArr.push({
+					spcId: spcId,
+					spcName: spcName
+				});
+				liStr += `<li data-name="${'${spcName}'}" data-value="${'${spcId}'}"><a href="javascript:void(0);" tabindex="-1">${'${spcName}'}</a></li>`;
+			});
+
+			document.getElementById('spcList').innerHTML = liStr;
+		}).catch(error => {
+			console.error(error);
+		});
+	}
 
 	// calendar frame ONLY (no data)
 	const buildCalendar = function () { //현재 달 달력 만들기
 		let doMonth = new Date(today.getFullYear(), today.getMonth(), 1);
 		let lastDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-		let tbCalendar = document.getElementById('calendar');
+		let calendar = document.getElementById('calendar');
 
-		// const spcOpt = $("#spcList");
-		// const spcClone = spcOpt.clone().html();
-		// $("#spcList").empty();
-		while (tbCalendar.rows.length > 1) {
-			tbCalendar.deleteRow(tbCalendar.rows.length - 1);
+		while (calendar.rows.length > 1) {
+			calendar.deleteRow(calendar.rows.length - 1);
 		}
 
-		let row = tbCalendar.insertRow();
+		let row = calendar.insertRow();
 		let cell = null;
 		let cnt = 0;
 		const thisMonth = doMonth.getMonth() + 1 + '월';
@@ -244,101 +196,117 @@
 
 		for (let i = 1; i <= lastDate.getDate(); i++) {
 			cell = row.insertCell();
-			cell.innerHTML = '<h2 class="date" data-day="' + doMonth.format('yyyyMM') + i + '">' + i + '</h2><ul class="alarm-list"></ul>';
+			cell.innerHTML = `<h2 class="date" data-day="` + doMonth.format('yyyyMM') + i + '">' + i + '</h2><ul class="alarm-list"></ul>';
 			cnt = cnt + 1;
 
-			if (cnt % 7 == 0) {
+			if (cnt % 7 === 0) {
 				row = calendar.insertRow();
 			}
 			/* today */
-			if (today.getFullYear() == date.getFullYear() &&
-				today.getMonth() == date.getMonth() &&
-				i == date.getDate()) {
+			if (today.getFullYear() === date.getFullYear() &&
+				today.getMonth() === date.getMonth() &&
+				i === date.getDate()) {
 				cell.setAttribute('class', 'today');
 			}
 		}
 
-		$('.search-btn .btn-type03:last-of-type').text(thisMonth);
-		$('#modalTitle').text(thisMonth);
-		$('#year > button').html(doMonth.getFullYear() + '년<span class="caret"></span>').data('value', doMonth.getFullYear());
-		$('#month > button').html(doMonth.getMonth() + 1 + '월<span class="caret"></span>').data('value', doMonth.getMonth() + 1);
+		document.getElementById('detailModalTrigger').textContent = thisMonth;
+		document.getElementById('modalTitle').textContent = thisMonth;
+
+		document.querySelector('#year > button').innerHTML = doMonth.getFullYear() + '년<span class="caret"></span>';
+		document.querySelector('#year > button').dataset.value = String(doMonth.getFullYear());
+		document.querySelector('#month > button').innerHTML = doMonth.getMonth() + 1 + '월<span class="caret"></span>';
+		document.querySelector('#month > button').dataset.value = String(doMonth.getMonth() + 1);
+
+		maintenance('GET');
 	};
 
-	const maintenance = function (spcNameArr, action, jobId) {
-		var spcIdArr = spcNameArr;
-		let option = {};
-
-		if (action == 'get') {
-			let optTransaction = {};
-			let d = $('#year button').data('value') + ('0' + $('#month button').data('value')).slice(-2)
-			let yyyy = d.slice(0, 4);
-			let mm = d.slice(4, 7);
+	const maintenance = function (action, jobId) {
+		if (action === 'GET') {
+			const apiUrls = new Array();
+			let maintenanceObject = new Object();
+			let yyyy = document.querySelector('#year > button').dataset.value;
+			let mm = ('0' + document.querySelector('#month > button').dataset.value).slice(-2);
 			let spcId = '';
-			let endDay = '';
 
-			if(!isEmpty(spcNameArr)){
-				var spcNameList = spcNameArr;
-				// console.log("spcName===", typeof spcNameArr)
-				if(typeof spcNameArr == 'number' ){
-					spcId = spcNameArr;
-				} else if (spcNameArr.length) {
-					spcId = spcNameArr.map(x => x.spcId).join();
+			if(!isEmpty(spcPairArr)){
+				if(typeof spcPairArr === 'number' ){
+					spcId = spcPairArr;
+				} else if (spcPairArr.length) {
+					spcId = spcPairArr.map(x => x.spcId).join();
 				} else {
-					spcId = spcNameArr.spcId;
+					spcId = spcPairArr.spcId;
 				}
 			}
 
-			endDay = yyyy + mm + new Date(yyyy, mm, 0).getDate();
-			startDay = yyyy + mm + '01';
+			maintenanceObject = {
+				oid: oid,
+				type: 'money',
+				like_yyyymm: yyyy + mm
+			}
 
-			// GET req
-			option = {
+			if (!isEmpty(jobId)) {
+				maintenanceObject['jobId'] = jobId
+			}
+
+			apiUrls.push($.ajax({
 				url: apiHost + '/spcs/maintenance',
-				type: 'get',
-				dataType: 'json',
+				type: 'GET',
+				data: maintenanceObject
+			}));
+
+			apiUrls.push($.ajax({
+				url: apiHost + '/spcs/transactions',
+				type: 'GET',
 				data: {
 					oid: oid,
-					type: "money",
-					like_yyyymm: yyyy + mm,
-				},
-				beforeSend: function () {
-					$('#loadingCircle').show();
-				},
-				async: false
-			};
+					spcIds: spcId,
+					startDay: yyyy + mm + '01',
+					endDay: yyyy + mm + new Date(yyyy, mm, 0).getDate()
+				}
+			}));
 
-			optTransaction = {
-				url: apiHost + '/spcs/transactions',
-				type: action,
-				dataType: 'json',
-				data: {
-					'oid' : oid,
-					'spcIds' : spcId,
-					'startDay': startDay,
-					'endDay' : endDay
-				},
-				async: false,
-				beforeSend: function () {
-					$('#loadingCircle').show();
-				},
-			};
-
-			if (jobId != undefined) {
+			if (!isEmpty(jobId)) {
 				option.data.jobId = jobId;
 			}
 
-			$.when($.ajax(option),$.ajax(optTransaction)).done(function (result1, result2) {
-				var item1 = result1[0].data;
-				var item2 = groupBy(result2[0].data, "withdraw_day");
-				// console.log("item2===", item2)
-				fillCalendar(item1, item2, spcNameList);
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				showWarningModal("fail");
-				return false;
-			});
+			Promise.all(apiUrls).then(response => {
+				let rtnArray = new Array();
+				response.forEach((res, index) => {
+					let database = res.data;
+					if (!isEmpty(database)) {
+						database.forEach(data => {
+							if (index === 0) {
+								rtnArray.push({
+									date: new Date(data.job_date).format('yyyyMMdd'),
+									job_type: data.job_type,
+									spc_id: data.spc_id,
+									id: data.id,
+									modal_data: data
+								});
+							} else {
+								rtnArray.push({
+									date: data.withdraw_day,
+									spc_id: data.spc_id,
+									status: data.status
+								});
+							}
+						});
+					}
+				});
 
+				if (!isEmpty(rtnArray)) {
+					rtnArray = groupBy(rtnArray, 'date');
+				}
+
+				fillCalender(rtnArray);
+			}).catch(error => {
+				console.error(error);
+				showWarningModal('fail');
+			});
 		} else {
-			if (action == 'post' || action == 'patch') {
+			let option;
+			if (action == 'POST' || action == 'PATCH') {
 				let data = setData();
 				if (isEmpty(data['spc_id'])) {
 					alert('SPC 선택은 필수 값입니다.');
@@ -399,7 +367,7 @@
 				let url = '';
 				data.spc_id = Number(data.spc_id);
 
-				if (action == 'patch') {
+				if (action == 'PATCH') {
 					let jobText = jobId == undefined ? '' : '&jobId=' + jobId;
 					delete data.spc_id;
 					delete data.type;
@@ -431,7 +399,7 @@
 				if (!confirm('삭제 하시겠습니까?')) {
 					return false;
 				}
-				if (action == 'delete') {
+				if (action == 'DELETE') {
 					let jobText = jobId == undefined ? '' : '&jobId=' + jobId;
 					option = {
 						url: apiHost + '/spcs/maintenance/' + jobId + '?oid=' + oid,
@@ -443,193 +411,233 @@
 					};
 				}
 			}
+
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
 				$("#spcAlarmModal").modal("hide");
 				document.location.reload(true);
 				// maintenance(spcPairArr, 'get');
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				showWarningModal("fail");
-				console.log("jqXHR===", jqXHR)
+				console.errer("jqXHR===", jqXHR)
 				return false;
 			});
 		}
 	};
 
-	const fillCalendar = function (mData, tData, spcNameList) {
-		var calendar = $('#calendar .alarm-list');
-		var modalData = $('#detailInfoModal').find(".alarm-list");
-		var spcList = spcNameList;
-		calendar.empty();
-		modalData.empty();
+	/**
+	 * 달력안에 일정 세팅
+	 *
+	 * @param data - 주요 일정 && 입출금 일정
+	 */
+	const fillCalender = (data) => {
+		const calendar = document.querySelectorAll('#calendar .alarm-list');
+		const modalData = document.querySelector('#detailInfoModal .alarm-list');
+		const alarmList = document.querySelectorAll('ul.alarm-list');
 
-		const checkType = $.makeArray($(':checkbox[name="type"]:checked').map(function () {
-				return $(this).val();
-			}
-		));
-		const serachName = $('#searchName').val().trim().toLowerCase();
+		//초기화
+		alarmList.forEach(alarm => {
+			while (alarm.hasChildNodes()) { alarm.removeChild(alarm.firstChild); }
+		});
 
-		if (mData.length > 0) {
-			mData.forEach(function (v, k) {
-				const filterArr = ["1", "2", "3", "4"];
-				let job_date = new Date(v.job_date).format('dd');
-				let job_type = v.job_type;
-				let sid = v.spc_id;
-				let job_info = '';
-				let tableStr = '';
-				let bulletStr = '';
-				let hiddenClass = '';
+		let checkType = new Array();
+		document.querySelectorAll('[name="type"]:checked').forEach(checkbox => {
+			checkType.push(checkbox.value);
+		});
 
-				// console.log("jov_date===", job_date)
-				// console.log("job_type===", job_type)
-				return new Promise((resolve, reject) => {
-					resolve(JSON.parse(v.job_info))
-				}).then(result => {
-					job_info = result;
+		const searchName = document.getElementById('searchName').value.trim()
+			, regExp = new RegExp(searchName, 'i')
+			, statusList = [
+				{ id: 0, val: '출금 - 반송' },
+				{ id: 1, val: '출금 - 승인 대기' },
+				{ id: 2, val: '출금 - 승인 중' },
+				{ id: 3, val: '출금 - 승인 완료' },
+				{ id: 4, val: '출금 - 가승인' },
+				{ id: 5, val: '출금 - 최종 승인' },
+				{ id: 6, val: '입금' }
+			];
 
-					let spcName = '';
-					if(spcList.length>0){
-						spcList.some(x => {
-							if(x.spcId === v.spc_id) {
-								spcName = x.spcName;
-							}
-						});
+		let modalStr = ``;
+		Object.entries(data).forEach(([date, items]) => {
+			const calendarDate = Number(date.slice(-2)) - 1;
+			let tableStr = ``
+			  , otherCount = 0
+			  , transactionCount = 0
+			  , first = true;
+
+			items.forEach(item => { if(isEmpty(item.job_type)) { transactionCount++; } })
+			items.forEach((item, index) => {
+				if (index < 2) {
+					let spcName = ''
+					  , hiddenClass = '';
+					if (!isEmpty(spcPairArr)) {
+						spcPairArr.some(x => { if(x.spcId === item.spc_id) { spcName = x.spcName; } });
 					}
 
-					if(isEmpty(spcName)){
-						spcName = "spc_no_name";
-					}
+					if (isEmpty(spcName)) spcName = 'spc_no_name';
 
-					if ($.inArray(job_type, checkType) === -1) {
-						hiddenClass = 'hidden';
-					} else {
-						if (!isEmpty(serachName)) {
-							if ((spcName.toLowerCase().match(serachName) || job_Name(job_type).match(serachName)) == null) {
+					if (!isEmpty(item.job_type)) {
+						const jobName = job_Name(item.job_type);
+						if (!checkType.includes(item.job_type)) {
+							hiddenClass = 'hidden';
+						} else {
+							if (!isEmpty(searchName) && (regExp.test(searchName) || regExp.test(jobName))
+							) {
 								hiddenClass = 'hidden';
 							}
 						}
-					}
 
-					// console.log("job_type===", job_type);
-					if (filterArr.indexOf(job_type) > -1){
-						tableStr = '<li data-jobId="' + v.id + '" data-id="' + v.spc_id + '" data-name="' + spcName + '" class="link bu t' + job_type + ' ' + hiddenClass + '">[' + spcName + '] ' + job_Name(job_type) + '</li>';
+						tableStr += `<li data-jobId="${'${item.id}'}" data-id="${'${item.spc_id}'}" data-name="${'${spcName}'}" class="link bu t${'${item.job_type}'} ${'${hiddenClass}'}">[${'${spcName}'}] ${'${jobName}'}</li>`;
+						modalStr += `<li class="link alarm-item ${'${hiddenClass}'}" data-id="${'${item.id}'}">
+										<span data-jobId="${'${item.id}'}" data-id="${'${item.spc_id}'}" data-name="${'${spcName}'}" class="bu t${'${item.job_type}'}">[${'${spcName}'}] ${'${jobName}'}</span>
+										<span class="fr btn-next"></span>
+										<br>
+									</li>`;
 					} else {
-						tableStr = '<li data-jobId="' + v.id + '" data-id="' + v.spc_id + '" data-name="' + spcName + '" class="link bu t' + job_type + ' ' + hiddenClass + '">[' + spcName + '] ' + job_Name(job_type) + '</li>';
-					}
-					bulletStr = '<span data-jobId="' + v.id + '" data-id="' + v.spc_id + '" data-name="' + spcName + '" class="bu t' + job_type + '">[ ' + spcName + ' ] ' + job_Name(job_type) + '</span><span class="fr btn-next"></span>';
-					calendar.eq(Number(job_date) - 1).append(tableStr);
-					modalData.append(
-						'<li class="link alarm-item ' + hiddenClass + '" data-id="'+v.id+'">'
-						+ bulletStr
-						+ '<br>'
-						+ ''
-						+'</li>'
-					)
-				}).catch(function(error) {
-					if(error){
-						return false;
-					}
-					console.log(error);
-				});
-			});
-		}
-
-		if (!isEmpty(tData)) {
-			Object.entries(tData).map((item, index) => {
-				// "반송" : 0,  "승인 대기" : 1", "승인 중" : "2", "승인완료": "3"
-				let statusList = [
-					{ id: 0, val: "출금 - 반송" },
-					{ id: 1, val: "출금 - 승인 대기" },
-					{ id: 2, val: "출금 - 승인 중" },
-					{ id: 3, val: "출금 - 승인 완료" },
-					{ id: 4, val: "출금 - 가승인" },
-					{ id: 5, val: "출금 - 최종 승인" },
-					{ id: 6, val: "입금" }
-				];
-				let tStr = ''
-				let bStr = '';
-				let firstStatus = item[1][0].status;
-				let bulletIdx = '';
-				let d = item[0].slice(-2);
-				let spcName = '';
-				let hiddenClass = '';
-
-				// console.log("pair---", spcPair)
-				spcList.some(x => {
-					if(x.spcId == item[1][0].spc_id) {
-						spcName = x.spcName;
-					}
-				});
-				if(item[1][0].status == 1){
-					bulletIdx = "2";
-				} else if(item[1][0].status == 2){
-					bulletIdx = "3";
-				} else if(item[1][0].status == 3) {
-					bulletIdx = "1";
-				} else if(item[1][0].status == 4) {
-					bulletIdx = "4";
-				} else if(item[1][0].status == 5) {
-					bulletIdx = "5";
-				}
-				if ($.inArray(bulletIdx, checkType) === -1) {
-					hiddenClass = 'hidden';
-				} else {
-					if (!isEmpty(serachName)) {
-						if ((spcName.toLowerCase().match(serachName) || (statusList[firstStatus].val).toLowerCase().match(serachName)) == null) {
+						const bulletIdx = Number(item.status) + 1
+							, statusName = statusList[item.id];
+						if (checkType.includes(bulletIdx)) {
 							hiddenClass = 'hidden';
+						} else {
+							if (!isEmpty(searchName) && (regExp.test(searchName) || regExp.test(jobName))
+							) {
+								hiddenClass = 'hidden';
+							}
+						}
+						tableStr += `<li data-id="${'${item.spc_id}'}" data-name="${'${spcName}'}" data-value="${'${item.status}'}" class="bu t${'${Number(item.status) + 1}'}">[${'${spcName}'}] ${'${statusList[item.status].val}'}</li>`;
+
+						if (first) {
+							first = false;
+							let suffix = '';
+							if (transactionCount > 1) { suffix = (transactionCount - 1) + ' 외'; }
+							modalStr += `<li class="alarm-item link" ${'${hiddenClass}'}>
+											<span data-id="${'${item.spc_id}'}" data-name="${'${spcName}'}" data-value="${'${item.status}'}" class="bu t${'${Number(item.status) + 1}'}">
+												[${'${spcName}'}] ${'${statusList[item.status].val}'} ${'${suffix}'}
+											</span>
+											<span class="fr btn-next"></span><br/>
+										</li>`;
 						}
 					}
+				} else {
+					otherCount++;
 				}
-				// console.log( 'item[1]===', item[1])
-				//    item[1][0].spc_id
-				if(firstStatus !=0){
-					if(item[1].length>1){
-						tStr = '<li data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + ' ' + hiddenClass + '">[' + spcName + '] ' + statusList[firstStatus].val + ' 외 + ' + (item[1].length - 1) + '건</li>';
-						bStr = '<span data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + '">[' + spcName + '] ' + statusList[firstStatus].val + ' 외 + ' + (item[1].length - 1) + '건</span><span class="fr btn-next"></span>';
-					} else {
-						tStr = '<li data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + ' ' + hiddenClass + '">[' + spcName + '] ' + statusList[firstStatus].val + '</li>';
-						bStr = '<span data-id="' + item[1][0].spc_id + '" data-name="' + spcName + '" data-value="' + firstStatus + '" class="bu t' + bulletIdx + '">[' + spcName + '] ' + statusList[firstStatus].val + '</span><span class="fr btn-next"></span>';
-					}
-					calendar.eq(Number(d) - 1).append(tStr);
-					modalData.append(
-						'<li class="alarm-item link ' + hiddenClass + '">'
-						+ bStr
-						+ '<br>'
-						+ ''
-						+'</li>'
-					)
-				}
-				// console.log("calendar===", calendar.find("li"))
 			});
-		}
 
-		$("#addAlarmBtn").on("click", function(){
-			modalPopInit(undefined, spcNameList);
+			if (otherCount > 0) {
+				tableStr += `<li>
+								<button type="button" class="btn-type06" id="dateModal${'${calendarDate}'}">
+									${'${otherCount}'} 개 더보기
+								</button>
+							</li>`;
+			}
+
+			calendar[calendarDate].innerHTML = tableStr;
+
+			const dateEtc = document.getElementById('dateModal' + calendarDate);
+			if (dateEtc !== null) {
+				dateEtc.addEventListener('click', () =>{ dateModal(date, items); }, false);
+			}
 		});
 
-		setTimeout(function(){
-			calendar.find(".link").on("click", function(){
-				var self = $(this);
-				if(isEmpty(self.attr("data-jobId"))){
-					// console.log("No jobId==", self.attr("data-jobId"))
+		modalData.innerHTML = modalStr;
+
+		const calendarLi = document.querySelectorAll('#calendar .alarm-list li.link');
+		[].forEach.call(calendarLi, (target) => {
+			target.addEventListener('click', (e) => {
+				let targetDate = e.currentTarget;
+				let jobid = targetDate.dataset.jobid;
+
+				if (isEmpty(jobid)) {
 					modalPopInit();
 				} else {
-					// console.log("YES jobId==", self.attr("data-jobId"))
-					let spcObj = {};
-					spcObj.spcId = self.data("id");
-					spcObj.spcName = self.data("name");
-					let jobId = self.data("jobid");
+					let spcObj = new Object;
+					spcObj.spcId = targetDate.dataset.id;
+					spcObj.spcName = targetDate.dataset.name;
+					const jobId = targetDate.dataset.jobid;
 
-					modalPopInit(mData, spcObj, jobId);
-					// $("#spcAlarmForm").find(".modal-header").text("주요 일정 알림 수정");
+					modalPopInit(data, spcObj, jobId);
 				}
-				// if($("#detailInfoModal").hasClass("active")) {
-				// 	$("#detailInfoModal").removeClass("active");
-				// }
-				// $("#spcAlarmModal").modal("show");
 			});
-		}, 300);
+		});
+	}
 
-	};
+	/**
+	 * 일자별 더보기 함수
+	 */
+	const dateModal = (date, items) => {
+		const calendarDate = (date.slice(-4)).replace(/(\d{2})(\d{2})/, '$1월 $2일')
+			, etcModal = document.getElementById('dateEtcModal')
+			, modalData = document.querySelector('#dateEtcModal .alarm-list')
+			, statusList = [
+				{ id: 0, val: '출금 - 반송' },
+				{ id: 1, val: '출금 - 승인 대기' },
+				{ id: 2, val: '출금 - 승인 중' },
+				{ id: 3, val: '출금 - 승인 완료' },
+				{ id: 4, val: '출금 - 가승인' },
+				{ id: 5, val: '출금 - 최종 승인' },
+				{ id: 6, val: '입금' }
+			];
+		let modalStr = ``;
+		let checkType = new Array();
+		document.querySelectorAll('[name="type"]:checked').forEach(checkbox => {
+			checkType.push(checkbox.value);
+		});
+		const searchName = document.getElementById('searchName').value.trim();
+
+		document.getElementById('dateEtcTitle').innerText = calendarDate;
+
+		items.forEach(item => {
+			let spcName = ''
+			  , hiddenClass = '';
+			if (!isEmpty(spcPairArr)) {
+				spcPairArr.some(x => { if(x.spcId === item.spc_id) { spcName = x.spcName; } });
+			}
+
+			if (isEmpty(spcName)) spcName = 'spc_no_name';
+
+			if (!isEmpty(item.job_type)) {
+				const jobName = job_Name(item.job_type);
+				if (!checkType.includes(item.job_type)) {
+					hiddenClass = 'hidden';
+				} else {
+					if (!isEmpty(searchName) && (regExp.test(searchName) || regExp.test(jobName))
+					) {
+						hiddenClass = 'hidden';
+					}
+				}
+
+				modalStr += `<li class="link alarm-item ${'${hiddenClass}'}" data-id="${'${item.id}'}">
+								<span data-jobId="${'${item.id}'}" data-id="${'${item.spc_id}'}" data-name="${'${spcName}'}" class="bu t${'${item.job_type}'}">[${'${spcName}'}] ${'${jobName}'}</span>
+								<span class="fr btn-next"></span>
+								<br>
+							</li>`;
+			} else {
+				const bulletIdx = Number(item.status) + 1
+					, statusName = statusList[item.id];
+				if (checkType.includes(bulletIdx)) {
+					hiddenClass = 'hidden';
+				} else {
+					if (!isEmpty(searchName) && (regExp.test(searchName) || regExp.test(jobName))
+					) {
+						hiddenClass = 'hidden';
+					}
+				}
+
+				modalStr += `<li class="alarm-item link" ${'${hiddenClass}'}>
+								<span data-id="${'${item.spc_id}'}" data-name="${'${spcName}'}" data-value="${'${item.status}'}" class="bu t${'${Number(item.status) + 1}'}">
+									[${'${spcName}'}] ${'${statusList[item.status].val}'}
+								</span>
+								<span class="fr btn-next"></span><br/>
+							</li>`;
+			}
+		});
+
+		modalData.innerHTML = modalStr;
+		etcModal.classList.add('active');
+		if (document.getElementById('detailInfoModal').classList.contains('active')) {
+			document.getElementById('detailInfoModal').classList.remove('active');
+		}
+
+	}
 
 	const modalPopInit = function (data, spcNameList, jobId) {
 		const modal = $('#spcAlarmModal');
@@ -670,19 +678,21 @@
 
 			postScheduleBtn.off('click');
 			postScheduleBtn.on("click", function(){
-				maintenance(spcIdArr, 'post');
+				maintenance('POST');
 			});
 		} else {
 			let targetDate;
-			data.forEach(temp => {
-				if (temp.id == jobId) {
-					targetDate = temp;
-				}
+			Object.entries(data).forEach(([date, items]) => {
+				items.forEach(item => {
+					if (item.id === Number(jobId)) {
+						targetDate = item;
+					}
+				});
 			});
 
 			title.text('주요 일정 알림 수정');
-			const jobInfo = JSON.parse(targetDate.job_info);
-			setJsonAutoMapping(targetDate, 'spcAlarmModal', 'dropdown');
+			const jobInfo = JSON.parse(targetDate.modal_data.job_info);
+			setJsonAutoMapping(targetDate.modal_data, 'spcAlarmModal', 'dropdown');
 			setJsonAutoMapping(jobInfo, 'spcAlarmModal');
 
 			if (jobInfo['alarmSetup'] == '') {
@@ -749,23 +759,17 @@
 				});
 			}
 
-			// deleteScheduleBtn.removeClass('hidden').attr('onclick', 'maintenance(\'delete\', \'' + data[0].id + '\' );');
 			deleteScheduleBtn.removeClass('hidden');
-
 			deleteScheduleBtn.off('click');
 			deleteScheduleBtn.on("click", function(e){
-				// e.preventDefault();
-				maintenance(spcNameList, 'delete', targetDate.id);
+				maintenance('DELETE', targetDate.id);
 			});
-			// $("#closeBtn").on("click", function(){ return false; })
 			postScheduleBtn.text('수정');
 
 			postScheduleBtn.off('click');
 			postScheduleBtn.on("click", function(){
-				// console.log("postScheduleBtn====")
-				maintenance(spcNameList, 'patch', targetDate.id);
+				maintenance('PATCH', targetDate.id);
 			});
-			// postScheduleBtn.attr('onclick', 'maintenance(' + spcNameList + '\'patch\', \'' + data[0].id + '\' );').text('수정');
 		}
 		modal.modal("show");
 		if($("#detailInfoModal").hasClass("active")) {
@@ -773,7 +777,7 @@
 		}
 	}
 
-	// 등록 & 수정 용 데이터 세팅
+	<%--// 등록 & 수정 용 데이터 세팅--%>
 	const setData = function () {
 		let jsonData = {};
 		let job_info = {};
@@ -1030,34 +1034,6 @@
 			$("#warningModal").modal("show");
 		}
 	}
-
-	// function beginningOfMonth(myDate){
-	// 	let date = new Date(myDate);
-	// 	date.setDate(1)
-	// 	date.setHours(0);
-	// 	date.setMinutes(0);
-	// 	date.setSeconds(0);
-	// 	return date.toLocaleString();
-	// }
-
-	// function endOfMonth(myDate){
-	// 	let date = new Date(myDate);
-	// 	date.setMonth(date.getMonth() +1)
-	// 	date.setDate(0);
-	// 	date.setHours(23);
-	// 	date.setMinutes(59);
-	// 	date.setSeconds(59);
-	// 	return date.toLocaleString();
-	// }
-
-	// function getHostname (url) {
-	// 	// use URL constructor and return hostname
-	// 	const matches = url.match(/^https?\:\/\/([^\/?#]+)(?:[\/?#]|$)/i);
-	// 	console.log("matches===", matches&&matches[1])
-	// 	return matches && matches[1].split('.')[0];
-	// 	// return new URL(url).hostname.split('.')[0];
-	// }
-
 </script>
 
 
@@ -1395,7 +1371,7 @@
 					--><button type="button" class="btn-type03 active">오늘</button><!--
 					--><button type="button" class="btn-prev-month">prev</button><!--
 					--><button type="button" class="btn-next-month">next</button><!--
-					--><button type="button" id="detailModalTrigger" class="btn-type03" onclick="$('#detailInfoModal').toggleClass('active')"></button><!--
+					--><button type="button" id="detailModalTrigger" class="btn-type03" onclick="$('#detailInfoModal').toggleClass('active'); if ($('#dateEtcModal').hasClass('active')) { $('#dateEtcModal').removeClass('active'); }"></button><!--
 				--></div>
 					<div id="detailInfoModal" class="dropdown-modal modal-dialog calendar-modal">
 						<div class="modal-content spc-detail-content">
@@ -1408,6 +1384,20 @@
 							</div>
 							<div class="btn-wrap-type05">
 								<button type="button" id="confirmBtn" class="btn-type" data-dismiss="modal" data-target="#detailInfoModal">확인</button>
+							</div>
+						</div>
+					</div>
+					<div id="dateEtcModal" class="dropdown-modal modal-dialog calendar-modal">
+						<div class="modal-content spc-detail-content">
+							<div class="modal-header">
+								<h2 id="dateEtcTitle" class="fl"></h2>
+								<!-- <a href="#" class="btn-type02 fr">상세보기</a> -->
+							</div>
+							<div class="modal-body">
+								<ul class="alarm-list"></ul>
+							</div>
+							<div class="btn-wrap-type05">
+								<button type="button" id="dateEtcBtn" class="btn-type" data-dismiss="modal" data-target="#dateEtcModal">확인</button>
 							</div>
 						</div>
 					</div>
