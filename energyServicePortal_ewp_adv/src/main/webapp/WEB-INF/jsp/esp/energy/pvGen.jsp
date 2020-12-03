@@ -227,6 +227,7 @@
 			});
 		}
 
+		document.querySelector('#deviceType button').innerHTML = '복수 선택 <span class="caret"></span>';
 		document.querySelector('#deviceType .selectDevices').innerHTML = '';
 
 		if (!isEmpty(selectedSite)) {
@@ -459,7 +460,7 @@
 								} else if (idx === 1 && /dashboard/.test(device.id) && device.value === id) {
 									data.name = device.dataset.name;
 									id += '_dashboard';
-								} else if (idx !== 0 && idx !== 1) {
+								} else if (idx !== 0 && idx !== 1 && device.value === id) {
 									data.name = device.dataset.name;
 								}
 								data.sid = device.dataset.sid;
