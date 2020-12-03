@@ -553,7 +553,9 @@
 						td = document.createElement('td');
 					}
 
-					th.innerHTML = (colLength > 2) ? (item.standard.substr(stdLength, colLength)).replace(/(\d{2})(\d{2})/, '$1:$2') : Number(item.standard);
+					th.innerHTML = (colLength > 2) ? (item.standard.substr(stdLength, colLength)).replace(/(\d{2})(\d{2})/, '$1:$2') : (item.standard.substr(stdLength, colLength));
+					console.log(th);
+					console.log(colLength);
 					theadTr.appendChild(th);
 
 					td.innerHTML = (item.timeValue !== '-') ? displayNumberFixedUnit(item.timeValue, 'Wh', 'kWh', 0)[0] : item.timeValue;
