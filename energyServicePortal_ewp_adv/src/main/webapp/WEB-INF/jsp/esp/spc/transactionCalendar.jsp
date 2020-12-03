@@ -98,9 +98,7 @@
 	 */
 	const pageInit = function () {
 		<%-- task 1: 사무수탁사  2: 자산 운용사  3: 사업주  ||  role 1: encored  2: spc clients --%>
-		if (task === '1') {
-			document.getElementById('requestBtnReview').remove();
-		} else if(task === '3') {
+		if(task === '2' && task === '3') {
 			document.getElementById('requestBtn').remove();
 		} else if( task === '4') {
 			document.getElementById('requestBtnReview').remove();
