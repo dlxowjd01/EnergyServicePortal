@@ -227,7 +227,7 @@
 			});
 		}
 
-		document.querySelector('#deviceType button').innerHTML = '복수 선택 <span class="caret"></span>';
+		document.querySelector('#deviceType button').innerHTML = '<fmt:message key="operHistory.multiple" /> <span class="caret"></span>';
 		document.querySelector('#deviceType .selectDevices').innerHTML = '';
 
 		if (!isEmpty(selectedSite)) {

@@ -507,7 +507,7 @@
 					}
 				}, 60 * 1000); //1분에 한번 현재현황 & 알림 갱신
 			} else {
-				$('#errMsg').text("해당 그룹에 등록 된 사이트가 존재하지 않습니다.");
+				$('#errMsg').text("<fmt:message key='gmain.warning.noSite' />");
 				$('#errorModal').modal('show');
 				setTimeout(function () {
 					$('#errorModal').modal('hide');
@@ -560,7 +560,7 @@
 						}
 					}
 				} else {
-					$('#errMsg').text("해당 그룹에 등록 된 사이트가 존재하지 않습니다.");
+					$('#errMsg').text("<fmt:message key='gmain.warning.noSite' />");
 					$('#errorModal').modal('show');
 					setTimeout(function () {
 						$('#errorModal').modal('hide');
