@@ -25,6 +25,15 @@ html.darkmode:root {
 	border-spacing: 0;
 }
 
+.dataTable.dashboard-table {
+	width: 100% !important;
+	table-layout: fixed;
+	margin: 0;
+	clear: both;
+	border-collapse: separate;
+	border-spacing: 0;
+}
+
 .dataTable thead th {
 	font-size: 13px;
 	font-weight: 500;
@@ -80,6 +89,13 @@ html.darkmode:root {
 	padding: 18px 10px;
 	font-size: 13px;
 	white-space: nowrap;
+}
+
+.dataTables_scrollHeadInner > .dataTable.dashboard-table th {
+	padding: 14px 10px;
+	white-space: normal;
+	word-wrap: break-word;
+	word-break: keep-all;
 }
 
 .dataTable tbody th,
@@ -314,6 +330,19 @@ html.darkmode:root {
 	background: var(--btn-upload) no-repeat 0 5px;
 	border: 0;
 	margin-top: -7px;
+	cursor: pointer;
+}
+
+.dataTables_wrapper .btn-file.up:hover {
+	opacity: 0.6;
+}
+
+
+.dataTables_wrapper .btn-file.down {
+	margin-top: -8px;
+	background: var(--btn-download) no-repeat 0 5px;
+	background-size: 21px;
+	border: 0;
 }
 
 .dataTables_wrapper select {
