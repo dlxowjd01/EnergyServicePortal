@@ -465,8 +465,10 @@
 								}
 								data.sid = device.dataset.sid;
 							} else {
-								data.name = device.dataset.name;
-								data.sid = device.dataset.sid;
+								if (device.value === id) {
+									data.name = device.dataset.name;
+									data.sid = device.dataset.sid;
+								}
 							}
 						});
 
