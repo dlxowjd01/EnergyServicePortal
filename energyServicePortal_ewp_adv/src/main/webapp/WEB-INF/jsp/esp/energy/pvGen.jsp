@@ -440,7 +440,8 @@
 				response.forEach((res, idx) => {
 					const database = res.data;
 					Object.entries(database).forEach(([id, data]) => {
-						document.querySelectorAll('input[name="device"]:checked').forEach(device => {
+						if (data.length > 1) data = new Array(data.find(x => x.metering_type === '2'));
+						document.querySelectorAll('input[name="device"]:checked').forEach(device =>  {
 							if (billingSites.length > 0 && dashSites.length <= 0) {
 								if (device.value === id) {
 									data.name = device.dataset.name;
