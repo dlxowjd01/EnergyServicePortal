@@ -3,8 +3,39 @@
 <script type="text/javascript">
 	$(function () {
 		getPropertyData();
-	});
+		$("#fileInput").on('change', function (e) {
+			let t = $(this).val();
+			if (isEmpty(t)) {return false;}
+			let labelText = 'File : ' + t.substr(12, t.length);
+			let listItem =  labelText + '<button type="button" class="icon-trash" onclick="deleteFile($(this))"></button>';
+			$(this).parent().find(".upload-text").html(listItem);
 
+			let fileReader = new FileReader();
+			let selectedFile = e.target.files[0];
+
+			fileReader.onload = function(event) {
+				let data = event.target.result;
+				let workbook = XLSX.read(data, {
+					type: "binary"
+				});
+				let arr = [];
+				workbook.SheetNames.forEach(sheet => {
+					let rowObject = XLSX.utils.sheet_to_row_object_array(
+						workbook.Sheets[sheet]
+					);
+					rowObject.forEach((item, index) => {
+						// item.key이름 별로 값을 
+						let obj = {}
+						// obj.key = item.key;
+						arr.push(obj);
+						// console.log(item);
+					});
+					// console.log(rowObject);
+				});
+			};
+			fileReader.readAsBinaryString(selectedFile);
+		});
+	});
 
 	function getPropertyData(callbackOption) {
 		let option = {
@@ -424,14 +455,14 @@
 							</div>
 						</div>
 
+						<!-- 기획 추가 확인 common.js on.change function 확인 할 것 -->
 						<div class="row">
-							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12"><span class="input-label">아이콘</span></div>
+							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12"><span class="input-label">타이틀 미정</span></div>
 							<div class="col-xl-10 col-lg-10 col-md-10 col-sm-12">
-								<div class="flex-baseline mt-10">
-										<input type="file" name="file" id="fileInput" class="btn-upload hidden" accept=".jpg, .png" multiple>
-										<label for="fileInput" class="btn file-upload">파일 선택</label>
-									 	<div class="file_list ml-16"><ul></ul></div>
-									<!-- <div class=""><button type='button' class='icon-trash' onclick='deleteFile($(this), "front")'></button></div> -->
+								<div class="flex-start mt-8">
+									<input type="file" name="file" id="fileInput" class="btn-upload stand-alone hidden" data-parse="true" accept=".xls, .xlsx">
+									<label for="fileInput" class="btn file-upload">파일 선택</label>
+									<span class="upload-text ml-16"></span>
 								</div>
 							</div>	
 						</div>

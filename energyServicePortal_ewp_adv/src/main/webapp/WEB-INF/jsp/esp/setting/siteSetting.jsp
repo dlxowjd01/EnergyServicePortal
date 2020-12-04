@@ -1324,6 +1324,8 @@
 							var sheet = xlsx.xl.worksheets['sheet1.xml'];
 							$('row:first c', sheet).attr( 's', '42' );
 							var sheet = xlsx.xl.worksheets['sheet1.xml'];
+
+							// 아래 부터는 customization 할 수 있는 부분
 							// var lastCol = sheet.getElementsByTagName('col').length - 1;
 							// var colRange = createCellPos( lastCol ) + '1';
 							// //Has to be done this way to avoid creation of unwanted namespace atributes.
@@ -1336,25 +1338,12 @@
 							// filterAttr.value = 'A1:' + colRange;
 							// xlsxFilter.setAttributeNode(filterAttr);
 							// sheet.getElementsByTagName('worksheet')[0].appendChild(xlsxFilter);
-
 						}
 					},
-					// {
-					// 	extend: 'csvHtml5',
-					// 	className: "btn-type03",
-					// 	text: 'CSV'
-					// },
-					// {
-					// 	extend: 'pdfHtml5',
-					// 	className: "btn-type03",
-					// 	text: 'PDF',
-					// },
 				],
 			});
 
 			siteTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup");
-
-			// siteTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup").addClass("hidden inline");
 
 			$("#siteType").find("li").on( 'click', function(){
 				if(!isEmpty($(this).data("name"))){
@@ -1608,21 +1597,13 @@
 					selector: 'td input[type="checkbox"], tr'
 					// selector: 'td input[type="checkbox"], td:not(:nth-of-type(11))'
 				},
-				initComplete: function(settings, json ){
-					// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-					// 	cell.innerHTML = i+1;
-					// 	$(cell).data("id", i);
-					// });		
+				initComplete: function(settings, json ){	
 					let str = `<div id="btnGroup" class="right-end2"><!--
 						--><button type="button" disabled class="btn-type03" onclick="updateModal('edit')">선택 수정</button><!--
 						--><button type="button" disabled class="btn-type03" onclick="updateModal('delete')">선택 삭제</button><!--
 					--></div>`;
 					$("#siteTable_wrapper").append($(str)).addClass('mb-28');
 
-					// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-					// 	cell.innerHTML = i+1;
-					// 	$(cell).data("id", i);
-					// });
 					let colGroup = $("#siteTable").find("colgroup col");
 					if(oid.match("testkpx")){
 						this.api().columns(9).visible( false );
