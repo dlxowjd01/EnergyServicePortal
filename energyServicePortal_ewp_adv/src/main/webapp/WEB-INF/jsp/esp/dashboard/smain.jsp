@@ -1204,7 +1204,7 @@
 						val = displayNumberFixedDecimal(point.y, 'kWh', 'kWh', 0)[0];
 					}
 					return s + '<br/><span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + val + " " + suffix;
-				}, '<span style="display:flex; margin-bottom:-10px;"><b>' + this.x + '월</b></span>');
+				}, '<span style="display:flex; margin-bottom:-10px;"><b>'+(langStatus === "KO" ? this.x+'월' : monthEN[this.x-1])+'</b></span>');
 
 			},
 			shared: true,
@@ -1677,7 +1677,7 @@
 				return this.points.reduce(function (s, point) {
 					let suffix = point.series.userOptions.tooltip.valueSuffix;
 					return s + '<br/><span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + numberComma(point.y) + suffix;
-				}, '<span style="display:flex; margin-bottom:-10px;"><b>' + this.x + '시</b></span>');
+				}, '<span style="display:flex; margin-bottom:-10px;"><b>'+(langStatus === "KO" ? this.x+'시' : this.x+'H')+'</b></span>');
 			},
 			shared: true,
 			useHTML: true,
@@ -1909,7 +1909,7 @@
 					let val = displayNumberFixedDecimal(point.y, 'kWh', 'kWh', 0)[0];
 
 					return s + '<br/><span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ':  ' + val + " " + suffix;
-				}, '<span style="display:flex; margin-bottom:-10px;"><b>' + this.x + '시</b></span>');
+				}, '<span style="display:flex; margin-bottom:-10px;"><b>'+(langStatus === "KO" ? this.x+'시' : this.x+'H')+'</b></span>');
 
 			},
 			style: {
@@ -2095,7 +2095,7 @@
 					let val = displayNumberFixedDecimal(point.y, 'kWh', 'kWh', 0)[0];
 
 					return s + '<br/><span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ':  ' + val + " " + suffix;
-				}, '<span style="display:flex; margin-bottom:-10px;"><b>' + this.x + '시</b></span>');
+				}, '<span style="display:flex; margin-bottom:-10px;"><b>'+(langStatus === "KO" ? this.x+'시' : this.x+'H')+'</b></span>');
 
 			},
 			style: {
