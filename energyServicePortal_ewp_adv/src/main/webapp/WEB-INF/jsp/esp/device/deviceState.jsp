@@ -887,7 +887,6 @@
 
 				if (!isEmpty(resultData) && !isEmpty(resultData[liData])) {
 					let dValue = '';
-					console.log('suffix', suffix);
 					if(liData.match("accumActiveEnergy")){
 						let tempVal = displayNumberFixedDecimal(resultData[liData], suffix, 3, 2);
 						tempVal[0] != '-' ? ( dValue = tempVal.join(' ')) : ( dValue = tempVal[0] );
@@ -1104,7 +1103,7 @@
 							thisStdDate = thisName;
 							thisKey = '000000';
 						}
-						manualObj[baseTime] = Number(manual.energy);
+						manualObj[baseTime] = Number(manual.energy) / 1000;
 
 						if (isEmpty(stdDate)) {
 							stdDate = thisStdDate;
@@ -1321,7 +1320,7 @@
 
 				items.push({
 					basetime: thisKey,
-					energy: Number($(this).val())
+					energy: Number($(this).val()) * 1000
 				});
 			} else if (stdDate != thisStdDate) {
 				data.push({
@@ -1334,12 +1333,12 @@
 
 				items.push({
 					basetime: thisKey,
-					energy: Number($(this).val())
+					energy: Number($(this).val()) * 1000
 				});
 			} else {
 				items.push({
 					basetime: thisKey,
-					energy: Number($(this).val())
+					energy: Number($(this).val()) * 1000
 				});
 			}
 
