@@ -663,7 +663,7 @@
 					if (temp.confirm == false) {
 						data[i].confirm  = '<a href="javascript:alarmConfirm(\'' + temp.alarm_id + '\',\'' + temp.ticket_id + '\');" class="table-link" ><fmt:message key="alarm.confirm.N" /></a>'; // 알람상태
 					} else {
-						data[i].confirm = '확인'; // 알람상태
+						data[i].confirm = '<fmt:message key="alarm.search.confirm.Y" />'; // 알람상태
 					}
 					
 					if (!(isEmpty(temp.status))) {
