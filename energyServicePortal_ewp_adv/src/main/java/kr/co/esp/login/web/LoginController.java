@@ -101,10 +101,14 @@ public class LoginController {
 			if (userInfoMap.get("required_verify") != null && (Boolean) userInfoMap.get("required_verify") == true) {
 				returnMap.put("rtnUrl", "verify");
 			} else {
-				if (userInfoMap.get("task") != null && ((int) userInfoMap.get("task") == 1 || (int) userInfoMap.get("task") == 2 || (int) userInfoMap.get("task") == 3)) {
-					returnMap.put("rtnUrl", "/spc/transactionCalendar.do");
+				if (userInfoMap.get("first_page") != null && !"".equals(userInfoMap.get("first_page"))) {
+					returnMap.put("rtnUrl", userInfoMap.get("first_page"));
 				} else {
-					returnMap.put("rtnUrl", "/dashboard/gmain.do");
+					if (userInfoMap.get("task") != null && ((int) userInfoMap.get("task") == 1 || (int) userInfoMap.get("task") == 2 || (int) userInfoMap.get("task") == 3)) {
+						returnMap.put("rtnUrl", "/spc/transactionCalendar.do");
+					} else {
+						returnMap.put("rtnUrl", "/dashboard/gmain.do");
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -133,10 +137,14 @@ public class LoginController {
 			if (userInfoMap != null && !userInfoMap.isEmpty()) {
 				session.setAttribute(UserUtil.USER_SESSION_ID, userInfoMap);
 
-				if (userInfoMap.get("task") != null && ((int) userInfoMap.get("task") == 1 || (int) userInfoMap.get("task") == 2 || (int) userInfoMap.get("task") == 3)) {
-					returnMap.put("rtnUrl", "/spc/transactionCalendar.do");
+				if (userInfoMap.get("first_page") != null && !"".equals(userInfoMap.get("first_page"))) {
+					returnMap.put("rtnUrl", userInfoMap.get("first_page"));
 				} else {
-					returnMap.put("rtnUrl", "/dashboard/gmain.do");
+					if (userInfoMap.get("task") != null && ((int) userInfoMap.get("task") == 1 || (int) userInfoMap.get("task") == 2 || (int) userInfoMap.get("task") == 3)) {
+						returnMap.put("rtnUrl", "/spc/transactionCalendar.do");
+					} else {
+						returnMap.put("rtnUrl", "/dashboard/gmain.do");
+					}
 				}
 			} else {
 				returnMap.put("rtnUrl", "");
