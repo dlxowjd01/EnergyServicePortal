@@ -1378,24 +1378,6 @@
 		$('div.tab-content > div.tab-pane').eq(0).addClass('active in').siblings().removeClass('active in');
 
 		id.parent().next().prop("disabled", true);
-
-		let sites = {
-			url: apiHost + "/config/sites?oid="+oid,
-			type: "get",
-			async: true,
-		}
-
-		$.when($.ajax(sites)).done(function (result) {
-			if (result.length > 0) {
-				let temp = ``;
-				result.map((v) => {
-					console.log(v)
-					temp += '<li data-name="'+v.name+'" data-value="'+v.sid+'"><a href="#" tabindex="-1">'+v.name+'</a></li>';
-				});
-				$(`#siteOptList`).html(temp)
-			}
-		})
-			
 		// updateModal ADD !!!!!
 		if(option == 'add'){
 			initModal();
@@ -1414,12 +1396,11 @@
 			let td = tr.find("td");
 			let uid = dTable.row(tr).data().uid;
 			let prevDesc = dTable.row(tr).data().desc;
-			console.log(uid)
 
 			// updateModal EDIT!!!!!
-			if(option == "edit") { 
+			if(option == "edit") {
 				let optSpc = {
-					url: apiHost + "/config/user_spcs?oid="+oid,
+					url: apiHost + "/config/user_spcs?oid=" + oid,
 					type: "get",
 					async: true,
 					data: {
@@ -1427,7 +1408,7 @@
 					}
 				}
 				let optSite = {
-					url: apiHost + "/config/user_sites?oid="+oid,
+					url: apiHost + "/config/user_sites?oid=" + oid,
 					type: "get",
 					async: true,
 					data: {
@@ -1439,7 +1420,6 @@
 
 				$.when($.ajax(optSite), $.ajax(optSpc)).done(function (result1, result2) {
 					let siteData = result1[0].data;
-					console.log(result1, result2)
 
 					if(siteData.length > 0){
 
@@ -1450,7 +1430,6 @@
 						$.each(siteData, function( index, item ) {
 							siteOptList.some( x => {
 								if($(x).data("value") === item.sid) {
-									console.log(item)
 									// console.log("item---", item.sid)
 									let name = $(x).data("name");
 									let role = "";
@@ -1964,7 +1943,7 @@
 											<div class="dropdown w-40">
 												<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 												<ul id="siteOptList" class="dropdown-menu">
-													<c:if test="${fn:length(siteList) > 1}">
+													<c:if test="${fn:length(siteList) > 0}">
 														<c:forEach var="site" items="${siteList}">
 															<c:if test="${site.name != '직접입력'}">
 																<li data-name="${site.name}" data-value="${site.sid}"><a href="#" tabindex="-1">${site.name}</a></li>
