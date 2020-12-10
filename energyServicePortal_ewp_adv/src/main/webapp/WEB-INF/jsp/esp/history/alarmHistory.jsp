@@ -373,12 +373,12 @@
 	const deviceTemplate = new Array();
 
 	const levelTemplate = {
-		9: '<fmt:message key="alarm.search.level.unknown" />',//알수없음
-		0: '<fmt:message key="alarm.search.level.info" />',//정보
-		1: '<fmt:message key="alarm.search.level.warn" />',//경고
-		2: '<fmt:message key="alarm.search.level.abnornal" />',//이상
-		3: '<fmt:message key="alarm.search.level.trip" />',//트립
-		4: '<fmt:message key="alarm.search.level.normal" />',//정상
+		9: "알수없음", //'<fmt:message key="alarm.search.level.unknown" />'
+		0: "정보", //'<fmt:message key="alarm.search.level.info" />'
+		1: "경고", //'<fmt:message key="alarm.search.level.warn" />'
+		2: "이상", //'<fmt:message key="alarm.search.level.abnornal" />'
+		3: "트립", //'<fmt:message key="alarm.search.level.trip" />'
+		4: "정상", //'<fmt:message key="alarm.search.level.normal" />'
 	};
 	const statusTemplate = {
 		'null': '<fmt:message key="alarm.popup.status.new" />', //신규
@@ -1485,33 +1485,32 @@
 		pieSeriesData = new Array();
 
 		var num2 = 0;
-		var legendInner = $('#legendArea');
-		var wrapper = `<ul></ul>`;
-		legendInner.empty();
-		legendInner.append(wrapper);
+		var liStr = "";
 
 		pieMap.forEach(function (val, key, legendAreaCopy) {
 			var typeNm = key;
-			var enName = "";
+			var enName = [];
 			var colorNum;
 
+			console.log(key)
 			if(key == "긴급"){
 				colorNum = 4;
-				enName = "urgent";
+				enName = ["Urgent", "urgent"];
 			} else if(key == "트립"){
 				colorNum = 3;
-				enName = "shutoff";
-			} else if(key == "이상"){
+				enName = ["Shutoff", "shutoff"];
+			} else if(key == "이상") {
 				colorNum = 2;
-				enName = "critical";
+				enName = ["Fault", "critical"];
 			} else if(key == "경고"){
 				colorNum = 1;
-				enName = "warning";
+				enName = ["Warning", "warning"];
 			} else if(key == "정상"){
 				colorNum = 0;
-				enName = "info";
+				enName = ["Info", "info"];
 			} else {
 				colorNum = 9;
+				enName = ["Unknown", ""];
 			}
 
 			$(':checkbox[name="' + chartTypeNm + '"]:checked').each(function () {
@@ -1519,7 +1518,6 @@
 			});
 
 			if (val != undefined) {
-				var liStr = '';
 				if(gr_type == true){
 					$temp = {
 						name: typeNm,
@@ -1529,7 +1527,7 @@
 						color: typeColorArr[num2],
 						y: val
 					};
-					liStr = '<li data-alarm="' + (num2+1) + '">' + key + '<span class="legend-value">' + val + '<fmt:message key="alarm.cases" /></span></li>';
+					liStr += '<li data-alarm="' + (num2+1) + '">' + (key) + '<span class="legend-value">' + val + '<fmt:message key="alarm.cases" /></span></li>';
 
 				} else {
 					$temp = {
@@ -1540,16 +1538,16 @@
 						color: colorArr[colorNum],
 						y: val
 					};
-					liStr = '<li data-alarm="' + enName + '">' + key + '<span class="legend-value">' + val + '<fmt:message key="alarm.cases" /></span></li>';
+					liStr += '<li data-alarm="' + enName[1] + '">' + (langStatus === "EN" ? enName[0] : key) + '<span class="legend-value">' + val + '<fmt:message key="alarm.cases" /></span></li>';
 				}
 				num2++;
 				pieSeriesData.push($temp);
-				legendInner.find("ul").append(liStr);
-
+				$(`#legendArea`).html("<ul>"+liStr+"</ul>");
 			}
 		});
 
 		chartDraw(columnSeriesData, pieSeriesData);
+		liStr = "";
 	}
 
 	const chartDraw = function (columnSeriesData, pieSeriesData) {
