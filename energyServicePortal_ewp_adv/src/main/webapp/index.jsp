@@ -6,16 +6,23 @@
 	<title>iDERMS</title>
 	<script type="text/javascript">
 		<c:choose>
-			<c:when test="${empty userInfo}">
+			<c:when test="${empty sessionScope.userInfo}">
 				location.href = '/login.do';
 			</c:when>
 			<c:otherwise>
 				<c:choose>
-					<c:when test="${userInfo.task eq 1 or userInfo.task eq 2}">
-				location.href = '/spc/transactionCalendar.do';
+					<c:when test="${sessionScope.userInfo.first_page ne null and not empty sessionScope.userInfo.first_page}">
+						location.href = '/' + '${sessionScope.userInfo.first_page}';
 					</c:when>
 					<c:otherwise>
-				location.href = '/dashboard/gmain.do';
+						<c:choose>
+							<c:when test="${sessionScope.userInfo.task eq 1 or sessionScope.userInfo.task eq 2}">
+						location.href = '/spc/transactionCalendar.do';
+							</c:when>
+							<c:otherwise>
+						location.href = '/dashboard/gmain.do';
+							</c:otherwise>
+						</c:choose>
 					</c:otherwise>
 				</c:choose>
 			</c:otherwise>

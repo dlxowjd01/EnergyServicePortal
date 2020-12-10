@@ -392,17 +392,16 @@
 
 <nav class="clear">
 	<button type="button" id="mobileNavBtn" class="category">카테고리</button>
-	<c:choose>
-		<c:when test="${fn:contains(pageContext.request.serverName, 'spower')}">
-			<div class="nav-brand spower"><a href="/dashboard/gmain.do">${sessionScope.userInfo.oid}</a></div>
-		</c:when>
-		<c:when test="${fn:contains(pageContext.request.serverName, 'wpsolar')}">
-			<div class="nav-brand wpsolar"><a href="/dashboard/gmain.do">${sessionScope.userInfo.oid}</a></div>
-		</c:when>
-		<c:otherwise>
-			<div class="nav-brand"><a href="/dashboard/gmain.do">${sessionScope.userInfo.oid}</a></div>
-		</c:otherwise>
-	</c:choose>
+	<div class="nav-brand ${sessionScope.userInfo.oid}">
+		<c:choose>
+			<c:when test="${sessionScope.userInfo.first_page ne null and not empty sessionScope.userInfo.first_page}">
+				<a href="/${sessionScope.userInfo.first_page}">${sessionScope.userInfo.oid}</a>
+			</c:when>
+			<c:otherwise>
+				<a href="/dashboard/gmain.do">${sessionScope.userInfo.oid}</a>
+			</c:otherwise>
+		</c:choose>
+	</div>
 
 	<c:set var="siteList" value="${siteHeaderList}"/> <!-- 사이트 별 -->
 	<c:set var="tagList" value="${tag_group}"/> <!-- 그룹 별 -->
