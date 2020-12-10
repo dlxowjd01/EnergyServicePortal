@@ -372,14 +372,24 @@
 	let sites = JSON.parse('${siteList}');
 	const deviceTemplate = new Array();
 
-	const levelTemplate = {
-		9: "알수없음", //'<fmt:message key="alarm.search.level.unknown" />'
-		0: "정보", //'<fmt:message key="alarm.search.level.info" />'
-		1: "경고", //'<fmt:message key="alarm.search.level.warn" />'
-		2: "이상", //'<fmt:message key="alarm.search.level.abnornal" />'
-		3: "트립", //'<fmt:message key="alarm.search.level.trip" />'
-		4: "정상", //'<fmt:message key="alarm.search.level.normal" />'
-	};
+	const levelTemplate = [
+		{
+			9: "알수없음",
+			0: "정보",
+			1: "경고",
+			2: "이상",
+			3: "트립",
+			4: "정상",
+		},
+		{
+			9: '<fmt:message key="alarm.search.level.unknown" />',
+			0: '<fmt:message key="alarm.search.level.info" />',
+			1: '<fmt:message key="alarm.search.level.warn" />',
+			2: '<fmt:message key="alarm.search.level.abnornal" />',
+			3: '<fmt:message key="alarm.search.level.trip" />',
+			4: '<fmt:message key="alarm.search.level.normal" />',
+		}
+	];
 	const statusTemplate = {
 		'null': '<fmt:message key="alarm.popup.status.new" />', //신규
 		'new': '<fmt:message key="alarm.popup.status.new" />', //신규
@@ -656,7 +666,7 @@
 					
 					data[i].localtime = temp.localtime; // 알람발생시간
 					data[i].tlocaltime = dateFormat(String(temp.localtime)); // 테이블에 보여질 알람발생시간
-					data[i].alarmtype = ((isEmpty(temp.level)) ? '-' : levelTemplate[temp.level]); // 테이블에 보여질 알람타입;
+					data[i].alarmtype = ((isEmpty(temp.level)) ? '-' : levelTemplate[1][temp.level]); // 테이블에 보여질 알람타입;
 					data[i].level = temp.level; // 알람타입
 					data[i].message = ((isEmpty(temp.message)) ? "" : temp.message); // 알람메시지
 					
@@ -1470,7 +1480,7 @@
 				if (tp == type) {
 					pieCnt++;
 					if (gr_type == true) equalTy = eval('deviceTemplate.' + tp);
-					if (gr_type == false) equalTy = levelTemplate[tp];
+					if (gr_type == false) equalTy = levelTemplate[0][tp];
 				}
 			});
 
