@@ -34,14 +34,7 @@
 			<div class="indiv smain-pv clear">
 				<div class="chart-top">
 					<h2 class="ntit"><fmt:message key='smain.monthDevSynthesis' /></h2>
-					<h1 class="stit">
-						<fmt:parseDate var="startPrint" value="${startMonth }" pattern="yyyyMMddHHmmss"/>
-						<fmt:parseDate var="endPrint" value="${startTime }" pattern="yyyyMMddHHmmss"/>
-
-						<fmt:formatDate value="${startPrint}" pattern="yyyy.MM.dd"/>
-						~
-						<fmt:formatDate value="${endPrint}" pattern="yyyy.MM.dd"/>
-					</h1>
+					<h1 class="stit" id="monthlyDate"></h1>
 				</div>
 				<div class="chart-middle clear">
 					<div class="box">
@@ -95,13 +88,7 @@
 			<div class="indiv smain-cal">
 				<div class="chart-top">
 					<h2 class="ntit"><fmt:message key='smain.monthDevCalendar' /></h2>
-					<h1 class="stit">
-						<fmt:parseDate var="sDate" value="${startDate}" pattern="yyyyMMddHHmmss"/>
-						<fmt:parseDate var="eDate" value="${startTime}" pattern="yyyyMMddHHmmss"/>
-						<fmt:formatDate var="sDt" pattern="yyyy-MM-dd" value="${sDate}"/>
-						<fmt:formatDate var="eDt" pattern="yyyy-MM-dd" value="${eDate}"/>
-						<em>${sDt} ~ ${eDt}</em>
-					</h1>
+					<h1 class="stit" id="calendarDate"></h1>
 				</div>
 				<div class="calendar-wrap">
 					<table class="calendar">
@@ -116,30 +103,7 @@
 								<th><fmt:message key='smain.sat' /></th>
 							</tr>
 						</thead>
-						<tbody>
-							<c:forEach var="week" items="${calList}">
-								<tr>
-									<c:forEach var="day" items="${week }">
-										<c:choose>
-											<c:when test="${day ne 0 }">
-												<td <c:if test="${nowDay eq day }">class="today"</c:if>>
-													<div class="flex-wrapper">
-														<em class="calWeatherDay day">${day }</em>
-														<em id="calWeatherValue_${day }"></em>
-													</div>
-													<div id="calWeatherIcon_${day }" class="wicon"></div>
-													<span id="calEnergyValue_${day }" class="fr"></span>
-												</td>
-											</c:when>
-											<c:otherwise>
-												<td class="disabled">
-												</td>
-											</c:otherwise>
-										</c:choose>
-									</c:forEach>
-								</tr>
-							</c:forEach>
-
+						<tbody id="calendarMonth">
 							<%--
 								<i class="ico-weather w1"></i> 	1	- 맑음 o
 								<i class="ico-weather w2"></i>   	- 바람 x
@@ -577,6 +541,8 @@
 		var refreshMinInterval;
 		var refreshQuarterInterval;
 
+		buildCalendar();
+
 		$('input[name="keyword"]').on('keyup', function(e) {
 			if (e.which == '13') {
 				getDvcInfo();
@@ -725,6 +691,51 @@
 		});
 
 	});
+
+	const buildCalendar = function () { //현재 달 달력 만들기
+		let today = new Date();
+		let doMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+		let lastDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+		let calendar = document.getElementById('calendarMonth');
+
+		$('#calendarDate').html('<em>' + today.getFullYear() + '.01.01' + ' ~ ' + (new Date()).format('yyyy.MM.dd') + '</em>')
+
+		while (calendar.rows.length > 1) {
+			calendar.deleteRow(calendar.rows.length - 1);
+		}
+
+		let row = calendar.insertRow();
+		let cell = null;
+		let cnt = 0;
+		const thisMonth = doMonth.getMonth() + 1 + '월';
+
+		for (let i = 0; i < doMonth.getDay(); i++) {
+			cell = row.insertCell();
+			cell.classList.add('disabled');
+			cnt = cnt + 1;
+		}
+
+		for (let i = 1; i <= lastDate.getDate(); i++) {
+			cell = row.insertCell();
+			cell.innerHTML =`
+							<div class="flex-wrapper">
+								<em class="calWeatherDay day">${'${i}'}</em>
+								<em id="calWeatherValue_${'${i}'}"></em>
+							</div>
+							<div id="calWeatherIcon_${'${i}'}" class="wicon"></div>
+							<span id="calEnergyValue_${'${i}'}" class="fr"></span>`;
+			cnt = cnt + 1;
+
+			if (cnt % 7 === 0) {
+				row = calendar.insertRow();
+			}
+
+			/* today */
+			if (i === today.getDate()) {
+				cell.setAttribute('class', 'today');
+			}
+		}
+	};
 
 	const siteId = '${sid}';
 	const sList = JSON.parse('${siteList}');
@@ -2230,9 +2241,6 @@
 							}
 						});
 
-						console.log("KPX getWeatherData tempArray===", tempArray);
-						console.log("weekWeatherData===", weekWeatherData);
-						
 						if (tempArray.length > 0) {
 							let weatherIconClass = getWeatherIcons(tempArray[tempArray.length - 1].sky);
 							let deviceIrrData = tempArray[tempArray.length - 1].sensor_solar.irradiationPoa;
@@ -3318,6 +3326,9 @@
 		const formData = getSiteMainSchCollection('year');
 		const monthFormData = getSiteMainSchCollection('month');
 		const beforeYearFormData = getSiteMainSchCollection('beforeYear');
+
+
+		$('#monthlyDate').text(((formData.startTime).substr(0, 8)).replace(/(\d{4})(\d{2})(\d{2})/, '$1.$2.$3') + ' ~ ' + (new Date()).format('yyyy.MM.dd'));
 
 		const monthEnergy = {
 			url: apiHost + apiEnergySite,
