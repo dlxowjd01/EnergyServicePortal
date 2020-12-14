@@ -548,8 +548,8 @@
 																</c:forEach>
 															</c:if>
 															<li onclick="toggleMenu(this)">
-																<input type="checkbox" name="divisionLocation" id="lo${countryStat.index}" value="${country.value.code}" <c:if test="${choice eq 'true'}">checked</c:if>>
-																<label for="lo${countryStat.index}" class="sub-item" <c:if test="${choice eq 'true'}">class="on"</c:if>>
+																<input type="checkbox" name="divisionLocation" id="lo_${loc.value.code}_${countryStat.index}" value="${country.value.code}" <c:if test="${choice eq 'true'}">checked</c:if>>
+																<label for="lo_${loc.value.code}_${countryStat.index}" class="sub-item" <c:if test="${choice eq 'true'}">class="on"</c:if>>
 																	<c:choose>
 																		<c:when test="${cookieLang eq 'KO'}">
 																			${country.value.name.kr}
