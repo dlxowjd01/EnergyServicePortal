@@ -1266,14 +1266,20 @@
 						</td>
 					</tr>
 					<tr>
-						<th></th>
-						<td></td>
+						<th>이행보증보험료</th>
+						<td id="이행보증보험료[index]"></td>
 						<th>만기일</th>
 						<td class="flex-start">
 							<span id="보험_만기일[index]"></span>
-							&nbsp;&nbsp;&nbsp;&nbsp;
+
 							<span class="fixed-height" id="보험_만기일_차이[index]"></span>
 						</td>
+					</tr>
+					<tr>
+						<th>보험료_총계</th>
+						<td id="보험료_총계[index]"></td>
+						<th></th>
+						<td></td>
 					</tr>
 				</table>
 			</div>

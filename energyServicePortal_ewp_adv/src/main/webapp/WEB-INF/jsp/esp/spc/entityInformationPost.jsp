@@ -1388,7 +1388,7 @@
 						<td>
 							<div class="text-input-type edit unit t1">
 								<input type="text" id="계약_단가" name="계약_단가" placeholder="직접 입력">
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 						<th>상업 운전 개시일</th>
@@ -2282,12 +2282,12 @@
 						<col style="width:50%">
 					</colgroup>
 					<tr>
-						<th rowspan="3">지급수수료</th>
+						<th rowspan="3">세금과공과</th>
 						<th class="pl-28"><label for="지방세">지방세</label></th>
 						<td>
 							<div class="text-input-type edit unit t1">
 								<input type="text" id="지방세" name="지방세" placeholder="직접 입력">
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 						<td></td>
@@ -2297,7 +2297,7 @@
 						<td>
 							<div class="text-input-type edit unit t1">
 								<input type="text" id="종합부동산세" name="종합부동산세" placeholder="직접 입력">
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 						<td></td>
@@ -2307,7 +2307,7 @@
 						<td>
 							<div class="text-input-type edit unit t1">
 								<input type="text" id="세금과공과_기타" name="세금과공과_기타" placeholder="직접 입력">
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 						<td></td>
@@ -2317,7 +2317,7 @@
 						<td>
 							<div class="text-input-type edit unit t1">
 								<input type="text" id="기장료" name="기장료" placeholder="직접 입력">
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 						<td></td>
@@ -2327,7 +2327,7 @@
 						<td>
 							<div class="text-input-type edit unit t1">
 								<input type="text" id="등기용역수수료" name="등기용역수수료" placeholder="직접 입력">
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 						<td></td>
@@ -2337,7 +2337,7 @@
 						<td>
 							<div class="text-input-type edit unit t1">
 								<input type="text" id="회계감사수수료" name="회계감사수수료" placeholder="직접 입력">
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 						<td></td>
@@ -2348,7 +2348,7 @@
 						<td>
 							<div class="text-input-type edit unit t1">
 								<input type="text" id="REC수수료" name="REC수수료" placeholder="직접 입력">
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 						<td></td>
@@ -2358,7 +2358,7 @@
 						<td>
 							<div class="text-input-type edit unit t1">
 								<input type="text" id="재위탁수수료" name="재위탁수수료" placeholder="직접 입력">
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 						<td></td>
@@ -2368,7 +2368,7 @@
 						<td>
 							<div class="text-input-type edit unit t1">
 								<input type="text" id="정기검사" name="정기검사" placeholder="직접 입력">
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 						<td></td>
@@ -2378,7 +2378,7 @@
 						<td>
 							<div class="text-input-type edit unit t1">
 								<input type="text" id="지급수수료_기타" name="지급수수료_기타" placeholder="직접 입력">
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 						<td></td>
@@ -2388,7 +2388,7 @@
 						<td>
 							<div class="text-input-type edit unit t1">
 								<input type="text" id="경비용역료" name="경비용역료" placeholder="직접 입력">
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 						<td></td>
@@ -2398,7 +2398,7 @@
 						<td>
 							<div class="text-input-type edit unit t1">
 								<input type="text" id="전력비" name="전력비" placeholder="직접 입력">
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 						<td></td>
@@ -2408,7 +2408,7 @@
 						<td>
 							<div class="text-input-type edit unit t1">
 								<input type="text" id="통신비" name="통신비" placeholder="직접 입력">
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 						<td></td>
@@ -2418,7 +2418,7 @@
 						<td>
 							<div class="text-input-type edit unit t1">
 								<input type="text" id="전기안전관리대행수수료" name="전기안전관리대행수수료" placeholder="직접 입력">
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 						<td></td>
@@ -2428,7 +2428,7 @@
 						<td>
 							<div class="text-input-type edit unit t1">
 								<input type="text" id="지출_총계" name="지출_총계" placeholder="자동 입력" readonly>
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 						<td></td>
