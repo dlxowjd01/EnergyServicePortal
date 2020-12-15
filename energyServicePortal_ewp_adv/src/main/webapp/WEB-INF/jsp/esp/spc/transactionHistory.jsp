@@ -332,7 +332,7 @@
 					oid: oid,
 					spc_ids: selectedSpc.toString()
 				},
-				timeout: 60000
+				timeout: 120000
 			}).done(function(data, textStatus, jqXHR) {
 				if (!isEmpty(data) && !isEmpty(data.data)) {
 					$('#transactionForm').submit();
