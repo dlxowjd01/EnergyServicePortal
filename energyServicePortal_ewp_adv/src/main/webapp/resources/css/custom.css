@@ -229,6 +229,7 @@ html.darkmode:root {
 	--btn-trash: url("/img/ico_trash.svg");
 	--btn-attachment: url("/img/attachment_light.svg");
 	--btn-upload: url("/img/btn_upload.svg");
+	-—btn-help: url("/img/help-inactive.svg");
 	--btn-download: url("/img/btn_download.svg");
 	--ico-delete: url("/img/close_btn_md.svg");
 	--ico-open: url("/img/ico_open.svg");
@@ -8036,6 +8037,19 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 .table-link:active {
 	color: var(--white87);
 	text-decoration: underline;
+}
+
+.btn-help {
+	margin-left: 5px;
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	border: 0;
+	text-indent: -9999px;
+	vertical-align: middle;
+	background: var(--btn-help) no-repeat center center;
+	background-size: 30px;
+	outline: none;
 }
 
 .btn-close {

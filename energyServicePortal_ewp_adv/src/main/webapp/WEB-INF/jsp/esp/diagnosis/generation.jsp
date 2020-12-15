@@ -32,7 +32,15 @@
 			</div>
 			<div class="toggle-box">
 				<div class="table-area clear">
-					<p class="table-text fl"><fmt:message key="genforecast.2.forecast_err_method" /></p>
+					<p class="table-text fl">
+						<fmt:message key="genforecast.2.forecast_err_method" />
+						<button type="button" id="tooltip" onclick="$(this).tooltip('toggle');" class="btn-help"
+								data-toggle="tooltip"
+								data-placement="right"
+								data-html="true"
+								title="<div class='left'>NMAE<br/>용량에 대비한 평균 오차율 %<br/>MAPE<br/>(용량 상관없이) 측정값 대비한 평균 오차율 %</div>">
+						</button>
+					</p>
 					<button type="button" class="btn-caret fr">펼치기</button>
 				</div>
 				<div class="table-fold-container">
@@ -46,7 +54,7 @@
 									<a href="javascript:void(0);">NMAE</a>
 								</li>
 								<li data-value="MAPE"><a href="javascript:void(0);">MAPE</a></li>
-								<li data-value="RRMSE"><a href="javascript:void(0);">RRMSE</a></li>
+<%--								<li data-value="RRMSE"><a href="javascript:void(0);">RRMSE</a></li>--%>
 							</ul>
 						</div>
 						<div class="text-input-type unit w-100">
