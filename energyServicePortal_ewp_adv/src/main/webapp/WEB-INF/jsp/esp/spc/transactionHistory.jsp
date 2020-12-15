@@ -285,11 +285,16 @@
 			newData.map(item => {
 				const found = spcInfoArr.findIndex(x => x.spc_id === item.spc_id);
 
+				let accountInfo = item.bank_name + ' ' + item.account_no;
+				if (!isEmpty(item.account_owner)) {
+					accountInfo += '(' +  item.account_owner + ')'
+				}
+
 				refineList.push({
 					spcId: item.spc_id,
 					spcName: spcInfoArr[found].spc_name,
 					accountDatetime: item.account_datetime,
-					accountInfo: item.bank_name + ' ' + item.account_no + '(' +  item.account_owner + ')',
+					accountInfo: accountInfo,
 					kind: item.kind,
 					amount: item.amount,
 					accountDesc1: isEmpty(item.account_desc1) ? '-' : item.account_desc1,
@@ -326,7 +331,8 @@
 				data: {
 					oid: oid,
 					spc_ids: selectedSpc.toString()
-				}
+				},
+				timeout: 60000
 			}).done(function(data, textStatus, jqXHR) {
 				if (!isEmpty(data) && !isEmpty(data.data)) {
 					$('#transactionForm').submit();

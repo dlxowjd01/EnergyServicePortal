@@ -1573,6 +1573,13 @@ table tbody td .dropdown-menu {
 	max-width: 100px;
 }
 
+.font-color-w60 {
+	color: var(--white60);
+}
+
+.font-color-w87 {
+	color: var(--white87);
+}
 /* ==================================
 		TO DO!!!!!!! width: 100%
  ==================================== */

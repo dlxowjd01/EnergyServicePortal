@@ -38,7 +38,7 @@
 								data-toggle="tooltip"
 								data-placement="right"
 								data-html="true"
-								title="<div class='left'>NMAE<br/>용량에 대비한 평균 오차율 %<br/>MAPE<br/>(용량 상관없이) 측정값 대비한 평균 오차율 %</div>">
+								title="<div class='left'><span class='strong font-color-w87'>NMAE</span><br/><span class='font-color-w60' style='font-size:8px;'>용량에 대비한 평균 오차율 %</span><br/><span class='strong font-color-w87'>MAPE</span><br/><span class='font-color-w60' style='font-size:8px;'>(용량 상관없이) 측정값 대비한 평균 오차율 %</span></div>">
 						</button>
 					</p>
 					<button type="button" class="btn-caret fr">펼치기</button>
