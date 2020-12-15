@@ -133,6 +133,39 @@
 		});
 	}
 
+	$(document).on('keyup', '[id^="이행보증보험료"], [id^="보험료"]', function() {
+		const thisIdx = $(this).prop('id').replace(/[^0-9]/g, '')
+			, implementation = $('#이행보증보험료' + thisIdx).val().trim().replace(/[^0-9]/g, '')
+			, guarantee = $('#보험료' + thisIdx).val().trim().replace(/[^0-9]/g, '');
+
+		if (!isEmpty(implementation) && !isEmpty(guarantee)) {
+			$('#보험료_총계' + thisIdx).val(numberComma(Number(implementation) + Number(guarantee)));
+			$('#이행보증보험료' + thisIdx).val(numberComma(implementation))
+			$('#보험료' + thisIdx).val(numberComma(guarantee))
+		} else if (!isEmpty(implementation)) {
+			$('#보험료_총계' + thisIdx).val(numberComma(implementation));
+			$('#이행보증보험료' + thisIdx).val(numberComma(implementation))
+		} else if (!isEmpty(guarantee)) {
+			$('#보험료_총계' + thisIdx).val(numberComma(guarantee));
+			$('#이행보증보험료' + thisIdx).val(numberComma(guarantee))
+		} else {
+			$('#보험료_총계' + thisIdx).val('');
+		}
+	});
+
+	$(document).on('keyup', '#spendInfo input', function() {
+		let totalAmt = 0;
+		$('#spendInfo input').each(function() {
+			const thisId = $(this).prop('id')
+				, thisVal = ($(this).val().trim()).replace(/[^0-9]/g, '');
+			if (thisId !== '지출_총계') {
+				totalAmt += Number(thisVal);
+				$(this).val(numberComma(thisVal));
+			}
+		});
+		$('#지출_총계').val(numberComma(totalAmt));
+	});
+
 	function cloneHtml() {
 		templateList = $("#addList_insuranceInfo").find("template.copy_list").clone().html();
 		$("#addList_insuranceInfo").find("template.copy_list").remove();
@@ -666,6 +699,7 @@
 			finance_info = setAreaParamData('financeInfo', 'dropdown'),
 			contract_info = setAreaParamData('contractInfo'),
 			addlist_insurance_info = setAreaParamData('insuranceInfo'),
+			spend_info = setAreaParamData('spendInfo'),
 			device_info = setAreaParamData('deviceInfo'),
 			warranty_info = setAreaParamData('warrantyInfo', 'dropdown'),
 			coefficient_info = setAreaParamData('coefficientInfo'),
@@ -743,6 +777,7 @@
 				associated_info: JSON.stringify(associated_info),
 				maintenance_info: JSON.stringify(maintenance_info),
 				addlist_insurance_info: JSON.stringify(addlist_insurance_info),
+				spend_info: JSON.stringify(spend_info),
 				account_info: JSON.stringify(account_info),
 				updated_by: loginId,
 				del_yn: 'N'
@@ -1353,7 +1388,7 @@
 						<td>
 							<div class="text-input-type edit unit t1">
 								<input type="text" id="계약_단가" name="계약_단가" placeholder="직접 입력">
-								<span>원</span>
+								<span>원/일</span>
 							</div>
 						</td>
 						<th>상업 운전 개시일</th>
@@ -2167,7 +2202,7 @@
 						<td>
 							<div class="text-input-type edit unit t1">
 								<input type="text" id="보험료[index]" name="보험료[index]">
-								<span>원</span>
+								<span>원/일</span>
 							</div>
 						</td>
 					</tr>
@@ -2202,8 +2237,13 @@
 						</td>
 					</tr>
 					<tr>
-						<th></th>
-						<td></td>
+						<th><label for="이행보증보험료[index]">이행보증보험료</label></th>
+						<td>
+							<div class="text-input-type edit unit t1">
+								<input type="text" id="이행보증보험료[index]" name="이행보증보험료[index]" placeholder="직접 입력">
+								<span>원/일</span>
+							</div>
+						</td>
 						<th><label for="보험_만기일[index]">만기일</label></th>
 						<td class="flex-start">
 							<div class="sel-calendar edit mr-24">
@@ -2212,6 +2252,186 @@
 							</div>
 							<span class="fixed-height"></span>
 						</td>
+					</tr>
+					<tr>
+						<th><label for="보험료_총계[index]">보험료 총계</label></th>
+						<td>
+							<div class="text-input-type edit unit t1">
+								<input type="text" id="보험료_총계[index]" name="보험료_총계[index]" placeholder="자동 완성" readonly>
+								<span>원/일</span>
+							</div>
+						</td>
+						<th></th>
+						<td></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+		<div class="indiv panel panel-default" id="spendInfo">
+			<div class="table-top panel-heading">
+				<h2 class="ntit mt-25">지출 정보</h2>
+				<a role="button" href="#spendInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse-arrow"></a>
+			</div>
+			<div id="spendInfoToggle" class="spc-table-row st-edit panel-collapse collapse in" role="tabpanel">
+				<table>
+					<colgroup>
+						<col style="width:7%">
+						<col style="width:8%">
+						<col style="width:35%">
+						<col style="width:50%">
+					</colgroup>
+					<tr>
+						<th rowspan="3">지급수수료</th>
+						<th class="pl-28"><label for="지방세">지방세</label></th>
+						<td>
+							<div class="text-input-type edit unit t1">
+								<input type="text" id="지방세" name="지방세" placeholder="직접 입력">
+								<span>원/일</span>
+							</div>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<th><label for="종합부동산세">종합부동산세</label></th>
+						<td>
+							<div class="text-input-type edit unit t1">
+								<input type="text" id="종합부동산세" name="종합부동산세" placeholder="직접 입력">
+								<span>원/일</span>
+							</div>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<th><label for="세금과공과_기타">기타</label></th>
+						<td>
+							<div class="text-input-type edit unit t1">
+								<input type="text" id="세금과공과_기타" name="세금과공과_기타" placeholder="직접 입력">
+								<span>원/일</span>
+							</div>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<th colspan="2"><label for="기장료">기장료</label></th>
+						<td>
+							<div class="text-input-type edit unit t1">
+								<input type="text" id="기장료" name="기장료" placeholder="직접 입력">
+								<span>원/일</span>
+							</div>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<th colspan="2"><label for="등기용역수수료">등기용역수수료</label></th>
+						<td>
+							<div class="text-input-type edit unit t1">
+								<input type="text" id="등기용역수수료" name="등기용역수수료" placeholder="직접 입력">
+								<span>원/일</span>
+							</div>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<th colspan="2"><label for="회계감사수수료">회계감사수수료</label></th>
+						<td>
+							<div class="text-input-type edit unit t1">
+								<input type="text" id="회계감사수수료" name="회계감사수수료" placeholder="직접 입력">
+								<span>원/일</span>
+							</div>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<th rowspan="4">지급수수료</th>
+						<th class="pl-28"><label for="REC수수료">REC수수료</label></th>
+						<td>
+							<div class="text-input-type edit unit t1">
+								<input type="text" id="REC수수료" name="REC수수료" placeholder="직접 입력">
+								<span>원/일</span>
+							</div>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<th><label for="재위탁수수료">재위탁수수료</label></th>
+						<td>
+							<div class="text-input-type edit unit t1">
+								<input type="text" id="재위탁수수료" name="재위탁수수료" placeholder="직접 입력">
+								<span>원/일</span>
+							</div>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<th><label for="정기검사">정기검사</label></th>
+						<td>
+							<div class="text-input-type edit unit t1">
+								<input type="text" id="정기검사" name="정기검사" placeholder="직접 입력">
+								<span>원/일</span>
+							</div>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<th><label for="지급수수료_기타">기타</label></th>
+						<td>
+							<div class="text-input-type edit unit t1">
+								<input type="text" id="지급수수료_기타" name="지급수수료_기타" placeholder="직접 입력">
+								<span>원/일</span>
+							</div>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<th colspan="2"><label for="경비용역료">경비용역료</label></th>
+						<td>
+							<div class="text-input-type edit unit t1">
+								<input type="text" id="경비용역료" name="경비용역료" placeholder="직접 입력">
+								<span>원/일</span>
+							</div>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<th colspan="2"><label for="전력비">전력비</label></th>
+						<td>
+							<div class="text-input-type edit unit t1">
+								<input type="text" id="전력비" name="전력비" placeholder="직접 입력">
+								<span>원/일</span>
+							</div>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<th colspan="2"><label for="통신비">통신비</label></th>
+						<td>
+							<div class="text-input-type edit unit t1">
+								<input type="text" id="통신비" name="통신비" placeholder="직접 입력">
+								<span>원/일</span>
+							</div>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<th colspan="2"><label for="전기안전관리대행수수료">전기안전관리대행수수료</label></th>
+						<td>
+							<div class="text-input-type edit unit t1">
+								<input type="text" id="전기안전관리대행수수료" name="전기안전관리대행수수료" placeholder="직접 입력">
+								<span>원/일</span>
+							</div>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<th colspan="2"><label for="지출_총계">지출 총계</label></th>
+						<td>
+							<div class="text-input-type edit unit t1">
+								<input type="text" id="지출_총계" name="지출_총계" placeholder="자동 입력" readonly>
+								<span>원/일</span>
+							</div>
+						</td>
+						<td></td>
 					</tr>
 				</table>
 			</div>

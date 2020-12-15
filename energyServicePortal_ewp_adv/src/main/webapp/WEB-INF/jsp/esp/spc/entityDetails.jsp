@@ -241,13 +241,14 @@
 				if (json.data.length > 0) {
 					//기본정보
 					const objArray = ['address', 'maintenance_info', 'account_info', 'finance_info', 'contract_info'
-						, 'addlist_insurance_info', 'device_info', 'warranty_info', 'coefficient_info', 'associated_info'];
+						, 'addlist_insurance_info', 'spend_info', 'device_info', 'warranty_info', 'coefficient_info', 'associated_info'];
 					const address = JSON.parse(json.data[0].address);
 					const maintenance_info = JSON.parse(json.data[0].maintenance_info);
 					const account_info = JSON.parse(json.data[0].account_info);
 					const finance_info = JSON.parse(json.data[0].finance_info);
 					const contract_info = JSON.parse(json.data[0].contract_info);
 					const addlist_insurance_info = JSON.parse(json.data[0].addlist_insurance_info);
+					const spend_info = JSON.parse(json.data[0].spend_info);
 					const device_info = JSON.parse(json.data[0].device_info);
 					const warranty_info = JSON.parse(json.data[0].warranty_info);
 					const coefficient_info = JSON.parse(json.data[0].coefficient_info);
@@ -405,7 +406,7 @@
 						}
 					}
 
-
+					setJsonAutoMapping(spend_info, 'spend_info'); //보험정보
 					setJsonAutoMapping(warranty_info, 'warrantyInfo'); //보증정보
 					setJsonAutoMapping(coefficient_info, 'coefficientInfo'); //환경변수
 					setJsonAutoMapping(associated_info, 'associatedInfo'); //관련정보
@@ -1273,6 +1274,175 @@
 							&nbsp;&nbsp;&nbsp;&nbsp;
 							<span class="fixed-height" id="보험_만기일_차이[index]"></span>
 						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+		<div class="indiv panel panel-default" id="spend_info">
+			<div class="table-top panel-heading">
+				<h2 class="ntit mt-25">지출 정보</h2>
+				<a role="button" href="#spendInfoToggle" data-toggle="collapse" data-parent="#accordion" class="collapse-arrow"></a>
+			</div>
+			<div id="spendInfoToggle" class="spc-table-row st-edit panel-collapse collapse in" role="tabpanel">
+				<table>
+					<colgroup>
+						<col style="width:7%">
+						<col style="width:8%">
+						<col style="width:35%">
+						<col style="width:50%">
+					</colgroup>
+					<tr>
+						<th rowspan="3">지급수수료</th>
+						<th class="pl-28">지방세</th>
+						<td>
+							<div>
+								<span id="지방세"></span>
+								<span>원/일</span>
+							</div>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<th>종합부동산세</th>
+						<td>
+							<div>
+								<span id="종합부동산세"></span>
+								<span>원/일</span>
+							</div>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<th>세금과공과_기타</th>
+						<td>
+							<div>
+								<span id="세금과공과_기타"></span>
+								<span>원/일</span>
+							</div>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<th colspan="2">기장료</th>
+						<td>
+							<div>
+								<span id="기장료"></span>
+								<span>원/일</span>
+							</div>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<th colspan="2">등기용역수수료</th>
+						<td>
+							<div>
+								<span id="등기용역수수료"></span>
+								<span>원/일</span>
+							</div>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<th colspan="2">회계감사수수료</th>
+						<td>
+							<div>
+								<span id="회계감사수수료"></span>
+								<span>원/일</span>
+							</div>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<th rowspan="4">지급수수료</th>
+						<th class="pl-28">REC수수료</th>
+						<td>
+							<div>
+								<span id="REC수수료"></span>
+								<span>원/일</span>
+							</div>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<th>재위탁수수료</th>
+						<td>
+							<div>
+								<span id="재위탁수수료"></span>
+								<span>원/일</span>
+							</div>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<th>정기검사</th>
+						<td>
+							<div>
+								<span id="정기검사"></span>
+								<span>원/일</span>
+							</div>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<th>지급수수료_기타</th>
+						<td>
+							<div>
+								<span id="지급수수료_기타"></span>
+								<span>원/일</span>
+							</div>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<th colspan="2">경비용역료</th>
+						<td>
+							<div>
+								<span id="경비용역료"></span>
+								<span>원/일</span>
+							</div>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<th colspan="2">전력비</th>
+						<td>
+							<div>
+								<span id="전력비"></span>
+								<span>원/일</span>
+							</div>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<th colspan="2">통신비</th>
+						<td>
+							<div>
+								<span id="통신비"></span>
+								<span>원/일</span>
+							</div>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<th colspan="2">전기안전관리대행수수료</th>
+						<td>
+							<div>
+								<span id="전기안전관리대행수수료"></span>
+								<span>원/일</span>
+							</div>
+						</td>
+						<td></td>
+					</tr>
+					<tr>
+						<th colspan="2">지출 총계</th>
+						<td>
+							<div>
+								<span id="지출_총계"></span>
+								<span>원/일</span>
+							</div>
+						</td>
+						<td></td>
 					</tr>
 				</table>
 			</div>

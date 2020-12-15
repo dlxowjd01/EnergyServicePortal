@@ -4056,13 +4056,20 @@
 											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
 											<ul id="newCityList" class="dropdown-menu">
 												<c:forEach var="country" items="${location}">
-													<c:if test="${country.value.code eq 'kr'}">
-														<c:forEach var="city" items="${country.value.locations}" varStatus="cityName">
-															<li data-value="${city.value.code}">
-																<a href="#" tabindex="-1"><c:out value="${city.value.code}"></c:out></a>
-															</li>
-														</c:forEach>
-													</c:if>
+													<c:forEach var="city" items="${country.value.locations}" varStatus="cityName">
+														<li data-value="${city.value.code}">
+															<a href="#" tabindex="-1">
+																<c:choose>
+																	<c:when test="${cookieLang eq 'KO'}">
+																		${city.value.name.kr}
+																	</c:when>
+																	<c:otherwise>
+																		${city.value.name.en}
+																	</c:otherwise>
+																</c:choose>
+															</a>
+														</li>
+													</c:forEach>
 												</c:forEach>
 											</ul>
 										</div>

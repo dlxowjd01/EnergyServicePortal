@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
-
 <!-- 파일 업로드 폼 -->
 <form id="picupload" name="upload" method="multipart/form-data"></form>
 <div id="alarmConfirm" class="modal fade" role="dialog">
@@ -614,7 +613,7 @@
 			statusArray.push($(this).val());
 		});
 
-		if (!isEmpty(sgid) || !isEmpty(vgid)) {
+		if (!isEmpty(sgid) || !isEmpty(vgid) || !isEmpty(sidparam)) {
 			siteArray = dataList[1].join(',')
 		} else {
 			siteArray = 'all';
@@ -628,8 +627,8 @@
 				endTime: $('#toDate').datepicker('getDate').format('yyyyMMdd') + '235959',
 			}
 		} else {
-			let confirm = "";
-			if ($(':checkbox[name="confirm"]:checked').next('label').text() === '<fmt:message key="alarm.confirm.N" />') {
+			let confirm;
+			if ($('#alstatus2').is(':checked')) {
 				confirm = false;
 			} else {
 				confirm = true;
