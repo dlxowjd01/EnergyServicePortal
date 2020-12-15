@@ -2735,7 +2735,7 @@
 						<col style="width:50%">
 					</colgroup>
 					<tr>
-						<th rowspan="3">지급수수료</th>
+						<th rowspan="3">세금과 공과</th>
 						<th class="pl-28"><label for="지방세">지방세</label></th>
 						<td>
 							<div class="text-input-type edit unit t1">

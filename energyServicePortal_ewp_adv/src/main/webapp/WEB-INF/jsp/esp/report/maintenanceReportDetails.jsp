@@ -19,13 +19,15 @@
 			async: false,
 			data: {},
 			success: function (json) {
-				const data = json.data[0],
-					workInfo = JSON.parse(data.work_info),
-					workDetailInfo = JSON.parse(data.work_detail_info);
+				const data = json.data[0]
+					, workInfo = JSON.parse(data.work_info)
+					, repairMaintenanceInfo = JSON.parse(data.repair_maintenance_info)
+					, workDetailInfo = JSON.parse(data.work_detail_info);
 
 				setDropDownValue('report_type', getReportTypeName(data['report_type']), data['report_type']);
 				setJsonAutoMapping(data, 'work_info');
 				setJsonAutoMapping(workInfo, 'work_info');
+				setJsonAutoMapping(repairMaintenanceInfo, 'repair_maintenance_info');
 				setJsonAutoMapping(workDetailInfo, 'work_detail_info');
 				getAttachFileDisplay(workDetailInfo['files']);
 
@@ -167,7 +169,7 @@
 					<tr>
 						<th>보고서 명</th>
 						<td id="report_name"></td>
-						<th>발전소</th>
+						<th>발전</th>
 						<td id="site_name"></td>
 					</tr>
 					<tr>
@@ -193,6 +195,89 @@
 				</table>
 			</div>
 		</div>
+
+		<div class="indiv mt-20" id="repair_maintenance_info">
+			<div class="table-top">
+				<h2 class="ntit mt-25">수선유지비 내역</h2>
+			</div>
+			<div class="spc-table-row">
+				<table>
+					<!-- <colgroup>
+						<col style="width: 15%;" />
+						<col style="width: 35%;" />
+						<col style="width: 15%;" />
+						<col style="width: 35%;" />
+					</colgroup> -->
+					<tr>
+						<th>인버터 수리</th>
+						<td id="인버터_수리"></td>
+						<th></th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>Tracker 보수</th>
+						<td id="tracker_보수"></td>
+						<th></th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>구조물 보수</th>
+						<td id="구조물_보수"></td>
+						<th></th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>접속반 보수</th>
+						<td id="접속반_보수"></td>
+						<th></th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>케이블 보수</th>
+						<td id="케이블_보수"></td>
+						<th></th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>보수공사 기타</th>
+						<td id="보수공사_기타"></td>
+						<th></th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>모니터링</th>
+						<td id="모니터링"></td>
+						<th></th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>예초 및 각도</th>
+						<td id="예초_및_각도"></td>
+						<th></th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>미원 및 피해보상</th>
+						<td id="미원_및_피해보상"></td>
+						<th></th>
+						<td></td>
+					</tr>
+					<tr>
+						<th id="기타명"></th>
+						<td id="기타"></td>
+						<th></th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>총_수선_유지비</th>
+						<td id="총_수선_유지비"></td>
+						<th></th>
+						<td></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
 		<div class="indiv mt-25" id="work_detail_info">
 			<div class="table-top">
 				<h2 class="ntit mt-25">처리 내역</h2>

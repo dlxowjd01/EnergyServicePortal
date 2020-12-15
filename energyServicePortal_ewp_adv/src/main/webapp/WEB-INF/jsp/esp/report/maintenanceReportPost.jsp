@@ -13,6 +13,27 @@
 		$('#출장_시기_from').datepicker('setDate', nowDate);
 	});
 
+	$(document).on('keyup', '#repair_maintenance_info input', function() {
+		let inputVal = $(this).val();
+
+		if (!isEmpty(inputVal)) {
+			let total = 0;
+			inputVal = inputVal.replace(/[^0-9]/g, '');
+
+			$('#repair_maintenance_info input').each(function() {
+				const thisVal = $(this).val().replace(/[^0-9]/g, '')
+					, thisId = $(this).prop('id');
+
+				if (thisId !== '기타명' && thisId !== '총_수선_유지비') {
+					total += Number(thisVal);
+				}
+			});
+
+			$('#총_수선_유지비').val(numberComma(total));
+			$(this).val(numberComma(inputVal));
+		}
+	});
+
 	const getGenData = () => {
 		$.ajax({
 			url: apiHost + '/auth/me/sites',
@@ -65,14 +86,22 @@
 	}
 
 	const setInsertReportData = () => {
-		const work_info = setAreaParamData('work_info'),
-			work_detail_info = setAreaParamData('work_detail_info'),
-			report_type = $('#report_type button').data('value'),
-			report_name = $('#report_name').val(),
-			site_id = $('#gen button').data('value');
+		const work_info = setAreaParamData('work_info')
+			, repair_maintenance_info = setAreaParamData('repair_maintenance_info')
+			, work_detail_info = setAreaParamData('work_detail_info')
+			, report_type = $('#report_type button').data('value')
+			, report_name = $('#report_name').val()
+			, site_id = $('#gen button').data('value');
 		let resultFiles = new Array();
 
 		$('#insertReportModal').modal(); // 처리중 모달띄우기
+
+		if (!isEmpty(repair_maintenance_info.기타)) {
+			if (isEmpty(repair_maintenance_info.기타명)) {
+				alert('기타 금액 입력시 기타명은 필수입니다.');
+				return false;
+			}
+		}
 
 		$('#work_detail_info').find('input[type="file"]').each(function () {
 			const liList =$(this).parent().find('.file_list li');
@@ -124,6 +153,7 @@
 				report_name: report_name,
 				site_id: site_id,
 				work_info: JSON.stringify(work_info),
+				repair_maintenance_info: JSON.stringify(repair_maintenance_info),
 				work_detail_info: JSON.stringify(work_detail_info),
 				updated_by: loginId
 			}),
@@ -201,7 +231,7 @@
 							</div>
 						</td>
 						<th>발전소</th>
-						<td>
+						<td class="group-type">
 							<div class="dropdown placeholder edit" id="gen" >
 								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="">
 									선택 <span class="caret"></span>
@@ -258,6 +288,139 @@
 				</table>
 			</div>
 		</div>
+
+		<div class="indiv report-post mt-20" id="repair_maintenance_info">
+			<div class="table-top">
+				<h2 class="ntit mt-25">수선유지비 내역</h2>
+			</div>
+			<div class="spc-table-row">
+				<table>
+					<colgroup>
+						<col style="width:15%">
+						<col style="width:35%">
+						<col style="width:15%">
+						<col style="width:35%">
+					</colgroup>
+					<tr>
+						<th>인버터 수리</th>
+						<td>
+							<div class="text-input-type edit">
+								<input type="text" id="인버터_수리" placeholder="직접 입력">
+							</div>
+						</td>
+						<th></th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>Tracker 보수</th>
+						<td>
+							<div class="text-input-type edit">
+								<input type="text" id="tracker_보수" placeholder="직접 입력">
+							</div>
+						</td>
+						<th></th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>구조물 보수</th>
+						<td>
+							<div class="text-input-type edit">
+								<input type="text" id="구조물_보수" placeholder="직접 입력">
+							</div>
+						</td>
+						<th></th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>접속반 보수</th>
+						<td>
+							<div class="text-input-type edit">
+								<input type="text" id="접속반_보수" placeholder="직접 입력">
+							</div>
+						</td>
+						<th></th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>케이블 보수</th>
+						<td>
+							<div class="text-input-type edit">
+								<input type="text" id="케이블_보수" placeholder="직접 입력">
+							</div>
+						</td>
+						<th></th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>보수공사 기타</th>
+						<td>
+							<div class="text-input-type edit">
+								<input type="text" id="보수공사_기타" placeholder="직접 입력">
+							</div>
+						</td>
+						<th></th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>모니터링</th>
+						<td>
+							<div class="text-input-type edit">
+								<input type="text" id="모니터링" placeholder="직접 입력">
+							</div>
+						</td>
+						<th></th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>예초 및 각도</th>
+						<td>
+							<div class="text-input-type edit">
+								<input type="text" id="예초_및_각도" placeholder="직접 입력">
+							</div>
+						</td>
+						<th></th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>미원 및 피해보상</th>
+						<td>
+							<div class="text-input-type edit">
+								<input type="text" id="미원_및_피해보상" placeholder="직접 입력">
+							</div>
+						</td>
+						<th></th>
+						<td></td>
+					</tr>
+					<tr>
+						<th>
+							<div class="text-input-type edit w-150px">
+								<input type="text" id="기타명" placeholder="직접 입력">
+							</div>
+						</th>
+						<td>
+							<div class="text-input-type edit">
+								<input type="text" id="기타" placeholder="직접 입력">
+							</div>
+						</td>
+						<th></th>
+						<td>
+
+						</td>
+					</tr>
+					<tr>
+						<th>총 수선 유지비</th>
+						<td>
+							<div class="text-input-type edit">
+								<input type="text" id="총_수선_유지비" placeholder="자동 입력" readonly>
+							</div>
+						</td>
+						<th></th>
+						<td></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
 		<form id="work_detail_info" name="work_detail_info">
 			<div class="indiv mt-25 report-post02">
 				<div class="table-top">

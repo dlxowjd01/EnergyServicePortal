@@ -1299,7 +1299,7 @@
 						<col style="width:50%">
 					</colgroup>
 					<tr>
-						<th rowspan="3">지급수수료</th>
+						<th rowspan="3">세금과 공과</th>
 						<th class="pl-28">지방세</th>
 						<td>
 							<div>
