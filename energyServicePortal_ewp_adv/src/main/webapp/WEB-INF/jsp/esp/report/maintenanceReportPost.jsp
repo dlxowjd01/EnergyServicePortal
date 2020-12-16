@@ -16,7 +16,7 @@
 	$(document).on('keyup', '#repair_maintenance_info input', function() {
 		let inputVal = $(this).val();
 
-		if (!isEmpty(inputVal)) {
+		if (!isEmpty(inputVal) && $(this).prop('id') !== '기타명') {
 			let total = 0;
 			inputVal = inputVal.replace(/[^0-9]/g, '');
 
@@ -394,7 +394,7 @@
 					<tr>
 						<th>
 							<div class="text-input-type edit w-150px">
-								<input type="text" id="기타명" placeholder="직접 입력">
+								<input type="text" id="기타명" placeholder="기타 (직접입력)”>
 							</div>
 						</th>
 						<td>

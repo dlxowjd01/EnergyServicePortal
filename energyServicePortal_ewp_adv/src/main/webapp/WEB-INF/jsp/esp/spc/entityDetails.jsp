@@ -772,7 +772,7 @@
 						<td>
 							<div class="flex-start fixed-height">
 								<span id="계약_단가"></span>
-								<span class="ml-6">원</span>
+								<span class="ml-6">원/월</span>
 							</div>
 						</td>
 						<th>상업 운전 개시일</th>
@@ -1235,7 +1235,7 @@
 						<td>
 							<div>
 								<span id="보험료[index]"></span>
-								<span class="ml-6">원</span>
+								<span class="ml-6">원/월</span>
 							</div>
 						</td>
 					</tr>
@@ -1261,23 +1261,27 @@
 						<th>종료일</th>
 						<td class="flex-start">
 							<span id="보험_종료일[index]"></span>
-							&nbsp;&nbsp;&nbsp;&nbsp;
 							<span class="fixed-height" id="보험_종료일_차이[index]"></span>
 						</td>
 					</tr>
 					<tr>
 						<th>이행보증보험료</th>
-						<td id="이행보증보험료[index]"></td>
+						<td class="flex-start">
+							<span id="이행보증보험료[index]"></span>
+							<span>원/월</span>
+						</td>
 						<th>만기일</th>
 						<td class="flex-start">
 							<span id="보험_만기일[index]"></span>
-
 							<span class="fixed-height" id="보험_만기일_차이[index]"></span>
 						</td>
 					</tr>
 					<tr>
 						<th>보험료_총계</th>
-						<td id="보험료_총계[index]"></td>
+						<td class="flex-start">
+							<span id="보험료_총계[index]"></span>
+							<span>원/월</span>
+						</td>
 						<th></th>
 						<td></td>
 					</tr>
@@ -1304,7 +1308,7 @@
 						<td>
 							<div>
 								<span id="지방세"></span>
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 						<td></td>
@@ -1314,7 +1318,7 @@
 						<td>
 							<div>
 								<span id="종합부동산세"></span>
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 						<td></td>
@@ -1324,7 +1328,7 @@
 						<td>
 							<div>
 								<span id="세금과공과_기타"></span>
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 						<td></td>
@@ -1334,7 +1338,7 @@
 						<td>
 							<div>
 								<span id="기장료"></span>
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 						<td></td>
@@ -1344,7 +1348,7 @@
 						<td>
 							<div>
 								<span id="등기용역수수료"></span>
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 						<td></td>
@@ -1354,7 +1358,7 @@
 						<td>
 							<div>
 								<span id="회계감사수수료"></span>
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 						<td></td>
@@ -1365,7 +1369,7 @@
 						<td>
 							<div>
 								<span id="REC수수료"></span>
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 						<td></td>
@@ -1375,7 +1379,7 @@
 						<td>
 							<div>
 								<span id="재위탁수수료"></span>
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 						<td></td>
@@ -1385,7 +1389,7 @@
 						<td>
 							<div>
 								<span id="정기검사"></span>
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 						<td></td>
@@ -1395,7 +1399,7 @@
 						<td>
 							<div>
 								<span id="지급수수료_기타"></span>
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 						<td></td>
@@ -1405,7 +1409,7 @@
 						<td>
 							<div>
 								<span id="경비용역료"></span>
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 						<td></td>
@@ -1415,7 +1419,7 @@
 						<td>
 							<div>
 								<span id="전력비"></span>
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 						<td></td>
@@ -1425,7 +1429,7 @@
 						<td>
 							<div>
 								<span id="통신비"></span>
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 						<td></td>
@@ -1435,7 +1439,7 @@
 						<td>
 							<div>
 								<span id="전기안전관리대행수수료"></span>
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 						<td></td>
@@ -1445,7 +1449,7 @@
 						<td>
 							<div>
 								<span id="지출_총계"></span>
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 						<td></td>

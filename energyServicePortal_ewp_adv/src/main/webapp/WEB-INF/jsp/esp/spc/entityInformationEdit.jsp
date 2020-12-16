@@ -2359,7 +2359,7 @@
 						<td>
 							<div class="text-input-type edit unit t1">
 								<input type="text" id="보험료[index]" name="보험료[index]">
-								<span>원</span>
+								<span>원/월</span>
 							</div>
 						</td>
 					</tr>
@@ -2398,7 +2398,7 @@
 						<td>
 							<div class="text-input-type edit unit t1">
 								<input type="text" id="이행보증보험료[index]" name="이행보증보험료[index]" placeholder="직접 입력">
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 						<th><label for="보험_만기일[index]">만기일</label></th>
@@ -2415,7 +2415,7 @@
 						<td>
 							<div class="text-input-type edit unit t1">
 								<input type="text" id="보험료_총계[index]" name="보험료_총계[index]" placeholder="자동 완성" readonly>
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 						<th></th>
