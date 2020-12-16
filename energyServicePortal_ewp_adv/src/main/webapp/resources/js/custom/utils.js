@@ -1155,6 +1155,8 @@ function setAreaParamData(areaId, type) {
 		if (obj.getAttribute("id") != null) {
 			if($.inArray("hasDatepicker", obj.classList) > -1 && $(this).datepicker('getDate') != null){
 				param[obj.getAttribute("id")] = $(this).datepicker('getDate').toISOString();
+			} else if($.inArray("mtz-monthpicker-widgetcontainer", obj.classList) > -1 && $(this).monthpicker('getDate') != null){
+				param[obj.getAttribute("id")] = $(this).monthpicker('getDate').toISOString();
 			} else {
 				param[obj.getAttribute("id")] = obj.value;
 			}

@@ -37,4 +37,9 @@ public class ReportController {
     public String reportMaintenanceReportEdit(HttpServletRequest request, HttpSession session, Model model) {
         return "esp/report/maintenanceReportEdit";
     }
+
+    @RequestMapping(value = "/report/costManagementReport.do")
+    public String costManagementReport(HttpServletRequest request, HttpSession session, Model model) {
+        return "esp/report/costManagementReport";
+    }
 }

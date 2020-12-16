@@ -1820,6 +1820,16 @@
 							</td>
 						</tr>
 						<tr>
+							<th><label for="빠른조회_비밀번호">빠른조회 비밀번호</label></th>
+							<td>
+								<div class="text-input-type edit">
+									<input type="text" id="빠른조회_비밀번호" name="빠른조회_비밀번호" placeholder="직접 입력">
+								</div>
+							</td>
+							<th></th>
+							<td></td>
+						</tr>
+						<tr>
 							<th class="group-type">
 								공인인증서 등록 <a href="javascript:addRow('addList_certificate_registration', 'class'); addRow('addList_certificate_registration2', 'class');" class="btn-add fr">추가</a>
 							</th>
