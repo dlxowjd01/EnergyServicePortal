@@ -164,7 +164,7 @@
 
 			$.ajax(optDelete).done(function (json, textStatus, jqXHR) {
 				modalBody.addClass("hidden");
-				$("#deleteSuccessMsg").text("사이트가 삭제 되었습니다.").removeClass("hidden");
+				$("#deleteSuccessMsg").text("<fmt:message key='siteSetting.alert.1' />").removeClass("hidden");
 				dTable.row(tr).remove().draw();
 				// refreshSiteList();
 				setTimeout(function(){
@@ -172,7 +172,7 @@
 				}, 1000);
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				modalBody.addClass("hidden");
-				$("#deleteSuccessMsg").text("사이트 삭제에 실패하였습니다.\n다시 시도해 주세요.").removeClass("hidden");
+				$("#deleteSuccessMsg").text("<fmt:message key='siteSetting.alert.2' />\n<fmt:message key='siteSetting.alert.3' />").removeClass("hidden");
 				setTimeout(function(){
 					$("#deleteConfirmModal").modal("hide");
 				}, 1500);
@@ -181,7 +181,7 @@
 		});
 
 		$("#deleteConfirmModal").on("hide.bs.modal", function() {
-			$("#deleteSuccessMsg").html('<h5 id="deleteSuccessMsg" class="ntit">사용자 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>');
+			$("#deleteSuccessMsg").html("<h5 id='deleteSuccessMsg' class='ntit'><fmt:message key='siteSetting.alert.4' /><br><span class='text-blue'></span>&ensp;<fmt:message key='siteSetting.alert.5' /></h5>");
 			$("#confirmSite").val("");
 			$("#deleteConfirmBtn").prop("disabled", true);
 			setTimeout(function(){
@@ -288,8 +288,8 @@
 
 			// 1. ADD site info
 			if(!$("#addSiteModal").hasClass("edit")) {
-				let resultSuccessText = "사업소 추가에 성공 하였습니다.";
-				let resultFailText = "사업소 추가에 실패 하였습니다.<br>";
+				let resultSuccessText = "<fmt:message key='siteSetting.alert.6' />";
+				let resultFailText = "<fmt:message key='siteSetting.alert.7' /><br>";
 
 				siteObj.name = newSiteName;
 				siteObj.location = newCity;
@@ -421,14 +421,14 @@
 					showAjaxResultModal("ajaxResultModal", "addSiteModal", "1", resultSuccessText);
 					refreshSiteList();
 				}).fail(function (jqXHR, textStatus, errorThrown) {
-					let errorMsg = resultFailText + "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText;
+					let errorMsg = resultFailText + "<fmt:message key='siteSetting.errorCode' />:" + jqXHR.status + "<br>" + "<fmt:message key='siteSetting.msg' />: " + jqXHR.responseText;
 					showAjaxResultModal("ajaxResultModal", "addSiteModal", "0", errorMsg);
 				});
 
 			} else {
 				// 2. EDIT site info
-				let resultSuccessText = "사업소 정보 변경에 성공 하였습니다.";
-				let resultFailText = "사업소 정보 변경에 실패 하였습니다.<br>";
+				let resultSuccessText = "<fmt:message key='siteSetting.alert.8' />";
+				let resultFailText = "<fmt:message key='siteSetting.alert.9' />.<br>";
 
 				let dTable = $("#siteTable").DataTable();
 				let tr = $("#siteTable").find("tbody tr.selected");
@@ -575,7 +575,7 @@
 					showAjaxResultModal("ajaxResultModal", "addSiteModal", "1", resultSuccessText);
 					refreshSiteList();
 				}).fail(function (jqXHR, textStatus, errorThrown) {
-					let errorMsg = resultFailText + "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText;
+					let errorMsg = resultFailText + "<fmt:message key='siteSetting.errorCode' />:" + jqXHR.status + "<br>" + "<fmt:message key='siteSetting.msg' />: " + jqXHR.responseText;
 					showAjaxResultModal("ajaxResultModal", "addSiteModal", "0", errorMsg);
 				});
 
@@ -585,8 +585,8 @@
 		// Alarm Form Submission !!!!!!!!!!!!!!!!!!!!!!
 		$("#updateAlarmForm").on("submit", function(e){
 			e.preventDefault();
-			let resultSuccessText = "알람 설정에 성공 하였습니다.";
-			let resultFailText = "알람 설정에 실패 하였습니다.<br>";
+			let resultSuccessText = "<fmt:message key='siteSetting.alert.10' />";
+			let resultFailText = "<fmt:message key='siteSetting.alert.11' /><br>";
 
 			let aTable = $("#alarmTable").DataTable();
 			let tr = $("#alarmTable tbody tr:not(.hidden)");
@@ -926,7 +926,7 @@
 					}, 200);
 				}).catch( err => {
 					console.log("cannot delete existing alarm info", err);
-					let errorMsg = resultFailText + "에러 메세지:" + err;
+					let errorMsg = resultFailText + "<fmt:message key='siteSetting.errorMsg' />:" + err;
 					showAjaxResultModal("ajaxResultModal", "addUserModal", "0", errorMsg);
 				});
 			} else {
@@ -1003,19 +1003,19 @@
 
 				if(item.resource_type === 0) {
 					// Demand && ESS : pair
-					item.siteType = "수요자원"
-					item.powerSource = "부하"
+					item.siteType = "<fmt:message key='siteSetting.needsResource' />"
+					item.powerSource = "<fmt:message key='siteSetting.burden' />"
 				} else {
 					if(isEmpty(item.resource_type)){
 						item.siteType = "-"
 					} else {
-						item.siteType = "발전소"
+						item.siteType = "<fmt:message key='siteSetting.plant' />"
 						if(item.resource_type === 1){
-							item.powerSource = "태양광"
+							item.powerSource = "<fmt:message key='siteSetting.solar' />"
 						} else if(item.resource_type === 2){
-							item.powerSource = "풍력"
+							item.powerSource = "<fmt:message key='siteSetting.windPower' />"
 						} else if(item.resource_type === 3){
-							item.powerSource = "소수력"
+							item.powerSource = "<fmt:message key='siteSetting.smallHydro' />"
 						}
 					}
 				}
@@ -1100,13 +1100,13 @@
 					{
 						"aTargets": [ 4 ],
 						"createdCell":  function (td, cellData, rowData, row, col) {
-							if(rowData.powerSource == "부하"){
+							if(rowData.powerSource == "<fmt:message key='siteSetting.burden' />"){
 								$(td).attr('data-value', 0);
-							} else if(rowData.powerSource == "태양광"){
+							} else if(rowData.powerSource == "<fmt:message key='siteSetting.solar' />"){
 								$(td).attr('data-value', 1);
-							} else if(rowData.powerSource == "풍력"){
+							} else if(rowData.powerSource == "<fmt:message key='siteSetting.windPower' />"){
 								$(td).attr('data-value', 2);
-							} else if(rowData.powerSource == "소수력"){
+							} else if(rowData.powerSource == "<fmt:message key='siteSetting.smallHydro' />"){
 								$(td).attr('data-value', 3);
 							}
 						}
@@ -1133,23 +1133,23 @@
 					// 	"className": "dt-center no-sorting"
 					// },
 					{
-						"sTitle": "사업소 유형",
+						"sTitle": "<fmt:message key='siteSetting.site.type' />",
 						"mData": "siteType",
 					},
 					{
-						"sTitle": "사업소 명",
+						"sTitle": "<fmt:message key='siteSetting.site.name' />",
 						"mData": "name"
 					},
 					{
-						"sTitle": "지역",
+						"sTitle": "<fmt:message key='siteSetting.location' />",
 						"mData": "location",
 					},
 					{
-						"sTitle": "발전 자원",
+						"sTitle": "<fmt:message key='siteSetting.resource' />",
 						"mData": "powerSource",
 					},
 					{
-						"sTitle": "발전 용량",
+						"sTitle": "<fmt:message key='siteSetting.capacity' />",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex )  {
 							let val = displayNumberFixedDecimal(full.capacities.gen, 'W', 3, 2);
@@ -1157,7 +1157,7 @@
 						},
 					},
 					{
-						"sTitle": "ESS 용량 (PCS)",
+						"sTitle": "<fmt:message key='siteSetting.ESSPCS.capacity' />",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex )  {
 							let val = displayNumberFixedDecimal(full.capacities.bat_pcs, 'W', 3, 2);
@@ -1165,7 +1165,7 @@
 						},
 					},
 					{
-						"sTitle": "ESS 용량 (BMS)",
+						"sTitle": "<fmt:message key='siteSetting.ESSBMS.capacity' />",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex )  {
 							let val = displayNumberFixedDecimal(full.capacities.bat_bms, 'W', 3, 2);
@@ -1173,28 +1173,28 @@
 						},
 					},
 					{
-						"sTitle": "DR 자원 ID",
+						"sTitle": "<fmt:message key='siteSetting.DR.resourceID' />",
 						"mData": "drName",
 						visible: false
 					},
 					{
-						"sTitle": "VPP 자원 ID",
+						"sTitle": "<fmt:message key='siteSetting.VPP.resourceID' />",
 						"mData": "vppName",
 					},
 					{
-						"sTitle": "알람 수신",
+						"sTitle": "<fmt:message key='siteSetting.alarm.receive' />",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex )  {
 							// return '<button type="button" class="btn-type-sm btn-type03">알람</button>'
 							if(!isEmpty(full.devices) && full.devices.length>0){
-								return '<button type="button" class="btn-type-sm btn-type03">알람</button>'
+								return "<button type='button' class='btn-type-sm btn-type03'><fmt:message key='siteSetting.alarm' /></button>"
 							} else {
-								return '<button type="button" class="btn-type-sm btn-type03" disabled>알람</button>'
+								return "<button type='button' class='btn-type-sm btn-type03' disabled><fmt:message key='siteSetting.alarm' /></button>"
 							}
 						},
 					},
 					{
-						"sTitle": "업데이트 일자",
+						"sTitle": "<fmt:message key='siteSetting.update.date' />",
 						"mData": "updatedAt",
 					},
 				],
@@ -1219,11 +1219,11 @@
 				},
 				initComplete: function(settings, json ){
 					let str = `<div id="btnGroup" class="right-end"><!--
-						--><button type="button" disabled class="btn-type03" onclick="updateModal('edit')">선택 수정</button><!--
-						--><button type="button" disabled class="btn-type03" onclick="updateModal('delete')">선택 삭제</button><!--
+						--><button type="button" disabled class="btn-type03" onclick="updateModal('edit')"><fmt:message key='siteSetting.updateSelected' /></button><!--
+						--><button type="button" disabled class="btn-type03" onclick="updateModal('delete')"><fmt:message key='siteSetting.deleteSelected' /></button><!--
 					--></div>`;
 
-					let addBtnStr = `<button type="button" class="btn-type fr mb-20" onclick="updateModal('add')">추가</button>`;
+					let addBtnStr = `<button type="button" class="btn-type fr mb-20" onclick="updateModal('add')"><fmt:message key='siteSetting.add' /></button>`;
 					$("#siteTable_wrapper").append($(str)).prepend($(addBtnStr));
 					if(oid.match("testkpx")){
 						let colGroup = $("#siteTable").find("colgroup col");
@@ -1313,8 +1313,8 @@
 					{
 						extend: 'excelHtml5',
 						className: "btn-save",
-						text: '엑셀 다운로드',
-						filename: '사업소 관리' + new Date().format('yyyyMMddHHmmss'),
+						text: "<fmt:message key='siteSetting.excelDownload' />",
+						filename: "<fmt:message key='siteSetting.site.manage' />" + new Date().format('yyyyMMddHHmmss'),
 						// exportOptions: {
 						// 	modifier: {
 						// 		page: 'current'
@@ -1412,16 +1412,16 @@
 
 					if(item.resource_type == 0) {
 						// Demand && ESS : pair
-						item.siteType = "수요자원"
-						item.powerSource = "부하"
+						item.siteType = "<fmt:message key='siteSetting.needsResource' />"
+						item.powerSource = "<fmt:message key='siteSetting.burden' />"
 					} else {
-						item.siteType = "발전소"
+						item.siteType = "<fmt:message key='siteSetting.plant' />"
 						if(item.resource_type === 1){
-							item.powerSource = "태양광"
+							item.powerSource = "<fmt:message key='siteSetting.solar' />"
 						} else if(item.resource_type === 2){
-							item.powerSource = "풍력"
+							item.powerSource = "<fmt:message key='siteSetting.windPower' />"
 						} else if(item.resource_type === 3){
-							item.powerSource = "소수력"
+							item.powerSource = "<fmt:message key='siteSetting.smallHydro' />"
 						}
 					}
 				}
@@ -1519,23 +1519,23 @@
 					// 	"className": "dt-center no-sorting"
 					// },
 					{
-						"sTitle": "사업소 유형",
+						"sTitle": "<fmt:message key='siteSetting.site.type' />",
 						"mData": "siteType",
 					},
 					{
-						"sTitle": "사업소 명",
+						"sTitle": "<fmt:message key='siteSetting.site.name' />",
 						"mData": "name"
 					},
 					{
-						"sTitle": "지역",
+						"sTitle": "<fmt:message key='siteSetting.location' />",
 						"mData": "location",
 					},
 					{
-						"sTitle": "발전 자원",
+						"sTitle": "<fmt:message key='siteSetting.resource' />",
 						"mData": "powerSource",
 					},
 					{
-						"sTitle": "발전 용량",
+						"sTitle": "<fmt:message key='siteSetting.capacity' />",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex )  {
 							let val = displayNumberFixedDecimal(full.capacities.gen, 'W', 3, 2);
@@ -1543,7 +1543,7 @@
 						},
 					},
 					{
-						"sTitle": "ESS 용량 (PCS)",
+						"sTitle": "<fmt:message key='siteSetting.ESSPCS.capacity' />",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex )  {
 							let val = displayNumberFixedDecimal(full.capacities.bat_pcs, 'W', 3, 2);
@@ -1551,7 +1551,7 @@
 						},
 					},
 					{
-						"sTitle": "ESS 용량 (BMS)",
+						"sTitle": "<fmt:message key='siteSetting.ESSBMS.capacity' />",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex )  {
 							let val = displayNumberFixedDecimal(full.capacities.bat_bms, 'W', 3, 2);
@@ -1559,29 +1559,29 @@
 						},
 					},
 					{
-						"sTitle": "DR 자원 ID",
+						"sTitle": "<fmt:message key='siteSetting.DR.resourceID' />",
 						"mData": "drName",
 						visible: false
 					},
 					{
-						"sTitle": "VPP 자원 ID",
+						"sTitle": "<fmt:message key='siteSetting.VPP.resourceID' />",
 						"mData": "vppName",
 					},
 					{
-						"sTitle": "알람 설정",
+						"sTitle": "<fmt:message key='siteSetting.alarm.setting' />",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex )  {
 							return ''
 						},
 					},
 					{
-						"sTitle": "업데이트 일자",
+						"sTitle": "<fmt:message key='siteSetting.update.date' />",
 						"mData": "updatedAt",
 					},
 				],
 				"language": {
-					"emptyTable": "조회된 데이터가 없습니다.",
-					"zeroRecords":  "검색된 결과가 없습니다.",
+					"emptyTable": "<fmt:message key='siteSetting.noData' />",
+					"zeroRecords":  "<fmt:message key='siteSetting.noSearchData' />",
 					"infoEmpty": "",
 					"paginate": {
 						// "previous": "",
@@ -1599,8 +1599,8 @@
 				},
 				initComplete: function(settings, json ){	
 					let str = `<div id="btnGroup" class="right-end2"><!--
-						--><button type="button" disabled class="btn-type03" onclick="updateModal('edit')">선택 수정</button><!--
-						--><button type="button" disabled class="btn-type03" onclick="updateModal('delete')">선택 삭제</button><!--
+						--><button type="button" disabled class="btn-type03" onclick="updateModal('edit')"><fmt:message key='siteSetting.updateSelected' /></button><!--
+						--><button type="button" disabled class="btn-type03" onclick="updateModal('delete')"><fmt:message key='siteSetting.deleteSelected' /></button><!--
 					--></div>`;
 					$("#siteTable_wrapper").append($(str)).addClass('mb-28');
 
@@ -1721,56 +1721,56 @@
 			],
 			"columns": [
 				{
-					"title": "순번",
+					"title": "<fmt:message key='siteSetting.index' />",
 					"data": null,
 					"className": "dt-center no-sorting"
 				},
 				{
-					"title": "사업소 유형",
+					"title": "<fmt:message key='siteSetting.site.type' />",
 					"data": null,
 				},
 				{
-					"title": "사업소 명",
+					"title": "<fmt:message key='siteSetting.site.name' />",
 					"data": null
 				},
 				{
-					"title": "지역",
+					"title": "<fmt:message key='siteSetting.location' />",
 					"data": null,
 				},
 				{
-					"title": "발전 자원",
+					"title": "<fmt:message key='siteSetting.resource' />",
 					"data": null,
 				},
 				{
-					"title": "발전 용량",
+					"title": "<fmt:message key='siteSetting.capacity' />",
 					"data": null,
 				},
 				{
-					"title": "ESS 용량 (PCS)",
+					"title": "<fmt:message key='siteSetting.ESSPCS.capacity' />",
 					"data": null,
 				},
 				{
-					"title": "ESS 용량 (BMS)",
+					"title": "<fmt:message key='siteSetting.ESSBMS.capacity' />",
 					"data": null,
 				},
 				{
-					"title": "DR 자원 ID",
+					"title": "<fmt:message key='siteSetting.DR.resourceID' />",
 					"data": null,
 					visible: false
 				},
 				{
-					"title": "VPP 자원 ID",
+					"title": "<fmt:message key='siteSetting.VPP.resourceID' />",
 					"data": null,
 				},
 				{
-					"title": "알람 수신",
+					"title": "<fmt:message key='siteSetting.alarm.receive' />",
 					"data": null,
 				},
 			],
 			"dom": 'tip',
 			"language": {
-				"emptyTable": "조회된 데이터가 없습니다.",
-				"zeroRecords":  "검색된 결과가 없습니다.",
+				"emptyTable": "<fmt:message key='siteSetting.noData' />",
+				"zeroRecords":  "<fmt:message key='siteSetting.noSearchData' />",
 				"infoEmpty": "",
 				"paginate": {
 					// "previous": "",
@@ -1907,7 +1907,7 @@
 						}, 600);
 					});
 				} else {
-					btn.contents().get(0).nodeValue = "선택";
+					btn.contents().get(0).nodeValue = "<fmt:message key='siteSetting.select' />";
 					if(btn.not(":disabled")){
 						btn.prop("disabled", true);
 					}
@@ -1923,7 +1923,7 @@
 			let s = json.site_type;
 			let resStr = '';
 			let siteStr = '';
-			let allStr = '<li><a href="#">전체</a></li>';
+			let allStr = "<li><a href='#'><fmt:message key='siteSetting.all' /></a></li>";
 
 			$.each(r, function(index, el){
 				let name = `${'${el.name.kr}'}`;
@@ -2004,7 +2004,7 @@
 			$("#siteType").append(allStr);
 
 			siteStr += `
-				<li><a href="#">해당 사항 없음</a></li>
+				<li><a href="#"><fmt:message key='siteSetting.noCase' /></a></li>
 			`;
 			$("#newSiteType").append(siteStr);
 
@@ -2015,7 +2015,7 @@
 				let newRes = $("#newResList");
 				let items = newRes.find("li");
 
-				newRes.prev().data({ "name" : "", "value": "" }).contents().get(0).nodeValue = "선택";
+				newRes.prev().data({ "name" : "", "value": "" }).contents().get(0).nodeValue = "<fmt:message key='siteSetting.select' />";
 				if(val == "0") {
 					items.eq(0).removeClass("hidden").siblings().addClass("hidden");
 				} else if(val == "1"){
@@ -2102,7 +2102,7 @@
 				<li data-value="${'${i+1}'}"><a href="#">${'${i+1}'}</a></li>
 			`;
 		}
-		inspStr += `<li data-value="0"><a href="#">말일</a></li>`
+		inspStr += `<li data-value="0"><a href="#"><fmt:message key='siteSetting.lastDay' /></a></li>`
 
 		if(option){
 			$("#newInspection").empty();
@@ -2147,7 +2147,7 @@
 			// dropdown
 			newVppResIdList.append(strVpp);
 		} else {
-			newVppResIdList.prev().prop('disabled', true).contents().get(0).nodeValue = "등록된 중개거래 자원 ID가 없습니다.";
+			newVppResIdList.prev().prop('disabled', true).contents().get(0).nodeValue = "<fmt:message key='siteSetting.alert.12' />";
 			$("#newVppRevShare").prop('disabled', true).val("-");
 		}
 		let propertyDropdown = $("#propertyRow").find(".dropdown-menu");
@@ -2204,7 +2204,7 @@
 			required.hasClass("no-symbol") ? required.removeClass("no-symbol") : null;
 			addBtn.text("추가");
 			newSiteName.prop('disabled', false).parent().removeClass("disabled");
-			$("#newVoltTypeList").prev().prop("disabled", true).data("value", "").contents().get(0).nodeValue = "선택";
+			$("#newVoltTypeList").prev().prop("disabled", true).data("value", "").contents().get(0).nodeValue = "<fmt:message key='siteSetting.select' />";
 			$("#addSiteModal").removeClass("edit").modal("show");
 		} else {
 			let dTable = $("#siteTable").DataTable();
@@ -2235,7 +2235,7 @@
 				} else {
 					// 추가 정보
 					$('#newSiteDetail').val(rowData.detail_info).prop("disabled", false);
-					addBtn.prop("disabled", false).text("수정").removeClass("hidden");
+					addBtn.prop("disabled", false).text("<fmt:message key='siteSetting.update' />").removeClass("hidden");
 				}
 
 				titleAdd.addClass("hidden").next().removeClass("hidden");
@@ -2259,12 +2259,12 @@
 				$("#newResList").prev().data({"name": td.eq(4).text(), "value" : td.eq(4).data("value") }).contents().get(0).nodeValue = td.eq(4).text();
 				// ESS 유무
 				if( isEmpty(rowData.ess) || rowData.ess === 0 ) {
-					$('#newEssList').prev().data("value", "0").contents().get(0).nodeValue = "무";
+					$('#newEssList').prev().data("value", "0").contents().get(0).nodeValue = "<fmt:message key='siteSetting.N' />";
 				} else {
 					if (rowData.ess === '-') {
-						$('#newEssList').prev().data("value", "0").contents().get(0).nodeValue = "무";
+						$('#newEssList').prev().data("value", "0").contents().get(0).nodeValue = "<fmt:message key='siteSetting.N' />";
 					} else {
-						$('#newEssList').prev().data("value", "1").contents().get(0).nodeValue = "유";
+						$('#newEssList').prev().data("value", "1").contents().get(0).nodeValue = "<fmt:message key='siteSetting.Y' />";
 					}
 				}
 				// 위경도
@@ -2308,7 +2308,7 @@
 							// console.log("util.volt_name==", util.volt_name);
 							$("#newVoltTypeList").prev().data({"id": util.utility_plan_id, "data-value" : util.volt_name }).html( util.volt_name + '<span class="caret"></span>');
 						} else {
-							$("#newVoltTypeList").prev().prop("disabled", true).html('선택<span class="caret"></span>');
+							$("#newVoltTypeList").prev().prop("disabled", true).html("<fmt:message key='siteSetting.select' /><span class='caret'></span>");
 						}
 
 						if(!isEmpty(util.peak_demand) ){
@@ -2320,7 +2320,7 @@
 						}
 
 						if(util.metering_day == 0){
-							$("#newInspection").prev().data("value", String(util.metering_day)).html( '말일<span class="caret"></span>');
+							$("#newInspection").prev().data("value", String(util.metering_day)).html( "<fmt:message key='siteSetting.lastDay' /><span class='caret'></span>");
 						} else {
 							$("#newInspection").prev().data("value", String(util.metering_day)).html( String(util.metering_day) + '<span class="caret"></span>');
 						}
@@ -2337,9 +2337,9 @@
 					let priceModel = JSON.parse(rowData.power_market);
 					// console.log("priceModel===", priceModel)
 					if(priceModel.price_type == "SMP_mean") {
-						$("#newPriceModelList").prev().data("value", priceModel.price_type).html( "SMP평균" + '<span class="caret"></span>');
+						$("#newPriceModelList").prev().data("value", priceModel.price_type).html( "<fmt:message key='siteSetting.SMP.avg' />" + '<span class="caret"></span>');
 					} else if(priceModel.price_type == "fixed") {
-						$("#newPriceModelList").prev().data("value", priceModel.price_type).html( "고정가" + '<span class="caret"></span>');
+						$("#newPriceModelList").prev().data("value", priceModel.price_type).html( "<fmt:message key='siteSetting.truePrice' />" + '<span class="caret"></span>');
 					} else {
 						$("#newPriceModelList").prev().data("value", priceModel.price_type).html( priceModel.price_type + '<span class="caret"></span>');
 					}
@@ -2408,7 +2408,7 @@
 					}
 				} else {
 					sectionVppDropdown.each(function(item, index){
-						$(this).prop("disabled", true).contents().get(0).nodeValue = "선택";
+						$(this).prop("disabled", true).contents().get(0).nodeValue = "<fmt:message key='siteSetting.select' />";
 					});
 					sectionVppInput.each(function(item, index){
 						$(this).prop("disabled", true).val("").parent().addClass("disabled");
@@ -2418,7 +2418,7 @@
 				if( td.eq(9).text() != '-' ) {
 					$('#newVppResIdList').prev().data("value", td.eq(9).text() ).contents().get(0).nodeValue = td.eq(9).text();
 				} else {
-					$('#newVppResIdList').prev().data("value", "").html('선택<span class="caret"></span>');
+					$('#newVppResIdList').prev().data("value", "").html("<fmt:message key='siteSetting.select' /><span class='caret'></span>");
 				}
 				$("#addSiteModal").addClass("edit").modal("show");
 			}
@@ -2522,7 +2522,7 @@
 		menuItem.each(function(index, item){
 			let val = $(this).data("parent");
 			if(val == typeName){
-				target.prop("disabled", false).data("value", "").contents().get(0).nodeValue = "선택";
+				target.prop("disabled", false).data("value", "").contents().get(0).nodeValue = "<fmt:message key='siteSetting.select' />";
 				$(this).removeClass("hidden");
 			}
 		});
@@ -2604,12 +2604,12 @@
 			});
 
 			const alarmLvlArr = [
-				{  name : "정보", val: 0 },
-				{  name : "경고", val: 1 },
-				{  name : "이상", val: 2 },
-				{  name : "트립", val: 3 },
-				{  name : "긴급", val: 4 },
-				{  name : "미정", val: 9 },
+				{  name : "<fmt:message key='siteSetting.info' />", val: 0 },
+				{  name : "<fmt:message key='siteSetting.warn' />", val: 1 },
+				{  name : "<fmt:message key='siteSetting.error' />", val: 2 },
+				{  name : "<fmt:message key='siteSetting.trip' />", val: 3 },
+				{  name : "<fmt:message key='siteSetting.emergency' />", val: 4 },
+				{  name : "<fmt:message key='siteSetting.undefined' />", val: 9 },
 			];
 
 			alarmLvlArr.forEach(function(item, index){
@@ -2786,7 +2786,7 @@
 				],
 				"aoColumns": [
 					{
-						"sTitle": "설비타입",
+						"sTitle": "<fmt:message key='siteSetting.device.type' />",
 						// "className": "no-sorting",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex ) {
@@ -2808,7 +2808,7 @@
 						},
 					},
 					{
-						"sTitle": "설비명",
+						"sTitle": "<fmt:message key='siteSetting.device.name' />",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex ) {
 							let val2 = data[1];
@@ -2836,7 +2836,7 @@
 						},
 					},
 					{
-						"sTitle": "알람레벨",
+						"sTitle": "<fmt:message key='siteSetting.alarm.level' />",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex ) {
 							let val3 = data[1];
@@ -2975,7 +2975,7 @@
 												data-function="concat"
 												data-index="${'${index}'}"
 												data-toggle="dropdown" 
-												data-name="선택" disabled>선택
+												data-name="선택" disabled><fmt:message key='siteSetting.select' />
 												<span class="caret"></span>
 											</button>
 											<ul class="dropdown-menu chk-type" role="menu">${'${ alarmLvlStr }'}</ul>
@@ -3000,7 +3000,7 @@
 						},
 					},
 					{
-						"sTitle": "담당자 (이름 / ID)",
+						"sTitle": "<fmt:message key='siteSetting.manager' />",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex ) {
 							const val4 = data[1];
@@ -3015,7 +3015,7 @@
 												data-function="concat"
 												data-child-id="aDvcPhoneUser${'${ newIdx }'}"
 												data-toggle="dropdown"
-												data-name="선택" disabled>선택
+												data-name="선택" disabled><fmt:message key='siteSetting.select' />
 												<span class="caret"></span>
 											</button>
 											<ul id="aDvcUserList${'${ newIdx }'}" class="dropdown-menu chk-type" role="menu">${'${ userNameStr }'}</ul>
@@ -3023,7 +3023,7 @@
 										<div class="text-input-type disabled" 
 											data-child-id="aDvcPhoneNonUser${'${ newIdx }'}"
 											data-user-type="non-user">
-											<input type="text" name="aDvcNonUserList${'${ newIdx }'}" placeholder="직접 입력" disabled />
+											<input type="text" name="aDvcNonUserList${'${ newIdx }'}" placeholder="<fmt:message key='siteSetting.input.self' />" disabled />
 										</div>
 									</div>`;
 								} else {
@@ -3170,7 +3170,7 @@
 																if(!isEmpty(userData[found].contact_phone)){
 																	displayText1 = userData[found].contact_phone;
 																} else {
-																	displayText1 = "번호 없음";
+																	displayText1 = "<fmt:message key='siteSetting.noNum' />";
 																}
 															}
 														}
@@ -3252,7 +3252,7 @@
 													data-function="concat"
 													data-toggle="dropdown"
 													data-child-id="aDvcPhoneUser${'${ newIdx }'}"
-													data-name="선택" disabled>선택
+													data-name="선택" disabled><fmt:message key='siteSetting.select' />
 													<span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu chk-type" role="menu">${'${ userNameStr }'}</ul>
@@ -3276,7 +3276,7 @@
 										dropdown4 += `<div class="text-input-type disabled" 
 											data-child-id="aDvcPhoneNonUser${'${ newIdx }'}"
 											data-user-type="non-user">
-											<input type="text" name="aDvcNonUserList${'${ newIdx }'}" placeholder="직접 입력" disabled />
+											<input type="text" name="aDvcNonUserList${'${ newIdx }'}" placeholder="<fmt:message key='siteSetting.input.self' />" disabled />
 										</div>`;
 									} else {
 										dropdown4 += `<div class="text-input-type disabled" 
@@ -3297,7 +3297,7 @@
 						},
 					},
 					{
-						"sTitle": "전화번호",
+						"sTitle": "<fmt:message key='siteSetting.phone' />",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex ) {
 							let dropdown5 = ``;
@@ -3318,7 +3318,7 @@
 									<div class="text-input-type disabled" 
 										data-user-type="non-user">
 										<input type="text" 
-											placeholder="직접입력"
+											placeholder="<fmt:message key='siteSetting.input.self' />"
 											data-parent-id="aDvcNonUserList${'${ newIdx }'}"
 											name="aDvcPhoneNonUser${'${ newIdx }'}" 
 											id="aDvcPhoneNonUser${'${ newIdx }'}" 
@@ -3330,15 +3330,15 @@
 						},
 					},
 					{
-						"sTitle": "추가 / 수정 / 삭제",
+						"sTitle": "<fmt:message key='siteSetting.add.update.delete' />",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex ) {
 							let dropdown6 = ``;
 							$.each(data[1], function(index, el){
 								dropdown6 += `<div class="flex-start">
-									<button type="button" class="icon-add" data-index="${'${index}'}" onclick="updateAlarmTable($(this), 'add' )">추가</button>
-									<button type="button" class="icon-edit" data-index="${'${index}'}" onclick="updateAlarmTable($(this), 'edit')">수정</button>
-									<button type="button" class="icon-delete" data-index="${'${index}'}" onclick="updateAlarmTable($(this), 'delete')">삭제</button>
+									<button type="button" class="icon-add" data-index="${'${index}'}" onclick="updateAlarmTable($(this), 'add' )"><fmt:message key='siteSetting.add' /></button>
+									<button type="button" class="icon-edit" data-index="${'${index}'}" onclick="updateAlarmTable($(this), 'edit')"><fmt:message key='siteSetting.update' /></button>
+									<button type="button" class="icon-delete" data-index="${'${index}'}" onclick="updateAlarmTable($(this), 'delete')"><fmt:message key='siteSetting.delete' /></button>
 								</div>`;
 							});
 							return dropdown6;
@@ -3371,8 +3371,8 @@
 						}
 					});
 					let str = `<div id="btnGroup" class="right-end2"><!--
-								--><button type="button" class="btn-type03 w-80px" data-dismiss="modal" aria-label="Close">취소</button><!--
-								--><button type="submit" class="btn-type w-80px ml-12">확인</button><!--
+								--><button type="button" class="btn-type03 w-80px" data-dismiss="modal" aria-label="Close"><fmt:message key='siteSetting.cancel' /></button><!--
+								--><button type="submit" class="btn-type w-80px ml-12"><fmt:message key='siteSetting.ok' /></button><!--
 							--></div>`;
 					$('#alarmTable_wrapper').append($(str));
 					// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
@@ -3469,7 +3469,7 @@
 			copy.find("td").each(function(index, el){
 				if(index<=2){
 					$(this).find(".dropdown:not(:last-of-type)").remove();
-					$(this).find(".dropdown-toggle").html('선택<span class="caret"></span>').attr({"data-index": dataIdx, "data-value": ""});
+					$(this).find(".dropdown-toggle").html("<fmt:message key='siteSetting.select' /><span class='caret'></span>").attr({"data-index": dataIdx, "data-value": ""});
 					$(this).find("input[type='checkbox']").prop("checked", false);
 					if(index === 0 || index === 2){
 						if(index === 0) {
@@ -3483,7 +3483,7 @@
 							$(this).find(".user-group:not(:last-of-type)").remove();
 							$(this).find(".user-group").attr("data-index", dataIdx);
 							$(this).find("input[type='checkbox']").prop("checked", false);
-							$(this).find(".dropdown-toggle").prop("disabled", false).html('선택<span class="caret"></span>').attr({"data-index": dataIdx, "data-value": ""});
+							$(this).find(".dropdown-toggle").prop("disabled", false).html("<fmt:message key='siteSetting.select' /><span class='caret'></span>").attr({"data-index": dataIdx, "data-value": ""});
 							$(this).find("input[type='text']").prop("disabled", false).attr("placeholder", "").val("").parent().removeClass("disabled");
 						}  else if(index===4){
 							$(this).find(".phone-group:not(:last-of-type)").remove();
@@ -3653,7 +3653,7 @@
 
 				if(index <= 2){
 					$(this).find(".dropdown:not(:first-of-type)").remove();
-					$(this).find(".dropdown-toggle").html('선택<span class="caret"></span>').attr({"data-value": "", "data-index": tempIdx});
+					$(this).find(".dropdown-toggle").html("<fmt:message key='siteSetting.select' /><span class='caret'></span>").attr({"data-value": "", "data-index": tempIdx});
 					$(this).find("input[type='checkbox']").prop("checked", false);
 					if(index === 0 || index === 2){
 						if(index === 0) {
@@ -3842,7 +3842,7 @@
 
 <div class="row header-wrapper">
 	<div class="col-12">
-		<h1 class="page-header">사업소 관리</h1>
+		<h1 class="page-header"><fmt:message key='siteSetting.site.manage' /></h1>
 	</div>
 </div>
 
@@ -3851,19 +3851,19 @@
 <div id="propertyRow" class="row">
 	<div class="col-10">
 		<div class="flex-group">
-			<span class="tx-tit">사업소 유형</span>
+			<span class="tx-tit"><fmt:message key='siteSetting.site.type' /></span>
 			<div class="dropdown">
 				<button type="button" class="dropdown-toggle"
-					data-toggle="dropdown">전체<span class="caret"></span></button>
+					data-toggle="dropdown"><fmt:message key='siteSetting.all' /><span class="caret"></span></button>
 					<ul id="siteType" class="dropdown-menu"></ul>
 			</div>
 		</div>
 		<div class="flex-group">
-			<span class="inline-title">지역</span>
+			<span class="inline-title"><fmt:message key='siteSetting.location' /></span>
 			<div class="dropdown">
-				<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+				<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
 				<ul id="countryList" class="dropdown-menu chk-type" role="menu">
-					<li><a href="#">전체</a></li>
+					<li><a href="#"><fmt:message key='siteSetting.all' /></a></li>
 					<c:forEach var="country" items="${location}">
 						<c:if test="${country.value.code eq 'kr'}">
 							<c:forEach var="city" items="${country.value.locations}" varStatus="cityName">
@@ -3881,18 +3881,18 @@
 			</div>
 		</div>
 		<div class="flex-group">
-			<span class="tx-tit">발전 자원</span>
+			<span class="tx-tit"><fmt:message key='siteSetting.resource' /></span>
 			<div class="dropdown">
 				<button type="button" class="dropdown-toggle"
-					data-toggle="dropdown">선택<span class="caret"></span></button>
+					data-toggle="dropdown"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
 				<ul id="resTypeList" class="dropdown-menu"></ul>
 			</div>
 		</div>
 		<div class="flex-group">
-			<span class="tx-tit">사업소 명</span>
+			<span class="tx-tit"><fmt:message key='siteSetting.site.name' /></span>
 			<div class="flex-start">
 				<div class="text-input-type">
-					<input type="text" id="siteSearchBox" name="site_search_box" placeholder="입력">
+					<input type="text" id="siteSearchBox" name="site_search_box" placeholder="<fmt:message key='siteSetting.input' />">
 				</div>
 			</div>
 		</div>
@@ -3931,14 +3931,14 @@
 	<div class="modal-dialog modal-sm">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 id="deleteSuccessMsg" class="ntit">사이트 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>
+				<h5 id="deleteSuccessMsg" class="ntit"><fmt:message key='siteSetting.errorTxt.1' /><br><span class="text-blue"></span>&ensp;<fmt:message key='siteSetting.errorTxt.2' /></h5>
 			</div>
 			<div class="modal-body">
-				<div class="text-input-type"><input type="text" name="confirm_site" id="confirmSite" placeholder="사이트 이름 입력"/></div>
+				<div class="text-input-type"><input type="text" name="confirm_site" id="confirmSite" placeholder="<fmt:message key='siteSetting.input.sitename' />"/></div>
 			</div>
 			<div class="btn-wrap-type05"><!--
-				--><button type="button" class="btn-type03 w-80px" data-dismiss="modal" aria-label="Close">취소</button><!--
-				--><button type="submit" id="deleteConfirmBtn" class="btn-type w-80px ml-12" disabled>확인</button><!--
+				--><button type="button" class="btn-type03 w-80px" data-dismiss="modal" aria-label="Close"><fmt:message key='siteSetting.cancel' /></button><!--
+				--><button type="submit" id="deleteConfirmBtn" class="btn-type w-80px ml-12" disabled><fmt:message key='siteSetting.ok' /></button><!--
 			--></div>
 		</div>
 	</div>
@@ -3949,14 +3949,14 @@
 	<div class="modal-dialog modal-sm">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 id="alarmDeleteSuccessMsg" class="ntit">알람 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;을 입력해 주세요.</h5>
+				<h5 id="alarmDeleteSuccessMsg" class="ntit"><fmt:message key='siteSetting.errorTxt.3' /><br><span class="text-blue"></span>&ensp;<fmt:message key='siteSetting.errorTxt.4' /></h5>
 			</div>
 			<div class="modal-body">
-				<div class="text-input-type"><input type="text" name="confirm_alarm" id="confirmAlarm" placeholder="장치명 입력"/></div>
+				<div class="text-input-type"><input type="text" name="confirm_alarm" id="confirmAlarm" placeholder="<fmt:message key='siteSetting.input.devicename' />"/></div>
 			</div>
 			<div class="btn-wrap-type05"><!--
-				--><button type="button" class="btn-type03 w-80px" data-dismiss="modal" aria-label="Close">취소</button><!--
-				--><button type="submit" id="alarmDeleteConfirmBtn" class="btn-type w-80px ml-12" disabled>확인</button><!--
+				--><button type="button" class="btn-type03 w-80px" data-dismiss="modal" aria-label="Close"><fmt:message key='siteSetting.cancel' /></button><!--
+				--><button type="submit" id="alarmDeleteConfirmBtn" class="btn-type w-80px ml-12" disabled><fmt:message key='siteSetting.ok' /></button><!--
 			--></div>
 		</div>
 	</div>
@@ -3968,9 +3968,9 @@
 	<div class="modal-dialog modal-xl">
 		<div class="modal-content alarm-modal-content">
 			<div class="modal-header flex-start">
-				알람 설정<button type="button" class="btn-add ml-24" onclick="insertRowCopy()">열 추가</button><!--
-				--><small id="duplicatedGroup" class="warning hidden">해당 설비는 이미 선택 되었습니다.</small><!--
-				--><small id="noIdWarning" class="warning hidden">중복되지 않는 설비 타입/ 설비명은 필수입니다.</small><!--
+				<fmt:message key='siteSetting.alarmSetting' /><button type="button" class="btn-add ml-24" onclick="insertRowCopy()"><fmt:message key='siteSetting.addRow' /></button><!--
+				--><small id="duplicatedGroup" class="warning hidden"><fmt:message key='siteSetting.errorTxt.5' /></small><!--
+				--><small id="noIdWarning" class="warning hidden"><fmt:message key='siteSetting.errorTxt.6' /></small><!--
 			--></div>
 			<div class="modal-body mt-10">
 				<form name="add_alarm_form" id="updateAlarmForm">
@@ -3996,64 +3996,64 @@
 <div class="modal fade" id="addSiteModal" tabindex="-1" role="dialog" aria-labelledby="addSiteModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-custom-xl">
 		<div class="modal-content site-modal-content">
-			<div id="titleAdd" class="modal-header mb-10"><h1>사업소 추가<span class="required fr">필수 입력 항목</span></h1></div>
-			<div id="titleEdit" class="modal-header"><h1>사업소 정보 수정</h1></div>
+			<div id="titleAdd" class="modal-header mb-10"><h1><fmt:message key='siteSetting.add.site' /><span class="required fr"><fmt:message key='siteSetting.required' /></span></h1></div>
+			<div id="titleEdit" class="modal-header"><h1><fmt:message key='siteSetting.update.site' /></h1></div>
 			<div class="modal-body">
 				<div class="container-fluid">
 					<form name="add_site_form" id="updateSiteForm" class="setting-form" autocomplete="off">
 						<section id="sectionSiteInfo">
 							<div class="row">
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label asterisk">사업소 명</span></div>
+								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label asterisk"><fmt:message key='siteSetting.site.name' /></span></div>
 								<div class="col-xl-3 col-lg-6 col-md-4 col-sm-10 pl-0">
 									<div class="flex-start">
 										<div class="text-input-type offset-73">
 											<input type="text" name="new_site_name" id="newSiteName" placeholder="입력" minlength="2" maxlength="30">
 										</div>
-										<button type="button" class="btn-type fr" onclick="checkSiteId($('#newSiteName').val().trim())" disabled>중복 체크</button>
+										<button type="button" class="btn-type fr" onclick="checkSiteId($('#newSiteName').val().trim())" disabled><fmt:message key='siteSetting.checkOverlap' /></button>
 									</div>
-									<small class="hidden warning">추가하실 사이트를 입력해 주세요</small>
-									<small class="hidden warning">2~15 글자를 입력해 주세요.</small>
-									<small class="hidden warning">특수 문자는 포함될 수 없습니다.</small>
-									<small id="invalidSite" class="hidden warning">이미 등록되어 있는 사이트 입니다.</small>
-									<small id="validSite" class="text-blue text-sm hidden">추가 가능한 사이트 입니다.</small>
+									<small class="hidden warning"><fmt:message key='siteSetting.errorTxt.7' /></small>
+									<small class="hidden warning"><fmt:message key='siteSetting.errorTxt.8' /></small>
+									<small class="hidden warning"><fmt:message key='siteSetting.errorTxt.9' /></small>
+									<small id="invalidSite" class="hidden warning"><fmt:message key='siteSetting.errorTxt.10' /></small>
+									<small id="validSite" class="text-blue text-sm hidden"><fmt:message key='siteSetting.errorTxt.11' /></small>
 								</div>
 
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">사업소 유형</span></div>
+								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label"><fmt:message key='siteSetting.site.type' /></span></div>
 								<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
 									<div class="dropdown">
-										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
 										<ul id="newSiteType" class="dropdown-menu"></ul>
 									</div>
-									<small class="hidden warning">사업소 유형을 선택해 주세요</small>
+									<small class="hidden warning"><fmt:message key='siteSetting.errorTxt.12' /></small>
 								</div>
 
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label asterisk">발전원</span></div>
+								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label asterisk"><fmt:message key='siteSetting.power' /></span></div>
 								<div class="col-xl-2 col-lg-6 col-md-4 col-sm-10 pl-0">
 									<div class="dropdown">
-										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
 										<ul id="newResList" class="dropdown-menu"></ul>
 									</div>
-									<small class="hidden warning">발전원 옵션을 선택해 주세요</small>
+									<small class="hidden warning"><fmt:message key='siteSetting.errorTxt.13' /></small>
 								</div>
 
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">ESS 유무</span></div>
+								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label"><fmt:message key='siteSetting.isESS' /></span></div>
 								<div class="col-xl-1 col-lg-2 col-md-4 col-sm-10 pl-0">
 									<div class="dropdown">
-										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
 										<ul id="newEssList" class="dropdown-menu">
-											<li data-value="1"><a href="#">유</a></li>
-											<li data-value="0"><a href="#">무</a></li>
+											<li data-value="1"><a href="#"><fmt:message key='siteSetting.isESS.Y' /></a></li>
+											<li data-value="0"><a href="#"><fmt:message key='siteSetting.isESS.N' /></a></li>
 										</ul>
 									</div>
 								</div>
 							</div>
 
 							<div class="row">
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label asterisk">사업소재지</span></div>
+								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label asterisk"><fmt:message key='siteSetting.site.location' /></span></div>
 								<div class="col-xl-6 col-lg-6 col-md-4 col-sm-10 pl-0">
 									<div class="flex-start">
 										<div class="dropdown w-55">
-											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
 											<ul id="newCityList" class="dropdown-menu">
 												<c:forEach var="country" items="${location}">
 													<c:forEach var="city" items="${country.value.locations}" varStatus="cityName">
@@ -4073,66 +4073,66 @@
 												</c:forEach>
 											</ul>
 										</div>
-										<div class="text-input-type w-100"><input type="text" name="new_street_addr" id="newStreetAddr" placeholder="입력" minlength="3" maxlength="28"></div>
+										<div class="text-input-type w-100"><input type="text" name="new_street_addr" id="newStreetAddr" placeholder="<fmt:message key='siteSetting.input' />" minlength="3" maxlength="28"></div>
 									</div>
-									<small class="hidden warning">사업소재지를 선택해 주세요</small>
+									<small class="hidden warning"><fmt:message key='siteSetting.errorTxt.14' /></small>
 								</div>
 
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">위경도</span></div>
+								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label"><fmt:message key='siteSetting.latNlon' /></span></div>
 								<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
-									<div class="text-input-type"><input type="text" name="new_coord" id="newCoord" placeholder="예) 35.9078, 127.7669" minlength="3" maxlength="28"></div>
-									<small id="latLongWarning" class="hidden warning">위경도 데이터를 다시 확인해 주세요.</small>
+									<div class="text-input-type"><input type="text" name="new_coord" id="newCoord" placeholder="<fmt:message key='siteSetting.example' />) 35.9078, 127.7669" minlength="3" maxlength="28"></div>
+									<small id="latLongWarning" class="hidden warning"><fmt:message key='siteSetting.errorTxt.15' /></small>
 								</div>
 								<div class="col-xl-2 col-lg-12 col-md-12 col-sm-12 pl-0">
-									<button type="button" class="btn-type w-100" onclick="weatherGridCalculator();">기상그리드 계산</button>
+									<button type="button" class="btn-type w-100" onclick="weatherGridCalculator();"><fmt:message key='siteSetting.calcGrid' /></button>
 								</div>
 							</div>
 
 							<div class="row">
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">추가 정보</span></div>
+								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label"><fmt:message key='siteSetting.extendInfo' /></span></div>
 								<div class="col-xl-6 col-lg-6 col-md-10 col-sm-10 pl-0">
-									<textarea name="new_site_desc" id="newSiteDetail" class="textarea" placeholder="입력"></textarea>
+									<textarea name="new_site_desc" id="newSiteDetail" class="textarea" placeholder="<fmt:message key='siteSetting.input' />"></textarea>
 								</div>
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">관측소 번호</span></div>
+								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label"><fmt:message key='siteSetting.observerNum' /></span></div>
 								<div class="col-xl-1 col-lg-2 col-md-4 col-sm-10 pl-0">
 									<div class="text-input-type">
-										<input type="text" name="station_id" id="station_id" placeholder="입력" minlength="1" maxlength="15">
+										<input type="text" name="station_id" id="station_id" placeholder="<fmt:message key='siteSetting.input' />" minlength="1" maxlength="15">
 									</div>
 								</div>
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">기상 그리드 </span></div>
+								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label"><fmt:message key='siteSetting.grid' /> </span></div>
 								<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
 									<div class="text-input-type">
-										<input type="text" name="gridX" id="gridX" placeholder="X값 입력" minlength="1" maxlength="4" onkeydown="onlyNum(event)">
+										<input type="text" name="gridX" id="gridX" placeholder="<fmt:message key='siteSetting.input.gridX' />" minlength="1" maxlength="4" onkeydown="onlyNum(event)">
 									</div>
 									<div class="text-input-type mt-5">
-										<input type="text" name="gridY" id="gridY" placeholder="Y값 입력" minlength="1" maxlength="4" onkeydown="onlyNum(event)">
+										<input type="text" name="gridY" id="gridY" placeholder="<fmt:message key='siteSetting.input.gridY' />" minlength="1" maxlength="4" onkeydown="onlyNum(event)">
 									</div>
 								</div>
 							</div>
 
 							<c:if test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
 								<div class="row">
-									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">발전기 코드</span></div>
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label"><fmt:message key='siteSetting.generatorCode' /></span></div>
 									<div class="col-xl-3 col-lg-6 col-md-4 col-sm-10 pl-0">
 										<div class="flex-start">
 											<div class="text-input-type">
-												<input type="text" name="kpx_genid" id="kpx_genid" placeholder="입력" minlength="2" maxlength="15">
+												<input type="text" name="kpx_genid" id="kpx_genid" placeholder="<fmt:message key='siteSetting.input' />" minlength="2" maxlength="15">
 											</div>
 										</div>
 									</div>
-									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">모선 전압</span></div>
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label"><fmt:message key='siteSetting.volt' /></span></div>
 									<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
 										<div class="flex-start">
 											<div class="text-input-type">
-												<input type="text" name="kpx_transvol" id="kpx_transvol" placeholder="입력" minlength="2" maxlength="15">
+												<input type="text" name="kpx_transvol" id="kpx_transvol" placeholder="<fmt:message key='siteSetting.input' />" minlength="2" maxlength="15">
 											</div>
 										</div>
 									</div>
-									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">EMS 코드</span></div>
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label"><fmt:message key='siteSetting.EMScode' /></span></div>
 									<div class="col-xl-2 col-lg-6 col-md-4 col-sm-10 pl-0">
 										<div class="flex-start">
 											<div class="text-input-type">
-												<input type="text" name="kpx_emsid" id="kpx_emsid" placeholder="입력" minlength="2" maxlength="100">
+												<input type="text" name="kpx_emsid" id="kpx_emsid" placeholder="<fmt:message key='siteSetting.input' />" minlength="2" maxlength="100">
 											</div>
 										</div>
 									</div>
@@ -4142,57 +4142,57 @@
 
 						<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
 							<section id="sectionPowerMarketInfo">
-								<h2 class="stit">전력 구매 정보</h2>
+								<h2 class="stit"><fmt:message key='siteSetting.powerBuyInfo' /></h2>
 								<div class="row">
-									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">계약 종별</span></div>
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label"><fmt:message key='siteSetting.contractType' /></span></div>
 									<div class="col-xl-3 col-lg-6 col-md-4 col-sm-10 pl-0">
 										<div class="flex-start">
 											<div class="dropdown w-100">
-												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
 												<ul id="newContractList" class="dropdown-menu"></ul>
 											</div>
 											<div class="dropdown w-100">
-												<button type="button" class="dropdown-toggle optional" data-toggle="dropdown" data-name="선택" disabled>선택<span class="caret"></span></button>
+												<button type="button" class="dropdown-toggle optional" data-toggle="dropdown" data-name="선택" disabled><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
 												<ul id="newVoltTypeList" class="dropdown-menu"></ul>
 											</div>
 										</div>
-										<small id="newVoltWarning" class="hidden warning">계약종별 상세 옵션을 선택해 주세요.</small>
+										<small id="newVoltWarning" class="hidden warning"><fmt:message key='siteSetting.errorTxt.16' /></small>
 									</div>
 									
-									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">계약 전력</span></div>
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label"><fmt:message key='siteSetting.contractPower' /></span></div>
 									<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
-										<div class="text-input-type"><input type="text" name="new_peak_demand" id="newPeakDemand" class="pr-36" oninput="truncateNonDigit(event, this)" onkeyup="formatUnit(this)" placeholder="입력" maxlength="10"><span class="unit">kW</span></div>
+										<div class="text-input-type"><input type="text" name="new_peak_demand" id="newPeakDemand" class="pr-36" oninput="truncateNonDigit(event, this)" onkeyup="formatUnit(this)" placeholder="<fmt:message key='siteSetting.input' />" maxlength="10"><span class="unit">kW</span></div>
 									</div>
 
-									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label offset-top">요금 적용<br>전력</span></div>
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label offset-top"><fmt:message key='siteSetting.applyPay' /><br><fmt:message key='siteSetting.power' /></span></div>
 									<div class="col-xl-2 col-lg-6 col-md-4 col-sm-10 pl-0">
-										<div class="text-input-type"><input type="text" name="new_dr_charge" id="newDrCharge" class="pr-36" oninput="truncateNonDigit(event, this)" onkeyup="formatUnit(this)" placeholder="입력" maxlength="10"><span class="unit">kW</span></div>
+										<div class="text-input-type"><input type="text" name="new_dr_charge" id="newDrCharge" class="pr-36" oninput="truncateNonDigit(event, this)" onkeyup="formatUnit(this)" placeholder="<fmt:message key='siteSetting.input' />" maxlength="10"><span class="unit">kW</span></div>
 									</div>
 
-									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">검침일</span></div>
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label"><fmt:message key='siteSetting.meterReadingDate' /></span></div>
 									<div class="col-xl-1 col-lg-2 col-md-4 col-sm-10 pl-0">
 										<div class="dropdown">
-											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
 											<ul id="newInspection" class="dropdown-menu"></ul>
 										</div>
 									</div>
 								</div>
 
 								<div class="row">
-									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label offset-top">한전<br>고객번호</span></div>
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label offset-top"><fmt:message key='siteSetting.gkswjs' /><br><fmt:message key='siteSetting.customerNumber' /></span></div>
 									<div class="col-xl-3 col-lg-3 col-md-4 col-sm-10 pl-0">
-										<div class="text-input-type"><input type="text" name="new_kepco_id" id="newKepcoId" placeholder="입력" maxlength="18"></div>
+										<div class="text-input-type"><input type="text" name="new_kepco_id" id="newKepcoId" placeholder="<fmt:message key='siteSetting.input' />" maxlength="18"></div>
 									</div>
 
-									<div class="col-xl-1 col-lg-1 col-md-2 col-sm-2"><span class="input-label offset-top">iSMART<br>아이디</span></div>
+									<div class="col-xl-1 col-lg-1 col-md-2 col-sm-2"><span class="input-label offset-top">iSMART<br><fmt:message key='siteSetting.id' /></span></div>
 									<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
-										<div class="text-input-type"><input type="text" name="new_smart_id" id="newISmartId" placeholder="입력" maxlength="18"></div>
+										<div class="text-input-type"><input type="text" name="new_smart_id" id="newISmartId" placeholder="<fmt:message key='siteSetting.input' />" maxlength="18"></div>
 									</div>
 
-									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label offset-top">iSMART<br>비밀번호</span></div>
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label offset-top">iSMART<br><fmt:message key='siteSetting.password' /></span></div>
 									<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
 										<div class="text-input-type"><!--
-										--><input type="password" name="new_smart_pwd" id="newISmartPwd" placeholder="입력" maxlength="18" autocomplete>
+										--><input type="password" name="new_smart_pwd" id="newISmartPwd" placeholder="<fmt:message key='siteSetting.input' />" maxlength="18" autocomplete>
 										<%--
 											<button type="button" class="pwd-icon" onclick="showPwd('newISmartPwd', this)">show</button>
 										--%>
@@ -4201,20 +4201,20 @@
 								</div>
 							</section>
 							<section id="sectionPowerMarketInfo">
-								<h2 class="stit">매전 정보</h2>
+								<h2 class="stit"><fmt:message key='siteSetting.meterInfo' /></h2>
 								<div class="row">
-									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">정상 단가</span></div>
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label"><fmt:message key='siteSetting.normalPrice' /></span></div>
 									<div class="col-xl-3 col-lg-6 col-md-4 col-sm-10 pl-0">
 										<div class="flex-start">
 											<div class="dropdown w-100">
-												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
 												<ul id="newPriceModelList" class="dropdown-menu">
-													<li data-name="고정가" data-value="fixed"><a href="#">고정가</a></li>
-													<li data-name="SMP평균" data-value="SMP_mean"><a href="#">SMP평균</a></li>
-													<li data-name="SMP" data-value="SMP"><a href="#">SMP</a></li>
+													<li data-name="고정가" data-value="fixed"><a href="#"><fmt:message key='siteSetting.truePrice' /></a></li>
+													<li data-name="SMP평균" data-value="SMP_mean"><a href="#"><fmt:message key='siteSetting.SMP.avg' /></a></li>
+													<li data-name="SMP" data-value="SMP"><a href="#"><fmt:message key='siteSetting.SMP' /></a></li>
 												</ul>
 											</div>
-											<div class="text-input-type hidden"><input type="text" name="Price" id="newPrice" oninput="truncateNonDigit(event, this)" placeholder="입력" maxlength="8"></div>
+											<div class="text-input-type hidden"><input type="text" name="Price" id="newPrice" oninput="truncateNonDigit(event, this)" placeholder="<fmt:message key='siteSetting.input' />" maxlength="8"></div>
 										</div>
 									</div>
 								</div>
@@ -4257,19 +4257,19 @@
 							</section> -->
 
 							<section id="sectionVppInfo">
-								<h2 class="stit">중개 거래 정보</h2>
+								<h2 class="stit"><fmt:message key='siteSetting.deal.info' /></h2>
 								<div class="row">
-									<div class="col-xl-1 col-lg-2 col-sm-2"><span class="input-label">자원 ID</span></div>
+									<div class="col-xl-1 col-lg-2 col-sm-2"><span class="input-label"><fmt:message key='siteSetting.resourceID' /></span></div>
 									<div class="col-xl-3 col-lg-3 col-sm-4 pl-0">
 										<div class="dropdown">
-											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
 											<ul id="newVppResIdList" class="dropdown-menu"></ul>
 										</div>
 									</div>
 
-									<div class="col-xl-1 col-lg-2 col-md-1 col-sm-2"><span class="input-label">수익 분배율</span></div>
+									<div class="col-xl-1 col-lg-2 col-md-1 col-sm-2"><span class="input-label"><fmt:message key='siteSetting.revenue.share' /></span></div>
 									<div class="col-xl-2 col-lg-2 col-sm-4 pl-0">
-										<div class="text-input-type"><input type="text" name="vpp_rev_share" id="newVppRevShare" class="pr-36" oninput="truncateNonDigit(event, this, 'percentage')" onkeyup="formatRatio(this)" placeholder="입력" maxlength="5"><span class="unit">%</span></div>
+										<div class="text-input-type"><input type="text" name="vpp_rev_share" id="newVppRevShare" class="pr-36" oninput="truncateNonDigit(event, this, 'percentage')" onkeyup="formatRatio(this)" placeholder="<fmt:message key='siteSetting.input' />" maxlength="5"><span class="unit">%</span></div>
 									</div>
 								</div>
 							</section>
@@ -4278,8 +4278,8 @@
 						<div class="row">
 							<div class="col-12">
 								<div class="btn-wrap-type02">
-									<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close">취소</button>
-									<button type="submit" id="addSiteBtn" class="btn-type" disabled>추가</button>
+									<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close"><fmt:message key='siteSetting.cancel' /></button>
+									<button type="submit" id="addSiteBtn" class="btn-type" disabled><fmt:message key='siteSetting.add' /></button>
 								</div>
 							</div>
 						</div>

@@ -39,7 +39,7 @@
 				radioGroup.prop("checked", false);
 				resIdWrapper.removeClass("hidden").prev().removeClass("hidden");
 				if(val == "vpp_group"){
-					resIdWrapper.prev().find(".input-label").text("거래 ID");
+					resIdWrapper.prev().find(".input-label").text("<fmt:message key='groupSetting.dealID' />");
 				}
 				// else {
 					// resIdWrapper.prev().find(".input-label").text("자원 ID");
@@ -135,7 +135,7 @@
 	
 		$("#deleteConfirmModal").on("hide.bs.modal", function() {
 			$("#confirmGroupName").val("");
-			$("#deleteSuccessMsg").html('<h5 id="deleteSuccessMsg" class="ntit">그룹 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>');
+			$("#deleteSuccessMsg").html("<h5 id='deleteSuccessMsg' class='ntit'><fmt:message key='groupSetting.errorTxt.1' /><br><span class='text-blue'></span>&ensp;<fmt:message key='groupSetting.errorTxt.2' /></h5>");
 			$("#deleteConfirmBtn").prop("disabled", true);
 			setTimeout(function(){
 				$(this).find(".modal-body").removeClass("hidden");
@@ -166,8 +166,8 @@
 
 			// 1. Add group info
 			if(!$("#addGroupModal").hasClass("edit")) {
-				let resultSuccessText = "그룹 추가에 성공 하였습니다.";
-				let resultFailText = "그룹 추가에 실패 하였습니다.<br>";
+				let resultSuccessText = "<fmt:message key='groupSetting.errorTxt.11' />";
+				let resultFailText = "<fmt:message key='groupSetting.errorTxt.12' /><br>";
 				callbackOption.type = "0";
 
 				obj.name = newGroupName;
@@ -191,7 +191,7 @@
 						data: JSON.stringify(obj)
 					}
 					
-					callbackOption.FailMsg = "사이트 그룹 추가에 실패하였습니다.<br>";
+					callbackOption.FailMsg = "<fmt:message key='groupSetting.errorTxt.13' /><br>";
 
 					makeAjaxCall(option, callbackOption ).then(res => {
 						console.log("add site group res===", res);
@@ -212,18 +212,18 @@
 							};
 
 							$.ajax(siteOpt).done(function (json, textStatus, jqXHR) {
-								let resultMsg = "사이트 " + resultSuccessText;
+								let resultMsg = "<fmt:message key='groupSetting.site' /> " + resultSuccessText;
 								showAjaxResultModal("ajaxResultModal", "addGroupModal", "1", resultMsg);
 								getGroupData(initModal);
 							}).fail(function (jqXHR, textStatus, errorThrown) {
-								let errorMsg = resultFailText + "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText;
+								let errorMsg = resultFailText + "<fmt:message key='groupSetting.errorCode' />:" + jqXHR.status + "<br>" + "<fmt:message key='groupSetting.msg' />: " + jqXHR.responseText;
 								showAjaxResultModal("ajaxResultModal", "addGroupModal", "0", errorMsg);
 							});								
 						}
 					});
 				} else {
-					let resultSuccessText = "그룹 추가에 성공 하였습니다.";
-					let resultFailText = "그룹 추가에 실패 하였습니다.<br>";
+					let resultSuccessText = "<fmt:message key='groupSetting.errorTxt.11' />";
+					let resultFailText = "<fmt:message key='groupSetting.errorTxt.12' /><br>";
 
 					obj.resourceId = newResId;
 					if(newGroupType == "vpp_group"){
@@ -235,7 +235,7 @@
 							contentType: 'application/json; charset=UTF-8',
 							data: JSON.stringify(obj)
 						}
-						callbackOption.FailMsg = "VPP(중개 거래) 추가에 실패하였습니다.<br>";
+						callbackOption.FailMsg = "<fmt:message key='groupSetting.errorTxt.14' /><br>";
 
 						makeAjaxCall(option, callbackOption).then(res => {
 							if(!isEmpty(res)){
@@ -258,12 +258,12 @@
 										promises.push(makeAjaxCall(siteOpt));
 									});
 									Promise.all(promises).then(finalRes => {
-										let resultMsg = "VPP(중개 거래) " + resultSuccessText;
+										let resultMsg = "<fmt:message key='groupSetting.vpp' /> " + resultSuccessText;
 										showAjaxResultModal("ajaxResultModal", "addGroupModal", "1", resultMsg);
 										getGroupData(initModal);
 									}).catch( err => {
 										console.log("cannot edit Vpp Site info", err);
-										let errorMsg = "VPP(중개 거래) " + resultFailText + "에러 메세지:" + err;
+										let errorMsg = "<fmt:message key='groupSetting.vpp' /> " + resultFailText + "<fmt:message key='groupSetting.errorMsg' />:" + err;
 										showAjaxResultModal("ajaxResultModal", "addGroupModal", "0", errorMsg);
 									});
 								}
@@ -319,8 +319,8 @@
 			
 			} else {
 			// 2. Edit existing user info
-				let resultSuccessText = "그룹 정보 변경에 성공 하였습니다.";
-				let resultFailText = "그룹 정보 변경에 실패 하였습니다.<br>";
+				let resultSuccessText = "<fmt:message key='groupSetting.errorTxt.15' />";
+				let resultFailText = "<fmt:message key='groupSetting.errorTxt.16' /><br>";
 				let dTable = $("#groupTable").DataTable();
 				let tr = $("#groupTable").find("tbody tr.selected");
 				let td = tr.find("td");
@@ -368,7 +368,7 @@
 
 					Promise.all([ makeAjaxCall(editOptionList[0]), makeAjaxCall(editOptionList[1]) ]).then( res => {
 						console.log("tag group res---", res);
-						let resultMsg = "사이트 " + resultSuccessText;
+						let resultMsg = "<fmt:message key='groupSetting.site' /> " + resultSuccessText;
 
 						if(!isEmpty(res[0].group_sites)){
 							let deletePromises = [];
@@ -450,7 +450,7 @@
 							contentType: 'application/json; charset=UTF-8',
 							data: JSON.stringify(obj)
 						}
-						let resultMsg = "VPP(중개거래) " + resultSuccessText;
+						let resultMsg = "<fmt:message key='groupSetting.vpp' /> " + resultSuccessText;
 
 						if(!isEmpty(obj)) {
 							// console.log("vpp_group ====", editOption);
@@ -493,7 +493,7 @@
 										getGroupData(initModal);
 									}).catch( err => {
 										console.log("cannot edit site info", err);
-										let errorMsg = "VPP(중개거래) " + resultFailText + "에러 메세지:" + err;
+										let errorMsg = "<fmt:message key='groupSetting.vpp' /> " + resultFailText + "<fmt:message key='groupSetting.errorMsg' />:" + err;
 										showAjaxResultModal("ajaxResultModal", "addUserModal", "0", errorMsg);
 									});
 								});
@@ -539,7 +539,7 @@
 									Promise.all(deleteSitePromises).then( res2 => {
 										console.log("res2---", res2);
 										$("#addGroupModal").modal("hide");
-										$("#resultSuccessMsg").text("그룹 정보가 수정 되었습니다.").removeClass("hidden");
+										$("#resultSuccessMsg").text("<fmt:message key='groupSetting.errorTxt.17' />").removeClass("hidden");
 										$("#resultBtn").parent().addClass("hidden");
 										$("#resultModal").modal("show");
 										getGroupData(initModal);
@@ -668,7 +668,7 @@
 			makeAjaxCall(optDelete).then( res => {
 				Promise.resolve(dTable.row(tr).remove().draw()).then( res => {
 					modalBody.addClass("hidden");
-					$("#deleteSuccessMsg").text("사이트가 삭제 되었습니다.").removeClass("hidden");
+					$("#deleteSuccessMsg").text("<fmt:message key='groupSetting.errorTxt.18' />").removeClass("hidden");
 					// refreshSiteList();
 					setTimeout(function(){
 						$("#deleteConfirmModal").modal("hide");
@@ -820,7 +820,7 @@
 					// 	"className": "dt-center no-sorting"
 					// },
 					{
-						"sTitle": "그룹 유형",
+						"sTitle": "<fmt:message key='groupSetting.group.type' />",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex )  {
 							let groupType = "";
@@ -832,18 +832,18 @@
 							// 	return groupType = "사업소 그룹";
 							// }
 							if(full.vgid){
-								return groupType = "VPP 그룹";
+								return groupType = "<fmt:message key='groupSetting.group.type.vpp' />";
 							} else if(full.sgid){
-								return groupType = "사업소 그룹";
+								return groupType = "<fmt:message key='groupSetting.group.type.site' />";
 							}
 						}
 					},
 					{
-						"sTitle": "그룹 명",
+						"sTitle": "<fmt:message key='groupSetting.group.name' />",
 						"mData": "name"
 					},
 					{
-						"sTitle": "사업소",
+						"sTitle": "<fmt:message key='groupSetting.site' />",
 						"mData":  null,
 						"mRender": function ( data, type, full, rowIndex )  {
 							if(!isEmpty(full.sites)){
@@ -890,7 +890,7 @@
 						}
 					},
 					{
-						"sTitle": "최종작업자",
+						"sTitle": "<fmt:message key='groupSetting.lastManager' />",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex )  {
 							let updatedBy = "";
@@ -905,7 +905,7 @@
 						}
 					},
 					{
-						"sTitle": "업데이트 일자",
+						"sTitle": "<fmt:message key='groupSetting.updateDate' />",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex )  {
 							let date = "";
@@ -922,7 +922,7 @@
 						}
 					},
 					{
-						"sTitle": "비고",
+						"sTitle": "<fmt:message key='groupSetting.temp' />",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex )  {
 							let desc = "";
@@ -957,11 +957,11 @@
 				initComplete: function(settings, json ){
 					// console.log("init settings---", settings)
 					let str = `<div id="btnGroup" class="right-end"><!--
-						--><button type="button" disabled class="btn-type03" onclick="updateModal('edit')">선택 수정</button><!--
-						--><button type="button" disabled class="btn-type03" onclick="updateModal('delete')">선택 삭제</button><!--
+						--><button type="button" disabled class="btn-type03" onclick="updateModal('edit')"><fmt:message key='groupSetting.updateSelected' /></button><!--
+						--><button type="button" disabled class="btn-type03" onclick="updateModal('delete')"><fmt:message key='groupSetting.deleteSelected' /></button><!--
 					--></div>`;
 
-					let addBtnStr = `<button type="button" class="btn-type fr mb-20" onclick="updateModal('add')">추가</button>`;
+					let addBtnStr = `<button type="button" class="btn-type fr mb-20" onclick="updateModal('add')"><fmt:message key='groupSetting.add' /></button>`;
 
 					$("#groupTable_wrapper").append($(str)).prepend($(addBtnStr));
 				},
@@ -1019,7 +1019,7 @@
 					{
 						extend: 'excelHtml5',
 						className: "btn-save",
-						text: '엑셀 다운로드',
+						text: "<fmt:message key='groupSetting.excelDownload' />",
 						// exportOptions: {
 						// 	modifier: {
 						// 		page: 'current'
@@ -1109,7 +1109,7 @@
 				// 	"className": "dt-center no-sorting"
 				// },
 				{
-					"sTitle": "그룹 유형",
+					"sTitle": "<fmt:message key='groupSetting.group.type' />",
 					"mData": null,
 					"mRender": function ( data, type, full, rowIndex )  {
 						let groupType = "";
@@ -1122,18 +1122,18 @@
 						// }
 
 						if (full.vgid){
-							return groupType = "VPP 그룹";
+							return groupType = "<fmt:message key='groupSetting.group.type.vpp' />";
 						} else if(full.sgid){
-							return groupType = "사업소 그룹";
+							return groupType = "<fmt:message key='groupSetting.group.type.site' />";
 						}
 					},
 				},
 				{
-					"sTitle": "그룹 명",
+					"sTitle": "<fmt:message key='groupSetting.group.name' />",
 					"mData": "name"
 				},
 				{
-					"sTitle": "사업소",
+					"sTitle": "<fmt:message key='groupSetting.site' />",
 					"mData":  null,
 					"mRender": function ( data, type, full, rowIndex )  {
 						if(!isEmpty(full.sites)){
@@ -1170,7 +1170,7 @@
 					}
 				},
 				{
-					"sTitle": "업데이트 일자",
+					"sTitle": "<fmt:message key='groupSetting.updateDate' />",
 					"mData": null,
 					"mRender": function ( data, type, full, rowIndex )  {
 						let date = "";
@@ -1187,7 +1187,7 @@
 					}
 				},
 				{
-					"sTitle": "비고",
+					"sTitle": "<fmt:message key='groupSetting.temp' />",
 					"mData": null,
 					"mRender": function ( data, type, full, rowIndex )  {
 						let desc = "";
@@ -1201,8 +1201,8 @@
 				}
 			],
 			"language": {
-				"emptyTable": "조회된 데이터가 없습니다.",
-				"zeroRecords":  "검색된 결과가 없습니다.",
+				"emptyTable": "<fmt:message key='groupSetting.noData' />",
+				"zeroRecords":  "<fmt:message key='groupSetting.noSearchData' />",
 				"infoEmpty": "",
 				"paginate": {
 					// "previous": "",
@@ -1243,45 +1243,45 @@
 			],
 			"columns": [
 				{
-					"title": "순번",
+					"title": "<fmt:message key='groupSetting.index' />",
 					"data": null,
 					"className": "dt-center no-sorting",
 				},
 				{
-					"title": "그룹 유형",
+					"title": "<fmt:message key='groupSetting.gorup.type' />",
 					"data": null,
 					"className": "dt-center no-sorting"
 				},
 				{
-					"title": "그룹 명",
+					"title": "<fmt:message key='groupSetting.group.name' />",
 					"data": null,
 					"className": "dt-center no-sorting"
 				},
 				{
-					"title": "사업소",
+					"title": "<fmt:message key='groupSetting.site' />",
 					"data": null,
 					"className": "dt-center no-sorting"
 				},
 				{
-					"title": "최종작업자",
+					"title": "<fmt:message key='groupSetting.lastManager' />",
 					"data": null,
 					"className": "dt-center no-sorting"
 				},
 				{
-					"title": "업데이트 일자",
+					"title": "<fmt:message key='groupSetting.lastUpate' />",
 					"data": null,
 					"className": "dt-center no-sorting"
 				},
 				{
-					"sTitle": "비고",
+					"sTitle": "<fmt:message key='groupSetting.temp' />",
 					"mData": "genCapacity",
 					"className": "dt-center no-sorting"
 				},
 			],
 			"dom": 'tip',
 			"language": {
-				"emptyTable": "조회된 데이터가 없습니다.",
-				"zeroRecords":  "검색된 결과가 없습니다.",
+				"emptyTable": "<fmt:message key='groupSetting.noData' />",
+				"zeroRecords":  "<fmt:message key='groupSetting.noSearchData' />",
 				"infoEmpty": "",
 				"paginate": {
 					// "previous": "",
@@ -1294,7 +1294,7 @@
 			initComplete: function(){
 				this.addClass("no-stripe");
 				if(role == 1){
-					let addBtnStr = `<button type="button" class="btn-type fr mb-20" onclick="updateModal('add')">추가</button>`;
+					let addBtnStr = `<button type="button" class="btn-type fr mb-20" onclick="updateModal('add')"><fmt:message key='groupSetting.add' /></button>`;
 					$("#groupTable_wrapper").prepend($(addBtnStr));
 				}
 			}
@@ -1332,7 +1332,7 @@
 		});
 
 		$.each(dropdownBtn, function(index, element){
-			$(this).prop("disabled", false).data({ "value": "", "vol-type": "", "plan-id" : "" }).html('선택' + '<span class="caret"></span>').next().find("li").removeClass("hidden");
+			$(this).prop("disabled", false).data({ "value": "", "vol-type": "", "plan-id" : "" }).html('<fmt:message key='groupSetting.select' />' + '<span class="caret"></span>').next().find("li").removeClass("hidden");
 		});
 		// console.log("initModal----")
 	}
@@ -1356,7 +1356,7 @@
 			}
 			titleAdd.removeClass("hidden").next().addClass("hidden");
 			required.hasClass("no-symbol") ? required.removeClass("no-symbol") : null;
-			addBtn.text("추가");
+			addBtn.text("<fmt:message key='groupSetting.add' />");
 			$('#newGroupName').prop('disabled', false);
 			$("#addGroupModal").removeClass("edit").modal("show");
 		} else {
@@ -1379,7 +1379,7 @@
 					let siteNameArr = [];
 					let siteValArr = [];
 
-					addBtn.prop("disabled", false).text("수정");
+					addBtn.prop("disabled", false).text("<fmt:message key='groupSetting.update' />");
 					titleAdd.addClass("hidden").next().removeClass("hidden");
 					required.hasClass("no-symbol") ? null : required.addClass("no-symbol");
 					if(rowData.description){
@@ -1395,7 +1395,7 @@
 					if(rowData.sgid){
 						let sharedOpt = '';
 						let shareOptGroup = $("#shareOptGroup");
-						newGroupType.prev().data("value", "tag_group").prop("disabled", true).contents().get(0).nodeValue = "사업소 그룹";
+						newGroupType.prev().data("value", "tag_group").prop("disabled", true).contents().get(0).nodeValue = "<fmt:message key='groupSetting.group.type.site' />";
 						shareOptGroup.find(".warning").addClass("hidden");
 						shareOptGroup.removeClass("hidden").prev().removeClass("hidden");
 						resIdWrapper.addClass("hidden").prev().addClass("hidden");
@@ -1404,13 +1404,13 @@
 							let checkBoxList = siteItem.toArray();
 
 							if(rowData.shared == true){
-								sharedOpt = "(공유)";
+								sharedOpt = "<fmt:message key='groupSetting.share' />";
 								$("#shareOpt1").prop("checked", true);
 							} else {
-								sharedOpt = "(미공유)";
+								sharedOpt = "<fmt:message key='groupSetting.noShare' />";
 								$("#shareOpt2").prop("checked", true);
 							}
-							sharedStr = `<span class="input-label list-label">등록된 사이트 리스트&ensp;${'${sharedOpt}'}</span>`;
+							sharedStr = `<span class="input-label list-label"><fmt:message key='groupSetting.site.list' />&ensp;${'${sharedOpt}'}</span>`;
 					
 
 							$.each(s, function(index, el){
@@ -1462,8 +1462,8 @@
 						}
 
 						if (rowData.vgid){
-							resIdWrapper.removeClass("hidden").prev().removeClass("hidden").find(".input-label").text("거래 ID");
-							newGroupType.prev().data("value", "vpp_group").prop("disabled", true).contents().get(0).nodeValue = "VPP 그룹";
+							resIdWrapper.removeClass("hidden").prev().removeClass("hidden").find(".input-label").text("<fmt:message key='groupSetting.dealID' />");
+							newGroupType.prev().data("value", "vpp_group").prop("disabled", true).contents().get(0).nodeValue = "<fmt:message key='groupSetting.group.type.vpp' />";
 
 						}
 						// else if(rowData.dgid){
@@ -1488,9 +1488,9 @@
 					let content = "";
 
 					if(popOverRowData.sgid){
-						groupType = "사업소 그룹";
+						groupType = "<fmt:message key='groupSetting.group.type.site' />";
 					} else if(popOverRowData.vgid){
-						groupType = "VPP 그룹";
+						groupType = "<fmt:message key='groupSetting.group.type.vpp' />";
 					}
 					
 					// else if(popOverRowData.dgid){
@@ -1498,9 +1498,9 @@
 					// }
 					
 					if(popOverRowData.shared == false){
-						title = "사업소 상세 정보 (공유)"
+						title = "<fmt:message key='groupSetting.site.detail.sahre' />"
 					} else {
-						title = "사업소 상세 정보 (미공유)"
+						title = "<fmt:message key='groupSetting.site.detail.noShare' />"
 					}
 					
 					$.each(popOverSites, function(index, el){ 
@@ -1686,28 +1686,28 @@
 
 <div class="row header-wrapper">
 	<div class="col-12">
-		<h1 class="page-header">그룹 관리</h1>
+		<h1 class="page-header"><fmt:message key='groupSetting.group.manage' /></h1>
 	</div>
 </div>
 
 <div class="row">
 	<div class="col-10">
 		<div class="flex-group">
-			<span class="tx-tit">그룹 유형</span>
+			<span class="tx-tit"><fmt:message key='groupSetting.group.type' /></span>
 			<div class="dropdown">
 				<button type="button" class="dropdown-toggle"
-					data-toggle="dropdown">선택<span class="caret"></span></button>
+					data-toggle="dropdown"><fmt:message key='groupSetting.select' /><span class="caret"></span></button>
 				<ul class="dropdown-menu chk-type" role="menu" id="groupList">
-					<li><a href="#">전체</a></li>
-					<li data-name="사업소 그룹" data-value=""><a href="#">사업소 그룹</a></li>
-					<li data-name="VPP 그룹" data-value=""><a href="#">VPP 그룹</a></li>
+					<li><a href="#"><fmt:message key='groupSetting.all' /></a></li>
+					<li data-name="사업소 그룹" data-value=""><a href="#"><fmt:message key='groupSetting.siteGroup' /></a></li>
+					<li data-name="VPP 그룹" data-value=""><a href="#"><fmt:message key='groupSetting.vppGroup' /></a></li>
 					<!-- <li data-name="DR 그룹" data-value=""><a href="#">DR 그룹</a></li> -->
 				</ul>
 			</div>
 		</div>
 		<div class="flex-group">
 			<div class="text-input-type">
-				<input type="text" id="groupSearchBox" name="group_search_box" placeholder="키워드 검색">
+				<input type="text" id="groupSearchBox" name="group_search_box" placeholder="<fmt:message key='groupSetting.keywordSearch' />">
 			</div>
 		</div>
 	</div>
@@ -1742,14 +1742,14 @@
 	<div class="modal-dialog modal-sm">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 id="deleteSuccessMsg" class="ntit">그룹 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>
+				<h5 id="deleteSuccessMsg" class="ntit"><fmt:message key='groupSetting.errorTxt.1' /><br><span class="text-blue"></span>&ensp;<fmt:message key='groupSetting.errorTxt.2' /></h5>
 			</div>
 			<div class="modal-body">
-				<div class="text-input-type"><input type="text" name="confirm_group" id="confirmGroupName" placeholder="사이트 이름 입력"/></div>
+				<div class="text-input-type"><input type="text" name="confirm_group" id="confirmGroupName" placeholder="<fmt:message key='groupSetting.input.siteName' />"/></div>
 			</div>
 			<div class="btn-wrap-type05"><!--
-				--><button type="button" class="btn-type03 w-80px" data-dismiss="modal" aria-label="Close">취소</button><!--
-				--><button type="submit" id="deleteConfirmBtn" class="btn-type w-80px ml-12" disabled>확인</button><!--
+				--><button type="button" class="btn-type03 w-80px" data-dismiss="modal" aria-label="Close"><fmt:message key='groupSetting.cancel' /></button><!--
+				--><button type="submit" id="deleteConfirmBtn" class="btn-type w-80px ml-12" disabled><fmt:message key='groupSetting.ok' /></button><!--
 			--></div>
 		</div>
 	</div>
@@ -1759,71 +1759,71 @@
 	<div class="modal-dialog modal-lg no-flex">
 		<div class="modal-content group-modal-content">
 			<div id="titleAdd" class="modal-header mb-10">
-				<h1 class="fl">그룹 추가</h1><span class="required px-4 fr">필수 입력 항목</span>
+				<h1 class="fl"><fmt:message key='groupSetting.group.add' /></h1><span class="required px-4 fr"><fmt:message key='groupSetting.required' /></span>
 			</div>
 			
-			<div id="titleEdit" class="modal-header"><h1>사업소 정보 수정</h1></div>
+			<div id="titleEdit" class="modal-header"><h1><fmt:message key='groupSetting.site.update' /></h1></div>
 			<div class="modal-body">
 				<div class="container-fluid">
 					<form name="add_group_form" id="updateGroupForm" class="setting-form" autocomplete="off">
 						<div class="row">
-							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12"><span class="input-label asterisk">그룹 유형</span></div>
+							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12"><span class="input-label asterisk"><fmt:message key='groupSetting.group.type' /></span></div>
 							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
 								<div class="dropdown">
-									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택"><fmt:message key='groupSetting.select' /><span class="caret"></span></button>
 									<ul id="newGroupType" class="dropdown-menu">
-										<li data-name="사업소 그룹" data-value="tag_group"><a href="#">사업소 그룹</a></li>
-										<li data-name="VPP 그룹" data-value="vpp_group"><a href="#">VPP 그룹</a></li>
+										<li data-name="사업소 그룹" data-value="tag_group"><a href="#"><fmt:message key='groupSetting.siteGroup' /></a></li>
+										<li data-name="VPP 그룹" data-value="vpp_group"><a href="#"><fmt:message key='groupSetting.vppGroup' /></a></li>
 					 					<!-- <li data-name="DR 그룹" data-value="dr_group"><a href="#">DR 그룹</a></li> -->
 									</ul>
 								</div>
-								<small class="hidden warning">그룹 유형을 선택해 주세요</small>
+								<small class="hidden warning"><fmt:message key='groupSetting.errorTxt.3' /></small>
 							</div>
 
-							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 pl-40 hidden"><span class="input-label asterisk">거래 ID</span></div>
+							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 pl-40 hidden"><span class="input-label asterisk"><fmt:message key='groupSetting.dealID' /></span></div>
 							<div id="resIdWrapper" class="col-xl-4 col-lg-4 col-md-4 col-sm-12 hidden">
 								<div class="text-input-type"><input type="text" id="newResId" name="new_res_id" /></div>
-								<small class="hidden warning">거래 ID를 입력해 주세요.</small>
+								<small class="hidden warning"><fmt:message key='groupSetting.errorTxt.4' /></small>
 							</div>
 						</div>
 
 						<div class="row">
-							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12"><span class="input-label asterisk">그룹 명</span></div>
+							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12"><span class="input-label asterisk"><fmt:message key='groupSetting.group.name' /></span></div>
 							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
 								<div class="flex-start">
 									<div class="text-input-type offset-width">
-										<input type="text" name="new_group_name" id="newGroupName" placeholder="입력" minlength="2" maxlength="15">
+										<input type="text" name="new_group_name" id="newGroupName" placeholder="<fmt:message key='groupSetting.input' />" minlength="2" maxlength="15">
 									</div>
-									<button type="button" id="checkGroupBtn" class="btn-type fr" disabled>중복 체크</button>
+									<button type="button" id="checkGroupBtn" class="btn-type fr" disabled><fmt:message key='groupSetting.checkOverlap' /></button>
 								</div>
-								<small class="hidden warning">추가하실 그룹을 입력해 주세요</small>
-								<small class="hidden warning">2~15 글자를 입력해 주세요.</small>
-								<small class="hidden warning">특수 문자는 포함될 수 없습니다.</small>
-								<small id="invalidGroup" class="hidden warning">이미 등록되어 있는 그룹 입니다.</small>
-								<small id="validGroup" class="text-blue text-sm hidden">추가 가능한 그룹 입니다.</small>
+								<small class="hidden warning"><fmt:message key='groupSetting.errorTxt.5' /></small>
+								<small class="hidden warning"><fmt:message key='groupSetting.errorTxt.6' /></small>
+								<small class="hidden warning"><fmt:message key='groupSetting.errorTxt.7' /></small>
+								<small id="invalidGroup" class="hidden warning"><fmt:message key='groupSetting.errorTxt.8' /></small>
+								<small id="validGroup" class="text-blue text-sm hidden"><fmt:message key='groupSetting.errorTxt.9' /></small>
 							</div>
 
-							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 pl-40 hidden"><span class="input-label asterisk">그룹 공유</span></div>
+							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 pl-40 hidden"><span class="input-label asterisk"><fmt:message key='groupSetting.group.share' /></span></div>
 							<div id="shareOptGroup" class="col-xl-4 col-lg-4 col-md-4 col-sm-12 hidden">
 								<div class="radio-type flex-start">
 									<div class="radio-group">
 										<input type="radio" id="shareOpt1" name="share_option" data-value="1" data-option-val="true">
-										<label for="shareOpt1">예</label>
+										<label for="shareOpt1"><fmt:message key='groupSetting.yes' /></label>
 									</div>
 									<div class="radio-group">
 										<input type="radio" id="shareOpt2" name="share_option" data-value="0" data-option-val="false">
-										<label for="shareOpt2">아니오</label>
+										<label for="shareOpt2"><fmt:message key='groupSetting.no' /></label>
 									</div>
 								</div>
-								<small class="hidden warning">그룹 공유 값을 선택해 주세요.</small>
+								<small class="hidden warning"><fmt:message key='groupSetting.errorTxt.10' /></small>
 							</div>
 						</div>
 
 						<div class="row">
-							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12"><span class="input-label">사업소 명</span></div>
+							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12"><span class="input-label"><fmt:message key='groupSetting.site.name' /></span></div>
 							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
 								<div class="dropdown">
-									<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+									<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택"><fmt:message key='groupSetting.select' /><span class="caret"></span></button>
 									<ul id="newSiteList" class="dropdown-menu chk-type">
 										<c:forEach var="site" items="${siteList}" varStatus="siteName">
 											<li data-id="${site.name}" data-name="${site.name}" data-value="${site.sid}">
@@ -1844,17 +1844,17 @@
 						</div>
 
 						<div class="row">
-							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12"><span class="input-label">추가 정보</span></div>
+							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12"><span class="input-label"><fmt:message key='groupSetting.extInfo' /></span></div>
 							<div class="col-xl-10 col-lg-10 col-md-10 col-sm-12">
-								<textarea name="new_site_desc" id="newGroupDesc" class="textarea" placeholder="입력"></textarea>
+								<textarea name="new_site_desc" id="newGroupDesc" class="textarea" placeholder="<fmt:message key='groupSetting.input' />"></textarea>
 							</div>
 						</div>
 
 						<div class="row">
 							<div class="col-12">
 								<div class="btn-wrap-type02">
-									<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close">취소</button>
-									<button type="submit" id="addGroupBtn" class="btn-type" disabled>추가</button>
+									<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close"><fmt:message key='groupSetting.cancel' /></button>
+									<button type="submit" id="addGroupBtn" class="btn-type" disabled><fmt:message key='groupSetting.add' /></button>
 								</div>
 							</div>
 						</div>

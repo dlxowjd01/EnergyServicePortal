@@ -196,7 +196,7 @@
 
 			$.ajax(optDelete).done(function (json, textStatus, jqXHR) {
 				modalBody.addClass("hidden");
-				$("#deleteSuccessMsg").text("사용자가 삭제 되었습니다.").removeClass("hidden");
+				$("#deleteSuccessMsg").text("<fmt:message key='userSetting.errorTxt.13' />").removeClass("hidden");
 				refreshUserList();
 				setTimeout(function(){
 					$("#deleteConfirmModal").modal("hide");
@@ -204,7 +204,7 @@
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				console.log("fail==", jqXHR);
 				modalBody.addClass("hidden");
-				$("#deleteSuccessMsg").text("사용자 삭제에 실패하였습니다.\n다시 시도해 주세요.").removeClass("hidden");
+				$("#deleteSuccessMsg").text("<fmt:message key='userSetting.errorTxt.14' />\n<fmt:message key='userSetting.errorTxt.15' />").removeClass("hidden");
 				setTimeout(function(){
 					$("#deleteConfirmModal").modal("hide");
 				}, 1500);
@@ -212,7 +212,7 @@
 		});
 
 		$("#deleteConfirmModal").on("hide.bs.modal", function() {
-			$("#deleteSuccessMsg").html('<h5 id="deleteSuccessMsg" class="ntit">사용자 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>');
+			$("#deleteSuccessMsg").html("<h5 id='deleteSuccessMsg' class='ntit'><fmt:message key='userSetting.errorTxt.16' /><br><span class='text-blue'></span>&ensp;<fmt:message key='userSetting.errorTxt.17' /></h5>");
 			$("#confirmUserId").val("");
 			$("#deleteConfirmBtn").prop("disabled", true);
 			setTimeout(function(){
@@ -250,8 +250,8 @@
 
 			// 1. Add user info
 			if(!$("#addUserModal").hasClass("edit")) {
-				let resultSuccessText = "사용자 추가에 성공 하였습니다.";
-				let resultFailText = "사용자 추가에 실패 하였습니다.<br>";
+				let resultSuccessText = "<fmt:message key='userSetting.errorTxt.18' />";
+				let resultFailText = "<fmt:message key='userSetting.errorTxt.19' /><br>";
 
 				userObj.login_id = newId;
 				userObj.name = newFullName;
@@ -292,7 +292,7 @@
 						refreshUserList();
 						showAjaxResultModal("ajaxResultModal", "addUserModal", "1", resultSuccessText);
 					}).fail(function (jqXHR, textStatus, errorThrown) {
-						let errorMsg = resultFailText + "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText;
+						let errorMsg = resultFailText + "<fmt:message key='userSetting.errorCode' />:" + jqXHR.status + "<br>" + "<fmt:message key='userSetting.msg' />: " + jqXHR.responseText;
 						showAjaxResultModal("ajaxResultModal", "addUserModal", "0", errorMsg);
 					});
 				} else {
@@ -344,7 +344,7 @@
 								showAjaxResultModal("ajaxResultModal", "addUserModal", "1", resultSuccessText);
 							}).catch( err => {
 								console.log("cannot edit site info", err);
-								let errorMsg = resultFailText + "에러 메세지:" + err;
+								let errorMsg = resultFailText + "<fmt:message key='userSetting.erorrMsg' />:" + err;
 								showAjaxResultModal("ajaxResultModal", "addUserModal", "0", errorMsg);
 							});
 						} else {
@@ -362,7 +362,7 @@
 									showAjaxResultModal("ajaxResultModal", "addUserModal", "1", resultSuccessText);
 								}).catch( err => {
 									console.log("cannot edit site info", err);
-									let errorMsg = resultFailText + "에러 메세지:" + err;
+									let errorMsg = resultFailText + "<fmt:message key='userSetting.erorrMsg' />:" + err;
 									showAjaxResultModal("ajaxResultModal", "addUserModal", "0", errorMsg);
 								});
 							}
@@ -383,21 +383,21 @@
 									showAjaxResultModal("ajaxResultModal", "addUserModal", "1", resultSuccessText);
 								}).catch( err => {
 									console.log("cannot edit spc info ====> ", err);
-									let errorMsg = resultFailText + "에러 메세지:" + err;
+									let errorMsg = resultFailText + "<fmt:message key='userSetting.erorrMsg' />:" + err;
 									showAjaxResultModal("ajaxResultModal", "addUserModal", "0", errorMsg);
 								});
 							}
 						}
 					}).fail(function (jqXHR, textStatus, errorThrown) {
-						let errorMsg = resultFailText + "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText;
+						let errorMsg = resultFailText + "<fmt:message key='userSetting.errorCode' />:" + jqXHR.status + "<br>" + "<fmt:message key='userSetting.msg' />: " + jqXHR.responseText;
 						showAjaxResultModal("ajaxResultModal", "addUserModal", "0", errorMsg);
 					});
 				}
 			} else {
 			// 2. Edit existing user info
-				let resultSuccessText = "사용자 정보 변경에 성공 하였습니다.";
-				let resultFailText = "사용자 정보 변경에 실패 하였습니다.<br>";
-				let emptyMsg = "변경하신 정보가 없습니다. 정보를 입력후 다시 시도해 주세요";
+				let resultSuccessText = "<fmt:message key='userSetting.errorTxt.20' />";
+				let resultFailText = "<fmt:message key='userSetting.errorTxt.21' /><br>";
+				let emptyMsg = "<fmt:message key='userSetting.errorTxt.22' />";
 
 				let dTable = $("#userTable").DataTable();
 				let tr = $("#userTable").find("tbody tr.selected");
@@ -500,7 +500,7 @@
 				// console.log("flagArr--", flagArr)
 				if( isEmpty($("#newUserPwd").val()) && isEmpty(editUserObj) && (flagIndex < 0) ) {
 					// if no changes have been made
-					let errorMsg = "변경하실 사용자, 사이트, SPC 정보를 입력해 주세요";
+					let errorMsg = "<fmt:message key='userSetting.errorTxt.23' />";
 					showAjaxResultModal("ajaxResultModal", null, null, errorMsg);
 				} else {
 					if( (flagIndex < 0) ){
@@ -511,7 +511,7 @@
 								refreshUserList();
 								showAjaxResultModal("ajaxResultModal", "addUserModal", "1", resultSuccessText);
 							}).fail(function (jqXHR, textStatus, errorThrown) {
-								let errorMsg = resultFailText + "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText;
+								let errorMsg = resultFailText + "<fmt:message key='userSetting.errorCode' />:" + jqXHR.status + "<br>" + "<fmt:message key='userSetting.msg' />: " + jqXHR.responseText;
 								showAjaxResultModal("ajaxResultModal", "addUserModal", "0", errorMsg);
 							});
 						} else {
@@ -522,7 +522,7 @@
 									refreshUserList();
 									showAjaxResultModal("ajaxResultModal", "addUserModal", "1", resultSuccessText);
 								}).fail(function (jqXHR, textStatus, errorThrown) {
-									let errorMsg = resultFailText + "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText;
+									let errorMsg = resultFailText + "<fmt:message key='userSetting.errorCode' />:" + jqXHR.status + "<br>" + "<fmt:message key='userSetting.msg' />: " + jqXHR.responseText;
 									showAjaxResultModal("ajaxResultModal", "addUserModal", "0", errorMsg);
 								});
 							}
@@ -533,7 +533,7 @@
 									refreshUserList();
 									showAjaxResultModal("ajaxResultModal", "addUserModal", "1", resultSuccessText);
 								}).fail(function (jqXHR, textStatus, errorThrown) {
-									let errorMsg = resultFailText + "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText;
+									let errorMsg = resultFailText + "<fmt:message key='userSetting.errorCode' />:" + jqXHR.status + "<br>" + "<fmt:message key='userSetting.msg' />: " + jqXHR.responseText;
 									showAjaxResultModal("ajaxResultModal", "addUserModal", "0", errorMsg);
 								});
 							}
@@ -620,12 +620,12 @@
 										showAjaxResultModal("ajaxResultModal", "addUserModal", "1", resultSuccessText);
 									}).catch( err => {
 										console.log("cannot delete existing alarm info", err);
-										let errorMsg = resultFailText + "에러 메세지:" + err;
+										let errorMsg = resultFailText + "<fmt:message key='userSetting.erorrMsg' />:" + err;
 										showAjaxResultModal("ajaxResultModal", "addUserModal", "0", errorMsg);
 									});
 								}
 							}).fail(function (jqXHR, textStatus, errorThrown) {
-								let errorMsg = resultFailText + "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText;
+								let errorMsg = resultFailText + "<fmt:message key='userSetting.errorCode' />:" + jqXHR.status + "<br>" + "<fmt:message key='userSetting.msg' />: " + jqXHR.responseText;
 								showAjaxResultModal("ajaxResultModal", "addUserModal", "0", errorMsg);
 							});
 						} else {
@@ -638,7 +638,7 @@
 										showAjaxResultModal("ajaxResultModal", "addUserModal", "1", resultSuccessText);
 									}).catch( err => {
 										console.log("cannot delete existing alarm info", err);
-										let errorMsg = resultFailText + "에러 메세지:" + err;
+										let errorMsg = resultFailText + "<fmt:message key='userSetting.errorMsg' />:" + err;
 										showAjaxResultModal("ajaxResultModal", "addUserModal", "0", errorMsg);
 									});
 								} else {
@@ -656,7 +656,7 @@
 											showAjaxResultModal("ajaxResultModal", "addUserModal", "0", emptyMsg);
 										}
 									}).fail(function (jqXHR, textStatus, errorThrown) {
-										let errorMsg = resultFailText + "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText;
+										let errorMsg = resultFailText + "<fmt:message key='userSetting.errorCode' />:" + jqXHR.status + "<br>" + "<fmt:message key='userSetting.msg' />: " + jqXHR.responseText;
 										showAjaxResultModal("ajaxResultModal", "addUserModal", "0", errorMsg);	
 									});
 								}
@@ -670,7 +670,7 @@
 											});
 										}
 									}).fail(function (jqXHR, textStatus, errorThrown) {
-										let errorMsg = resultFailText + "에러코드:" + jqXHR.status + "<br>" + "메세지: " + jqXHR.responseText;
+										let errorMsg = resultFailText + "<fmt:message key='userSetting.errorCode' />:" + jqXHR.status + "<br>" + "<fmt:message key='userSetting.msg' />: " + jqXHR.responseText;
 										showAjaxResultModal("ajaxResultModal", "addUserModal", "0", errorMsg);
 									});
 								}
@@ -728,21 +728,21 @@
 					}
 
 					if(item.role == 1){
-						obj.user_role = "시스템 관리자"
+						obj.user_role = "<fmt:message key='userSetting.auth.admin' />"
 					} else {
-						obj.user_role = "일반 사용자"
+						obj.user_role = "<fmt:message key='userSetting.auth.user' />"
 					}
 
 					if(item.task == 0){
-						obj.user_task = "일반"
+						obj.user_task = "<fmt:message key='userSetting.workType.1' />"
 					} else if(item.task == 1){
-						obj.user_task = "사무 수탁사"
+						obj.user_task = "<fmt:message key='userSetting.workType.2' />"
 					} else if(item.task == 2){
-						obj.user_task = "자산 운용사"
+						obj.user_task = "<fmt:message key='userSetting.workType.3' />"
 					} else if(item.task == 3){
-						obj.user_task = "출금 관리자"
+						obj.user_task = "<fmt:message key='userSetting.workType.4' />"
 					} else if(item.task == 4){
-						obj.user_task = "사업주"
+						obj.user_task = "<fmt:message key='userSetting.workType.5' />"
 					}
 
 					if(!isEmpty(item.createdAt)){
@@ -754,9 +754,9 @@
 
 					if(!isEmpty(item.valid_yn)){
 						if(item.valid_yn == "Y"){
-							obj.valid_yn = "사용"
+							obj.valid_yn = "<fmt:message key='userSetting.isUse.Y' />"
 						} else {
-							obj.valid_yn = "중지"
+							obj.valid_yn = "<fmt:message key='userSetting.isUse.N' />"
 						}
 					} else {
 						obj.valid_yn = "-";
@@ -812,40 +812,40 @@
 									"mData": "user_id"
 								},
 								{
-									"sTitle": "이름",
+									"sTitle": "<fmt:message key='userSetting.name' />",
 									"mData": "name",
 								},
 								{
-									"sTitle": "휴대폰",
+									"sTitle": "<fmt:message key='userSetting.phone' />",
 									"mData": "contact_phone",
 								},
 								{
-									"sTitle": "이메일",
+									"sTitle": "<fmt:message key='userSetting.email' />",
 									"mData": "contact_email",
 								},
 								{
-									"sTitle": "소속",
+									"sTitle": "<fmt:message key='userSetting.team' />",
 									"mData": "team",
 								},
 								{
-									"sTitle": "권한 등급",
+									"sTitle": "<fmt:message key='userSetting.auth' />",
 									"mData": "user_role",
 									"className": "acc-level"
 								},
 								{
-									"sTitle": "업무 구분",
+									"sTitle": "<fmt:message key='userSetting.workType' />",
 									"mData": "user_task",
 								},
 								{
-									"sTitle": "등록일자",
+									"sTitle": "<fmt:message key='userSetting.registerDate.1' />",
 									"mData": "created_at",
 								},
 								{
-									"sTitle": "사용 여부",
+									"sTitle": "<fmt:message key='userSetting.isUse' />",
 									"mData": "valid_yn",
 								},
 								{
-									"sTitle": "이중 인증",
+									"sTitle": "<fmt:message key='userSetting.certification' />",
 									"mData": "verify_level",
 									visible: false,
 								}
@@ -871,12 +871,12 @@
 							initComplete: function(){
 								let str = `
 									<div id="btnGroup" class="right-end"><!--
-										--><button type="button" disabled class="btn-type03" onclick="updateModal('edit')">선택 수정</button><!--
-										--><button type="button" disabled class="btn-type03" onclick="updateModal('delete')">선택 삭제</button><!--
+										--><button type="button" disabled class="btn-type03" onclick="updateModal('edit')"><fmt:message key='userSetting.updateSelected' /></button><!--
+										--><button type="button" disabled class="btn-type03" onclick="updateModal('delete')"><fmt:message key='userSetting.deleteSelected' /></button><!--
 								--></div>
 								`;
 								let addBtnStr = `
-									<button type="button" class="btn-type fr mb-20" onclick="updateModal('add')">추가</button>
+									<button type="button" class="btn-type fr mb-20" onclick="updateModal('add')"><fmt:message key='userSetting.add' /></button>
 								`;
 								$("#userTable_wrapper").append($(str)).prepend($(addBtnStr));
 
@@ -988,40 +988,40 @@
 									"mData": "user_id"
 								},
 								{
-									"sTitle": "이름",
+									"sTitle": "<fmt:message key='userSetting.name' />",
 									"mData": "name",
 								},
 								{
-									"sTitle": "휴대폰",
+									"sTitle": "<fmt:message key='userSetting.phone' />",
 									"mData": "contact_phone",
 								},
 								{
-									"sTitle": "이메일",
+									"sTitle": "<fmt:message key='userSetting.email' />",
 									"mData": "contact_email",
 								},
 								{
-									"sTitle": "소속",
+									"sTitle": "<fmt:message key='userSetting.team' />",
 									"mData": "team",
 								},
 								{
-									"sTitle": "권한 등급",
+									"sTitle": "<fmt:message key='userSetting.auth' />",
 									"mData": "user_role",
 									"className": "acc-level"
 								},
 								{
-									"sTitle": "업무 구분",
+									"sTitle": "<fmt:message key='userSetting.workType' />",
 									"mData": "user_task",
 								},
 								{
-									"sTitle": "등록일자",
+									"sTitle": "<fmt:message key='userSetting.registerDate.1' />",
 									"mData": "created_at",
 								},
 								{
-									"sTitle": "사용 여부",
+									"sTitle": "<fmt:message key='userSetting.isUse' />",
 									"mData": "valid_yn",
 								},
 								{
-									"sTitle": "이중 인증",
+									"sTitle": "<fmt:message key='userSetting.certification' />",
 									"mData": "verify_level",
 									visible: false,
 								}
@@ -1047,12 +1047,12 @@
 							initComplete: function(){
 								let str = `
 									<div id="btnGroup" class="right-end"><!--
-										--><button type="button" disabled class="btn-type03" onclick="updateModal('edit')">선택 수정</button><!--
-										--><button type="button" disabled class="btn-type03" onclick="updateModal('delete')">선택 삭제</button><!--
+										--><button type="button" disabled class="btn-type03" onclick="updateModal('edit')"><fmt:message key='userSetting.updateSelected' /></button><!--
+										--><button type="button" disabled class="btn-type03" onclick="updateModal('delete')"><fmt:message key='userSetting.deleteSelected' /></button><!--
 								--></div>
 								`;
 								let addBtnStr = `
-									<button type="button" class="btn-type fr mb-20" onclick="updateModal('add')">추가</button>
+									<button type="button" class="btn-type fr mb-20" onclick="updateModal('add')"><fmt:message key='userSetting.add' /></button>
 								`;
 								$("#userTable_wrapper").append($(str)).prepend($(addBtnStr));
 
@@ -1249,52 +1249,52 @@
 			],
 			"columns": [
 				{
-					"title": "순번",
+					"title": "<fmt:message key='userSetting.index' />",
 					"data": null,
 					"className": "dt-center no-sorting"
 				},
 				{
-					"title": "이름",
+					"title": "<fmt:message key='userSetting.name' />",
 					"data": null,
 				},
 				{
-					"title": "휴대폰",
+					"title": "<fmt:message key='userSetting.phone' />",
 					"data": null
 				},
 				{
-					"title": "이메일",
+					"title": "<fmt:message key='userSetting.email' />",
 					"data": null,
 				},
 				{
-					"title": "소속",
+					"title": "<fmt:message key='userSetting.team' />",
 					"data": null,
 				},
 				{
-					"title": "권한 등급",
+					"title": "<fmt:message key='userSetting.auth' />",
 					"data": null,
 				},
 				{
-					"title": "업무 구분",
+					"title": "<fmt:message key='userSetting.workType' />",
 					"data": null,
 				},
 				{
-					"title": "등록일",
+					"title": "<fmt:message key='userSetting.registerDate.2' />",
 					"data": null,
 				},
 				{
-					"title": "사용 여부",
+					"title": "<fmt:message key='userSetting.isUse' />",
 					"data": null,
 				},
 				{
-					"sTitle": "이중 인증",
+					"sTitle": "<fmt:message key='userSetting.certification' />",
 					"data": null,
 					visible: false,
 				}
 			],
 			"dom": 'tip',
 			"language": {
-				"emptyTable": "조회된 데이터가 없습니다.",
-				"zeroRecords":  "검색된 결과가 없습니다.",
+				"emptyTable": "<fmt:message key='userSetting.noData' />",
+				"zeroRecords":  "<fmt:message key='userSetting.noSearchData' />",
 				"infoEmpty": "",
 				"paginate": {
 					// "previous": "",
@@ -1306,7 +1306,7 @@
 			initComplete: function(){
 				this.addClass("no-stripe");
 				let addBtnStr = `
-					<button type="button" class="btn-type fr mb-20" onclick="updateModal('add')">추가</button>
+					<button type="button" class="btn-type fr mb-20" onclick="updateModal('add')"><fmt:message key='userSetting.add' /></button>
 				`;
 				$("#userTable_wrapper").prepend($(addBtnStr));
 			},
@@ -1360,7 +1360,7 @@
 		$("#newUserDesc").val("");
 
 		$.each(dropdown, function(index, element){
-			$(this).html('선택' + '<span class="caret"></span>');
+			$(this).html("<fmt:message key='userSetting.select' />" + '<span class="caret"></span>');
 			$(this).data("value", "");
 		});
 
@@ -1387,7 +1387,7 @@
 			}
 			titleAdd.removeClass("hidden").next().addClass("hidden");
 			required.hasClass("no-symbol") ? required.removeClass("no-symbol") : null;
-			addBtn.prop("disabled", true).text("등록");
+			addBtn.prop("disabled", true).text("<fmt:message key='userSetting.register' />");
 			$('#newId').prop('disabled', false);
 			$("#addUserModal").removeClass("edit").modal("show");
 		} else {
@@ -1416,7 +1416,7 @@
 					}
 				}
 
-				addBtn.prop("disabled", false).text("수정");
+				addBtn.prop("disabled", false).text("<fmt:message key='userSetting.update' />");
 
 				$.when($.ajax(optSite), $.ajax(optSpc)).done(function (result1, result2) {
 					let siteData = result1[0].data;
@@ -1434,14 +1434,14 @@
 									let name = $(x).data("name");
 									let role = "";
 									if(item.role == 1){
-										role = "관리 권한";
+										role = "<fmt:message key='userSetting.auth.manage' />";
 									} else {
-										role = "조회 권한";
+										role = "<fmt:message key='userSetting.auth.search' />";
 									}
 
 									siteStr += `
 									<li class="delete" data-sid="${'${item.sid}'}" data-role="${'${item.role}'}" data-site-name="${'${name}'}">${'${name}'}&nbsp;(&nbsp;${'${role}'}&nbsp;)
-										<button type="button" class="icon-delete text-btn" onclick="removeList( $(this).closest('li'), $(this) )">삭제 예정</button>
+										<button type="button" class="icon-delete text-btn" onclick="removeList( $(this).closest('li'), $(this) )"><fmt:message key='userSetting.toBeDelete' /></button>
 									</li>
 									`;
 									siteDeleteList.push(item.usid);
@@ -1450,7 +1450,7 @@
 						});
 
 						console.log("siteDeleteList===", siteDeleteList)
-						$("#selectedSiteList").append(siteStr).prev().html("수정 리스트&emsp;<span class='fr'>(&nbsp;<strong class='text-orange'>삭제 예정</strong>&ensp;선택 시, 등록된 기존 정보 삭제)</span>").removeClass("hidden");
+						$("#selectedSiteList").append(siteStr).prev().html("<fmt:message key='userSetting.updateList' />&emsp;<span class='fr'>(&nbsp;<strong class='text-orange'><fmt:message key='userSetting.toBeDelete' /></strong>&ensp;<fmt:message key='userSetting.deleteMsg' />)</span>").removeClass("hidden");
 					}
 
 
@@ -1466,23 +1466,23 @@
 								if($(x).data("value") === item.spcid) {
 									let name = $(x).data("name");
 									let role = '';
-									item.role == "1" ? role = "관리 권한" : role = "조회 권한";
+									item.role == "1" ? role = "<fmt:message key='userSetting.auth.manage' />" : role = "<fmt:message key='userSetting.auth.search' />";
 
 									spcStr += `
 										<li class="delete" data-spc-id="${'${item.spcid}'}" data-role="${'${item.role}'}" data-spc-name="${'${name}'}">${'${name}'}&nbsp;(&nbsp;${'${role}'}&nbsp;)
-											<button type="button" class="icon-delete text-btn" onclick="removeList( $(this).closest('li'), $(this) )">삭제 예정</button>
+											<button type="button" class="icon-delete text-btn" onclick="removeList( $(this).closest('li'), $(this) )"><fmt:message key='userSetting.toBeDelete' /></button>
 										</li>
 									`;
 									spcDeleteList.push(item.uspcid);
 								}
 							});
 						});
-						$("#selectedSpcList").append(spcStr).prev().html("수정 리스트&emsp;<span class='fr'>(&nbsp;<strong class='text-orange'>삭제 예정</strong>&ensp;선택 시, 등록된 기존 정보 삭제)</span>").removeClass("hidden");;
+						$("#selectedSpcList").append(spcStr).prev().html("<fmt:message key='userSetting.updateList' />&emsp;<span class='fr'>(&nbsp;<strong class='text-orange'><fmt:message key='userSetting.toBeDelete' /></strong>&ensp;<fmt:message key='userSetting.deleteMsg' />)</span>").removeClass("hidden");;
 					}
 
 					let val = $("#newAccLevel").prev().data("value");
-					$("#siteAccOpt").prev().prop("disabled", false).contents().get(0).nodeValue = "선택";
-					$("#spcAccOpt").prev().prop("disabled", false).contents().get(0).nodeValue = "선택";
+					$("#siteAccOpt").prev().prop("disabled", false).contents().get(0).nodeValue = "<fmt:message key='userSetting.select' />";
+					$("#spcAccOpt").prev().prop("disabled", false).contents().get(0).nodeValue = "<fmt:message key='userSetting.select' />";
 				}).fail(function (jqXHR, textStatus, errorThrown) {
 					console.log("optSite error===", jqXHR)
 					return false;
@@ -1500,14 +1500,14 @@
 
 				$('#newFullName').val(td.eq(2).text());
 				let accName = td.eq(6).text();
-				if(td.eq(6).text() == "시스템 관리자"){
+				if(td.eq(6).text() == "<fmt:message key='userSetting.auth.admin' />"){
 					accLevBtn.data( { "name" : accName, "value" : "1"}).html(accName+ '<span class="caret">');
 					if ($('.nav-tabs > li').eq(0).find('a').attr('href') == '#siteTab') {
 						$('.nav-tabs > li').eq(0).addClass('hidden').removeClass('active').siblings().addClass('active');
 					}
 
 					$('#siteTab').removeClass('active').siblings().addClass('active in');
-				} else if(td.eq(6).text() == "일반 사용자"){
+				} else if(td.eq(6).text() == "<fmt:message key='userSetting.auth.user' />"){
 					accLevBtn.data( { "name" : accName, "value" : "2"}).html(accName + '<span class="caret">');
 				}
 
@@ -1526,24 +1526,24 @@
 				if(!isEmpty(td.eq(7).text())){
 					let textVal = td.eq(7).text();
 					console.log("textVal==", textVal)
-					if(textVal == "일반"){
+					if(textVal == "<fmt:message key='userSetting.workType.1' />"){
 						newTaskBtn.data( { "name" : textVal, "value" : "0"}).html(textVal + '<span class="caret">');
-					} else if(textVal == "사무 수탁사"){
+					} else if(textVal == "<fmt:message key='userSetting.workType.2' />"){
 						newTaskBtn.data( { "name" : textVal, "value" : "1"}).html(textVal + '<span class="caret">');
-					} else if(textVal == "자산 운용사"){
+					} else if(textVal == "<fmt:message key='userSetting.workType.3' />"){
 						newTaskBtn.data( { "name" : textVal, "value" : "2"}).html(textVal + '<span class="caret">');
-					} else if(textVal == "출금 관리자"){
+					} else if(textVal == "<fmt:message key='userSetting.workType.4' />"){
 						newTaskBtn.data( { "name" : textVal, "value" : "3"}).html(textVal + '<span class="caret">');
-					} else if(textVal == "사업주"){
+					} else if(textVal == "<fmt:message key='userSetting.workType.5' />"){
 						newTaskBtn.data( { "name" : textVal, "value" : "4"}).html(textVal + '<span class="caret">');
 					}
 				}
 
 				if(!isEmpty(td.eq(9).text())){
 					let textVal = td.eq(9).text()
-					if(textVal == "사용"){
+					if(textVal == "<fmt:message key='userSetting.isUse.Y' />"){
 						$('#newUseOpt').prev().data({ "name" : textVal,  "value": "Y" }).html( "Y" + '<span class="caret">');
-					} else if(textVal == "중지") {
+					} else if(textVal == "<fmt:message key='userSetting.isUse.N' />") {
 						$('#newUseOpt').prev().data({ "name" : textVal, "value":  "N" }).html("N" + '<span class="caret">');
 					}
 				}
@@ -1646,7 +1646,7 @@
 
 				html = `
 					<li class="new" data-sid="${'${siteVal}'}" data-role="${'${accVal}'}" data-site-name="${'${name}'}">${'${name}'}&nbsp;(&nbsp;${'${siteAccName}'}&nbsp;)<!--
-					--><button type="button" class="icon-delete" onclick="removeList( $(this).closest('li') )">삭제</button><!--
+					--><button type="button" class="icon-delete" onclick="removeList( $(this).closest('li') )"><fmt:message key='userSetting.delete' /></button><!--
 				--></li>
 				`;
 				$("#selectedSiteList").append(html);
@@ -1690,7 +1690,7 @@
 
 			html = `
 				<li class="new" data-spc-id="${'${spcVal}'}" data-role="${'${accVal}'}" data-spc-name="${'${name}'}">${'${name}'}&nbsp;(&nbsp;${'${spcAccName}'}&nbsp;)<!--
-				--><button type="button" class="icon-delete" onclick="removeList( $(this).closest('li') )">삭제</button><!--
+				--><button type="button" class="icon-delete" onclick="removeList( $(this).closest('li') )"><fmt:message key='userSetting.delete' /></button><!--
 			--></li>
 			`;
 			$("#selectedSpcList").append(html);
@@ -1790,14 +1790,14 @@
 	<div class="modal-dialog modal-sm">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 id="deleteSuccessMsg" class="ntit">사용자 삭제를 계속 진행 하시려면,<br><span class="text-blue"></span>&ensp;를 입력해 주세요.</h5>
+				<h5 id="deleteSuccessMsg" class="ntit"><fmt:message key='userSetting.deleteMsg1' /><br><span class="text-blue"></span>&ensp;<fmt:message key='userSetting.deleteMsg2' /></h5>
 			</div>
 			<div class="modal-body">
-				<div class="text-input-type"><input type="text" id="confirmUserId" name="confirm_user_id" placeholder="사용자 아이디 입력"/></div>
+				<div class="text-input-type"><input type="text" id="confirmUserId" name="confirm_user_id" placeholder="<fmt:message key='userSetting.enterId' />"/></div>
 				</div>
 				<div class="btn-wrap-type05"><!--
-				--><button type="button" class="btn-type03 w-80px" data-dismiss="modal" aria-label="Close">취소</button><!--
-				--><button type="button" id="deleteConfirmBtn" class="btn-type w-80px ml-12" disabled>확인</button><!--
+				--><button type="button" class="btn-type03 w-80px" data-dismiss="modal" aria-label="Close"><fmt:message key='userSetting.cancel' /></button><!--
+				--><button type="button" id="deleteConfirmBtn" class="btn-type w-80px ml-12" disabled><fmt:message key='userSetting.ok' /></button><!--
 			--></div>
 		</div>
 	</div>
@@ -1806,8 +1806,8 @@
 <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-md-lg">
 		<div class="modal-content user-modal-content">
-			<div id="titleAdd" class="modal-header"><h1>사용자 추가<span class="required fr">필수 입력 항목</span></h1></div>
-			<div id="titleEdit" class="modal-header"><h1>사용자 정보 수정</h1></div>
+			<div id="titleAdd" class="modal-header"><h1><fmt:message key='userSetting.addUser' /><span class="required fr"><fmt:message key='userSetting.required' /></span></h1></div>
+			<div id="titleEdit" class="modal-header"><h1><fmt:message key='userSetting.updateInfo' /></h1></div>
 			<div class="modal-body">
 				<div class="container-fluid">
 					<form name="add_user_form" id="updateUserForm" class="setting-form" autocomplete="off">
@@ -1818,79 +1818,79 @@
 									<div class="text-input-type offset-width">
 										<input type="text" name="new_id" id="newId" placeholder="입력" minlength="5" maxlength="15">
 									</div>
-									<button type="button" class="btn-type fr" onclick="checkId($('#newId').val())" disabled>중복 체크</button>
+									<button type="button" class="btn-type fr" onclick="checkId($('#newId').val())" disabled><fmt:message key='userSetting.checkOverlap' /></button>
 								</div>
-								<small class="hidden warning">사용자 아이디를 입력해 주세요</small>
-								<small class="hidden warning">5~15 글자를 입력해 주세요.</small>
-								<small class="hidden warning">한글, 특수 문자는 포함될 수 없습니다.</small>
-								<small id="invalidId" class="hidden warning">동일한 아이디가 존재합니다.</small>
-								<small id="validId" class="text-blue text-sm hidden">사용 가능한 아이디 입니다.</small>
+								<small class="hidden warning"><fmt:message key='userSetting.errorTxt.1' /></small>
+								<small class="hidden warning"><fmt:message key='userSetting.errorTxt.2' /></small>
+								<small class="hidden warning"><fmt:message key='userSetting.errorTxt.3' /></small>
+								<small id="invalidId" class="hidden warning"><fmt:message key='userSetting.errorTxt.4' /></small>
+								<small id="validId" class="text-blue text-sm hidden"><fmt:message key='userSetting.errorTxt.5' /></small>
 							</div>
 
-							<div class="col-lg-2 col-sm-3"><span class="input-label offset asterisk">비밀번호</span></div>
+							<div class="col-lg-2 col-sm-3"><span class="input-label offset asterisk"><fmt:message key='userSetting.password' /></span></div>
 							<div class="col-lg-4 col-sm-9">
 								<div class="text-input-type"><!--
-									--><input type="password" id="newUserPwd" name="new_pwd" placeholder="입력" minlength="8" maxlength="32">
+									--><input type="password" id="newUserPwd" name="new_pwd" placeholder="<fmt:message key='userSetting.input' />" minlength="8" maxlength="32">
 									<%--
 									<button type="button" class="pwd-icon" onclick="showPwd('newUserPwd', this)">show</button>
 									--%>
 								</div>
 								<div class="flex-start warning-wrapper">
-									<small id="hasLet" class="tick">영문</small>
-									<small id="hasNum" class="tick">숫자</small>
-									<small id="isEightCharLong" class="tick">8자리 이상</small>
+									<small id="hasLet" class="tick"><fmt:message key='userSetting.eng' /></small>
+									<small id="hasNum" class="tick"><fmt:message key='userSetting.num' /></small>
+									<small id="isEightCharLong" class="tick"><fmt:message key='userSetting.minLength8' /></small>
 								</div>
 							</div>
 						</div>
 
 						<div class="row">
-							<div class="col-lg-2 col-sm-3"><span class="input-label asterisk">이름</span></div>
+							<div class="col-lg-2 col-sm-3"><span class="input-label asterisk"><fmt:message key='userSetting.name' /></span></div>
 							<div class="col-lg-4 col-sm-9">
-								<div class="text-input-type"><input type="text" id="newFullName" name="new_full_name" placeholder="입력" minlength="3" maxlength="28"></div>
-								<small class="hidden warning">영문/한글(3~28 글자) 조합의 이름을 입력해 주세요</small>
+								<div class="text-input-type"><input type="text" id="newFullName" name="new_full_name" placeholder="<fmt:message key='userSetting.input' />" minlength="3" maxlength="28"></div>
+								<small class="hidden warning"><fmt:message key='userSetting.errorTxt.6' /></small>
 							</div>
-							<div class="col-lg-2 col-sm-3"><span class="input-label offset asterisk">권한 등급</span></div>
+							<div class="col-lg-2 col-sm-3"><span class="input-label offset asterisk"><fmt:message key='userSetting.auth' /></span></div>
 							<div class="col-lg-4 col-sm-9">
 								<div class="dropdown">
-									<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+									<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택"><fmt:message key='userSetting.select' /><span class="caret"></span></button>
 									<ul id="newAccLevel" class="dropdown-menu">
-										<li data-value="1" data-name="시스템 관리자"><a href="#">시스템 관리자</a></li>
-										<li data-value="2" data-name="일반 사용자"><a href="#">일반 사용자</a></li>
+										<li data-value="1" data-name="시스템 관리자"><a href="#"><fmt:message key='userSetting.auth.admin' /></a></li>
+										<li data-value="2" data-name="일반 사용자"><a href="#"><fmt:message key='userSetting.auth.user' /></a></li>
 									</ul>
 								</div>
 							</div>
 						</div>
 
 						<div class="row">
-							<div class="col-lg-2 col-sm-3"><span class="input-label">휴대폰</span></div>
+							<div class="col-lg-2 col-sm-3"><span class="input-label"><fmt:message key='userSetting.phone' /></span></div>
 							<div class="col-lg-4 col-sm-9">
-								<div class="text-input-type"><input type="text" id="newMobileNum" name="new_mobil_num" placeholder="입력" maxlength="13"></div>
-								<small id="isValidNewMobileNum" class=" warning hidden">10자리 이상의 휴대폰 번호를 입력해 주세요.</small>
+								<div class="text-input-type"><input type="text" id="newMobileNum" name="new_mobil_num" placeholder="<fmt:message key='userSetting.input' />" maxlength="13"></div>
+								<small id="isValidNewMobileNum" class=" warning hidden"><fmt:message key='userSetting.errorTxt.7' /></small>
 							</div>
-							<div class="col-lg-2 col-sm-3"><span class="input-label offset">소속</span></div>
+							<div class="col-lg-2 col-sm-3"><span class="input-label offset"><fmt:message key='userSetting.team' /></span></div>
 							<div class="col-lg-4 col-sm-9">
-								<div class="text-input-type"><input type="text" id="newAffiliation" name="new_affiliation" placeholder="입력">
+								<div class="text-input-type"><input type="text" id="newAffiliation" name="new_affiliation" placeholder="<fmt:message key='userSetting.input' />">
 								</div>
 							</div>
 						</div>
 
 						<div class="row">
-							<div class="col-lg-2 col-sm-3"><span class="input-label">이메일</span></div>
+							<div class="col-lg-2 col-sm-3"><span class="input-label"><fmt:message key='userSetting.email' /></span></div>
 							<div class="col-lg-4 col-sm-9">
 								<div class="text-input-type"><input type="text" id="newEmailAddr" name="new_email_addr" placeholder="입력"></div>
-								<small class="hidden warning">올바른 이메일 형식을 입력해 주세요.</small>
+								<small class="hidden warning"><fmt:message key='userSetting.errorTxt.8' /></small>
 							</div>
 							<c:if test="${activateSPC eq true}">
-							<div class="col-lg-2 col-sm-3"><span class="input-label offset">업무 구분</span></div>
+							<div class="col-lg-2 col-sm-3"><span class="input-label offset"><fmt:message key='userSetting.workType' /></span></div>
 							<div class="col-lg-4 col-sm-9">
 								<div class="dropdown">
-									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택"><fmt:message key='userSetting.select' /><span class="caret"></span></button>
 									<ul id="newTaskList" class="dropdown-menu">
-										<li data-name="일반" data-value="0"><a href="#">일반</a></li>
-										<li data-name="사무수탁사" data-value="1"><a href="#">사무 수탁사</a></li>
-										<li data-name="자산운용사" data-value="2"><a href="#">자산 운용사</a></li>
-										<li data-name="출금관리자" data-value="3"><a href="#">출금 관리자</a></li>
-										<li data-name="사업주" data-value="4"><a href="#">사업주</a></li>
+										<li data-name="일반" data-value="0"><a href="#"><fmt:message key='userSetting.workType.1' /></a></li>
+										<li data-name="사무수탁사" data-value="1"><a href="#"><fmt:message key='userSetting.workType.2' /></a></li>
+										<li data-name="자산운용사" data-value="2"><a href="#"><fmt:message key='userSetting.workType.3' /></a></li>
+										<li data-name="출금관리자" data-value="3"><a href="#"><fmt:message key='userSetting.workType.4' /></a></li>
+										<li data-name="사업주" data-value="4"><a href="#"><fmt:message key='userSetting.workType.5' /></a></li>
 									</ul>
 								</div>
 							</div>
@@ -1898,17 +1898,17 @@
 						</div>
 
 						<div class="row">
-							<div class="col-lg-2 col-sm-3"><span class="input-label">사용 여부</span></div>
+							<div class="col-lg-2 col-sm-3"><span class="input-label"><fmt:message key='userSetting.isUse' /></span></div>
 							<div class="col-lg-4 col-sm-9">
 								<div class="dropdown">
-									<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+									<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택"><fmt:message key='userSetting.select' /><span class="caret"></span></button>
 									<ul id="newUseOpt" class="dropdown-menu">
 										<li data-name="사용" data-value="Y"><a href="#">Y</a></li>
 										<li data-name="중지" data-value="N"><a href="#">N</a></li>
 									</ul>
 								</div>
 							</div>
-							<div class="col-lg-2 col-sm-3"><span class="input-label offset">이중 인증</span></div>
+							<div class="col-lg-2 col-sm-3"><span class="input-label offset"><fmt:message key='userSetting.certification' /></span></div>
 							<div class="col-lg-4 col-sm-9">
 								<label class="switch switch-slide">
 									<input type="checkbox" value="showTable" id="switchBtn" class="switch-input">
@@ -1918,18 +1918,18 @@
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-lg-2 col-sm-3"><span class="input-label">설명</span></div>
+							<div class="col-lg-2 col-sm-3"><span class="input-label"><fmt:message key='userSetting.info' /></span></div>
 							<div class="col-lg-10 col-sm-9">
-								<textarea name="new_user_desc" id="newUserDesc" class="textarea w-100" placeholder="입력"></textarea>
+								<textarea name="new_user_desc" id="newUserDesc" class="textarea w-100" placeholder="<fmt:message key='userSetting.input' />"></textarea>
 							</div>
 						</div>
 
 						<div class="row">
 							<div class="col-12">
 								<ul class="nav nav-tabs">
-									<li class="active w-50"><a data-toggle="tab" href="#siteTab">사업소</a></li>
+									<li class="active w-50"><a data-toggle="tab" href="#siteTab"><fmt:message key='userSetting.site' /></a></li>
 									<c:if test="${activateSPC eq true}">
-									<li class="w-50"><a data-toggle="tab" href="#spcTab">SPC</a></li>
+									<li class="w-50"><a data-toggle="tab" href="#spcTab"><fmt:message key='userSetting.spc' /></a></li>
 									</c:if>
 								</ul>
 							</div>
@@ -1941,7 +1941,7 @@
 									<div class="col-lg-7 col-md-7 col-sm-12">
 										<div class="flex-start">
 											<div class="dropdown w-40">
-												<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+												<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택"><fmt:message key='userSetting.select' /><span class="caret"></span></button>
 												<ul id="siteOptList" class="dropdown-menu">
 													<c:if test="${fn:length(siteList) > 0}">
 														<c:forEach var="site" items="${siteList}">
@@ -1953,18 +1953,18 @@
 												</ul>
 											</div>
 											<div class="dropdown ml-16 w-25">
-												<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+												<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택"><fmt:message key='userSetting.select' /><span class="caret"></span></button>
 												<ul id="siteAccOpt" class="dropdown-menu">
-													<li data-value="1" data-name="관리 권한"><a href="#">관리 권한</a></li>
-													<li data-value="2" data-name="조회 권한"><a href="#">조회 권한</a></li>
+													<li data-value="1" data-name="관리 권한"><a href="#"><fmt:message key='userSetting.auth.manage' /></a></li>
+													<li data-value="2" data-name="조회 권한"><a href="#"><fmt:message key='userSetting.auth.search' /></a></li>
 												</ul>
 											</div>
-											<button type="button" class="btn-add ml-16" onclick="addToList('site')">추가</button>
+											<button type="button" class="btn-add ml-16" onclick="addToList('site')"><fmt:message key='userSetting.add' /></button>
 										</div>
-										<small id="isSiteEmpty" class="warning hidden">추가하실 사이트의 옵션을 선택해 주세요.</small>
-										<small id="isSiteSelected" class="warning hidden">동일한 사이트가 이미 추가 되었습니다.</small>
+										<small id="isSiteEmpty" class="warning hidden"><fmt:message key='userSetting.errorTxt.9' /></small>
+										<small id="isSiteSelected" class="warning hidden"><fmt:message key='userSetting.errorTxt.10' /></small>
 									</div>
-									<div class="col-lg-5 col-md-5 col-sm-12"><h2 class="stit hidden">추가 리스트</h2><ol id="selectedSiteList" class="selected-list"></ol></div>
+									<div class="col-lg-5 col-md-5 col-sm-12"><h2 class="stit hidden"><fmt:message key='userSetting.addList' /></h2><ol id="selectedSiteList" class="selected-list"></ol></div>
 								</div>
 							</div>
 							<c:if test="${activateSPC eq true}">
@@ -1973,7 +1973,7 @@
 									<div class="col-lg-7 col-md-7 col-sm-12">
 										<div class="flex-start">
 											<div class="dropdown w-40">
-												<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+												<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택"><fmt:message key='userSetting.select' /><span class="caret"></span></button>
 												<ul id="spcOptList" class="dropdown-menu">
 													<template>
 														<li data-value="*spcId*" data-name="*spcName*"><a href="#" tabindex="-1">*spcName*</a></li>
@@ -1981,18 +1981,18 @@
 												</ul>
 											</div>
 											<div class="dropdown ml-16 w-25">
-												<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+												<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택"><fmt:message key='userSetting.select' /><span class="caret"></span></button>
 												<ul id="spcAccOpt" class="dropdown-menu">
-													<li data-value="1" data-name="관리 권한"><a href="#">관리 권한</a></li>
-													<li data-value="2" data-name="조회 권한"><a href="#">조회 권한</a></li>
+													<li data-value="1" data-name="관리 권한"><a href="#"><fmt:message key='userSetting.auth.manage' /></a></li>
+													<li data-value="2" data-name="조회 권한"><a href="#"><fmt:message key='userSetting.auth.search' /></a></li>
 												</ul>
 											</div>
-											<button type="button" class="btn-add ml-16" onclick="addToList('spc')">추가</button>
+											<button type="button" class="btn-add ml-16" onclick="addToList('spc')"><fmt:message key='userSetting.add' /></button>
 										</div>
-										<small id="isSpcEmpty" class="warning hidden">추가하실 SPC 옵션을 선택해 주세요.</small>
-										<small id="isSpcSelected" class="warning hidden">동일한 SPC가 이미 추가 되었습니다.</small>
+										<small id="isSpcEmpty" class="warning hidden"><fmt:message key='userSetting.erroTxt.11' /></small>
+										<small id="isSpcSelected" class="warning hidden"><fmt:message key='userSetting.errorTxt.12' /></small>
 									</div>
-									<div class="col-lg-5 col-md-5 col-sm-12"><h2 class="stit hidden">추가 리스트</h2><ul id="selectedSpcList" class="selected-list"></ul></div>
+									<div class="col-lg-5 col-md-5 col-sm-12"><h2 class="stit hidden"><fmt:message key='userSetting.addList' /></h2><ul id="selectedSpcList" class="selected-list"></ul></div>
 
 								</div>
 							</div>
@@ -2002,8 +2002,8 @@
 						<div class="row">
 							<div class="col-12">
 								<div class="btn-wrap-type02">
-									<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close">취소</button>
-									<button type="submit" id="addUserBtn" class="btn-type" disabled>등록</button>
+									<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close"><fmt:message key='userSetting.cancel' /></button>
+									<button type="submit" id="addUserBtn" class="btn-type" disabled><fmt:message key='userSetting.register' /></button>
 									<!-- <button type="submit" id="addUserBtn" class="btn-type">확인</button> -->
 								</div>
 							</div>
@@ -2017,7 +2017,7 @@
 
 <div class="row header-wrapper">
 	<div class="col-12">
-		<h1 class="page-header">사용자 관리</h1>
+		<h1 class="page-header"><fmt:message key='userSetting.userManage' /></h1>
 	</div>
 </div>
 
@@ -2025,19 +2025,19 @@
 <div class="row">
 	<div class="col-12">
 		<div class="flex-group">
-			<span class="tx-tit">사용자 유형</span>
+			<span class="tx-tit"><fmt:message key='userSetting.userType' /></span>
 			<div class="dropdown">
-				<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+				<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택"><fmt:message key='userSetting.select' /><span class="caret"></span></button>
 				<ul class="dropdown-menu" id="userList">
-					<li data-value=""><a href="#" tabindex="-1">전체</a></li>
-					<li data-value="관리자"><a href="#" tabindex="-1">시스템 관리자</a></li>
-					<li data-value="사용자"><a href="#" tabindex="-1">일반 사용자</a></li>
+					<li data-value=""><a href="#" tabindex="-1"><fmt:message key='userSetting.all' /></a></li>
+					<li data-value="관리자"><a href="#" tabindex="-1"><fmt:message key='userSetting.auth.admin' /></a></li>
+					<li data-value="사용자"><a href="#" tabindex="-1"><fmt:message key='userSetting.auth.user' /></a></li>
 				</ul>
 			</div>
 		</div>
 		<div class="flex-group">
 			<div class="text-input-type">
-				<input type="search" id="searchBox" aria-controls="userTable" placeholder="키워드 검색">
+				<input type="search" id="searchBox" aria-controls="userTable" placeholder="<fmt:message key='userSetting.keywordSearch' />">
 			</div>
 		</div>
 	</div>

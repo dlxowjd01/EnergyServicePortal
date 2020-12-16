@@ -3,7 +3,7 @@
 
 <div class="row">
 	<div class="col-lg-12">
-		<h1 class="page-header">발전 예측</h1>
+		<h1 class="page-header"><fmt:message key="generation.title" /></h1>
 	</div>
 	<div class="dropdown-wrapper col-lg-2">
 		<div class="dropdown" id="siteList">
@@ -63,10 +63,10 @@
 						</div>
 					</div>
 
-					<p class="table-text">오차 계산 데이터 필터</p>
+					<p class="table-text"><fmt:message key="generation.filter.title" /></p>
 					<div class="dropdown mb-16" id="ignore_ref">
 						<button type="button" class="dropdown-toggle w-100" data-toggle="dropdown">
-							용량 대비 발전량 % 이상<span class="caret"></span>
+							<fmt:message key="generation.filter.percent" /><span class="caret"></span>
 						</button>
 						<ul class="dropdown-menu">
 							<li data-value="" class="on">
@@ -124,7 +124,7 @@
 				</div>
 				<div class="inline-flex">
 					<div class="period">
-						<span class="tx-tit">기간</span>
+						<span class="tx-tit"><fmt:message key="generation.period" /></span>
 						<div class="sa-select">
 							<div class="dropdown" id="period">
 								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="오늘">
@@ -149,7 +149,7 @@
 					</div>
 
 					<div class="unit" id="cycle">
-						<span class="tx-tit">단위</span>
+						<span class="tx-tit"><fmt:message key="generation.unit" /></span>
 						<div class="sa-select">
 							<div class="dropdown" id="interval">
 								<button type="button" class="dropdown-toggle w3" data-toggle="dropdown">
@@ -167,7 +167,7 @@
 					<button type="button" class="btn-type" id="renderBtn"><fmt:message key="genforecast.3.update" /></button>
 				</div>
 			</div>
-			<a href="javascript:void(0);" class="btn-chart" id="changeChart">그래프</a>
+			<a href="javascript:void(0);" class="btn-chart" id="changeChart"><fmt:message key="generation.graph" /></a>
 
 			<h4 class="text-time"></h4>
 			<div id="chart2" class="inchart"></div>
@@ -184,7 +184,7 @@
 			</div>
 			<div class="table-top clear">
 				<h2 class="ntit fl"><fmt:message key="genforecast.4.datatable" /></h2>
-				<span class="fr"><a href="javascript:void(0);" class="btn-fold">표접기</a></span>
+				<span class="fr"><a href="javascript:void(0);" class="btn-fold"><fmt:message key="generation.collapse" /></a></span>
 			</div>
 			<div class="table-wrapper">
 				<div class="fold-box" id="tableDesktop"></div>
@@ -224,10 +224,10 @@
 
 			if (idx == 0) {
 				$(':checkbox[name="device"]').prop('checked', true);
-				$('#deviceType button').eq(0).html('전체 <span class="caret"></span>');
+				$('#deviceType button').eq(0).html('<fmt:message key="generation.all" /> <span class="caret"></span>');
 			} else {
 				$(':checkbox[name="device"]').prop('checked', false);
-				$('#deviceType button').eq(0).html('복수 선택 <span class="caret"></span>');
+				$('#deviceType button').eq(0).html('<fmt:message key="generation.multiple" /> <span class="caret"></span>');
 			}
 		});
 
@@ -251,7 +251,7 @@
 		$('.btn-caret').click(function () {
 			$('.table-fold-container').slideToggle();
 			$(this).toggleClass("on");
-			$(this).text($(this).text() == '내용접기' ? '펼치기' : '내용접기');
+			$(this).text($(this).text() == '<fmt:message key="generation.content.collapse" />' ? '<fmt:message key="generation.expand" />' : '<fmt:message key="generation.content.collapse" />');
 		});
 
 		//몬가를 선택함.
@@ -304,9 +304,9 @@
 			let cnt = $val.length;
 
 			if (cnt < 1) {
-				alert('다운받을 데이터가 없습니다.');
+				alert('<fmt:message key="generation.noDownloadData" />');
 			} else {
-				if (confirm('엑셀로 저장하시겠습니까?')) {
+				if (confirm('<fmt:message key="generation.excelDownload" />')) {
 					tableToExcel('tableDesktop', excelName, e);
 				}
 			}
@@ -383,7 +383,7 @@
 			$('#measure button').data('value', 'NMAE').html('NMAE &nbsp;<span class="caret"></span>');
 
 			$('#ignore_ref li a').eq(1).addClass('on');
-			$('#ignore_ref button').data('value', 'capacity').html('용량 대비 발전량 % 이상 &nbsp;<span class="caret"></span>');
+			$('#ignore_ref button').data('value', 'capacity').html('<fmt:message key="generation.filter.percent" /> &nbsp;<span class="caret"></span>');
 
 			$('input[name="ignore_tolerance1"]').val('10');
 			$('input[name="ignore_tolerance2"]').val('');
@@ -440,7 +440,7 @@
 								$('input[name="capacity"]').val('');
 							}
 						} else {
-							alert('예측 오차 계산의 비교 대상 데이터가 없습니다.');
+							alert('<fmt:message key="generation.noData" />');
 							$('.value-num').eq(2).empty().append('<span class="num"> </span>%');
 						}
 					}
@@ -463,7 +463,7 @@
 			str += `<li>
 						<a href="javascript:void(0);" data-value="all" tabindex="-1">
 							<input type="checkbox" id="all" value="all" name="site">
-							<label for="all">전체</label>
+							<label for="all"><fmt:message key="generation.all" /></label>
 						</a>
 					</li>`;
 			str += `<li class="btn-wrap-border-min"></li>`;
@@ -475,15 +475,15 @@
 						</a>
 					</li>`;
 			});
-			str += `<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16">적용</button></li>`;
+			str += `<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16"><fmt:message key="generation.apply" /></button></li>`;
 		} else {
-			str += `<li class="no-data">선택가능한 사이트가 없습니다.</li>`;
+			str += `<li class="no-data"><fmt:message key="generation.noSite" /></li>`;
 		}
 		$('#siteList ul').append(str);
 	};
 
 	const device = function () {
-		$('#deviceType .dropdown-toggle').empty().append('복수 선택').append('<span class="caret"></span>');
+		$('#deviceType .dropdown-toggle').empty().append('<fmt:message key="generation.multiple" />').append('<span class="caret"></span>');
 		$('#deviceType .sec-li-box').remove();
 
 		if ($(':checkbox[name="site"]:checked').length > 0) {
@@ -556,13 +556,13 @@
 							let deviceHtml1 = $('<li>').append('<a>');
 							deviceHtml1.find('a').attr('href', '#').attr('tabindex', '-1');
 							deviceHtml1.find('a').append('<input id="device_billing_' + sid + '" name="device" type="checkbox" value="' + sid + '" data-name="' + sNm + '_매전" data-did="' + billingArray.toString() + '">').append('<label>');
-							deviceHtml1.find('label').attr('for', 'device_billing_' + sid).append('<span>').append('&nbsp;매전량');
+							deviceHtml1.find('label').attr('for', 'device_billing_' + sid).append('<span>').append('&nbsp;<fmt:message key="generation.sales" />');
 							siteGrp.find('ul').prepend(deviceHtml1);
 
 							let deviceHtml2 = $('<li>').append('<a>');
 							deviceHtml2.find('a').attr('href', '#').attr('tabindex', '-1');
 							deviceHtml2.find('a').append('<input id="device_dash_' + sid + '" name="device" type="checkbox" value="' + sid + '" data-name="' + sNm + '_대시보드" data-did="' + dashboardArray.toString() + '">').append('<label>');
-							deviceHtml2.find('label').attr('for', 'device_dash_' + sid).append('<span>').append('&nbsp;대시보드');
+							deviceHtml2.find('label').attr('for', 'device_dash_' + sid).append('<span>').append('&nbsp;<fmt:message key="generation.dashboard" />');
 							siteGrp.find('ul').prepend(deviceHtml2);
 
 						}
@@ -604,12 +604,12 @@
 		));
 
 		if (billingSites.length <= 0 && dashSites.length <= 0 && checkedDevices.length <= 0) {
-			alert('계량값을 선택해 주세요.');
+			alert('<fmt:message key="generation.selectValue" />');
 			return false;
 		}
 
 		if (isEmpty(interval)) {
-			alert('단위를 선택해 주세요.');
+			alert('<fmt:message key="generation.selectUnit" />');
 			return false;
 		}
 
@@ -863,7 +863,7 @@
 						tr.append(th);
 					}
 
-					th = $('<th>').html('합계');
+					th = $('<th>').html('<fmt:message key="generation.total" />');
 					tr.append(th);
 
 					tableTemp.find('table').append('<thead>');
@@ -923,7 +923,7 @@
 					tr.append(th);
 
 					if (standard.length == (i + 1)) {
-						th = $('<th>').html('합계');
+						th = $('<th>').html('<fmt:message key="generation.total" />');
 						tr.append(th);
 
 						tableTemp.find('table').append('<thead>');
@@ -952,7 +952,7 @@
 						tr.append(th);
 					}
 
-					th = $('<th>').html('합계');
+					th = $('<th>').html('<fmt:message key="generation.total" />');
 					tr.append(th);
 
 					tableTemp.find('table').append('<thead>');
@@ -1040,7 +1040,7 @@
 						tr.append(th);
 					}
 
-					th = $('<th>').html('합계');
+					th = $('<th>').html('<fmt:message key="generation.total" />');
 					tr.append(th);
 
 					tableTemp.find('table').append('<thead>');

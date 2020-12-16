@@ -1501,7 +1501,6 @@
 			var enName = [];
 			var colorNum;
 
-			console.log(key)
 			if(key == "긴급"){
 				colorNum = 4;
 				enName = ["Urgent", "urgent"];
@@ -1540,7 +1539,7 @@
 
 				} else {
 					$temp = {
-						name: typeNm,
+						name: (langStatus === "EN" ? enName[0] : typeNm),
 						dataLabels: {
 							enabled: false
 						},
