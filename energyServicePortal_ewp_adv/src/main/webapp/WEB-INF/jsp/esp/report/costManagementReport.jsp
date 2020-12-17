@@ -441,6 +441,8 @@
         data['updated_by'] = loginId;
         data['generated_at'] = today.toISOString();
 
+	    if (data.site_id === 'all' && /cost_spc/.test(data.report_type)) data.site_id = '';
+
         $.ajax({
             url: apiHost + '/reports/cost?oid=' + oid,
             method: 'post',
