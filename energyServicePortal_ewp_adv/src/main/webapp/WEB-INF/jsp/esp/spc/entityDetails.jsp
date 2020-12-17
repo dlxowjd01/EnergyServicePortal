@@ -1277,7 +1277,7 @@
 						</td>
 					</tr>
 					<tr>
-						<th>보험료_총계</th>
+						<th>보험료 총계</th>
 						<td class="flex-start">
 							<span id="보험료_총계[index]"></span>
 							<span>원/월</span>

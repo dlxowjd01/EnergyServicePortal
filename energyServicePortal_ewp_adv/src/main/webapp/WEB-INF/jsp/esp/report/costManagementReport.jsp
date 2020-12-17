@@ -664,22 +664,6 @@
                                     <ul class="dropdown-menu"></ul>
                                 </div>
                             </div>
-                            <div class="flex-start">
-                                <span class="input-label">보고서 유형</span>
-                                <div id="report_type" class="dropdown placeholder">
-                                    <button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
-                                        선택<span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li data-value="cost_gen">
-                                           <a href="javascript:void(0);">cost gen</a>
-                                        </li>
-                                        <li data-value="cost_spc">
-                                            <a href="javascript:void(0);">cost spc</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
                         </div>
 
                         <div class="col-lg-6 col-sm-12">
@@ -692,8 +676,30 @@
                                     <ul class="dropdown-menu"></ul>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-12">
+                            <div class="flex-start">
+                                <span class="input-label">보고서 유형</span>
+                                <div id="report_type" class="dropdown placeholder">
+                                    <button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
+                                        선택<span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li data-value="cost_gen">
+                                            <a href="javascript:void(0);">cost gen</a>
+                                        </li>
+                                        <li data-value="cost_spc">
+                                            <a href="javascript:void(0);">cost spc</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-12">
                             <div class="flex-start dateField">
-                                <span class="input-label">적용기간</span>
+                                <span class="input-label pr-28">적용기간</span>
                                 <div class="sel-calendar">
                                     <input type="text" id="report_data_start" name="report_data_start" value="" class="sel month-pick" autocomplete="off" readonly="" placeholder="날짜 선택">
                                 </div>

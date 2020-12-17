@@ -2212,7 +2212,7 @@
 						<td>
 							<div class="text-input-type edit unit t1">
 								<input type="text" id="보험료[index]" name="보험료[index]" placeholder="직접 입력">
-								<span>원/일</span>
+								<span>원/월</span>
 							</div>
 						</td>
 					</tr>

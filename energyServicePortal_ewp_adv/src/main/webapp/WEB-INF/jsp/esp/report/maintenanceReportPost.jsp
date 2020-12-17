@@ -16,7 +16,7 @@
 	$(document).on('keyup', '#repair_maintenance_info input', function() {
 		let inputVal = $(this).val();
 
-		if (!isEmpty(inputVal) && $(this).prop('id') !== '기타명') {
+		if ($(this).prop('id') !== '기타명') {
 			let total = 0;
 			inputVal = inputVal.replace(/[^0-9]/g, '');
 
@@ -392,7 +392,7 @@
 						<td></td>
 					</tr>
 					<tr>
-						<th>미원 및 피해보상</th>
+						<th>민원 및 피해보상</th>
 						<td>
 							<div class="text-input-type edit">
 								<input type="text" id="민원_및_피해보상" placeholder="직접 입력">
