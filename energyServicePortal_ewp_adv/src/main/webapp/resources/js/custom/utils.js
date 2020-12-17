@@ -1441,16 +1441,20 @@ const addRow = function (listId, type, nextIdx) {
 		} else {
 			if (listId == 'insuranceInfoToggle' && type != 'first') {
 				listLength = 0;
-				let section = $selecter.find('section');
+				let section = $selecter.parent().find('section');
 				if (section.length <= 0) {
 					listLength = 1;
 				} else {
-					section.forEach(function(el) {
-						let index = Number(el.attr('id').replace(/[^0-9]/, '')) + 1;
-						if (index > listLength) {
-							listLength = index;
+					let maxIdx = 0;
+					section.each(function() {
+						if ($(this) != null) {
+							let index = Number($(this).attr('id').replace(/[^0-9]/g, ''));
+							if (maxIdx < index) maxIdx = index;
 						}
 					});
+
+					listLength = maxIdx + 1;
+					console.log(listLength);
 				}
 			} else {
 				listLength = $selecter.children().length;

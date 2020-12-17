@@ -164,10 +164,7 @@
                             if (incomSum == 0) {
                                 $('#margin').text('-');
                             } else {
-                                let margin = Math.round((incomSum / expenseSum) * 1000) / 10;
-                                if (incomSum < expenseSum) {
-                                    margin = '-' + String(margin);
-                                }
+                                let margin = Math.round(((incomSum - expenseSum) / incomSum) * 1000) / 10;
                                 $('#margin').text(margin + ' %');
                             }
 
