@@ -137,6 +137,12 @@
                 errorMsg('적용기간을 선택해주세요.');
                 return false;
             } else {
+
+                if (start_yyyymm > end_yyyymm) {
+                    errorMsg('시작월이 종료월보다 클수 없습니다.');
+                    return false;
+                }
+
                 $.ajax({
                     url: apiHost + '/spcs/balance/monthly_summary',
                     type: 'GET',
@@ -151,14 +157,18 @@
 
                         if (!isEmpty(result) && !isEmpty(result.data)) {
                             (result.data).forEach(rst => {
-                                incomSum += isNaN(rst.income) ? 0 : rst.income;
-                                expenseSum += isNaN(rst.expense) ? 0 : rst.expense;
+                                incomSum += isNaN(rst.income) ? 0 : Number(rst.income);
+                                expenseSum += isNaN(rst.expense) ? 0 : Number(rst.expense);
                             });
 
-                            if (incomSum != 0) {
-                                $('#margin').text(numberComma((incomSum / expenseSum) * 100) + ' %');
-                            } else {
+                            if (incomSum == 0) {
                                 $('#margin').text('-');
+                            } else {
+                                let margin = Math.round((incomSum / expenseSum) * 1000) / 10;
+                                if (incomSum < expenseSum) {
+                                    margin = '-' + String(margin);
+                                }
+                                $('#margin').text(margin + ' %');
                             }
 
                             $('#profit').text(numberComma(incomSum - expenseSum) + ' 원');
@@ -716,20 +726,28 @@
                 <h2 class="ntit">전체 통합 원가관리 요약</h2>
             </div>
             <div class="value-wrapper">
-                <h3 class="value-title">이익률</h3>
-                <p class="value-num" id="margin"></p>
+                <div class="group-type04">
+                    <div>이익률</div>
+                    <div id="margin"></div>
+                </div>
             </div>
             <div class="value-wrapper">
-                <h3 class="value-title">이익금</h3>
-                <p class="value-num" id="profit"></p>
+                <div class="group-type04">
+                    <div>이익금</div>
+                    <div id="profit"></div>
+                </div>
             </div>
             <div class="value-wrapper">
-                <h3 class="value-title">수입총계</h3>
-                <p class="value-num" id="incomSum"></p>
+                <div class="group-type04">
+                    <div>수입총계</div>
+                    <div id="incomSum"></div>
+                </div>
             </div>
             <div class="value-wrapper">
-                <h3 class="value-title">지출총계</h3>
-                <p class="value-num" id="expenseSum"></p>
+                <div class="group-type04">
+                    <div>지출총계</div>
+                    <div id="expenseSum"></div>
+                </div>
             </div>
             <div class="toggle-box">
                 <div class="table-area clear">

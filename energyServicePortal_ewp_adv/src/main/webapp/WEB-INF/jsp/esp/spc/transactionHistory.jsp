@@ -110,9 +110,11 @@
 			  , warning = $('.warning')
 			  , selectedSpc = new Array();
 
-			document.querySelectorAll('#spcList input:checked').forEach(inp => {
-				selectedSpc.push(inp.dataset.value);
-			});
+			if ($(':checkbox[name="spcName"]:checked').val() === 'all') {
+				document.querySelectorAll('[name="spcName"]').forEach(check => { if (check.value !== 'all') { selectedSpc.push(check.value); } });
+			} else {
+				document.querySelectorAll('[name="spcName"]:checked').forEach(checked => { selectedSpc.push(checked.value); });
+			}
 
 			const startDate = $('#fromDate').datepicker('getDate').format('yyyyMMdd');
 			const endDate = $('#toDate').datepicker('getDate').format('yyyyMMdd');
@@ -129,7 +131,11 @@
 				}
 			});
 
-			window.sessionStorage.setItem(pathName + '_spc', selectedSpc.toString()); //세션스토리지에 저장한다.
+			if ($(':checkbox[name="spcName"]:checked').val() === 'all') {
+				window.sessionStorage.setItem(pathName + '_spc', 'all'); //세션스토리지에 저장한다.
+			} else {
+				window.sessionStorage.setItem(pathName + '_spc', selectedSpc.toString()); //세션스토리지에 저장한다.s
+			}
 			window.sessionStorage.setItem(pathName + '_start', startDate); //세션스토리지에 저장한다.
 			window.sessionStorage.setItem(pathName + '_end', endDate); //세션스토리지에 저장한다.
 			window.sessionStorage.setItem(pathName + '_type', $('#transactionType').prev().data('value')); //세션스토리지에 저장한다.
@@ -173,9 +179,9 @@
 				success: (json, textStatus, jqXHR) => {
 					spcList.empty();
 					(json.data).sortOn('name');
+					(json.data).unshift({ spc_id: 'all', name: '<fmt:message key="deviceState.all" />'});
 					(json.data).forEach((item, index) => {
 						let listItem = '';
-						let uniq = item.spc_id + '_' + index;
 						let spcObj = {
 							spc_id: item.spc_id,
 							spc_name: item.name
@@ -183,14 +189,15 @@
 						spcInfoArr.push(spcObj);
 
 						if(isEmpty(item.name)){
-							listItem = cloned.replace(/\*spcId\*/g, item.spc_id).replace(/\*spcName\*/g, "spc_no_name"+ index).replace(/\*uniqName\*/g, uniq);
+							listItem = cloned.replace(/\*spcId\*/g, item.spc_id).replace(/\*spcName\*/g, "spc_no_name"+ index);
 						} else {
-							listItem = cloned.replace(/\*spcId\*/g, item.spc_id).replace(/\*spcName\*/g, item.name).replace(/\*uniqName\*/g, uniq);
+							listItem = cloned.replace(/\*spcId\*/g, item.spc_id).replace(/\*spcName\*/g, item.name);
 						}
 						spcList.append($(listItem));
 					});
 
 					spcList.append(`<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16">적용</button></li>`);
+					spcList.find('input[value="all"]').parent().after('<li class="btn-wrap-border-min"></li>');
 					resolve();
 				},
 				error: (jqXHR, textStatus, errorThrown) => {
@@ -205,6 +212,7 @@
 
 			if (!isEmpty(spcList)) {
 				let spcArray = new Array();
+				
 				if (spcList.match(',')) {
 					spcArray = spcList.split(',');
 				} else {
@@ -244,7 +252,6 @@
 			}
 
 			$('#transactionType').parent().find('.dropdown-toggle').data('value', types).html(transType[Number(types)] + '<span class="caret"></span>');
-
 			$('#transactionForm').submit();
 		}).catch(() => {
 			alert('처리 중 오류가 발생했습니다.');
@@ -335,6 +342,8 @@
 				timeout: 300000
 			}).done(function(data, textStatus, jqXHR) {
 				if (!isEmpty(data) && !isEmpty(data.data)) {
+					console.log(data);
+					return false;
 					$('#transactionForm').submit();
 				}
 			}).fail(function(jqXHR, textStatus, errorThrown) {
@@ -411,7 +420,7 @@
 					<ul id="spcList" class="dropdown-menu chk-type" role="menu">
 						<li data-value="*spcId*"><!--
 						--><a href="javascript:void(0);" tabindex="-1"><!--
-							--><input type="checkbox" id="*spcName*" value="*spcId*" data-value="*spcId*" name="*uniqName*" checked><!--
+							--><input type="checkbox" id="*spcName*" value="*spcId*" data-value="*spcId*" name="spcName" checked><!--
 							--><label for="*spcName*">*spcName*</label><!--
 						--></a><!--
 					--></li><!--

@@ -532,6 +532,39 @@
 		}
 	}
 
+	/**
+	 * 입출금 내역 갱신
+	 */
+	$(document).on('click', '#refresh', function () {
+		let selectedSpc = $('#spcList').prev().data('value');
+
+		if (!isEmpty(selectedSpc)) {
+			$('#loadingCircle').show();
+
+			$.ajax({
+				url: apiHost + '/spcs/transactions/real/refresh',
+				type: 'GET',
+				data: {
+					oid: oid,
+					spc_ids: selectedSpc.toString()
+				},
+				timeout: 300000
+			}).done(function(data, textStatus, jqXHR) {
+				if (!isEmpty(data) && !isEmpty(data.data)) {
+					console.log(data);
+					return false;
+					$('#transactionForm').submit();
+				}
+			}).fail(function(jqXHR, textStatus, errorThrown) {
+				console.error(textStatus);
+				alert('입출금 내역 갱신에 실패했습니다.');
+				return false;
+			})
+		} else {
+			alert('선택된 SPC가 없습니다.');
+			return false;
+		}
+	});
 </script>
 
 <div class="row header-wrapper">
@@ -543,7 +576,7 @@
 <form id="fileUploadForm" name="fileUploadForm"></form>
 <form id="withdrawForm" name="withdraw_form" action="#" method="post">
 	<div class="row spc-search-bar">
-		<div class="col-12">
+		<div class="col-11">
 			<div class="sa-select"><!--
 			--><span class="tx-tit">SPC 선택</span><!--
 			--><div class="dropdown"><!--
@@ -564,6 +597,9 @@
 			--><label for="availableAmount" class="tx-tit">계좌 잔액</label><!--
 			--><div class="text-input-type"><input type="text" id="" name="availableAmount" disabled="" readonly=""></div>
 			</div>
+		</div>
+		<div class="col-1">
+			<button type="button" id="refresh" class="btn-type03">입출금 내역 갱신</button>
 		</div>
 	</div>
 	<div class="row content-wrapper spc-transaction">

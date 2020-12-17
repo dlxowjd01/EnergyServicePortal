@@ -322,6 +322,16 @@
 						<td></td>
 					</tr>
 					<tr>
+						<th>모듈 보수</th>
+						<td>
+							<div class="text-input-type edit">
+								<input type="text" id="모듈_보수" placeholder="직접 입력">
+							</div>
+						</td>
+						<th></th>
+						<td></td>
+					</tr>
+					<tr>
 						<th>구조물 보수</th>
 						<td>
 							<div class="text-input-type edit">
@@ -385,7 +395,7 @@
 						<th>미원 및 피해보상</th>
 						<td>
 							<div class="text-input-type edit">
-								<input type="text" id="미원_및_피해보상" placeholder="직접 입력">
+								<input type="text" id="민원_및_피해보상" placeholder="직접 입력">
 							</div>
 						</td>
 						<th></th>
@@ -394,7 +404,7 @@
 					<tr>
 						<th>
 							<div class="text-input-type edit w-150px">
-								<input type="text" id="기타명" placeholder="기타 (직접입력)”>
+								<input type="text" id="기타명" placeholder="기타 (직접입력)">
 							</div>
 						</th>
 						<td>
@@ -411,7 +421,7 @@
 						<th>총 수선 유지비</th>
 						<td>
 							<div class="text-input-type edit">
-								<input type="text" id="총_수선_유지비" placeholder="자동 입력" readonly>
+								<input type="text" id="총_수선_유지비" placeholder="자동 완성" readonly>
 							</div>
 						</td>
 						<th></th>

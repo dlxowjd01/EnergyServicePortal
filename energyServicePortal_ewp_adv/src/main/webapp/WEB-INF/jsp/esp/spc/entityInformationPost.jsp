@@ -147,7 +147,7 @@
 			$('#이행보증보험료' + thisIdx).val(numberComma(implementation))
 		} else if (!isEmpty(guarantee)) {
 			$('#보험료_총계' + thisIdx).val(numberComma(guarantee));
-			$('#이행보증보험료' + thisIdx).val(numberComma(guarantee))
+			$('#보험료' + thisIdx).val(numberComma(guarantee))
 		} else {
 			$('#보험료_총계' + thisIdx).val('');
 		}
@@ -2211,7 +2211,7 @@
 						<th><label for="보험료[index]">보험료</label></th>
 						<td>
 							<div class="text-input-type edit unit t1">
-								<input type="text" id="보험료[index]" name="보험료[index]">
+								<input type="text" id="보험료[index]" name="보험료[index]" placeholder="직접 입력">
 								<span>원/일</span>
 							</div>
 						</td>

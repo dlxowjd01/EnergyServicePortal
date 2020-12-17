@@ -221,6 +221,12 @@
 						<td></td>
 					</tr>
 					<tr>
+						<th>모듈 보수</th>
+						<td id="모듈_보수"></td>
+						<th></th>
+						<td></td>
+					</tr>
+					<tr>
 						<th>구조물 보수</th>
 						<td id="구조물_보수"></td>
 						<th></th>

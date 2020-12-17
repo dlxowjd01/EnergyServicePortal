@@ -1324,7 +1324,7 @@
 						<td></td>
 					</tr>
 					<tr>
-						<th>세금과공과_기타</th>
+						<th>기타</th>
 						<td>
 							<div>
 								<span id="세금과공과_기타"></span>
@@ -1395,7 +1395,7 @@
 						<td></td>
 					</tr>
 					<tr>
-						<th>지급수수료_기타</th>
+						<th>기타</th>
 						<td>
 							<div>
 								<span id="지급수수료_기타"></span>
