@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
+<script type="text/javascript" src="/js/custom/jszip.js" charset="utf-8"></script>
+<script type="text/javascript" src="/js/custom/jszip-utils.js" charset="utf-8"></script>
 <script type="text/javascript" src="/js/jquery.mtz.monthpicker.js"></script>
 <script type="text/javascript">
     let costTable = null;
@@ -346,12 +348,23 @@
      */
     const rtnDropdown = ($selector) => {
         if ($selector === 'report_type') {
-            const dropdownValue = $('#' + $selector + ' button').data('value');
-            if (dropdownValue !== $('#yieldList').data('value')) {
-                $('#yieldList').empty(); // 적용변수 초기화
+            const dropdownValue = $('#' + $selector + ' button').data('value')
+                , siteValue = $('#site_id button').data('value');
+
+            if (siteValue === 'all') {
+                if (!/cost_spc/.test(dropdownValue)) {
+                    errorMsg('전체 선택시에는 SPC 원가관리보고서를 선택해야합니다.');
+                    $('#report_type button').data('value', '').html('선택 <span class="caret"></span>');
+                    return false;
+                }
+            } else {
+                if (!/cost_gen/.test(dropdownValue)) {
+                    errorMsg('개별 사이트 선택시에는 발전소 원가관리보고서를 선택해야합니다.');
+                    $('#report_type button').data('value', '').html('선택 <span class="caret"></span>');
+                    return false;
+                }
             }
 
-            setSpcGenReport();
         } else if ($selector === 'spc_id') {
             const dropdownValue = $('#' + $selector + ' button').data('value');
             $('#site_id ul').empty();
@@ -365,6 +378,7 @@
                 },
                 success: (data) => {
                     const siteList = data.data[0]['spcGens'];
+                    $('#site_id ul').append(`<li data-value="all"><a href="javascript:void(0);">전체</a></li>`);
                     if (!isEmpty(data) && !isEmpty(data.data[0]['spcGens'])) {
                         siteList.forEach(gen => {
                             let liStr = `<li data-value="${'${gen[\'gen_id\']}'}"><a href="javascript:void(0);">${'${gen[\'name\']}'}</a></li>`;
@@ -380,30 +394,19 @@
                 }
             });
         } else if ($selector === 'site_id') {
-            setSpcGenReport();
+            const dropdownValue = $('#' + $selector + ' button').data('value');
+            if (dropdownValue === 'all') {
+                $('#report_type li').each(function() {
+                   let dataValue = $(this).data('value')
+                     , dataText = $(this).text();
+                   if (/cost_spc/.test(dataValue)) {
+                       $('#report_type button').data('value', dataValue).html(dataText + '<span class="caret"></span>');
+                   }
+                });
+            } else {
+                $('#report_type button').data('value', '').html('선택 <span class="caret"></span>');
+            }
         }
-    }
-
-    /**
-     *
-     */
-    const setSpcGenReport = () => {
-        const siteId = $('#site_id button').data('value')
-            , spcId = $('#spc_id button').data('value')
-            , reportType = $('#report_type button').data('value')
-            , dataRange = $('#report_type button').data('range')
-            , dataInterval = $('#report_type button').data('interval')
-            , today = new Date();
-
-        let month = 1;
-        if (dataInterval === 'year') {
-            month += 12;
-        } else {
-            month += Number(dataRange);
-        }
-
-        $('.fromDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - month, 1));
-        $('.toDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - 1, 0));
     }
 
     //보고서 생성
@@ -500,25 +503,29 @@
         } else {
             checkedArray.forEach(checkBox => {
                 const chkIndex = Number((checkBox.getAttribute('id')).replace(/[^0-9]/g, ''))
-                    , rowData = yieldTable.row(chkIndex).data()
+                    , rowData = costTable.row(chkIndex).data()
                     , fileLink = (rowData.file_link.substring(15)).substring(0, rowData.file_link.substring(15).length - 1)
                     , orgFileName = JSON.parse(rowData.generated_file_link).orgFileName;
 
-                if (zipArr.some(e => e.fileName === orgFileName)) {
-                    let tempName = orgFileName.split('.');
-                    zipArr.push({
-                        fileLink: fileLink,
-                        fileName: tempName[0] + '_' + i + '.' + tempName[1]
-                    });
-                } else {
-                    zipArr.push({
-                        fileLink: fileLink,
-                        fileName: orgFileName
-                    });
+                if (checkBox.getAttribute('id') !== 'check') {
+                    if (zipArr.some(e => e.fileName === orgFileName)) {
+                        let tempName = orgFileName.split('.');
+                        zipArr.push({
+                            fileLink: fileLink,
+                            fileName: tempName[0] + '_' + chkIndex + '.' + tempName[1]
+                        });
+                    } else {
+                        zipArr.push({
+                            fileLink: fileLink,
+                            fileName: orgFileName
+                        });
+                    }
                 }
             });
 
             getZip(zipArr);
+
+            $('#check').prop('checked', false);
             getDataList();
         }
     }
