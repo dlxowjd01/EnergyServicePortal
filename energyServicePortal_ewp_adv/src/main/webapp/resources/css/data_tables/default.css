@@ -326,6 +326,11 @@ html.darkmode:root {
 	color: var(--white60);
 }
 
+.dataTables_wrapper .btn-file {
+	display: inline-block;
+	text-align: center;
+}
+
 .dataTables_wrapper .btn-file.up {
 	background: var(--btn-upload) no-repeat 0 5px;
 	border: 0;
@@ -412,6 +417,16 @@ html.darkmode:root {
 	text-decoration: none !important;
 	color: var(--white60);
 	cursor: pointer;
+}
+
+.dataTables_wrapper .dataTables_length {
+	height: 40px;
+    position: absolute;
+    bottom: 0;
+    right: calc(0% + 90px);
+    transform: translate(50%,20%);
+    text-align: center;
+    padding-top: 0.25em;
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button.current,

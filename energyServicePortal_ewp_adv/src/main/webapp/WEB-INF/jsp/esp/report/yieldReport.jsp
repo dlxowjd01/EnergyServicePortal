@@ -19,13 +19,15 @@
 			scrollCollapse: true,
 			sortable: true,
 			paging: true,
-			pageLength: 15,
+			pageLength: 50,
+			lengthMenu : [[50, 50, 100, 200], ["보기", 50, 100, 200]],
+
 			columns: [
 				{
-					title: '',
+					title: '<input type="checkbox" id="allCheck"><label for="allCheck"></label>',
 					data: null,
 					mRender: function ( data, type, full, rowIndex ) {
-						return '<input type="checkbox" id="check' + rowIndex.row + '" name="table_checkbox"><label for="check' + rowIndex.row + '"></label>';
+						return '<input type="checkbox" class="datatable-checkbox" id="check' + rowIndex.row + '" name="table_checkbox"><label for="check' + rowIndex.row + '"></label>';
 					},
 					className: 'dt-center no-sorting'
 				},
@@ -104,12 +106,26 @@
 					data: 'confirmed_at',
 					render: function (data, type, full, rowIndex) {
 						if (isEmpty(data)) {
-							return `<fmt:message key="yieldReport.confirmReport" /> <label for="confirmFile${'${full[\'id\']}'}" class="btn-file fr up"><fmt:message key="yieldReport.upload" /></label>
+							return `<fmt:message key="yieldReport.confirmReport" />`;
+						} else {
+							const linkData = JSON.parse(full['confirmed_file_link'])
+								, confirmed_date = (new Date(data)).format('yyyy-MM-dd HH:mm:ss');
+							return `${'${confirmed_date}'}`;
+						}
+					},
+					className: 'dt-center'
+				},
+				{
+					title: '<fmt:message key="yieldReport.upload" />',
+					data: 'confirmed_at',
+					render: function (data, type, full, rowIndex) {
+						if (isEmpty(data)) {
+							return `<label for="confirmFile${'${full[\'id\']}'}" class="btn-file up"><fmt:message key="yieldReport.upload" /></label>
 									<input type="file" id="confirmFile${'${full[\'id\']}'}" name="confirmFile${'${full[\'id\']}'}" class="btn-upload hidden" accept="application/pdf">`;
 						} else {
 							const linkData = JSON.parse(full['confirmed_file_link'])
 								, confirmed_date = (new Date(data)).format('yyyy-MM-dd HH:mm:ss');
-							return `${'${confirmed_date}'} <button type="button" class="btn-file fr down" onclick="downloadFile('${'${linkData[\'fileKey\']}'}', '${'${linkData[\'orgFileName\']}'}')">다운로드</button>`;
+							return `<button type="button" class="btn-file down" onclick="downloadFile('${'${linkData[\'fileKey\']}'}', '${'${linkData[\'orgFileName\']}'}')">다운로드</button>`;
 						}
 					},
 					className: 'dt-center'
@@ -134,7 +150,7 @@
 				},
 				info: "_PAGE_ - _PAGES_ " + " / <fmt:message key='table.totalCase.start' /> _TOTAL_ <fmt:message key='table.totalCase.end' />",
 			},
-			dom: 'tip',
+			dom: 'tipl',
 		}).on('select', function(e, dt, type, indexes) {
 			yieldTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
 		}).on('deselect', function(e, dt, type, indexes) {
@@ -244,6 +260,7 @@
 			yieldTable.clear().draw();
 			errorMsg(error);
 		});
+		$("#allCheck").prop("checked", false)
 	}
 
 	/**
@@ -890,10 +907,11 @@
 					<col style="width:10%"> <!-- 발전소명 <fmt:message key='yieldReport.plantName' /> -->
 					<col style="width:8%"> <!-- 보고서 유형 <fmt:message key='yieldReport.type' /> -->
 					<col style="width:15%"> <!-- 적용기간 <fmt:message key='yieldReport.period' /> -->
-					<col style="width:8%"> <!-- 다운로드 <fmt:message key='yieldReport.download' /> -->
-					<col style="width:15%"> <!-- 보고서 생성 시간 <fmt:message key='yieldReport.createdTime' /> -->
-					<col style="width:16%"> <!-- 보고서 확정 <fmt:message key='yieldReport.reportEnd' /> -->
-					<col style="width:8%"> <!-- 최종 작업자 <fmt:message key='yieldReport.person' /> -->
+					<col style="width:6%"> <!-- 다운로드 <fmt:message key='yieldReport.download' /> -->
+					<col style="width:12%"> <!-- 보고서 생성 시간 <fmt:message key='yieldReport.createdTime' /> -->
+					<col style="width:9%"> <!-- 보고서 확정 <fmt:message key='yieldReport.reportEnd' /> -->
+					<col style="width:4%"> <!-- 보고서 확정 <fmt:message key='yieldReport.upload' /> -->
+					<col style="width:10%"> <!-- 최종 작업자 <fmt:message key='yieldReport.person' /> -->
 				</colgroup>
 			</table>
 		</div>

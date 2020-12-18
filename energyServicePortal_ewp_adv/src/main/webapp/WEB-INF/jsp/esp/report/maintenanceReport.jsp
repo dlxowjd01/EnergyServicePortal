@@ -3,8 +3,8 @@
 
 <script type="text/javascript">
 	let reportTable = null;
-	$(function () {
 
+	$(function () {
 		reportTable = $('#reportTable').DataTable({
 			autoWidth: true,
 			fixedHeader: true,
@@ -13,8 +13,18 @@
 			scrollCollapse: true,
 			sortable: true,
 			paging: true,
-			pageLength: 10,
+			pageLength: 50,
+			lengthMenu : [[50, 50, 100, 200], ["보기", 50, 100, 200]],
+
 			columns: [
+				{
+					title: '<input type="checkbox" id="allCheck"><label for="allCheck"></label>',
+					data: null,
+					mRender: function ( data, type, full, rowIndex ) {
+						return '<input type="checkbox" class="datatable-checkbox" id="check' + rowIndex.row + '" name="table_checkbox"><label for="check' + rowIndex.row + '"></label>';
+					},
+					className: 'dt-center no-sorting'
+				},
 				{
 					title: '<fmt:message key="workreportmain.2.number" />',
 					data: null,
@@ -75,6 +85,10 @@
 					className: 'dt-center'
 				}
 			],
+			select: {
+				style: 'multi',
+				selector: 'td:first-child > :checkbox, tr > td:not(:has(button))'
+			},
 			language: {
 				emptyTable: "조회된 데이터가 없습니다.",
 				zeroRecords:  "검색된 결과가 없습니다.",
@@ -85,7 +99,11 @@
 				},
 				info: "_PAGE_ - _PAGES_ " + " / 총 _TOTAL_ 개",
 			},
-			dom: 'tip',
+			dom: 'tipl',
+		}).on('select', function(e, dt, type, indexes) {
+			reportTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
+		}).on('deselect', function(e, dt, type, indexes) {
+			reportTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", false);
 		}).columns.adjust().draw();
 
 		new $.fn.dataTable.Buttons(reportTable, {
@@ -286,8 +304,9 @@
 					<fmt:message key="workreportmain.2.register" />
 				</button>
 			</div>
-			<table id="reportTable">
+			<table id="reportTable" class="chk-type">
 				<colgroup>
+					<col style="width:5%">
 					<col style="width:5%">
 					<col style="width:15%">
 					<col style="width:15%">

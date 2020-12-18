@@ -410,6 +410,15 @@ $(function() {
 	});
 });
 
+/* Checkbox 전체선택 */
+$(function() {
+	$(document).on(`click`, `#allCheck + label`, e => {
+		$(`.datatable-checkbox + label`).click();
+		$(`.datatable-checkbox`).prop(`checked`, $(`#allCheck`).prop(`checked`) ? false : true);
+		$(`#allCheck`).prop(`checked`) ? $(`.selected`).removeClass(`selected`) : $(`.datatable-checkbox`).parent().parent().addClass(`selected`);
+	});
+});
+
 /* reset */
 $(function() {
 	$("nav .all-menu .menu-group .btn-group .reset-btn").click(function(){
