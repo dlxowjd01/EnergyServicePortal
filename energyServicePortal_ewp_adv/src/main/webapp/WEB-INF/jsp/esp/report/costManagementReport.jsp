@@ -164,8 +164,9 @@
                             if (incomSum == 0) {
                                 $('#margin').text('-');
                             } else {
+                                let f = d3.format('.1f');
                                 let margin = Math.round(((incomSum - expenseSum) / incomSum) * 1000) / 10;
-                                $('#margin').text(margin + ' %');
+                                $('#margin').text(f(margin) + ' %');
                             }
 
                             $('#profit').text(numberComma(incomSum - expenseSum) + ' 원');
