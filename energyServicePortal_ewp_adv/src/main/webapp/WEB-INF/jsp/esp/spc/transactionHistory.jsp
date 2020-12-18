@@ -318,6 +318,8 @@
 
 			if (refreshed_at != null) {
 				$('#refresh_date').text('마지막 업데이트 ' + new Date(refreshed_at).format('yyyy-MM-dd HH:mm:ss'));
+			} else {
+				$('#refresh_date').text('');
 			}
 		}).catch(error => {
 			transactionHistory.clear().draw();

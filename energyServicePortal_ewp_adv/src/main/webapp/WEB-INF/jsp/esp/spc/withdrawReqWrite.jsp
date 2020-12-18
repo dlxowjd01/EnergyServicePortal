@@ -93,6 +93,7 @@
 						spcIds: spcId
 					}
 				}).done(function (json, textStatus, jqXHR) {
+					console.log(json);
 					if (!isEmpty(json) && !isEmpty(json.data) && !isEmpty(json.data.items)) {
 						const targetAccount = json.data.items.find(e => e.account_no === account);
 
@@ -103,6 +104,12 @@
 						}
 					} else {
 						$('[name="availableAmount"]').val('');
+					}
+
+					if (json.refreshed_at != null) {
+						$('#refresh_date').text('마지막 업데이트 ' + new Date(json.refreshed_at).format('yyyy-MM-dd HH:mm:ss'));
+					} else {
+						$('#refresh_date').text('');
 					}
 				}).fail(function (jqXHR, textStatus, errorThrown) {
 					alert('처리 중 오류가 발생했습니다.');
@@ -516,6 +523,36 @@
 				return false;
 			});
 		}
+
+		/**
+		 * 입출금 내역 갱신
+		 */
+		$('#refresh').on('click', function () {
+			let selectedSpc = $('#spcList').prev().data('value');
+
+			if (!isEmpty(selectedSpc)) {
+				$('#loadingCircle').show();
+
+				$.ajax({
+					url: apiHost + '/spcs/transactions/real/refresh',
+					type: 'GET',
+					data: {
+						oid: oid,
+						spc_ids: selectedSpc.toString()
+					},
+					timeout: 300000
+				}).done(function(data, textStatus, jqXHR) {
+					getAmount();
+				}).fail(function(jqXHR, textStatus, errorThrown) {
+					console.error(textStatus);
+					alert('입출금 내역 갱신에 실패했습니다.');
+					return false;
+				})
+			} else {
+				alert('선택된 SPC가 없습니다.');
+				return false;
+			}
+		});
 	});
 
 	function rtnDropdown($selector) {
@@ -531,38 +568,6 @@
 			}
 		}
 	}
-
-	/**
-	 * 입출금 내역 갱신
-	 */
-	$(document).on('click', '#refresh', function () {
-		let selectedSpc = $('#spcList').prev().data('value');
-
-		if (!isEmpty(selectedSpc)) {
-			$('#loadingCircle').show();
-
-			$.ajax({
-				url: apiHost + '/spcs/transactions/real/refresh',
-				type: 'GET',
-				data: {
-					oid: oid,
-					spc_ids: selectedSpc.toString()
-				},
-				timeout: 300000
-			}).done(function(data, textStatus, jqXHR) {
-				if (!isEmpty(data) && !isEmpty(data.data)) {
-					$('#transactionForm').submit();
-				}
-			}).fail(function(jqXHR, textStatus, errorThrown) {
-				console.error(textStatus);
-				alert('입출금 내역 갱신에 실패했습니다.');
-				return false;
-			})
-		} else {
-			alert('선택된 SPC가 없습니다.');
-			return false;
-		}
-	});
 </script>
 
 <div class="row header-wrapper">
@@ -574,7 +579,7 @@
 <form id="fileUploadForm" name="fileUploadForm"></form>
 <form id="withdrawForm" name="withdraw_form" action="#" method="post">
 	<div class="row spc-search-bar">
-		<div class="col-11">
+		<div class="col-9">
 			<div class="sa-select"><!--
 			--><span class="tx-tit">SPC 선택</span><!--
 			--><div class="dropdown"><!--
@@ -595,6 +600,9 @@
 			--><label for="availableAmount" class="tx-tit">계좌 잔액</label><!--
 			--><div class="text-input-type"><input type="text" id="" name="availableAmount" disabled="" readonly=""></div>
 			</div>
+		</div>
+		<div class="col-2">
+			<span class="tx-tit" id="refresh_date"></span>
 		</div>
 		<div class="col-1">
 			<button type="button" id="refresh" class="btn-type03">입출금 내역 갱신</button>
