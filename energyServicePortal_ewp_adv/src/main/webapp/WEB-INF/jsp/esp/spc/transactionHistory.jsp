@@ -276,7 +276,8 @@
 					if (!isEmpty(json.data)) {
 						resolve({
 							newData: json.data,
-							searchOptArr: searchOptArr
+							searchOptArr: searchOptArr,
+							refreshed_at: json.refreshed_at
 						});
 					} else {
 						reject('조회 내역이 없습니다.');
@@ -287,7 +288,7 @@
 					reject(new Error('조회중 오류가 발생했습니다.'));
 				}
 			});
-		}).then(({newData, searchOptArr}) => {
+		}).then(({newData, searchOptArr, refreshed_at}) => {
 			const refineList = new Array();
 			newData.map(item => {
 				const found = spcInfoArr.findIndex(x => x.spc_id === item.spc_id);
@@ -314,6 +315,10 @@
 			transactionHistory.clear();
 			transactionHistory.rows.add(refineList).draw();
 			$($.fn.dataTable.tables(true)).DataTable().columns.adjust();
+
+			if (refreshed_at != null) {
+				$('#refresh_date').text('마지막 업데이트 ' + new Date(refreshed_at).format('yyyy-MM-dd HH:mm:ss'));
+			}
 		}).catch(error => {
 			transactionHistory.clear().draw();
 			errorMsg(error);
@@ -342,8 +347,6 @@
 				timeout: 300000
 			}).done(function(data, textStatus, jqXHR) {
 				if (!isEmpty(data) && !isEmpty(data.data)) {
-					console.log(data);
-					return false;
 					$('#transactionForm').submit();
 				}
 			}).fail(function(jqXHR, textStatus, errorThrown) {
@@ -411,7 +414,7 @@
 </div>
 
 <div class="row spc-search-bar header-wrapper">
-	<div class="col-11"><!--
+	<div class="col-9"><!--
 	--><form id="transactionForm"><!--
 		--><span class="tx-tit">SPC 선택</span><!--
 		--><div class="sa-select">
@@ -473,6 +476,9 @@
 				</ul>
 			</div>
 		</form>
+	</div>
+	<div class="col-2">
+		<span class="tx-tit" id="refresh_date"></span>
 	</div>
 	<div class="col-1">
 		<button type="button" id="refresh" class="btn-type03">입출금 내역 갱신</button>

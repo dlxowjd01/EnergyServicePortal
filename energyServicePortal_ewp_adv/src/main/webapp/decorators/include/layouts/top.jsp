@@ -62,6 +62,8 @@
 <script type="text/javascript" src="/js/fileSaver/FileSaver.min.js"></script>
 <!-- timepicker -->
 <script type="text/javascript" src="/js/wickedpicker.min.js"></script>
+<!-- d3-format -->
+<script type="text/javascript" src="/js/d3-format/d3-format.min.js"></script>
 
 <script type="text/javascript">
 	// role => 1: 시스템관리자, 2: 일반
@@ -95,7 +97,6 @@
 	};
 
 	$(document).ready(function () {
-
 		<c:choose>
 			<c:when test="${fn:contains(pageContext.request.serverName, 'spower')}">
 		changeFavicon('/resources/favicon.ico');

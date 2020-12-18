@@ -551,8 +551,6 @@
 				timeout: 300000
 			}).done(function(data, textStatus, jqXHR) {
 				if (!isEmpty(data) && !isEmpty(data.data)) {
-					console.log(data);
-					return false;
 					$('#transactionForm').submit();
 				}
 			}).fail(function(jqXHR, textStatus, errorThrown) {
