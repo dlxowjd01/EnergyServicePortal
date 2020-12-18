@@ -4512,16 +4512,16 @@
 		}
 
 		if(isEmpty(option)){
-			urls.push({
-				url: apiHost + apiStatusRawSite,
-				type: 'GET',
-				data: {
-					sid: siteId,
-					formId: 'v2'
-				}
-			});
-
 			if (oid.match('testkpx')) {
+				urls.push({
+					url: apiHost + apiStatusRawSite,
+					type: 'GET',
+					data: {
+						sid: siteId,
+						formId: 'v2'
+					}
+				});
+
 				let rtus = [];
 				sList.forEach(site => {
 					if (!isEmpty(site.rtus)) {
@@ -4568,6 +4568,23 @@
 					});
 				}
 			} else {
+				let dids = new Array();
+				if (!isEmpty(sList[0].devices)) {
+					sList[0].devices.forEach(device => {
+						if (device.dashboard === true && device.metering_type === 2) {
+							dids.push(device.did);
+						}
+					});
+				}
+
+				urls.push({
+					url: apiHost + apiStatusRaw,
+					type: 'GET',
+					data: {
+						dids: dids.toString()
+					}
+				});
+
 				urls.push({
 					url: apiHost + apiEnergyNowSite,
 					type: 'GET',
@@ -4623,7 +4640,7 @@
 					const data = arg[1];
 					const url = data.url;
 
-					if ((url).match(apiStatusRawSite)) {
+					if ((url).match(apiStatusRaw) || (url).match(apiStatusRawSite)) {
 						// url : apiStatusRawSite
 						if (!isEmpty(data)) {
 							Object.entries(data).forEach(rawData => {
@@ -4654,18 +4671,11 @@
 										}
 									}
 								} else {
-									if (!isEmpty(deviceData)) {
-										Object.entries(deviceData).map(di => {
-											const key = di[0];
-											const value = di[1];
-								
-											if(key == 'dcPower') {
-												itemDcPower += value;
-											} else if(key == 'activePower') {
-												itemAcPower += value;
-											} else if(key == 'efficiency') {
-												itemEfficiency += value;
-											}
+									if (!isEmpty(deviceData) && !isEmpty(deviceData.data)) {
+										deviceData.data.forEach(el => {
+											if (!isEmpty(el.dcPower)) itemDcPower += el.dcPower;
+											if (!isEmpty(el.activePower)) itemAcPower += el.activePower;
+											if (!isEmpty(el.efficiency)) itemEfficiency += el.efficiency;
 										});
 									}
 								}
