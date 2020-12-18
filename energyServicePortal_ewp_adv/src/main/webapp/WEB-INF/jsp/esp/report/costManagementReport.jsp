@@ -447,6 +447,7 @@
         data['generated_by'] = loginId;
         data['updated_by'] = loginId;
         data['generated_at'] = today.toISOString();
+        data['report_data_end'] = new Date($('#report_data_end').monthpicker('getDate').getFullYear(), $('#report_data_end').monthpicker('getDate').getMonth() + 1, 0).toISOString();
 
 	    if (data.site_id === 'all' && /cost_spc/.test(data.report_type)) data.site_id = '';
 
