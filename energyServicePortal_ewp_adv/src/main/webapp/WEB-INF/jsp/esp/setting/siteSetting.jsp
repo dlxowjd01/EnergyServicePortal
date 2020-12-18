@@ -2248,7 +2248,16 @@
 				// 사업소 명
 				newSiteName.val( td.eq(2).text() ).prop("disabled", true).parent().addClass("disabled");
 				// 지역
-				$('#newCityList').prev().data({"name": td.eq(3).text(), "value" : td.eq(3).data("value") }).contents().get(0).nodeValue = td.eq(3).text();
+				let city = td.eq(3).text();
+				$('#newCityList li').each(function() {
+					if (city === $(this).data('value')) {
+						let cityText = $(this).find('a').contents().get(0).nodeValue.trim();
+						let cityValue = $(this).data('value');
+						$('#newCityList').prev().data({'name': cityText, 'value': cityValue}).contents().get(0).nodeValue = cityText;
+					}
+				});
+
+				//$('#newCityList').prev().data({"name": td.eq(3).text(), "value" : td.eq(3).data("value") }).contents().get(0).nodeValue = td.eq(3).text();
 				// Address
 				if( !isEmpty(rowData.address)) {
 					$('#newStreetAddr').val(rowData.address);
