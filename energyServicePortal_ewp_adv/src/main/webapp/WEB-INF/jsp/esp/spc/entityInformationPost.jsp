@@ -86,7 +86,7 @@
 
 	const fnLocation = () => {
 		$.ajax({
-			url: apiHost + '/config/view/properties',
+			url: apiHost + '/config/view/properties2',
 			type: 'get',
 			async: false,
 			data: {types: 'location'},

@@ -42,7 +42,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			//Menu조회
 			Map<String,Object> parameters = new HashMap<String, Object>();
 			parameters.put("types", "menu");
-			Map<String, Object> menuProperties = get("/config/view/properties", mode, parameters, token); //그룹화되어있는 사이트 리스트 정보
+			Map<String, Object> menuProperties = get("/config/view/properties2", mode, parameters, token); //그룹화되어있는 사이트 리스트 정보
 			if (200 == (int) menuProperties.get("code")) {
 				Map<String, Object> menuMap = (Map<String, Object>) menuProperties.get("data");
 				Map<String, Object> menuList = (Map<String, Object>) menuMap.get("menu");
@@ -415,7 +415,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			}
 			parameters.clear();
 			parameters.put("types", "resource,location");
-			Map<String, Object> typeProperties = get("/config/view/properties", mode, parameters, token); //그룹화되어있는 사이트 리스트 정보
+			Map<String, Object> typeProperties = get("/config/view/properties2", mode, parameters, token); //그룹화되어있는 사이트 리스트 정보
 			if (200 == (int) typeProperties.get("code")) {
 				Map<String, Object> typeMap = (Map<String, Object>) typeProperties.get("data");
 

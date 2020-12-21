@@ -345,7 +345,7 @@
 		};
 
 		const urlAlarmProp = {
-			url: apiHost + '/config/view/properties',
+			url: apiHost + '/config/view/properties2',
 			type: 'get',
 			data: {types: 'alarm_level'},
 			dataType: 'json'

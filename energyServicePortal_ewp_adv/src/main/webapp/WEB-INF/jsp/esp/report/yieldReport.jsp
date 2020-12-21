@@ -308,7 +308,7 @@
 		});
 
 		const props = $.ajax({
-			url: apiHost + '/config/view/properties',
+			url: apiHost + '/config/view/properties2',
 			type: 'GET',
 			data: { oid: oid, types: 'yield_report_type' }
 		});

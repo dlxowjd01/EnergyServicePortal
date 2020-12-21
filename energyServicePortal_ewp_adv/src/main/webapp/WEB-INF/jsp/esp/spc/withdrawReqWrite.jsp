@@ -499,7 +499,7 @@
 
 		function bankProperties() {
 			let opt = {
-				url: apiHost + '/config/view/properties?types=bank_name',
+				url: apiHost + '/config/view/properties2?types=bank_name',
 				type: 'GET',
 				dataType: 'json'
 			};

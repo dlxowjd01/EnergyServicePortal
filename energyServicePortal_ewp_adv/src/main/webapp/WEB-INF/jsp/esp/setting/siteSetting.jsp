@@ -1799,7 +1799,7 @@
 			async: true
 		}
 		let selectOpt = {
-			url: apiHost + "/config/view/properties?types=site_type,resource",
+			url: apiHost + "/config/view/properties2?types=site_type,resource",
 			type: 'get',
 			async: true,
 			beforeSend: function (jqXHR, settings) {

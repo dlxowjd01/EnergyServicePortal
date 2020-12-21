@@ -271,7 +271,7 @@ const firstAjax = () => {
 		}
 
 		urls.push({
-			url: apiHost + '/config/view/properties',
+			url: apiHost + '/config/view/properties2',
 			type: 'get',
 			async: false,
 			data: {
@@ -523,7 +523,7 @@ const ajaxData = (urls, target) => {
 					} else {
 						apiDatas[targetUrl] = result;
 					}
-				} else if (targetUrl.match('/config/view/properties')) {
+				} else if (targetUrl.match('/config/view/properties2')) {
 					Object.entries(result.resource).map(obj => {
 						if (langStatus == 'KO') {
 							resourceTemplate[obj[1].code] = obj[1].name.kr;
