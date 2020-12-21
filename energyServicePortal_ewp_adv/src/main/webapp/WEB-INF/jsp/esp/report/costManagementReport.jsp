@@ -116,6 +116,10 @@
             costTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", true);
         }).on('deselect', function(e, dt, type, indexes) {
             costTable.rows( indexes ).nodes().to$().find("input[type='checkbox']").prop("checked", false);
+
+            if ($(':checkbox[name="table_checkbox"]').length !== $(':checkbox[name="table_checkbox"]:checked')) {
+                $('#check').prop('checked', false);
+            }
         }).columns.adjust().draw();
 
 
@@ -272,11 +276,9 @@
 
     const checkAll = () => {
         if ($('#check').is(':checked')) {
-            $(':checkbox[name="table_checkbox"]').prop('checked', true);
-            $(':checkbox[name="table_checkbox"]').parents('tr').addClass('selected');
+            costTable.rows().select();
         } else {
-            $(':checkbox[name="table_checkbox"]').prop('checked', false);
-            $(':checkbox[name="table_checkbox"]').parents('tr').removeClass('selected');
+            costTable.rows().deselect();
         }
     }
 
