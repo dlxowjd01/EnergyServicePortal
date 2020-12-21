@@ -173,9 +173,10 @@
                                 $('#margin').text(f(margin) + ' %');
                             }
 
-                            $('#profit').text(numberComma(incomSum - expenseSum) + ' 원');
-                            $('#incomSum').text(numberComma(incomSum) + ' 원');
-                            $('#expenseSum').text(numberComma(expenseSum) + ' 원');
+                            let f = d3.format(',.1f');
+                            $('#profit').text(f(incomSum - expenseSum) + ' 원');
+                            $('#incomSum').text(f(incomSum) + ' 원');
+                            $('#expenseSum').text(f(expenseSum) + ' 원');
                         }
                     },
                     error: (request, status, error) => {
