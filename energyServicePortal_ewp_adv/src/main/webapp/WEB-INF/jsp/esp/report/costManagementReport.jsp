@@ -173,7 +173,7 @@
                                 $('#margin').text(f(margin) + ' %');
                             }
 
-                            let f = d3.format(',.1f');
+                            let f = d3.format(',.0f');
                             $('#profit').text(f(incomSum - expenseSum) + ' 원');
                             $('#incomSum').text(f(incomSum) + ' 원');
                             $('#expenseSum').text(f(expenseSum) + ' 원');
