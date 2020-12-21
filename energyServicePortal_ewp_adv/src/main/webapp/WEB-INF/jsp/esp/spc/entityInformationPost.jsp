@@ -133,6 +133,17 @@
 		});
 	}
 
+	$(document).on('keyup', '[id^=계약_단가]', function() {
+		const thisVal = $(this).val().replace(/[^0-9]/g, '').trim();
+
+		if (!isEmpty(thisVal)) {
+			const f = d3.format(',');
+			$(this).val(f(thisVal));
+		} else {
+			$(this).val('');
+		}
+	});
+
 	$(document).on('keyup', '[id^="이행보증보험료"], [id^="보험료"]', function() {
 		const thisIdx = $(this).prop('id').replace(/[^0-9]/g, '')
 			, implementation = $('#이행보증보험료' + thisIdx).val().trim().replace(/[^0-9]/g, '')

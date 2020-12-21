@@ -467,7 +467,7 @@
 						<th>민원 및 피해보상</th>
 						<td>
 							<div class="text-input-type edit">
-								<input type="text" id="미원_및_피해보상" placeholder="직접 입력">
+								<input type="text" id="민원_및_피해보상" placeholder="직접 입력">
 							</div>
 						</td>
 						<th></th>

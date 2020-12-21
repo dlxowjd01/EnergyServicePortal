@@ -145,6 +145,17 @@
 		}
 	});
 
+	$(document).on('keyup', '[id^=계약_단가]', function() {
+		const thisVal = $(this).val().replace(/[^0-9]/g, '').trim();
+
+		if (!isEmpty(thisVal)) {
+			const f = d3.format(',');
+			$(this).val(f(thisVal));
+		} else {
+			$(this).val('');
+		}
+	});
+	
 	$(document).on('keyup', '#spendInfo input', function() {
 		let totalAmt = 0;
 		$('#spendInfo input').each(function() {
