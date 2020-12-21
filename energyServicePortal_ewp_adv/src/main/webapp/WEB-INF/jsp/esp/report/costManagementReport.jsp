@@ -200,7 +200,7 @@
      * 원가관리보고서
      */
     const getDataList = () => {
-        new Promise(resolve => {
+        new Promise((resolve, reject) => {
             $.ajax({
                 url: apiHost + '/reports/cost',
                 type: 'GET',
@@ -209,12 +209,12 @@
                     if (!isEmpty(result) && !isEmpty(result['data'])) {
                         resolve(result['data']);
                     } else {
-                        throw Error('<fmt:message key="yieldReport.error.19" />');
+                        reject('<fmt:message key="yieldReport.error.19" />');
                     }
                 },
                 error: (request, status, error) => {
                     console.error(error);
-                    throw Error('<fmt:message key="yieldReport.error.20" />');
+                    reject('<fmt:message key="yieldReport.error.20" />');
                 }
             });
         }).then(resultData => {
