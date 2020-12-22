@@ -640,14 +640,26 @@
 	};
 
 	//사업소 조회
-	const siteMakeList = function () {
-		const makeSite = Array.from(siteList);
+	const siteMakeList = function (search = []) {
+		const makeSite = search.length ? Array.from(search) : Array.from(siteList);
 		makeSite.sortOn('name');
 		makeSite.unshift({ sid: 'all', name: '<fmt:message key="dropDown.all" />'});
 		setMakeList(makeSite, 'siteULList', {'dataFunction': {}}); //list생성
-		$('#siteULList').append(`<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16"><fmt:message key="dropDown.apply" /></button></li>`);
-		$('#siteULList').find('input[value="all"]').parent().after('<li class="btn-wrap-border-min"></li>');
+		
+		$('#siteULList')
+			.append(`<li class="btn-wrap-type03 btn-wrap-border dropdown-apply"><button type="button" class="btn-type mr-16"><fmt:message key="dropDown.apply" /></button></li>`)
+			.find('input[value="all"]').parent().after('<li class="btn-wrap-border-min"></li>');
+
+		if (!$(`.dropdown-search`).length) {
+			$(`#siteList`).prepend(`<div class="dropdown-search"><input type="text" placeholder="<fmt:message key="dropdown.siteSearch" />" onKeyup="searchSite($(this).val())" ></div>`)
+		}
 	};
+
+	const searchSite = keyword => {
+		const result = siteList.filter(x => x.name.includes(keyword));
+
+		siteMakeList(result);
+	}
 
 	//선택한 SID에 해당하는 유형의 타입을 보여준다.
 	const deviceType = function (deviceTp) {

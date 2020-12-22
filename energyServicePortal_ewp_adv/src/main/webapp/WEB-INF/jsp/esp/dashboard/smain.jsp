@@ -214,6 +214,7 @@
 			<div class="indiv smain-circle">
 				<div class="flex-wrapper mb-24">
 					<h2 class="ntit"><fmt:message key='smain.todayDevStatus' /></h2>
+					<a href="javascript:void(0)" class="smain-go-pvGen btn-type" onclick="toPvGen('${sid}');">발전이력</a href="javascript:void(0)">
 					<div class="stit fr" id="dayGenHours"></div>
 				</div>
 				<div class="search-wrap">
@@ -5362,6 +5363,14 @@
 		} else {
 			$form.attr('action', '/dashboard/smain.do').submit();
 		}
+	}
+
+	function toPvGen(sid) {
+		const $form = $(`#linkSiteForm`);
+
+		let $sid = $(`<input>`).attr({ type : `hidden`, name : `sid` }).val(sid);
+
+		$form.append($sid).attr(`action`, `/energy/pvGen.do`).submit();
 	}
 
 	function addToDateList(idx, data, option, customDateList){

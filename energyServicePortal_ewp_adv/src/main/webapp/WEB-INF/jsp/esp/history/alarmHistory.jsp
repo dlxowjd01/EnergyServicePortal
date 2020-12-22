@@ -548,7 +548,7 @@
 		makeSite.sortOn('name');
 		makeSite.unshift({ sid: 'all', name: '<fmt:message key="alarm.search.all" />'});
 		setMakeList(makeSite, 'siteList', {'dataFunction': {}}); //list생성
-		$('#siteList').append(`<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16"><fmt:message key='alarm.apply' /></button></li>`);
+		$('#siteList').append(`<li class="btn-wrap-type03 btn-wrap-border dropdown-apply"><button type="button" class="btn-type mr-16"><fmt:message key='alarm.apply' /></button></li>`);
 		$('#siteList').find('input[value="all"]').parent().after('<li class="btn-wrap-border-min"></li>');
 
 
@@ -712,11 +712,46 @@
 	
 	const makeDiv = function (deviceType) {
 		let divStr = '';
-		divStr += '<div class="table-top clear">';
+		divStr += '<div class="table-top">';
 		divStr += '<h2 class="ntit fl">' + deviceTemplate[deviceType] + '</h2>';
+		divStr += '<div>';
+		divStr += '<button type="button" class="dt-button buttons-excel buttons-html5 btn-save" ><fmt:message key="workreportmain.1.dataExtracts" /></button>';
 		divStr += '<button type="button" class="btn-type03 fr" onclick="alarmConfirmAll(\'' + deviceType + '\');"><fmt:message key="alarm.checkAll" /></button>';
 		divStr += '</div>';
+		divStr += '</div>';
 		$(".table-wrap-type").append(divStr);
+	}
+
+	const downloadExcel = _ => {
+		const checkedArray = document.querySelectorAll('[name="rowCheck"]:checked');
+
+		let zipArr = []
+		if (checkedArray.length === 0) {
+			errorMsg('<fmt:message key="yieldReport.error.17" />');
+		} else {
+			checkedArray.forEach(checkBox => {
+				const chkIndex = Number((checkBox.getAttribute('id')).replace(/[^0-9]/g, ''))
+					, rowData = yieldTable.row(chkIndex).data()
+					, fileLink = (rowData.file_link.substring(15)).substring(0, rowData.file_link.substring(15).length - 1)
+					, orgFileName = JSON.parse(rowData.generated_file_link).orgFileName;
+
+				if (zipArr.some(e => e.fileName === orgFileName)) {
+					let tempName = orgFileName.split('.');
+					zipArr.push({
+						fileLink: fileLink,
+						fileName: tempName[0] + '_' + i + '.' + tempName[1]
+					});
+				} else {
+					zipArr.push({
+						fileLink: fileLink,
+						fileName: orgFileName
+					});
+				}
+			});
+
+			getZip(zipArr);
+			getDataList();
+		}
 	}
 	
 	const makeTableHead = function (deviceType) {

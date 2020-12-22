@@ -141,6 +141,7 @@
 </div>
 
 <script type="text/javascript">
+	const sidparam = "${param.sid}";
 	const sites = JSON.parse('${siteList}');
 	let generationData = new Object()
 		, standard = new Array()
@@ -181,6 +182,11 @@
 
 		$('#fromDate').datepicker('setDate', 'today'); //데이트 피커 기본
 		$('#toDate').datepicker('setDate', 'today'); //데이트 피커 기본
+
+		if (sidparam) {
+			$("#interval > ul > li:nth-child(3) > a").click();
+			setTimeout(searchGenData, 500)
+		}
 	});
 
 	//사업소 호출
@@ -206,10 +212,14 @@
 						</li>`;
 			});
 
-			liStr += `<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16"><fmt:message key="pvGen.apply" /></button></li>`;
+			liStr += `<li class="btn-wrap-type03 btn-wrap-border dropdown-apply"><button type="button" class="btn-type mr-16"><fmt:message key="pvGen.apply" /></button></li>`;
 			siteList.innerHTML = liStr;
 		} else {
 			siteList.innerHTML = `<li class="no-data"><fmt:message key='pvGen.cannotSelectSite' /></li>`;
+		}
+
+		if (sidparam) {
+			$("#siteList ul li a[data-value="+sidparam+"] > label").click();
 		}
 	};
 
@@ -297,11 +307,16 @@
 				});
 
 				deviceList.innerHTML = liStr;
+
+				if (sidparam) {
+					$("#deviceType > div > div > div > div > div.fl > button:nth-child(1)").click();
+				}
 			}).catch(error => {
 				console.error(error);
 				errorMsg(error);
 			});
 		}
+
 	};
 
 	function rtnDropdown($dropdownId) {

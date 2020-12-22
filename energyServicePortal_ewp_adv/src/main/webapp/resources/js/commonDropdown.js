@@ -5,62 +5,63 @@
  *
  */
 //드롭 다운 공통 동작 작업 -- 디스에이블이 아닌 항목에 대해서 작동함.
-$(document).on('click', '.dropdown-menu:not(.unused) li:not(.disabled, .dropdown-cov .sec-li-box, .btn-wrap-type03, .lang, .no-data)', function (e) {
-	e.preventDefault(); //다른 드롭 다운 동작 막기
-	let $selector = $(this),
-		$dropdown = $selector.closest('.dropdown'),
-		$dropdownId = $dropdown.prop('id'),
-		$displayButton = $dropdown.find('button');
+$(document)
+	.on('click', '.dropdown-menu:not(.unused) li:not(.disabled, .dropdown-cov .sec-li-box, .btn-wrap-type03, .lang, .no-data, .dropdown-search)', function (e) {
+		e.preventDefault(); //다른 드롭 다운 동작 막기
+		let $selector = $(this),
+			$dropdown = $selector.closest('.dropdown'),
+			$dropdownId = $dropdown.prop('id'),
+			$displayButton = $dropdown.find('button');
 
-	if ($selector.find(':radio').length > 0) {
-		$selector.find(':radio').prop('checked', true);
-	} else if ($selector.find(':checkbox').length > 0) {
-		if ($selector.find(':checkbox').prop('checked')) {
-			$selector.find(':checkbox').prop('checked', false);
+		if ($selector.find(':radio').length > 0) {
+			$selector.find(':radio').prop('checked', true);
+		} else if ($selector.find(':checkbox').length > 0) {
+			if ($selector.find(':checkbox').prop('checked')) {
+				$selector.find(':checkbox').prop('checked', false);
+			} else {
+				$selector.find(':checkbox').prop('checked', true);
+			}
+		}
+
+		if ($selector.find(':checkbox').length > 0) {
+			let $selectorName = $selector.find(':checkbox').prop('name');
+			if ($selector.find(':checkbox').val() === 'all') {
+				$(':checkbox[name="' + $selectorName + '"]').each(function() {
+					if ($(this).val() !== 'all') {
+						$(this).prop('checked', false);
+					}
+				});
+			} else {
+				$(':checkbox[name="' + $selectorName + '"]').each(function() {
+					if ($(this).val() === 'all') {
+						$(this).prop('checked', false);
+					}
+				});
+			}
+
+			displayDropdown($dropdown);
+		} else if ($selector.find(':radio').length > 0) {
+			displayDropdown($dropdown);
 		} else {
-			$selector.find(':checkbox').prop('checked', true);
-		}
-	}
-
-	if ($selector.find(':checkbox').length > 0) {
-		let $selectorName = $selector.find(':checkbox').prop('name');
-		if ($selector.find(':checkbox').val() === 'all') {
-			$(':checkbox[name="' + $selectorName + '"]').each(function() {
-				if ($(this).val() !== 'all') {
-					$(this).prop('checked', false);
-				}
-			});
-		} else {
-			$(':checkbox[name="' + $selectorName + '"]').each(function() {
-				if ($(this).val() === 'all') {
-					$(this).prop('checked', false);
-				}
-			});
+			let $displayData = $selector.data();
+			let $displayText = $selector.text();
+			$displayButton.eq(0).html($displayText + '<span class="caret"></span>').addClass("active");
+			//data Setting
+			if (!isEmpty($displayData)) {
+				$.map($displayData, function (val, key) {
+					$displayButton.data(key, val);
+				});
+			}
 		}
 
-		displayDropdown($dropdown);
-	} else if ($selector.find(':radio').length > 0) {
-		displayDropdown($dropdown);
-	} else {
-		let $displayData = $selector.data();
-		let $displayText = $selector.text();
-		$displayButton.eq(0).html($displayText + '<span class="caret"></span>').addClass("active");
-		//data Setting
-		if (!isEmpty($displayData)) {
-			$.map($displayData, function (val, key) {
-				$displayButton.data(key, val);
-			});
+		if (typeof (rtnDropdown) == 'function') {
+			rtnDropdown($dropdownId);
 		}
-	}
 
-	if (typeof (rtnDropdown) == 'function') {
-		rtnDropdown($dropdownId);
-	}
-
-	if ($displayButton.hasClass('no-close')) {
-		return false;
-	}
-});
+		if ($displayButton.hasClass('no-close')) {
+			return false;
+		}
+	})
 
 /**
  * 선택된 값 표시
