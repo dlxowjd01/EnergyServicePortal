@@ -614,9 +614,13 @@
 		});
 
 		if (!isEmpty(sgid) || !isEmpty(vgid) || !isEmpty(sidparam)) {
-			siteArray = dataList[1].join(',')
+			siteArray = dataList[1].join(',');
 		} else {
-			siteArray = 'all';
+			if ($('#site_0').is(':checked') || $(':checkbox[name="site"]:not(#site_0)').length === $(':checkbox[name="site"]:checked').length) {
+				siteArray = 'all';
+			} else {
+				siteArray = dataList[1].join(',');
+			}
 		}
 
 		if ($(':checkbox[name="confirm"]:checked').length == 2) {

@@ -1971,7 +1971,7 @@
 							</td>
 						</tr>
 						<tr>
-							<th><label for="빠른조회_비밀번호">빠른조회 비밀번호</label></th>
+							<th><label for="빠른조회_비밀번호">빠른조회 비밀번호 (공통)</label></th>
 							<td>
 								<div class="text-input-type edit">
 									<input type="text" id="빠른조회_비밀번호" name="빠른조회_비밀번호" placeholder="직접 입력">

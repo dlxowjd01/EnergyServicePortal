@@ -750,6 +750,7 @@
 	const apiStatusRaw = '/status/raw';
 	const apiConfigDevice = '​/config/devices';
 	const apiGetDvcProperties = '/config/view/device_properties';
+	const apiGetProperties = '/config/view/properties2';
 	const featureProperties = {};
 	const featurePropertiesSub = {};
 
@@ -2212,7 +2213,14 @@
 				}
 			}
 
-			$.when($.ajax(weekWeather), $.ajax(weekWeatherTime), $.ajax(statusRaw)).done(function (weekWeatherData, weekWeatherTimeData, statusRawData) {
+			let properties = {
+				url: apiHost + apiGetProperties,
+				type: 'get',
+				dataType: 'json',
+				data: { types: 'location' }
+			}
+
+			$.when($.ajax(weekWeather), $.ajax(weekWeatherTime), $.ajax(statusRaw), $.ajax(properties)).done(function (weekWeatherData, weekWeatherTimeData, statusRawData, propertiesData) {
 				// KPX ONLY
 				if (weekWeatherData[1] == 'success') {
 					let weekWeather = weekWeatherData[0];
@@ -2242,20 +2250,38 @@
 							}
 						});
 
+						let prop, siteLocation;
+						if (propertiesData[1] === 'success') {
+							prop = propertiesData[0].location;
+
+							if (!isEmpty(prop)) {
+								Object.entries(prop).forEach(([propIdx, country]) => {
+									const location = country.locations;
+									Object.entries(location).forEach(([locIdx, loc]) => {
+										if (loc.code === sList[0].location) {
+											siteLocation = langStatus === 'KO' ? loc.name.kr : loc.name.en;
+										}
+									});
+								});
+
+								if (isEmpty(siteLocation)) siteLocation = sList[0].location;
+							}
+						}
+
 						if (tempArray.length > 0) {
 							let weatherIconClass = getWeatherIcons(tempArray[tempArray.length - 1].sky);
 							let deviceIrrData = tempArray[tempArray.length - 1].sensor_solar.irradiationPoa;
 
 							if($('#viewOptList').prev().data("value") == "2"){
 								$('#sTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + '&nbsp;' + '&#8451;');
-								$('#weekSolarIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i><strong>' + sList[0].location + '</strong>');
+								$('#weekSolarIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i><strong>' + siteLocation + '</strong>');
 								if(!isEmpty(deviceIrrData)){						
 									$("#sIrradiation").parents().closest('li').removeClass('hidden');
 									$("#sIrradiation").text(deviceIrrData);
 								}
 							} else {
 								$('#weekTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + '&nbsp;' + '&#8451;');
-								$('#weekIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i><strong>' + sList[0].location + '</strong>');
+								$('#weekIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i><strong>' + siteLocation + '</strong>');
 								if(!isEmpty(deviceIrrData)){	
 									$("#weekIrradiation").parents().closest('li').removeClass('hidden');
 									$("#weekIrradiation").text(deviceIrrData)
@@ -2264,13 +2290,31 @@
 						}
 					}
 				}
-				console.log("statusRawData[1]---", statusRawData[1])
+
 				if (statusRawData[1] == 'success') {
 					let items = statusRawData[0];
 					if (!isEmpty(items)) {
+
+						let prop, siteLocation;
+						if (propertiesData[1] === 'success') {
+							prop = propertiesData[0].location;
+
+							if (!isEmpty(prop)) {
+								Object.entries(prop).forEach(([propIdx, country]) => {
+									const location = country.locations;
+									Object.entries(location).forEach(([locIdx, loc]) => {
+										if (loc.code === sList[0].location) {
+											siteLocation = langStatus === 'KO' ? loc.name.kr : loc.name.en;
+										}
+									});
+								});
+
+								if (isEmpty(siteLocation)) siteLocation = sList[0].location;
+							}
+						}
+
 						Object.entries(items).map(obj => {
 							let deviceData = obj[1].data;
-							console.log("deviceData---", deviceData)
 							deviceData.forEach(di => {
 		
 								let humidity = isEmpty(di.humidity) ? '-' : di.humidity;
@@ -2281,16 +2325,15 @@
 								
 								if($('#viewOptList').prev().data("value") == "2"){
 									$('#sTemp').html(temperature + ' ' + '&#8451;');
-									$('#weekSolarIcon').next('strong').html(sList[0].location);
+									$('#weekSolarIcon').next('strong').html(siteLocation);
 									$('#sWindVelocity').text((windSpeed).toFixed(1) + ' km/h');
 									$('#sWindDirection').text(windDirection);
 									$('#sHumidity').html(humidity + ' ' + '&#37;');
 									$('.weather .stit').html(new Date(di.timestamp).format('yyyy-MM-dd HH:mm:ss'));
 
 								} else {
-									// console.log("di==", di, "windSpeed===", windSpeed);
 									$('#weekTemp').html(temperature + '&#8451;');
-									$('#weekIcon').find('strong').html(sList[0].location);
+									$('#weekIcon').find('strong').html(siteLocation);
 									if(windSpeed != "-"){
 										$('#weekWindVelocity').text((windSpeed).toFixed(1) + ' km/h');
 									} else {
@@ -2320,9 +2363,16 @@
 				}
 			}
 
-			$.when($.ajax(weekWeather), $.ajax(weekWeatherTime)).done(function (weekWeatherData, weekWeatherTimeData) {
-				let weekWeather = weekWeatherData[0];
+			let properties = {
+				url: apiHost + apiGetProperties,
+				type: 'get',
+				dataType: 'json',
+				data: { types: 'location' }
+			}
 
+			$.when($.ajax(weekWeather), $.ajax(weekWeatherTime), $.ajax(properties)).done(function (weekWeatherData, weekWeatherTimeData, propertiesData) {
+				let weekWeather = weekWeatherData[0];
+				let prop = propertiesData[0];
 				if (weekWeatherData[1] == 'success') {
 					if($('#viewOptList').prev().data("value") == "2"){
 						weekWeather.forEach((el, index) => {
@@ -2341,7 +2391,23 @@
 
 				if (weekWeatherTimeData[1] == 'success') {
 					let items = weekWeatherTimeData[0];
-					
+					let prop, siteLocation;
+					if (propertiesData[1] === 'success') {
+						prop = propertiesData[0].location;
+
+						if (!isEmpty(prop)) {
+							Object.entries(prop).forEach(([propIdx, country]) => {
+								const location = country.locations;
+								Object.entries(location).forEach(([locIdx, loc]) => {
+									if (loc.code === sList[0].location) {
+										siteLocation = langStatus === 'KO' ? loc.name.kr : loc.name.en;
+									}
+								});
+							});
+
+							if (isEmpty(siteLocation)) siteLocation = sList[0].location;
+						}
+					}
 					if (items.length > 0) {
 						let tempArray = [];
 						$.each(items, function (i, el) {
@@ -2356,7 +2422,7 @@
 
 							if($('#viewOptList').prev().data("value") == "2") {
 								$('#sTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + '&#8451;');
-								$('#weekSolarIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i><strong>' + sList[0].location + '</strong>');
+								$('#weekSolarIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i><strong>' + siteLocation + '</strong>');
 								$('#sWindVelocity').text((tempArray[tempArray.length - 1].wind_speed).toFixed(1) + ' km/h');
 								$('#sWindDirection').text(tempArray[tempArray.length - 1].wind_velocity);
 								$('#sHumidity').html((tempArray[tempArray.length - 1].humidity).toFixed(1) + ' ' + '&#37;');
@@ -2368,7 +2434,7 @@
 								}
 							} else {
 								$('#weekTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + '&#8451;');
-								$('#weekIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i><strong>' + sList[0].location + '</strong>');
+								$('#weekIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i><strong>' + siteLocation + '</strong>');
 								$('#weekWindVelocity').text((tempArray[tempArray.length - 1].wind_speed).toFixed(1) + ' km/h');
 								$('#weekWindDirection').text(tempArray[tempArray.length - 1].wind_velocity);
 								$('#weekHum').html((tempArray[tempArray.length - 1].humidity).toFixed(1) + ' ' + '&#37;');
