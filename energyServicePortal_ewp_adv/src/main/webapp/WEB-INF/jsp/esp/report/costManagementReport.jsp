@@ -6,6 +6,15 @@
 <script type="text/javascript">
     let costTable = null;
     let reportType = new Object();
+    let doubleSubmitFlag = false;
+    function doubleSubmitCheck(){
+        if(doubleSubmitFlag){
+            return doubleSubmitFlag;
+        }else{
+            doubleSubmitFlag = true;
+            return false;
+        }
+    }
 
     $(function() {
         costTable = $('#costTable').DataTable({
@@ -187,8 +196,8 @@
             }
         });
 
-        var currentYear = (new Date()).getFullYear();
-        var options = {
+        let currentYear = (new Date()).getFullYear();
+        let options = {
             startYear: 2000,
             finalYear: currentYear,
             pattern: 'yyyy-mm',
@@ -454,6 +463,8 @@
 
 	    if (data.site_id === 'all' && /cost_spc/.test(data.report_type)) data.site_id = '';
 
+        if(doubleSubmitCheck()) return false;
+
         $.ajax({
             url: apiHost + '/reports/cost?oid=' + oid,
             method: 'post',
@@ -464,10 +475,12 @@
             success: () => {
                 $('#reportModal').modal('hide');
                 errorMsg('<fmt:message key="yieldReport.error.11" />');
+                doubleSubmitFlag = false;
                 getDataList();
             },
             fail: () => {
                 errorMsg('<fmt:message key="yieldReport.error.12" />');
+                doubleSubmitFlag = false;
                 return false;
             }
         });
