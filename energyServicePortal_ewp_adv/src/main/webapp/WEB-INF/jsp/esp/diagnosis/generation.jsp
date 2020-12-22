@@ -454,12 +454,14 @@
 	};
 
 	//사업소 호출
-	const makeSiteList = function () {
+	const makeSiteList = function (searchData = []) {
 		$('#siteList ul').empty();
 
+		const list = searchData.length ? searchData : siteList;
+
 		let str = '';
-		siteList.sortOn('name');
-		if (siteList.length > 0) {
+		list.sortOn('name');
+		if (list.length > 0) {
 			str += `<li>
 						<a href="javascript:void(0);" data-value="all" tabindex="-1">
 							<input type="checkbox" id="all" value="all" name="site">
@@ -467,7 +469,7 @@
 						</a>
 					</li>`;
 			str += `<li class="btn-wrap-border-min"></li>`;
-			siteList.forEach((site, index) => {
+			list.forEach((site, index) => {
 				str += `<li>
 						<a href="javascript:void(0);" data-value="${'${site.sid}'}" tabindex="-1">
 							<input type="checkbox" id="${'${site.sid}'}" value="${'${site.sid}'}" name="site">
@@ -475,12 +477,22 @@
 						</a>
 					</li>`;
 			});
-			str += `<li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16"><fmt:message key="generation.apply" /></button></li>`;
+			str += `<li class="btn-wrap-type03 btn-wrap-border dropdown-apply"><button type="button" class="btn-type mr-16"><fmt:message key="generation.apply" /></button></li>`;
 		} else {
 			str += `<li class="no-data"><fmt:message key="generation.noSite" /></li>`;
 		}
 		$('#siteList ul').append(str);
+
+		if (!$(".dropdown-search").length) {
+			$("#siteList").prepend(`<div class="dropdown-search"><input type="text" placeholder="<fmt:message key="dropdown.siteSearch" />" onKeyup="searchSite($(this).val())" ></div>`);
+		}
 	};
+	
+	const searchSite = keyword => {
+		const result = siteList.filter(x => x.name.includes(keyword));
+
+		makeSiteList(result);
+	}
 
 	const device = function () {
 		$('#deviceType .dropdown-toggle').empty().append('<fmt:message key="generation.multiple" />').append('<span class="caret"></span>');

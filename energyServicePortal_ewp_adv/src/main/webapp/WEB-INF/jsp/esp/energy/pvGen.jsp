@@ -190,12 +190,14 @@
 	});
 
 	//사업소 호출
-	const makeSiteList = async () => {
+	const makeSiteList = async (searchData = []) => {
 		const siteList = document.querySelector('#siteList ul');
 		while (siteList.firstChild) siteList.removeChild(siteList.firstChild);
 		let liStr = ``;
 
-		if (!isEmpty(sites)) {
+		const list = searchData.length ? searchData : sites
+
+		if (!isEmpty(list)) {
 			liStr += `<li>
 						<a href="javascript:void(0);" data-value="all" tabindex="-1">
 							<input type="checkbox" id="all" value="all" name="site">
@@ -203,7 +205,7 @@
 						</a>
 					</li>`;
 			liStr += `<li class="btn-wrap-border-min"></li>`;
-			sites.forEach((site, index) => {
+			list.forEach((site, index) => {
 				liStr += `<li>
 							<a href="javascript:void(0);" data-value="${'${site.sid}'}" tabindex="-1">
 								<input type="checkbox" id="${'${site.sid}'}" value="${'${site.sid}'}" name="site">
@@ -218,10 +220,20 @@
 			siteList.innerHTML = `<li class="no-data"><fmt:message key='pvGen.cannotSelectSite' /></li>`;
 		}
 
-		if (sidparam) {
-			$("#siteList ul li a[data-value="+sidparam+"] > label").click();
+		if (!$(".dropdown-search").length) {
+			$("#siteList").prepend(`<div class="dropdown-search"><input type="text" placeholder="<fmt:message key="dropdown.siteSearch" />" onKeyup="searchSite($(this).val())" ></div>`);
+
+			if (sidparam) {
+				$("#siteList ul li a[data-value="+sidparam+"] > label").click();
+			}
 		}
 	};
+
+	const searchSite = keyword => {
+		const result = sites.filter(x => x.name.includes(keyword));
+
+		makeSiteList(result);
+	}
 
 	const makeDeviceList = () => {
 		let selectedSite = new Array();

@@ -2655,6 +2655,8 @@ html[lang="en"] .all-menu > a:after {
 	white-space: normal;
 }
 
+#site > .dropdown-menu,
+#selectSiteList > .dropdown-menu,
 #siteList > .dropdown-menu {
 	top: 76px;
 	min-width: 230px;
@@ -2764,7 +2766,7 @@ html[lang="en"] .all-menu > a:after {
 
 .dropdown-apply {
 	position: fixed;
-    top: 450px;
+    top: 490px;
     width: 230px;
     background: var(--active);
 	padding: 18px 0px;
@@ -9176,12 +9178,13 @@ th .btn-align {
 }
 
 .report-detail-box table td {
-	width: 70%;
+    width: 70%;
+	white-space: normal;
 }
 
 .report-detail-box table td .text-file img {
-	width: 100%;
-	height: auto;
+    width: 25%;
+    height: auto;
 }
 
 .spc-tbl .btn-file {
