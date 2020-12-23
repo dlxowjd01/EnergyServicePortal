@@ -1422,6 +1422,14 @@ const addRow = function (listId, type, nextIdx) {
 	} else {
 		if (type == 'next') {
 			listLength = $selecter.length;
+
+			$selecter.each(function() {
+				let idx = $(this).find('.dropdown.placeholder:eq(0)').prop('id').replace(/[^0-9]/g, '');
+				if (listLength < idx) {
+					listLength = idx;
+				}
+			});
+			listLength++;
 		} else if(type == 'escalation') {
 			if(isEmpty(nextIdx)) {
 				var dummyIdx = 0;

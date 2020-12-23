@@ -107,9 +107,9 @@
 					}
 
 					if (json.refreshed_at != null) {
-						$('#refresh_date').text('마지막 업데이트 ' + new Date(json.refreshed_at).format('yyyy-MM-dd HH:mm:ss'));
+						$('#refresh_date').text('마지막 업데이트 : ' + new Date(json.refreshed_at).format('yyyy-MM-dd HH:mm:ss'));
 					} else {
-						$('#refresh_date').text('');
+						$('#refresh_date').text('마지막 업데이트 : ');
 					}
 				}).fail(function (jqXHR, textStatus, errorThrown) {
 					alert('처리 중 오류가 발생했습니다.');
@@ -579,33 +579,37 @@
 <form id="fileUploadForm" name="fileUploadForm"></form>
 <form id="withdrawForm" name="withdraw_form" action="#" method="post">
 	<div class="row spc-search-bar">
-		<div class="col-9">
-			<div class="sa-select"><!--
-			--><span class="tx-tit">SPC 선택</span><!--
-			--><div class="dropdown"><!--
-				--><button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택" data-value="">선택<span class="caret"></span></button><!--
-				--><ul id="spcList" class="dropdown-menu unused center" role="menu"><li id="*spcName*" data-value="*spcId*"><a href="javascript:void(0);" tabindex="-1">*spcName*</a></li></ul><!--
-				--><small class="hidden warning">SPC를 선택해 주세요.</small>
+		<div class="col-12">
+			<div class="fl">
+				<div class="sa-select"><!--
+				--><span class="tx-tit">SPC 선택</span><!--
+				--><div class="dropdown"><!--
+					--><button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택" data-value="">선택<span class="caret"></span></button><!--
+					--><ul id="spcList" class="dropdown-menu unused center" role="menu"><li id="*spcName*" data-value="*spcId*"><a href="javascript:void(0);" tabindex="-1">*spcName*</a></li></ul><!--
+					--><small class="hidden warning">SPC를 선택해 주세요.</small>
+					</div>
+				</div>
+				<div class="sa-select"><!--
+				--><span class="tx-tit">출금 계좌번호</span><!--
+				--><div class="dropdown"><!--
+					--><button type="button" class="dropdown-toggle w-222px" data-toggle="dropdown" data-name="선택" data-value="">선택<span class="caret"></span></button>
+						<ul id="withdrawList" class="dropdown-menu unused center" role="menu"><li data-acc-holder="*acc_holder*" data-name="*bank_name*" data-value="*acc_num*"><a href="#" tabindex="-1">*bank_name* *acc_num*</a></li></ul>
+						<small class="hidden warning">출금 요청 계좌를 선택해 주세요.</small>
+					</div>
+				</div>
+				<div class="sa-select"><!--
+				--><label for="availableAmount" class="tx-tit">계좌 잔액</label><!--
+				--><div class="text-input-type w-120px"><input type="text" id="" name="availableAmount" disabled="" readonly=""></div>
+				</div>
+				<div class="sa-select">
+					<div class="tx-tit" id="refresh_date">마지막 업데이트 : </div>
 				</div>
 			</div>
-			<div class="sa-select"><!--
-			--><span class="tx-tit">출금 계좌번호</span><!--
-			--><div class="dropdown"><!--
-				--><button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택" data-value="">선택<span class="caret"></span></button>
-					<ul id="withdrawList" class="dropdown-menu unused center" role="menu"><li data-acc-holder="*acc_holder*" data-name="*bank_name*" data-value="*acc_num*"><a href="#" tabindex="-1">*bank_name* *acc_num*</a></li></ul>
-					<small class="hidden warning">출금 요청 계좌를 선택해 주세요.</small>
+			<div class="fr">
+				<div class="sa-select" style="display:inline-block;">
+					<button type="button" id="refresh" class="btn-type03">입출금 내역 갱신</button>
 				</div>
 			</div>
-			<div class="sa-select"><!--
-			--><label for="availableAmount" class="tx-tit">계좌 잔액</label><!--
-			--><div class="text-input-type"><input type="text" id="" name="availableAmount" disabled="" readonly=""></div>
-			</div>
-		</div>
-		<div class="col-2">
-			<span class="tx-tit" id="refresh_date"></span>
-		</div>
-		<div class="col-1">
-			<button type="button" id="refresh" class="btn-type03">입출금 내역 갱신</button>
 		</div>
 	</div>
 	<div class="row content-wrapper spc-transaction">
@@ -650,7 +654,7 @@
 							<td>
 								<div class="sa-select">
 									<div class="dropdown placeholder">
-										<button type="button" class="dropdown-toggle" data-clone="empty" data-toggle="dropdown" data-name="" data-value="">선택<span class="caret"></span></button>
+										<button type="button" class="dropdown-toggle placeholder" data-clone="empty" data-toggle="dropdown" data-name="" data-value="">선택<span class="caret"></span></button>
 										<ul id="purposeList" class="dropdown-menu" role="menu">
 											<li data-value="*purposeValue*"><a href="#" tabindex="-1">*purposeTitle*</a></li>
 										</ul>
