@@ -95,15 +95,6 @@ const firstAjax = () => {
 	siteList.forEach(site => {
 		siteSids.push(site.sid);
 
-		urls.push({
-			url: apiHost + '/status/raw/site',
-			type: 'GET',
-			data: {
-				sid: site.sid,
-				formId: 'v2'
-			}
-		});
-
 		if (site.devices != null) {
 			const devices = site.devices;
 			devices.forEach(device => {
@@ -214,26 +205,6 @@ const firstAjax = () => {
 		}
 	});
 
-	//현재 발전량
-	urls.push({
-		url: apiHost + '/energy/now/sites?interval=month',
-		type: 'GET',
-		data: {
-			sids: siteSids.toString(),
-			metering_type: 2,
-		}
-	});
-
-	//현재 발전량
-	urls.push({
-		url: apiHost + '/energy/now/sites?interval=day',
-		type: 'GET',
-		data: {
-			sids: siteSids.toString(),
-			metering_type: 2,
-		}
-	});
-
 	urls.push({
 		url: apiHost + '/weather/site',
 		type: 'get',
@@ -246,31 +217,21 @@ const firstAjax = () => {
 		}
 	});
 
-	//알람 이력
-	urls.push({
-		url: apiHost + '/alarms',
-		type: 'GET',
-		data: {
-			sids: siteSids.toString(),
-			startTime: dayData.startTime,
-			endTime: dayData.endTime,
-			confirm: false
-		}
-	});
-
 	if (!ess) {
 		$('#statusSiteList').find('.ESS').remove();
 	}
 	setInitList('siteList'); //사이트 리스트
 
 	apiDatas = new Object();
+	searchAlarm();
+	searchStatusRaw();
 	ajaxData(urls);
 }
 
 /**
  * 1분마다 갱신할 API 데이터
  */
-const minAjax = () => {
+const minAjax = async () => {
 	yearData = getSiteMainSchCollection('year');
 	monthData = getSiteMainSchCollection('month');
 	yesterData = getSiteMainSchCollection('yesterday');
@@ -282,20 +243,11 @@ const minAjax = () => {
 
 	siteList.forEach(site => {
 		siteSids.push(site.sid);
-
-		urls.push({
-			url: apiHost + '/status/raw/site',
-			type: 'GET',
-			data: {
-				sid: site.sid,
-				formId: 'v2'
-			}
-		});
 	});
 
 	if (isEmpty(sgid)) siteSids = 'all';
 
-	//중개거래 대시보드에서만 사용하는 항목
+	//중개거래 대시보드에서만 사용하는 항목ㅁㅓ
 	if (location.pathname.match('jmain')) {
 		//현재 발전량
 		urls.push({
@@ -317,26 +269,14 @@ const minAjax = () => {
 		}
 	});
 
-	//알람 이력
-	urls.push({
-		url: apiHost + '/alarms',
-		type: 'GET',
-		data: {
-			sids: siteSids.toString(),
-			startTime: dayData.startTime,
-			endTime: dayData.endTime,
-			confirm: false
-		},
-	});
-
 	delete apiDatas[apiHost + '/energy/now/sites?interval=day'];
-	delete apiDatas[apiHost + '/status/raw/site'];
-	delete apiDatas[apiHost + '/alarms'];
 
 	if (location.pathname.match('jmain')) {
 		delete apiDatas[apiHost + '/energy/now/sites?interval=hour'];
 	}
 
+	searchAlarm();
+	searchStatusRaw();
 	ajaxData(urls, 'min');
 }
 
@@ -347,7 +287,9 @@ const minAjax = () => {
  * @param target min:1분단위, hour:1시간단위
  */
 const ajaxData = (urls, target) => {
-	document.getElementById('loadingCircleDashboard').style.display =  '';
+	if (target !== 'min') {
+		document.getElementById('loadingCircleDashboard').style.display =  '';
+	}
 	let deferreds = new Array();
 
 	//ajax 한번에 실행
@@ -381,47 +323,18 @@ const ajaxData = (urls, target) => {
 				let siteId = '';
 
 				if (isEmpty(apiDatas[targetUrl])) {
-					if (targetUrl.match('/status/raw/site')) {
-						Object.entries(result).forEach(rtn => {
-							if (rtn[0] !== 'url') {
-								const data = rtn[1];
-								if (!isEmpty(data.sid)) {
-									siteId = data.sid;
-								}
-							}
-						});
-
-						apiDatas[targetUrl] = new Object();
-						apiDatas[targetUrl][siteId] = result;
-					} else {
-						apiDatas[targetUrl] = result;
-					}
+					apiDatas[targetUrl] = result;
 				} else {
-					if (targetUrl.match('/status/raw/site')) {
-						Object.entries(result).forEach(rtn => {
-							if (rtn[0] !== 'url') {
-								const data = rtn[1];
-								if (!isEmpty(data.sid)) {
-									siteId = data.sid;
-								}
-							}
+					let rtnData = apiDatas[targetUrl].data;
+					if (Array.isArray(rtnData) && Array.isArray(rtnData)) {
+						(result.data).forEach(rtn => {
+							rtnData.push(rtn);
 						});
-
-						if (!isEmpty(siteId)) {
-							apiDatas[targetUrl][siteId] = result;
-						}
+						apiDatas[targetUrl].data = rtnData;
 					} else {
-						let rtnData = apiDatas[targetUrl].data;
-						if (Array.isArray(rtnData) && Array.isArray(rtnData)) {
-							(result.data).forEach(rtn => {
-								rtnData.push(rtn);
-							});
-							apiDatas[targetUrl].data = rtnData;
-						} else {
-							let nArray = new Array();
-							nArray.push(result);
-							apiDatas[targetUrl] = nArray;
-						}
+						let nArray = new Array();
+						nArray.push(result);
+						apiDatas[targetUrl] = nArray;
 					}
 				}
 			} else {
@@ -431,7 +344,8 @@ const ajaxData = (urls, target) => {
 
 		if (target === 'min') {
 			getTodayTotalDetail();
-			alarmInfoList();
+			//alarmInfoList();
+			searchSite();
 
 			if (location.pathname.match('jmain')) {
 				setRealtimeRecord();
@@ -441,13 +355,17 @@ const ajaxData = (urls, target) => {
 			dailyChartDraw();
 			typeSiteDraw();
 			getTodayTotalDetail();
-			alarmInfoList();
+			//alarmInfoList();
 			searchSite();
 
 			if (location.pathname.match('jmain')) {
 				setRealtimeRecord();
 			}
+
+			minAjax();
+			searchNowMonth();
 		}
+
 		document.getElementById('loadingCircleDashboard').style.display =  'none';
 		dashboardViewFlag = false;
 	});
@@ -1419,11 +1337,13 @@ const searchSite = async function () {
 									refineList[siteIdx]['beforeDay'] = '-';
 								}
 							} else if (index === 1) { //금일 누적
-								const siteNowEnergy = resultData[siteId];
-								if(!isEmpty(siteNowEnergy) && !isEmpty(siteNowEnergy['energy'])) {
-									refineList[siteIdx]['accumulate'] = displayNumberFixedUnit(siteNowEnergy['energy'], 'Wh', 'kWh', 0)[0];
-								} else {
-									refineList[siteIdx]['accumulate'] = '-';
+								if (!isEmpty(resultData[siteId])) {
+									const siteNowEnergy = resultData[siteId];
+									if(!isEmpty(siteNowEnergy) && !isEmpty(siteNowEnergy['energy'])) {
+										refineList[siteIdx]['accumulate'] = displayNumberFixedUnit(siteNowEnergy['energy'], 'Wh', 'kWh', 0)[0];
+									} else {
+										refineList[siteIdx]['accumulate'] = '-';
+									}
 								}
 							} else if (index === 2) { //금일 예측
 								let siteForeGenSum = 0;
@@ -1452,6 +1372,11 @@ const searchSite = async function () {
 			firstBy(function(a, b) {return Number(String(b['accumulate']).replace(/[^0-9]/g, '')) - Number(String(a['accumulate']).replace(/[^0-9]/g, ''));})
 			.thenBy(function(a, b) {return Number(String(b['capacity']).replace(/[^0-9]/g, '')) - Number(String(a['capacity']).replace(/[^0-9]/g, ''));})
 		);
+
+		refineList.forEach(site => {
+			if (site['accumulate'] === undefined) site['accumulate'] = '-';
+			if (site['forecast'] === undefined) site['forecast'] = '-';
+		});
 
 		setMakeList(refineList, 'siteList', {'dataFunction': {'align': alignFunc}}); //list생성
 		// return refineList;
@@ -1521,71 +1446,11 @@ const searchSite = async function () {
 					maxZoom: 15
 				};
 
-				var markerCluster = new MarkerClusterer(map, markers, clusterOptions);
+				let markerCluster = new MarkerClusterer(map, markers, clusterOptions);
 				markerCluster.addMarkers(markers);
 
-				// google.maps.event.addListener(markerCluster, "clusteringbegin", function (c) {
-				// 	let clusters = c.getClusters();
-				// 	clusters.forEach((item, index) => {
-
-				// 		let styleOptions = {
-				// 			textColor: 'black',
-				// 			textSize: 15,
-				// 			anchorText: [9, 16],
-				// 			fontWeight: 'normal',
-				// 			height: 45,
-				// 			width: 32
-				// 		};
-				// 		let newUrl = [
-				// 			'/img/map_icons/cluster_blue.png',
-				// 			'/img/map_icons/cluster_orange.png',
-				// 			'/img/map_icons/cluster_red.png',
-				// 			'/img/map_icons/cluster_yellow.png',
-				// 		];
-				// 		let maxVal = 0;
-
-				// 		item.markerClusterer_.clusters_.forEach(x => {
-							
-				// 			x.markers_.forEach((el, idx) => {
-				// 				let url = el.icon.url;
-				// 				// console.log("maxVal===", maxVal, "url===", url )
-				// 				if(!isEmpty(url)){
-				// 					if(url.endsWith("marker_yellow.png") && maxVal<4){
-				// 						maxVal = 4;
-				// 					}
-				// 					if(url.endsWith("marker_red.png") && maxVal<3){
-				// 						maxVal = 3;
-				// 					}
-				// 					if(url.endsWith("marker_orange.png") && maxVal<2){
-				// 						maxVal = 2;
-				// 					}
-				// 					if(url.endsWith("marker_blue.png") && maxVal<1){
-				// 						maxVal = 1;
-				// 					}
-
-				// 					// if(url.endsWith("marker_blue.png") && maxVal<1){
-				// 					// 	newUrl = '/img/map_icons/cluster_blue.png';
-				// 					// }
-				// 				}
-				// 			});
-				// 		});
-
-				// 		styleOptions.url = newUrl[maxVal];
-					
-				// 		if(!isEmpty(clusters[index].clusterIcon_.style)){
-				// 		 	item.clusterIcon_.style.url = newUrl[maxVal];
-				// 		}
-				// 	});
-				// });
-
-				google.maps.event.addListener(markerCluster, "mouseover", function (c) {
-					// console.log("mouseover====" + c.getCenter());
-					// console.log("&mdash;Number of managed markers in cluster: " + c.getSize());
-				});
-
-				google.maps.event.addListener(markerCluster, "mouseout", function (c) {
-					// console.log("mouseout===" + c.getCenter());
-				});
+				google.maps.event.addListener(markerCluster, "mouseover", function (c) {});
+				google.maps.event.addListener(markerCluster, "mouseout", function (c) {});
 
 			}
 		}
@@ -1640,6 +1505,98 @@ const searchSite = async function () {
 		}, 2000);
 		return false;
 	});
+}
+
+const searchAlarm = async () => {
+	let siteSids = new Array();
+	siteList.forEach(site => {
+		siteSids.push(site.sid);
+	});
+
+	if (isEmpty(sgid)) siteSids = 'all';
+
+	$.ajax({
+		url: apiHost + '/alarms',
+		type: 'GET',
+		data: {
+			sids: siteSids.toString(),
+			startTime: dayData.startTime,
+			endTime: dayData.endTime,
+			confirm: false
+		},
+		success: (data, textStatus, jqXHR) => {
+			apiDatas[apiHost + '/alarms'] = data;
+			alarmInfoList();
+		},
+		error: (jqXHR, textStatus, errorThrown) => {
+			console.error(textStatus);
+			return false;
+		}
+	});
+}
+
+const searchStatusRaw = async () => {
+	let apiUrl = new Array();
+	let apiData = new Object();
+	siteList.forEach(site => {
+		apiUrl.push($.ajax({
+			url: apiHost + '/status/raw/site',
+			type: 'GET',
+			data: {
+				sid: site.sid,
+				formId: 'v2'
+			}
+		}));
+	});
+
+	Promise.all(apiUrl).then(response => {
+		response.forEach(device => {
+			Object.entries(device).forEach(([type, data]) => {
+				const sid = data.sid;
+				if (!isEmpty(sid)) {
+					if (isEmpty(apiData[sid]) ) {
+						apiData[sid] = device;
+					} else {
+						if (isEmpty(apiData[sid][type])) {
+							const rawData = apiData[sid];
+							rawData[type] = device;
+							apiData[sid] = rawData;
+						}
+					}
+				}
+			});
+		});
+
+		apiDatas[apiHost + '/status/raw/site'] = apiData;
+		getTodayTotalDetail();
+		searchSite();
+	}).catch(errer => {});
+}
+
+const searchNowMonth = async () => {
+	let siteSids = new Array();
+	siteList.forEach(site => {
+		siteSids.push(site.sid);
+	});
+
+	if (isEmpty(sgid)) siteSids = 'all';
+
+	$.ajax({
+		url: apiHost + '/energy/now/sites?interval=month',
+		type: 'GET',
+		data: {
+			sids: siteSids.toString(),
+			metering_type: 2,
+		},
+		success: (data, textStatus, jqXHR) => {
+			apiDatas[apiHost + '/energy/now/sites?interval=month'] = data;
+			monthlyChartDraw();
+		},
+		error: (jqXHR, textStatus, errorThrown) => {
+			console.error(textStatus);
+			return false;
+		}
+	})
 }
 
 /**
