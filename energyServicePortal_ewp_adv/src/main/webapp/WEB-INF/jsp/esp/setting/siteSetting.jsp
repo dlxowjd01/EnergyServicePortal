@@ -1209,7 +1209,7 @@
 						"previous": "",
 						"next": "",
 					},
-					"info": "_PAGE_ - _PAGES_ " + " / 총 _TOTAL_ 개",
+					"info": "_PAGE_ - _PAGES_ " + " / <fmt:message key='table.totalCase.start' /> _TOTAL_ <fmt:message key='table.totalCase.end' />",
 					"select": {
 						"rows": {
 							_: "",

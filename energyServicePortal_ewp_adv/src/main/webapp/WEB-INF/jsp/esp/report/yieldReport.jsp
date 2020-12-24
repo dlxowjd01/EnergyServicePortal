@@ -20,7 +20,7 @@
 			sortable: true,
 			paging: true,
 			pageLength: 50,
-			lengthMenu : [[50, 50, 100, 200], ["보기", 50, 100, 200]],
+			lengthMenu : [[50, 50, 100, 200], ["<fmt:message key='dataTable.entries' />", 50, 100, 200]],
 
 			columns: [
 				{

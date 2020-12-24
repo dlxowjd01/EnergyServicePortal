@@ -1772,6 +1772,24 @@
 				},
 				data: []
 			},
+			{
+				type: 'spline',
+				dashStyle: 'ShortDash',
+				<c:choose>
+					<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
+				name: '<fmt:message key="smain.devTime" />',
+					</c:when>
+					<c:otherwise>
+				name: '<fmt:message key="smain.devTime" />',
+					</c:otherwise>
+				</c:choose>
+
+				color: 'var(--turquoise)',
+				tooltip: {
+					valueSuffix: 'H',
+				},
+				data: []
+			},
 		],
 
 	});
@@ -5113,9 +5131,15 @@
 				energyData2.forEach((el, index) => {
 					energyData2[index] = el;
 				});
+
+				let devTime = [];
+				efficiencyData.forEach((el, index) => {
+					devTime[index] = (el / 100).toFixed(2) * 1;
+				});
 				
 				hourlyChart.series[0].setData(energyData1);
 				hourlyChart.series[1].setData(energyData2);
+				hourlyChart.series[2].setData(devTime);
 
 				if (!oid.match('testkpx')) {
 					let tempObj = {
@@ -5135,8 +5159,8 @@
 						},
 						yAxis: 1,						
 					}
-					if(hourlyChart.series[2]){
-						hourlyChart.series[2].remove();
+					if(hourlyChart.series[3]){
+						hourlyChart.series[3].remove();
 					}
 
 					hourlyChart.addSeries(tempObj);
