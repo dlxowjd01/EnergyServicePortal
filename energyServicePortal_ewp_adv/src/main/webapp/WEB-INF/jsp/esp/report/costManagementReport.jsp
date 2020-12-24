@@ -205,8 +205,12 @@
         };
         $('.month-pick').monthpicker(options);
 
+        $('#fromDate').val('2020-01');
+        $('#toDate').val('2020-12');
+
         getProperties();
         getDataList();
+        $('#application').trigger('click');
     });
 
     /**
