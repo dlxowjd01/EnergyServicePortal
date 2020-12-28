@@ -1689,7 +1689,9 @@
 			formatter: function () {
 				return this.points.reduce(function (s, point) {
 					let suffix = point.series.userOptions.tooltip.valueSuffix;
-					return s + '<br/><span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + numberComma(point.y) + suffix;
+					let value = suffix === "H" ? ((point.y / 100).toFixed(2) * 1)+suffix : numberComma(point.y)+suffix
+					
+					return s + '<br/><span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + value;
 				}, '<span style="display:flex; margin-bottom:-10px;"><b>'+(langStatus === "KO" ? this.x+'시' : this.x+'H')+'</b></span>');
 			},
 			shared: true,
@@ -1787,7 +1789,15 @@
 				color: 'var(--turquoise)',
 				tooltip: {
 					valueSuffix: 'H',
+					formatter() {
+						console.log(this.value);
+						// return (this.value * 1).toFixed(2) + "H";
+					},
 				},
+				marker: {
+					symbol: 'circle'
+				},
+				yAxis: 1,
 				data: []
 			},
 		],
@@ -5132,14 +5142,9 @@
 					energyData2[index] = el;
 				});
 
-				let devTime = [];
-				efficiencyData.forEach((el, index) => {
-					devTime[index] = (el / 100).toFixed(2) * 1;
-				});
-				
 				hourlyChart.series[0].setData(energyData1);
 				hourlyChart.series[1].setData(energyData2);
-				hourlyChart.series[2].setData(devTime);
+				hourlyChart.series[2].setData(efficiencyData);
 
 				if (!oid.match('testkpx')) {
 					let tempObj = {

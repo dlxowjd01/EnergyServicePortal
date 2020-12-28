@@ -2827,7 +2827,7 @@
 								let totalLength = el.length;
 								let newIdx = String(rowIndex.row+index)
 								let displayText = "";
-								(totalLength >=2) ? (displayText = (el.name + " 외 +" + String(totalLength-1)) ) : (displayText = el.name)
+								(totalLength >=2) ? (displayText = (el.name + " <fmt:message key='dropdown.etc' /> +" + String(totalLength-1)) ) : (displayText = el.name)
 
 								dropdown2 += `<div class="dropdown">
 										<button type="button" class="dropdown-toggle" 
@@ -2894,7 +2894,7 @@
 											joinedVal = alarmArr.toString();
 
 											if(alarmArr.length >=2){
-												displayText = displayText + " 외 +" + String(alarmArr.length-1);
+												displayText = displayText + " <fmt:message key='dropdown.etc' /> +" + String(alarmArr.length-1);
 											}
 											
 										} else {
@@ -2920,7 +2920,7 @@
 											joinedVal = alarmArr.toString();
 
 											if(alarmArr.length >=2){
-												displayText = displayText + " 외 +" + String(alarmArr.length-1);
+												displayText = displayText + " <fmt:message key='dropdown.etc' /> +" + String(alarmArr.length-1);
 											}
 											
 										}
@@ -2947,7 +2947,7 @@
 											joinedVal = alarmArr.toString();
 
 											if(alarmArr.length >=2){
-												displayText = displayText + " 외 +" + String(alarmArr.length-1);
+												displayText = displayText + " <fmt:message key='dropdown.etc' /> +" + String(alarmArr.length-1);
 											}
 
 										} else if(el.userGroup === "non_user"){
@@ -2970,7 +2970,7 @@
 												joinedVal = alarmArr.toString();
 
 												if(alarmArr.length >=2){
-													displayText = displayText + " 외 +" + String(alarmArr.length-1);
+													displayText = displayText + " <fmt:message key='dropdown.etc' /> +" + String(alarmArr.length-1);
 												}
 
 											}
@@ -3144,18 +3144,18 @@
 										let nonUserPhoneLength = nonUserNumberArr.length;
 
 										if(totalLength1 >=2){
-											displayText = !isEmpty(displayText) ? (displayText + " 외 +" + String(totalLength1-1) ) : "";
-											displayText1 = !isEmpty(displayText1) ? (displayText1 + " 외 +" + String(totalLength1-1) ) : "";
+											displayText = !isEmpty(displayText) ? (displayText + " <fmt:message key='dropdown.etc' /> +" + String(totalLength1-1) ) : "";
+											displayText1 = !isEmpty(displayText1) ? (displayText1 + " <fmt:message key='dropdown.etc' /> +" + String(totalLength1-1) ) : "";
 										}
 
 										if(nonUserNameLength >=2){
-											textNonUserName = !isEmpty(textNonUserName) ? (textNonUserName + " 외 +" + String(nonUserNameLength-1) ) : "";
+											textNonUserName = !isEmpty(textNonUserName) ? (textNonUserName + " <fmt:message key='dropdown.etc' /> +" + String(nonUserNameLength-1) ) : "";
 										} else {
 											textNonUserName = !isEmpty(textNonUserName) ? textNonUserName : "";
 										}
 
 										if(nonUserPhoneLength >=2){		
-											textNonUserPhone = !isEmpty(tempNonUserNum) ? (tempNonUserNum + " 외 +" + String(nonUserPhoneLength-1) ) : "";
+											textNonUserPhone = !isEmpty(tempNonUserNum) ? (tempNonUserNum + " <fmt:message key='dropdown.etc' /> +" + String(nonUserPhoneLength-1) ) : "";
 										} else {
 											textNonUserPhone = tempNonUserNum;
 										}
@@ -3195,8 +3195,8 @@
 												// console.log("totalLength1===", totalLength1);
 												
 												if(totalLength1 >=2){
-													displayText = displayText + " 외 +" + String(totalLength1-1);
-													displayText1 = displayText1 + " 외 +" + String(totalLength1-1);
+													displayText = displayText + " <fmt:message key='dropdown.etc' /> +" + String(totalLength1-1);
+													displayText1 = displayText1 + " <fmt:message key='dropdown.etc' /> +" + String(totalLength1-1);
 												}
 											}
 										} else if(el.userGroup === "non_user"){
@@ -3234,13 +3234,13 @@
 												let nonUserPhoneLength = nonUserNumberArr.length;
 												
 												if(nonUserNameLength >=2){
-													textNonUserName = !isEmpty(textNonUserName) ? (textNonUserName + " 외 +" + String(nonUserNameLength-1) ) : "";
+													textNonUserName = !isEmpty(textNonUserName) ? (textNonUserName + " <fmt:message key='dropdown.etc' /> +" + String(nonUserNameLength-1) ) : "";
 												} else {
 													textNonUserName = !isEmpty(textNonUserName) ? textNonUserName : "";
 												}
 
 												if(nonUserPhoneLength >=2){		
-													textNonUserPhone = !isEmpty(tempNonUserNum) ? (tempNonUserNum + " 외 +" + String(nonUserPhoneLength-1) ) : "";
+													textNonUserPhone = !isEmpty(tempNonUserNum) ? (tempNonUserNum + " <fmt:message key='dropdown.etc' /> +" + String(nonUserPhoneLength-1) ) : "";
 												} else {
 													textNonUserPhone = tempNonUserNum;
 												}
@@ -3747,8 +3747,8 @@
 					$(target).val(val);
 				} else {
 					let tempVal = $(target).val();
-					let newVal = tempVal.split("외");
-					$(target).val(newVal[0].trim() + ' 외 ' + String(checked.length-1));
+					let newVal = tempVal.split("<fmt:message key='dropdown.etc' />");
+					$(target).val(newVal[0].trim() + " <fmt:message key='dropdown.etc' /> " + String(checked.length-1));
 				}
 			} else {
 				$(target).val("");

@@ -1424,7 +1424,7 @@
 
 								if(index === 0){
 									if( s.length > 1) {
-										newSiteList.prev().contents().get(0).nodeValue = (el.name + " 외 +" + String(s.length-1) );
+										newSiteList.prev().contents().get(0).nodeValue = (el.name + " <fmt:message key='dropdown.etc' /> +" + String(s.length-1) );
 									} else {
 										newSiteList.prev().contents().get(0).nodeValue = el.name;
 									}
@@ -1450,7 +1450,7 @@
 
 								if(index === 0){
 									if( s.length > 1) {
-										newSiteList.prev().contents().get(0).nodeValue = (el.name + " 외 +" + String(s.length-1));
+										newSiteList.prev().contents().get(0).nodeValue = (el.name + " <fmt:message key='dropdown.etc' /> +" + String(s.length-1));
 									} else {
 										newSiteList.prev().contents().get(0).nodeValue = el.name;
 									}

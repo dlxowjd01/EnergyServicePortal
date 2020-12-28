@@ -941,7 +941,7 @@
 						// }).columns.adjust().responsive.recalc();
 					} else {
 						$('#userTable').DataTable().clear().destroy();
-						$.fn.dataTable.ext.order.intl();
+						// $.fn.dataTable.ext.order.intl();
 						var userTable = $('#userTable').DataTable({
 							"aaData": newArr,
 							"retrieve": true,
