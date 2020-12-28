@@ -1789,10 +1789,6 @@
 				color: 'var(--turquoise)',
 				tooltip: {
 					valueSuffix: 'H',
-					formatter() {
-						console.log(this.value);
-						// return (this.value * 1).toFixed(2) + "H";
-					},
 				},
 				marker: {
 					symbol: 'circle'
@@ -5175,23 +5171,28 @@
 						opposite: true,
 						gridLineWidth: 0,
 						title:{
-							text: "%",
-							x: -25,
+							text: "%/H",
+							x: -17,
 							y: 25,
 							align: 'low',
 							rotation: 0,
 							style: {
 								color: 'var(--grey)',
-								fontSize: '12px'
+								fontSize: '11px'
 							}
 						},
 						labels: {
-							x: 10,
+							x: 5,
 							min: 0,
 							max: 100,
+							formatter: function() {
+								this.value = this.value > 100 ? 100 : this.value;
+
+								return this.value+"%"+"<br />"+(this.value / 100)+"H";
+							},
 							style: {
 								color: 'var(--grey)',
-								fontSize: '12px'
+								fontSize: '10px'
 							}
 						},
 						min: 0,
@@ -5205,7 +5206,6 @@
 						},
 					});
 					hourlyChart.redraw();
-
 				}
 				$("#loadingCircle").hide();
 			}).fail(function (jqXHR, textStatus, errorThrown) {
