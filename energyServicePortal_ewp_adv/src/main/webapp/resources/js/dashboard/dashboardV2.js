@@ -1162,6 +1162,8 @@ const searchSite = async function () {
 		deviceStatus.push(chk.value);
 	});
 
+	document.getElementById('miniLoadingCircle').style.display = '';
+
 	new Promise((resolve, reject) => {
 		const refineList = new Array();
 		siteList.forEach(site => {
@@ -1347,7 +1349,6 @@ const searchSite = async function () {
 								}
 							} else if (index === 2) { //금일 예측
 								let siteForeGenSum = 0;
-								// console.log('resultData', resultData);
 								if (!isEmpty(resultData[siteId])) {
 									const siteEnergy = resultData[siteId];
 									siteEnergy.forEach(siteForeEnergyItem => {
@@ -1379,9 +1380,8 @@ const searchSite = async function () {
 		});
 
 		setMakeList(refineList, 'siteList', {'dataFunction': {'align': alignFunc}}); //list생성
-		// return refineList;
-	// }).then(refineList => {
-		if (typeof (geocodeAddress) == 'function') {
+
+		if (typeof (geocodeAddress) == 'function' && !isEmpty(apiDatas[apiHost + '/status/raw/site']) && !isEmpty(apiDatas[apiHost + '/energy/now/sites?interval=day'])  && isEmpty(makerObject)) {
 			map = new google.maps.Map(document.getElementById('gMainMap'), {
 				mapTypeId: 'satellite',
 				zoom: 7.3,
@@ -1418,9 +1418,8 @@ const searchSite = async function () {
 							operationText = "[ 발전량 없음 ]&ensp;";
 							operationColor = '#878787';
 						}
-						// console.log("site.latlng====", site.latlng);
-						
-						if(site.latlng.includes(",")){
+
+						if(site.latlng.includes(",")) {
 							geocodeAddress(site.address, site.sid, site.name, site.latlng, operationColor, operationText);
 						}
 					} else {
@@ -1451,7 +1450,6 @@ const searchSite = async function () {
 
 				google.maps.event.addListener(markerCluster, "mouseover", function (c) {});
 				google.maps.event.addListener(markerCluster, "mouseout", function (c) {});
-
 			}
 		}
 
@@ -1494,9 +1492,18 @@ const searchSite = async function () {
 		}, 400);
 		
 		document.getElementById('loadingCircleDashboard').style.display =  'none';
+
+		if (!isEmpty(apiDatas[apiHost + '/status/raw/site']) && !isEmpty(apiDatas[apiHost + '/energy/now/sites?interval=day'])) {
+			document.getElementById('miniLoadingCircle').style.display = 'none';
+		}
+
 		return refineList;
 	}).catch(error => {
 		console.error(error);
+		if (!isEmpty(apiDatas[apiHost + '/status/raw/site']) && !isEmpty(apiDatas[apiHost + '/energy/now/sites?interval=day'])) {
+			document.getElementById('miniLoadingCircle').style.display = 'none';
+		}
+		document.getElementById('miniLoadingCircle').style.display = '';
 		document.getElementById('loadingCircleDashboard').style.display =  'none';
 		$('#errMsg').text(error);
 		$('#errorModal').modal('show');
@@ -1710,6 +1717,5 @@ const getWeatherIconClass = (weatherId) => {
 }
 
 function setMarker (){
-	console.log("markers===", markers);
 	return '/img/map_icons/cluster_yellow.png'
 }

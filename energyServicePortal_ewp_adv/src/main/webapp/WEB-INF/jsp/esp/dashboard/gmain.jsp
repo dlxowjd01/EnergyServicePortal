@@ -166,6 +166,7 @@
 			<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
 				<div class="gmain-row2">
 					<div class="indiv gmain-table">
+						<div id="miniLoadingCircle" class="mini-loading" style="display:none;"><img class="mini-loading-image" src="/img/loading_icon.gif" alt="Loading..."/></div>
 						<div class="gmain-map2-content-kpx">
 							<div class="table-top clear">
 								<div class="input-group1">
@@ -271,6 +272,7 @@
 			<c:otherwise>
 				<div class="gmain-row2">
 					<div class="indiv gmain-table">
+						<div id="miniLoadingCircle" class="mini-loading" style="display:none;"><img class="mini-loading-image" src="/img/loading_icon.gif" alt="Loading..."/></div>
 						<div class="gmain-map2">
 							<div class="map-wrap" id="gMainMap"></div>
 						</div>
