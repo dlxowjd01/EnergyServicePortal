@@ -19,8 +19,8 @@
     $(function() {
         costTable = $('#costTable').DataTable({
             autoWidth: true,
-            fixedHeader: true,
             'table-layout': 'fixed',
+            scrollX: true,
             scrollY: '720px',
             scrollCollapse: true,
             sortable: true,
@@ -744,7 +744,7 @@
 </div>
 
 <div class="row">
-    <div class="col-lg-3 col-md-4 col-sm-12 search-left">
+    <div class="col-lg-3 col-md-12 col-sm-12 search-left">
         <div class="indiv">
             <div class="flex-wrapper">
                 <h2 class="ntit">전체 통합 원가관리 요약</h2>
@@ -795,7 +795,7 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-9 col-md-8 col-sm-12">
+    <div class="col-lg-9 col-md-12 col-sm-12">
         <div class="indiv">
             <div class="flex-wrapper mb-20">
                 <div><!--
