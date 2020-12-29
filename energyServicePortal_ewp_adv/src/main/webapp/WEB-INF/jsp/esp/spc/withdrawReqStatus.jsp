@@ -181,15 +181,15 @@
 				searchOpt.keyword = new RegExp(document.getElementById('keyword').value.trim(), 'i');
 			}
 
-			if (!isEmpty(document.getElementById('statusChangedAt').value.trim())) {
-				searchOpt.statusChangedAt = document.getElementById('statusChangedAt').value.trim();
+			if (!isEmpty(document.getElementById('withdrawDay').value.trim())) {
+				searchOpt.withdrawDay = document.getElementById('withdrawDay').value.trim();
 			}
 
 			if (!isEmpty(status)) {
 				window.sessionStorage.setItem(pathName + '_status', status.toString()); //세션스토리지에 저장한다.
 			}
 			window.sessionStorage.setItem(pathName + '_keyword', document.getElementById('keyword').value.trim()); //세션스토리지에 저장한다.
-			window.sessionStorage.setItem(pathName + '_statusChangedAt', document.getElementById('statusChangedAt').value.trim()); //세션스토리지에 저장한다.
+			window.sessionStorage.setItem(pathName + '_withdrawDay', document.getElementById('withdrawDay').value.trim()); //세션스토리지에 저장한다.
 
 			if (isEmpty(searchOpt.status) && isEmpty(searchOpt.keyword)) {
 				getDataList(null);
@@ -226,7 +226,7 @@
 		}).then(spcArr => {
 			const status = window.sessionStorage.getItem(pathName + '_status');
 			const keyword = window.sessionStorage.getItem(pathName + '_keyword');
-			const statusChangedAt = window.sessionStorage.getItem(pathName + '_statusChangedAt');
+			const withdrawDay = window.sessionStorage.getItem(pathName + '_withdrawDay');
 
 			if (!isEmpty(status)) {
 				if (status.match(',')) {
@@ -254,8 +254,8 @@
 				document.getElementById('keyword').value = keyword;
 			}
 
-			if (!isEmpty(statusChangedAt)) {
-				document.getElementById('statusChangedAt').value = statusChangedAt;
+			if (!isEmpty(withdrawDay)) {
+				document.getElementById('withdrawDay').value = withdrawDay;
 			}
 
 			$('#searchForm').submit();
@@ -335,10 +335,10 @@
 						refineList = refineList.filter(rowData => {
 							if ((searchOpt.status).includes(String(rowData.statusVal))
 								&& (rowData.spcName).match(searchOpt.keyword)
-								&& (!isEmpty(searchOpt.statusChangedAt)
-									&& (rowData.statusChangedAt != null
-										&& rowData.statusChangedAt.replace(/[^0-9]/g, '').substr(0, 8) === searchOpt.statusChangedAt.replace(/[^0-9]/g, ''))
-									) || isEmpty(searchOpt.statusChangedAt)) {
+								&& (!isEmpty(searchOpt.withdrawDay)
+									&& (rowData.withdrawDay != null
+										&& rowData.withdrawDay.replace(/[^0-9]/g, '') === searchOpt.withdrawDay.replace(/[^0-9]/g, ''))
+									) || isEmpty(searchOpt.withdrawDay)) {
 								return true;
 							}
 						});
@@ -689,14 +689,13 @@
 				</div>
 			</div>
 			<div class="sa-select"><!--
-			--><span class="tx-tit">승인일</span>
-				<div class="text-input-type mr-16"><input type="text" id="statusChangedAt" name="statusChangedAt" class="datepicker" readonly></div>
+			--><span class="tx-tit">출금일자</span>
+				<div class="text-input-type mr-16"><input type="text" id="withdrawDay" name="withdrawDay" class="datepicker"></div>
 			</div><!--
 		--> <div class="sa-select">
 				<div class="text-input-type mr-16"><input type="text" id="keyword" placeholder="입력"></div>
 				<button type="submit" class="btn-type">검색</button>
 			</div>
-
 		</div>
 		<div class="col-1">
 			<button type="button" id="approvalBtn" class="btn-type">출금 최종승인</button>

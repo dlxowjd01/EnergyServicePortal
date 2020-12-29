@@ -250,49 +250,48 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-lg-12 clear input-align">
-		<div class="fl">
-			<span class="tx-tit"><fmt:message key="workreport.1.reportType" /></span>
-			<div class="sa-select">
-				<div class="dropdown">
-					<button type="button" id="report_type" class="dropdown-toggle w5"
-						data-toggle="dropdown" data-value="">
-						<fmt:message key="workreportmain.1.all" />
-						<span class="caret"></span>
-					</button>
-					<ul class="dropdown-menu" role="menu">
-						<li data-value="">
-							<a href="javascript:void(0);"><fmt:message key="workreportmain.1.all" /></a>
-						</li>
-						<li data-value="1">
-							<a href="javascript:void(0);"><fmt:message key="workreport.1.tripActionReport" /></a>
-						</li>
-						<li data-value="2">
-							<a href="javascript:void(0);">QC 보고서</a>
-						</li>
-					</ul>
-				</div>
+	<div class="col-lg-1 col-sm-3"><span class="tx-tit"><fmt:message key="workreport.1.reportType" /></span></div>
+	<div class="col-lg-1 col-sm-9">
+		<div class="sa-select">
+			<div class="dropdown">
+				<button type="button" id="report_type" class="dropdown-toggle w5" data-toggle="dropdown" data-value="">
+					<fmt:message key="workreportmain.1.all" />
+					<span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu" role="menu">
+					<li data-value="">
+						<a href="javascript:void(0);"><fmt:message key="workreportmain.1.all" /></a>
+					</li>
+					<li data-value="1">
+						<a href="javascript:void(0);"><fmt:message key="workreport.1.tripActionReport" /></a>
+					</li>
+					<li data-value="2">
+						<a href="javascript:void(0);">QC 보고서</a>
+					</li>
+				</ul>
 			</div>
 		</div>
-		<div class="fl">
-			<span class="tx-tit"><fmt:message key="workreportmain.1.dateOfIssue" /></span>
-			<div class="sel-calendar dateField">
-				<input type="text" id="write_date_from" class="sel fromDate" value="" autocomplete="off" readonly />
-				<em></em>
-				<input type="text" id="write_date_to" class="sel toDate" value="" autocomplete="off" readonly />
-			</div>
-			<small id="dateWarning" class="hidden warning">시작일과 종료일을 모두 입력해 주세요.</small>
+	</div>
+	<div class="col-lg-1 col-sm-3"><span class="tx-tit"><fmt:message key="workreportmain.1.dateOfIssue" /></span></div>
+	<div class="col-lg-4 col-sm-9">
+		<div class="sel-calendar dateField">
+			<input type="text" id="write_date_from" class="sel fromDate" value="" autocomplete="off" readonly />
+			<em></em>
+			<input type="text" id="write_date_to" class="sel toDate" value="" autocomplete="off" readonly />
 		</div>
-		<div class="fl">
-			<div class="text-input-type">
-				<input type="text" id="key_word" placeholder="입력" />
-			</div>
+		<small id="dateWarning" class="hidden warning">시작일과 종료일을 모두 입력해 주세요.</small>
+	</div>
+	<div class="col-lg-2 col-sm-9">
+		<div class="text-input-type">
+			<input type="text" id="key_word" placeholder="입력" />
 		</div>
-		<div class="fl">
-			<button type="submit" class="btn-type" onclick="getDataList();">
-				<fmt:message key="workreportmain.1.search" />
-			</button>
-		</div>
+	</div>
+	<div class="col-lg-1 col-sm-3">
+		<button type="submit" class="btn-type" onclick="getDataList();">
+			<fmt:message key="workreportmain.1.search" />
+		</button>
+	</div>
+	<div class="col-lg-2 col-sm-12">
 		<div id="exportBtnGroup" class="fr"></div>
 	</div>
 </div>

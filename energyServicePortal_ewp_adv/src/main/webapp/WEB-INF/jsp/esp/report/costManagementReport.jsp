@@ -804,7 +804,7 @@
 				--></div>
                 <div><button type="button" class="btn-type" onclick="modalInit();">신규 생성</button></div>
             </div>
-            <table id="costTable" class="chk-type">
+            <table id="costTable" class="chk-type dashboard-table">
                 <colgroup>
                    <col style="width:5%" /> <%-- 체크박스 --%>
                    <col style="width:5%" /> <%-- 순번 --%>
