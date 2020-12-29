@@ -245,14 +245,14 @@
 	}
 </script>
 <div class="row">
-	<div class="col-lg-12">
+	<div class="col-12">
 		<h1 class="page-header">작업 보고서</h1>
 	</div>
 </div>
 <div class="row">
-	<div class="col-lg-1 col-sm-3"><span class="tx-tit"><fmt:message key="workreport.1.reportType" /></span></div>
-	<div class="col-lg-1 col-sm-9">
-		<div class="sa-select">
+	<div class="col-10">
+		<div class="flex-group">
+			<span class="tx-tit"><fmt:message key="workreport.1.reportType" /></span>
 			<div class="dropdown">
 				<button type="button" id="report_type" class="dropdown-toggle w5" data-toggle="dropdown" data-value="">
 					<fmt:message key="workreportmain.1.all" />
@@ -271,28 +271,27 @@
 				</ul>
 			</div>
 		</div>
-	</div>
-	<div class="col-lg-1 col-sm-3"><span class="tx-tit"><fmt:message key="workreportmain.1.dateOfIssue" /></span></div>
-	<div class="col-lg-4 col-sm-9">
-		<div class="sel-calendar dateField">
-			<input type="text" id="write_date_from" class="sel fromDate" value="" autocomplete="off" readonly />
-			<em></em>
-			<input type="text" id="write_date_to" class="sel toDate" value="" autocomplete="off" readonly />
+		<div class="flex-group">
+			<span class="tx-tit"><fmt:message key="workreportmain.1.dateOfIssue" /></span>
+			<div class="sel-calendar dateField">
+				<input type="text" id="write_date_from" class="sel fromDate" value="" autocomplete="off" readonly />
+				<em></em>
+				<input type="text" id="write_date_to" class="sel toDate" value="" autocomplete="off" readonly />
+			</div>
+			<small id="dateWarning" class="hidden warning">시작일과 종료일을 모두 입력해 주세요.</small>
 		</div>
-		<small id="dateWarning" class="hidden warning">시작일과 종료일을 모두 입력해 주세요.</small>
-	</div>
-	<div class="col-lg-2 col-sm-9">
-		<div class="text-input-type">
-			<input type="text" id="key_word" placeholder="입력" />
+		<div class="flex-group">
+			<div class="text-input-type mr-12">
+				<input type="text" id="key_word" placeholder="입력" />
+			</div>
+			<button type="submit" class="btn-type" onclick="getDataList();">
+				<fmt:message key="workreportmain.1.search" />
+			</button>
 		</div>
 	</div>
-	<div class="col-lg-1 col-sm-3">
-		<button type="submit" class="btn-type" onclick="getDataList();">
-			<fmt:message key="workreportmain.1.search" />
-		</button>
-	</div>
-	<div class="col-lg-2 col-sm-12">
+	<div class="col-2">
 		<div id="exportBtnGroup" class="fr"></div>
+		<!-- <button type="button" class="btn-save ml-16 fr" onclick="$(this).prev().toggleClass('hidden')">데이터 다운로드</button>-->
 	</div>
 </div>
 <div class="row">
