@@ -181,10 +181,15 @@
 				searchOpt.keyword = new RegExp(document.getElementById('keyword').value.trim(), 'i');
 			}
 
+			if (!isEmpty(document.getElementById('statusChangedAt').value.trim())) {
+				searchOpt.statusChangedAt = document.getElementById('statusChangedAt').value.trim();
+			}
+
 			if (!isEmpty(status)) {
 				window.sessionStorage.setItem(pathName + '_status', status.toString()); //세션스토리지에 저장한다.
 			}
 			window.sessionStorage.setItem(pathName + '_keyword', document.getElementById('keyword').value.trim()); //세션스토리지에 저장한다.
+			window.sessionStorage.setItem(pathName + '_statusChangedAt', document.getElementById('statusChangedAt').value.trim()); //세션스토리지에 저장한다.
 
 			if (isEmpty(searchOpt.status) && isEmpty(searchOpt.keyword)) {
 				getDataList(null);
@@ -221,6 +226,7 @@
 		}).then(spcArr => {
 			const status = window.sessionStorage.getItem(pathName + '_status');
 			const keyword = window.sessionStorage.getItem(pathName + '_keyword');
+			const statusChangedAt = window.sessionStorage.getItem(pathName + '_statusChangedAt');
 
 			if (!isEmpty(status)) {
 				if (status.match(',')) {
@@ -246,6 +252,10 @@
 
 			if (!isEmpty(keyword)) {
 				document.getElementById('keyword').value = keyword;
+			}
+
+			if (!isEmpty(statusChangedAt)) {
+				document.getElementById('statusChangedAt').value = statusChangedAt;
 			}
 
 			$('#searchForm').submit();
@@ -324,7 +334,11 @@
 					if (!isEmpty(searchOpt)) {
 						refineList = refineList.filter(rowData => {
 							if ((searchOpt.status).includes(String(rowData.statusVal))
-								&& (rowData.spcName).match(searchOpt.keyword)) {
+								&& (rowData.spcName).match(searchOpt.keyword)
+								&& (!isEmpty(searchOpt.statusChangedAt)
+									&& (rowData.statusChangedAt != null
+										&& rowData.statusChangedAt.replace(/[^0-9]/g, '').substr(0, 8) === searchOpt.statusChangedAt.replace(/[^0-9]/g, ''))
+									) || isEmpty(searchOpt.statusChangedAt)) {
 								return true;
 							}
 						});
@@ -660,8 +674,8 @@
 	<div class="row spc-search-bar">
 		<div class="col-11">
 			<div class="sa-select"><!--
-				--><span class="tx-tit">검토 상태</span><!--
-				--><div id="reqStatus" class="dropdown"><!--
+			--><span class="tx-tit">검토 상태</span><!--
+			--><div id="reqStatus" class="dropdown"><!--
 				--><button type="button" class="dropdown-toggle unused" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button><!--
 				--><ul class="dropdown-menu chk-type" role="menu"><!--
 					--><li data-value="2" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="wait" name="review_status" value="2"><label for="wait">검토 중</label></a></li><!--
@@ -673,11 +687,16 @@
 					--><li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16">적용</button></li><!--
 				--></ul>
 				</div>
+			</div>
+			<div class="sa-select"><!--
+			--><span class="tx-tit">승인일</span>
+				<div class="text-input-type mr-16"><input type="text" id="statusChangedAt" name="statusChangedAt" class="datepicker" readonly></div>
 			</div><!--
-			--><div class="sa-select">
+		--> <div class="sa-select">
 				<div class="text-input-type mr-16"><input type="text" id="keyword" placeholder="입력"></div>
 				<button type="submit" class="btn-type">검색</button>
 			</div>
+
 		</div>
 		<div class="col-1">
 			<button type="button" id="approvalBtn" class="btn-type">출금 최종승인</button>
