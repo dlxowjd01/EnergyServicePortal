@@ -201,6 +201,22 @@
 			});
 		});
 
+		$(".header-search > input").on("keyup", e => {
+			const keyword = $(e.target).val();
+			const target = $(e.target).data("target");
+
+			let temp = "";
+			if (target === "headerPlantList") {
+				const data = siteList.filter(x => x.name.includes(keyword));
+				data.forEach((v, k) => {
+					temp += `<a href="#" class="sub-item" onclick="dashboardMove('site', 'sid', ${'${v.sid}'}); return false">${'${v.name}'}</a>`;
+				})
+				$("#"+target).html(`<li><a href="#" class="group-title" onclick="dashboardMove('group', '', ''); return false"><fmt:message key="header.select.all" /></a></li>`+temp)
+			} else {
+
+			}
+		})
+
 		function validateEmail(email){
 			let re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
 			// let re = \b[\w.!#$%&’*+\/=?^`{|}~-]+@[\w-]+(?:\.[\w-]+)*\b
@@ -384,7 +400,6 @@
 		} else {
 			$(self).find("label").removeClass("on");
 		}
-
 	}
 </script>
 
@@ -419,7 +434,8 @@
 								<dt><fmt:message key="menu.top.plantAnalysis" /></dt>
 								<dd>
 									<a href="#"><fmt:message key="menu.top.plantAnalysis.site" /></a>
-									<ul class="overflow-list">
+									<p class="header-search"><input type="text" data-target="headerPlantList" placeholder="<fmt:message key='button.search' />"></p>
+									<ul class="overflow-list" id="headerPlantList">
 										<li><a href="#" class="group-title" onclick="dashboardMove('group', '', ''); return false"><fmt:message key="header.select.all" /></a></li>
 										<c:if test="${fn:length(siteList) > 0}">
 											<c:forEach var="site" items="${siteList}">
@@ -438,7 +454,8 @@
 									<dt></dt>
 									<dd>
 										<a href="#"><fmt:message key="menu.top.plantAnalysis.group" /></a>
-										<ul class="overflow-list">
+										<p class="header-search"><input type="text" data-target="headerGroupList" placeholder="<fmt:message key='button.search' />"></p>
+										<ul class="overflow-list" id="headerGroupList">
 											<c:forEach var="group" items="${tagList}">
 												<li>
 													<a href="#" class="group-title" onclick="dashboardMove('group', 'sgid', '${group.sgid}'); return false">${group.name}</a>

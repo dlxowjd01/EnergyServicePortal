@@ -5,6 +5,43 @@
 	var deviceNameList = [];
 	var alarmDataList = [];
 	var deleteAlarmList = [];
+	// const translate = {
+	// 	contract1 : {
+	// 		"주택용(저압)" : "1",
+	// 		"주택용(고압)" : "2",
+	// 		"일반용(갑)I" : "3",
+	// 		"일반용(갑)II" : "4",
+	// 		"일반용(을)" : "5",
+	// 		"교육용(갑)" : "6",
+	// 		"교육용(을)" : "7",
+	// 		"산업용(갑)I" : "8",
+	// 		"산업용(갑)II" : "9",
+	// 		"산업용(을)" : "",
+	// 		"임시(갑)" : "",
+	// 		"임시(을)" : "",
+	// 		"가로등(을)" : "",
+	// 		"심야전력(갑)" : "",
+	// 		"농사용(갑)" : "",
+	// 		"농사용(을)" : "",
+	// 		"심야전력(을)I" : "",
+	// 		"심야전력(을)II" : "",
+	// 	},
+	// 	contract2 : {
+	// 		"저압전력" : "",
+	// 		"고압전력" : "",
+	// 		"고압A" : "",
+	// 		"고압B" : "",
+	// 		"고압A:선택 I" : "",
+	// 		"고압A:선택 II" : "",
+	// 		"고압A:선택 III" : "",
+	// 		"고압B:선택 I" : "",
+	// 		"고압B:선택 II" : "",
+	// 		"고압B:선택 III" : "",
+	// 		"고압C:선택 I" : "",
+	// 		"고압C:선택 II" : "",
+	// 		"고압C:선택 III" : "",
+	// 	}
+	// }
 
 	$(function () {
 		let optionList = [
@@ -1858,8 +1895,10 @@
 				let id = item[1].planId.replace(/,\s*$/, "");
 				let util = item[1].utilName.replace(/,\s*$/, "");
 
+				let itemName = item[0];
+
 				cStr += `
-					<li data-util-name="${'${util}'}" data-plan-id="${'${id}'}" data-vol-type="${'${vStr}'}" data-value="${'${item[0]}'}"><a href="#">${'${item[0]}'}</a></li>
+					<li data-util-name="${'${util}'}" data-plan-id="${'${id}'}" data-vol-type="${'${vStr}'}" data-value="${'${item[0]}'}"><a href="#">${'${itemName}'}</a></li>
 				`;
 			});
 			// if(option){
@@ -1897,7 +1936,9 @@
 						btn.prop("disabled", false)
 					}
 					for(let i=0, length = vArr.length; i<length; i++){
-						str += `<li data-util-name="${'${utilArr[i]}'}" data-id="${'${idArr[i]}'}" data-value="${'${vArr[i]}'}"><a href="#">${'${vArr[i]}'}</a></li>`;
+						let itemName = vArr[i];
+
+						str += `<li data-util-name="${'${utilArr[i]}'}" data-id="${'${idArr[i]}'}" data-value="${'${vArr[i]}'}"><a href="#">${'${itemName}'}</a></li>`;
 					}
 					subOpt.append(str);
 					subOpt.find("li").click(function(){
@@ -1926,7 +1967,8 @@
 			let allStr = "<li><a href='#'><fmt:message key='siteSetting.all' /></a></li>";
 
 			$.each(r, function(index, el){
-				let name = `${'${el.name.kr}'}`;
+				let name = langStatus === "EN" ? `${'${el.name.en}'}` : `${'${el.name.kr}'}`;
+
 				resStr += `
 					<li data-name="${'${name}'}" data-value="${'${el.code}'}"><a href="#">${'${name}'}</a></li>
 				`
@@ -1987,7 +2029,7 @@
 			});
 
 			$.each(s, function(index, el){
-				let name = `${'${el.name.kr}'}`;
+				let name = langStatus === "EN" ? `${'${el.name.en}'}` : `${'${el.name.kr}'}`;
 				if(el.code == "gen"){
 					siteStr += `
 						<li data-name="${'${name}'}" data-value="1"><a href="#">${'${name}'}</a></li>
@@ -2000,7 +2042,7 @@
 			});
 
 
-			allStr += siteStr;
+			allStr += siteStr;	
 			$("#siteType").append(allStr);
 
 			siteStr += `
@@ -4016,7 +4058,7 @@
 								<div class="col-xl-3 col-lg-6 col-md-4 col-sm-10 pl-0">
 									<div class="flex-start">
 										<div class="text-input-type offset-73">
-											<input type="text" name="new_site_name" id="newSiteName" placeholder="입력" minlength="2" maxlength="30">
+											<input type="text" name="new_site_name" id="newSiteName" placeholder="<fmt:message key='siteSetting.input' />" minlength="2" maxlength="30">
 										</div>
 										<button type="button" class="btn-type fr" onclick="checkSiteId($('#newSiteName').val().trim())" disabled><fmt:message key='siteSetting.checkOverlap' /></button>
 									</div>
@@ -4243,7 +4285,7 @@
 									<div class="col-xl-1 col-lg-1 col-md-2 col-sm-2"><span class="input-label">계약용량</span></div>
 									<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
 										<div class="text-input-type">
-											<input type="text" name="new_dr_vol" id="newDrVol" class="pr-36" oninput="truncateNonDigit(event, this)" onkeyup="formatUnit(this)" placeholder="입력" maxlength="10"><span class="unit">kW</span>
+											<input type="text" name="new_dr_vol" id="newDrVol" class="pr-36" oninput="truncateNonDigit(event, this)" onkeyup="formatUnit(this)" placeholder="<fmt:message key='siteSetting.input' />" maxlength="10"><span class="unit">kW</span>
 										</div>
 									</div>
 
@@ -4260,7 +4302,7 @@
 
 									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">수익 분배율</span></div>
 									<div class="col-xl-1 col-lg-3 col-md-4 col-sm-10 pl-0">
-										<div class="text-input-type"><input type="text" name="new_dr_rev_share" id="newDrRevShare" class="pr-36" oninput="truncateNonDigit(event, this, 'percentage')" onkeyup="formatRatio(this)" placeholder="입력" maxlength="5"><span class="unit">%</span></div>
+										<div class="text-input-type"><input type="text" name="new_dr_rev_share" id="newDrRevShare" class="pr-36" oninput="truncateNonDigit(event, this, 'percentage')" onkeyup="formatRatio(this)" placeholder="<fmt:message key='siteSetting.input' />" maxlength="5"><span class="unit">%</span></div>
 									</div>
 								</div>
 							</section> -->

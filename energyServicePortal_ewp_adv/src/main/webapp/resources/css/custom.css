@@ -3888,7 +3888,7 @@ li[data-alarm="urgent"]:before,
 }
 
 .setting-form .input-label {
-	white-space: nowrap;
+	/* white-space: nowrap; */
 	width: auto;
 }
 
@@ -10355,4 +10355,20 @@ table.table-footer tfoot td.light {
 	height: 18px;
 	background: url(../img/delete.png);
 	text-indent: -9999px;
+}
+
+.header-search {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.header-search > input {
+	width: 90%;
+    background: transparent;
+    border: none;
+    padding: 10px 5px;
+    border-bottom: 1px solid var(--white50);
+    margin: 0px 0px 10px 0px;
+    font-size: 14px;
 }
