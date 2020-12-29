@@ -131,7 +131,7 @@
 			// }
 			
 			// else {
-			// 	$("#newSiteType").prev().prop("disabled", false).contents().get(0).nodeValue = "선택";
+			// 	$("#newSiteType").prev().prop("disabled", false).contents().get(0).nodeValue = "<fmt:message key="dropDown.select" />";
 			// }
 		});
 
@@ -1885,7 +1885,7 @@
 				}
 				$("#newVoltWarning").addClass("hidden");
 
-				subOpt.empty().prev().data("value", "").contents().get(0).nodeValue = "선택";
+				subOpt.empty().prev().data("value", "").contents().get(0).nodeValue = "<fmt:message key='dropDown.select' />";
 				
 				if(!isEmpty($(this).data("vol-type"))){
 					let str = '';
@@ -2179,7 +2179,7 @@
 		});
 
 		$.each(dropdownBtn, function(index, element){
-			$(this).data({ "value": "", "vol-type": "", "plan-id" : "" }).html('선택' + '<span class="caret"></span>').prop("disabled", false);
+			$(this).data({ "value": "", "vol-type": "", "plan-id" : "" }).html('<fmt:message key="dropDown.select" />' + '<span class="caret"></span>').prop("disabled", false);
 			$(this).next().find("li").removeClass("hidden");
 		});
 		// console.log("initModal----")
@@ -2202,7 +2202,7 @@
 			}
 			titleAdd.removeClass("hidden").next().addClass("hidden");
 			required.hasClass("no-symbol") ? required.removeClass("no-symbol") : null;
-			addBtn.text("추가");
+			addBtn.text("<fmt:message key='modal.add' />");
 			newSiteName.prop('disabled', false).parent().removeClass("disabled");
 			$("#newVoltTypeList").prev().prop("disabled", true).data("value", "").contents().get(0).nodeValue = "<fmt:message key='siteSetting.select' />";
 			$("#addSiteModal").removeClass("edit").modal("show");
@@ -2301,7 +2301,7 @@
 						if(!isEmpty(util.utility_plan_id)){
 							$("#newContractList").prev().data({"plan-id": util.utility_plan_id, "value": utilPlanName }).html(utilPlanName + '<span class="caret"></span>');
 						} else {
-							$("#newContractList").prev().html('선택<span class="caret"></span>');
+							$("#newContractList").prev().html('<fmt:message key="dropDown.select" /><span class="caret"></span>');
 						}
 
 						if(isEmpty(rowData.role)) {
@@ -2388,7 +2388,7 @@
 // 				} else {
 // 					console.log("no dr grou id---")
 // 					sectionDrDropdown.each(function(item, index){
-// 						$(this).prop("disabled", true).contents().get(0).nodeValue = "선택";
+// 						$(this).prop("disabled", true).contents().get(0).nodeValue = "<fmt:message key="dropDown.select" />";
 // 					});
 // 					sectionDrInput.each(function(item, index){
 // 						$(this).prop("disabled", true).val("");
@@ -2836,7 +2836,7 @@
 											data-index="${'${index}'}"
 											data-did="${'${ el.did }'}" 
 											data-value="${'${ el.name }'}" 
-											data-name="선택" disabled>${'${ displayText }'}
+											data-name="<fmt:message key="dropDown.select" />" disabled>${'${ displayText }'}
 											<span class="caret"></span></button>
 										<ul id="aDvcNameList${'${ newIdx }'}" class="dropdown-menu chk-type" role="menu">${'${ dvcNameStr }'}</ul>
 									</div>`;
@@ -2859,7 +2859,7 @@
 											<button type="button" class="dropdown-toggle" 
 												data-function="concat"
 												data-index="${'${index}'}"
-												data-toggle="dropdown" data-name="선택" disabled>선택
+												data-toggle="dropdown" data-name="<fmt:message key="dropDown.select" />" disabled><fmt:message key="dropDown.select" />
 												<span class="caret"></span>
 											</button>
 											<ul id="aDvcAlarmList${'${ newIdx }'}" class="dropdown-menu chk-type" role="menu">${'${ alarmLvlStr }'}</ul>
@@ -2984,7 +2984,7 @@
 												data-function="concat"
 												data-index="${'${index}'}"
 												data-toggle="dropdown" 
-												data-name="선택" disabled><fmt:message key='siteSetting.select' />
+												data-name="<fmt:message key="dropDown.select" />" disabled><fmt:message key='siteSetting.select' />
 												<span class="caret"></span>
 											</button>
 											<ul class="dropdown-menu chk-type" role="menu">${'${ alarmLvlStr }'}</ul>
@@ -2995,7 +2995,7 @@
 												data-function="concat"
 												data-index="${'${index}'}"
 												data-toggle="dropdown"
-												data-name="선택" disabled>${'${ displayText }'}
+												data-name="<fmt:message key="dropDown.select" />" disabled>${'${ displayText }'}
 												<span class="caret"></span>
 											</button>
 											<ul class="dropdown-menu chk-type" role="menu">${'${ alarmLvlStr }'}</ul>
@@ -3024,7 +3024,7 @@
 												data-function="concat"
 												data-child-id="aDvcPhoneUser${'${ newIdx }'}"
 												data-toggle="dropdown"
-												data-name="선택" disabled><fmt:message key='siteSetting.select' />
+												data-name="<fmt:message key="dropDown.select" />" disabled><fmt:message key='siteSetting.select' />
 												<span class="caret"></span>
 											</button>
 											<ul id="aDvcUserList${'${ newIdx }'}" class="dropdown-menu chk-type" role="menu">${'${ userNameStr }'}</ul>
@@ -3261,7 +3261,7 @@
 													data-function="concat"
 													data-toggle="dropdown"
 													data-child-id="aDvcPhoneUser${'${ newIdx }'}"
-													data-name="선택" disabled><fmt:message key='siteSetting.select' />
+													data-name="<fmt:message key="dropDown.select" />" disabled><fmt:message key='siteSetting.select' />
 													<span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu chk-type" role="menu">${'${ userNameStr }'}</ul>
@@ -3274,7 +3274,7 @@
 												data-uid="${'${ joinedVal }'}" 
 												data-phone="${'${ displayText1 }'}" 
 												data-child-id="aDvcPhoneUser${'${ newIdx }'}"
-												data-name="선택" disabled>${'${ displayText }'}
+												data-name="<fmt:message key="dropDown.select" />" disabled>${'${ displayText }'}
 												<span class="caret"></span>
 											</button>
 											<ul id="aDvcUserList${'${ newIdx }'}" class="dropdown-menu chk-type" role="menu">${'${ userNameStr }'}</ul>
@@ -3675,7 +3675,7 @@
 						if(index===3){
 							$(this).find(".user-group:not(:first-of-type)").remove();
 							$(this).find("input[type='checkbox']").prop("checked", false);
-							$(this).find(".dropdown-toggle").prop("disabled", false).html('선택<span class="caret"></span>').attr({"data-value": "", "data-index": tempIdx});
+							$(this).find(".dropdown-toggle").prop("disabled", false).html('<fmt:message key="dropDown.select" /><span class="caret"></span>').attr({"data-value": "", "data-index": tempIdx});
 							$(this).find("input[type='text']").prop("disabled", false).attr("placeholder", "").val("").parent().removeClass("disabled");
 						} else if(index===4){
 							$(this).find(".phone-group:not(:first-of-type)").remove();
@@ -3870,7 +3870,7 @@
 		<div class="flex-group">
 			<span class="inline-title"><fmt:message key='siteSetting.location' /></span>
 			<div class="dropdown">
-				<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
+				<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="<fmt:message key="dropDown.select" />"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
 				<ul id="countryList" class="dropdown-menu chk-type" role="menu">
 					<li><a href="#"><fmt:message key='siteSetting.all' /></a></li>
 					<c:forEach var="country" items="${location}">
@@ -4030,7 +4030,7 @@
 								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label"><fmt:message key='siteSetting.site.type' /></span></div>
 								<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
 									<div class="dropdown">
-										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
+										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key="dropDown.select" />"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
 										<ul id="newSiteType" class="dropdown-menu"></ul>
 									</div>
 									<small class="hidden warning"><fmt:message key='siteSetting.errorTxt.12' /></small>
@@ -4039,7 +4039,7 @@
 								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label asterisk"><fmt:message key='siteSetting.power' /></span></div>
 								<div class="col-xl-2 col-lg-6 col-md-4 col-sm-10 pl-0">
 									<div class="dropdown">
-										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
+										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key="dropDown.select" />"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
 										<ul id="newResList" class="dropdown-menu"></ul>
 									</div>
 									<small class="hidden warning"><fmt:message key='siteSetting.errorTxt.13' /></small>
@@ -4048,7 +4048,7 @@
 								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label"><fmt:message key='siteSetting.isESS' /></span></div>
 								<div class="col-xl-1 col-lg-2 col-md-4 col-sm-10 pl-0">
 									<div class="dropdown">
-										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
+										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key="dropDown.select" />"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
 										<ul id="newEssList" class="dropdown-menu">
 											<li data-value="1"><a href="#"><fmt:message key='siteSetting.isESS.Y' /></a></li>
 											<li data-value="0"><a href="#"><fmt:message key='siteSetting.isESS.N' /></a></li>
@@ -4062,7 +4062,7 @@
 								<div class="col-xl-6 col-lg-6 col-md-4 col-sm-10 pl-0">
 									<div class="flex-start">
 										<div class="dropdown w-55">
-											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
+											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key="dropDown.select" />"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
 											<ul id="newCityList" class="dropdown-menu">
 												<c:forEach var="country" items="${location}">
 													<c:forEach var="city" items="${country.value.locations}" varStatus="cityName">
@@ -4157,11 +4157,11 @@
 									<div class="col-xl-3 col-lg-6 col-md-4 col-sm-10 pl-0">
 										<div class="flex-start">
 											<div class="dropdown w-100">
-												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
+												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key="dropDown.select" />"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
 												<ul id="newContractList" class="dropdown-menu"></ul>
 											</div>
 											<div class="dropdown w-100">
-												<button type="button" class="dropdown-toggle optional" data-toggle="dropdown" data-name="선택" disabled><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
+												<button type="button" class="dropdown-toggle optional" data-toggle="dropdown" data-name="<fmt:message key="dropDown.select" />" disabled><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
 												<ul id="newVoltTypeList" class="dropdown-menu"></ul>
 											</div>
 										</div>
@@ -4181,7 +4181,7 @@
 									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label"><fmt:message key='siteSetting.meterReadingDate' /></span></div>
 									<div class="col-xl-1 col-lg-2 col-md-4 col-sm-10 pl-0">
 										<div class="dropdown">
-											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
+											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key="dropDown.select" />"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
 											<ul id="newInspection" class="dropdown-menu"></ul>
 										</div>
 									</div>
@@ -4216,7 +4216,7 @@
 									<div class="col-xl-3 col-lg-6 col-md-4 col-sm-10 pl-0">
 										<div class="flex-start">
 											<div class="dropdown w-100">
-												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
+												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key="dropDown.select" />"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
 												<ul id="newPriceModelList" class="dropdown-menu">
 													<li data-name="고정가" data-value="fixed"><a href="#"><fmt:message key='siteSetting.truePrice' /></a></li>
 													<li data-name="SMP평균" data-value="SMP_mean"><a href="#"><fmt:message key='siteSetting.SMP.avg' /></a></li>
@@ -4235,7 +4235,7 @@
 									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">자원 ID</span></div>
 									<div class="col-xl-3 col-lg-3 col-md-4 col-sm-10 pl-0">
 										<div class="dropdown">
-											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key="dropDown.select" />"><fmt:message key="dropDown.select" /><span class="caret"></span></button>
 											<ul id="newDrResIdList" class="dropdown-menu"></ul>
 										</div>
 									</div>
@@ -4250,7 +4250,7 @@
 									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">CBL 계산식</span></div>
 									<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
 										<div class="dropdown">
-											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key="dropDown.select" />"><fmt:message key="dropDown.select" /><span class="caret"></span></button>
 											<ul id="newCblList" class="dropdown-menu">
 												<li data-value="max45"><a href="#">max45</a></li>
 												<li data-value="mid68"><a href="#">mid68</a></li>
@@ -4271,7 +4271,7 @@
 									<div class="col-xl-1 col-lg-2 col-sm-2"><span class="input-label"><fmt:message key='siteSetting.resourceID' /></span></div>
 									<div class="col-xl-3 col-lg-3 col-sm-4 pl-0">
 										<div class="dropdown">
-											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
+											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key="dropDown.select" />"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
 											<ul id="newVppResIdList" class="dropdown-menu"></ul>
 										</div>
 									</div>
