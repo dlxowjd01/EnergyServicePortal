@@ -479,7 +479,7 @@
 								</div>
 								<div class="wt-list-wrap">
 									<ul class="list-type">
-										<li class="hidden"><strong><fmt:message key='smain.sunPower' /></strong><span id="sIrradiation">-</span> W/m&#13217;</li>
+										<li class="hidden"><strong><fmt:message key='smain.sunPower' /></strong><span id="sIrradiation">-</span> W/&#13217;</li>
 										<li><strong><fmt:message key='smain.windDirection' /></strong> <span id="sWindDirection">-</span> &deg;</li>
 										<li><strong><fmt:message key='smain.windSpeed' /></strong> <span id="sWindVelocity"></span></li>
 										<li><strong><fmt:message key='smain.humidity' /></strong> <span id="sHumidity"></span></li>
@@ -1381,7 +1381,7 @@
 				columnHeaderFormatter: function (item, key) {
 					if (!item || item instanceof Highcharts.Axis) {
 						// return item.options.title.text;
-						return "닐짜"
+						return "날짜"
 					}
 					return {
 						topLevelColumnTitle: '<fmt:message key="smain.dayDev" />',
@@ -1430,10 +1430,9 @@
 		xAxis: [
 			{
 				type: 'datetime',
-				format: '{value:%m/%d}',
 				lineColor: 'var(--grey)',
 				tickColor: 'var(--grey)',
-				tickInterval: 1,
+				tickInterval: 24 * 3600 * 1000,
 				gridLineColor: 'var(--white25)',
 				plotLines: [{
 					color: 'var(--grey)',
@@ -1443,7 +1442,7 @@
 					align: 'center',
 					y: 27,
 					formatter: function () {
-						let newVal = Highcharts.dateFormat('%m/%d',  this.value);
+						let newVal = Highcharts.dateFormat('%m/%d', this.value);
 						return newVal;
 					},
 					style: {
@@ -2299,16 +2298,17 @@
 							if($('#viewOptList').prev().data("value") == "2"){
 								$('#sTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + '&nbsp;' + '&#8451;');
 								$('#weekSolarIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i><strong>' + siteLocation + '</strong>');
-								if(!isEmpty(deviceIrrData)){						
+								if(!isEmpty(deviceIrrData)){
+									let f = d3.format(',.1f');
 									$("#sIrradiation").parents().closest('li').removeClass('hidden');
-									$("#sIrradiation").text(deviceIrrData);
+									$("#sIrradiation").text(f(deviceIrrData));
 								}
 							} else {
 								$('#weekTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + '&nbsp;' + '&#8451;');
 								$('#weekIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i><strong>' + siteLocation + '</strong>');
 								if(!isEmpty(deviceIrrData)){	
 									$("#weekIrradiation").parents().closest('li').removeClass('hidden');
-									$("#weekIrradiation").text(deviceIrrData)
+									$("#weekIrradiation").text(f(deviceIrrData));
 								}
 							}
 						}
