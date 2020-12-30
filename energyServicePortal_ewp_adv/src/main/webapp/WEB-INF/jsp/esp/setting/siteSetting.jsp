@@ -4260,9 +4260,10 @@
 											<div class="dropdown w-100">
 												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key="dropDown.select" />"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
 												<ul id="newPriceModelList" class="dropdown-menu">
-													<li data-name="고정가" data-value="fixed"><a href="#"><fmt:message key='siteSetting.truePrice' /></a></li>
-													<li data-name="SMP평균" data-value="SMP_mean"><a href="#"><fmt:message key='siteSetting.SMP.avg' /></a></li>
-													<li data-name="SMP" data-value="SMP"><a href="#"><fmt:message key='siteSetting.SMP' /></a></li>
+													<li data-name="<fmt:message key='siteSetting.truePrice' />" data-value="fixed"><a href="#"><fmt:message key='siteSetting.truePrice' /></a></li>
+													<li data-name="<fmt:message key='siteSetting.SMP.avg' />" data-value="SMP_mean"><a href="#"><fmt:message key='siteSetting.SMP.avg' /></a></li>
+													<li data-name="<fmt:message key='siteSetting.SMP.land' />" data-value="SMP"><a href="#"><fmt:message key='siteSetting.SMP.land' /></a></li>
+													<li data-name="<fmt:message key='siteSetting.SMP.jeju' />" data-value="SMP_JEJU"><a href="#"><fmt:message key='siteSetting.SMP.jeju' /></a></li>
 												</ul>
 											</div>
 											<div class="text-input-type hidden"><input type="text" name="Price" id="newPrice" oninput="truncateNonDigit(event, this)" placeholder="<fmt:message key='siteSetting.input' />" maxlength="8"></div>
