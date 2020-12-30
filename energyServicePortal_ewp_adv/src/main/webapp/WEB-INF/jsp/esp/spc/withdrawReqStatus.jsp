@@ -338,7 +338,7 @@
 								&& (!isEmpty(searchOpt.withdrawDay)
 									&& (rowData.withdrawDay != null
 										&& rowData.withdrawDay.replace(/[^0-9]/g, '') === searchOpt.withdrawDay.replace(/[^0-9]/g, ''))
-									) || isEmpty(searchOpt.withdrawDay)) {
+									 || isEmpty(searchOpt.withdrawDay))) {
 								return true;
 							}
 						});
@@ -690,7 +690,7 @@
 			</div>
 			<div class="sa-select"><!--
 			--><span class="tx-tit">출금일자</span>
-				<div class="text-input-type mr-16"><input type="text" id="withdrawDay" name="withdrawDay" class="datepicker"></div>
+				<div class="text-input-type mr-16"><input type="text" id="withdrawDay" name="withdrawDay" class="datepicker" autocomplete="off"></div>
 			</div><!--
 		--> <div class="sa-select">
 				<div class="text-input-type mr-16"><input type="text" id="keyword" placeholder="입력"></div>
