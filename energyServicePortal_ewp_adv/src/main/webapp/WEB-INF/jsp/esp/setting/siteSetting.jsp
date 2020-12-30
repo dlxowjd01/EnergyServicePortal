@@ -2386,14 +2386,12 @@
 				// PowerMarket??? (tariff?) info
 				if( !isEmpty(rowData.power_market)) {
 					let priceModel = JSON.parse(rowData.power_market);
-					// console.log("priceModel===", priceModel)
-					if(priceModel.price_type == "SMP_mean") {
-						$("#newPriceModelList").prev().data("value", priceModel.price_type).html( "<fmt:message key='siteSetting.SMP.avg' />" + '<span class="caret"></span>');
-					} else if(priceModel.price_type == "fixed") {
-						$("#newPriceModelList").prev().data("value", priceModel.price_type).html( "<fmt:message key='siteSetting.truePrice' />" + '<span class="caret"></span>');
-					} else {
-						$("#newPriceModelList").prev().data("value", priceModel.price_type).html( priceModel.price_type + '<span class="caret"></span>');
-					}
+
+					$('#newPriceModelList li').each(function() {
+						if ($(this).data('value') === priceModel.price_type) {
+							$("#newPriceModelList").prev().data("value", priceModel.price_type).html( $(this).data('name') + '<span class="caret"></span>');
+						}
+					});
 					$("#newPrice").val(priceModel.price).html( priceModel.price + '<span class="caret"></span>');
 				}
 
