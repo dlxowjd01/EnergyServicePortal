@@ -13,10 +13,21 @@ import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/**
+ * 대시보드 컨트롤러
+ */
 @Controller
 public class DashboardController {
 	private static final Logger logger = LoggerFactory.getLogger(DashboardController.class);
 
+	/**
+	 * 그룹 대시보드
+	 *
+	 * @param request
+	 * @param session
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/dashboard/gmain.do")
 	public String gmain(HttpServletRequest request, HttpSession session, Model model) {
 		String dashboardMap = (String) EgovProperties.getProperty("dashboard.map"); // TEST 서버 여부
@@ -32,6 +43,14 @@ public class DashboardController {
 		return "esp/dashboard/gmain";
 	}
 
+	/**
+	 * 중개거래 대시보드
+	 *
+	 * @param request
+	 * @param session
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/dashboard/jmain.do")
 	public String jmain(HttpServletRequest request, HttpSession session, Model model) {
 		String defaultOid = EgovProperties.getProperty("default.oid");
@@ -44,6 +63,14 @@ public class DashboardController {
 		return "esp/dashboard/jmain";
 	}
 
+	/**
+	 * 사이트 대시보드
+	 *
+	 * @param request
+	 * @param session
+	 * @param model
+	 * @return
+	 */
 	@RequestMapping(value = "/dashboard/smain.do")
 	public String smain(HttpServletRequest request, HttpSession session, Model model) {
 		Map<String, Object> userInfo = UserUtil.getUserInfo(session);
@@ -63,4 +90,16 @@ public class DashboardController {
 		return "esp/dashboard/dmain";
 	}
 
+	/**
+	 * ESS 대시보드
+	 *
+	 * @param request
+	 * @param session
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/dashboard/emain.do")
+	public String emin(HttpServletRequest request, HttpSession session, Model model) {
+		return "esp/dashboard/emain";
+	}
 }

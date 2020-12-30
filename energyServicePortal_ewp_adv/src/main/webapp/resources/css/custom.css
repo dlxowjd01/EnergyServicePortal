@@ -5051,6 +5051,7 @@ input.inp[readonly]:focus {
 
 .indiv.chart-pv .sel-calendar,
 .flex-group,
+.flex-group .sel-calendar,
 .indiv.chart-diagnosis .inline-flex .duration {
 	display: inline-flex;
 	flex-wrap: nowrap;

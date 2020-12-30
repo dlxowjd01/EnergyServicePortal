@@ -493,12 +493,11 @@ $(function() {
 	});
 });
 
-$(function() {
-	$(document).on('click', '.dropdown-menu li:not(.disabled) a', function(){
-		selectBoxTextApply(this);
-	});
-
-});
+// $(function() {
+// 	$(document).on('click', '.dropdown-menu li:not(.disabled) a', function(){
+// 		selectBoxTextApply(this);
+// 	});
+// });
 
 
 function selectBoxTextApply(obj) {
