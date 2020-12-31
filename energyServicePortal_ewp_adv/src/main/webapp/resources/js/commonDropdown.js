@@ -26,9 +26,13 @@ $(document)
 		if ($selector.find(':checkbox').length > 0) {
 			let $selectorName = $selector.find(':checkbox').prop('name');
 			if ($selector.find(':checkbox').val() === 'all') {
+				let checked = true;
+				if (!$selector.find(':checkbox').is(':checked')) {
+					checked = false;
+				}
 				$(':checkbox[name="' + $selectorName + '"]').each(function() {
 					if ($(this).val() !== 'all') {
-						$(this).prop('checked', false);
+						$(this).prop('checked', checked);
 					}
 				});
 			} else {

@@ -2306,7 +2306,8 @@
 							} else {
 								$('#weekTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + '&nbsp;' + '&#8451;');
 								$('#weekIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i><strong>' + siteLocation + '</strong>');
-								if(!isEmpty(deviceIrrData)){	
+								if(!isEmpty(deviceIrrData)){
+									let f = d3.format(',.1f');
 									$("#weekIrradiation").parents().closest('li').removeClass('hidden');
 									$("#weekIrradiation").text(f(deviceIrrData));
 								}
@@ -2447,26 +2448,28 @@
 							if($('#viewOptList').prev().data("value") == "2") {
 								$('#sTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + '&#8451;');
 								$('#weekSolarIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i><strong>' + siteLocation + '</strong>');
-								$('#sWindVelocity').text((tempArray[tempArray.length - 1].wind_speed).toFixed(1) + ' km/h');
+								$('#sWindVelocity').text((tempArray[tempArray.length - 1].wind_speed).toFixed(1) + ' m/sec');
 								$('#sWindDirection').text(tempArray[tempArray.length - 1].wind_velocity);
 								$('#sHumidity').html((tempArray[tempArray.length - 1].humidity).toFixed(1) + ' ' + '&#37;');
 								$('#currentTimeB').html(String(tempArray[tempArray.length - 1].basetime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6'));
 
-								if(!isEmpty(deviceIrrData)){
+								if(!isEmpty(deviceIrrData)) {
+									let f = d3.format(',.1f');
 									$("#sIrradiation").parents().closest('li').removeClass('hidden');
-									$("#sIrradiation").text(deviceIrrData)
+									$("#sIrradiation").text(f(deviceIrrData));
 								}
 							} else {
 								$('#weekTemp').html((tempArray[tempArray.length - 1].temperature).toFixed(1) + '&#8451;');
 								$('#weekIcon').html('<i class="ico-weather ' + weatherIconClass + '"></i><strong>' + siteLocation + '</strong>');
-								$('#weekWindVelocity').text((tempArray[tempArray.length - 1].wind_speed).toFixed(1) + ' km/h');
+								$('#weekWindVelocity').text((tempArray[tempArray.length - 1].wind_speed).toFixed(1) + ' m/sec');
 								$('#weekWindDirection').text(tempArray[tempArray.length - 1].wind_velocity);
 								$('#weekHum').html((tempArray[tempArray.length - 1].humidity).toFixed(1) + ' ' + '&#37;');
 								$('#currentTimeA').html(String(tempArray[tempArray.length - 1].basetime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6'));
 								
-								if(!isEmpty(deviceIrrData)){
+								if(!isEmpty(deviceIrrData)) {
+									let f = d3.format(',.1f');
 									$("#weekIrradiation").parents().closest('li').removeClass('hidden');
-									$("#weekIrradiation").text(deviceIrrData)
+									$("#weekIrradiation").text(f(deviceIrrData));
 								}
 							}
 						}
