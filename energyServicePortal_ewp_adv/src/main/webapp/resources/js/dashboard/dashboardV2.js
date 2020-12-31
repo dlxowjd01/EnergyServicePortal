@@ -592,6 +592,7 @@ const dailyChartDraw = async () => {
 											// }
 											const index = Number(String(item['basetime']).slice(6, 8)) - 1;
 											pvList[index] += Math.floor(item['energy'] / 1000);
+											payList[index] += Math.floor(item['money'] / 1000);
 											sumObj['pvSum'] += Math.floor(item['energy'] / 1000);
 										});
 									}
