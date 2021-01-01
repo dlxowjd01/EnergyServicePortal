@@ -1601,6 +1601,7 @@ const searchNowMonth = async () => {
 		success: (data, textStatus, jqXHR) => {
 			apiDatas[apiHost + '/energy/now/sites?interval=month'] = data;
 			monthlyChartDraw();
+			dailyChartDraw();
 		},
 		error: (jqXHR, textStatus, errorThrown) => {
 			console.error(textStatus);
