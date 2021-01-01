@@ -424,14 +424,16 @@ const monthlyChartDraw = async () => {
 				if (!isEmpty(apiData)) {
 					const siteNowEnergyData = apiData['data'];
 					Object.entries(siteNowEnergyData).forEach(([siteKey, siteData]) => {
-						const index = Number(siteData['start'].toString().slice(4, 6)) - 1;
-						if (!isEmpty(siteData['energy'])) {
-							pvList[index] += Math.floor(siteData['energy'] / 1000);
-							sumObj.pvSum += Math.floor(siteData['energy'] / 1000);
-						}
+						if (siteData['start'].toString().slice(0, 6) === String(today.getFullYear()) + ('0' + (today.getMonth() + 1)).slice(-2)) {
+							const index = Number(siteData['start'].toString().slice(4, 6)) - 1;
+							if (!isEmpty(siteData['energy'])) {
+								pvList[index] += Math.floor(siteData['energy'] / 1000);
+								sumObj.pvSum += Math.floor(siteData['energy'] / 1000);
+							}
 
-						if (!isEmpty(siteData['money'])) {
-							payList[index] += Math.floor(siteData['money'] / 1000);
+							if (!isEmpty(siteData['money'])) {
+								payList[index] += Math.floor(siteData['money'] / 1000);
+							}
 						}
 					});
 				}
