@@ -1032,7 +1032,7 @@ const getTodayTotalDetail = async function () {
 			, usage = Math.floor((acPowerSum / capacitySum) * 100)
 			, other = 100 - usage;
 
-		pieChart.setTitle({text: Math.floor(acPowerSum / 1000) + 'kW'});
+		pieChart.setTitle({text: Math.floor(acPowerSum / 1000).toLocaleString() + 'kW'});
 		pieChart.series[0].data.forEach((e, idx) => {
 			if (e.name === i18nManager.tr("dashboard_photovoltaic")) {
 				e.update({y: usage});
