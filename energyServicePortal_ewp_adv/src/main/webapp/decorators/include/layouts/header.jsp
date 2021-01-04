@@ -200,21 +200,18 @@
 				return false;
 			});
 		});
-
+		
 		$(".header-search > input").on("keyup", e => {
 			const keyword = $(e.target).val();
-			const target = $(e.target).data("target");
+			const target = "."+$(e.target).data("target");
 
-			let temp = "";
-			if (target === "headerPlantList") {
-				const data = siteList.filter(x => x.name.includes(keyword));
-				data.forEach((v, k) => {
-					temp += `<a href="#" class="sub-item" onclick="dashboardMove('site', 'sid', ${'${v.sid}'}); return false">${'${v.name}'}</a>`;
-				})
-				$("#"+target).html(`<li><a href="#" class="group-title" onclick="dashboardMove('group', '', ''); return false"><fmt:message key="header.select.all" /></a></li>`+temp)
-			} else {
-
-			}
+			$(target).each((ix, el) => {
+				if ($(el).data("name").includes(keyword)) {
+					$(el).removeClass("--hidden");
+				} else {
+					$(el).addClass("--hidden");
+				}
+			})
 		})
 
 		function validateEmail(email){
@@ -253,7 +250,6 @@
 
 		}
 	});
-
 
 	function updateHeaderModal(){
 		let fullName = '${userInfo.name}';
@@ -434,12 +430,12 @@
 								<dt><fmt:message key="menu.top.plantAnalysis" /></dt>
 								<dd>
 									<a href="#"><fmt:message key="menu.top.plantAnalysis.site" /></a>
-									<p class="header-search"><input type="text" data-target="headerPlantList" placeholder="<fmt:message key='button.search' />"></p>
+									<p class="header-search"><input type="text" data-target="site-item" placeholder="<fmt:message key='button.search' />"></p>
 									<ul class="overflow-list" id="headerPlantList">
 										<li><a href="#" class="group-title" onclick="dashboardMove('group', '', ''); return false"><fmt:message key="header.select.all" /></a></li>
 										<c:if test="${fn:length(siteList) > 0}">
 											<c:forEach var="site" items="${siteList}">
-												<li>
+												<li class="site-item" data-name="${site.name}">
 													<a href="#" class="sub-item" onclick="dashboardMove('site', 'sid', '${site.sid}'); return false">${site.name}</a>
 												</li>
 											</c:forEach>
@@ -454,7 +450,7 @@
 									<dt></dt>
 									<dd>
 										<a href="#"><fmt:message key="menu.top.plantAnalysis.group" /></a>
-										<p class="header-search"><input type="text" data-target="headerGroupList" placeholder="<fmt:message key='button.search' />"></p>
+										<p class="header-search"><input type="text" data-target="group-item" placeholder="<fmt:message key='button.search' />"></p>
 										<ul class="overflow-list" id="headerGroupList">
 											<c:forEach var="group" items="${tagList}">
 												<li>
@@ -462,7 +458,7 @@
 													<ul>
 														<c:set var="groupSites" value="${group.sites}"/>
 														<c:forEach var="groupSiteList" items="${groupSites}">
-															<li>
+															<li class="group-item" data-name="${groupSiteList.name}">
 																<a href="#" class="sub-item" onclick="dashboardMove('site', 'sid', '${groupSiteList.sid}'); return false">${groupSiteList.name}</a>
 															</li>
 														</c:forEach>

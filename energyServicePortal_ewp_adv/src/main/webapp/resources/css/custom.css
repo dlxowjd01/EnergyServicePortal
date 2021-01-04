@@ -1648,6 +1648,10 @@ table tbody td .dropdown-menu {
 				[common]
  ==================================== */
 
+ .--hidden {
+	display: none!important;
+ }
+
 #mask {
 	display: none;
 	position: fixed;
