@@ -165,10 +165,6 @@
 			value.contact_phone = $("#mobileNum").val();
 			$("#mobileNum").val(value.contact_phone);
 
-			console.log("value.contact_email===", value.contact_email);
-			console.log("value.contact_phone===", value.contact_phone);
-
-
 			let token = '${sessionScope.userInfo.token}';
 			let option = {
 				url: apiHost + '/config/users/' + userInfoId,
@@ -202,11 +198,11 @@
 		});
 		
 		$(".header-search > input").on("keyup", e => {
-			const keyword = $(e.target).val();
-			const target = "."+$(e.target).data("target");
+			const keyword = new RegExp($(e.target).val().trim(), 'i');
+			const target = "." + $(e.target).data("target");
 
 			$(target).each((ix, el) => {
-				if ($(el).data("name").includes(keyword)) {
+				if ($(el).data("name").match(keyword)) {
 					$(el).removeClass("hidden");
 				} else {
 					$(el).addClass("hidden");
