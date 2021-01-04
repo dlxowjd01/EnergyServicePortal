@@ -207,9 +207,9 @@
 
 			$(target).each((ix, el) => {
 				if ($(el).data("name").includes(keyword)) {
-					$(el).removeClass("--hidden");
+					$(el).removeClass("hidden");
 				} else {
-					$(el).addClass("--hidden");
+					$(el).addClass("hidden");
 				}
 			})
 		})
