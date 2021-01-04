@@ -41,7 +41,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 		},
 		labels: {
 			align: 'center',
-			y: 27,
+			y: 20,
 			style: {
 				color: 'var(--grey)',
 				fontSize: '12px'

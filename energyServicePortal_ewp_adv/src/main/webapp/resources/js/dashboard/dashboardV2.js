@@ -512,7 +512,7 @@ const monthlyChartDraw = async () => {
 			align: 'low',
 			rotation: 0,
 			y: 25,
-			x: 15,
+			x: 40,
 			style: {
 				color: 'var(--grey)',
 				fontSize: '12px'
@@ -710,7 +710,7 @@ const dailyChartDraw = async () => {
 			align: 'low',
 			rotation: 0,
 			y: 25,
-			x: 15,
+			x: 45,
 			style: {
 				color: 'var(--grey)',
 				fontSize: '12px'
