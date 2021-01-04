@@ -214,7 +214,7 @@
 			<div class="indiv smain-circle">
 				<div class="flex-wrapper mb-24">
 					<h2 class="ntit"><fmt:message key='smain.todayDevStatus' /></h2>
-					<a href="javascript:void(0)" class="smain-go-pvGen btn-type" onclick="toPvGen('${sid}');">발전이력</a href="javascript:void(0)">
+					<a href="javascript:void(0)" class="smain-go-pvGen btn-type" onclick="toPvGen('${sid}');"><fmt:message key="smain.goPvGen" /></a href="javascript:void(0)">
 					<div class="stit fr" id="dayGenHours"></div>
 				</div>
 				<div class="search-wrap">
