@@ -82,7 +82,7 @@ const displayDropdown = ($selector) => {
 	} else if ($selector.find(':checkbox').length > 0) {
 		let checkedItems = $selector.find('input[type="checkbox"]:checked');
 		let checkedboxLength = checkedItems.length;
-		let checkboxLength = $selector.find('input[type="checkbox"]:not([value="all"])').length;
+		let checkboxLength = $selector.find('input[type="checkbox"]').length;
 
 		if(checkedboxLength == checkboxLength){
 			$displayText = i18nManager.tr('commonDropdown.total');
