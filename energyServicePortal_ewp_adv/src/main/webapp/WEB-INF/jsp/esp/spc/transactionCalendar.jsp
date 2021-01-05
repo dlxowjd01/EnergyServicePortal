@@ -283,10 +283,11 @@
 									modal_data: data
 								});
 							} else {
+								let status = data.status === 9 ? 13 : data.status;
 								rtnArray.push({
 									date: data.withdraw_day,
 									spc_id: data.spc_id,
-									status: data.status
+									status: status
 								});
 							}
 						});
@@ -413,7 +414,6 @@
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
 				$("#spcAlarmModal").modal("hide");
 				document.location.reload(true);
-				// maintenance(spcPairArr, 'get');
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				showWarningModal("fail");
 				console.errer("jqXHR===", jqXHR)
@@ -440,16 +440,7 @@
 		const checkType = [].map.call(document.querySelectorAll('[name="type"]:checked'), (chk) => { return Number(chk.value) });
 
 		const searchName = document.getElementById('searchName').value.trim()
-			, regExp = new RegExp(searchName, 'i')
-			, statusList = [
-				{ id: 0, val: '출금 - 반송' },
-				{ id: 1, val: '출금 - 승인 대기' },
-				{ id: 2, val: '출금 - 승인 중' },
-				{ id: 3, val: '출금 - 승인 완료' },
-				{ id: 4, val: '출금 - 가승인' },
-				{ id: 5, val: '출금 - 최종 승인' },
-				{ id: 6, val: '입금' }
-			];
+			, regExp = new RegExp(searchName, 'i');
 
 		let modalStr = ``;
 		Object.entries(data).forEach(([date, items]) => {
@@ -469,7 +460,7 @@
 
 				//업무 구분
 				const jobType = !isEmpty(item.job_type) ? Number(item.job_type) : item.status;
-				const jobName = !isEmpty(item.job_type) ? job_name(item.job_type) : statusList[item.id];
+				const jobName = !isEmpty(item.job_type) ? job_name(item.job_type) : status_name(item.status);
 
 				//왼쪽 검색조건 적용
 				if (!checkType.includes(jobType)) {
@@ -490,15 +481,15 @@
 				if (showCount > 2) { hiddenClass = 'hidden'; }
 
 				if (!isEmpty(item.job_type)) {
-					tableStr += `<li data-jobId="${'${item.id}'}" data-id="${'${item.spc_id}'}" data-name="${'${spcName}'}" class="link bu t${'${item.job_type}'} ${'${hiddenClass}'}">[${'${spcName}'}] ${'${jobName}'}</li>`;
+					tableStr += `<li data-jobId="${'${item.id}'}" data-id="${'${item.spc_id}'}" data-name="${'${spcName}'}" class="link bu t${'${jobType}'} ${'${hiddenClass}'}">[${'${spcName}'}] ${'${jobName}'}</li>`;
 					modalStr += `<li class="link alarm-item ${'${hiddenClass}'}" data-id="${'${item.id}'}">
-									<span data-jobId="${'${item.id}'}" data-id="${'${item.spc_id}'}" data-name="${'${spcName}'}" class="bu t${'${item.job_type}'}">[${'${spcName}'}] ${'${jobName}'}</span>
+									<span data-jobId="${'${item.id}'}" data-id="${'${item.spc_id}'}" data-name="${'${spcName}'}" class="bu t${'${jobType}'}">[${'${spcName}'}] ${'${jobName}'}</span>
 									<span class="fr btn-next"></span>
 									<br>
 								</li>`;
 				} else {
 					const bulletIdx = statusCode(jobType);
-					tableStr += `<li data-id="${'${item.spc_id}'}" data-name="${'${spcName}'}" data-value="${'${jobType}'}" class="bu t${'${bulletIdx}'} ${'${hiddenClass}'}">[${'${spcName}'}] ${'${statusList[jobType].val}'}</li>`;
+					tableStr += `<li data-id="${'${item.spc_id}'}" data-name="${'${spcName}'}" data-value="${'${jobType}'}" class="bu t${'${bulletIdx}'} ${'${hiddenClass}'}">[${'${spcName}'}] ${'${jobName}'}</li>`;
 
 					if (first) {
 						first = false;
@@ -506,7 +497,7 @@
 						if (transactionCount > 1) { suffix = (transactionCount - 1) + ' 외'; }
 						modalStr += `<li class="alarm-item link ${'${hiddenClass}'}">
 										<span data-id="${'${item.spc_id}'}" data-name="${'${spcName}'}" data-value="${'${jobType}'}" class="bu t${'${bulletIdx}'}">
-											[${'${spcName}'}] ${'${statusList[jobType].val}'} ${'${suffix}'}
+											[${'${spcName}'}] ${'${jobName}'} ${'${suffix}'}
 										</span>
 										<span class="fr btn-next"></span><br/>
 									</li>`;
@@ -568,6 +559,8 @@
 			bulletIdx = '4';
 		} else if(status === 5) {
 			bulletIdx = '5';
+		} else if(status === 13) {
+			bulletIdx = '13';
 		}
 
 		return bulletIdx;
@@ -581,16 +574,7 @@
 		const calendarDate = (date.slice(-4)).replace(/(\d{2})(\d{2})/, '$1월 $2일')
 			, etcModal = document.getElementById('dateEtcModal')
 			, modalData = document.querySelector('#dateEtcModal .alarm-list')
-			, regExp = new RegExp(searchName, 'i')
-			, statusList = [
-				{ id: 0, val: '출금 - 반송' },
-				{ id: 1, val: '출금 - 승인 대기' },
-				{ id: 2, val: '출금 - 승인 중' },
-				{ id: 3, val: '출금 - 승인 완료' },
-				{ id: 4, val: '출금 - 가승인' },
-				{ id: 5, val: '출금 - 최종 승인' },
-				{ id: 6, val: '입금' }
-			];
+			, regExp = new RegExp(searchName, 'i');
 		let modalStr = ``;
 		let checkType = new Array();
 		document.querySelectorAll('[name="type"]:checked').forEach(checkbox => {
@@ -626,7 +610,7 @@
 							</li>`;
 			} else {
 				const status = item.status
-					, statusName = statusList[item.id];
+					, statusName = status_name(item.id);
 
 				let bulletIdx;
 				if(status === 1) {
@@ -639,6 +623,10 @@
 					bulletIdx = '4';
 				} else if(status === 5) {
 					bulletIdx = '5';
+				} else if(status === 6) {
+					bulletIdx = '6';
+				} else {
+					bulletIdx = '13';
 				}
 
 				if (!checkType.includes(bulletIdx)) {
@@ -652,7 +640,7 @@
 
 				modalStr += `<li class="alarm-item link ${'${hiddenClass}'}">
 								<span data-id="${'${item.spc_id}'}" data-name="${'${spcName}'}" data-value="${'${status}'}" class="bu t${'${bulletIdx}'}">
-									[${'${spcName}'}] ${'${statusList[status].val}'}
+									[${'${spcName}'}] ${'${statusName}'}
 								</span>
 								<span class="fr btn-next"></span><br/>
 							</li>`;
@@ -945,6 +933,32 @@
 
 	};
 
+	const status_name = function (type) {
+		let rtn = '';
+
+		switch (type) {
+			case 0: rtn = '출금 - 반송'
+				break;
+			case 1: rtn = '출금 - 승인 대기'
+				break;
+			case 2: rtn = '출금 - 승인 중'
+				break;
+			case 3: rtn = '출금 - 승인 완료'
+				break;
+			case 4: rtn = '출금 - 가승인'
+				break;
+			case 5: rtn = '출금 - 최종 승인'
+				break;
+			case 6: rtn = '입금'
+				break;
+			case 13: rtn = '출금 - 임시 저장'
+				break;
+			default: rtn = ''
+				break;
+		}
+		return rtn;
+	};
+
 	const job_name = function (type) {
 		let rtn = '';
 		switch (type) {
@@ -970,7 +984,7 @@
 				break;
 			case '12': rtn = '대출상환 만기일'
 				break;
-			case 'default': rtn = ''
+			default: rtn = ''
 				break;
 		}
 		return rtn;
@@ -1385,6 +1399,10 @@
 				<div class="chk-type c5">
 					<input type="checkbox" id="chk_op05" name="type" value="5" checked>
 					<label for="chk_op05">출금 - 최종승인</label>
+				</div>
+				<div class="chk-type c13">
+					<input type="checkbox" id="chk_op13" name="type" value="13" checked>
+					<label for="chk_op13">출금 - 임시저장</label>
 				</div>
 
 				<div class="flex-wrapper mt-40">

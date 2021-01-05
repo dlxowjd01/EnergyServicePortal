@@ -277,6 +277,7 @@
 
 		withdrawForm.on('submit', function(e){
 			e.preventDefault();
+
 			let warning = withdrawForm.find(".warning");
 			let tr = tableBody.find("tr");
 			let jsonData = {}
@@ -293,8 +294,14 @@
 			jsonData.withdraw_day = $("#requestedDate").val().replace(/-/g, "");
 			// to
 			jsonData.to_account = "";
+
 			// status
-			jsonData.status = 1;
+			if (e.originalEvent.submitter.textContent === '제출') {
+				jsonData.status = 1;
+			} else {
+				jsonData.status = 9;
+			}
+
 			jsonData.status_changed_by = loginName;
 			jsonData.status_changed_at = new Date();
 			jsonData.requested_by = loginName;
@@ -392,7 +399,7 @@
 				};
 
 				$.ajax(opt).done(function (json, textStatus, jqXHR) {
-					window.location.href = window.location.origin + '/spc/transactionHistory.do'
+					window.location.href = window.location.origin + '/spc/withdrawReqStatus.do'
 				}).fail(function (jqXHR, textStatus, errorThrown) {
 					alert('처리 중 오류가 발생했습니다.');
 					console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
@@ -489,8 +496,20 @@
 			calcTotal();
 		});
 
-		$("#deleteRowBtn").on("click", function(){
-			$("#tableBody tr:not(:first-child)").find('td input:checked').closest('tr').remove();
+		$("#deleteRowBtn").on("click", function() {
+			if ($("#tableBody tr").length > 1) {
+				if ($("#tableBody tr").length === $("#tableBody tr").find('td input:checked').length) {
+					$("#tableBody tr:not(:first-child)").find('td input:checked').closest('tr').remove();
+
+					alert('최소 한개의 행이 존재 해야합니다.');
+					return false;
+				} else {
+					$("#tableBody tr").find('td input:checked').closest('tr').remove();
+				}
+			} else {
+				alert('최소 한개의 행이 존재 해야합니다.');
+				return false;
+			}
 		});
 
 		$("#selectAll").on("click", function(){
@@ -729,7 +748,8 @@
 				</div>
 
 				<div class="btn-wrap-type05"><!--
-				--><button type="button" onclick="location.href='/spc/transactionCalendar.do'" class="btn btn-type03 w-80px mr-12">목록</button><!--
+				--><button type="button" onclick="location.href='/spc/transactionCalendar.do'" class="btn btn-type03 w-80px">목록</button><!--
+				--><button type="submit" class="btn btn-type03 w-80px mr-12">임시 저장</button><!--
 				--><button type="submit" class="btn btn-type">제출</button><!--
 			--></div>
 			</div>

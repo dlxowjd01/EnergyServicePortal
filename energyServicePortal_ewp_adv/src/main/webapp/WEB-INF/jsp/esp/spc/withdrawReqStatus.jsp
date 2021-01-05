@@ -112,6 +112,9 @@
 							} else if (!isEmpty(full['statusVal']) && full['statusVal'] === 1) {
 								statusButton += `<a href="javascript:void(0);" onclick="goToEdit(\'${'${rowIndex.row}'}\')" class="icon-edit"></a>
 												<a href="javascript:void(0);" onclick="deleteRow(\'${'${rowIndex.row}'}\')" class="icon-delete"></a>`;
+							} else if (!isEmpty(full['statusVal']) && full['statusVal'] === 9) {
+								statusButton += `<a href="javascript:void(0);" onclick="goToEdit(\'${'${rowIndex.row}'}\')" class="icon-edit"></a>
+												<a href="javascript:void(0);" onclick="deleteRow(\'${'${rowIndex.row}'}\')" class="icon-delete"></a>`;
 							}
 						}
 						return statusButton;
@@ -305,6 +308,10 @@
 							case 5:
 								statusVal = '출금 최종승인';
 								statusClass = 'text-blue';
+								break;
+							case 9:
+								statusVal = '임시 저장';
+								statusClass = 'text-link';
 								break;
 							default:
 								statusVal = '';
@@ -582,11 +589,13 @@
 		const rowData = withdrawReqStatus.row(rowIndex).data()
 			, spcId = rowData.transactionSpcId
 			, spcName = rowData.spcName
-			, reqId = rowData.transactionReqId;
+			, reqId = rowData.transactionReqId
+			, statusVal = rowData.statusVal;
 
 		document.getElementById('reqEditSpcId').value = spcId;
 		document.getElementById('reqEditSpcName').value = spcName;
 		document.getElementById('reqEditReqId').value = reqId;
+		document.getElementById('reqEditReqStatus').value = statusVal;
 		document.getElementById('reqEditForm').submit();
 	}
 
@@ -652,6 +661,7 @@
 	<input type="hidden" id="reqEditSpcId" name="req_edit_spc_id" value=''/>
 	<input type="hidden" id="reqEditSpcName" name="req_edit_spc_name" value=''/>
 	<input type="hidden" id="reqEditReqId" name="req_edit_req_id" value=''/>
+	<input type="hidden" id="reqEditReqStatus" name="req_edit_req_status" value=''/>
 </form>
 
 <form id="reqDetailForm" method="post" action="/spc/withdrawReqStatusDetail.do">
@@ -684,6 +694,7 @@
 					--><li data-value="4" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="provisional" name="review_status" value="4"><label for="provisional">출금 가승인</label></a></li><!--
 					--><li data-value="5" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="finalApproval" name="review_status" value="5"><label for="finalApproval">출금 최종승인</label></a></li><!--
 					--><li data-value="0" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="reject" name="review_status" value="0"><label for="reject">반송</label></a></li><!--
+					--><li data-value="9" tabindex="-1"><a href="javascript:void(0);"><input type="checkbox" id="temp" name="review_status" value="9"><label for="temp">임시 저장</label></a></li><!--
 					--><li class="btn-wrap-type03 btn-wrap-border"><button type="button" class="btn-type mr-16">적용</button></li><!--
 				--></ul>
 				</div>

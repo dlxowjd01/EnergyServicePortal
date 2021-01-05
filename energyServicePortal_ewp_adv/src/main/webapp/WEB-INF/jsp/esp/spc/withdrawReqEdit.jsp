@@ -214,7 +214,6 @@
 							$("#total").val(savedTotal);
 						}).then(() => {
 							$.each(res, function(index, element){
-								// console.log("x===", x)
 								Object.entries(element).map((item, index) => {
 									const strAccType = "입출금_구분";
 									const strAccNum = "계좌_번호";
@@ -253,8 +252,7 @@
 									let bankName = '';
 									let accNum = '';
 									let accHolder = '';
-									console.log("v===", v.accHolder)
-									if(v.accType.match("출금")){
+									if(v.accType.match("출금")) {
 										accNum = v.accNum;
 										accHolder = v.accHolder;
 										bankName = v.bankName;
@@ -277,7 +275,6 @@
 										$(".receive-list").each(function(){
 											$(this).append($(receiving));
 											$(this).find("li").on("click", function(){
-												// console.log("receive list clicking---")
 												$(this).prev().data({"value": $(this).data("value"), "name": $(this).data("name") });
 											});
 										});
@@ -381,8 +378,13 @@
 			jsonData.withdraw_day = $("#requestedDate").val().replace(/-/g, "");
 			// to
 			jsonData.to_account = "";
+
 			// status
-			jsonData.status = 1;
+			if (e.originalEvent.submitter.textContent === '제출') {
+				jsonData.status = 1;
+			} else {
+				jsonData.status = 9;
+			}
 			jsonData.status_changed_by = loginName;
 			jsonData.status_changed_at = new Date();
 			jsonData.requested_by = loginName;
@@ -482,7 +484,7 @@
 					$.each(fileList, function(index, element){
 						uploadFile('post', $("#fileInput")[0].files[index], finalNameList[index].filedName);
 					});
-					window.location.href = window.location.origin + '/spc/transactionHistory.do'
+					window.location.href = window.location.origin + '/spc/withdrawReqStatus.do'
 				}).fail(function (jqXHR, textStatus, errorThrown) {
 					alert('처리 중 오류가 발생했습니다.');
 					console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
@@ -810,7 +812,10 @@
 				</div>
 
 				<div class="btn-wrap-type05"><!--
-				--><button type="button" onclick="location.href='/spc/transactionHistory.do'" class="btn btn-type03 w-80px mr-12">목록</button><!--
+				--><button type="button" onclick="location.href='/spc/withdrawReqStatus.do'" class="btn btn-type03 w-80px <c:if test="${param.req_edit_req_status ne 9}"> mr-12 </c:if>">목록</button><!--
+				<c:if test="${param.req_edit_req_status eq 9}">
+				--><button type="submit" class="btn btn-type03 w-80px mr-12">임시 저장</button><!--
+				</c:if>
 				--><button type="submit" class="btn btn-type">제출</button><!--
 			--></div>
 			</div>

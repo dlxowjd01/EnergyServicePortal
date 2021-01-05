@@ -665,12 +665,12 @@
 								--></div>
 							</c:when>
 							<c:otherwise>
-								<c:if test="${(param.req_detail_status_val ne 4 and param.req_detail_status_val ne 5)}">
+								<c:if test="${(param.req_detail_status_val ne 4 and param.req_detail_status_val ne 5 and param.req_detail_status_val ne 9)}">
 									<div class="spc-btn-group my-20"><!--
-										--><button type="button" id="reviewBtn" class="btn-type mr-16">검토대기로 변경</button><!--
-										--><button type="button" id="rejectBtn" class="btn-type03 w-80px">반송</button><!--
-										--><button type="submit" class="btn-type ml-12">승인</button><!--
-									--></div>
+									--><button type="button" id="reviewBtn" class="btn-type mr-16">검토대기로 변경</button><!--
+									--><button type="button" id="rejectBtn" class="btn-type03 w-80px">반송</button><!--
+									--><button type="submit" class="btn-type ml-12">승인</button><!--
+								--></div>
 								</c:if>
 							</c:otherwise>
 						</c:choose>
@@ -697,7 +697,7 @@
 								--></div>
 								</c:when>
 								<c:otherwise>
-									<c:if test="${userInfo.task eq 2 and (param.req_detail_status_val ne 4 and param.req_detail_status_val ne 5)}">
+									<c:if test="${userInfo.task eq 2 and (param.req_detail_status_val ne 4 and param.req_detail_status_val ne 5 and param.req_detail_status_val ne 9)}">
 										<div class="spc-btn-group my-20"><!--
 										--><button type="button" id="reviewBtn" class="btn-type mr-16">검토대기로 변경</button><!--
 										--><button type="button" id="rejectBtn" class="btn-type03 w-80px">반송</button><!--
