@@ -2667,7 +2667,17 @@ html[lang="en"] .all-menu > a:after {
 #selectSiteList > .dropdown-menu,
 #siteList > .dropdown-menu {
 	top: 76px;
-	min-width: 230px;
+	width: 260px;
+	height: 300px;
+}
+
+#site .dropdown-search,
+#selectSiteList .dropdown-search,
+#siteList .dropdown-search,
+#site .dropdown-apply,
+#selectSiteList .dropdown-apply,
+#siteList .dropdown-apply {
+	width: 260px;
 }
 
 .modal .dropdown-menu {
@@ -2754,7 +2764,6 @@ html[lang="en"] .all-menu > a:after {
 }
 
 .dropdown-search {
-	width: 230px;
 	position: absolute;
 	top: 100%;
 	background: var(--active);
