@@ -610,7 +610,7 @@
 							</li>`;
 			} else {
 				const status = item.status
-					, statusName = status_name(item.id);
+					, statusName = status_name(item.status);
 
 				let bulletIdx;
 				if(status === 1) {
