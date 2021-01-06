@@ -123,11 +123,9 @@
 		$('#fromDate').datepicker('setDate', -8);
 		$('#toDate').datepicker('setDate', -1);
 
-		properties();
-
 		setInitList('siteULList'); //사업소 리스트
-		siteMakeList();
-		getDataList();
+		properties();
+		searchDevices();
 	});
 
 	const rtnDropdown = ($selector) => {
@@ -173,8 +171,9 @@
 
 	//사업소 조회
 	const siteMakeList = function (search = []) {
-		const makeSite = search.length ? Array.from(search) : Array.from(siteList);
+		let makeSite = search.length ? Array.from(search) : Array.from(siteList);
 		makeSite.sortOn('name');
+		makeSite = makeSite.filter(e => e.ESS === true);
 		makeSite.unshift({ sid: 'all', name: '<fmt:message key="dropDown.all" />'});
 		setMakeList(makeSite, 'siteULList', {'dataFunction': {}}); //list생성
 
@@ -186,8 +185,47 @@
 		}
 	};
 
+	const searchDevices = () => {
+		if (!isEmpty(siteList)) {
+			let deviceAjax = new Array();
+			siteList.forEach(site => {
+				deviceAjax.push($.ajax({
+					url: apiHost + '/config/devices',
+					type: 'get',
+					dataType: 'json',
+					data: {
+						sid: site.sid,
+						formId: 'v2'
+					}
+				}));
+			});
+
+			Promise.all(deviceAjax).then(response => {
+				if (!isEmpty(response)) {
+					response.forEach(res => {
+						if (!isEmpty(res)) {
+							const siteIndex = siteList.findIndex(e => e.sid === res[0].sid);
+							const essFind = res.find(e => /ESS/.test(e.device_type));
+							if (essFind) {
+								siteList[siteIndex]['ESS'] = true;
+							} else {
+								siteList[siteIndex]['ESS'] = false;
+							}
+							siteList[siteIndex]['devices'] = res;
+						}
+					});
+				}
+			}).finally(() => {
+				siteMakeList();
+				getDataList();
+			});
+		}
+	}
+
 	//설비 유형
 	const deviceTypeList = () => {
+		let makeSite = search.length ? Array.from(search) : Array.from(siteList);
+
 		let siteArray = new Array();
 		let typeArray = new Array();
 
@@ -199,7 +237,7 @@
 			document.querySelectorAll('[name="site"]:checked').forEach(checked => { siteArray.push(checked.value); });
 		}
 
-		if (!isEmpty(siteArray)) {
+		if (!isEmpty(makeSite)) {
 			let deviceAjax = new Array();
 			siteArray.forEach(site => {
 				deviceAjax.push($.ajax({
@@ -261,6 +299,7 @@
 		if (!isEmpty(siteArray)) {
 			$('#loadingCircleDashboard').show();
 			let deviceAjax = new Array();
+
 			siteArray.forEach(site => {
 				deviceAjax.push($.ajax({
 					url: apiHost + '/config/devices',
