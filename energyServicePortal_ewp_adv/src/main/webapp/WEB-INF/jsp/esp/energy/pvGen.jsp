@@ -259,7 +259,7 @@
 					url: apiHost + '/config/devices/',
 					type: 'GET',
 					data: {
-						oid: 'spower',
+						oid: oid,
 						sid: sid
 					}
 				}));
