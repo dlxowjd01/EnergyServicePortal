@@ -183,6 +183,8 @@
 		if (!$(`.dropdown-search`).length) {
 			$(`#siteList`).prepend(`<div class="dropdown-search"><input type="text" placeholder="<fmt:message key="dropdown.siteSearch" />" onKeyup="searchSite($(this).val())" ></div>`)
 		}
+
+		deviceTypeList();
 	};
 
 	const searchDevices = () => {
@@ -515,7 +517,7 @@
 					<ul class="dropdown-menu chk-type " role="menu" id="siteULList">
 						<li>
 							<a href="javascript:void(0);" tabindex="-1">
-								<input type="checkbox" id="site_[INDEX]" value="[sid]" name="site">
+								<input type="checkbox" id="site_[INDEX]" value="[sid]" name="site" checked>
 								<label for="site_[INDEX]">[name]</label>
 							</a>
 						</li>

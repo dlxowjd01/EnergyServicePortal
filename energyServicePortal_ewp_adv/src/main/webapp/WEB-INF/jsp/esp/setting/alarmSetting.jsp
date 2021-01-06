@@ -582,32 +582,39 @@
 			const LEVEL = { v : workbook.Sheets[sheetNames]['H' + i] != undefined ? workbook.Sheets[sheetNames]['H' + i].v : '' };
 			const DESCRIPTION = { v : workbook.Sheets[sheetNames]['I' + i] != undefined ? String(workbook.Sheets[sheetNames]['I' + i].v).trim() : '' };
 			const tempDataSet = DEV_TYPE.v + '_' + MANUFACTURER.v + '_' + MODEL.v  + '_' + VERSION.v;
-			if (i === 3) {
-				strDataSet = tempDataSet;
-			} else {
-				if (isEmpty(DEV_TYPE.v)) {
-					continue;
-				} else if (isEmpty(MANUFACTURER.v)) {
-					errorMsg('제조사는 필수값입니다.');
-					return false;
-				} else if (isEmpty(MODEL.v)) {
-					errorMsg('모델명은 필수값입니다.');
-					return false;
-				} else if (isEmpty(VERSION.v)) {
-					errorMsg('펌웨어 버전은 필수값입니다.');
-					return false;
-				} else if (isEmpty(ALARM_CODE.v)) {
-					errorMsg('에러 코드는 필수값입니다.');
-					return false;
-				} else if (isEmpty(ALARM_MSG.v)) {
-					errorMsg('메세지는 필수값입니다.');
-					return false;
-				}
+			if (i === 3) strDataSet = tempDataSet;
 
-				if (strDataSet !== tempDataSet) {
-					errorMsg('엑셀 업로드는 하나의 데이터 셋만 가능합니다.');
+			if (!isEmpty(DEV_TYPE.v)) {
+				let typeCheck = false;
+				Object.entries(deviceTemplate).forEach(([type, name]) => {
+					if (type === DEV_TYPE.v) typeCheck = true;
+				});
+				if (!typeCheck) {
+					errorMsg('설비유형은 코드로 입력하여야합니다.');
 					return false;
 				}
+			} else if (!isEmpty(DEV_TYPE.v)) {
+				continue;
+			} else if (isEmpty(MANUFACTURER.v)) {
+				errorMsg('제조사는 필수값입니다.');
+				return false;
+			} else if (isEmpty(MODEL.v)) {
+				errorMsg('모델명은 필수값입니다.');
+				return false;
+			} else if (isEmpty(VERSION.v)) {
+				errorMsg('펌웨어 버전은 필수값입니다.');
+				return false;
+			} else if (isEmpty(ALARM_CODE.v)) {
+				errorMsg('에러 코드는 필수값입니다.');
+				return false;
+			} else if (isEmpty(ALARM_MSG.v)) {
+				errorMsg('메세지는 필수값입니다.');
+				return false;
+			}
+
+			if (strDataSet !== tempDataSet) {
+				errorMsg('엑셀 업로드는 하나의 데이터 셋만 가능합니다.');
+				return false;
 			}
 
 			if (isEmpty(alarmLevel[LEVEL.v])) {
