@@ -438,14 +438,15 @@
 			let todayGenAllSite = 0;
 			let ratioDaily = 0;
 			let restDaily = 0;
-			let seriesData = new Array();
+			let seriesData1 = [];
+			let seriesData2 = [];
+			let category = [];
 
 			Object.entries(hourGenBySite).forEach(([siteId, hourGenData]) => {hourGenAllSite += hourGenData});
 			Object.entries(hourForeGenBySite).forEach(([siteId, hourGenData]) => {hourForeGenAllSite += hourGenData});
 
 			siteList.forEach((site, siteIdx) => {
-				let ratioHourly = 0
-				  , siteArray = new Array();
+				let ratioHourly = 0;
 
 				const toDayGen = isEmpty(todayGenBySite[site.sid]) ? 0 : todayGenBySite[site.sid];
 				const toDayForeGen = isEmpty(todayForeGenBySite[site.sid]) ? 0 : todayForeGenBySite[site.sid];
@@ -475,17 +476,16 @@
 					}
 				}
 
-				siteArray.push(site.name);
-				siteArray.push(ratioHourly);
-				siteArray.push(ratioDaily);
-				seriesData.push(siteArray);
+				category.push(site.name);
+				seriesData1.push(ratioHourly);
+				seriesData2.push(100 - ratioHourly);
 			});
 
 			rchart1.update({
 				xAxis: {
 					max: 2,
 					scrollbar: {
-						enabled: seriesData.length<=2 ? false : true,
+						enabled: seriesData1.length<=2 ? false : true,
 						minWidth: 30,
 						barBackgroundColor: 'var(--white40)',
 						barBorderRadius: 5,
@@ -498,12 +498,17 @@
 						trackBorderRadius: 0,
 						trackBorderColor: 'none'
 					},
-
+					categories: category
 				},
 				series: [{
+					data: seriesData2,
+					tooltip: { pointFormat: "" },
+					name: null,
+					color: "transparent"
+				}, {
 					name: '실시간 출력량',
-					data: seriesData,
-					minPointWidth: seriesData.length<=2 ? 50 : 12,
+					data: seriesData1,
+					minPointWidth: seriesData1.length<=2 ? 50 : 12,
 					// maxPointWidth: seriesData.length<2 ? 50 : 30,
 					dataLabels: {
 						enabled: true,
@@ -738,7 +743,7 @@
 				x: 0,
 				y: -2
 			},
-			opposite: true
+			opposite: true,
 		},
 		tooltip: {
 			shared: true,
@@ -763,6 +768,7 @@
 				},
 				borderWidth: 0,
 				// pointWidth: 28,
+				stacking: 'normal',
 			},
 			column: {
 				stacking: 'percent',
@@ -788,6 +794,10 @@
 			}
 		},
 		series: [{
+			data: null,
+			tooltip: null,
+			name: null,
+		}, {
 			name: '실시간 출력량',
 			data: null,
 			dataLabels: {
