@@ -278,6 +278,10 @@
 		}
 	}
 
+	const afterDatePick = () => {
+		getDataList();
+	}
+
 	/**
 	 * 데이터 조회
 	 */
