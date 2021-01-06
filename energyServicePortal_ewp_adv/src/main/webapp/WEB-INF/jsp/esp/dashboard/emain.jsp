@@ -7,9 +7,8 @@
 
 	$(function() {
 		emainTable = $('#emainTable').DataTable({
-			autoWidth: true,
-			'table-layout': 'fixed',
 			scrollX: true,
+			scrollXInner: '800px',
 			scrollY: '720px',
 			scrollCollapse: true,
 			paging: false,
@@ -61,7 +60,7 @@
 					data: 'newest_sent_at',
 					render: function(data, type, full, rowIndex) {
 						if (!isEmpty(data)) {
-							data = data.substr(0, 12);
+							data = String(data).substr(0, 12);
 							return data.replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})/g, '$1-$2-$3 $4:$5')
 						} else {
 							return '-';
@@ -128,6 +127,7 @@
 
 		setInitList('siteULList'); //사업소 리스트
 		siteMakeList();
+		getDataList();
 	});
 
 	const rtnDropdown = ($selector) => {
@@ -256,6 +256,8 @@
 			document.querySelectorAll('[name="site"]').forEach(check => { if (check.value !== 'all') { siteArray.push({sid: check.value, name: check.nextElementSibling.textContent}); } });
 		}
 
+		document.querySelectorAll('[name="deviceType"]:checked').forEach(check => { typeArray.push(check.value) });
+
 		if (!isEmpty(siteArray)) {
 			$('#loadingCircleDashboard').show();
 			let deviceAjax = new Array();
@@ -351,6 +353,8 @@
 					});
 				}
 
+				if (dataArray.length > 0 && typeArray.length > 0) { dataArray = dataArray.filter(e => typeArray.includes(e.device_type)); }
+
 				let devices = new Array();
 				if (dataArray.length > 0) {
 					deviceAjax = new Array();
@@ -428,11 +432,16 @@
 
 						emainTable.clear();
 						emainTable.rows.add(dataArray).draw();
+						$($.fn.dataTable.tables(true)).DataTable().columns.adjust();
 
 						$('#loadingCircleDashboard').hide();
 					});
+				} else {
+					emainTable.clear();
+					emainTable.rows.add(dataArray).draw();
+					$('#loadingCircleDashboard').hide();
 				}
-				//$($.fn.dataTable.tables(true)).DataTable().columns.adjust();
+
 			}).catch(error => {
 				console.error(error);
 				$('#loadingCircleDashboard').hide();
@@ -504,15 +513,15 @@
 		<div class="indiv">
 			<table id="emainTable" class="dashboard-table">
 				<colgroup>
-					<col style="width:12%">
-					<col style="width:8%">
-					<col style="width:12%">
-					<col style="width:8%">
-					<col style="width:16%">
-					<col style="width:16%">
-					<col style="width:8%">
-					<col style="width:8%">
-					<col style="width:12%">
+					<col style="width:12%"/>
+					<col style="width:8%"/>
+					<col style="width:12%"/>
+					<col style="width:8%"/>
+					<col style="width:16%"/>
+					<col style="width:16%"/>
+					<col style="width:8%"/>
+					<col style="width:8%"/>
+					<col style="width:12%"/>
 				</colgroup>
 				<thead></thead>
 				<tbody></tbody>
