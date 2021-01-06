@@ -226,8 +226,6 @@
 
 	//설비 유형
 	const deviceTypeList = () => {
-		let makeSite = search.length ? Array.from(search) : Array.from(siteList);
-
 		let siteArray = new Array();
 		let typeArray = new Array();
 
@@ -239,7 +237,7 @@
 			document.querySelectorAll('[name="site"]:checked').forEach(checked => { siteArray.push(checked.value); });
 		}
 
-		if (!isEmpty(makeSite)) {
+		if (!isEmpty(siteArray)) {
 			let deviceAjax = new Array();
 			siteArray.forEach(site => {
 				deviceAjax.push($.ajax({
