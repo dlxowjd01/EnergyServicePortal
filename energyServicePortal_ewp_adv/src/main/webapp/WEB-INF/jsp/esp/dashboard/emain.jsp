@@ -76,7 +76,7 @@
 						if (isEmpty(data)) {
 							return '-';
 						} else {
-							return f(data);
+							return f(data * 100);
 						}
 					},
 					className: 'dt-center'
@@ -89,7 +89,7 @@
 						if (isEmpty(data)) {
 							return '-';
 						} else {
-							return f(data);
+							return f(data * 100);
 						}
 					},
 					className: 'dt-center'
