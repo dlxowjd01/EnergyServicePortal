@@ -355,13 +355,14 @@
 
 				if (dataArray.length > 0 && typeArray.length > 0) { dataArray = dataArray.filter(e => typeArray.includes(e.device_type)); }
 
+				//임시로 해당 장비들 조회 제회하도록 구성
+				if (dataArray.length) { dataArray = dataArray.filter(e => !['BMS_RACK', 'SENSOR_FLAME', 'SENSOR_TEMPHUMID', 'SENSOR_WEATHER'].includes(e.device_type)); }
+
 				let devices = new Array();
 				if (dataArray.length > 0) {
 					deviceAjax = new Array();
 					dataArray.forEach(data => {
-						if (data.device_type !== 'BMS_RACK') {
-							devices.push(data.did);
-						}
+						devices.push(data.did);
 					});
 
 					deviceAjax.push($.ajax({
