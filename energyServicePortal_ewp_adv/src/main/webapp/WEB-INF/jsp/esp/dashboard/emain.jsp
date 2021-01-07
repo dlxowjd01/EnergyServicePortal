@@ -134,7 +134,7 @@
 		if ($selector == 'siteList') {
 			if (selector.find('input:checkbox:checked').length > 0) {
 				deviceTypeList();
-				getDataList();
+				dropDownInit($('#typeList'))
 			} else {
 				$('#typeULList').empty();
 				emainTable.clear().draw();
@@ -184,7 +184,7 @@
 			$(`#siteList`).prepend(`<div class="dropdown-search"><input type="text" placeholder="<fmt:message key="dropdown.siteSearch" />" onKeyup="searchSite($(this).val())" ></div>`)
 		}
 
-		deviceTypeList();
+		deviceTypeList(true);
 	};
 
 	const searchDevices = () => {
@@ -219,13 +219,12 @@
 				}
 			}).finally(() => {
 				siteMakeList();
-				getDataList();
 			});
 		}
 	}
 
 	//설비 유형
-	const deviceTypeList = () => {
+	const deviceTypeList = (firstLoad) => {
 		let siteArray = new Array();
 		let typeArray = new Array();
 
@@ -263,10 +262,13 @@
 					if (!isEmpty(typeArray)) {
 						typeArray.forEach(type => {
 							let typeName = deviceProp[type].name;
+							let check = '';
+							if (firstLoad && type === 'BMS_SYS') check = 'checked';
+
 							$('#typeULList').append(`
 								<li>
 									<a href="javascript:void(0);" tabindex="-1">
-										<input type="checkbox" id="device_${'${type}'}" value="${'${type}'}" name="deviceType" checked>
+										<input type="checkbox" id="device_${'${type}'}" value="${'${type}'}" name="deviceType" ${'${check}'}>
 										<label for="device_${'${type}'}">${'${typeName}'}</label>
 									</a>
 								</li>
@@ -274,6 +276,9 @@
 						});
 					}
 				}
+			}).finally(() => {
+				displayDropdown($('#typeList'))
+				getDataList();
 			});
 		}
 	}
@@ -358,37 +363,33 @@
 										});
 									}
 								} else {
-									if (item.device_type !== 'BMS_RACK') {
-										if (idx > -1) {
-											dataArray[idx] = Object.assign({}, dataArray[idx], item);
-										} else {
-											dataArray.push(item);
-										}
+									if (idx > -1) {
+										dataArray[idx] = Object.assign({}, dataArray[idx], item);
+									} else {
+										dataArray.push(item);
 									}
 								}
 							});
 						} else {
 							Object.entries(res).forEach(([did, status]) => {
-								if (status.device_type !== 'BMS_RACK') {
-									const idx = dataArray.findIndex(e => e.did === did);
-									if (!isEmpty(status.data) && !isEmpty(status.data[0].timestamp)) {
-										if (idx > -1) {
-											dataArray[idx].lastTargetActivePowerReqDate = status.data[0].timestamp;
-										} else {
-											dataArray.push({
-												did: did,
-												lastTargetActivePowerReqDate: status.data[0].timestamp
-											});
-										}
+								const idx = dataArray.findIndex(e => e.did === did);
+								if (!isEmpty(status.data) && !isEmpty(status.data[0].timestamp)) {
+									if (idx > -1) {
+										dataArray[idx].lastTargetActivePowerReqDate = status.data[0].timestamp;
 									} else {
-										if (idx > -1) {
-											dataArray[idx].lastTargetActivePowerReqDate = '-'
-										} else {
-											dataArray.push({
-												did: did,
-												lastTargetActivePowerReqDate: '-'
-											});
-										}
+										dataArray.push({
+											did: did,
+											lastTargetActivePowerReqDate: status.data[0].timestamp
+										});
+									}
+								} else {
+									if (idx > -1) {
+										dataArray[idx].lastTargetActivePowerReqDate = '-'
+									} else {
+										dataArray.push({
+											did: did,
+											lastTargetActivePowerReqDate: '-'
+										});
 									}
 								}
 							});
@@ -396,7 +397,7 @@
 					});
 				}
 
-				if (dataArray.length > 0 && typeArray.length > 0) { dataArray = dataArray.filter(e => typeArray.includes(e.device_type)); }
+				if (dataArray.length >0) { dataArray = dataArray.filter(e => typeArray.includes(e.device_type)); }
 
 				//임시로 해당 장비들 조회 제회하도록 구성
 				//if (dataArray.length) { dataArray = dataArray.filter(e => !['BMS_RACK', 'SENSOR_FLAME', 'SENSOR_TEMPHUMID', 'SENSOR_WEATHER'].includes(e.device_type)); }
@@ -425,7 +426,8 @@
 							dids: devices.toString(),
 							startDay: Number($('#fromDate').datepicker('getDate').format('yyyyMMdd')),
 							endDay: Number($('#toDate').datepicker('getDate').format('yyyyMMdd')),
-						})
+						}),
+						timeout: 50000
 					}));
 
 					deviceAjax.push($.ajax({
@@ -436,7 +438,8 @@
 							dids: devices.toString(),
 							startDay: Number($('#fromDate').datepicker('getDate').format('yyyyMMdd')),
 							endDay: Number($('#toDate').datepicker('getDate').format('yyyyMMdd')),
-						})
+						}),
+						timeout: 50000
 					}));
 
 					Promise.all(deviceAjax).then(response => {
