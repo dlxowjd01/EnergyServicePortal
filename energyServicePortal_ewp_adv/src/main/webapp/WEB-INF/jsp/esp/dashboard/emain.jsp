@@ -17,17 +17,17 @@
 				{
 					title: '사이트명',
 					data: 'siteName',
-					className: 'dt-center'
+					className: 'dt-left'
 				},
 				{
 					title: '설비 유형',
 					data: 'device_type',
-					className: 'dt-center'
+					className: 'dt-left'
 				},
 				{
 					title: '디바이스',
 					data: 'name',
-					className: 'dt-center'
+					className: 'dt-left'
 				},
 				{
 					title: '용량(kW)',
@@ -266,7 +266,7 @@
 							$('#typeULList').append(`
 								<li>
 									<a href="javascript:void(0);" tabindex="-1">
-										<input type="checkbox" id="device_${'${type}'}" value="${'${type}'}" name="deviceType">
+										<input type="checkbox" id="device_${'${type}'}" value="${'${type}'}" name="deviceType" checked>
 										<label for="device_${'${type}'}">${'${typeName}'}</label>
 									</a>
 								</li>
@@ -399,7 +399,7 @@
 				if (dataArray.length > 0 && typeArray.length > 0) { dataArray = dataArray.filter(e => typeArray.includes(e.device_type)); }
 
 				//임시로 해당 장비들 조회 제회하도록 구성
-				if (dataArray.length) { dataArray = dataArray.filter(e => !['BMS_RACK', 'SENSOR_FLAME', 'SENSOR_TEMPHUMID', 'SENSOR_WEATHER'].includes(e.device_type)); }
+				//if (dataArray.length) { dataArray = dataArray.filter(e => !['BMS_RACK', 'SENSOR_FLAME', 'SENSOR_TEMPHUMID', 'SENSOR_WEATHER'].includes(e.device_type)); }
 
 				let devices = new Array();
 				if (dataArray.length > 0) {
@@ -409,31 +409,34 @@
 					});
 
 					deviceAjax.push($.ajax({
-						url: apiHost + '/kesco-success-rate',
-						type: 'get',
-						data: {
-							dids: devices.toString(),
-						}
+						url: apiHost + '/get/kesco-success-rate',
+						type: 'post',
+						contentType: 'application/json',
+						data: JSON.stringify({
+							dids: devices.toString()
+						})
 					}));
 
 					deviceAjax.push($.ajax({
-						url: apiHost + '/kesco-success-rate',
-						type: 'get',
-						data: {
+						url: apiHost + '/get/kesco-success-rate',
+						type: 'post',
+						contentType: 'application/json',
+						data: JSON.stringify({
 							dids: devices.toString(),
-							startDay: $('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000',
-							endDay: $('#toDate').datepicker('getDate').format('yyyyMMdd') + '235959',
-						}
+							startDay: Number($('#fromDate').datepicker('getDate').format('yyyyMMdd')),
+							endDay: Number($('#toDate').datepicker('getDate').format('yyyyMMdd')),
+						})
 					}));
 
 					deviceAjax.push($.ajax({
-						url: apiHost + '/kesco-history-newest',
-						type: 'get',
-						data: {
+						url: apiHost + '/get/kesco-history-newest',
+						type: 'post',
+						contentType: 'application/json',
+						data: JSON.stringify({
 							dids: devices.toString(),
-							startDay: $('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000',
-							endDay: $('#toDate').datepicker('getDate').format('yyyyMMdd') + '235959'
-						}
+							startDay: Number($('#fromDate').datepicker('getDate').format('yyyyMMdd')),
+							endDay: Number($('#toDate').datepicker('getDate').format('yyyyMMdd')),
+						})
 					}));
 
 					Promise.all(deviceAjax).then(response => {
@@ -558,11 +561,11 @@
 			<table id="emainTable" class="dashboard-table">
 				<colgroup>
 					<col style="width:12%"/>
+					<col style="width:12%"/>
+					<col style="width:16%"/>
 					<col style="width:8%"/>
 					<col style="width:12%"/>
-					<col style="width:8%"/>
-					<col style="width:16%"/>
-					<col style="width:16%"/>
+					<col style="width:12%"/>
 					<col style="width:8%"/>
 					<col style="width:8%"/>
 					<col style="width:12%"/>
