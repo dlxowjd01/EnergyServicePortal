@@ -421,8 +421,8 @@
 						type: 'get',
 						data: {
 							dids: devices.toString(),
-							startTime: $('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000',
-							endTime: $('#toDate').datepicker('getDate').format('yyyyMMdd') + '235959',
+							startDay: $('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000',
+							endDay: $('#toDate').datepicker('getDate').format('yyyyMMdd') + '235959',
 						}
 					}));
 
@@ -431,8 +431,8 @@
 						type: 'get',
 						data: {
 							dids: devices.toString(),
-							startTime: $('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000',
-							endTime: $('#toDate').datepicker('getDate').format('yyyyMMdd') + '235959'
+							startDay: $('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000',
+							endDay: $('#toDate').datepicker('getDate').format('yyyyMMdd') + '235959'
 						}
 					}));
 
