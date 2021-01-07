@@ -548,11 +548,13 @@
 		makeSite.sortOn('name');
 		makeSite.unshift({ sid: 'all', name: '<fmt:message key="alarm.search.all" />'});
 		setMakeList(makeSite, 'siteList', {'dataFunction': {}}); //list생성
-		$('#siteList').append(`<li class="btn-wrap-type03 btn-wrap-border dropdown-apply"><button type="button" class="btn-type mr-16"><fmt:message key='alarm.apply' /></button></li>`);
+
 		$('#siteList').find('input[value="all"]').parent().after('<li class="btn-wrap-border-min"></li>');
 
 		if (!$(`.dropdown-search`).length) {
-			$(`#site`).prepend(`<div class="dropdown-search"><input type="text" placeholder="<fmt:message key="dropdown.siteSearch" />" onKeyup="searchSite($(this).val())" ></div>`)
+			$(`#site`)
+				.prepend(`<div class="dropdown-search"><input type="text" placeholder="<fmt:message key="dropdown.siteSearch" />" onKeyup="searchSite($(this).val())" ></div>`)
+				.append(`<li class="btn-wrap-type03 btn-wrap-border dropdown-apply"><button type="button" class="btn-type mr-16"><fmt:message key='alarm.apply' /></button></li>`);
 		}
 
 

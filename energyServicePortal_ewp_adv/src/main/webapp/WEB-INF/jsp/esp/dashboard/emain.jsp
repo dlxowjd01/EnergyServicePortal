@@ -177,11 +177,12 @@
 		makeSite.unshift({ sid: 'all', name: '<fmt:message key="dropDown.all" />'});
 		setMakeList(makeSite, 'siteULList', {'dataFunction': {}}); //list생성
 
-		$('#siteList').append(`<div class="btn-wrap-type03 btn-wrap-border dropdown-apply"><button type="button" class="btn-type mr-16"><fmt:message key="deviceState.apply" /></button></div>`);
 		$('#siteULList').find('input[value="all"]').parent().after('<li class="btn-wrap-border-min"></li>');
 
 		if (!$(`.dropdown-search`).length) {
-			$(`#siteList`).prepend(`<div class="dropdown-search"><input type="text" placeholder="<fmt:message key="dropdown.siteSearch" />" onKeyup="searchSite($(this).val())" ></div>`)
+			$(`#siteList`)
+				.prepend(`<div class="dropdown-search"><input type="text" placeholder="<fmt:message key="dropdown.siteSearch" />" onKeyup="searchSite($(this).val())" ></div>`)
+				.append(`<div class="btn-wrap-type03 btn-wrap-border dropdown-apply"><button type="button" class="btn-type mr-16"><fmt:message key="deviceState.apply" /></button></div>`);
 		}
 
 		deviceTypeList(true);
