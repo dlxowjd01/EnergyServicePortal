@@ -2759,7 +2759,8 @@ html[lang="en"] .all-menu > a:after {
 	background: none;
 }
 
-.open > .dropdown-search {
+.open > .dropdown-search,
+.open > .dropdown-apply {
 	display: block;
 }
 
@@ -2782,8 +2783,10 @@ html[lang="en"] .all-menu > a:after {
 }
 
 .dropdown-apply {
-	position: fixed;
-    top: 490px;
+	display: none;
+	position: absolute;
+	top: 354px;
+	z-index: 999;
     width: 230px;
     background: var(--active);
 	padding: 18px 0px;
