@@ -450,7 +450,7 @@
 										const idx = dataArray.findIndex(e => e.did === item.did);
 										if (idx > -1) {
 											if (!isEmpty(item.success_rate)) {
-												dataArray[idx].success_rate = item.success_rate;
+												dataArray[idx].success_rate_today = item.success_rate;
 											}
 										}
 									});
@@ -461,7 +461,7 @@
 										const idx = dataArray.findIndex(e => e.did === item.did);
 										if (idx > -1) {
 											if (!isEmpty(item.success_rate)) {
-												dataArray[idx].success_rate_today = item.success_rate;
+												dataArray[idx].success_rate = item.success_rate;
 											}
 										}
 									});
