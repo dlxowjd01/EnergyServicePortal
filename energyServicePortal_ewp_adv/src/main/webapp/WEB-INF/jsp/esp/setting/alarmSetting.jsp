@@ -593,7 +593,7 @@
 					errorMsg('설비유형은 코드로 입력하여야합니다.');
 					return false;
 				}
-			} else if (!isEmpty(DEV_TYPE.v)) {
+			} else if (isEmpty(DEV_TYPE.v)) {
 				continue;
 			} else if (isEmpty(MANUFACTURER.v)) {
 				errorMsg('제조사는 필수값입니다.');

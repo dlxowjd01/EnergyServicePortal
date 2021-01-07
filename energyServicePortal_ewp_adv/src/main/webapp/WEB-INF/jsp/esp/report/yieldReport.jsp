@@ -166,8 +166,6 @@
 	});
 
 	const getProperties = () => {
-		// $('#reportClass ul').empty();
-		// $('#reportClass ul').append(`<li data-value=""><a href="javascript:void(0);">전체</a></li>`);
 		$.ajax({
 			url: apiHost + '/config/view/properties',
 			type: 'GET',
@@ -339,6 +337,10 @@
 			if (isEmpty(spcData)) {
 				$('#spc_id ul').append(`<li><a href="javascript:void(0);"><fmt:message key="yieldReport.error.19" /></a></li>`);
 			} else {
+				//[동서햇빛] 시에만 전체 선택 로직 구현
+				if (oid === 'sundream') {
+					$('#spc_id ul').append(`<li data-value="all"><a href="javascript:void(0);">전체</a></li>`);
+				}
 				spcData.forEach(spc => {
 					$('#spc_id ul').append(`<li data-value="${'${spc[\'spc_id\']}'}"><a href="javascript:void(0);">${'${spc[\'name\']}'}</a></li>`);
 				});
@@ -432,38 +434,69 @@
 				$('#yieldList').empty(); // 적용변수 초기화
 			}
 
+			selectReportType();
+
 			setSpcGenReport();
 		} else if ($selector === 'spc_id') {
 			const dropdownValue = $('#' + $selector + ' button').data('value');
 			$('#site_id ul').empty();
 
-			$.ajax({
-				url: apiHost + '/spcs/' + dropdownValue,
-				type: 'GET',
-				data: {
-					oid: oid,
-					includeGens: true
-				},
-				success: (data) => {
-					const siteList = data.data[0]['spcGens'];
-					if (!isEmpty(data) && !isEmpty(data.data[0]['spcGens'])) {
-						siteList.forEach(gen => {
-							let liStr = `<li data-value="${'${gen[\'gen_id\']}'}"><a href="javascript:void(0);">${'${gen[\'name\']}'}</a></li>`;
-							$('#site_id ul').append(liStr);
-						});
-					} else {
+			selectReportType();
+
+			if (dropdownValue === 'all') {
+				$('#site_id ul').append(`<li data-value="all"><a href="javascript:void(0);">전체</a></li>`);
+			} else {
+				$.ajax({
+					url: apiHost + '/spcs/' + dropdownValue,
+					type: 'GET',
+					data: {
+						oid: oid,
+						includeGens: true
+					},
+					success: (data) => {
+						const siteList = data.data[0]['spcGens'];
+						if (!isEmpty(data) && !isEmpty(data.data[0]['spcGens'])) {
+							siteList.forEach(gen => {
+								let liStr = `<li data-value="${'${gen[\'gen_id\']}'}"><a href="javascript:void(0);">${'${gen[\'name\']}'}</a></li>`;
+								$('#site_id ul').append(liStr);
+							});
+						} else {
+							$('#site_id ul').append(`<li><a href="javascript:void(0);"><fmt:message key="yieldReport.error.19" /></a></li>`);
+						}
+					},
+					fail: function(){
+						errorMsg('<fmt:message key="yieldReport.error.6" />');
 						$('#site_id ul').append(`<li><a href="javascript:void(0);"><fmt:message key="yieldReport.error.19" /></a></li>`);
 					}
-				},
-				fail: function(){
-					errorMsg('<fmt:message key="yieldReport.error.6" />');
-					$('#site_id ul').append(`<li><a href="javascript:void(0);"><fmt:message key="yieldReport.error.19" /></a></li>`);
-				}
-			});
+				});
+			}
 		} else if ($selector === 'site_id') {
+			selectReportType();
 			setSpcGenReport();
 		}
  	}
+
+ 	const selectReportType = () => {
+		const dropdownValue = $('#report_type button').data('value');
+		if (oid === 'sundream') {
+			let spcId = $('#spc_id button').data('value');
+			let siteId = $('#site_id button').data('value');
+
+			if (dropdownValue === 'shbnpp_monthly_spc') { //개별
+				if (spcId === 'all' || siteId === 'all') {
+					errorMsg('SPC 또는 발전소 전체 선택시 개별보고서 선택이 불가능합니다.');
+					dropDownInit($('#report_type'));
+					return false;
+				}
+			} else if (dropdownValue === 'shbnpp_monthly_user') { //종합
+				if ((!isEmpty(spcId) && spcId !== 'all') || (!isEmpty(siteId) && siteId !== 'all')) {
+					errorMsg('SPC 또는 발전소 개별 선택시 전체보고서 선택이 불가능합니다.');
+					dropDownInit($('#report_type'));
+					return false;
+				}
+			}
+		}
+	}
 
  	/**
 	 *
