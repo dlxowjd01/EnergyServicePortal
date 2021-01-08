@@ -44,7 +44,11 @@
 					data: 'spc_name',
 					render: function (data, type, full, rowIndex) {
 						if (isEmpty(data)) {
-							return '-';
+							if (oid === 'sundream' && isEmpty(full['site_name'])) {
+								return '전체';
+							} else {
+								return '-';
+							}
 						} else {
 							return data;
 						}
@@ -56,7 +60,11 @@
 					data: 'site_name',
 					render: function (data, type, full, rowIndex) {
 						if (isEmpty(data)) {
-							return '-';
+							if (oid === 'sundream' && isEmpty(full['spc_name'])) {
+								return '전체';
+							} else {
+								return '-';
+							}
 						} else {
 							return data;
 						}
@@ -167,7 +175,7 @@
 
 	const getProperties = () => {
 		$.ajax({
-			url: apiHost + '/config/view/properties',
+			url: apiHost + '/config/view/properties2',
 			type: 'GET',
 			data: { oid: oid, types: 'yield_report_type' },
 			success: (data, textStatus, jqXHR) => {
@@ -215,6 +223,7 @@
 				const reportDataStart = (new Date(data['report_data_start'])).format('yyyy-MM-dd')
 					, reportDataEnd = (new Date(data['report_data_end'])).format('yyyy-MM-dd');
 
+				console.log(data['report_type']);
 				data['reportTypeName'] = reportType[data['report_type']];
 				data['report_date'] = reportDataStart + ' ~ ' + reportDataEnd;
 
@@ -568,6 +577,16 @@
 		data['generated_by'] = loginId;
 		data['updated_by'] = loginId;
 		data['generated_at'] = today.toISOString();
+
+		if (oid === 'sundream') {
+			if (data['spc_id'] === 'all') {
+				delete data['spc_id'];
+			}
+
+			if (data['site_id'] === 'all') {
+				delete data['site_id'];
+			}
+		}
 
 		$.ajax({
 			url: apiHost + '/reports/performance?oid=' + oid,
