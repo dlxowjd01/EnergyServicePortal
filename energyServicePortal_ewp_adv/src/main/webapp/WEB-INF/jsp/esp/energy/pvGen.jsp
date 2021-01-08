@@ -221,7 +221,9 @@
 		}
 
 		if (!$(".dropdown-search").length) {
-			$("#siteList").prepend(`<div class="dropdown-search"><input type="text" placeholder="<fmt:message key="dropdown.siteSearch" />" onKeyup="searchSite($(this).val())" ></div>`);
+			$("#siteList")
+				.prepend(`<div class="dropdown-search"><input type="text" placeholder="<fmt:message key="dropdown.siteSearch" />" onKeyup="searchSite($(this).val())" ></div>`)
+				.append(`<div class="btn-wrap-type03 btn-wrap-border dropdown-apply"><button type="button" class="btn-type mr-16"><fmt:message key="deviceState.apply" /></button></div>`);
 
 			if (sidparam) {
 				$("#siteList ul li a[data-value="+sidparam+"] > label").click();

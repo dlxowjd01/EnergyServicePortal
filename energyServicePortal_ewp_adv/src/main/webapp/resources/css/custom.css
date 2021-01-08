@@ -2678,7 +2678,7 @@ html[lang="en"] .all-menu > a:after {
 #site .dropdown-apply,
 #selectSiteList .dropdown-apply,
 #siteList .dropdown-apply {
-	width: 260px;
+	width: 100%;
 }
 
 .modal .dropdown-menu {
@@ -2787,7 +2787,7 @@ html[lang="en"] .all-menu > a:after {
 	display: none;
 	position: absolute;
 	top: 354px;
-	z-index: 999;
+	z-index: 100;
     width: 230px;
     background: var(--active);
 	padding: 18px 0px;
@@ -10369,13 +10369,21 @@ table.table-footer tfoot td.light {
 /* Responsive - Mobile */
 @media (max-width: 480px) {
 	.chart-wrapper .sum-list {
-		width: 70%;
+		width: 70%!important;
 		display: block;
 		line-height: 20px;
 	}
 
 	.chart-wrapper .sum-list li+li {
 		margin-left: 0px;
+	}
+
+	.gmain-center {
+		overflow-x: auto;
+	}
+
+	.gmain-center > table {
+		white-space: nowrap;
 	}
 }
 
