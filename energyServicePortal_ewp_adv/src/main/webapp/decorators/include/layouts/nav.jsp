@@ -180,7 +180,7 @@
 </div>
 <div id="mobileNav" class="mobile-nav">
 	<div class="logo-wrapper">
-		<h1 class="mobile-logo">
+		<h1 class="mobile-logo" onclick="location='/'">
 			<c:choose>
 				<c:when test="${fn:contains(pageContext.request.serverName, 'spower')}">
 					<span class="spower mobile"></span>

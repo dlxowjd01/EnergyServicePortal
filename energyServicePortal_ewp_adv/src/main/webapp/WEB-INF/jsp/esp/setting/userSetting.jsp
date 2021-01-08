@@ -1816,7 +1816,7 @@
 							<div class="col-lg-4 col-sm-9">
 								<div class="flex-start">
 									<div class="text-input-type offset-width">
-										<input type="text" name="new_id" id="newId" placeholder="입력" minlength="5" maxlength="15">
+										<input type="text" name="new_id" id="newId" placeholder="<fmt:message key='input.input' />" minlength="5" maxlength="15">
 									</div>
 									<button type="button" class="btn-type fr" onclick="checkId($('#newId').val())" disabled><fmt:message key='userSetting.checkOverlap' /></button>
 								</div>
@@ -1877,7 +1877,7 @@
 						<div class="row">
 							<div class="col-lg-2 col-sm-3"><span class="input-label"><fmt:message key='userSetting.email' /></span></div>
 							<div class="col-lg-4 col-sm-9">
-								<div class="text-input-type"><input type="text" id="newEmailAddr" name="new_email_addr" placeholder="입력"></div>
+								<div class="text-input-type"><input type="text" id="newEmailAddr" name="new_email_addr" placeholder="<fmt:message key='input.input' />"></div>
 								<small class="hidden warning"><fmt:message key='userSetting.errorTxt.8' /></small>
 							</div>
 							<c:if test="${activateSPC eq true}">

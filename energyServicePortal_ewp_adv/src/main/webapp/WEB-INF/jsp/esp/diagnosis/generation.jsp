@@ -38,10 +38,10 @@
 								data-toggle="tooltip"
 								data-placement="right"
 								data-html="true"
-								title="<div class='left'><span class='strong font-color-w87'>NMAE</span><br/><span class='font-color-w60' style='font-size:8px;'>용량에 대비한 평균 오차율 %</span><br/><span class='strong font-color-w87'>MAPE</span><br/><span class='font-color-w60' style='font-size:8px;'>(용량 상관없이) 측정값 대비한 평균 오차율 %</span></div>">
+								title="<div class='left'><span class='strong font-color-w87'>NMAE</span><br/><span class='font-color-w60' style='font-size:8px;'><fmt:message key='generation.tooltip.1' /></span><br/><span class='strong font-color-w87'>MAPE</span><br/><span class='font-color-w60' style='font-size:8px;'><fmt:message key='generation.tooltip.2' /></span></div>">
 						</button>
 					</p>
-					<button type="button" class="btn-caret fr">펼치기</button>
+					<button type="button" class="btn-caret fr"><fmt:message key='generation.expand' /></button>
 				</div>
 				<div class="table-fold-container">
 					<div class="flex-wrapper">

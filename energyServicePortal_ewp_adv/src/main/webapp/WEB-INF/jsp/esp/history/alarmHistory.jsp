@@ -755,7 +755,7 @@
 			});
 
 		if (exportTable.find("tr").length === 1) {
-			alert("선택된 알람내역이 없습니다.");
+			alert("<fmt:message key='alarm.noSeleted' />");
 		} else {
 			tab_text += exportTable.html() + '</table></body></html>';
 

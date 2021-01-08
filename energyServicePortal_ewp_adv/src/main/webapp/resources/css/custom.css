@@ -5849,7 +5849,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 }
 
 .table-top input[type="text"] {
-	width: 150px;
+	width: 170px;
 	height: 36px;
 	line-height: 36px;
 	border: 0;
@@ -10359,6 +10359,19 @@ table.table-footer tfoot td.light {
 	color: var(--white87);
 	line-height: 36px;
 }
+
+/* Responsive - Tablet */
+@media screen (max-width: 768px) {
+	
+}
+
+/* Responsive - Mobile */
+@media screen (max-width: 480px) {
+	.chart-wrapper .sum-list li+li {
+		margin-left: 0px;
+	}
+}
+
 
 /* TO DELETE!!!!! */
 
