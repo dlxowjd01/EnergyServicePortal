@@ -1940,11 +1940,12 @@ footer .copyright a + a:before {
 	position: fixed;
 	top: 123px;
 	left: 0;
-	width: 72px;
+	/* width: 72px; */
 	height: 100%;
 	background: transparent;
 	color: var(--white60);
 	z-index: 150;
+	overflow-y: auto;
 }
 
 .side-nav > ul > li {
@@ -10361,12 +10362,18 @@ table.table-footer tfoot td.light {
 }
 
 /* Responsive - Tablet */
-@media screen (max-width: 768px) {
+@media (max-width: 768px) {
 	
 }
 
 /* Responsive - Mobile */
-@media screen (max-width: 480px) {
+@media (max-width: 480px) {
+	.chart-wrapper .sum-list {
+		width: 70%;
+		display: block;
+		line-height: 20px;
+	}
+
 	.chart-wrapper .sum-list li+li {
 		margin-left: 0px;
 	}

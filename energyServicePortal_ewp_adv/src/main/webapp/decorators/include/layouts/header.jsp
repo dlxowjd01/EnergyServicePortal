@@ -393,6 +393,8 @@
 			$(self).find("label").removeClass("on");
 		}
 	}
+
+	// $("body").prepend(screen.width+"*"+screen.height);
 </script>
 
 <form id="dashboardForm" name="dashboardForm" method="post"></form>
