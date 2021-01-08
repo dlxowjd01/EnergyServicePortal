@@ -698,7 +698,7 @@
 							</div>
 						</div>
 						<div class="col-lg-2 col-md-2 col-sm-3">
-							<span class="input-label asterisk">반복 종료일</span>
+							<span class="input-label">반복 종료일</span>
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex-start">
 							<div class="text-input-type w-100">
