@@ -1188,12 +1188,12 @@ const searchSite = async function () {
 							, deviceData = device[1];
 
 						if (!isEmpty(deviceData)) {
+							if (!operation.includes(deviceData['operation'])) {
+								operation.push(deviceData['operation']);
+							}
+
 							//대상은 INV 인버터 타입 대상
 							if (deviceType.match('INV')) {
-								if (!operation.includes(deviceData['operation'])) {
-									operation.push(deviceData['operation']);
-								}
-
 								activePower = (activePower != '-') ? activePower + deviceData['activePower'] : deviceData['activePower'];
 								capacity = (capacity != '-') ? capacity + deviceData['capacity'] : deviceData['capacity'];
 								inverterCount = (!isEmpty(deviceData['devices'])) ? deviceData['devices'].length : '-';
@@ -1272,6 +1272,7 @@ const searchSite = async function () {
 			resolve(refineList);
 		} else {
 			setMakeList(refineList, 'siteList', {'dataFunction': {'align': alignFunc}}); //list생성
+			document.getElementById('miniLoadingCircle').style.display = 'none';
 		}
 	}).then(refineList => {
 		if (!isEmpty(refineList)) {
