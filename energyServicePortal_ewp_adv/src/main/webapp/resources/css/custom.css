@@ -10361,6 +10361,11 @@ table.table-footer tfoot td.light {
 	line-height: 36px;
 }
 
+.mobile-br { display: none; }
+#userInfoBtn .light {
+	margin-left: 3px;
+}
+
 /* Responsive - Tablet */
 @media (max-width: 768px) {
 	
@@ -10384,6 +10389,13 @@ table.table-footer tfoot td.light {
 
 	.gmain-center > table {
 		white-space: nowrap;
+	}
+}
+
+@media (max-width: 320px) {
+	.mobile-br { display: block; }
+	#userInfoBtn {
+		
 	}
 }
 

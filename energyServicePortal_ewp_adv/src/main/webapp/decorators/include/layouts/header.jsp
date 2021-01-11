@@ -649,7 +649,11 @@
 			</c:when>
 			<c:otherwise>
 				<li class="member clear">
-					<div class="fr"><button type="button" data-toggle="modal" data-target="#updateUserInfoModal" data-backdrop="static" data-keyboard="false" id="userInfoBtn" class="btn-type03">${sessionScope.userInfo.name}<span class="light">&emsp;${sessionScope.userInfo.login_id}</span></button></div>
+					<div class="fr">
+						<button type="button" data-toggle="modal" data-target="#updateUserInfoModal" data-backdrop="static" data-keyboard="false" id="userInfoBtn" class="btn-type03">
+							${sessionScope.userInfo.name}<br class="mobile-br" /><span class="light">${sessionScope.userInfo.login_id}</span>
+						</button>
+					</div>
 				</li>
 				<li><%@ include file="/decorators/include/selectLang.jsp" %></li>
 			</c:otherwise>

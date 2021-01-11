@@ -12,21 +12,23 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-12">
-		<div class="dropdown fl" id="selectSiteList">
-			<button type="button" class="dropdown-toggle w10 no-close" data-toggle="dropdown" data-name="<fmt:message key='colState.register.siteSelect' />">
+	<div class="w-100" style="padding: 12px;">
+		<div class="dropdown-wrapper w-100 flex-wrap-center">
+			<div class="dropdown" id="selectSiteList">
+				<button type="button" class="dropdown-toggle w10 no-close" data-toggle="dropdown" data-name="<fmt:message key='colState.register.siteSelect' />">
 				<fmt:message key='colState.search.site' /><span class="caret"></span>
-			</button>
-			<ul class="dropdown-menu chk-type" role="menu" id="siteULList">
-				<li data-value="[sid]">
-					<a href="javascript:void(0);" tabindex="-1">
-						<input type="checkbox" id="site_[INDEX]" value="[sid]" name="site">
-						<label for="site_[INDEX]">[name]</label>
-					</a>
-				</li>
-			</ul>
+				</button>
+				<ul class="dropdown-menu chk-type" role="menu" id="siteULList">
+					<li data-value="[sid]">
+						<a href="javascript:void(0);" tabindex="-1">
+							<input type="checkbox" id="site_[INDEX]" value="[sid]" name="site">
+							<label for="site_[INDEX]">[name]</label>
+						</a>
+					</li>
+				</ul>
+			</div>
+			<a href="javascript:void(0);" class="btn-type02 btn-save fr" id="excelDown"><fmt:message key="datacolleciton.4.savelog" /></a>
 		</div>
-		<a href="javascript:void(0);" class="btn-type02 btn-save fr" id="excelDown"><fmt:message key="datacolleciton.4.savelog" /></a>
 	</div>
 </div>
 
