@@ -1600,7 +1600,7 @@
 					<tr>
 						<th>년간 관리 운영비 (1년차)</th>
 						<td>
-							<span id="년간_관리_운영비"></span><span class="ml-6">만원</span>
+							<span id="년간_관리_운영비"></span><span class="ml-6">원</span>
 						</td>
 						<th>물가 반영 비율</th>
 						<td>

@@ -2684,7 +2684,7 @@
 					<tr>
 						<th>년간 관리 운영비 (1년차)</th>
 						<td>
-							<div class="text-input-type edit unit t1"><input type="text" id="년간_관리_운영비" name="년간_관리_운영비"><span>만원</span></div>
+							<div class="text-input-type edit unit t1"><input type="text" id="년간_관리_운영비" name="년간_관리_운영비"><span>원</span></div>
 						</td>
 						<th>물가 반영 비율</th>
 						<td>

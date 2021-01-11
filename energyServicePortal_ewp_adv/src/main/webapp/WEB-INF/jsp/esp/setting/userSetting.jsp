@@ -852,6 +852,9 @@
 							],
 							"dom": 'tip',
 							"language": {
+								"emptyTable": "<fmt:message key='userSetting.noData' />",
+								"zeroRecords":  "<fmt:message key='userSetting.noSearchData' />",
+								"infoEmpty": "",
 								"paginate": {
 									"previous": "",
 									"next": "",
@@ -1028,6 +1031,9 @@
 							],
 							"dom": 'tip',
 							"language": {
+								"emptyTable": "<fmt:message key='userSetting.noData' />",
+								"zeroRecords":  "<fmt:message key='userSetting.noSearchData' />",
+								"infoEmpty": "",
 								"paginate": {
 									"previous": "",
 									"next": "",
