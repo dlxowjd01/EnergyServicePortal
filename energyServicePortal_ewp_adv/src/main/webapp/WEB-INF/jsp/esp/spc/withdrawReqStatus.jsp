@@ -3,6 +3,7 @@
 <script type="text/javascript">
 	const pathName = location.pathname;
 	const spcArr = new Array();
+	let pageFirst = true;
 
 	let withdrawReqStatus = null;
 	$(function() {
@@ -167,6 +168,20 @@
 				info: "_PAGE_ - _PAGES_ " + " / 총 _TOTAL_ 개",
 			},
 			dom: 'tip',
+			drawCallback: function(settings) {
+				if (pageFirst && withdrawReqStatus !== null && withdrawReqStatus.data().length > 0) {
+					pageFirst = false;
+					const cPage = window.sessionStorage.getItem(pathName + '_cPage');
+					if (cPage != undefined) {
+						withdrawReqStatus.page(Number(cPage)).draw(false);
+					}
+				}
+			}
+		}).on('page.dt', function () {
+			let info = withdrawReqStatus.page.info(),
+				cPage = info.page;
+
+			window.sessionStorage.setItem(pathName + '_cPage', cPage); //세션스토리지에 저장한다.
 		}).columns.adjust().draw();
 
 		$('#searchForm').on('submit', function(e) {
@@ -193,6 +208,13 @@
 			}
 			window.sessionStorage.setItem(pathName + '_keyword', document.getElementById('keyword').value.trim()); //세션스토리지에 저장한다.
 			window.sessionStorage.setItem(pathName + '_withdrawDay', document.getElementById('withdrawDay').value.trim()); //세션스토리지에 저장한다.
+
+			if (!pageFirst) {
+				let info = withdrawReqStatus.page.info(),
+						cPage = info.page;
+
+				window.sessionStorage.setItem(pathName + '_cPage', cPage); //세션스토리지에 저장한다.
+			}
 
 			if (isEmpty(searchOpt.status) && isEmpty(searchOpt.keyword)) {
 				getDataList(null);
