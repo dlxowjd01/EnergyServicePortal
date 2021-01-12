@@ -1424,9 +1424,11 @@ const addRow = function (listId, type, nextIdx) {
 			listLength = $selecter.length;
 
 			$selecter.each(function() {
-				let idx = $(this).find('.dropdown.placeholder:eq(0)').prop('id').replace(/[^0-9]/g, '');
-				if (listLength < idx) {
-					listLength = idx;
+				if ($(this).find('.dropdown.placeholder:eq(0)').prop('id') !== undefined) {
+					let idx = $(this).find('.dropdown.placeholder:eq(0)').prop('id').replace(/[^0-9]/g, '');
+					if (listLength < idx) {
+						listLength = idx;
+					}
 				}
 			});
 			listLength++;
