@@ -251,8 +251,8 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		labels: {
 			formatter: function () {
 				const suffix = this.chart.yAxis[0].userOptions.title.text;
-				const yAxisValue = displayNumberFixedUnit(this.value, 'kWh', suffix, 1);
-				return yAxisValue[0];
+				const yAxisValue = displayNumberFixedUnit(this.value / 1000, 'kWh', suffix, 1);
+				return Math.floor(yAxisValue[0])+"K";
 			},
 			style: {
 				color: 'var(--grey)',

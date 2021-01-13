@@ -61,7 +61,7 @@
 						if (!isEmpty(data)) {
 							return `<a href="javascript:void(0);" onclick="getDetailNotice('${'${full.id}'}');" class="table-link">${'${data}'}</a>`;
 						} else {
-							return '';
+							return '-';
 						}
 					},
 					className: 'dt-left',
