@@ -2678,7 +2678,8 @@ html[lang="en"] .all-menu > a:after {
 #site .dropdown-apply,
 #selectSiteList .dropdown-apply,
 #siteList .dropdown-apply {
-	width: 260px;
+	width: 100%;
+	min-width: 260px;
 }
 
 .modal .dropdown-menu {
