@@ -860,11 +860,12 @@
 
 		if (type == 'post') {
 			ajaxUrl = apiHost + '/config/rtus?oid=' + oid + '&sid=' + sid;
-			typeName = langStatus === `KO` ? '등록' : `register`;
+			typeName = langStatus === `KO` ? '등록' : `Register`;
 		} else {
 			ajaxUrl = apiHost + '/config/rtus/' + rid;
-			typeName = langStatus === `KO` ? '수정' : `modify`;
+			typeName = langStatus === `KO` ? '수정' : `Modify`;
 		}
+
 
 		$.ajax({
 			url: ajaxUrl,
@@ -878,14 +879,14 @@
 				description: description
 			}),
 			success: function (data) {
-				alert(`RTU ${typeName} <fmt:message key="colState.alert.10" />`);
+				alert(`RTU ${"${typeName}"}<fmt:message key="colState.alert.10" />`);
 
 				getRtuDataList();
 				$('#addRtuModal').modal('hide');
 			},
 			error: function (error) {
 				console.error(error);
-				alert(`RTU ${typeName} <fmt:message key="colState.alert.11" />`);
+				alert(`RTU ${"${typeName}"}<fmt:message key="colState.alert.11" />`);
 				return false;
 			}
 		});
