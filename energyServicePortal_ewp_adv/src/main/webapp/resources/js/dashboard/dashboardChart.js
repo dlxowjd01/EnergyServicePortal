@@ -245,14 +245,14 @@ const dailyChart = Highcharts.chart('dailyChart', {
 			style: {
 				color: 'var(--grey)',
 				fontSize: '12px',
-				transform: 'translate(-25px, 0px)',
+				transform: 'translate(-25px, 0px)'
 			}
 		},
 		labels: {
 			formatter: function () {
 				const suffix = this.chart.yAxis[0].userOptions.title.text;
-				const yAxisValue = displayNumberFixedUnit(this.value / 1000, 'kWh', suffix, 1);
-				return Math.floor(yAxisValue[0])+"K";
+				const yAxisValue = displayNumberFixedUnit(this.value, 'kWh', suffix, 1);
+				return yAxisValue[0];
 			},
 			style: {
 				color: 'var(--grey)',

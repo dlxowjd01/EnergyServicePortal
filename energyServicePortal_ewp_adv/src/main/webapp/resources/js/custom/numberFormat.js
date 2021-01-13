@@ -73,11 +73,11 @@ const displayNumberFixedDecimal = function(number, unit, intChipher, decimalChip
 			}
 
 			/* 시작 unit 단위가 w보다 클경우 */
-			const standardUnit = (unit.substr(0, 1)).replace('원', '');
+			const standardUnit = (unit.substr(0, 1)).replace(/W/i, '');
 			if (!isEmpty(standardUnit)) {
-				const findIndex = moneyUnit.findIndex(targetUnit => (targetUnit.unit).match(standardUnit));
+				const findIndex = whUnit.findIndex(targetUnit => (targetUnit).match(standardUnit));
 				if (findIndex > 0) {
-					moneyUnit = moneyUnit.splice(findIndex, moneyUnit.length);
+					whUnit = whUnit.splice(findIndex, whUnit.length);
 				}
 			}
 			/* 시작 unit 단위가 w보다 클경우 */
@@ -110,20 +110,18 @@ const displayNumberFixedDecimal = function(number, unit, intChipher, decimalChip
 				decimalChipher = 2;
 			}
 
-			if (unit.match('W')) {
-				/* 시작 unit 단위가 w보다 클경우 */
-				const standardUnit = (unit.substr(0, 1)).replace(/W/i, '');
-				if (!isEmpty(standardUnit)) {
-					const findIndex = whUnit.findIndex(targetUnit => targetUnit.match(standardUnit));
-					if (findIndex > 0) {
-						whUnit = whUnit.splice(findIndex, whUnit.length);
-					}
+			/* 시작 unit 단위가 w보다 클경우 */
+			const standardUnit = (unit.substr(0, 1)).replace('원', '');
+			if (!isEmpty(standardUnit)) {
+				const findIndex = moneyUnit.findIndex(targetUnit => (targetUnit.unit).match(standardUnit));
+				if (findIndex > 0) {
+					moneyUnit = moneyUnit.splice(findIndex, whUnit.length);
 				}
 			}
 
 			whUnit.some(function(v, k) {
 				let str = String(Math.floor(number)).replace(/[^\d]/, '');
-				if(str.length > intChipher && v != 'T') {
+				if(str.length > intChipher && v != '억') {
 					number = number / 1000;
 				} else {
 					if(decimalChipher === 0){
