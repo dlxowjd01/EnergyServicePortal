@@ -293,7 +293,7 @@
 		areaData['kind'] = 1;
 
 		if (isEmpty(areaData['spc_id'])) {
-			delete areaData['spc_id'];
+			areaData['spc_id'] = null;
 		}
 
 		$('#addNotice').find('input[type="file"]').each(function () {
