@@ -71,7 +71,8 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 			x: 15,
 			style: {
 				color: 'var(--grey)',
-				fontSize: '12px'
+				fontSize: '12px',
+				transform: 'translate(-25px, 0px)'
 			}
 		},
 		labels: {
@@ -96,7 +97,8 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 			x: -12,
 			style: {
 				color: 'var(--grey)',
-				fontSize: '12px'
+				fontSize: '12px',
+				transform: 'translate(-25px, 0px)'
 			}
 		},
 		labels: {
@@ -245,7 +247,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 			style: {
 				color: 'var(--grey)',
 				fontSize: '12px',
-				transform: 'translate(-25px, 0px)'
+				transform: 'translate(-30px, 0px)'
 			}
 		},
 		labels: {
@@ -270,7 +272,8 @@ const dailyChart = Highcharts.chart('dailyChart', {
 			x: -12,
 			style: {
 				color: 'var(--grey)',
-				fontSize: '12px'
+				fontSize: '12px',
+				transform: 'translate(-25px, 0px)'
 			}
 		},
 		labels: {
@@ -279,7 +282,8 @@ const dailyChart = Highcharts.chart('dailyChart', {
 			},
 			style: {
 				color: 'var(--grey)',
-				fontSize: '12px'
+				fontSize: '12px',
+				transform: 'translate(-10px, 0px)'
 			}
 		},
 		visible: secondYAxis,
@@ -413,7 +417,8 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 			text: '',
 			style: {
 				color: 'var(--grey)',
-				fontSize: '12px'
+				fontSize: '12px',
+				transform: 'translate(-25px, 0px)'
 			}
 		},
 		labels: {
