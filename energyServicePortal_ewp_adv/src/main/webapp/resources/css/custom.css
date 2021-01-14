@@ -4329,7 +4329,7 @@ input.inp[readonly]:focus {
 
 .pagination {
 	width: 100%;
-	margin: 34px auto 0;
+	margin: 15px auto 0;
 	text-align: center;
 }
 
@@ -4362,8 +4362,11 @@ input.inp[readonly]:focus {
 /* NONE DataTable pagination  */
 
 .pagination-wrapper {
-	margin: 34px 0 0;
+	margin: 15px 0 0;
 	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .pagination-wrapper a,
@@ -5851,7 +5854,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 }
 
 .table-top input[type="text"] {
-	width: 170px;
+	width: 150px;
 	height: 36px;
 	line-height: 36px;
 	border: 0;
@@ -7435,7 +7438,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	position: relative;
 	padding: 20px 24px;
 	background: var(--box-color);
-	height: 472px;
+	height: auto;
 	border: 0;
 	box-shadow: none;
 }
@@ -7535,9 +7538,9 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 }
 
 .eq-btn-box {
-	position: absolute;
-	bottom: 20px;
-	right: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
 	text-align: right;
 	margin: 20px 0 0;
 }
@@ -8853,12 +8856,6 @@ button.text-file {
 
 .collect-box.last-box {
 	min-height: 400px;
-}
-
-.collect-box .pagination-wrapper {
-	position: absolute;
-	bottom: 40px;
-	width: calc(100% - 87px);
 }
 
 .collect-wrap.table-scroll {
@@ -10362,18 +10359,38 @@ table.table-footer tfoot td.light {
 	line-height: 36px;
 }
 
-.mobile-br { display: none; }
+.mobile-br {
+	display: none;
+}
 #userInfoBtn .light {
 	margin-left: 3px;
 }
 
 /* Responsive - Tablet */
 @media (max-width: 768px) {
+	table {
+		overflow-x: auto;
+		white-space: nowrap;
+	}
 	
+	.jmain-center,
+	.smain-center,
+	.gmain-center,
+	.device-table {
+		overflow-x: auto;
+	}
+
+	.pagination a {
+		width: 30px;
+	}
 }
 
 /* Responsive - Mobile */
 @media (max-width: 480px) {
+	.pagination a {
+		width: 25px;
+	}
+
 	.chart-wrapper .sum-list {
 		width: 70%!important;
 		display: block;
@@ -10384,19 +10401,83 @@ table.table-footer tfoot td.light {
 		margin-left: 0px;
 	}
 
-	.gmain-center {
-		overflow-x: auto;
+	#innerBody > div:nth-child(5) > div.col-xl-8.col-md-12.col-sm-12 > div.gmain-row2 > div > div.gmain-map2-content > div.table-top.clear > div.input-group1 {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
 	}
 
-	.gmain-center > table {
-		white-space: nowrap;
+	.mobile-nav-close {
+		z-index: 1000;
 	}
+
+	#weekIcon strong {
+		padding: 0;
+	}
+
+	.smain-table .fl,
+	.smain-table .fl input {
+		width: 100%;
+	}
+
+	.equip-card .equip-card-ul li {
+		width: 100%;
+		border: none;
+		padding: 0px;
+	}
+
+	.page-header {
+		float: none!important;
+	}
+
+	.time {
+		display: flex;
+		flex-wrap: wrap;
+		float: none!important;
+	}
+
+	.time > * {
+		width: 50%;
+		text-align: left;
+		margin-left: 0px!important;
+		display: inline-block;
+	}
+
+	.time > em {
+		margin-left: -25%!important;
+	} 
+
+	#colStateInfo {
+		overflow: auto;
+	}
+
+	.collect-box .command-list {
+		margin: 0;
+	}
+
+	.collect-box .command-list .flex-group .sm-title {
+		width: 10vw;
+	}
+
+	#colStateInfo .row .w-50 {
+		width: 100%!important;
+		padding: 0px 10px;
+	}
+
+	#colStateInfo .row .w-50:not(:first-child) {
+		margin-top: 20px;
+	}
+
 }
 
 @media (max-width: 320px) {
 	.mobile-br { display: block; }
 	#userInfoBtn {
-		
+		line-height: 10px;
+	}
+
+	#searchDetail > #search {
+		margin: 10px 0 0 0;
 	}
 }
 

@@ -344,15 +344,7 @@
 	.row.header-wrapper {
 		height: auto;
 	}
-
-	.row.header-wrapper .time.fr {
-		float: none;
-		text-align: left;
-	}
-
-	.row.header-wrapper .time.fr > span {
-		margin-left: 0;
-	}
+}
 
 	.chart-wrapper .sum-list {
 		width: 80%;

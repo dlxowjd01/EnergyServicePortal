@@ -103,7 +103,7 @@
 		</div>
 	</div>
 	<div class="col-xl-7 col-lg-6 col-md-6 col-sm-12">
-		<div class="indiv collect-box">
+		<div class="indiv collect-box" id="colStateInfo">
 			<div class="table-top clear">
 				<h2 class="ntit fl"><span id="selectedRTU">RTU</span> <fmt:message key='colState.table.detail' /></h2>
 				<div class="btn-wrap-type02 fr">
