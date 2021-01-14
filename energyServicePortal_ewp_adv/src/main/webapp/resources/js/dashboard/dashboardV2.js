@@ -389,7 +389,7 @@ const monthlyChartDraw = async () => {
 		pvSum: 0,
 	};
 
-	$(`.gmain-chart1 span.term`).text(today.getFullYear() + '.1.1 ~ ' + today.getFullYear() + '.' + (Number(today.getMonth()) + 1) + '.' + today.getDate());
+	$(`.gmain-chart1 span.term`).text(today.getFullYear() + '.01.1 ~ ' + today.getFullYear() + '.' + ('0' + (Number(today.getMonth()) + 1)).slice(-2) + '.' + today.getDate());
 	new Promise(resolve => {
 		targetApi.forEach((targetUrl, index) => {
 			const apiData = apiDatas[targetUrl];
@@ -404,15 +404,15 @@ const monthlyChartDraw = async () => {
 									if (!isEmpty(items)) {
 										items.forEach(item => {
 											const index = Number(String(item['basetime']).slice(4, 6)) - 1;
-											chargeList[index] += Math.floor(item['cenergy'] / 1000);
-											sumObj['chargeSum'] += Math.floor(item['cenergy'] / 1000);
+											chargeList[index] += item['cenergy'];
+											sumObj['chargeSum'] += item['cenergy'];
 
-											dischargeList[index] += Math.floor(item['denergy'] / 1000);
-											sumObj['dischargeSum'] += Math.floor(item['denergy'] / 1000);
+											dischargeList[index] += item['denergy'];
+											sumObj['dischargeSum'] += item['denergy'];
 
-											pvList[index] += Math.floor(item['energy'] / 1000);
-											payList[index] += Math.floor(item['money'] / 1000);
-											sumObj['pvSum'] += Math.floor(item['energy'] / 1000);
+											pvList[index] += item['energy'];
+											payList[index] += item['money'];
+											sumObj['pvSum'] += item['energy'];
 										});
 									}
 								});
@@ -427,12 +427,12 @@ const monthlyChartDraw = async () => {
 						if (siteData['start'].toString().slice(0, 6) === String(today.getFullYear()) + ('0' + (today.getMonth() + 1)).slice(-2)) {
 							const index = Number(siteData['start'].toString().slice(4, 6)) - 1;
 							if (!isEmpty(siteData['energy'])) {
-								pvList[index] += Math.floor(siteData['energy'] / 1000);
-								sumObj.pvSum += Math.floor(siteData['energy'] / 1000);
+								pvList[index] += siteData['energy'];
+								sumObj.pvSum += siteData['energy'];
 							}
 
 							if (!isEmpty(siteData['money'])) {
-								payList[index] += Math.floor(siteData['money'] / 1000);
+								payList[index] += siteData['money'];
 							}
 						}
 					});
@@ -442,9 +442,17 @@ const monthlyChartDraw = async () => {
 
 		resolve();
 	}).then(() => {
-
 		let maxValue = 0;
 		let emptyObj = {};
+
+		chargeList.forEach((e, index) => { chargeList[index] = Math.floor(e / 1000); });
+		dischargeList.forEach((e, index) => { dischargeList[index] = Math.floor(e / 1000); });
+		pvList.forEach((e, index) => { pvList[index] = Math.floor(e / 1000); });
+		payList.forEach((e, index) => { payList[index] = Math.floor(e / 1000); });
+
+		Object.entries(sumObj).forEach(([key, data]) => {
+			sumObj[key] = Math.floor(data / 1000);
+		});
 
 		chargeList.forEach(data => {
 			if(data===0){
@@ -588,14 +596,10 @@ const dailyChartDraw = async () => {
 									const items = siteEnergy['items'];
 									if (!isEmpty(items)) {
 										items.forEach(item => {
-											// (인코어드 데이터 모니터링 용) 지우지 말아주세요. 발전량이 과도하게 많이 들어온 경우
-											// if(item.energy > 10000000){
-											// 	console.log("사이트 아이디===>", siteId, "에너지===>", item, "사이트 에너지 상세 ===>", siteEnergyItem )
-											// }
 											const index = Number(String(item['basetime']).slice(6, 8)) - 1;
-											pvList[index] += Math.floor(item['energy'] / 1000);
-											payList[index] += Math.floor(item['money'] / 1000);
-											sumObj['pvSum'] += Math.floor(item['energy'] / 1000);
+											pvList[index] += item['energy'];
+											payList[index] += item['money'];
+											sumObj['pvSum'] += item['energy'];
 										});
 									}
 								});
@@ -610,12 +614,12 @@ const dailyChartDraw = async () => {
 						if (!isEmpty(siteData)) {
 							const index = Number(String(siteData['start']).slice(6, 8)) - 1;
 							if (!isEmpty(siteData['energy'])) {
-								pvList[index] += Math.floor(siteData['energy'] / 1000);
-								sumObj['pvSum'] += Math.floor(siteData['energy'] / 1000);
+								pvList[index] += siteData['energy'];
+								sumObj['pvSum'] += siteData['energy'];
 							}
 
 							if (!isEmpty(siteData['money'])) {
-								payList[index] += Math.floor(siteData['money'] / 1000);
+								payList[index] += siteData['money'];
 							}
 						}
 
@@ -626,9 +630,17 @@ const dailyChartDraw = async () => {
 
 		resolve();
 	}).then(() => {
-
 		let maxValue = 0;
 		let emptyObj = {};
+
+		chargeList.forEach((e, index) => { chargeList[index] = Math.floor(e / 1000); });
+		dischargeList.forEach((e, index) => { dischargeList[index] = Math.floor(e / 1000); });
+		pvList.forEach((e, index) => { pvList[index] = Math.floor(e / 1000); });
+		payList.forEach((e, index) => { payList[index] = Math.floor(e / 1000); });
+
+		Object.entries(sumObj).forEach(([key, data]) => {
+			sumObj[key] = Math.floor(data / 1000);
+		});
 
 		chargeList.forEach(data => {
 			if(data===0){
