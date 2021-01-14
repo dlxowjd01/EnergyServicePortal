@@ -207,6 +207,11 @@
 				}
 			}
 
+			if (isEmpty(data['repeat_before_after_holiday'])) {
+				alert('공휴일 처리는 필수 값입니다.');
+				return false;
+			}
+
 			let job_info = JSON.parse(data['job_info']);
 			if (!isEmpty(job_info['alarmSetup'])) {
 
