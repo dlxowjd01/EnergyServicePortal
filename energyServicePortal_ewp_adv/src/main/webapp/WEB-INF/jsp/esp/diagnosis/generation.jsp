@@ -532,7 +532,7 @@
 					type: 'get',
 					async: false,
 					data: {
-						oid: 'spower',
+						oid: oid,
 						sid: sid
 					},
 					success: function (result) {
