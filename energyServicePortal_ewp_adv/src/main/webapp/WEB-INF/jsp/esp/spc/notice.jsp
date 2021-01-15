@@ -279,7 +279,7 @@
 		if (isEmpty(areaData.subject.trim())) { errorMsg('제목은 필수 값입니다.'); return false; }
 		if (isEmpty(areaData.contents.trim())) { errorMsg('내용은 필수 값입니다.'); return false; }
 		if (isEmpty(areaData.level)) { errorMsg('공개 범위는 필수 값입니다.'); return false; }
-
+		else { if (areaData.level === 2 && isEmpty(areaData.spc_id)) { errorMsg('SPC 선택은 필수입니다.'); return false; } }
 
 		if (method == 'patch') {
 			urlSuffix = '/' + id + '?oid=' + oid;
