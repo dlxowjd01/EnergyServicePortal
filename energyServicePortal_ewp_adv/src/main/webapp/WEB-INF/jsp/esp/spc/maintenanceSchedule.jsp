@@ -633,7 +633,7 @@
 			<div class="modal-body">
 				<div class="container-fluid">
 					<div class="row">
-						<div class="col-lg-2 col-md-2 col-sm-3"><span class="input-label">발전소 선택</span></div>
+						<div class="col-lg-2 col-md-2 col-sm-3"><span class="input-label asterisk">발전소 선택</span></div>
 						<div class="col-lg-5 col-md-5 col-sm-9 flex-start">
 							<div class="text-input-type mr-12">
 								<input type="text" id="siteName" name="siteName" placeholder="입력" class="required" autocomplete="off">

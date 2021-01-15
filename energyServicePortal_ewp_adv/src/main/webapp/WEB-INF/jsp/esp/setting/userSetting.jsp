@@ -746,7 +746,13 @@
 					}
 
 					if(!isEmpty(item.createdAt)){
-						let d = new Date(item.createdAt).format('yyyy-MM-dd') + '&ensp;' + new Date(item.createdAt).toLocaleTimeString();
+						let d = new Date(item.createdAt).format('yyyy-MM-dd') + " " + new Date(item.createdAt).toLocaleTimeString();
+						if (langStatus === "EN") {
+							let enDate = d.split(" ");
+								enDate[1] = enDate[1] == "오전" ? "AM" : "PM";
+								
+							d = enDate.join(" ");
+						}
 						obj.created_at = d;
 					} else {
 						obj.created_at = "-";

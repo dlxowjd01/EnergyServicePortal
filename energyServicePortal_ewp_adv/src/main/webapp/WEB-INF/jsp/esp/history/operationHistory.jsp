@@ -589,6 +589,7 @@
 	let deviceTemplate = new Object();
 	let tableProperties = new Object();
 	let featureProperties = new Object();
+
 	const deviceProperties = function () {
 		$.ajax({
 			url: apiHost + '/config/view/device_properties',
@@ -616,7 +617,7 @@
 						if (v.analysis_table) {
 							let tempObj = new Object();
 							let unit = (v.unit != null && v.unit != '') ? '(' + v.unit + ')' : '';
-							let propName = (langStatus == 'KO') ? v.name.kr : v.name.en;
+							let propName = (langStatus == 'KO') ? v.name.kr : toTitleCase(v.name.en);
 							tempObj['key'] = k;
 							tempObj['value'] = propName + unit;
 							tempTable.push(tempObj);
@@ -625,7 +626,7 @@
 						if (v.analysis_feature) {
 							let tempObj = new Object();
 							let unit = (v.unit != null && v.unit != '') ? '(' + v.unit + ')' : '';
-							let propName = (langStatus == 'KO') ? v.name.kr : v.name.en;
+							let propName = (langStatus == 'KO') ? v.name.kr : toTitleCase(v.name.en);
 							tempObj['key'] = k;
 							tempObj['value'] = propName + unit;
 							tempFeature.push(tempObj);

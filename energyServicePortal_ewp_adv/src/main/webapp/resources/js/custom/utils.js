@@ -2044,3 +2044,16 @@ function escapeHtml (text) {
 		}[a];
 	});
 }
+
+/**
+ * 영문화 규칙 적용 | ex) test text(x) => Test Text (x)
+ * @param {string} str 
+ */
+function toTitleCase(str) {
+	let result = "";
+	str.split(" ").forEach((v, k) => {
+		result += v.charAt(0).toUpperCase() + v.substr(1)+" ";
+	});
+
+	return result.split("(").join(" (").trim();
+}

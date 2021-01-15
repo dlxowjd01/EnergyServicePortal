@@ -423,7 +423,7 @@ html.darkmode:root {
 	height: 40px;
     position: absolute;
     bottom: 0;
-    right: calc(0% + 90px);
+    right: calc(0% + 30px);
     transform: translate(50%,20%);
     text-align: center;
     padding-top: 0.25em;

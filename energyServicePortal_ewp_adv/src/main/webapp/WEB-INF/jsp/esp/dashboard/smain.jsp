@@ -2282,7 +2282,7 @@
 									const location = country.locations;
 									Object.entries(location).forEach(([locIdx, loc]) => {
 										if (loc.code === sList[0].location) {
-											siteLocation = langStatus === 'KO' ? loc.name.kr : loc.name.en;
+											siteLocation = langStatus === 'KO' ? loc.name.kr : toTitleCase(loc.name.en);
 										}
 									});
 								});
@@ -2329,7 +2329,7 @@
 									const location = country.locations;
 									Object.entries(location).forEach(([locIdx, loc]) => {
 										if (loc.code === sList[0].location) {
-											siteLocation = langStatus === 'KO' ? loc.name.kr : loc.name.en;
+											siteLocation = langStatus === 'KO' ? loc.name.kr : toTitleCase(loc.name.en);
 										}
 									});
 								});
@@ -2425,7 +2425,7 @@
 								const location = country.locations;
 								Object.entries(location).forEach(([locIdx, loc]) => {
 									if (loc.code === sList[0].location) {
-										siteLocation = langStatus === 'KO' ? loc.name.kr : loc.name.en;
+										siteLocation = langStatus === 'KO' ? loc.name.kr : toTitleCase(loc.name.en);
 									}
 								});
 							});
@@ -2650,13 +2650,13 @@
 				let deviceName = key;
 				let tempFeature = [];
 				let tempFeature2 = [];
-				let devicePropName = (langStatus == 'KO') ? val.name.kr : val.name.en;
+				let devicePropName = (langStatus == 'KO') ? val.name.kr : toTitleCase(val.name.en);
 
 				$.map(propList, function (v, k) {
 					if (v.dashboard_head) {
 						let tempObj = {};
 						let unit = (v.unit != null && v.unit != '') ? '' + v.unit + '' : '';
-						let propName = (langStatus == 'KO') ? v.name.kr : v.name.en;
+						let propName = (langStatus == 'KO') ? v.name.kr : toTitleCase(v.name.en);
 
 						tempObj['key'] = k;
 						tempObj['value'] = propName;
@@ -2673,7 +2673,7 @@
 					if (v.dashboard_detail) {
 						let tempObj2 = {};
 						let unit = (v.unit != null && v.unit != '') ? '' + v.unit + '' : '';
-						let subPropName = (langStatus == 'KO') ? v.name.kr : v.name.en;
+						let subPropName = (langStatus == 'KO') ? v.name.kr : toTitleCase(v.name.en);
 
 						tempObj2['key'] = k;
 						tempObj2['value'] = subPropName;

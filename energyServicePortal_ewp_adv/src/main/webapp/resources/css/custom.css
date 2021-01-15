@@ -5130,7 +5130,7 @@ input.inp[readonly]:focus {
 	display: flex;
 	justify-content: normal;
 	flex-wrap: wrap;
-	width: calc(100% - 200px);
+	width: calc(100% - 100px);
 	margin-left: -17px;
 }
 
@@ -5147,7 +5147,7 @@ input.inp[readonly]:focus {
 }
 
 .indiv.chart-diagnosis .chart-top span:not(.caret) {
-	width: 50px;
+	width: auto;
 	text-align: right;
 }
 
@@ -5946,7 +5946,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 }
 
 .gmain-wrap .intable th .btn-align {
-	white-space: normal;
+	white-space: nowrap;
 	background: var(--box-color);
 }
 

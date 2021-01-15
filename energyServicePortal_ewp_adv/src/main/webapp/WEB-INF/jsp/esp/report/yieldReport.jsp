@@ -20,7 +20,10 @@
 			sortable: true,
 			paging: true,
 			pageLength: 50,
-			lengthMenu : [[50, 50, 100, 200], ["<fmt:message key='dataTable.entries' />", 50, 100, 200]],
+			lengthMenu : [[50, 100, 200], [50, 100, 200]],
+			initComplete() {
+				$("#yieldTable_length > label").html('<select name="yieldTable_length" aria-controls="yieldTable" class=""><option value="50">50</option><option value="100">100</option><option value="200">200</option></select>')
+			},
 
 			columns: [
 				{

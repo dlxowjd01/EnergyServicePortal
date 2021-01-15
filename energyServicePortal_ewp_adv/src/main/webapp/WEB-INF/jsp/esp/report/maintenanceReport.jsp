@@ -14,7 +14,10 @@
 			sortable: true,
 			paging: true,
 			pageLength: 50,
-			lengthMenu : [[50, 50, 100, 200], ["보기", 50, 100, 200]],
+			lengthMenu : [[50, 100, 200], [50, 100, 200]],
+			initComplete() {
+				$("#reportTable_length > label").html('<select name="reportTable_length" aria-controls="reportTable" class=""><option value="50">50</option><option value="100">100</option><option value="200">200</option></select>')
+			},
 
 			columns: [
 				{
@@ -77,7 +80,7 @@
 					className: 'dt-center'
 				},
 				{
-					title: '등록상태',
+					title: '<fmt:message key="workreportmain.2.registrationStatus" />',
 					data: null,
 					render: function (data, type, full, rowIndex) {
 						return '<fmt:message key="workreportmain.2.saved" />'
@@ -90,14 +93,14 @@
 				selector: 'td:first-child > :checkbox, tr > td:not(:has(button))'
 			},
 			language: {
-				emptyTable: "조회된 데이터가 없습니다.",
-				zeroRecords:  "검색된 결과가 없습니다.",
+				emptyTable: "<fmt:message key='yieldReport.noData.1' />",
+				zeroRecords:  "<fmt:message key='yieldReport.noData.2' />",
 				infoEmpty: "",
 				paginate: {
 					previous: "",
 					next: "",
 				},
-				info: "_PAGE_ - _PAGES_ " + " / 총 _TOTAL_ 개",
+				info: "_PAGE_ - _PAGES_ " + " / <fmt:message key='table.totalCase.start' /> _TOTAL_ <fmt:message key='table.totalCase.end' />",
 			},
 			dom: 'tipl',
 		}).on('select', function(e, dt, type, indexes) {
