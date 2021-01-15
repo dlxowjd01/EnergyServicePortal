@@ -226,7 +226,11 @@
 						$('#spc_id').parent().removeClass('hidden');
 						getSpcData();
 
-						$('#addNotice #spc_id button').html(result.spc_name + '<span class="caret"></span>').data('value', result.spc_id);
+						if (isEmpty(result.spc_name)) {
+							$('#addNotice #spc_id button').html('SPC 선택 <span class="caret"></span>').data('value', '');
+						} else {
+							$('#addNotice #spc_id button').html(result.spc_name + '<span class="caret"></span>').data('value', result.spc_id);
+						}
 					} else {
 						$('#spc_id').parent().addClass('hidden');
 					}

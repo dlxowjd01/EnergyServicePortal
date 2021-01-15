@@ -156,7 +156,7 @@
 			if(!isEmpty($("#fullName").val())) {
 				value.name = $("#fullName").val();
 				$("#fullName").val(value.name);
-				$("#userInfoBtn").contents().filter(function(){ return this.nodeType == 3; }).first().replaceWith(value.name);
+				//$("#userInfoBtn").contents().filter(function(){ return this.nodeType == 3; }).first().replaceWith(value.name);
 			}
 
 			value.contact_email = $("#emailAddr").val();
