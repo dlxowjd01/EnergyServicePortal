@@ -10444,7 +10444,7 @@ table.table-footer tfoot td.light {
 	}
 
 	.time > em {
-		margin-left: -25%!important;
+		text-align: right;
 	} 
 
 	#colStateInfo {
