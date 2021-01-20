@@ -218,7 +218,7 @@
 		});
 
 		$("#deleteConfirmModal").on("hide.bs.modal", function() {
-			$("#deleteSuccessMsg").html("<h5 id='deleteSuccessMsg' class='ntit'><fmt:message key='siteSetting.alert.4' /><br><span class='text-blue'></span>&ensp;<fmt:message key='siteSetting.alert.5' /></h5>");
+			$("#deleteSuccessMsg").html("<h5 id='deleteSuccessMsg' class='ntit'><fmt:message key='siteSetting.errorTxt.1' /><br><span class='text-blue'></span>&ensp;<fmt:message key='siteSetting.alert.5' /></h5>");
 			$("#confirmSite").val("");
 			$("#deleteConfirmBtn").prop("disabled", true);
 			setTimeout(function(){
