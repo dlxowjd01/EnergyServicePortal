@@ -1322,7 +1322,7 @@
 			
 			<!-- 기본 항목 -->
 			<div class="row chart-top">
-				<div class="col-xl-9 col-lg-7 col-md-7 col-sm-12">
+				<div class="col-xl-9 col-lg-7 col-md-7 col-sm-12" id="operationFilter">
 					<div id="analyzeDiv1" class="sa-select mb-10">
 						<div class="sa-select mb-10">
 							<div class="dropdown" id="chartDid">
@@ -1373,106 +1373,112 @@
 					</div>
 
 					<div id="analyzeDiv2" class="sa-select" style="display:none;">
-						<span class="tx-tit"><fmt:message key='operHistory.graph.gridX' /></span>
-						<div class="sa-select mb-10">
-							<div id="chartDid2" class="dropdown">
-								<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="<fmt:message key='operHistory.graph.name' />"><fmt:message key='operHistory.graph.name' /><span class="caret"></span></button>
-								<ul class="dropdown-menu" id="chartDidUl2">
-									<li data-value="[val]" data-sid="[sid]" data-type="[type]"><a>[siteDevice]</a></li>
-								</ul>
+						
+						<div>
+							<span class="tx-tit"><fmt:message key='operHistory.graph.gridX' /></span>
+							<div class="sa-select mb-10">
+								<div id="chartDid2" class="dropdown">
+									<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="<fmt:message key='operHistory.graph.name' />"><fmt:message key='operHistory.graph.name' /><span class="caret"></span></button>
+									<ul class="dropdown-menu" id="chartDidUl2">
+										<li data-value="[val]" data-sid="[sid]" data-type="[type]"><a>[siteDevice]</a></li>
+									</ul>
+								</div>
 							</div>
-						</div>
-						<div class="sa-select mb-10">
-							<div id="columnDrop2" class="dropdown">
-								<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="<fmt:message key='operHistory.graph.type' />"><fmt:message key='operHistory.graph.type' /><span class="caret"></span></button>
-								<ul id="columnLi2" class="dropdown-menu radio-type" role="menu">
-									<li data-value="[key]">
-										<a href="javascript:void(0);" tabindex="-1">
-											<input type="radio" id="column02_[INDEX]" name="column2" value="[key]">
-											<label for="column02_[INDEX]">[value]</label>
-										</a>
-									</li>
-								</ul>
+							<div class="sa-select mb-10">
+								<div id="columnDrop2" class="dropdown">
+									<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="<fmt:message key='operHistory.graph.type' />"><fmt:message key='operHistory.graph.type' /><span class="caret"></span></button>
+									<ul id="columnLi2" class="dropdown-menu radio-type" role="menu">
+										<li data-value="[key]">
+											<a href="javascript:void(0);" tabindex="-1">
+												<input type="radio" id="column02_[INDEX]" name="column2" value="[key]">
+												<label for="column02_[INDEX]">[value]</label>
+											</a>
+										</li>
+									</ul>
+								</div>
 							</div>
-						</div>
-						<div class="sa-select mb-10">
-							<div class="dropdown">
-								<button type="button" class="dropdown-toggle w4" data-toggle="dropdown" data-value="mean" data-name="평균"><fmt:message key="statushistory.2.average" /><span class="caret"></span></button>
-								<ul class="dropdown-menu radio-type " role="menu">
-									<li data-value="max">
-										<a href="javascript:void(0);" tabindex="-1">
-											<input type="radio" id="rdValue2_01" name="rdValue2" value="max">
-											<label for="rdValue2_01"><fmt:message key="statushistory.2.max" /></label>
-										</a>
-									</li>
-									<li data-value="min">
-										<a href="javascript:void(0);" tabindex="-1">
-											<input type="radio" id="rdValue2_02" name="rdValue2" value="min">
-											<label for="rdValue2_02"><fmt:message key="statushistory.2.min" /></label>
-										</a>
-									</li>
-									<li data-value="mean">
-										<a href="javascript:void(0);" tabindex="-1">
-											<input type="radio" id="rdValue2_03" name="rdValue2" value="mean" checked>
-											<label for="rdValue2_03"><fmt:message key="statushistory.2.average" /></label>
-										</a>
-									</li>
-								</ul>
+							<div class="sa-select mb-10">
+								<div class="dropdown">
+									<button type="button" class="dropdown-toggle w4" data-toggle="dropdown" data-value="mean" data-name="평균"><fmt:message key="statushistory.2.average" /><span class="caret"></span></button>
+									<ul class="dropdown-menu radio-type " role="menu">
+										<li data-value="max">
+											<a href="javascript:void(0);" tabindex="-1">
+												<input type="radio" id="rdValue2_01" name="rdValue2" value="max">
+												<label for="rdValue2_01"><fmt:message key="statushistory.2.max" /></label>
+											</a>
+										</li>
+										<li data-value="min">
+											<a href="javascript:void(0);" tabindex="-1">
+												<input type="radio" id="rdValue2_02" name="rdValue2" value="min">
+												<label for="rdValue2_02"><fmt:message key="statushistory.2.min" /></label>
+											</a>
+										</li>
+										<li data-value="mean">
+											<a href="javascript:void(0);" tabindex="-1">
+												<input type="radio" id="rdValue2_03" name="rdValue2" value="mean" checked>
+												<label for="rdValue2_03"><fmt:message key="statushistory.2.average" /></label>
+											</a>
+										</li>
+									</ul>
+								</div>
 							</div>
 						</div>
 
-						<span class="tx-tit"><fmt:message key='operHistory.graph.gridY' /></span>
-						<div class="sa-select mb-10">
-							<div id="chartDid3" class="dropdown">
-								<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="<fmt:message key='operHistory.graph.name' />">
-									<fmt:message key='operHistory.graph.name' /><span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu" id="chartDidUl3">
-									<li data-value="[val]" data-sid="[sid]" data-type="[type]"><a href="javascript:void(0);">[siteDevice]</a></li>
-								</ul>
+						<div>
+							<span class="tx-tit"><fmt:message key='operHistory.graph.gridY' /></span>
+							<div class="sa-select mb-10">
+								<div id="chartDid3" class="dropdown">
+									<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="<fmt:message key='operHistory.graph.name' />">
+										<fmt:message key='operHistory.graph.name' /><span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu" id="chartDidUl3">
+										<li data-value="[val]" data-sid="[sid]" data-type="[type]"><a href="javascript:void(0);">[siteDevice]</a></li>
+									</ul>
+								</div>
+							</div>
+							<div class="sa-select mb-10">
+								<div id="columnDrop3" class="dropdown">
+									<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="<fmt:message key='operHistory.graph.type' />"><fmt:message key='operHistory.graph.type' /><span class="caret"></span></button>
+									<ul id="columnLi3" class="dropdown-menu radio-type" role="menu">
+										<li>
+											<a href="javascript:void(0);" data-value="[key]" tabindex="-1">
+												<input type="radio" id="column03_[INDEX]" name="column3" value="[key]">
+												<label for="column03_[INDEX]">[value]</label>
+											</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class="sa-select mb-10">
+								<div class="dropdown">
+									<button type="button" class="dropdown-toggle w4" data-toggle="dropdown" data-value="mean" data-name="평균"><fmt:message key="statushistory.2.average" /><span class="caret"></span></button>
+									<ul class="dropdown-menu radio-type" role="menu">
+										<li data-value="max">
+											<a href="javascript:void(0);" tabindex="-1">
+												<input type="radio" id="rdValue3_1" name="rdValue3" value="max">
+												<label for="rdValue3_1"><fmt:message key="statushistory.2.max" /></label>
+											</a>
+										</li>
+										<li data-value="min">
+											<a href="javascript:void(0);" tabindex="-1">
+												<input type="radio" id="rdValue3_2" name="rdValue3" value="min">
+												<label for="rdValue3_2"><fmt:message key="statushistory.2.min" /></label>
+											</a>
+										</li>
+										<li data-value="mean">
+											<a href="javascript:void(0);" tabindex="-1">
+												<input type="radio" id="rdValue3_3" name="rdValue3" value="mean" checked>
+												<label for="rdValue3_3"><fmt:message key="statushistory.2.average" /></label>
+											</a>
+										</li>
+									</ul>
+								</div>
 							</div>
 						</div>
-						<div class="sa-select mb-10">
-							<div id="columnDrop3" class="dropdown">
-								<button type="button" class="dropdown-toggle w2" data-toggle="dropdown" data-name="<fmt:message key='operHistory.graph.type' />"><fmt:message key='operHistory.graph.type' /><span class="caret"></span></button>
-								<ul id="columnLi3" class="dropdown-menu radio-type" role="menu">
-									<li>
-										<a href="javascript:void(0);" data-value="[key]" tabindex="-1">
-											<input type="radio" id="column03_[INDEX]" name="column3" value="[key]">
-											<label for="column03_[INDEX]">[value]</label>
-										</a>
-									</li>
-								</ul>
-							</div>
-						</div>
-						<div class="sa-select mb-10">
-							<div class="dropdown">
-								<button type="button" class="dropdown-toggle w4" data-toggle="dropdown" data-value="mean" data-name="평균"><fmt:message key="statushistory.2.average" /><span class="caret"></span></button>
-								<ul class="dropdown-menu radio-type" role="menu">
-									<li data-value="max">
-										<a href="javascript:void(0);" tabindex="-1">
-											<input type="radio" id="rdValue3_1" name="rdValue3" value="max">
-											<label for="rdValue3_1"><fmt:message key="statushistory.2.max" /></label>
-										</a>
-									</li>
-									<li data-value="min">
-										<a href="javascript:void(0);" tabindex="-1">
-											<input type="radio" id="rdValue3_2" name="rdValue3" value="min">
-											<label for="rdValue3_2"><fmt:message key="statushistory.2.min" /></label>
-										</a>
-									</li>
-									<li data-value="mean">
-										<a href="javascript:void(0);" tabindex="-1">
-											<input type="radio" id="rdValue3_3" name="rdValue3" value="mean" checked>
-											<label for="rdValue3_3"><fmt:message key="statushistory.2.average" /></label>
-										</a>
-									</li>
-								</ul>
-							</div>
-						</div>
+
 					</div>
 					<!-- 버튼 -->
-					<div class="sa-select mb-10">
+					<div class="sa-select mb-10 operation-filter-button">
 						<button type="button" class="btn-type" id="chartAdd"><fmt:message key="statushistory.2.additem" /></button>
 						<button type="button" class="btn-type" id="chartDraw"><fmt:message key="statushistory.2.create" /></button>
 					</div>

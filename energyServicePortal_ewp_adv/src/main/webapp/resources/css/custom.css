@@ -10359,7 +10359,8 @@ table.table-footer tfoot td.light {
 	line-height: 36px;
 }
 
-.mobile-br {
+.mobile-br,
+.tablet-br {
 	display: none;
 }
 #userInfoBtn .light {
@@ -10368,6 +10369,9 @@ table.table-footer tfoot td.light {
 
 /* Responsive - Tablet */
 @media (max-width: 768px) {
+	.tablet-br {
+		display: block;
+	}
 	table {
 		overflow-x: auto;
 		white-space: nowrap;
@@ -10382,6 +10386,46 @@ table.table-footer tfoot td.light {
 
 	.pagination a {
 		width: 30px;
+	}
+
+	.time {
+		white-space: nowrap;
+	}
+
+	.chart-wrapper .sum-list li+li {
+		margin: 0px 20px 0px 0px;
+	}
+
+	.gmain-wrap table td.right {
+		text-align: center!important;
+	}
+
+	.operation-history .chart-top {
+		display: block!important;
+	}
+
+	.operation-history .chart-top > div {
+		max-width: 100%;
+	}
+
+	.operation-history .chart-top > div > .flex-end,
+	.operation-filter-button {
+		display: flex!important;
+		justify-content: center!important;
+	}
+
+	#analyzeDiv1 {
+		display: flex;
+		justify-content: center;
+	}
+
+	#analyzeDiv2 {
+		width: 100%;
+	}
+
+	#analyzeDiv2 > div {
+		display: flex;
+		justify-content: center;
 	}
 }
 
