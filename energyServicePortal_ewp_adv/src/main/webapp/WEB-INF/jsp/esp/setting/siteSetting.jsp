@@ -1189,24 +1189,24 @@
 						"sTitle": "<fmt:message key='siteSetting.capacity' />",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex )  {
-							let val = displayNumberFixedDecimal(full.capacities.gen, 'W', 3, 2);
-							return (data.capacities.gen != 0) ? (val[0] + ' ' + val[1]) : "0"
+							let val = displayNumberFixedUnit(full.capacities.gen, 'W', 'kW', 2);
+							return (data.capacities.gen != 0) ? val[0] : "0"
 						},
 					},
 					{
 						"sTitle": "<fmt:message key='siteSetting.ESSPCS.capacity' />",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex )  {
-							let val = displayNumberFixedDecimal(full.capacities.bat_pcs, 'W', 3, 2);
-							return (full.capacities.bat_pcs != 0) ? (val[0] + ' ' + val[1]) : "0"
+							let val = displayNumberFixedUnit(full.capacities.bat_pcs, 'W', 'kW', 2);
+							return (full.capacities.bat_pcs != 0) ? val[0] : "0"
 						},
 					},
 					{
 						"sTitle": "<fmt:message key='siteSetting.ESSBMS.capacity' />",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex )  {
-							let val = displayNumberFixedDecimal(full.capacities.bat_bms, 'W', 3, 2);
-							return (full.capacities.bat_bms != 0) ? (val[0] + ' ' + val[1]) : "0"
+							let val = displayNumberFixedUnit(full.capacities.bat_bms, 'W', 'kW', 2);
+							return (full.capacities.bat_bms != 0) ? val[0] : "0"
 						},
 					},
 					{
@@ -1575,24 +1575,24 @@
 						"sTitle": "<fmt:message key='siteSetting.capacity' />",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex )  {
-							let val = displayNumberFixedDecimal(full.capacities.gen, 'W', 3, 2);
-							return (data.capacities.gen != 0) ? (val[0] + ' ' + val[1]) : "0"
+							let val = displayNumberFixedUnit(full.capacities.gen, 'W', 'kW', 2);
+							return (data.capacities.gen != 0) ? val[0] : "0"
 						},
 					},
 					{
 						"sTitle": "<fmt:message key='siteSetting.ESSPCS.capacity' />",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex )  {
-							let val = displayNumberFixedDecimal(full.capacities.bat_pcs, 'W', 3, 2);
-							return (full.capacities.bat_pcs != 0) ? (val[0] + ' ' + val[1]) : "0"
+							let val = displayNumberFixedUnit(full.capacities.bat_pcs, 'W', 'kW', 2);
+							return (full.capacities.bat_pcs != 0) ? val[0] : "0"
 						},
 					},
 					{
 						"sTitle": "<fmt:message key='siteSetting.ESSBMS.capacity' />",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex )  {
-							let val = displayNumberFixedDecimal(full.capacities.bat_bms, 'W', 3, 2);
-							return (full.capacities.bat_bms != 0) ? (val[0] + ' ' + val[1]) : "0"
+							let val = displayNumberFixedUnit(full.capacities.bat_bms, 'W', 'kW', 2);
+							return (full.capacities.bat_bms != 0) ? val[0] : "0"
 						},
 					},
 					{

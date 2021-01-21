@@ -458,12 +458,16 @@
 	function downloadFile(self){
 		let token = '${sessionScope.userInfo.token}'
 		let url = '';
+		let typeName = '';
 		if($(self).data("name") == "downloadMergeDocs") {
 			url = apiHost + '/spcs/transactions/download/request?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId + '&evidence=true';
+			typeName = '출금요청서';
 		} else if($(self).data("name") == "downloadReqDoc"){
 			url = apiHost + '/spcs/transactions/download/request?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId;
+			typeName = '증빙서류';
 		} else if($(self).data("name") == "downloadProof"){
 			url = apiHost + '/spcs/transactions/download/evidence?oid='+oid + '&spc_id=' + spcId + '&request_id=' + reqId;
+			typeName = '출금요청서및증빙';
 		};
 
 		$.ajax({
@@ -473,12 +477,12 @@
 				responseType: 'blob'
 			},
 			success: function(data) {
-				let account = $("#tableBody").find("tr:first-child td:nth-child(2)").text().replace(/^\s+|\s+$|\s+(?=\s)/g, "");
+				let account = $("#tableBody").find("tr:first-child td:nth-child(4)").text().replace(/^\s+|\s+$|\s+(?=\s)/g, "");
 
 				let d = $("#tableBody").find("tr:first-child td:nth-child(1)").text().replace(/[^0-9]/g, "");
 				// let d = new Date();
 				// d = d.toISOString().substring(0, 10).replace(/-/g, "");
-				let name = d + '_' + spcName + '_' + account + '.pdf';
+				let name = d + '_' + spcName + '_' + account + '_' + typeName + '.pdf';
 
 				var a = document.createElement('a');
 				var url = window.URL.createObjectURL(data);

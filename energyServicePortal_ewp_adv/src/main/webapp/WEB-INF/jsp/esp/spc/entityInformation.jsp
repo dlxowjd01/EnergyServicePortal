@@ -27,7 +27,6 @@
 		spcEntityTable = $('#spcEntityTable').DataTable({
 			autoWidth: true,
 			fixedHeader: true,
-			'table-layout': 'fixed',
 			scrollY: '720px',
 			scrollCollapse: true,
 			sortable: true,
@@ -51,19 +50,13 @@
 					className: 'dt-center no-sorting fixed'
 				},
 				{
-					title: 'SPC명',
+					title: 'SPC',
 					data: 'spc_name',
-					render: function (data, type, full, rowIndex) {
-						return '<a href="javascript:moveModifyPage(\'' + full['spc_id'] + '\', \'' + full['gen_id'] + '\')" class="table-link">' + data + '</a>';
-					},
 					className: 'dt-left'
 				},
 				{
-					title: '발전소 명',
+					title: '발전소',
 					data: 'gen_name',
-					render: function (data, type, full, rowIndex) {
-						return '<a href="javascript:moveModifyPage(\'' + full['spc_id'] + '\', \'' + full['gen_id'] + '\')" class="table-link">' + data + '</a>';
-					},
 					className: 'dt-left'
 				},
 				{
@@ -158,11 +151,19 @@
 					title: '-추가보수',
 					data: 'additional_amount',
 					className: 'dt-center'
+				},
+				{
+					title: '정보관리',
+					data: null,
+					render: function (data, type, full, rowIndex) {
+						return '<button onclick="moveModifyPage(\'' + full['spc_id'] + '\', \'' + full['gen_id'] + '\')" class="btn-type03">보기</button>';
+					},
+					className: 'dt-center'
 				}
 			],
 			select: {
 				style: 'multi',
-				selector: 'td:first-child > :checkbox, tr'
+				selector: 'td:first-child > :checkbox, tr > td:not(:has(button))'
 			},
 			language: {
 				emptyTable: "조회된 데이터가 없습니다.",
@@ -215,7 +216,7 @@
 	 * 리스트 검색 및 정제
 	 */
 	const getDataList = () => {
-		new Promise(resolve => {
+		new Promise((resolve, reject) => {
 			$.ajax({
 				url: apiHost + '/spcs',
 				type: 'GET',
@@ -227,17 +228,17 @@
 					if (result['status'] === 'success') {
 						const resultList = result['data'];
 						if (isEmpty(resultList)) {
-							throw new Error('조회된 내역이 없습니다.');
+							reject('조회된 내역이 없습니다.');
 						} else {
 							resolve(resultList);
 						}
 					} else {
-						throw new Error('조회에 실패했습니다.');
+						reject('조회에 실패했습니다.');
 					}
 				},
 				error: (error) => {
 					console.error(error);
-					throw new Error('조회에 실패했습니다.');
+					reject('조회에 실패했습니다.');
 				}
 			});
 		}).then(resultList => {
@@ -605,7 +606,7 @@
 
 <div class="row header-wrapper">
 	<div class="col-12">
-		<h1 class="page-header">SPC 기본 정보</h1>
+		<h1 class="page-header">기본정보</h1>
 	</div>
 </div>
 <div class="row">
@@ -718,8 +719,9 @@
 <div class="row">
 	<div class="col-lg-12">
 		<div class="indiv">
-			<div class="btn-wrap-type01">
+			<div class="btn-wrap-type02 btn-wrap-fixed mb-16">
 				<button type="button" class="btn-type big" onclick="location.href='/spc/entityInformationPost.do'">신규 등록</button>
+				<button type="button" class="btn-type03" id="deleteBtn" onclick="setCheckedDataRemove();" disabled>선택 삭제</button>
 			</div>
 			<table id="spcEntityTable" class="chk-type">
 				<colgroup>
@@ -728,18 +730,16 @@
 					<col style="width:12%">
 					<col style="width:12%">
 					<col style="width:8%">
-					<col style="width:12%">
-					<col style="width:8%">
-					<col style="width:8%">
-					<col style="width:8%">
-					<col style="width:8%">
-					<col style="width:8%">
-					<col style="width:8%">
+					<col style="width:11%">
+					<col style="width:7%">
+					<col style="width:7%">
+					<col style="width:7%">
+					<col style="width:7%">
+					<col style="width:7%">
+					<col style="width:7%">
+					<col style="width:7%">
 				</colgroup>
 			</table>
-			<div class="btn-wrap-type02 mt-30">
-				<button type="button" class="btn-type03" id="deleteBtn" onclick="setCheckedDataRemove();" disabled>선택 삭제</button>
-			</div>
 		</div>
 	</div>
 </div>

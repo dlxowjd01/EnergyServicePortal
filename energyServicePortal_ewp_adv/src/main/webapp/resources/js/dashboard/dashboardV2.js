@@ -1611,6 +1611,7 @@ const searchNowMonth = async () => {
 			sids: siteSids.toString(),
 			metering_type: 2,
 		},
+		timeout: 50000,
 		success: (data, textStatus, jqXHR) => {
 			apiDatas[apiHost + '/energy/now/sites?interval=month'] = data;
 			monthlyChartDraw();
