@@ -651,4 +651,5 @@ const enTranslation =
   "dashboard.table.13": "/ Last Year (%)",
   "dashboard.EA": "EA",
   "gmain.1000won": "$",
+  "gmain.10000won": "$",
 }

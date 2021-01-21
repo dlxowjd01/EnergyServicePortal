@@ -662,5 +662,6 @@ const koTranslation =
   "dashboard.table.13": "전년 동월 대비 발전 비율(%)",
   "dashboard.EA": "개소",
   "gmain.1000won": "천원",
+  "gmain.10000won": "만원",
 
 }

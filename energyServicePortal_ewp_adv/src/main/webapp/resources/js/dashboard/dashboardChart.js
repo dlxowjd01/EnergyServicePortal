@@ -72,7 +72,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 			style: {
 				color: 'var(--grey)',
 				fontSize: '12px',
-				transform: 'translate(-25px, 0px)'
+				transform: 'translate(-28px, 0px)'
 			}
 		},
 		labels: {
@@ -90,20 +90,20 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 	}, {
 		gridLineWidth: 0,
 		title: {
-			text: i18nManager.tr("gmain.1000won"),
+			text: i18nManager.tr("gmain.10000won"),
 			align: 'low',
 			rotation: 0,
 			y: 25,
-			x: -12,
+			x: 0,
 			style: {
 				color: 'var(--grey)',
 				fontSize: '12px',
-				transform: 'translate(-25px, 0px)'
+				transform: 'translate(-30px, 0px)'
 			}
 		},
 		labels: {
 			formatter: function () {
-				return  numberComma(this.value);
+				return  numberComma(this.value / 10);
 			},
 			style: {
 				color: 'var(--grey)',
@@ -118,8 +118,8 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 		formatter: function () {
 			return this.points.reduce(function (s, point) {
 				if(point.y !== 0){
-					let suffix = point.series.userOptions.tooltip.valueSuffix;
-					return s + '<br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + numberComma(Math.round(point.y)) + ' ' + suffix;
+					let suffix = point.series.userOptions.tooltip.valueSuffix === "천원" ? "만원" : point.series.userOptions.tooltip.valueSuffix;
+					return s + '<br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + numberComma(Math.round(point.y / 10)) + ' ' + suffix;
 				} else {
 					return s
 				}
@@ -247,7 +247,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 			style: {
 				color: 'var(--grey)',
 				fontSize: '12px',
-				transform: 'translate(-30px, 0px)'
+				transform: 'translate(-40px, 0px)'
 			}
 		},
 		labels: {
@@ -269,11 +269,11 @@ const dailyChart = Highcharts.chart('dailyChart', {
 			align: 'low',
 			rotation: 0,
 			y: 25,
-			x: -12,
+			x: 0,
 			style: {
 				color: 'var(--grey)',
 				fontSize: '12px',
-				transform: 'translate(-25px, 0px)'
+				transform: 'translate(-30px, 0px)'
 			}
 		},
 		labels: {
