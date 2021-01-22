@@ -14,7 +14,7 @@
 		</div>
 	</div>
 </div>
-<div class="row">
+<div class="row generation-content">
 	<div class="col-lg-3 col-md-4">
 		<div class="indiv chart-diagnosis">
 			<h2 class="ntit"><fmt:message key="genforecast.2.forecast_summary" /></h2>
@@ -100,29 +100,29 @@
 	<div class="col-lg-9 col-md-8">
 		<div class="indiv chart-diagnosis">
 			<div class="chart-top">
-				<div id="deviceType">
-					<span class="tx-tit"><fmt:message key="genforecast.3.measured_data" /></span>
-					<div class="sa-select">
-						<div class="dropdown">
-							<button type="button" class="dropdown-toggle w7 no-close" type="button" data-toggle="dropdown" data-name="복수 선택">
-								<fmt:message key="genforecast.3.multiple_selection" /><span class="caret"></span>
-							</button>
-							<div class="dropdown-menu chk-type"><!--
-							--><ul class="dropdown-cov clear selectDevices"></ul><!--
-							--><div class="li-btn-box clear">
-									<div class="fl">
-										<button type="button" class="btn-type03"><fmt:message key="genforecast.3.selectall" /></button>
-										<button type="button" class="btn-type03"><fmt:message key="genforecast.3.clearall" /></button>
-									</div>
-									<div class="end">
-										<button type="button" class="btn-type fr"><fmt:message key="genforecast.3.apply" /></button>
+				<div class="inline-flex">
+					<div id="deviceType">
+						<span class="tx-tit"><fmt:message key="genforecast.3.measured_data" /></span>
+						<div class="sa-select">
+							<div class="dropdown">
+								<button type="button" class="dropdown-toggle w7 no-close" type="button" data-toggle="dropdown" data-name="복수 선택">
+									<fmt:message key="genforecast.3.multiple_selection" /><span class="caret"></span>
+								</button>
+								<div class="dropdown-menu chk-type"><!--
+								--><ul class="dropdown-cov clear selectDevices"></ul><!--
+								--><div class="li-btn-box clear">
+										<div class="fl">
+											<button type="button" class="btn-type03"><fmt:message key="genforecast.3.selectall" /></button>
+											<button type="button" class="btn-type03"><fmt:message key="genforecast.3.clearall" /></button>
+										</div>
+										<div class="end">
+											<button type="button" class="btn-type fr"><fmt:message key="genforecast.3.apply" /></button>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="inline-flex">
 					<div class="period">
 						<span class="tx-tit"><fmt:message key="generation.period" /></span>
 						<div class="sa-select">

@@ -934,7 +934,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="fl">
+		<div class="fl yield-search">
 			<div class="text-input-type"><input type="text" id="key_word" placeholder="<fmt:message key='yieldReport.input' />" autocomplete="off"></div>
 		</div>
 		<div class="fl">

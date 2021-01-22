@@ -208,7 +208,7 @@
 				<div class="table-top clear">
 					<h2 class="ntit fl"><fmt:message key="datacolleciton.3.datacollectionlog" /></h2>
 				</div>
-				<div class="clear input-align">
+				<div class="clear input-align collection-log-filter">
 					<div class="fl">
 						<span class="tx-tit"><fmt:message key='colState.log.type' /></span>
 						<div class="sel-calendar">

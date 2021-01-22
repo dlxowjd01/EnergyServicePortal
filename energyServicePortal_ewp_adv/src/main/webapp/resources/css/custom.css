@@ -5130,8 +5130,7 @@ input.inp[readonly]:focus {
 	display: flex;
 	justify-content: normal;
 	flex-wrap: wrap;
-	width: calc(100% - 100px);
-	margin-left: -17px;
+	width: 100%;
 }
 
 .indiv.chart-diagnosis {
@@ -10426,6 +10425,68 @@ table.table-footer tfoot td.light {
 	#analyzeDiv2 > div {
 		display: flex;
 		justify-content: center;
+	}
+
+	.collection-log-filter > div  {
+		margin: 0px 0px 15px 0px!important;
+	}
+
+	#measure > button {
+		width: 100%;
+	}
+
+	#measure + .unit {
+		margin: 0 0 0 12px!important;
+	}
+
+	.yield-search {
+		width: 200px;
+	}
+
+	.maintenance-search {
+		width: 100%;
+		margin-left: 0!important;
+	}
+
+	.maintenance-search > div {
+		width: 80%;
+	}
+
+	.generation-content {
+		display: block!important;
+	}
+
+	.generation-content > div {
+		max-width: 100%!important;
+	}
+
+	.indiv.chart-diagnosis .chart-top {
+		width: calc(100% - 100px)!important;
+	}
+
+	.indiv.chart-diagnosis .chart-top > div {
+		width: 100%;
+	}
+
+	#application {
+		width: 100%;
+	}
+
+	.spcInfoFilter {
+		justify-content: space-between!important;
+	}
+
+	.spcInfoSearch {
+		width: 640px!important;
+	}
+
+	#contract_select {
+		margin-right: 0px!important;
+	}
+
+	.spcInfoSearch,
+	.spcInfoSearch + button {
+		margin-top: 15px;
 	}
 }
 

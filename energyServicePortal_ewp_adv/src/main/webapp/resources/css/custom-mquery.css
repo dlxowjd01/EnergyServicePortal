@@ -62,7 +62,7 @@
 
 @media all and (max-width: 1280px) {
 	.indiv.chart-diagnosis .chart-top .inline-flex .duration {
-		display: none;
+		/* display: none; */
 	}
 
 	.entity-wrapper.post .indiv .spc-table-row.st-edit .text-input-type.edit,
@@ -826,7 +826,7 @@
 
 	.chart-pv .chart-top .duration,
 	.chart-pv-table {
-		display: none;
+		/* display: none; */
 	}
 
 	.chart-pv .chart-top .sel-calendar {

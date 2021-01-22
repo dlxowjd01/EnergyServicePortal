@@ -283,7 +283,7 @@
 			</div>
 			<small id="dateWarning" class="hidden warning">시작일과 종료일을 모두 입력해 주세요.</small>
 		</div>
-		<div class="flex-group">
+		<div class="flex-group maintenance-search">
 			<div class="text-input-type mr-12">
 				<input type="text" id="key_word" placeholder="입력" />
 			</div>

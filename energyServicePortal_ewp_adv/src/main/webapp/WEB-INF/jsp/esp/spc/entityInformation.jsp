@@ -26,7 +26,7 @@
 
 		spcEntityTable = $('#spcEntityTable').DataTable({
 			autoWidth: true,
-			fixedHeader: true,
+			// fixedHeader: true,
 			scrollY: '720px',
 			scrollCollapse: true,
 			sortable: true,
@@ -612,7 +612,7 @@
 <div class="row">
 	<div class="col-12 clear input-align">
 		<div class="fl">
-			<div class="flex-start">
+			<div class="flex-start spcInfoFilter">
 				<label for="operation_select" class="tx-tit">운영 여부</label>
 				<div class="dropdown sa-select mr-16" id="operation_select">
 					<button type="button" class="dropdown-toggle w7 no-close" data-toggle="dropdown" data-name="운영 여부 선택">
@@ -706,7 +706,7 @@
 					</ul>
 				</div>
 
-				<div class="text-input-type mr-12">
+				<div class="text-input-type mr-12 spcInfoSearch">
 					<input type="text" id="key_word" name="key_word" placeholder="입력">
 				</div>
 				<button type="button" class="btn-type" id="searchBtn">검색</button>
