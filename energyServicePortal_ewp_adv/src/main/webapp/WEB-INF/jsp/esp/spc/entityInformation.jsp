@@ -267,7 +267,7 @@
 						let guaranteed_value = '-'; //보증값
 						let guaranteed_performance = '-'; //보증실적
 						let guaranteed_probability = '-'; //보증확률
-						if (!isEmpty(warrantyInfo['보증_방식'])) {
+						if (!isEmpty(warrantyInfo) && !isEmpty(warrantyInfo['보증_방식'])) {
 							if (warrantyInfo['보증_방식'] === 'PR') {
 								guaranteed_value = isEmpty(warrantyInfo['PR_보증치']) ? '-' : warrantyInfo['PR_보증치'];
 								if (!isEmpty(warrantyInfo['보증_감소율']) && !isEmpty(warrantyInfo['현재_적용_연차'])) {
@@ -334,16 +334,16 @@
 							gen_id: genId,
 							gen_name: genName,
 							operation_period: termDate,
-							annual: isEmpty(warrantyInfo['현재_적용_연차']) ? '-' : warrantyInfo['현재_적용_연차'],
-							guarantee: isEmpty(warrantyInfo['보증_방식']) ? '-' : warrantyInfo['보증_방식'],
+							annual: (!isEmpty(warrantyInfo) && !isEmpty(warrantyInfo['현재_적용_연차'])) ? warrantyInfo['현재_적용_연차'] : '-',
+							guarantee: (!isEmpty(warrantyInfo) && !isEmpty(warrantyInfo['보증_방식'])) ? warrantyInfo['보증_방식'] : '-',
 							guaranteed_value: guaranteed_value,
 							guaranteed_performance: guaranteed_performance,
 							guaranteed_probability: guaranteed_probability,
-							reduction_rate: isEmpty(warrantyInfo['보증_감소율']) ? '-' : warrantyInfo['보증_감소율'],
-							additional_amount: isEmpty(warrantyInfo['추가_보수']) ? '-' : warrantyInfo['추가_보수'],
-							operation: maintenanceInfo['운영_여부'],
-							contract: maintenanceInfo['관리_계약_구분'],
-							warranty: warrantyInfo['보증_방식'],
+							reduction_rate: (!isEmpty(warrantyInfo) && !isEmpty(warrantyInfo['보증_감소율'])) ? warrantyInfo['보증_감소율'] : '-',
+							additional_amount: (!isEmpty(warrantyInfo) && !isEmpty(warrantyInfo['추가_보수'])) ? warrantyInfo['추가_보수'] : '-',
+							operation: (!isEmpty(maintenanceInfo)) ? maintenanceInfo['운영_여부'] : '-',
+							contract: (!isEmpty(maintenanceInfo)) ? maintenanceInfo['관리_계약_구분'] : '-',
+							warranty: (!isEmpty(warrantyInfo)) ? warrantyInfo['보증_방식'] : '-'
 						});
 					});
 				}

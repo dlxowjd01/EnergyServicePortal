@@ -558,9 +558,10 @@
 																	</c:if>
 																</c:forEach>
 															</c:if>
+
 															<li onclick="toggleMenu(this)">
 																<input type="checkbox" name="divisionLocation" id="lo_${loc.value.code}_${countryStat.index}" value="${country.value.code}" <c:if test="${choice eq 'true'}">checked</c:if>>
-																<label for="lo_${loc.value.code}_${countryStat.index}" class="sub-item" <c:if test="${choice eq 'true'}">class="on"</c:if>>
+																<label for="lo_${loc.value.code}_${countryStat.index}" class="sub-item <c:if test="${choice eq 'true'}">on</c:if>">
 																	<c:choose>
 																		<c:when test="${cookieLang eq 'KO'}">
 																			${country.value.name.kr}
@@ -598,7 +599,7 @@
 											</c:if>
 											<li onclick="toggleMenu(this)">
 												<input type="checkbox" name="divisionResourceType" id="tp${stat.index}" value="${type.value.code}" <c:if test="${choice eq 'true'}">checked</c:if>>
-												<label for="tp${stat.index}" class="sub-item" <c:if test="${choice eq 'true'}">class="on"</c:if>>
+												<label for="tp${stat.index}" class="sub-item <c:if test="${choice eq 'true'}">on</c:if>">
 													<c:choose>
 														<c:when test="${cookieLang eq 'KO'}">
 															${type.value.name.kr}
