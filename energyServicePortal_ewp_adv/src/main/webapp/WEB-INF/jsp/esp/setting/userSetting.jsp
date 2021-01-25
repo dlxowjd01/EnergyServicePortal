@@ -2049,7 +2049,7 @@
 				</ul>
 			</div>
 		</div>
-		<div class="flex-group">
+		<div class="flex-group userSetting-search">
 			<div class="text-input-type">
 				<input type="search" id="searchBox" aria-controls="userTable" placeholder="<fmt:message key='userSetting.keywordSearch' />">
 			</div>

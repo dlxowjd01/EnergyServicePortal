@@ -23,7 +23,7 @@
 	</div>
 	<div class="col-lg-10 col-md-8 col-sm-6">
 		<div class="indiv chart-pv">
-			<div class="flex-wrapper">
+			<div class="flex-wrapper pvGen-filter">
 				<div class="chart-top">
 					<div id="deviceType" class="flex-group">
 						<span class="tx-tit"><fmt:message key="renewablesgen.3.measureddata" /></span>
@@ -85,8 +85,8 @@
 							</div>
 							<small class="warning hidden"><fmt:message key="pvGen.graph.unit.warn" /></small>
 						</div>
-						<button type="button" class="btn-type" id="renderBtn"><fmt:message key="renewablesgen.3.update" /></button>
 					</div>
+					<button type="button" class="btn-type" id="renderBtn"><fmt:message key="renewablesgen.3.update" /></button>
 				</div>
 				<div class="end"><!--
 				--><span class="tx-tit"><fmt:message key="pvGen.graph.style" /></span><!--

@@ -612,100 +612,107 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-12 clear input-align">
+	<div class="col-12 clear input-align spcInfoFilterWrap">
 		<div class="fl">
 			<div class="flex-start spcInfoFilter">
-				<label for="operation_select" class="tx-tit">운영 여부</label>
-				<div class="dropdown sa-select mr-16" id="operation_select">
-					<button type="button" class="dropdown-toggle w7 no-close" data-toggle="dropdown" data-name="운영 여부 선택">
-						운영 여부 선택<span class="caret"></span>
-					</button>
-					<ul class="dropdown-menu chk-type" role="menu" id="operationList">
-						<li>
-							<a href="javascript:void(0);" tabindex="-1">
-								<input type="checkbox" id="operation_1" value="운영중" name="operation_opt">
-								<label for="operation_1">운영중</label>
-							</a>
-						</li>
-						<li>
-							<a href="javascript:void(0);" tabindex="-1">
-								<input type="checkbox" id="operation_2" value="운영예정" name="operation_opt">
-								<label for="operation_2">운영 예정</label>
-							</a>
-						</li>
-						<li>
-							<a href="javascript:void(0);" tabindex="-1">
-								<input type="checkbox" id="operation_3" value="해지" name="operation_opt">
-								<label for="operation_3">해지</label>
-							</a>
-						</li>
-					</ul>
+				<div class="dropdown-wrap">
+					<label for="operation_select" class="tx-tit">운영 여부</label>
+					<div class="dropdown sa-select mr-16" id="operation_select">
+						<button type="button" class="dropdown-toggle w7 no-close" data-toggle="dropdown" data-name="운영 여부 선택">
+							운영 여부 선택<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu chk-type" role="menu" id="operationList">
+							<li>
+								<a href="javascript:void(0);" tabindex="-1">
+									<input type="checkbox" id="operation_1" value="운영중" name="operation_opt">
+									<label for="operation_1">운영중</label>
+								</a>
+							</li>
+							<li>
+								<a href="javascript:void(0);" tabindex="-1">
+									<input type="checkbox" id="operation_2" value="운영예정" name="operation_opt">
+									<label for="operation_2">운영 예정</label>
+								</a>
+							</li>
+							<li>
+								<a href="javascript:void(0);" tabindex="-1">
+									<input type="checkbox" id="operation_3" value="해지" name="operation_opt">
+									<label for="operation_3">해지</label>
+								</a>
+							</li>
+						</ul>
+					</div>
 				</div>
 
-				<label for="warranty_select" class="tx-tit">보증 방식</label>
-				<div class="dropdown sa-select mr-16" id="warranty_select">
-					<button type="button" class="dropdown-toggle w7 no-close" data-toggle="dropdown" data-name="보증 방식 선택">
-						보증 방식 선택<span class="caret"></span>
-					</button>
-					<ul class="dropdown-menu chk-type" role="menu" id="warrantyList">
-						<li>
-							<a href="javascript:void(0);" tabindex="-1">
-								<input type="checkbox" id="warranty_1" value="PR" name="warranty_opt">
-								<label for="warranty_1">PR</label>
-							</a>
-						</li>
-						<li>
-							<a href="javascript:void(0);" tabindex="-1">
-								<input type="checkbox" id="warranty_2" value="발전 시간" name="warranty_opt">
-								<label for="warranty_2">발전 시간</label>
-							</a>
-						</li>
-						<li>
-							<a href="javascript:void(0);" tabindex="-1">
-								<input type="checkbox" id="warranty_3" value="PR + 발전시간" name="warranty_opt">
-								<label for="warranty_3">PR + 발전시간</label>
-							</a>
-						</li>
-					</ul>
+
+				<div class="dropdown-wrap">
+					<label for="warranty_select" class="tx-tit">보증 방식</label>
+					<div class="dropdown sa-select mr-16" id="warranty_select">
+						<button type="button" class="dropdown-toggle w7 no-close" data-toggle="dropdown" data-name="보증 방식 선택">
+							보증 방식 선택<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu chk-type" role="menu" id="warrantyList">
+							<li>
+								<a href="javascript:void(0);" tabindex="-1">
+									<input type="checkbox" id="warranty_1" value="PR" name="warranty_opt">
+									<label for="warranty_1">PR</label>
+								</a>
+							</li>
+							<li>
+								<a href="javascript:void(0);" tabindex="-1">
+									<input type="checkbox" id="warranty_2" value="발전 시간" name="warranty_opt">
+									<label for="warranty_2">발전 시간</label>
+								</a>
+							</li>
+							<li>
+								<a href="javascript:void(0);" tabindex="-1">
+									<input type="checkbox" id="warranty_3" value="PR + 발전시간" name="warranty_opt">
+									<label for="warranty_3">PR + 발전시간</label>
+								</a>
+							</li>
+						</ul>
+					</div>
 				</div>
 
-				<label for="contract_select" class="tx-tit">계약 구분</label>
-				<div class="dropdown sa-select mr-24" id="contract_select">
-					<button type="button" class="dropdown-toggle w7 no-close" data-toggle="dropdown" data-name="계약 구분 선택">
-						계약 구분 선택<span class="caret"></span>
-					</button>
-					<ul class="dropdown-menu chk-type" role="menu" id="contractList">
-						<li>
-							<a href="javascript:void(0);" tabindex="-1">
-								<input type="checkbox" id="contract_1" value="종합" name="contract_opt">
-								<label for="contract_1">종합</label>
-							</a>
-						</li>
-						<li>
-							<a href="javascript:void(0);" tabindex="-1">
-								<input type="checkbox" id="contract_2" value="일반관리" name="contract_opt">
-								<label for="contract_2">일반관리</label>
-							</a>
-						</li>
-						<li>
-							<a href="javascript:void(0);" tabindex="-1">
-								<input type="checkbox" id="contract_3" value="사무수탁" name="contract_opt">
-								<label for="contract_3">사무수탁</label>
-							</a>
-						</li>
-						<li>
-							<a href="javascript:void(0);" tabindex="-1">
-								<input type="checkbox" id="contract_4" value="보험" name="contract_opt">
-								<label for="contract_4">보험</label>
-							</a>
-						</li>
-						<li>
-							<a href="javascript:void(0);" tabindex="-1">
-								<input type="checkbox" id="contract_5" value="안전관리자" name="contract_opt">
-								<label for="contract_5">안전관리자</label>
-							</a>
-						</li>
-					</ul>
+				<div class="dropdown-wrap">
+					<label for="contract_select" class="tx-tit">계약 구분</label>
+					<div class="dropdown sa-select mr-24" id="contract_select">
+						<button type="button" class="dropdown-toggle w7 no-close" data-toggle="dropdown" data-name="계약 구분 선택">
+							계약 구분 선택<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu chk-type" role="menu" id="contractList">
+							<li>
+								<a href="javascript:void(0);" tabindex="-1">
+									<input type="checkbox" id="contract_1" value="종합" name="contract_opt">
+									<label for="contract_1">종합</label>
+								</a>
+							</li>
+							<li>
+								<a href="javascript:void(0);" tabindex="-1">
+									<input type="checkbox" id="contract_2" value="일반관리" name="contract_opt">
+									<label for="contract_2">일반관리</label>
+								</a>
+							</li>
+							<li>
+								<a href="javascript:void(0);" tabindex="-1">
+									<input type="checkbox" id="contract_3" value="사무수탁" name="contract_opt">
+									<label for="contract_3">사무수탁</label>
+								</a>
+							</li>
+							<li>
+								<a href="javascript:void(0);" tabindex="-1">
+									<input type="checkbox" id="contract_4" value="보험" name="contract_opt">
+									<label for="contract_4">보험</label>
+								</a>
+							</li>
+							<li>
+								<a href="javascript:void(0);" tabindex="-1">
+									<input type="checkbox" id="contract_5" value="안전관리자" name="contract_opt">
+									<label for="contract_5">안전관리자</label>
+								</a>
+							</li>
+						</ul>
+					</div>
 				</div>
 
 				<div class="text-input-type mr-12 spcInfoSearch">

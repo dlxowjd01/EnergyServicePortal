@@ -785,7 +785,7 @@
 </div>
 
 <div class="row">
-	<div class="col-12 clear input-align">
+	<div class="col-12 clear input-align alarmSetting-filter">
 		<div class="fl">
 			<div class="flex-group">
 				<span class="tx-tit">설비 타입</span>
@@ -822,8 +822,8 @@
 					</button>
 					<ul class="dropdown-menu"></ul>
 				</div>
-				<button type="button" class="btn-type ml-16" onclick="schAlarmList();">검색</button>
 			</div>
+			<button type="button" class="btn-type ml-16" onclick="schAlarmList();">검색</button>
 		</div>
 		<div id="exportBtnGroup" class="fr"></div>
 	</div>
@@ -832,7 +832,7 @@
 <div class="row content-wrapper">
 	<div class="col-12">
 		<div class="indiv">
-			<div class="flex-wrapper mb-20">
+			<div class="flex-wrapper mb-20 alarmSetting-table-button">
 				<div>
 					<button type="button" class="btn-type03 big" onclick="location.href='/excel/alarmSettingTemplate.xlsx'">템플릿 다운로드</button>
 				</div>

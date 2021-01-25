@@ -889,7 +889,7 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-12 clear input-align">
+	<div class="col-12 clear input-align yield-filter">
 		<div class="fl">
 			<span class="tx-tit"><fmt:message key="revenuereport.1.type" /></span>
 			<div class="sa-select">
@@ -948,11 +948,11 @@
 <div class="row">
 	<div class="col-lg-12">
 		<div class="indiv">
-			<div class="flex-wrapper mb-20">
-				<div><!-- 
-					--><button type="button" class="btn-type03 big" onclick="setCheckedDataExcelDown();"><fmt:message key='yieldReport.selected.download' /></button><!-- 
-					--><button type="button" class="btn-type03 big" onclick="setCheckedDataRemove();"><fmt:message key='yieldReport.selected.delete' /></button><!-- 
-				--></div>
+			<div class="flex-wrapper mb-20 yield-table-button">
+				<div>
+					<button type="button" class="btn-type03 big" onclick="setCheckedDataExcelDown();"><fmt:message key='yieldReport.selected.download' /></button>
+					<button type="button" class="btn-type03 big" onclick="setCheckedDataRemove();"><fmt:message key='yieldReport.selected.delete' /></button>
+				</div>
 				<div><button type="button" class="btn-type" onclick="modalInit();"><fmt:message key='yieldReport.new' /></button></div>
 			</div>
 			<table id="yieldTable" class="chk-type">
