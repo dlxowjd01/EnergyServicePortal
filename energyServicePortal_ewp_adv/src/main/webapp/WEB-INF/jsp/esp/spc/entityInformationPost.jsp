@@ -222,6 +222,7 @@
 		initAddListHtml(); //추가 기능 관련 초기화
 		setComboBoxData(); //시도 설정
 		getSpcData();//SPC명 설정
+		getgenIdData();//발전소 설정
 	}
 
 	function initAddListHtml() {
@@ -933,9 +934,7 @@
 	}
 
 	function rtnDropdown($dropdownId) {
-		if($dropdownId == 'spcId') {
-			getgenIdData();
-		} else if ($dropdownId.match('은행_리스트')) {
+		if ($dropdownId.match('은행_리스트')) {
 			const target = $('#' + $dropdownId),
 				targetInput = target.parents('td').find('[id^=은행_직접입력]');
 			if (target.find('button').data('value') == '직접입력') {
