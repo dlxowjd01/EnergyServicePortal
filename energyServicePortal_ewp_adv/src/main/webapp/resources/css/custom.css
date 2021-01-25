@@ -2678,12 +2678,19 @@ html[lang="en"] .all-menu > a:after {
 	height: 300px;
 }
 
+#spcId>.dropdown-menu,
+#genId>.dropdown-menu {
+	top:90px;width:260px;height:300px
+}
+
 #site .dropdown-search,
 #selectSiteList .dropdown-search,
 #siteList .dropdown-search,
 #site .dropdown-apply,
 #selectSiteList .dropdown-apply,
-#siteList .dropdown-apply {
+#siteList .dropdown-apply,
+#spcId .dropdown-search,
+#genId .dropdown-search {
 	width: 100%;
 	min-width: 260px;
 }

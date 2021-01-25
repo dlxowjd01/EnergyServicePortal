@@ -2232,16 +2232,16 @@
 								<fieldset class="radio-type flex-start">
 									<legend sr-only="보험 정보"></legend>
 									<div class="radio-group">
-										<input type="radio" id="보험구분_조립_보험[index]" name="보험구분[index]" value="조립보험">
-										<label for="보험구분_조립_보험[index]">조립 보험</label>
+										<input type="radio" id="보험구분_조립_보험0" name="보험구분0" value="조립보험">
+										<label for="보험구분_조립_보험0">조립 보험</label>
 									</div>
 									<div class="radio-group">
-										<input type="radio" id="보험구분_CMI[index]" name="보험구분[index]" value="CMI">
-										<label for="보험구분_CMI[index]">CMI</label>
+										<input type="radio" id="보험구분_CMI0" name="보험구분0" value="CMI">
+										<label for="보험구분_CMI0">CMI</label>
 									</div>
 									<div class="radio-group">
-										<input type="radio" id="보험구분_CGL[index]" name="보험구분[index]" value="CGL">
-										<label for="보험구분_CGL[index]">CGL</label>
+										<input type="radio" id="보험구분_CGL0" name="보험구분0" value="CGL">
+										<label for="보험구분_CGL0">CGL</label>
 									</div>
 								</fieldset>
 							</td>
@@ -2249,88 +2249,88 @@
 							<td></td>
 						</tr>
 						<tr>
-							<th><label for="보험사[index]">보험사</label></th>
+							<th><label for="보험사0">보험사</label></th>
 							<td>
 								<div class="text-input-type edit">
-									<input type="text" id="보험사[index]" name="보험사[index]" placeholder="직접 입력">
+									<input type="text" id="보험사0" name="보험사0" placeholder="직접 입력">
 								</div>
 							</td>
-							<th><label for="보험_중개사[index]">보험 중개사</label></th>
+							<th><label for="보험_중개사0">보험 중개사</label></th>
 							<td>
 								<div class="text-input-type edit">
-									<input type="text" id="보험_중개사[index]" name="보험_중개사[index]" placeholder="직접 입력">
+									<input type="text" id="보험_중개사0" name="보험_중개사0" placeholder="직접 입력">
 								</div>
 							</td>
 						</tr>
 						<tr>
-							<th><label for="보험_기간_from[index]">보험 기간</label></th>
+							<th><label for="보험_기간_from0">보험 기간</label></th>
 							<td class="group-type">
 								<legend class="sr-only">보험 기간</legend>
 								<fieldset class="sel-calendar edit twin clear dateField">
-									<input type="text" id="보험_기간_from[index]" class="sel fromDate" name="보험_기간_from[index]" value="" autocomplete="off" placeholder="시작일" readonly>
-									<input type="text" id="보험_기간_to[index]" class="sel toDate" name="보험_기간_to[index]" value="" autocomplete="off" placeholder="종료일" readonly>
+									<input type="text" id="보험_기간_from0" class="sel fromDate" name="보험_기간_from0" value="" autocomplete="off" placeholder="시작일" readonly>
+									<input type="text" id="보험_기간_to0" class="sel toDate" name="보험_기간_to0" value="" autocomplete="off" placeholder="종료일" readonly>
 								</fieldset>
 							</td>
-							<th><label for="보험료[index]">보험료</label></th>
+							<th><label for="보험료0">보험료</label></th>
 							<td>
 								<div class="text-input-type edit unit t1">
-									<input type="text" id="보험료[index]" name="보험료[index]" placeholder="직접 입력">
+									<input type="text" id="보험료0" name="보험료0" placeholder="직접 입력">
 									<span>원/월</span>
 								</div>
 							</td>
 						</tr>
 						<tr>
-							<th><label for="자가부담금[index]">자가부담금</label></th>
+							<th><label for="자가부담금0">자가부담금</label></th>
 							<td>
 								<div class="text-input-type edit">
-									<input type="text" id="자가부담금[index]" name="자가부담금[index]" placeholder="직접 입력">
+									<input type="text" id="자가부담금0" name="자가부담금0" placeholder="직접 입력">
 								</div>
 							</td>
-							<th><label for="보험가액[index]">보험가액</label></th>
+							<th><label for="보험가액0">보험가액</label></th>
 							<td>
 								<div class="text-input-type edit">
-									<input type="text" id="보험가액[index]" name="보험가액[index]" placeholder="직접 입력">
+									<input type="text" id="보험가액0" name="보험가액0" placeholder="직접 입력">
 								</div>
 							</td>
 						</tr>
 						<tr class="dateField">
-							<th><label for="보험_시작일[index]">시작일</label></th>
+							<th><label for="보험_시작일0">시작일</label></th>
 							<td>
 								<div class="sel-calendar edit">
-									<input type="text" id="보험_시작일[index]" class="sel fromDate" name="보험_시작일[index]" value="" autocomplete="off" placeholder="날짜 선택" readonly>
+									<input type="text" id="보험_시작일0" class="sel fromDate" name="보험_시작일0" value="" autocomplete="off" placeholder="날짜 선택" readonly>
 								</div>
 							</td>
-							<th><label for="보험_종료일[index]">종료일</label></th>
+							<th><label for="보험_종료일0">종료일</label></th>
 							<td class="flex-start">
 								<div class="sel-calendar edit mr-24">
-									<input type="text" id="보험_종료일[index]" class="sel toDate" name="보험_종료일[index]" value="" autocomplete="off" placeholder="날짜 선택" readonly>
-									<input type="hidden" id="보험_종료일_차이[index]" name="보험_종료일_차이[index]" value="">
+									<input type="text" id="보험_종료일0" class="sel toDate" name="보험_종료일0" value="" autocomplete="off" placeholder="날짜 선택" readonly>
+									<input type="hidden" id="보험_종료일_차이0" name="보험_종료일_차이0" value="">
 								</div>
 								<span class="fixed-height"></span>
 							</td>
 						</tr>
 						<tr>
-							<th><label for="이행보증보험료[index]">이행보증보험료</label></th>
+							<th><label for="이행보증보험료0">이행보증보험료</label></th>
 							<td>
 								<div class="text-input-type edit unit t1">
-									<input type="text" id="이행보증보험료[index]" name="이행보증보험료[index]" placeholder="직접 입력">
+									<input type="text" id="이행보증보험료0" name="이행보증보험료0" placeholder="직접 입력">
 									<span>원/월</span>
 								</div>
 							</td>
-							<th><label for="보험_만기일[index]">만기일</label></th>
+							<th><label for="보험_만기일0">만기일</label></th>
 							<td class="flex-start">
 								<div class="sel-calendar edit mr-24">
-									<input type="text" id="보험_만기일[index]" class="sel toDate" name="보험_만기일[index]" value="" autocomplete="off" placeholder="날짜 선택" readonly>
-									<input type="hidden" id="보험_만기일_차이[index]" name="보험_만기일_차이[index]" value="">
+									<input type="text" id="보험_만기일0" class="sel toDate" name="보험_만기일0" value="" autocomplete="off" placeholder="날짜 선택" readonly>
+									<input type="hidden" id="보험_만기일_차이0" name="보험_만기일_차이0" value="">
 								</div>
 								<span class="fixed-height"></span>
 							</td>
 						</tr>
 						<tr>
-							<th><label for="보험료_총계[index]">보험료 총계</label></th>
+							<th><label for="보험료_총계0">보험료 총계</label></th>
 							<td>
 								<div class="text-input-type edit unit t1">
-									<input type="text" id="보험료_총계[index]" name="보험료_총계[index]" placeholder="자동 완성" readonly>
+									<input type="text" id="보험료_총계0" name="보험료_총계0" placeholder="자동 완성" readonly>
 									<span>원/월</span>
 								</div>
 							</td>

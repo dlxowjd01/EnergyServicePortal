@@ -437,7 +437,7 @@
 					}
 
 
-					setJsonAutoMapping(spend_info, 'spend_info'); //보험정보
+					setJsonAutoMapping(spend_info, 'spendInfo'); //보험정보
 					setJsonAutoMapping(warranty_info, 'warrantyInfo'); //보증정보
 					setJsonAutoMapping(coefficient_info, 'coefficientInfo'); //환경변수
 					setJsonAutoMapping(associated_info, 'associatedInfo'); //관련정보
@@ -1099,25 +1099,25 @@
 						</colgroup>
 						<tr>
 							<th>보험 정보</th>
-							<td id="보험구분[index]"></td>
+							<td id="보험구분0"></td>
 							<th></th>
 							<td></td>
 						</tr>
 						<tr>
 							<th>보험사</th>
-							<td id="보험사[index]"></td>
+							<td id="보험사0"></td>
 							<th>보험 중개사</th>
-							<td id="보험_중개사[index]"></td>
+							<td id="보험_중개사0"></td>
 						</tr>
 						<tr>
 							<th>보험 기간</th>
 							<td class="group-type">
-								<span id="보험_기간_from[index]"></span> ~ <span id="보험_기간_to[index]"></span>
+								<span id="보험_기간_from0"></span> ~ <span id="보험_기간_to0"></span>
 							</td>
 							<th>보험료</th>
 							<td>
 								<div>
-									<span id="보험료[index]"></span>
+									<span id="보험료0"></span>
 									<span class="ml-6">원/월</span>
 								</div>
 							</td>
@@ -1126,43 +1126,43 @@
 							<th>자가부담금</th>
 							<td>
 								<div>
-									<span id="자가부담금[index]"></span>
+									<span id="자가부담금0"></span>
 									<span class="ml-6">원</span>
 								</div>
 							</td>
 							<th>보험가액</th>
 							<td>
 								<div>
-									<span id="보험가액[index]"></span>
+									<span id="보험가액0"></span>
 									<span class="ml-6">원</span>
 								</div>
 							</td>
 						</tr>
 						<tr>
 							<th>시작일</th>
-							<td id="보험_시작일[index]"></td>
+							<td id="보험_시작일0"></td>
 							<th>종료일</th>
 							<td class="flex-start">
-								<span id="보험_종료일[index]"></span>
-								<span class="fixed-height" id="보험_종료일_차이[index]"></span>
+								<span id="보험_종료일0"></span>
+								<span class="fixed-height" id="보험_종료일_차이0"></span>
 							</td>
 						</tr>
 						<tr>
 							<th>이행보증보험료</th>
 							<td class="flex-start">
-								<span id="이행보증보험료[index]"></span>
+								<span id="이행보증보험료0"></span>
 								<span>원/월</span>
 							</td>
 							<th>만기일</th>
 							<td class="flex-start">
-								<span id="보험_만기일[index]"></span>
-								<span class="fixed-height" id="보험_만기일_차이[index]"></span>
+								<span id="보험_만기일0"></span>
+								<span class="fixed-height" id="보험_만기일_차이0"></span>
 							</td>
 						</tr>
 						<tr>
 							<th>보험료 총계</th>
 							<td class="flex-start">
-								<span id="보험료_총계[index]"></span>
+								<span id="보험료_총계0"></span>
 								<span>원/월</span>
 							</td>
 							<th></th>
