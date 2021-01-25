@@ -1195,13 +1195,13 @@
 											</ul>
 										</div>
 										<div class="fixed-height">
-											<input type="file" id="SPC_법인_인감_파일[index]" class="hidden" name="SPC_법인_인감_파일" accept=".jpg, .png, .pdf">
-											<label for="SPC_법인_인감_파일[index]" class="btn file-upload">파일 선택</label>
+											<input type="file" id="SPC_법인_인감_파일[index]" class="hidden ml-6" name="SPC_법인_인감_파일" accept=".jpg, .png, .pdf">
+											<label for="SPC_법인_인감_파일[index]" class="btn file-upload ml-6">파일 선택</label>
 											<span class="upload-text ml-16"></span>
-											<span class="radio-type">
-											<input type="radio" id="SPC_법인_인감_대표[index]" name="SPC_법인_인감_대표" value="[index]">
-											<label for="SPC_법인_인감_대표[index]">대표 인감</label>
-										</span>
+											<span class="radio-type ml-12">
+												<input type="radio" id="SPC_법인_인감_대표[index]" name="SPC_법인_인감_대표" value="[index]">
+												<label for="SPC_법인_인감_대표[index]">대표 인감</label>
+											</span>
 											<button type="button" class="btn-close fixed-height hidden mt-0" onclick="$(this).parents().closest('.group-type').remove()"></button>
 										</div>
 									</div>
