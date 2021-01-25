@@ -1291,6 +1291,16 @@
 							<td></td>
 						</tr>
 						<tr>
+							<th colspan="2">임대료</th>
+							<td>
+								<div>
+									<span id="지출_정보_임대료"></span>
+									<span>원/월</span>
+								</div>
+							</td>
+							<td></td>
+						</tr>
+						<tr>
 							<th colspan="2">전력비</th>
 							<td>
 								<div>
