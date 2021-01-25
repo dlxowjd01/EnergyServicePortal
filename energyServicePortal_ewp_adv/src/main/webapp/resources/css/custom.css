@@ -3552,6 +3552,7 @@ li[data-alarm="urgent"]:before,
 .modal {
 	text-align: center;
 	z-index: 200;
+	overflow: auto!important;
 }
 
 .modal.stack {
@@ -4410,6 +4411,11 @@ input.inp[readonly]:focus {
 }
 
 /* layout component */
+
+.dashboard-header {
+	display: flex;
+	align-items: center;
+}
 
 .row.header-wrapper {
 	height: 60px;
@@ -10542,6 +10548,11 @@ table.table-footer tfoot td.light {
 
 	.indiv.chart-diagnosis .chart-top > div {
 		width: 100%;
+		flex-wrap: wrap!important;
+	}
+
+	.indiv.chart-diagnosis .chart-top > div > div {
+		margin-left: 0px!important;
 	}
 
 	#application {

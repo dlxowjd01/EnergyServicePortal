@@ -7,7 +7,7 @@
 
 <form id="linkSiteForm" name="linkSiteForm" method="post"></form>
 <div class="row header-wrapper">
-	<div class="col-lg-5 col-md-6 col-sm-12">
+	<div class="col-lg-5 col-md-6 col-sm-12 dashboard-header">
 		<h1 class="page-header fl">${siteName}</h1>
 		<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
 			<label class="switch switch-slide fl">
