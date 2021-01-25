@@ -11,6 +11,7 @@
 			fixedHeader: true,
 			"table-layout": "fixed",
 			scrollY: '720px',
+			scrollX: true,
 			scrollCollapse: true,
 			sortable: true,
 			paging: true,

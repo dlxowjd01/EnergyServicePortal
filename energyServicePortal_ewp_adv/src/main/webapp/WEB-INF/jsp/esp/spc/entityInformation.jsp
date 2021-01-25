@@ -728,12 +728,12 @@
 			<table id="spcEntityTable" class="chk-type">
 				<colgroup>
 					<col style="width:4%">
-					<col style="width:4%">
-					<col style="width:12%">
-					<col style="width:12%">
-					<col style="width:8%">
-					<col style="width:11%">
+					<col style="width:3.5%">
+					<col style="width:14%">
+					<col style="width:13%">
 					<col style="width:7%">
+					<col style="width:12%">
+					<col style="width:6%">
 					<col style="width:7%">
 					<col style="width:7%">
 					<col style="width:7%">

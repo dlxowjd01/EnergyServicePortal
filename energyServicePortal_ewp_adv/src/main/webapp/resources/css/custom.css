@@ -9019,6 +9019,7 @@ button.text-file {
 .spc-balance-post .text-input-type input {
 	text-align: center;
 	background: none;
+	text-indent: 0px!important;
 }
 
 .spc-tbl td.right {
@@ -10616,12 +10617,23 @@ table.table-footer tfoot td.light {
 		display: block;
 	}
 
+	.spc-balance-post .sel {
+		text-align: left!important;
+		padding-left: 10px!important;
+	}
+
 	#searchOption .dropdown {
 		width: 100%!important;
 	}
 
 	#searchOption .btn-wrap-type03 > button:last-child {
 		margin: 10px 0 0 0!important;
+	}
+
+	.pvGen-right,
+	.pvGen-right + div {
+		max-width: 100%!important;
+		flex: 100%!important;
 	}
 }
 

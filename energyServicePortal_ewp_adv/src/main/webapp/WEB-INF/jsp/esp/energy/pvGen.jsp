@@ -15,7 +15,7 @@
 	</div>
 </div>
 <div class="row">
-	<div class="col-lg-2 col-md-4 col-sm-6">
+	<div class="col-lg-2 col-md-4 col-sm-6 pvGen-right">
 		<div class="indiv chart-pv">
 			<h2 class="ntit"><fmt:message key="renewablesgen.2.solarenergy" /></h2>
 			<div class="value-wrapper"></div>

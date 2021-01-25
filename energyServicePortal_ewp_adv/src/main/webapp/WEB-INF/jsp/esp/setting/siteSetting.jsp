@@ -3959,17 +3959,17 @@
 		<div class="indiv">
 			<table id="siteTable">
 				<colgroup>
-					<col style="width:5%">
-					<col style="width:12%">
-					<col style="width:16%">
+					<col style="width:3.5%">
+					<col style="width:7%">
+					<col style="width:14%">
+					<col style="width:3%">
 					<col style="width:5%">
 					<col style="width:6%">
-					<col style="width:8%">
-					<col style="width:8%">
-					<col style="width:8%">
-					<col style="width:8%">
-					<col style="width:12%">
-					<col style="width:12%">
+					<col style="width:9%">
+					<col style="width:9%">
+					<col style="width:6%">
+					<col style="width:4%">
+					<col style="width:9%">
 				</colgroup>
 				<thead></thead>
 				<tbody></tbody>

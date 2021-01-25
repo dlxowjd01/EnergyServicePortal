@@ -19,6 +19,7 @@ html.darkmode:root {
 
 .dataTable {
 	width: 100%!important;
+	min-width: 1700px!important;
 	margin: 0 auto;
 	clear: both;
 	border-collapse: separate;
