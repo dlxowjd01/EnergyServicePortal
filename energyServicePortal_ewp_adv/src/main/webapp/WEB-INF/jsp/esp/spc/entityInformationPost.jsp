@@ -8,6 +8,7 @@
 
 	$(function () {
 		setInitList('spcList');
+		setInitList('genList');
 
 		fnLocation();
 		initProcess();
@@ -21,10 +22,6 @@
 			} else {
 
 			}
-		});
-
-		$('.account-type').each(function(){
-			$(this).next().find("li[data-default!='select']").addClass("hidden");
 		});
 
 		$('.tag-box-entity .tag-type').on('click', function() {
@@ -48,8 +45,6 @@
 				<li class="path"></li>
 			`);
 		});
-
-		setInitList('genList');
 
 		initRow('addList_registered_seal');
 		addRow('addList_registered_seal');
@@ -425,6 +420,8 @@
 					refineSpcList.sortOn('name');
 					refineSpcList.unshift({spc_id: '', name: '직접입력'});
 					setMakeList(refineSpcList, 'spcList', {'dataFunction': {}});
+
+					<%--$('#spcId').prepend(`<div class="dropdown-search"><input type="text" placeholder="<fmt:message key="dropdown.siteSearch" />" onKeyup="searchSite($(this).val())" ></div>`);--%>
 				}
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				console.log("optSite error===", jqXHR)
@@ -436,6 +433,8 @@
 				data.data.unshift({spc_id: '', name: '직접입력'});
 
 				setMakeList(data.data, 'spcList', {'dataFunction': {}});
+
+				<%--$('#spcId').prepend(`<div class="dropdown-search"><input type="text" placeholder="<fmt:message key="dropdown.siteSearch" />" onKeyup="searchSite($(this).val())" ></div>`);--%>
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				console.error(jqXHR);
 				console.error(textStatus);
@@ -462,6 +461,7 @@
 					spcGens.unshift({sid: '', name: '직접입력', location: '', address: ''});
 					setMakeList(spcGens, 'genList', {'dataFunction': {}});
 
+					<%--$('#genList').prepend(`<div class="dropdown-search"><input type="text" placeholder="<fmt:message key="dropdown.siteSearch" />" onKeyup="searchSite($(this).val())" ></div>`)--%>
 				},
 				error: function (request, status, error) {}
 			});
@@ -470,6 +470,8 @@
 			spcGens.sortOn('name');
 			spcGens.unshift({sid: '', name: '직접입력', location: '', address: ''});
 			setMakeList(spcGens, 'genList', {'dataFunction': {}});
+
+			<%--$('#genList').prepend(`<div class="dropdown-search"><input type="text" placeholder="<fmt:message key="dropdown.siteSearch" />" onKeyup="searchSite($(this).val())" ></div>`)--%>
 		}
 	}
 
@@ -978,7 +980,7 @@
 		<div class="indiv panel panel-default">
 			<ul id="myTabs" class="nav nav-tabs" role="tablist">
 				<li role="presentation" class="entity-tab active">
-					<a href="#basicInfo" id="tabBasicInfo" role="tab" data-toggle="tab" aria-controls="basicInfo" aria-expanded="true">기본정보</a>
+					<a href="#basicInfo" id="tabBasicInfo" role="tab" data-toggle="tab" aria-controls="basicInfo" aria-expanded="true">SPC 기본정보</a>
 				</li>
 				<li class="path"></li>
 				<li role="presentation" class="entity-tab">
@@ -2799,7 +2801,7 @@
 			</div>
 			<div class="btn-wrap-type-r clear">
 				<a href="/spc/entityInformation.do" class="btn btn-type03 fl">목록</a>
-				<button type="button" class="btn-type big fr" onclick="setSaveData();">등록</button>
+				<button type="button" class="btn-type big fr" onclick="setSaveData();">저장</button>
 				<a href="/spc/entityInformation.do" class="btn btn-type03 fr mr-12">취소</a>
 			</div>
 		</div>

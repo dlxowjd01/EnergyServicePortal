@@ -1239,7 +1239,7 @@
 		<div class="indiv panel panel-default">
 			<ul id="myTabs" class="nav nav-tabs" role="tablist">
 				<li role="presentation" class="entity-tab active">
-					<a href="#basicInfo" id="tabBasicInfo" role="tab" data-toggle="tab" aria-controls="basicInfo" aria-expanded="true">기본정보</a>
+					<a href="#basicInfo" id="tabBasicInfo" role="tab" data-toggle="tab" aria-controls="basicInfo" aria-expanded="true">SPC 기본정보</a>
 				</li>
 				<li class="path"></li>
 				<li role="presentation" class="entity-tab">
