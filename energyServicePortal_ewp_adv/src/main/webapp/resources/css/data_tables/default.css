@@ -27,7 +27,7 @@ html.darkmode:root {
 
 .dataTable.dashboard-table {
 	width: 100%!important;
-	min-width: 1000px !important;
+	min-width: 1700px!important;
 	table-layout: fixed;
 	margin: 0;
 	clear: both;

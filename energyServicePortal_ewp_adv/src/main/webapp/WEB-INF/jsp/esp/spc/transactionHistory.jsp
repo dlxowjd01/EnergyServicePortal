@@ -409,13 +409,16 @@
 	</div>
 </div>
 
-<div class="row header-wrapper">
+<div class="row header-wrapper flex-wrap-center trhistory-header">
 	<div class="col-12">
 		<h1 class="page-header">입출금 관리 내역</h1>
 	</div>
+	<div class="col-2">
+		<span class="tx-tit" id="refresh_date"></span>
+	</div>
 </div>
 
-<div class="row spc-search-bar header-wrapper">
+<div class="row spc-search-bar header-wrapper flex-wrap-center">
 	<div class="col-9"><!--
 	--><form id="transactionForm"><!--
 		--><span class="tx-tit">SPC 선택</span><!--
@@ -479,10 +482,7 @@
 			</div>
 		</form>
 	</div>
-	<div class="col-2">
-		<span class="tx-tit" id="refresh_date"></span>
-	</div>
-	<div class="col-1">
+	<div>
 		<button type="button" id="refresh" class="btn-type03">입출금 내역 갱신</button>
 	</div>
 </div>

@@ -1448,7 +1448,7 @@
 	</div>
 	<div class="col-lg-9 col-md-8 col-sm-12">
 		<div class="indiv indiv-type">
-			<div class="schedule_area">
+			<div class="schedule_area transaction_schedule">
 				<div class="search-top-info clear">
 					<div class="fl search-btn"><!--
 					--><button type="button" class="btn-type03 active">오늘</button><!--

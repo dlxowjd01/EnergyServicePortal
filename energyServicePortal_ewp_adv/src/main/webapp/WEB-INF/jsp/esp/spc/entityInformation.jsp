@@ -26,7 +26,8 @@
 
 		spcEntityTable = $('#spcEntityTable').DataTable({
 			autoWidth: true,
-			// fixedHeader: true,
+			fixedHeader: true,
+            scrollX: true,
 			scrollY: '720px',
 			scrollCollapse: true,
 			sortable: true,
@@ -375,6 +376,7 @@
 			spcEntityTable.clear();
 			spcEntityTable.rows.add(refineList).draw();
 			$("#loadingCircle2").hide();
+			spcEntityTable.columns.adjust();
 		}).catch(error => {
 			spcEntityTable.clear().draw();
 			errorMsg(error);

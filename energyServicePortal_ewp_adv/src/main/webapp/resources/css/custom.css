@@ -2507,6 +2507,12 @@ html[lang="en"] .all-menu > a:after {
 	align-items: center;
 }
 
+.flex-wrap-center:after,
+.flex-wrap-center:before {
+	content: none!important;
+	display: none!important;
+}
+
 .flex-start,
 .flex-start2,
 .flex-start3 {
@@ -8338,7 +8344,7 @@ button.text-file {
 }
 
 .input-align .text-input-type {
-	width: 340px;
+	width: auto;
 }
 
 .input-align .sel-calendar {
@@ -9415,6 +9421,10 @@ table.table-footer tfoot td.light {
 		withdrawReqWrite.do
  ==================================== */
 
+.spc-search-bar {
+	padding-right: 12px;
+}
+
 .spc-search-bar .sa-select .dropdown-toggle {
 	width: 280px;
 }
@@ -10423,6 +10433,15 @@ table.table-footer tfoot td.light {
 	margin-left: 3px;
 }
 
+.trhistory-header > div {
+	flex: initial!important;
+	width: auto!important;
+}
+
+.gmainTable_wrapper table {
+	white-space: nowrap;
+}
+
 /* Responsive - Tablet */
 @media (max-width: 768px) {
 	.tablet-br {
@@ -10544,6 +10563,54 @@ table.table-footer tfoot td.light {
 	.spcInfoSearch,
 	.spcInfoSearch + button {
 		margin-top: 15px;
+	}
+
+	.spc-status-top td:not(:last-child) {
+		border-right: 1px solid var(--white12);
+	}
+
+	.spc-status-top td,
+	.spc-status-top th {
+		white-space: normal!important;
+	}
+
+	.transaction_schedule .search-btn {
+		float: none!important;
+	}
+
+	.transaction_schedule .btn-wrap-type02 {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-top: 14px;
+	}
+
+	.transaction_schedule .btn-wrap-type02 a {
+		margin: 0!important;
+	}
+
+	#searchOption {
+		width: auto!important;
+		height: auto!important;
+		max-height: initial!important;
+	}
+
+	#searchOption .row {
+		display: block!important;
+	}
+
+	#searchOption .row > div {
+		margin: 5px 0 0 0!important;
+		width: 100%;
+		display: block;
+	}
+
+	#searchOption .dropdown {
+		width: 100%!important;
+	}
+
+	#searchOption .btn-wrap-type03 > button:last-child {
+		margin: 10px 0 0 0!important;
 	}
 }
 

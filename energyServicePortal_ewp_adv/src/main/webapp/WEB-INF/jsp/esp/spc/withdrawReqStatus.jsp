@@ -11,6 +11,7 @@
 			autoWidth: true,
 			fixedHeader: true,
 			"table-layout": "fixed",
+			scrollX: true,
 			scrollY: '720px',
 			scrollCollapse: true,
 			sortable: true,

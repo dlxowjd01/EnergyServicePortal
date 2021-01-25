@@ -792,6 +792,7 @@
 							// "sScrollXInner": "110%",
 							"sScrollY": true,
 							"scrollY": "720px",
+							"scrollX": true,
 							"bScrollCollapse": true,
 							"pageLength": 100,
 							// "bFilter": false, disabling this option will prevent table.search()
@@ -965,6 +966,7 @@
 							// "sScrollXInner": "110%",
 							"sScrollY": true,
 							"scrollY": "560px",
+							"scrollX": true,
 							"bScrollCollapse": true,
 							"pageLength": 100,
 							// "bFilter": false, disabling this option will prevent table.search()
