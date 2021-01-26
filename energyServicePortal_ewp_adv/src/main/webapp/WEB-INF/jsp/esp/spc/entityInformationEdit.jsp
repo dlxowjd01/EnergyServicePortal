@@ -316,9 +316,20 @@
 					<a href="#attachementInfo" id="tabAttachementInfo" role="tab" data-toggle="tab" aria-controls="attachementInfo" aria-expanded="false" class="fl">
 						기타 첨부파일
 					</a>
+					<button type="button" class="btn-close fr"></button>
 				</li>
 				<li class="path"></li>
 			`);
+
+			$('.tag-box-entity .tag-type').each(function() {
+				if ($(this).data('tab') === 'tabAttachementInfo') {
+					$(this).addClass('hidden');
+				}
+			});
+
+			if ($('.tag-box-entity .tag-type:not(.hidden)').length === 0) {
+				$('.tag-box-entity').addClass('hidden');
+			}
 		}
 	}
 
