@@ -107,23 +107,20 @@
 		addRow('addList_switch_gear');
 	});
 
+	// 상단 패널 삭제
 	$(document).on('click', '#myTabs .btn-close', function(e) {
 		e.preventDefault();
-		const targetId = $(this).prev().attr('id')
-			, targetTab = $(this).prev().attr('href');
+		const $target = $(this).prev("a");
 
-		$('.tag-box-entity .tag-type').each(function() {
-			if ($(this).data('tab') === targetId) {
-				$(this).removeClass('hidden');
-			}
-		});
+		$(".tag-type[data-tab="+$target.attr("id")+"]").removeClass('hidden');
 
-		$(this).parent().next().remove();
-		$(this).parent().remove();
+		$target.parent().remove();
 
-		if ($(targetTab).hasClass('active')) {
-			$('#tabBasicInfo').trigger('click');
+		if ($($target.attr("href")).hasClass('active')) {
+			$('#tabBasicInfo').click();
 		}
+
+		$('.tag-box-entity').removeClass('hidden');
 	});
 
 	const fnLocation = () => {
@@ -1023,7 +1020,7 @@
 				</ul>
 			</div>
 
-			<div class="tag-box-entity mt-12">
+			<div class="tag-box-entity mt-12" id="tagList">
 				<p class="tx-tit">
 					<span class="tag-type" data-tab="tabMaintenanceInfo" data-id="maintenanceInfo">관리 운영 정보</span>
 					<span class="tag-type" data-tab="tabFinanceInfo" data-id="financeInfo">금융 정보</span>

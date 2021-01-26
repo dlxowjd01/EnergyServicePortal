@@ -9965,6 +9965,7 @@ table.table-footer tfoot td.light {
 	height: 28px;
 	color: var(--white87);
 	font-size: 12px;
+	cursor: pointer;
 }
 
 .entity-wrapper.post .indiv .spc-table-row.st-edit {
