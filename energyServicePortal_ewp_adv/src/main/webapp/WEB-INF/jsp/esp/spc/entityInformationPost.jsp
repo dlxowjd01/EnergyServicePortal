@@ -2838,10 +2838,12 @@
 					</form>
 				</div>
 			</div>
-			<div class="btn-wrap-type-r clear">
-				<a href="/spc/entityInformation.do" class="btn btn-type03 fl">목록</a>
-				<button type="button" class="btn-type big fr" onclick="setSaveData();">저장</button>
-				<a href="/spc/entityInformation.do" class="btn btn-type03 fr mr-12">취소</a>
+			<div class="btn-wrap-type-r clear spcRegisterButton flex-wrap-center">
+				<a href="/spc/entityInformation.do" class="btn btn-type03">목록</a>
+				<div class="flex-wrap-center">
+					<a href="/spc/entityInformation.do" class="btn btn-type03 mr-12">취소</a>
+					<button type="button" class="btn-type big" onclick="setSaveData();">저장</button>
+				</div>
 			</div>
 		</div>
 	</div>

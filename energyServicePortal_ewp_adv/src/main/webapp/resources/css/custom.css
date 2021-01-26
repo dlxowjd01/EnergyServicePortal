@@ -10439,6 +10439,7 @@ table.table-footer tfoot td.light {
 	line-height: 36px;
 }
 
+/* custom */
 .mobile-br,
 .tablet-br {
 	display: none;
@@ -10456,12 +10457,13 @@ table.table-footer tfoot td.light {
 	white-space: nowrap;
 }
 
-#spcInfoFilterWrap {
-	width: 100%;
-}
-
 .tag-box-entity {
 	overflow-x: auto;
+}
+
+.spcInfoSearch {
+	max-width: 640px!important;
+	width: 100%!important;
 }
 
 /* Responsive - Tablet */
@@ -10576,12 +10578,28 @@ table.table-footer tfoot td.light {
 		width: 100%;
 	}
 
-	.spcInfoFilter {
-		justify-content: space-between!important;
+	.spcInfoFilterWrap,
+	.spcInfoFilterWrap > div {
+		width: 100%;
 	}
 
-	.spcInfoSearch {
-		width: 640px!important;
+	.spcInfoFilterWrap > div > div > .dropdown-wrap {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	.spcInfoFilterWrap > div > div > .dropdown-wrap:not(:last-child) {
+		margin-bottom: 10px;
+	}
+
+	.spcInfoFilterWrap > div > div > .dropdown-wrap .dropdown {
+		margin: 0!important;
+	}
+
+	.spcInfoFilter {
+		justify-content: space-between!important;
 	}
 
 	#contract_select {
@@ -10590,7 +10608,9 @@ table.table-footer tfoot td.light {
 
 	.spcInfoSearch,
 	.spcInfoSearch + button {
-		margin-top: 15px;
+		max-width: 768px!important;
+		width: 100%!important;
+		margin: 0px 0px 15px 0px!important;
 	}
 
 	.spc-status-top td:not(:last-child) {
@@ -10651,10 +10671,34 @@ table.table-footer tfoot td.light {
 		max-width: 100%!important;
 		flex: 100%!important;
 	}
+
+	#basicForm {
+		overflow: auto;
+		table-layout: auto;
+	}
+
+	#basicForm table td,
+	#basicForm table th {
+		white-space: nowrap!important;
+		padding: 10px!important;
+	}
+	
+	#basicForm table label {
+		width: 120px;
+	}
+
+	#basicForm table button,
+	#basicForm table input {
+		width: 240px!important;
+	}
 }
 
 /* Responsive - Mobile */
 @media (max-width: 480px) {
+	.spcRegisterButton {
+		display: block!important;
+	}
+	
 	.sel-calendar {
 		flex-wrap: wrap!important;
 	}
@@ -10781,11 +10825,6 @@ table.table-footer tfoot td.light {
 
 	.spcInfoSearch + button {
 		width: 100%;
-	}
-
-	#basicForm table td,
-	#basicForm table th {
-		padding: 10px!important;
 	}
 
 	.transaction_schedule .search-btn {
@@ -10932,25 +10971,13 @@ table.table-footer tfoot td.light {
 		text-align: center;
 	}
 
-	.dataTables_wrapper .dataTables_info .paging_simple_numbers {
+	.dataTables_paginate {
+		white-space: nowrap;
+		right: calc(50% + 20px)!important;
 		transform: translate(50%, -40px)!important;
 	}
 }
 
-.dropdown-wrap {
-	width: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-}
-
-.dropdown-wrap:not(:last-child) {
-	margin-bottom: 10px;
-}
-
-.dropdown-wrap .dropdown {
-	margin: 0!important;
-}
 
 
 /* TO DELETE!!!!! */
