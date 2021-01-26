@@ -1728,9 +1728,10 @@
 										--><li data-value="SMP수익"><a href="javascript:void(0);">SMP 수익</a></li><!--
 										--><li data-value="DSRA적립"><a href="javascript:void(0);">DSRA 적립</a></li><!--
 										--><li data-value="운영계좌"><a href="javascript:void(0);">운영계좌</a></li><!--
-										--><li data-value="REC계좌"><a href="javascript:void(0);">REC계좌</a></li><!--
-										--><li data-value="SMP계좌"><a href="javascript:void(0);">SMP계좌</a></li><!--
+										--><li data-value="REC계좌"><a href="javascript:void(0);">REC 계좌</a></li><!--
+										--><li data-value="SMP계좌"><a href="javascript:void(0);">SMP 계좌</a></li><!--
 										--><li data-value="기타"><a href="javascript:void(0);">기타</a></li><!--
+										--><li data-value="유보계좌"><a href="javascript:void(0);">유보계좌</a></li><!--
 									--></ul><!--
 								--></div>
 										<div class="dropdown placeholder edit" id="은행_리스트[index]">

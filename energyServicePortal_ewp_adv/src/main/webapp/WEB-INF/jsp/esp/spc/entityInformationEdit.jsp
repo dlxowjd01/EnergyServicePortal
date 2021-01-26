@@ -1964,6 +1964,8 @@
 										--><li data-value="REC수익"><a href="#">REC 수익</a></li><!--
 										--><li data-value="SMP수익"><a href="#">SMP 수익</a></li><!--
 										--><li data-value="운영계좌"><a href="#">운영계좌</a></li><!--
+										--><li data-value="REC계좌"><a href="#">REC 계좌</a></li><!--
+										--><li data-value="SMP계좌"><a href="#">SMP 계좌</a></li><!--
 										--><li data-value="기타"><a href="#">기타</a></li><!--
 										--><li data-value="유보계좌"><a href="#">유보계좌</a></li><!--
 									--></ul><!--
