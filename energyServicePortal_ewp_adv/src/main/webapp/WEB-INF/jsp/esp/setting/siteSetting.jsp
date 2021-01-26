@@ -338,6 +338,11 @@
 				kpxTransvol = $('#kpx_transvol').val();
 			}
 
+			let newSPriceType = $('#newSPriceType').prev().data('value');
+			let newSPrice = $('#newSPrice').val();
+			let newRPriceType = $('#newRPriceType').prev().data('value');
+			let newRPrice = $('#newRPrice').val();
+
 			// 1. ADD site info
 			if(!$("#addSiteModal").hasClass("edit")) {
 				let resultSuccessText = "<fmt:message key='siteSetting.alert.6' />";
@@ -433,6 +438,25 @@
 						newPowerMarketObj.price = newPrice;
 					}
 				}
+
+				if( !isEmpty(newSPriceType) ){
+					newPowerMarketObj.smp_price_type = newSPriceType;
+					if( !isEmpty(newPrice) ){
+						newPowerMarketObj.smp_price = newSPrice;
+					}
+				}
+
+				if( !isEmpty(newRPriceType) ){
+					newPowerMarketObj.rec_price_type = newRPriceType;
+					if( !isEmpty(newPrice) ){
+						newPowerMarketObj.rec_price = newRPrice;
+					}
+				}
+
+				if ( !isEmpty(newPowerModel) ) {
+					newPowerMarketObj.price_type = newPowerModel;
+				}
+
 				if( !isEmpty(newPowerMarketObj) ){
 					siteObj.power_market = JSON.stringify(newPowerMarketObj);
 				}
@@ -587,6 +611,21 @@
 						newPowerMarketObj.price = newPrice;
 					}
 				}
+
+				if( !isEmpty(newSPriceType) ){
+					newPowerMarketObj.smp_price_type = newSPriceType;
+					if( !isEmpty(newPrice) ){
+						newPowerMarketObj.smp_price = newSPrice;
+					}
+				}
+
+				if( !isEmpty(newRPriceType) ){
+					newPowerMarketObj.rec_price_type = newRPriceType;
+					if( !isEmpty(newPrice) ){
+						newPowerMarketObj.rec_price = newRPrice;
+					}
+				}
+
 				if( !isEmpty(newPowerMarketObj) ){
 					siteEditObj.power_market = JSON.stringify(newPowerMarketObj);
 				}
@@ -2323,7 +2362,6 @@
 					$('#newSiteDetail').val(rowData.detail_info).prop("disabled", true);
 
 					addBtn.addClass("hidden");
-
 				} else {
 					// 추가 정보
 					$('#newSiteDetail').val(rowData.detail_info).prop("disabled", false);
@@ -2451,12 +2489,29 @@
 				if( !isEmpty(rowData.power_market)) {
 					let priceModel = JSON.parse(rowData.power_market);
 
+					//정산 단가
 					$('#newPriceModelList li').each(function() {
 						if ($(this).data('value') === priceModel.price_type) {
 							$("#newPriceModelList").prev().data("value", priceModel.price_type).html( $(this).data('name') + '<span class="caret"></span>');
 						}
 					});
 					$("#newPrice").val(priceModel.price).html( priceModel.price + '<span class="caret"></span>');
+
+					//SMP
+					$('#newSPriceType li').each(function() {
+						if ($(this).data('value') === priceModel.smp_price_type) {
+							$("#newSPriceType").prev().data("value", priceModel.smp_price_type).html( $(this).data('name') + '<span class="caret"></span>');
+						}
+					});
+					$("#newSPrice").val(priceModel.smp_price).html( priceModel.smp_price + '<span class="caret"></span>');
+
+					//REC
+					$('#newRPriceType li').each(function() {
+						if ($(this).data('value') === priceModel.rec_price_type) {
+							$("#newRPriceType").prev().data("value", priceModel.rec_price_type).html( $(this).data('name') + '<span class="caret"></span>');
+						}
+					});
+					$("#newRPrice").val(priceModel.rec_price).html( priceModel.rec_price + '<span class="caret"></span>');
 				}
 
 				// DR info
@@ -4336,7 +4391,7 @@
 								<h2 class="stit"><fmt:message key='siteSetting.meterInfo' /></h2>
 								<div class="row">
 									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label"><fmt:message key='siteSetting.normalPrice' /></span></div>
-									<div class="col-xl-1 col-lg-4 col-md-4 col-sm-10 pl-0">
+									<div class="col-xl-2 col-lg-4 col-md-4 col-sm-10 pl-0">
 										<div class="flex-start">
 											<div class="dropdown w-100">
 												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key="dropDown.select" />"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
@@ -4350,32 +4405,34 @@
 											<div class="text-input-type hidden"><input type="text" name="Price" id="newPrice" oninput="truncateNonDigit(event, this)" placeholder="<fmt:message key='siteSetting.input' />" maxlength="8"></div>
 										</div>
 									</div>
+								</div>
+								<div class="row">
 									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">SMP</span></div>
-									<div class="col-xl-4 col-lg-6 col-md-4 col-sm-10 pl-0">
+									<div class="col-xl-3 col-lg-4 col-md-4 col-sm-10 pl-0">
 										<div class="flex-start">
 											<div class="dropdown w-40">
 												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key="dropDown.select" />"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
-												<ul id="newSMP" class="dropdown-menu">
-													<li data-name="고정가" data-value="고정가"><a href="#">고정가</a></li>
-													<li data-name="월 가중 평균" data-value="월_가중_평균"><a href="#">월 가중 평균</a></li>
-													<li data-name="실시간" data-value="실시간"><a href="#">실시간</a></li>
+												<ul id="newSPriceType" class="dropdown-menu">
+													<li data-name="고정가" data-value="fixed"><a href="#">고정가</a></li>
+													<li data-name="월 가중 평균" data-value="SMP_mean"><a href="#">월 가중 평균</a></li>
+													<li data-name="실시간" data-value="SMP"><a href="#">실시간</a></li>
 												</ul>
 											</div>
-											<div class="text-input-type w-60"><input type="text" name="smp_etc" id="smp_etc" oninput="truncateNonDigit(event, this)" placeholder="<fmt:message key='siteSetting.input' />" maxlength="8"></div>
+											<div class="text-input-type w-60"><input type="text" name="newSPrice" id="newSPrice" oninput="truncateNonDigit(event, this)" placeholder="<fmt:message key='siteSetting.input' />" maxlength="8"></div>
 										</div>
 									</div>
 									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">REC</span></div>
-									<div class="col-xl-4 col-lg-6 col-md-4 col-sm-10 pl-0">
+									<div class="col-xl-3 col-lg-4 col-md-4 col-sm-10 pl-0">
 										<div class="flex-start">
 											<div class="dropdown w-40">
 												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key="dropDown.select" />"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
-												<ul id="newREC" class="dropdown-menu">
-													<li data-name="고정가" data-value="고정가"><a href="#">고정가</a></li>
-													<li data-name="SMP + REC" data-value="SMP_REC"><a href="#">SMP + REC</a></li>
-													<li data-name="연간추후정산" data-value="연간추후정산"><a href="#">연간추후정산</a></li>
+												<ul id="newRPriceType" class="dropdown-menu">
+													<li data-name="고정가" data-value="fixed"><a href="#">고정가</a></li>
+													<li data-name="SMP + REC" data-value="smp_rec"><a href="#">SMP + REC</a></li>
+													<li data-name="연간추후정산" data-value="later"><a href="#">연간추후정산</a></li>
 												</ul>
 											</div>
-											<div class="text-input-type w-60"><input type="text" name="rec_etc" id="rec_etc" oninput="truncateNonDigit(event, this)" placeholder="<fmt:message key='siteSetting.input' />" maxlength="8"></div>
+											<div class="text-input-type w-60"><input type="text" name="newRPrice" id="newRPrice" oninput="truncateNonDigit(event, this)" placeholder="<fmt:message key='siteSetting.input' />" maxlength="8"></div>
 										</div>
 									</div>
 								</div>
