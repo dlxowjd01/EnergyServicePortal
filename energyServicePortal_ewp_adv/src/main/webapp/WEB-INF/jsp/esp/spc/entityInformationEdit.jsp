@@ -29,6 +29,19 @@
 			`);
 		});
 
+		$('.onlyNum').keyup(function() {
+			let thisVal = $(this).val().trim(), thisName = $(this).prop('name');
+			thisVal = thisVal.replace(/[^0-9, \.]/g, '');
+
+			if (isEmpty(thisVal)) {
+				$(this).val('');
+			} else {
+				if (!/번호/.test(thisName) && !/연락처/.test(thisName)) {
+					$(this).val(numberComma(thisVal));
+				}
+			}
+		});
+
 		$("#unitPriceList").on("click", "li", unitPriceListChange);
 
 		initRow('addList_registered_seal');
@@ -1293,13 +1306,13 @@
 								<th><label for="사업자등록번호">사업자등록번호</label></th>
 								<td>
 									<div class="text-input-type edit">
-										<input type="text" id="사업자등록번호" name="사업자등록번호" placeholder="직접 입력">
+										<input type="text" id="사업자등록번호" name="사업자등록번호" placeholder="직접 입력" class="onlyNum">
 									</div>
 								</td>
 								<th><label for="법인등록번호">법인등록번호</label></th>
 								<td>
 									<div class="text-input-type edit">
-										<input type="text" id="법인등록번호" name="법인등록번호" placeholder="직접 입력">
+										<input type="text" id="법인등록번호" name="법인등록번호" placeholder="직접 입력" class="onlyNum">
 									</div>
 								</td>
 							</tr>
@@ -1372,7 +1385,7 @@
 								<th><label for="금융사_대리기관_담당자(연락처)">담당자(연락처)</label></th>
 								<td>
 									<div class="text-input-type edit">
-										<input type="text" id="금융사_대리기관_담당자(연락처)" name="금융사_대리기관_담당자(연락처)" placeholder="직접 입력">
+										<input type="text" id="금융사_대리기관_담당자(연락처)" name="금융사_대리기관_담당자(연락처)" placeholder="직접 입력" class="onlyNum">
 									</div>
 								</td>
 							</tr>
@@ -1386,7 +1399,7 @@
 								<th><label for="시공사_담당자(연락처)">담당자(연락처)</label></th>
 								<td>
 									<div class="text-input-type edit">
-										<input type="text" id="시공사_담당자(연락처)" name="시공사_담당자(연락처)" placeholder="직접 입력">
+										<input type="text" id="시공사_담당자(연락처)" name="시공사_담당자(연락처)" placeholder="직접 입력" class="onlyNum">
 									</div>
 								</td>
 							</tr>
@@ -1400,7 +1413,7 @@
 								<th><label for="사무수탁사_담당자(연락처)">담당자(연락처)</label></th>
 								<td>
 									<div class="text-input-type edit">
-										<input type="text" id="사무수탁사_담당자(연락처)" name="사무수탁사_담당자(연락처)" placeholder="직접 입력">
+										<input type="text" id="사무수탁사_담당자(연락처)" name="사무수탁사_담당자(연락처)" placeholder="직접 입력" class="onlyNum">
 									</div>
 								</td>
 							</tr>
@@ -1414,7 +1427,7 @@
 								<th><label for="발전_관리자(연락처)">발전 관리자(연락처)</label></th>
 								<td>
 									<div class="text-input-type edit">
-										<input type="text" id="발전_관리자(연락처)" name="발전_관리자(연락처)" placeholder="직접 입력">
+										<input type="text" id="발전_관리자(연락처)" name="발전_관리자(연락처)" placeholder="직접 입력" class="onlyNum">
 									</div>
 								</td>
 							</tr>
@@ -1424,7 +1437,7 @@
 								<th><label for="사업_관리자(연락처)">사업 관리자(연락처)</label></th>
 								<td>
 									<div class="text-input-type edit">
-										<input type="text" id="사업_관리자(연락처)" name="사업_관리자(연락처)" placeholder="직접 입력">
+										<input type="text" id="사업_관리자(연락처)" name="사업_관리자(연락처)" placeholder="직접 입력" class="onlyNum">
 									</div>
 								</td>
 							</tr>
@@ -1533,11 +1546,11 @@
 									<legend class="sr-only">설치 용량 및 설치 용량 기타</legend>
 									<div class="group-type">
 										<div class="text-input-type edit unit t1">
-											<input type="text" id="설치_용량" name="설치_용량" placeholder="설치용량">
+											<input type="text" id="설치_용량" name="설치_용량" placeholder="설치용량" class="onlyNum">
 											<span>kW</span>
 										</div>
 										<div class="text-input-type edit">
-											<input type="text" id="설치_용량_기타" name="설치_용량_기타" placeholder="태양광">
+											<input type="text" id="설치_용량_기타" name="설치_용량_기타" placeholder="태양광" class="onlyNum">
 										</div>
 									</div>
 								</fieldset>
@@ -1653,7 +1666,7 @@
 							<th><label for="계약_단가">계약 단가</label></th>
 							<td>
 								<div class="text-input-type edit unit t1">
-									<input type="text" id="계약_단가" name="계약_단가" placeholder="직접 입력">
+									<input type="text" id="계약_단가" name="계약_단가" placeholder="직접 입력" class="onlyNum">
 									<span>원/월</span>
 								</div>
 							</td>
@@ -1856,7 +1869,7 @@
 								<th><label for="대출_약정액">대출 약정액</label></th>
 								<td>
 									<div class="text-input-type edit unit t1">
-										<input type="text" id="대출_약정액" class="right" name="대출_약정액">
+										<input type="text" id="대출_약정액" class="right" name="대출_약정액" class="onlyNum">
 										<span>원</span>
 									</div>
 								</td>
@@ -1992,7 +2005,7 @@
 								</th>
 								<td>
 									<div class="text-input-type edit">
-										<input type="text" id="계좌_번호[index]" name="계좌_번호[index]" placeholder="직접 입력">
+										<input type="text" id="계좌_번호[index]" name="계좌_번호[index]" placeholder="직접 입력" class="onlyNum">
 									</div>
 									<button type="button" class="btn-close hidden mr-12 fr" onclick="$(this).parents().closest('tr').remove()"></button>
 									<div class="text-input-type edit">
@@ -2030,8 +2043,8 @@
 											</ul>
 										</div>
 										<div class="flex-baseline mt10">
-											<input type="file" id="공인인증서_등록_이미지[index]" class="hidden" name="공인인증서_등록_이미지[index]" accept=".der, .key" multiple>
-											<label for="공인인증서_등록_이미지[index]" class="btn file-upload">파일 선택</label>
+											<input type="file" id="공인인증서_등록_이미지[index]" class="hidden ml-6" name="공인인증서_등록_이미지[index]" accept=".der, .key" multiple>
+											<label for="공인인증서_등록_이미지[index]" class="btn file-upload ml-6">파일 선택</label>
 											<ul class="file_list ml-16">
 												<li>등록 파일 이름</li>
 											</ul>
@@ -2041,7 +2054,7 @@
 								<th><label for="인증서_비밀번호[index]">인증서 비밀번호</label></th>
 								<td class="addList_certificate_registration2 entity">
 									<div class="group-type flex-start">
-										<div class="text-input-type edit w-300px">
+										<div class="text-input-type edit  w-70">
 											<input type="password" id="인증서_비밀번호[index]" name="인증서_비밀번호[index]" placeholder="비밀번호를 입력해 주세요.">
 										</div>
 										<div class="fr fixed-height mt-5 mr-12">
@@ -2054,7 +2067,7 @@
 								<th><label for="DSRA_적립_요구금액">DSRA 적립 요구금액</label></th>
 								<td>
 									<div class="text-input-type edit">
-										<input type="text" id="DSRA_적립_요구금액" name="DSRA_적립_요구금액" placeholder="직접 입력">
+										<input type="text" id="DSRA_적립_요구금액" name="DSRA_적립_요구금액" placeholder="직접 입력" class="onlyNum">
 									</div>
 								</td>
 								<th></th>
@@ -2089,14 +2102,14 @@
 							<th><label for="도급_계약서_공사_계약_금액">(도급 계약서) 공사 계약 금액</label></th>
 							<td>
 								<div class="text-input-type edit unit t1 mr-30">
-									<input type="text" id="도급_계약서_공사_계약_금액" name="도급_계약서_공사_계약_금액" placeholder="직접 입력">
+									<input type="text" id="도급_계약서_공사_계약_금액" name="도급_계약서_공사_계약_금액" placeholder="직접 입력" class="onlyNum">
 									<span>원</span>
 								</div>
 							</td>
 							<th><label for="약정_금액">약정 금액</label></th>
 							<td>
 								<div class="text-input-type edit unit t1 mr-30">
-									<input type="text" id="약정_금액" name="약정_금액" placeholder="직접 입력">
+									<input type="text" id="약정_금액" name="약정_금액" placeholder="직접 입력" class="onlyNum">
 									<span>원</span>
 								</div>
 							</td>
@@ -2171,17 +2184,17 @@
 								</div>
 								<div class="flex-start">
 									<div class="text-input-type edit">
-										<input type="text" id="지급금액_1차" name="지급금액_1차" placeholder="직접 입력">
+										<input type="text" id="지급금액_1차" name="지급금액_1차" placeholder="직접 입력" class="onlyNum">
 									</div>
 								</div>
 								<div class="flex-start">
 									<div class="text-input-type edit">
-										<input type="text" id="지급금액_2차" name="지급금액_2차" placeholder="직접 입력">
+										<input type="text" id="지급금액_2차" name="지급금액_2차" placeholder="직접 입력" class="onlyNum">
 									</div>
 								</div>
 								<div class="flex-start">
 									<div class="text-input-type edit">
-										<input type="text" id="지급금액_3차" name="지급금액_3차" placeholder="직접 입력">
+										<input type="text" id="지급금액_3차" name="지급금액_3차" placeholder="직접 입력" class="onlyNum">
 									</div>
 								</div>
 								<div class="fixed-height w-300px">
@@ -2274,7 +2287,7 @@
 							<th><label for="보험료0">보험료</label></th>
 							<td>
 								<div class="text-input-type edit unit t1">
-									<input type="text" id="보험료0" name="보험료0" placeholder="직접 입력">
+									<input type="text" id="보험료0" name="보험료0" placeholder="직접 입력" class="onlyNum">
 									<span>원/월</span>
 								</div>
 							</td>
@@ -2283,13 +2296,13 @@
 							<th><label for="자가부담금0">자가부담금</label></th>
 							<td>
 								<div class="text-input-type edit">
-									<input type="text" id="자가부담금0" name="자가부담금0" placeholder="직접 입력">
+									<input type="text" id="자가부담금0" name="자가부담금0" placeholder="직접 입력" class="onlyNum">
 								</div>
 							</td>
 							<th><label for="보험가액0">보험가액</label></th>
 							<td>
 								<div class="text-input-type edit">
-									<input type="text" id="보험가액0" name="보험가액0" placeholder="직접 입력">
+									<input type="text" id="보험가액0" name="보험가액0" placeholder="직접 입력" class="onlyNum">
 								</div>
 							</td>
 						</tr>
@@ -2313,7 +2326,7 @@
 							<th><label for="이행보증보험료0">이행보증보험료</label></th>
 							<td>
 								<div class="text-input-type edit unit t1">
-									<input type="text" id="이행보증보험료0" name="이행보증보험료0" placeholder="직접 입력">
+									<input type="text" id="이행보증보험료0" name="이행보증보험료0" placeholder="직접 입력" class="onlyNum">
 									<span>원/월</span>
 								</div>
 							</td>
@@ -2352,7 +2365,7 @@
 							<th class="pl-28"><label for="지방세">지방세</label></th>
 							<td>
 								<div class="text-input-type edit unit t1">
-									<input type="text" id="지방세" name="지방세" placeholder="직접 입력">
+									<input type="text" id="지방세" name="지방세" placeholder="직접 입력" class="onlyNum">
 									<span>원/월</span>
 								</div>
 							</td>
@@ -2362,7 +2375,7 @@
 							<th><label for="종합부동산세">종합부동산세</label></th>
 							<td>
 								<div class="text-input-type edit unit t1">
-									<input type="text" id="종합부동산세" name="종합부동산세" placeholder="직접 입력">
+									<input type="text" id="종합부동산세" name="종합부동산세" placeholder="직접 입력" class="onlyNum">
 									<span>원/월</span>
 								</div>
 							</td>
@@ -2372,7 +2385,7 @@
 							<th><label for="세금과공과_기타">기타</label></th>
 							<td>
 								<div class="text-input-type edit unit t1">
-									<input type="text" id="세금과공과_기타" name="세금과공과_기타" placeholder="직접 입력">
+									<input type="text" id="세금과공과_기타" name="세금과공과_기타" placeholder="직접 입력" class="onlyNum">
 									<span>원/월</span>
 								</div>
 							</td>
@@ -2382,7 +2395,7 @@
 							<th colspan="2"><label for="기장료">기장료</label></th>
 							<td>
 								<div class="text-input-type edit unit t1">
-									<input type="text" id="기장료" name="기장료" placeholder="직접 입력">
+									<input type="text" id="기장료" name="기장료" placeholder="직접 입력" class="onlyNum">
 									<span>원/월</span>
 								</div>
 							</td>
@@ -2392,7 +2405,7 @@
 							<th colspan="2"><label for="등기용역수수료">등기용역수수료</label></th>
 							<td>
 								<div class="text-input-type edit unit t1">
-									<input type="text" id="등기용역수수료" name="등기용역수수료" placeholder="직접 입력">
+									<input type="text" id="등기용역수수료" name="등기용역수수료" placeholder="직접 입력" class="onlyNum">
 									<span>원/월</span>
 								</div>
 							</td>
@@ -2402,7 +2415,7 @@
 							<th colspan="2"><label for="회계감사수수료">회계감사수수료</label></th>
 							<td>
 								<div class="text-input-type edit unit t1">
-									<input type="text" id="회계감사수수료" name="회계감사수수료" placeholder="직접 입력">
+									<input type="text" id="회계감사수수료" name="회계감사수수료" placeholder="직접 입력" class="onlyNum">
 									<span>원/월</span>
 								</div>
 							</td>
@@ -2413,7 +2426,7 @@
 							<th class="pl-28"><label for="REC수수료">REC수수료</label></th>
 							<td>
 								<div class="text-input-type edit unit t1">
-									<input type="text" id="REC수수료" name="REC수수료" placeholder="직접 입력">
+									<input type="text" id="REC수수료" name="REC수수료" placeholder="직접 입력" class="onlyNum">
 									<span>원/월</span>
 								</div>
 							</td>
@@ -2423,7 +2436,7 @@
 							<th><label for="재위탁수수료">재위탁수수료</label></th>
 							<td>
 								<div class="text-input-type edit unit t1">
-									<input type="text" id="재위탁수수료" name="재위탁수수료" placeholder="직접 입력">
+									<input type="text" id="재위탁수수료" name="재위탁수수료" placeholder="직접 입력" class="onlyNum">
 									<span>원/월</span>
 								</div>
 							</td>
@@ -2433,7 +2446,7 @@
 							<th><label for="정기검사">정기검사</label></th>
 							<td>
 								<div class="text-input-type edit unit t1">
-									<input type="text" id="정기검사" name="정기검사" placeholder="직접 입력">
+									<input type="text" id="정기검사" name="정기검사" placeholder="직접 입력" class="onlyNum">
 									<span>원/월</span>
 								</div>
 							</td>
@@ -2443,7 +2456,7 @@
 							<th><label for="지급수수료_기타">기타</label></th>
 							<td>
 								<div class="text-input-type edit unit t1">
-									<input type="text" id="지급수수료_기타" name="지급수수료_기타" placeholder="직접 입력">
+									<input type="text" id="지급수수료_기타" name="지급수수료_기타" placeholder="직접 입력" class="onlyNum">
 									<span>원/월</span>
 								</div>
 							</td>
@@ -2453,7 +2466,7 @@
 							<th colspan="2"><label for="경비용역료">경비용역료</label></th>
 							<td>
 								<div class="text-input-type edit unit t1">
-									<input type="text" id="경비용역료" name="경비용역료" placeholder="직접 입력">
+									<input type="text" id="경비용역료" name="경비용역료" placeholder="직접 입력" class="onlyNum">
 									<span>원/월</span>
 								</div>
 							</td>
@@ -2463,7 +2476,7 @@
 							<th colspan="2"><label for="지출_정보_임대료">임대료</label></th>
 							<td>
 								<div class="text-input-type edit unit t1">
-									<input type="text" id="지출_정보_임대료" name="지출_정보_임대료" placeholder="직접 입력">
+									<input type="text" id="지출_정보_임대료" name="지출_정보_임대료" placeholder="직접 입력" class="onlyNum">
 									<span>원/월</span>
 								</div>
 							</td>
@@ -2473,7 +2486,7 @@
 							<th colspan="2"><label for="전력비">전력비</label></th>
 							<td>
 								<div class="text-input-type edit unit t1">
-									<input type="text" id="전력비" name="전력비" placeholder="직접 입력">
+									<input type="text" id="전력비" name="전력비" placeholder="직접 입력" class="onlyNum">
 									<span>원/월</span>
 								</div>
 							</td>
@@ -2483,7 +2496,7 @@
 							<th colspan="2"><label for="통신비">통신비</label></th>
 							<td>
 								<div class="text-input-type edit unit t1">
-									<input type="text" id="통신비" name="통신비" placeholder="직접 입력">
+									<input type="text" id="통신비" name="통신비" placeholder="직접 입력" class="onlyNum">
 									<span>원/월</span>
 								</div>
 							</td>
@@ -2493,7 +2506,7 @@
 							<th colspan="2"><label for="전기안전관리대행수수료">전기안전관리대행수수료</label></th>
 							<td>
 								<div class="text-input-type edit unit t1">
-									<input type="text" id="전기안전관리대행수수료" name="전기안전관리대행수수료" placeholder="직접 입력">
+									<input type="text" id="전기안전관리대행수수료" name="전기안전관리대행수수료" placeholder="직접 입력" class="onlyNum">
 									<span>원/월</span>
 								</div>
 							</td>
@@ -2538,11 +2551,11 @@
 							<td class="group-type">
 								<div class="text-input-type edit unit t1">
 									<label class="sr-only">설치 용량 (KW)</label>
-									<input type="text" id="설치_용량_KW"><span>kW</span>
+									<input type="text" id="설치_용량_KW" class="onlyNum"><span>kW</span>
 								</div>
 								<div class="text-input-type edit unit t1">
 									<label class="sr-only">설치 용량(매)</label>
-									<input type="text" id="설치_용량(매)"><span>매</span>
+									<input type="text" id="설치_용량(매)" class="onlyNum"><span>매</span>
 								</div>
 							</td>
 						</tr>
@@ -2553,7 +2566,7 @@
 							</th>
 							<td id="addList_module_angle" class="entity">
 								<div class="text-input-type edit unit t1 fl">
-									<input type="text" id="모듈_설치_각도[index]" name="모듈_설치_각도[index]">&ensp;&deg;
+									<input type="text" id="모듈_설치_각도[index]" name="모듈_설치_각도[index]" class="onlyNum">&ensp;&deg;
 									<button type="button" class="btn-close hidden" onclick="$(this).parent().remove()">삭제</button>
 								</div>
 							</td>
@@ -2591,10 +2604,10 @@
 								<fieldset class="group-type">
 									<legend sr-only="인버터 용량 / 대수"></legend>
 									<div class="text-input-type edit unit t1">
-										<input type="text" id="인버터_용량[index]" name="인버터_용량[index]"><span>kW</span>
+										<input type="text" id="인버터_용량[index]" name="인버터_용량[index]" class="onlyNum"><span>kW</span>
 									</div>
 									<div class="text-input-type edit unit t1">
-										<input type="text" id="인버터_용량_대수[index]" name="인버터_용량_대수[index]"><span>대</span>
+										<input type="text" id="인버터_용량_대수[index]" name="인버터_용량_대수[index]" class="onlyNum"><span>대</span>
 
 										<button type="button" class="btn-close hidden" onclick="$(this).parents('.group-type').remove();">삭제</button>
 									</div>
@@ -2618,10 +2631,10 @@
 							<td id="addList_connection" class="entity">
 								<div class="group-type">
 									<div class="text-input-type edit unit t1">
-										<input type="text" id="접속반_채널[index]" name="접속반_채널[index]"><span>Ch</span>
+										<input type="text" id="접속반_채널[index]" name="접속반_채널[index]" class="onlyNum"><span>Ch</span>
 									</div>
 									<div class="text-input-type edit unit t1">
-										<input type="text" id="접속반_채널_대수[index]" name="접속반_채널_대수[index]"><span>대</span>
+										<input type="text" id="접속반_채널_대수[index]" name="접속반_채널_대수[index]" class="onlyNum"><span>대</span>
 									</div>
 									<button type="button" class="btn-close hidden" onclick="removeList(this);">삭제</button>
 								</div>
@@ -2631,7 +2644,7 @@
 							<th>접속반 용량 / 통신방식</th>
 							<td class="group-type">
 								<div class="text-input-type edit unit t1">
-									<input type="text" id="접속반_용량" name="접속반_용량">
+									<input type="text" id="접속반_용량" name="접속반_용량" class="onlyNum">
 									<span>kW</span>
 								</div>
 								<fieldset class="radio-type flex-start2">
@@ -2710,17 +2723,17 @@
 							</td>
 							<th>PR 보증치</th>
 							<td>
-								<div class="text-input-type edit unit t1"><input type="text" id="PR_보증치" name="PR_보증치"><span>%</span></div>
+								<div class="text-input-type edit unit t1"><input type="text" id="PR_보증치" name="PR_보증치" class="onlyNum"><span>%</span></div>
 							</td>
 						</tr>
 						<tr>
 							<th>발전시간 보증치</th>
 							<td>
-								<div class="text-input-type edit unit t1"><input type="text" id="발전시간_보증치" name="발전시간_보증치"><span>h</span></div>
+								<div class="text-input-type edit unit t1"><input type="text" id="발전시간_보증치" name="발전시간_보증치" class="onlyNum"><span>h</span></div>
 							</td>
 							<th>보증 감소율</th>
 							<td>
-								<div class="text-input-type edit unit t2"><input type="text" id="보증_감소율" name="보증_감소율"><span>년차별 %</span></div>
+								<div class="text-input-type edit unit t2"><input type="text" id="보증_감소율" name="보증_감소율" class="onlyNum"><span>년차별 %</span></div>
 							</td>
 						</tr>
 						<tr>
@@ -2735,21 +2748,21 @@
 									</ul>
 								</div>
 								<div class="text-input-type edit unit t2">
-									<input type="text" id="기준_단가_원" name="기준_단가_원"><span>원 / kW</span></div>
+									<input type="text" id="기준_단가_원" name="기준_단가_원" class="onlyNum"><span>원 / kW</span></div>
 							</td>
 							<th>현재 적용 연차</th>
 							<td>
-								<div class="text-input-type edit unit t1"><input type="text" id="현재_적용_연차" name="현재_적용_연차"><span>년차</span></div>
+								<div class="text-input-type edit unit t1"><input type="text" id="현재_적용_연차" name="현재_적용_연차" class="onlyNum"><span>년차</span></div>
 							</td>
 						</tr>
 						<tr>
 							<th>년간 관리 운영비 (1년차)</th>
 							<td>
-								<div class="text-input-type edit unit t1"><input type="text" id="년간_관리_운영비" name="년간_관리_운영비"><span>원</span></div>
+								<div class="text-input-type edit unit t1"><input type="text" id="년간_관리_운영비" name="년간_관리_운영비" class="onlyNum"><span>원</span></div>
 							</td>
 							<th>물가 반영 비율</th>
 							<td>
-								<div class="text-input-type edit unit t1"><input type="text" id="물가_반영_비율" name="물가_반영_비율"><span>%</span></div>
+								<div class="text-input-type edit unit t1"><input type="text" id="물가_반영_비율" name="물가_반영_비율" class="onlyNum"><span>%</span></div>
 							</td>
 						</tr>
 						<tr>
@@ -2769,20 +2782,20 @@
 							</td>
 							<th>추가 보수 용량</th>
 							<td>
-								<div class="text-input-type edit unit t2"><input type="text" id="추가_보수_용량" name="추가_보수_용량"><span>kW 이상</span></div>
+								<div class="text-input-type edit unit t2"><input type="text" id="추가_보수_용량" name="추가_보수_용량" class="onlyNum"><span>kW 이상</span></div>
 							</td>
 						</tr>
 						<tr>
 							<th>추가 보수 백분율</th>
 							<td>
-								<div class="text-input-type edit unit t1"><input type="text" id="추가_보수_백분율" name="추가_보수_백분율"><span>%</span></div>
+								<div class="text-input-type edit unit t1"><input type="text" id="추가_보수_백분율" name="추가_보수_백분율" class="onlyNum"><span>%</span></div>
 							</td>
 							<th>전력요금 종별</th>
 							<td class="group-type">
 								<div class="text-input-type edit">
 									<input type="text" id="전력요금_종별_요금제" placeholder="요금제">
 								</div>
-								<div class="text-input-type edit unit t2"><input type="text" id="전력요금_종별_계약전력" name="전력요금_종별_계약전력" placeholder="계약 전력"><span>kW</span></div>
+								<div class="text-input-type edit unit t2"><input type="text" id="전력요금_종별_계약전력" name="전력요금_종별_계약전력" placeholder="계약 전력" class="onlyNum"><span>kW</span></div>
 							</td>
 						</tr>
 					</table>
@@ -2798,32 +2811,32 @@
 						<tr>
 							<th>Annual Variability</th>
 							<td>
-								<div class="text-input-type edit unit t1"><input type="text" id="annual" name="annual"><span>%</span></div>
+								<div class="text-input-type edit unit t1"><input type="text" id="annual" name="annual" class="onlyNum"><span>%</span></div>
 							</td>
 							<th>PV modul modeling/params</th>
 							<td>
-								<div class="text-input-type edit unit t1"><input type="text" id="pv_modul" name="pv_modul"><span>%</span></div>
+								<div class="text-input-type edit unit t1"><input type="text" id="pv_modul" name="pv_modul" class="onlyNum"><span>%</span></div>
 							</td>
 						</tr>
 						<tr>
 							<th>Inverter efficiency</th>
 							<td>
-								<div class="text-input-type edit unit t1"><input type="text" id="inverter" name="inverter"><span>%</span></div>
+								<div class="text-input-type edit unit t1"><input type="text" id="inverter" name="inverter" class="onlyNum"><span>%</span></div>
 							</td>
 							<th>Soiling, mismatch</th>
 							<td>
-								<div class="text-input-type edit unit t1"><input type="text" id="soiling" name="soiling"><span>%</span></div>
+								<div class="text-input-type edit unit t1"><input type="text" id="soiling" name="soiling" class="onlyNum"><span>%</span></div>
 							</td>
 						</tr>
 						<tr>
 							<th><label for="degradationEstimation">Degradation estimation</label></th>
 							<td>
-								<div class="text-input-type edit unit t1"><input type="text" id="degradationEstimation" name="degradation_estimation"><span>%</span></div>
+								<div class="text-input-type edit unit t1"><input type="text" id="degradationEstimation" name="degradation_estimation" class="onlyNum"><span>%</span></div>
 							</td>
 							<th><label for="degradationEstimation">Resulting ann, Variability(sigma)</label></th>
 							<td>
 								<div class="text-input-type edit unit t1">
-									<input type="text" id="resulting_ann" name="resulting_ann"><span>%</span>
+									<input type="text" id="resulting_ann" name="resulting_ann" class="onlyNum"><span>%</span>
 								</div>
 							</td>
 						</tr>
@@ -2831,13 +2844,13 @@
 							<th>System Degradation</th>
 							<td>
 								<div class="text-input-type edit unit t1">
-									<input type="text" id="system_degradation" name="system_degradation"><span>%</span>
+									<input type="text" id="system_degradation" name="system_degradation" class="onlyNum"><span>%</span>
 								</div>
 							</td>
 							<th>System Availability</th>
 							<td>
 								<div class="text-input-type edit unit t1">
-									<input type="text" id="system_availability" name="system_availability"><span>%</span>
+									<input type="text" id="system_availability" name="system_availability" class="onlyNum"><span>%</span>
 								</div>
 							</td>
 						</tr>
@@ -2858,7 +2871,7 @@
 							</td>
 							<th><label for="회사_연락처"></label>회사 연락처</th>
 							<td>
-								<div class="text-input-type edit"><input type="text" id="회사_연락처" name="회사_연락처" placeholder="직접 입력"></div>
+								<div class="text-input-type edit"><input type="text" id="회사_연락처" name="회사_연락처" placeholder="직접 입력" class="onlyNum"></div>
 							</td>
 						</tr>
 						<tr>
@@ -2868,7 +2881,7 @@
 							</td>
 							<th>대표자 연락처</th>
 							<td>
-								<div class="text-input-type edit"><input type="text" id="대표자_연락처" name="대표자 연락처" placeholder="직접 입력"></div>
+								<div class="text-input-type edit"><input type="text" id="대표자_연락처" name="대표자 연락처" placeholder="직접 입력" class="onlyNum"></div>
 							</td>
 						</tr>
 						<tr>
@@ -2878,7 +2891,7 @@
 							</td>
 							<th><label for="담당자_연락처">담당자 연락처</label></th>
 							<td>
-								<div class="text-input-type edit"><input type="text" id="담당자_연락처" name="담당자_연락처" placeholder="직접 입력"></div>
+								<div class="text-input-type edit"><input type="text" id="담당자_연락처" name="담당자_연락처" placeholder="직접 입력" class="onlyNum"></div>
 							</td>
 						</tr>
 						<tr>
@@ -2913,7 +2926,7 @@
 									<input type="file" id="spc_file_01" class="hidden" name="spc_file_01" accept=".gif, .jpg, .png" multiple="">
 									<label for="spc_file_01" class="btn file-upload">파일 선택</label>
 									<div class="file_list ml-16">
-										<ul>
+										<ul data-basic="No Files Selected">
 											<li>No Files Selected</li>
 										</ul>
 									</div>
@@ -2934,7 +2947,7 @@
 									<input type="file" id="spc_file_02" class="hidden" name="spc_file_02" accept=".gif, .jpg, .png" multiple="">
 									<label for="spc_file_02" class="btn file-upload">파일 선택</label>
 									<div class="file_list ml-16">
-										<ul>
+										<ul data-basic="No Files Selected">
 											<li>No Files Selected</li>
 										</ul>
 									</div>
@@ -2955,7 +2968,7 @@
 									<input type="file" id="spc_file_03" class="hidden" name="spc_file_03" accept=".gif, .jpg, .png" multiple="">
 									<label for="spc_file_03" class="btn file-upload">파일 선택</label>
 									<div class="file_list ml-16">
-										<ul>
+										<ul data-basic="No Files Selected">
 											<li>No Files Selected</li>
 										</ul>
 									</div>
@@ -2976,7 +2989,7 @@
 									<input type="file" id="spc_file_04" class="hidden" name="spc_file_04" accept=".gif, .jpg, .png" multiple="">
 									<label for="spc_file_04" class="btn file-upload">파일 선택</label>
 									<div class="file_list ml-16">
-										<ul>
+										<ul data-basic="No Files Selected">
 											<li>No Files Selected</li>
 										</ul>
 									</div>
@@ -2997,7 +3010,7 @@
 									<input type="file" id="spc_file_05" class="hidden" name="spc_file_05" accept=".gif, .jpg, .png" multiple="">
 									<label for="spc_file_05" class="btn file-upload">파일 선택</label>
 									<div class="file_list ml-16">
-										<ul>
+										<ul data-basic="No Files Selected">
 											<li>No Files Selected</li>
 										</ul>
 									</div>
@@ -3018,7 +3031,7 @@
 									<input type="file" id="spc_file_06" class="hidden" name="spc_file_06" accept=".gif, .jpg, .png" multiple="">
 									<label for="spc_file_06" class="btn file-upload">파일 선택</label>
 									<div class="file_list ml-16">
-										<ul>
+										<ul data-basic="No Files Selected">
 											<li>No Files Selected</li>
 										</ul>
 									</div>
@@ -3039,7 +3052,7 @@
 									<input type="file" id="spc_file_07" class="hidden" name="spc_file_07" accept=".gif, .jpg, .png" multiple="">
 									<label for="spc_file_07" class="btn file-upload">파일 선택</label>
 									<div class="file_list ml-16">
-										<ul>
+										<ul data-basic="No Files Selected">
 											<li>No Files Selected</li>
 										</ul>
 									</div>
@@ -3060,7 +3073,7 @@
 									<input type="file" id="spc_file_08" class="hidden" name="spc_file_08" accept=".gif, .jpg, .png" multiple="">
 									<label for="spc_file_08" class="btn file-upload">파일 선택</label>
 									<div class="file_list ml-16">
-										<ul>
+										<ul data-basic="No Files Selected">
 											<li>No Files Selected</li>
 										</ul>
 									</div>
@@ -3081,7 +3094,7 @@
 									<input type="file" id="spc_file_09" class="hidden" name="spc_file_09" accept=".gif, .jpg, .png" multiple="">
 									<label for="spc_file_09" class="btn file-upload">파일 선택</label>
 									<div class="file_list ml-16">
-										<ul>
+										<ul data-basic="No Files Selected">
 											<li>No Files Selected</li>
 										</ul>
 									</div>
@@ -3102,7 +3115,7 @@
 									<input type="file" id="spc_file_10" class="hidden" name="spc_file_10" accept=".gif, .jpg, .png" multiple="">
 									<label for="spc_file_10" class="btn file-upload">파일 선택</label>
 									<div class="file_list ml-16">
-										<ul>
+										<ul data-basic="No Files Selected">
 											<li>No Files Selected</li>
 										</ul>
 									</div>

@@ -558,31 +558,13 @@
 		let genName = $('#genName').text();
 		let excelName = 'spc_' + genName + '_';
 
-		var excelHtml = '';
-		excelHtml += $('#basicInfo h2').html();
-		excelHtml += $('#basicInfo #basicInfoToggle').html();
-		excelHtml += $('#addressInfo h2').html();
-		excelHtml += $('#addressInfo #addressInfoToggle').html();
-		excelHtml += $('#maintenanceInfo h2').html();
-		excelHtml += $('#maintenanceInfo #maintenanceInfoToggle').html();
-		excelHtml += $('#accountInfo h2').html();
-		excelHtml += $('#accountInfo #accountInfoToggle').html();
-		excelHtml += $('#financeInfo h2').html();
-		excelHtml += $('#financeInfo #financeInfoToggle').html();
-		excelHtml += $('#contractInfo h2').html();
-		excelHtml += $('#contractInfo #contractInfoToggle').html();
-		excelHtml += $('#insuranceInfo h2').html();
-		excelHtml += $('#insuranceInfo #insuranceInfoToggle').html();
-		excelHtml += $('#deviceInfo h2').html();
-		excelHtml += $('#deviceInfo #deviceInfoToggle').html();
-		excelHtml += $('#warrantyInfo h2').html();
-		excelHtml += $('#warrantyInfo #warrantyInfoToggle').html();
-		excelHtml += $('#coefficientInfo h2').html();
-		excelHtml += $('#coefficientInfo #coefficientInfoToggle').html();
-		excelHtml += $('#associatedInfo h2').html();
-		excelHtml += $('#associatedInfo #associatedInfoToggle').html();
-		excelHtml += $('.attachment h2').html();
-		excelHtml += $('#attachement_info #attachementInfoToggle').html();
+		let excelHtml = '';
+
+		$('#myTabs a').each(function() {
+			const tabId = $(this).attr('id'), content = $(this).attr('href');
+			excelHtml += $('#' + tabId).html();
+			excelHtml += $(content).html();
+		});
 
 		$('#excelList').html(excelHtml);
 
@@ -1709,9 +1691,11 @@
 				</div>
 			</div>
 			<div class="btn-wrap-type-r clear">
+				<a href="javascript:getExcelDown();" class="btn btn-type03 fl">엑셀 다운로드</a>
 				<button type="button" class="btn-type big fr" onclick="setCheckedDataEdit();">수정</button>
 				<a href="/spc/entityInformation.do" class="btn btn-type03 fr mr-12">취소</a>
 			</div>
+			<div id="excelList" style="display:none;">
 		</div>
 	</div>
 </div>

@@ -233,18 +233,28 @@ function deleteFile(self, type) {
 					file.splice(idx, 1);
 					self.parent().parent().parent().find('input[type="file"]').data('file', file);
 				}
+
 				self.parent(".upload-text").remove();
 			} else {
 				self.parent(".upload-text").parent().find('input[type="file"]').val('');
 				self.parent(".upload-text").empty();
 			}
 		} else {
-			self.parent(".upload-text").remove();
-			if (ul.children().length <= 0) {
-				let item = '';
-				item = '<li class="no-file">선택된 파일이 없습니다.</li>'
-				ul.append(item);
-				ul.parents('.file_list').parent().find('input[type="file"]').val('');
+			let div = self.parents('div.file_list');
+			if (div.length > 0) {
+				self.parent(".upload-text").remove();
+				if (div.find('li').length <= 0) {
+					if (!isEmpty(div.find('ul').data('basic'))) div.find('ul').append('<li class="no-file">' + div.find('ul').data('basic') + '</li>');
+					div.parent().find('input[type="file"]').val('');
+				}
+			} else {
+				self.parent(".upload-text").remove();
+				if (ul.children().length <= 0) {
+					let item = '';
+					item = '<li class="no-file">선택된 파일이 없습니다.</li>'
+					ul.append(item);
+					ul.parents('.file_list').parent().find('input[type="file"]').val('');
+				}
 			}
 		}
 	} else {

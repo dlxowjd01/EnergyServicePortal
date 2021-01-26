@@ -88,6 +88,21 @@
 			});
 		}
 
+		$("#newCountryList li").on("click", function(e) {
+			e.preventDefault();
+			const code = $(this).data("value");
+
+			$("#newCityList li").each(function() {
+				if (code == $(this).data('country')) {
+					$(this).removeClass('hidden');
+				} else {
+					$(this).addClass('hidden');
+				}
+			});
+
+			$("#newCityList").prev().data({'name': '', 'value': ''}).contents().get(0).nodeValue = '시/도 선택';
+		});
+
 		// Validations
 		$("#newSiteName").on("keydown", function(e) {;
 			$("#invalidSite").addClass("hidden");
@@ -917,7 +932,6 @@
 										}
 									}								
 								} else {
-									console.log("nonUserArr===", nonUserArr);
 									let obj = {};
 									if(nonUserArr.length>0 && registeredUserArr.length>0) {
 										obj.deviceId = $(el).val();
@@ -2227,6 +2241,7 @@
 			$(this).next().find("li").removeClass("hidden");
 		});
 		// console.log("initModal----")
+		$("#newCityList li").addClass("hidden");
 	}
 
 	function updateModal(option, callback){
@@ -2238,7 +2253,7 @@
 		let addBtn = $("#addSiteBtn");
 
 		// ADD MODAL!!!
-		if(option == "add"){
+		if(option == "add") {
 			initModal();
 			if(newSiteName.parent().next().hasClass("hidden")) {
 				newSiteName.parent().next().removeClass("hidden");
@@ -2260,6 +2275,29 @@
 
 			// EDIT MODAL!!!
 			if(option == "edit") {
+				const sid = rowData.sid;
+
+				// if (!isEmpty(sid)) {
+				// 	$.ajax({
+				// 		url: apiHost + '/spcs/gens',
+				// 		type: 'get',
+				// 		data: {
+				// 			oid: oid,
+				// 			gen_ids: sid
+				// 		},
+				// 		success: function(data, textStatus, jqXHR) {
+				// 			const result = data.data;
+				// 			if (result.length > 0) {
+				// 				const financeInfo = JSON.parse(result[0].finance_info);
+				// 				console.log(financeInfo);
+				// 			}
+				// 		},
+				// 		error: function(jqXHR, textStatus, errorThrown) {
+				// 			console.error(textStatus);
+				// 		}
+				// 	});
+				// }
+
 				if(!isEmpty(rowData.role) && rowData.role != 1){
 					let input = form.find("input");
 					let dropdownBtn = form.find(".dropdown-toggle");
@@ -2297,7 +2335,21 @@
 					if (city === $(this).data('value')) {
 						let cityText = $(this).find('a').contents().get(0).nodeValue.trim();
 						let cityValue = $(this).data('value');
+						let countryValue = $(this).data('country');
 						$('#newCityList').prev().data({'name': cityText, 'value': cityValue}).contents().get(0).nodeValue = cityText;
+
+						$('#newCountryList li').each(function() {
+							if ($(this).data('value') === countryValue) {
+								let countryText = $(this).find('a').contents().get(0).nodeValue.trim();
+								$('#newCountryList').prev().data({'name': countryText, 'value': countryValue}).contents().get(0).nodeValue = countryText;
+							}
+						});
+
+						$('#newCityList li').each(function() {
+							if ($(this).data('country') === countryValue) {
+								$(this).removeClass('hidden');
+							}
+						});
 					}
 				});
 
@@ -3684,7 +3736,6 @@
 				}
 			}
 		}
-
 	}
 
 	function insertRowCopy(){
@@ -4104,11 +4155,30 @@
 								<div class="col-xl-6 col-lg-6 col-md-4 col-sm-10 pl-0">
 									<div class="flex-start">
 										<div class="dropdown w-55">
-											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key="dropDown.select" />"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
+											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="국가 선택">국가 선택<span class="caret"></span></button>
+											<ul id="newCountryList" class="dropdown-menu">
+												<c:forEach var="country" items="${location}">
+													<li data-value="${country.value.code}">
+														<a href="#" tabindex="-1">
+															<c:choose>
+																<c:when test="${cookieLang eq 'KO'}">
+																	${country.value.name.kr}
+																</c:when>
+																<c:otherwise>
+																	${country.value.name.en}
+																</c:otherwise>
+															</c:choose>
+														</a>
+													</li>
+												</c:forEach>
+											</ul>
+										</div>
+										<div class="dropdown w-55">
+											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="시/도 선택">시/도 선택<span class="caret"></span></button>
 											<ul id="newCityList" class="dropdown-menu">
 												<c:forEach var="country" items="${location}">
 													<c:forEach var="city" items="${country.value.locations}" varStatus="cityName">
-														<li data-value="${city.value.code}">
+														<li data-value="${city.value.code}" data-country="${country.value.code}">
 															<a href="#" tabindex="-1">
 																<c:choose>
 																	<c:when test="${cookieLang eq 'KO'}">
@@ -4124,7 +4194,7 @@
 												</c:forEach>
 											</ul>
 										</div>
-										<div class="text-input-type w-100"><input type="text" name="new_street_addr" id="newStreetAddr" placeholder="<fmt:message key='siteSetting.input' />" minlength="3" maxlength="28"></div>
+										<div class="text-input-type w-100"><input type="text" name="new_street_addr" id="newStreetAddr" placeholder="상세 주소" minlength="3" maxlength="28"></div>
 									</div>
 									<small class="hidden warning"><fmt:message key='siteSetting.errorTxt.14' /></small>
 								</div>
@@ -4255,7 +4325,7 @@
 								<h2 class="stit"><fmt:message key='siteSetting.meterInfo' /></h2>
 								<div class="row">
 									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label"><fmt:message key='siteSetting.normalPrice' /></span></div>
-									<div class="col-xl-3 col-lg-6 col-md-4 col-sm-10 pl-0">
+									<div class="col-xl-1 col-lg-4 col-md-4 col-sm-10 pl-0">
 										<div class="flex-start">
 											<div class="dropdown w-100">
 												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key="dropDown.select" />"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
@@ -4267,6 +4337,34 @@
 												</ul>
 											</div>
 											<div class="text-input-type hidden"><input type="text" name="Price" id="newPrice" oninput="truncateNonDigit(event, this)" placeholder="<fmt:message key='siteSetting.input' />" maxlength="8"></div>
+										</div>
+									</div>
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">SMP</span></div>
+									<div class="col-xl-4 col-lg-6 col-md-4 col-sm-10 pl-0">
+										<div class="flex-start">
+											<div class="dropdown w-40">
+												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key="dropDown.select" />"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
+												<ul id="newSMP" class="dropdown-menu">
+													<li data-name="고정가" data-value="고정가"><a href="#">고정가</a></li>
+													<li data-name="월 가중 평균" data-value="월_가중_평균"><a href="#">월 가중 평균</a></li>
+													<li data-name="실시간" data-value="실시간"><a href="#">실시간</a></li>
+												</ul>
+											</div>
+											<div class="text-input-type w-60"><input type="text" name="smp_etc" id="smp_etc" oninput="truncateNonDigit(event, this)" placeholder="<fmt:message key='siteSetting.input' />" maxlength="8"></div>
+										</div>
+									</div>
+									<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label">REC</span></div>
+									<div class="col-xl-4 col-lg-6 col-md-4 col-sm-10 pl-0">
+										<div class="flex-start">
+											<div class="dropdown w-40">
+												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key="dropDown.select" />"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
+												<ul id="newREC" class="dropdown-menu">
+													<li data-name="고정가" data-value="고정가"><a href="#">고정가</a></li>
+													<li data-name="SMP + REC" data-value="SMP_REC"><a href="#">SMP + REC</a></li>
+													<li data-name="연간추후정산" data-value="연간추후정산"><a href="#">연간추후정산</a></li>
+												</ul>
+											</div>
+											<div class="text-input-type w-60"><input type="text" name="rec_etc" id="rec_etc" oninput="truncateNonDigit(event, this)" placeholder="<fmt:message key='siteSetting.input' />" maxlength="8"></div>
 										</div>
 									</div>
 								</div>
