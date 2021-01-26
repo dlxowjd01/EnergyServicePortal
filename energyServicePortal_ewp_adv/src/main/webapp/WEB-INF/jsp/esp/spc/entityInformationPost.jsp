@@ -42,7 +42,6 @@
 					</a>
 					<button type="button" class="btn-close fr"></button>
 				</li>
-				<li class="path"></li>
 			`);
 		});
 
@@ -1013,16 +1012,16 @@
 <div class="row entity-wrapper post">
 	<div class="col-12">
 		<div class="indiv panel panel-default">
-			<ul id="myTabs" class="nav nav-tabs" role="tablist">
-				<li role="presentation" class="entity-tab active">
-					<a href="#basicInfo" id="tabBasicInfo" role="tab" data-toggle="tab" aria-controls="basicInfo" aria-expanded="true">SPC 기본정보</a>
-				</li>
-				<li class="path"></li>
-				<li role="presentation" class="entity-tab">
-					<a href="#addressInfo" role="tab" id="tabAddressInfo" data-toggle="tab" aria-controls="addressInfo">발전소 정보</a>
-				</li>
-				<li class="path"></li>
-			</ul>
+			<div class="scrollTabs">
+				<ul id="myTabs" class="nav nav-tabs" role="tablist">
+					<li role="presentation" class="entity-tab active">
+						<a href="#basicInfo" id="tabBasicInfo" role="tab" data-toggle="tab" aria-controls="basicInfo" aria-expanded="true">SPC 기본정보</a>
+					</li>
+					<li role="presentation" class="entity-tab">
+						<a href="#addressInfo" role="tab" id="tabAddressInfo" data-toggle="tab" aria-controls="addressInfo">발전소 정보</a>
+					</li>
+				</ul>
+			</div>
 
 			<div class="tag-box-entity mt-12">
 				<p class="tx-tit">
