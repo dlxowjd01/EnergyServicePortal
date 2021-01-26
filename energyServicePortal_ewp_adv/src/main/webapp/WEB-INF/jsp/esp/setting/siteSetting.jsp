@@ -1532,28 +1532,24 @@
 			// 11. 알람 설정
 			var siteReadOnlyTable = $('#siteTable').DataTable({
 				"aaData": newArr,
+				"destroy": true,
+				// "retrieve": true,
 				"table-layout": "fixed",
 				"fixedHeader": true,
-				// "autoWidth": true,
 				// "bAutoWidth": true,
 				"bSearchable" : true,
+				// "scrollX": true,
+				// "sScrollX": "100%",
+				// "sScrollXInner": "100%",
 				"sScrollY": true,
 				"scrollY": "720px",
 				"scrollX": true,
 				"bScrollCollapse": true,
 				"pageLength": 100,
+				// "bFilter": false, disabling this option will prevent table.search()
 				"aaSorting": [[ 0, 'asc' ]],
 				"bSortable": true,
 				"order": [[ 1, 'asc' ]],
-				// "bFilter": false, disabling this option will prevent table.search()
-	
-				"aoColumnDefs": [
-					{
-						"aTargets": [ 0 ],
-						"bSortable": false,
-						"orderable": false
-					},
-				],
 				"aoColumns": [
 					{
 						"sTitle": "",
@@ -1628,6 +1624,18 @@
 						},
 					},
 					{
+						"sTitle": "<fmt:message key='siteSetting.alarm.receive' />",
+						"mData": null,
+						"mRender": function ( data, type, full, rowIndex )  {
+							// return '<button type="button" class="btn-type-sm btn-type03">알람</button>'
+							if(!isEmpty(full.devices) && full.devices.length>0){
+								return "<button type='button' class='btn-type-sm btn-type03'><fmt:message key='siteSetting.alarm' /></button>"
+							} else {
+								return "<button type='button' class='btn-type-sm btn-type03' disabled><fmt:message key='siteSetting.alarm' /></button>"
+							}
+						},
+					},
+					{
 						"sTitle": "<fmt:message key='siteSetting.update.date' />",
 						"mData": "updatedAt",
 					},
@@ -1642,6 +1650,7 @@
 						"sPrevious": "",
 						"sNext": ""
 					},
+					"info": "_PAGE_ - _PAGES_ " + " / <fmt:message key='table.totalCase.start' /> _TOTAL_ <fmt:message key='table.totalCase.end' />",
 				},
 				"dom": 'tip',
 				"select": {
@@ -1651,7 +1660,7 @@
 					// selector: 'td input[type="checkbox"], td:not(:nth-of-type(11))'
 				},
 				initComplete: function(settings, json ){	
-					let str = `<div id="btnGroup" class="right-end2"><!--
+					let str = `<div id="btnGroup" class="right-end"><!--
 						--><button type="button" disabled class="btn-type03" onclick="updateModal('edit')"><fmt:message key='siteSetting.updateSelected' /></button><!--
 						--><button type="button" disabled class="btn-type03" onclick="updateModal('delete')"><fmt:message key='siteSetting.deleteSelected' /></button><!--
 					--></div>`;
@@ -1831,6 +1840,7 @@
 					"sPrevious": "",
 					"sNext": ""
 				},
+				"info": "_PAGE_ - _PAGES_ " + " / <fmt:message key='table.totalCase.start' /> _TOTAL_ <fmt:message key='table.totalCase.end' />",
 			},
 			initComplete: function(){
 				this.addClass("no-stripe");
@@ -3456,6 +3466,7 @@
 						// "sPrevious": "",
 						// "sNext": ""
 					},
+					"info": "_PAGE_ - _PAGES_ " + " / <fmt:message key='table.totalCase.start' /> _TOTAL_ <fmt:message key='table.totalCase.end' />",
 				},
 				initComplete: function(){
 					this.api().columns().header().each ((el, i) => {
