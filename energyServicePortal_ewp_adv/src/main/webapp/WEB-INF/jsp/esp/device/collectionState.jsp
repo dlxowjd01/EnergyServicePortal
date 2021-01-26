@@ -183,6 +183,8 @@
 												<li data-value="targetPower"><a href="javascript:void(0);" tabindex="-1"><fmt:message key='colState.detail.sendCmd.target' /></a></li>
 											</ul>
 										</div>
+									</div>
+									<div class="flex-group">
 										<div class="text-input-type">
 											<input type="text" id="optionVal" name="optionVal" placeholder="">
 										</div>

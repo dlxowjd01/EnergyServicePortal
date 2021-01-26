@@ -10699,8 +10699,29 @@ table.table-footer tfoot td.light {
 
 /* Responsive - Mobile */
 @media (max-width: 480px) {
+	#rtuCommand .flex-group .sm-title {
+		width: 70px!important;
+	}
+
+	#rtuCommand > .flex-group > .dropdown > button {
+		width: 150px!important;
+	}
+
+	#basicForm table {
+		width: 768px;
+	}
+
 	.spcRegisterButton {
 		display: block!important;
+	}
+
+	.spcRegisterButton > a {
+		width: 100%!important;
+		margin-bottom: 10px;
+	}
+
+	.spcRegisterButton > div > * {
+		width: calc(50% - 5px)!important;
 	}
 	
 	.sel-calendar {
