@@ -1921,17 +1921,18 @@
 								</div>
 							</td>
 						</tr>
-						<tr>
-							<th><label for="인출_가능_기한">인출 가능 기한</label></th>
-							<td class="flex-start">
-								<div class="sel-calendar edit">
-									<input type="text" id="인출_가능_기한" class="sel" name="인출_가능_기한" value="" autocomplete="off" placeholder="자동 입력" readonly>
-								</div>
-								<span class="fixed-height" id="인출_가능_남은일"></span>
-							</td>
-							<th></th>
-							<td></td>
-						</tr>
+<%--						ULON-41 관련 주석--%>
+<%--						<tr>--%>
+<%--							<th><label for="인출_가능_기한">인출 가능 기한</label></th>--%>
+<%--							<td class="flex-start">--%>
+<%--								<div class="sel-calendar edit">--%>
+<%--									<input type="text" id="인출_가능_기한" class="sel" name="인출_가능_기한" value="" autocomplete="off" placeholder="자동 입력" readonly>--%>
+<%--								</div>--%>
+<%--								<span class="fixed-height" id="인출_가능_남은일"></span>--%>
+<%--							</td>--%>
+<%--							<th></th>--%>
+<%--							<td></td>--%>
+<%--						</tr>--%>
 						<tr>
 							<th>
 								<div class="fixed-height">지급 약정</div>

@@ -971,15 +971,15 @@
 							<th>(실제) 준공일</th>
 							<td id="실제_준공일"></td>
 						</tr>
-						<tr>
-							<th>인출 가능 기한</th>
-							<td>
-								<span id="인출_가능_기한"></span>
-								<span class="fixed-height" id="인출_가능_남은일"></span>
-							</td>
-							<th></th>
-							<td></td>
-						</tr>
+<%--						<tr>--%>
+<%--							<th>인출 가능 기한</th>--%>
+<%--							<td>--%>
+<%--								<span id="인출_가능_기한"></span>--%>
+<%--								<span class="fixed-height" id="인출_가능_남은일"></span>--%>
+<%--							</td>--%>
+<%--							<th></th>--%>
+<%--							<td></td>--%>
+<%--						</tr>--%>
 						<tr>
 							<th>
 								<div class="fixed-height">지급 약정</div>
