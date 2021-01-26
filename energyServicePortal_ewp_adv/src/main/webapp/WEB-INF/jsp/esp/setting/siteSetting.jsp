@@ -653,7 +653,6 @@
 					siteEditObj.vpp_info = JSON.stringify(newVppObj);
 				}
 
-				// console.log('siteEditObj===', siteEditObj)
 				option = {
 					url: apiHost + "/config/sites/" + sid,
 					type: 'patch',
@@ -2122,7 +2121,7 @@
 				let newRes = $("#newResList");
 				let items = newRes.find("li");
 
-				newRes.prev().data({ "name" : "", "value": "" }).contents().get(0).nodeValue = "<fmt:message key='siteSetting.select' />";
+				newRes.prev().data({ "name" : "", "value": "" }).contents().get(0).nodeValue = "선택";
 				if(val == "0") {
 					items.eq(0).removeClass("hidden").siblings().addClass("hidden");
 				} else if(val == "1"){
@@ -2130,6 +2129,8 @@
 				} else {
 					items.removeClass("hidden");
 				}
+
+				validateForm();
 			});
 
 			$("#siteType li").on("click", function(){
@@ -2286,10 +2287,10 @@
 		});
 
 		$.each(dropdownBtn, function(index, element){
-			$(this).data({ "value": "", "vol-type": "", "plan-id" : "" }).html('<fmt:message key="dropDown.select" />' + '<span class="caret"></span>').prop("disabled", false);
+			$(this).data({ "value": "", "vol-type": "", "plan-id" : "" }).html($(this).data('name') + '<span class="caret"></span>').prop("disabled", false);
 			$(this).next().find("li").removeClass("hidden");
 		});
-		// console.log("initModal----")
+
 		$("#newCityList li").addClass("hidden");
 	}
 
@@ -2324,30 +2325,7 @@
 
 			// EDIT MODAL!!!
 			if(option == "edit") {
-				const sid = rowData.sid;
-
-				// if (!isEmpty(sid)) {
-				// 	$.ajax({
-				// 		url: apiHost + '/spcs/gens',
-				// 		type: 'get',
-				// 		data: {
-				// 			oid: oid,
-				// 			gen_ids: sid
-				// 		},
-				// 		success: function(data, textStatus, jqXHR) {
-				// 			const result = data.data;
-				// 			if (result.length > 0) {
-				// 				const financeInfo = JSON.parse(result[0].finance_info);
-				// 				console.log(financeInfo);
-				// 			}
-				// 		},
-				// 		error: function(jqXHR, textStatus, errorThrown) {
-				// 			console.error(textStatus);
-				// 		}
-				// 	});
-				// }
-
-				if(!isEmpty(rowData.role) && rowData.role != 1){
+				if(!isEmpty(rowData.role) && rowData.role != 1) {
 					let input = form.find("input");
 					let dropdownBtn = form.find(".dropdown-toggle");
 
@@ -2369,7 +2347,7 @@
 				}
 
 				titleAdd.addClass("hidden").next().removeClass("hidden");
-				required.hasClass("no-symbol") ? null : required.addClass("no-symbol");
+				//required.hasClass("no-symbol") ? null : required.addClass("no-symbol");
 
 				if(!newSiteName.parent().next().hasClass("hidden")) {
 					newSiteName.parent().next().addClass("hidden");
@@ -2672,9 +2650,15 @@
 				}
 			}
 		} else {
-			$("#addSiteBtn").prop("disabled", false);
+			let newCityList = $("#newCityList").prev().data("value");
+			let newResList = $("#newResList").prev().data("value");
+			
+			if( !isEmpty(newCityList) && !isEmpty(newResList) ){
+				$("#addSiteBtn").prop("disabled", false);
+			} else {
+				$("#addSiteBtn").prop("disabled", true);
+			}
 		}
-
 	}
 
 	function showSubgroup (self){
