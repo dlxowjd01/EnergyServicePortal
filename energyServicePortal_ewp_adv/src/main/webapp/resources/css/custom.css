@@ -10466,6 +10466,13 @@ table.table-footer tfoot td.light {
 	width: 100%!important;
 }
 
+.spcInfoFilterWrap > div > div > .dropdown-wrap {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
 /* Responsive - Tablet */
 @media (max-width: 768px) {
 	.tablet-br {
@@ -10584,9 +10591,6 @@ table.table-footer tfoot td.light {
 	}
 
 	.spcInfoFilterWrap > div > div > .dropdown-wrap {
-		width: 100%;
-		display: flex;
-		align-items: center;
 		justify-content: space-between;
 	}
 
