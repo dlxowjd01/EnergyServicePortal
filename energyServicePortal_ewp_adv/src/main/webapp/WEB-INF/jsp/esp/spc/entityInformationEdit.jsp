@@ -755,6 +755,17 @@
 
 					if (!isEmpty(json.data[0].attachement_info)) {
 						getAttachFileDisplay(JSON.parse(json.data[0].attachement_info)); //첨부파일
+					} else {
+						setMakeList(new Array(), 'fileList01', {'dataFunction' : {}});
+						setMakeList(new Array(), 'fileList02', {'dataFunction' : {}});
+						setMakeList(new Array(), 'fileList03', {'dataFunction' : {}});
+						setMakeList(new Array(), 'fileList04', {'dataFunction' : {}});
+						setMakeList(new Array(), 'fileList05', {'dataFunction' : {}});
+						setMakeList(new Array(), 'fileList06', {'dataFunction' : {}});
+						setMakeList(new Array(), 'fileList07', {'dataFunction' : {}});
+						setMakeList(new Array(), 'fileList08', {'dataFunction' : {}});
+						setMakeList(new Array(), 'fileList09', {'dataFunction' : {}});
+						setMakeList(new Array(), 'fileList10', {'dataFunction' : {}});
 					}
 
 					addDatePicker();
@@ -1069,22 +1080,7 @@
 			type: 'patch',
 			async: true,
 			contentType: 'application/json',
-			data: JSON.stringify({
-				address: JSON.stringify(address_info),
-				contract_info: JSON.stringify(contract_info),
-				device_info: JSON.stringify(device_info),
-				finance_info: JSON.stringify(finance_info),
-				warranty_info: JSON.stringify(warranty_info),
-				coefficient_info: JSON.stringify(coefficient_info),
-				attachement_info: JSON.stringify(attachement_info),
-				associated_info: JSON.stringify(associated_info),
-				maintenance_info: JSON.stringify(maintenance_info),
-				addlist_insurance_info: JSON.stringify(addlist_insurance_info),
-				spend_info: JSON.stringify(spend_info),
-				account_info: JSON.stringify(account_info),
-				updated_by: loginId,
-				del_yn: 'N'
-			}),
+			data: JSON.stringify(setData),
 			success: function (json) {
 				alert('수정되었습니다.');
 				goNowPage(spcId, genId);
