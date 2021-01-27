@@ -9286,7 +9286,7 @@ th .btn-align {
 	padding: 0 0 0 28px;
 }
 
-form[name="basicForm"] tr > th:first-child {
+#myTabContent > .spc-table-row table tr > th:first-child {
 	padding: 0 0 0 56px; 
 }
 
@@ -10713,23 +10713,28 @@ table.table-footer tfoot td.light {
 		flex: 100%!important;
 	}
 
-	#basicForm {
+	#myTabContent > .spc-table-row,
+	#myTabContent > .spc-table-row form {
 		overflow: auto;
+	}
+	
+	#myTabContent > .spc-table-row table {
+		width: 1440px;
 		table-layout: auto;
 	}
 
-	#basicForm table td,
-	#basicForm table th {
+	#myTabContent > .spc-table-row table td,
+	#myTabContent > .spc-table-row table th {
 		white-space: nowrap!important;
 		padding: 10px!important;
 	}
 	
-	#basicForm table label {
+	#myTabContent > .spc-table-row table label {
 		width: 120px;
 	}
 
-	#basicForm table button,
-	#basicForm table input {
+	#myTabContent > .spc-table-row table button,
+	#myTabContent > .spc-table-row table input {
 		width: 240px!important;
 	}
 }
@@ -10744,7 +10749,7 @@ table.table-footer tfoot td.light {
 		width: 150px!important;
 	}
 
-	#basicForm table {
+	#myTabContent > .spc-table-row table {
 		width: 768px;
 	}
 
