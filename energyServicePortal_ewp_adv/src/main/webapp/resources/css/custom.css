@@ -10510,6 +10510,11 @@ table.table-footer tfoot td.light {
     /* background: rgba(255,255,255,.12); */
 }
 
+.spc-table-row table > tbody > tr > .entity > div:not(:first-child) > button {
+	display: inline-block!important;
+	transform: rotate(45deg);
+}
+
 /* Responsive - Tablet */
 @media (max-width: 768px) {
 	.tablet-br {
@@ -10733,9 +10738,13 @@ table.table-footer tfoot td.light {
 		width: 120px;
 	}
 
-	#myTabContent > .spc-table-row table button,
+	#myTabContent > .spc-table-row table button:not(.dropdown-toggle) {
+		width: 40px!important;
+	}
+	
+	#myTabContent > .spc-table-row table .dropdown > button,
 	#myTabContent > .spc-table-row table input {
-		width: 240px!important;
+		width: 300px!important;
 	}
 }
 
