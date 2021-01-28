@@ -60,7 +60,7 @@
                     data: 'site_name',
                     render: function (data, type, full, rowIndex) {
                         if (isEmpty(data)) {
-                            return '-';
+                            return '전체';
                         } else {
                             return data;
                         }

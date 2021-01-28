@@ -149,7 +149,7 @@
 					className: 'dt-right'
 				},
 				{
-					title: '-추가보수',
+					title: '추가보수',
 					data: 'additional_amount',
 					className: 'dt-center'
 				},
