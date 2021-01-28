@@ -389,7 +389,7 @@ const monthlyChartDraw = async () => {
 		pvSum: 0,
 	};
 
-	$(`.gmain-chart1 span.term`).text(today.getFullYear() + '.01.1 ~ ' + today.getFullYear() + '.' + ('0' + (Number(today.getMonth()) + 1)).slice(-2) + '.' + today.getDate());
+	$(`.gmain-chart1 span.term`).text(today.getFullYear() + '.01.01 ~ ' + today.getFullYear() + '.' + ('0' + (Number(today.getMonth()) + 1)).slice(-2) + '.' + today.getDate());
 	new Promise(resolve => {
 		targetApi.forEach((targetUrl, index) => {
 			const apiData = apiDatas[targetUrl];
@@ -581,7 +581,7 @@ const dailyChartDraw = async () => {
 		categories.push(String(i));
 	}
 
-	$(`.gmain-chart2 span.term`).text(today.format('yyyy.MM') + '.1 ~ ' + today.format('yyyy.MM') + '.' + today.getDate());
+	$(`.gmain-chart2 span.term`).text(today.format('yyyy.MM') + '.01 ~ ' + today.format('yyyy.MM') + '.' + today.getDate());
 
 	new Promise(resolve => {
 		targetApi.forEach((targetUrl, index) => {
