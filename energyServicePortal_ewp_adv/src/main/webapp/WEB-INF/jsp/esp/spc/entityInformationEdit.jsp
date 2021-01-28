@@ -31,8 +31,9 @@
 
 		$('.onlyNum').keyup(function() {
 			let thisVal = $(this).val().trim(), thisName = $(this).prop('name');
-			thisVal = thisVal.replace(/[^0-9, \.]/g, '');
+			thisVal = thisVal.replace(/[^0-9 \.]/g, '');
 
+			console.log(thisVal);
 			if (isEmpty(thisVal)) {
 				$(this).val('');
 			} else {
