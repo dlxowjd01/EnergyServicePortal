@@ -10018,10 +10018,10 @@ table.table-footer tfoot td.light {
 	color: var(--white60);
 }
 
-.entity-wrapper.post table .text-file a + button,
-.entity-wrapper.post table .text-file + button {
-	float: right;
-	margin-top: -23px;
+.entity-wrapper.post table .text-file {
+	display: flex;
+	align-items: center;
+	margin-right: 20px;
 }
 
 .entity-wrapper.post fieldset.flex-start,
