@@ -1588,7 +1588,7 @@
 						</colgroup>
 						<tr>
 							<th>현장 사진</th>
-							<td id="addFileList01">
+							<td id="addFileList01" class="flex-start">
 								<p class="text-file">
 									<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 								</p>
@@ -1598,7 +1598,7 @@
 						</tr>
 						<tr>
 							<th>수배전반</th>
-							<td id="addFileList02">
+							<td id="addFileList02" class="flex-start">
 								<p class="text-file">
 									<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 								</p>
@@ -1608,7 +1608,7 @@
 						</tr>
 						<tr>
 							<th>케이블</th>
-							<td id="addFileList03">
+							<td id="addFileList03" class="flex-start">
 								<p class="text-file">
 									<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 								</p>
@@ -1618,7 +1618,7 @@
 						</tr>
 						<tr>
 							<th>모듈</th>
-							<td id="addFileList04">
+							<td id="addFileList04" class="flex-start">
 								<p class="text-file">
 									<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 								</p>
@@ -1628,7 +1628,7 @@
 						</tr>
 						<tr>
 							<th>인버터</th>
-							<td id="addFileList05">
+							<td id="addFileList05" class="flex-start">
 								<p class="text-file">
 									<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 								</p>
@@ -1638,7 +1638,7 @@
 						</tr>
 						<tr>
 							<th>결선도</th>
-							<td id="addFileList06">
+							<td id="addFileList06" class="flex-start">
 								<p class="text-file">
 									<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 								</p>
@@ -1648,7 +1648,7 @@
 						</tr>
 						<tr>
 							<th>토목</th>
-							<td id="addFileList07">
+							<td id="addFileList07" class="flex-start">
 								<p class="text-file">
 									<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 								</p>
@@ -1658,7 +1658,7 @@
 						</tr>
 						<tr>
 							<th>구조물</th>
-							<td id="addFileList08">
+							<td id="addFileList08" class="flex-start">
 								<p class="text-file">
 									<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 								</p>
@@ -1668,7 +1668,7 @@
 						</tr>
 						<tr>
 							<th>접속반</th>
-							<td id="addFileList09">
+							<td id="addFileList09" class="flex-start">
 								<p class="text-file">
 									<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 								</p>
@@ -1678,7 +1678,7 @@
 						</tr>
 						<tr>
 							<th>기타설비</th>
-							<td id="addFileList10">
+							<td id="addFileList10" class="flex-start">
 								<p class="text-file">
 									<a href="${apiHost}/files/download/[fieldname]?oid=${param.oid}&orgFilename=[originalname]">[originalname]</a>
 								</p>

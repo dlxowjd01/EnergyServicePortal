@@ -10512,7 +10512,6 @@ table.table-footer tfoot td.light {
 
 .spc-table-row table > tbody > tr > .entity > div:not(:first-child) > button {
 	display: inline-block!important;
-	transform: rotate(45deg);
 }
 
 /* Responsive - Tablet */

@@ -25,7 +25,6 @@
 					</a>
 					<button type="button" class="btn-close fr"></button>
 				</li>
-				<li class="path"></li>
 			`);
 		});
 
@@ -319,7 +318,6 @@
 					</a>
 					<button type="button" class="btn-close fr"></button>
 				</li>
-				<li class="path"></li>
 			`);
 
 			$('.tag-box-entity .tag-type').each(function() {
@@ -528,7 +526,6 @@
 										</a>
 										<button type="button" class="btn-close fr"></button>
 									</li>
-									<li class="path"></li>
 								`);
 
 								$('.tag-box-entity .tag-type').each(function() {
@@ -1258,17 +1255,17 @@
 <div class="row entity-wrapper post">
 	<div class="col-12">
 		<div class="indiv panel panel-default">
-			<ul id="myTabs" class="nav nav-tabs" role="tablist">
-				<li role="presentation" class="entity-tab active">
-					<a href="#basicInfo" id="tabBasicInfo" role="tab" data-toggle="tab" aria-controls="basicInfo" aria-expanded="true">SPC 기본정보</a>
-				</li>
-				<li class="path"></li>
-				<li role="presentation" class="entity-tab">
-					<a href="#addressInfo" role="tab" id="tabAddressInfo" data-toggle="tab" aria-controls="addressInfo">발전소 정보</a>
-				</li>
-				<li class="path"></li>
-			</ul>
-
+			<div class="scrollTabs">
+				<ul id="myTabs" class="nav nav-tabs" role="tablist">
+					<li role="presentation" class="entity-tab active">
+						<a href="#basicInfo" id="tabBasicInfo" role="tab" data-toggle="tab" aria-controls="basicInfo" aria-expanded="true">SPC 기본정보</a>
+					</li>
+					<li role="presentation" class="entity-tab">
+						<a href="#addressInfo" role="tab" id="tabAddressInfo" data-toggle="tab" aria-controls="addressInfo">발전소 정보</a>
+					</li>
+				</ul>
+			</div>
+			
 			<div class="tag-box-entity mt-12">
 				<p class="tx-tit">
 					<span class="tag-type" data-tab="tabMaintenanceInfo" data-id="maintenanceInfo">관리 운영 정보</span>
@@ -2927,16 +2924,15 @@
 							<tr>
 								<th>현장 사진</th>
 								<td class="flex-start-td">
-									<div id="fileList01">
-										<p class="text-file">
-											<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-											<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList01', [INDEX]);"></button>
-										</p>
-									</div>
-
 									<input type="file" id="spc_file_01" class="hidden" name="spc_file_01" accept=".gif, .jpg, .png" multiple="">
 									<label for="spc_file_01" class="btn file-upload">파일 선택</label>
 									<div class="file_list ml-16">
+										<div id="fileList01">
+											<p class="text-file">
+												<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+												<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList01', [INDEX]);"></button>
+											</p>
+										</div>
 										<ul data-basic="No Files Selected">
 											<li>No Files Selected</li>
 										</ul>
