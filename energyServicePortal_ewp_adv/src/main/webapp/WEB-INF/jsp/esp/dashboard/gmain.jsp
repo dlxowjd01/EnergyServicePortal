@@ -351,14 +351,14 @@
 										<tr class="dbclickopen flag[INDEX]" data-sid="[sid]">
 											<td class="first-td">
 												<span class="status [statusClass]" title="[status]">[status]</span>
-												<span class="status-bar"></span>
+												<!-- <span class="status-bar"></span> -->
 											</td>
 											<td>[alarmError]</td>
 											<td>[alarmWarning]</td>
 											<td class="center">[name]</td>
-											<td class="right">[capacityView]</td>
-											<td class="right">[forecast]</td>
-											<td class="right">[accumulate]</td>
+											<td class="center">[capacityView]</td>
+											<td class="center">[forecast]</td>
+											<td class="center">[accumulate]</td>
 											<td class="ESS">-</td>
 											<td class="ESS">-</td>
 										</tr>
