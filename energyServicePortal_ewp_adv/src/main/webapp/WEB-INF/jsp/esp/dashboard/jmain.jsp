@@ -138,6 +138,7 @@
 			</div>
 		</div>
 		<div class="indiv gmain-table jmain-table">
+			<div id="miniLoadingCircle" class="mini-loading" style="display:none;"><img class="mini-loading-image" src="/img/loading_icon.gif" alt="Loading..."/></div>
 			<div class="table-top clear">
 				<div class="input-group1">
 					<input type="text" class="input" id="searchName" name="searchName" value="" placeholder="사업소 검색" onkeyup="if (event.keyCode == 13) searchSiteList();">

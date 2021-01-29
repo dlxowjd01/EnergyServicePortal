@@ -59,7 +59,7 @@
 				async: true
 			},
 			{
-				url: apiHost + "/auth/me/sites?addCapacity=true",
+				url: apiHost + "/auth/me/sites?addCapacity=true&includeDevices=true",
 				type: "get",
 				async: true,
 			},
@@ -1046,7 +1046,7 @@
 				async: true
 			},
 			{
-				url: apiHost + "/auth/me/sites?addCapacity=true",
+				url: apiHost + "/auth/me/sites?addCapacity=true&includeDevices=true",
 				type: "get",
 				async: true,
 			},
@@ -1655,18 +1655,11 @@
 						"mData": "vppName",
 					},
 					{
-						"sTitle": "<fmt:message key='siteSetting.alarm.setting' />",
-						"mData": null,
-						"mRender": function ( data, type, full, rowIndex )  {
-							return ''
-						},
-					},
-					{
 						"sTitle": "<fmt:message key='siteSetting.alarm.receive' />",
 						"mData": null,
 						"mRender": function ( data, type, full, rowIndex )  {
 							// return '<button type="button" class="btn-type-sm btn-type03">알람</button>'
-							if(!isEmpty(full.devices) && full.devices.length>0){
+							if(!isEmpty(full.devices) && full.devices.length > 0){
 								return "<button type='button' class='btn-type-sm btn-type03'><fmt:message key='siteSetting.alarm' /></button>"
 							} else {
 								return "<button type='button' class='btn-type-sm btn-type03' disabled><fmt:message key='siteSetting.alarm' /></button>"
@@ -1710,8 +1703,8 @@
 						colGroup.eq(9).addClass("hidden");
 					}
 
-					this.api().columns(10).visible( false );
-					colGroup.eq(10).addClass("hidden");
+					//this.api().columns(10).visible( false );
+					//colGroup.eq(10).addClass("hidden");
 
 					this.api().columns().header().each ((el, i) => {
 						if(i == 0){
