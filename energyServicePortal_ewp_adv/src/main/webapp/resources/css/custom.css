@@ -11092,6 +11092,13 @@ table.table-footer tfoot td.light {
 	}
 }
 
+.group-type.flex-start {
+	display: flex!important;
+}
+
+#addList_module_angle .group-type > div {
+	width: 300px!important;
+}
 
 
 /* TO DELETE!!!!! */

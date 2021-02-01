@@ -1047,7 +1047,7 @@
 							</colgroup>
 							<tr>
 								<th>SPC명</th>
-								<td class="group-type">
+								<td class="group-type flex-start">
 									<div class="dropdown-wrapper w-60">
 										<div class="dropdown" id="spcId">
 											<button type="button" class="dropdown-toggle" data-toggle="dropdown">
@@ -1086,7 +1086,7 @@
 							</tr>
 							<tr>
 								<th>주소</th>
-								<td class="group-type">
+								<td class="group-type flex-start">
 									<div class="dropdown placeholder edit" id="spcCountry">
 										<button type="button" class="dropdown-toggle underline w-100" data-toggle="dropdown" data-name="국가 선택">
 											국가 선택<span class="caret"></span>
@@ -1210,11 +1210,11 @@
 								</td>
 							</tr>
 							<tr>
-								<th class="group-type">SPC 법인 인감
+								<th class="group-type flex-start">SPC 법인 인감
 									<a href="javascript:addRow('addList_registered_seal');" class="btn-add fr">추가</a>
 								</th>
 								<td id="addList_registered_seal" class="entity">
-									<div class="group-type">
+									<div class="group-type flex-start">
 										<div class="dropdown placeholder edit" id="spcSeal[index]" data-name="인감 선택">
 											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
 												인감 선택<span class="caret"></span>
@@ -1258,7 +1258,7 @@
 						</colgroup>
 						<tr>
 							<th><label for="genName">발전소명</label></th>
-							<td class="group-type">
+							<td class="group-type flex-start">
 								<div class="dropdown-wrapper w-60">
 									<div class="dropdown" id="genId">
 										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="발전소명 선택">
@@ -1280,7 +1280,7 @@
 						</tr>
 						<tr>
 							<th>주소</th>
-							<td class="group-type">
+							<td class="group-type flex-start">
 								<div class="dropdown placeholder edit" id="발전소_국가">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown">
 										국가 선택<span class="caret"></span>
@@ -1324,7 +1324,7 @@
 							<td>
 								<fieldset>
 									<legend class="sr-only">설치 용량 및 설치 용량 기타</legend>
-									<div class="group-type">
+									<div class="group-type flex-start">
 										<div class="text-input-type edit unit t1">
 											<input type="text" id="설치_용량" name="설치_용량" placeholder="설치용량">
 											<span>kW</span>
@@ -1383,7 +1383,7 @@
 								<a href="javascript:addRow('addList_affiliation', 'class');addRow('addList_affiliation2', 'class');" class="btn-add fr">추가</a>
 							</th>
 							<td class="addList_affiliation entity">
-								<div class="group-type">
+								<div class="group-type flex-start">
 									<div class="dropdown placeholder edit" id="등기이사_소속[index]">
 										<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown">
 											소속 선택<span class="caret"></span>
@@ -1643,13 +1643,13 @@
 								</td>
 							</tr>
 							<tr>
-								<th class="group-type"><label for="상환_만기일">상환 만기일</label></th>
+								<th class="group-type flex-start"><label for="상환_만기일">상환 만기일</label></th>
 								<td>
 									<div class="sel-calendar edit">
 										<input type="text" id="상환_만기일" class="sel datepicker" name="상환_만기일" value="" autocomplete="off" placeholder="날짜 선택" readonly>
 									</div>
 								</td>
-								<th class="group-type">
+								<th class="group-type flex-start">
 									<label for="이자_지급일0">이자 지급일</label>
 									<a href="javascript:addRow('addList_interest_pay_date');" class="btn-add fr">추가</a>
 								</th>
@@ -1663,7 +1663,7 @@
 								</td>
 							</tr>
 							<tr>
-								<th class="group-type">
+								<th class="group-type flex-start">
 									<label for="보장발전시간_정산일0">보장발전시간 정산일</label>
 									<a href="javascript:addRow('addList_payroll_date');" class="btn-add fr">추가</a>
 								</th>
@@ -1761,7 +1761,7 @@
 								--></div>
 									</div>
 									<div class="fixed-height">
-										<div class="group-type">
+										<div class="group-type flex-start">
 											<div class="text-input-type edit unit t1">
 												<input type="text" id="예금주[index]" name="예금주[index]" placeholder="직접 입력">
 											</div>
@@ -1800,7 +1800,7 @@
 								<td></td>
 							</tr>
 							<tr>
-								<th class="group-type">
+								<th class="group-type flex-start">
 									공인인증서 등록 <a href="javascript:addRow('addList_certificate_registration', 'class'); addRow('addList_certificate_registration2', 'class');" class="btn-add fr">추가</a>
 								</th>
 								<td class="addList_certificate_registration entity">
@@ -2054,7 +2054,7 @@
 						</tr>
 						<tr>
 							<th><label for="보험_기간_from0">보험 기간</label></th>
-							<td class="group-type">
+							<td class="group-type flex-start">
 								<legend class="sr-only">보험 기간</legend>
 								<fieldset class="sel-calendar edit twin clear dateField">
 									<input type="text" id="보험_기간_from0" class="sel fromDate" name="보험_기간_from0" value="" autocomplete="off" placeholder="시작일" readonly>
@@ -2312,7 +2312,7 @@
 						<tr>
 							<th>모듈 제조사 / 모델<a href="javascript:addRow('addList_module_info');" class="btn-add fr">추가</a></th>
 							<td id="addList_module_info" class="entity">
-								<div class="group-type">
+								<div class="group-type flex-start">
 									<div class="text-input-type edit">
 										<label class="sr-only">모듈 제조사</label>
 										<input type="text" id="모듈_제조사[index]" name="모듈_제조사[index]" placeholder="제조사">
@@ -2325,7 +2325,7 @@
 								</div>
 							</td>
 							<th>설치 용량</th>
-							<td class="group-type">
+							<td class="group-type flex-start">
 								<div class="text-input-type edit unit t1">
 									<label class="sr-only">설치 용량 (KW)</label>
 									<input type="text" id="설치_용량_KW" class="onlyNum"><span>kW</span>
@@ -2342,8 +2342,10 @@
 								<a href="javascript:addRow('addList_module_angle');" class="btn-add fr">추가</a>
 							</th>
 							<td id="addList_module_angle" class="entity">
-								<div class="text-input-type edit unit t1 fl">
-									<input type="text" id="모듈_설치_각도[index]" name="모듈_설치_각도[index]" class="onlyNum">&ensp;&deg;
+								<div class="group-type flex-start">	
+									<div class="text-input-type edit unit t1 fl">
+										<input type="text" id="모듈_설치_각도[index]" name="모듈_설치_각도[index]" class="onlyNum">&ensp;&deg;
+									</div>
 									<button type="button" class="btn-close hidden" onclick="$(this).parent().remove()">삭제</button>
 								</div>
 							</td>
@@ -2364,7 +2366,7 @@
 							<th>인버터 제조사 / 모델<a href="javascript:addRow('addList_inverter');" class="btn-add fr">추가</a></th>
 							<td id="addList_inverter" class="entity">
 								<div class="flex-start">
-									<fieldset class="group-type">
+									<fieldset class="group-type flex-start">
 										<legend sr-only="인버터 제조사/모델"></legend>
 										<div class="text-input-type edit">
 											<input type="text" id="인버터_제조사[index]" name="인버터_제조사[index]" placeholder="제조사">
@@ -2378,16 +2380,15 @@
 							</td>
 							<th>인버터 용량 / 대수<a href="javascript:addRow('addList_inverter_vol');" class="btn-add fr">추가</a></th>
 							<td id="addList_inverter_vol" class="entity">
-								<fieldset class="group-type">
+								<fieldset class="group-type flex-start">
 									<legend sr-only="인버터 용량 / 대수"></legend>
 									<div class="text-input-type edit unit t1">
 										<input type="text" id="인버터_용량[index]" name="인버터_용량[index]" class="onlyNum"><span>kW</span>
 									</div>
 									<div class="text-input-type edit unit t1">
 										<input type="text" id="인버터_용량_대수[index]" name="인버터_용량_대수[index]" class="onlyNum"><span>대</span>
-
-										<button type="button" class="btn-close hidden" onclick="$(this).parents('.group-type').remove();">삭제</button>
 									</div>
+									<button type="button" class="btn-close hidden" onclick="$(this).parents('.group-type').remove();">삭제</button>
 								</fieldset>
 							</td>
 						</tr>
@@ -2406,7 +2407,7 @@
 							</td>
 							<th>접속반 채널 / 대수<a href="javascript:addRow('addList_connection');" class="btn-add fr">추가</a></th>
 							<td id="addList_connection" class="entity">
-								<div class="group-type">
+								<div class="group-type flex-start">
 									<div class="text-input-type edit unit t1">
 										<input type="text" id="접속반_채널[index]" name="접속반_채널[index]" class="onlyNum"><span>Ch</span>
 									</div>
@@ -2419,7 +2420,7 @@
 						</tr>
 						<tr>
 							<th>접속반 용량 / 통신방식</th>
-							<td class="group-type">
+							<td class="group-type flex-start">
 								<div class="text-input-type edit unit t1">
 									<input type="text" id="접속반_용량" name="접속반_용량" class="onlyNum">
 									<span>kW</span>
@@ -2458,7 +2459,7 @@
 							</td>
 							<th>수배전반 제조사 / 모델<a href="javascript:addRow('addList_switch_gear');" class="btn-add fr">추가</a></th>
 							<td id="addList_switch_gear" class="entity">
-								<div class="group-type">
+								<div class="group-type flex-start">
 									<div class="text-input-type edit">
 										<input type="text" id="수배전반_제조사[index]" name="수배전반_제조사[index]" placeholder="제조사">
 									</div>
@@ -2515,7 +2516,7 @@
 						</tr>
 						<tr>
 							<th>기준 단가</th>
-							<td class="group-type">
+							<td class="group-type flex-start">
 								<div class="dropdown placeholder edit" id="기준_단가">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown">기준 단가 선택<span class="caret"></span></button>
 									<ul class="dropdown-menu" role="menu">
@@ -2568,7 +2569,7 @@
 								<div class="text-input-type edit unit t1"><input type="text" id="추가_보수_백분율" name="추가_보수_백분율" class="onlyNum"><span>%</span></div>
 							</td>
 							<th>전력요금 종별</th>
-							<td class="group-type">
+							<td class="group-type flex-start">
 								<div class="text-input-type edit">
 									<input type="text" id="전력요금_종별_요금제" placeholder="요금제">
 								</div>
