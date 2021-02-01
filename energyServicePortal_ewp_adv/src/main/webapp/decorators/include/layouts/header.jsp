@@ -536,45 +536,49 @@
 									<ul class="overflow-list">
 										<c:set var="divisionLocation" value="${sessionScope.divisionLocation}"/>
 										<c:forEach var="loc" items="${location}" varStatus="stat">
-											<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx') or (fn:contains(sessionScope.userInfo.oid, 'testkpx') and loc.value.code eq 'kr')}">
-												<li>
-													<a href="#" class="group-title">
-														<c:choose>
-															<c:when test="${cookieLang eq 'KO'}">
-																${loc.value.name.kr}
-															</c:when>
-															<c:otherwise>
-																${loc.value.name.en}
-															</c:otherwise>
-														</c:choose>
-													</a>
-													<ul>
-														<c:forEach var="country" items="${loc.value.locations}" varStatus="countryStat">
-															<c:set var="choice" value="false" />
-															<c:if test="${fn:length(divisionLocation) > 0}">
-																<c:forEach var="selLoc" items="${divisionLocation}">
-																	<c:if test="${country.value.code eq selLoc}">
-																		<c:set var="choice" value="true" />
+											<c:if test="${!empty loc.value.display && loc.value.display eq true}">
+												<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx') or (fn:contains(sessionScope.userInfo.oid, 'testkpx') and loc.value.code eq 'kr')}">
+													<li>
+														<a href="#" class="group-title">
+															<c:choose>
+																<c:when test="${cookieLang eq 'KO'}">
+																	${loc.value.name.kr}
+																</c:when>
+																<c:otherwise>
+																	${loc.value.name.en}
+																</c:otherwise>
+															</c:choose>
+														</a>
+														<ul>
+															<c:forEach var="country" items="${loc.value.locations}" varStatus="countryStat">
+																<c:if test="${!empty country.value.display && country.value.display eq true}">
+																	<c:set var="choice" value="false" />
+																	<c:if test="${fn:length(divisionLocation) > 0}">
+																		<c:forEach var="selLoc" items="${divisionLocation}">
+																			<c:if test="${country.value.code eq selLoc}">
+																				<c:set var="choice" value="true" />
+																			</c:if>
+																		</c:forEach>
 																	</c:if>
-																</c:forEach>
-															</c:if>
 
-															<li onclick="toggleMenu(this)">
-																<input type="checkbox" name="divisionLocation" id="lo_${loc.value.code}_${countryStat.index}" value="${country.value.code}" <c:if test="${choice eq 'true'}">checked</c:if>>
-																<label for="lo_${loc.value.code}_${countryStat.index}" class="sub-item <c:if test="${choice eq 'true'}">on</c:if>">
-																	<c:choose>
-																		<c:when test="${cookieLang eq 'KO'}">
-																			${country.value.name.kr}
-																		</c:when>
-																		<c:otherwise>
-																			${country.value.name.en}
-																		</c:otherwise>
-																	</c:choose>
-																</label>
-															</li>
-														</c:forEach>
-													</ul>
-												</li>
+																	<li onclick="toggleMenu(this)">
+																		<input type="checkbox" name="divisionLocation" id="lo_${loc.value.code}_${countryStat.index}" value="${country.value.code}" <c:if test="${choice eq 'true'}">checked</c:if>>
+																		<label for="lo_${loc.value.code}_${countryStat.index}" class="sub-item <c:if test="${choice eq 'true'}">on</c:if>">
+																			<c:choose>
+																				<c:when test="${cookieLang eq 'KO'}">
+																					${country.value.name.kr}
+																				</c:when>
+																				<c:otherwise>
+																					${country.value.name.en}
+																				</c:otherwise>
+																			</c:choose>
+																		</label>
+																	</li>
+																</c:if>
+															</c:forEach>
+														</ul>
+													</li>
+												</c:if>
 											</c:if>
 										</c:forEach>
 									</ul>

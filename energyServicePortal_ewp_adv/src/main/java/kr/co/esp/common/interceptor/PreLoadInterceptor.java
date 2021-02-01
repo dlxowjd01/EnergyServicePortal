@@ -9,6 +9,7 @@ import org.codehaus.jettison.json.JSONObject;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import javax.json.JsonObject;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -418,6 +419,39 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			Map<String, Object> typeProperties = get("/config/view/properties2", mode, parameters, token); //그룹화되어있는 사이트 리스트 정보
 			if (200 == (int) typeProperties.get("code")) {
 				Map<String, Object> typeMap = (Map<String, Object>) typeProperties.get("data");
+
+				JSONArray jsonSiteList = (JSONArray) request.getAttribute("siteList");
+
+				for (int i = 0; i < jsonSiteList.length(); i++) {
+					JSONObject site = (JSONObject) jsonSiteList.get(i);
+					String location = (String) site.get("location");
+					int resourceType = (Integer) site.get("resource_type");
+
+					LinkedHashMap<String, Object> locationMap = (LinkedHashMap<String, Object>) typeMap.get("location");
+					for (Map.Entry<String, Object> country : locationMap.entrySet()) {
+						LinkedHashMap<String, Object> countryValue = (LinkedHashMap<String, Object>) country.getValue();
+						LinkedHashMap<String, Object> countryMap = (LinkedHashMap<String, Object>) countryValue.get("locations");
+
+						for (Map.Entry<String, Object> state : countryMap.entrySet()) {
+							LinkedHashMap<String, Object> stateValue = (LinkedHashMap<String, Object>) state.getValue();
+							String locationCode = (String) stateValue.get("code");
+
+							if (locationCode.equals(location)) {
+								stateValue.put("display", true);
+								countryValue.put("display", true);
+							}
+						}
+					}
+
+					LinkedHashMap<String, Object> resourceMap = (LinkedHashMap<String, Object>) typeMap.get("resource");
+					for (Map.Entry<String, Object> resource : resourceMap.entrySet()) {
+						LinkedHashMap<String, Object> resourceValue = (LinkedHashMap<String, Object>) resource.getValue();
+						int resourceCode = Integer.parseInt((String) resourceValue.get("code"));
+						if (resourceCode == resourceType) {
+							resourceValue.put("display", true);
+						}
+					}
+				}
 
 				request.setAttribute("resource", typeMap.get("resource"));
 				request.setAttribute("location", typeMap.get("location"));
