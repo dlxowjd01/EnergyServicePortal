@@ -487,7 +487,7 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 				// inside: true,
 				style: {
 					color: 'var(--white87)',
-					fontSize: '11px',
+					fontSize: '9px',
 					fontWeight: 400,
 					textOutline: 0,
 					textAlign: 'right',
