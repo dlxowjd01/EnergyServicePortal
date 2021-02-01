@@ -117,13 +117,13 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 	tooltip: {
 		formatter: function () {
 			return this.points.reduce(function (s, point) {
-				if(point.y !== 0){
-					let suffix = point.series.userOptions.tooltip.valueSuffix === "천원" ? "만원" : point.series.userOptions.tooltip.valueSuffix;
-					return s + '<br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + numberComma(Math.round(point.y / 10)) + ' ' + suffix;
+				if(point.y !== 0) {
+					let suffix = point.series.userOptions.tooltip.valueSuffix;
+					return s + '<br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + numberComma(Math.round(point.y)) + ' ' + suffix;
 				} else {
 					return s
 				}
-			}, `<span style="display:flex;"><b>${langStatus === `KO` ? this.x+'월' : monthEN[this.x - 1]}</b></span>`);
+			}, `<span style="display:flex;"><b>${langStatus === `KO` ? this.x + '월' : monthEN[this.x - 1]}</b></span>`);
 		},
 		shared: true,
 		useHTML: true,
@@ -253,8 +253,8 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		labels: {
 			formatter: function () {
 				const suffix = this.chart.yAxis[0].userOptions.title.text;
-				const yAxisValue = displayNumberFixedUnit(this.value / 1000, 'kWh', suffix, 1);
-				return Math.floor(yAxisValue[0])+"K";
+				const yAxisValue = displayNumberFixedUnit(this.value, 'kWh', suffix, 1);
+				return yAxisValue[0];
 			},
 			style: {
 				color: 'var(--grey)',
@@ -294,7 +294,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 		hideDelay: 1,
 		formatter: function () {
 			return this.points.reduce(function (s, point) {
-				if(point.y !== 0){
+				if(point.y !== 0) {
 					let suffix = point.series.userOptions.tooltip.valueSuffix;
 					return s + ' <br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + numberComma(Math.round(point.y)) + ' ' + suffix;
 				} else {

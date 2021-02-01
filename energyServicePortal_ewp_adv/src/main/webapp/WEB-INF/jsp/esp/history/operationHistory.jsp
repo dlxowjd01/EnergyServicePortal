@@ -770,16 +770,18 @@
 				siteGrp.append('<ul>');
 
 				deviceList.sortOn('name');
+				let deviceProp = new Array();
 				$.each(deviceList, function (i, el) {
 					if (el.sid == site.siteId) {
 						$.each(typeArray, function (k, elm) {
 							if (elm == el.device_type) {
+								deviceProp.push(el);
 								let str = `<li>
-								<a href="javascript:void(0);" data-value="${'${el.did}'}" tabindex="-1">
-									<input type="checkbox" id="device_${'${el.did}'}" name="device" value="${'${el.did}'}" data-sid="${'${el.sid}'}" data-type="${'${el.device_type}'}">
-									<label for="device_${'${el.did}'}">${'${el.name}'}</label>
-								</a>
-							</li>`
+												<a href="javascript:void(0);" data-value="${'${el.did}'}" tabindex="-1">
+													<input type="checkbox" id="device_${'${el.did}'}" name="device" value="${'${el.did}'}" data-sid="${'${el.sid}'}" data-type="${'${el.device_type}'}">
+													<label for="device_${'${el.did}'}">${'${el.name}'}</label>
+												</a>
+											</li>`
 								siteGrp.find('ul').append(str);
 							}
 						});
@@ -803,6 +805,7 @@
 	}
 
 	const setTypeList = function (obj) {
+		let columnList = new Array();
 		let type = $('#' + obj + ' button').data('type');
 		let idNum = '';
 		if (obj.length > 8) {
@@ -812,13 +815,19 @@
 		$('#' + 'columnLi' + idNum).prev().html($('#' + 'columnLi' + idNum).prev().data('name') + '<span class="caret"></span>');
 		$.map(featureProperties, function (value, key) {
 			if (type == key) {
-				setMakeList(value, 'columnLi' + idNum, {
-					"dataFunction": {
-						"INDEX": getNumberIndex
-					}
-				}); //list생성
+				columnList = value;
 			}
 		});
+
+		if (columnList.length === 0) {
+			$('#' + 'columnLi' + idNum).empty().append(`<li class="no-data">선택 황목 없음</li>`);
+		} else {
+			setMakeList(columnList, 'columnLi' + idNum, {
+				"dataFunction": {
+					"INDEX": getNumberIndex
+				}
+			}); //list생성
+		}
 	}
 
 	//선택된 디바이스 유형별로 테이블을 생성한다.

@@ -396,6 +396,7 @@ const monthlyChartDraw = async () => {
 			if (index === 0) {
 				if (!isEmpty(apiData)) {
 					const siteEnergyData = apiData['data'];
+					console.log(siteEnergyData);
 					if (!isEmpty(siteEnergyData)) {
 						Object.entries(siteEnergyData).forEach(([siteId, siteEnergyItem]) => {
 							if (!isEmpty(siteEnergyItem)) {
@@ -448,7 +449,7 @@ const monthlyChartDraw = async () => {
 		chargeList.forEach((e, index) => { chargeList[index] = Math.floor(e / 1000); });
 		dischargeList.forEach((e, index) => { dischargeList[index] = Math.floor(e / 1000); });
 		pvList.forEach((e, index) => { pvList[index] = Math.floor(e / 1000); });
-		payList.forEach((e, index) => { payList[index] = Math.floor(e / 1000); });
+		payList.forEach((e, index) => { payList[index] = Math.floor(e / 10000); });
 
 		Object.entries(sumObj).forEach(([key, data]) => {
 			sumObj[key] = Math.floor(data / 1000);
@@ -511,7 +512,7 @@ const monthlyChartDraw = async () => {
 			if(el.name == i18nManager.tr("dashboard_discharge") && emptyObj.disChargeData === 0){
 				chartSeries.showInLegend = false
 			}
-			chartSeries.tooltip = {valueSuffix: el.suffix}
+			chartSeries.tooltip = {valueSuffix: (/원/.test(el.suffix)) ? '만원' : el.suffix}
 			monthlyChart.addSeries(chartSeries, false);
 		});
 
@@ -1264,20 +1265,20 @@ const searchSite = async function () {
 						site['status'] = '이상';
 						site['statusClass'] = 'status-error';
 					}
-				
-					site['inverterCount'] = inverterCount //사이트에 속한 인버터 갯수.
-					site['operation'] = operation; //사이트 상태 정보.
-					site['capacity'] = capacity;   //사이트에 속한 인버터 설비 용량 정보.
-					site['capacityView'] = (isEmpty(capacity) || capacity === '-') ? '-' : displayNumberFixedUnit(capacity, 'W', 'kW', 0)[0];   //사이트에 속한 인버터 설비 용량 정보.
-					site['activePower'] = activePower;   //사이트에 속한 인버터.
-					site['activePowerView'] =(isEmpty(activePower) || activePower === '-') ? '-' : displayNumberFixedUnit(activePower, 'W', 'kW', 0)[0];   //사이트에 속한 인버터.
-					site['irradiationPoa'] = irradiationPoa;   //사이트에 속한 인버터 설비 용량 정보.
-					refineList.push(site);
 				}
 			} else {
 				site['status'] = 'null';
 				site['statusClass'] = 'status-null';
 			}
+
+			site['inverterCount'] = inverterCount //사이트에 속한 인버터 갯수.
+			site['operation'] = operation; //사이트 상태 정보.
+			site['capacity'] = capacity;   //사이트에 속한 인버터 설비 용량 정보.
+			site['capacityView'] = (isEmpty(capacity) || capacity === '-') ? '-' : displayNumberFixedUnit(capacity, 'W', 'kW', 0)[0];   //사이트에 속한 인버터 설비 용량 정보.
+			site['activePower'] = activePower;   //사이트에 속한 인버터.
+			site['activePowerView'] =(isEmpty(activePower) || activePower === '-') ? '-' : displayNumberFixedUnit(activePower, 'W', 'kW', 0)[0];   //사이트에 속한 인버터.
+			site['irradiationPoa'] = irradiationPoa;   //사이트에 속한 인버터 설비 용량 정보.
+			refineList.push(site);
 		});
 
 		if (refineList.length > 0) {
@@ -1509,7 +1510,7 @@ const searchSite = async function () {
 		
 		document.getElementById('loadingCircleDashboard').style.display =  'none';
 
-		if (!isEmpty(apiDatas[apiHost + '/status/raw/site']) && !isEmpty(apiDatas[apiHost + '/energy/now/sites?interval=day'])) {
+		if (apiDatas[apiHost + '/status/raw/site'] !== undefined && apiDatas[apiHost + '/energy/now/sites?interval=day']  !== undefined) {
 			document.getElementById('miniLoadingCircle').style.display = 'none';
 		}
 
