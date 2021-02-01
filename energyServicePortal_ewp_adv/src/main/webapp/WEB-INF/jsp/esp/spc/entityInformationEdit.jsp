@@ -4,7 +4,7 @@
 	const countryList = new Array();
 	const sidoList = new Array();
 
-	$(function () {
+	$(function() {
 		fnLocation();
 
 		$('.tag-box-entity .tag-type').on('click', function() {
@@ -313,7 +313,7 @@
 				|| (addFileList09.length > 0) || (addFileList10.length > 0)) {
 			$('#myTabs').append(`
 				<li role="presentation" class="entity-tab">
-					<a href="#attachementInfo" id="tabAttachementInfo" role="tab" data-toggle="tab" aria-controls="attachementInfo" aria-expanded="false" class="fl">
+					<a href="#attachementInfo" id="tabAttachementInfo" role="tab" data-toggle="tab" aria-controls="attachementInfo" aria-expanded="false" class="fl" onclick="setFileList()">
 						기타 첨부파일
 					</a>
 					<button type="button" class="btn-close fr"></button>
@@ -1228,6 +1228,16 @@
 
 	function goMoveList(){
 		location.href = '/spc/entityInformation.do';
+	}
+
+	const setFileList = () => {
+		$("#attachementInfo tr > td > .file_list > div").each((ix, el) => {
+			if ($(el).html() !== '<div class="no-data"><fmt:message key="smain.noQueryData"></fmt:message></div>') {
+				$(el).siblings("ul").remove();
+				console.log("DEL")
+			}
+			console.log($(el).html())
+		});
 	}
 
 </script>
@@ -2944,16 +2954,15 @@
 							<tr>
 								<th>수배전반</th>
 								<td class="flex-start-td">
-									<div id="fileList02">
-										<p class="text-file">
-											<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-											<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList02', [INDEX]);"></button>
-										</p>
-									</div>
-
 									<input type="file" id="spc_file_02" class="hidden" name="spc_file_02" accept=".gif, .jpg, .png" multiple="">
 									<label for="spc_file_02" class="btn file-upload">파일 선택</label>
 									<div class="file_list ml-16">
+										<div id="fileList02">
+											<p class="text-file">
+												<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+												<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList02', [INDEX]);"></button>
+											</p>
+										</div>
 										<ul data-basic="No Files Selected">
 											<li>No Files Selected</li>
 										</ul>
@@ -2965,16 +2974,15 @@
 							<tr>
 								<th>케이블</th>
 								<td class="flex-start-td">
-									<div id="fileList03">
-										<p class="text-file">
-											<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-											<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList03', [INDEX]);"></button>
-										</p>
-									</div>
-
 									<input type="file" id="spc_file_03" class="hidden" name="spc_file_03" accept=".gif, .jpg, .png" multiple="">
 									<label for="spc_file_03" class="btn file-upload">파일 선택</label>
 									<div class="file_list ml-16">
+										<div id="fileList03">
+											<p class="text-file">
+												<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+												<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList03', [INDEX]);"></button>
+											</p>
+										</div>
 										<ul data-basic="No Files Selected">
 											<li>No Files Selected</li>
 										</ul>
@@ -2986,16 +2994,15 @@
 							<tr>
 								<th>모듈</th>
 								<td class="flex-start-td">
-									<div id="fileList04">
-										<p class="text-file">
-											<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-											<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList04', [INDEX]);"></button>
-										</p>
-									</div>
-
 									<input type="file" id="spc_file_04" class="hidden" name="spc_file_04" accept=".gif, .jpg, .png" multiple="">
 									<label for="spc_file_04" class="btn file-upload">파일 선택</label>
 									<div class="file_list ml-16">
+										<div id="fileList04">
+											<p class="text-file">
+												<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+												<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList04', [INDEX]);"></button>
+											</p>
+										</div>
 										<ul data-basic="No Files Selected">
 											<li>No Files Selected</li>
 										</ul>
@@ -3007,16 +3014,15 @@
 							<tr>
 								<th>인버터</th>
 								<td class="flex-start-td">
-									<div id="fileList05">
-										<p class="text-file">
-											<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-											<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList05', [INDEX]);"></button>
-										</p>
-									</div>
-
 									<input type="file" id="spc_file_05" class="hidden" name="spc_file_05" accept=".gif, .jpg, .png" multiple="">
 									<label for="spc_file_05" class="btn file-upload">파일 선택</label>
 									<div class="file_list ml-16">
+										<div id="fileList05">
+											<p class="text-file">
+												<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+												<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList05', [INDEX]);"></button>
+											</p>
+										</div>
 										<ul data-basic="No Files Selected">
 											<li>No Files Selected</li>
 										</ul>
@@ -3028,16 +3034,15 @@
 							<tr>
 								<th>결선도</th>
 								<td class="flex-start-td">
-									<div id="fileList06">
-										<p class="text-file">
-											<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-											<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList06', [INDEX]);"></button>
-										</p>
-									</div>
-
 									<input type="file" id="spc_file_06" class="hidden" name="spc_file_06" accept=".gif, .jpg, .png" multiple="">
 									<label for="spc_file_06" class="btn file-upload">파일 선택</label>
 									<div class="file_list ml-16">
+										<div id="fileList06">
+											<p class="text-file">
+												<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+												<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList06', [INDEX]);"></button>
+											</p>
+										</div>
 										<ul data-basic="No Files Selected">
 											<li>No Files Selected</li>
 										</ul>
@@ -3049,16 +3054,15 @@
 							<tr>
 								<th>토목</th>
 								<td class="flex-start-td">
-									<div id="fileList07">
-										<p class="text-file">
-											<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-											<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList07', [INDEX]);"></button>
-										</p>
-									</div>
-
 									<input type="file" id="spc_file_07" class="hidden" name="spc_file_07" accept=".gif, .jpg, .png" multiple="">
 									<label for="spc_file_07" class="btn file-upload">파일 선택</label>
 									<div class="file_list ml-16">
+										<div id="fileList07">
+											<p class="text-file">
+												<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+												<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList07', [INDEX]);"></button>
+											</p>
+										</div>
 										<ul data-basic="No Files Selected">
 											<li>No Files Selected</li>
 										</ul>
@@ -3070,16 +3074,15 @@
 							<tr>
 								<th>구조물</th>
 								<td class="flex-start-td">
-									<div id="fileList08">
-										<p class="text-file">
-											<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-											<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList08', [INDEX]);"></button>
-										</p>
-									</div>
-
 									<input type="file" id="spc_file_08" class="hidden" name="spc_file_08" accept=".gif, .jpg, .png" multiple="">
 									<label for="spc_file_08" class="btn file-upload">파일 선택</label>
 									<div class="file_list ml-16">
+										<div id="fileList08">
+											<p class="text-file">
+												<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+												<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList08', [INDEX]);"></button>
+											</p>
+										</div>
 										<ul data-basic="No Files Selected">
 											<li>No Files Selected</li>
 										</ul>
@@ -3091,16 +3094,15 @@
 							<tr>
 								<th>접속반</th>
 								<td class="flex-start-td">
-									<div id="fileList09">
-										<p class="text-file">
-											<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-											<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList09', [INDEX]);"></button>
-										</p>
-									</div>
-
 									<input type="file" id="spc_file_09" class="hidden" name="spc_file_09" accept=".gif, .jpg, .png" multiple="">
 									<label for="spc_file_09" class="btn file-upload">파일 선택</label>
 									<div class="file_list ml-16">
+										<div id="fileList09">
+											<p class="text-file">
+												<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+												<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList09', [INDEX]);"></button>
+											</p>
+										</div>
 										<ul data-basic="No Files Selected">
 											<li>No Files Selected</li>
 										</ul>
@@ -3112,16 +3114,15 @@
 							<tr>
 								<th>기타설비</th>
 								<td class="flex-start-td">
-									<div id="fileList10">
-										<p class="text-file">
-											<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
-											<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList10', [INDEX]);"></button>
-										</p>
-									</div>
-
 									<input type="file" id="spc_file_10" class="hidden" name="spc_file_10" accept=".gif, .jpg, .png" multiple="">
 									<label for="spc_file_10" class="btn file-upload">파일 선택</label>
 									<div class="file_list ml-16">
+										<div id="fileList10">
+											<p class="text-file">
+												<a href="${apiHost}/files/download/[fieldname]?oid=${sessionScope.userInfo.oid}&orgFilename=[originalname]">[originalname]</a>
+												<button type="button" class="icon-trash" onclick="setRemoveFileList('fileList10', [INDEX]);"></button>
+											</p>
+										</div>
 										<ul data-basic="No Files Selected">
 											<li>No Files Selected</li>
 										</ul>
