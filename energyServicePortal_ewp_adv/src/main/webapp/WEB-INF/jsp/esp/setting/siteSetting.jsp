@@ -1305,7 +1305,8 @@
 							_: "",
 							1: ""
 						}
-					}
+					},
+					"zeroRecords": "<fmt:message key='siteSetting.noSearchData' />",
 				},
 				initComplete: function(settings, json ){
 					let str = `<div id="btnGroup" class="right-end"><!--
@@ -3498,6 +3499,7 @@
 						// "sPrevious": "",
 						// "sNext": ""
 					},
+					"zeroRecords" : "<fmt:message key='siteSetting.noSearchData' />",
 					"info": "_PAGE_ - _PAGES_ " + " / <fmt:message key='table.totalCase.start' /> _TOTAL_ <fmt:message key='table.totalCase.end' />",
 				},
 				initComplete: function(){

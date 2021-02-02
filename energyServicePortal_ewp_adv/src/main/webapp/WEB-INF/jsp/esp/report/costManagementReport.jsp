@@ -439,6 +439,8 @@
         let data = setAreaParamData('reportModal', 'dropdown'),
             report_variable = new Array();
 
+        const [sd, ed] = [$('#report_data_start').monthpicker('getDate'), $('#report_data_end').monthpicker('getDate')];
+
         if (isEmpty($('#spc_id button').data('value'))) {
             errorMsg('<fmt:message key="yieldReport.error.7" />');
             return;
@@ -456,10 +458,17 @@
             }
         }
 
-        if ($('#report_data_start').monthpicker('getDate') === null || $('#report_data_end').monthpicker('getDate') === null) {
+        if (sd === null || ed === null) {
             errorMsg('<fmt:message key="yieldReport.error.10" />');
             return;
         }
+
+        if (sd > ed) {
+            errorMsg("시작일이 종료일보다 큽니다.");
+            return;
+        }
+
+
 
         data['generated_by'] = loginId;
         data['updated_by'] = loginId;
