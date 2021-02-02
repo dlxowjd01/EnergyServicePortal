@@ -204,11 +204,11 @@
 						<div class="sa-select">
 							<h2 class="tx-tit"><fmt:message key="alarm.table.isChecked" /></h2>
 							<div class="dropdown short" id="alarmstatus">	
-								<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="<fmt:message key='default.dataNameSelect' />"><fmt:message key="alarm.search.confirm.N" /><span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="<fmt:message key='default.dataNameSelect' />"><fmt:message key="alertshistory.1.all" /><span class="caret"></span></button>
 								<ul class="dropdown-menu chk-type" role="menu" id="alstatus">
 									<li>
 										<a href="javascript:void(0)" tabindex="-1">
-											<input type="checkbox" id="alstatus1" name="confirm">
+											<input type="checkbox" id="alstatus1" name="confirm" checked>
 											<label for="alstatus1"><fmt:message key='alarm.search.confirm.Y' /></label>
 										</a>
 									</li>

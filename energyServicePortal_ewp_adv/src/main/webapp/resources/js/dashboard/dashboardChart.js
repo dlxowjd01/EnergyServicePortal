@@ -247,7 +247,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 			style: {
 				color: 'var(--grey)',
 				fontSize: '12px',
-				transform: 'translate(-40px, 0px)'
+				transform: 'translate(-28px, 0px)'
 			}
 		},
 		labels: {
