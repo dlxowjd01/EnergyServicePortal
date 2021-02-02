@@ -136,8 +136,11 @@
 	});
 
 	function getDataList(page, n, sort) {
+		console.log("search!")
 		const write_date_from = $('#write_date_from').datepicker('getDate')
 			, write_date_to = $('#write_date_to').datepicker('getDate')
+
+		console.log(write_date_from, write_date_to)
 
 		if ((write_date_from != null && write_date_to == null) || (write_date_from == null && write_date_to != null)) {
 			$('#dateWarning').removeClass('hidden');
@@ -166,7 +169,9 @@
 				return a['workDate'] < b['workDate'] ? 1 : a['workDate'] > b['workDate'] ? -1 : 0;
 			});
 
-			// reportTable.clear();
+			console.log(refineList);
+
+			reportTable.clear();
 			reportTable.rows.add(refineList).draw();
 		}).fail((jqXHR, textStatus, errorThrown) => {
 			reportTable.clear().draw();
@@ -278,9 +283,9 @@
 		<div class="flex-group">
 			<span class="tx-tit"><fmt:message key="workreportmain.1.dateOfIssue" /></span>
 			<div class="sel-calendar dateField">
-				<input type="text" id="write_date_from" class="sel fromDate" value="" autocomplete="off" readonly />
+				<input type="text" id="write_date_from" class="sel fromDate" value="" autocomplete="off" placeholder="시작일" readonly />
 				<em></em>
-				<input type="text" id="write_date_to" class="sel toDate" value="" autocomplete="off" readonly />
+				<input type="text" id="write_date_to" class="sel toDate" value="" autocomplete="off" placeholder="종료일" readonly />
 			</div>
 			<small id="dateWarning" class="hidden warning">시작일과 종료일을 모두 입력해 주세요.</small>
 		</div>
