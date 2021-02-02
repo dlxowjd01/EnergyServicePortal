@@ -10516,6 +10516,10 @@ table.table-footer tfoot td.light {
 
 /* Responsive - Tablet */
 @media (max-width: 768px) {
+	#deviceStateTypeList > .row {
+		height: auto!important;
+	}
+	
 	.tablet-br {
 		display: block;
 	}
@@ -11098,6 +11102,15 @@ table.table-footer tfoot td.light {
 
 #addList_module_angle .group-type > div {
 	width: 300px!important;
+}
+
+#deviceStateTypeList > .row {
+	height: 496px;
+}
+
+#deviceStateTypeList > .row > div,
+#deviceStateTypeList > .row > div > .equip-card {
+	height: 100%;
 }
 
 

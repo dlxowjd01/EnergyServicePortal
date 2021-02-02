@@ -908,6 +908,7 @@
 					<button type="button" class="dropdown-toggle w7" data-toggle="dropdown"><fmt:message key="revenuereport.1.2020" /><span class="caret"></span></button>
 					<ul class="dropdown-menu" role="menu">
 						<li data-value=""><a href="javascript:void(0);"><fmt:message key="revenuereport.1.all" /></a></li>
+						<li data-value="2021"><a href="javascript:void(0);"><fmt:message key="revenuereport.1.2021" /></a></li>
 						<li data-value="2020"><a href="javascript:void(0);"><fmt:message key="revenuereport.1.2020" /></a></li>
 						<li data-value="2019"><a href="javascript:void(0);"><fmt:message key="revenuereport.1.2019" /></a></li>
 						<li data-value="2018"><a href="javascript:void(0);"><fmt:message key="revenuereport.1.2018" /></a></li>
