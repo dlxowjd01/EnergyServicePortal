@@ -1234,9 +1234,7 @@
 		$("#attachementInfo tr > td > .file_list > div").each((ix, el) => {
 			if ($(el).html() !== '<div class="no-data"><fmt:message key="smain.noQueryData"></fmt:message></div>') {
 				$(el).siblings("ul").remove();
-				console.log("DEL")
 			}
-			console.log($(el).html())
 		});
 	}
 

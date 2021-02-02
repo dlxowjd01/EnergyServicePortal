@@ -390,7 +390,7 @@
 
         } else if ($selector === 'spc_id') {
             const dropdownValue = $('#' + $selector + ' button').data('value');
-            $('#site_id ul').empty();
+            $('#site_id ul').html("");
 
             $.ajax({
                 url: apiHost + '/spcs/' + dropdownValue,
@@ -400,13 +400,14 @@
                     includeGens: true
                 },
                 success: (data) => {
+                    // $('#site_id ul').html("");
                     const siteList = data.data[0]['spcGens'];
-                    $('#site_id ul').append(`<li data-value="all"><a href="javascript:void(0);">전체</a></li>`);
                     if (!isEmpty(data) && !isEmpty(data.data[0]['spcGens'])) {
                         siteList.forEach(gen => {
                             let liStr = `<li data-value="${'${gen[\'gen_id\']}'}"><a href="javascript:void(0);">${'${gen[\'name\']}'}</a></li>`;
                             $('#site_id ul').append(liStr);
                         });
+                        $('#site_id ul').prepend(`<li data-value="all"><a href="javascript:void(0);">전체</a></li>`);
                     } else {
                         $('#site_id ul').append(`<li><a href="javascript:void(0);"><fmt:message key="yieldReport.error.19" /></a></li>`);
                     }
