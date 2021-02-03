@@ -1,6 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
 
+<style type="text/css">
+
+</style>
+
 <form id="linkSiteForm" name="linkSiteForm" method="post"></form>
 <div class="container-fluid">
 	<div class="row header-wrapper">
@@ -91,6 +95,8 @@
 					<h1 class="stit" id="calendarDate"></h1>
 				</div>
 				<div class="calendar-wrap">
+					<a href="javascript:void(0);" class="right hidden"><span><p class="hidden">다음달</p></span></a>
+					<a href="javascript:void(0);" class="left"><span><p class="hidden">이전달</p></span></a>
 					<table class="calendar">
 						<thead>
 							<tr>
@@ -691,17 +697,47 @@
 			clearInterval(refreshQuarterInterval);
 		});
 
+
+		$('a.right').on('click', function() {
+			buildCalendar(Number($('#calendarMonth').data('addMonth')) + 1);
+			getWeatherCalendarEnergyData();
+		});
+
+		$('a.left').on('click', function() {
+			buildCalendar(Number($('#calendarMonth').data('addMonth')) - 1);
+			getWeatherCalendarEnergyData();
+		});
 	});
 
-	const buildCalendar = function () { //현재 달 달력 만들기
+	const buildCalendar = function (addMonth) { //현재 달 달력 만들기
 		let today = new Date();
 		let doMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-		let lastDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+		let lastDate = new Date(doMonth.getFullYear(), doMonth.getMonth() + 1, 0);
+
+		if (addMonth === undefined) {
+			$('#calendarMonth').data('addMonth', 0);
+			$('#calendarDate').html('<em>' + doMonth.format('yyyy.MM') + '.01' + ' ~ ' + (new Date()).format('yyyy.MM.dd') + '</em>');
+		} else {
+			$('#calendarMonth').data('addMonth', addMonth);
+			doMonth = new Date(today.getFullYear(), today.getMonth() + addMonth, 1);
+			lastDate = new Date(doMonth.getFullYear(), doMonth.getMonth() + 1, 0);
+			$('#calendarDate').html('<em>' + doMonth.format('yyyy.MM') + '.01' + ' ~ ' + lastDate.format('yyyy.MM.dd') + '</em>');
+
+			if (addMonth === 0) {
+				$('a.right').addClass('hidden');
+			} else {
+				$('a.right').removeClass('hidden');
+			}
+
+			if (addMonth === -2) {
+				$('a.left').addClass('hidden');
+			} else {
+				$('a.left').removeClass('hidden');
+			}
+		}
+
 		let calendar = document.getElementById('calendarMonth');
-
-		$('#calendarDate').html('<em>' + today.getFullYear() + '.01.01' + ' ~ ' + (new Date()).format('yyyy.MM.dd') + '</em>')
-
-		while (calendar.rows.length > 1) {
+		while (calendar.rows.length > 0) {
 			calendar.deleteRow(calendar.rows.length - 1);
 		}
 
@@ -4437,6 +4473,16 @@
 
 	function getWeatherCalendarEnergyData() {
 		const formData = getSiteMainSchCollection('month');
+		const addMonth = $('#calendarMonth').data('addMonth');
+
+		if (addMonth !== undefined && addMonth !== 0) {
+			const today = new Date();
+			const doMonth = new Date(today.getFullYear(), today.getMonth() + addMonth, 1);
+			const lastDate = new Date(doMonth.getFullYear(), doMonth.getMonth() + 1, 0);
+
+			formData.startTime = doMonth.format('yyyyMMdd') + '000000';
+			formData.endTime = lastDate.format('yyyyMMdd') + '235959';
+		}
 
 		const dailyEnergy = {
 			url: apiHost + apiEnergySite,

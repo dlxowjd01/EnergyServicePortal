@@ -1217,6 +1217,38 @@ table tbody td .dropdown-menu {
 	display: none !important;
 }
 
+a.right,
+a.left {
+	padding-top: 60px;
+}
+a.right span {
+	position: absolute;
+	top: 76%;
+	right: 4.5%;
+	width: 24px;
+	height: 24px;
+	margin-left: -12px;
+	border-left: 1px solid #fff;
+	border-bottom: 1px solid #fff;
+	-webkit-transform: rotate(-140deg);
+	transform: rotate(-140deg);
+	box-sizing: border-box;
+}
+
+a.left span {
+	position: absolute;
+	top: 76%;
+	left: 7.5%;
+	width: 24px;
+	height: 24px;
+	margin-left: -12px;
+	border-left: 1px solid #fff;
+	border-bottom: 1px solid #fff;
+	-webkit-transform: rotate(40deg);
+	transform: rotate(40deg);
+	box-sizing: border-box;
+}
+
 /* ==================================
 			[Alignment]
 ====================================== */

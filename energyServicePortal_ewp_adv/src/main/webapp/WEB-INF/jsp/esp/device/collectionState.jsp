@@ -370,6 +370,11 @@
 			let startTime = start + startTimepicker + '00';
 			let endTime = end + endTimepicker + '00';
 
+			if (isEmpty(rids)) {
+				alert('RTU 정보가 확인되지 않습니다.');
+				return false;
+			}
+
 			$.ajax({
 				url: apiHost + '/log',
 				type: 'get',
