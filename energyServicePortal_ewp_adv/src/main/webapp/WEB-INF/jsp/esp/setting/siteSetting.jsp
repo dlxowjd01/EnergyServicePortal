@@ -2188,13 +2188,12 @@
 				}
 			} else {
 				filterColumn("#siteTable", "3", "");
-				inputs.prop("checked", true);
-				// if (checked.length < 16) {
-				// 	inputs.prop("checked", true);
-				// } else {
-				// 	inputs.prop("checked", false);
-				// }
-				console.log(inputs, checked)
+				// inputs.prop("checked", true);
+				if (checked.length < 16) {
+					inputs.prop("checked", true);
+				} else {
+					inputs.prop("checked", false);
+				}
 			}
 		});
 
