@@ -2145,6 +2145,7 @@
 			let val = $(this).data("id");
 			let joined = "";
 			let selected = [];
+			let inputs = $("#countryList").find("input");
 			let checked = $("#countryList").find("input:checked");
 
 			if(!isEmpty(val)){
@@ -2187,7 +2188,13 @@
 				}
 			} else {
 				filterColumn("#siteTable", "3", "");
-				checked.prop("checked", false);
+				inputs.prop("checked", true);
+				// if (checked.length < 16) {
+				// 	inputs.prop("checked", true);
+				// } else {
+				// 	inputs.prop("checked", false);
+				// }
+				console.log(inputs, checked)
 			}
 		});
 
