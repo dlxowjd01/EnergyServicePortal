@@ -320,6 +320,8 @@
 	const sgid = '';
 	const vgid = '<c:out value="${vgid}" escapeXml="false" />';
 	const today = new Date();
+	const divisionLocation = '${sessionScope.divisionLocation}';
+	const divisionResourceType = '${sessionScope.divisionResourceType}';
 
 	let first = true;
 

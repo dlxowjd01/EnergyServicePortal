@@ -468,7 +468,9 @@
 <script type="text/javascript">
 	const siteList = JSON.parse('${siteList}')
 		, sgid = '${sgid}'
-		, today = new Date();
+		, today = new Date()
+		, divisionLocation = '${sessionScope.divisionLocation}'
+		, divisionResourceType = '${sessionScope.divisionResourceType}';
 
 	<c:if test="${dashboardMap eq 'google'}">
 	let makerObject = new Object();

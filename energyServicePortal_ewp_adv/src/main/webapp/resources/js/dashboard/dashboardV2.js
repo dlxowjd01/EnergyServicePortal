@@ -105,7 +105,7 @@ const firstAjax = () => {
 		}
 	});
 
-	if (isEmpty(sgid) && isEmpty('${sessionScope.divisionLocation}') && isEmpty('${sessionScope.divisionResourceType}')) siteSids = 'all';
+	if (isEmpty(sgid) && isEmpty(divisionLocation) && isEmpty(divisionResourceType)) siteSids = 'all';
 
 	//중개거래 대시보드에서만 사용하는 항목
 	if (location.pathname.match('jmain')) {
@@ -245,7 +245,7 @@ const minAjax = async () => {
 		siteSids.push(site.sid);
 	});
 
-	if (isEmpty(sgid) && isEmpty('${sessionScope.divisionLocation}') && isEmpty('${sessionScope.divisionResourceType}')) siteSids = 'all';
+	if (isEmpty(sgid) && isEmpty(divisionLocation) && isEmpty(divisionResourceType)) siteSids = 'all';
 
 	//중개거래 대시보드에서만 사용하는 항목ㅁㅓ
 	if (location.pathname.match('jmain')) {
@@ -1537,7 +1537,7 @@ const searchAlarm = async () => {
 		siteSids.push(site.sid);
 	});
 
-	if (isEmpty(sgid) && isEmpty('${sessionScope.divisionLocation}') && isEmpty('${sessionScope.divisionResourceType}')) siteSids = 'all';
+	if (isEmpty(sgid) && isEmpty(divisionLocation) && isEmpty(divisionResourceType)) siteSids = 'all';
 
 	$.ajax({
 		url: apiHost + '/alarms',
@@ -1603,7 +1603,7 @@ const searchNowMonth = async () => {
 		siteSids.push(site.sid);
 	});
 
-	if (isEmpty(sgid) && isEmpty('${sessionScope.divisionLocation}') && isEmpty('${sessionScope.divisionResourceType}')) siteSids = 'all';
+	if (isEmpty(sgid) && isEmpty(divisionLocation) && isEmpty(divisionResourceType)) siteSids = 'all';
 
 	$.ajax({
 		url: apiHost + '/energy/now/sites?interval=month',
