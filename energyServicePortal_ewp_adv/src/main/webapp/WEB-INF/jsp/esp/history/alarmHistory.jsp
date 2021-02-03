@@ -7,10 +7,10 @@
 		<div class="modal-content">
 			<h2 class="modal-title"><fmt:message key='alarm.table.confirm' /></h2>
 			<p class="text-line1 mt-20 mb-24"><fmt:message key='alarm.confirm.YN' /></p>
-			<div class="btn-wrap-type05"><!--
-			--><button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close"><fmt:message key='alarm.confirm.N' /></button><!--
-			--><button type="button" class="btn-type ml-12" onclick="alarmConfirmProcess();"><fmt:message key='alarm.confirm.Y' /></button><!--
-		--></div>
+			<div class="btn-wrap-type05">
+				<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close"><fmt:message key='alarm.confirm.N' /></button>
+				<button type="button" class="btn-type ml-12" onclick="alarmConfirmProcess();"><fmt:message key='alarm.confirm.Y' /></button>
+			</div>
 		</div>
 	</div>
 </div>
@@ -103,10 +103,10 @@
 
 				<hr>
 
-				<div class="btn-wrap-type02"><!--
-				--><button type="button" class="btn-type03" data-dismiss="modal"><fmt:message key='alarm.popup.cancel' /></button><!--
-				--><button type="button" class="btn-type ml-12" onclick="ackProcess();"><fmt:message key='alarm.popup.confirm' /></button><!--
-			--></div>
+				<div class="btn-wrap-type02">
+					<button type="button" class="btn-type03" data-dismiss="modal"><fmt:message key='alarm.popup.cancel' /></button>
+					<button type="button" class="btn-type ml-12" onclick="ackProcess();"><fmt:message key='alarm.popup.confirm' /></button>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -203,7 +203,7 @@
 						</div>
 						<div class="sa-select">
 							<h2 class="tx-tit"><fmt:message key="alarm.table.isChecked" /></h2>
-							<div class="dropdown short" id="alarmstatus">	
+							<div class="dropdown short" id="alarmstatus">
 								<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="<fmt:message key='default.dataNameSelect' />"><fmt:message key="alertshistory.1.all" /><span class="caret"></span></button>
 								<ul class="dropdown-menu chk-type" role="menu" id="alstatus">
 									<li>

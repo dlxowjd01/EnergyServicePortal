@@ -1654,7 +1654,7 @@
 				gridLineWidth: 1,
 				min: 0,
 				title: {
-					x: 10,
+					x: 13,
 					y: 27,
 					text: 'kWh',
 					align: 'low',
@@ -1676,10 +1676,10 @@
 							return numberComma(this.value);
 						}
 					},
-					x: -10,
+					x: -5,
 					style: {
 						color: 'var(--grey)',
-						fontSize: '12px'
+						fontSize: '11px'
 					}
 				}
 			}, {}
