@@ -537,7 +537,7 @@
 
 				<%-- KPX(전력 거래소 사용시 하단 내용 숨김) --%>
 				<c:if test="${defaultOid ne 'testkpx'}">
-				<div class="desc">
+				<div class="desc login-footer">
 					<div class="row center">
 						<div class="col-6">
 							<h3 class="mb-10"><fmt:message key='login.kakaotalk' /></h3>

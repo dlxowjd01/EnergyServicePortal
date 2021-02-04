@@ -939,3 +939,21 @@ textarea:focus {
 		width: 80%;
 	}
 }
+
+@media (max-width: 480px) {
+	.login-footer > .center {
+		display: block!important;
+	}
+
+	.login-footer > .center > div {
+		width: 100%;
+		max-width: 100%;
+		border: none;
+		padding: 0;
+	}
+
+	.login-footer > .center > div:first-child {
+		margin-bottom: 10px;
+		padding-bottom: 10px;
+	}
+}
