@@ -1560,7 +1560,7 @@ const searchStatusRaw = async () => {
 	let apiUrl = new Array();
 	let apiData = new Object();
 	siteList.forEach(site => {
-		if (site.hasDevices) {
+		// if (site.hasDevices) {
 			apiUrl.push($.ajax({
 				url: apiHost + '/status/raw/site',
 				type: 'GET',
@@ -1569,7 +1569,7 @@ const searchStatusRaw = async () => {
 					formId: 'v2'
 				}
 			}));
-		}
+		// }
 	});
 
 	Promise.all(apiUrl).then(response => {
