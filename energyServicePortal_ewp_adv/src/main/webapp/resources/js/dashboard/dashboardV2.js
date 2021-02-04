@@ -241,9 +241,7 @@ const minAjax = async () => {
 	let siteSids = new Array();
 	let urls = new Array();
 
-	siteList.forEach(site => {
-		siteSids.push(site.sid);
-	});
+	siteList.forEach(site => { siteSids.push(site.sid); });
 
 	if (isEmpty(sgid) && isEmpty(divisionLocation) && isEmpty(divisionResourceType)) siteSids = 'all';
 
@@ -396,7 +394,6 @@ const monthlyChartDraw = async () => {
 			if (index === 0) {
 				if (!isEmpty(apiData)) {
 					const siteEnergyData = apiData['data'];
-					console.log(siteEnergyData);
 					if (!isEmpty(siteEnergyData)) {
 						Object.entries(siteEnergyData).forEach(([siteId, siteEnergyItem]) => {
 							if (!isEmpty(siteEnergyItem)) {
@@ -1563,14 +1560,16 @@ const searchStatusRaw = async () => {
 	let apiUrl = new Array();
 	let apiData = new Object();
 	siteList.forEach(site => {
-		apiUrl.push($.ajax({
-			url: apiHost + '/status/raw/site',
-			type: 'GET',
-			data: {
-				sid: site.sid,
-				formId: 'v2'
-			}
-		}));
+		if (site.hasDevices) {
+			apiUrl.push($.ajax({
+				url: apiHost + '/status/raw/site',
+				type: 'GET',
+				data: {
+					sid: site.sid,
+					formId: 'v2'
+				}
+			}));
+		}
 	});
 
 	Promise.all(apiUrl).then(response => {

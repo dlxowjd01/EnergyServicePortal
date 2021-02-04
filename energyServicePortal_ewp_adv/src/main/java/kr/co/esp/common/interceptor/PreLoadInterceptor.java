@@ -549,6 +549,11 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 
 		if (refineList.size() > 0) {
 			for (int i = 0; i < refineList.size(); i++) {
+				if (refineList.get(i).get("devices") == null) {
+					refineList.get(i).put("hasDevices", false);
+				} else {
+					refineList.get(i).put("hasDevices", true);
+				}
 				refineList.get(i).remove("devices");
 			}
 		}
