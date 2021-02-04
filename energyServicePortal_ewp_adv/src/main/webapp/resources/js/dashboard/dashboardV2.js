@@ -1246,36 +1246,30 @@ const searchSite = async function () {
 				searchSite = true;
 			}
 
-			if(!isEmpty(operation)){
-				if (targetOperation && searchSite) {
-			
-					if (operation.includes(0)) {
-						site['status'] = '중지';
-						site['statusClass'] = 'status-stop';
-					} else if (operation.includes(1)) {
-						site['status'] = '정상';
-						site['statusClass'] = 'status-drv';
-					} else if (operation.includes(2)) {
-						site['status'] = '트립';
-						site['statusClass'] = 'status-error';
-					} else {
-						site['status'] = '이상';
-						site['statusClass'] = 'status-error';
-					}
+			if (targetOperation && searchSite) {
+				if (operation.includes(0)) {
+					site['status'] = '중지';
+					site['statusClass'] = 'status-stop';
+				} else if (operation.includes(1)) {
+					site['status'] = '정상';
+					site['statusClass'] = 'status-drv';
+				} else if (operation.includes(2)) {
+					site['status'] = '트립';
+					site['statusClass'] = 'status-error';
+				} else {
+					site['status'] = '이상';
+					site['statusClass'] = 'status-error';
 				}
-			} else {
-				site['status'] = 'null';
-				site['statusClass'] = 'status-null';
-			}
 
-			site['inverterCount'] = inverterCount //사이트에 속한 인버터 갯수.
-			site['operation'] = operation; //사이트 상태 정보.
-			site['capacity'] = capacity;   //사이트에 속한 인버터 설비 용량 정보.
-			site['capacityView'] = (isEmpty(capacity) || capacity === '-') ? '-' : displayNumberFixedUnit(capacity, 'W', 'kW', 0)[0];   //사이트에 속한 인버터 설비 용량 정보.
-			site['activePower'] = activePower;   //사이트에 속한 인버터.
-			site['activePowerView'] =(isEmpty(activePower) || activePower === '-') ? '-' : displayNumberFixedUnit(activePower, 'W', 'kW', 0)[0];   //사이트에 속한 인버터.
-			site['irradiationPoa'] = irradiationPoa;   //사이트에 속한 인버터 설비 용량 정보.
-			refineList.push(site);
+				site['inverterCount'] = inverterCount //사이트에 속한 인버터 갯수.
+				site['operation'] = operation; //사이트 상태 정보.
+				site['capacity'] = capacity;   //사이트에 속한 인버터 설비 용량 정보.
+				site['capacityView'] = (isEmpty(capacity) || capacity === '-') ? '-' : displayNumberFixedUnit(capacity, 'W', 'kW', 0)[0];   //사이트에 속한 인버터 설비 용량 정보.
+				site['activePower'] = activePower;   //사이트에 속한 인버터.
+				site['activePowerView'] =(isEmpty(activePower) || activePower === '-') ? '-' : displayNumberFixedUnit(activePower, 'W', 'kW', 0)[0];   //사이트에 속한 인버터.
+				site['irradiationPoa'] = irradiationPoa;   //사이트에 속한 인버터 설비 용량 정보.
+				refineList.push(site);
+			}
 		});
 
 		if (refineList.length > 0) {
