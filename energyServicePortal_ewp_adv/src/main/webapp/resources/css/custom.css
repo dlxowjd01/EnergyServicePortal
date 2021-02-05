@@ -3422,14 +3422,18 @@ input[type="radio"]:checked + label:after {
 	padding: 20px 0 15px;
 }
 
+.alarm-notice li {
+	display: flex;
+	align-items: center;
+}
+
 .alarm-notice li a {
+	width: 100%;
 	display: block;
 	margin: 0;
 	padding: 0;
-	width: 100%;
 	color: var(--white87);
 	line-height: 18px;
-	font-size: 12px;
 	text-overflow: ellipsis;
 	overflow: hidden;
 	white-space: nowrap;
@@ -3457,15 +3461,13 @@ input[type="radio"]:checked + label:after {
 
 /* 미정의 9 */
 
-.alarm-notice li a:before {
-	display: inline-block;
-	float: none;
-	margin-right: 13px;
-	margin-top: 5px;
+.alarm-notice li:before {
 	content: "";
-	background: var(--grey);
 	width: 8px;
 	height: 8px;
+	display: inline-block;
+	margin-right: 13px;
+	background: var(--grey);
 	border-radius: 4px;
 }
 
@@ -3515,8 +3517,6 @@ li[data-alarm="urgent"]:before,
 }
 
 .alarm-notice li span {
-	text-align: right;
-	width: 100px;
 	line-height: 24px;
 	font-size: 12px;
 	letter-spacing: -0.5px;
@@ -3528,7 +3528,6 @@ li[data-alarm="urgent"]:before,
 }
 
 .alarm-notice li span.err-time {
-	float: right;
 	color: var(--white60);
 }
 
@@ -10783,6 +10782,20 @@ table.table-footer tfoot td.light {
 	}
 }
 
+#alarmNotice > li > a {
+	display: flex!important;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+/* 13 Inch */
+@media (max-width: 1300px) {
+	#alarmNotice > li > a {
+		display: block!important;
+	}
+}
+
 /* Responsive - Mobile */
 @media (max-width: 480px) {
 	#rtuCommand .flex-group .sm-title {
@@ -11127,6 +11140,7 @@ table.table-footer tfoot td.light {
 		transform: translate(50%, -40px)!important;
 	}
 }
+
 
 .group-type.flex-start {
 	display: flex!important;
