@@ -3997,6 +3997,10 @@ li[data-alarm="urgent"]:before,
 	width: calc(100% - 74px);
 }
 
+.highcharts-tooltip>span {
+	max-height:100px;
+	overflow-y: auto;
+}
 /* ====================================
 	   [setting] userSettings.do
 ===================================== */
@@ -5084,6 +5088,12 @@ input.inp[readonly]:focus {
 .indiv.chart-pv {
 	min-height: 480px;
 }
+
+.indiv.chart-pv.scroll {
+	overflow-y: auto;
+	max-height: 700px;
+}
+
 
 .indiv.chart-pv.fixed {
 	height: 100%;
@@ -10750,6 +10760,7 @@ table.table-footer tfoot td.light {
 	.pvGen-right + div {
 		max-width: 100%!important;
 		flex: 100%!important;
+		max-height: 700px;
 	}
 
 	#myTabContent > .spc-table-row,

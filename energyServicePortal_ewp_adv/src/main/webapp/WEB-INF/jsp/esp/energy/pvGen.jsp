@@ -16,7 +16,7 @@
 </div>
 <div class="row">
 	<div class="col-lg-2 col-md-4 col-sm-6 pvGen-right">
-		<div class="indiv chart-pv">
+		<div class="indiv chart-pv scroll">
 			<h2 class="ntit"><fmt:message key="renewablesgen.2.solarenergy" /></h2>
 			<div class="value-wrapper"></div>
 		</div>
@@ -145,7 +145,8 @@
 	const sites = JSON.parse('${siteList}');
 	let generationData = new Object()
 		, standard = new Array()
-		, interval = '';
+		, interval = ''
+		, statusSummary = new Array();
 
 	$(function() {
 		makeSiteList();
@@ -275,11 +276,13 @@
 					let deviceStr = ``;
 					if (!isEmpty(devices)) {
 						let targetSite = sites.find(site => site['sid'] !== undefined && site['sid'] === devices[0]['sid']);
+						let sensorSolar = devices.find(device => device['device_type'] === 'SENSOR_SOLAR');
+						let solarDid = isEmpty(sensorSolar) ? '' : sensorSolar.did;
 
 						deviceStr +=
 							`   <li>
 									<a href="javascript:void(0);" tabindex="-1">
-										<input id="device_dashboard_${'${targetSite[\'sid\']}'}" name="device" type="checkbox" value="${'${targetSite[\'sid\']}'}" data-sid="${'${targetSite[\'sid\']}'}" data-name="${'${targetSite[\'name\']}'}_<fmt:message key='pvGen.dashboard' />">
+										<input id="device_dashboard_${'${targetSite[\'sid\']}'}" name="device" type="checkbox" value="${'${targetSite[\'sid\']}'}" data-sid="${'${targetSite[\'sid\']}'}" data-solar="${'${solarDid}'}" data-sitename="${'${targetSite[\'name\']}'}" data-name="${'${targetSite[\'name\']}'}_<fmt:message key='pvGen.dashboard' />">
 										<label for="${'${targetSite[\'sid\']}'}"><span></span><fmt:message key='pvGen.dashboard' /></label>
 									</a>
 								</li>
@@ -288,7 +291,7 @@
 						deviceStr +=
 							`   <li>
 									<a href="javascript:void(0);" tabindex="-1">
-										<input id="device_billing_${'${targetSite[\'sid\']}'}" name="device" type="checkbox" value="${'${targetSite[\'sid\']}'}" data-sid="${'${targetSite[\'sid\']}'}" data-name="${'${targetSite[\'name\']}'}_<fmt:message key='pvGen.sales' />">
+										<input id="device_billing_${'${targetSite[\'sid\']}'}" name="device" type="checkbox" value="${'${targetSite[\'sid\']}'}" data-sid="${'${targetSite[\'sid\']}'}" data-solar="${'${solarDid}'}" data-sitename="${'${targetSite[\'name\']}'}" data-name="${'${targetSite[\'name\']}'}_<fmt:message key='pvGen.sales' />">
 										<label for="${'${targetSite[\'sid\']}'}"><span></span><fmt:message key='pvGen.sales' /></label>
 									</a>
 								</li>
@@ -303,7 +306,7 @@
 								deviceStr +=
 									`   <li>
 											<a href="javascript:void(0);" tabindex="-1">
-												<input id="${'${device[\'did\']}'}" name="device" type="checkbox" value="${'${device[\'did\']}'}" data-sid="${'${targetSite[\'sid\']}'}" data-name="${'${targetSite[\'name\']}'}_${'${device[\'name\']}'}">
+												<input id="${'${device[\'did\']}'}" name="device" type="checkbox" value="${'${device[\'did\']}'}" data-sid="${'${targetSite[\'sid\']}'}" data-solar="${'${solarDid}'}" data-sitename="${'${targetSite[\'name\']}'}" data-name="${'${targetSite[\'name\']}'}_${'${device[\'name\']}'}">
 												<label for="${'${device[\'did\']}'}"><span></span>${'${device[\'name\']}'}</label>
 											</a>
 										</li>
@@ -374,15 +377,20 @@
 
 		const billingSites = new Array();
 		const dashSites = new Array();
+		const checkedSites = new Array();
+		const solarDevices = new Array();
 		const checkedDevices = new Array();
 
 		document.querySelectorAll('input[name="device"]:checked').forEach(device => {
 			const deviceId = device.getAttribute('id');
 			if (deviceId.match('billing')) {
+				if (!checkedSites.includes(device.value)) checkedSites.push(device.value);
 				billingSites.push(device.value);
 			} else if (deviceId.match('dashboard')) {
+				if (!checkedSites.includes(device.value)) checkedSites.push(device.value);
 				dashSites.push(device.value);
 			} else {
+				if (!checkedSites.includes(device.dataset.sid)) checkedSites.push(device.dataset.sid);
 				checkedDevices.push(device.value);
 			}
 		});
@@ -418,92 +426,162 @@
 		//매전량
 		if (billingSites.length > 0) {
 			promiseUrl.push($.ajax({
-				url: apiHost + '/energy/sites',
-				type: 'GET',
-				async: false,
-				data: {
+				url: apiHost + '/get/energy/sites',
+				type: 'POST',
+				contentType: 'application/json',
+				data: JSON.stringify({
 					sid: billingSites.toString(),
-					startTime: startTime,
-					endTime: endTime,
+					startTime: Number(startTime),
+					endTime: Number(endTime),
 					interval: interval,
 					displayType: 'billing',
 					formId: 'v2'
-				}
+				})
 			}));
 		}
 
 		//대시보드
 		if (dashSites.length > 0) {
 			promiseUrl.push($.ajax({
-				url: apiHost + '/energy/sites',
-				type: 'GET',
-				async: false,
-				data: {
+				url: apiHost + '/get/energy/sites',
+				type: 'POST',
+				contentType: 'application/json',
+				data: JSON.stringify({
 					sid: dashSites.toString(),
-					startTime: startTime,
-					endTime: endTime,
+					startTime: Number(startTime),
+					endTime: Number(endTime),
 					interval: interval,
 					displayType: 'dashboard',
 					formId: 'v2'
-				}
+				})
 			}));
 		}
 
 		if (checkedDevices.length > 0) {
 			promiseUrl.push($.ajax({
-				url: apiHost + '/energy/devices',
-				type: 'GET',
-				async: false,
-				data: {
+				url: apiHost + '/get/energy/devices',
+				type: 'POST',
+				contentType: 'application/json',
+				data: JSON.stringify({
 					dids: checkedDevices.toString(),
-					startTime: startTime,
-					endTime: endTime,
+					startTime: Number(startTime),
+					endTime: Number(endTime),
 					interval: interval
-				}
+				})
 			}));
 		}
+
+		promiseUrl.push($.ajax({
+			url: apiHost + '/status/summary',
+			type: 'GET',
+			contentType: 'application/json',
+			data: {
+				sids: checkedSites.toString(),
+				dids: solarDevices.toString(),
+				startTime: Number(startTime),
+				endTime: Number(endTime),
+				interval: interval,
+				formId: 'v2'
+			}
+		}));
 
 		Promise.all(promiseUrl).then(response => {
 			generationData = new Object();
 			if (!isEmpty(response)) {
 				response.forEach((res, idx) => {
 					const database = res.data;
-					Object.entries(database).forEach(([id, data]) => {
-						if (data.length > 1) data = new Array(data.find(x => x.metering_type === '2'));
-						document.querySelectorAll('input[name="device"]:checked').forEach(device =>  {
-							if (billingSites.length > 0 && dashSites.length <= 0) {
-								if (device.value === id) {
-									data.name = device.dataset.name;
-									data.sid = device.dataset.sid;
-									id += idx === 0 ? '_billing' : '';
-								}
-							} else if (billingSites.length <= 0 && dashSites.length > 0) {
-								if (device.value === id) {
-									data.name = device.dataset.name;
-									data.sid = device.dataset.sid;
-									id += idx === 0 ? '_dashboard' : '';
-								}
-							} else if (billingSites.length > 0 && dashSites.length > 0) {
-								if (idx === 0 && /billing/.test(device.id) && device.value === id) {
-									data.name = device.dataset.name;
-									id += '_billing';
-								} else if (idx === 1 && /dashboard/.test(device.id) && device.value === id) {
-									data.name = device.dataset.name;
-									id += '_dashboard';
-								} else if (idx !== 0 && idx !== 1 && device.value === id) {
-									data.name = device.dataset.name;
-								}
-								data.sid = device.dataset.sid;
-							} else {
-								if (device.value === id) {
-									data.name = device.dataset.name;
-									data.sid = device.dataset.sid;
-								}
-							}
-						});
+					if (idx === (response.length - 1)) {
+						if (!isEmpty(res.SENSOR_SOLAR)) {
+							const sensorSolar = res.SENSOR_SOLAR;
+							sensorSolar.sort((a, b) => {
+								return a['basetime'] - b['basetime'];
+							});
 
-						generationData[id] = data;
-					});
+							let solarDid = '';
+							let solarArray = new Array();
+							standard = makeStandard(interval);
+							document.querySelectorAll('input[name="device"]:checked').forEach(device => {
+								const solar = statusSummary.find(status => status.sid === device.dataset.sid);
+								if (isEmpty(solar)) {
+									statusSummary.push({
+										name: device.dataset.sitename + '_일사량',
+										sid: device.dataset.sid,
+										did: device.dataset.solar,
+										yAxis: 1,
+										dashStyle: 'ShortDash',
+										color: 'var(--white60)',
+										tooltip: {
+											valueSuffix: 'W/m\xB2',
+										},
+										marker: {
+											symbol: 'circle'
+										}
+									})
+								}
+							});
+
+							statusSummary.forEach((status, index) => {
+								let solarArray = new Array()
+								,   solarDid = status.did;
+
+								standard.forEach(std => {
+									let solar = sensorSolar.find(summary => (summary.did === solarDid && std === String(summary.basetime)));
+									if (!isEmpty(solar)) {
+										solarArray.push([
+											std,
+											solar.mean.irradiationPoa
+										]);
+									} else {
+										solarArray.push([
+											std,
+											null
+										]);
+									}
+								});
+
+								statusSummary[index].data = solarArray;
+							});
+						} else {
+							statusSummary = new Array();
+						}
+					} else {
+						Object.entries(database).forEach(([id, data]) => {
+							if (data.length > 1) data = new Array(data.find(x => x.metering_type === '2'));
+							document.querySelectorAll('input[name="device"]:checked').forEach(device =>  {
+								if (billingSites.length > 0 && dashSites.length <= 0) {
+									if (device.value === id) {
+										data.name = device.dataset.name;
+										data.sid = device.dataset.sid;
+										id += idx === 0 ? '_billing' : '';
+									}
+								} else if (billingSites.length <= 0 && dashSites.length > 0) {
+									if (device.value === id) {
+										data.name = device.dataset.name;
+										data.sid = device.dataset.sid;
+										id += idx === 0 ? '_dashboard' : '';
+									}
+								} else if (billingSites.length > 0 && dashSites.length > 0) {
+									if (idx === 0 && /billing/.test(device.id) && device.value === id) {
+										data.name = device.dataset.name;
+										id += '_billing';
+									} else if (idx === 1 && /dashboard/.test(device.id) && device.value === id) {
+										data.name = device.dataset.name;
+										id += '_dashboard';
+									} else if (idx !== 0 && idx !== 1 && device.value === id) {
+										data.name = device.dataset.name;
+									}
+									data.sid = device.dataset.sid;
+								} else {
+									if (device.value === id) {
+										data.name = device.dataset.name;
+										data.sid = device.dataset.sid;
+									}
+								}
+							});
+
+							generationData[id] = data;
+						});
+					}
 				});
 			}
 
@@ -586,8 +664,6 @@
 					}
 
 					th.innerHTML = (colLength > 2) ? (item.standard.substr(stdLength, colLength)).replace(/(\d{2})(\d{2})/, '$1:$2') : (item.standard.substr(stdLength, colLength));
-					console.log(th);
-					console.log(colLength);
 					theadTr.appendChild(th);
 
 					td.innerHTML = (item.timeValue !== '-') ? displayNumberFixedUnit(item.timeValue, 'Wh', 'kWh', 0)[0] : item.timeValue;
@@ -776,7 +852,6 @@
 					if (!isEmpty(items)) {
 						items.forEach(item => {
 							if (String(item.basetime).substr(8, 6) === std) {
-								console.log(std, item.energy);
 								timeValue += Math.round(item.energy / 1000) ;
 							}
 						});
@@ -850,6 +925,8 @@
 			num++;
 		});
 
+		seriesData = seriesData.concat(statusSummary);
+		console.log(seriesData);
 		chartDraw(chartStandard, seriesData);
 
 		//발전량 합계
@@ -860,6 +937,7 @@
 			let totalArr = new Array();
 
 			seriesData.forEach(data => {
+				if (!isEmpty(data.yAxis) && data.yAxis === 1) return false;
 				if (chartStyle === 'allSum') {
 					if (totalArr.length > 0) {
 						totalArr[0].totVal += data.total;
@@ -970,7 +1048,7 @@
 				},
 				crosshair: true
 			}],
-			yAxis: {
+			yAxis: [{
 				gridLineColor: 'var(--white25)',
 				gridLineWidth: 1,
 				min: 0,
@@ -994,7 +1072,33 @@
 						fontSize: '10px'
 					}
 				}
+			}, {
+			gridLineWidth: 0,
+				title: {
+				text: '(W/㎡)',
+					align: 'low',
+					rotation: 0,
+					y: 25,
+					x: 0,
+					style: {
+					color: 'var(--grey)',
+						fontSize: '12px',
+						transform: 'translate(-30px, 0px)'
+				}
 			},
+			labels: {
+				formatter: function () {
+					return  numberComma(this.value / 10);
+				},
+				style: {
+					color: 'var(--grey)',
+						fontSize: '12px'
+				}
+			},
+			visible: true,
+			opposite: true,
+			showEmpty: false
+		}],
 			legend: {
 				enabled: true,
 				align: 'right',
@@ -1006,6 +1110,7 @@
 					fontSize: '12px',
 					fontWeight: 400
 				},
+				maxHeight: 40,
 				itemHoverStyle: {
 					color: ''
 				},
@@ -1015,7 +1120,12 @@
 			tooltip: {
 				formatter: function () {
 					return this.points.reduce(function (s, point) {
-						return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + numberComma(point.y) + 'kWh';
+						if (/일사량/.test(point.series.name)) {
+							return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + numberComma((point.y).toFixed(2)) + 'W/㎡';
+						} else {
+							return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + numberComma(point.y) + 'kWh';
+						}
+
 					}, '<b>' + dateFormat(this.points[0].point.name) + '</b>');
 				},
 				shared: true,
@@ -1067,7 +1177,7 @@
 				date = val.substring(0, 2) + ':' + val.substring(2, 4);
 			} else if (String(val).length > 8) {
 				date = val.substring(0, 4) + '-' + val.substring(4, 6) + '-' + val.substring(6, 8) + ' ' + val.substring(8, 10) + ':' + val.substring(10, 12);
-			} else {
+			} else if (String(val).length === 8) {
 				date = val.substring(0, 4) + '-' + val.substring(4, 6) + '-' + val.substring(6, 8);
 			}
 		}
