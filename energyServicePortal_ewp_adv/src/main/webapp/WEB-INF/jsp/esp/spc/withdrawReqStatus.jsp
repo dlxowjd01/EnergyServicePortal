@@ -464,7 +464,9 @@
 					new Error('SPC 정보 조회 내역이 없습니다.');
 				} else {
 					spcGens.forEach(element => {
-						promiseItem.push(Promise.resolve(JSON.parse(element.finance_info)));
+						if (element.finance_info !== undefined && element.finance_info !== null) {
+							promiseItem.push(Promise.resolve(JSON.parse(element.finance_info)));
+						}
 					});
 
 					Promise.all(promiseItem).then(res => {
