@@ -644,7 +644,9 @@
 				span.classList = grid.color;
 
 				let totalSum = 0;
+				console.log(items)
 				items.forEach((item, index) => {
+					console.log(item, index)
 					let th = document.createElement('th')
 						, td = document.createElement('td')
 

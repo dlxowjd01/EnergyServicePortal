@@ -10801,8 +10801,14 @@ table.table-footer tfoot td.light {
 }
 
 /* 13 Inch */
-@media (max-width: 1300px) {
+@media (max-width: 1280px) {
 	#alarmNotice > li > a {
+		display: block!important;
+	}
+
+	#alarmNotice > li > a > span {
+		float: none!important;
+		text-align: left!important;
 		display: block!important;
 	}
 }
