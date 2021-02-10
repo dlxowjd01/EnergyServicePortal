@@ -4492,6 +4492,7 @@
 				sid: siteId,
 				startTime: formData.startTime,
 				endTime: formData.endTime,
+				displayType: 'dashboard',
 				interval: 'day',
 				formId: 'v2'
 			}
