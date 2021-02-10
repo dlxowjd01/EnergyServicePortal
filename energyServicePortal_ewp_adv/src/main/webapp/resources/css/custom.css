@@ -7303,6 +7303,10 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 
 /* operation: 정상 */
 
+.equip-icon > spn.on {
+	border: 2px solid white;
+}
+
 .alert-icon > .inv-normal,
 .equip-icon > span.equip-normal {
 	background: var(--jordy-blue);
@@ -11201,4 +11205,8 @@ table.table-footer tfoot td.light {
     border-bottom: 1px solid var(--white50);
     margin: 0px 0px 10px 0px;
     font-size: 14px;
+}
+
+.pointer {
+	cursor: pointer;
 }

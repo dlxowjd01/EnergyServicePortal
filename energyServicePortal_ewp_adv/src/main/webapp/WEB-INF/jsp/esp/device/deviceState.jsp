@@ -55,9 +55,9 @@
 					<div class="chart-top">
 						<h2 class="ntit fl">[typeName]</h2>
 						<div class="equip-icon fr">
-							<span class="equip-normal"><fmt:message key="deviceState.view.normal" />([normal])</span>
-							<span class="equip-alert"><fmt:message key="deviceState.view.stop" />([alert])</span>
-							<span class="equip-error"><fmt:message key="deviceState.view.trip" />([error])</span>
+							<span class="equip-normal pointer"><fmt:message key="deviceState.view.normal" />([normal])</span>
+							<span class="equip-alert pointer"><fmt:message key="deviceState.view.stop" />([alert])</span>
+							<span class="equip-error pointer"><fmt:message key="deviceState.view.trip" />([error])</span>
 						</div>
 					</div>
 					<ul class="device-list [typeClass]" id="[typeId]_List">
@@ -445,6 +445,30 @@
 				}
 			}
 		});
+	});
+
+	$(document).on('click', '.equip-icon span', function() {
+		if ($(this).hasClass('on')) {
+			$(this).parents('div.indiv').find('li').each(function() {
+				$(this).removeClass('hidden');
+			});
+			$(this).removeClass('on');
+		} else {
+			const deviceState = $(this).attr('class').replace('equip-', '').replace('pointer', '').trim();
+			$(this).parents('div.indiv').find('li.text-black').each(function() {
+				if ($(this).hasClass(deviceState)) {
+					$(this).removeClass('hidden');
+				} else {
+					$(this).addClass('hidden');
+				}
+			});
+
+			$(this).parents('div.indiv').find('li.text-white').each(function() {
+				$(this).addClass('hidden');
+			});
+
+			$(this).addClass('on').siblings().removeClass('on');
+		}
 	});
 
 	//사업소 조회
