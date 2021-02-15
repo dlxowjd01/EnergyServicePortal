@@ -302,7 +302,7 @@
 							return a['name'] > b['name'] ? 1 : a['name'] < b['name'] ? -1 : 0;
 						});
 						devices.forEach(device => {
-							if (device.dashboard || device.billing) {
+							if ((device.dashboard || device.billing) && device.metering_type === 2) {
 								deviceStr +=
 									`   <li>
 											<a href="javascript:void(0);" tabindex="-1">
