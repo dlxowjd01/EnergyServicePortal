@@ -215,7 +215,7 @@
 			siteArray.push(site.sid);
 			tableData.push({
 				sid: site.sid,
-				capacity: site.capacities.gen ? numberComma(Math.round(site.capacities.gen / 1000)): "-",
+				capacity: (!isEmpty(site.capacities) && !isEmpty(site.capacities.gen)) ? numberComma(Math.round(site.capacities.gen / 1000)) : '-',
 				siteName: site.name
 			});
 		});

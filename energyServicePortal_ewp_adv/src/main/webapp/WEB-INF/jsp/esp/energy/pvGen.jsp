@@ -1015,7 +1015,7 @@
 				renderTo: 'chart2',
 				marginTop: 50,
 				marginLeft: 60,
-				marginRight: 30,
+				marginRight: 60,
 				backgroundColor: 'transparent',
 			},
 			navigation: {
@@ -1075,32 +1075,33 @@
 					}
 				}
 			}, {
-			gridLineWidth: 0,
+				gridLineColor: 'var(--white25)',
+				gridLineWidth: 0,
 				title: {
-				text: '(W/㎡)',
+					text: '(W/㎡)',
 					align: 'low',
 					rotation: 0,
 					y: 25,
-					x: 0,
+					x: 35,
 					style: {
-					color: 'var(--grey)',
-						fontSize: '12px',
+						color: 'var(--grey)',
+						fontSize: '10px',
 						transform: 'translate(-30px, 0px)'
-				}
-			},
-			labels: {
-				formatter: function () {
-					return  numberComma(this.value / 10);
+					}
 				},
-				style: {
-					color: 'var(--grey)',
-						fontSize: '12px'
-				}
-			},
-			visible: true,
-			opposite: true,
-			showEmpty: false
-		}],
+				labels: {
+					formatter: function () {
+						return  numberComma(this.value / 10);
+					},
+					style: {
+						color: 'var(--grey)',
+							fontSize: '10px'
+					}
+				},
+				visible: true,
+				opposite: true,
+				showEmpty: false
+			}],
 			legend: {
 				enabled: true,
 				align: 'right',
