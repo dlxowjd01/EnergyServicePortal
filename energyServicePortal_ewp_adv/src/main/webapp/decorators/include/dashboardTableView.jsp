@@ -252,6 +252,7 @@
 					sid: siteArray.toString(),
 					startTime: yesterDayFormData.startTime,
 					endTime: yesterDayFormData.endTime,
+					displayType: 'dashboard',
 					formId: 'v2'
 				}
 			});
@@ -264,6 +265,7 @@
 					sid: siteArray.toString(),
 					startTime: yearFormData.startTime,
 					endTime: yearFormData.endTime,
+					displayType: 'dashboard',
 					formId: 'v2'
 				}
 			});
