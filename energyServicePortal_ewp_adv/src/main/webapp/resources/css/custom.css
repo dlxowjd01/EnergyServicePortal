@@ -1978,6 +1978,11 @@ footer .copyright a + a:before {
 	color: var(--white60);
 	z-index: 150;
 	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.side-nav > ul {
+	height: 800px;
 }
 
 .side-nav > ul > li {
