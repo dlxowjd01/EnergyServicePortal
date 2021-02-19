@@ -374,8 +374,10 @@
 																	<span class="tx2">[irradiationPoa] W/㎡</span>
 																</div>
 																<div class="fr">
-																	<span class="tx2"><fmt:message key="gdash.7.temp"/> [temperature]</span>
-																	<span class="tx2"><fmt:message key="gdash.7.humid"/> [humidity]</span>
+																	<span class="tx"><fmt:message key="gdash.7.temp"/></span>
+																	<span class="tx2">[temperature]</span>
+																	<span class="tx"><fmt:message key="gdash.7.humid"/></span>
+																	<span class="tx2">[humidity]</span>
 																</div>
 															</div>
 														</div>
