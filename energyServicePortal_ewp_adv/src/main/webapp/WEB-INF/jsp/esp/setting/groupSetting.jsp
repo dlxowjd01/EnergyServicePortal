@@ -1838,7 +1838,7 @@
 								<div class="dropdown">
 									<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택"><fmt:message key='groupSetting.select' /><span class="caret"></span></button>
 									<ul id="newSiteList" class="dropdown-menu chk-type">
-										<li class="groupSettingSearch"><input type="text" placeholder="사업소 검색"></li>
+										<li class="groupSettingSearch list-search"><input type="text" placeholder="사업소 검색"></li>
 										<c:forEach var="site" items="${siteList}" varStatus="siteName">
 											<li data-id="${site.name}" data-name="${site.name}" data-value="${site.sid}">
 												<a href="#" class="chk-type" tabindex="-1">

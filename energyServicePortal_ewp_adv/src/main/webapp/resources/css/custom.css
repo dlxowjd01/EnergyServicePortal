@@ -11216,12 +11216,12 @@ table.table-footer tfoot td.light {
 	cursor: pointer;
 }
 
-.groupSettingSearch {
+.list-search {
 	width: 100%;
 	border-bottom: 1px solid var(--white20);
 }
 
-.groupSettingSearch > input {
+.list-search > input {
 	width: 100%;
 	padding: 12px 8px;
 	font-size: 14px;

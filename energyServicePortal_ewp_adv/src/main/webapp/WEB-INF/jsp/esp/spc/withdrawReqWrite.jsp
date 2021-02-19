@@ -130,7 +130,7 @@
 			}
 
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
-				spcList.empty();
+				spcList.html(`<li class="list-search" id="spcListSearch"><input type="text" placeholder="SPC명 검색"></li>`);
 				(json.data).sortOn('name');
 				json.data.forEach((item, index) => {
 					let listItem = '';
@@ -153,6 +153,19 @@
 				return false;
 			});
 		}
+
+		$(document)
+			.on("keyup search input paste cut", "#spcListSearch > input", function(e) {
+				const keyword = $(this).val().trim();
+
+				$("#spcList > li:not(#spcListSearch)").each((ix, el) => {
+					$(el).addClass("hidden");
+
+					if ($(el).attr("id").includes(keyword)) {
+						$(el).removeClass("hidden");
+					}
+				})
+			})
 
 		function getAccountInfo (id) {
 			if (isEmpty(id)) return false;
@@ -604,7 +617,10 @@
 				--><span class="tx-tit">SPC 선택</span><!--
 				--><div class="dropdown"><!--
 					--><button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택" data-value="">선택<span class="caret"></span></button><!--
-					--><ul id="spcList" class="dropdown-menu center" role="menu"><li id="*spcName*" data-value="*spcId*"><a href="javascript:void(0);" tabindex="-1">*spcName*</a></li></ul><!--
+					--><ul id="spcList" class="dropdown-menu center" role="menu">
+							
+							<li id="*spcName*" data-value="*spcId*"><a href="javascript:void(0);" tabindex="-1">*spcName*</a></li>
+						</ul><!--
 					--><small class="hidden warning">SPC를 선택해 주세요.</small>
 					</div>
 				</div>
