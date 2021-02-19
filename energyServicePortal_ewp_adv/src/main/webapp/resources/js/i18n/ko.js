@@ -654,7 +654,7 @@ const koTranslation =
   "dashboard.table.5": "경고 알람",
   "dashboard.table.6": "현재 발전량(kW)",
   "dashboard.table.7": "현재 날씨",
-  "dashboard.table.8": "전일 발전(kW)",
+  "dashboard.table.8": "전일 발전량(kW)",
   "dashboard.table.9": "전일 날씨",
   "dashboard.table.10": "전일 발전 시간(H)",
   "dashboard.table.11": "월간 발전량(MWh)",

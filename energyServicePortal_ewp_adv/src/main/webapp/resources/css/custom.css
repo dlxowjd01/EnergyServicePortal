@@ -8055,13 +8055,12 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	line-height: 40px;
 }
 
-.chart-legend-wrapper li[data-alarm]:before {
+.chart-legend-wrapper li[data-alarm] .legend-circle {
 	display: inline-block;
 	margin-right: 16px;
 	width: 7px;
 	height: 7px;
 	border-radius: 3px;
-	content: "";
 }
 
 .chart-legend-wrapper .legend-value {

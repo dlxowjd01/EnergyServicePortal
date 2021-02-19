@@ -700,7 +700,7 @@
 					if (!(isEmpty(temp.status_timestamp))) {
 						data[i].status_timestamp = new Date(temp.status_timestamp).format('yyyy-MM-dd HH:mm:ss'); // 최종업데이트 시간
 					} else {
-						data[i].status_timestamp = '';
+						data[i].status_timestamp = '-';
 					}
 				}
 				
@@ -1568,7 +1568,7 @@
 			} else if(key == "경고"){
 				colorNum = 1;
 				enName = ["Warning", "warning"];
-			} else if(key == "정상"){
+			} else if(key == "정보"){
 				colorNum = 0;
 				enName = ["Info", "info"];
 			} else {
@@ -1590,7 +1590,7 @@
 						color: typeColorArr[num2],
 						y: val
 					};
-					liStr += '<li data-alarm="' + (num2+1) + '">' + (key) + '<span class="legend-value">' + val + '<fmt:message key="alarm.cases" /></span></li>';
+					liStr += '<li data-alarm="' + (num2+1) + '"><span class="legend-circle" style="background: '+typeColorArr[num2]+'"></span>' + (key) + '<span class="legend-value">' + val + '<fmt:message key="alarm.cases" /></span></li>';
 
 				} else {
 					$temp = {
@@ -1601,7 +1601,7 @@
 						color: colorArr[colorNum],
 						y: val
 					};
-					liStr += '<li data-alarm="' + enName[1] + '">' + (langStatus === "EN" ? enName[0] : key) + '<span class="legend-value">' + val + '<fmt:message key="alarm.cases" /></span></li>';
+					liStr += '<li data-alarm="' + enName[1] + '"><span class="legend-circle" style="background: '+colorArr[colorNum]+'"></span>' + (langStatus === "EN" ? enName[0] : key) + '<span class="legend-value">' + val + '<fmt:message key="alarm.cases" /></span></li>';
 				}
 				num2++;
 				pieSeriesData.push($temp);
