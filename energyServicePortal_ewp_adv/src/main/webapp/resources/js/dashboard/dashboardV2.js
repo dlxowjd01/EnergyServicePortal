@@ -123,7 +123,9 @@ const firstAjax = () => {
 	searchSite(siteSids);
 	alarmInfoList(siteSids);
 
-
+	if (location.pathname.match('jmain')) {
+		setRealtimeRecord(siteSids);
+	}
 }
 
 /**
@@ -201,16 +203,18 @@ const minAjax = async () => {
 	new Promise(resolve => {
 		return resolve(Promise.all(targetApi));
 	}).then(response => {
-		let acPowerSum = 0, capacitySum = 0, invertorCount = 0;
+		let acPowerSum = 0, capacitySum = 0, invertorCount = 0, energySum = 0;
 		response.forEach((resData, index) => {
 			if (!isEmpty(resData)) {
 				if (index === 0) {
 					//월간 차트
-					let energy = 0, money = 0;
+					let energy = 0, money = 0, cenergy = 0, denergy = 0;
 					const siteNowEnergyData = resData['data'];
 					Object.entries(siteNowEnergyData).forEach(([siteKey, siteData]) => {
 						if (!isEmpty(siteData) && siteData['start'].toString().slice(0, 6) === String(today.getFullYear()) + ('0' + (today.getMonth() + 1)).slice(-2)) {
 							if (!isEmpty(siteData['energy'])) { energy += siteData['energy']; }
+							if (!isEmpty(siteData['cenergy'])) { cenergy += siteData['cenergy']; }
+							if (!isEmpty(siteData['denergy'])) { denergy += siteData['denergy']; }
 							if (!isEmpty(siteData['money'])) { money += siteData['money']; }
 						}
 					});
@@ -226,16 +230,21 @@ const minAjax = async () => {
 						monthlyChart.series[i].setData(seriesData);
 					}
 					monthlyChart.redraw();
-					//월간 차트
 
+					$('#monthlySum li.charge').html(i18nManager.tr('dashboard_charge') + ' : ' + displayNumberFixedDecimal(Math.floor(cenergy / 1000), 'kWh', 3, 2).join(' '));
+					$('#monthlySum li.discharge').html(i18nManager.tr('dashboard_charge') + ' : ' + displayNumberFixedDecimal(Math.floor(denergy / 1000), 'kWh', 3, 2).join(' '));
+					$('#monthlySum li.pv').html(i18nManager.tr('dashboard_charge') + ' : ' + displayNumberFixedDecimal((Math.floor($('#monthlySum li.pv').data('part') + energy) / 1000), 'kWh', 3, 2).join(' '));
+					//월간 차트
 				} else if (index === 1) {
 					//일간 차트
-					let co2Sum = 0, energySum = 0, moneySum = 0;
+					let co2Sum = 0, moneySum = 0, cenergy = 0, denergy = 0;
 					const siteNowEnergyData = resData['data'];
 					Object.entries(siteNowEnergyData).forEach(([siteKey, siteData]) => {
 						if (!isEmpty(siteData)) {
 							if (!isEmpty(siteData['co2'])) { co2Sum += siteData['co2']; }
 							if (!isEmpty(siteData['energy'])) { energySum += siteData['energy']; }
+							if (!isEmpty(siteData['cenergy'])) { cenergy += siteData['cenergy']; }
+							if (!isEmpty(siteData['denergy'])) { denergy += siteData['denergy']; }
 							if (!isEmpty(siteData['money'])) { moneySum += siteData['money']; }
 						}
 					});
@@ -251,11 +260,15 @@ const minAjax = async () => {
 						dailyChart.series[i].setData(seriesData);
 					}
 					dailyChart.redraw();
+
+					$('#dailySum li.charge').html(i18nManager.tr('dashboard_charge') + ' : ' + displayNumberFixedDecimal(Math.floor(cenergy / 1000), 'kWh', 3, 2).join(' '));
+					$('#dailySum li.discharge').html(i18nManager.tr('dashboard_charge') + ' : ' + displayNumberFixedDecimal(Math.floor(denergy / 1000), 'kWh', 3, 2).join(' '));
+					$('#dailySum li.pv').html(i18nManager.tr('dashboard_charge') + ' : ' + displayNumberFixedDecimal((Math.floor($('#dailySum li.pv').data('part') + energySum) / 1000), 'kWh', 3, 2).join(' '));
 					//일간 차트
 
 					$('.gmain-chart4 .chart-info-right ul li:nth-child(1) span').text(numberComma(Math.floor(energySum / 1000)));
-					$('#centerTbody tr td:nth-child(4)').html(numberComma(Math.floor(co2Sum / 1000)) + '<em>&nbsp;&nbsp;kg</em>');
-					$('#centerTbody tr td:nth-child(5)').html(numberComma(Math.floor(moneySum / 1000)) + '<em>&nbsp;&nbsp;'+i18nManager.tr('dashboard_in_thousands_of_won')+'</em>');
+					$('#centerTbody tr td:nth-child(5)').html(numberComma(Math.floor(co2Sum / 1000)) + '<em>&nbsp;&nbsp;kg</em>');
+					$('#centerTbody tr td:nth-child(6)').html(numberComma(Math.floor(moneySum / 1000)) + '<em>&nbsp;&nbsp;'+i18nManager.tr('dashboard_in_thousands_of_won')+'</em>');
 				} else if (index === 2) {
 					$('#siteList tr.dbclickopen').each(function() {
 						const siteId = $(this).data('sid');
@@ -334,9 +347,10 @@ const minAjax = async () => {
 						}
 					});
 
-					$('#siteList tr.dbclickopen').each(function(){
+					$('#siteList tr.dbclickopen').each(function() {
 						if ($(this).data('sid') === targetSid) {
 							$(this).find('td:eq(4)').text(numberComma(capacity / 1000));
+							$(this).data('operation', operation);
 
 							const detail = $(this).next('tr.detail-info');
 							detail.find('.di-top-sec .fl .tx2').text(irradiationPoa + ' W/㎡');
@@ -348,18 +362,13 @@ const minAjax = async () => {
 				}
 			}
 		});
-		return {
-			activePower: acPowerSum,
-			capacity: capacitySum,
-			invertorCount: invertorCount,
-		}
-	}).then(resolveData => {
-		const acPowerSum = resolveData['activePower']
-			, capacitySum = resolveData['capacity']
-			, invertorCount = resolveData['invertorCount']
-			, usage = Math.floor((acPowerSum / capacitySum) * 100)
-			, other = 100 - usage;
+		return {acPowerSum, capacitySum, invertorCount, energySum}
+	}).then(({acPowerSum, capacitySum, invertorCount, energySum}) => {
+		const usage = Math.floor((acPowerSum / capacitySum) * 100)
+			, other = 100 - usage
+			, generationHour = (Math.round((energySum / capacitySum) * 10) / 10);
 
+		$('#centerTbody tr td:nth-child(4)').html(generationHour + '<em>&nbsp;&nbsp;H</em>');
 		pieChart.setTitle({text: Math.floor(acPowerSum / 1000).toLocaleString() + 'kW'});
 		pieChart.series[0].data.forEach((e, idx) => {
 			if (e.name === i18nManager.tr("dashboard_photovoltaic")) {
@@ -374,6 +383,8 @@ const minAjax = async () => {
 
 		$('#centerTbody tr td:nth-child(2)').html(numberComma(invertorCount) + '<em>&nbsp;&nbsp;'+i18nManager.tr('dashboard_units')+'</em>');
 		$('#centerTbody tr td:nth-child(3)').html(numberComma(Math.round(capacitySum / 1000)) + '<em>&nbsp;&nbsp;kW</em>');
+
+		searchOperationSite();
 	}).catch((error) => {
 		console.error('처리 중 오류 발생');
 		console.error(error);
@@ -381,6 +392,10 @@ const minAjax = async () => {
 	});
 
 	alarmInfoList(siteSids);
+
+	if (location.pathname.match('jmain')) {
+		setRealtimeRecord(siteSids);
+	}
 }
 
 
@@ -441,7 +456,7 @@ const monthlyChartDraw = async (siteSids, renewal) => {
 		const dischargeList = new Array(12).fill(0);
 		const pvList = new Array(12).fill(0);
 		const payList = new Array(12).fill(0);
-		const sumObj = { chargeSum: 0, dischargeSum: 0, pvSum: 0 };
+		const sumObj = { chargeSum: 0, dischargeSum: 0, pvSum: 0, pvPart: 0 };
 		response.forEach((resData, index) => {
 			if ((renewal && index === 0) || (!renewal && index === 1)) {
 				if (!isEmpty(resData)) {
@@ -451,7 +466,7 @@ const monthlyChartDraw = async (siteSids, renewal) => {
 							const index = Number(siteData['start'].toString().slice(4, 6)) - 1;
 							if (!isEmpty(siteData['energy'])) {
 								pvList[index] += siteData['energy'];
-								sumObj.pvSum += siteData['energy'];
+								sumObj['pvSum'] += siteData['energy'];
 							}
 
 							if (!isEmpty(siteData['money'])) {
@@ -480,6 +495,7 @@ const monthlyChartDraw = async (siteSids, renewal) => {
 											pvList[index] += item['energy'];
 											payList[index] += item['money'];
 											sumObj['pvSum'] += item['energy'];
+											sumObj['pvPart'] += item['energy'];
 										});
 									}
 								});
@@ -556,7 +572,7 @@ const monthlyChartDraw = async (siteSids, renewal) => {
 					str += '<li class="discharge">' + i18nManager.tr('dashboard_discharge') + ' : ' + displayNumberFixedDecimal(Math.floor(value / 1000), 'kWh', 3, 2).join(' ') + '</li>';
 				}
 				if (key === 'pvSum') {
-					str += '<li class="pv">' + i18nManager.tr('dashboard_photovoltaic') + ' : ' + displayNumberFixedDecimal(Math.floor(value / 1000), 'kWh', 3, 2).join(' ') + '</li>';
+					str += '<li class="pv" data-part="' + sumObj.pvPart + '">' + i18nManager.tr('dashboard_photovoltaic') + ' : ' + displayNumberFixedDecimal(Math.floor(value / 1000), 'kWh', 3, 2).join(' ') + '</li>';
 				}
 			});
 
@@ -635,7 +651,7 @@ const dailyChartDraw = async (siteSids, renewal) => {
 		const dischargeList = new Array(lastDay.getDate()).fill(0);
 		const pvList = new Array(lastDay.getDate()).fill(0);
 		const payList = new Array(lastDay.getDate()).fill(0);
-		const sumObj = { chargeSum: 0, dischargeSum: 0, pvSum: 0 };
+		const sumObj = { chargeSum: 0, dischargeSum: 0, pvSum: 0, pvPart: 0};
 
 		response.forEach((resData, index) => {
 			if ((renewal && index === 0) || (!renewal && index === 1)) {
@@ -669,6 +685,7 @@ const dailyChartDraw = async (siteSids, renewal) => {
 											pvList[index] += item['energy'];
 											payList[index] += item['money'];
 											sumObj['pvSum'] += item['energy'];
+											sumObj['pvPart'] += item['energy'];
 										});
 									}
 								});
@@ -747,7 +764,7 @@ const dailyChartDraw = async (siteSids, renewal) => {
 					str += '<li class="discharge">' + i18nManager.tr('dashboard_discharge') + ' : ' + displayNumberFixedDecimal(Math.floor(value / 1000), 'kWh', 3, 2).join(' ') + '</li>';
 				}
 				if (key === 'pvSum') {
-					str += '<li class="pv">' + i18nManager.tr('dashboard_photovoltaic') + ' : ' + displayNumberFixedDecimal(Math.floor(value / 1000), 'kWh', 3, 2).join(' ') + '</li>';
+					str += '<li class="pv" data-part="' + sumObj.pvPart + '">' + i18nManager.tr('dashboard_photovoltaic') + ' : ' + displayNumberFixedDecimal(Math.floor(value / 1000), 'kWh', 3, 2).join(' ') + '</li>';
 				}
 			});
 
@@ -981,6 +998,7 @@ const getTodayTotalDetail = async function (siteSids) {
 	$('#centerTbody tr td:nth-child(3)').text('');
 	$('#centerTbody tr td:nth-child(4)').text('');
 	$('#centerTbody tr td:nth-child(5)').text('');
+	$('#centerTbody tr td:nth-child(6)').text('');
 
 	targetApi.push($.ajax({
 		url: apiHost + '/get/energy/now/sites',
@@ -1025,12 +1043,12 @@ const getTodayTotalDetail = async function (siteSids) {
 	new Promise(resolve => {
 		resolve(Promise.all(targetApi));
 	}).then(response => {
-		let acPowerSum = 0, capacitySum = 0, invertorCount = 0;
+		let acPowerSum = 0, capacitySum = 0, invertorCount = 0, energySum = 0;
 		response.forEach((apiData, index) => {
 			if (!isEmpty(apiData) && !isEmpty(apiData['data'])) {
 				const resultData = apiData['data'];
 				if (index === 0) {
-					let co2Sum = 0, energySum = 0, moneySum = 0;
+					let co2Sum = 0, moneySum = 0;
 					Object.entries(resultData).forEach(([siteKey, siteNowEnergy]) => {
 						if (!isEmpty(siteNowEnergy)) {
 							co2Sum += Math.floor(isEmpty(siteNowEnergy['co2']) ? 0 : siteNowEnergy['co2']);
@@ -1040,8 +1058,8 @@ const getTodayTotalDetail = async function (siteSids) {
 					});
 
 					$('.gmain-chart4 .chart-info-right ul li:nth-child(1) span').text(numberComma(Math.floor(energySum / 1000)));
-					$('#centerTbody tr td:nth-child(4)').html(numberComma(Math.floor(co2Sum / 1000)) + '<em>&nbsp;&nbsp;kg</em>');
-					$('#centerTbody tr td:nth-child(5)').html(numberComma(Math.floor(moneySum / 1000)) + '<em>&nbsp;&nbsp;'+i18nManager.tr('dashboard_in_thousands_of_won')+'</em>');
+					$('#centerTbody tr td:nth-child(5)').html(numberComma(Math.floor(co2Sum / 1000)) + '<em>&nbsp;&nbsp;kg</em>');
+					$('#centerTbody tr td:nth-child(6)').html(numberComma(Math.floor(moneySum / 1000)) + '<em>&nbsp;&nbsp;'+i18nManager.tr('dashboard_in_thousands_of_won')+'</em>');
 				} else if (index === 1) {
 					let generationForecastSum = 0;
 					Object.entries(resultData).forEach(([siteId, siteForeEnergyItem]) => {
@@ -1070,18 +1088,13 @@ const getTodayTotalDetail = async function (siteSids) {
 			}
 		});
 
-		return {
-			activePower: acPowerSum,
-			capacity: capacitySum,
-			invertorCount: invertorCount
-		};
-	}).then(resolveData => {
-		const acPowerSum = resolveData['activePower']
-			, capacitySum = resolveData['capacity']
-			, invertorCount = resolveData['invertorCount']
-			, usage = Math.floor((acPowerSum / capacitySum) * 100)
-			, other = 100 - usage;
+		return {acPowerSum, capacitySum, invertorCount, energySum};
+	}).then(({acPowerSum, capacitySum, invertorCount, energySum}) => {
+		const usage = Math.floor((acPowerSum / capacitySum) * 100)
+			, other = 100 - usage
+			, generationHour = (Math.round((energySum / capacitySum) * 10) / 10);
 
+		$('#centerTbody tr td:nth-child(4)').html(generationHour + '<em>&nbsp;&nbsp;H</em>');
 		pieChart.setTitle({text: Math.floor(acPowerSum / 1000).toLocaleString() + 'kW'});
 		pieChart.series[0].data.forEach((e, idx) => {
 			if (e.name === i18nManager.tr("dashboard_photovoltaic")) {
@@ -1230,7 +1243,8 @@ const searchSite = async function (siteSids) {
 			sids: siteSids.toString(),
 			metering_type: '2',
 			interval: 'day'
-		})
+		}),
+		timeout: 50000
 	}));
 
 	targetApi.push($.ajax({
@@ -1448,30 +1462,39 @@ const searchSite = async function (siteSids) {
 				searchSite = true;
 			}
 
-			if (targetOperation && searchSite) {
-				if (operation !== undefined) {
-					if (operation.includes(0)) {
-						site['status'] = '중지';
-						site['statusClass'] = 'status-stop';
-					} else if (operation.includes(1)) {
-						site['status'] = '정상';
-						site['statusClass'] = 'status-drv';
-					} else if (operation.includes(2)) {
-						site['status'] = '트립';
-						site['statusClass'] = 'status-error';
-					} else {
-						site['status'] = '이상';
-						site['statusClass'] = 'status-error';
-					}
+			if (operation !== undefined) {
+				if (operation.includes(0)) {
+					site['status'] = '중지';
+					site['statusClass'] = 'status-stop';
+				} else if (operation.includes(1)) {
+					site['status'] = '정상';
+					site['statusClass'] = 'status-drv';
+				} else if (operation.includes(2)) {
+					site['status'] = '트립';
+					site['statusClass'] = 'status-error';
 				} else {
 					site['status'] = '이상';
 					site['statusClass'] = 'status-error';
 				}
-
-				if (site['accumulate'] === undefined) site['accumulate'] = '-';
-				if (site['forecast'] === undefined) site['forecast'] = '-';
 			} else {
-				refineList.splice(siteIdx, 1);
+				site['status'] = '이상';
+				site['statusClass'] = 'status-error';
+			}
+
+			if (site['accumulate'] === undefined) site['accumulate'] = '-';
+			if (site['forecast'] === undefined) site['forecast'] = '-';
+			if (site['inverterCount'] === undefined) site['inverterCount'] = '-';
+			if (site['operation'] === undefined) site['operation'] = '-';
+			if (site['capacityView'] === undefined) site['capacityView'] = '-';
+			if (site['activePower'] === undefined) site['activePower'] = '-';
+			if (site['activePowerView'] === undefined) site['activePowerView'] = '-';
+			if (site['irradiationPoa'] === undefined) site['irradiationPoa'] = '-';
+
+			site['resourceClass'] = resourceIcon(site['resource_type']);
+			if (targetOperation && searchSite) {
+				site['displayClass'] = '';
+			} else {
+				site['displayClass'] = 'hidden';
 			}
 		});
 
@@ -1557,8 +1580,8 @@ const searchSite = async function (siteSids) {
 
 			setTimeout(function () {
 				refineList.forEach((site, siteIdx) => {
-					let capacity = (site.capacity == '-' && isNaN(site.capacity)) ? 0 :site.capacity;
-					let activePower = (site.activePower == '-' && isNaN(site.activePower)) ? 0 : site.activePower;
+					let capacity = (site.capacity === undefined || (site.capacity == '-' && isNaN(site.capacity))) ? 0 :site.capacity;
+					let activePower = (site.activePower === undefined || (site.activePower == '-' && isNaN(site.activePower))) ? 0 : site.activePower;
 
 					let activePercent = Math.floor((activePower / capacity) * 100);
 					let title = activePercent + '%';
@@ -1598,10 +1621,6 @@ const searchSite = async function (siteSids) {
 		}
 	}).catch(error => {
 		console.error(error);
-		if (!isEmpty(apiDatas[apiHost + '/status/raw/site']) && !isEmpty(apiDatas[apiHost + '/energy/now/sites?interval=day'])) {
-			document.getElementById('miniLoadingCircle').style.display = 'none';
-		}
-		document.getElementById('miniLoadingCircle').style.display = '';
 		document.getElementById('loadingCircleDashboard').style.display =  'none';
 		$('#errMsg').text(error);
 		$('#errorModal').modal('show');
@@ -1609,6 +1628,52 @@ const searchSite = async function (siteSids) {
 			$('#errorModal').modal('hide');
 		}, 2000);
 		return false;
+	});
+}
+
+/**
+ * 사이트 검색
+ *
+ * @param operation
+ */
+const searchOperationSite = () => {
+	const searchName = document.getElementById('searchName').value.trim();
+	const deviceStatus = new Array();
+	document.querySelectorAll('[name="deviceStatus"]:checked').forEach(chk => {
+		deviceStatus.push(chk.value);
+	});
+
+	$('#siteList tr.dbclickopen').each(function() {
+		const operation = $(this).data('operation')
+			, siteAddress = $(this).data('address')
+			, siteName = $(this).find('td:eq(2)').text();
+
+		if (deviceStatus.length === 3) {
+			const searchPattern = new RegExp(searchName, 'i'); //ignoreCase 대소문자 구분X
+			if (searchPattern.test(siteName) || searchPattern.test(siteAddress)) {
+				$(this).removeClass('hidden');
+			} else {
+				$(this).addClass('hidden');
+				$(this).next('.detail-info').find('.di-wrap').hide();
+			}
+		} else {
+			if (deviceStatus.includes(String(operation))) {
+				if (isEmpty(searchName)) {
+					$(this).removeClass('hidden');
+				} else {
+					const searchPattern = new RegExp(searchName, 'i'); //ignoreCase 대소문자 구분X
+					if (searchPattern.test(siteName) || searchPattern.test(siteAddress)) {
+						$(this).removeClass('hidden');
+					} else {
+						$(this).addClass('hidden');
+						$(this).next('.detail-info').find('.di-wrap').hide();
+					}
+				}
+			} else {
+				$(this).addClass('hidden');
+				$(this).next('.detail-info').find('.di-wrap').hide();
+			}
+		}
 	});
 }
 

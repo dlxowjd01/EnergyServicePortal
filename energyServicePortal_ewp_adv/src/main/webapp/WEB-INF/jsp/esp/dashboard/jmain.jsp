@@ -362,15 +362,92 @@
 		}
 	}
 
-	const setRealtimeRecord = async () => {
-		const targetApi = [apiHost + '/energy/sites?interval=hour',
-							apiHost + '/energy/forecasting/sites?interval=hour&startTime=' + dayData.startTime + '&endTime=' + dayData.endTime,
-							apiHost + '/energy/forecasting/sites?interval=hour&startTime=' + hourData.startTime + '&endTime=' + hourData.endTime,
-							apiHost + '/energy/forecasting/sites?interval=day&startTime=' + dayData.startTime + '&endTime=' + dayData.endTime,
-							apiHost + '/energy/now/sites?interval=hour',
-							apiHost + '/energy/now/sites?interval=day'];
+	const setRealtimeRecord = async (siteSids) => {
+		const targetApi = new Array();
+
+		targetApi.push($.ajax({
+			url: apiHost + '/get/energy/sites',
+			type: 'POST',
+			contentType: 'application/json',
+			data: JSON.stringify({
+				sid: siteSids.toString(),
+				startTime: Number(dayData.startTime),
+				endTime: Number(dayData.endTime),
+				displayType: 'dashboard',
+				formId: 'v2',
+				interval: 'hour'
+			})
+		}));
+
+		targetApi.push($.ajax({
+			url: apiHost + '/get/energy/forecasting/sites',
+			type: 'POST',
+			contentType: 'application/json',
+			data: JSON.stringify({
+				sid: siteSids.toString(),
+				displayType: 'dashboard',
+				startTime: Number(dayData.startTime),
+				endTime: Number(dayData.endTime),
+				formId: 'v2',
+				interval: 'hour'
+			})
+		}));
+
+		targetApi.push($.ajax({
+			url: apiHost + '/get/energy/forecasting/sites',
+			type: 'POST',
+			contentType: 'application/json',
+			data: JSON.stringify({
+				sid: siteSids.toString(),
+				displayType: 'dashboard',
+				startTime: Number(hourData.startTime),
+				endTime: Number(hourData.endTime),
+				formId: 'v2',
+				interval: 'hour'
+			})
+		}));
+
+		targetApi.push($.ajax({
+			url: apiHost + '/get/energy/forecasting/sites',
+			type: 'POST',
+			contentType: 'application/json',
+			data: JSON.stringify({
+				sid: siteSids.toString(),
+				displayType: 'dashboard',
+				startTime: Number(dayData.startTime),
+				endTime: Number(dayData.endTime),
+				formId: 'v2',
+				interval: 'day'
+			})
+		}));
+
+		//현재 발전량
+		targetApi.push($.ajax({
+			url: apiHost + '/get/energy/now/sites',
+			type: 'POST',
+			contentType: 'application/json',
+			data: JSON.stringify({
+				sids: siteSids.toString(),
+				metering_type: '2',
+				interval: 'hour'
+			})
+		}));
+
+		//현재 발전량
+		targetApi.push($.ajax({
+			url: apiHost + '/get/energy/now/sites',
+			type: 'POST',
+			contentType: 'application/json',
+			data: JSON.stringify({
+				sids: siteSids.toString(),
+				metering_type: '2',
+				interval: 'day'
+			})
+		}));
 
 		new Promise(resolve => {
+			resolve(Promise.all(targetApi));
+		}).then(response => {
 			const pvListHourly = new Array(24).fill(0);
 			const pvListForeHourly = new Array(24).fill(0);
 			const hourForeGenBySite = new Object();
@@ -378,11 +455,10 @@
 			const hourGenBySite = new Object();
 			const todayGenBySite = new Object();
 
-			targetApi.forEach((targetUrl, index) => {
-				const apiData = apiDatas[targetUrl];
+			response.forEach((resData, index) => {
 				if (index === 0 || index === 1 || index === 2 || index === 3) {
-					if (!isEmpty(apiData)) {
-						const siteNowEnergyData = apiData['data'];
+					if (!isEmpty(resData)) {
+						const siteNowEnergyData = resData['data'];
 						if (!isEmpty(siteNowEnergyData)) {
 							Object.entries(siteNowEnergyData).forEach(([siteId, energyData]) => {
 								if (!isEmpty(energyData)) {
@@ -410,8 +486,8 @@
 						}
 					}
 				} else {
-					if (!isEmpty(apiData)) {
-						const siteNowEnergyData = apiData['data'];
+					if (!isEmpty(resData)) {
+						const siteNowEnergyData = resData['data'];
 						Object.entries(siteNowEnergyData).forEach(([siteId, siteData]) => {
 							if (!isEmpty(siteData) && !isEmpty(siteData['energy']) ) {
 								if (index === 4) {
@@ -427,14 +503,14 @@
 				}
 			});
 
-			resolve({
+			return {
 				pvListHourly: pvListHourly,
 				pvListForeHourly: pvListForeHourly,
 				hourForeGenBySite: hourForeGenBySite,
 				hourGenBySite: hourGenBySite,
 				todayForeGenBySite: todayForeGenBySite,
 				todayGenBySite: todayGenBySite
-			});
+			};
 		}).then(({pvListHourly, pvListForeHourly, hourForeGenBySite, hourGenBySite, todayForeGenBySite, todayGenBySite}) => {
 			let hourGenAllSite = 0;
 			let hourForeGenAllSite = 0;
@@ -579,7 +655,7 @@
 					color: 'var(--turquoise)'
 				}],
 				plotLines: {
-					
+
 				}
 			});
 			rchart2.redraw();

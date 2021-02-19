@@ -129,6 +129,7 @@
 							<th><fmt:message key="gdash.4.tot_num"/></th>
 							<th><fmt:message key="gdash.4.num_device"/></th>
 							<th><fmt:message key="gdash.4.tot_cap"/></th>
+							<th><fmt:message key="gdash.4.generation"/></th>
 							<th><fmt:message key="gdash.4.today_co2"/></th>
 							<th><fmt:message key="gdash.4.today_revenue"/></th>
 						</tr>
@@ -138,6 +139,7 @@
 							<td><em>&nbsp;&nbsp;<fmt:message key='gmain.totalCount.site' /></em></td>
 							<td><em>&nbsp;&nbsp;<fmt:message key='gmain.totalCount.device' /></em></td>
 							<td><em>&nbsp;&nbsp;kW</em></td>
+							<td><em>&nbsp;&nbsp;H</em></td>
 							<td><em>&nbsp;&nbsp;kg</em></td>
 							<td><em>&nbsp;&nbsp;<fmt:message key='gmain.1000won' /></em></td>
 						</tr>
@@ -276,15 +278,14 @@
 			<c:otherwise>
 				<div class="gmain-row2">
 					<div class="indiv gmain-table">
-						<div id="miniLoadingCircle" class="mini-loading" style="display:none;"><img class="mini-loading-image" src="/img/loading_icon.gif" alt="Loading..."/></div>
 						<div class="gmain-map2">
 							<div class="map-wrap" id="gMainMap"></div>
 						</div>
 						<div class="gmain-map2-content">
 							<div class="table-top clear">
 								<div class="input-group1">
-									<input type="text" class="input" id="searchName" name="searchName" value="" placeholder="<fmt:message key='gmain.searchSite' />" onkeyup="if (event.keyCode == 13) searchSite();">
-									<button type="button" class="btn-type" onclick="searchSite();"><fmt:message key="gdash.7.apply"/></button>
+									<input type="text" class="input" id="searchName" name="searchName" value="" placeholder="<fmt:message key='gmain.searchSite' />" onkeyup="if (event.keyCode == 13) searchOperationSite();">
+									<button type="button" class="btn-type" onclick="searchOperationSite();"><fmt:message key="gdash.7.apply"/></button>
 								</div>
 								<div class="input-group2">
 									<span class="tx-tit"><fmt:message key="gdash.7.status"/></span>
@@ -352,7 +353,7 @@
 										</thead>
 										<tbody id="siteList">
 										<!-- [D] 상태별 배경 : 't1' or 't2' 클래스 추가 -->
-										<tr class="dbclickopen flag[INDEX]" data-sid="[sid]">
+										<tr class="dbclickopen flag[INDEX] [displayClass]" data-sid="[sid]" data-operation="[operation]" data-address="[address]">
 											<td class="first-td">
 												<span class="status [statusClass]" title="[status]">[status]</span>
 												<!-- <span class="status-bar"></span> -->
@@ -730,7 +731,7 @@
 			const rowCount = Number($('#' + $selector + ' button').data('value'));
 			siteListTable.page.len(rowCount).draw();
 		} else {
-			searchSite();
+			searchOperationSite();
 		}
 	}
 
