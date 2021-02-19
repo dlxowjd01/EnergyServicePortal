@@ -525,7 +525,7 @@
 				return false;
 			}
 
-			$(".dashboardTableSearch").remove();
+			$(".dashboardTableSearch").addClass("hidden");
 		}
 		
 		const dashboardTable = $(".dashboard-table").DataTable();
@@ -536,6 +536,7 @@
 		$('#switchBtn').on('click', function () {
 			if ($(this).is(':checked')) {
 			// B. TableView
+				$(".dashboardTableSearch").removeClass("hidden");
 				// document.cookie = 'switch=checked; path=/';
 				setCookie("switch", "checked");
 				target.eq(0).addClass('hidden').next().removeClass('hidden');
@@ -544,6 +545,7 @@
 				clearInterval(refreshMinInterval);
 				clearInterval(refreshHourInterval);
 			} else {
+				$(".dashboardTableSearch").addClass("hidden");
 			// A. DashboardView
 				target.eq(0).removeClass('hidden').next().addClass('hidden');
 				setCookie("switch", "");
