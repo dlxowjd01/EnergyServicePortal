@@ -1781,7 +1781,7 @@ function makeNavigation (page, totalPage) {
  *
  * @param interval
  * @returns {any[]}
- */
+ */ 
 const makeStandard = (interval, type) => {
 	let standard = new Array();
 	let sDate = $('#fromDate').datepicker('getDate').format('yyyyMMdd')

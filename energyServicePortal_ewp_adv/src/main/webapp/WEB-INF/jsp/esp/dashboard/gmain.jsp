@@ -8,14 +8,18 @@
 <form id="linkSiteForm" name="linkSiteForm" method="post"></form>
 <div class="row header-wrapper">
 	<div class="col-lg-5 col-md-6 col-sm-12 dashboard-header">
-		<h1 class="page-header fl">${siteName}</h1>
+		<h1 class="page-header">${siteName}</h1>
 		<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-			<label class="switch switch-slide fl">
-				<input type="checkbox" value="showTable" id="switchBtn" class="switch-input" ${cookie['switch'].value}/>
+			<label class="switch switch-slide">
+				<input type="checkbox" value="showTable" id="switchBtn" class="switch-input" ${cookie['switch'].value} />
 				<span class="switch-label" data-on="<fmt:message key='gmain.switch.table' />" data-off="<fmt:message key='gmain.switch.dashboard' />"></span>
 				<span class="switch-handle"></span>
 			</label>
 		</c:if>
+		
+		<div class="dashboardTableSearch">
+			<input type="text" placeholder="발전소 명 검색">
+		</div>
 	</div>
 	<div class="col-lg-7 col-md-6 col-sm-12">
 		<div class="time fr">
@@ -520,7 +524,14 @@
 				}, 2000);
 				return false;
 			}
+
+			$(".dashboardTableSearch").remove();
 		}
+		
+		const dashboardTable = $(".dashboard-table").DataTable();
+		$(".dashboardTableSearch > input").on( 'keyup search input paste cut', function(e) {
+			dashboardTable.search( this.value ).draw();
+		});
 
 		$('#switchBtn').on('click', function () {
 			if ($(this).is(':checked')) {

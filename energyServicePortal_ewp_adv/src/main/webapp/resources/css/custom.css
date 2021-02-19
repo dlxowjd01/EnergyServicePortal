@@ -4476,7 +4476,7 @@ input.inp[readonly]:focus {
 	display: inline-block;
 	vertical-align: middle;
 	margin: 0;
-	padding: 10px 0 0;
+	padding: 0px!important;
 	font-size: 20px;
 	color: var(--white);
 	border: 0;
@@ -5469,7 +5469,7 @@ html[lang="en"] .btn-save {
 
 .switch-slide {
 	position: relative;
-	margin: 6px 0 0 20px;
+	margin: 0 0 0 20px;
 	width: 80px;
 	height: 30px;
 	cursor: pointer;
@@ -11214,4 +11214,30 @@ table.table-footer tfoot td.light {
 
 .pointer {
 	cursor: pointer;
+}
+
+.groupSettingSearch {
+	width: 100%;
+	border-bottom: 1px solid var(--white20);
+}
+
+.groupSettingSearch > input {
+	width: 100%;
+	padding: 12px 8px;
+	font-size: 14px;
+	border: none;
+	background: none;
+	color: var(--white60);
+}
+
+.dashboardTableSearch {
+	margin-left: 20px;
+}
+
+.dashboardTableSearch > input {
+	padding: 8px 15px;
+	font-size: 14px;
+	border-radius: 2px;
+	background: var(--white20);
+	border: none;
 }

@@ -11,6 +11,18 @@
 		setDropdownValue($("#groupList"));
 		setDropdownValue($("#newGroupType"));
 
+		$(".groupSettingSearch > input").on("keyup", e => {
+			const keyword = new RegExp($(e.target).val().trim(), 'i');
+
+			$("#newSiteList > li:not(:first-child)").each((ix, el) => {
+				if ($(el).data("id").match(keyword)) {
+					$(el).removeClass("hidden");
+				} else {
+					$(el).addClass("hidden");
+				}
+			})
+		})
+
 		$("#newGroupType li").on("click", function(){
 			let groupType = $("#newGroupType");
 			let val = $(this).data("value");
@@ -1366,7 +1378,7 @@
 			let td = tr.find("td");
 			let rowData = dTable.row(tr).data();
 			let newSiteList = $("#newSiteList");
-			let siteItem = newSiteList.find("li input[type='checkbox']");
+			let siteItem = newSiteList.find("li:not(.groupSettingSearch) input[type='checkbox']");
 			let resIdWrapper = $("#resIdWrapper");
 			$("#validGroup").is(".hidden") ? null : $("#validGroup").addClass("hidden");
 
@@ -1826,6 +1838,7 @@
 								<div class="dropdown">
 									<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택"><fmt:message key='groupSetting.select' /><span class="caret"></span></button>
 									<ul id="newSiteList" class="dropdown-menu chk-type">
+										<li class="groupSettingSearch"><input type="text" placeholder="사업소 검색"></li>
 										<c:forEach var="site" items="${siteList}" varStatus="siteName">
 											<li data-id="${site.name}" data-name="${site.name}" data-value="${site.sid}">
 												<a href="#" class="chk-type" tabindex="-1">
