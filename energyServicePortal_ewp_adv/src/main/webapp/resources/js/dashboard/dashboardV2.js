@@ -1449,15 +1449,20 @@ const searchSite = async function (siteSids) {
 			}
 
 			if (targetOperation && searchSite) {
-				if (operation.includes(0)) {
-					site['status'] = '중지';
-					site['statusClass'] = 'status-stop';
-				} else if (operation.includes(1)) {
-					site['status'] = '정상';
-					site['statusClass'] = 'status-drv';
-				} else if (operation.includes(2)) {
-					site['status'] = '트립';
-					site['statusClass'] = 'status-error';
+				if (operation !== undefined) {
+					if (operation.includes(0)) {
+						site['status'] = '중지';
+						site['statusClass'] = 'status-stop';
+					} else if (operation.includes(1)) {
+						site['status'] = '정상';
+						site['statusClass'] = 'status-drv';
+					} else if (operation.includes(2)) {
+						site['status'] = '트립';
+						site['statusClass'] = 'status-error';
+					} else {
+						site['status'] = '이상';
+						site['statusClass'] = 'status-error';
+					}
 				} else {
 					site['status'] = '이상';
 					site['statusClass'] = 'status-error';
