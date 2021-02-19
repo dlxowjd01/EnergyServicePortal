@@ -3640,7 +3640,7 @@ li[data-alarm="urgent"]:before,
 }
 
 .modal.stack .modal-content {
-	width: 320px;
+	/* width: 320px; */
 }
 
 .modal-backdrop {

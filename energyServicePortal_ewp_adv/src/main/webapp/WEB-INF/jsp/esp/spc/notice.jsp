@@ -54,19 +54,19 @@
 				}
 			},
 			columns: [
-				{
-					title: 'SPC 명',
-					data: 'spc_name',
-					render: function (data, type, full, rowIndex) {
-						if (!isEmpty(data)) {
-							return `<a href="javascript:void(0);" onclick="getDetailNotice('${'${full.id}'}');" class="table-link">${'${data}'}</a>`;
-						} else {
-							return '-';
-						}
-					},
-					className: 'dt-left',
-					orderable: false
-				},
+				// {
+				// 	title: 'SPC 명',
+				// 	data: 'spc_name',
+				// 	render: function (data, type, full, rowIndex) {
+				// 		if (!isEmpty(data)) {
+				// 			return `<a href="javascript:void(0);" onclick="getDetailNotice('${'${full.id}'}');" class="table-link">${'${data}'}</a>`;
+				// 		} else {
+				// 			return '-';
+				// 		}
+				// 	},
+				// 	className: 'dt-left',
+				// 	orderable: false
+				// },
 				{
 					title: '제목',
 					data: 'subject',

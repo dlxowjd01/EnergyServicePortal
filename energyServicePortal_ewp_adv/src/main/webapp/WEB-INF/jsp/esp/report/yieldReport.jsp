@@ -5,10 +5,8 @@
 
 <script type="text/javascript">
 	let yieldTable = null;
-
-	const yieldReportType = new Object();
-
-	let reportType = new Object();
+	let reportType = {};
+	const yieldReportType = {};
 
 	$(function () {
 		yieldTable = $('#yieldTable').DataTable({
@@ -25,7 +23,6 @@
 			initComplete() {
 				$("#yieldTable_length > label").html('<select name="yieldTable_length" aria-controls="yieldTable" class=""><option value="50">50</option><option value="100">100</option><option value="200">200</option></select>')
 			},
-
 			columns: [
 				{
 					title: '<input type="checkbox" id="allCheck"><label for="allCheck"></label>',
@@ -250,11 +247,14 @@
 				, searchYear = $('#year button').data('value')
 				, searchMonth = $('#month button').data('value')
 				, keyWord = $('#key_word').val().trim()
-				, key_word = new RegExp(keyWord, 'i');
-
+				, key_word = new RegExp(keyWord, 'i')
+				, yearList = [];
+			
 			resultData = resultData.filter(rowData => {
 				let	reportYear = Number(rowData['report_date'].substring(0, 4));
 				let	reportMonth = Number(rowData['report_date'].substring(5, 7));
+
+				yearList.push(reportYear);
 
 				if (((!isEmpty(searchType) && rowData['report_type'] === searchType) || isEmpty(searchType))
 					&& ((!isEmpty(searchYear) && reportYear === searchYear) || isEmpty(searchYear))
@@ -264,6 +264,14 @@
 					return true;
 				}
 			});
+
+			let yearTemplate = `<li data-value=""><a href="javascript:void(0);"><fmt:message key="revenuereport.1.all" /></a></li>`;
+			[...new Set(yearList)].forEach((v, k) => {
+				k = langStatus === "KO" ? "년" : "";
+
+				yearTemplate += `<li data-value="${'${v}'}"><a href="javascript:void(0);">${'${v+k}'}</a></li>`
+			});
+			$("#year > ul").html(yearTemplate);
 
 			yieldTable.clear();
 			yieldTable.rows.add(resultData).draw();
@@ -820,7 +828,7 @@
 					<div class="row">
 						<div class="col-lg-6 col-sm-12">
 							<div class="flex-start">
-								<span class="input-label">SPC</span>
+								<span class="input-label asterisk">SPC</span>
 								<div id="spc_id" class="dropdown placeholder">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='default.dataNameSelect' />">
 										<fmt:message key='yieldReport.select' /><span class="caret"></span>
@@ -829,7 +837,7 @@
 								</div>
 							</div>
 							<div class="flex-start">
-								<span class="input-label"><fmt:message key="revenuereport.2.report_classification" /></span>
+								<span class="input-label asterisk"><fmt:message key="revenuereport.2.report_classification" /></span>
 								<div id="report_type" class="dropdown placeholder">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='default.dataNameSelect' />">
 										<fmt:message key='yieldReport.select' /><span class="caret"></span>
@@ -850,7 +858,7 @@
 
 						<div class="col-lg-6 col-sm-12">
 							<div class="flex-start">
-								<span class="input-label"><fmt:message key='yieldReport.plant' /></span>
+								<span class="input-label asterisk"><fmt:message key='yieldReport.plant' /></span>
 								<div class="dropdown placeholder" id="site_id">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='default.dataNameSelect' />">
 										<fmt:message key='yieldReport.select' /><span class="caret"></span>
@@ -905,13 +913,13 @@
 			<span class="tx-tit"><fmt:message key='yieldReport.startMonth' /></span>
 			<div class="sa-select">
 				<div class="dropdown" id="year">
-					<button type="button" class="dropdown-toggle w7" data-toggle="dropdown"><fmt:message key="revenuereport.1.2020" /><span class="caret"></span></button>
+					<button type="button" class="dropdown-toggle w7" data-toggle="dropdown"><fmt:message key="revenuereport.1.all" /><span class="caret"></span></button>
 					<ul class="dropdown-menu" role="menu">
-						<li data-value=""><a href="javascript:void(0);"><fmt:message key="revenuereport.1.all" /></a></li>
-						<li data-value="2021"><a href="javascript:void(0);"><fmt:message key="revenuereport.1.2021" /></a></li>
-						<li data-value="2020"><a href="javascript:void(0);"><fmt:message key="revenuereport.1.2020" /></a></li>
-						<li data-value="2019"><a href="javascript:void(0);"><fmt:message key="revenuereport.1.2019" /></a></li>
-						<li data-value="2018"><a href="javascript:void(0);"><fmt:message key="revenuereport.1.2018" /></a></li>
+						<!-- <li data-value=""><a href="javascript:void(0);"><fmt:message key="revenuereport.1.all" /></a></li> -->
+						<!-- <li data-value="2021"><a href="javascript:void(0);"><fmt:message key="revenuereport.1.2021" /></a></li> -->
+						<!-- <li data-value="2020"><a href="javascript:void(0);"><fmt:message key="revenuereport.1.2020" /></a></li> -->
+						<!-- <li data-value="2019"><a href="javascript:void(0);"><fmt:message key="revenuereport.1.2019" /></a></li> -->
+						<!-- <li data-value="2018"><a href="javascript:void(0);"><fmt:message key="revenuereport.1.2018" /></a></li> -->
 					</ul>
 				</div>
 			</div>
