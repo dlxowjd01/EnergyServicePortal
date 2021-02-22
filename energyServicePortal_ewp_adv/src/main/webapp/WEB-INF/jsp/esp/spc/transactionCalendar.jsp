@@ -1441,7 +1441,7 @@
 			</div>
 			<div class="search-input-wrapper flex-wrapper">
 				<h2 class="ntit">SPC</h2>
-				<span class="desc">spc 이름을 입력해 주세요.</span>
+				<span class="desc">SPC 이름을 입력해 주세요.</span>
 			</div>
 			<div class="text-input-type"><input type="text" id="searchName" name="searchName" placeholder="입력"></div>
 		</div>
