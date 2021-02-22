@@ -141,11 +141,14 @@
 					keyWord = $('#key_word').val().trim(),
 					resultList = result.data;
 				const keyWordPattern = new RegExp(keyWord, 'i'); //ignoreCase 대소문자 구분X
+				const yearList = [];
 
 				if (!isEmpty(resultList)) {
 					resultList.forEach(rowData => {
+						console.log(rowData);
 						if (!isEmpty(rowData['balance_info'])) {
 							const balance_info = JSON.parse(rowData['balance_info']);
+							yearList.push(Number(rowData['balance_yyyymm'].substring(0, 4)));
 
 							rowData['balance_yyyymm'] = rowData['balance_yyyymm'].replace(/(\d{4})(\d{2})/, '$1-$2');
 							if (!isEmpty(balance_info)) {
@@ -166,6 +169,13 @@
 							}
 						}
 					});
+
+					let yearTemplate = ``;
+					[...new Set(yearList)].forEach((v, k) => {
+						yearTemplate += `<li data-value="${'${v}'}"><a href="#">${'${v}'}년</a></li>`
+					})
+					$("#year > ul").html(yearTemplate);
+					$("#year > button").html($("#year > ul > li:first-child").html()+`<span class="caret"></span>`);
 				}
 
 				balanceTable.clear();

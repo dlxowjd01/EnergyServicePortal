@@ -11241,14 +11241,20 @@ table.table-footer tfoot td.light {
 	border: none;
 }
 
-.input-label > span {
+.input-label > span,
+span.asterisk {
 	position: relative;
 }
 
-.input-label > span.asterisk:after {
+.input-label > span.asterisk:after,
+span.asterisk:after {
 	content: "*";
 	position: absolute;
 	top: -5px;
 	right: -9px;
 	color: var(--vivid-blue);
+}
+
+th > span.asterisk:after {
+	top: -20px;
 }

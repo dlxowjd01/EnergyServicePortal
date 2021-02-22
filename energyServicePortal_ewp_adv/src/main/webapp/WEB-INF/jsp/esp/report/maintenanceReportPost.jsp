@@ -194,7 +194,7 @@
 <div class="row">
 	<div class="col-lg-12">
 		<div>
-			<span class="tx-tit">보고서 구분</span>
+			<span class="tx-tit asterisk">보고서 구분</span>
 			<div class="sa-select">
 				<div class="dropdown" id="report_type">
 					<button type="button" class="dropdown-toggle w9" data-toggle="dropdown" data-value="">
@@ -224,13 +224,13 @@
 						<col style="width:35%">
 					</colgroup>
 					<tr>
-						<th>보고서 명</th>
+						<th><span class="asterisk">보고서 명</span></th>
 						<td>
 							<div class="text-input-type edit">
 								<input type="text" id="report_name" placeholder="직접 입력">
 							</div>
 						</td>
-						<th>발전소</th>
+						<th><span class="asterisk">발전소</span></th>
 						<td class="group-type">
 							<div class="dropdown placeholder edit" id="gen" >
 								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="">
