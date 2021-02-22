@@ -828,7 +828,7 @@
 					<div class="row">
 						<div class="col-lg-6 col-sm-12">
 							<div class="flex-start">
-								<span class="input-label asterisk">SPC</span>
+								<span class="input-label"><span class="asterisk">SPC</span></span>
 								<div id="spc_id" class="dropdown placeholder">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='default.dataNameSelect' />">
 										<fmt:message key='yieldReport.select' /><span class="caret"></span>
@@ -837,7 +837,7 @@
 								</div>
 							</div>
 							<div class="flex-start">
-								<span class="input-label asterisk"><fmt:message key="revenuereport.2.report_classification" /></span>
+								<span class="input-label"><span class="asterisk"><fmt:message key="revenuereport.2.report_classification" /></span></span>
 								<div id="report_type" class="dropdown placeholder">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='default.dataNameSelect' />">
 										<fmt:message key='yieldReport.select' /><span class="caret"></span>
@@ -858,7 +858,7 @@
 
 						<div class="col-lg-6 col-sm-12">
 							<div class="flex-start">
-								<span class="input-label asterisk"><fmt:message key='yieldReport.plant' /></span>
+								<span class="input-label"><span class="asterisk"><fmt:message key='yieldReport.plant' /></span></span>
 								<div class="dropdown placeholder" id="site_id">
 									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='default.dataNameSelect' />">
 										<fmt:message key='yieldReport.select' /><span class="caret"></span>

@@ -169,7 +169,7 @@
 					<tr>
 						<th>보고서 명</th>
 						<td id="report_name"></td>
-						<th>발전</th>
+						<th>발전소</th>
 						<td id="site_name"></td>
 					</tr>
 					<tr>

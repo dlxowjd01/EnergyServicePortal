@@ -684,7 +684,7 @@
                     <div class="row">
                         <div class="col-lg-6 col-sm-12">
                             <div class="flex-start">
-                                <span class="input-label asterisk">SPC</span>
+                                <span class="input-label"><span class="asterisk">SPC</span></span>
                                 <div id="spc_id" class="dropdown placeholder">
                                     <button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
                                         선택<span class="caret"></span>
@@ -696,7 +696,7 @@
 
                         <div class="col-lg-6 col-sm-12">
                             <div class="flex-start">
-                                <span class="input-label asterisk">발전소</span>
+                                <span class="input-label"><span class="asterisk">발전소</span></span>
                                 <div id="site_id" class="dropdown placeholder">
                                     <button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
                                         선택<span class="caret"></span>
@@ -709,7 +709,7 @@
                     <div class="row">
                         <div class="col-lg-6 col-sm-12">
                             <div class="flex-start">
-                                <span class="input-label asterisk">보고서 유형</span>
+                                <span class="input-label"><span class="asterisk">보고서 유형</span></span>
                                 <div id="report_type" class="dropdown placeholder">
                                     <button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
                                         선택<span class="caret"></span>

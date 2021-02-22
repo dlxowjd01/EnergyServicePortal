@@ -11240,3 +11240,15 @@ table.table-footer tfoot td.light {
 	background: var(--white20);
 	border: none;
 }
+
+.input-label > span {
+	position: relative;
+}
+
+.input-label > span.asterisk:after {
+	content: "*";
+	position: absolute;
+	top: -5px;
+	right: -9px;
+	color: var(--vivid-blue);
+}
