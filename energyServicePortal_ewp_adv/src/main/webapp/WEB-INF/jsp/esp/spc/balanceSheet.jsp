@@ -134,7 +134,7 @@
 			type: 'GET',
 			data: {
 				oid: oid,
-				yyyymm: $('#year button').data('value') + '__'
+				yyyymm: '______' // 걍 전체로 조회하고 필터링
 			},
 			success: function (result) {
 				let refineList = new Array(),
@@ -147,35 +147,37 @@
 					resultList.forEach(rowData => {
 						console.log(rowData);
 						if (!isEmpty(rowData['balance_info'])) {
-							const balance_info = JSON.parse(rowData['balance_info']);
-							yearList.push(Number(rowData['balance_yyyymm'].substring(0, 4)));
-
-							rowData['balance_yyyymm'] = rowData['balance_yyyymm'].replace(/(\d{4})(\d{2})/, '$1-$2');
-							if (!isEmpty(balance_info)) {
-								rowData['inflowOfCash'] = numberComma(Math.round(balance_info['inflowOfCash'].replace(/[^0-9.]/g, '')));
-								rowData['outflowOfCash'] = numberComma(Math.round(balance_info['outflowOfCash'].replace(/[^0-9.]/g, '')));
-								rowData['endOfTermFlow'] = numberComma(Math.round(balance_info['endOfTermFlow'].replace(/[^0-9.]/g, '')));
-							}
-
-							const siteInfo = siteList.find(e => e.sid === rowData['site_id']);
-							rowData['name'] = siteInfo.name;
-
-							if (isEmpty(keyWord)) {
-								refineList.push(rowData);
-							} else {
-								if (keyWordPattern.test(rowData['name']) || keyWordPattern.test(rowData['spc_name'])) {
+							const year = Number(rowData['balance_yyyymm'].substring(0, 4));
+							yearList.push(year);
+							if ($("#year button").data("value") === "____" || $("#year button").data("value") === year) {
+								const balance_info = JSON.parse(rowData['balance_info']);
+	
+								rowData['balance_yyyymm'] = rowData['balance_yyyymm'].replace(/(\d{4})(\d{2})/, '$1-$2');
+								if (!isEmpty(balance_info)) {
+									rowData['inflowOfCash'] = numberComma(Math.round(balance_info['inflowOfCash'].replace(/[^0-9.]/g, '')));
+									rowData['outflowOfCash'] = numberComma(Math.round(balance_info['outflowOfCash'].replace(/[^0-9.]/g, '')));
+									rowData['endOfTermFlow'] = numberComma(Math.round(balance_info['endOfTermFlow'].replace(/[^0-9.]/g, '')));
+								}
+	
+								const siteInfo = siteList.find(e => e.sid === rowData['site_id']);
+								rowData['name'] = siteInfo.name;
+	
+								if (isEmpty(keyWord)) {
 									refineList.push(rowData);
+								} else {
+									if (keyWordPattern.test(rowData['name']) || keyWordPattern.test(rowData['spc_name'])) {
+										refineList.push(rowData);
+									}
 								}
 							}
 						}
 					});
 
-					let yearTemplate = ``;
+					let yearTemplate = `<li data-value="____"><a href="#">전체</a></li>`;
 					[...new Set(yearList)].forEach((v, k) => {
 						yearTemplate += `<li data-value="${'${v}'}"><a href="#">${'${v}'}년</a></li>`
 					})
 					$("#year > ul").html(yearTemplate);
-					$("#year > button").html($("#year > ul > li:first-child").html()+`<span class="caret"></span>`);
 				}
 
 				balanceTable.clear();
@@ -283,14 +285,13 @@
 			<span class="tx-tit">기준</span>
 			<div class="sa-select">
 				<div class="dropdown" id="year">
-					<button type="button" class="dropdown-toggle w8" data-toggle="dropdown"
-						data-value="2020">
-						2020년<span class="caret"></span>
+					<button type="button" class="dropdown-toggle w8" data-toggle="dropdown" data-value="____">
+						전체 <span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu chk-type" role="menu">
-						<li data-value="2020"><a href="#">2020년</a></li>
+						<!-- <li data-value="2020"><a href="#">2020년</a></li>
 						<li data-value="2019"><a href="#">2019년</a></li>
-						<li data-value="2018"><a href="#">2018년</a></li>
+						<li data-value="2018"><a href="#">2018년</a></li> -->
 					</ul>
 				</div>
 			</div>
