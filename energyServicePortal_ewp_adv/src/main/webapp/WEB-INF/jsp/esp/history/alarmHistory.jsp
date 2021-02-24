@@ -628,7 +628,7 @@
 		if (!isEmpty(sgid) || !isEmpty(vgid) || !isEmpty(sidparam)) {
 			siteArray = dataList[1].join(',');
 		} else {
-			if ($('#site_0').is(':checked') || $(':checkbox[name="site"]:not(#site_0)').length === $(':checkbox[name="site"]:checked').length) {
+			if ($('#site_0').is(':checked') || sites.length === $(':checkbox[name="site"]:checked').length) {
 				siteArray = 'all';
 			} else {
 				siteArray = dataList[1].join(',');
