@@ -1,0 +1,33 @@
+.flex {
+	display: flex;
+}
+
+#vppDashboardContent > div > div:not(:last-child) {
+	margin-bottom: 24px;
+}
+
+#vpp-1-1 {
+	display: flex;
+	justify-content: space-between;
+}
+
+#vpp-1-1 > div {
+	width: calc(50% - 12px);
+}
+
+.vpp-infobox {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 10px 0;
+	font-size: 14px;
+	color: var(--white60);
+}
+
+.vpp-infobox > p:last-child {
+	color: rgba(255, 255, 255, .87);
+}
+
+.vpp-infobox:not(:last-child) {
+	border-bottom: 1px solid rgba(255, 255, 255, .12);
+}
