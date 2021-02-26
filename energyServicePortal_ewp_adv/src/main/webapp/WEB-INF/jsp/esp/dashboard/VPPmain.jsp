@@ -216,7 +216,7 @@
 		</div>
 
 		<div class="indiv vpp-2-2">
-			<div class="flex-center-between">
+			<div class="flex-start-between">
 				<h2 class="title">발전 현황</h2>
 				<div class="sa-select">
 					<div class="dropdown" id="locationList">
@@ -248,10 +248,10 @@
 				<table class="vpp-2-2-table" id="vppMapTable">
 					<colgroup>
 						<col width="11%">
-						<col width="35%">
-						<col width="30%">
-						<col width="11%">
-						<col width="11%">
+						<col width="32%">
+						<col width="26%">
+						<col width="14%">
+						<col width="14%">
 					</colgroup>
 					<thead>
 						<tr>
@@ -427,24 +427,24 @@
 			<!-- vpp-3-2-graph 만들때 마지막거부터 -->
 			<div class="vpp-3-2-graph">
 				<div class="actived">
-					<div>1</div>
-					<p>예측 오차</p>
-				</div>
-				<div class="actived">
-					<div>4</div>
-					<p>20%</p>
-				</div>
-				<div class="actived">
-					<div>15</div>
-					<p>10%</p>
-				</div>
-				<div class="actived">
 					<div>32</div>
 					<p>8%</p>
 				</div>
 				<div class="actived">
 					<div>42</div>
 					<p>6%</p>
+				</div>
+				<div class="actived">
+					<div>15</div>
+					<p>10%</p>
+				</div>
+				<div class="actived">
+					<div>4</div>
+					<p>20%</p>
+				</div>
+				<div class="actived">
+					<div>1</div>
+					<p>예측 오차</p>
 				</div>
 			</div>
 
@@ -540,16 +540,15 @@
 				$(this).addClass("actived");
 			})
 			.on("click", "#vppMapTable tbody tr:not(.vpp-fold-menu)", function(e) {
-				$("#vppMapTable tbody tr.open").removeClass("open")
 				if (!$(this).hasClass("open")) {
+					$("#vppMapTable tbody tr.open").removeClass("open");
 					$(this).addClass("open");
+				} else {
+					$("#vppMapTable tbody tr.open").removeClass("open");
 				}
 			})
 			.on("click", ".vpp-3-2-graph > div", function(e) {
-				$(".vpp-3-2-graph > div.actived").removeClass("actived");
-				$(this)
-					.addClass("actived")
-					.nextAll().addClass("actived")
+				$(this).toggleClass("actived");
 			})
 			.on("click", ".auto-rolling", function(e) {
 				$(this).toggleClass("play stop");
