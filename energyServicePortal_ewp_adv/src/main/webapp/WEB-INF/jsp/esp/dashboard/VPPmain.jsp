@@ -5,7 +5,7 @@
 	<script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyAgEDjSwQWd_Q9RF_owO8WkMtf-6lmVSpc"></script>
 </c:if>
 
-<link type="text/css" rel="stylesheet" href="/css/vppDashboard.css">
+<link type="text/css" rel="stylesheet" href="/css/vppDashboard.min.css">
 
 
 <form id="linkSiteForm" name="linkSiteForm" method="post"></form>
@@ -88,9 +88,6 @@
 						</div>
 					</div>
 				</div>
-			</div>
-			<div>
-
 			</div>
 		</div>
 
@@ -438,7 +435,7 @@
 			.on("click", "#vppMapTable tbody tr:not(.vpp-fold-menu)", function(e) {
 				$("#vppMapTable tbody tr.open").removeClass("open")
 				if (!$(this).hasClass("open")) {
-					$(this).addClass("open")
+					$(this).addClass("open");
 				}
 			})
 	});
