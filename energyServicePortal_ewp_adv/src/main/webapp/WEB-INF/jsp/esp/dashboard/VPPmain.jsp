@@ -1,11 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
-<c:if test="${dashboardMap eq 'google'}">
+<!-- <c:if test="${dashboardMap eq 'google'}">
 	<script src="https://unpkg.com/@googlemaps/markerclustererplus/dist/index.min.js"></script>
 	<script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyAgEDjSwQWd_Q9RF_owO8WkMtf-6lmVSpc"></script>
-</c:if>
+</c:if> -->
 
-<link type="text/css" rel="stylesheet" href="/css/vppDashboard.min.css">
+<link type="text/css" rel="stylesheet" href="/css/vppDashboard.css" />
 
 
 <form id="linkSiteForm" name="linkSiteForm" method="post"></form>
@@ -96,8 +96,35 @@
 				<h2 class="title actived">보조자원 예측</h2>
 				<h2 class="title">충/방전 현황</h2>
 			</div>
-			<div>
-				<div><!-- 그래프 --></div>
+			<div class="vpp-1-3-1 vpp-1-3-content view">
+				<div>그래프</div>
+			</div>
+			<div class="vpp-1-3-2 vpp-1-3-content">
+				<div><!-- 그래프? --></div>
+				<div class="vpp-1-3-2-1">
+					<div>
+						<h3>이용 현황</h3>
+						<div class="vpp-infobox">
+							<p>이용</p>
+							<p>100 kW</p>
+						</div>
+						<div class="vpp-infobox">
+							<p>총 용량</p>
+							<p>2 MWh</p>
+						</div>
+					</div>
+					<div>
+						<h3>금일 계획</h3>
+						<div class="vpp-infobox">
+							<p>금일 충전 계획</p>
+							<p>240 kWh</p>
+						</div>
+						<div class="vpp-infobox">
+							<p>금일 방전 계획</p>
+							<p>20 kWh</p>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 
@@ -158,7 +185,7 @@
 						<div>
 							<div class="vpp-2-1-1-img">
 								<img src="/img/vpp/wind-power.svg" alt="풍력" />
-								<!-- <img src="/img/vpp/network-error.svg" alt="가동" class="network-status-img" /> -->
+								<!-- <img src="/img/vpp/network-error-yellow.svg" alt="가동" class="network-status-img" /> -->
 							</div>
 							<p>풍력</p>
 						</div>
@@ -174,7 +201,7 @@
 								<img src="/img/vpp/ess.svg" alt="태양광" />
 								<p>ESS</p>
 							</div>
-							<img src="/img/vpp/network-error.svg" alt="통신" />
+							<img src="/img/vpp/network-error-yellow.svg" alt="통신" />
 						</div>
 						<div>
 							<div class="flex-center">
@@ -211,7 +238,10 @@
 
 			<div class="vpp-2-2-center">
 				<p>사이트 현황</p>
-				<p class="flex-center"><img src="/img/vpp/play.svg" alt="자동 재생" /> 자동 재생</p>
+				<div class="auto-rolling play">
+					<p class="play"><img src="/img/vpp/play.svg" alt="자동 재생" /> 자동 재생</p>
+					<p class="stop"><img src="/img/vpp/pause.svg" alt="일시 정지" /> 일시 정지</p>
+				</div>
 			</div>
 
 			<div class="vpp-2-2-tablewrap">
@@ -243,7 +273,7 @@
 								<img src="/img/vpp/fuelcell.svg" alt="자원" class="">
 							</td>
 							<td> <span class="normal">정상</span> </td>
-							<td> <span class="error">정상</span> </td>
+							<td> <span class="error">이상</span> </td>
 						</tr>
 						<tr class="vpp-fold-menu">
 							<td colspan="5">
@@ -325,26 +355,27 @@
 		</div>
 		<div class="indiv vpp-3-2">
 			<h2 class="title">주간 예측오차율</h2>
+			<!-- vpp-3-2-graph 만들때 마지막거부터 -->
 			<div class="vpp-3-2-graph">
-				<div>
-					<div>42</div>
-					<p>6%</p>
+				<div class="actived">
+					<div>1</div>
+					<p>예측 오차</p>
 				</div>
-				<div>
-					<div>32</div>
-					<p>8%</p>
-				</div>
-				<div>
-					<div>15</div>
-					<p>10%</p>
-				</div>
-				<div>
+				<div class="actived">
 					<div>4</div>
 					<p>20%</p>
 				</div>
-				<div>
-					<div>1</div>
-					<p>예측 오차</p>
+				<div class="actived">
+					<div>15</div>
+					<p>10%</p>
+				</div>
+				<div class="actived">
+					<div>32</div>
+					<p>8%</p>
+				</div>
+				<div class="actived">
+					<div>42</div>
+					<p>6%</p>
 				</div>
 			</div>
 
@@ -352,7 +383,14 @@
 
 			<!-- dataTable -->
 			<table id="vpp-3-2-dataTable">
-
+				<colgroup>
+					<col width="185px">
+					<col width="60px">
+					<col width="60px">
+					<col width="60px">
+					<col width="60px">
+					<col width="60px">
+				</colgroup>
 			</table>
 		</div>
 	</div>
@@ -385,7 +423,7 @@
 					className: 'dt-head-left dt-body-right'
 				},
 				{
-					title: "현시각 \n 발전",
+					title: "현시각 발전",
 					// data: 'siteName',
 					// render: function (data, type, full, rowIndex) {
 					// },
@@ -426,7 +464,7 @@
 			dom: 'tip',
 		}).columns.adjust().draw();
 
-		// on 이벤트 체이닝
+		// 이벤트 체이닝
 		$(document)
 			.on("click", ".vpp-1-3 > .title-area > .title", function(e) {
 				$(".vpp-1-3 > .title-area > .title.actived").removeClass("actived");
@@ -438,5 +476,30 @@
 					$(this).addClass("open");
 				}
 			})
+			.on("click", ".vpp-3-2-graph > div", function(e) {
+				$(".vpp-3-2-graph > div.actived").removeClass("actived");
+				$(this)
+					.addClass("actived")
+					.nextAll().addClass("actived")
+			})
+			.on("click", ".auto-rolling", function(e) {
+				$(this).toggleClass("play stop");
+				rolling();
+			})
+			.on("click", ".vpp-1-3 > .title-area > .title", function(e) {
+				$(".vpp-1-3 > .title-area > .title.actived").removeClass("actived");
+				$(this).addClass("actived");
+
+				$(".vpp-1-3-content").removeClass("view");
+				$(".vpp-1-3-"+($(this).index() + 1)).addClass("view");
+			})
+
+		rolling();
 	});
+
+	function rolling() {
+		const play = $(".auto-rolling").hasClass("play") ? true : false;
+
+		// alert(play);
+	}
 </script>
