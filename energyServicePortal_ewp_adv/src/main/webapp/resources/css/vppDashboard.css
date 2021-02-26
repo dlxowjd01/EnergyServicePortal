@@ -307,7 +307,10 @@ h2.title {
 
 .vpp-2-2-table td > span.normal { background-color: #90caf3; }
 .vpp-2-2-table td > span.error { background-color: #ffd954; }
-.vpp-2-2-table td > span.off { background-color: #656565; }
+.vpp-2-2-table td > span.off {
+	background-color: #656565;
+	color: rgba(255, 255, 255, .4);
+}
 
 .vpp-2-2-tablewrap {
 	max-height: 463px;
@@ -393,6 +396,11 @@ h2.title {
 	width: calc(50% - 20px);
 }
 
+.vpp-fold-menu .vpp-infobox {
+	font-size: 13px;
+	font-weight: normal;
+}
+
 .vpp-3-1 {
 	display: flex;
 	flex-direction: column;
@@ -460,11 +468,11 @@ h2.title {
 	text-align: right;
 }
 
-.vpp-3-2-graph > div:nth-child(1) > div { background: #009389; }
-.vpp-3-2-graph > div:nth-child(2) > div { background: #00b2aa; }
+.vpp-3-2-graph > div:nth-child(1) > div { background: #b0e9e8; }
+.vpp-3-2-graph > div:nth-child(2) > div { background: #78dbda; }
 .vpp-3-2-graph > div:nth-child(3) > div { background: #26ccc8; }
-.vpp-3-2-graph > div:nth-child(4) > div { background: #78dbda; }
-.vpp-3-2-graph > div:nth-child(5) > div { background: #b0e9e8; }
+.vpp-3-2-graph > div:nth-child(4) > div { background: #00b2aa; }
+.vpp-3-2-graph > div:nth-child(5) > div { background: #009389; }
 
 .vpp-3-2 > p {
 	text-align: right;

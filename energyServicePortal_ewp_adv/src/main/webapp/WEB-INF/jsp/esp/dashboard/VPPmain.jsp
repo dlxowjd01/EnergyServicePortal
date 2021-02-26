@@ -331,6 +331,75 @@
 								</div>
 							</td>
 						</tr>
+
+						<tr>
+							<td>ㅇㅇ</td>
+							<td>123123ㅁㄴㅇ</td>
+							<td>
+								<img src="/img/vpp/solar-panel.svg" alt="자원" class="">
+								<img src="/img/vpp/wind-power.svg" alt="자원" class="">
+								<img src="/img/vpp/ess.svg" alt="자원" class="actived">
+								<img src="/img/vpp/fuelcell.svg" alt="자원" class="">
+							</td>
+							<td> <span class="off">정상</span> </td>
+							<td> <span class="off">이상</span> </td>
+						</tr>
+						<tr class="vpp-fold-menu">
+							<td colspan="5">
+								<div>
+									<div class="vpp-fold-menu-header">
+										<img src="/img/weather_icons/ico1_sun.svg" alt="날씨"> 
+										<div>
+											<ul>
+												<li>일사량</li>
+												<li>61 kWh/m.day</li>
+											</ul>
+											<div class="flex-center">
+												<ul>
+													<li>온도</li>
+													<li>23%</li>
+												</ul>
+												<ul>
+													<li>온도</li>
+													<li>23%</li>
+												</ul>
+											</div>
+										</div>
+									</div>
+
+									<div class="vpp-fold-menu-content">
+										<div>
+											<div class="vpp-infobox">
+												<p>발전소 용량</p>
+												<p>91.12kW</p>
+											</div>
+											<div class="vpp-infobox">
+												<p>발전소 용량</p>
+												<p>91.12kW</p>
+											</div>
+											<div class="vpp-infobox">
+												<p>발전소 용량</p>
+												<p>91.12kW</p>
+											</div>
+										</div>
+										<div>
+											<div class="vpp-infobox">
+												<p>발전소 용량</p>
+												<p>91.12kW</p>
+											</div>
+											<div class="vpp-infobox">
+												<p>발전소 용량</p>
+												<p>91.12kW</p>
+											</div>
+											<div class="vpp-infobox">
+												<p>발전소 용량</p>
+												<p>91.12kW</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</td>
+						</tr>
 					</tbody>
 				</table>
 			</div>
