@@ -282,7 +282,7 @@
 						deviceStr +=
 							`   <li>
 									<a href="javascript:void(0);" tabindex="-1">
-										<input id="device_dashboard_${'${targetSite[\'sid\']}'}" name="device" type="checkbox" value="${'${targetSite[\'sid\']}'}" data-sid="${'${targetSite[\'sid\']}'}" data-solar="${'${solarDid}'}" data-sitename="${'${targetSite[\'name\']}'}" data-name="${'${targetSite[\'name\']}'}_<fmt:message key='pvGen.dashboard' />">
+										<input id="device_dashboard_${'${targetSite[\'sid\']}'}" name="device" type="checkbox" value="${'${targetSite[\'sid\']}'}" data-sid="${'${targetSite[\'sid\']}'}" data-sitename="${'${targetSite[\'name\']}'}" data-name="${'${targetSite[\'name\']}'}_<fmt:message key='pvGen.dashboard' />">
 										<label for="${'${targetSite[\'sid\']}'}"><span></span><fmt:message key='pvGen.dashboard' /></label>
 									</a>
 								</li>
@@ -291,7 +291,7 @@
 						deviceStr +=
 							`   <li>
 									<a href="javascript:void(0);" tabindex="-1">
-										<input id="device_billing_${'${targetSite[\'sid\']}'}" name="device" type="checkbox" value="${'${targetSite[\'sid\']}'}" data-sid="${'${targetSite[\'sid\']}'}" data-solar="${'${solarDid}'}" data-sitename="${'${targetSite[\'name\']}'}" data-name="${'${targetSite[\'name\']}'}_<fmt:message key='pvGen.sales' />">
+										<input id="device_billing_${'${targetSite[\'sid\']}'}" name="device" type="checkbox" value="${'${targetSite[\'sid\']}'}" data-sid="${'${targetSite[\'sid\']}'}" data-sitename="${'${targetSite[\'name\']}'}" data-name="${'${targetSite[\'name\']}'}_<fmt:message key='pvGen.sales' />">
 										<label for="${'${targetSite[\'sid\']}'}"><span></span><fmt:message key='pvGen.sales' /></label>
 									</a>
 								</li>
@@ -302,11 +302,11 @@
 							return a['name'] > b['name'] ? 1 : a['name'] < b['name'] ? -1 : 0;
 						});
 						devices.forEach(device => {
-							if ((device.dashboard || device.billing) && device.metering_type === 2) {
+							if (((device.dashboard || device.billing) && device.metering_type === 2) || (device.device_type === 'SENSOR_SOLAR')) {
 								deviceStr +=
 									`   <li>
 											<a href="javascript:void(0);" tabindex="-1">
-												<input id="${'${device[\'did\']}'}" name="device" type="checkbox" value="${'${device[\'did\']}'}" data-sid="${'${targetSite[\'sid\']}'}" data-solar="${'${solarDid}'}" data-sitename="${'${targetSite[\'name\']}'}" data-name="${'${targetSite[\'name\']}'}_${'${device[\'name\']}'}">
+												<input id="${'${device[\'did\']}'}" name="device" type="checkbox" value="${'${device[\'did\']}'}" data-sid="${'${targetSite[\'sid\']}'}" data-sitename="${'${targetSite[\'name\']}'}" data-name="${'${targetSite[\'name\']}'}_${'${device[\'name\']}'}" data-type="${'${device.device_type}'}">
 												<label for="${'${device[\'did\']}'}"><span></span>${'${device[\'name\']}'}</label>
 											</a>
 										</li>
@@ -378,6 +378,7 @@
 		const billingSites = new Array();
 		const dashSites = new Array();
 		const checkedSites = new Array();
+		const solarSites = new Array();
 		const solarDevices = new Array();
 		const checkedDevices = new Array();
 
@@ -390,8 +391,16 @@
 				if (!checkedSites.includes(device.value)) checkedSites.push(device.value);
 				dashSites.push(device.value);
 			} else {
-				if (!checkedSites.includes(device.dataset.sid)) checkedSites.push(device.dataset.sid);
-				checkedDevices.push(device.value);
+				if (device.dataset.type === 'SENSOR_SOLAR') {
+					if (!solarDevices.includes(device.value)) solarDevices.push(device.value);
+					solarDevices.push(device.value);
+
+					if (!solarDevices.includes(device.dataset.sid)) solarDevices.push(device.dataset.sid);
+					solarSites.push(device.dataset.sid);
+				} else {
+					if (!checkedSites.includes(device.value)) checkedSites.push(device.value);
+					checkedDevices.push(device.value);
+				}
 			}
 		});
 
@@ -403,7 +412,7 @@
 		}
 
 		const deviceWarning = document.getElementById('deviceType').children[1].children[1];
-		if (billingSites.length <= 0 && dashSites.length <= 0 && checkedDevices.length <= 0) {
+		if (billingSites.length <= 0 && dashSites.length <= 0 && checkedDevices.length <= 0 && solarDevices.length <= 0) {
 			deviceWarning.classList.remove('hidden');
 		} else {
 			if (!deviceWarning.className.match(/\bhidden\b/)) deviceWarning.classList.add('hidden');
@@ -471,26 +480,28 @@
 			}));
 		}
 
-		promiseUrl.push($.ajax({
-			url: apiHost + '/status/summary',
-			type: 'GET',
-			contentType: 'application/json',
-			data: {
-				sids: checkedSites.toString(),
-				dids: solarDevices.toString(),
-				startTime: Number(startTime),
-				endTime: Number(endTime),
-				interval: interval,
-				formId: 'v2'
-			}
-		}));
+		if (solarDevices.length > 0) {
+			promiseUrl.push($.ajax({
+				url: apiHost + '/status/summary',
+				type: 'GET',
+				contentType: 'application/json',
+				data: {
+					sids: solarSites.toString(),
+					dids: solarDevices.toString(),
+					startTime: Number(startTime),
+					endTime: Number(endTime),
+					interval: interval,
+					formId: 'v2'
+				}
+			}));
+		}
 
 		Promise.all(promiseUrl).then(response => {
 			generationData = new Object();
 			if (!isEmpty(response)) {
 				response.forEach((res, idx) => {
 					const database = res.data;
-					if (idx === (response.length - 1)) {
+					if (idx === (response.length - 1) && solarDevices.length > 0) {
 						if (!isEmpty(res.SENSOR_SOLAR)) {
 							const sensorSolar = res.SENSOR_SOLAR;
 							sensorSolar.sort((a, b) => {
@@ -499,24 +510,45 @@
 
 							let solarDid = '';
 							let solarArray = new Array();
+							let colorIndex = 0;
 							standard = makeStandard(interval);
 							document.querySelectorAll('input[name="device"]:checked').forEach(device => {
-								const solar = statusSummary.find(status => status.sid === device.dataset.sid);
-								if (isEmpty(solar)) {
-									statusSummary.push({
-										name: device.dataset.sitename + '_일사량',
-										sid: device.dataset.sid,
-										did: device.dataset.solar,
-										yAxis: 1,
-										dashStyle: 'ShortDash',
-										color: 'var(--white60)',
-										tooltip: {
-											valueSuffix: 'W/m\xB2',
-										},
-										marker: {
-											symbol: 'circle'
-										}
-									})
+								if (device.dataset.type === 'SENSOR_SOLAR') {
+									let colorArr = [
+										'var(--powder-blue)',
+										'var(--turquoise)',
+										'var(--teal)',
+										'var(--light-blue)',
+										'var(--blueberry)',
+										'var(--royal-blue)',
+										'var(--blue-yonder)',
+										'var(--circle-solar-power)',
+										'var(--deep-lilac)',
+										'var(--yellow-green)',
+										'var(--green)',
+										'var(--eucalyptus)',
+										'var(--french-pass)',
+										'var(--malibu)',
+										'var(--vivid-blue)',
+									];
+									const solar = statusSummary.find(status => status.sid === device.dataset.sid);
+									if (isEmpty(solar)) {
+										statusSummary.push({
+											name: device.dataset.name,
+											sid: device.dataset.sid,
+											did: device.value,
+											yAxis: 1,
+											dashStyle: 'ShortDash',
+											color: colorArr[colorIndex],
+											tooltip: {
+												valueSuffix: 'W/m\xB2',
+											},
+											marker: {
+												symbol: 'circle'
+											}
+										});
+										colorIndex ++;
+									}
 								}
 							});
 
@@ -644,9 +676,7 @@
 				span.classList = grid.color;
 
 				let totalSum = 0;
-				console.log(items)
 				items.forEach((item, index) => {
-					console.log(item, index)
 					let th = document.createElement('th')
 						, td = document.createElement('td')
 
@@ -832,7 +862,7 @@
 			'var(--malibu)',
 			'var(--vivid-blue)',
 		];
-		let chartStandard = new Array();
+		let chartStandard = standard;
 
 		const chartStyle = $('#chartStyle button').data('value'); //현재 선택된 스타일
 		const chartStyle2 = $('#chartStyle2 button').data('value'); //현재 선택된 스타일
@@ -847,8 +877,7 @@
 				, dup = false;
 
 			if (['5min', '15min', 'hour'].includes(interval) && chartStyle2 === 'overlap') {
-				const standard2 = makeStandard(interval, 'overlap');
-				chartStandard = standard2;
+				chartStandard = makeStandard(interval, 'overlap');
 				standard2.forEach((std, index) => {
 					let timeValue = null;
 					if (!isEmpty(items)) {
@@ -863,7 +892,6 @@
 					deivceEnergy.push([std, timeValue]);
 				});
 			} else {
-				chartStandard = standard;
 				standard.forEach((std, index) => {
 					let suffix = '';
 					if (interval === '5min' ||interval === '15min' || interval === 'hour') {
@@ -928,7 +956,6 @@
 		});
 
 		seriesData = seriesData.concat(statusSummary);
-		console.log(seriesData);
 		chartDraw(chartStandard, seriesData);
 
 		//발전량 합계
@@ -1082,7 +1109,7 @@
 					align: 'low',
 					rotation: 0,
 					y: 25,
-					x: 35,
+					x: 40,
 					style: {
 						color: 'var(--grey)',
 						fontSize: '10px',
