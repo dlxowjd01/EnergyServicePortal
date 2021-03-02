@@ -547,18 +547,16 @@
 				clearInterval(refreshHourInterval);
 			} else {
 				$(".dashboardTableSearch").addClass("hidden");
-			// A. DashboardView
+				// A. DashboardView
 				target.eq(0).removeClass('hidden').next().addClass('hidden');
-				setCookie("switch", "");
-				// document.cookie = 'switch=; path=/';
-				
+				setCookie('switch', '');
+
 				if (!isEmpty(siteList) && siteList.length > 0) {
 					let pathName = window.location.pathname;
 
-					if( pathName.includes('gmain') && dashboardViewFlag === true){
+					if (pathName.includes('gmain') && dashboardViewFlag === true) {
 						firstAjax();
 						refreshHourInterval = setInterval(firstAjax, 60 * 60 * 1000); // 한시간에 한번 화면갱신
-						// setInterval(() => firstAjax(), 60 * 60 * 1000); // 한시간에 한번 화면갱신
 						refreshMinInterval = setInterval(() => {
 							minIntervalCount++;
 							if ((minIntervalCount % 60) !== 0) {
@@ -566,11 +564,9 @@
 							}
 						}, 60 * 1000); //1분에 한번 현재현황 & 알림 갱신
 					} else {
-						if( pathName.includes('jmain')){
-
+						if (pathName.includes('jmain')) {
 							firstAjax();
 							refreshHourInterval = setInterval(firstAjax, 60 * 60 * 1000); // 한시간에 한번 화면갱신
-							// setInterval(() => firstAjax(), 60 * 60 * 1000); // 한시간에 한번 화면갱신
 							refreshMinInterval = setInterval(() => {
 								minIntervalCount++;
 								if ((minIntervalCount % 60) !== 0) {

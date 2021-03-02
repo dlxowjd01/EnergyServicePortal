@@ -29,6 +29,10 @@ const replaceNotFullKorean = /[ㄱ-ㅎㅏ-ㅣ]/gi;
  * 공통 이벤트 처리
  */
 $(document).ready(function () {
+	setInitList('alarmNotice'); //알람 공지 세팅
+	$('#statusSiteList').find('.ESS').remove();
+	setInitList('siteList'); //사이트 리스트
+
 	// 모든 table 헤더에 클릭 이벤트를 설정한다.
 	var tables = document.querySelectorAll("table.dashboard-sort");
 	for (var i = 0; i < tables.length; ++i) {
@@ -85,8 +89,6 @@ $(document).ready(function () {
  * 필요한 데이터를 모두 조회한다.
  */
 const firstAjax = () => {
-	setInitList('alarmNotice'); //알람 공지 세팅
-
 	yearData = getSiteMainSchCollection('year');
 	monthData = getSiteMainSchCollection('month');
 	yesterData = getSiteMainSchCollection('yesterday');
@@ -94,25 +96,7 @@ const firstAjax = () => {
 	hourData = getSiteMainSchCollection('hour');
 
 	let siteSids = new Array();
-	let ess = false;
-
-	siteList.forEach(site => {
-		siteSids.push(site.sid);
-
-		if (site.devices != null) {
-			const devices = site.devices;
-			devices.forEach(device => {
-				if ((device.device_type.toUpperCase()).match('ESS')) {
-					ess = true;
-				}
-			});
-		}
-	});
-
-	if (!ess) {
-		$('#statusSiteList').find('.ESS').remove();
-	}
-	setInitList('siteList'); //사이트 리스트
+	siteList.forEach(site => { siteSids.push(site.sid);});
 
 	if (isEmpty(sgid) && isEmpty(divisionLocation) && isEmpty(divisionResourceType)) siteSids = 'all';
 
