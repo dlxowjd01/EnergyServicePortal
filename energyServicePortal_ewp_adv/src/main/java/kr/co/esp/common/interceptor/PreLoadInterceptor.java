@@ -233,6 +233,11 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 				if ("init".equals(divisionProc)) { //초기화
 					jsonArray = new JSONArray();
 					for (Map<String, Object> refineMap : siteOriginList) {
+						if (refineMap.get("devices") == null) {
+							refineMap.put("hasDevices", false);
+						} else {
+							refineMap.put("hasDevices", true);
+						}
 						refineMap.remove("devices");
 						jsonArray.put(jsonParser(refineMap));
 					}

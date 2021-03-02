@@ -187,6 +187,26 @@ const minAjax = async () => {
 		})
 	}));
 
+	const deviceRaw = new Array();
+	siteList.forEach(site => {
+		if (site.hasDevices) {
+			deviceRaw.push(site.sid)
+		}
+	});
+
+	targetApi.push($.ajax({
+		url: apiHost + '/get/status/raw/sites',
+		type: 'POST',
+		contentType: 'application/json',
+		data: JSON.stringify({
+			sids: deviceRaw.toString(),
+			formId: 'v2',
+			isLimited: true,
+			displayType: 'dashboard',
+			operation: 'overall'
+		})
+	}));
+
 	siteList.forEach(site => {
 		if (site.hasDevices) {
 			targetApi.push($.ajax({
@@ -238,24 +258,45 @@ const minAjax = async () => {
 				} else if (index === 1) {
 					//일간 차트
 					let co2Sum = 0, moneySum = 0, cenergy = 0, denergy = 0;
+					let energySum2 = 0, moneySum2 = 0;
 					const siteNowEnergyData = resData['data'];
+					let yesterDay = new Date();
+					yesterDay.setDate(yesterDay.getDate() - 1);
 					Object.entries(siteNowEnergyData).forEach(([siteKey, siteData]) => {
 						if (!isEmpty(siteData)) {
-							if (!isEmpty(siteData['co2'])) { co2Sum += siteData['co2']; }
-							if (!isEmpty(siteData['energy'])) { energySum += siteData['energy']; }
-							if (!isEmpty(siteData['cenergy'])) { cenergy += siteData['cenergy']; }
-							if (!isEmpty(siteData['denergy'])) { denergy += siteData['denergy']; }
-							if (!isEmpty(siteData['money'])) { moneySum += siteData['money']; }
+							if (String(siteData['start']).substr(0, 8) === today.format('yyyyMMdd')) {
+								if (!isEmpty(siteData['co2'])) { co2Sum += siteData['co2']; }
+								if (!isEmpty(siteData['energy'])) { energySum += siteData['energy']; }
+								if (!isEmpty(siteData['cenergy'])) { cenergy += siteData['cenergy']; }
+								if (!isEmpty(siteData['denergy'])) { denergy += siteData['denergy']; }
+								if (!isEmpty(siteData['money'])) { moneySum += siteData['money']; }
+							} else if (String(siteData['start']).substr(0, 8) === yesterDay.format('yyyyMMdd')) {
+								if (!isEmpty(siteData['energy'])) { energySum2 += siteData['energy']; }
+								if (!isEmpty(siteData['money'])) { moneySum2 += siteData['money']; }
+							}
+
+							$('#siteList tr.dbclickopen').each(function() {
+								if ($(this).data('sid') === siteKey) {
+									$(this).find('td:eq(6)').text(numberComma(Math.round(siteData['energy'] / 1000)));
+
+									const detail = $(this).next('tr.detail-info');
+									detail.find('.di-bottom-sec .left .di-list li:eq(1) span.di-li-text').text(numberComma(Math.round(siteData['energy'] / 1000)));
+								}
+							});
 						}
 					});
 
+					let yesterDayGen = Number($('#dailySum').data('yesterDayGen')) + energySum2;
+					let yesterDayMoney = Number($('#dailySum').data('yesterDayMoney')) + moneySum2;
 					let seriesLength = dailyChart.series.length;
 					for (let i = seriesLength - 1; i > -1; i--) {
 						const seriesData = dailyChart.series[i].yData;
 						if (dailyChart.series[i].name === i18nManager.tr("dashboard_payment")) {
-							seriesData[today.getDate()] = Math.round(moneySum / 1000)
+							seriesData[today.getDate() - 2] = Math.round(yesterDayMoney / 1000)
+							seriesData[today.getDate() - 1] = Math.round(moneySum / 1000)
 						} else if (dailyChart.series[i].name === i18nManager.tr("dashboard_photovoltaic")) {
-							seriesData[today.getDate()] = Math.round(energySum / 1000)
+							seriesData[today.getDate() - 2] = Math.round(yesterDayGen / 1000);
+							seriesData[today.getDate() - 1] = Math.round(energySum / 1000);
 						}
 						dailyChart.series[i].setData(seriesData);
 					}
@@ -269,6 +310,7 @@ const minAjax = async () => {
 					$('.gmain-chart4 .chart-info-right ul li:nth-child(1) span').text(numberComma(Math.floor(energySum / 1000)));
 					$('#centerTbody tr td:nth-child(5)').html(numberComma(Math.floor(co2Sum / 1000)) + '<em>&nbsp;&nbsp;kg</em>');
 					$('#centerTbody tr td:nth-child(6)').html(numberComma(Math.floor(moneySum / 1000)) + '<em>&nbsp;&nbsp;'+i18nManager.tr('dashboard_in_thousands_of_won')+'</em>');
+					energySum += energySum2; // 해외사업소가 잇는경우 다른날짜의 발전량이 같이 들어온다 그걸위해서 나눠서 저장해서 합침
 				} else if (index === 2) {
 					$('#siteList tr.dbclickopen').each(function() {
 						const siteId = $(this).data('sid');
@@ -320,44 +362,69 @@ const minAjax = async () => {
 						detail.find('.di-bottom-sec .right .di-text-box a p.tx span').text(numberComma(alarmWarning + alarmError) + ' 건');
 					});
 				} else {
-					let operation = new Array(), activePower = '', capacity = '',
-						inverterCnt = '', irradiationPoa = '', targetSid = '';
-					Object.entries(resData).forEach(([deviceType, deviceData]) => {
-						targetSid = deviceData['sid'];
-						if (!isEmpty(deviceData)) {
-							if (deviceType.match('INV')) {
-								if (!operation.includes(deviceData['operation'])) { operation.push(deviceData['operation']); }
-								acPowerSum += (isEmpty(deviceData['activePower'])) ? 0 : deviceData['activePower'];
-								capacitySum += (isEmpty(deviceData['capacity'])) ? 0 : deviceData['capacity'];
-								invertorCount += (isEmpty(deviceData['devices'])) ? 0 : deviceData['devices'].length;
+					Object.entries(resData).forEach(([site_id, siteDevice]) => {
+						let operation = new Array(), activePower = '', capacity = '',
+							inverterCnt = '', irradiationPoa = '';
+						Object.entries(siteDevice).forEach(([deviceType, deviceData]) => {
+							if (!isEmpty(deviceData)) {
+								if (deviceType.match('INV')) {
+									if (!operation.includes(deviceData['operation'])) { operation.push(deviceData['operation']); }
+									acPowerSum += (isEmpty(deviceData['activePower'])) ? 0 : Number(deviceData['activePower']);
+									capacitySum += (isEmpty(deviceData['capacity'])) ? 0 : Number(deviceData['capacity']);
+									invertorCount += (isEmpty(deviceData['devices'])) ? 0 : deviceData['devices'].length;
 
-								activePower = (activePower != '-') ? activePower + deviceData['activePower'] : deviceData['activePower'];
-								capacity = (capacity != '-') ? capacity + deviceData['capacity'] : deviceData['capacity'];
-								inverterCnt = (!isEmpty(deviceData['devices'])) ? deviceData['devices'].length : '-';
+									activePower = (activePower != '-') ? Number(activePower) + Number(deviceData['activePower']) : Number(deviceData['activePower']);
+									capacity = (capacity != '-') ? Number(capacity) + Number(deviceData['capacity']) : Number(deviceData['capacity']);
+									inverterCnt = (!isEmpty(deviceData['devices'])) ? deviceData['devices'].length : '-';
 
-								if ($('.dbTime').data('timestamp') === undefined || ($('.dbTime').data('timestamp') != undefined && Number($('.dbTime').data('timestamp')) < deviceData['timestamp'])) {
-									const dbTime = new Date(deviceData['timestamp']);
-									$('.dbTime').data('timestamp', deviceData['timestamp']).text(dbTime.format('yyyy-MM-dd HH:mm:ss'));
-								}
-							} else if (deviceType === 'SENSOR_SOLAR') {
-								if (!isEmpty(deviceData) && !isEmpty(deviceData['irradiationPoa'])) {
-									irradiationPoa = (deviceData['irradiationPoa']).toFixed(1);
+									if ($('.dbTime').data('timestamp') === undefined || ($('.dbTime').data('timestamp') != undefined && Number($('.dbTime').data('timestamp')) < deviceData['timestamp'])) {
+										const dbTime = new Date(deviceData['timestamp']);
+										$('.dbTime').data('timestamp', deviceData['timestamp']).text(dbTime.format('yyyy-MM-dd HH:mm:ss'));
+									}
+								} else if (deviceType === 'SENSOR_SOLAR') {
+									if (!isEmpty(deviceData) && !isEmpty(deviceData['irradiationPoa'])) {
+										irradiationPoa = (deviceData['irradiationPoa']).toFixed(1);
+									}
 								}
 							}
-						}
-					});
+						});
 
-					$('#siteList tr.dbclickopen').each(function() {
-						if ($(this).data('sid') === targetSid) {
-							$(this).find('td:eq(4)').text(numberComma(capacity / 1000));
-							$(this).data('operation', operation);
+						$('#siteList tr.dbclickopen').each(function() {
+							if ($(this).data('sid') === site_id) {
+								$(this).find('td:eq(4)').text(numberComma(Math.round(capacity / 1000)));
+								$(this).data('operation', operation);
 
-							const detail = $(this).next('tr.detail-info');
-							detail.find('.di-top-sec .fl .tx2').text(irradiationPoa + ' W/㎡');
-							detail.find('.di-bottom-sec .left .di-list li:eq(0) span.di-li-text').text(numberComma(activePower));
-							detail.find('.di-bottom-sec .right .di-list li:eq(0) span.di-li-text').text(numberComma(capacity / 1000));
-							detail.find('.di-bottom-sec .right .di-list li:eq(1) span.di-li-text').text(numberComma(inverterCnt));
-						}
+								const detail = $(this).next('tr.detail-info');
+								detail.find('.di-top-sec .fl .tx2').text(irradiationPoa + ' W/㎡');
+								detail.find('.di-bottom-sec .left .di-list li:eq(0) span.di-li-text').text(numberComma(Math.round(activePower / 1000)));
+								detail.find('.di-bottom-sec .right .di-list li:eq(0) span.di-li-text').text(numberComma(Math.round(capacity / 1000)));
+								detail.find('.di-bottom-sec .right .di-list li:eq(1) span.di-li-text').text(numberComma(inverterCnt));
+
+								let activePercent = 0, title = '', etc = 0;
+								if ((!isNaN(activePower) || activePower > 0) && (!isNaN(capacity) || capacity > 0)) {
+									activePercent = Math.floor((activePower / capacity) * 100);
+									etc = 100 - activePercent;
+									title = activePercent + '%';
+									if (isNaN(activePercent)) { title = '- %'; }
+								} else {
+									title = '0%';
+									activePercent = 0;
+									etc = 0;
+								}
+
+								const chartId = $(this).next('tr.detail-info').find('.inchart').attr('id');
+								const targetChart = $('#' + chartId).highcharts();
+								targetChart.setTitle({text: title});
+								targetChart.series[0].data.forEach((e, idx) => {
+									if (e.name === '현재 효율') {
+										e.update({y: activePercent});
+									} else {
+										e.update({y: etc});
+									}
+								});
+								targetChart.redraw();
+							}
+						});
 					});
 				}
 			}
@@ -604,45 +671,31 @@ const dailyChartDraw = async (siteSids, renewal) => {
 	const targetApi = new Array();
 	$(`.gmain-chart2 span.term`).text(today.format('yyyy.MM') + '.01 ~ ' + today.format('yyyy.MM') + '.' + today.getDate());
 
-	if (renewal) {
-		targetApi.push($.ajax({
-			url: apiHost + '/get/energy/now/sites',
-			type: 'POST',
-			contentType: 'application/json',
-			data: JSON.stringify({
-				sids: siteSids.toString(),
-				metering_type: '2',
-				interval: 'day'
-			}),
-			timeout: 50000
-		}));
-	} else {
-		targetApi.push($.ajax({
-			url: apiHost + '/get/energy/sites',
-			type: 'POST',
-			contentType: 'application/json',
-			data: JSON.stringify({
-				sid: siteSids.toString(),
-				startTime: Number(monthData.startTime),
-				endTime: Number(monthData.endTime),
-				interval: 'day',
-				displayType: 'dashboard',
-				formId: 'v2'
-			})
-		}));
+	targetApi.push($.ajax({
+		url: apiHost + '/get/energy/now/sites',
+		type: 'POST',
+		contentType: 'application/json',
+		data: JSON.stringify({
+			sids: siteSids.toString(),
+			metering_type: '2',
+			interval: 'day'
+		}),
+		timeout: 50000
+	}));
 
-		targetApi.push($.ajax({
-			url: apiHost + '/get/energy/now/sites',
-			type: 'POST',
-			contentType: 'application/json',
-			data: JSON.stringify({
-				sids: siteSids.toString(),
-				metering_type: '2',
-				interval: 'day'
-			}),
-			timeout: 50000
-		}));
-	}
+	targetApi.push($.ajax({
+		url: apiHost + '/get/energy/sites',
+		type: 'POST',
+		contentType: 'application/json',
+		data: JSON.stringify({
+			sid: siteSids.toString(),
+			startTime: Number(monthData.startTime),
+			endTime: Number(monthData.endTime),
+			interval: 'day',
+			displayType: 'dashboard',
+			formId: 'v2'
+		})
+	}));
 
 	new Promise(resolve => {
 		resolve(Promise.all(targetApi));
@@ -653,13 +706,17 @@ const dailyChartDraw = async (siteSids, renewal) => {
 		const payList = new Array(lastDay.getDate()).fill(0);
 		const sumObj = { chargeSum: 0, dischargeSum: 0, pvSum: 0, pvPart: 0};
 
+		let yesterDayGen = 0;
+		let yesterDayMoney = 0;
+
 		response.forEach((resData, index) => {
-			if ((renewal && index === 0) || (!renewal && index === 1)) {
+			if (index === 0) {
 				if (!isEmpty(resData)) {
 					const siteNowEnergyData = resData['data'];
 					Object.entries(siteNowEnergyData).forEach(([siteKey, siteData]) => {
 						if (!isEmpty(siteData)) {
 							const index = Number(String(siteData['start']).slice(6, 8)) - 1;
+
 							if (!isEmpty(siteData['energy'])) {
 								pvList[index] += siteData['energy'];
 								sumObj['pvSum'] += siteData['energy'];
@@ -682,6 +739,11 @@ const dailyChartDraw = async (siteSids, renewal) => {
 									if (!isEmpty(items)) {
 										items.forEach(item => {
 											const index = Number(String(item['basetime']).slice(6, 8)) - 1;
+											if (index === today.getDate() - 2) {
+												yesterDayGen += item['energy'];
+												yesterDayMoney += item['money'];
+											}
+
 											pvList[index] += item['energy'];
 											payList[index] += item['money'];
 											sumObj['pvSum'] += item['energy'];
@@ -696,8 +758,8 @@ const dailyChartDraw = async (siteSids, renewal) => {
 			}
 		});
 
-		return {chargeList, dischargeList, pvList, payList, sumObj};
-	}).then(({chargeList, dischargeList, pvList, payList, sumObj}) => {
+		return {chargeList, dischargeList, pvList, payList, sumObj, yesterDayGen, yesterDayMoney};
+	}).then(({chargeList, dischargeList, pvList, payList, sumObj, yesterDayGen, yesterDayMoney}) => {
 		let maxValue = 0;
 		let seriesLength = dailyChart.series.length;
 		for (let i = seriesLength - 1; i > -1; i--) {
@@ -750,10 +812,10 @@ const dailyChartDraw = async (siteSids, renewal) => {
 				fontSize: '12px'
 			}
 		});
-		dailyChart.redraw();
 		dailyChart.xAxis[0].setCategories(categories);
-		dailyChart.redraw(); // 차트 데이터를 다시 그린다
+		dailyChart.redraw();
 
+		$('#dailySum').data('yesterDayGen', yesterDayGen).data('yesterDayMoney', yesterDayMoney);
 		new Promise(resolve => {
 			let str = '';
 			Object.entries(sumObj).forEach(([key, value]) => {
@@ -1027,18 +1089,25 @@ const getTodayTotalDetail = async function (siteSids) {
 		timeout: 50000
 	}));
 
+	const deviceRaw = new Array();
 	siteList.forEach(site => {
 		if (site.hasDevices) {
-		targetApi.push($.ajax({
-			url: apiHost + '/status/raw/site',
-			type: 'GET',
-			data: {
-				sid: site.sid,
-				formId: 'v2'
-			}
-		}));
+			deviceRaw.push(site.sid)
 		}
 	});
+
+	targetApi.push($.ajax({
+		url: apiHost + '/get/status/raw/sites',
+		type: 'POST',
+		contentType: 'application/json',
+		data: JSON.stringify({
+			sids: deviceRaw.toString(),
+			formId: 'v2',
+			isLimited: true,
+			displayType: 'dashboard',
+			operation: 'overall'
+		})
+	}));
 
 	new Promise(resolve => {
 		resolve(Promise.all(targetApi));
@@ -1073,17 +1142,19 @@ const getTodayTotalDetail = async function (siteSids) {
 					});
 				}
 			} else if (!isEmpty(apiData) && index >= 2) {
-				Object.entries(apiData).forEach(([deviceType, deviceData]) => {
-					if (deviceType.match('INV') && !isEmpty(deviceData)) {
-						acPowerSum += (isEmpty(deviceData['activePower'])) ? 0 : deviceData['activePower'];
-						capacitySum += (isEmpty(deviceData['capacity'])) ? 0 : deviceData['capacity'];
-						invertorCount += (isEmpty(deviceData['devices'])) ? 0 : deviceData['devices'].length;
+				Object.entries(apiData).forEach(([site_id, siteDevice]) => {
+					Object.entries(siteDevice).forEach(([deviceType, deviceData]) => {
+						if (deviceType.match('INV') && !isEmpty(deviceData)) {
+							acPowerSum += (isEmpty(deviceData['activePower'])) ? 0 : deviceData['activePower'];
+							capacitySum += (isEmpty(deviceData['capacity'])) ? 0 : deviceData['capacity'];
+							invertorCount += (isEmpty(deviceData['devices'])) ? 0 : deviceData['devices'].length;
 
-						if ($('.dbTime').data('timestamp') === undefined || ($('.dbTime').data('timestamp') != undefined && Number($('.dbTime').data('timestamp')) < deviceData['timestamp'])) {
-							const dbTime = new Date(deviceData['timestamp']);
-							$('.dbTime').data('timestamp', deviceData['timestamp']).text(dbTime.format('yyyy-MM-dd HH:mm:ss'));
+							if ($('.dbTime').data('timestamp') === undefined || ($('.dbTime').data('timestamp') != undefined && Number($('.dbTime').data('timestamp')) < deviceData['timestamp'])) {
+								const dbTime = new Date(deviceData['timestamp']);
+								$('.dbTime').data('timestamp', deviceData['timestamp']).text(dbTime.format('yyyy-MM-dd HH:mm:ss'));
+							}
 						}
-					}
+					});
 				});
 			}
 		});
@@ -1287,20 +1358,25 @@ const searchSite = async function (siteSids) {
 		})
 	}));
 
+	const deviceRaw = new Array();
 	siteList.forEach(site => {
 		if (site.hasDevices) {
-			targetApi.push($.ajax({
-				url: apiHost + '/status/raw/site',
-				type: 'GET',
-				data: {
-					sid: site.sid,
-					formId: 'v2'
-				}
-			}));
+			deviceRaw.push(site.sid)
 		}
 	});
 
-	//document.getElementById('miniLoadingCircle').style.display = '';
+	targetApi.push($.ajax({
+		url: apiHost + '/get/status/raw/sites',
+		type: 'POST',
+		contentType: 'application/json',
+		data: JSON.stringify({
+			sids: deviceRaw.toString(),
+			formId: 'v2',
+			isLimited: true,
+			displayType: 'dashboard',
+			operation: 'overall'
+		})
+	}));
 
 	new Promise(resolve => {
 		resolve(Promise.all(targetApi));
@@ -1390,7 +1466,7 @@ const searchSite = async function (siteSids) {
 						refineList[siteIdx]['alarmWarning'] = alarmWarning;
 						refineList[siteIdx]['alarmError'] = alarmError;
 						refineList[siteIdx]['alarmTotal'] = alarmError + alarmWarning;
-					} else if (index >= 5) {
+					} else {
 						let operation = new Array();
 						let activePower = '';
 						let capacity = '';
@@ -1398,27 +1474,33 @@ const searchSite = async function (siteSids) {
 						let irradiationPoa = '';
 
 						let targetDevice = false;
-						Object.entries(apiData).forEach(([deviceType, deviceData]) => {
-							if (!isEmpty(deviceData) && deviceData['sid'] === siteId) {
-								targetDevice = true;
-								if (!operation.includes(deviceData['operation'])) {
-									operation.push(deviceData['operation']);
-								}
+						Object.entries(apiData).forEach(([site_id, siteDevice]) => {
+							if (!isEmpty(siteDevice) && site_id === siteId) {
+								Object.entries(siteDevice).forEach(([deviceType, deviceData]) => {
 
-								//대상은 INV 인버터 타입 대상
-								if (deviceType.match('INV')) {
-									activePower = (activePower != '-') ? activePower + deviceData['activePower'] : deviceData['activePower'];
-									capacity = (capacity != '-') ? capacity + deviceData['capacity'] : deviceData['capacity'];
-									inverterCount = (!isEmpty(deviceData['devices'])) ? deviceData['devices'].length : '-';
-								} else if (deviceType === 'SENSOR_SOLAR') {
-									if (!isEmpty(deviceData) && !isEmpty(deviceData['irradiationPoa'])) {
-										irradiationPoa = (deviceData['irradiationPoa']).toFixed(1);
+									targetDevice = true;
+									if (!operation.includes(deviceData['operation']) && deviceData['operation'] != undefined) {
+										operation.push(deviceData['operation']);
 									}
-								}
+
+									//대상은 INV 인버터 타입 대상
+									if (deviceType.match('INV')) {
+										activePower = (activePower != '-') ? activePower + deviceData['activePower'] : deviceData['activePower'];
+										capacity = (capacity != '-') ? capacity + deviceData['capacity'] : deviceData['capacity'];
+										inverterCount = (!isEmpty(deviceData['devices'])) ? deviceData['devices'].length : '-';
+									} else if (deviceType === 'SENSOR_SOLAR') {
+										if (!isEmpty(deviceData) && !isEmpty(deviceData['irradiationPoa'])) {
+											irradiationPoa = (deviceData['irradiationPoa']).toFixed(1);
+										}
+									}
+								});
 							}
 						});
 
 						if (targetDevice) {
+							if (isNaN(capacity)) { capacity = '-'; }
+							if (isNaN(activePower)) { activePower = '-'; }
+
 							site['inverterCount'] = inverterCount //사이트에 속한 인버터 갯수.
 							site['operation'] = operation; //사이트 상태 정보.
 							site['capacity'] = capacity;   //사이트에 속한 인버터 설비 용량 정보.
@@ -1583,13 +1665,16 @@ const searchSite = async function (siteSids) {
 					let capacity = (site.capacity === undefined || (site.capacity == '-' && isNaN(site.capacity))) ? 0 :site.capacity;
 					let activePower = (site.activePower === undefined || (site.activePower == '-' && isNaN(site.activePower))) ? 0 : site.activePower;
 
-					let activePercent = Math.floor((activePower / capacity) * 100);
-					let title = activePercent + '%';
-					if (isNaN(activePercent)) {
-						title = '- %';
+					let activePercent = 0, title = '', etc = 0;
+					if ((isNaN(capacity) && capacity > 0) && (isNaN(activePower) && activePower > 0)) {
+						activePercent = Math.floor((activePower / capacity) * 100);
+						title = activePercent + '%';
+						etc = 100 - activePercent;
+					} else {
+						activePercent = 0;
+						title = '0%';
+						etc = 100;
 					}
-
-					let etc = capacity - activePower;
 					let series = [{
 						type: 'pie',
 						innerSize: '70%',
@@ -1597,14 +1682,14 @@ const searchSite = async function (siteSids) {
 						colorByPoint: true,
 						data: [{
 							color: 'var(--turquoise)',
-							name: '총 설비용량',
+							name: '현재 효율',
 							dataLabels: {
 								enabled: false
 							},
 							y: Number(activePower)
 						}, {
 							color: 'var(--dove-gray)',
-							name: '미설비용량',
+							name: '현재 비효율',
 							dataLabels: {
 								enabled: false
 							},

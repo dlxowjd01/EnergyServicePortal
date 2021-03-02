@@ -623,8 +623,6 @@ const siteListChart = (selector, seriesData, title) => {
 		seriesData[0].data[0].y = 0;
 		seriesData[0].data[1].y = 1000000;
 	}
-	seriesData[0].data[0].name = "현재 효율";
-	seriesData[0].data[1].name = "현재 비효율";
 
 	let option = {
 		chart: {
