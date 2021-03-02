@@ -253,9 +253,9 @@ const minAjax = async () => {
 					for (let i = seriesLength - 1; i > -1; i--) {
 						const seriesData = dailyChart.series[i].yData;
 						if (dailyChart.series[i].name === i18nManager.tr("dashboard_payment")) {
-							seriesData[today.getMonth()] = Math.round(moneySum / 1000)
+							seriesData[today.getDate()] = Math.round(moneySum / 1000)
 						} else if (dailyChart.series[i].name === i18nManager.tr("dashboard_photovoltaic")) {
-							seriesData[today.getMonth()] = Math.round(energySum / 1000)
+							seriesData[today.getDate()] = Math.round(energySum / 1000)
 						}
 						dailyChart.series[i].setData(seriesData);
 					}

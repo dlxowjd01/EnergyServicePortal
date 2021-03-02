@@ -207,7 +207,7 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 
 			parameters.clear();
 			parameters.put("includeSites", "true");
-			parameters.put("includeDevices", "false");
+			parameters.put("includeDevices", "true");
 			parameters.put("addCapacity", "true");
 
 			Map<String, Object> userSiteGroupSearch = get("/auth/me/groups", mode, parameters, token); //그룹화되어있는 사이트 리스트 정보
@@ -257,6 +257,12 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 					if (refineList != null && refineList.size() > 0) {
 						jsonArray = new JSONArray();
 						for (Map<String, Object> refineMap : refineList) {
+							if (refineMap.get("devices") == null) {
+								refineMap.put("hasDevices", false);
+							} else {
+								refineMap.put("hasDevices", true);
+							}
+							refineMap.remove("devices");
 							jsonArray.put(jsonParser(refineMap));
 						}
 					}
@@ -284,6 +290,12 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 					if (refineList != null && refineList.size() > 0) {
 						jsonArray = new JSONArray();
 						for (Map<String, Object> refineMap : refineList) {
+							if (refineMap.get("devices") == null) {
+								refineMap.put("hasDevices", false);
+							} else {
+								refineMap.put("hasDevices", true);
+							}
+							refineMap.remove("devices");
 							jsonArray.put(jsonParser(refineMap));
 						}
 					}
@@ -362,6 +374,12 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 						if (refineList != null && refineList.size() > 0) {
 							jsonArray = new JSONArray();
 							for (Map<String, Object> refineMap : refineList) {
+								if (refineMap.get("devices") == null) {
+									refineMap.put("hasDevices", false);
+								} else {
+									refineMap.put("hasDevices", true);
+								}
+								refineMap.remove("devices");
 								jsonArray.put(jsonParser(refineMap));
 							}
 						}
@@ -388,6 +406,12 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 						if (refineList != null && refineList.size() > 0) {
 							jsonArray = new JSONArray();
 							for (Map<String, Object> refineMap : refineList) {
+								if (refineMap.get("devices") == null) {
+									refineMap.put("hasDevices", false);
+								} else {
+									refineMap.put("hasDevices", true);
+								}
+								refineMap.remove("devices");
 								jsonArray.put(jsonParser(refineMap));
 							}
 						}

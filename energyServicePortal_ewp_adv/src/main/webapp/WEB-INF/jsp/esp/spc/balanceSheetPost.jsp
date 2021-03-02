@@ -476,7 +476,7 @@
 			}
 		} else if (param == 'balance') {
 			$('#balanceTable input[type="text"]').each(function () {
-				if ($(this).val() == '') {
+				if ($(this).val() == '' && $(this).prop('readonly') == false) {
 					emptyValue = true;
 				}
 				rtnObj[$(this).prop('name')] = $(this).val().replace(/[^-0-9.]/g, '');
