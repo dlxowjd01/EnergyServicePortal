@@ -1192,7 +1192,7 @@
 					var totalValue = (total.totVal != '-' && total.totVal != 0) ? Math.round(total.totVal * 100) / 100 : '-';
 					if ((total.name).match('<fmt:message key='pvGen.devTime' />')) {
 						totalTemp += `<h3 class="value-title">${'${total.name}'}</h3>
-								<p class="value-num"><span class="num">${'${numberComma(totalValue)}'}</span> Hour</p>`;
+								<p class="value-num"><span class="num">${'${numberComma(totalValue)}'}</span> hrs</p>`;
 					} else {
 						totalTemp += `<h3 class="value-title">${'${total.name}'}</h3>
 								<p class="value-num"><span class="num">${'${numberComma(totalValue)}'}</span> kWh</p>`;
@@ -1205,7 +1205,14 @@
 					const dataValue = summary.data;
 					let totalValue = 0;
 					if (!isEmpty(dataValue)) {
-						totalValue = dataValue.reduce( function add(sum, currValue) { return parseFloat(sum) + parseFloat(currValue); });
+						if (dataValue.length === 1) {
+							totalValue = dataValue[0][1];
+						} else {
+							totalValue = dataValue.reduce(function add(sum, currValue) {
+								if (typeof sum === 'object') sum =  parseFloat(isEmpty(sum[1]) ? 0 : sum[1]);
+								return sum + parseFloat(isEmpty(currValue[1]) ? 0 : currValue[1]);
+							});
+						}
 					}
 					totalValue = displayNumberFixedDecimal(totalValue, 'W/㎡', 3, 2);
 
@@ -1278,7 +1285,7 @@
 					align: 'low',
 					rotation: 0,
 					y: 25,
-					x: 10,
+					x: 20,
 					style: {
 						color: 'var(--grey)',
 						fontSize: '10px'
@@ -1327,7 +1334,7 @@
 				gridLineColor: 'var(--white25)',
 				gridLineWidth: 0,
 				title: {
-					text: '(Hours)',
+					text: '(hrs)',
 					align: 'low',
 					rotation: 0,
 					y: 25,
