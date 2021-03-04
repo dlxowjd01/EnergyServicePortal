@@ -156,7 +156,11 @@
 		$('#deviceType button.btn-type03').on('click', function (e) {
 			let idx = $('#deviceType button.btn-type03').index($(this));
 			if (idx == 0) {
-				$(':checkbox[name="device"]').prop('checked', true);
+				$(':checkbox[name="device"]').each(function() {
+					if (!['dashboard', 'billing', 'time', 'SENSOR_SOLAR'].includes($(this).data('type'))) {
+						$(this).prop('checked', true);
+					}
+				});
 			} else {
 				$(':checkbox[name="device"]').prop('checked', false);
 			}
@@ -307,17 +311,27 @@
 								</li>
 							`;
 
+						if (!isEmpty(sensorSolar)) {
+							deviceStr +=
+								`   <li>
+									<a href="javascript:void(0);" tabindex="-1">
+										<input id="${'${sensorSolar[\'did\']}'}" name="device" type="checkbox" value="${'${sensorSolar[\'did\']}'}" data-sid="${'${targetSite[\'sid\']}'}" data-sitename="${'${targetSite[\'name\']}'}" data-name="${'${targetSite[\'name\']}'}_${'${sensorSolar[\'name\']}'}" data-type="${'${sensorSolar[\'device_type\']}'}">
+										<label for="${'${sensorSolar[\'did\']}'}"><span></span>${'${sensorSolar[\'name\']}'}</label>
+									</a>
+								</li>
+							`;
+						}
 
 						deviceStr += `<li class="btn-wrap-border-min"></li>`;
 						devices.sort((a, b) => {
 							return a['name'] > b['name'] ? 1 : a['name'] < b['name'] ? -1 : 0;
 						});
 						devices.forEach(device => {
-							if (((device.dashboard || device.billing) && device.metering_type === 2) || (device.device_type === 'SENSOR_SOLAR')) {
+							if (((device.dashboard || device.billing) && device.metering_type === 2)) {
 								deviceStr +=
 									`   <li>
 											<a href="javascript:void(0);" tabindex="-1">
-												<input id="${'${device[\'did\']}'}" name="device" type="checkbox" value="${'${device[\'did\']}'}" data-sid="${'${targetSite[\'sid\']}'}" data-sitename="${'${targetSite[\'name\']}'}" data-name="${'${targetSite[\'name\']}'}_${'${device[\'name\']}'}" data-type="${'${device.device_type}'}">
+												<input id="${'${device[\'did\']}'}" name="device" type="checkbox" value="${'${device[\'did\']}'}" data-sid="${'${targetSite[\'sid\']}'}" data-sitename="${'${targetSite[\'name\']}'}" data-name="${'${targetSite[\'name\']}'}_${'${device[\'name\']}'}" data-type="${'${device[\'device_type\']}'}">
 												<label for="${'${device[\'did\']}'}"><span></span>${'${device[\'name\']}'}</label>
 											</a>
 										</li>
@@ -571,6 +585,7 @@
 
 		Promise.all(promiseUrl).then(response => {
 			generationData = new Object();
+			summaryData = new Object();
 			if (!isEmpty(response)) {
 				response.forEach((res, idx) => {
 					const database = res.data;
@@ -578,7 +593,7 @@
 						if (!isEmpty(res.SENSOR_SOLAR)) {
 							summaryData = res.SENSOR_SOLAR;
 						} else {
-							statusSummary = new Array();
+							summaryData = new Object();
 						}
 					} else {
 						Object.entries(database).forEach(([id, data]) => {
@@ -966,8 +981,6 @@
 		}
 	}
 
-
-
 	/**
 	 * 차트 데이터 정제
 	 */
@@ -1185,11 +1198,10 @@
 				}
 			});
 
+			let totalTemp = ``;
 			if (!isEmpty(totalArr)) {
-				let totalTemp = ``;
 				totalArr.forEach(total => {
 					var totalValue = (total.totVal != '-' && total.totVal != 0) ? Math.round(total.totVal * 100) / 100 : '-';
-
 					if ((total.name).match('<fmt:message key='pvGen.devTime' />')) {
 						totalTemp += `<h3 class="value-title">${'${total.name}'}</h3>
 								<p class="value-num"><span class="num">${'${numberComma(totalValue)}'}</span> Hour</p>`;
@@ -1197,11 +1209,24 @@
 						totalTemp += `<h3 class="value-title">${'${total.name}'}</h3>
 								<p class="value-num"><span class="num">${'${numberComma(totalValue)}'}</span> kWh</p>`;
 					}
-
 				});
-
-				document.querySelector('.value-wrapper').innerHTML = totalTemp;
 			}
+
+			if (!isEmpty(statusSummary)) {
+				statusSummary.forEach(summary => {
+					const dataValue = summary.data;
+					let totalValue = 0;
+					if (!isEmpty(dataValue)) {
+						totalValue = dataValue.reduce( function add(sum, currValue) { return parseFloat(sum) + parseFloat(currValue); });
+					}
+					totalValue = displayNumberFixedDecimal(totalValue, 'W/㎡', 3, 2);
+
+					totalTemp += `<h3 class="value-title">${'${summary.name}'}</h3>
+								<p class="value-num"><span class="num">${'${totalValue[0]}'}</span> ${'${totalValue[1]}'}</p>`;
+				});
+			}
+
+			document.querySelector('.value-wrapper').innerHTML = totalTemp;
 		}
 		document.querySelector('.text-time').innerHTML = (new Date()).format('yyyy-MM-dd HH:mm:ss');
 	}

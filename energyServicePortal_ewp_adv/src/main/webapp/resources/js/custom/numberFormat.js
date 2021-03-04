@@ -64,7 +64,7 @@ const displayNumberFixedDecimal = function(number, unit, intChipher, decimalChip
 	if(isEmpty(number)) {
 		return ['-', unit];
 	} else {
-		if( (unit.match('W')) || (unit === 'VAR') ) {
+		if( (unit.match('W')) || (unit === 'VAR') || (unit === 'W/㎡')) {
 			if(isEmpty(intChipher)) {
 				decimalChipher = 3;
 			}
@@ -91,7 +91,7 @@ const displayNumberFixedDecimal = function(number, unit, intChipher, decimalChip
 				if(str.length > intChipher && v != 'T') {
 					number = number / 1000;
 				} else {
-					let endUnit = unit.endsWith("VAR") ? "VAR" : "W";
+					let endUnit = unit.endsWith("VAR") ? "VAR" : unit.endsWith("W/㎡") ? "W/㎡" : "W";
 					if(decimalChipher === 0){
 						rtnValue = [numberComma(Math.round(number)), v + endUnit + suffix];
 					} else {
