@@ -156,13 +156,20 @@
 		$('#deviceType button.btn-type03').on('click', function (e) {
 			let idx = $('#deviceType button.btn-type03').index($(this));
 			if (idx == 0) {
-				$(':checkbox[name="device"]').each(function() {
-					if (!['dashboard', 'billing', 'time', 'SENSOR_SOLAR'].includes($(this).data('type'))) {
-						$(this).prop('checked', true);
+				$(':checkbox[name="device"]').prop('checked', true);
+
+				document.querySelectorAll('#interval li').forEach(li => {
+					if (li.dataset.value === 'day' || li.dataset.value === 'month') {
+						li.classList.remove('disabled');
+					} else {
+						li.classList.add('disabled');
 					}
 				});
 			} else {
 				$(':checkbox[name="device"]').prop('checked', false);
+				document.querySelectorAll('#interval li').forEach(li => {
+					li.classList.add('disabled');
+				});
 			}
 
 			displayDropdown($('#deviceType'));
@@ -363,43 +370,24 @@
 
 	function rtnDropdown($dropdownId) {
 		if ($dropdownId === '') {
-			let sensorSolar = false, genHour = false;
+			let genHour = false;
 			document.querySelectorAll('[name="device"]:checked').forEach(device => {
-				if (device.dataset.type == 'SENSOR_SOLAR') { sensorSolar = true; }
 				if (device.dataset.type === 'time') { genHour = true; }
 			});
 
-			dropDownInit($('#interval'));
-			if (sensorSolar && genHour) {
-				document.querySelectorAll('#interval li').forEach(li => {
-					if (li.classList.contains('disabled') && li.classList ) {
+			if (genHour) {
+				dropDownInit($('#interval'));
 
+				document.querySelectorAll('#interval li').forEach(li => {
+					if (li.dataset.value === 'day' || li.dataset.value === 'month') {
+						li.classList.remove('disabled');
+					} else {
+						li.classList.add('disabled');
 					}
 				});
-				alert('일사량 정보와 발전시간 정보는 같이 조회 불가능합니다.');
-				document.querySelectorAll('[name="device"]:checked').forEach(device => {
-					if (device.dataset.type === 'SENSOR_SOLAR' || device.dataset.type === 'time') {
-						device.checked = false;
-					}
-				});
-				return false;
 			} else {
 				document.querySelectorAll('#interval li').forEach(li => {
-					if (sensorSolar) {
-						if (li.dataset.value === 'day' || li.dataset.value === 'month') {
-							li.classList.add('disabled');
-						} else {
-							li.classList.remove('disabled');
-						}
-					} else if (genHour) {
-						if (li.dataset.value === 'day' || li.dataset.value === 'month') {
-							li.classList.remove('disabled');
-						} else {
-							li.classList.add('disabled');
-						}
-					} else {
-						li.classList.remove('disabled');
-					}
+					li.classList.remove('disabled');
 				});
 			}
 		} else if ($dropdownId === 'siteList') {
@@ -965,7 +953,7 @@
 					  , solarDid = status.did;
 
 					standard.forEach(std => {
-						let solar = sensorSolar.find(summary => (summary.did === solarDid && std === String(summary.basetime)));
+						let solar = sensorSolar.find(summary => (summary.did === solarDid && std === String(summary.basetime).substr(0, 8)));
 						if (!isEmpty(solar)) {
 							solarArray.push([std, solar.mean.irradiationPoa]);
 						} else {
@@ -983,7 +971,7 @@
 
 	/**
 	 * 차트 데이터 정제
-	 */
+	 */ 
 	const chartDataDraw = function () {
 		let num = 0;
 		let stack = 0;
@@ -1244,7 +1232,7 @@
 			chart: {
 				renderTo: 'chart2',
 				marginTop: 50,
-				marginLeft: 50,
+				marginLeft: 80,
 				marginRight: 60,
 				backgroundColor: 'transparent',
 			},
@@ -1283,6 +1271,7 @@
 			yAxis: [{
 				gridLineColor: 'var(--white25)',
 				gridLineWidth: 1,
+				offset: 0,
 				min: 0,
 				title: {
 					text: '(kWh)',
@@ -1315,7 +1304,7 @@
 					align: 'low',
 					rotation: 0,
 					y: 25,
-					x: 10,
+					x: 40,
 					style: {
 						color: 'var(--grey)',
 						fontSize: '10px',
@@ -1324,7 +1313,7 @@
 				},
 				labels: {
 					formatter: function () {
-						return  numberComma(this.value / 10);
+						return  this.value;
 					},
 					style: {
 						color: 'var(--grey)',
@@ -1342,7 +1331,7 @@
 					align: 'low',
 					rotation: 0,
 					y: 25,
-					x: 20,
+					x: 25,
 					style: {
 						color: 'var(--grey)',
 						fontSize: '10px',
@@ -1358,35 +1347,9 @@
 						fontSize: '10px'
 					}
 				},
+				offset: 35,
 				visible: true,
-				opposite: true,
-				showEmpty: false
-			}, {
-				gridLineColor: 'var(--white25)',
-				gridLineWidth: 0,
-				title: {
-					text: '(Hours)',
-					align: 'low',
-					rotation: 0,
-					y: 25,
-					x: 40,
-					style: {
-						color: 'var(--grey)',
-						fontSize: '10px',
-						transform: 'translate(-30px, 0px)'
-					}
-				},
-				labels: {
-					formatter: function () {
-						return  this.value;
-					},
-					style: {
-						color: 'var(--grey)',
-						fontSize: '10px'
-					}
-				},
-				visible: true,
-				opposite: true,
+				opposite: false,
 				showEmpty: false
 			}],
 			legend: {
@@ -1413,7 +1376,7 @@
 						if (/일사량/.test(point.series.name)) {
 							return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + numberComma((point.y).toFixed(2)) + 'W/㎡';
 						} else if(/발전시간/.test(point.series.name)) {
-							return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + numberComma((point.y).toFixed(2)) + 'Hour';
+							return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + numberComma((point.y).toFixed(2)) + 'hrs';
 						} else {
 							return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + numberComma(point.y) + 'kWh';
 						}
