@@ -19,6 +19,10 @@
 		<div class="indiv chart-pv scroll">
 			<h2 class="ntit"><fmt:message key="pvGen.summary" /></h2>
 			<div class="value-wrapper"></div>
+			<h2 class="ntit hidden"><fmt:message key="pvGen.hoursummary" /></h2>
+			<div class="value-wrapper hidden"></div>
+			<h2 class="ntit hidden"><fmt:message key="pvGen.insolationsummary" /></h2>
+			<div class="value-wrapper hidden"></div>
 		</div>
 	</div>
 	<div class="col-lg-10 col-md-8 col-sm-6">
@@ -488,24 +492,17 @@
 			return false;
 		}
 
-		const promiseUrl = new Array();
+		document.querySelectorAll('.chart-pv .ntit')[0].classList.remove('hidden');
+		document.querySelectorAll('.chart-pv .value-wrapper')[0].classList.remove('hidden');
+		document.querySelectorAll('.chart-pv .value-wrapper')[0].innerHTML = '';
+		document.querySelectorAll('.chart-pv .ntit')[1].classList.add('hidden');
+		document.querySelectorAll('.chart-pv .value-wrapper')[1].classList.add('hidden');
+		document.querySelectorAll('.chart-pv .value-wrapper')[1].innerHTML = '';
+		document.querySelectorAll('.chart-pv .ntit')[2].classList.add('hidden');
+		document.querySelectorAll('.chart-pv .value-wrapper')[2].classList.add('hidden');
+		document.querySelectorAll('.chart-pv .value-wrapper')[2].innerHTML = '';
 
-		//매전량
-		if (billingSites.length > 0) {
-			promiseUrl.push($.ajax({
-				url: apiHost + '/get/energy/sites',
-				type: 'POST',
-				contentType: 'application/json',
-				data: JSON.stringify({
-					sid: billingSites.toString(),
-					startTime: Number(startTime),
-					endTime: Number(endTime),
-					interval: interval,
-					displayType: 'billing',
-					formId: 'v2'
-				})
-			}));
-		}
+		const promiseUrl = new Array();
 
 		//대시보드
 		if (dashSites.length > 0) {
@@ -519,6 +516,23 @@
 					endTime: Number(endTime),
 					interval: interval,
 					displayType: 'dashboard',
+					formId: 'v2'
+				})
+			}));
+		}
+
+		//매전량
+		if (billingSites.length > 0) {
+			promiseUrl.push($.ajax({
+				url: apiHost + '/get/energy/sites',
+				type: 'POST',
+				contentType: 'application/json',
+				data: JSON.stringify({
+					sid: billingSites.toString(),
+					startTime: Number(startTime),
+					endTime: Number(endTime),
+					interval: interval,
+					displayType: 'billing',
 					formId: 'v2'
 				})
 			}));
@@ -587,43 +601,30 @@
 						Object.entries(database).forEach(([id, data]) => {
 							if (data.length > 1) data = new Array(data.find(x => x.metering_type === '2'));
 							document.querySelectorAll('input[name="device"]:checked').forEach(device =>  {
-								if (billingSites.length > 0 && dashSites.length === 0 && timeSites.length === 0) {
-									if (device.value === id) {
+								if (dashSites.length > 0 && idx === 0) {
+									if (device.value === id && /dashboard/.test(device.id)) {
 										data.name = device.dataset.name;
 										data.sid = device.dataset.sid;
-										id += idx === 0 ? '_billing' : '';
-									}
-								} else if (billingSites.length === 0 && dashSites.length > 0 && timeSites.length === 0) {
-									if (device.value === id) {
-										data.name = device.dataset.name;
-										data.sid = device.dataset.sid;
-										id += idx === 0 ? '_dashboard' : '';
-									}
-								} else if (billingSites.length === 0 && dashSites.length === 0 && timeSites.length > 0) {
-									if (device.value === id) {
-										data.name = device.dataset.name;
-										data.sid = device.dataset.sid;
-										id += idx === 0 ? '_time' : '';
-									}
-								} else if (billingSites.length > 0 || dashSites.length > 0 || timeSites.length > 0) {
-									if (/billing/.test(device.id) && device.value === id && isEmpty(generationData[id + '_billing'])) {
-										data.name = device.dataset.name;
-										id += '_billing';
-										data.sid = device.dataset.sid;
-									} else if (/dashboard/.test(device.id) && device.value === id && isEmpty(generationData[id + '_dashboard'])) {
-										data.name = device.dataset.name;
 										id += '_dashboard';
-										data.sid = device.dataset.sid;
-									} else if (/time/.test(device.id) && device.value === id && isEmpty(generationData[id + '_time'])) {
+									}
+								} else if ((dashSites.length === 0 && billingSites.length > 0 && idx === 0)
+										|| (dashSites.length > 0 && billingSites.length > 0 && idx === 1)) {
+									if (device.value === id && /billing/.test(device.id)) {
 										data.name = device.dataset.name;
+										data.sid = device.dataset.sid;
+										id += '_billing';
+									}
+								} else if ((dashSites.length === 0 && billingSites.length === 0 && timeSites.length > 0 && idx === 0)
+									|| (dashSites.length === 0 && billingSites.length > 0 && timeSites.length > 0 && idx === 1)
+									|| (dashSites.length > 0 && billingSites.length > 0 && timeSites.length > 0 && idx === 2)) {
+									if (device.value === id && /time/.test(device.id)) {
+										data.name = device.dataset.name;
+										data.sid = device.dataset.sid;
 										id += '_time';
-										data.sid = device.dataset.sid;
-									} else if (device.value === id) {
-										data.name = device.dataset.name;
-										data.sid = device.dataset.sid;
 									}
 								} else {
-									if (device.value === id) {
+									if (device.value === id && !/dashboard/.test(device.id)
+										&& !/billing/.test(device.id) && !/time/.test(device.id)) {
 										data.name = device.dataset.name;
 										data.sid = device.dataset.sid;
 									}
@@ -1187,11 +1188,13 @@
 			});
 
 			let totalTemp = ``;
+			let totalTemp_time = ``;
+			let totalTemp_insolation = ``;
 			if (!isEmpty(totalArr)) {
 				totalArr.forEach(total => {
 					var totalValue = (total.totVal != '-' && total.totVal != 0) ? Math.round(total.totVal * 100) / 100 : '-';
 					if ((total.name).match('<fmt:message key='pvGen.devTime' />')) {
-						totalTemp += `<h3 class="value-title">${'${total.name}'}</h3>
+						totalTemp_time += `<h3 class="value-title">${'${total.name}'}</h3>
 								<p class="value-num"><span class="num">${'${numberComma(totalValue)}'}</span> hrs</p>`;
 					} else {
 						totalTemp += `<h3 class="value-title">${'${total.name}'}</h3>
@@ -1216,12 +1219,40 @@
 					}
 					totalValue = displayNumberFixedDecimal(totalValue, 'W/㎡', 3, 2);
 
-					totalTemp += `<h3 class="value-title">${'${summary.name}'}</h3>
+					totalTemp_insolation += `<h3 class="value-title">${'${summary.name}'}</h3>
 								<p class="value-num"><span class="num">${'${totalValue[0]}'}</span> ${'${totalValue[1]}'}</p>`;
 				});
 			}
 
-			document.querySelector('.value-wrapper').innerHTML = totalTemp;
+			if (!isEmpty(totalTemp)) {
+				document.querySelectorAll('.chart-pv .ntit')[0].classList.remove('hidden');
+				document.querySelectorAll('.chart-pv .value-wrapper')[0].classList.remove('hidden');
+				document.querySelectorAll('.chart-pv .value-wrapper')[0].innerHTML = totalTemp;
+			} else {
+				document.querySelectorAll('.chart-pv .ntit')[0].classList.add('hidden');
+				document.querySelectorAll('.chart-pv .value-wrapper')[0].classList.add('hidden');
+				document.querySelectorAll('.chart-pv .value-wrapper')[0].innerHTML = '';
+			}
+
+			if (!isEmpty(totalTemp_time)) {
+				document.querySelectorAll('.chart-pv .ntit')[1].classList.remove('hidden');
+				document.querySelectorAll('.chart-pv .value-wrapper')[1].classList.remove('hidden');
+				document.querySelectorAll('.chart-pv .value-wrapper')[1].innerHTML = totalTemp_time;
+			} else {
+				document.querySelectorAll('.chart-pv .ntit')[1].classList.add('hidden');
+				document.querySelectorAll('.chart-pv .value-wrapper')[1].classList.add('hidden');
+				document.querySelectorAll('.chart-pv .value-wrapper')[1].innerHTML = '';
+			}
+
+			if (!isEmpty(totalTemp_insolation)) {
+				document.querySelectorAll('.chart-pv .ntit')[2].classList.remove('hidden');
+				document.querySelectorAll('.chart-pv .value-wrapper')[2].classList.remove('hidden');
+				document.querySelectorAll('.chart-pv .value-wrapper')[2].innerHTML = totalTemp_insolation;
+			} else {
+				document.querySelectorAll('.chart-pv .ntit')[2].classList.add('hidden');
+				document.querySelectorAll('.chart-pv .value-wrapper')[2].classList.add('hidden');
+				document.querySelectorAll('.chart-pv .value-wrapper')[2].innerHTML = '';
+			}
 		}
 		document.querySelector('.text-time').innerHTML = (new Date()).format('yyyy-MM-dd HH:mm:ss');
 	}
@@ -1278,7 +1309,7 @@
 			yAxis: [{
 				gridLineColor: 'var(--white25)',
 				gridLineWidth: 1,
-				offset: 0,
+				offset: -10,
 				min: 0,
 				title: {
 					text: '(kWh)',
@@ -1311,7 +1342,7 @@
 					align: 'low',
 					rotation: 0,
 					y: 25,
-					x: 40,
+					x: 20,
 					style: {
 						color: 'var(--grey)',
 						fontSize: '10px',
@@ -1338,7 +1369,7 @@
 					align: 'low',
 					rotation: 0,
 					y: 25,
-					x: 25,
+					x: 40,
 					style: {
 						color: 'var(--grey)',
 						fontSize: '10px',
