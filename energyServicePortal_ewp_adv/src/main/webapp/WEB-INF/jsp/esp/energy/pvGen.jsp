@@ -355,14 +355,13 @@
 				if (device.dataset.type === 'time') { genHour = true; }
 			});
 
+			dropDownInit($('#interval'));
 			if (sensorSolar && genHour) {
 				document.querySelectorAll('#interval li').forEach(li => {
 					if (li.classList.contains('disabled') && li.classList ) {
 
 					}
 				});
-
-
 				alert('일사량 정보와 발전시간 정보는 같이 조회 불가능합니다.');
 				document.querySelectorAll('[name="device"]:checked').forEach(device => {
 					if (device.dataset.type === 'SENSOR_SOLAR' || device.dataset.type === 'time') {
@@ -390,7 +389,6 @@
 				});
 			}
 		} else if ($dropdownId === 'siteList') {
-
 			makeDeviceList();
 		} else if ($dropdownId === 'period') {
 			let period = $('#period button').data('value');
@@ -730,7 +728,7 @@
 
 						th.innerHTML = '<fmt:message key="pvGen.total" />';
 						theadTr.appendChild(th);
-						if (deviceId.match('time')) td.innerHTML = totalSum;
+						if (deviceId.match('time')) td.innerHTML = Math.round(totalSum * 100) / 100;
 						else td.innerHTML = displayNumberFixedUnit(totalSum, 'Wh', 'kWh', 0)[0];
 						tbodyTr.appendChild(td);
 					}
