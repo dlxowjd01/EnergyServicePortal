@@ -1220,7 +1220,7 @@
 				renderTo: 'chart2',
 				marginTop: 50,
 				marginLeft: 50,
-				marginRight: 30,
+				marginRight: 60,
 				backgroundColor: 'transparent',
 			},
 			navigation: {
@@ -1264,7 +1264,7 @@
 					align: 'low',
 					rotation: 0,
 					y: 25,
-					x: 5,
+					x: 10,
 					style: {
 						color: 'var(--grey)',
 						fontSize: '10px'
@@ -1290,7 +1290,7 @@
 					align: 'low',
 					rotation: 0,
 					y: 25,
-					x: 40,
+					x: 10,
 					style: {
 						color: 'var(--grey)',
 						fontSize: '10px',
@@ -1317,7 +1317,7 @@
 					align: 'low',
 					rotation: 0,
 					y: 25,
-					x: 40,
+					x: 20,
 					style: {
 						color: 'var(--grey)',
 						fontSize: '10px',
@@ -1326,7 +1326,7 @@
 				},
 				labels: {
 					formatter: function () {
-						return  numberComma(this.value / 10);
+						return  this.value;
 					},
 					style: {
 						color: 'var(--grey)',
@@ -1353,7 +1353,7 @@
 				},
 				labels: {
 					formatter: function () {
-						return  numberComma(this.value / 10);
+						return  this.value;
 					},
 					style: {
 						color: 'var(--grey)',
