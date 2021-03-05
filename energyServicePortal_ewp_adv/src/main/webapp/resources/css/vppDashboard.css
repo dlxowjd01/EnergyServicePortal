@@ -318,6 +318,11 @@ h2.title {
 	color: rgba(255, 255, 255, .4);
 }
 
+.vpp-2-2-table td:nth-child(4),
+.vpp-2-2-table td:nth-child(5) {
+	text-align: center!important;
+}
+
 .vpp-2-2-tablewrap {
 	max-height: 463px;
 	overflow-y: auto;
@@ -431,7 +436,6 @@ h2.title {
 	margin-bottom: 14px;
 	display: flex;
 	align-items: flex-start;
-	border-radius: 4px;
 	overflow: hidden;
 }
 
@@ -472,11 +476,11 @@ h2.title {
 	text-align: right;
 }
 
-.vpp-3-2-graph > div:nth-child(1) > div { background: #009389; }
+.vpp-3-2-graph > div:nth-child(1) > div { background: #009389; border-radius: 4px 0px 0px 4px; }
 .vpp-3-2-graph > div:nth-child(2) > div { background: #00b2aa; }
 .vpp-3-2-graph > div:nth-child(3) > div { background: #26ccc8; }
 .vpp-3-2-graph > div:nth-child(4) > div { background: #78dbda; }
-.vpp-3-2-graph > div:nth-child(5) > div { background: #b0e9e8; }
+.vpp-3-2-graph > div:nth-child(5) > div { background: #b0e9e8; border-radius: 0px 4px 4px 0px; }
 
 .vpp-3-2 > p {
 	text-align: right;
@@ -511,13 +515,19 @@ h2.title {
 	word-break: keep-all;
 }
 
-.dataTables_scrollHeadInner>.dataTable {
+.dataTables_scrollHeadInner > .dataTable {
 	border-top: 1px solid rgba(255 255 255, 0.12);
 }
 
-.dataTable.no-footer.no-stripe thead th,
-.dataTables_scrollHeadInner>.dataTable td,
-.dataTables_scrollHeadInner>.dataTable th {
+.dataTables_scrollHeadInner th {
 	background: none!important;
-	border-bottom: 1px solid rgba(255 255 255, 0.12);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* .dataTables_scrollHeadInner {
+} */
+
+.dataTables_wrapper {
+	border-top: 1px solid rgba(255, 255, 255, 0.12);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }

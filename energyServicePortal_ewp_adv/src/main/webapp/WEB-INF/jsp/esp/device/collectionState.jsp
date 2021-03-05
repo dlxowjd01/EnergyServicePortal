@@ -77,29 +77,34 @@
 
 <div class="row">
 	<div class="col-xl-5 col-lg-6 col-md-6 col-sm-12">
-		<div class="indiv collect-box">
-			<div class="table-top clear">
+		<div class="indiv collect-box" id="colStateRtu">
+			<div class="table-top">
 				<h2 class="ntit fl"><fmt:message key="datacolleciton.1.rtu" /></h2>
-				<button type="button" class="btn-type fr" id="showRegRtu"><fmt:message key="datacolleciton.1.add" /></button>
+				<div>
+					<button class="status-button rtu-filter-button normal actived" data-status="normal">정상 (0)</button>
+					<button class="status-button rtu-filter-button error actived" data-status="error">이상 (0)</button>
+				</div>
 			</div>
 			<div class="table-wrap-type collect-wrap">
 				<table class="history-table scroll" id="PV_INVERTER">
 					<thead>
 						<tr>
 							<th><fmt:message key="datacolleciton.1.siteid" /></th>
-							<th><fmt:message key="datacolleciton.1.rtuid" /></th>
+							<th><fmt:message key="datacolleciton.1.rtuid" /></th> 
+							<th><fmt:message key="datacolleciton.1.rtuStatus" /></th> 
 							<th><fmt:message key="datacolleciton.1.rtusn" /></th>
 							<th><fmt:message key="datacolleciton.1.reg.date" /></th>
 						</tr>
 					</thead>
 					<tbody>
 					<tr>
-						<td colspan="4"><fmt:message key='colState.table.info' /></td>
+						<td colspan="5"><fmt:message key='colState.table.info' /></td>
 					</tr>
 					</tbody>
 				</table>
 				<div class="pagination-wrapper" id="paging"></div>
 			</div>
+			<button type="button" class="btn-type fr" id="showRegRtu"><fmt:message key="datacolleciton.1.add" /></button>
 		</div>
 	</div>
 	<div class="col-xl-7 col-lg-6 col-md-6 col-sm-12">
@@ -429,7 +434,27 @@
 				}
 			});
 		});
+
+		$(".rtu-filter-button").on('click', function(e) {
+			$(this).toggleClass("actived");
+			
+			statusFilter();
+		});
+
 	})
+	function statusFilter() {
+		let target = [];
+		$(".rtu-filter-button.actived").each((ix, el) => {
+			target.push("."+$(el).data("status"));
+		});
+		console.log(target.join(", "))
+		$("#PV_INVERTER tbody tr").each((ix, el) => {
+			$(el).removeClass("visible");
+			if ($(el).is(target.join(", "))) {
+				$(el).addClass("visible");
+			}
+		})
+	}
 
 	//사업소 조회
 	const siteMakeList = function (search = []) {
@@ -724,44 +749,72 @@
 					tableData.data('dataList', rtuList);
 					rtuList = rtuPaging(1);
 					rtuList.forEach(rtu => {
-						const rtuDate = new Date(rtu.createdAt).format('yyyy-MM-dd'),
-							siteName = rtu.siteName,
-							serialId = `#${'${rtu.serialNumber}'}`;
+						// RTU 통신이상: 가장 최신 RTU 상태 정보 데이터가 1시간이 넘어가는 경우  
+						const reqData = {
+							startTime: 20190101000000,
+							rids: rtu.rid,
+						}
+						$.ajax({
+							url: apiHost + "/get/status/health",
+							type: "post",
+							data: JSON.stringify(reqData),
+							dataType: 'json',
+							contentType: "application/json",
+							async: false,
+							success: function (rtuStatus) {
+								console.log(rtuStatus)
+								const rtuDate = new Date(rtu.createdAt).format('yyyy-MM-dd'),
+									siteName = rtu.siteName,
+									serialId = `#${'${rtu.serialNumber}'}`;
 
-						rtuInfo =
-							`	<tr id="${'${rtu.serialNumber}'}">
-									<td>${'${siteName}'}</td>
-									<td>${'${rtu.name}'}</td>
-									<td>${'${rtu.serialNumber}'}</td>
-									<td>${'${rtuDate}'}</td>
-								</tr>
-							`
-						tableData.append(rtuInfo);
+								let status = ["error", "이상"];
+								if (rtuStatus.rtus.length) {
+									if ((new Date().getTime() - rtuStatus.rtus[0]['last_timestamp']) <= 3600000) {
+										status = ["normal", "정상"];
+									}
+								}
 
-						$(serialId).off('click');
-						$(serialId).on('click', () => {
-							const rtuName = $('#selectedRTU');
-							rtuName.text(rtu.name).data('rid', rtu.rid).data('rName', rtu.name).data('sName', siteName);
-							selectLog(rtu.rid);
-						});
+								rtuInfo =
+									`	<tr id="${'${rtu.serialNumber}'}" class="${'${status[0]}'}">
+											<td>${'${siteName}'}</td>
+											<td>${'${rtu.name}'}</td>
+											<td><span class="status-button ${'${status[0]}'}">${'${status[1]}'}</span></td>
+											<td>${'${rtu.serialNumber}'}</td>
+											<td>${'${rtuDate}'}</td>
+										</tr>
+									`
+								tableData.append(rtuInfo);
 
-						dateFilter.off('click');
-						dateFilter.on('click', () => {
-							const datePicker1 = $('#datepicker1').datepicker('getDate');
-							const datePicker2 = $('#datepicker2').datepicker('getDate');
-							if(datePicker1 != null && datePicker2 != null) {
-								const start = datePicker1.format('yyyyMMdd');
-								const end = datePicker2.format('yyyyMMdd');
-								const startTimepicker = $('#timepicker1').wickedpicker('time').replace(/[^0-9]/g, '');
-								const endTimepicker = $('#timepicker2').wickedpicker('time').replace(/[^0-9]/g, '');
+								$(serialId)
+									.off('click')
+									.on('click', () => {
+										const rtuName = $('#selectedRTU');
+										rtuName.text(rtu.name).data('rid', rtu.rid).data('rName', rtu.name).data('sName', siteName);
+										selectLog(rtu.rid);
+									});
 
-								const startDate = start + startTimepicker + '00';
-								const endDate = end + endTimepicker + '00';
+								dateFilter
+									.off('click')
+									.on('click', () => {
+										const datePicker1 = $('#datepicker1').datepicker('getDate');
+										const datePicker2 = $('#datepicker2').datepicker('getDate');
+										if(datePicker1 != null && datePicker2 != null) {
+											const start = datePicker1.format('yyyyMMdd');
+											const end = datePicker2.format('yyyyMMdd');
+											const startTimepicker = $('#timepicker1').wickedpicker('time').replace(/[^0-9]/g, '');
+											const endTimepicker = $('#timepicker2').wickedpicker('time').replace(/[^0-9]/g, '');
 
-								selectLog(rtu.rid, startDate, endDate);
-							} else {
-								alert('<fmt:message key="colState.alert.6" />');
-								return false;
+											const startDate = start + startTimepicker + '00';
+											const endDate = end + endTimepicker + '00';
+
+											selectLog(rtu.rid, startDate, endDate);
+										} else {
+											alert('<fmt:message key="colState.alert.6" />');
+											return false;
+										}
+									});
+								
+								statusFilter();
 							}
 						});
 					});
@@ -921,43 +974,71 @@
 		tableData.empty();
 
 		rtuList.forEach(rtu => {
-			const rtuDate = new Date(rtu.createdAt).format('yyyy-MM-dd'),
-				siteName = rtu.siteName,
-				serialId = `#${'${rtu.serialNumber}'}`;
+			const reqData = {
+				startTime: 20190101000000,
+				rids: rtu.rid,
+			}
+			$.ajax({
+				url: apiHost + "/get/status/health",
+				type: "post",
+				data: JSON.stringify(reqData),
+				dataType: 'json',
+				contentType: "application/json",
+				async: false,
+				success: function (rtuStatus) {
+					console.log(rtuStatus)
+					const rtuDate = new Date(rtu.createdAt).format('yyyy-MM-dd'),
+						siteName = rtu.siteName,
+						serialId = `#${'${rtu.serialNumber}'}`;
 
-			rtuInfo =`	<tr id="${'${rtu.serialNumber}'}">
-							<td>${'${siteName}'}</td>
-							<td>${'${rtu.name}'}</td>
-							<td>${'${rtu.serialNumber}'}</td>
-							<td>${'${rtuDate}'}</td>
-						</tr>
-					`
-			tableData.append(rtuInfo);
+					let status = ["error", "이상"];
+					if (rtuStatus.rtus.length) {
+						if ((new Date().getTime() - rtuStatus.rtus[0]['last_timestamp']) <= 3600000) {
+							status = ["normal", "정상"];
+						}
+					}
 
-			$(serialId).off('click');
-			$(serialId).on('click', () => {
-				const rtuName = $('#selectedRTU');
-				rtuName.text(rtu.name).data('rid', rtu.rid).data('rName', rtu.name).data('sName', siteName);
-				selectLog(rtu.rid);
-			});
+					rtuInfo =
+						`	<tr id="${'${rtu.serialNumber}'}" class="${'${status[0]}'}">
+								<td>${'${siteName}'}</td>
+								<td>${'${rtu.name}'}</td>
+								<td><span class="status-button ${'${status[0]}'}">${'${status[1]}'}</span></td>
+								<td>${'${rtu.serialNumber}'}</td>
+								<td>${'${rtuDate}'}</td>
+							</tr>
+						`
+					tableData.append(rtuInfo);
 
-			dateFilter.off('click');
-			dateFilter.on('click', () => {
-				const datePicker1 = $('#datepicker1').datepicker('getDate');
-				const datePicker2 = $('#datepicker2').datepicker('getDate');
-				if(datePicker1 != null && datePicker2 != null) {
-					const start = datePicker1.format('yyyyMMdd');
-					const end = datePicker2.format('yyyyMMdd');
-					const startTimepicker = $('#timepicker1').wickedpicker('time').replace(/[^0-9]/g, '');
-					const endTimepicker = $('#timepicker2').wickedpicker('time').replace(/[^0-9]/g, '');
+					$(serialId)
+						.off('click')
+						.on('click', () => {
+							const rtuName = $('#selectedRTU');
+							rtuName.text(rtu.name).data('rid', rtu.rid).data('rName', rtu.name).data('sName', siteName);
+							selectLog(rtu.rid);
+						});
 
-					const startDate = start + startTimepicker + '00';
-					const endDate = end + endTimepicker + '00';
+					dateFilter
+						.off('click')
+						.on('click', () => {
+							const datePicker1 = $('#datepicker1').datepicker('getDate');
+							const datePicker2 = $('#datepicker2').datepicker('getDate');
+							if(datePicker1 != null && datePicker2 != null) {
+								const start = datePicker1.format('yyyyMMdd');
+								const end = datePicker2.format('yyyyMMdd');
+								const startTimepicker = $('#timepicker1').wickedpicker('time').replace(/[^0-9]/g, '');
+								const endTimepicker = $('#timepicker2').wickedpicker('time').replace(/[^0-9]/g, '');
 
-					selectLog(rtu.rid, startDate, endDate);
-				} else {
-					alert('<fmt:message key="colState.alert.12" />');
-					return false;
+								const startDate = start + startTimepicker + '00';
+								const endDate = end + endTimepicker + '00';
+
+								selectLog(rtu.rid, startDate, endDate);
+							} else {
+								alert('<fmt:message key="colState.alert.6" />');
+								return false;
+							}
+						});
+
+					statusFilter();
 				}
 			});
 		});

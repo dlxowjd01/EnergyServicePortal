@@ -8294,14 +8294,15 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 
 .icon-open {
 	display: inline-block;
-	margin-left: 16px;
+	margin-left: 5px;
 	width: 16px;
 	height: 16px;
 	border: 0;
 	text-indent: -9999px;
 	vertical-align: middle;
 	background: var(--ico-open) no-repeat center center;
-	outline: none;
+	outline: 0;
+	transform: scale(0.8);
 }
 
 .btn-file {
@@ -8835,7 +8836,7 @@ button.text-file {
 
 .collect-box {
 	overflow: hidden;
-	height: 500px;
+	height: 520px;
 }
 
 .collect-box .table-wrap-type.collect-wrap .history-table.scroll tbody tr:hover {
@@ -8947,7 +8948,8 @@ button.text-file {
 
 .collect-wrap thead th,
 .collect-wrap tbody td {
-	text-align: center;
+	/* text-align: center; */
+	word-break: keep-all;
 }
 
 .collect-wrap .ellipsis {
@@ -11229,11 +11231,11 @@ table.table-footer tfoot td.light {
 	color: var(--white60);
 }
 
-.dashboardTableSearch {
+#dashboardTableSearch {
 	margin-left: 20px;
 }
 
-.dashboardTableSearch > input {
+#dashboardTableSearch > input {
 	padding: 8px 15px;
 	font-size: 14px;
 	border-radius: 2px;
@@ -11262,4 +11264,62 @@ th > span.asterisk:after {
 table th,
 table td {
 	text-align: center!important;
+}
+
+.status-button {
+	font-size: 12px;
+	padding: 4px 8px;
+	border-radius: 2px;
+	font-weight: normal;
+	color: rgba(0, 0, 0, .87);
+}
+
+.status-button.normal { background-color: #90caf3; }
+.status-button.error { background-color: #ffd954; }
+.status-button.off {
+	background-color: #656565;
+	color: rgba(255, 255, 255, .4);
+}
+
+#colStateRtu > .table-top,
+#colStateRtu > .table-top > div {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+#colStateRtu > .table-top > div {
+	margin: 0;
+}
+
+#colStateRtu > .table-top > div > button {
+	border: none;
+	margin-left: 10px;
+	opacity: 0.7;
+}
+
+#colStateRtu > .table-top > div > button:hover {
+	opacity: 0.85;
+}
+
+#colStateRtu > .table-top > div > button.actived {
+	opacity: 1;
+}
+
+#colStateRtu {
+	position: relative;
+}
+
+#showRegRtu {
+	position: absolute;
+	bottom: 24px;
+	right: 30px;
+}
+
+#colStateRtu table tbody tr {
+	display: none;
+}
+
+#colStateRtu table tbody tr.visible {
+	display: table-row!important;
 }

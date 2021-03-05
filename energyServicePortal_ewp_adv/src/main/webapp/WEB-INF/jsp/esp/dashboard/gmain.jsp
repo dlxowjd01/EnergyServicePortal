@@ -17,7 +17,7 @@
 			</label>
 		</c:if>
 		
-		<div class="dashboardTableSearch">
+		<div id="dashboardTableSearch">
 			<input type="text" placeholder="발전소 명 검색">
 		</div>
 	</div>
@@ -526,18 +526,18 @@
 				return false;
 			}
 
-			$(".dashboardTableSearch").addClass("hidden");
+			$("#dashboardTableSearch").addClass("hidden");
 		}
 		
 		const dashboardTable = $(".dashboard-table").DataTable();
-		$(".dashboardTableSearch > input").on( 'keyup search input paste cut', function(e) {
+		$("#dashboardTableSearch > input").on( 'keyup search input paste cut', function(e) {
 			dashboardTable.search( this.value ).draw();
 		});
 
 		$('#switchBtn').on('click', function () {
 			if ($(this).is(':checked')) {
 			// B. TableView
-				$(".dashboardTableSearch").removeClass("hidden");
+				$("#dashboardTableSearch").removeClass("hidden");
 				// document.cookie = 'switch=checked; path=/';
 				setCookie("switch", "checked");
 				target.eq(0).addClass('hidden').next().removeClass('hidden');
@@ -546,8 +546,8 @@
 				clearInterval(refreshMinInterval);
 				clearInterval(refreshHourInterval);
 			} else {
-				$(".dashboardTableSearch").addClass("hidden");
 				// A. DashboardView
+				$("#dashboardTableSearch").addClass("hidden");
 				target.eq(0).removeClass('hidden').next().addClass('hidden');
 				setCookie('switch', '');
 

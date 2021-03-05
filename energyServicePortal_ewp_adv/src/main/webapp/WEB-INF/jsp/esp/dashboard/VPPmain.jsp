@@ -272,8 +272,8 @@
 								<img src="/img/vpp/ess.svg" alt="자원" class="actived">
 								<img src="/img/vpp/fuelcell.svg" alt="자원" class="">
 							</td>
-							<td> <span class="normal">정상</span> </td>
-							<td> <span class="error">이상</span> </td>
+							<td> <span class="status-button normal">정상</span> </td>
+							<td> <span class="status-button error">이상</span> </td>
 						</tr>
 						<tr class="vpp-fold-menu">
 							<td colspan="5">

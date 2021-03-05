@@ -660,6 +660,8 @@ const koTranslation =
   "dashboard.table.11": "월간 발전량(MWh)",
   "dashboard.table.12": "전년 동월 발전량(MWh)",
   "dashboard.table.13": "전년 동월 대비 발전 비율(%)",
+  "dashboard.table.nowTime": "금일 발전시간 (H)",
+  "dashboard.table.status": "통신 상태",
   "dashboard.EA": "개소",
   "gmain.1000won": "천원",
   "gmain.10000won": "만원",

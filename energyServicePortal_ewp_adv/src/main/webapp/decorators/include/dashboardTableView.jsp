@@ -8,8 +8,10 @@
 					<col style="width:4%">
 					<col style="width:11%">
 					<col style="width:7%">
+					<col style="width:9%">
+					<col style="width:9%">
 					<col style="width:11%">
-					<col style="width:11%">
+					<col style="width:7%">
 					<col style="width:7%">
 					<col style="width:7%">
 					<col style="width:7%">
@@ -40,7 +42,7 @@
 			sortable: true,
 			columns: [
 				{
-					title: i18nManager.tr("dashboard.table.1"),
+					title: i18nManager.tr("dashboard.table.1"), // 순번
 					data: null,
 					render: function (data, type, full, rowIndex) {
 						return rowIndex.row + 1;
@@ -48,7 +50,7 @@
 					className: 'dt-center no-sorting fixed'
 				},
 				{
-					title: i18nManager.tr("dashboard.table.2"),
+					title: i18nManager.tr("dashboard.table.2"), // 발전소 명
 					data: 'siteName',
 					render: function (data, type, full, rowIndex) {
 						return '<a href="javascript:pageMove(\'' + full['sid'] + '\', \'siteMain\'), \'self\'">' + data + '</a>' +
@@ -57,7 +59,7 @@
 					className: 'dt-head-left dt-body-left'
 				},
 				{
-					title: i18nManager.tr("dashboard.table.3"),
+					title: i18nManager.tr("dashboard.table.3"), // 발전용량
 					data: 'capacity',
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
@@ -65,7 +67,7 @@
 					className: 'dt-head-right dt-body-right'
 				},
 				{
-					title: i18nManager.tr("dashboard.table.4"),
+					title: i18nManager.tr("dashboard.table.4"), // 인버터 가동상태
 					data: 'invCount',
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
@@ -73,7 +75,16 @@
 					className: 'dt-center'
 				},
 				{
-					title: i18nManager.tr("dashboard.table.5"),
+					title: i18nManager.tr("dashboard.table.status"), // 통신상태
+					data: '',
+					render: function (data, type, full, rowIndex) {
+						let html = `<span class="status-button error">정상</span>`;
+						return html;
+					},
+					className: 'dt-center'
+				},
+				{
+					title: i18nManager.tr("dashboard.table.5"), // 경고 알람
 					data: 'deviceFault',
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
@@ -81,7 +92,22 @@
 					className: 'dt-center'
 				},
 				{
-					title: i18nManager.tr("dashboard.table.6"),
+					title: i18nManager.tr("dashboard.table.nowTime"), // 금일 발전시간 | (신규) [금일 발전량 / 용량]
+					data: null,
+					render: function (data, type, full, rowIndex) {
+						if (isEmpty(full['nowEnergy']) || isEmpty(full['capacity'])) {
+							return '-'
+						} else {
+							const nowEnergy = Number(String(full['nowEnergy']).replace(/[^\d]/g, ''));
+							const capacity = Number(String(full['capacity']).replace(/[^\d]/g, ''));
+
+							return (capacity === 0) ? "0" : (Math.round(nowEnergy/capacity * 10) / 10);
+						}
+					},
+					className: 'dt-center'
+				},
+				{
+					title: i18nManager.tr("dashboard.table.6"), // 현재 발전량
 					data: 'nowEnergy',
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
@@ -89,7 +115,7 @@
 					className: 'dt-head-right dt-body-right'
 				},
 				{
-					title: i18nManager.tr("dashboard.table.7"),
+					title: i18nManager.tr("dashboard.table.7"), // 현재 날씨
 					data: 'toDaySky',
 					render: function (data, type, full, rowIndex) {
 						if (data != null && data === '-') {
@@ -103,7 +129,7 @@
 					className: 'dt-center'
 				},
 				{
-					title: i18nManager.tr("dashboard.table.8"),
+					title: i18nManager.tr("dashboard.table.8"), // 전일 발전량
 					data: 'yesterEnergy',
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
@@ -111,7 +137,7 @@
 					className: 'dt-head-right dt-body-right'
 				},
 				{
-					title: i18nManager.tr("dashboard.table.10"),
+					title: i18nManager.tr("dashboard.table.10"), // 전일 발전시간
 					data: null,
 					render: function (data, type, full, rowIndex) {
 						if (isEmpty(full['yesterEnergy']) || isEmpty(full['capacity'])) {
@@ -126,7 +152,7 @@
 					className: 'dt-center'
 				},
 				{
-					title: i18nManager.tr("dashboard.table.9"),
+					title: i18nManager.tr("dashboard.table.9"), // 전일 날ㅆㅣ
 					data: 'yesterDaySky',
 					render: function (data, type, full, rowIndex) {
 						if (data != null && data === '-') {
@@ -140,7 +166,7 @@
 					className: 'dt-center'
 				},
 				{
-					title: i18nManager.tr("dashboard.table.11"),
+					title: i18nManager.tr("dashboard.table.11"), // 월간 발전량
 					data: 'monthGen',
 					render: function (data, type, full, rowIndex) {
 						if (isEmpty(data)) {
@@ -152,7 +178,7 @@
 					className: 'dt-head-right dt-body-right'
 				},
 				{
-					title: i18nManager.tr("dashboard.table.12"),
+					title: i18nManager.tr("dashboard.table.12"), // 전년 동월 발전량
 					data: 'beforeYearGen',
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
@@ -160,7 +186,7 @@
 					className: 'dt-head-right dt-body-right'
 				},
 				{
-					title: i18nManager.tr("dashboard.table.13"),
+					title: i18nManager.tr("dashboard.table.13"), // 전년 동월대비 발전비율
 					data: 'proportion',
 					render: function (data, type, full, rowIndex) {
 						return data;
@@ -315,6 +341,7 @@
 		urls.forEach(function (url) {
 			let deferred = $.Deferred();
 			deferreds.push(deferred);
+			console.log(url)
 
 			$.ajax(url).done(function (data) {
 				data['url'] = url['url'];
@@ -325,11 +352,12 @@
 				document.getElementById('loadingCircleDashboard').style.display =  'none';
 				let errMsg = "처리 중 오류가 발생했습니다.<br/>에러 메세지:" + errorThrown;
 				let r = formatErrorMessage(jqXHR, errorThrown);
-				console.log("error===", r);
+				console.log("error===", r, url);
 				$("#errMsg").html(errMsg);
 				$("#errorModal").modal("show");
 				setTimeout(function(){
 					$("#errorModal").modal("hide");
+					location.reload();
 				}, 2000);
 				return false;
 			});
