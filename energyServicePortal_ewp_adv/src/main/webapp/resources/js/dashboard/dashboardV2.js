@@ -548,7 +548,7 @@ const monthlyChartDraw = async (siteSids, standard) => {
 		$('.gmain-chart1 span.term span').text(standard.getFullYear() + '.01.01 ~ ' + standard.getFullYear() + '.12.31').data('standard', standard);
 		startTime = Number(standard.getFullYear() + '0101000000'), endTime = Number(standard.getFullYear() + '1231000000');
 	} else {
-		$('.gmain-chart1 span.term span').text(today.getFullYear() + '.01.01 ~ ' + today.getFullYear() + '.' + ('0' + (Number(today.getMonth()) + 1)).slice(-2) + '.' + today.getDate()).data('standard', new Date());
+		$('.gmain-chart1 span.term span').text(today.getFullYear() + '.01.01 ~ ' + today.getFullYear() + '.' + ('0' + (Number(today.getMonth()) + 1)).slice(-2) + '.' + ('0' + today.getDate()).slice(-2)).data('standard', new Date());
 		startTime = Number(yearData.startTime), endTime = Number(yearData.endTime);
 	}
 
@@ -730,11 +730,11 @@ const dailyChartDraw = async (siteSids, standard) => {
 	let lastDay = 0, startTime = '', endTime = '';
 	if (standard !== undefined && (today.getFullYear() != standard.getFullYear() || today.getMonth() != standard.getMonth())) {
 		lastDay = new Date(standard.getFullYear(), standard.getMonth() + 1, 0);
-		$('.gmain-chart2 span.term span').text(standard.format('yyyy.MM') + '.01 ~ ' + standard.format('yyyy.MM') + '.' + lastDay.getDate()).data('standard', standard);
+		$('.gmain-chart2 span.term span').text(standard.format('yyyy.MM') + '.01 ~ ' + standard.format('yyyy.MM') + '.' + ('0' + lastDay.getDate()).slice(-2)).data('standard', standard);
 		startTime = Number(standard.format('yyyyMM') + '01000000'), endTime = Number(lastDay.format('yyyyMMdd') + '000000');
 	} else {
 		lastDay = new Date(today.getFullYear(), today.getMonth() + 2, 0);
-		$('.gmain-chart2 span.term span').text(today.format('yyyy.MM') + '.01 ~ ' + today.format('yyyy.MM') + '.' + today.getDate()).data('standard', new Date());
+		$('.gmain-chart2 span.term span').text(today.format('yyyy.MM') + '.01 ~ ' + today.format('yyyy.MM') + '.' + ('0' + today.getDate()).slice(-2)).data('standard', new Date());
 		startTime = Number(monthData.startTime), endTime = Number(monthData.endTime);
 	}
 
@@ -922,7 +922,7 @@ const typeSiteDraw = async (siteSids) => {
 
 	const yesterday = new Date();
 	yesterday.setDate(Number(today.getDate()) - 1);
-	$(`.gmain-chart3 span.term`).text(yesterday.getFullYear() + '.' + (Number(yesterday.getMonth()) + 1) + '.' + yesterday.getDate());
+	$(`.gmain-chart3 span.term`).text(yesterday.getFullYear() + '.' + ('0' + (Number(yesterday.getMonth()) + 1)).slice(-2) + '.' + ('0' + yesterday.getDate()).slice(-2));
 
 	targetApi.push($.ajax({
 		url: apiHost + '/get/energy/sites',

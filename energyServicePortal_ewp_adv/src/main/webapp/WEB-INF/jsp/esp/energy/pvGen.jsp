@@ -373,7 +373,14 @@
 				}
 
 				if (!isEmpty(dashStandard) && !isEmpty(dashInterval)) {
-					$(':checkbox[name="device"]').prop('checked', true);
+					$(':checkbox[name="device"]').each(function() {
+						if(/dashboard/.test($(this).attr('id'))) {
+							$(this).prop('checked', true);
+						}
+					});
+
+
+
 					displayDropdown($('#deviceType'));
 					if (dashInterval === 'hour') {
 						$('#fromDate').val(dashStandard.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'));
