@@ -445,7 +445,13 @@
 		});
 
 		$(".rtu-filter-button").on('click', function(e) {
-			$(this).toggleClass("actived");
+			const l = $(".rtu-filter-button.actived").length;
+			if (l === 1 && $(this).hasClass("actived")) {
+				$(".rtu-filter-button").addClass("actived");
+			} else {
+				$(".rtu-filter-button").removeClass("actived");
+				$(this).addClass("actived");
+			}
 			
 			statusFilter();
 		});
@@ -456,6 +462,7 @@
 		$(".rtu-filter-button.actived").each((ix, el) => {
 			target.push("."+$(el).data("status"));
 		});
+		
 		console.log(target.join(", "))
 		$("#PV_INVERTER tbody tr").each((ix, el) => {
 			$(el).removeClass("visible");
