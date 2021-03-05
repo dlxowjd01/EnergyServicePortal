@@ -1227,6 +1227,7 @@ const alarmInfoList = async (siteSids) => {
 		} else {
 			let alarmEl = $('.indiv[data-alarm]');
 			alarmEl.attr('data-alarm', '');
+			$('#alarmNotice').empty();
 		}
 	}).fail((jqXHR, textStatus, errorThrown) => {
 		console.error(textStatus);
@@ -1369,95 +1370,97 @@ const searchSite = async function (siteSids) {
 		siteList.forEach((site, siteIdx) => {
 			const siteId = site.sid;
 			response.forEach((apiData, index) => {
-				if (!isEmpty(apiData)) {
-					const resultData = apiData['data'];
-					if (index === 0) {
-						let siteYesterGenSum = 0;
-						if (!isEmpty(resultData[siteId])) {
-							const siteEnergy = resultData[siteId];
-							siteEnergy.forEach(siteForeEnergyItem => {
-								if (!isEmpty(siteForeEnergyItem['items'])) {
-									siteForeEnergyItem['items'].map(e => siteYesterGenSum += e['energy']);
-									refineList[siteIdx]['beforeDay'] = displayNumberFixedUnit(siteYesterGenSum, 'Wh', 'kWh', 0)[0];
-								} else {
-									refineList[siteIdx]['beforeDay'] = '-';
-								}
-							});
-						} else {
-							refineList[siteIdx]['beforeDay'] = '-';
-						}
-					} else if (index === 1) { //금일 누적
-						if (!isEmpty(resultData[siteId])) {
-							const siteNowEnergy = resultData[siteId];
-							if(!isEmpty(siteNowEnergy) && !isEmpty(siteNowEnergy['energy'])) {
-								refineList[siteIdx]['accumulate'] = displayNumberFixedUnit(siteNowEnergy['energy'], 'Wh', 'kWh', 0)[0];
+				const resultData = apiData['data'];
+				if (index === 0) {
+					let siteYesterGenSum = 0;
+					if (!isEmpty(apiData) && !isEmpty(resultData[siteId])) {
+						const siteEnergy = resultData[siteId];
+						siteEnergy.forEach(siteForeEnergyItem => {
+							if (!isEmpty(siteForeEnergyItem['items'])) {
+								siteForeEnergyItem['items'].map(e => siteYesterGenSum += e['energy']);
+								refineList[siteIdx]['beforeDay'] = displayNumberFixedUnit(siteYesterGenSum, 'Wh', 'kWh', 0)[0];
 							} else {
-								refineList[siteIdx]['accumulate'] = '-';
+								refineList[siteIdx]['beforeDay'] = '-';
 							}
-						}
-					} else if (index === 2) { //금일 예측
-						let siteForeGenSum = 0;
-						if (!isEmpty(resultData[siteId])) {
-							const siteEnergy = resultData[siteId];
-							siteEnergy.forEach(siteForeEnergyItem => {
-								if (!isEmpty(siteForeEnergyItem['items'])) {
-									siteForeEnergyItem['items'].map(e => siteForeGenSum += e['energy']);
-									refineList[siteIdx]['forecast'] = displayNumberFixedUnit(siteForeGenSum, 'Wh', 'kWh', 0)[0];
-								} else {
-									refineList[siteIdx]['forecast'] = '-';
-								}
-							});
-						} else {
-							refineList[siteIdx]['forecast'] = '-';
-						}
-					} else if (index === 3) {
-						let temperature = '-', humidity = '-';
-						if (!isEmpty(apiData)) {
-							//시간 역순으로 정렬한 다음에 Observed 값을 만나면 그값이 쓰는값
-							const weatherData = apiData['data'];
-							if (!isEmpty(weatherData) && !isEmpty(weatherData[siteId]) && !isEmpty(weatherData[siteId]['items'])) {
-								const siteWeatherData = weatherData[siteId]['items'];
-								siteWeatherData.sort((a, b) => {
-									if (a.basetime > b.basetime) {return -1;}
-									if (a.basetime < b.basetime) {return 1;}
-									return 0;
-								});
-
-								const observedData = siteWeatherData.find(weather => weather.observed === true);
-								if (!isEmpty(observedData)) {
-									temperature = isEmpty(observedData['temperature']) ? '-' : observedData['temperature'];
-									humidity = isEmpty(observedData['humidity']) ? '-' : observedData['humidity'];
-								}
-							}
-						}
-
-						refineList[siteIdx]['temperature'] = temperature + ' °C';
-						refineList[siteIdx]['humidity'] = humidity + ' %'
-					} else if (index === 4) {
-						let alarmWarning = 0, alarmError = 0;
-						if (!isEmpty(apiData)) {
-							apiData.forEach(alarm => {
-								if (siteId === alarm.sid) {
-									if (alarm.level == 0 || alarm.level == 1 || alarm.level == 9) {
-										alarmWarning++;
-									} else {
-										alarmError++;
-									}
-								}
-							});
-						}
-
-						refineList[siteIdx]['alarmWarning'] = alarmWarning;
-						refineList[siteIdx]['alarmError'] = alarmError;
-						refineList[siteIdx]['alarmTotal'] = alarmError + alarmWarning;
+						});
 					} else {
-						let operation = new Array();
-						let activePower = '';
-						let capacity = '';
-						let inverterCount = '';
-						let irradiationPoa = '';
+						refineList[siteIdx]['beforeDay'] = '-';
+					}
+				} else if (index === 1) { //금일 누적
+					if (!isEmpty(apiData) && !isEmpty(resultData[siteId])) {
+						const siteNowEnergy = resultData[siteId];
+						if(!isEmpty(siteNowEnergy) && !isEmpty(siteNowEnergy['energy'])) {
+							refineList[siteIdx]['accumulate'] = displayNumberFixedUnit(siteNowEnergy['energy'], 'Wh', 'kWh', 0)[0];
+						} else {
+							refineList[siteIdx]['accumulate'] = '-';
+						}
+					} else {
+						refineList[siteIdx]['accumulate'] = '-';
+					}
+				} else if (index === 2) { //금일 예측
+					let siteForeGenSum = 0;
+					if (!isEmpty(apiData) && !isEmpty(resultData[siteId])) {
+						const siteEnergy = resultData[siteId];
+						siteEnergy.forEach(siteForeEnergyItem => {
+							if (!isEmpty(siteForeEnergyItem['items'])) {
+								siteForeEnergyItem['items'].map(e => siteForeGenSum += e['energy']);
+								refineList[siteIdx]['forecast'] = displayNumberFixedUnit(siteForeGenSum, 'Wh', 'kWh', 0)[0];
+							} else {
+								refineList[siteIdx]['forecast'] = '-';
+							}
+						});
+					} else {
+						refineList[siteIdx]['forecast'] = '-';
+					}
+				} else if (index === 3) {
+					let temperature = '-', humidity = '-';
+					if (!isEmpty(apiData) && !isEmpty(apiData)) {
+						//시간 역순으로 정렬한 다음에 Observed 값을 만나면 그값이 쓰는값
+						const weatherData = apiData['data'];
+						if (!isEmpty(weatherData) && !isEmpty(weatherData[siteId]) && !isEmpty(weatherData[siteId]['items'])) {
+							const siteWeatherData = weatherData[siteId]['items'];
+							siteWeatherData.sort((a, b) => {
+								if (a.basetime > b.basetime) {return -1;}
+								if (a.basetime < b.basetime) {return 1;}
+								return 0;
+							});
 
-						let targetDevice = false;
+							const observedData = siteWeatherData.find(weather => weather.observed === true);
+							if (!isEmpty(observedData)) {
+								temperature = isEmpty(observedData['temperature']) ? '-' : observedData['temperature'];
+								humidity = isEmpty(observedData['humidity']) ? '-' : observedData['humidity'];
+							}
+						}
+					}
+
+					refineList[siteIdx]['temperature'] = temperature + ' °C';
+					refineList[siteIdx]['humidity'] = humidity + ' %'
+				} else if (index === 4) {
+					let alarmWarning = 0, alarmError = 0;
+					if (!isEmpty(apiData)) {
+						apiData.forEach(alarm => {
+							if (siteId === alarm.sid) {
+								if (alarm.level == 0 || alarm.level == 1 || alarm.level == 9) {
+									alarmWarning++;
+								} else {
+									alarmError++;
+								}
+							}
+						});
+					}
+
+					refineList[siteIdx]['alarmWarning'] = alarmWarning;
+					refineList[siteIdx]['alarmError'] = alarmError;
+					refineList[siteIdx]['alarmTotal'] = alarmError + alarmWarning;
+				} else {
+					let operation = new Array();
+					let activePower = '';
+					let capacity = '';
+					let inverterCount = '';
+					let irradiationPoa = '';
+
+					let targetDevice = false;
+					if (!isEmpty(apiData)) {
 						Object.entries(apiData).forEach(([site_id, siteDevice]) => {
 							if (!isEmpty(siteDevice) && site_id === siteId) {
 								Object.entries(siteDevice).forEach(([deviceType, deviceData]) => {
@@ -1480,21 +1483,22 @@ const searchSite = async function (siteSids) {
 								});
 							}
 						});
+					}
 
-						if (targetDevice) {
-							if (isNaN(capacity)) { capacity = '-'; }
-							if (isNaN(activePower)) { activePower = '-'; }
+					if (targetDevice) {
+						if (isNaN(capacity)) { capacity = '-'; }
+						if (isNaN(activePower)) { activePower = '-'; }
 
-							site['inverterCount'] = inverterCount //사이트에 속한 인버터 갯수.
-							site['operation'] = operation; //사이트 상태 정보.
-							site['capacity'] = capacity;   //사이트에 속한 인버터 설비 용량 정보.
-							site['capacityView'] = (isEmpty(capacity) || capacity === '-') ? '-' : displayNumberFixedUnit(capacity, 'W', 'kW', 0)[0];   //사이트에 속한 인버터 설비 용량 정보.
-							site['activePower'] = activePower;   //사이트에 속한 인버터.
-							site['activePowerView'] =(isEmpty(activePower) || activePower === '-') ? '-' : displayNumberFixedUnit(activePower, 'W', 'kW', 0)[0];   //사이트에 속한 인버터.
-							site['irradiationPoa'] = irradiationPoa;   //사이트에 속한 인버터 설비 용량 정보.
-						}
+						site['inverterCount'] = inverterCount //사이트에 속한 인버터 갯수.
+						site['operation'] = operation; //사이트 상태 정보.
+						site['capacity'] = capacity;   //사이트에 속한 인버터 설비 용량 정보.
+						site['capacityView'] = (isEmpty(capacity) || capacity === '-') ? '-' : displayNumberFixedUnit(capacity, 'W', 'kW', 0)[0];   //사이트에 속한 인버터 설비 용량 정보.
+						site['activePower'] = activePower;   //사이트에 속한 인버터.
+						site['activePowerView'] =(isEmpty(activePower) || activePower === '-') ? '-' : displayNumberFixedUnit(activePower, 'W', 'kW', 0)[0];   //사이트에 속한 인버터.
+						site['irradiationPoa'] = irradiationPoa;   //사이트에 속한 인버터 설비 용량 정보.
 					}
 				}
+
 			});
 		});
 
