@@ -88,14 +88,16 @@
 			<div class="table-wrap-type collect-wrap">
 				<table class="history-table scroll" id="PV_INVERTER">
 					<colgroup>
-						<col style="width: 35%">
-						<col style="width: 25%">
-						<col style="width: 11%">
-						<col style="width: 15%">
+						<col style="width: 6%">
+						<col style="width: 30%">
+						<col style="width: 20%">
 						<col style="width: 14%">
+						<col style="width: 18%">
+						<col style="width: 17%">
 					</colgroup>
 					<thead>
 						<tr>
+							<th><fmt:message key="datacolleciton.1.ix" /></th>
 							<th><fmt:message key="datacolleciton.1.siteid" /></th>
 							<th><fmt:message key="datacolleciton.1.rtuid" /></th> 
 							<th><fmt:message key="datacolleciton.1.rtuStatus" /></th> 
@@ -757,6 +759,7 @@
 
 					tableData.data('dataList', rtuList);
 					// rtuList = rtuPaging(1);
+					let ix = 1;
 					rtuList.forEach(rtu => {
 						// RTU 통신이상: 가장 최신 RTU 상태 정보 데이터가 1시간이 넘어가는 경우  
 						const reqData = {
@@ -785,6 +788,7 @@
 
 								rtuInfo =
 									`	<tr id="${'${rtu.serialNumber}'}" class="${'${status[0]}'}">
+											<td>${'${ix}'}</td>
 											<td>${'${siteName}'}</td>
 											<td>${'${rtu.name}'}</td>
 											<td><span class="status-button ${'${status[0]}'}">${'${status[1]}'}</span></td>
@@ -829,6 +833,7 @@
 								$(".rtu-filter-button").last().html("이상 ("+$("tr.error").length+")");
 							}
 						});
+						ix++;
 					});
 				},
 				error: function (error) {
@@ -985,6 +990,7 @@
 			// rtuList = rtuPaging(page);
 		tableData.empty();
 
+		let ix = 1;
 		rtuList.forEach(rtu => {
 			const reqData = {
 				startTime: getTime(1, false),
@@ -1012,6 +1018,7 @@
 
 					rtuInfo =
 						`	<tr id="${'${rtu.serialNumber}'}" class="${'${status[0]}'}">
+								<td>${'${ix}'}</td>
 								<td>${'${siteName}'}</td>
 								<td>${'${rtu.name}'}</td>
 								<td><span class="status-button ${'${status[0]}'}">${'${status[1]}'}</span></td>
@@ -1056,6 +1063,7 @@
 					$(".rtu-filter-button").last().html("이상 ("+$("tr.error").length+")");
 				}
 			});
+			ix++;
 		});
 	}
 

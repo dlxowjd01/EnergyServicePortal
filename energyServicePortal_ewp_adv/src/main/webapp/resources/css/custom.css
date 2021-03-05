@@ -8935,7 +8935,7 @@ button.text-file {
 
 #colStateRtu table th,
 #colStateRtu table td {
-	padding: 0!important
+	padding: 0px 5px!important
 }
 
 .collect-wrap thead th,
