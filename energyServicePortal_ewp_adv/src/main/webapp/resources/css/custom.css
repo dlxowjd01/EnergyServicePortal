@@ -8909,6 +8909,11 @@ button.text-file {
 	min-height: 400px;
 }
 
+#colStateRtu .table-wrap-type {
+	max-height: 360px;
+	overflow-y: auto;
+}
+
 .collect-wrap.table-scroll {
 	overflow: auto;
 	/* height: 500px; */
@@ -8925,8 +8930,12 @@ button.text-file {
 }
 
 .collect-wrap .history-table.scroll {
-	overflow: auto;
 	margin-top: 0;
+}
+
+#colStateRtu table th,
+#colStateRtu table td {
+	padding: 0!important
 }
 
 .collect-wrap thead th,

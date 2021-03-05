@@ -5,21 +5,21 @@
 		<div class="indiv">
 			<table id="gmainTable" class="dashboard-table" >
 				<colgroup>
-					<col style="width:4%">
-					<col style="width:11%">
-					<col style="width:7%">
-					<col style="width:9%">
-					<col style="width:9%">
-					<col style="width:11%">
-					<col style="width:7%">
-					<col style="width:7%">
-					<col style="width:7%">
-					<col style="width:7%">
-					<col style="width:7%">
-					<col style="width:7%">
-					<col style="width:7%">
-					<col style="width:7%">
-					<col style="width:7%">
+					<col style="width:4%">  <!-- 순번 -->
+					<col style="width:14%"> <!-- 발전소 명 -->
+					<col style="width:9%">  <!-- 발전용량(kW) -->
+					<col style="width:8%">  <!-- 인버터 가동 상태 -->
+					<col style="width:5%">  <!-- 통신 상태 -->
+					<col style="width:11%"> <!-- 경고 알람 -->
+					<col style="width:7%">  <!-- 금일 발전시간 (Hrs) -->
+					<col style="width:7%">  <!-- 금일 누적발전량(kWh) -->
+					<col style="width:7%">  <!-- 현재 날씨 -->
+					<col style="width:7%">  <!-- 전일 발전 시간(Hrs) -->
+					<col style="width:7%">  <!-- 전일 발전량(kWh) -->
+					<col style="width:7%">  <!-- 전일 날씨 -->
+					<col style="width:7%">  <!-- 월간 발전량(MWh) -->
+					<col style="width:7%">  <!-- 전년 동월 발전량(MWh) -->
+					<col style="width:7%">  <!-- 전년 동월 대비 발전 비율(%) -->
 				</colgroup>
 				<thead></thead>
 				<tbody></tbody>
@@ -128,14 +128,6 @@
 					className: 'dt-center'
 				},
 				{
-					title: i18nManager.tr("dashboard.table.8"), // 전일 발전량
-					data: 'yesterEnergy',
-					render: function (data, type, full, rowIndex) {
-						return isEmpty(data) ? '-' : data;
-					},
-					className: 'dt-head-right dt-body-right'
-				},
-				{
 					title: i18nManager.tr("dashboard.table.10"), // 전일 발전시간
 					data: null,
 					render: function (data, type, full, rowIndex) {
@@ -149,6 +141,14 @@
 						}
 					},
 					className: 'dt-center'
+				},
+				{
+					title: i18nManager.tr("dashboard.table.8"), // 전일 발전량
+					data: 'yesterEnergy',
+					render: function (data, type, full, rowIndex) {
+						return isEmpty(data) ? '-' : data;
+					},
+					className: 'dt-head-right dt-body-right'
 				},
 				{
 					title: i18nManager.tr("dashboard.table.9"), // 전일 날ㅆㅣ
@@ -344,7 +344,7 @@
 				contentType: "application/json",
 				data: JSON.stringify({
 					sids: siteArray_temp.join(","),
-					startTime: getPastHour()
+					startTime: getTime(1, false)
 				}),
 			});
 		}
@@ -524,13 +524,6 @@
 								tableData[index]['comStatus'] = ["normal", "정상"];
 							}
 						});
-						// console.log(result);
-						// tableData.forEach((site, index) => {
-						// 	const data = result.data[site.sid];
-
-						// 	console.log(data);
-						// })
-						console.log(result);
 					}
 				}
 			});

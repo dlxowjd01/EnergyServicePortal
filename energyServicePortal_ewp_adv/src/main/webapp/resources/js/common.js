@@ -762,17 +762,28 @@ const showClock = () => {
 	}
 }
 
-function getPastHour() {
+
+/** yyyymmddhhiiss형식 시간 반환
+ * 
+ * @param minusHour 
+ * minusHour시간 전으로 설정
+ * 
+ * @param onlyYmd 
+ * 시분초를 0으로 할지말지
+ * 
+ */
+function getTime(minusHour, onlyYmd = true) {
 	const cur = new Date();
-	cur.setHours(cur.getHours() - 1);
+
+	cur.setHours(cur.getHours() - minusHour);
 
 	const [y, m, d, h, i, s] = [
 		String(cur.getFullYear()),
 		String(cur.getMonth() + 1).padStart(2, 0),
 		String(cur.getDate()).padStart(2, 0),
-		String(cur.getHours()).padStart(2, 0),
-		String(cur.getMinutes()).padStart(2, 0),
-		String(cur.getSeconds()).padStart(2, 0),
+		onlyYmd ? `00` : String(cur.getHours()).padStart(2, 0),
+		onlyYmd ? `00` : String(cur.getMinutes()).padStart(2, 0),
+		onlyYmd ? `00` : String(cur.getSeconds()).padStart(2, 0),
 	];
 
 	return (y+m+d+h+i+s) * 1;

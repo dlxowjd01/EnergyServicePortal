@@ -87,6 +87,13 @@
 			</div>
 			<div class="table-wrap-type collect-wrap">
 				<table class="history-table scroll" id="PV_INVERTER">
+					<colgroup>
+						<col style="width: 35%">
+						<col style="width: 25%">
+						<col style="width: 11%">
+						<col style="width: 15%">
+						<col style="width: 14%">
+					</colgroup>
 					<thead>
 						<tr>
 							<th><fmt:message key="datacolleciton.1.siteid" /></th>
@@ -700,6 +707,8 @@
 		$('#optionVal').val('');
 
 		logTable.empty();
+
+		// $("#PV_INVERTER")
 	}
 
 	//RTU 조회
@@ -747,11 +756,11 @@
 					});
 
 					tableData.data('dataList', rtuList);
-					rtuList = rtuPaging(1);
+					// rtuList = rtuPaging(1);
 					rtuList.forEach(rtu => {
 						// RTU 통신이상: 가장 최신 RTU 상태 정보 데이터가 1시간이 넘어가는 경우  
 						const reqData = {
-							startTime: getPastHour(),
+							startTime: getTime(1, false),
 							rids: rtu.rid,
 						}
 						$.ajax({
@@ -955,30 +964,30 @@
 		});
 	}
 
-	const rtuPaging = (page) => {
-		const tableData = $('#PV_INVERTER').find('tbody'),
-			pagePer = 8;
-		let jsonList = tableData.data('dataList'),
-			totalCount = jsonList.length;
-		let totalPage = Math.ceil(totalCount / pagePer);
-		let totalnav = Math.ceil(totalPage / pagePerData);
-		const startNum = (pagePer * (page - 1));
-		const endNum = ((pagePer * page) >= totalCount) ? totalCount : (pagePer * page);
-		jsonList = jsonList.slice(startNum, endNum);
+	// const rtuPaging = (page) => {
+	// 	const tableData = $('#PV_INVERTER').find('tbody'),
+	// 		pagePer = 8;
+	// 	let jsonList = tableData.data('dataList'),
+	// 		totalCount = jsonList.length;
+	// 	let totalPage = Math.ceil(totalCount / pagePer);
+	// 	let totalnav = Math.ceil(totalPage / pagePerData);
+	// 	const startNum = (pagePer * (page - 1));
+	// 	const endNum = ((pagePer * page) >= totalCount) ? totalCount : (pagePer * page);
+	// 	jsonList = jsonList.slice(startNum, endNum);
 
-		makeNavigation(page, totalPage);
-		return jsonList;
-	};
+	// 	makeNavigation(page, totalPage);
+	// 	return jsonList;
+	// };
 
 	const getDataList = (page) => {
 		const tableData = $('#PV_INVERTER').find('tbody'),
-			dateFilter = $('#selectLogByDate'),
-			rtuList = rtuPaging(page);
+			dateFilter = $('#selectLogByDate')
+			// rtuList = rtuPaging(page);
 		tableData.empty();
 
 		rtuList.forEach(rtu => {
 			const reqData = {
-				startTime: getPastHour(),
+				startTime: getTime(1, false),
 				rids: rtu.rid,
 			}
 			$.ajax({

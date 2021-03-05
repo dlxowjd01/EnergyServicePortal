@@ -29,6 +29,7 @@
 				<h2 class="title">금일 총 전력 거래량</h2>
 				<p class="vpp-1-1-value"><span>100.00</span> <span>MWh</span></p>
 				<div>
+					
 					<div class="vpp-infobox">
 						<p>금일 주요자원 거래량</p>
 						<p>100.05 MWh</p>
@@ -41,15 +42,15 @@
 			</div>
 			<div class="indiv vpp1-1-2">
 				<h2 class="title">금일 총 수익</h2>
-				<p class="vpp-1-1-value"><span>100.00</span> <span>만원</span></p>
+				<p class="vpp-1-1-value"><span>100.00</span> <span>천원</span></p>
 				<div>
 					<div class="vpp-infobox">
-						<p>금일 주요자원 거래량</p>
-						<p>100.05 MWh</p>
+						<p>금일 SMP 수익</p>
+						<p>100.05 천원</p>
 					</div>
 					<div class="vpp-infobox">
-						<p>금일 보조자원 거래량</p>
-						<p>100.05 MWh</p>
+						<p>금일 예측 수익</p>
+						<p>2.75 천원</p>
 					</div>
 				</div>
 			</div>
@@ -72,17 +73,17 @@
 								<p>95%</p>
 							</div>
 							<div class="vpp-infobox">
-								<p>전일</p>
+								<p>전주</p>
 								<p>95%</p>
 							</div>
 						</div>
 						<div>
 							<div class="vpp-infobox">
-								<p>전일</p>
+								<p>전월</p>
 								<p>95%</p>
 							</div>
 							<div class="vpp-infobox">
-								<p>전일</p>
+								<p>전년</p>
 								<p>95%</p>
 							</div>
 						</div>
@@ -144,18 +145,18 @@
 							<p>3000.8 만원</p>
 						</div>
 						<div class="vpp-infobox">
-							<p>당월</p>
+							<p>당해</p>
 							<p>3000.8 만원</p>
 						</div>
 					</div>
 					<div>
-						<h3>SMP 수익</h3>
+						<h3>예측 수익</h3>
 						<div class="vpp-infobox">
 							<p>당월</p>
 							<p>3000.8 만원</p>
 						</div>
 						<div class="vpp-infobox">
-							<p>당월</p>
+							<p>당해</p>
 							<p>3000.8 만원</p>
 						</div>
 					</div>
@@ -175,17 +176,17 @@
 						<p>주요 자원</p>
 					</div>
 					<div class="flex-center-between">
-						<div class="actived">
+						<div id="mainResource_sun">
 							<div class="vpp-2-1-1-img">
 								<img src="/img/vpp/solar-panel.svg" alt="태양광" />
-								<img src="/img/vpp/network-normal.svg" alt="가동" class="network-status-img" />
+								<img src="" alt="" class="network-status-img" />
 							</div>
 							<p>태양광</p>
 						</div>
-						<div>
+						<div id="mainResource_wind">
 							<div class="vpp-2-1-1-img">
 								<img src="/img/vpp/wind-power.svg" alt="풍력" />
-								<!-- <img src="/img/vpp/network-error-yellow.svg" alt="가동" class="network-status-img" /> -->
+								<img src="" alt="" class="network-status-img" />
 							</div>
 							<p>풍력</p>
 						</div>
@@ -196,19 +197,19 @@
 						<p>보조 자원</p>
 					</div>
 					<div>
-						<div class="actived">
+						<div class="actived" id="subResource_ESS">
 							<div class="flex-center">
 								<img src="/img/vpp/ess.svg" alt="태양광" />
 								<p>ESS</p>
 							</div>
-							<img src="/img/vpp/network-error-yellow.svg" alt="통신" />
+							<img src="" alt="" />
 						</div>
-						<div>
+						<div class="actived" id="subResource_fuelcell">
 							<div class="flex-center">
 								<img src="/img/vpp/fuelcell.svg" alt="풍력" />
 								<p>연료전지</p>
 							</div>
-							<!-- <img src="/img/vpp/network-normal.svg" alt="통신" /> -->
+							<img src="" alt="" />
 						</div>
 					</div>
 				</div>
@@ -248,10 +249,10 @@
 				<table class="vpp-2-2-table" id="vppMapTable">
 					<colgroup>
 						<col width="11%">
-						<col width="32%">
-						<col width="26%">
-						<col width="14%">
-						<col width="14%">
+						<col width="33%">
+						<col width="27%">
+						<col width="13%">
+						<col width="13%">
 					</colgroup>
 					<thead>
 						<tr>
@@ -424,7 +425,6 @@
 		</div>
 		<div class="indiv vpp-3-2">
 			<h2 class="title">주간 예측오차율</h2>
-			<!-- vpp-3-2-graph 만들때 마지막거부터 -->
 			<div class="vpp-3-2-graph">
 				<div class="actived">
 					<div>32</div>
@@ -563,7 +563,139 @@
 			})
 
 		rolling();
+		setResourceStatus();
 	});
+
+	// 임시 --------
+	const tempId = "8b3c35b9-8229-447e-a9c2-b3c8e65bd622";
+
+	function setResourceStatus() {
+		$.ajax({
+			type: "GET",
+			url: apiHost + "/config/vpp-groups/" + tempId,
+			async: false,
+			data: {
+				includeSites: true,
+				includeDevices: true,
+			}
+		}).done(result => {
+			let tableTemplate = ``;
+			result.sites.map(x => {
+				$.ajax({
+					url: apiHost + "/vpp/energy/sites",
+					data: {
+						sid: x.sid,
+						interval: "15min",
+						isLimited: true,
+						startTime: getTime(0, true)
+					}
+				}).done(data => {
+					data = data.data[x.sid];
+					console.log(data)
+					if (!data.ess) {
+						$("#subResource_ESS").removeClass("actived");
+					}
+
+					let resource = "";
+					switch (data.resource_type) {
+						case 1:
+							resource = "#mainResource_sun";
+						break;
+						
+						case 2:
+							resource = "#mainResource_wind";
+						break;
+
+						case 4:
+							resource = "#subResource_fuelcell";
+						break;
+					}
+
+					$(resource).addClass("actived");
+					if ($(resource).find(".network-status-img").attr("src") === "" && (data.energyPrimary <= 0 || data.energySecondary <= 0)) {
+						$(resource).find(".network-status-img").attr("src", "/img/vpp/network-error-yellow.svg");
+					} else {
+						$(resource).find(".network-status-img").attr("src", "/img/vpp/network-normal.svg");
+					}
+				});
+
+				tableTemplate += `
+					<tr>
+						<td>${'${x.location}'}</td>
+						<td>${'${x.name}'}</td>
+						<td>
+							<img src="/img/vpp/solar-panel.svg" alt="자원" class="${'${x.resource_type === 1 && "actived"}'}">
+							<img src="/img/vpp/wind-power.svg" alt="자원" class="${'${x.resource_type === 2 && "actived"}'}">
+							<img src="/img/vpp/ess.svg" alt="자원" class="${'${x.ess === 1 && "actived"}'}">
+							<img src="/img/vpp/fuelcell.svg" alt="자원" class="${'${x.resource_type === 4 && "actived"}'}">
+						</td>
+						<td> <span class="status-button normal">정상</span> </td>
+						<td> <span class="status-button error">이상</span> </td>
+					</tr>
+					<tr class="vpp-fold-menu">
+						<td colspan="5">
+							<div>
+								<div class="vpp-fold-menu-header">
+									<img src="/img/weather_icons/ico1_sun.svg" alt="날씨"> 
+									<div>
+										<ul>
+											<li>일사량</li>
+											<li>61 kWh/m.day</li>
+										</ul>
+										<div class="flex-center">
+											<ul>
+												<li>온도</li>
+												<li>23%</li>
+											</ul>
+											<ul>
+												<li>온도</li>
+												<li>23%</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+
+								<div class="vpp-fold-menu-content">
+									<div>
+										<div class="vpp-infobox">
+											<p>발전소 용량</p>
+											<p>91.12kW</p>
+										</div>
+										<div class="vpp-infobox">
+											<p>발전소 용량</p>
+											<p>91.12kW</p>
+										</div>
+										<div class="vpp-infobox">
+											<p>발전소 용량</p>
+											<p>91.12kW</p>
+										</div>
+									</div>
+									<div>
+										<div class="vpp-infobox">
+											<p>발전소 용량</p>
+											<p>91.12kW</p>
+										</div>
+										<div class="vpp-infobox">
+											<p>발전소 용량</p>
+											<p>91.12kW</p>
+										</div>
+										<div class="vpp-infobox">
+											<p>발전소 용량</p>
+											<p>91.12kW</p>
+										</div>
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+				`;
+
+				console.log(x);
+
+			});
+			$("#vppMapTable tbody").html(tableTemplate);
+		});
+	}
 
 	function rolling() {
 		const play = $(".auto-rolling").hasClass("play") ? true : false;

@@ -279,7 +279,7 @@ h2.title {
 
 .vpp-2-2-table td {
 	text-align: left!important;
-	padding: 16px;
+	padding: 16px 8px;
 	font-size: 13px;
 	vertical-align: middle;
 }
