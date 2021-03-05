@@ -616,6 +616,7 @@
 									}
 								} else if ((dashSites.length === 0 && billingSites.length === 0 && timeSites.length > 0 && idx === 0)
 									|| (dashSites.length === 0 && billingSites.length > 0 && timeSites.length > 0 && idx === 1)
+									|| (dashSites.length > 0 && billingSites.length === 0 && timeSites.length > 0 && idx === 1)
 									|| (dashSites.length > 0 && billingSites.length > 0 && timeSites.length > 0 && idx === 2)) {
 									if (device.value === id && /time/.test(device.id)) {
 										data.name = device.dataset.name;
