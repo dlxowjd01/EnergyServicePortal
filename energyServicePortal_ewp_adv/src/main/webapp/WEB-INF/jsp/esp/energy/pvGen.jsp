@@ -381,11 +381,12 @@
 						$('#interval button').data('value', 'hour').html('<fmt:message key="renewablesgen.3.1hr" />' + '<span class="caret"></sapn>');
 					} else {
 						const lastDay = new Date(dashStandard.substr(0, 4), dashStandard.substr(4), 0);
-						console.log(lastDay);
 						$('#fromDate').val(dashStandard.replace(/(\d{4})(\d{2})/, '$1-$2') + '-01');
 						$('#toDate').val(dashStandard.replace(/(\d{4})(\d{2})/, '$1-$2') + '-' + lastDay.getDate());
 						$('#interval button').data('value', 'day').html('<fmt:message key="renewablesgen.3.1day" />' + '<span class="caret"></sapn>');
 					}
+
+					$('#chartStyle button').data('value', 'allSum').html('<fmt:message key="renewablesgen.3.sumtotal" /></a></li> <span class="caret"></span>');
 					searchGenData();
 				}
 			}).catch(error => {

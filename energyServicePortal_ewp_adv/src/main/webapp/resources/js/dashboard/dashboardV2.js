@@ -428,7 +428,7 @@ const minAjax = async () => {
 							});
 						}
 
-						$(this).find('td:eq(3)').text(rtuStatus);
+						$(this).find('td:eq(3)').html(rtuStatus);
 					});
 				} else {
 					Object.entries(resData).forEach(([site_id, siteDevice]) => {
@@ -502,7 +502,7 @@ const minAjax = async () => {
 	}).then(({acPowerSum, capacitySum, invertorCount, energySum}) => {
 		const usage = Math.floor((acPowerSum / capacitySum) * 100)
 			, other = 100 - usage
-			, generationHour = (Math.round((energySum / capacitySum) * 10) / 10);
+			, generationHour = (Math.round((energySum / capacitySum) * 100) / 100).toFixed(2);
 
 		$('#centerTbody tr td:nth-child(4)').html(generationHour + '<em>&nbsp;&nbsp;Hrs</em>');
 		pieChart.setTitle({text: Math.floor(acPowerSum / 1000).toLocaleString() + 'kW'});
@@ -1239,7 +1239,7 @@ const getTodayTotalDetail = async function (siteSids) {
 	}).then(({acPowerSum, capacitySum, invertorCount, energySum}) => {
 		const usage = Math.floor((acPowerSum / capacitySum) * 100)
 			, other = 100 - usage
-			, generationHour = (Math.round((energySum / capacitySum) * 10) / 10);
+			, generationHour = (Math.round((energySum / capacitySum) * 100) / 100).toFixed(2);
 
 		$('#centerTbody tr td:nth-child(4)').html(generationHour + '<em>&nbsp;&nbsp;Hrs</em>');
 		pieChart.setTitle({text: Math.floor(acPowerSum / 1000).toLocaleString() + 'kW'});
