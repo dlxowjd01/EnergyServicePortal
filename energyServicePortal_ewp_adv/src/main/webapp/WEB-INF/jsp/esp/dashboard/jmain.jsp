@@ -18,7 +18,11 @@
 		<div class="indiv chart-wrapper2 gmain-chart1">
 			<div class="chart-top">
 				<h2 class="ntit"><fmt:message key="vppdash.1.month" /></h2>
-				<span class="term"></span>
+				<span class="term">
+					<img src="/img/ico-back.svg" class="back">
+					<span></span>
+					<img src="/img/ico-next.svg" class="next hidden">
+				</span>
 			</div>
 			<%--					<div class="no-data">--%>
 			<%--						<span>올해 발전량 정보를 가져올 수 없습니다.</span>--%>
@@ -30,7 +34,11 @@
 		<div class="indiv chart-wrapper2 gmain-chart2">
 			<div class="chart-top">
 				<h2 class="ntit"><fmt:message key="vppdash.2.daily" /></h2>
-				<span class="term"></span>
+				<span class="term">
+					<img src="/img/ico-back.svg" class="back">
+					<span></span>
+					<img src="/img/ico-next.svg" class="next hidden">
+				</span>
 			</div>
 			<div class="inchart">
 				<div id="dailyChart"></div>
@@ -191,6 +199,9 @@
 								<button type="button" class="btn-align"><fmt:message key="vppdash.8.warn" /></button>
 							</th>
 							<th>
+								<button type="button" class="btn-align"><fmt:message key="gdash.7.rtu_status"/></button>
+							</th>
+							<th>
 								<button type="button" class="btn-align"><fmt:message key="vppdash.8.site" /></button>
 							</th>
 							<th>
@@ -218,6 +229,7 @@
 								</td>
 								<td>[alarmError]</td>
 								<td>[alarmWarning]</td>
+								<td><span class="status-button [rtustatusClass]">[rtustatus]</span></td>
 								<td class="left">[name]</td>
 								<td class="right">[capacityView]</td>
 								<td class="right">[forecast]</td>
@@ -361,6 +373,21 @@
 			$form.attr('action', '/dashboard/smain.do').submit();
 		}
 	}
+
+	const goPvGen = (target, interval) => {
+		if (interval === 'day') {
+			const standard = $('#monthlySum').parent().find('.term span').data('standard');
+			target = standard.format('yyyy') + ('0' + target).slice(-2);
+		} else {
+			const standard = $('#dailySum').parent().find('.term span').data('standard');
+			target = standard.format('yyyyMM') + ('0' + target).slice(-2);
+		}
+
+		let $form = $('#linkSiteForm');
+		let $inp = $('<input>').attr('type', 'hidden').attr('name', 'target').val(target);
+		let $inp2 = $('<input>').attr('type', 'hidden').attr('name', 'interval').val(interval);
+		$form.empty().append($inp).append($inp2).attr('action', '/energy/pvGen.do').submit();
+	};
 
 	const setRealtimeRecord = async (siteSids) => {
 		const targetApi = new Array();

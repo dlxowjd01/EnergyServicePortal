@@ -92,11 +92,13 @@
 			<div class="indiv smain-cal">
 				<div class="chart-top">
 					<h2 class="ntit"><fmt:message key='smain.monthDevCalendar' /></h2>
-					<h1 class="stit" id="calendarDate"></h1>
+					<h1 class="stit" id="calendarDate">
+						<img src="/img/ico-back.svg" class="back">
+						<span></span>
+						<img src="/img/ico-next.svg" class="next hidden">
+					</h1>
 				</div>
 				<div class="calendar-wrap">
-					<a href="javascript:void(0);" class="right hidden"><span><p class="hidden">다음달</p></span></a>
-					<a href="javascript:void(0);" class="left"><span><p class="hidden">이전달</p></span></a>
 					<table class="calendar">
 						<thead>
 							<tr>
@@ -698,12 +700,12 @@
 		});
 
 
-		$('a.right').on('click', function() {
+		$('img.next').on('click', function() {
 			buildCalendar(Number($('#calendarMonth').data('addMonth')) + 1);
 			getWeatherCalendarEnergyData();
 		});
 
-		$('a.left').on('click', function() {
+		$('img.back').on('click', function() {
 			buildCalendar(Number($('#calendarMonth').data('addMonth')) - 1);
 			getWeatherCalendarEnergyData();
 		});
@@ -716,23 +718,23 @@
 
 		if (addMonth === undefined) {
 			$('#calendarMonth').data('addMonth', 0);
-			$('#calendarDate').html('<em>' + doMonth.format('yyyy.MM') + '.01' + ' ~ ' + (new Date()).format('yyyy.MM.dd') + '</em>');
+			$('#calendarDate span').html('<em>' + doMonth.format('yyyy.MM') + '.01' + ' ~ ' + (new Date()).format('yyyy.MM.dd') + '</em>');
 		} else {
 			$('#calendarMonth').data('addMonth', addMonth);
 			doMonth = new Date(today.getFullYear(), today.getMonth() + addMonth, 1);
 			lastDate = new Date(doMonth.getFullYear(), doMonth.getMonth() + 1, 0);
-			$('#calendarDate').html('<em>' + doMonth.format('yyyy.MM') + '.01' + ' ~ ' + lastDate.format('yyyy.MM.dd') + '</em>');
+			$('#calendarDate span').html('<em>' + doMonth.format('yyyy.MM') + '.01' + ' ~ ' + lastDate.format('yyyy.MM.dd') + '</em>');
 
 			if (addMonth === 0) {
-				$('a.right').addClass('hidden');
+				$('img.next').addClass('hidden');
 			} else {
-				$('a.right').removeClass('hidden');
+				$('img.next').removeClass('hidden');
 			}
 
 			if (addMonth === -2) {
-				$('a.left').addClass('hidden');
+				$('img.back').addClass('hidden');
 			} else {
-				$('a.left').removeClass('hidden');
+				$('img.back').removeClass('hidden');
 			}
 		}
 

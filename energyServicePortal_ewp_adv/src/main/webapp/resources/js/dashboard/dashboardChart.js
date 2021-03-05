@@ -157,7 +157,13 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 			label: {
 				connectorAllowed: false
 			},
-			borderWidth: 0
+			borderWidth: 0,
+			events: {
+				click: function (event) {
+					const x = event.point.category;
+					goPvGen(x, 'day');
+				}
+			}
 		},
 		line: {
 			marker: {
@@ -339,6 +345,12 @@ const dailyChart = Highcharts.chart('dailyChart', {
 					var visibility = this.visible ? 'visible' : 'hidden';
 					this.legendItem.styles.color == 'var(--white60)'
 					// var visibility = this.visible ? 'visible' : 'hidden';
+				}
+			},
+			events: {
+				click: function (event) {
+					const x = event.point.category;
+					goPvGen(x, 'hour');
 				}
 			}
 		},

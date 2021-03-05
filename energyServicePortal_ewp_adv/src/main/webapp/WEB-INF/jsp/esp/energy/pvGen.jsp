@@ -147,6 +147,8 @@
 <script type="text/javascript">
 	const sidparam = "${param.sid}";
 	const sites = JSON.parse('${siteList}');
+	const dashStandard = '${param.target}';
+	const dashInterval = '${param.interval}';
 	let generationData = new Object()
 	  , summaryData = new Object()
 	  , standard = new Array()
@@ -246,11 +248,16 @@
 				$("#siteList ul li a[data-value="+sidparam+"] > label").click();
 			}
 		}
+
+		if (!isEmpty(dashStandard) && !isEmpty(dashInterval)) {
+			$(':checkbox[name="site"]').prop('checked', true);
+			displayDropdown($('#siteList'));
+			makeDeviceList();
+		}
 	};
 
 	const searchSite = keyword => {
 		const result = sites.filter(x => x.name.includes(keyword));
-
 		makeSiteList(result);
 	}
 
@@ -364,12 +371,28 @@
 				if (sidparam) {
 					$("#deviceType > div > div > div > div > div.fl > button:nth-child(1)").click();
 				}
+
+				if (!isEmpty(dashStandard) && !isEmpty(dashInterval)) {
+					$(':checkbox[name="device"]').prop('checked', true);
+					displayDropdown($('#deviceType'));
+					if (dashInterval === 'hour') {
+						$('#fromDate').val(dashStandard.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'));
+						$('#toDate').val(dashStandard.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3'));
+						$('#interval button').data('value', 'hour').html('<fmt:message key="renewablesgen.3.1hr" />' + '<span class="caret"></sapn>');
+					} else {
+						const lastDay = new Date(dashStandard.substr(0, 4), dashStandard.substr(4), 0);
+						console.log(lastDay);
+						$('#fromDate').val(dashStandard.replace(/(\d{4})(\d{2})/, '$1-$2') + '-01');
+						$('#toDate').val(dashStandard.replace(/(\d{4})(\d{2})/, '$1-$2') + '-' + lastDay.getDate());
+						$('#interval button').data('value', 'day').html('<fmt:message key="renewablesgen.3.1day" />' + '<span class="caret"></sapn>');
+					}
+					searchGenData();
+				}
 			}).catch(error => {
 				console.error(error);
 				errorMsg(error);
 			});
 		}
-
 	};
 
 	function rtnDropdown($dropdownId) {

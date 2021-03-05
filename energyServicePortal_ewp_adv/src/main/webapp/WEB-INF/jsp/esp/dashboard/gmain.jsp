@@ -35,12 +35,15 @@
 	<div class="col-xl-4 col-md-12 col-sm-12">
 		<div class="indiv chart-wrapper gmain-chart1">
 			<div class="chart-top offset">
-				<h2 class="ntit"><fmt:message key="gdash.1.month"/></h2><span class="term"></span>
+				<div id="miniLoadingCircle_month" class="mini-loading" style="display:none;"><img class="mini-loading-image" src="/img/loading_icon.gif" alt="Loading..."/></div>
+				<h2 class="ntit"><fmt:message key="gdash.1.month"/></h2>
+				<span class="term">
+					<img src="/img/ico-back.svg" class="back">
+					<span></span>
+					<img src="/img/ico-next.svg" class="next hidden">
+				</span>
 				<ul id="monthlySum" class="sum-list mobile-visible"></ul>
 			</div>
-			<%--					<div class="no-data">--%>
-			<%--						<span><fmt:message key='gmain.warning.power' /></span>--%>
-			<%--					</div>--%>
 			<div class="inchart mobile-hidden">
 				<div id="monthlyChart"></div>
 			</div>
@@ -48,7 +51,13 @@
 
 		<div class="indiv chart-wrapper gmain-chart2">
 			<div class="chart-top offset">
-				<h2 class="ntit"><fmt:message key="gdash.2.daily"/></h2><span class="term"></span>
+				<div id="miniLoadingCircle_daily" class="mini-loading" style="display:none;"><img class="mini-loading-image" src="/img/loading_icon.gif" alt="Loading..."/></div>
+				<h2 class="ntit"><fmt:message key="gdash.2.daily"/></h2>
+				<span class="term">
+					<img src="/img/ico-back.svg" class="back">
+					<span></span>
+					<img src="/img/ico-next.svg" class="next hidden">
+				</span>
 				<ul id="dailySum" class="sum-list mobile-visible"></ul>
 			</div>
 			<div class="inchart mobile-hidden">
@@ -139,7 +148,7 @@
 							<td><em>&nbsp;&nbsp;<fmt:message key='gmain.totalCount.site' /></em></td>
 							<td><em>&nbsp;&nbsp;<fmt:message key='gmain.totalCount.device' /></em></td>
 							<td><em>&nbsp;&nbsp;kW</em></td>
-							<td><em>&nbsp;&nbsp;H</em></td>
+							<td><em>&nbsp;&nbsp;Hrs</em></td>
 							<td><em>&nbsp;&nbsp;kg</em></td>
 							<td><em>&nbsp;&nbsp;<fmt:message key='gmain.1000won' /></em></td>
 						</tr>
@@ -332,6 +341,9 @@
 												<button type="button" class="btn-align"><fmt:message key="gdash.7.medium"/></button>
 											</th>
 											<th>
+												<button type="button" class="btn-align"><fmt:message key="gdash.7.rtu_status"/></button>
+											</th>
+											<th>
 												<button type="button" class="btn-align"><fmt:message key="gdash.7.site"/></button>
 											</th>
 											<th>
@@ -360,6 +372,7 @@
 											</td>
 											<td>[alarmError]</td>
 											<td>[alarmWarning]</td>
+											<td><span class="status-button [rtustatusClass]">[rtustatus]</span></td>
 											<td class="center">[name]</td>
 											<td class="center">[capacityView]</td>
 											<td class="center">[forecast]</td>
@@ -591,7 +604,6 @@
 			clearInterval(refreshMinInterval);
 			clearInterval(refreshHourInterval);
 		});
-
 	});
 
 	<c:if test="${dashboardMap eq 'google'}">
@@ -750,6 +762,22 @@
 			$form.attr('action', '/dashboard/smain.do').submit();
 		}
 	}
+
+	const goPvGen = (target, interval) => {
+
+		if (interval === 'day') {
+			const standard = $('#monthlySum').parent().find('.term span').data('standard');
+			target = standard.format('yyyy') + ('0' + target).slice(-2);
+		} else {
+			const standard = $('#dailySum').parent().find('.term span').data('standard');
+			target = standard.format('yyyyMM') + ('0' + target).slice(-2);
+		}
+
+		let $form = $('#linkSiteForm');
+		let $inp = $('<input>').attr('type', 'hidden').attr('name', 'target').val(target);
+		let $inp2 = $('<input>').attr('type', 'hidden').attr('name', 'interval').val(interval);
+		$form.empty().append($inp).append($inp2).attr('action', '/energy/pvGen.do').submit();
+	};
 
 	function hideAllInfoWindows(map) {
 		markers.forEach(function(marker) {
