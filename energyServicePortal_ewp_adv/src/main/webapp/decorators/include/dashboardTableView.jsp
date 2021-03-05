@@ -76,10 +76,9 @@
 				},
 				{
 					title: i18nManager.tr("dashboard.table.status"), // 통신상태
-					data: '',
+					data: 'comStatus',
 					render: function (data, type, full, rowIndex) {
-						let html = `<span class="status-button error">정상</span>`;
-						return html;
+						return `<span class="status-button ${'${data[0]}'}">${'${data[1]}'}</span>`;
 					},
 					className: 'dt-center'
 				},
@@ -246,6 +245,8 @@
 			});
 		});
 
+		let siteArray_temp = siteArray;
+
 		if (isEmpty(sgid)) siteArray = 'all';
 
 		//오늘 발전
@@ -332,6 +333,19 @@
 					endTime: yesterDayFormData.endTime,
 					formId: 'v2'
 				}
+			});
+
+			// 통신 상태
+			
+			urls.push({
+				url: apiHost + "/get/status/health",
+				type: "post",
+				dataType: 'json',
+				contentType: "application/json",
+				data: JSON.stringify({
+					sids: siteArray_temp.join(","),
+					startTime: getPastHour()
+				}),
 			});
 		}
 
@@ -502,6 +516,21 @@
 								tableData[index]['deviceFault'] = alarm['message'];
 							}
 						});
+					} else if (targetUrl.match('/get/status/health')) {
+						tableData.forEach((site, index) => {
+							const comStatus = result.sites.find(x => site.sid === x.sid);
+							tableData[index]['comStatus'] = ["error", "이상"];
+							if (comStatus.rtus.length) {
+								tableData[index]['comStatus'] = ["normal", "정상"];
+							}
+						});
+						// console.log(result);
+						// tableData.forEach((site, index) => {
+						// 	const data = result.data[site.sid];
+
+						// 	console.log(data);
+						// })
+						console.log(result);
 					}
 				}
 			});

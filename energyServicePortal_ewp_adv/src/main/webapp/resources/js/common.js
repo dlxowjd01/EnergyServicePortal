@@ -761,3 +761,19 @@ const showClock = () => {
 		setTimeout(showClock,1000);
 	}
 }
+
+function getPastHour() {
+	const cur = new Date();
+	cur.setHours(cur.getHours() - 1);
+
+	const [y, m, d, h, i, s] = [
+		String(cur.getFullYear()),
+		String(cur.getMonth() + 1).padStart(2, 0),
+		String(cur.getDate()).padStart(2, 0),
+		String(cur.getHours()).padStart(2, 0),
+		String(cur.getMinutes()).padStart(2, 0),
+		String(cur.getSeconds()).padStart(2, 0),
+	];
+
+	return (y+m+d+h+i+s) * 1;
+}

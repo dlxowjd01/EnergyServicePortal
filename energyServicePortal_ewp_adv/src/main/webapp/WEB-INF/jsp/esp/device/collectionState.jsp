@@ -751,7 +751,7 @@
 					rtuList.forEach(rtu => {
 						// RTU 통신이상: 가장 최신 RTU 상태 정보 데이터가 1시간이 넘어가는 경우  
 						const reqData = {
-							startTime: 20190101000000,
+							startTime: getPastHour(),
 							rids: rtu.rid,
 						}
 						$.ajax({
@@ -769,9 +769,9 @@
 
 								let status = ["error", "이상"];
 								if (rtuStatus.rtus.length) {
-									if ((new Date().getTime() - rtuStatus.rtus[0]['last_timestamp']) <= 3600000) {
-										status = ["normal", "정상"];
-									}
+									status = ["normal", "정상"];
+									// if ((new Date().getTime() - rtuStatus.rtus[0]['last_timestamp']) <= 3600000) {
+									// }
 								}
 
 								rtuInfo =
@@ -815,6 +815,9 @@
 									});
 								
 								statusFilter();
+
+								$(".rtu-filter-button").first().html("정상 ("+$("tr.normal").length+")");
+								$(".rtu-filter-button").last().html("이상 ("+$("tr.error").length+")");
 							}
 						});
 					});
@@ -975,7 +978,7 @@
 
 		rtuList.forEach(rtu => {
 			const reqData = {
-				startTime: 20190101000000,
+				startTime: getPastHour(),
 				rids: rtu.rid,
 			}
 			$.ajax({
@@ -993,9 +996,9 @@
 
 					let status = ["error", "이상"];
 					if (rtuStatus.rtus.length) {
-						if ((new Date().getTime() - rtuStatus.rtus[0]['last_timestamp']) <= 3600000) {
-							status = ["normal", "정상"];
-						}
+						status = ["normal", "정상"];
+						// if ((new Date().getTime() - rtuStatus.rtus[0]['last_timestamp']) <= 3600000) {
+						// }
 					}
 
 					rtuInfo =
@@ -1039,6 +1042,9 @@
 						});
 
 					statusFilter();
+
+					$(".rtu-filter-button").first().html("정상 ("+$("tr.normal").length+")");
+					$(".rtu-filter-button").last().html("이상 ("+$("tr.error").length+")");
 				}
 			});
 		});
