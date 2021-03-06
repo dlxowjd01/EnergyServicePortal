@@ -412,17 +412,17 @@ const minAjax = async () => {
 						let rtuStatus = '';
 						if (!isEmpty(resData) && !isEmpty(resData.sites)) {
 							(resData.sites).forEach(data => {
-								if (siteId === data.sid) {
+								if (siteId === data.sid && data.rtus !== undefined) {
 									if (data.rtus.length > 0) {
 										data.rtus.forEach(rtu => {
 											if (rtu.operation === 1) {
-												rtuStatus = '<span className="status-button normal">정상</span>';
+												rtuStatus = '<span class="status-button normal">정상</span>';
 											} else {
-												rtuStatus = '<span className="status-button error">이상</span>';
+												rtuStatus = '<span class="status-button error">이상</span>';
 											}
 										});
 									} else {
-										rtuStatus = '<span className="status-button error">이상</span>';
+										rtuStatus = '<span class="status-button error">이상</span>';
 									}
 								}
 							});
@@ -1558,7 +1558,7 @@ const searchSite = async function (siteSids) {
 					if (!isEmpty(apiData) && !isEmpty(apiData.sites)) {
 						(apiData.sites).forEach(data => {
 							if (siteId === data.sid) {
-								if (data.rtus.length > 0) {
+								if (data.rtus.length > 0 && data.rtus !== undefined) {
 									data.rtus.forEach(rtu => {
 										if (rtu.operation === 1) {
 											site['rtustatus'] = '정상';
