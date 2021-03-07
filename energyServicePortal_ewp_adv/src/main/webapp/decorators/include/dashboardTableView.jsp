@@ -520,7 +520,7 @@
 						tableData.forEach((site, index) => {
 							const comStatus = result.sites.find(x => site.sid === x.sid);
 							tableData[index]['comStatus'] = ["error", "이상"];
-							if (comStatus.rtus.length) {
+							if (!isEmpty(comStatus.rtus) && comStatus.rtus.length > 0) {
 								tableData[index]['comStatus'] = ["normal", "정상"];
 							}
 						});
