@@ -616,6 +616,7 @@
 			}));
 		}
 
+		$('#loadingCircle').show();
 		Promise.all(promiseUrl).then(response => {
 			generationData = new Object();
 			summaryData = new Object();
@@ -669,9 +670,11 @@
 				});
 			}
 
+			$('#loadingCircle').hide();
 			drawPage();
 		}).catch(error => {
 			console.error(error);
+			$('#loadingCircle').hide();
 		});
 	}
 
