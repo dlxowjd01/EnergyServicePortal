@@ -483,7 +483,7 @@
 				</div>
 				<div class="w-55 pr-20 ugs-table-wrap">
 					<h2 class="sm-title mb-10">추가 목록</h2>
-					<table id="etcTable">
+					<table id="etcTable" style="min-width: 500px !important;">
 						<colgroup>
 							<col style="width:25%">
 							<col style="width:25%">

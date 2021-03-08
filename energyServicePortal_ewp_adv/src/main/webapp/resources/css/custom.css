@@ -163,6 +163,54 @@ bootstrap default
 	--blue-yonder: #7e89c9;
 	--blueberry: #5269ef;
 	--royal-blue: #274dea;
+	
+	--robin-s-egg-blue: #b0e9e8;
+	--tealish: #26ccc8;
+	--teal: #009389;
+	--soft-blue-two: #50b5ff;
+	--lightish-blue: #5269ef;
+	--azul: #274dea;
+	--soft-blue: #7e89c9;
+	--light-urple: #9363fd;
+	--dark-lilac: #9f52b3;
+	--apple-green: #7ed321;
+	--bluish-green: #12af67;
+	--ocean-green: #3b9065;
+	--powder-blue: #bbdfff;
+	--sky-blue: #74b9fa;
+	--azure: #1d98e9;
+
+	--robin-s-egg-blue-light: #d0f2f2;
+	--tealish-light: #7de1de;
+	--teal-light: #66beb8;
+	--soft-blue-two-light: #96d3ff;
+	--lightish-blue-light: #97a5f6;
+	--azul-light: #7d94f3;
+	--soft-blue-light: #b2b8df;
+	--light-urple-light: #bea2fe;
+	--dark-lilac-light: #c697d2;
+	--apple-green-light: #b2e57a;
+	--bluish-green-light: #71cfa4;
+	--ocean-green-light: #89bda3;
+	--powder-blue-light: #d7ecff;
+	--sky-blue-light: #acd5fc;
+	--azure-light: #77c1f2;
+
+	--robin-s-egg-blue-dark: #8dbbba;
+	--tealish-dark: #1ea3a0;
+	--teal-dark: #00766e;
+	--soft-blue-two-dark: #4091cc;
+	--lightish-blue-dark: #4154bf;
+	--azul-dark: #1f3dbb;
+	--soft-blue-dark: #656ea1;
+	--light-urple-dark: #764fcb;
+	--dark-lilac-dark: #7f418f;
+	--apple-green-dark: #65a91a;
+	--bluish-green-dark: #0e8c52;
+	--ocean-green-dark: #2f7351;
+	--powder-blue-dark: #96b3cc;
+	--sky-blue-dark: #5d94c8;
+	--azure-dark: #177abb;
 	/* ********* Images (logo) ********* */
 	--encored-logo: url("/img/logo_encored_wh.svg");
 	--iderms-logo: url("/img/logo_iderms.svg");
@@ -7372,7 +7420,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	margin: 10px 6px;
 	padding: 12px;
 	width: 115px;
-	height: 132px;
+	min-height: 132px;
 	border-radius: 4px;
 	text-align: left;
 	background: var(--box-darker);
