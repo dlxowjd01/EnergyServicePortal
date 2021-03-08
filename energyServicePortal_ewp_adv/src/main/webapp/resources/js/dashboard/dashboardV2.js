@@ -320,7 +320,7 @@ const minAjax = async () => {
 
 							$('#siteList tr.dbclickopen').each(function() {
 								if ($(this).data('sid') === siteKey) {
-									$(this).find('td:eq(6)').text(numberComma(Math.round(siteData['energy'] / 1000)));
+									$(this).find('td:eq(7)').text(numberComma(Math.round(siteData['energy'] / 1000)));
 
 									const detail = $(this).next('tr.detail-info');
 									detail.find('.di-bottom-sec .left .di-list li:eq(1) span.di-li-text').text(numberComma(Math.round(siteData['energy'] / 1000)));
@@ -412,20 +412,17 @@ const minAjax = async () => {
 						let rtuStatus = '';
 						if (!isEmpty(resData) && !isEmpty(resData.sites)) {
 							(resData.sites).forEach(data => {
-								if (siteId === data.sid && !isEmpty(data.rtus)) {
-									if (data.rtus.length > 0) {
-										data.rtus.forEach(rtu => {
-											if (rtu.operation === 1) {
-												rtuStatus = '<span class="status-button normal">정상</span>';
-											} else {
-												rtuStatus = '<span class="status-button error">이상</span>';
-											}
-										});
+								if (siteId === data.sid) {
+									if (!isEmpty(data.rtus) && data.rtus.length > 0) {
+										const operation = data.rtus.find(e => e.operation === 1);
+										if (!isEmpty(operation)) {
+											rtuStatus = '<span class="status-button normal">정상</span>';
+										} else {
+											rtuStatus = '<span class="status-button error">이상</span>';
+										}
 									} else {
 										rtuStatus = '<span class="status-button error">이상</span>';
 									}
-								} else {
-									rtuStatus = '<span class="status-button error">이상</span>';
 								}
 							});
 						}
@@ -520,7 +517,7 @@ const minAjax = async () => {
 		pieChart.redraw();
 
 		$('#centerTbody tr td:nth-child(2)').html(numberComma(invertorCount) + '<em>&nbsp;&nbsp;'+i18nManager.tr('dashboard_units')+'</em>');
-		$('#centerTbody tr td:nth-child(3)').html(numberComma(Math.round(capacitySum / 1000)) + '<em>&nbsp;&nbsp;kW</em>');
+		$('#centerTbody tr td:nth-child(4)').html(numberComma(Math.round(capacitySum / 1000)) + '<em>&nbsp;&nbsp;kW</em>');
 
 		searchOperationSite();
 	}).catch((error) => {
@@ -1559,24 +1556,20 @@ const searchSite = async function (siteSids) {
 				} else if (index === 5) {
 					if (!isEmpty(apiData) && !isEmpty(apiData.sites)) {
 						(apiData.sites).forEach(data => {
-							if (siteId === data.sid && !isEmpty(data.rtus)) {
-								if (data.rtus.length > 0) {
-									data.rtus.forEach(rtu => {
-										if (rtu.operation === 1) {
-											site['rtustatus'] = '정상';
-											site['rtustatusClass'] = 'normal';
-										} else {
-											site['rtustatus'] = '이상';
-											site['rtustatusClass'] = 'error';
-										}
-									});
+							if (siteId === data.sid) {
+								if (!isEmpty(data.rtus) && data.rtus.length > 0) {
+									const operation = data.rtus.find(e => e.operation === 1);
+									if (!isEmpty(operation)) {
+										site['rtustatus'] = '정상';
+										site['rtustatusClass'] = 'normal';
+									} else {
+										site['rtustatus'] = '이상';
+										site['rtustatusClass'] = 'error';
+									}
 								} else {
 									site['rtustatus'] = '이상';
 									site['rtustatusClass'] = 'error';
 								}
-							} else {
-								site['rtustatus'] = '이상';
-								site['rtustatusClass'] = 'error';
 							}
 						});
 					} else {
