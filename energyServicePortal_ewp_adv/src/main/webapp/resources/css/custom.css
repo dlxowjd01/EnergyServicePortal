@@ -1477,6 +1477,14 @@ table tbody td .dropdown-menu {
 	padding-left: 40px;
 }
 
+.pr-10 {
+	padding-right: 10px !important;
+}
+
+.pr-20 {
+	padding-right: 20px !important;
+}
+
 .pr-28 {
 	padding-right: 28px !important;
 }
@@ -1518,6 +1526,10 @@ table tbody td .dropdown-menu {
 
 .w-25 {
 	width: 25% !important;
+}
+
+.w-30 {
+	width: 30% !important;
 }
 
 .w-33 {
@@ -1594,6 +1606,10 @@ table tbody td .dropdown-menu {
 
 .w-300px {
 	width: 300px !important;
+}
+
+.w-500px {
+	width: 500px !important;
 }
 
 .mxw-100px {
@@ -4854,16 +4870,34 @@ input.inp[readonly]:focus {
 				[panel]
  ==================================== */
 
-.panel-default {
+.panel.no-border {
+	margin-bottom: 0px !important
+}
+
+.panel-default:not(.no-border) {
 	border: 1px solid var(--white10);
 	background: var(--box-color);
 }
 
-.panel-group .panel {
+.panel-default.no-border {
+	border: 0px solid var(--white10);
+	background: var(--box-color);
+}
+
+.panel-group:not(.no-padding) .panel {
     padding: 20px 24px 12px;
 }
 
-.panel-default > .panel-heading {
+.panel-default > .panel-heading.no-padding {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background: none;
+	border: none;
+	color: var(--white87);
+}
+
+.panel-default > .panel-heading:not(.no-padding) {
 	display: flex;
 	justify-content: space-between;
 	padding: 18px 2px;
@@ -4879,7 +4913,14 @@ input.inp[readonly]:focus {
 	padding: 22px 10px;
 }
 
-.panel-default > .panel-heading + .panel-collapse > .panel-body {
+.panel-default > .panel-heading + .panel-collapse > .panel-body:not(.no-padding) {
+	padding: 18px 16px 4px;
+	border-top: 1px solid var(--white15);
+	border-bottom: none;
+	background-color: var(--box-darker);
+}
+
+.panel-default > .panel-heading + .panel-collapse > .panel-body.no-padding {
 	padding: 18px 16px 4px;
 	border-top: 1px solid var(--white15);
 	border-bottom: none;
@@ -8531,6 +8572,10 @@ button.text-file {
 }
 
 .bullet .color15:before {
+	background: var(--vivid-blue);
+}
+
+.bullet .color16:before {
 	background: var(--vivid-blue);
 }
 

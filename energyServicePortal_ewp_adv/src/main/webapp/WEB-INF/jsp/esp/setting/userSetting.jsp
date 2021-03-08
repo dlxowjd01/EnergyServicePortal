@@ -886,7 +886,8 @@
 								--></div>
 								`;
 								let addBtnStr = `
-									<button type="button" class="btn-type fr mb-20" onclick="updateModal('add')"><fmt:message key='userSetting.add' /></button>
+									<button type="button" class="btn-type fr mb-20 ml-6" onclick="updateModal('add')"><fmt:message key='userSetting.add' /></button>
+									<button type="button" class="btn-type fr mb-20" onclick="location.href='/setting/userGradeSetting.do'">설정</button>
 								`;
 								$("#userTable_wrapper").append($(str)).prepend($(addBtnStr));
 
@@ -1066,7 +1067,8 @@
 								--></div>
 								`;
 								let addBtnStr = `
-									<button type="button" class="btn-type fr mb-20" onclick="updateModal('add')"><fmt:message key='userSetting.add' /></button>
+									<button type="button" class="btn-type fr mb-20 ml-6" onclick="updateModal('add')"><fmt:message key='userSetting.add' /></button>
+									<button type="button" class="btn-type fr mb-20" onclick="location.href='/setting/userGradeSetting.do'">설정</button>
 								`;
 								$("#userTable_wrapper").append($(str)).prepend($(addBtnStr));
 
@@ -1767,35 +1769,6 @@
 			}
 		}
 	}
-
-
-	// function cloneSpcRow(){
-	// 	let clone = $("#spcRow .flex-start:first-of-type").clone();
-	// 	let length = $("#spcRow .flex-start").length;
-	// 	let ul = $(clone).find(".dropdown-menu");
-	// 	let id = $(ul).attr("id");
-
-	// 	$.each(ul, function(index, element){
-	// 		$(this).attr("id", id.replace(/(\d+)/, length));
-	// 	});
-	// 	$(clone).find(".btn-close").removeClass("hidden");
-
-	// 	$("#spcRow").append($(clone));
-	// }
-
-
-	// function onlyOne(self) {
-	// 	var checkboxes = document.getElementsByName('user_row');
-	// 	tr.addClass("selected");
-	// 	tr.siblings().removeClass("selected");
-
-	// 	checkboxes.forEach((item, index) => {
-	// 		if (item !== self) {
-	// 			item.checked = false;
-	// 		}
-	// 	});
-	// }
-
 </script>
 
 <c:set var="siteList" value="${siteHeaderList}"/> <!-- 사이트 별 -->
@@ -1843,11 +1816,8 @@
 
 							<div class="col-lg-2 col-sm-3"><span class="input-label offset asterisk"><fmt:message key='userSetting.password' /></span></div>
 							<div class="col-lg-4 col-sm-9">
-								<div class="text-input-type"><!--
-									--><input type="password" id="newUserPwd" name="new_pwd" placeholder="<fmt:message key='userSetting.input' />" minlength="8" maxlength="32">
-									<%--
-									<button type="button" class="pwd-icon" onclick="showPwd('newUserPwd', this)">show</button>
-									--%>
+								<div class="text-input-type">
+									<input type="password" id="newUserPwd" name="new_pwd" placeholder="<fmt:message key='userSetting.input' />" minlength="8" maxlength="32">
 								</div>
 								<div class="flex-start warning-wrapper">
 									<small id="hasLet" class="tick"><fmt:message key='userSetting.eng' /></small>
@@ -1863,14 +1833,15 @@
 								<div class="text-input-type"><input type="text" id="newFullName" name="new_full_name" placeholder="<fmt:message key='userSetting.input' />" minlength="3" maxlength="28"></div>
 								<small class="hidden warning"><fmt:message key='userSetting.errorTxt.6' /></small>
 							</div>
-							<div class="col-lg-2 col-sm-3"><span class="input-label offset asterisk"><fmt:message key='userSetting.auth' /></span></div>
+							<div class="col-lg-2 col-sm-3"><span class="input-label offset asterisk"><fmt:message key='userSetting.password' /></span></div>
 							<div class="col-lg-4 col-sm-9">
-								<div class="dropdown">
-									<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택"><fmt:message key='userSetting.select' /><span class="caret"></span></button>
-									<ul id="newAccLevel" class="dropdown-menu">
-										<li data-value="1" data-name="시스템 관리자"><a href="#"><fmt:message key='userSetting.auth.admin' /></a></li>
-										<li data-value="2" data-name="일반 사용자"><a href="#"><fmt:message key='userSetting.auth.user' /></a></li>
-									</ul>
+								<div class="text-input-type">
+									<input type="password" id="newUserPwd" name="new_pwd" placeholder="<fmt:message key='userSetting.input' />" minlength="8" maxlength="32">
+								</div>
+								<div class="flex-start warning-wrapper">
+									<small id="hasLet" class="tick"><fmt:message key='userSetting.eng' /></small>
+									<small id="hasNum" class="tick"><fmt:message key='userSetting.num' /></small>
+									<small id="isEightCharLong" class="tick"><fmt:message key='userSetting.minLength8' /></small>
 								</div>
 							</div>
 						</div>

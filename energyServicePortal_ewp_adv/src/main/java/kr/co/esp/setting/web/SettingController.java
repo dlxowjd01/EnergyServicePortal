@@ -32,6 +32,11 @@ public class SettingController {
 		return "esp/setting/userSetting";
 	}
 
+	@RequestMapping(value = "/setting/userGradeSetting.do")
+	public String userGradeSetting(HttpServletRequest request, HttpSession session, Model model) {
+		return "esp/setting/userGradeSetting";
+	}
+
 	@RequestMapping(value = "/setting/comCodeSetting.do")
 	public String comCodeSetting(HttpServletRequest request, HttpSession session, Model model) {
 		return "esp/setting/comCodeSetting";
