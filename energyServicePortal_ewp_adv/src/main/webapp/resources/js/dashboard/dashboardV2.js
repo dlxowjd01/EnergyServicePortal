@@ -1778,8 +1778,8 @@ const searchSite = async function (siteSids) {
 					let activePower = (site.activePower === undefined || (site.activePower == '-' && isNaN(site.activePower))) ? 0 : site.activePower;
 
 					let activePercent = 0, title = '', etc = 0;
-					if ((isNaN(capacity) && capacity > 0) && (isNaN(activePower) && activePower > 0)) {
-						activePercent = Math.floor((activePower / capacity) * 100);
+					if ((!isNaN(capacity) && capacity > 0) && (!isNaN(activePower) && activePower > 0)) {
+						activePercent = Math.floor((Number(activePower) / Number(capacity)) * 100);
 						title = activePercent + '%';
 						etc = 100 - activePercent;
 					} else {
@@ -1798,7 +1798,7 @@ const searchSite = async function (siteSids) {
 							dataLabels: {
 								enabled: false
 							},
-							y: Number(activePower)
+							y: Number(activePercent)
 						}, {
 							color: 'var(--dove-gray)',
 							name: '현재 비효율',
