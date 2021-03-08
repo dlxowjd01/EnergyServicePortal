@@ -2726,7 +2726,10 @@ html[lang="en"] .all-menu > a:after {
 #selectSiteList .dropdown-apply,
 #siteList .dropdown-apply,
 #spcId .dropdown-search,
-#genId .dropdown-search {
+#genId .dropdown-search,
+#site > button,
+#selectSiteList > button,
+#siteList > button {
 	width: 100%;
 	min-width: 260px;
 }

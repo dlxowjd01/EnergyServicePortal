@@ -777,8 +777,8 @@
 	const makeTableHead = function (deviceType) {
 		let newContainer = document.createElement('Div');
 		let newHeadTable = document.createElement('table');
-		let colList = ['<fmt:message key="alarm.table.site" />', '<fmt:message key="alarm.table.deviceName" />', '<fmt:message key="alarm.table.alarmTime" />', '<fmt:message key="alarm.table.alarmType" />', '<fmt:message key="alarm.table.alarmMsg" />', '<fmt:message key="alarm.table.isChecked" />', '<fmt:message key="alarm.table.status" />', '<fmt:message key="alarm.table.finalUpdated" />']; // 테이블
-		let tdList = ['[site_name]', '[device_name]', '[tlocaltime]', '[alarmtype]', '[message]', '[confirm]', '[status]', '[status_timestamp]'];
+		let colList = ['<fmt:message key="yieldReport.index" />', '<fmt:message key="alarm.table.site" />', '<fmt:message key="alarm.table.deviceName" />', '<fmt:message key="alarm.table.alarmTime" />', '<fmt:message key="alarm.table.alarmType" />', '<fmt:message key="alarm.table.alarmMsg" />', '<fmt:message key="alarm.table.isChecked" />', '<fmt:message key="alarm.table.status" />', '<fmt:message key="alarm.table.finalUpdated" />']; // 테이블
+		let tdList = ['[INDEX]', '[site_name]', '[device_name]', '[tlocaltime]', '[alarmtype]', '[message]', '[confirm]', '[status]', '[status_timestamp]'];
 		let thead = newHeadTable.createTHead();
 		let tbody = newHeadTable.createTBody();
 		let tRow = thead.insertRow();
@@ -798,7 +798,7 @@
 		for (let i = 0; i < tdList.length + 1; i++) {
 			let dCell = document.createElement("td");
 			if (i == 0) {
-				dCell.innerHTML = '<input type="checkbox" id="chk_op[INDEX]" name="rowCheck" value="[alarm_id]"><label for="chk_op[INDEX]">[INDEX]</label>';
+				dCell.innerHTML = '<input type="checkbox" id="chk_op[INDEX]" name="rowCheck" value="[alarm_id]"><label for="chk_op[INDEX]"></label>';
 				bRow.appendChild(dCell);
 			} else {
 				dCell.innerHTML =  tdList[i - 1];

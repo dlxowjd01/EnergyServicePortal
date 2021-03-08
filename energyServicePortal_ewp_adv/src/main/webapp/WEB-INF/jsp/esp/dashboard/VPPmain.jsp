@@ -567,19 +567,19 @@
 	});
 
 	// 복붙해서 지도만 띄워놨음 
-	
-		let makerObject = new Object();
-		let markers = [];
-		let map = new google.maps.Map(document.getElementById('vppMap'), {
-			mapTypeId: 'satellite',
-			zoom: 7.3,
-			mapTypeControl: false, //맵타입
-			streetViewControl: false, //스트리트뷰
-			fullscreenControl: false, //전체보기
-			center: {lat: 36.549012, lng: 127.788546} // center: new google.maps.LatLng(37.549012, 126.988546),
-		});
-		let geocoder = new google.maps.Geocoder();
-		let infowindow = new google.maps.InfoWindow();
+
+	let makerObject = new Object();
+	let markers = [];
+	let map = new google.maps.Map(document.getElementById('vppMap'), {
+		mapTypeId: 'satellite',
+		zoom: 7.3,
+		mapTypeControl: false, //맵타입
+		streetViewControl: false, //스트리트뷰
+		fullscreenControl: false, //전체보기
+		center: {lat: 36.549012, lng: 127.788546} // center: new google.maps.LatLng(37.549012, 126.988546),
+	});
+	let geocoder = new google.maps.Geocoder();
+	let infowindow = new google.maps.InfoWindow();
 	
 	
 	const geocodeAddress = (siteAddr, siteId, siteName, siteLatlng, siteColor, operationText) => {
