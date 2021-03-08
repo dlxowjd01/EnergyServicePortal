@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
-<!-- <c:if test="${dashboardMap eq 'google'}">
+
 	<script src="https://unpkg.com/@googlemaps/markerclustererplus/dist/index.min.js"></script>
 	<script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyAgEDjSwQWd_Q9RF_owO8WkMtf-6lmVSpc"></script>
-</c:if> -->
+
 
 <link type="text/css" rel="stylesheet" href="/css/vppDashboard.css" />
 
@@ -415,12 +415,12 @@
 				<p><span>94</span> 개소</p>
 			</div>
 			<div class="vpp-infobox">
-				<p>총 예측 사이트</p>
-				<p><span>94</span> 개소</p>
+				<p>총 예측 설비용량</p>
+				<p><span>40.036</span> MW</p>
 			</div>
 			<div class="vpp-infobox">
-				<p>총 예측 사이트</p>
-				<p><span>94</span> 개소</p>
+				<p>총 발전 예측 정확도</p>
+				<p><span>95.1</span> %</p>
 			</div>
 		</div>
 		<div class="indiv vpp-3-2">
@@ -566,6 +566,149 @@
 		setResourceStatus();
 	});
 
+	// 복붙해서 지도만 띄워놨음 
+	
+		let makerObject = new Object();
+		let markers = [];
+		let map = new google.maps.Map(document.getElementById('vppMap'), {
+			mapTypeId: 'satellite',
+			zoom: 7.3,
+			mapTypeControl: false, //맵타입
+			streetViewControl: false, //스트리트뷰
+			fullscreenControl: false, //전체보기
+			center: {lat: 36.549012, lng: 127.788546} // center: new google.maps.LatLng(37.549012, 126.988546),
+		});
+		let geocoder = new google.maps.Geocoder();
+		let infowindow = new google.maps.InfoWindow();
+	
+	
+	const geocodeAddress = (siteAddr, siteId, siteName, siteLatlng, siteColor, operationText) => {
+		let latLng = new Object(),
+			dummy = siteLatlng.split(',');
+		latLng['lat'] = Number(dummy[0]);
+		latLng['lng'] = Number(dummy[1]);
+
+		let marker = new google.maps.Marker({
+			map: map,
+			title: siteName,
+			position: latLng,
+			title: siteName,
+			icon: pinSymbol(siteColor),
+		});
+		
+		if (langStatus === "EN") {
+			operationText = operationText.replace(`정상`, `Normal`);
+			operationText = operationText.replace(`트립`, `Trip`);
+			operationText = operationText.replace(`중지`, `Stop`);
+		}
+
+		let infoWIndowContent = '<div class="gmap-content"><span style="color:' + siteColor + '">' + operationText + '</span>' + siteName + '</div>';
+		marker.infowindow = new google.maps.InfoWindow({
+			content: infoWIndowContent
+		});
+
+		markers.push(marker);
+		makerObject[siteId] = marker;
+
+		google.maps.event.addListener(makerObject[siteId], 'click', (function (makerArray, siteId) {
+			return function () {
+				$.map(makerObject, function (val, key) {
+					if (!isEmpty(val)) {
+						val.infowindow.close();
+					}
+				});
+				makerObject[siteId].infowindow.open(map, makerObject[siteId]);
+				list_detail_open_main(siteId);
+			}
+		})(makerObject, siteId));
+
+
+	}
+
+	const pinSymbol = (color) => {
+		if(color == "#f2a363"){
+			return {
+				url: '/img/map_icons/marker_orange.png',
+				height: 20,
+				width: 14
+			}
+		} else if(color == "#90caf3"){
+			return {
+				url: '/img/map_icons/marker_blue.png',
+				height: 20,
+				width: 14
+			}
+		} else if(color == "#ffd954"){
+			return {
+				url: '/img/map_icons/marker_yellow.png',
+				height: 20,
+				width: 14
+			}
+		} else if(color == "#878787"){
+			return {
+				url: '/img/map_icons/marker_grey.png',
+				height: 20,
+				width: 14
+			}
+		} else {
+			return {
+				url: '/img/map_icons/marker_red.png',
+				height: 20,
+				width: 14
+			}
+		}
+	}
+
+	const list_detail_open_main = (sid) => {
+		$('.dbclickopen').each(function (item, index) {
+			var touchtime = 0;
+
+			if ($(this).data('sid') == sid) {
+				let target = $(this);
+				target.next().find('.di-wrap').slideDown(function () {
+					$('.gmain-wrap').animate({scrollTop: target.position().top}, 1000);
+				});
+			}
+		});
+	}
+	
+	const smoothZoom = (map, max, cnt, zoom) => {
+		if (zoom) {
+			if (cnt == 18) {
+				return false;
+			}
+
+			if (cnt >= max) {
+				return;
+			} else {
+				z = google.maps.event.addListener(map, 'zoom_changed', function (event) {
+					google.maps.event.removeListener(z);
+					smoothZoom(map, max, cnt + 1, true);
+				});
+				setTimeout(function () {
+					map.setZoom(cnt)
+				}, 80); // 80ms is what I found to work well on my system -- it might not work well on all systems
+			}
+		} else {
+			if (cnt == 6) {
+				return false;
+			}
+
+			if (cnt <= max) {
+				return;
+			} else {
+				z = google.maps.event.addListener(map, 'zoom_changed', function (event) {
+					google.maps.event.removeListener(z);
+					smoothZoom(map, max, cnt - 1, false);
+				});
+				setTimeout(function () {
+					map.setZoom(cnt)
+				}, 80); // 80ms is what I found to work well on my system -- it might not work well on all systems
+			}
+		}
+	}
+	
+
 	// 임시 --------
 	const tempId = "8b3c35b9-8229-447e-a9c2-b3c8e65bd622";
 
@@ -588,10 +731,10 @@
 						interval: "15min",
 						isLimited: true,
 						startTime: getTime(0, true)
-					}
+					},
+					async: false,
 				}).done(data => {
 					data = data.data[x.sid];
-					console.log(data)
 					if (!data.ess) {
 						$("#subResource_ESS").removeClass("actived");
 					}
@@ -617,8 +760,10 @@
 					} else {
 						$(resource).find(".network-status-img").attr("src", "/img/vpp/network-normal.svg");
 					}
-				});
 
+					x.energyData = data;
+				});
+				console.log(x);
 				tableTemplate += `
 					<tr>
 						<td>${'${x.location}'}</td>
@@ -640,16 +785,16 @@
 									<div>
 										<ul>
 											<li>일사량</li>
-											<li>61 kWh/m.day</li>
+											<li>0 kWh/m.day</li>
 										</ul>
 										<div class="flex-center">
 											<ul>
 												<li>온도</li>
-												<li>23%</li>
+												<li>0%</li>
 											</ul>
 											<ul>
-												<li>온도</li>
-												<li>23%</li>
+												<li>습도</li>
+												<li>0%</li>
 											</ul>
 										</div>
 									</div>
@@ -659,29 +804,29 @@
 									<div>
 										<div class="vpp-infobox">
 											<p>발전소 용량</p>
-											<p>91.12kW</p>
+											<p>${'${x.energyData.capacity.toLocaleString()}'} kW</p>
 										</div>
 										<div class="vpp-infobox">
-											<p>발전소 용량</p>
-											<p>91.12kW</p>
+											<p>금일 누적거래량</p>
+											<p>0 kW</p>
 										</div>
 										<div class="vpp-infobox">
-											<p>발전소 용량</p>
-											<p>91.12kW</p>
+											<p>금일 예측거래량</p>
+											<p>0 kW</p>
 										</div>
 									</div>
 									<div>
 										<div class="vpp-infobox">
-											<p>발전소 용량</p>
-											<p>91.12kW</p>
+											<p>금일 SMP 수익</p>
+											<p>0 천원</p>
 										</div>
 										<div class="vpp-infobox">
-											<p>발전소 용량</p>
-											<p>91.12kW</p>
+											<p>금일 예측 수익</p>
+											<p>0 천원</p>
 										</div>
 										<div class="vpp-infobox">
-											<p>발전소 용량</p>
-											<p>91.12kW</p>
+											<p>금일 총 수익</p>
+											<p>0 천원</p>
 										</div>
 									</div>
 								</div>
@@ -689,9 +834,6 @@
 						</td>
 					</tr>
 				`;
-
-				console.log(x);
-
 			});
 			$("#vppMapTable tbody").html(tableTemplate);
 		});
