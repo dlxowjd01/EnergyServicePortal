@@ -459,7 +459,7 @@ const minAjax = async () => {
 
 						$('#siteList tr.dbclickopen').each(function() {
 							if ($(this).data('sid') === site_id) {
-								$(this).find('td:eq(4)').text(numberComma(Math.round(capacity / 1000)));
+								$(this).find('td:eq(5)').text(numberComma(Math.round(capacity / 1000)));
 								$(this).data('operation', operation);
 
 								const detail = $(this).next('tr.detail-info');
@@ -517,7 +517,7 @@ const minAjax = async () => {
 		pieChart.redraw();
 
 		$('#centerTbody tr td:nth-child(2)').html(numberComma(invertorCount) + '<em>&nbsp;&nbsp;'+i18nManager.tr('dashboard_units')+'</em>');
-		$('#centerTbody tr td:nth-child(5)').html(numberComma(Math.round(capacitySum / 1000)) + '<em>&nbsp;&nbsp;kW</em>');
+		$('#centerTbody tr td:nth-child(3)').html(numberComma(Math.round(capacitySum / 1000)) + '<em>&nbsp;&nbsp;kW</em>');
 
 		searchOperationSite();
 	}).catch((error) => {
