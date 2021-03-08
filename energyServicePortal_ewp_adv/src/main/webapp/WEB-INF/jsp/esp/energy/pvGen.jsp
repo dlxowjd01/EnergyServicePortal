@@ -857,10 +857,12 @@
 					stdDate = std.substr(0, lastLength);
 				} else {
 					if (stdDate !== std.substr(0, lastLength)) {
+						const loop = Math.floor(dataIdx / 15);
+						const colorIdx = dataIdx - (15 * loop);
 						dataArr.push({
 							deviceId: id,
 							deviceNm: data.name,
-							color: 'color' + String(dataIdx + 1),
+							color: 'color' + String(colorIdx + 1),
 							std: stdDate,
 							data: deivceEnergy
 						});
@@ -877,7 +879,11 @@
 							if (id.match('_time')) {
 								const site = sites.find(e => e.sid === id.replace('_time', ''))
 									, siteCapacity = site.capacities.gen ? site.capacities.gen : 0;
-								timeValue = item.energy / siteCapacity;
+								if (siteCapacity > 0 && item.energy > 0) {
+									timeValue = item.energy / siteCapacity;
+								} else {
+									timeValue = '-';
+								}
 							} else {
 								timeValue = item.energy;
 							}
@@ -891,16 +897,18 @@
 				});
 
 				if (stdLength === index) {
+					const loop = Math.floor(dataIdx / 15);
+					const colorIdx = dataIdx - (15 * loop);
 					dataArr.push({
 						deviceId: id,
 						deviceNm: data.name,
-						color: 'color' + String(dataIdx + 1),
+						color: 'color' + String(colorIdx + 1),
 						std: stdDate,
 						data: deivceEnergy
 					});
 				}
 			});
-		})
+		});
 
 		return dataArr;
 	}
@@ -1143,6 +1151,7 @@
 				data: deivceEnergy
 			});
 
+			if (num === 15) num = 0;
 			num++;
 		});
 
@@ -1224,7 +1233,7 @@
 			let totalTemp_insolation = ``;
 			if (!isEmpty(totalArr)) {
 				totalArr.forEach(total => {
-					var totalValue = (total.totVal != '-' && total.totVal != 0) ? Math.round(total.totVal * 100) / 100 : '-';
+					var totalValue = (!isNaN(total.totVal) && total.totVal != 0) ? Math.round(total.totVal * 100) / 100 : '-';
 					if ((total.name).match('<fmt:message key='pvGen.devTime' />')) {
 						totalTemp_time += `<h3 class="value-title">${'${total.name}'}</h3>
 								<p class="value-num"><span class="num">${'${numberComma(totalValue)}'}</span> hrs</p>`;

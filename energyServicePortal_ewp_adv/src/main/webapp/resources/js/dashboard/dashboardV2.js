@@ -517,7 +517,7 @@ const minAjax = async () => {
 		pieChart.redraw();
 
 		$('#centerTbody tr td:nth-child(2)').html(numberComma(invertorCount) + '<em>&nbsp;&nbsp;'+i18nManager.tr('dashboard_units')+'</em>');
-		$('#centerTbody tr td:nth-child(4)').html(numberComma(Math.round(capacitySum / 1000)) + '<em>&nbsp;&nbsp;kW</em>');
+		$('#centerTbody tr td:nth-child(5)').html(numberComma(Math.round(capacitySum / 1000)) + '<em>&nbsp;&nbsp;kW</em>');
 
 		searchOperationSite();
 	}).catch((error) => {
@@ -1843,7 +1843,7 @@ const searchOperationSite = () => {
 	$('#siteList tr.dbclickopen').each(function() {
 		const operation = $(this).data('operation')
 			, siteAddress = $(this).data('address')
-			, siteName = $(this).find('td:eq(2)').text();
+			, siteName = $(this).find('td:eq(4)').text();
 
 		if (deviceStatus.length === 3) {
 			const searchPattern = new RegExp(searchName, 'i'); //ignoreCase 대소문자 구분X
