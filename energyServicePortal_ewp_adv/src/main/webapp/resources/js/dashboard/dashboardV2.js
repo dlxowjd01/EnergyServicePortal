@@ -424,6 +424,8 @@ const minAjax = async () => {
 									} else {
 										rtuStatus = '<span class="status-button error">이상</span>';
 									}
+								} else {
+									rtuStatus = '<span class="status-button error">이상</span>';
 								}
 							});
 						}
@@ -1572,6 +1574,9 @@ const searchSite = async function (siteSids) {
 									site['rtustatus'] = '이상';
 									site['rtustatusClass'] = 'error';
 								}
+							} else {
+								site['rtustatus'] = '이상';
+								site['rtustatusClass'] = 'error';
 							}
 						});
 					} else {
