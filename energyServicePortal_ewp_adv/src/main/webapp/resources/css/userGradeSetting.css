@@ -2,6 +2,52 @@
 	height: 880px;
 }
 
+#userGradeSettingWrap > .pvGen-right > .indiv {
+	padding: 26px 0px!important;
+	overflow-y: auto;
+}
+
+#userGradeSettingWrap > .pvGen-right > .indiv > div {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 16px;
+}
+
+#userGradeSettingWrap > .pvGen-right > .indiv > .grade-block {
+	font-size: 16px;
+	color: var(--white60);
+	cursor: pointer;
+	background: var(--box-color);
+	transition: 0.3s all;
+}
+
+#userGradeSettingWrap > .pvGen-right > .indiv > .grade-block:not(.actived):hover,
+#userGradeSettingWrap > .pvGen-right > .indiv > .grade-block .del:hover {
+	filter: brightness(85%)
+}
+
+#userGradeSettingWrap > .pvGen-right > .indiv > .grade-block .del {
+	display: none;
+	cursor: pointer;
+	transition: 0.3s all;
+}
+
+#userGradeSettingWrap > .pvGen-right > .indiv > .grade-block.actived {
+	background: #1d8ed8;
+	font-weight: bold;
+	color: var(--white87);
+}
+
+#userGradeSettingWrap > .pvGen-right > .indiv > .grade-block.actived .del {
+	display: block;
+}
+
+#userGradeSettingWrap > .pvGen-right > .indiv > .title-block {
+	font-size: 13px;
+	color: var(--white60);
+}
+
 #userGradeSettingWrap > div:last-child > .indiv {
 	padding: 0px!important;
 	display: flex;
@@ -27,17 +73,6 @@
 #userGradeSettingWrap > div > div {
 	max-height: initial!important;
 	height: 100%;
-}
-
-#userGradeSettingWrap > .pvGen-right > div > div {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-}
-
-#userGradeSettingWrap > .pvGen-right > div > div > span {
-	font-size: 13px;
-	color: rgba(255, 255, 255, 0.6);
 }
 
 #userGradeSettingWrap > .pvGen-right > div > div > button {

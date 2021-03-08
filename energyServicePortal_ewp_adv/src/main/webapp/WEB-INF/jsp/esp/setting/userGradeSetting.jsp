@@ -409,8 +409,10 @@
 <div class="row" id="userGradeSettingWrap">
 	<div class="col-lg-2 col-md-4 col-sm-6 pvGen-right">
 		<div class="indiv chart-pv scroll">
-			<div> <span>사용자 등급</span> <button class="btn-type06"></button></div>
-			<h2 class="ntit"></h2>
+			<div class="title-block"> <span>사용자 등급</span> <button class="btn-type06"></button> </div>
+			<div class="grade-block"> <span>사용자 등급</span> <img src="/img/delete.svg" alt="" class="del" /> </div>
+			<div class="grade-block actived"> <span>사용자 등급</span> <img src="/img/delete.svg" alt="" class="del" /> </div>
+			<!-- <h2 class="ntit"></h2> -->
 		</div>
 	</div>
 
