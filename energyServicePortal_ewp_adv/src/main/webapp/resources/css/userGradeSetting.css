@@ -1,0 +1,96 @@
+#userGradeSettingWrap {
+	height: 880px;
+}
+
+#userGradeSettingWrap > div:last-child > .indiv {
+	padding: 0px!important;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+#userGradeSettingWrap > div:last-child > .indiv > .row:first-child {
+	padding: 32px 32px 40px 32px;
+}
+
+#userGradeSettingWrap > div:last-child > .indiv > .row:last-child {
+	width: 100%;
+	border-top: 1px solid rgba(255, 255, 255, 0.12);
+	padding: 23px 32px 32px 32px;
+	margin: 0!important;
+}
+
+#userGradeSettingWrap > div:last-child > .indiv > .row:last-child > div {
+	padding: 0!important;
+}
+
+#userGradeSettingWrap > div > div {
+	max-height: initial!important;
+	height: 100%;
+}
+
+#userGradeSettingWrap > .pvGen-right > div > div {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+#userGradeSettingWrap > .pvGen-right > div > div > span {
+	font-size: 13px;
+	color: rgba(255, 255, 255, 0.6);
+}
+
+#userGradeSettingWrap > .pvGen-right > div > div > button {
+	padding: 0!important;
+}
+
+.ugs-menu-setting {
+	width: 332px!important;
+}
+
+#userGradeSettingWrap #menuList {
+	width: 100%;
+	max-height: 684px;
+	height: 100%;
+	overflow-y: auto;
+}
+
+#userGradeSettingWrap #menuList > div,
+#userGradeSettingWrap #menuList > label,
+#userGradeSettingWrap #menuList .panel-body {
+	width: 100%!important;
+	border: none!important;
+	padding: 6px 16px!important;
+	margin: 0!important;
+}
+
+#userGradeSettingWrap #menuList > div > div:first-child {
+	padding: 0!important
+}
+
+#userGradeSettingWrap #menuList .panel-title {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+#userGradeSettingWrap #menuList .panel-body {
+	background: none!important;
+}
+
+/* 테이블 영역 */
+.ugs-table-wrap {
+	width: 580px!important;
+	padding-right: 72px;
+	margin: 0 32px 0 56px;
+	border-right: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+#userGradeSettingWrap .auth > div {
+	margin-right: 28px;
+}
+
+#userGradeSettingWrap .auth > div > input {
+	margin-right: 16px!important;
+}

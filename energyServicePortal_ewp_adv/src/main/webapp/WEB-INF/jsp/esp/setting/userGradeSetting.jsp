@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ include file="/decorators/include/taglibs.jsp"%>
+
 <script type="text/javascript">
 	let etcTable = null;
 	$(function() {
@@ -32,7 +33,7 @@
 			autoWidth: true,
 			fixedHeader: true,
 			scrollX: true,
-			scrollY: '720px',
+			scrollY: '684px',
 			scrollCollapse: true,
 			sortable: true,
 			paging: false,
@@ -405,19 +406,19 @@
 	</div>
 </div>
 
-<div class="row">
+<div class="row" id="userGradeSettingWrap">
 	<div class="col-lg-2 col-md-4 col-sm-6 pvGen-right">
 		<div class="indiv chart-pv scroll">
-			<div> 사용자 등급<button class="btn-type06"></button></div>
+			<div> <span>사용자 등급</span> <button class="btn-type06"></button></div>
 			<h2 class="ntit"></h2>
 		</div>
 	</div>
 
 	<div class="col-lg-10 col-md-8 col-sm-6">
 		<div class="indiv">
-			<div class="row">
+			<div class="row" style="margin: 0;">
 				<div class="w-25">
-					<div class="w-90">
+					<div>
 						<h2 class="sm-title">등급 이름</h2>
 						<div class="text-input-type mt-20">
 							<input type="text" id="customName" name="customName" placeholder="입력" autocomplete="off">
@@ -461,7 +462,7 @@
 						</div>
 
 						<h2 class="sm-title mt-30">권한</h2>
-						<div class="flex-end mt-10">
+						<div class="flex-start mt-10 auth">
 							<div class="radio-type">
 								<input type="radio" id="grade1" name="gradeType" value="management" checked="">
 								<label for="grade1">관리 권한</label>
@@ -478,9 +479,9 @@
 						</div>
 					</div>
 				</div>
-				<div class="w-55 pr-20">
+				<div class="w-55 pr-20 ugs-table-wrap">
 					<h2 class="sm-title mb-10">추가 목록</h2>
-					<table id="etcTable" style="min-width: 500px !important;">
+					<table id="etcTable">
 						<colgroup>
 							<col style="width:25%">
 							<col style="width:25%">
@@ -490,13 +491,13 @@
 						<tbody></tbody>
 					</table>
 				</div>
-				<div class="w-20">
+				<div class="w-20 ugs-menu-setting">
 					<h2 class="sm-title mb-10">메뉴 권한 설정</h2>
 					<div id="menuList" class="chk-type w-100" sytle="margin-top: -40px"></div>
 				</div>
 			</div>
 			<div class="row">
-				<div class="btn-wrap-type-r mt-20">
+				<div class="btn-wrap-type-r">
 					<button type="button" class="btn-type03 big" onclick="alert('초기화 함수 생성');">취소</button>
 					<button type="button" class="btn-type big" onclick="addCustomLevel();">저장</button>
 				</div>
@@ -505,3 +506,5 @@
 
 	</div>
 </div>
+
+<link type="text/css" rel="stylesheet" href="/css/userGradeSetting.css" />
