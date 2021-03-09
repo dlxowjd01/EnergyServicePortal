@@ -210,6 +210,10 @@
 		}
 	});
 
+	const selectInit =() => {
+		$('#custom-level .grade-block').removeClass('actived');
+	}
+
 	const pageInit = () => {
 		$('#customName').val('');
 		$('#isCustomNameEmpty').addClass('hidden');
@@ -725,7 +729,7 @@
 <div class="row" id="userGradeSettingWrap">
 	<div class="col-lg-2 col-md-4 col-sm-6 pvGen-right">
 		<div id="custom-level" class="indiv chart-pv scroll">
-			<div class="title-block"> <span>사용자 등급</span> <button class="btn-type06" onclick="pageInit();"></button> </div>
+			<div class="title-block"> <span>사용자 등급</span> <button class="btn-type06" onclick="pageInit(); selectInit();"></button> </div>
 		</div>
 	</div>
 

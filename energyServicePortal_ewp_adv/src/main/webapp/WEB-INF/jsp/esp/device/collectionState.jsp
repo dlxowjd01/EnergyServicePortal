@@ -21,7 +21,7 @@
 				<ul class="dropdown-menu chk-type" role="menu" id="siteULList">
 					<li data-value="[sid]">
 						<a href="javascript:void(0);" tabindex="-1">
-							<input type="checkbox" id="site_[INDEX]" value="[sid]" name="site">
+							<input type="checkbox" id="site_[INDEX]" data-role="[role]" value="[sid]" name="site">
 							<label for="site_[INDEX]">[name]</label>
 						</a>
 					</li>
@@ -344,6 +344,18 @@
 		$('.delete_btn').on('click', function () {
 			const rid = $('#selectedRTU').data('rid');
 
+			let role = true;
+			document.querySelectorAll('[name="site"]:checked').forEach(checked => {
+				if (checked.dataset.role === '2') {
+					role = false;
+				}
+			});
+
+			if (!role) {
+				errorMsg('선택한 사이트 중 권한이 없는 사이트가 있습니다.');
+				return false;
+			}
+
 			if (isEmpty(rid)) {
 				alert('<fmt:message key="colState.alert.1" />');
 				return false;	
@@ -423,6 +435,18 @@
 		$('.modify_btn').on('click', function () {
 			const rid = $('#selectedRTU').data('rid');
 
+			let role = true;
+			document.querySelectorAll('[name="site"]:checked').forEach(checked => {
+				if (checked.dataset.role === '2') {
+					role = false;
+				}
+			});
+
+			if (!role) {
+				errorMsg('선택한 사이트 중 권한이 없는 사이트가 있습니다.');
+				return false;
+			}
+
 			if (isEmpty(rid)) {
 				alert('<fmt:message key="colState.alert.4" />');
 				return false;
@@ -476,7 +500,7 @@
 	const siteMakeList = function (search = []) {
 		const makeSite = search.length ? Array.from(search) : Array.from(siteList);
 		makeSite.sortOn('name');
-		makeSite.unshift({ sid: 'all', name: '<fmt:message key="dropDown.all" />'});
+		makeSite.unshift({ sid: 'all', role: '', name: '<fmt:message key="dropDown.all" />'});
 		setMakeList(makeSite, 'siteULList', {'dataFunction': {}}); //list생성
 
 		$('#siteULList').find('input[value="all"]').parent().after('<li class="btn-wrap-border-min"></li>');
@@ -869,6 +893,18 @@
 		$('#serialNumber').val('');
 		$('#description').val('');
 		//RTU 등록/수정 초기화
+
+		let role = true;
+		document.querySelectorAll('[name="site"]:checked').forEach(checked => {
+			if (!isEmpty(checked.dataset.role) && checked.dataset.role === '2') {
+				role = false;
+			}
+		});
+
+		if (!role) {
+			errorMsg('선택한 사이트 중 권한이 없는 사이트가 있습니다.');
+			return false;
+		}
 
 		let siteArray = new Array();
 		if ($(':checkbox[name="site"]:checked').val() === 'all') {

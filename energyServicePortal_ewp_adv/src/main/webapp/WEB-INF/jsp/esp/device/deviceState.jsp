@@ -21,7 +21,7 @@
 				<ul class="dropdown-menu chk-type " role="menu" id="siteULList">
 					<li>
 						<a href="javascript:void(0);" tabindex="-1">
-							<input type="checkbox" id="site_[INDEX]" value="[sid]" name="site">
+							<input type="checkbox" id="site_[INDEX]" data-role="[role]" value="[sid]" name="site">
 							<label for="site_[INDEX]">[name]</label>
 						</a>
 					</li>
@@ -475,7 +475,7 @@
 	const siteMakeList = function (search = []) {
 		const makeSite = search.length ? Array.from(search) : Array.from(siteList);
 		makeSite.sortOn('name');
-		makeSite.unshift({ sid: 'all', name: '<fmt:message key="dropDown.all" />'});
+		makeSite.unshift({ sid: 'all', role: '', name: '<fmt:message key="dropDown.all" />'});
 		setMakeList(makeSite, 'siteULList', {'dataFunction': {}}); //list생성
 		
 		$('#siteULList').find('input[value="all"]').parent().after('<li class="btn-wrap-border-min"></li>');
@@ -1394,6 +1394,18 @@
 			dropDown = popup.find('.dropdown'),
 			textArea = popup.find('textarea'),
 			inputArr = popup.find('input');
+
+		let role = true;
+		$(':checkbox[name="site"]').each(function() {
+			if (!isEmpty($(this).data('role')) && $(this).data('role') === '2') {
+				role = false;
+			}
+		});
+
+		if (!role) {
+			errorMsg('선택한 사이트 중 권한이 없는 사이트가 있습니다.');
+			return false;
+		}
 
 		dropDown.each(function () {
 			dropDownInit($(this));
