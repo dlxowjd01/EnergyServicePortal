@@ -462,37 +462,13 @@
 			name = $('#groupOpt button').text();
 			type = 3;
 
-			if (isEmpty(code)) {
-				$('#isGroupEmpty').removeClass('hidden'); return false;
-			} else {
-				const duplication = tableData.find(e => e.kind === type && e.id === code);
-				if (isEmpty(duplication)) {
-					addRow.push({
-						kind: type,
-						id: code,
-						name: name,
-						role: role
-					});
-				}
-			}
+			if (isEmpty(code)) { $('#isGroupEmpty').removeClass('hidden'); return false; }
 		} else if (/spc/.test(activeTab)) {
 			code = $('#spcOpt button').data('value');
 			name = $('#spcOpt button').text();
 			type = 2;
 
-			if (isEmpty(code)) {
-				$('#isSpcEmpty').removeClass('hidden'); return false;
-			} else {
-				const duplication = tableData.find(e => e.kind === type && e.id === code);
-				if (isEmpty(duplication)) {
-					addRow.push({
-						kind: type,
-						id: code,
-						name: name,
-						role: role
-					});
-				}
-			}
+			if (isEmpty(code)) { $('#isSpcEmpty').removeClass('hidden'); return false; }
 		} else {
 			code = $('#siteOpt button').data('value');
 			name = $('#siteOpt button').text();
@@ -569,7 +545,7 @@
 				const siteList = data.data;
 				if (!isEmpty(siteList)) {
 					siteList.forEach(site => {
-						const duplication = tableData.find(e => e.kind === 1 && e.id === site.sid);
+						const duplication = tableData.find(e => e.kind === 1 && e.id === site.gen_id);
 						if (isEmpty(duplication)) {
 							addRow.push({
 								kind: 1,
