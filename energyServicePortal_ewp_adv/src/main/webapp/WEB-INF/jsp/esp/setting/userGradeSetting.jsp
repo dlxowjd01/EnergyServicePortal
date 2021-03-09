@@ -548,9 +548,9 @@
 							});
 						}
 					});
-
-					etcTable.rows.add(addRow).draw();
 				}
+
+				etcTable.rows.add(addRow).draw();
 			}).fail((jqXHR, textStatus, errorThrown) => {
 				console.error(textStatus);
 			});
@@ -572,8 +572,9 @@
 							});
 						}
 					});
-					etcTable.rows.add(addRow).draw();
 				}
+
+				etcTable.rows.add(addRow).draw();
 			}).fail((jqXHR, textStatus, errorThrown) => {
 				console.error(textStatus);
 			});
