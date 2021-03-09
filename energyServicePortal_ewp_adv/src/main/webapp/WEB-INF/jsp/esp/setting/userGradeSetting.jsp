@@ -173,6 +173,7 @@
 		$(this).addClass('actived').siblings().removeClass('actived');
 
 		pageInit();
+
 		$('#customName').val(targetNm);
 		$('#addLevel').attr('onclick', 'addCustomLevel("PATCH");').text('수정');
 		getUserMenuList(targetId);
@@ -211,6 +212,11 @@
 
 	const pageInit = () => {
 		$('#customName').val('');
+		$('#isCustomNameEmpty').addClass('hidden');
+		$('.tab-content input').val('');
+		$('.tab-content small').addClass('hidden');
+		$('.tab-content div.dropdown button').removeData('value').html('선택 <span class="caret"></span>');
+
 		$('#addLevel').attr('onclick', 'addCustomLevel("POST");').text('등록');
 		$('.nav-tabs li:eq(0)').trigger('click');
 		etcTable.clear().draw();
