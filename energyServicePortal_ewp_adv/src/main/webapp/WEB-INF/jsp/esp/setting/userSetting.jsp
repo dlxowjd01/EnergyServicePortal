@@ -280,6 +280,13 @@
 
 			let verify_level = $('#switchBtn').is(':checked') ? '1' : '0';
 
+			if (verify_level === '1') {
+				$('#isValidNewMobileNum').removeClass('hidden');
+				return false;
+			} else {
+				$('#isValidNewMobileNum').addClass('hidden');
+			}
+
 			// 1. Add user info
 			if(!$("#addUserModal").hasClass("edit")) {
 				let resultSuccessText = "<fmt:message key='userSetting.errorTxt.18' />";
@@ -732,7 +739,7 @@
 
 
 	$(document).on('click', '#customLevelList li', function() {
-		if ($(this).data('value') === 'task') {
+		if ($(this).data('value') === 'N') {
 			$('#newTaskList').prev().prop('disabled', false);
 			$('.tab-content').removeClass('hidden');
 			$('.tab-content').prev().removeClass('hidden');
@@ -750,14 +757,12 @@
 			async: false,
 			data: { oid: oid }
 		}).done((data, textStatus, jqXHR) => {
-			console.log(data);
 			let temp = ``;
-			// temp += `<li data-value="N"><a href="#" tabindex="-1">업무구분</a></li>`;
 			(data.data).forEach(custom => {
 				temp += `<li data-value="${'${custom.level_id}'}" data-name="${'${custom.name}'}"><a href="#" tabindex="-1">${'${custom.name}'}</a></li>`;
 			});
 
-			$('#customLevelList').empty().append(temp);
+			$('#customLevelList').empty().append(temp).prepend(`<li data-value="N"><a href="#" tabindex="-1">업무구분</a></li>`);
 			$('#userList').empty().append(temp).prepend('<li data-value=""><a href="#" tabindex="-1">전체</a></li>');
 		}).fail((jqXHR, textStatus, errorThrown) => {
 			console.error(textStatus);
@@ -1294,18 +1299,18 @@
 						// $("#userTable").dataTable().search( $(this).val() );
 					});
 					
-					$("#userList").find("li").on( 'click', function(){
+					$("#userList").find("li").on('click', function() {
 						if(!isEmpty($(this).data("value"))){
 							$("#userTable").DataTable().column("7").search("\\b"+$(this).data("name")+"\\b", true, false).draw();
 
 							let tr = $("#userTable").find("tbody tr.selected");
 							let btn = $("#btnGroup").find(".btn-type03");
-							if(tr.length <= 0){		
-								btn.each(function(index, element){
+							if(tr.length <= 0) {
+								btn.each(function(index, element) {
 									$(this).prop("disabled", true);
 								});
 							} else {
-								btn.each(function(index, element){
+								btn.each(function(index, element) {
 									$(this).prop("disabled", false);
 								});
 							}
@@ -1495,6 +1500,9 @@
 		$("#confirmUserId").val("");
 		$("#newUserDesc").val("");
 
+
+		$('.tab-content').addClass('hidden');
+		$('.tab-content').prev().addClass('hidden');
 		$.each(dropdown, function(index, element){
 			$(this).html("<fmt:message key='userSetting.select' />" + '<span class="caret"></span>');
 			$(this).data("value", "");
@@ -1642,10 +1650,12 @@
 					}
 
 					$('#siteTab').removeClass('active').siblings().addClass('active in');
+
 					customLevelBtn.prop('disabled', true);
 					newTaskBtn.prop('disabled', true);
 				} else if(td.eq(6).text() == "<fmt:message key='userSetting.auth.user' />"){
 					accLevBtn.data( { "name" : accName, "value" : "2"}).html(accName + '<span class="caret">');
+
 					customLevelBtn.prop('disabled', false);
 					newTaskBtn.prop('disabled', false);
 				}
@@ -1670,20 +1680,34 @@
 						}
 					});
 					customLevelBtn.prop('disabled', false).data( { "name" : td.eq(7).text(), "value" : targetValue}).html(td.eq(7).text() + '<span class="caret">');
+
+					if (td.eq(7).text() === 'N') {
+						newTaskBtn.prop('disabled', false);
+						$('.tab-content').removeClass('hidden');
+						$('.tab-content').prev().removeClass('hidden');
+					} else {
+						newTaskBtn.prop('disabled', true);
+						$('.tab-content').addClass('hidden');
+						$('.tab-content').prev().addClass('hidden');
+					}
+				} else {
+					newTaskBtn.prop('disabled', true);
+					$('.tab-content').addClass('hidden');
+					$('.tab-content').prev().addClass('hidden');
 				}
 
 				if(!isEmpty(td.eq(8).text())){
 					let textVal = td.eq(8).text();
 					if(textVal == "<fmt:message key='userSetting.workType.1' />"){
-						newTaskBtn.prop('disabled', false).data( { "name" : textVal, "value" : "0"}).html(textVal + '<span class="caret">');
+						newTaskBtn.data( { "name" : textVal, "value" : "0"}).html(textVal + '<span class="caret">');
 					} else if(textVal == "<fmt:message key='userSetting.workType.2' />"){
-						newTaskBtn.prop('disabled', false).data( { "name" : textVal, "value" : "1"}).html(textVal + '<span class="caret">');
+						newTaskBtn.data( { "name" : textVal, "value" : "1"}).html(textVal + '<span class="caret">');
 					} else if(textVal == "<fmt:message key='userSetting.workType.3' />"){
-						newTaskBtn.prop('disabled', false).data( { "name" : textVal, "value" : "2"}).html(textVal + '<span class="caret">');
+						newTaskBtn.data( { "name" : textVal, "value" : "2"}).html(textVal + '<span class="caret">');
 					} else if(textVal == "<fmt:message key='userSetting.workType.4' />"){
-						newTaskBtn.prop('disabled', false).data( { "name" : textVal, "value" : "3"}).html(textVal + '<span class="caret">');
+						newTaskBtn.data( { "name" : textVal, "value" : "3"}).html(textVal + '<span class="caret">');
 					} else if(textVal == "<fmt:message key='userSetting.workType.5' />"){
-						newTaskBtn.prop('disabled', false).data( { "name" : textVal, "value" : "4"}).html(textVal + '<span class="caret">');
+						newTaskBtn.data( { "name" : textVal, "value" : "4"}).html(textVal + '<span class="caret">');
 					}
 				}
 
