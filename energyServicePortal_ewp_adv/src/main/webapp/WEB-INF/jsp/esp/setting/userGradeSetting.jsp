@@ -6,16 +6,13 @@
 	$(function() {
 		$('.nav-tabs a').on('click', function() {
 			const tab = $(this).attr('href');
+			$('.tab-content input').val('');
 			$('.tab-content small').addClass('hidden');
 			$('.tab-content div.dropdown button').removeData('value').html('선택 <span class="caret"></span>');
 
-			if (/group/.test(tab)) {
-				getGroupList();
-			} else if (/spc/.test(tab)) {
-				getSpcList();
-			} else {
-				getSiteList();
-			}
+			if (/group/.test(tab)) { getGroupList(); }
+			else if (/spc/.test(tab)) { getSpcList(); }
+			else { getSiteList(); }
 		});
 
 		etcTable = $('#etcTable').DataTable({
@@ -33,9 +30,9 @@
 					className: 'dt-center',
 					mRender: function ( data, type, full, rowIndex ) {
 						let text = '';
-						if (data === '1') {
+						if (data === 1) {
 							text = '발전소';
-						} else if(data === '2') {
+						} else if(data === 2) {
 							text = 'SPC';
 						} else {
 							text = '그룹';
@@ -54,7 +51,7 @@
 					mData: 'role',
 					mRender: function ( data, type, full, rowIndex ) {
 						let temp = ``;
-						if (data === '1') {
+						if (data === 1) {
 							temp = `<button type="button" class="btn-type-sm btn-type03">관리 권한</button>`;
 						} else {
 							temp = `<button type="button" class="btn-type-sm btn-type03">조회 권한</button>`;
@@ -145,21 +142,6 @@
 		}
 	});
 
-	$(document).on('click', '.btn-close', function() {
-		const value = $(this).data('value');
-		if (!isEmpty(value)) {
-			const tableList = etcTable.rows().data().toArray();
-			let rowIndex = '';
-			tableList.forEach((data, index) => {
-				if (data.id === value) {
-					rowIndex = index;
-				}
-			});
-
-			etcTable.rows(rowIndex).remove().draw();
-		}
-	});
-
 	$(document).on('click', '#comDeleteBtn', function() {
 		const deleteSite = $('#comDeleteModal').data('value');
 		$.ajax({
@@ -192,7 +174,7 @@
 
 		pageInit();
 		$('#customName').val(targetNm);
-		$('#addLevel').attr('onclick', 'addCustomLevel("PATCH");');
+		$('#addLevel').attr('onclick', 'addCustomLevel("PATCH");').text('수정');
 		getUserMenuList(targetId);
 		getUserSiteList(targetId);
 	});
@@ -202,12 +184,39 @@
 		deleteCustomLevel(targetId);
 	});
 
+	$(document).on('click', '#etcTable tbody tr td', function(e) {
+		if (e.target.classList.contains('btn-type03')) {
+			if (etcTable.cell(this).data() === 1) {
+				etcTable.cell(this).data(2);
+				$(this).find('button.btn-type03').text('조회권한');
+			} else {
+				etcTable.cell(this).data(1);
+				$(this).find('button.btn-type03').text('관리권한');
+			}
+		} else if (e.target.classList.contains('btn-close')) {
+			const value = this.children[1].dataset.value;
+			if (!isEmpty(value)) {
+				const tableList = etcTable.rows().data().toArray();
+				let rowIndex = '';
+				tableList.forEach((data, index) => {
+					if (data.id === value) {
+						rowIndex = index;
+					}
+				});
+
+				etcTable.row(':eq(' + rowIndex + ')').remove().draw();
+			}
+		}
+	});
+
 	const pageInit = () => {
 		$('#customName').val('');
-		$('#addLevel').attr('onclick', 'addCustomLevel("POST");');
+		$('#addLevel').attr('onclick', 'addCustomLevel("POST");').text('등록');
 		$('.nav-tabs li:eq(0)').trigger('click');
 		etcTable.clear().draw();
-		getMenuList();
+		$('#menuList input').prop('checked', false);
+		$('#menuList h4.panel-title a').attr('aria-expanded', true);
+		$('#menuList div.panel-collapse').attr('aria-expanded', true).addClass('in').removeAttr('style');
 	}
 
 	const getCustomLevel = () => {
@@ -268,6 +277,7 @@
 		}).done((data, textStatus, jqXHR) => {
 			if (!isEmpty(data.data)) {
 				etcTable.rows.add(data.data).draw();
+				$('#etcTable').data('standard', data.data);
 			}
 		}).fail((jqXHR, textStatus, errorThrown) => {
 			console.error(textStatus);
@@ -276,7 +286,7 @@
 
 	const getGroupList = () => {
 		$.ajax({
-			url: apiHost + '/auth/me/groups?includeSites=false&includeDevices=false',
+			url: apiHost + '/auth/me/groups?includeSites=true&includeDevices=false',
 			type: 'GET',
 			data: { oid: oid }
 		}).done((data, textStatus, jqXHR) => {
@@ -286,13 +296,21 @@
 
 			if (!isEmpty(groupList)) {
 				groupList.forEach(li => {
-					optList += `<li data-value="${'${li.sgid}'}" data-type="tag"><a href="javascript:void(0);">${'${li.name}'}</a></li>`;
+					optList += `
+						<li data-value="${'${li.sgid}'}" data-type="tag">
+							<a href="javascript:void(0);">${'${li.name}'}</a>
+						</li>
+					`;
 				});
 			}
 
 			if (!isEmpty(vppList)) {
 				vppList.forEach(li => {
-					optList += `<li data-value="${'${li.vgid}'}" data-type="vpp"><a href="javascript:void(0);">${'${li.name}'}</a></li>`;
+					optList += `
+						<li data-value="${'${li.vgid}'}" data-type="vpp">
+							<a href="javascript:void(0);">${'${li.name}'}</a>
+						</li>
+					`;
 				});
 			}
 
@@ -317,6 +335,7 @@
 				optList += `<li>선택가능한 항목이 없습니다.</li>`;
 			}
 			$('#spcOptList').empty().append(optList);
+			$('#spcOptList').prepend('<div class="dropdown-search"><input type="text" placeholder="발전소 검색" onkeyup="searchSite($(this).val())"></div>');
 		}).fail((jqXHR, textStatus, errorThrown) => {
 			console.error(textStatus);
 		});
@@ -342,6 +361,18 @@
 		});
 	}
 
+	const searchSite = (keyword, type) => {
+		const liList = $('#' + type + 'OptList > li');
+
+		liList.each(function() {
+			if (($(this).text().trim()).includes(keyword)) {
+				$(this).removeClass('hidden');
+			} else {
+				$(this).addClass('hidden');
+			}
+		});
+	}
+
 	const getMenuList = () => {
 		$.ajax({
 			url: apiHost + '/config/custom-level/menu-list',
@@ -361,6 +392,8 @@
 
 					if (menu.parent === null) {
 						let subMenuList = ``;
+						let subDownButton = ``;
+						let subDownSection = ``;
 						menuList.forEach(subMenu => {
 							if (menuCode === subMenu.parent) {
 								let subName = JSON.parse(subMenu.name);
@@ -373,22 +406,32 @@
 							}
 						});
 
+						if (!isEmpty(subMenuList)) {
+							subDownButton = `<a href="#tab-${'${menu.code}'}" role="button" data-toggle="collapse" data-parent="#panelGroup" aria-expanded="true" aria-controls="tab-${'${menu.code}'}" class="panel-fold"></a>`;
+							subDownSection = `
+								<div id="tab-${'${menu.code}'}" class="panel-collapse collapse in" role="tabpanel" aria-expanded="true">
+										<div class="panel-body no-padding">
+										<ul>
+											${'${subMenuList}'}
+										</ul>
+									</div>
+								</div>
+							`;
+						} else {
+							subDownButton = ``;
+							subDownSection = ``;
+						}
+
 						menuTemp += `
 							<div class="panel panel-default no-border">
 								<div class="panel-heading no-padding" role="tab">
 									<h4 class="panel-title">
 										<input type="checkbox" id="menu-${'${menu.code}'}" name="menu" value="${'${menu.code}'}">
 										<label class="custom-checkbox" for="menu-${'${menu.code}'}">${'${menuName.kr}'}</label>
-										<a href="#tab-${'${menu.code}'}" role="button" data-toggle="collapse" data-parent="#panelGroup" aria-expanded="true" aria-controls="tab-${'${menu.code}'}" class="panel-fold"></a>
+										${'${subDownButton}'}
 									</h4>
 								</div>
-								<div id="tab-${'${menu.code}'}" class="panel-collapse collapse" role="tabpanel" aria-expanded="true">
-									<div class="panel-body no-padding">
-										<ul>
-											${'${subMenuList}'}
-										</ul>
-									</div>
-								</div>
+								${'${subDownSection}'}
 							</div>
 						`;
 					}
@@ -403,59 +446,137 @@
 	const addList = () => {
 		const addRow = new Array();
 		const activeTab = $('.nav-tabs li.active a').attr('href');
+		const tableData = etcTable.rows().data().toArray();
 		let type = '', name = '', code = '', duplication = false;
 
 		$('.tab-content small').addClass('hidden');
 		if (/group/.test(activeTab)) {
 			code = $('#groupOpt button').data('value');
 			name = $('#groupOpt button').text();
-			type = '3';
+			type = 3;
 
-			if (isEmpty(code)) { $('#isGroupEmpty').removeClass('hidden'); return false; }
+			if (isEmpty(code)) {
+				$('#isGroupEmpty').removeClass('hidden'); return false;
+			} else {
+				const duplication = tableData.find(e => e.kind === type && e.id === code);
+				if (isEmpty(duplication)) {
+					addRow.push({
+						kind: type,
+						id: code,
+						name: name,
+						role: $(':radio[name="gradeType"]:checked').val()
+					});
+				}
+			}
 		} else if (/spc/.test(activeTab)) {
 			code = $('#spcOpt button').data('value');
 			name = $('#spcOpt button').text();
-			type = '2';
+			type = 2;
 
-			if (isEmpty(code)) { $('#isSpcEmpty').removeClass('hidden'); return false; }
+			if (isEmpty(code)) {
+				$('#isSpcEmpty').removeClass('hidden'); return false;
+			} else {
+				const duplication = tableData.find(e => e.kind === type && e.id === code);
+				if (isEmpty(duplication)) {
+					addRow.push({
+						kind: type,
+						id: code,
+						name: name,
+						role: $(':radio[name="gradeType"]:checked').val()
+					});
+				}
+			}
 		} else {
 			code = $('#siteOpt button').data('value');
 			name = $('#siteOpt button').text();
-			type = '1';
+			type = 1;
 
-			if (isEmpty(code)) { $('#isSiteEmpty').removeClass('hidden'); return false; }
-		}
+			if (isEmpty(code)) {
+				$('#isSiteEmpty').removeClass('hidden'); return false;
+			} else {
+				const duplication = tableData.find(e => e.kind === type && e.id === code);
+				if (isEmpty(duplication)) {
+					addRow.push({
+						kind: type,
+						id: code,
+						name: name,
+						role: $(':radio[name="gradeType"]:checked').val()
+					});
 
-		const tableData = etcTable.rows().data().toArray();
-		if (tableData.length > 0) {
-			tableData.forEach(data => {
-				if (data.type === type && data.code === code) {
-					if (/group/.test(activeTab)) {
-						$('#isGroupSelected').removeClass('hidden');
-						duplication = true;
-						return false;
-					} else if (/spc/.test(activeTab)) {
-						$('#isSpcSelected').removeClass('hidden');
-						duplication = true;
-						return false;
-					} else {
-						$('#isSiteSelected').removeClass('hidden');
-						duplication = true;
-						return false;
-					}
+					etcTable.rows.add(addRow).draw();
+				} else {
+					errorMsg('중복된 발전소가 존재합니다.');
+					return false;
 				}
-			});
+			}
 		}
 
-		if (!duplication) {
-			addRow.push({
-				kind: type,
-				id: code,
-				name: name,
-				role: $(':radio[name="gradeType"]:checked').val()
-			});
+		if (type === 3) {
+			$.ajax({
+				url: apiHost + '/auth/me/groups?includeSites=true&includeDevice=false&addCapacity=false',
+				type: 'GET',
+			}).done((data, textStatus, jqXHR) => {
+				let siteList = new Array();
+				let groupList = data.tag_group;
+				let vppList = data.vpp_group;
 
-			etcTable.rows.add(addRow).draw();
+				if (!isEmpty(groupList)) {
+					groupList.forEach(li => {
+						if (li.sgid === code) {
+							siteList = li.sites;
+						}
+					});
+				}
+
+				if (!isEmpty(vppList)) {
+					vppList.forEach(li => {
+						if (li.vgid === code) {
+							siteList = li.sites;
+						}
+					});
+				}
+
+				if (!isEmpty(siteList)) {
+					siteList.forEach(site => {
+						const duplication = tableData.find(e => e.kind === 1 && e.id === site.sid);
+						if (isEmpty(duplication)) {
+							addRow.push({
+								kind: 1,
+								id: site.sid,
+								name: site.name,
+								role: $(':radio[name="gradeType"]:checked').val()
+							});
+						}
+					});
+
+					etcTable.rows.add(addRow).draw();
+				}
+			}).fail((jqXHR, textStatus, errorThrown) => {
+				console.error(textStatus);
+			});
+		} else if (type === 2) {
+			$.ajax({
+				url: apiHost + '/spcs/' + code + '/gens?oid=' + oid,
+				type: 'GET',
+			}).done((data, textStatus, jqXHR) => {
+				const siteList = data.data;
+				if (!isEmpty(siteList)) {
+					siteList.forEach(site => {
+						const duplication = tableData.find(e => e.kind === 1 && e.id === site.sid);
+						if (isEmpty(duplication)) {
+							addRow.push({
+								kind: 1,
+								id: site.gen_id,
+								name: site.name,
+								role: $(':radio[name="gradeType"]:checked').val()
+							});
+						}
+					});
+					etcTable.rows.add(addRow).draw();
+				}
+			}).fail((jqXHR, textStatus, errorThrown) => {
+				console.error(textStatus);
+			});
 		}
 	}
 
@@ -475,8 +596,8 @@
 
 		new Promise((resolve, reject) => {
 			let apiUrl = apiHost + '/config/custom-level?oid=' + oid;
-			if (method === 'patch') {
-				let levelId = $('.grade-block.active').data('levelid');
+			if (method === 'PATCH') {
+				let levelId = $('.grade-block.actived').data('levelid');
 				apiUrl = apiHost + '/config/custom-level/' + levelId + '?oid=' + oid;
 			}
 
@@ -497,7 +618,8 @@
 				reject('등록에 실패했습니다.');
 			});
 		}).then(resolve => {
-			const levelId = resolve.level_id;
+			let levelId = resolve.level_id;
+			if (method === 'PATCH') levelId = $('.grade-block.actived').data('levelid');
 			const registerApi = new Array();
 			const menuList = new Array();
 			const deleteMenu = new Array();
@@ -521,10 +643,18 @@
 			});
 
 			if (siteList.length > 0) {
-				siteList.forEach(site => {
-					site['level_id'] = levelId;
-					delete site['name'];
-				});
+				const standard = $('#etcTable').data('standard');
+				if (!isEmpty(standard)) {
+					siteList.forEach(site => {
+						site['level_id'] = levelId;
+						delete site['name'];
+					});
+
+					standard.forEach(std => {
+						const target = siteList.find(e => e.kind === std.kind && e.id === std.id);
+						if (isEmpty(target)) deleteSite.push(std);
+					});
+				}
 			}
 
 			registerApi.push(
@@ -553,8 +683,14 @@
 
 			Promise.all(registerApi).then(response => {
 				getCustomLevel();
+				pageInit();
 
-				errorMsg('등록되었습니다.');
+				if(method === 'PATCH') {
+					errorMsg('수정되었습니다.');
+				} else {
+					errorMsg('등록되었습니다.');
+				}
+
 				return false;
 			}).catch(error => {
 				reject('등록에 실패했습니다.');
@@ -628,8 +764,9 @@
 						<div class="tab-content">
 							<div id="groupTab" class="tab-pane fade in active">
 								<div id="groupOpt" class="dropdown w-100 mt-10">
+									<div class="dropdown-search w-100"><input type="text" placeholder="그룹 검색" onkeyup="searchSite($(this).val(), 'group')"></div>
 									<button type="button" class="dropdown-toggle w-100" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-									<ul id="groupOptList" class="dropdown-menu"></ul>
+									<ul id="groupOptList" class="dropdown-menu" style="top:75px; width:260px; height:300px;"></ul>
 								</div>
 								<small id="isGroupEmpty" class="warning hidden">추가하실 그룹을 선택해 주세요.</small>
 								<small id="isGroupSelected" class="warning hidden">동일한 그룹이 이미 추가 되었습니다.</small>
@@ -637,8 +774,9 @@
 
 							<div id="spcTab" class="tab-pane fade in">
 								<div id="spcOpt" class="dropdown w-100 mt-10">
+									<div class="dropdown-search w-100"><input type="text" placeholder="SPC 검색" onkeyup="searchSite($(this).val(), 'spc')"></div>
 									<button type="button" class="dropdown-toggle w-100" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-									<ul id="spcOptList" class="dropdown-menu"></ul>
+									<ul id="spcOptList" class="dropdown-menu" style="top:75px; width:260px; height:300px;"></ul>
 								</div>
 								<small id="isSpcEmpty" class="warning hidden">추가하실 그룹을 선택해 주세요.</small>
 								<small id="isSpcSelected" class="warning hidden">동일한 그룹이 이미 추가 되었습니다.</small>
@@ -646,8 +784,9 @@
 
 							<div id="siteTab" class="tab-pane fade in">
 								<div id="siteOpt" class="dropdown w-100 mt-10">
+									<div class="dropdown-search w-100"><input type="text" placeholder="발전소 검색" onkeyup="searchSite($(this).val(), 'site')"></div>
 									<button type="button" class="dropdown-toggle w-100" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
-									<ul id="siteOptList" class="dropdown-menu"></ul>
+									<ul id="siteOptList" class="dropdown-menu" style="top:75px; width:260px; height:300px;"></ul>
 								</div>
 								<small id="isSiteEmpty" class="warning hidden">추가하실 그룹을 선택해 주세요.</small>
 								<small id="isSiteSelected" class="warning hidden">동일한 그룹이 이미 추가 되었습니다.</small>
@@ -691,7 +830,7 @@
 			</div>
 			<div class="row">
 				<div class="btn-wrap-type-r">
-					<button type="button" class="btn-type03 big" onclick="pageInit();">취소</button>
+					<button type="button" class="btn-type03 big" onclick="location.href='/setting/userSetting.do'">취소</button>
 					<button type="button" class="btn-type big" onclick="addCustomLevel();" id="addLevel">저장</button>
 				</div>
 			</div>
