@@ -821,7 +821,7 @@
 			<div class="row">
 				<div class="btn-wrap-type-r">
 					<button type="button" class="btn-type03 big" onclick="location.href='/setting/userSetting.do'">취소</button>
-					<button type="button" class="btn-type big" onclick="addCustomLevel();" id="addLevel">저장</button>
+					<button type="button" class="btn-type big" onclick="addCustomLevel('POST');" id="addLevel">저장</button>
 				</div>
 			</div>
 		</div>
