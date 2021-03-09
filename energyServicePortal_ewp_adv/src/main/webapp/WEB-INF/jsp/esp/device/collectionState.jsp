@@ -346,13 +346,13 @@
 
 			let role = true;
 			document.querySelectorAll('[name="site"]:checked').forEach(checked => {
-				if (!isEmpty(checked.dataset.role) && checked.dataset.role === 2) {
+				if (!isEmpty(checked.dataset.role) && checked.dataset.role === '2') {
 					role = false;
 				}
 			});
 
 			if (!role) {
-				errorMsg('선택한 사이트 중 권한이 없는 사이트가 있습니다.');
+				alert('선택한 사이트 중 권한이 없는 사이트가 있습니다.');
 				return false;
 			}
 
@@ -437,13 +437,13 @@
 
 			let role = true;
 			document.querySelectorAll('[name="site"]:checked').forEach(checked => {
-				if (checked.dataset.role === '2') {
+				if (!isEmpty(checked.dataset.role) && checked.dataset.role === '2') {
 					role = false;
 				}
 			});
 
 			if (!role) {
-				errorMsg('선택한 사이트 중 권한이 없는 사이트가 있습니다.');
+				alert('선택한 사이트 중 권한이 없는 사이트가 있습니다.');
 				return false;
 			}
 
@@ -896,13 +896,13 @@
 
 		let role = true;
 		document.querySelectorAll('[name="site"]:checked').forEach(checked => {
-			if (!isEmpty(checked.dataset.role) && checked.dataset.role === 2) {
+			if (!isEmpty(checked.dataset.role) && checked.dataset.role === '2') {
 				role = false;
 			}
 		});
 
 		if (!role) {
-			errorMsg('선택한 사이트 중 권한이 없는 사이트가 있습니다.');
+			alert('선택한 사이트 중 권한이 없는 사이트가 있습니다.');
 			return false;
 		}
 
