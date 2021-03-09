@@ -758,6 +758,7 @@
 			async: false,
 			data: { oid: oid }
 		}).done((data, textStatus, jqXHR) => {
+			console.log(data);
 			let temp = ``;
 			(data.data).forEach(custom => {
 				temp += `<li data-value="${'${custom.level_id}'}" data-name="${'${custom.name}'}"><a href="#" tabindex="-1">${'${custom.name}'}</a></li>`;

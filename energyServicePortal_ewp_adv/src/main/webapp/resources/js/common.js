@@ -803,3 +803,7 @@ function getDayInterval() {
 		(y+m+d+`235959`) * 1
 	];
 }
+
+function objectToArray(obj, mapFunc = {}) {
+	return Object.entries(obj).map(mapFunc);
+}

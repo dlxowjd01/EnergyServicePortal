@@ -27,30 +27,30 @@
 		<div class="vpp-1-1">
 			<div class="indiv vpp-1-1-1">
 				<h2 class="title">금일 총 전력 거래량</h2>
-				<p class="vpp-1-1-value"><span>100.00</span> <span>MWh</span></p>
+				<p class="vpp-1-1-value"><span id="totalEnergy">-</span> <span>MWh</span></p>
 				<div>
 					
 					<div class="vpp-infobox">
 						<p>금일 주요자원 거래량</p>
-						<p>100.05 MWh</p>
+						<p><span id="mainEnergy">-</span> MWh</p>
 					</div>
 					<div class="vpp-infobox">
 						<p>금일 보조자원 거래량</p>
-						<p>100.05 MWh</p>
+						<p><span id="subEnergy">-</span> MWh</p>
 					</div>
 				</div>
 			</div>
 			<div class="indiv vpp1-1-2">
 				<h2 class="title">금일 총 수익</h2>
-				<p class="vpp-1-1-value"><span>100.00</span> <span>천원</span></p>
+				<p class="vpp-1-1-value"><span id="totalMoney">-</span> <span>천원</span></p>
 				<div>
 					<div class="vpp-infobox">
 						<p>금일 SMP 수익</p>
-						<p>100.05 천원</p>
+						<p><span id="todaySMP">-</span> 천원</p>
 					</div>
 					<div class="vpp-infobox">
 						<p>금일 예측 수익</p>
-						<p>2.75 천원</p>
+						<p><span id="todayPredictionMoney">-</span> 천원</p>
 					</div>
 				</div>
 			</div>
@@ -70,21 +70,21 @@
 						<div>
 							<div class="vpp-infobox">
 								<p>전일</p>
-								<p>95%</p>
+								<p>- %</p>
 							</div>
 							<div class="vpp-infobox">
 								<p>전주</p>
-								<p>95%</p>
+								<p>- %</p>
 							</div>
 						</div>
 						<div>
 							<div class="vpp-infobox">
 								<p>전월</p>
-								<p>95%</p>
+								<p>- %</p>
 							</div>
 							<div class="vpp-infobox">
 								<p>전년</p>
-								<p>95%</p>
+								<p>- %</p>
 							</div>
 						</div>
 					</div>
@@ -142,22 +142,22 @@
 						<h3>SMP 수익</h3>
 						<div class="vpp-infobox">
 							<p>당월</p>
-							<p>3000.8 만원</p>
+							<p>- 만원</p>
 						</div>
 						<div class="vpp-infobox">
 							<p>당해</p>
-							<p>3000.8 만원</p>
+							<p>- 만원</p>
 						</div>
 					</div>
 					<div>
 						<h3>예측 수익</h3>
 						<div class="vpp-infobox">
 							<p>당월</p>
-							<p>3000.8 만원</p>
+							<p>- 만원</p>
 						</div>
 						<div class="vpp-infobox">
 							<p>당해</p>
-							<p>3000.8 만원</p>
+							<p>- 만원</p>
 						</div>
 					</div>
 				</div>
@@ -263,145 +263,7 @@
 							<td>통신</td>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
-							<td>강릉</td>
-							<td>강릉삼복태양광발전소</td>
-							<td>
-								<img src="/img/vpp/solar-panel.svg" alt="자원" class="actived">
-								<img src="/img/vpp/wind-power.svg" alt="자원" class="actived">
-								<img src="/img/vpp/ess.svg" alt="자원" class="actived">
-								<img src="/img/vpp/fuelcell.svg" alt="자원" class="">
-							</td>
-							<td> <span class="status-button normal">정상</span> </td>
-							<td> <span class="status-button error">이상</span> </td>
-						</tr>
-						<tr class="vpp-fold-menu">
-							<td colspan="5">
-								<div>
-									<div class="vpp-fold-menu-header">
-										<img src="/img/weather_icons/ico1_sun.svg" alt="날씨"> 
-										<div>
-											<ul>
-												<li>일사량</li>
-												<li>61 kWh/m.day</li>
-											</ul>
-											<div class="flex-center">
-												<ul>
-													<li>온도</li>
-													<li>23%</li>
-												</ul>
-												<ul>
-													<li>온도</li>
-													<li>23%</li>
-												</ul>
-											</div>
-										</div>
-									</div>
-
-									<div class="vpp-fold-menu-content">
-										<div>
-											<div class="vpp-infobox">
-												<p>발전소 용량</p>
-												<p>91.12kW</p>
-											</div>
-											<div class="vpp-infobox">
-												<p>발전소 용량</p>
-												<p>91.12kW</p>
-											</div>
-											<div class="vpp-infobox">
-												<p>발전소 용량</p>
-												<p>91.12kW</p>
-											</div>
-										</div>
-										<div>
-											<div class="vpp-infobox">
-												<p>발전소 용량</p>
-												<p>91.12kW</p>
-											</div>
-											<div class="vpp-infobox">
-												<p>발전소 용량</p>
-												<p>91.12kW</p>
-											</div>
-											<div class="vpp-infobox">
-												<p>발전소 용량</p>
-												<p>91.12kW</p>
-											</div>
-										</div>
-									</div>
-								</div>
-							</td>
-						</tr>
-
-						<tr>
-							<td>ㅇㅇ</td>
-							<td>123123ㅁㄴㅇ</td>
-							<td>
-								<img src="/img/vpp/solar-panel.svg" alt="자원" class="">
-								<img src="/img/vpp/wind-power.svg" alt="자원" class="">
-								<img src="/img/vpp/ess.svg" alt="자원" class="actived">
-								<img src="/img/vpp/fuelcell.svg" alt="자원" class="">
-							</td>
-							<td> <span class="off">정상</span> </td>
-							<td> <span class="off">이상</span> </td>
-						</tr>
-						<tr class="vpp-fold-menu">
-							<td colspan="5">
-								<div>
-									<div class="vpp-fold-menu-header">
-										<img src="/img/weather_icons/ico1_sun.svg" alt="날씨"> 
-										<div>
-											<ul>
-												<li>일사량</li>
-												<li>61 kWh/m.day</li>
-											</ul>
-											<div class="flex-center">
-												<ul>
-													<li>온도</li>
-													<li>23%</li>
-												</ul>
-												<ul>
-													<li>온도</li>
-													<li>23%</li>
-												</ul>
-											</div>
-										</div>
-									</div>
-
-									<div class="vpp-fold-menu-content">
-										<div>
-											<div class="vpp-infobox">
-												<p>발전소 용량</p>
-												<p>91.12kW</p>
-											</div>
-											<div class="vpp-infobox">
-												<p>발전소 용량</p>
-												<p>91.12kW</p>
-											</div>
-											<div class="vpp-infobox">
-												<p>발전소 용량</p>
-												<p>91.12kW</p>
-											</div>
-										</div>
-										<div>
-											<div class="vpp-infobox">
-												<p>발전소 용량</p>
-												<p>91.12kW</p>
-											</div>
-											<div class="vpp-infobox">
-												<p>발전소 용량</p>
-												<p>91.12kW</p>
-											</div>
-											<div class="vpp-infobox">
-												<p>발전소 용량</p>
-												<p>91.12kW</p>
-											</div>
-										</div>
-									</div>
-								</div>
-							</td>
-						</tr>
-					</tbody>
+					<tbody></tbody>
 				</table>
 			</div>
 		</div>
@@ -412,15 +274,15 @@
 		<div class="indiv vpp-3-1">
 			<div class="vpp-infobox">
 				<p>총 예측 사이트</p>
-				<p><span>94</span> 개소</p>
+				<p><span id="totalSiteCount">-</span> 개소</p>
 			</div>
 			<div class="vpp-infobox">
 				<p>총 예측 설비용량</p>
-				<p><span>40.036</span> MW</p>
+				<p><span id="totalCapacity">-</span> MW</p>
 			</div>
 			<div class="vpp-infobox">
 				<p>총 발전 예측 정확도</p>
-				<p><span>95.1</span> %</p>
+				<p><span id="totalAcc">-</span> %</p>
 			</div>
 		</div>
 		<div class="indiv vpp-3-2">
@@ -533,42 +395,262 @@
 			dom: 'tip',
 		}).columns.adjust().draw();
 
-		// 이벤트 체이닝
-		$(document)
-			.on("click", ".vpp-1-3 > .title-area > .title", function(e) {
-				$(".vpp-1-3 > .title-area > .title.actived").removeClass("actived");
-				$(this).addClass("actived");
-			})
-			.on("click", "#vppMapTable tbody tr:not(.vpp-fold-menu)", function(e) {
-				if (!$(this).hasClass("open")) {
-					$("#vppMapTable tbody tr.open").removeClass("open");
-					$(this).addClass("open");
-				} else {
-					$("#vppMapTable tbody tr.open").removeClass("open");
-				}
-			})
-			.on("click", ".vpp-3-2-graph > div", function(e) {
-				$(this).toggleClass("actived");
-			})
-			.on("click", ".auto-rolling", function(e) {
-				$(this).toggleClass("play stop");
-				rolling();
-			})
-			.on("click", ".vpp-1-3 > .title-area > .title", function(e) {
-				$(".vpp-1-3 > .title-area > .title.actived").removeClass("actived");
-				$(this).addClass("actived");
+		$.when(
+			$.ajax({
+				type: "GET",
+				url: apiHost + "/config/vpp-groups/" + tempId,
+				data: {
+					includeSites: true,
+					includeDevices: true,
+				},
+			}).done(r1 => {
+				const sids = r1.sites.map(x => x.sid).join();
 
-				$(".vpp-1-3-content").removeClass("view");
-				$(".vpp-1-3-"+($(this).index() + 1)).addClass("view");
-			})
+				$.ajax({
+					url: apiHost + "/vpp/energy/sites",
+					data: {
+						sid: sids,
+						interval: "15min",
+						isLimited: true,
+						startTime: getTime(0, true)
+					},
+					async: false,
+				}).done(r2 => {
+					r1.energyData = Object.entries(r2.data).map(x => {
+						x[1].sid = x[0];
 
-		rolling();
-		setResourceStatus();
+						return x[1];
+					});
+				});
+
+				$.ajax({
+					url: apiHost + "/energy/forecast/accuracy",
+					type: "POST",
+					dataType: 'json',
+					contentType: "application/json",
+					data: JSON.stringify({
+						"sids": sids,
+						"startTime": interval[0],
+						"endTime": interval[1],
+						"interval": "day",
+						"cal_incentive": true,
+						"additionalProp1": {}
+					}),
+					async: false
+				}).done(r3 => {
+					console.log(r3)
+				});
+
+				return r1;
+			})
+		).then(r => {
+			console.log(r);
+			App.sites = r.sites;
+			App.energyData = r.energyData;
+			App.sids = r.sites.map(x => x.sid).join();
+
+			App.init();
+		})
+
 	});
 
-	// 복붙해서 지도만 띄워놨음 
+	// 임시 VPP ID --------
+	const tempId = "8b3c35b9-8229-447e-a9c2-b3c8e65bd622";
+	const interval = getDayInterval();
 
-	const Map = {
+	// 메인 객체
+	const App = {
+		sites: [],
+		sids: [],
+		energyData: [],
+
+		init() {
+			App.setEvent();
+			TotalTrading.init();
+			TotalProfit.init();
+			Resources.init();
+			Graph1.init();
+			SiteStatus.init();
+			Prediction.accuracy();
+			PieGraph.init();
+		},
+
+		// 이벤트 체이닝
+		setEvent() {
+			$(document)
+				.on("click", ".vpp-1-3 > .title-area > .title", function(e) {
+					$(".vpp-1-3 > .title-area > .title.actived").removeClass("actived");
+					$(this).addClass("actived");
+				})
+				.on("click", "#vppMapTable tbody tr:not(.vpp-fold-menu)", function(e) {
+					if (!$(this).hasClass("open")) {
+						$("#vppMapTable tbody tr.open").removeClass("open");
+						$(this).addClass("open");
+					} else {
+						$("#vppMapTable tbody tr.open").removeClass("open");
+					}
+				})
+				.on("click", ".vpp-3-2-graph > div", function(e) {
+					$(this).toggleClass("actived");
+				})
+				.on("click", ".auto-rolling", function(e) {
+					$(this).toggleClass("play stop");
+					rolling();
+				})
+				.on("click", ".vpp-1-3 > .title-area > .title", function(e) {
+					$(".vpp-1-3 > .title-area > .title.actived").removeClass("actived");
+					$(this).addClass("actived");
+
+					$(".vpp-1-3-content").removeClass("view");
+					$(".vpp-1-3-"+($(this).index() + 1)).addClass("view");
+				})
+				.on("click", ".vpp-focus-map, .vpp-pin", VppMap.focusTo)
+		},
+	}
+
+	// 금일 총 전력거래량
+	const TotalTrading = {
+		init() {
+			$("#totalEnergy").html((App.energyData.reduce((acc, cur) => acc + cur.energy, 0) / 1000 / 1000).toFixed(2));
+			$("#mainEnergy").html((App.energyData.reduce((acc, cur) => acc + cur.energyPrimary, 0) / 1000 / 1000).toFixed(2));
+			$("#subEnergy").html((App.energyData.reduce((acc, cur) => acc + cur.energySecondary, 0) / 1000 / 1000).toFixed(2));
+		},
+	}
+
+	// 금일 총 수익
+	const TotalProfit = {
+		init() {
+			$.ajax({
+				url: apiHost+"/energy/now/sites",
+				type: "get",
+				data: {
+					sids: App.sids,
+					metering_type: "2",
+					interval: "day",
+				},
+			}).done(r => {
+				const data = Object.entries(r.data).map(x => {
+					x[1].sid = x[0];
+
+					return x[1];
+				});
+
+				$("#totalMoney, #todaySMP").html((data.reduce((acc, cur) => acc + cur.money, 0) / 1000).toFixed(2));
+			});
+
+			$.ajax({
+				url: apiHost+"/get/energy/forecasting/sites",
+				type: "POST",
+				dataType: 'json',
+				contentType: "application/json",
+				data: JSON.stringify({
+					"sid": App.sids,
+					"startTime": interval[0],
+					"endTime": interval[1],
+					"interval": "day",
+					"displayType": "dashboard",
+					"formId": "v2"
+				}),
+			}).done(r => {
+				const data = Object.entries(r.data).map(x => x[1][0].items[0]);
+
+				$("#todayPredictionMoney").html((data.reduce((acc, cur) => acc + cur.money, 0) / 1000).toFixed(2));
+			});
+		},
+	}
+
+	// 전력거래량 예측
+	const Graph1 = {
+		init() {
+			Highcharts.chart("vppGraph1", {
+				chart: {
+					type: 'area',
+				}
+			})
+		},
+	}
+
+	const PieGraph = {
+		init() {
+			Highcharts.chart("vppPie", {
+				chart: {
+					backgroundColor: "transparent",
+					plotBorderWidth: 0,
+				},
+				title: {
+					text: '95.1%',
+					align: 'center',
+					verticalAlign: 'middle',
+					y: 0,
+					fontSize: 15
+				},
+				plotOptions: {
+					pie: {
+						startAngle: 0,
+						endAngle: 360,
+						center: ['50%', '50%'],
+						size: '100px'
+					}
+				},
+				series: [{
+					type: 'pie',
+					name: '예측',
+					innerSize: '50%',
+					data: [
+						['asd', 95.1],
+					]
+				}]
+			});
+		}
+	}
+
+	// 자원 현황
+	const Resources = {
+		init() {
+			$.ajax({
+				url: apiHost + "/vpp/energy/sites",
+				data: {
+					sid: App.sids,
+					interval: "15min",
+					isLimited: true,
+					startTime: getTime(0, true)
+				},
+			}).done(r => {
+				Object.entries(r.data).map(x => {
+					const data = x[1];
+
+					if (!data.ess) {
+						$("#subResource_ESS").removeClass("actived");
+					}
+	
+					let resource = "";
+					switch (data.resource_type) {
+						case 1:
+							resource = "#mainResource_sun";
+						break;
+						
+						case 2:
+							resource = "#mainResource_wind";
+						break;
+	
+						case 4:
+							resource = "#subResource_fuelcell";
+						break;
+					}
+	
+					$(resource).addClass("actived");
+					if ($(resource).find(".network-status-img").attr("src") === "" && (data.energyPrimary <= 0 || data.energySecondary <= 0)) {
+						$(resource).find(".network-status-img").attr("src", "/img/vpp/network-error-yellow.svg");
+					} else {
+						$(resource).find(".network-status-img").attr("src", "/img/vpp/network-normal.svg");
+					}
+				});
+			})
+		}
+	}
+	
+	// 발전 현황
+	const VppMap = {
 		makerObject : {},
 		markers : [],
 		map : new google.maps.Map(document.getElementById('vppMap'), {
@@ -582,92 +664,53 @@
 		geocoder : new google.maps.Geocoder(),
 		infowindow : new google.maps.InfoWindow(),
 
-		geocodeAddress (siteAddr, siteId, siteName, siteLatlng, siteColor, operationText) {
+		geocodeAddress (siteAddr, siteId, siteLatlng, siteColor) {
 			let latLng = new Object(),
 				dummy = siteLatlng.split(',');
 			latLng['lat'] = Number(dummy[0]);
 			latLng['lng'] = Number(dummy[1]);
 
 			let marker = new google.maps.Marker({
-				map: Map.map,
-				title: siteName,
+				map: VppMap.map,
 				position: latLng,
-				title: siteName,
-				icon: pinSymbol(siteColor),
+				icon: VppMap.pinSymbol(siteColor),
 			});
-			
-			if (langStatus === "EN") {
-				operationText = operationText.replace(`정상`, `Normal`);
-				operationText = operationText.replace(`트립`, `Trip`);
-				operationText = operationText.replace(`중지`, `Stop`);
-			}
 
-			let infoWIndowContent = '<div class="gmap-content"><span style="color:' + siteColor + '">' + operationText + '</span>' + siteName + '</div>';
+			let infoWIndowContent = '<div class="vpp-pin" data-sid="'+siteId+'"><span style="color:' + siteColor + '"></span></div>';
 			marker.infowindow = new google.maps.InfoWindow({
 				content: infoWIndowContent
 			});
 
-			markers.push(marker);
-			makerObject[siteId] = marker;
-
-			google.maps.event.addListener(makerObject[siteId], 'click', (function (makerArray, siteId) {
-				return function () {
-					$.map(makerObject, function (val, key) {
-						if (!isEmpty(val)) {
-							val.infowindow.close();
-						}
-					});
-					makerObject[siteId].infowindow.open(map, makerObject[siteId]);
-					list_detail_open_main(siteId);
-				}
-			})(makerObject, siteId));
+			VppMap.markers.push(marker);
+			VppMap.makerObject[siteId] = marker;
 		},
 
 		pinSymbol(color) {
-			if(color == "#f2a363"){
-				return {
-					url: '/img/map_icons/marker_orange.png',
-					height: 20,
-					width: 14
-				}
-			} else if(color == "#90caf3"){
-				return {
-					url: '/img/map_icons/marker_blue.png',
-					height: 20,
-					width: 14
-				}
-			} else if(color == "#ffd954"){
-				return {
-					url: '/img/map_icons/marker_yellow.png',
-					height: 20,
-					width: 14
-				}
-			} else if(color == "#878787"){
-				return {
-					url: '/img/map_icons/marker_grey.png',
-					height: 20,
-					width: 14
-				}
-			} else {
-				return {
-					url: '/img/map_icons/marker_red.png',
-					height: 20,
-					width: 14
-				}
+			const img = {
+				url: '/img/map_icons/marker_red.png',
+				height: 20,
+				width: 14
 			}
-		},
 
-		list_detail_open_main(sid) {
-			$('.dbclickopen').each(function (item, index) {
-				var touchtime = 0;
+			switch (color) {
+				case "#f2a363":
+					img.url = "/img/map_icons/marker_orange.png";
+				break;
 
-				if ($(this).data('sid') == sid) {
-					let target = $(this);
-					target.next().find('.di-wrap').slideDown(function () {
-						$('.gmain-wrap').animate({scrollTop: target.position().top}, 1000);
-					});
-				}
-			});
+				case "#90caf3":
+					img.url = "/img/map_icons/marker_blue.png";
+				break;
+
+				case "#ffd954":
+					img.url = "/img/map_icons/marker_yellow.png";
+				break;
+
+				case "#878787":
+					img.url = "/img/map_icons/marker_grey.png";
+				break;
+			}
+
+			return img;
 		},
 
 		smoothZoom(map, max, cnt, zoom) {
@@ -681,7 +724,7 @@
 				} else {
 					z = google.maps.event.addListener(map, 'zoom_changed', function (event) {
 						google.maps.event.removeListener(z);
-						smoothZoom(map, max, cnt + 1, true);
+						VppMap.smoothZoom(map, max, cnt + 1, true);
 					});
 					setTimeout(function () {
 						map.setZoom(cnt)
@@ -697,73 +740,39 @@
 				} else {
 					z = google.maps.event.addListener(map, 'zoom_changed', function (event) {
 						google.maps.event.removeListener(z);
-						smoothZoom(map, max, cnt - 1, false);
+						VppMap.smoothZoom(map, max, cnt - 1, false);
 					});
 					setTimeout(function () {
 						map.setZoom(cnt)
 					}, 80); // 80ms is what I found to work well on my system -- it might not work well on all systems
 				}
 			}
+		},
+
+		focusTo() {
+			if (typeof(VppMap.smoothZoom) == 'function') {
+				let self = $(this);
+				let sid = self.data('sid');
+				let markerIcon = VppMap.makerObject[sid];
+
+				VppMap.map.setCenter(markerIcon.position);
+				VppMap.smoothZoom(VppMap.map, 18, VppMap.map.getZoom(), true);
+				google.maps.event.trigger(markerIcon, 'click');
+			}
+			return false;
 		}
 	}
 
-	// 임시 --------
-	const tempId = "8b3c35b9-8229-447e-a9c2-b3c8e65bd622";
-
-	function setResourceStatus() {
-		$.ajax({
-			type: "GET",
-			url: apiHost + "/config/vpp-groups/" + tempId,
-			async: false,
-			data: {
-				includeSites: true,
-				includeDevices: true,
-			}
-		}).done(result => {
+	// 사이트 현황
+	const SiteStatus = {
+		init() {
 			let tableTemplate = ``;
-			result.sites.map(x => {
-				$.ajax({
-					url: apiHost + "/vpp/energy/sites",
-					data: {
-						sid: x.sid,
-						interval: "15min",
-						isLimited: true,
-						startTime: getTime(0, true)
-					},
-					async: false,
-				}).done(data => {
-					data = data.data[x.sid];
-					if (!data.ess) {
-						$("#subResource_ESS").removeClass("actived");
-					}
+			let energy = {};
+			App.sites.map(x => {
+				energy = App.energyData.find(v => v.sid === x.sid);
 
-					let resource = "";
-					switch (data.resource_type) {
-						case 1:
-							resource = "#mainResource_sun";
-						break;
-						
-						case 2:
-							resource = "#mainResource_wind";
-						break;
-
-						case 4:
-							resource = "#subResource_fuelcell";
-						break;
-					}
-
-					$(resource).addClass("actived");
-					if ($(resource).find(".network-status-img").attr("src") === "" && (data.energyPrimary <= 0 || data.energySecondary <= 0)) {
-						$(resource).find(".network-status-img").attr("src", "/img/vpp/network-error-yellow.svg");
-					} else {
-						$(resource).find(".network-status-img").attr("src", "/img/vpp/network-normal.svg");
-					}
-
-					x.energyData = data;
-				});
-				console.log(x);
 				tableTemplate += `
-					<tr>
+					<tr class="vpp-focus-map" data-sid="${'${x.sid}'}">
 						<td>${'${x.location}'}</td>
 						<td>${'${x.name}'}</td>
 						<td>
@@ -783,16 +792,16 @@
 									<div>
 										<ul>
 											<li>일사량</li>
-											<li>0 kWh/m.day</li>
+											<li>- kWh/m.day</li>
 										</ul>
 										<div class="flex-center">
 											<ul>
 												<li>온도</li>
-												<li>0%</li>
+												<li>-%</li>
 											</ul>
 											<ul>
 												<li>습도</li>
-												<li>0%</li>
+												<li>-%</li>
 											</ul>
 										</div>
 									</div>
@@ -802,29 +811,29 @@
 									<div>
 										<div class="vpp-infobox">
 											<p>발전소 용량</p>
-											<p>${'${x.energyData.capacity.toLocaleString()}'} kW</p>
+											<p>${'${energy.capacity.toLocaleString()}'} kW</p>
 										</div>
 										<div class="vpp-infobox">
 											<p>금일 누적거래량</p>
-											<p>0 kW</p>
+											<p>${'${(energy.energy / 1000).toLocaleString()}'} kWh</p>
 										</div>
 										<div class="vpp-infobox">
 											<p>금일 예측거래량</p>
-											<p>0 kW</p>
+											<p>- kWh</p>
 										</div>
 									</div>
 									<div>
 										<div class="vpp-infobox">
 											<p>금일 SMP 수익</p>
-											<p>0 천원</p>
+											<p>- 천원</p>
 										</div>
 										<div class="vpp-infobox">
 											<p>금일 예측 수익</p>
-											<p>0 천원</p>
+											<p>- 천원</p>
 										</div>
 										<div class="vpp-infobox">
 											<p>금일 총 수익</p>
-											<p>0 천원</p>
+											<p>- 천원</p>
 										</div>
 									</div>
 								</div>
@@ -832,14 +841,29 @@
 						</td>
 					</tr>
 				`;
-			});
+
+				VppMap.geocodeAddress(x.address, x.sid, x.latlng, "#90caf3");
+			})
 			$("#vppMapTable tbody").html(tableTemplate);
-		});
+		},
+
+		rolling() {
+			const play = $(".auto-rolling").hasClass("play") ? true : false;
+
+		}
 	}
 
-	function rolling() {
-		const play = $(".auto-rolling").hasClass("play") ? true : false;
+	const Prediction = {
+		site() {
 
-		// alert(play);
+		},
+
+		capacity() {
+
+		},
+
+		accuracy() {
+
+		}
 	}
 </script>

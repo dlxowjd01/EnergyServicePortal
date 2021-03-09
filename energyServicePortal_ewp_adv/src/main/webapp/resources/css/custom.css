@@ -11411,3 +11411,7 @@ table td {
 #colStateRtu table tbody tr.visible {
 	display: table-row!important;
 }
+
+.highcharts-credits {
+	display: none!important;
+}
