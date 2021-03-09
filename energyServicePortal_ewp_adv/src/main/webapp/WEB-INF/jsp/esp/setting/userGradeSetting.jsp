@@ -4,21 +4,10 @@
 <script type="text/javascript">
 	let etcTable = null;
 	$(function() {
-		$.ajax({
-			url: apiHost + '/config/custom-level/',
-			type: 'GET',
-			data: {
-				oid: oid
-			}
-		}).done((data, textStatus, jqXHR) => {
-			console.log(data);
-		}).fail((jqXHR, textStatus, errorThrown) => {
-			console.error(textStatus);
-		});
-
 		$('.nav-tabs a').on('click', function() {
 			const tab = $(this).attr('href');
 			$('.tab-content small').addClass('hidden');
+			$('.tab-content div.dropdown button').removeData('value').html('선택 <span class="caret"></span>');
 
 			if (/group/.test(tab)) {
 				getGroupList();
@@ -40,21 +29,18 @@
 			columns: [
 				{
 					sTitle: '구분',
-					mData: 'type',
+					mData: 'kind',
 					className: 'dt-center',
 					mRender: function ( data, type, full, rowIndex ) {
 						let text = '';
-						if (data === 'site') {
+						if (data === '1') {
 							text = '발전소';
-						} else if(data === 'spc') {
+						} else if(data === '2') {
 							text = 'SPC';
 						} else {
-							if (/tag/.test(data)) {
-								text = '그룹';
-							} else {
-								text = 'VPP';
-							}
+							text = '그룹';
 						}
+
 						return text;
 					}
 				},
@@ -65,22 +51,22 @@
 				},
 				{
 					sTitle: '권한',
-					mData: 'grade',
+					mData: 'role',
 					mRender: function ( data, type, full, rowIndex ) {
 						let temp = ``;
-						if (data === 'management') {
+						if (data === '1') {
 							temp = `<button type="button" class="btn-type-sm btn-type03">관리 권한</button>`;
 						} else {
 							temp = `<button type="button" class="btn-type-sm btn-type03">조회 권한</button>`;
 						}
-						temp += `<button type="button" class="btn-close" data-value="${'${full.code}'}"></button>`;
+						temp += `<button type="button" class="btn-close" data-value="${'${full.id}'}"></button>`;
 						return temp;
 					},
 					className: 'dt-center'
 				},
 				{
 					sTitle: '코드',
-					mData: 'code',
+					mData: 'id',
 					className: 'dt-center',
 					visible: false
 				},
@@ -98,6 +84,7 @@
 			dom: 'tp'
 		});
 
+		getCustomLevel();
 		getGroupList();
 		getMenuList();
 	});
@@ -111,15 +98,11 @@
 				if ($(this).val() === 'all') {
 					$(':checkbox[name="menu"]').prop('checked', true);
 				} else {
-					let subMenuCnt = 0, subMenuChkCnt = 0;
 					$(':checkbox[name="menu"]').each(function() {
-						if (!isEmpty($(this).data('parent'))) {
-							subMenuCnt++;
-							if ($(this).is(':checked')) subMenuChkCnt++;
+						if (!isEmpty($(this).data('parent')) && menuCode === $(this).data('parent')) {
+							$(this).prop('checked', true);
 						}
 					});
-
-					if (subMenuCnt === subMenuChkCnt) {}
 				}
 			} else {
 				let subMenuCnt = 0, subMenuChkCnt = 0;
@@ -130,7 +113,7 @@
 					}
 				});
 
-				if (subMenuCnt === subMenuChkCnt) {
+				if (subMenuChkCnt > 0) {
 					$(':checkbox[name="menu"][value="' + parent + '"]').prop('checked', true);
 				}
 			}
@@ -141,38 +124,24 @@
 				} else {
 					let subMenuCnt = 0, subMenuChkCnt = 0;
 					$(':checkbox[name="menu"]').each(function() {
-						if (!isEmpty($(this).data('parent'))) {
-							subMenuCnt++;
-							if ($(this).is(':checked')) subMenuChkCnt++;
+						if (!isEmpty($(this).data('parent')) && menuCode === $(this).data('parent')) {
+							$(this).prop('checked', false);
 						}
 					});
-
-					if (subMenuCnt === subMenuChkCnt) {
-
-					}
 				}
 			} else {
-
-			}
-		}
-
-		if (isEmpty(parent)) {
-			if ($(this).val() === 'all') {
-				$(':checkbox[name="menu"]').prop('checked', true);
-			} else {
+				let subMenuCnt = 0, subMenuChkCnt = 0;
 				$(':checkbox[name="menu"]').each(function() {
-					const dataParent = $(this).data('parent');
-					if (!isEmpty(dataParent) && menuCode === dataParent) {
-						$(this).prop('checked', true);
+					if ($(this).data('parent') === parent) {
+						subMenuCnt++;
+						if ($(this).is(':checked')) subMenuChkCnt++;
 					}
 				});
-			}
-		} else {
-			if ($(':checkbox[name="menu"][value="all"]').is(':checked')) {
-				$(':checkbox[name="menu"][value="all"]').prop('checked', false);
-			}
 
-			$(':checkbox[name="menu"][id="menu-' + parent + '"]').prop('checked', false);
+				if (subMenuChkCnt === 0) {
+					$(':checkbox[name="menu"][value="' + parent + '"]').prop('checked', false);
+				}
+			}
 		}
 	});
 
@@ -182,7 +151,7 @@
 			const tableList = etcTable.rows().data().toArray();
 			let rowIndex = '';
 			tableList.forEach((data, index) => {
-				if (data.code === value) {
+				if (data.id === value) {
 					rowIndex = index;
 				}
 			});
@@ -190,6 +159,120 @@
 			etcTable.rows(rowIndex).remove().draw();
 		}
 	});
+
+	$(document).on('click', '#comDeleteBtn', function() {
+		const deleteSite = $('#comDeleteModal').data('value');
+		$.ajax({
+			url: apiHost + '/config/custom-level/' + deleteSite + '?oid=' + oid,
+			type: 'DELETE'
+		}).done((data, textStatus, jqXHR) => {
+			if (data.info.count >= 1) {
+				errorMsg('삭제가 완료되엇습니다.');
+				return false;
+			} else {
+				errorMsg('삭제가 된 항목이 없습니다.');
+				return false;
+			}
+		}).fail((jqXHR, textStatus, errorThrown) => {
+			console.error(textStatus);
+			errorMsg('삭제중 오류가 발생했습니다.');
+			return false;
+		}).always(() => {
+			$('#comDeleteModal').modal('hide').removeData('value');
+			$('#confirmTitle').val('');
+
+			getCustomLevel();
+		});
+	});
+
+	$(document).on('click', '#custom-level .grade-block', function() {
+		const targetId = $(this).data('levelid')
+			, targetNm = $(this).find('span').text();
+		$(this).addClass('actived').siblings().removeClass('actived');
+
+		pageInit();
+		$('#customName').val(targetNm);
+		$('#addLevel').attr('onclick', 'addCustomLevel("PATCH");');
+		getUserMenuList(targetId);
+		getUserSiteList(targetId);
+	});
+
+	$(document).on('click', '#custom-level .grade-block .del', function() {
+		const targetId = $(this).parent().data('levelid');
+		deleteCustomLevel(targetId);
+	});
+
+	const pageInit = () => {
+		$('#customName').val('');
+		$('#addLevel').attr('onclick', 'addCustomLevel("POST");');
+		$('.nav-tabs li:eq(0)').trigger('click');
+		etcTable.clear().draw();
+		getMenuList();
+	}
+
+	const getCustomLevel = () => {
+		$.ajax({
+			url: apiHost + '/config/custom-level/',
+			type: 'GET',
+			data: {
+				oid: oid
+			}
+		}).done((data, textStatus, jqXHR) => {
+			let temp = ``;
+			(data.data).forEach(custom => {
+				temp += `
+					<div class="grade-block" data-levelid="${'${custom.level_id}'}">
+						<span>${'${custom.name}'}</span>
+						<img src="/img/delete.svg" alt="" class="del" />
+					</div>
+				`;
+			});
+
+			$('#custom-level').find('.grade-block').remove();
+			$('#custom-level').append(temp);
+		}).fail((jqXHR, textStatus, errorThrown) => {
+			console.error(textStatus);
+			errorMsg('처리중 오류가 발생했습니다.');
+			return false;
+		});
+	}
+
+	const getUserMenuList = (levelId) => {
+		$.ajax({
+			url: apiHost + '/config/custom-level/menu',
+			type: 'GET',
+			data: {
+				oid: oid,
+				level_id: levelId
+			}
+		}).done((data, textStatus, jqXHR) => {
+			if (!isEmpty(data.data)) {
+				(data.data).forEach(data => {
+					const menuCode = data.menu_code;
+					$(':checkbox[name="menu"][value="' + menuCode + '"]').prop('checked', true).data('have', true);
+				});
+			}
+		}).fail((jqXHR, textStatus, errorThrown) => {
+			console.error(textStatus);
+		});
+	}
+
+	const getUserSiteList = (levelId) => {
+		$.ajax({
+			url: apiHost + '/config/custom-level/ids',
+			type: 'GET',
+			data: {
+				oid: oid,
+				level_id: levelId
+			}
+		}).done((data, textStatus, jqXHR) => {
+			if (!isEmpty(data.data)) {
+				etcTable.rows.add(data.data).draw();
+			}
+		}).fail((jqXHR, textStatus, errorThrown) => {
+			console.error(textStatus);
+		});
+	}
 
 	const getGroupList = () => {
 		$.ajax({
@@ -296,10 +379,10 @@
 									<h4 class="panel-title">
 										<input type="checkbox" id="menu-${'${menu.code}'}" name="menu" value="${'${menu.code}'}">
 										<label class="custom-checkbox" for="menu-${'${menu.code}'}">${'${menuName.kr}'}</label>
-										<a href="#tab-${'${menu.code}'}" role="button" data-toggle="collapse" data-parent="#panelGroup" aria-expanded="false" aria-controls="collapseOne" class="panel-fold"></a>
+										<a href="#tab-${'${menu.code}'}" role="button" data-toggle="collapse" data-parent="#panelGroup" aria-expanded="true" aria-controls="tab-${'${menu.code}'}" class="panel-fold"></a>
 									</h4>
 								</div>
-								<div id="tab-${'${menu.code}'}" class="panel-collapse collapse" role="tabpanel">
+								<div id="tab-${'${menu.code}'}" class="panel-collapse collapse" role="tabpanel" aria-expanded="true">
 									<div class="panel-body no-padding">
 										<ul>
 											${'${subMenuList}'}
@@ -326,15 +409,21 @@
 		if (/group/.test(activeTab)) {
 			code = $('#groupOpt button').data('value');
 			name = $('#groupOpt button').text();
-			type = 'group-' + $('#groupOpt button').data('type');
+			type = '3';
+
+			if (isEmpty(code)) { $('#isGroupEmpty').removeClass('hidden'); return false; }
 		} else if (/spc/.test(activeTab)) {
 			code = $('#spcOpt button').data('value');
 			name = $('#spcOpt button').text();
-			type = 'spc';
+			type = '2';
+
+			if (isEmpty(code)) { $('#isSpcEmpty').removeClass('hidden'); return false; }
 		} else {
 			code = $('#siteOpt button').data('value');
 			name = $('#siteOpt button').text();
-			type = 'site';
+			type = '1';
+
+			if (isEmpty(code)) { $('#isSiteEmpty').removeClass('hidden'); return false; }
 		}
 
 		const tableData = etcTable.rows().data().toArray();
@@ -360,17 +449,17 @@
 
 		if (!duplication) {
 			addRow.push({
-				type: type,
-				code: code,
+				kind: type,
+				id: code,
 				name: name,
-				grade: $(':radio[name="gradeType"]:checked').val()
+				role: $(':radio[name="gradeType"]:checked').val()
 			});
 
 			etcTable.rows.add(addRow).draw();
 		}
 	}
 
-	const addCustomLevel = () => {
+	const addCustomLevel = (method) => {
 		const cstNm = $('#customName').val().trim();
 		if (isEmpty(cstNm)) {
 			$('#isCustomNameEmpty').removeClass('hidden');
@@ -384,19 +473,124 @@
 			return false;
 		}
 
-		$.ajax({
-			url: apiHost + '/config/custom-level?oid=' + oid,
-			type: 'POST',
-			data: JSON.stringify({
-				name: cstNm,
-				description: ''
-			}),
-			contentType: 'application/json; charset=UTF-8'
-		}).done((data, textStatus, jqXHR) => {
-			console.log(data);
-		}).fail((jqXHR, textStatus, errorThrown) => {
-			console.error(textStatus);
+		new Promise((resolve, reject) => {
+			let apiUrl = apiHost + '/config/custom-level?oid=' + oid;
+			if (method === 'patch') {
+				let levelId = $('.grade-block.active').data('levelid');
+				apiUrl = apiHost + '/config/custom-level/' + levelId + '?oid=' + oid;
+			}
+
+			$.ajax({
+				url: apiUrl,
+				type: method,
+				data: JSON.stringify({
+					name: cstNm,
+					description: ''
+				}),
+				contentType: 'application/json; charset=UTF-8'
+			}).done((data, textStatus, jqXHR) => {
+				resolve(data);
+			}).fail((jqXHR, textStatus, errorThrown) => {
+				console.error(textStatus);
+				console.error(errorThrown);
+
+				reject('등록에 실패했습니다.');
+			});
+		}).then(resolve => {
+			const levelId = resolve.level_id;
+			const registerApi = new Array();
+			const menuList = new Array();
+			const deleteMenu = new Array();
+			const siteList = etcTable.rows().data().toArray();
+			const deleteSite = new Array();
+
+			$(':checkbox[name="menu"]').each(function() {
+				if ($(this).is(':checked')) {
+					menuList.push({
+						level_id: levelId,
+						menu_code: $(this).val()
+					});
+				} else {
+					if ($(this).data('have') === true) {
+						deleteMenu.push({
+							level_id: levelId,
+							menu_code: $(this).val()
+						});
+					}
+				}
+			});
+
+			if (siteList.length > 0) {
+				siteList.forEach(site => {
+					site['level_id'] = levelId;
+					delete site['name'];
+				});
+			}
+
+			registerApi.push(
+				$.ajax({
+					url: apiHost + '/config/custom-level/menu',
+					type: 'POST',
+					data: JSON.stringify({
+						update: menuList,
+						delete: deleteMenu
+					}),
+					contentType: 'application/json; charset=UTF-8'
+				})
+			);
+
+			registerApi.push(
+				$.ajax({
+					url: apiHost + '/config/custom-level/ids',
+					type: 'POST',
+					data: JSON.stringify({
+						update: siteList,
+						delete: deleteSite
+					}),
+					contentType: 'application/json; charset=UTF-8'
+				})
+			)
+
+			Promise.all(registerApi).then(response => {
+				getCustomLevel();
+
+				errorMsg('등록되었습니다.');
+				return false;
+			}).catch(error => {
+				reject('등록에 실패했습니다.');
+			});
+		}).catch(error => {
+			errorMsg(error);
 		});
+	}
+
+	const deleteCustomLevel = (levelId) => {
+		let modal = $('#comDeleteModal');
+		$('#comDeleteSuccessMsg span').text('삭제');
+		modal.find('.modal-body').removeClass('hidden');
+		modal.modal('show');
+		modal.data('value', levelId);
+
+		$('#confirmTitle').on('input keyp', function() {
+			if($(this).val() !== '삭제') {
+				$('#comDeleteBtn').prop('disabled', true);
+			} else {
+				$('#comDeleteBtn').prop('disabled', false);
+			}
+		});
+	}
+
+	/**
+	 * 에러 처리
+	 *
+	 * @param msg
+	 */
+	const errorMsg = msg => {
+		$("#errMsg").text(msg);
+		$("#errorModal").modal("show");
+		setTimeout(function(){
+			$("#errorModal").modal("hide");
+		}, 1800);
 	}
 </script>
 
@@ -408,11 +602,8 @@
 
 <div class="row" id="userGradeSettingWrap">
 	<div class="col-lg-2 col-md-4 col-sm-6 pvGen-right">
-		<div class="indiv chart-pv scroll">
-			<div class="title-block"> <span>사용자 등급</span> <button class="btn-type06"></button> </div>
-			<div class="grade-block"> <span>사용자 등급</span> <img src="/img/delete.svg" alt="" class="del" /> </div>
-			<div class="grade-block actived"> <span>사용자 등급</span> <img src="/img/delete.svg" alt="" class="del" /> </div>
-			<!-- <h2 class="ntit"></h2> -->
+		<div id="custom-level" class="indiv chart-pv scroll">
+			<div class="title-block"> <span>사용자 등급</span> <button class="btn-type06" onclick="pageInit();"></button> </div>
 		</div>
 	</div>
 
@@ -466,11 +657,11 @@
 						<h2 class="sm-title mt-30">권한</h2>
 						<div class="flex-start mt-10 auth">
 							<div class="radio-type">
-								<input type="radio" id="grade1" name="gradeType" value="management" checked="">
+								<input type="radio" id="grade1" name="gradeType" value="1" checked="">
 								<label for="grade1">관리 권한</label>
 							</div>
 							<div class="radio-type">
-								<input type="radio" id="grade2" name="gradeType" value="search">
+								<input type="radio" id="grade2" name="gradeType" value="2">
 								<label for="grade2">조회 권한</label>
 							</div>
 						</div>
@@ -500,8 +691,8 @@
 			</div>
 			<div class="row">
 				<div class="btn-wrap-type-r">
-					<button type="button" class="btn-type03 big" onclick="alert('초기화 함수 생성');">취소</button>
-					<button type="button" class="btn-type big" onclick="addCustomLevel();">저장</button>
+					<button type="button" class="btn-type03 big" onclick="pageInit();">취소</button>
+					<button type="button" class="btn-type big" onclick="addCustomLevel();" id="addLevel">저장</button>
 				</div>
 			</div>
 		</div>

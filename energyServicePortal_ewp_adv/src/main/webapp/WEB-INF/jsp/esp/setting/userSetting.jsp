@@ -29,6 +29,7 @@
 			},
 		];
 
+		getCustomLevel();
 		initModal();
 		getUserList(optionList[0]);
 		getSpcList(optionList[1], copySpcList, setDropdownValue);
@@ -70,6 +71,19 @@
 		});
 
 		$("#newUserPwd").on('input', validatePassword);
+
+		$("#confirmNewUserPwd").keyup(function() {
+			let password = $("#newUserPwd").val();
+			password == $(this).val() ? $("#pwdUserMatched").addClass("hidden") : $("#pwdUserMatched").removeClass("hidden");
+			let validated = $("#pwdUserMatched").hasClass("hidden");
+			if (validated) {
+				$("#addUserBtn").removeClass("disabled");
+				$("#addUserBtn").prop("disabled", false);
+			} else {
+				$("#addUserBtn").addClass("disabled");
+				$("#addUserBtn").prop("disabled", true);
+			}
+		});
 
 		$("#newFullName").on('input', function(evt) {
 			if( $(this).val().match(/['.,!#$%&"*+/=?^`{|}~;:<>]+$/)){
@@ -146,30 +160,34 @@
 					$("#addUserBtn").prop("disabled", true);
 				}
 			}
-
 		});
 
 		// Dropdown Click event
 		$("#newAccLevel").find("li").on("click", function(){
-			if ($(this).data('value') == '1') {
-				if ($('.nav-tabs > li').eq(0).find('a').attr('href') == '#siteTab') {
-					$('.nav-tabs > li').eq(0).addClass('hidden').removeClass('active').siblings().addClass('active');
-				}
-
-				$('#siteTab').removeClass('active').siblings().addClass('active in');
+			if ($(this).data('value') === 1) {
+				$('#customLevelList').prev().prop('disabled', true);
 			} else {
-				$('.nav-tabs > li').eq(0).removeClass('hidden');
+				$('#customLevelList').prev().prop('disabled', false);
 			}
-
-			if($("#addUserModal").hasClass("edit")){
-				if( !isEmpty($(this).data("value")) && validateEditForm() == 1) {
-					$("#addUserBtn").prop("disabled", false);
-				}
-			} else {
-				if( !isEmpty($(this).data("value")) && validateAddForm() == 1) {
-					$("#addUserBtn").prop("disabled", false);
-				}
-			}
+			// if ($(this).data('value') == '1') {
+			// 	if ($('.nav-tabs > li').eq(0).find('a').attr('href') == '#siteTab') {
+			// 		$('.nav-tabs > li').eq(0).addClass('hidden').removeClass('active').siblings().addClass('active');
+			// 	}
+			//
+			// 	$('#siteTab').removeClass('active').siblings().addClass('active in');
+			// } else {
+			// 	$('.nav-tabs > li').eq(0).removeClass('hidden');
+			// }
+			//
+			// if($("#addUserModal").hasClass("edit")){
+			// 	if( !isEmpty($(this).data("value")) && validateEditForm() == 1) {
+			// 		$("#addUserBtn").prop("disabled", false);
+			// 	}
+			// } else {
+			// 	if( !isEmpty($(this).data("value")) && validateAddForm() == 1) {
+			// 		$("#addUserBtn").prop("disabled", false);
+			// 	}
+			// }
 		});
 
 		// Modal event
@@ -239,12 +257,21 @@
 			let newEmailAddr =$("#newEmailAddr").val();
 			let newTaskList = $("#newTaskList").prev().data("value");
 			let newTaskName = $("#newTaskList").prev().data("name");
-			let newUseOpt = $("#newUseOpt").prev().data("value");
+
+			let newUseOpt = $('#newUseOpt').is(':checked') ? 'Y' : 'N';
 			let newUswOptName = $("#newUseOpt").prev().data("name");
 			let newUserDesc = $("#newUserDesc").val();
 
 			let siteItemList = $("#selectedSiteList").find("li");
 			let spcItemList = $("#selectedSpcList").find("li");
+
+			let customLevelYn = 'N'
+			let customLevel = $('#customLevelList').prev().data('value');
+			if (customLevel === 'N') {
+				customLevel = '';
+			} else {
+				customLevelYn = 'Y';
+			}
 
 			let verify_level = $('#switchBtn').is(':checked') ? '1' : '0';
 
@@ -258,6 +285,8 @@
 				userObj.password = newPwd;
 				userObj.role = newAccVal;
 				userObj.verify_level = Number(verify_level);
+				userObj.custom_level_yn = customLevelYn;
+				userObj.custom_level_id = customLevel;
 
 				if( !isEmpty(newPhoneNum)){
 					userObj.contact_phone = newPhoneNum;
@@ -420,6 +449,9 @@
 				let pwd = { password : $("#newUserPwd").val() }
 				let editUserObj = {};
 
+				editUserObj.custom_level_yn = customLevelYn;
+				editUserObj.custom_level_id = customLevel;
+
 				if( !isEmpty(newFullName) && ( newFullName != td.eq(2).text() ) ) {
 					editUserObj.name = newFullName;
 				}
@@ -435,16 +467,18 @@
 				if( !isEmpty(newAffiliation) && ( newAffiliation != td.eq(5).text() ) ) {
 					editUserObj.team = newAffiliation;
 				}
-				if( !isEmpty(newTaskList) && !isEmpty(newTaskList) && ( newTaskName != td.eq(7).text() ) ) {
-					editUserObj.task = newTaskList;
+				if( !isEmpty(newTaskList) && !isEmpty(newTaskList) && ( newTaskName != td.eq(8).text() ) ) {
+					if (!$('#newTaskList').prev().prop('disabled')) {
+						editUserObj.task = newTaskList;
+					}
 				}
 
-				if( !isEmpty(newUseOpt) && (newUswOptName != td.eq(9).text() ) ) {
+				if( !isEmpty(newUseOpt) && (newUswOptName != td.eq(10).text() ) ) {
 					// console.log("newUseOpt===", newUseOpt, "newUswOptName===", newUswOptName);
 					editUserObj.valid_yn = newUseOpt;
 				}
 
-				if( !isEmpty(verify_level) && (verify_level != td.eq(10).text() ) ) {
+				if( !isEmpty(verify_level) && (verify_level != td.eq(11).text() ) ) {
 					editUserObj.verify_level = Number(verify_level);
 				}
 
@@ -686,6 +720,41 @@
 	});
 
 
+	$(document).on('click', '#customLevelList li', function() {
+		if ($(this).data('value') === 'task') {
+			$('#newTaskList').prev().prop('disabled', false);
+			$('.tab-content').removeClass('hidden');
+			$('.tab-content').prev().removeClass('hidden');
+		} else {
+			$('#newTaskList').prev().prop('disabled', true);
+			$('.tab-content').addClass('hidden');
+			$('.tab-content').prev().addClass('hidden');
+		}
+	});
+
+	const getCustomLevel = () => {
+		$.ajax({
+			url: apiHost + '/config/custom-level/',
+			type: 'GET',
+			async: false,
+			data: { oid: oid }
+		}).done((data, textStatus, jqXHR) => {
+			let temp = ``;
+			temp += `<li data-value="N"><a href="#" tabindex="-1">업무구분</a></li>`;
+			(data.data).forEach(custom => {
+				temp += `<li data-value="${'${custom.level_id}'}"><a href="#" tabindex="-1">${'${custom.name}'}</a></li>`;
+			});
+
+			$('#customLevelList').empty().append(temp);
+			$('#userList').empty().append(temp);
+			$('#userList').prepend('<li data-value=""><a href="#" tabindex="-1">전체</a></li>')
+		}).fail((jqXHR, textStatus, errorThrown) => {
+			console.error(textStatus);
+			errorMsg('처리중 오류가 발생했습니다.');
+			return false;
+		});
+	}
+
 	// Get Ajax Data
 	function getUserList(opt, callback) {
 		$.ajax(opt).done(function (json, textStatus, jqXHR) {
@@ -743,6 +812,18 @@
 						obj.user_task = "<fmt:message key='userSetting.workType.4' />"
 					} else if(item.task == 4){
 						obj.user_task = "<fmt:message key='userSetting.workType.5' />"
+					}
+
+					if (item.custom_level_yn === 'Y') {
+						$('#userList li').each(function() {
+							if ($(this).data('value') == item.custom_level_id) {
+								obj.custom_level_name = $(this).text();
+								obj.custom_level_id = $(this).data('value');
+							}
+						});
+					} else {
+						obj.custom_level_name = '';
+						obj.custom_level_id = item.custom_level_id;
 					}
 
 					if(!isEmpty(item.createdAt)){
@@ -838,6 +919,17 @@
 									"sTitle": "<fmt:message key='userSetting.auth' />",
 									"mData": "user_role",
 									"className": "acc-level"
+								},
+								{
+									"sTitle": "<fmt:message key='userSetting.customAuth' />",
+									"mData": "custom_level_name",
+									"mRender": function ( data, type, row ) {
+										if (isEmpty(data)) {
+											return '-';
+										} else {
+											return data;
+										}
+									},
 								},
 								{
 									"sTitle": "<fmt:message key='userSetting.workType' />",
@@ -1019,6 +1111,17 @@
 									"sTitle": "<fmt:message key='userSetting.auth' />",
 									"mData": "user_role",
 									"className": "acc-level"
+								},
+								{
+									"sTitle": "<fmt:message key='userSetting.customAuth' />",
+									"mData": "custom_level_id",
+									"mRender": function ( data, type, row ) {
+										if (isEmpty(data)) {
+											return '-';
+										} else {
+											return data;
+										}
+									},
 								},
 								{
 									"sTitle": "<fmt:message key='userSetting.workType' />",
@@ -1290,6 +1393,10 @@
 					"data": null,
 				},
 				{
+					"sTitle": "<fmt:message key='userSetting.customAuth' />",
+					"data": null,
+				},
+				{
 					"title": "<fmt:message key='userSetting.workType' />",
 					"data": null,
 				},
@@ -1539,28 +1646,28 @@
 					$('#newAffiliation').val(td.eq(5).text())
 				}
 
-				if(!isEmpty(td.eq(7).text())){
-					let textVal = td.eq(7).text();
-					console.log("textVal==", textVal)
+				if(!isEmpty(td.eq(8).text())){
+					$('#customLevelList').prev().prop('disabled', false).data('value', 'N').html('업무구분 <span class="caret"></span>');
+					let textVal = td.eq(8).text();
 					if(textVal == "<fmt:message key='userSetting.workType.1' />"){
-						newTaskBtn.data( { "name" : textVal, "value" : "0"}).html(textVal + '<span class="caret">');
+						newTaskBtn.prop('disabled', false).data( { "name" : textVal, "value" : "0"}).html(textVal + '<span class="caret">');
 					} else if(textVal == "<fmt:message key='userSetting.workType.2' />"){
-						newTaskBtn.data( { "name" : textVal, "value" : "1"}).html(textVal + '<span class="caret">');
+						newTaskBtn.prop('disabled', false).data( { "name" : textVal, "value" : "1"}).html(textVal + '<span class="caret">');
 					} else if(textVal == "<fmt:message key='userSetting.workType.3' />"){
-						newTaskBtn.data( { "name" : textVal, "value" : "2"}).html(textVal + '<span class="caret">');
+						newTaskBtn.prop('disabled', false).data( { "name" : textVal, "value" : "2"}).html(textVal + '<span class="caret">');
 					} else if(textVal == "<fmt:message key='userSetting.workType.4' />"){
-						newTaskBtn.data( { "name" : textVal, "value" : "3"}).html(textVal + '<span class="caret">');
+						newTaskBtn.prop('disabled', false).data( { "name" : textVal, "value" : "3"}).html(textVal + '<span class="caret">');
 					} else if(textVal == "<fmt:message key='userSetting.workType.5' />"){
-						newTaskBtn.data( { "name" : textVal, "value" : "4"}).html(textVal + '<span class="caret">');
+						newTaskBtn.prop('disabled', false).data( { "name" : textVal, "value" : "4"}).html(textVal + '<span class="caret">');
 					}
 				}
 
-				if(!isEmpty(td.eq(9).text())){
-					let textVal = td.eq(9).text()
-					if(textVal == "<fmt:message key='userSetting.isUse.Y' />"){
-						$('#newUseOpt').prev().data({ "name" : textVal,  "value": "Y" }).html( "Y" + '<span class="caret">');
+				if(!isEmpty(td.eq(10).text())){
+					let textVal = td.eq(10).text()
+					if(textVal == "<fmt:message key='userSetting.isUse.Y' />") {
+						$('#newUseOpt').prop('checked', true);
 					} else if(textVal == "<fmt:message key='userSetting.isUse.N' />") {
-						$('#newUseOpt').prev().data({ "name" : textVal, "value":  "N" }).html("N" + '<span class="caret">');
+						$('#newUseOpt').prop('checked', false);
 					}
 				}
 
@@ -1833,15 +1940,13 @@
 								<div class="text-input-type"><input type="text" id="newFullName" name="new_full_name" placeholder="<fmt:message key='userSetting.input' />" minlength="3" maxlength="28"></div>
 								<small class="hidden warning"><fmt:message key='userSetting.errorTxt.6' /></small>
 							</div>
-							<div class="col-lg-2 col-sm-3"><span class="input-label offset asterisk"><fmt:message key='userSetting.password' /></span></div>
+							<div class="col-lg-2 col-sm-3"><span class="input-label offset asterisk"><fmt:message key='userSetting.password.confirm' /></span></div>
 							<div class="col-lg-4 col-sm-9">
 								<div class="text-input-type">
-									<input type="password" id="newUserPwd" name="new_pwd" placeholder="<fmt:message key='userSetting.input' />" minlength="8" maxlength="32">
+									<input type="password" id="confirmNewUserPwd" name="confirm_new_pwd" placeholder="<fmt:message key='userSetting.input' />" minlength="8" maxlength="32">
 								</div>
 								<div class="flex-start warning-wrapper">
-									<small id="hasLet" class="tick"><fmt:message key='userSetting.eng' /></small>
-									<small id="hasNum" class="tick"><fmt:message key='userSetting.num' /></small>
-									<small id="isEightCharLong" class="tick"><fmt:message key='userSetting.minLength8' /></small>
+									<small id="pwdUserMatched" class="warning-text hidden">비밀번호가 일치하지 않습니다.</small>
 								</div>
 							</div>
 						</div>
@@ -1852,9 +1957,14 @@
 								<div class="text-input-type"><input type="text" id="newMobileNum" name="new_mobil_num" placeholder="<fmt:message key='userSetting.input' />" maxlength="13"></div>
 								<small id="isValidNewMobileNum" class=" warning hidden"><fmt:message key='userSetting.errorTxt.7' /></small>
 							</div>
-							<div class="col-lg-2 col-sm-3"><span class="input-label offset"><fmt:message key='userSetting.team' /></span></div>
+							<div class="col-lg-2 col-sm-3"><span class="input-label offset asterisk"><fmt:message key='userSetting.auth' /></span></div>
 							<div class="col-lg-4 col-sm-9">
-								<div class="text-input-type"><input type="text" id="newAffiliation" name="new_affiliation" placeholder="<fmt:message key='userSetting.input' />">
+								<div class="dropdown">
+									<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택"><fmt:message key='userSetting.select' /><span class="caret"></span></button>
+									<ul id="newAccLevel" class="dropdown-menu">
+										<li data-value="1" data-name="시스템 관리자"><a href="#"><fmt:message key='userSetting.auth.admin' /></a></li>
+										<li data-value="2" data-name="일반 사용자"><a href="#"><fmt:message key='userSetting.auth.user' /></a></li>
+									</ul>
 								</div>
 							</div>
 						</div>
@@ -1866,17 +1976,11 @@
 								<small class="hidden warning"><fmt:message key='userSetting.errorTxt.8' /></small>
 							</div>
 							<c:if test="${activateSPC eq true}">
-							<div class="col-lg-2 col-sm-3"><span class="input-label offset"><fmt:message key='userSetting.workType' /></span></div>
+							<div class="col-lg-2 col-sm-3"><span class="input-label offset"><fmt:message key='userSetting.customAuth' /></span></div>
 							<div class="col-lg-4 col-sm-9">
 								<div class="dropdown">
-									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택"><fmt:message key='userSetting.select' /><span class="caret"></span></button>
-									<ul id="newTaskList" class="dropdown-menu">
-										<li data-name="일반" data-value="0"><a href="#"><fmt:message key='userSetting.workType.1' /></a></li>
-										<li data-name="사무수탁사" data-value="1"><a href="#"><fmt:message key='userSetting.workType.2' /></a></li>
-										<li data-name="자산운용사" data-value="2"><a href="#"><fmt:message key='userSetting.workType.3' /></a></li>
-										<li data-name="출금관리자" data-value="3"><a href="#"><fmt:message key='userSetting.workType.4' /></a></li>
-										<li data-name="사업주" data-value="4"><a href="#"><fmt:message key='userSetting.workType.5' /></a></li>
-									</ul>
+									<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택" disabled="disabled"><fmt:message key='userSetting.select' /><span class="caret"></span></button>
+									<ul id="customLevelList" class="dropdown-menu"></ul>
 								</div>
 							</div>
 							</c:if>
@@ -1885,16 +1989,31 @@
 						<div class="row">
 							<div class="col-lg-2 col-sm-3"><span class="input-label"><fmt:message key='userSetting.isUse' /></span></div>
 							<div class="col-lg-4 col-sm-9">
-								<div class="dropdown">
-									<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택"><fmt:message key='userSetting.select' /><span class="caret"></span></button>
-									<ul id="newUseOpt" class="dropdown-menu">
-										<li data-name="사용" data-value="Y"><a href="#">Y</a></li>
-										<li data-name="중지" data-value="N"><a href="#">N</a></li>
-									</ul>
-								</div>
+								<label class="switch switch-slide">
+									<input type="checkbox" value="showTable" id="newUseOpt" class="switch-input">
+									<span class="switch-label" data-on="Y" data-off="N"></span>
+									<span class="switch-handle"></span>
+								</label>
 							</div>
-							<div class="col-lg-2 col-sm-3"><span class="input-label offset"><fmt:message key='userSetting.certification' /></span></div>
-							<div class="col-lg-4 col-sm-9">
+							<c:if test="${activateSPC eq true}">
+								<div class="col-lg-2 col-sm-3"><span class="input-label offset"><fmt:message key='userSetting.workType' /></span></div>
+								<div class="col-lg-4 col-sm-9">
+									<div class="dropdown">
+										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택" disabled="disabled"><fmt:message key='userSetting.select' /><span class="caret"></span></button>
+										<ul id="newTaskList" class="dropdown-menu">
+											<li data-name="일반" data-value="0"><a href="#"><fmt:message key='userSetting.workType.1' /></a></li>
+											<li data-name="사무수탁사" data-value="1"><a href="#"><fmt:message key='userSetting.workType.2' /></a></li>
+											<li data-name="자산운용사" data-value="2"><a href="#"><fmt:message key='userSetting.workType.3' /></a></li>
+											<li data-name="출금관리자" data-value="3"><a href="#"><fmt:message key='userSetting.workType.4' /></a></li>
+											<li data-name="사업주" data-value="4"><a href="#"><fmt:message key='userSetting.workType.5' /></a></li>
+										</ul>
+									</div>
+								</div>
+							</c:if>
+						</div>
+						<div class="row">
+							<div class="col-lg-2 col-sm-3"><span class="input-label"><fmt:message key='userSetting.certification' /></span></div>
+							<div class="col-lg-10 col-sm-9">
 								<label class="switch switch-slide">
 									<input type="checkbox" value="showTable" id="switchBtn" class="switch-input">
 									<span class="switch-label" data-on="Y" data-off="N"></span>
@@ -2052,14 +2171,15 @@
 			<table id="userTable">
 				<colgroup>
 					<col style="width:6%">
-					<col style="width:10%">
-					<col style="width:16%">
-					<col style="width:9%">
-					<col style="width:15%">
-					<col style="width:9%">
-					<col style="width:8%">
 					<col style="width:8%">
 					<col style="width:14%">
+					<col style="width:9%">
+					<col style="width:13%">
+					<col style="width:9%">
+					<col style="width:8%">
+					<col style="width:8%">
+					<col style="width:8%">
+					<col style="width:12%">
 					<col style="width:5%">
 				</colgroup>
 				<thead></thead>
