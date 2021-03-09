@@ -447,6 +447,7 @@
 		const addRow = new Array();
 		const activeTab = $('.nav-tabs li.active a').attr('href');
 		const tableData = etcTable.rows().data().toArray();
+		const role = Number($(':radio[name="gradeType"]:checked').val());
 		let type = '', name = '', code = '', duplication = false;
 
 		$('.tab-content small').addClass('hidden');
@@ -464,7 +465,7 @@
 						kind: type,
 						id: code,
 						name: name,
-						role: $(':radio[name="gradeType"]:checked').val()
+						role: role
 					});
 				}
 			}
@@ -482,7 +483,7 @@
 						kind: type,
 						id: code,
 						name: name,
-						role: $(':radio[name="gradeType"]:checked').val()
+						role: role
 					});
 				}
 			}
@@ -500,7 +501,7 @@
 						kind: type,
 						id: code,
 						name: name,
-						role: $(':radio[name="gradeType"]:checked').val()
+						role: role
 					});
 
 					etcTable.rows.add(addRow).draw();
@@ -544,7 +545,7 @@
 								kind: 1,
 								id: site.sid,
 								name: site.name,
-								role: $(':radio[name="gradeType"]:checked').val()
+								role: role
 							});
 						}
 					});
@@ -568,7 +569,7 @@
 								kind: 1,
 								id: site.gen_id,
 								name: site.name,
-								role: $(':radio[name="gradeType"]:checked').val()
+								role: role
 							});
 						}
 					});
