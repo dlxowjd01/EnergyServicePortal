@@ -166,8 +166,16 @@
 		$("#newAccLevel").find("li").on("click", function(){
 			if ($(this).data('value') === 1) {
 				$('#customLevelList').prev().prop('disabled', true);
+
+				if ($('.nav-tabs > li').eq(0).find('a').attr('href') == '#siteTab') {
+					$('.nav-tabs > li').eq(0).addClass('hidden').removeClass('active').siblings().addClass('active');
+				}
+
+				$('#siteTab').removeClass('active').siblings().addClass('active in');
 			} else {
 				$('#customLevelList').prev().prop('disabled', false);
+
+				$('.nav-tabs > li').eq(0).removeClass('hidden');
 			}
 			// if ($(this).data('value') == '1') {
 			// 	if ($('.nav-tabs > li').eq(0).find('a').attr('href') == '#siteTab') {
@@ -267,11 +275,8 @@
 
 			let customLevelYn = 'N'
 			let customLevel = $('#customLevelList').prev().data('value');
-			if (customLevel === 'N') {
-				customLevel = '';
-			} else {
-				customLevelYn = 'Y';
-			}
+			if (customLevel === 'N') { customLevel = ''; }
+			else { customLevelYn = 'Y'; }
 
 			let verify_level = $('#switchBtn').is(':checked') ? '1' : '0';
 
@@ -467,11 +472,17 @@
 				if( !isEmpty(newAffiliation) && ( newAffiliation != td.eq(5).text() ) ) {
 					editUserObj.team = newAffiliation;
 				}
-				if( !isEmpty(newTaskList) && !isEmpty(newTaskList) && ( newTaskName != td.eq(8).text() ) ) {
-					if (!$('#newTaskList').prev().prop('disabled')) {
-						editUserObj.task = newTaskList;
+
+				if (customLevelYn === 'N') {
+					if( !isEmpty(newTaskList) && !isEmpty(newTaskList) && ( newTaskName != td.eq(8).text() ) ) {
+						if (!$('#newTaskList').prev().prop('disabled')) {
+							editUserObj.task = newTaskList;
+						}
 					}
+				} else {
+					editUserObj.task = '';
 				}
+
 
 				if( !isEmpty(newUseOpt) && (newUswOptName != td.eq(10).text() ) ) {
 					// console.log("newUseOpt===", newUseOpt, "newUswOptName===", newUswOptName);
@@ -1494,6 +1505,7 @@
 		let titleAdd = $('#titleAdd');
 		let id = $('#newId');
 		let accLevBtn = $('#newAccLevel').prev();
+		let customLevelBtn = $('#customLevelList').prev();
 		let newTaskBtn =$('#newTaskList').prev();
 		let required = $("#updateUserForm").find(".asterisk");
 
@@ -1545,7 +1557,6 @@
 					let siteData = result1[0].data;
 
 					if(siteData.length > 0){
-
 						let siteOptList = $("#siteOptList li").toArray();
 						let siteStr = ``;
 
@@ -1572,7 +1583,6 @@
 							});
 						});
 
-						console.log("siteDeleteList===", siteDeleteList)
 						$("#selectedSiteList").append(siteStr).prev().html("<fmt:message key='userSetting.updateList' />&emsp;<span class='fr'>(&nbsp;<strong class='text-orange'><fmt:message key='userSetting.toBeDelete' /></strong>&ensp;<fmt:message key='userSetting.deleteMsg' />)</span>").removeClass("hidden");
 					}
 
@@ -1630,8 +1640,12 @@
 					}
 
 					$('#siteTab').removeClass('active').siblings().addClass('active in');
+					customLevelBtn.prop('disabled', true);
+					newTaskBtn.prop('disabled', true);
 				} else if(td.eq(6).text() == "<fmt:message key='userSetting.auth.user' />"){
 					accLevBtn.data( { "name" : accName, "value" : "2"}).html(accName + '<span class="caret">');
+					customLevelBtn.prop('disabled', false);
+					newTaskBtn.prop('disabled', false);
 				}
 
 				if( !isEmpty(td.eq(3).text() ) && td.eq(3).text() != "-" ){
@@ -1646,8 +1660,17 @@
 					$('#newAffiliation').val(td.eq(5).text())
 				}
 
+				if( !isEmpty(td.eq(7).text()) && td.eq(7).text() != "-" ){
+					let targetValue = '';
+					customLevelBtn.next().find('li').each(function() {
+						if ($(this).text() === td.eq(7).text()) {
+							targetValue = $(this).data('value');
+						}
+					});
+					customLevelBtn.prop('disabled', false).data( { "name" : td.eq(7).text(), "value" : targetValue}).html(td.eq(7).text() + '<span class="caret">');
+				}
+
 				if(!isEmpty(td.eq(8).text())){
-					$('#customLevelList').prev().prop('disabled', false).data('value', 'N').html('업무구분 <span class="caret"></span>');
 					let textVal = td.eq(8).text();
 					if(textVal == "<fmt:message key='userSetting.workType.1' />"){
 						newTaskBtn.prop('disabled', false).data( { "name" : textVal, "value" : "0"}).html(textVal + '<span class="caret">');
