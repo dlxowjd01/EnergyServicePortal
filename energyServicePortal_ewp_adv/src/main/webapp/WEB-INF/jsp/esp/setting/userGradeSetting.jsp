@@ -189,10 +189,10 @@
 		if (e.target.classList.contains('btn-type03')) {
 			if (etcTable.cell(this).data() === 1) {
 				etcTable.cell(this).data(2);
-				$(this).find('button.btn-type03').text('조회권한');
+				$(this).find('button.btn-type03').text('조회 권한');
 			} else {
 				etcTable.cell(this).data(1);
-				$(this).find('button.btn-type03').text('관리권한');
+				$(this).find('button.btn-type03').text('관리 권한');
 			}
 		} else if (e.target.classList.contains('btn-close')) {
 			const value = this.children[1].dataset.value;

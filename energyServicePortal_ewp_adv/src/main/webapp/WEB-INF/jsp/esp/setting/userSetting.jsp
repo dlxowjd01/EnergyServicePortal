@@ -165,7 +165,8 @@
 		// Dropdown Click event
 		$("#newAccLevel").find("li").on("click", function(){
 			if ($(this).data('value') === 1) {
-				$('#customLevelList').prev().prop('disabled', true);
+				$('#customLevelList').prev().prop('disabled', true).html("<fmt:message key='userSetting.select' />" + '<span class="caret"></span>').data("value", "");
+				$('#newTaskList').prev().prop('disabled', true).html("<fmt:message key='userSetting.select' />" + '<span class="caret"></span>').data("value", "");
 
 				if ($('.nav-tabs > li').eq(0).find('a').attr('href') == '#siteTab') {
 					$('.nav-tabs > li').eq(0).addClass('hidden').removeClass('active').siblings().addClass('active');
@@ -173,7 +174,8 @@
 
 				$('#siteTab').removeClass('active').siblings().addClass('active in');
 			} else {
-				$('#customLevelList').prev().prop('disabled', false);
+				$('#customLevelList').prev().prop('disabled', false).html("<fmt:message key='userSetting.select' />" + '<span class="caret"></span>').data("value", "");
+				$('#newTaskList').prev().prop('disabled', false).html("<fmt:message key='userSetting.select' />" + '<span class="caret"></span>').data("value", "");
 
 				$('.nav-tabs > li').eq(0).removeClass('hidden');
 			}
@@ -275,7 +277,7 @@
 
 			let customLevelYn = 'N'
 			let customLevel = $('#customLevelList').prev().data('value');
-			if (customLevel === 'N') { customLevel = ''; }
+			if (customLevel === 'N') { customLevel = null; }
 			else { customLevelYn = 'Y'; }
 
 			let verify_level = $('#switchBtn').is(':checked') ? '1' : '0';
@@ -737,7 +739,6 @@
 		});
 	});
 
-
 	$(document).on('click', '#customLevelList li', function() {
 		if ($(this).data('value') === 'N') {
 			$('#newTaskList').prev().prop('disabled', false);
@@ -830,6 +831,7 @@
 						obj.user_task = "<fmt:message key='userSetting.workType.5' />"
 					}
 
+					obj.custom_level_yn = item.custom_level_yn;
 					if (item.custom_level_yn === 'Y') {
 						$('#userList li').each(function() {
 							if ($(this).data('value') == item.custom_level_id) {
@@ -962,6 +964,11 @@
 								{
 									"sTitle": "<fmt:message key='userSetting.certification' />",
 									"mData": "verify_level",
+									visible: false,
+								},
+								{
+									"sTitle": "커스텀 레벨 설정",
+									"mData": "custom_level_yn",
 									visible: false,
 								}
 							],
@@ -1154,6 +1161,11 @@
 								{
 									"sTitle": "<fmt:message key='userSetting.certification' />",
 									"mData": "verify_level",
+									visible: false,
+								},
+								{
+									"sTitle": "커스텀 레벨 설정",
+									"mData": "custom_level_yn",
 									visible: false,
 								}
 							],
@@ -1430,6 +1442,11 @@
 					"sTitle": "<fmt:message key='userSetting.certification' />",
 					"data": null,
 					visible: false,
+				},
+				{
+					"sTitle": "커스텀 레벨 설정",
+					"data": null,
+					visible: false,
 				}
 			],
 			"dom": 'tip',
@@ -1524,7 +1541,7 @@
 
 		id.parent().next().prop("disabled", true);
 		// updateModal ADD !!!!!
-		if(option == 'add'){
+		if(option == 'add') {
 			initModal();
 			if(id.parent().next().hasClass("hidden")) {
 				id.parent().next().removeClass("hidden");
@@ -1574,7 +1591,6 @@
 						$.each(siteData, function( index, item ) {
 							siteOptList.some( x => {
 								if($(x).data("value") === item.sid) {
-									// console.log("item---", item.sid)
 									let name = $(x).data("name");
 									let role = "";
 									if(item.role == 1){
@@ -1598,9 +1614,7 @@
 
 
 					let spcData = result2[0].data;
-
 					if(spcData.length > 0){
-
 						let spcOptList = $("#spcOptList li").toArray();
 						let spcStr = ``;
 
@@ -1679,21 +1693,26 @@
 							targetValue = $(this).data('value');
 						}
 					});
-					customLevelBtn.prop('disabled', false).data( { "name" : td.eq(7).text(), "value" : targetValue}).html(td.eq(7).text() + '<span class="caret">');
 
-					if (td.eq(7).text() === 'N') {
+					newTaskBtn.prop('disabled', true);
+					$('.tab-content').addClass('hidden');
+					$('.tab-content').prev().addClass('hidden');
+					customLevelBtn.prop('disabled', false).data( { "name" : td.eq(7).text(), "value" : targetValue}).html(td.eq(7).text() + '<span class="caret">');
+				} else {
+					if (!isEmpty(dTable.row('.selected').data().custom_level_yn)
+						&& dTable.row('.selected').data().custom_level_yn === 'N'
+						&& td.eq(6).text() !== "<fmt:message key='userSetting.auth.admin' />"
+					) {
 						newTaskBtn.prop('disabled', false);
 						$('.tab-content').removeClass('hidden');
 						$('.tab-content').prev().removeClass('hidden');
+						customLevelBtn.prop('disabled', false).data( { "name" : '업무구분', "value" : 'N'}).html('업무구분 <span class="caret">');
 					} else {
 						newTaskBtn.prop('disabled', true);
 						$('.tab-content').addClass('hidden');
 						$('.tab-content').prev().addClass('hidden');
 					}
-				} else {
-					newTaskBtn.prop('disabled', true);
-					$('.tab-content').addClass('hidden');
-					$('.tab-content').prev().addClass('hidden');
+
 				}
 
 				if(!isEmpty(td.eq(8).text())){
