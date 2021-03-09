@@ -292,6 +292,7 @@
 						async: false,
 						data: $('#loginForm').serialize()
 					}).done(function (json, textStatus, jqXHR) {
+						console.log(json);
 						if (isEmpty(json.rtnUrl)) {
 							alertMsg(json.msg);
 							//location.reload();

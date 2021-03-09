@@ -473,15 +473,15 @@
 					editUserObj.team = newAffiliation;
 				}
 
-				if (customLevelYn === 'N') {
+				// if (customLevelYn === 'N') {
 					if( !isEmpty(newTaskList) && !isEmpty(newTaskList) && ( newTaskName != td.eq(8).text() ) ) {
 						if (!$('#newTaskList').prev().prop('disabled')) {
 							editUserObj.task = newTaskList;
 						}
 					}
-				} else {
-					editUserObj.task = '';
-				}
+				// } else {
+				// 	editUserObj.task = '';
+				// }
 
 
 				if( !isEmpty(newUseOpt) && (newUswOptName != td.eq(10).text() ) ) {
@@ -750,15 +750,15 @@
 			async: false,
 			data: { oid: oid }
 		}).done((data, textStatus, jqXHR) => {
+			console.log(data);
 			let temp = ``;
-			temp += `<li data-value="N"><a href="#" tabindex="-1">업무구분</a></li>`;
+			// temp += `<li data-value="N"><a href="#" tabindex="-1">업무구분</a></li>`;
 			(data.data).forEach(custom => {
-				temp += `<li data-value="${'${custom.level_id}'}"><a href="#" tabindex="-1">${'${custom.name}'}</a></li>`;
+				temp += `<li data-value="${'${custom.level_id}'}" data-name="${'${custom.name}'}"><a href="#" tabindex="-1">${'${custom.name}'}</a></li>`;
 			});
 
 			$('#customLevelList').empty().append(temp);
-			$('#userList').empty().append(temp);
-			$('#userList').prepend('<li data-value=""><a href="#" tabindex="-1">전체</a></li>')
+			$('#userList').empty().append(temp).prepend('<li data-value=""><a href="#" tabindex="-1">전체</a></li>');
 		}).fail((jqXHR, textStatus, errorThrown) => {
 			console.error(textStatus);
 			errorMsg('처리중 오류가 발생했습니다.');
@@ -828,8 +828,8 @@
 					if (item.custom_level_yn === 'Y') {
 						$('#userList li').each(function() {
 							if ($(this).data('value') == item.custom_level_id) {
-								obj.custom_level_name = $(this).text();
-								obj.custom_level_id = $(this).data('value');
+								obj.custom_level_name = $(this).data("name");
+								obj.custom_level_id = $(this).data("value");
 							}
 						});
 					} else {
@@ -1125,7 +1125,7 @@
 								},
 								{
 									"sTitle": "<fmt:message key='userSetting.customAuth' />",
-									"mData": "custom_level_id",
+									"mData": "custom_level_name",
 									"mRender": function ( data, type, row ) {
 										if (isEmpty(data)) {
 											return '-';
@@ -1296,7 +1296,8 @@
 					
 					$("#userList").find("li").on( 'click', function(){
 						if(!isEmpty($(this).data("value"))){
-							filterColumn( "#userTable", "6", $(this).data("value"));
+							$("#userTable").DataTable().column("7").search("\\b"+$(this).data("name")+"\\b", true, false).draw();
+
 							let tr = $("#userTable").find("tbody tr.selected");
 							let btn = $("#btnGroup").find(".btn-type03");
 							if(tr.length <= 0){		
@@ -1309,7 +1310,7 @@
 								});
 							}
 						} else {
-							filterColumn("#userTable", "6", "");
+							filterColumn("#userTable", "7", "");
 						}
 					});
 					// $("#pageLengthList").find("li").on( 'click', function(){ 
@@ -1365,6 +1366,7 @@
 			}
 		}
 		getUserList(option, "destroy");
+		getCustomLevel();
 	}
 
 	function drawEmptyTable(target){
@@ -1980,7 +1982,7 @@
 								<div class="text-input-type"><input type="text" id="newMobileNum" name="new_mobil_num" placeholder="<fmt:message key='userSetting.input' />" maxlength="13"></div>
 								<small id="isValidNewMobileNum" class=" warning hidden"><fmt:message key='userSetting.errorTxt.7' /></small>
 							</div>
-							<div class="col-lg-2 col-sm-3"><span class="input-label offset asterisk"><fmt:message key='userSetting.auth' /></span></div>
+							<div class="col-lg-2 col-sm-3"><span class="input-label offset"><span class="asterisk"><fmt:message key='userSetting.auth' /></span></span></div>
 							<div class="col-lg-4 col-sm-9">
 								<div class="dropdown">
 									<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택"><fmt:message key='userSetting.select' /><span class="caret"></span></button>
