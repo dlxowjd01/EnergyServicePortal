@@ -265,7 +265,7 @@
 			let newPhoneNum = $("#newMobileNum").val();
 			let newAffiliation = $("#newAffiliation").val();
 			let newEmailAddr =$("#newEmailAddr").val();
-			let newTaskList = $("#newTaskList").prev().data("value");
+			let newTaskList = !isEmpty($("#newTaskList").prev().data("value")) ? 0 : $("#newTaskList").prev().data("value");
 			let newTaskName = $("#newTaskList").prev().data("name");
 
 			let newUseOpt = $('#newUseOpt').is(':checked') ? 'Y' : 'N';
@@ -277,12 +277,12 @@
 
 			let customLevelYn = 'N'
 			let customLevel = $('#customLevelList').prev().data('value');
-			if (customLevel === 'N') { customLevel = null; }
+			if (customLevel === 'N' || isEmpty(customLevel)) { customLevel = null; }
 			else { customLevelYn = 'Y'; }
 
 			let verify_level = $('#switchBtn').is(':checked') ? '1' : '0';
 
-			if (verify_level === '1') {
+			if (verify_level === '1' && $("#newMobileNum").val() == '') {
 				$('#isValidNewMobileNum').removeClass('hidden');
 				return false;
 			} else {
@@ -770,6 +770,12 @@
 			errorMsg('처리중 오류가 발생했습니다.');
 			return false;
 		});
+	}
+
+	const rtnDropdown = (target) => {
+		if (target === 'accLevel') {
+			validateAddForm();
+		}
 	}
 
 	// Get Ajax Data
@@ -2027,7 +2033,7 @@
 							</div>
 							<div class="col-lg-2 col-sm-3"><span class="input-label offset"><span class="asterisk"><fmt:message key='userSetting.auth' /></span></span></div>
 							<div class="col-lg-4 col-sm-9">
-								<div class="dropdown">
+								<div id="accLevel" class="dropdown">
 									<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택"><fmt:message key='userSetting.select' /><span class="caret"></span></button>
 									<ul id="newAccLevel" class="dropdown-menu">
 										<li data-value="1" data-name="시스템 관리자"><a href="#"><fmt:message key='userSetting.auth.admin' /></a></li>

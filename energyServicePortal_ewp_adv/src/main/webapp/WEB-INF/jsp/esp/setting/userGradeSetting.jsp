@@ -308,6 +308,8 @@
 						</li>
 					`;
 				});
+			} else {
+				optList += `<li><a href="javascript:void(0);">선택가능한 항목이 없습니다.</a></li>`;
 			}
 
 			if (!isEmpty(vppList)) {
@@ -338,7 +340,7 @@
 					optList += `<li data-value="${'${li.spc_id}'}"><a href="javascript:void(0);">${'${li.name}'}</a></li>`;
 				});
 			} else {
-				optList += `<li>선택가능한 항목이 없습니다.</li>`;
+				optList += `<li><a href="javascript:void(0);">선택가능한 항목이 없습니다.</a></li>`;
 			}
 			$('#spcOptList').empty().append(optList);
 			$('#spcOptList').prepend('<div class="dropdown-search"><input type="text" placeholder="발전소 검색" onkeyup="searchSite($(this).val())"></div>');
@@ -359,7 +361,7 @@
 					optList += `<li data-value="${'${li.sid}'}"><a href="javascript:void(0);">${'${li.name}'}</a></li>`;
 				});
 			} else {
-				optList += `<li>선택가능한 항목이 없습니다.</li>`;
+				optList += `<li><a href="javascript:void(0);">선택가능한 항목이 없습니다.</a></li>`;
 			}
 			$('#siteOptList').empty().append(optList);
 		}).fail((jqXHR, textStatus, errorThrown) => {
