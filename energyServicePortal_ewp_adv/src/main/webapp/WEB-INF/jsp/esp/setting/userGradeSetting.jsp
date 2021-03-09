@@ -633,13 +633,13 @@
 			});
 
 			if (siteList.length > 0) {
+				siteList.forEach(site => {
+					site['level_id'] = levelId;
+					delete site['name'];
+				});
+
 				const standard = $('#etcTable').data('standard');
 				if (!isEmpty(standard)) {
-					siteList.forEach(site => {
-						site['level_id'] = levelId;
-						delete site['name'];
-					});
-
 					standard.forEach(std => {
 						const target = siteList.find(e => e.kind === std.kind && e.id === std.id);
 						if (isEmpty(target)) deleteSite.push(std);
