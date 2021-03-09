@@ -788,3 +788,18 @@ function getTime(minusHour, onlyYmd = true) {
 
 	return (y+m+d+h+i+s) * 1;
 }
+
+function getDayInterval() {
+	const cur = new Date();
+
+	const [y, m, d, h, i, s] = [
+		String(cur.getFullYear()),
+		String(cur.getMonth() + 1).padStart(2, 0),
+		String(cur.getDate()).padStart(2, 0),
+	];
+
+	return [
+		(y+m+d+`000000`) * 1,
+		(y+m+d+`235959`) * 1
+	];
+}

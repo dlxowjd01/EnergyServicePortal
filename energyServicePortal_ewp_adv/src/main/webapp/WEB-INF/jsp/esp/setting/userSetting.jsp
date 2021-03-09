@@ -1929,7 +1929,7 @@
 				<div class="container-fluid">
 					<form name="add_user_form" id="updateUserForm" class="setting-form" autocomplete="off">
 						<div class="row">
-							<div class="col-lg-2 col-sm-3"><span class="input-label asterisk">ID</span></div>
+							<div class="col-lg-2 col-sm-3"><span class="input-label"><span class="asterisk">ID</span></span></div>
 							<div class="col-lg-4 col-sm-9">
 								<div class="flex-start">
 									<div class="text-input-type offset-width">
@@ -1944,7 +1944,7 @@
 								<small id="validId" class="text-blue text-sm hidden"><fmt:message key='userSetting.errorTxt.5' /></small>
 							</div>
 
-							<div class="col-lg-2 col-sm-3"><span class="input-label offset asterisk"><fmt:message key='userSetting.password' /></span></div>
+							<div class="col-lg-2 col-sm-3"><span class="input-label offset"><span class="asterisk"><fmt:message key='userSetting.password' /></span></span></div>
 							<div class="col-lg-4 col-sm-9">
 								<div class="text-input-type">
 									<input type="password" id="newUserPwd" name="new_pwd" placeholder="<fmt:message key='userSetting.input' />" minlength="8" maxlength="32">
@@ -1958,12 +1958,12 @@
 						</div>
 
 						<div class="row">
-							<div class="col-lg-2 col-sm-3"><span class="input-label asterisk"><fmt:message key='userSetting.name' /></span></div>
+							<div class="col-lg-2 col-sm-3"><span class="input-label"><span class="asterisk"><fmt:message key='userSetting.name' /></span></span></div>
 							<div class="col-lg-4 col-sm-9">
 								<div class="text-input-type"><input type="text" id="newFullName" name="new_full_name" placeholder="<fmt:message key='userSetting.input' />" minlength="3" maxlength="28"></div>
 								<small class="hidden warning"><fmt:message key='userSetting.errorTxt.6' /></small>
 							</div>
-							<div class="col-lg-2 col-sm-3"><span class="input-label offset asterisk"><fmt:message key='userSetting.password.confirm' /></span></div>
+							<div class="col-lg-2 col-sm-3"><span class="input-label offset"><span class="asterisk"><fmt:message key='userSetting.password' /></span></span></div>
 							<div class="col-lg-4 col-sm-9">
 								<div class="text-input-type">
 									<input type="password" id="confirmNewUserPwd" name="confirm_new_pwd" placeholder="<fmt:message key='userSetting.input' />" minlength="8" maxlength="32">

@@ -88,10 +88,17 @@
 	max-height: 684px;
 	height: 100%;
 	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+#userGradeSettingWrap #menuList > label {
+	width: 100%!important;
+	border: none!important;
+	padding: 0!important;
+	margin: 6px 16px!important;
 }
 
 #userGradeSettingWrap #menuList > div,
-#userGradeSettingWrap #menuList > label,
 #userGradeSettingWrap #menuList .panel-body {
 	width: 100%!important;
 	border: none!important;

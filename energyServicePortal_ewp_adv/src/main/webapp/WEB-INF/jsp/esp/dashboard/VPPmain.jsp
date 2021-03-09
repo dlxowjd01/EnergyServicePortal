@@ -567,148 +567,145 @@
 	});
 
 	// 복붙해서 지도만 띄워놨음 
-	
 
-	let makerObject = new Object();
-	let markers = [];
-	let map = new google.maps.Map(document.getElementById('vppMap'), {
-		mapTypeId: 'satellite',
-		zoom: 7.3,
-		mapTypeControl: false, //맵타입
-		streetViewControl: false, //스트리트뷰
-		fullscreenControl: false, //전체보기
-		center: {lat: 36.549012, lng: 127.788546} // center: new google.maps.LatLng(37.549012, 126.988546),
-	});
-	let geocoder = new google.maps.Geocoder();
-	let infowindow = new google.maps.InfoWindow();
-	
-	
-	const geocodeAddress = (siteAddr, siteId, siteName, siteLatlng, siteColor, operationText) => {
-		let latLng = new Object(),
-			dummy = siteLatlng.split(',');
-		latLng['lat'] = Number(dummy[0]);
-		latLng['lng'] = Number(dummy[1]);
+	const Map = {
+		makerObject : {},
+		markers : [],
+		map : new google.maps.Map(document.getElementById('vppMap'), {
+			mapTypeId: 'satellite',
+			zoom: 7.3,
+			mapTypeControl: false, //맵타입
+			streetViewControl: false, //스트리트뷰
+			fullscreenControl: false, //전체보기
+			center: {lat: 36.549012, lng: 127.788546} // center: new google.maps.LatLng(37.549012, 126.988546),
+		}),
+		geocoder : new google.maps.Geocoder(),
+		infowindow : new google.maps.InfoWindow(),
 
-		let marker = new google.maps.Marker({
-			map: map,
-			title: siteName,
-			position: latLng,
-			title: siteName,
-			icon: pinSymbol(siteColor),
-		});
+		geocodeAddress (siteAddr, siteId, siteName, siteLatlng, siteColor, operationText) {
+			let latLng = new Object(),
+				dummy = siteLatlng.split(',');
+			latLng['lat'] = Number(dummy[0]);
+			latLng['lng'] = Number(dummy[1]);
+
+			let marker = new google.maps.Marker({
+				map: Map.map,
+				title: siteName,
+				position: latLng,
+				title: siteName,
+				icon: pinSymbol(siteColor),
+			});
+			
+			if (langStatus === "EN") {
+				operationText = operationText.replace(`정상`, `Normal`);
+				operationText = operationText.replace(`트립`, `Trip`);
+				operationText = operationText.replace(`중지`, `Stop`);
+			}
+
+			let infoWIndowContent = '<div class="gmap-content"><span style="color:' + siteColor + '">' + operationText + '</span>' + siteName + '</div>';
+			marker.infowindow = new google.maps.InfoWindow({
+				content: infoWIndowContent
+			});
+
+			markers.push(marker);
+			makerObject[siteId] = marker;
+
+			google.maps.event.addListener(makerObject[siteId], 'click', (function (makerArray, siteId) {
+				return function () {
+					$.map(makerObject, function (val, key) {
+						if (!isEmpty(val)) {
+							val.infowindow.close();
+						}
+					});
+					makerObject[siteId].infowindow.open(map, makerObject[siteId]);
+					list_detail_open_main(siteId);
+				}
+			})(makerObject, siteId));
+		},
+
+		pinSymbol(color) {
+			if(color == "#f2a363"){
+				return {
+					url: '/img/map_icons/marker_orange.png',
+					height: 20,
+					width: 14
+				}
+			} else if(color == "#90caf3"){
+				return {
+					url: '/img/map_icons/marker_blue.png',
+					height: 20,
+					width: 14
+				}
+			} else if(color == "#ffd954"){
+				return {
+					url: '/img/map_icons/marker_yellow.png',
+					height: 20,
+					width: 14
+				}
+			} else if(color == "#878787"){
+				return {
+					url: '/img/map_icons/marker_grey.png',
+					height: 20,
+					width: 14
+				}
+			} else {
+				return {
+					url: '/img/map_icons/marker_red.png',
+					height: 20,
+					width: 14
+				}
+			}
+		},
+
+		list_detail_open_main(sid) {
+			$('.dbclickopen').each(function (item, index) {
+				var touchtime = 0;
+
+				if ($(this).data('sid') == sid) {
+					let target = $(this);
+					target.next().find('.di-wrap').slideDown(function () {
+						$('.gmain-wrap').animate({scrollTop: target.position().top}, 1000);
+					});
+				}
+			});
+		},
+
+		smoothZoom(map, max, cnt, zoom) {
+			if (zoom) {
+				if (cnt == 18) {
+					return false;
+				}
 		
-		if (langStatus === "EN") {
-			operationText = operationText.replace(`정상`, `Normal`);
-			operationText = operationText.replace(`트립`, `Trip`);
-			operationText = operationText.replace(`중지`, `Stop`);
-		}
-
-		let infoWIndowContent = '<div class="gmap-content"><span style="color:' + siteColor + '">' + operationText + '</span>' + siteName + '</div>';
-		marker.infowindow = new google.maps.InfoWindow({
-			content: infoWIndowContent
-		});
-
-		markers.push(marker);
-		makerObject[siteId] = marker;
-
-		google.maps.event.addListener(makerObject[siteId], 'click', (function (makerArray, siteId) {
-			return function () {
-				$.map(makerObject, function (val, key) {
-					if (!isEmpty(val)) {
-						val.infowindow.close();
-					}
-				});
-				makerObject[siteId].infowindow.open(map, makerObject[siteId]);
-				list_detail_open_main(siteId);
-			}
-		})(makerObject, siteId));
-
-
-	}
-
-	const pinSymbol = (color) => {
-		if(color == "#f2a363"){
-			return {
-				url: '/img/map_icons/marker_orange.png',
-				height: 20,
-				width: 14
-			}
-		} else if(color == "#90caf3"){
-			return {
-				url: '/img/map_icons/marker_blue.png',
-				height: 20,
-				width: 14
-			}
-		} else if(color == "#ffd954"){
-			return {
-				url: '/img/map_icons/marker_yellow.png',
-				height: 20,
-				width: 14
-			}
-		} else if(color == "#878787"){
-			return {
-				url: '/img/map_icons/marker_grey.png',
-				height: 20,
-				width: 14
-			}
-		} else {
-			return {
-				url: '/img/map_icons/marker_red.png',
-				height: 20,
-				width: 14
-			}
-		}
-	}
-
-	const list_detail_open_main = (sid) => {
-		$('.dbclickopen').each(function (item, index) {
-			var touchtime = 0;
-
-			if ($(this).data('sid') == sid) {
-				let target = $(this);
-				target.next().find('.di-wrap').slideDown(function () {
-					$('.gmain-wrap').animate({scrollTop: target.position().top}, 1000);
-				});
-			}
-		});
-	}
-	
-	const smoothZoom = (map, max, cnt, zoom) => {
-		if (zoom) {
-			if (cnt == 18) {
-				return false;
-			}
-
-			if (cnt >= max) {
-				return;
+				if (cnt >= max) {
+					return;
+				} else {
+					z = google.maps.event.addListener(map, 'zoom_changed', function (event) {
+						google.maps.event.removeListener(z);
+						smoothZoom(map, max, cnt + 1, true);
+					});
+					setTimeout(function () {
+						map.setZoom(cnt)
+					}, 80); // 80ms is what I found to work well on my system -- it might not work well on all systems
+				}
 			} else {
-				z = google.maps.event.addListener(map, 'zoom_changed', function (event) {
-					google.maps.event.removeListener(z);
-					smoothZoom(map, max, cnt + 1, true);
-				});
-				setTimeout(function () {
-					map.setZoom(cnt)
-				}, 80); // 80ms is what I found to work well on my system -- it might not work well on all systems
-			}
-		} else {
-			if (cnt == 6) {
-				return false;
-			}
-
-			if (cnt <= max) {
-				return;
-			} else {
-				z = google.maps.event.addListener(map, 'zoom_changed', function (event) {
-					google.maps.event.removeListener(z);
-					smoothZoom(map, max, cnt - 1, false);
-				});
-				setTimeout(function () {
-					map.setZoom(cnt)
-				}, 80); // 80ms is what I found to work well on my system -- it might not work well on all systems
+				if (cnt == 6) {
+					return false;
+				}
+		
+				if (cnt <= max) {
+					return;
+				} else {
+					z = google.maps.event.addListener(map, 'zoom_changed', function (event) {
+						google.maps.event.removeListener(z);
+						smoothZoom(map, max, cnt - 1, false);
+					});
+					setTimeout(function () {
+						map.setZoom(cnt)
+					}, 80); // 80ms is what I found to work well on my system -- it might not work well on all systems
+				}
 			}
 		}
 	}
-	
 
 	// 임시 --------
 	const tempId = "8b3c35b9-8229-447e-a9c2-b3c8e65bd622";
