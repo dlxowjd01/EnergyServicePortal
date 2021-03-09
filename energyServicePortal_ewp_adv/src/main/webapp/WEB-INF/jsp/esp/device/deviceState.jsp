@@ -1397,7 +1397,7 @@
 
 		let role = true;
 		$(':checkbox[name="site"]').each(function() {
-			if (!isEmpty($(this).data('role')) && $(this).data('role') === '2') {
+			if (!isEmpty($(this).data('role')) && $(this).data('role') === 2) {
 				role = false;
 			}
 		});

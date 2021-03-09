@@ -1008,8 +1008,11 @@
 								`;
 								let addBtnStr = `
 									<button type="button" class="btn-type fr mb-20 ml-6" onclick="updateModal('add')"><fmt:message key='userSetting.add' /></button>
-									<button type="button" class="btn-type fr mb-20" onclick="location.href='/setting/userGradeSetting.do'">설정</button>
 								`;
+
+								if (role === '1') {
+									addBtnStr += `<button type="button" class="btn-type fr mb-20" onclick="location.href='/setting/userGradeSetting.do'">설정</button>`;
+								}
 								$("#userTable_wrapper").append($(str)).prepend($(addBtnStr));
 
 								// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
@@ -1205,8 +1208,11 @@
 								`;
 								let addBtnStr = `
 									<button type="button" class="btn-type fr mb-20 ml-6" onclick="updateModal('add')"><fmt:message key='userSetting.add' /></button>
-									<button type="button" class="btn-type fr mb-20" onclick="location.href='/setting/userGradeSetting.do'">설정</button>
 								`;
+								if (role === '1') {
+									addBtnStr += `<button type="button" class="btn-type fr mb-20" onclick="location.href='/setting/userGradeSetting.do'">설정</button>`;
+								}
+
 								$("#userTable_wrapper").append($(str)).prepend($(addBtnStr));
 
 								// this.api().column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
