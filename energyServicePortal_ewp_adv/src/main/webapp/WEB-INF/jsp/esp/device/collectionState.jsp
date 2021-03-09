@@ -323,7 +323,7 @@
 	const beforeHour = new Date(now.getFullYear(), now.getMonth(), now.getDay(), now.getHours() - 1, now.getMinutes(), now.getSeconds()).format("yyyyMMddHHmmss");
 	const searchFilter = JSON.stringify({'include': [{'relation': 'rtus'}]});
 
-	$(function () { 
+	$(function () {
 		setInitList('siteULList'); //사업소 리스트 초기화
 		setInitList('rtuSiteULList');
 		siteMakeList(); //사업소 리스트 그리기
