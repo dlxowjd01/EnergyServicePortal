@@ -50,7 +50,7 @@
 						<div class="line2" id="yearEnergyValue"></div>
 					</div>
 					<div class="box">
-						<div class="line1"><fmt:message key='smain.totalMonthDevTime' /></div>
+						<div class="line1"><fmt:message key='smain.avgMonthDevTime' /></div>
 						<div class="line2" id="monthGenHours"></div>
 					</div>
 					<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
