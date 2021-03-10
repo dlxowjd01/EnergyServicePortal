@@ -133,7 +133,7 @@
 			<h2 class="title">수익 현황</h2>
 			<div>
 				<div class="vpp-1-4-1">
-					<div> 
+					<div id="moneyStatusGraph"> 
 						<!-- 그래프 -->
 					</div>
 				</div>
@@ -624,32 +624,48 @@
 				chart: {
 					backgroundColor: "transparent",
 					plotBorderWidth: 0,
+					height: 103
 				},
 				title: {
 					text: '95.1%',
 					align: 'center',
 					verticalAlign: 'middle',
 					y: 0,
-					fontSize: 15
+					style: {
+						fontSize: "15px",
+						color: "var(--white87)",
+						fontWeight: "normal"
+					}
 				},
 				plotOptions: {
 					pie: {
 						startAngle: 0,
 						endAngle: 360,
 						center: ['50%', '50%'],
-						size: '100px'
+						size: '98px'
 					}
 				},
 				series: [{
 					type: 'pie',
 					name: '예측',
 					innerSize: '50%',
+					color: "#cfcfcf",
 					data: [
-						['asd', 95.1],
+						['예측', 95.1],
 					]
 				}]
 			});
 		}
+	}
+
+	const MoneyStatus = {
+		init() {
+			
+		},
+
+		refresh() {
+			
+		},
 	}
 
 	// 자원 현황
@@ -960,11 +976,7 @@
 				},
 				columnDefs: [
 					{targets: [0], width: "185px"},
-					{targets: [1], width: "60px"},
-					{targets: [2], width: "60px"},
-					{targets: [3], width: "60px"},
-					{targets: [4], width: "60px"},
-					{targets: [5], width: "60px"}
+					{targets: [1, 2, 3, 4, 5], width: "60px"},
 				],
 				dom: 'tip',
 			});

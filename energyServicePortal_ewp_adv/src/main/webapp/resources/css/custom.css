@@ -11410,3 +11410,14 @@ th > span.asterisk:after {
 .highcharts-credits {
 	display: none!important;
 }
+
+.col-scroll {
+	height: 400px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	padding-right: 10px;
+}
+
+.col-scroll .tab-content {
+	overflow-x: hidden;
+}

@@ -125,86 +125,88 @@
 					<button type="button" class="btn-type modify_btn"><fmt:message key='colState.table.update' /></button>
 				</div>
 			</div>
-			<div class="row">
-				<div class="w-50">
-					<h2 class="list-title"><fmt:message key='colState.detail.title' /></h2>
-					<ul id="rtuDeviceInfo" class="device-list">
-						<li><fmt:message key='colState.detail.number' /><span class="data-val"></span></li>
-						<li><fmt:message key='colState.detail.version' /><span class="data-val"></span></li>
-					</ul>
-				</div>
-				<div class="w-50">
-					<h2 class="list-title"><fmt:message key='colState.detail.status' /></h2>
-					<ul id="deviceStatus" class="device-list">
-						<li><fmt:message key='colState.detail.cpu' /><span class="data-val"></span></li>
-						<li><fmt:message key='colState.detail.memory' /><span class="data-val"></span></li>
-						<li><fmt:message key='colState.detail.disk' /><span class="data-val"></span></li>
-						<li><fmt:message key='colState.detail.temperature' /><span class="data-val"></span></li>
-					</ul>
-				</div>
-			</div>
-
-			<div class="table-wrap-type collect-wrap">
-				<ul class="nav nav-tabs">
-					<li class="nav-item active">
-						<a class="nav-link" data-toggle="tab" href="#deviceList"><fmt:message key='colState.detail.connected' /></a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" data-toggle="tab" href="#commandSend"><fmt:message key='colState.detail.command' /></a>
-					</li>
-				</ul>
-				<div class="tab-content">
-					<div class="tab-pane fade active in spc-table-row st-edit panel-collapse collapse" id="deviceList">
-						<div class="table-top clear"></div>
-						<div class="collect-wrap table-scroll">
-							<table id="detailInfoTable" class="history-table">
-								<thead>
-								<tr>
-									<th><fmt:message key='colState.detail.type' /></th>
-									<th><fmt:message key='colState.detail.name' /></th>
-									<th><fmt:message key='colState.detail.networkType' /></th>
-									<th>Baud Rate</th>
-									<th><fmt:message key='colState.detail.size' /></th>
-									<th><fmt:message key='colState.detail.info' /></th>
-								</tr>
-								</thead>
-								<tbody>
-								<tr>
-									<td colspan="6"><fmt:message key='colState.detail.alert' /></td>
-								</tr>
-								</tbody>
-							</table>
-						</div>
+			<div class="col-scroll">
+				<div class="row">
+					<div class="w-50">
+						<h2 class="list-title"><fmt:message key='colState.detail.title' /></h2>
+						<ul id="rtuDeviceInfo" class="device-list">
+							<li><fmt:message key='colState.detail.number' /><span class="data-val"></span></li>
+							<li><fmt:message key='colState.detail.version' /><span class="data-val"></span></li>
+						</ul>
 					</div>
-					<div class="tab-pane fade spc-table-row st-edit panel-collapse collapse" id="commandSend">
-						<div class="row">
-							<div class="w-100">
-								<div id="rtuCommand" class="command-list">
-									<div class="flex-group">
-										<span class="sm-title"><fmt:message key='colState.detail.sendCmd.command' /></span>
-										<div class="dropdown" id="command">
-											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='colState.select' />"><fmt:message key='colState.detail.sendCmd.select' /><span class="caret"></span></button>
-											<ul class="dropdown-menu" role="menu">
-												<li data-value="kpx_targetPower"><a href="javascript:void(0);" tabindex="-1">kpx_targetPower</a></li>
-											</ul>
+					<div class="w-50">
+						<h2 class="list-title"><fmt:message key='colState.detail.status' /></h2>
+						<ul id="deviceStatus" class="device-list">
+							<li><fmt:message key='colState.detail.cpu' /><span class="data-val"></span></li>
+							<li><fmt:message key='colState.detail.memory' /><span class="data-val"></span></li>
+							<li><fmt:message key='colState.detail.disk' /><span class="data-val"></span></li>
+							<li><fmt:message key='colState.detail.temperature' /><span class="data-val"></span></li>
+						</ul>
+					</div>
+				</div>
+	
+				<div class="table-wrap-type collect-wrap">
+					<ul class="nav nav-tabs">
+						<li class="nav-item active">
+							<a class="nav-link" data-toggle="tab" href="#deviceList"><fmt:message key='colState.detail.connected' /></a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" data-toggle="tab" href="#commandSend"><fmt:message key='colState.detail.command' /></a>
+						</li>
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane fade active in spc-table-row st-edit panel-collapse collapse" id="deviceList">
+							<div class="table-top clear"></div>
+							<div class="collect-wrap table-scroll">
+								<table id="detailInfoTable" class="history-table">
+									<thead>
+									<tr>
+										<th><fmt:message key='colState.detail.type' /></th>
+										<th><fmt:message key='colState.detail.name' /></th>
+										<th><fmt:message key='colState.detail.networkType' /></th>
+										<th>Baud Rate</th>
+										<th><fmt:message key='colState.detail.size' /></th>
+										<th><fmt:message key='colState.detail.info' /></th>
+									</tr>
+									</thead>
+									<tbody>
+									<tr>
+										<td colspan="6"><fmt:message key='colState.detail.alert' /></td>
+									</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div class="tab-pane fade spc-table-row st-edit panel-collapse collapse" id="commandSend">
+							<div class="row">
+								<div class="w-100">
+									<div id="rtuCommand" class="command-list">
+										<div class="flex-group">
+											<span class="sm-title"><fmt:message key='colState.detail.sendCmd.command' /></span>
+											<div class="dropdown" id="command">
+												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='colState.select' />"><fmt:message key='colState.detail.sendCmd.select' /><span class="caret"></span></button>
+												<ul class="dropdown-menu" role="menu">
+													<li data-value="kpx_targetPower"><a href="javascript:void(0);" tabindex="-1">kpx_targetPower</a></li>
+												</ul>
+											</div>
 										</div>
-									</div>
-									<div class="flex-group">
-										<span class="sm-title"><fmt:message key='colState.detail.sendCmd.option' /></span>
-										<div class="dropdown" id="commandKey">
-											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='colState.select' />"><fmt:message key='colState.detail.sendCmd.select' /><span class="caret"></span></button>
-											<ul class="dropdown-menu" role="menu" id="selectCmdOptList">
-												<li data-value="targetPower"><a href="javascript:void(0);" tabindex="-1"><fmt:message key='colState.detail.sendCmd.target' /></a></li>
-											</ul>
+										<div class="flex-group">
+											<span class="sm-title"><fmt:message key='colState.detail.sendCmd.option' /></span>
+											<div class="dropdown" id="commandKey">
+												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='colState.select' />"><fmt:message key='colState.detail.sendCmd.select' /><span class="caret"></span></button>
+												<ul class="dropdown-menu" role="menu" id="selectCmdOptList">
+													<li data-value="targetPower"><a href="javascript:void(0);" tabindex="-1"><fmt:message key='colState.detail.sendCmd.target' /></a></li>
+												</ul>
+											</div>
 										</div>
-									</div>
-									<div class="flex-group">
-										<div class="text-input-type">
-											<input type="text" id="optionVal" name="optionVal" placeholder="">
-										</div>
-										<div class="btn-wrap-type02 flex-start">
-											<%--								<button type="button" class="btn-type03"><fmt:message key='colState.detail.sendCmd.del' /></button>--%>
-											<button type="button" class="btn-type" onclick="commandModal();"><fmt:message key='colState.detail.sendCmd.send' /></button>
+										<div class="flex-group">
+											<div class="text-input-type">
+												<input type="text" id="optionVal" name="optionVal" placeholder="">
+											</div>
+											<div class="btn-wrap-type02 flex-start">
+												<%--								<button type="button" class="btn-type03"><fmt:message key='colState.detail.sendCmd.del' /></button>--%>
+												<button type="button" class="btn-type" onclick="commandModal();"><fmt:message key='colState.detail.sendCmd.send' /></button>
+											</div>
 										</div>
 									</div>
 								</div>
