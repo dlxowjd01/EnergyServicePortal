@@ -969,7 +969,7 @@
 
 	/**
 	 * 차트 데이터 정제
-	 */ 
+	 */
 	const chartDataDraw = function () {
 		let num = 0;
 		let stack = 0;

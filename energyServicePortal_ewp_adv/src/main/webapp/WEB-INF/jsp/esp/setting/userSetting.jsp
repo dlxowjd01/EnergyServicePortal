@@ -1000,12 +1000,13 @@
 										--><button type="button" disabled class="btn-type03" onclick="updateModal('delete')"><fmt:message key='userSetting.deleteSelected' /></button><!--
 								--></div>
 								`;
-								let addBtnStr = `
-									<button type="button" class="btn-type fr mb-20 ml-6" onclick="updateModal('add')"><fmt:message key='userSetting.add' /></button>
-								`;
 
+								let addBtnStr = ``;
 								if (role === '1') {
-									addBtnStr += `<button type="button" class="btn-type fr mb-20" onclick="location.href='/setting/userGradeSetting.do'">설정</button>`;
+									addBtnStr = `
+										<button type="button" class="btn-type fr mb-20 ml-6" onclick="updateModal('add')"><fmt:message key='userSetting.add' /></button>
+										<button type="button" class="btn-type fr mb-20" onclick="location.href='/setting/userGradeSetting.do'">설정</button>
+									`;
 								}
 								$("#userTable_wrapper").append($(str)).prepend($(addBtnStr));
 
@@ -1200,11 +1201,13 @@
 										--><button type="button" disabled class="btn-type03" onclick="updateModal('delete')"><fmt:message key='userSetting.deleteSelected' /></button><!--
 								--></div>
 								`;
-								let addBtnStr = `
-									<button type="button" class="btn-type fr mb-20 ml-6" onclick="updateModal('add')"><fmt:message key='userSetting.add' /></button>
-								`;
+
+								let addBtnStr = ``;
 								if (role === '1') {
-									addBtnStr += `<button type="button" class="btn-type fr mb-20" onclick="location.href='/setting/userGradeSetting.do'">설정</button>`;
+									addBtnStr = `
+										<button type="button" class="btn-type fr mb-20 ml-6" onclick="updateModal('add')"><fmt:message key='userSetting.add' /></button>
+										<button type="button" class="btn-type fr mb-20" onclick="location.href='/setting/userGradeSetting.do'">설정</button>
+									`;
 								}
 
 								$("#userTable_wrapper").append($(str)).prepend($(addBtnStr));
@@ -2036,7 +2039,9 @@
 								<div id="accLevel" class="dropdown">
 									<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택"><fmt:message key='userSetting.select' /><span class="caret"></span></button>
 									<ul id="newAccLevel" class="dropdown-menu">
-										<li data-value="1" data-name="시스템 관리자"><a href="#"><fmt:message key='userSetting.auth.admin' /></a></li>
+										<c:if test="${role eq '1'}">
+											<li data-value="1" data-name="시스템 관리자"><a href="#"><fmt:message key='userSetting.auth.admin' /></a></li>
+										</c:if>
 										<li data-value="2" data-name="일반 사용자"><a href="#"><fmt:message key='userSetting.auth.user' /></a></li>
 									</ul>
 								</div>
