@@ -1396,7 +1396,7 @@
 			inputArr = popup.find('input');
 
 		let role = true;
-		$(':checkbox[name="site"]').each(function() {
+		$(':checkbox[name="site"]:checked').each(function() {
 			if (!isEmpty($(this).data('role')) && $(this).data('role') === 2) {
 				role = false;
 			}
@@ -1541,7 +1541,7 @@
 		}
 
 		let role = true;
-		$(':checkbox[name="site"]').each(function() {
+		$(':checkbox[name="site"]:checked').each(function() {
 			if (!isEmpty($(this).data('role')) && $(this).data('role') === 2) {
 				role = false;
 			}
