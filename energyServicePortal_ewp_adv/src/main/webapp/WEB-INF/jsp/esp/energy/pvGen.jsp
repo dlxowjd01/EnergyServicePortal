@@ -146,7 +146,7 @@
 		<div class="indiv chart-pv table-box">
 			<div class="table-save-box"><a href="#;" class="btn-save"><fmt:message key="renewablesgen.4.dataextracts" /></a></div>
 			<div class="table-top clear">
-				<h2 class="ntit fl"><fmt:message key="renewablesgen.4.powergenerationchart" /></h2>
+				<h2 class="ntit fl"><fmt:message key="renewablesgen.4.powergenerationchart2" /></h2>
 				<span class="fr"><a href="#;" class="btn-fold"><fmt:message key="pvGen.table.fold" /></a></span>
 			</div>
 			<div class="table-wrapper">
@@ -785,6 +785,7 @@
 
 						span.innerHTML = grid.deviceNm
 						td.className = 'bullet';
+						td.style = 'text-align: left !important';
 						td.appendChild(span);
 						tbodyTr.appendChild(td);
 
@@ -843,6 +844,7 @@
 					if (index === 0) {
 						span.innerHTML = grid.deviceNm
 						td.className = 'bullet';
+						td.style = 'text-align: left !important';
 						td.appendChild(span);
 						tbodyTr.appendChild(td);
 
@@ -891,6 +893,9 @@
 				document.getElementById(target).appendChild(table);
 			}
 		});
+
+		if (isEmpty(document.getElementById(target).innerHTML)) document.getElementById(target).closest('div.col-12').classList.add('hidden');
+		else  document.getElementById(target).closest('div.col-12').classList.remove('hidden');
 
 		if (target === 'table-generation') {
 			drawPage('table-irradiationPoa');
