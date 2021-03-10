@@ -647,7 +647,7 @@
 					const sName = $('#selectedRTU').data('sName');
 					let logTable = $('#logTable').find('tbody');
 					logTable.empty()
-					let totalPage = isEmpty(result.count) ? Math.round(result.data.length / 5) : Math.round(result.count / 5);
+					let totalPage = isEmpty(result.count) ? Math.ceil(result.data.length / 5) : Math.ceil(result.count / 5);
 					collectionMakeNavigation(rids, page, totalPage);
 
 					result.data.forEach(log => {
@@ -687,7 +687,7 @@
 					//데이터 세팅
 					let logTable = $('#logTable').find('tbody');
 					logTable.empty()
-					let totalPage = Math.round(result.count / 5);
+					let totalPage = Math.ceil(result.count / 5);
 					collectionMakeNavigation(rids, page, totalPage);
 					result.logs.forEach(log => {
 						let dTimestamp = new Date(log.dTimestamp).format('yyyy-MM-dd HH:mm:ss');
