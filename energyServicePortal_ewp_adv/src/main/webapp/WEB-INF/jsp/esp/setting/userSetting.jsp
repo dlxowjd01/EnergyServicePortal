@@ -76,13 +76,6 @@
 			let password = $("#newUserPwd").val();
 			password == $(this).val() ? $("#pwdUserMatched").addClass("hidden") : $("#pwdUserMatched").removeClass("hidden");
 			let validated = $("#pwdUserMatched").hasClass("hidden");
-			if (validated) {
-				$("#addUserBtn").removeClass("disabled");
-				$("#addUserBtn").prop("disabled", false);
-			} else {
-				$("#addUserBtn").addClass("disabled");
-				$("#addUserBtn").prop("disabled", true);
-			}
 		});
 
 		$("#newFullName").on('input', function(evt) {
@@ -2027,7 +2020,7 @@
 									<input type="password" id="confirmNewUserPwd" name="confirm_new_pwd" placeholder="<fmt:message key='userSetting.input' />" minlength="8" maxlength="32">
 								</div>
 								<div class="flex-start warning-wrapper">
-									<small id="pwdUserMatched" class="warning-text hidden">비밀번호가 일치하지 않습니다.</small>
+									<small id="pwdUserMatched" class="warning hidden">비밀번호가 일치하지 않습니다.</small>
 								</div>
 							</div>
 						</div>
