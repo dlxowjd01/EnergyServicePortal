@@ -401,6 +401,8 @@
 				menuList.forEach(menu => {
 					let menuName = JSON.parse(menu.name);
 					let menuCode = menu.code;
+					let isChecked = '';
+					if (menuCode === 'dashboard') isChecked = 'checked';
 
 					if (menu.parent === null) {
 						let subMenuList = ``;
@@ -409,9 +411,11 @@
 						menuList.forEach(subMenu => {
 							if (menuCode === subMenu.parent) {
 								let subName = JSON.parse(subMenu.name);
+								let isSubChecked = '';
+								if (subMenu.code === 'gmain') isSubChecked = 'checked';
 								subMenuList += `
 									<li>
-										<input type="checkbox" id="menu-${'${subMenu.code}'}" name="menu" data-parent="${'${subMenu.parent}'}" value="${'${subMenu.code}'}">
+										<input type="checkbox" id="menu-${'${subMenu.code}'}" name="menu" data-parent="${'${subMenu.parent}'}" ${'${isSubChecked}'} value="${'${subMenu.code}'}">
 										<label class="custom-checkbox" for="menu-${'${subMenu.code}'}">${'${subName.kr}'}</label>
 									</li>
 								`;
@@ -438,7 +442,7 @@
 							<div class="panel panel-default no-border">
 								<div class="panel-heading no-padding" role="tab">
 									<h4 class="panel-title">
-										<input type="checkbox" id="menu-${'${menu.code}'}" name="menu" value="${'${menu.code}'}">
+										<input type="checkbox" id="menu-${'${menu.code}'}" name="menu" ${'${isChecked}'} value="${'${menu.code}'}">
 										<label class="custom-checkbox" for="menu-${'${menu.code}'}">${'${menuName.kr}'}</label>
 										${'${subDownButton}'}
 									</h4>
@@ -821,7 +825,7 @@
 			<div class="row">
 				<div class="btn-wrap-type-r">
 					<button type="button" class="btn-type03 big" onclick="location.href='/setting/userSetting.do'">취소</button>
-					<button type="button" class="btn-type big" onclick="addCustomLevel('POST');" id="addLevel">저장</button>
+					<button type="button" class="btn-type big" onclick="addCustomLevel('POST₩');" id="addLevel">저장</button>
 				</div>
 			</div>
 		</div>
