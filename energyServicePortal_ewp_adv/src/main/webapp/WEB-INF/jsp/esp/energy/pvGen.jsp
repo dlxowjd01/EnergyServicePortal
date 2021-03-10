@@ -202,14 +202,15 @@
 
 		$('.btn-save').on('click', function (e) {
 			let excelName = '발전이력';
-			let $val = $('#table-desktop').find('tbody');
+			let $val = $(this).parents('div.col-12').find('.chart-table').find('tbody');
+			let thisId = $(this).parents('div.col-12').find('.chart-table').attr('id');
 			let cnt = $val.length;
 
 			if (cnt < 1) {
 				alert('<fmt:message key="pvGen.alert.1" />');
 			} else {
 				if (confirm('<fmt:message key="pvGen.confirm.1" />')) {
-					tableToExcel('table-desktop', excelName, e);
+					tableToExcel(thisId, excelName, e);
 				}
 			}
 		});
@@ -709,9 +710,8 @@
 				});
 			}
 
-			$('#loadingCircle').hide();
-
 			drawPage('table-generation');
+			drawPage('table-irradiationPoa');
 		}).catch(error => {
 			console.error(error);
 			$('#loadingCircle').hide();
@@ -726,7 +726,6 @@
 
 		standard = makeStandard(interval);
 		let gridData = gridDataMake(target);
-		console.log(gridData);
 
 		//기준일 && 이름 순으로 정렬
 		gridData.sort(
@@ -776,6 +775,7 @@
 				items.forEach((item, index) => {
 					let th = document.createElement('th')
 						, td = document.createElement('td')
+					td.style = 'text-align: left !important';
 
 					if (index === 0) {
 						let standardDate = item.standard.substr(0, stdLength);
@@ -786,11 +786,13 @@
 						span.innerHTML = grid.deviceNm
 						td.className = 'bullet';
 						td.style = 'text-align: left !important';
+
 						td.appendChild(span);
 						tbodyTr.appendChild(td);
 
 						th = document.createElement('th');
 						td = document.createElement('td');
+						td.style = 'text-align: left !important';
 					}
 
 					th.innerHTML = (colLength > 2) ? (item.standard.substr(stdLength, colLength)).replace(/(\d{2})(\d{2})/, '$1:$2') : (item.standard.substr(stdLength, colLength));
@@ -799,7 +801,7 @@
 					if (grid.type === 'time') {
 						td.innerHTML = (item.timeValue !== '-') ? Math.round(item.timeValue * 100) / 100 : item.timeValue;
 					} else if (grid.type === 'SENSOR_SOLAR') {
-						td.innerHTML = (item.timeValue !== '-') ? Math.round((item.timeValue) * 100) / 100 : item.timeValue;
+						td.innerHTML = (item.timeValue !== '-') ? numberComma(Math.round((item.timeValue) * 100) / 100) : item.timeValue;
 					} else {
 						td.innerHTML = (item.timeValue !== '-') ? displayNumberFixedUnit(item.timeValue, 'Wh', 'kWh', 0)[0] : item.timeValue;
 					}
@@ -810,6 +812,7 @@
 					if ((items.length - 1) === index) {
 						th = document.createElement('th');
 						td = document.createElement('td');
+						td.style = 'text-align: right !important';
 
 						th.innerHTML = '<fmt:message key="pvGen.total" />';
 						theadTr.appendChild(th);
@@ -817,7 +820,7 @@
 						if (grid.type === 'time') {
 							td.innerHTML = Math.round(totalSum * 100) / 100;
 						} else if (grid.type === 'SENSOR_SOLAR') {
-							td.innerHTML = Math.round((totalSum) * 100) / 100;
+							td.innerHTML = numberComma(Math.round((totalSum) * 100) / 100);
 						} else {
 							td.innerHTML = displayNumberFixedUnit(totalSum, 'Wh', 'kWh', 0)[0];
 						}
@@ -840,6 +843,7 @@
 
 				items.forEach((item, index) => {
 					let td = document.createElement('td');
+					td.style = 'text-align: left !important';
 
 					if (index === 0) {
 						span.innerHTML = grid.deviceNm
@@ -849,11 +853,12 @@
 						tbodyTr.appendChild(td);
 
 						td = document.createElement('td');
+						td.style = 'text-align: left !important';
 
 						if (grid.type === 'time') {
 							td.innerHTML = (item.timeValue !== '-') ? Math.round(item.timeValue * 100) / 100 : item.timeValue;
 						} else if (grid.type === 'SENSOR_SOLAR') {
-							td.innerHTML = (item.timeValue !== '-') ? Math.round((item.timeValue) * 100) / 100 : item.timeValue;
+							td.innerHTML = (item.timeValue !== '-') ? numberComma(Math.round((item.timeValue) * 100) / 100) : item.timeValue;
 						} else {
 							td.innerHTML = (item.timeValue !== '-') ? displayNumberFixedUnit(item.timeValue, 'Wh', 'kWh', 0)[0] : item.timeValue;
 						}
@@ -864,7 +869,7 @@
 					if (grid.type === 'time') {
 						td.innerHTML = (item.timeValue !== '-') ? Math.round(item.timeValue * 100) / 100 : item.timeValue;
 					} else if (grid.type === 'SENSOR_SOLAR') {
-						td.innerHTML = (item.timeValue !== '-') ? Math.round((item.timeValue) * 100) / 100 : item.timeValue;
+						td.innerHTML = (item.timeValue !== '-') ? numberComma(Math.round((item.timeValue) * 100) / 100) : item.timeValue;
 					} else {
 						td.innerHTML = (item.timeValue !== '-') ? displayNumberFixedUnit(item.timeValue, 'Wh', 'kWh', 0)[0] : item.timeValue;
 					}
@@ -874,11 +879,12 @@
 
 					if ((items.length - 1) === index) {
 						td = document.createElement('td');
+						td.style = 'text-align: right !important';
 
 						if (grid.type === 'time') {
 							td.innerHTML = Math.round(totalSum * 100) / 100;
 						} else if (grid.type === 'SENSOR_SOLAR') {
-							td.innerHTML = Math.round((totalSum) * 100) / 100;
+							td.innerHTML = numberComma(Math.round((totalSum) * 100) / 100);
 						} else {
 							td.innerHTML = displayNumberFixedUnit(totalSum, 'Wh', 'kWh', 0)[0];
 						}
@@ -888,7 +894,6 @@
 				table.querySelector('tbody').appendChild(tbodyTr);
 			}
 
-			console.log(gridData.length);
 			if ((gridData.length - 1) === index) {
 				document.getElementById(target).appendChild(table);
 			}
@@ -898,8 +903,6 @@
 		else  document.getElementById(target).closest('div.col-12').classList.remove('hidden');
 
 		if (target === 'table-generation') {
-			drawPage('table-irradiationPoa');
-		} else {
 			chartDataDraw();
 		}
 	}
@@ -1335,6 +1338,7 @@
 			chart.destroy();
 		}
 
+		$('#loadingCircle').hide();
 		let option = {
 			chart: {
 				renderTo: 'chart2',
