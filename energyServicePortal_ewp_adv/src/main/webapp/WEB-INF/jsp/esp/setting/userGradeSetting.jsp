@@ -576,11 +576,18 @@
 
 	const addCustomLevel = (method) => {
 		const cstNm = $('#customName').val().trim();
+		const siteList = etcTable.rows().data().toArray();
+
 		if (isEmpty(cstNm)) {
 			$('#isCustomNameEmpty').removeClass('hidden');
 			return false;
 		} else {
 			$('#isCustomNameEmpty').addClass('hidden');
+		}
+
+		if (siteList.length === 0) {
+			alert('추가 목록에 하나이상의 발전소를 추가해 주세요.');
+			return false;
 		}
 
 		if ($(':checkbox[name="menu"]:checked').length === 0) {
@@ -617,7 +624,6 @@
 			const registerApi = new Array();
 			const menuList = new Array();
 			const deleteMenu = new Array();
-			const siteList = etcTable.rows().data().toArray();
 			const deleteSite = new Array();
 
 			$(':checkbox[name="menu"]').each(function() {
@@ -825,7 +831,7 @@
 			<div class="row">
 				<div class="btn-wrap-type-r">
 					<button type="button" class="btn-type03 big" onclick="location.href='/setting/userSetting.do'">취소</button>
-					<button type="button" class="btn-type big" onclick="addCustomLevel('POST₩');" id="addLevel">저장</button>
+					<button type="button" class="btn-type big" onclick="addCustomLevel('POST');" id="addLevel">저장</button>
 				</div>
 			</div>
 		</div>
