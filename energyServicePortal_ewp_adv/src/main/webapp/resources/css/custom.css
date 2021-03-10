@@ -11349,11 +11349,6 @@ th > span.asterisk:after {
 	top: -20px;
 }
 
-table th,
-table td {
-	text-align: center!important;
-}
-
 .status-button {
 	font-size: 12px;
 	padding: 4px 8px;

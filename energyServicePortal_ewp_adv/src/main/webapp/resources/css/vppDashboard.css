@@ -537,3 +537,7 @@ h2.title {
 	height: 220px;
 	border: 1px solid rgba(255, 255, 255, 0.2)
 }
+
+.dataTable.no-footer.no-stripe thead th, .dataTables_scrollHeadInner>.dataTable td, .dataTables_scrollHeadInner>.dataTable th {
+	vertical-align: middle;
+}

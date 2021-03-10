@@ -329,72 +329,6 @@
 
 <script>
 	$(_ => {
-		// 임시
-		$("#vpp-3-2-dataTable").DataTable({
-			autoWidth: false,
-			"table-layout": "fixed",
-			scrollX: false,
-			scrollY: '720px',
-			scrollCollapse: true,
-			sortable: true,
-			paging: false,
-			columns: [
-				{
-					title: "사이트 명",
-					// data: 'siteName',
-					// render: function (data, type, full, rowIndex) {
-					// },
-					className: 'dt-head-left dt-body-left'
-				},
-				{
-					title: "현재출력",
-					// data: 'siteName',
-					// render: function (data, type, full, rowIndex) {
-					// },
-					className: 'dt-head-left dt-body-right'
-				},
-				{
-					title: "현시각 발전",
-					// data: 'siteName',
-					// render: function (data, type, full, rowIndex) {
-					// },
-					className: 'dt-head-left dt-body-right'
-				},
-				{
-					title: "현시각 예측",
-					// data: 'siteName',
-					// render: function (data, type, full, rowIndex) {
-					// },
-					className: 'dt-head-left dt-body-right'
-				},
-				{
-					title: "금일 오차",
-					// data: 'siteName',
-					// render: function (data, type, full, rowIndex) {
-					// },
-					className: 'dt-head-left dt-body-right'
-				},
-				{
-					title: "주간 오차",
-					// data: 'siteName',
-					// render: function (data, type, full, rowIndex) {
-					// },
-					className: 'dt-head-left dt-body-right'
-				},
-			],
-			language: {
-				emptyTable: i18nManager.tr("gdash.the_data_you_have_queried_does_not_exist"),
-				zeroRecords:  i18nManager.tr("gdash.your_search_has_not_returned_results"),
-				infoEmpty: "",
-				paginate: {
-					previous: "",
-					next: "",
-				},
-				info: "",
-			},
-			dom: 'tip',
-		}).columns.adjust().draw();
-
 		$.when(
 			$.ajax({
 				type: "GET",
@@ -438,7 +372,7 @@
 					}),
 					async: false
 				}).done(r3 => {
-					console.log(r3)
+					App.acc = r3.data.data;
 				});
 
 				return r1;
@@ -463,6 +397,7 @@
 		sites: [],
 		sids: [],
 		energyData: [],
+		acc: [],
 
 		init() {
 			App.setEvent();
@@ -473,6 +408,7 @@
 			SiteStatus.init();
 			Prediction.accuracy();
 			PieGraph.init();
+			Table.init();
 		},
 
 		// 이벤트 체이닝
@@ -520,52 +456,164 @@
 	// 금일 총 수익
 	const TotalProfit = {
 		init() {
-			$.ajax({
-				url: apiHost+"/energy/now/sites",
-				type: "get",
-				data: {
-					sids: App.sids,
-					metering_type: "2",
-					interval: "day",
-				},
-			}).done(r => {
-				const data = Object.entries(r.data).map(x => {
+			$.when(getNow(), getForecast()).then((now, forecast) => {
+				now = Object.entries(now[0].data).map(x => {
 					x[1].sid = x[0];
-
+					
 					return x[1];
 				});
-
-				$("#totalMoney, #todaySMP").html((data.reduce((acc, cur) => acc + cur.money, 0) / 1000).toFixed(2));
-			});
-
-			$.ajax({
-				url: apiHost+"/get/energy/forecasting/sites",
-				type: "POST",
-				dataType: 'json',
-				contentType: "application/json",
-				data: JSON.stringify({
-					"sid": App.sids,
-					"startTime": interval[0],
-					"endTime": interval[1],
-					"interval": "day",
-					"displayType": "dashboard",
-					"formId": "v2"
-				}),
-			}).done(r => {
-				const data = Object.entries(r.data).map(x => x[1][0].items[0]);
-
-				$("#todayPredictionMoney").html((data.reduce((acc, cur) => acc + cur.money, 0) / 1000).toFixed(2));
+				
+				forecast = Object.entries(forecast[0].data).map(x => x[1][0].items[0]);
+				
+				$("#totalMoney, #todaySMP").html((now.reduce((acc, cur) => acc + cur.money, 0) / 1000).toFixed(2));
+				$("#todayPredictionMoney").html((forecast.reduce((acc, cur) => acc + cur.money, 0) / 1000).toFixed(2));
 			});
 		},
 	}
 
 	// 전력거래량 예측
 	const Graph1 = {
+		series: [
+			{name: '실측', type: 'area', color: 'var(--circle-solar-power)', data: 'now', suffix: 'kWh'},
+			{name: '예측', type: 'spline', color: 'var(--white)', data: 'forecast', suffix: 'kWh'},
+		],
+		target: {},
+
 		init() {
-			Highcharts.chart("vppGraph1", {
+			Graph1.target = Highcharts.chart("vppGraph1", {
 				chart: {
-					type: 'area',
-				}
+					width: 306,
+					height: 218,
+					// marginTop: 40,
+					// marginLeft: 50,
+					// marginRight: 50,
+					backgroundColor: 'transparent',
+				},
+				navigation: {
+					buttonOptions: {
+						enabled: false
+					}
+				},
+				title: {
+					text: ''
+				},
+				subtitle: {
+					text: ''
+				},
+				xAxis: [{
+					lineColor: 'var(--grey)',
+					tickColor: 'var(--grey)',
+					gridLineColor: 'var(--white25)',
+					tickWidth: 1,
+					tickColor: 'var(--grey)',
+					type: 'datetime',
+					dateTimeLabelFormats: {
+						millisecond: '%H:%M:%S.%L',
+						second: '%H:%M:%S',
+						minute: '%H:%M',
+						hour: '%H',
+						day: '%m.%d ',
+						week: '%m.%e',
+						month: '%m',
+						year: '%Y'
+					},
+					labels: {
+						align: 'center',
+						style: {
+							color: 'var(--grey)',
+							fontSize: '12px'
+						}
+					},
+					tickInterval: 1,
+					title: {
+						text: null
+					},
+					categories: ['2', '4', '6', '8', '10', '12', '14', '16', '18', '20', '22', '24'],
+					crosshair: true
+				}],
+				yAxis: [{
+					lineColor: 'var(--grey)',
+					tickColor: 'var(--grey)',
+					gridLineColor: 'var(--white25)',
+					gridLineWidth: 1,
+					plotLines: [{
+						color: 'var(--grey)',
+						width: 1
+					}],
+					title: {
+						text: 'kWh',
+						align: 'low',
+						rotation: 0,
+						style: {
+							color: 'var(--grey)',
+							fontSize: '12px'
+						}
+					},
+					labels: {
+						formatter: function () {
+							return this.value / 1000 / 1000;
+						},
+						style: {
+							color: 'var(--grey)',
+							fontSize: '12px'
+						}
+					}
+				}],
+				legend: {
+					enabled: true,
+					align: 'right',
+					verticalAlign: 'top',
+					x: 5,
+					y: -15,
+					itemStyle: {
+						color: 'var(--white87)',
+						fontSize: '12px',
+						fontWeight: 400
+					},
+					itemHoverStyle: {
+						color: ''
+					},
+					symbolPadding: 0,
+					symbolHeight: 7
+				},
+				plotOptions: {
+					series: {
+						label: {
+							connectorAllowed: false
+						},
+						borderWidth: 0
+					},
+					line: {
+						marker: {
+							enabled: false
+						}
+					},
+					column: {
+						stacking: 'normal'
+					}
+				},
+				series: Graph1.series
+			});
+
+			Graph1.draw();
+		},
+
+		draw() {
+			$.when(getNow("15min"), getForecast("hour")).then((now, forecast) => {
+				now = Object.entries(now[0].data).map(x => {
+					x[1].sid = x[0];
+					
+					return x[1];
+				});
+				
+				forecast = Object.entries(forecast[0].data).map(x => x[1][0].items[0]);
+	
+				console.log(now, forecast)
+				$.each(Graph1.series, (ix, el) => {
+					el.data = [100];
+				});
+
+				Graph1.target.redraw();
 			})
 		},
 	}
@@ -607,45 +655,33 @@
 	// 자원 현황
 	const Resources = {
 		init() {
-			$.ajax({
-				url: apiHost + "/vpp/energy/sites",
-				data: {
-					sid: App.sids,
-					interval: "15min",
-					isLimited: true,
-					startTime: getTime(0, true)
-				},
-			}).done(r => {
-				Object.entries(r.data).map(x => {
-					const data = x[1];
+			App.energyData.map(x => {
+				if (!x.ess) {
+					$("#subResource_ESS").removeClass("actived");
+				}
 
-					if (!data.ess) {
-						$("#subResource_ESS").removeClass("actived");
-					}
-	
-					let resource = "";
-					switch (data.resource_type) {
-						case 1:
-							resource = "#mainResource_sun";
-						break;
-						
-						case 2:
-							resource = "#mainResource_wind";
-						break;
-	
-						case 4:
-							resource = "#subResource_fuelcell";
-						break;
-					}
-	
-					$(resource).addClass("actived");
-					if ($(resource).find(".network-status-img").attr("src") === "" && (data.energyPrimary <= 0 || data.energySecondary <= 0)) {
-						$(resource).find(".network-status-img").attr("src", "/img/vpp/network-error-yellow.svg");
-					} else {
-						$(resource).find(".network-status-img").attr("src", "/img/vpp/network-normal.svg");
-					}
-				});
-			})
+				let resource = "";
+				switch (x.resource_type) {
+					case 1:
+						resource = "#mainResource_sun";
+					break;
+					
+					case 2:
+						resource = "#mainResource_wind";
+					break;
+
+					case 4:
+						resource = "#subResource_fuelcell";
+					break;
+				}
+
+				$(resource).addClass("actived");
+				if ($(resource).find(".network-status-img").attr("src") === "" && (x.energyPrimary <= 0 || x.energySecondary <= 0)) {
+					$(resource).find(".network-status-img").attr("src", "/img/vpp/network-error-yellow.svg");
+				} else {
+					$(resource).find(".network-status-img").attr("src", "/img/vpp/network-normal.svg");
+				}
+			});
 		}
 	}
 	
@@ -865,5 +901,130 @@
 		accuracy() {
 
 		}
+	}
+
+	// 주간 예측오차율 
+	const Table = {
+		target: null,
+
+		init() {
+			Table.target = $("#vpp-3-2-dataTable").DataTable({
+				autoWidth: false,
+				"table-layout": "fixed",
+				scrollX: false,
+				scrollY: '720px',
+				scrollCollapse: true,
+				sortable: true,
+				paging: false,
+				columns: [
+					{
+						title: "사이트 명",
+						data: 'name',
+						className: 'dt-head-left dt-body-left'
+					},
+					{
+						title: "현재출력",
+						data: 'curEnergy',
+						className: 'dt-head-right dt-body-right'
+					},
+					{
+						title: "현시각 <br> 발전<br>",
+						data: 'curTime',
+						className: 'dt-head-right dt-body-right'
+					},
+					{
+						title: "현시각 <br> 예측<br>",
+						data: 'curForecast',
+						className: 'dt-head-right dt-body-right'
+					},
+					{
+						title: "금일 <br> 오차<br>",
+						data: 'todayError',
+						className: 'dt-head-right dt-body-right'
+					},
+					{
+						title: "주간 <br> 오차<br>",
+						data: 'weekError',
+						className: 'dt-head-right dt-body-right'
+					},
+				],
+				language: {
+					emptyTable: i18nManager.tr("gdash.the_data_you_have_queried_does_not_exist"),
+					zeroRecords:  i18nManager.tr("gdash.your_search_has_not_returned_results"),
+					infoEmpty: "",
+					paginate: {
+						previous: "",
+						next: "",
+					},
+					info: "",
+				},
+				columnDefs: [
+					{targets: [0], width: "185px"},
+					{targets: [1], width: "60px"},
+					{targets: [2], width: "60px"},
+					{targets: [3], width: "60px"},
+					{targets: [4], width: "60px"},
+					{targets: [5], width: "60px"}
+				],
+				dom: 'tip',
+			});
+
+			Table.refresh();
+		},
+
+		refresh() {
+			const tableData = [];
+
+			App.sites.forEach((site, ix) => {
+				const ed = App.energyData.find(x => x.sid === site.sid);
+
+				tableData[ix] = {
+					name: site.name,
+					curEnergy: Math.round(ed.activePower / 1000),
+					curTime: "-",
+					curForecast: "-",
+					todayError: "-",
+					weekError: "-",
+				}
+			})
+
+			console.log(tableData);
+
+			Table.target.clear();
+			Table.target.rows.add(tableData);
+			Table.target.draw();
+			Table.target.columns.adjust();
+		}
+	}
+	
+	// 금일 데이터
+	function getNow(intv = "day") {
+		return $.ajax({
+			url: apiHost+"/energy/now/sites",
+			type: "get",
+			data: {
+				sids: App.sids,
+				metering_type: "2",
+				interval: intv,
+			},
+		});
+	}
+
+	// 금일 예측 데이터
+	function getForecast(intv = "day") {
+		return $.ajax({
+			url: apiHost+"/get/energy/forecasting/sites",
+			type: "POST",
+			dataType: 'json',
+			contentType: "application/json",
+			data: JSON.stringify({
+				"sid": App.sids,
+				"startTime": interval[0],
+				"endTime": interval[1],
+				"interval": intv,
+				"displayType": "dashboard",
+				"formId": "v2"
+			}),
+		});
 	}
 </script>
