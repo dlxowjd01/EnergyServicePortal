@@ -774,12 +774,14 @@
 				let totalSum = 0;
 				items.forEach((item, index) => {
 					let th = document.createElement('th')
-						, td = document.createElement('td')
+						, td = document.createElement('td');
+					th.style = 'text-align: left !important';
 					td.style = 'text-align: left !important';
 
 					if (index === 0) {
 						let standardDate = item.standard.substr(0, stdLength);
 
+						th.style = '';
 						th.innerHTML = (standardDate.length === 8) ? standardDate.replace(/(\d{4})(\d{2})(\d{2})/, '$1-$2-$3') : (standardDate.length === 6) ? standardDate.replace(/(\d{4})(\d{2})/, '$1-$2') : standardDate;
 						theadTr.appendChild(th);
 
@@ -792,6 +794,7 @@
 
 						th = document.createElement('th');
 						td = document.createElement('td');
+						th.style = 'text-align: left !important';
 						td.style = 'text-align: left !important';
 					}
 
