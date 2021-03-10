@@ -136,7 +136,22 @@
 			</div>
 			<div class="table-wrapper">
 				<div class="fold-box">
-					<div class="chart-table" id="table-desktop">
+					<div class="chart-table" id="table-generation">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-12">
+		<div class="indiv chart-pv table-box">
+			<div class="table-save-box"><a href="#;" class="btn-save"><fmt:message key="renewablesgen.4.dataextracts" /></a></div>
+			<div class="table-top clear">
+				<h2 class="ntit fl"><fmt:message key="renewablesgen.4.powergenerationchart" /></h2>
+				<span class="fr"><a href="#;" class="btn-fold"><fmt:message key="pvGen.table.fold" /></a></span>
+			</div>
+			<div class="table-wrapper">
+				<div class="fold-box">
+					<div class="chart-table" id="table-irradiationPoa">
 					</div>
 				</div>
 			</div>
@@ -164,18 +179,18 @@
 			if (idx == 0) {
 				$(':checkbox[name="device"]').prop('checked', true);
 
-				document.querySelectorAll('#interval li').forEach(li => {
-					if (li.dataset.value === 'day' || li.dataset.value === 'month') {
-						li.classList.remove('disabled');
-					} else {
-						li.classList.add('disabled');
-					}
-				});
+				// document.querySelectorAll('#interval li').forEach(li => {
+				// 	if (li.dataset.value === 'day' || li.dataset.value === 'month') {
+				// 		li.classList.remove('disabled');
+				// 	} else {
+				// 		li.classList.add('disabled');
+				// 	}
+				// });
 			} else {
 				$(':checkbox[name="device"]').prop('checked', false);
-				document.querySelectorAll('#interval li').forEach(li => {
-					li.classList.add('disabled');
-				});
+				// document.querySelectorAll('#interval li').forEach(li => {
+				// 	li.classList.add('disabled');
+				// });
 			}
 
 			displayDropdown($('#deviceType'));
@@ -410,21 +425,21 @@
 				if (device.dataset.type === 'time') { genHour = true; }
 			});
 
-			if (genHour) {
-				dropDownInit($('#interval'));
-
-				document.querySelectorAll('#interval li').forEach(li => {
-					if (li.dataset.value === 'day' || li.dataset.value === 'month') {
-						li.classList.remove('disabled');
-					} else {
-						li.classList.add('disabled');
-					}
-				});
-			} else {
-				document.querySelectorAll('#interval li').forEach(li => {
-					li.classList.remove('disabled');
-				});
-			}
+			// if (genHour) {
+			// 	dropDownInit($('#interval'));
+			//
+			// 	document.querySelectorAll('#interval li').forEach(li => {
+			// 		if (li.dataset.value === 'day' || li.dataset.value === 'month') {
+			// 			li.classList.remove('disabled');
+			// 		} else {
+			// 			li.classList.add('disabled');
+			// 		}
+			// 	});
+			// } else {
+			// 	document.querySelectorAll('#interval li').forEach(li => {
+			// 		li.classList.remove('disabled');
+			// 	});
+			// }
 		} else if ($dropdownId === 'siteList') {
 			makeDeviceList();
 		} else if ($dropdownId === 'period') {
@@ -695,7 +710,8 @@
 			}
 
 			$('#loadingCircle').hide();
-			drawPage();
+
+			drawPage('table-generation');
 		}).catch(error => {
 			console.error(error);
 			$('#loadingCircle').hide();
@@ -705,11 +721,12 @@
 	/**
 	 * 데이터 그리드 작성
 	 */
-	const drawPage = () => {
-		document.getElementById('table-desktop').innerHTML = '';
+	const drawPage = (target) => {
+		document.getElementById(target).innerHTML = '';
 
 		standard = makeStandard(interval);
-		let gridData = gridDataMake();
+		let gridData = gridDataMake(target);
+		console.log(gridData);
 
 		//기준일 && 이름 순으로 정렬
 		gridData.sort(
@@ -734,11 +751,12 @@
 		let table = document.createElement('table');
 		table.className = 'table-desktop';
 		gridData.forEach((grid, index) => {
+
 			const items = grid.data, deviceId = grid.deviceId;
 
 			if (isEmpty(std) || std !== grid.std) {
 				if (!isEmpty(std) && std !== grid.std) {
-					document.getElementById('table-desktop').appendChild(table);
+					document.getElementById(target).appendChild(table);
 
 					table = document.createElement('table');
 					table.className = 'table-desktop';
@@ -868,13 +886,17 @@
 				table.querySelector('tbody').appendChild(tbodyTr);
 			}
 
+			console.log(gridData.length);
 			if ((gridData.length - 1) === index) {
-				document.getElementById('table-desktop').appendChild(table);
+				document.getElementById(target).appendChild(table);
 			}
 		});
 
-		//statusDataDraw();
-		chartDataDraw();
+		if (target === 'table-generation') {
+			drawPage('table-irradiationPoa');
+		} else {
+			chartDataDraw();
+		}
 	}
 
 	/**
@@ -882,10 +904,15 @@
 	 *
 	 * @returns {any[]}
 	 */
-	const gridDataMake = function () {
+	const gridDataMake = function (target) {
 		let dataArr = new Array();
 
 		Object.entries(generationData).forEach(([id, data], dataIdx) => {
+			if (target === 'table-generation') {
+				if (data.type === 'SENSOR_SOLAR') return false;
+			} else {
+				if (data.type !== 'SENSOR_SOLAR') return false;
+			}
 			const items = data[0].items, stdLength = standard.length - 1;
 			let deivceEnergy = new Array(), stdDate = '';
 

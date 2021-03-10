@@ -1395,16 +1395,18 @@
 			textArea = popup.find('textarea'),
 			inputArr = popup.find('input');
 
-		let role = true;
-		$(':checkbox[name="site"]:checked').each(function() {
-			if (!isEmpty($(this).data('role')) && $(this).data('role') === 2) {
-				role = false;
-			}
-		});
+		if (role === '2') {
+			let role = true;
+			$(':checkbox[name="site"]:checked').each(function() {
+				if (!isEmpty($(this).data('role')) && $(this).data('role') === 2) {
+					role = false;
+				}
+			});
 
-		if (!role) {
-			errorMsg('선택한 사이트 중 권한이 없는 사이트가 있습니다.');
-			return false;
+			if (!role) {
+				errorMsg('선택한 사이트 중 권한이 없는 사이트가 있습니다.');
+				return false;
+			}
 		}
 
 		dropDown.each(function () {
@@ -1540,17 +1542,20 @@
 			event.stopPropagation(); //버블링 방지
 		}
 
-		let role = true;
-		$(':checkbox[name="site"]:checked').each(function() {
-			if (!isEmpty($(this).data('role')) && $(this).data('role') === 2) {
-				role = false;
-			}
-		});
+		if (role === '2') {
+			let role = true;
+			$(':checkbox[name="site"]:checked').each(function() {
+				if (!isEmpty($(this).data('role')) && $(this).data('role') === 2) {
+					role = false;
+				}
+			});
 
-		if (!role) {
-			errorMsg('선택한 사이트 중 권한이 없는 사이트가 있습니다.');
-			return false;
+			if (!role) {
+				errorMsg('선택한 사이트 중 권한이 없는 사이트가 있습니다.');
+				return false;
+			}
 		}
+
 
 		let areaData = setAreaParamData('addDeviceModal', 'dropdown');
 		let alertPreffix = '등록';

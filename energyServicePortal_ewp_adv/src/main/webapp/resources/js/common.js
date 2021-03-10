@@ -75,9 +75,9 @@ $(function() {
 /* 표 접기/펼치기 */
 $(function() {
 	$('.btn-fold').click(function(){
-		var tbl_height = $(".fold-box").height();
+		var tbl_height = $(this).parents('.indiv').find(".fold-box").height();
 //        $(".table-wrapper").css("min-height",tbl_height);
-		$('.fold-box').slideToggle();
+		$(this).parents('.indiv').find(".fold-box").slideToggle();
 		$(this).toggleClass("on");
 		$(this).text($(this).text() == '표접기' ? '펼치기' : '표접기');
 	});

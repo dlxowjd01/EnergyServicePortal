@@ -344,16 +344,18 @@
 		$('.delete_btn').on('click', function () {
 			const rid = $('#selectedRTU').data('rid');
 
-			let role = true;
-			document.querySelectorAll('[name="site"]:checked').forEach(checked => {
-				if (!isEmpty(checked.dataset.role) && checked.dataset.role === '2') {
-					role = false;
-				}
-			});
+			if (role === '2') {
+				let role = true;
+				document.querySelectorAll('[name="site"]:checked').forEach(checked => {
+					if (!isEmpty(checked.dataset.role) && checked.dataset.role === '2') {
+						role = false;
+					}
+				});
 
-			if (!role) {
-				alert('선택한 사이트 중 권한이 없는 사이트가 있습니다.');
-				return false;
+				if (!role) {
+					alert('선택한 사이트 중 권한이 없는 사이트가 있습니다.');
+					return false;
+				}
 			}
 
 			if (isEmpty(rid)) {
@@ -435,17 +437,20 @@
 		$('.modify_btn').on('click', function () {
 			const rid = $('#selectedRTU').data('rid');
 
-			let role = true;
-			document.querySelectorAll('[name="site"]:checked').forEach(checked => {
-				if (!isEmpty(checked.dataset.role) && checked.dataset.role === '2') {
-					role = false;
-				}
-			});
+			if (role === '2') {
+				let role = true;
+				document.querySelectorAll('[name="site"]:checked').forEach(checked => {
+					if (!isEmpty(checked.dataset.role) && checked.dataset.role === '2') {
+						role = false;
+					}
+				});
 
-			if (!role) {
-				alert('선택한 사이트 중 권한이 없는 사이트가 있습니다.');
-				return false;
+				if (!role) {
+					alert('선택한 사이트 중 권한이 없는 사이트가 있습니다.');
+					return false;
+				}
 			}
+
 
 			if (isEmpty(rid)) {
 				alert('<fmt:message key="colState.alert.4" />');
@@ -894,16 +899,18 @@
 		$('#description').val('');
 		//RTU 등록/수정 초기화
 
-		let role = true;
-		document.querySelectorAll('[name="site"]:checked').forEach(checked => {
-			if (!isEmpty(checked.dataset.role) && checked.dataset.role === '2') {
-				role = false;
-			}
-		});
+		if (role === '2') {
+			let role = true;
+			document.querySelectorAll('[name="site"]:checked').forEach(checked => {
+				if (!isEmpty(checked.dataset.role) && checked.dataset.role === '2') {
+					role = false;
+				}
+			});
 
-		if (!role) {
-			alert('선택한 사이트 중 권한이 없는 사이트가 있습니다.');
-			return false;
+			if (!role) {
+				alert('선택한 사이트 중 권한이 없는 사이트가 있습니다.');
+				return false;
+			}
 		}
 
 		let siteArray = new Array();
