@@ -105,8 +105,10 @@ $(document).ready(function () {
 			$('#miniLoadingCircle_daily').show();
 			dailyChartDraw(siteSids, standard);
 		} else {
+			const yesterday = new Date();
+			yesterday.setDate(Number(today.getDate()) - 1);
 			standard.setDate(standard.getDate() + 1);
-			if (today.getFullYear() === standard.getFullYear() && today.getMonth() === standard.getMonth() && today.getDate() === standard.getDate()) {
+			if (yesterday.getFullYear() === standard.getFullYear() && yesterday.getMonth() === standard.getMonth() && yesterday.getDate() === standard.getDate()) {
 				$(this).parent().find('img.next').addClass('hidden');
 			} else {
 				$(this).parent().find('img.next').removeClass('hidden');
@@ -139,8 +141,10 @@ $(document).ready(function () {
 			$('#miniLoadingCircle_type').show();
 			dailyChartDraw(siteSids, standard);
 		} else {
+			const yesterday = new Date();
+			yesterday.setDate(Number(today.getDate()) - 1);
 			standard.setDate(standard.getDate() - 1);
-			if (today.getFullYear() === standard.getFullYear() && today.getMonth() === standard.getMonth() && today.getDate() === standard.getDate()) {
+			if (yesterday.getFullYear() === standard.getFullYear() && yesterday.getMonth() === standard.getMonth() && yesterday.getDate() === standard.getDate()) {
 				$(this).parent().find('img.next').addClass('hidden');
 			} else {
 				$(this).parent().find('img.next').removeClass('hidden');

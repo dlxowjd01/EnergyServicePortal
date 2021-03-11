@@ -497,7 +497,7 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 					const x = event.point.category;
 					console.log(event);
 					console.log(x);
-					generation(x, 'day');
+					generation(x, 'hour');
 				}
 			}
 		},
