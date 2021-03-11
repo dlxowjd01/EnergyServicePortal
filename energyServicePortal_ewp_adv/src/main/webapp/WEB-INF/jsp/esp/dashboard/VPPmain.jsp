@@ -316,11 +316,10 @@
 			<table id="vpp-3-2-dataTable">
 				<colgroup>
 					<col width="185px">
-					<col width="60px">
-					<col width="60px">
-					<col width="60px">
-					<col width="60px">
-					<col width="60px">
+					<col width="75px">
+					<col width="75px">
+					<col width="75px">
+					<col width="75px">
 				</colgroup>
 			</table>
 		</div>
@@ -404,7 +403,7 @@
 			TotalTrading.init();
 			TotalProfit.init();
 			Resources.init();
-			Graph1.init();
+			Graph1.refresh();
 			SiteStatus.init();
 			Prediction.accuracy();
 			PieGraph.init();
@@ -474,19 +473,15 @@
 	// 전력거래량 예측
 	const Graph1 = {
 		series: [
-			{name: '실측', type: 'area', color: 'var(--circle-solar-power)', data: 'now', suffix: 'kWh'},
-			{name: '예측', type: 'spline', color: 'var(--white)', data: 'forecast', suffix: 'kWh'},
+			{name: '실측', type: 'area', color: 'var(--circle-solar-power)', data: [], suffix: 'kWh'},
+			{name: '예측', type: 'line', color: 'var(--white)', data: [], suffix: 'kWh'},
 		],
 		target: {},
 
-		init() {
+		setOption() {
 			Graph1.target = Highcharts.chart("vppGraph1", {
 				chart: {
-					width: 306,
-					height: 218,
-					// marginTop: 40,
-					// marginLeft: 50,
-					// marginRight: 50,
+					marginLeft: 0,
 					backgroundColor: 'transparent',
 				},
 				navigation: {
@@ -505,23 +500,14 @@
 					tickColor: 'var(--grey)',
 					gridLineColor: 'var(--white25)',
 					tickWidth: 1,
-					tickColor: 'var(--grey)',
-					type: 'datetime',
-					dateTimeLabelFormats: {
-						millisecond: '%H:%M:%S.%L',
-						second: '%H:%M:%S',
-						minute: '%H:%M',
-						hour: '%H',
-						day: '%m.%d ',
-						week: '%m.%e',
-						month: '%m',
-						year: '%Y'
-					},
+					tickLength: 6,
 					labels: {
+						x: 9,
 						align: 'center',
 						style: {
 							color: 'var(--grey)',
-							fontSize: '12px'
+							fontSize: '10px',
+							rotation: 0
 						}
 					},
 					tickInterval: 1,
@@ -529,18 +515,15 @@
 						text: null
 					},
 					categories: ['2', '4', '6', '8', '10', '12', '14', '16', '18', '20', '22', '24'],
-					crosshair: true
 				}],
 				yAxis: [{
 					lineColor: 'var(--grey)',
 					tickColor: 'var(--grey)',
 					gridLineColor: 'var(--white25)',
 					gridLineWidth: 1,
-					plotLines: [{
-						color: 'var(--grey)',
-						width: 1
-					}],
 					title: {
+						x: 10,
+						y: 30,
 						text: 'kWh',
 						align: 'low',
 						rotation: 0,
@@ -549,15 +532,22 @@
 							fontSize: '12px'
 						}
 					},
-					labels: {
+					labels: { 
+						x: 0,
+						y: 15,
+						align: "left",
 						formatter: function () {
-							return this.value / 1000 / 1000;
+							return Math.round(this.value / 1000);
 						},
 						style: {
 							color: 'var(--grey)',
 							fontSize: '12px'
-						}
-					}
+						},
+					},
+					plotLines: [{
+						color: 'var(--grey)',
+						width: 1
+					}],
 				}],
 				legend: {
 					enabled: true,
@@ -583,35 +573,35 @@
 						},
 						borderWidth: 0
 					},
-					line: {
+					area: {
+						lineColor: "transparent",
 						marker: {
 							enabled: false
 						}
 					},
-					column: {
-						stacking: 'normal'
-					}
 				},
 				series: Graph1.series
 			});
-
-			Graph1.draw();
 		},
 
-		draw() {
+		refresh() {
 			$.when(getNow("15min"), getForecast("hour")).then((now, forecast) => {
-				now = Object.entries(now[0].data).map(x => {
-					x[1].sid = x[0];
-					
-					return x[1];
-				});
-				
-				forecast = Object.entries(forecast[0].data).map(x => x[1][0].items[0]);
-	
-				console.log(now, forecast)
+				const data = [
+					Object.entries(now[0].data).map(x => {
+						x[1].sid = x[0];
+						
+						return x[1].energy;
+					}),
+					Object.entries(forecast[0].data).map(x => x[1][0].items[0].energy)
+				];
+		
 				$.each(Graph1.series, (ix, el) => {
-					el.data = [100];
+					Graph1.series[ix].data = fillArray(data[ix], 12);
 				});
+
+				console.log(Graph1.series)
+
+				Graph1.setOption();
 
 				Graph1.target.redraw();
 			})
@@ -939,18 +929,8 @@
 						className: 'dt-head-left dt-body-left'
 					},
 					{
-						title: "현재출력",
-						data: 'curEnergy',
-						className: 'dt-head-right dt-body-right'
-					},
-					{
-						title: "현시각 <br> 발전<br>",
-						data: 'curTime',
-						className: 'dt-head-right dt-body-right'
-					},
-					{
-						title: "현시각 <br> 예측<br>",
-						data: 'curForecast',
+						title: "용량",
+						data: 'capacity',
 						className: 'dt-head-right dt-body-right'
 					},
 					{
@@ -961,6 +941,11 @@
 					{
 						title: "주간 <br> 오차<br>",
 						data: 'weekError',
+						className: 'dt-head-right dt-body-right'
+					},
+					{
+						title: "이전 <br> 30일 오차<br>",
+						data: 'beforeError',
 						className: 'dt-head-right dt-body-right'
 					},
 				],
@@ -976,7 +961,7 @@
 				},
 				columnDefs: [
 					{targets: [0], width: "185px"},
-					{targets: [1, 2, 3, 4, 5], width: "60px"},
+					{targets: [1, 2, 3, 4], width: "75px"},
 				],
 				dom: 'tip',
 			});
@@ -992,11 +977,10 @@
 
 				tableData[ix] = {
 					name: site.name,
-					curEnergy: Math.round(ed.activePower / 1000),
-					curTime: "-",
-					curForecast: "-",
+					capacity: Math.round(ed.capacity / 1000),
 					todayError: "-",
 					weekError: "-",
+					beforeError: "-",
 				}
 			})
 

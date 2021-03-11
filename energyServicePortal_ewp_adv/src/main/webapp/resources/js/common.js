@@ -807,3 +807,9 @@ function getDayInterval() {
 function objectToArray(obj, mapFunc = {}) {
 	return Object.entries(obj).map(mapFunc);
 }
+
+function fillArray(target, len, fill = 0) {
+	if (target.length < len) {
+		return target.concat(new Array(len - target.length).fill(fill));
+	}
+}

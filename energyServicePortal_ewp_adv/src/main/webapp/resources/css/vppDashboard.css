@@ -75,7 +75,7 @@ h2.title {
 }
 
 .vpp-1-2-1 {
-	width: 308px;
+	width: 322px;
 }
 
 .vpp-1-2-2 > h3 {
@@ -477,11 +477,11 @@ h2.title {
 	text-align: right;
 }
 
-.vpp-3-2-graph > div:nth-child(1) > div { background: #009389; border-radius: 4px 0px 0px 4px; }
+.vpp-3-2-graph > div:nth-child(1) > div { background: #009389; /*border-radius: 4px 0px 0px 4px;*/ }
 .vpp-3-2-graph > div:nth-child(2) > div { background: #00b2aa; }
 .vpp-3-2-graph > div:nth-child(3) > div { background: #26ccc8; }
 .vpp-3-2-graph > div:nth-child(4) > div { background: #78dbda; }
-.vpp-3-2-graph > div:nth-child(5) > div { background: #b0e9e8; border-radius: 0px 4px 4px 0px; }
+.vpp-3-2-graph > div:nth-child(5) > div { background: #b0e9e8; /*border-radius: 0px 4px 4px 0px;*/ }
 
 .vpp-3-2 > p {
 	text-align: right;
@@ -536,7 +536,7 @@ h2.title {
 #vppGraph1,
 #moneyStatusGraph {
 	height: 220px;
-	border: 1px solid rgba(255, 255, 255, 0.2)
+	/* border: 1px solid rgba(255, 255, 255, 0.2) */
 }
 
 .dataTable.no-footer.no-stripe thead th, .dataTables_scrollHeadInner>.dataTable td, .dataTables_scrollHeadInner>.dataTable th {
