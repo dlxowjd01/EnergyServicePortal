@@ -105,7 +105,7 @@ $(document).ready(function () {
 			$('#miniLoadingCircle_daily').show();
 			dailyChartDraw(siteSids, standard);
 		} else {
-			standard.setMonth(standard.getDate() + 1);
+			standard.setDate(standard.getDate() + 1);
 			if (today.getFullYear() === standard.getFullYear() && today.getMonth() === standard.getMonth() && today.getDate() === standard.getDate()) {
 				$(this).parent().find('img.next').addClass('hidden');
 			} else {
@@ -153,7 +153,7 @@ $(document).ready(function () {
 
 /**
  * 페이지 초기 진입시
- * 필요한 데이터를 모두 조회한다.
+ * 필요한 데이터를 모두 조회한다. 
  */
 const firstAjax = () => {
 	yearData = getSiteMainSchCollection('year');
