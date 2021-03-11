@@ -67,7 +67,13 @@
 
 		<div class="indiv chart-wrapper gmain-chart3">
 			<div class="chart-top offset">
-				<h2 class="ntit"><fmt:message key="gdash.3.yesterday"/></h2><span class="term"></span>
+				<div id="miniLoadingCircle_type" class="mini-loading" style="display:none;"><img class="mini-loading-image" src="/img/loading_icon.gif" alt="Loading..."/></div>
+				<h2 class="ntit"><fmt:message key="gdash.3.yesterday"/></h2>
+				<span class="term">
+					<img src="/img/ico-back.svg" class="back">
+					<span></span>
+					<img src="/img/ico-next.svg" class="next hidden">
+				</span>
 				<ul id="yesterdaySum" class="sum-list mobile-visible"></ul>
 			</div>
 			<!-- 사업소별 현황 -->
@@ -761,6 +767,17 @@
 		} else {
 			$form.attr('action', '/dashboard/smain.do').submit();
 		}
+	}
+
+	const generation = (target, interval) => {
+		const standard = $('#typeSiteCurrent').parents('div.indiv').find('.term span').data('standard');
+		const site = siteList.find(e => e.name === target);
+
+		let $form = $('#linkSiteForm');
+		let $inp = $('<input>').attr('type', 'hidden').attr('name', 'sidparam').val(site.sid);
+		let $inp2 = $('<input>').attr('type', 'hidden').attr('name', 'target').val(standard.format('yyyyMMdd'));
+		let $inp3 = $('<input>').attr('type', 'hidden').attr('name', 'interval').val(interval);
+		$form.append($inp).append($inp2).append($inp3).attr('action', '/diagnosis/generation.do').submit();
 	}
 
 	const goPvGen = (target, interval) => {

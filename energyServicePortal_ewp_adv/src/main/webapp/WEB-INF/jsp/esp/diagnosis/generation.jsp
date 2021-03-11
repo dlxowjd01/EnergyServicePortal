@@ -208,6 +208,9 @@
 	let deferreds = new Array();
 	let accociation = new Map();
 	let dup = false;
+	const sidparam = '${param.sidparam}';
+	const dashStandard = '${param.target}';
+	const dashInterval = '${param.interval}';
 	let applicationData = {
 		observed: null,
 		observedType: 'column',
@@ -216,6 +219,9 @@
 	};
 
 	$(function () {
+		$('#fromDate').datepicker('setDate', 'today'); //데이트 피커 기본
+		$('#toDate').datepicker('setDate', 'today'); //데이트 피커 기본
+
 		makeSiteList(); //사이트 조회
 
 		//전체 선택/전체 해제
@@ -316,9 +322,6 @@
 		$('#application').on('click', function () {
 			application();
 		});
-
-		$('#fromDate').datepicker('setDate', 'today'); //데이트 피커 기본
-		$('#toDate').datepicker('setDate', 'today'); //데이트 피커 기본
 	});
 
 	const rtnDropdown = ($dropdownId) => {
@@ -488,11 +491,16 @@
 				.prepend(`<div class="dropdown-search"><input type="text" placeholder="<fmt:message key="dropdown.siteSearch" />" onKeyup="searchSite($(this).val())" ></div>`)
 				.append(`<div class="btn-wrap-type03 btn-wrap-border dropdown-apply"><button type="button" class="btn-type mr-16"><fmt:message key="deviceState.apply" /></button></div>`);
 		}
+
+		if (!isEmpty(sidparam)) {
+			$(':checkbox[name="site"][value="' + sidparam + '"]').prop('checked', true);
+			displayDropdown($('#siteList'));
+			device();
+		}
 	};
 	
 	const searchSite = keyword => {
 		const result = siteList.filter(x => x.name.includes(keyword));
-
 		makeSiteList(result);
 	}
 
@@ -584,9 +592,28 @@
 					dataType: "json"
 				});
 			});
-			$(':checkbox[name="site"]:checked').each(function () {
 
-			});
+
+			if (!isEmpty(sidparam)) {
+				$(':checkbox[name="device"]').each(function() {
+					if ($(this).attr('id').includes('dash')) {
+						$(this).prop('checked', true);
+					}
+				});
+				displayDropdown($('#deviceType'));
+
+				let intervalText = '선택';
+				$('#interval li').each(function() {
+					if ($(this).data('value') === dashInterval) {
+						intervalText = $(this).text();
+					}
+				});
+				$('#interval button').html(intervalText + '<span class="caret"></span>').data('value', dashInterval);
+				$('#fromDate').val(dashStandard.replace(/(\d{4})(\d{2})(\d{2})/g, '$1-$2-$3'));
+				$('#toDate').val(dashStandard.replace(/(\d{4})(\d{2})(\d{2})/g, '$1-$2-$3'));
+
+				fetchGenData();
+			}
 		}
 	};
 
@@ -1178,6 +1205,25 @@
 					});
 
 					arrDevice.push(timeValue[0]);
+
+					if (arr.length === 1) {
+						let totalArr = displayNumberFixedUnit(total, 'Wh', 'kWh', 2);
+						arrDevice.push(totalArr[0]); //합계.
+
+						let dataName = '';
+						if (key == 'actual') {
+							dataName = '실측';
+						} else {
+							dataName = '예측';
+						}
+
+						dataArr.push({
+							name: dataName,
+							id: key,
+							std: stdDate,
+							data: arrDevice
+						});
+					}
 				});
 			}
 		});
@@ -1275,6 +1321,41 @@
 					arrDevice.push([
 						stnd, timeValue
 					]);
+
+					if (arr.length == 1) {
+						let dataName = '';
+						if (key == 'actual') {
+							dataName = '실측';
+							let $temp = {
+								name: dataName,
+								type: applicationData.observedType,
+								stack: 0,
+								tooltip: {
+									valueSuffix: 'kWh'
+								},
+								color: colorArr[0],
+								data: arrDevice
+							};
+							seriesData.push($temp);
+							applicationData.observed = dummy;
+							summary(total, 0);
+						} else {
+							dataName = '예측';
+							let $temp = {
+								name: dataName,
+								type: applicationData.forecastedType,
+								stack: 1,
+								tooltip: {
+									valueSuffix: 'kWh'
+								},
+								color: colorArr[1],
+								data: arrDevice
+							};
+							seriesData.push($temp);
+							applicationData.forecasted = dummy;
+							summary(total, 1);
+						}
+					}
 				});
 			}
 		});

@@ -115,6 +115,12 @@
 				}
 			}
 		} else {
+
+			if (menuCode === 'dashboard' || menuCode === 'gmain') {
+				$(this).prop('checked', true);
+				return false;
+			}
+
 			if (isEmpty(parent)) {
 				if ($(this).val() === 'all') {
 					$(':checkbox[name="menu"]').prop('checked', false);
@@ -225,6 +231,8 @@
 		$('.nav-tabs li:eq(0)').trigger('click');
 		etcTable.clear().draw();
 		$('#menuList input').prop('checked', false);
+		$('#menu-dashboard').prop('checked', true);
+		$('#menu-gmain').prop('checked', true);
 		$('#menuList h4.panel-title a').attr('aria-expanded', true);
 		$('#menuList div.panel-collapse').attr('aria-expanded', true).addClass('in').removeAttr('style');
 	}

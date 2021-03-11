@@ -167,8 +167,7 @@
 	let generationData = new Object()
 	  , summaryData = new Object()
 	  , standard = new Array()
-	  , interval = ''
-	  , statusSummary = new Array();
+	  , interval = '';
 
 	$(function() {
 		makeSiteList();
@@ -384,9 +383,7 @@
 
 				deviceList.innerHTML = liStr;
 
-				if (sidparam) {
-					$("#deviceType > div > div > div > div > div.fl > button:nth-child(1)").click();
-				}
+				if (sidparam) { $("#deviceType > div > div > div > div > div.fl > button:nth-child(1)").click(); }
 
 				if (!isEmpty(dashStandard) && !isEmpty(dashInterval)) {
 					$(':checkbox[name="device"]').each(function() {
@@ -394,8 +391,6 @@
 							$(this).prop('checked', true);
 						}
 					});
-
-
 
 					displayDropdown($('#deviceType'));
 					if (dashInterval === 'hour') {
@@ -456,7 +451,6 @@
 				$('#toDate').datepicker('setDate', 'today'); //데이트 피커 기본
 			}
 		} else if ($dropdownId.match('chartStyle')) {
-			statusDataDraw();
 			chartDataDraw();
 		}
 	}
@@ -1040,7 +1034,8 @@
 		Object.entries(generationData).forEach(([id, data]) => {
 			const items = data[0].items
 				, name = data.name
-				, sid = data.sid;
+				, sid = data.sid
+				, dataType = (data.type === 'billing' || data.type === 'time' || data.type === 'SENSOR_SOLAR') ? data.type : '';
 
 			let deivceEnergy = new Array()
 				, totalSum = 0
@@ -1109,7 +1104,6 @@
 
 			if (chartStyle === 'allSum') {
 				if (seriesData.length > 0) {
-					const dataType = id.match('_billing') ? 'billing' : id.match('_time') ? 'time' : '';
 					const findData = seriesData.find(e => e.dataType === dataType);
 
 					if (isEmpty(findData)) {
@@ -1122,7 +1116,6 @@
 				}
 			} else if (chartStyle === 'siteSum') {
 				if (seriesData.length > 0) {
-					const dataType = id.match('_billing') ? 'billing' : id.match('_time') ? 'time' : '';
 					const findData = seriesData.find(e => e.sid === sid && e.dataType === dataType);
 
 					if (isEmpty(findData)) {
@@ -1158,7 +1151,7 @@
 				type: chartType,
 				stack: stack,
 				sid: sid,
-				dataType: data.type,
+				dataType: dataType,
 				yAxis: yAxis,
 				tooltip: {
 					valueSuffix: suffix,
@@ -1183,7 +1176,6 @@
 			num++;
 		});
 
-		seriesData = seriesData.concat(statusSummary);
 		chartDraw(chartStandard, seriesData);
 
 		//발전량 합계

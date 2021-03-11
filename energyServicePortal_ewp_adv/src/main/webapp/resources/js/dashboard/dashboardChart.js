@@ -492,6 +492,14 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 			formatter: function () {
 				return 'test';
 			},
+			events: {
+				click: function (event) {
+					const x = event.point.category;
+					console.log(event);
+					console.log(x);
+					generation(x, 'day');
+				}
+			}
 		},
 		bar: {
 			dataLabels: {

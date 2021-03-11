@@ -95,7 +95,7 @@ $(document).ready(function () {
 			}
 			$('#miniLoadingCircle_month').show();
 			monthlyChartDraw(siteSids, standard);
-		} else {
+		} else if ($('img.back').index(this) === 1) {
 			standard.setMonth(standard.getMonth() + 1);
 			if (((today.getFullYear() === standard.getFullYear()) && today.getMonth() > standard.getMonth()) || today.getFullYear() != standard.getFullYear()) {
 				$(this).parent().find('img.next').removeClass('hidden');
@@ -104,6 +104,15 @@ $(document).ready(function () {
 			}
 			$('#miniLoadingCircle_daily').show();
 			dailyChartDraw(siteSids, standard);
+		} else {
+			standard.setMonth(standard.getDate() + 1);
+			if (today.getFullYear() === standard.getFullYear() && today.getMonth() === standard.getMonth() && today.getDate() === standard.getDate()) {
+				$(this).parent().find('img.next').addClass('hidden');
+			} else {
+				$(this).parent().find('img.next').removeClass('hidden');
+			}
+			$('#miniLoadingCircle_type').show();
+			typeSiteDraw(siteSids, standard);
 		}
 	});
 
@@ -120,15 +129,24 @@ $(document).ready(function () {
 			}
 			$('#miniLoadingCircle_month').show();
 			monthlyChartDraw(siteSids, standard);
-		} else {
+		} else if ($('img.back').index(this) === 1) {
 			standard.setMonth(standard.getMonth() - 1);
 			if (((today.getFullYear() === standard.getFullYear()) && today.getMonth() > standard.getMonth()) || today.getFullYear() != standard.getFullYear()) {
 				$(this).parent().find('img.next').removeClass('hidden');
 			} else {
 				$(this).parent().find('img.next').addClass('hidden');
 			}
-			$('#miniLoadingCircle_daily').show();
+			$('#miniLoadingCircle_type').show();
 			dailyChartDraw(siteSids, standard);
+		} else {
+			standard.setDate(standard.getDate() - 1);
+			if (today.getFullYear() === standard.getFullYear() && today.getMonth() === standard.getMonth() && today.getDate() === standard.getDate()) {
+				$(this).parent().find('img.next').addClass('hidden');
+			} else {
+				$(this).parent().find('img.next').removeClass('hidden');
+			}
+			$('#miniLoadingCircle_type').show();
+			typeSiteDraw(siteSids, standard);
 		}
 	});
 });
@@ -545,7 +563,7 @@ const monthlyChartDraw = async (siteSids, standard) => {
 	let startTime = '', endTime = '';
 	if (standard != undefined && (today.getFullYear() != standard.getFullYear())) {
 		$('.gmain-chart1 span.term span').text(standard.getFullYear() + '.01.01 ~ ' + standard.getFullYear() + '.12.31').data('standard', standard);
-		startTime = Number(standard.getFullYear() + '0101000000'), endTime = Number(standard.getFullYear() + '1231000000');
+		startTime = Number(standard.getFullYear() + '0101000000'), endTime = Number(standard.getFullYear() + '1231235959');
 	} else {
 		$('.gmain-chart1 span.term span').text(today.getFullYear() + '.01.01 ~ ' + today.getFullYear() + '.' + ('0' + (Number(today.getMonth()) + 1)).slice(-2) + '.' + ('0' + today.getDate()).slice(-2)).data('standard', new Date());
 		startTime = Number(yearData.startTime), endTime = Number(yearData.endTime);
@@ -730,7 +748,7 @@ const dailyChartDraw = async (siteSids, standard) => {
 	if (standard !== undefined && (today.getFullYear() != standard.getFullYear() || today.getMonth() != standard.getMonth())) {
 		lastDay = new Date(standard.getFullYear(), standard.getMonth() + 1, 0);
 		$('.gmain-chart2 span.term span').text(standard.format('yyyy.MM') + '.01 ~ ' + standard.format('yyyy.MM') + '.' + ('0' + lastDay.getDate()).slice(-2)).data('standard', standard);
-		startTime = Number(standard.format('yyyyMM') + '01000000'), endTime = Number(lastDay.format('yyyyMMdd') + '000000');
+		startTime = Number(standard.format('yyyyMM') + '01000000'), endTime = Number(lastDay.format('yyyyMMdd') + '235959');
 	} else {
 		lastDay = new Date(today.getFullYear(), today.getMonth() + 2, 0);
 		$('.gmain-chart2 span.term span').text(today.format('yyyy.MM') + '.01 ~ ' + today.format('yyyy.MM') + '.' + ('0' + today.getDate()).slice(-2)).data('standard', new Date());
@@ -916,12 +934,20 @@ const dailyChartDraw = async (siteSids, standard) => {
 	});
 }
 
-const typeSiteDraw = async (siteSids) => {
+const typeSiteDraw = async (siteSids, standard) => {
 	const targetApi = new Array();
 
 	const yesterday = new Date();
 	yesterday.setDate(Number(today.getDate()) - 1);
-	$(`.gmain-chart3 span.term`).text(yesterday.getFullYear() + '.' + ('0' + (Number(yesterday.getMonth()) + 1)).slice(-2) + '.' + ('0' + yesterday.getDate()).slice(-2));
+	let startTime = '', endTime = '';
+
+	if (standard !== undefined && (today.getFullYear() != standard.getFullYear() || today.getMonth() != standard.getMonth() || today.getDate() != standard.getDate())) {
+		$('.gmain-chart3 span.term span').text(standard.format('yyyy.MM.dd')).data('standard', standard);
+		startTime = Number(standard.format('yyyyMMdd') + '000000'), endTime = Number(standard.format('yyyyMMdd') + '235959');
+	} else {
+		$(`.gmain-chart3 span.term span`).text(yesterday.format('yyyy.MM.dd')).data('standard', yesterday);
+		startTime = Number(yesterData.startTime), endTime = Number(yesterData.endTime);
+	}
 
 	targetApi.push($.ajax({
 		url: apiHost + '/get/energy/sites',
@@ -929,8 +955,8 @@ const typeSiteDraw = async (siteSids) => {
 		contentType: 'application/json',
 		data: JSON.stringify({
 			sid: siteSids.toString(),
-			startTime: Number(yesterData.startTime),
-			endTime: Number(yesterData.endTime),
+			startTime: Number(startTime),
+			endTime: Number(endTime),
 			interval: 'day',
 			displayType: 'dashboard',
 			formId: 'v2'
@@ -943,8 +969,8 @@ const typeSiteDraw = async (siteSids) => {
 		contentType: 'application/json',
 		data: JSON.stringify({
 			sid: siteSids.toString(),
-			startTime: Number(yesterData.startTime),
-			endTime: Number(yesterData.endTime),
+			startTime: Number(startTime),
+			endTime: Number(endTime),
 			interval: 'day',
 			formId: 'v2'
 		}),
@@ -1115,6 +1141,8 @@ const typeSiteDraw = async (siteSids) => {
 		console.error('처리 중 오류 발생');
 		console.error(error);
 		return false;
+	}).finally(() =>{
+		$('#miniLoadingCircle_type').hide();
 	});
 }
 
