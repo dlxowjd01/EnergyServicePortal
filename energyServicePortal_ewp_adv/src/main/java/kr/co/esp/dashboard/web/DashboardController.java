@@ -41,7 +41,7 @@ public class DashboardController {
 			model.addAttribute("secondYAxis", true);
 		}
 
-		boolean haveMenu = true;
+		boolean haveMenu = false;
 		LinkedHashMap<String, Object> menuList = (LinkedHashMap<String, Object>) request.getAttribute("menuList");
 		for (Map.Entry<String, Object> elem : menuList.entrySet()) {
 			Map<String, Object> menuDetail = (Map<String, Object>) elem.getValue();
@@ -50,6 +50,21 @@ public class DashboardController {
 
 			if (menuCode.contains("generation")) {
 				if (!access.isEmpty()) {
+					if (access.containsKey("allow")) {
+						Map<String, Object> allowMap = (Map<String, Object>) access.get("allow");
+						if (allowMap.containsKey("oid") && ((List) allowMap.get("oid")).contains(userInfo.get("oid"))) {
+							haveMenu = true;
+						} else {
+							if (allowMap.containsKey("role") && ((List) allowMap.get("role")).contains(userInfo.get("role"))) {
+								haveMenu = true;
+							} else if (allowMap.containsKey("task") && ((List) allowMap.get("task")).contains(userInfo.get("task"))) {
+								haveMenu = true;
+							}
+						}
+					} else {
+						haveMenu = true;
+					}
+
 					if (access.containsKey("deny")) {
 						Map<String, Object> denyMap = (Map<String, Object>) access.get("deny");
 						if (denyMap.containsKey("oid") && ((List) denyMap.get("oid")).contains(userInfo.get("oid"))) {
@@ -62,26 +77,9 @@ public class DashboardController {
 							}
 						}
 					}
-
-					if (haveMenu == true) {
-						if (access.containsKey("allow")) {
-							Map<String, Object> allowMap = (Map<String, Object>) access.get("allow");
-							if (allowMap.containsKey("oid") && ((List) allowMap.get("oid")).contains(userInfo.get("oid"))) {
-								haveMenu = true;
-							} else {
-								if (allowMap.containsKey("role") && ((List) allowMap.get("role")).contains(userInfo.get("role"))) {
-									haveMenu = true;
-								} else if (allowMap.containsKey("task") && ((List) allowMap.get("task")).contains(userInfo.get("task"))) {
-									haveMenu = true;
-								}
-							}
-						}
-					}
 				} else {
 					haveMenu = true;
 				}
-			} else {
-				haveMenu = false;
 			}
 		}
 
