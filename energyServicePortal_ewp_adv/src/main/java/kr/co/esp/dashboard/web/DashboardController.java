@@ -80,6 +80,8 @@ public class DashboardController {
 				} else {
 					haveMenu = true;
 				}
+			} else {
+				haveMenu = false;
 			}
 		}
 

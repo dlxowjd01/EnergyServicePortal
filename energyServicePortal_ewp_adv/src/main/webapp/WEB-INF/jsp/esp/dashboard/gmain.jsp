@@ -808,7 +808,6 @@
 
 			setTimeout(function(){
 				$('#errorModal').modal('hide');
-				location.reload();
 			}, 2000);
 		}
 	};
