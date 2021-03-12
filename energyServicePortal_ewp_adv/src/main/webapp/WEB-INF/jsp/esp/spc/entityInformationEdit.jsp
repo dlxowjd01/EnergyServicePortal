@@ -1882,7 +1882,7 @@
 								<th><label for="대출_약정액">대출 약정액</label></th>
 								<td>
 									<div class="text-input-type edit unit t1">
-										<input type="text" id="대출_약정액" class="right" name="대출_약정액" class="onlyNum">
+										<input type="text" id="대출_약정액" class="onlyNum right" name="대출_약정액">
 										<span>원</span>
 									</div>
 								</td>

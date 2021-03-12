@@ -134,6 +134,11 @@
 		let repayment = 0;	    //상환금
 		let org_loan_tot = 0;	//납입원금 누계
 		let standard = $('#year button').data('value') + ('0' + $('#month button').data('value')).slice(-2);
+		console.log(loan_type, loan, loan_period, loan_gumri);
+
+		if (loan != '') {
+			$('[name^="principal_"]').eq(idx).val(numberComma(loan));
+		}
 
 		if (loan_type != undefined && loan != '' && loan_period != '' && loan_gumri != '') {
 			loan_gumri = loan_gumri / 100;
@@ -246,6 +251,9 @@
 			$(this).val(numberComma(thisVal));
 			$('[name^="surtax_"]').eq(idx).val(numberComma(surtax));
 			$('[name^="supplySum_"]').eq(idx).val(numberComma(supplySum));
+		} else {
+			$('[name^="surtax_"]').eq(idx).val('');
+			$('[name^="supplySum_"]').eq(idx).val('');
 		}
 
 		let sum = 0;
@@ -261,8 +269,38 @@
 		balanceSum();
 	});
 
-	//현근유입 합계
+	//현금 유입 합계
 	$(document).on('propertychange change keyup paste input', '#balanceTable input', function () {
+		let siteBilling = $('[name^="siteBilling"]').eq(0).val().replace(/[^0-9.-]/g, '')
+		let siteMoney = $('[name^="siteMoney"]').eq(0).val().replace(/[^0-9.-]/g, '')
+		let loan_0 = $('[name^="loan_0"]').eq(0).val().replace(/[^0-9.-]/g, '')
+		let interestCost_0 = $('[name^="interestCost_0"]').eq(0).val().replace(/[^0-9.-]/g, '')
+		let conversionCharge_0 = $('[name^="conversionCharge_0"]').eq(0).val().replace(/[^0-9.-]/g, '')
+		let managementCharge_0 = $('[name^="managementCharge_0"]').eq(0).val().replace(/[^0-9.-]/g, '')
+		let corporateTax = $('[name^="corporateTax"]').eq(0).val().replace(/[^0-9.-]/g, '')
+		let additionalTax = $('[name^="additionalTax"]').eq(0).val().replace(/[^0-9.-]/g, '')
+		// let rental = $('[name^="rental"]').eq(0).val().replace(/[^0-9.-]/g, '')
+		let expense = $('[name^="expense"]').eq(0).val().replace(/[^0-9.-]/g, '')
+		let inflowOfCash = $('[name^="inflowOfCash"]').eq(0).val().replace(/[^0-9.-]/g, '')
+		let outflowOfCash = $('[name^="outflowOfCash"]').eq(0).val().replace(/[^0-9.-]/g, '')
+		let endOfTerm = $('[name^="endOfTerm"]').eq(0).val().replace(/[^0-9.-]/g, '')
+		let endOfTermFlow = $('[name^="endOfTermFlow"]').eq(0).val().replace(/[^0-9.-]/g, '')
+
+		$('[name^="siteBilling"]').eq(0).val(numberComma(siteBilling));
+		$('[name^="siteMoney"]').eq(0).val(numberComma(siteMoney));
+		$('[name^="loan_0"]').eq(0).val(numberComma(loan_0));
+		$('[name^="interestCost_0"]').eq(0).val(numberComma(interestCost_0));
+		$('[name^="conversionCharge_0"]').eq(0).val(numberComma(conversionCharge_0));
+		$('[name^="managementCharge_0"]').eq(0).val(numberComma(managementCharge_0));
+		$('[name^="corporateTax"]').eq(0).val(numberComma(corporateTax));
+		$('[name^="additionalTax"]').eq(0).val(numberComma(additionalTax));
+		// $('[name^="rental"]').eq(0).val(numberComma(rental));
+		$('[name^="expense"]').eq(0).val(numberComma(expense));
+		$('[name^="inflowOfCash"]').eq(0).val(numberComma(inflowOfCash));
+		$('[name^="outflowOfCash"]').eq(0).val(numberComma(outflowOfCash));
+		$('[name^="endOfTerm"]').eq(0).val(numberComma(endOfTerm));
+		$('[name^="endOfTermFlow"]').eq(0).val(numberComma(endOfTermFlow));
+
 		if (!$('#noteDown').is(':checked')) {
 			balanceSum();
 		}
