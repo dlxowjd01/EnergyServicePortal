@@ -377,7 +377,7 @@
 				return r1;
 			})
 		).then(r => {
-			console.log(r);
+
 			App.sites = r.sites;
 			App.energyData = r.energyData;
 			App.sids = r.sites.map(x => x.sid).join();
@@ -403,10 +403,11 @@
 			TotalTrading.init();
 			TotalProfit.init();
 			Resources.init();
-			Graph1.refresh();
-			SiteStatus.init();
-			Prediction.accuracy();
-			PieGraph.init();
+			Graph1.refresh(); // 전력거래량 예측 그래프
+			PieGraph.init(); // 예측정확도 파이그래프
+			Graph3.refresh(); // 
+			SiteStatus.init(); // 발전현황
+			Prediction.refresh();
 			Table.init();
 		},
 
@@ -599,7 +600,6 @@
 					Graph1.series[ix].data = fillArray(data[ix], 12);
 				});
 
-				console.log(Graph1.series)
 
 				Graph1.setOption();
 
@@ -612,15 +612,19 @@
 		init() {
 			Highcharts.chart("vppPie", {
 				chart: {
+					type: "pie",
 					backgroundColor: "transparent",
+					margin: [0, 0, 0, 0],
+					spacing: [0, 0, 0, 0],
+					zoomType: 'xy',
 					plotBorderWidth: 0,
-					height: 103
+					plotShadow: false,
 				},
 				title: {
-					text: '95.1%',
+					text: (Object.values(App.acc.total)[0].accuracy * 100)+'%',
 					align: 'center',
 					verticalAlign: 'middle',
-					y: 0,
+					y: 13.5,
 					style: {
 						fontSize: "15px",
 						color: "var(--white87)",
@@ -629,32 +633,200 @@
 				},
 				plotOptions: {
 					pie: {
-						startAngle: 0,
-						endAngle: 360,
+						dataLabels: {
+							enabled: false,
+							style: {
+								fontWeight: 'bold',
+								color: 'var(--white87)'
+							}
+						},
 						center: ['50%', '50%'],
-						size: '98px'
+						borderWidth: 0,
+						size: 103
 					}
+				},	
+				tooltip: {
+					shared: true,
+					borderColor: 'none',
+					backgroundColor: 'var(--bg-color)',
+					padding: 16,
+					style: {
+						color: 'var(--white87)',
+					},
+					valueSuffix: ' kwh',
+					pointFormat: '<b>{point.percentage:.0f}%</b>'
 				},
 				series: [{
 					type: 'pie',
-					name: '예측',
-					innerSize: '50%',
-					color: "#cfcfcf",
-					data: [
-						['예측', 95.1],
-					]
-				}]
+					innerSize: '70%',
+					name: "예측 정확도",
+					colorByPoint: true,
+					data: [{
+						color: '#cfcfcf',
+						name: "예측",
+						dataLabels: {
+							enabled: false
+						},
+						y: Object.values(App.acc.total)[0].accuracy * 100 //60% -- 아래로 총합 100%
+					}, {
+						color: '#656565',
+						name: "안예측",
+						dataLabels: {
+							enabled: false
+						},
+						y: 100 - (Object.values(App.acc.total)[0].accuracy * 100) //20% 나머지
+					}]
+				}],
 			});
 		}
 	}
 
-	const MoneyStatus = {
-		init() {
-			
+	// 수익현황
+	const Graph3 = {
+		series: [
+			{name: 'SMP', color: '#26ccc8', data: []},
+			{name: '예측', color: '#878787', data: []},
+		],
+		target: {},
+
+		setOption() {
+			Graph3.target = Highcharts.chart("moneyStatusGraph", {
+				chart: {
+					type: "column",
+					marginLeft: 0,
+					backgroundColor: 'transparent',
+				},
+				navigation: {
+					buttonOptions: {
+						enabled: false
+					}
+				},
+				title: {
+					text: ''
+				},
+				subtitle: {
+					text: ''
+				},
+				xAxis: [{
+					lineColor: 'var(--grey)',
+					tickColor: 'var(--grey)',
+					gridLineColor: 'var(--white25)',
+					tickWidth: 1,
+					tickLength: 6,
+					type: 'datetime',
+					labels: {
+						x: 9,
+						align: 'center',
+						style: {
+							color: 'var(--grey)',
+							fontSize: '10px',
+							rotation: 0
+						}
+					},
+					tickInterval: 1,
+					title: {
+						text: null
+					},
+					dateTimeLabelFormats: {
+						millisecond: '%H:%M:%S.%L',
+						second: '%H:%M:%S',
+						minute: '%H:%M',
+						hour: '%H',
+						day: '%m.%d ',
+						week: '%m.%e',
+						month: '%m',
+						year: '%Y'
+					},
+					categories: null,
+					crosshair: true
+				}],
+				yAxis: [{
+					lineColor: 'var(--grey)',
+					tickColor: 'var(--grey)',
+					gridLineColor: 'var(--white25)',
+					gridLineWidth: 1,
+					title: {
+						x: 10,
+						y: 30,
+						text: '천원',
+						align: 'low',
+						rotation: 0,
+						style: {
+							color: 'var(--grey)',
+							fontSize: '12px'
+						}
+					},
+					labels: { 
+						x: 0,
+						y: 15,
+						align: "left",
+						formatter: function () {
+							return Math.round(this.value / 1000);
+						},
+						style: {
+							color: 'var(--grey)',
+							fontSize: '12px'
+						},
+					},
+					plotLines: [{
+						color: 'var(--grey)',
+						width: 1
+					}],
+				}],
+				legend: {
+					enabled: true,
+					align: 'right',
+					verticalAlign: 'top',
+					x: 5,
+					y: -15,
+					itemStyle: {
+						color: 'var(--white87)',
+						fontSize: '12px',
+						fontWeight: 400
+					},
+					itemHoverStyle: {
+						color: ''
+					},
+					symbolPadding: 0,
+					symbolHeight: 7
+				},
+				plotOptions: {
+					series: {
+						label: {
+							connectorAllowed: false
+						},
+						borderWidth: 0
+					},
+					area: {
+						lineColor: "transparent",
+						marker: {
+							enabled: false
+						}
+					},
+				},
+				series: Graph3.series
+			});
 		},
 
 		refresh() {
-			
+			// $.when(getNow("15min"), getForecast("hour")).then((now, forecast) => {
+			// 	const data = [
+			// 		Object.entries(now[0].data).map(x => {
+			// 			x[1].sid = x[0];
+						
+			// 			return x[1].energy;
+			// 		}),
+			// 		Object.entries(forecast[0].data).map(x => x[1][0].items[0].energy)
+			// 	];
+		
+			// 	$.each(Graph3.series, (ix, el) => {
+			// 		Graph3.series[ix].data = fillArray(data[ix], 12);
+			// 	});
+
+				Graph3.setOption();
+
+				Graph3.target.redraw();
+			// })
 		},
 	}
 
@@ -896,17 +1068,26 @@
 	}
 
 	const Prediction = {
-		site() {
+		refresh() {
+			$.when(getForecast()).then((forecast) => {
+				forecast = Object.entries(forecast.data).map(x => {
+					x[1][0].items[0].sid = x[0];
 
+					return x[1][0].items[0];
+				}).filter(x => x.energy > 0);
+
+				const capacity = forecast.map(x => {
+					return App.energyData.find(site => site.sid === x.sid).capacity;
+				}).reduce((acc, cur) => acc + cur, 0);
+
+				const acc = Object.values(App.acc.total)[0].accuracy * 100
+
+				$("#totalSiteCount").html(forecast.length); // 총 예측 사이트
+				$("#totalCapacity").html(((capacity / 1000 / 1000).toFixed(2) * 1).toLocaleString());
+				$("#totalAcc").html(acc);
+
+			})
 		},
-
-		capacity() {
-
-		},
-
-		accuracy() {
-
-		}
 	}
 
 	// 주간 예측오차율 
@@ -984,7 +1165,7 @@
 				}
 			})
 
-			console.log(tableData);
+
 
 			Table.target.clear();
 			Table.target.rows.add(tableData);

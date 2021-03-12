@@ -74,8 +74,9 @@ h2.title {
 	justify-content: space-between;
 }
 
-.vpp-1-2-1 {
-	width: 322px;
+.vpp-1-2-1,
+.vpp-1-4-1 {
+	width: 327px;
 }
 
 .vpp-1-2-2 > h3 {
@@ -84,16 +85,17 @@ h2.title {
 }
 
 .vpp-pie-area {
-	width: 188px;
+	width: 178px;
+	height: 148px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	margin: 24px 0 21px 0;
+	/* margin: 24px 0 21px 0; */
 }
 
 #vppPie {
-	width: 103px;
-	height: 103px;
+	width: 100%;
+	height: 100%;
 }
 
 .vpp-1-2-2 .vpp-infobox > p:first-child {
@@ -155,7 +157,7 @@ h2.title {
 
 .vpp-1-4-2,
 .vpp-1-3-2-1 > div {
-	width: 188px;
+	width: 178px;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
