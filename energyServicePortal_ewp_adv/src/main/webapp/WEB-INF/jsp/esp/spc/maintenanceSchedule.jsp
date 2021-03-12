@@ -793,7 +793,9 @@
 							<div class="btn-wrap-type02">
 								<button type="button" id="deleteScheduleBtn" class="btn-type04 hidden">삭제</button>
 								<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close">취소</button>
+								<c:if test="${sessionScope.userInfo.role eq '1'}">
 								<button type="button" id="addScheduleBtn" class="btn-type">등록</button>
+								</c:if>
 							</div>
 						</div>
 					</div>
@@ -928,7 +930,10 @@
 						<button type="button" class="btn-next-month">next</button>
 						<strong></strong>
 					</div>
+					<c:if test="${sessionScope.userInfo.role eq '1'}">
 					<a href="javascript:void(0);" class="btn-type fr" id="register">등록</a>
+					</c:if>
+
 					<!--<a href="/spc/maintenanceSchedulePost.do" class="btn-type fr">등록</a>-->
 				</div>
 				<div class="search-bottom-wrapper">

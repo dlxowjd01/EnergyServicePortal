@@ -962,7 +962,9 @@
 					<button type="button" class="btn-type03 big" onclick="setCheckedDataExcelDown();"><fmt:message key='yieldReport.selected.download' /></button>
 					<button type="button" class="btn-type03 big" onclick="setCheckedDataRemove();"><fmt:message key='yieldReport.selected.delete' /></button>
 				</div>
+				<c:if test="${sessionScope.userInfo.role eq '1'}">
 				<div><button type="button" class="btn-type" onclick="modalInit();"><fmt:message key='yieldReport.new' /></button></div>
+				</c:if>
 			</div>
 			<table id="yieldTable" class="chk-type">
 				<colgroup>

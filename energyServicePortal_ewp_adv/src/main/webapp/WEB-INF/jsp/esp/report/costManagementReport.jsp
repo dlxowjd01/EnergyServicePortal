@@ -812,7 +812,9 @@
 					--><button type="button" class="btn-type03 big" onclick="setCheckedDataExcelDown();">선택 다운로드</button><!--
 					--><button type="button" class="btn-type03 big" onclick="setCheckedDataRemove();">선택 삭제</button><!--
 				--></div>
+                <c:if test="${sessionScope.userInfo.role eq '1'}">
                 <div><button type="button" class="btn-type" onclick="modalInit();">신규 생성</button></div>
+                </c:if>
             </div>
             <table id="costTable" class="chk-type dashboard-table">
                 <colgroup>

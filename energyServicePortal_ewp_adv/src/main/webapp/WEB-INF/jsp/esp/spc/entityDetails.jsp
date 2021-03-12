@@ -1691,7 +1691,9 @@
 			</div>
 			<div class="btn-wrap-type-r clear">
 				<a href="javascript:getExcelDown();" class="btn btn-type03 fl">엑셀 다운로드</a>
+				<c:if test="${sessionScope.userInfo.role eq '1'}">
 				<button type="button" class="btn-type big fr" onclick="setCheckedDataEdit();">수정</button>
+				</c:if>
 				<a href="/spc/entityInformation.do" class="btn btn-type03 fr mr-12">취소</a>
 			</div>
 			<div id="excelList" style="display:none;">

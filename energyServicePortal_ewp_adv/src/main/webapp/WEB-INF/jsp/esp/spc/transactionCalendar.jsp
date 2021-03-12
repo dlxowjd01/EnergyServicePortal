@@ -98,11 +98,17 @@
 	 */
 	const pageInit = function () {
 		<%-- task 1: 사무수탁사  2: 자산 운용사  3: 사업주  ||  role 1: encored  2: spc clients --%>
-		if(task === '2' && task === '3') {
-			document.getElementById('requestBtn').remove();
-		} else if( task === '4') {
-			document.getElementById('requestBtnReview').remove();
-			document.getElementById('requestBtn').remove();
+		if (customYn === 'N') {
+			if(task === '2' && task === '3') {
+				document.getElementById('requestBtn').remove();
+			} else if( task === '4') {
+				document.getElementById('requestBtnReview').remove();
+				document.getElementById('requestBtn').remove();
+			}
+		} else {
+			if (role === '2') {
+				document.getElementById('requestBtn').remove();
+			}
 		}
 
 		let html = '';
@@ -134,7 +140,7 @@
 	 * spc 리스트 조회
 	 */
 	const getSpcList = () => {
-		new Promise(resolve =>  {
+		new Promise((resolve, reject) =>  {
 			$.ajax({
 				url: apiHost + '/spcs?oid=' + oid + '&includeGens=true',
 				type: 'GET',
@@ -144,11 +150,11 @@
 				success: function (json) {
 					let data = json.data;
 					if (!isEmpty(data)) { resolve(data); }
-					else { new Error('SPC 조회 내역이 없습니다.') }
+					else { reject('SPC 조회 내역이 없습니다.') }
 				},
 				error: function(request, status, error) {
 					console.error(status);
-					new Error('SPC 조회 중 오류가 발생했습니다.');
+					reject('SPC 조회 중 오류가 발생했습니다.');
 				}
 			});
 		}).then(data => {
@@ -166,9 +172,10 @@
 			});
 
 			document.getElementById('spcList').innerHTML = liStr;
-			buildCalendar();
 		}).catch(error => {
 			console.error(error);
+		}).finally(() => {
+			buildCalendar();
 		});
 	}
 

@@ -70,6 +70,7 @@
 	const role = '${sessionScope.userInfo.role}';
 	// task => 0: 일반, 1:사무수탁, 2:자산운용, 3:출금관리, 4:사업주
 	const task = '${sessionScope.userInfo.task}';
+	const customYn = '${sessionScope.userInfo.custom_level_yn}';
 	const oid = '${sessionScope.userInfo.oid}';
 	const loginId = '${sessionScope.userInfo.login_id}';
 	const userInfoId = '${sessionScope.userInfo.uid}';

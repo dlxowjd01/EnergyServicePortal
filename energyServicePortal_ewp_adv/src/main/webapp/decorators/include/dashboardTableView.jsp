@@ -103,13 +103,17 @@
 					title: i18nManager.tr("dashboard.table.nowTime"), // 금일 발전시간 | (신규) [금일 발전량 / 용량]
 					data: null,
 					render: function (data, type, full, rowIndex) {
-						if (isEmpty(full['nowEnergy']) || isEmpty(full['capacity'])) {
+						if (isEmpty(full['nowEnergy_origin']) || isEmpty(full['capacity_origin'])) {
 							return '-'
 						} else {
-							const nowEnergy = Number(String(full['nowEnergy']).replace(/[^\d]/g, ''));
-							const capacity = Number(String(full['capacity']).replace(/[^\d]/g, ''));
-							const displayData = (capacity === 0) ? '0' : (Math.round(nowEnergy/capacity * 10) / 10)
-							return `<a href="javascript:void(0);" onclick="goPvGen('${'${today.format(\'yyyyMMdd\')}'}', 'hour', 'time', '${'${full[\'sid\']}'}')">${'${displayData}'}</a>`;
+							const nowEnergy = isEmpty(full['nowEnergy_origin']) ? 0 : full['nowEnergy_origin'];
+							const capacity = isEmpty(full['capacity_origin']) ? 0 : full['capacity_origin'];
+							if (nowEnergy > 0 && capacity > 0) {
+								const displayData =(Math.round(nowEnergy/capacity * 10) / 10);
+								return `<a href="javascript:void(0);" onclick="goPvGen('${'${today.format(\'yyyyMMdd\')}'}', 'hour', 'time', '${'${full[\'sid\']}'}')">${'${displayData}'}</a>`;
+							} else {
+								return '-'
+							}
 						}
 					},
 					className: 'dt-center'
@@ -124,7 +128,7 @@
 							return `<a href="javascript:void(0);" onclick="goPvGen('${'${today.format(\'yyyyMMdd\')}'}', 'hour', '', '${'${full[\'sid\']}'}')">${'${data}'}</a>`;
 						}
 					},
-					className: 'dt-head-right dt-body-right'
+					className: 'dt-center'
 				},
 				{
 					title: i18nManager.tr("dashboard.table.7"), // 현재 날씨
@@ -144,13 +148,17 @@
 					title: i18nManager.tr("dashboard.table.10"), // 전일 발전시간
 					data: null,
 					render: function (data, type, full, rowIndex) {
-						if (isEmpty(full['yesterEnergy']) || isEmpty(full['capacity'])) {
+						if (isEmpty(full['yesterEnergy_origin']) || isEmpty(full['capacity_origin'])) {
 							return '-'
 						} else {
-							const yesterEnergy = Number(String(full['yesterEnergy']).replace(/[^\d]/g, ''));
-							const capacity = Number(String(full['capacity']).replace(/[^\d]/g, ''));
-							const displayData = (capacity === 0) ? '0' : (Math.round(yesterEnergy/capacity * 10) / 10)
-							return `<a href="javascript:void(0);" onclick="goPvGen('${'${yester.format(\'yyyyMMdd\')}'}', 'hour', 'time', '${'${full[\'sid\']}'}')">${'${displayData}'}</a>`;
+							const yesterEnergy = isEmpty(full['yesterEnergy_origin']) ? 0 : full['yesterEnergy_origin'];
+							const capacity = isEmpty(full['capacity_origin']) ? 0 : full['capacity_origin'];
+							if (yesterEnergy > 0 && capacity > 0) {
+								const displayData = (Math.round(yesterEnergy/capacity * 10) / 10);
+								return `<a href="javascript:void(0);" onclick="goPvGen('${'${yester.format(\'yyyyMMdd\')}'}', 'hour', 'time', '${'${full[\'sid\']}'}')">${'${displayData}'}</a>`;
+							} else {
+								return '-';
+							}
 						}
 					},
 					className: 'dt-center'
@@ -165,7 +173,7 @@
 							return `<a href="javascript:void(0);" onclick="goPvGen('${'${yester.format(\'yyyyMMdd\')}'}', 'hour', '', '${'${full[\'sid\']}'}')">${'${data}'}</a>`;
 						}
 					},
-					className: 'dt-head-right dt-body-right'
+					className: 'dt-center'
 				},
 				{
 					title: i18nManager.tr("dashboard.table.9"), // 전일 날씨
@@ -185,16 +193,20 @@
 					title: i18nManager.tr("dashboard.table.14"), // 지난달 발전시간
 					data: null,
 					render: function (data, type, full, rowIndex) {
-						if (isEmpty(full['lastMonthGen']) || isEmpty(full['capacity'])) {
+						if (isEmpty(full['lastMonthGen']) || isEmpty(full['capacity_origin'])) {
 						 	return '-'
 						} else {
-							const lastMonthEnergy = Number(String(full['lastMonthGen']).replace(/[^\d]/g, ''));
-							const capacity = Number(String(full['capacity']).replace(/[^\d]/g, ''));
-							const displayData = (capacity === 0) ? '0' : (Math.round(lastMonthEnergy/capacity * 10) / 10)
-							return `<a href="javascript:void(0);" onclick="goPvGen('${'${lastMonth.format(\'yyyyMM\')}'}', 'day', 'time', '${'${full[\'sid\']}'}')">${'${displayData}'}</a>`;
+							const lastMonthEnergy = isEmpty(full['lastMonthGen_origin']) ? 0 : full['lastMonthGen_origin'];
+							const capacity = isEmpty(full['capacity_origin']) ? 0 : full['capacity_origin'];
+							if (lastMonthEnergy > 0 && capacity > 0) {
+								const displayData = Math.round(lastMonthEnergy/capacity * 10) / 10
+								return `<a href="javascript:void(0);" onclick="goPvGen('${'${lastMonth.format(\'yyyyMM\')}'}', 'day', 'time', '${'${full[\'sid\']}'}')">${'${displayData}'}</a>`;
+							} else {
+								return '-';
+							}
 						}
 					},
-					className: 'dt-head-right dt-body-right'
+					className: 'dt-center'
 				},
 				{
 					title: i18nManager.tr("dashboard.table.15"), // 지난달 발전량
@@ -206,22 +218,26 @@
 							return `<a href="javascript:void(0);" onclick="goPvGen('${'${lastMonth.format(\'yyyyMM\')}'}', 'day', '', '${'${full[\'sid\']}'}')">${'${data}'}</a>`;
 						}
 					},
-					className: 'dt-head-right dt-body-right'
+					className: 'dt-center'
 				},
 				{
 					title: i18nManager.tr("dashboard.table.16"), // 지난달 일 평균 발전시간
 					data: null,
 					render: function (data, type, full, rowIndex) {
-						if (isEmpty(full['lastMonthGen']) || isEmpty(full['capacity'])) {
+						if (isEmpty(full['lastMonthGen']) || isEmpty(full['capacity_origin'])) {
 							return '-'
 						} else {
-							const lastMonthEnergy = Number(String(full['lastMonthGen']).replace(/[^\d]/g, ''));
-							const capacity = Number(String(full['capacity']).replace(/[^\d]/g, ''));
-							const displayData = (capacity === 0) ? '0' : Math.round(((lastMonthEnergy/capacity) / lastDay) * 10) / 10;
-							return `<a href="javascript:void(0);" onclick="goPvGen('${'${lastMonth.format(\'yyyyMM\')}'}', 'day', 'time', '${'${full[\'sid\']}'}')">${'${displayData}'}</a>`;
-						} 
+							const lastMonthEnergy = isEmpty(full['lastMonthGen_origin']) ? 0 : full['lastMonthGen_origin'];
+							const capacity = isEmpty(full['capacity_origin']) ? 0 : full['capacity_origin'];
+							if (lastMonthEnergy > 0 && capacity > 0) {
+								const displayData = Math.round(((lastMonthEnergy/capacity) / lastDay) * 10) / 10
+								return `<a href="javascript:void(0);" onclick="goPvGen('${'${lastMonth.format(\'yyyyMM\')}'}', 'day', 'time', '${'${full[\'sid\']}'}')">${'${displayData}'}</a>`;
+							} else {
+								return '-';
+							}
+						}
 					},
-					className: 'dt-head-right dt-body-right'
+					className: 'dt-center'
 				},
 			],
 			language: {
@@ -236,7 +252,6 @@
 			},
 			dom: 'tip',
 		}).columns.adjust().draw();
-
 	});
 
 	/**
@@ -270,6 +285,7 @@
 			tableData.push({
 				sid: site.sid,
 				capacity: (!isEmpty(site.capacities) && !isEmpty(site.capacities.gen)) ? numberComma(Math.round(site.capacities.gen / 1000)) : '-',
+				capacity_origin: site.capacities.gen,
 				siteName: site.name
 			});
 		});
@@ -382,7 +398,7 @@
 				})(deferred);
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				document.getElementById('loadingCircleDashboard').style.display =  'none';
-				let errMsg = "처리 중 오류가 발생했습니다.<br/>에러 메세지:" + errorThrown;
+				let errMsg = '처리 중 오류가 발생했습니다.<br/>에러 메세지:' + errorThrown;
 				let r = formatErrorMessage(jqXHR, errorThrown);
 				console.log("error===", r, url);
 				$("#errMsg").html(errMsg);
@@ -440,7 +456,6 @@
 						});
 
 						tableData.forEach((site, index) => {
-
 							if (site.sid === targetSid) {
 								if (totalCount == 0) {
 									tableData[index]['invCount'] = '-';
@@ -460,6 +475,7 @@
 							if (isEmpty(targetData)) {
 								tableData[index]['nowEnergy'] = '-';
 							} else {
+								tableData[index]['nowEnergy_origin'] = targetData.energy;
 								tableData[index]['nowEnergy'] = !isNaN(targetData.energy) ? displayNumberFixedUnit(targetData.energy, 'W', 'kW', 0)[0] : '-';
 							}
 						});
@@ -507,8 +523,10 @@
 										let genEnergy = 0;
 										items.map(e => genEnergy += e['energy']);
 										if (interval) {
+											tableData[index]['yesterEnergy_origin'] = genEnergy;
 											tableData[index]['yesterEnergy'] = !isNaN(genEnergy) ? displayNumberFixedUnit(genEnergy, 'W', 'kW', 0)[0] : '-';
 										} else {
+											tableData[index]['lastMonthGen_origin'] = genEnergy;
 											tableData[index]['lastMonthGen'] = !isNaN(genEnergy) ? displayNumberFixedUnit(genEnergy, 'W', 'kW', 0)[0] : '-';
 										}
 									}
