@@ -494,6 +494,7 @@
 <script type="text/javascript">
 	const siteList = JSON.parse('${siteList}')
 		, sgid = '${sgid}'
+		, haveMenu = '${haveMenu}'
 		, today = new Date()
 		, divisionLocation = '${sessionScope.divisionLocation}'
 		, divisionResourceType = '${sessionScope.divisionResourceType}';
@@ -782,24 +783,34 @@
 
 	const goPvGen = (target, interval, type, sid) => {
 
-		if (!$('#switchBtn').is(':checked')) {
-			if (interval === 'day') {
-				const standard = $('#monthlySum').parent().find('.term span').data('standard');
-				target = standard.format('yyyy') + ('0' + target).slice(-2);
-			} else {
-				const standard = $('#dailySum').parent().find('.term span').data('standard');
-				target = standard.format('yyyyMM') + ('0' + target).slice(-2);
+		if (haveMenu === 'true') {
+			if (!$('#switchBtn').is(':checked')) {
+				if (interval === 'day') {
+					const standard = $('#monthlySum').parent().find('.term span').data('standard');
+					target = standard.format('yyyy') + ('0' + target).slice(-2);
+				} else {
+					const standard = $('#dailySum').parent().find('.term span').data('standard');
+					target = standard.format('yyyyMM') + ('0' + target).slice(-2);
+				}
 			}
-		}
 
-		if (isEmpty(type)) { type = ''; }
-		if (isEmpty(sid)) { sid = ''; }
-		let $form = $('#linkSiteForm');
-		let $inp = $('<input>').attr('type', 'hidden').attr('name', 'target').val(target);
-		let $inp2 = $('<input>').attr('type', 'hidden').attr('name', 'interval').val(interval);
-		let $inp3 = $('<input>').attr('type', 'hidden').attr('name', 'type').val(type);
-		let $inp4 = $('<input>').attr('type', 'hidden').attr('name', 'sid').val(sid);
-		$form.empty().append($inp).append($inp2).append($inp3).append($inp4).attr('action', '/energy/pvGen.do').submit();
+			if (isEmpty(type)) { type = ''; }
+			if (isEmpty(sid)) { sid = ''; }
+			let $form = $('#linkSiteForm');
+			let $inp = $('<input>').attr('type', 'hidden').attr('name', 'target').val(target);
+			let $inp2 = $('<input>').attr('type', 'hidden').attr('name', 'interval').val(interval);
+			let $inp3 = $('<input>').attr('type', 'hidden').attr('name', 'type').val(type);
+			let $inp4 = $('<input>').attr('type', 'hidden').attr('name', 'sid').val(sid);
+			$form.empty().append($inp).append($inp2).append($inp3).append($inp4).attr('action', '/energy/pvGen.do').submit();
+		} else {
+			$('#errMsg').html('메뉴 이동 권한이 없습니다.');
+			$('#errorModal').modal('show');
+
+			setTimeout(function(){
+				$('#errorModal').modal('hide');
+				location.reload();
+			}, 2000);
+		}
 	};
 
 	function hideAllInfoWindows(map) {

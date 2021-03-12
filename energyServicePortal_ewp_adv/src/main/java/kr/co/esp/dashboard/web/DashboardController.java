@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -30,6 +31,7 @@ public class DashboardController {
 	 */
 	@RequestMapping(value = "/dashboard/gmain.do")
 	public String gmain(HttpServletRequest request, HttpSession session, Model model) {
+		Map<String, Object> userInfo = UserUtil.getUserInfo(request);
 		String dashboardMap = (String) EgovProperties.getProperty("dashboard.map"); // TEST 서버 여부
 
 		String defaultOid = EgovProperties.getProperty("default.oid");
@@ -39,6 +41,49 @@ public class DashboardController {
 			model.addAttribute("secondYAxis", true);
 		}
 
+		boolean haveMenu = true;
+		LinkedHashMap<String, Object> menuList = (LinkedHashMap<String, Object>) request.getAttribute("menuList");
+		for (Map.Entry<String, Object> elem : menuList.entrySet()) {
+			Map<String, Object> menuDetail = (Map<String, Object>) elem.getValue();
+			Map<String, Object> access = (Map<String, Object>) menuDetail.get("access");
+			String menuCode = (String) menuDetail.get("code");
+
+			if (menuCode.contains("generation")) {
+				if (!access.isEmpty()) {
+					if (access.containsKey("deny")) {
+						Map<String, Object> denyMap = (Map<String, Object>) access.get("deny");
+						if (denyMap.containsKey("oid") && ((List) denyMap.get("oid")).contains(userInfo.get("oid"))) {
+							haveMenu = false;
+						} else {
+							if (denyMap.containsKey("role") && ((List) denyMap.get("role")).contains(userInfo.get("role"))) {
+								haveMenu = false;
+							} else if (denyMap.containsKey("task") && ((List) denyMap.get("task")).contains(userInfo.get("task"))) {
+								haveMenu = false;
+							}
+						}
+					}
+
+					if (haveMenu == true) {
+						if (access.containsKey("allow")) {
+							Map<String, Object> allowMap = (Map<String, Object>) access.get("allow");
+							if (allowMap.containsKey("oid") && ((List) allowMap.get("oid")).contains(userInfo.get("oid"))) {
+								haveMenu = true;
+							} else {
+								if (allowMap.containsKey("role") && ((List) allowMap.get("role")).contains(userInfo.get("role"))) {
+									haveMenu = true;
+								} else if (allowMap.containsKey("task") && ((List) allowMap.get("task")).contains(userInfo.get("task"))) {
+									haveMenu = true;
+								}
+							}
+						}
+					}
+				} else {
+					haveMenu = true;
+				}
+			}
+		}
+
+		model.addAttribute("haveMenu", haveMenu);
 		model.addAttribute("dashboardMap", dashboardMap);
 		return "esp/dashboard/gmain";
 	}
