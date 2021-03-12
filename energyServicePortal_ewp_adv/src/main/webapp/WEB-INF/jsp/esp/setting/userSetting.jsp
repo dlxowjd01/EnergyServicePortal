@@ -2039,7 +2039,7 @@
 								<div id="accLevel" class="dropdown">
 									<button type="button" class="dropdown-toggle asterisk" data-toggle="dropdown" data-name="선택"><fmt:message key='userSetting.select' /><span class="caret"></span></button>
 									<ul id="newAccLevel" class="dropdown-menu">
-										<c:if test="${role eq '1'}">
+										<c:if test="${userInfo.role eq '1'}">
 											<li data-value="1" data-name="시스템 관리자"><a href="#"><fmt:message key='userSetting.auth.admin' /></a></li>
 										</c:if>
 										<li data-value="2" data-name="일반 사용자"><a href="#"><fmt:message key='userSetting.auth.user' /></a></li>

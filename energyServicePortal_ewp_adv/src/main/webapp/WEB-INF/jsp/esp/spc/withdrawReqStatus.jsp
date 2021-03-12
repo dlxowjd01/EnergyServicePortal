@@ -108,7 +108,7 @@
 					data: 'status',
 					render: function (data, type, full, rowIndex) {
 						let statusButton = `<button class="${'${full.statusClass}'} clear-btn" onclick="goToDetail(\'${'${rowIndex.row}'}\')">${'${data}'}</button>`;
-						if (role === '1' && (role !== '2' && task !== '2' && customYn === 'N')) {
+						if (task !== '2') {
 							if (!isEmpty(full['statusVal']) && full['statusVal'] === 0) {
 								statusButton += `<a href="javascript:void(0);" onclick="deleteRow(\'${'${rowIndex.row}'}\')" class="icon-delete"></a>`;
 							} else if (!isEmpty(full['statusVal']) && full['statusVal'] === 1) {
@@ -222,7 +222,12 @@
 			} else {
 				getDataList(searchOpt);
 			}
+
+			$('#searchForm').submit();
+		}).catch(error => {
+			errorMsg(error);
 		});
+	}
 
 		pageInit();
 	});

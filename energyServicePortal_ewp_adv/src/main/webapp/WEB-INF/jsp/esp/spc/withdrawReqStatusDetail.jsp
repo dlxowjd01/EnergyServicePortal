@@ -680,49 +680,37 @@
 						</c:choose>
 					</c:when>
 					<c:otherwise>
-						<c:choose>
-							<c:when test="${userInfo.custom_level_yn eq 'N' and userInfo.task ne 1}">
-								<div class="flex-wrapper mt-20">
-									<h2 class="heading">메모</h2><!--
-									--><a class="chk-type" href="javascript:void(0);"><input type="checkbox" id="memoOpt" name="memo_opt"><label for="memoOpt">사무수탁사 함께 보기</label></a><!--
-								--></div>
-								<div class="textarea-container mt-12">
-									<button type="button" id="saveBtn" class="btn-type03 btn-fixed">저장</button>
-									<textarea placeholder="직접입력" id="txt2" class="textarea w-100"></textarea>
-								</div>
-								<c:choose>
-									<c:when test="${userInfo.task eq 3 and param.req_detail_status_val eq 3}">
-										<div class="spc-btn-group my-20"><!--
+						<c:if test="${userInfo.task ne 1}">
+							<div class="flex-wrapper mt-20">
+								<h2 class="heading">메모</h2><!--
+							--><a class="chk-type" href="javascript:void(0);"><input type="checkbox" id="memoOpt" name="memo_opt"><label for="memoOpt">사무수탁사 함께 보기</label></a><!--
+						--></div>
+							<div class="textarea-container mt-12">
+								<button type="button" id="saveBtn" class="btn-type03 btn-fixed">저장</button>
+								<textarea placeholder="직접입력" id="txt2" class="textarea w-100"></textarea>
+							</div>
+							<c:choose>
+								<c:when test="${userInfo.task eq 3 and param.req_detail_status_val eq 3}">
+									<div class="spc-btn-group my-20"><!--
 									--><button type="button" id="provisionalBtn" class="btn-type">출금 가승인</button><!--
 								--></div>
-									</c:when>
-									<c:when test="${userInfo.task eq 3 and (param.req_detail_status_val eq 4 or param.req_detail_status_val eq 5)}">
-										<div class="spc-btn-group my-20"><!--
+								</c:when>
+								<c:when test="${userInfo.task eq 3 and (param.req_detail_status_val eq 4 or param.req_detail_status_val eq 5)}">
+									<div class="spc-btn-group my-20"><!--
 									--><button type="button" id="finalApprovalBtn" class="btn-type">승인완료로 변경</button><!--
 								--></div>
-									</c:when>
-									<c:otherwise>
-										<c:if test="${userInfo.task eq 2 and (param.req_detail_status_val ne 4 and param.req_detail_status_val ne 5 and param.req_detail_status_val ne 9)}">
-											<div class="spc-btn-group my-20"><!--
+								</c:when>
+								<c:otherwise>
+									<c:if test="${userInfo.task eq 2 and (param.req_detail_status_val ne 4 and param.req_detail_status_val ne 5 and param.req_detail_status_val ne 9)}">
+										<div class="spc-btn-group my-20"><!--
 										--><button type="button" id="reviewBtn" class="btn-type mr-16">검토대기로 변경</button><!--
 										--><button type="button" id="rejectBtn" class="btn-type03 w-80px">반송</button><!--
 										--><button type="submit" class="btn-type ml-12">승인</button><!--
 									--></div>
-										</c:if>
-									</c:otherwise>
-								</c:choose>
-							</c:when>
-							<c:otherwise>
-								<div class="flex-wrapper mt-20">
-									<h2 class="heading">메모</h2><!--
-									--><a class="chk-type" href="javascript:void(0);"><input type="checkbox" id="memoOpt" name="memo_opt"><label for="memoOpt">사무수탁사 함께 보기</label></a><!--
-								--></div>
-								<div class="textarea-container mt-12">
-									<textarea placeholder="직접입력" id="txt2" class="textarea w-100"></textarea>
-								</div>
-							</c:otherwise>
-						</c:choose>
-
+									</c:if>
+								</c:otherwise>
+							</c:choose>
+						</c:if>
 					</c:otherwise>
 				</c:choose>
 			</div>

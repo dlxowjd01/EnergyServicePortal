@@ -730,10 +730,8 @@
 	<div class="col-lg-12">
 		<div class="indiv">
 			<div class="btn-wrap-type02 btn-wrap-fixed mb-16">
-				<c:if test="${sessionScope.userInfo.role eq 1}">
 				<button type="button" class="btn-type big" onclick="location.href='/spc/entityInformationPost.do'">신규 등록</button>
 				<button type="button" class="btn-type03" id="deleteBtn" onclick="setCheckedDataRemove();" disabled>선택 삭제</button>
-				</c:if>
 			</div>
 			<table id="spcEntityTable" class="chk-type">
 				<colgroup>

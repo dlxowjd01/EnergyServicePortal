@@ -307,11 +307,9 @@
 	<div class="col-lg-12">
 		<div class="indiv">
 			<div class="btn-wrap-type01">
-				<c:if test="${sessionScope.userInfo.role eq '1'}">
 				<button type="button" class="btn-type" onclick="location.href='/report/maintenanceReportPost.do'">
 					<fmt:message key="workreportmain.2.register" />
 				</button>
-				</c:if>
 			</div>
 			<table id="reportTable" class="chk-type">
 				<colgroup>

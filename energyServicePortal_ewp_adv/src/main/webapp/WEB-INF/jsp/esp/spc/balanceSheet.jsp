@@ -311,9 +311,7 @@
 	<div class="col-12">
 		<div class="indiv">
 			<div class="btn-wrap-type01">
-				<c:if test="${sessionScope.userInfo.role eq '1'}">
 				<button type="button" class="btn-type" onclick="location.href='/spc/balanceSheetPost.do'">신규 등록</button>
-				</c:if>
 			</div>
 			<table id="balanceTable" class="chk-type">
 				<colgroup>
@@ -328,9 +326,7 @@
 				</colgroup>
 			</table>
 			<div class="btn-wrap-type02 mt-30">
-				<c:if test="${sessionScope.userInfo.role eq '1'}">
 				<button type="button" class="btn-type03" id="deleteBtn" onclick="deleteRow();" disabled="disabled">선택 삭제</button>
-				</c:if>
 			</div>
 		</div>
 	</div>
