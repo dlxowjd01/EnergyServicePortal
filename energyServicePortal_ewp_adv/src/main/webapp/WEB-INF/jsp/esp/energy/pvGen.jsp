@@ -259,16 +259,22 @@
 			$("#siteList")
 				.prepend(`<div class="dropdown-search"><input type="text" placeholder="<fmt:message key="dropdown.siteSearch" />" onKeyup="searchSite($(this).val())" ></div>`)
 				.append(`<div class="btn-wrap-type03 btn-wrap-border dropdown-apply"><button type="button" class="btn-type mr-16"><fmt:message key="deviceState.apply" /></button></div>`);
-
-			if (sidparam) {
-				$("#siteList ul li a[data-value="+sidparam+"] > label").click();
-			}
 		}
 
 		if (!isEmpty(dashStandard) && !isEmpty(dashInterval)) {
-			$(':checkbox[name="site"]').prop('checked', true);
+			if (!isEmpty(sidparam)) {
+				$(':checkbox[name="site"][value="' + sidparam + '"]').prop('checked', true);
+			} else {
+				$(':checkbox[name="site"]').prop('checked', true);
+			}
 			displayDropdown($('#siteList'));
 			makeDeviceList();
+		} else {
+			if (!isEmpty(sidparam)) {
+				$(':checkbox[value=' + sidparam + ']').prop('checked', true);
+				displayDropdown($('#siteList'));
+				makeDeviceList();
+			}
 		}
 	};
 
@@ -384,8 +390,6 @@
 
 				deviceList.innerHTML = liStr;
 
-				if (sidparam) { $("#deviceType > div > div > div > div > div.fl > button:nth-child(1)").click(); }
-
 				if (!isEmpty(dashStandard) && !isEmpty(dashInterval)) {
 					if (!isEmpty(dashType) && dashType === 'time') {
 						$(':checkbox[name="device"]').each(function() {
@@ -415,6 +419,10 @@
 
 					$('#chartStyle button').data('value', 'allSum').html('<fmt:message key="renewablesgen.3.sumtotal" /></a></li> <span class="caret"></span>');
 					searchGenData();
+				} else {
+					if (sidparam) {
+						$(':checkbox[name="device"][data-sid="' + sidparam + '"]').prop('checked', true);
+					}
 				}
 			}).catch(error => {
 				console.error(error);

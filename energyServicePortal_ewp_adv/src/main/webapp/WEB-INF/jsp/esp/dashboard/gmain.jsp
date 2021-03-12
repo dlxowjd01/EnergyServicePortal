@@ -780,7 +780,7 @@
 		$form.append($inp).append($inp2).append($inp3).attr('action', '/diagnosis/generation.do').submit();
 	}
 
-	const goPvGen = (target, interval, type) => {
+	const goPvGen = (target, interval, type, sid) => {
 
 		if (!$('#switchBtn').is(':checked')) {
 			if (interval === 'day') {
@@ -793,11 +793,13 @@
 		}
 
 		if (isEmpty(type)) { type = ''; }
+		if (isEmpty(sid)) { sid = ''; }
 		let $form = $('#linkSiteForm');
 		let $inp = $('<input>').attr('type', 'hidden').attr('name', 'target').val(target);
 		let $inp2 = $('<input>').attr('type', 'hidden').attr('name', 'interval').val(interval);
 		let $inp3 = $('<input>').attr('type', 'hidden').attr('name', 'type').val(type);
-		$form.empty().append($inp).append($inp2).append($inp3).attr('action', '/energy/pvGen.do').submit();
+		let $inp4 = $('<input>').attr('type', 'hidden').attr('name', 'sid').val(sid);
+		$form.empty().append($inp).append($inp2).append($inp3).append($inp4).attr('action', '/energy/pvGen.do').submit();
 	};
 
 	function hideAllInfoWindows(map) {

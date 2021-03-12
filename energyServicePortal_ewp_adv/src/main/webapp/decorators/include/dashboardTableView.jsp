@@ -109,7 +109,7 @@
 							const nowEnergy = Number(String(full['nowEnergy']).replace(/[^\d]/g, ''));
 							const capacity = Number(String(full['capacity']).replace(/[^\d]/g, ''));
 							const displayData = (capacity === 0) ? '0' : (Math.round(nowEnergy/capacity * 10) / 10)
-							return `<a href="javascript:void(0);" onclick="goPvGen('${'${today.format(\'yyyyMMdd\')}'}', 'hour', 'time')">${'${displayData}'}</a>`;
+							return `<a href="javascript:void(0);" onclick="goPvGen('${'${today.format(\'yyyyMMdd\')}'}', 'hour', 'time', '${'${full[\'sid\']}'}')">${'${displayData}'}</a>`;
 						}
 					},
 					className: 'dt-center'
@@ -121,7 +121,7 @@
 						if (isEmpty(data)) {
 							return '-';
 						} else {
-							return `<a href="javascript:void(0);" onclick="goPvGen('${'${today.format(\'yyyyMMdd\')}'}', 'hour')">${'${data}'}</a>`;
+							return `<a href="javascript:void(0);" onclick="goPvGen('${'${today.format(\'yyyyMMdd\')}'}', 'hour', '', '${'${full[\'sid\']}'}')">${'${data}'}</a>`;
 						}
 					},
 					className: 'dt-head-right dt-body-right'
@@ -150,7 +150,7 @@
 							const yesterEnergy = Number(String(full['yesterEnergy']).replace(/[^\d]/g, ''));
 							const capacity = Number(String(full['capacity']).replace(/[^\d]/g, ''));
 							const displayData = (capacity === 0) ? '0' : (Math.round(yesterEnergy/capacity * 10) / 10)
-							return `<a href="javascript:void(0);" onclick="goPvGen('${'${yester.format(\'yyyyMMdd\')}'}', 'hour', 'time')">${'${displayData}'}</a>`;
+							return `<a href="javascript:void(0);" onclick="goPvGen('${'${yester.format(\'yyyyMMdd\')}'}', 'hour', 'time', '${'${full[\'sid\']}'}')">${'${displayData}'}</a>`;
 						}
 					},
 					className: 'dt-center'
@@ -162,7 +162,7 @@
 						if (isEmpty(data)) {
 							return '-'
 						} else {
-							return `<a href="javascript:void(0);" onclick="goPvGen('${'${yester.format(\'yyyyMMdd\')}'}', 'hour')">${'${data}'}</a>`;
+							return `<a href="javascript:void(0);" onclick="goPvGen('${'${yester.format(\'yyyyMMdd\')}'}', 'hour', '', '${'${full[\'sid\']}'}')">${'${data}'}</a>`;
 						}
 					},
 					className: 'dt-head-right dt-body-right'
@@ -191,7 +191,7 @@
 							const lastMonthEnergy = Number(String(full['lastMonthGen']).replace(/[^\d]/g, ''));
 							const capacity = Number(String(full['capacity']).replace(/[^\d]/g, ''));
 							const displayData = (capacity === 0) ? '0' : (Math.round(lastMonthEnergy/capacity * 10) / 10)
-							return `<a href="javascript:void(0);" onclick="goPvGen('${'${lastMonth.format(\'yyyyMM\')}'}', 'day', 'time')">${'${displayData}'}</a>`;
+							return `<a href="javascript:void(0);" onclick="goPvGen('${'${lastMonth.format(\'yyyyMM\')}'}', 'day', 'time', '${'${full[\'sid\']}'}')">${'${displayData}'}</a>`;
 						}
 					},
 					className: 'dt-head-right dt-body-right'
@@ -203,7 +203,7 @@
 						if (isEmpty(data)) {
 							return '-';
 						} else {
-							return `<a href="javascript:void(0);" onclick="goPvGen('${'${lastMonth.format(\'yyyyMM\')}'}', 'day')">${'${data}'}</a>`;
+							return `<a href="javascript:void(0);" onclick="goPvGen('${'${lastMonth.format(\'yyyyMM\')}'}', 'day', '', '${'${full[\'sid\']}'}')">${'${data}'}</a>`;
 						}
 					},
 					className: 'dt-head-right dt-body-right'
@@ -218,8 +218,8 @@
 							const lastMonthEnergy = Number(String(full['lastMonthGen']).replace(/[^\d]/g, ''));
 							const capacity = Number(String(full['capacity']).replace(/[^\d]/g, ''));
 							const displayData = (capacity === 0) ? '0' : Math.round(((lastMonthEnergy/capacity) / lastDay) * 10) / 10;
-							return `<a href="javascript:void(0);" onclick="goPvGen('${'${lastMonth.format(\'yyyyMM\')}'}', 'day', 'time')">${'${displayData}'}</a>`;
-						}
+							return `<a href="javascript:void(0);" onclick="goPvGen('${'${lastMonth.format(\'yyyyMM\')}'}', 'day', 'time', '${'${full[\'sid\']}'}')">${'${displayData}'}</a>`;
+						} 
 					},
 					className: 'dt-head-right dt-body-right'
 				},
