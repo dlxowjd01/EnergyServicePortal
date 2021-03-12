@@ -3684,7 +3684,7 @@
 							startTime: userDefinedDay.format("yyyyMMdd") + '000000',
 							endTime: toDate.format("yyyyMMdd") + '235959',
 							interval: 'day',
-							// displayType: 'dashboard',
+							displayType: 'dashboard',
 							formId: 'v2'
 						}
 					}
@@ -3878,7 +3878,7 @@
 							startTime: userDefinedDay.format("yyyyMMddHHmmss"),
 							endTime: new Date().format("yyyyMMddHHmmss"),
 							interval: 'day',
-							// displayType: 'dashboard',
+							displayType: 'dashboard',
 							formId: 'v2'
 						}
 					}
@@ -4021,7 +4021,7 @@
 						startTime: monthAgo.format("yyyyMMddHHmmss"),
 						endTime: new Date().format("yyyyMMddHHmmss"),
 						interval: 'day',
-						// displayType: 'dashboard',
+						displayType: 'dashboard',
 						formId: 'v2'
 					}
 				}
