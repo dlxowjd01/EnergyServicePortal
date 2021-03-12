@@ -30,6 +30,15 @@
 
 <script type="text/javascript">
 	let gmainTable = null;
+	let yester = new Date();
+	yester.setDate(yester.getDate() - 1);
+
+	let lastMonth = new Date();
+	lastMonth.setDate(0);
+
+	let lastDay = 0;
+	lastDay = lastMonth.getDate();
+
 	$(function () {
 		gmainTable = $('#gmainTable').DataTable({
 			autoWidth: true,
@@ -99,8 +108,8 @@
 						} else {
 							const nowEnergy = Number(String(full['nowEnergy']).replace(/[^\d]/g, ''));
 							const capacity = Number(String(full['capacity']).replace(/[^\d]/g, ''));
-
-							return (capacity === 0) ? "0" : (Math.round(nowEnergy/capacity * 10) / 10);
+							const displayData = (capacity === 0) ? '0' : (Math.round(nowEnergy/capacity * 10) / 10)
+							return `<a href="javascript:void(0);" onclick="goPvGen('${'${today.format(\'yyyyMMdd\')}'}', 'hour', 'time')">${'${displayData}'}</a>`;
 						}
 					},
 					className: 'dt-center'
@@ -109,7 +118,11 @@
 					title: i18nManager.tr("dashboard.table.6"), // 현재 발전량
 					data: 'nowEnergy',
 					render: function (data, type, full, rowIndex) {
-						return isEmpty(data) ? '-' : data;
+						if (isEmpty(data)) {
+							return '-';
+						} else {
+							return `<a href="javascript:void(0);" onclick="goPvGen('${'${today.format(\'yyyyMMdd\')}'}', 'hour')">${'${data}'}</a>`;
+						}
 					},
 					className: 'dt-head-right dt-body-right'
 				},
@@ -136,8 +149,8 @@
 						} else {
 							const yesterEnergy = Number(String(full['yesterEnergy']).replace(/[^\d]/g, ''));
 							const capacity = Number(String(full['capacity']).replace(/[^\d]/g, ''));
-
-							return (capacity === 0) ? "0" : (Math.round(yesterEnergy/capacity * 10) / 10);
+							const displayData = (capacity === 0) ? '0' : (Math.round(yesterEnergy/capacity * 10) / 10)
+							return `<a href="javascript:void(0);" onclick="goPvGen('${'${yester.format(\'yyyyMMdd\')}'}', 'hour', 'time')">${'${displayData}'}</a>`;
 						}
 					},
 					className: 'dt-center'
@@ -146,12 +159,16 @@
 					title: i18nManager.tr("dashboard.table.8"), // 전일 발전량
 					data: 'yesterEnergy',
 					render: function (data, type, full, rowIndex) {
-						return isEmpty(data) ? '-' : data;
+						if (isEmpty(data)) {
+							return '-'
+						} else {
+							return `<a href="javascript:void(0);" onclick="goPvGen('${'${yester.format(\'yyyyMMdd\')}'}', 'hour')">${'${data}'}</a>`;
+						}
 					},
 					className: 'dt-head-right dt-body-right'
 				},
 				{
-					title: i18nManager.tr("dashboard.table.9"), // 전일 날ㅆㅣ
+					title: i18nManager.tr("dashboard.table.9"), // 전일 날씨
 					data: 'yesterDaySky',
 					render: function (data, type, full, rowIndex) {
 						if (data != null && data === '-') {
@@ -165,30 +182,44 @@
 					className: 'dt-center'
 				},
 				{
-					title: i18nManager.tr("dashboard.table.11"), // 월간 발전량
-					data: 'monthGen',
+					title: i18nManager.tr("dashboard.table.14"), // 지난달 발전시간
+					data: null,
 					render: function (data, type, full, rowIndex) {
-						if (isEmpty(data)) {
-							return '-';
+						if (isEmpty(full['lastMonthGen']) || isEmpty(full['capacity'])) {
+						 	return '-'
 						} else {
-							return numberComma(data);
+							const lastMonthEnergy = Number(String(full['lastMonthGen']).replace(/[^\d]/g, ''));
+							const capacity = Number(String(full['capacity']).replace(/[^\d]/g, ''));
+							const displayData = (capacity === 0) ? '0' : (Math.round(lastMonthEnergy/capacity * 10) / 10)
+							return `<a href="javascript:void(0);" onclick="goPvGen('${'${lastMonth.format(\'yyyyMM\')}'}', 'day', 'time')">${'${displayData}'}</a>`;
 						}
 					},
 					className: 'dt-head-right dt-body-right'
 				},
 				{
-					title: i18nManager.tr("dashboard.table.12"), // 전년 동월 발전량
-					data: 'beforeYearGen',
+					title: i18nManager.tr("dashboard.table.15"), // 지난달 발전량
+					data: 'lastMonthGen',
 					render: function (data, type, full, rowIndex) {
-						return isEmpty(data) ? '-' : data;
+						if (isEmpty(data)) {
+							return '-';
+						} else {
+							return `<a href="javascript:void(0);" onclick="goPvGen('${'${lastMonth.format(\'yyyyMM\')}'}', 'day')">${'${data}'}</a>`;
+						}
 					},
 					className: 'dt-head-right dt-body-right'
 				},
 				{
-					title: i18nManager.tr("dashboard.table.13"), // 전년 동월대비 발전비율
-					data: 'proportion',
+					title: i18nManager.tr("dashboard.table.16"), // 지난달 일 평균 발전시간
+					data: null,
 					render: function (data, type, full, rowIndex) {
-						return data;
+						if (isEmpty(full['lastMonthGen']) || isEmpty(full['capacity'])) {
+							return '-'
+						} else {
+							const lastMonthEnergy = Number(String(full['lastMonthGen']).replace(/[^\d]/g, ''));
+							const capacity = Number(String(full['capacity']).replace(/[^\d]/g, ''));
+							const displayData = (capacity === 0) ? '0' : Math.round(((lastMonthEnergy/capacity) / lastDay) * 10) / 10;
+							return `<a href="javascript:void(0);" onclick="goPvGen('${'${lastMonth.format(\'yyyyMM\')}'}', 'day', 'time')">${'${displayData}'}</a>`;
+						}
 					},
 					className: 'dt-head-right dt-body-right'
 				},
@@ -216,9 +247,7 @@
 	const getDashboardTable = (table) => {
 		const dayFormData = getSiteMainSchCollection('day');
 		const yesterDayFormData = getSiteMainSchCollection('yesterday');
-		const monthFormData = getSiteMainSchCollection('month');
 		const beforeMonthFormData = getSiteMainSchCollection('beforeMonth');
-		const yearFormData = getSiteMainSchCollection('beforeYearSameMonth');
 
 		let tableData = new Array();
 		let urls = new Array();
@@ -261,16 +290,6 @@
 				}
 			});
 
-			urls.push({
-				url: apiHost + '/energy/now/sites',
-				type: 'get',
-				data: {
-					sids: siteArray.toString(),
-					metering_type: 2,
-					interval: 'month'
-				}
-			});
-
 			//어제 발전
 			urls.push({
 				url: apiHost + '/energy/sites?interval=day',
@@ -290,8 +309,8 @@
 				type: 'get',
 				data: {
 					sid: siteArray.toString(),
-					startTime: yearFormData.startTime,
-					endTime: yearFormData.endTime,
+					startTime: beforeMonthFormData.startTime,
+					endTime: beforeMonthFormData.endTime,
 					displayType: 'dashboard',
 					formId: 'v2'
 				}
@@ -355,7 +374,6 @@
 		urls.forEach(function (url) {
 			let deferred = $.Deferred();
 			deferreds.push(deferred);
-			console.log(url)
 
 			$.ajax(url).done(function (data) {
 				data['url'] = url['url'];
@@ -439,18 +457,10 @@
 					} else if (targetUrl.match('/energy/now/sites')) {
 						tableData.forEach((site, index) => {
 							let targetData = result.data[site.sid];
-							if (result.interval === 'month') {
-								if (isEmpty(targetData) || isEmpty(targetData.energy)) {
-									tableData[index]['monthGen'] = '-';
-								} else {
-									tableData[index]['monthGen'] = !isNaN(targetData.energy) ? displayNumberFixedUnit(targetData.energy, 'W', 'MW', 2)[0] : '-';
-								}
+							if (isEmpty(targetData)) {
+								tableData[index]['nowEnergy'] = '-';
 							} else {
-								if (isEmpty(targetData)) {
-									tableData[index]['nowEnergy'] = '-';
-								} else {
-									tableData[index]['nowEnergy'] = !isNaN(targetData.energy) ? displayNumberFixedUnit(targetData.energy, 'W', 'kW', 0)[0] : '-';
-								}
+								tableData[index]['nowEnergy'] = !isNaN(targetData.energy) ? displayNumberFixedUnit(targetData.energy, 'W', 'kW', 0)[0] : '-';
 							}
 						});
 					} else if (targetUrl.match('/weather/site')) {
@@ -499,7 +509,7 @@
 										if (interval) {
 											tableData[index]['yesterEnergy'] = !isNaN(genEnergy) ? displayNumberFixedUnit(genEnergy, 'W', 'kW', 0)[0] : '-';
 										} else {
-											tableData[index]['beforeYearGen'] = !isNaN(genEnergy) ? displayNumberFixedUnit(genEnergy, 'W', 'kW', 0)[0] : '-';
+											tableData[index]['lastMonthGen'] = !isNaN(genEnergy) ? displayNumberFixedUnit(genEnergy, 'W', 'kW', 0)[0] : '-';
 										}
 									}
 								});
@@ -525,14 +535,6 @@
 							}
 						});
 					}
-				}
-			});
-
-			tableData.forEach((data, index) => {
-				if (isEmpty(data.beforeYearGen) || isEmpty(data.monthGen) ) {
-					tableData[index]['proportion'] = '-'
-				} else {
-					tableData[index]['proportion'] = ((data.monthGen / data.beforeYearGen) * 100).toFixed(2);
 				}
 			});
 

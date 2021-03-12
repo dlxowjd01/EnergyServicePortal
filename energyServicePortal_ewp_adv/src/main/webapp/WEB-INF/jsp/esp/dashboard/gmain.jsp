@@ -780,20 +780,24 @@
 		$form.append($inp).append($inp2).append($inp3).attr('action', '/diagnosis/generation.do').submit();
 	}
 
-	const goPvGen = (target, interval) => {
+	const goPvGen = (target, interval, type) => {
 
-		if (interval === 'day') {
-			const standard = $('#monthlySum').parent().find('.term span').data('standard');
-			target = standard.format('yyyy') + ('0' + target).slice(-2);
-		} else {
-			const standard = $('#dailySum').parent().find('.term span').data('standard');
-			target = standard.format('yyyyMM') + ('0' + target).slice(-2);
+		if (!$('#switchBtn').is(':checked')) {
+			if (interval === 'day') {
+				const standard = $('#monthlySum').parent().find('.term span').data('standard');
+				target = standard.format('yyyy') + ('0' + target).slice(-2);
+			} else {
+				const standard = $('#dailySum').parent().find('.term span').data('standard');
+				target = standard.format('yyyyMM') + ('0' + target).slice(-2);
+			}
 		}
 
+		if (isEmpty(type)) { type = ''; }
 		let $form = $('#linkSiteForm');
 		let $inp = $('<input>').attr('type', 'hidden').attr('name', 'target').val(target);
 		let $inp2 = $('<input>').attr('type', 'hidden').attr('name', 'interval').val(interval);
-		$form.empty().append($inp).append($inp2).attr('action', '/energy/pvGen.do').submit();
+		let $inp3 = $('<input>').attr('type', 'hidden').attr('name', 'type').val(type);
+		$form.empty().append($inp).append($inp2).append($inp3).attr('action', '/energy/pvGen.do').submit();
 	};
 
 	function hideAllInfoWindows(map) {
