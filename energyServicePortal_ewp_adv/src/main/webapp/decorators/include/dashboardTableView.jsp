@@ -73,7 +73,7 @@
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
 					},
-					className: 'dt-head-right dt-body-right'
+					className: 'dt-center'
 				},
 				{
 					title: i18nManager.tr("dashboard.table.4"), // 인버터 가동상태
