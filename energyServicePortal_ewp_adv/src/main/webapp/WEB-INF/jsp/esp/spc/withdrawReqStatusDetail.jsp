@@ -32,6 +32,7 @@
 		// txtArea.eq(0).val();
 		unCheckAll(memoOpt);
 		getDataList();
+		getAmount();
 
 		// const setAttributes = function (attrs) {
 		// 	for (var idx in attrs) {
@@ -380,9 +381,63 @@
 				return false;
 			});
 		}
-	
+
+		/**
+		 * 입출금 내역 갱신
+		 */
+		$('#refresh').on('click', function () {
+			$.ajax({
+				url: apiHost + '/spcs/transactions/real/refresh',
+				type: 'GET',
+				data: {
+					oid: oid,
+					spc_ids: spcId
+				},
+				timeout: 300000
+			}).done(function(data, textStatus, jqXHR) {
+				getAmount();
+			}).fail(function(jqXHR, textStatus, errorThrown) {
+				console.error(textStatus);
+				alert('입출금 내역 갱신에 실패했습니다.');
+				return false;
+			})
+		});
 	});
 
+	function getAmount() {
+		$.ajax({
+			url: apiHost + '/spcs/transactions/real/balance',
+			type: 'GET',
+			data: {
+				oid: oid,
+				spcIds: spcId
+			}
+		}).done(function (json, textStatus, jqXHR) {
+			console.log(json);
+			if (!isEmpty(json) && !isEmpty(json.data) && !isEmpty(json.data.items)) {
+				const targetAccount = json.data.items.find(e => e.account_no === account);
+
+				if (isEmpty(targetAccount)) {
+					$('[name="availableAmount"]').val('');
+				} else {
+					$('[name="availableAmount"]').val(numberComma(targetAccount.account_balance));
+				}
+			} else {
+				$('[name="availableAmount"]').val('');
+			}
+
+			if (json.refreshed_at != null) {
+				$('#refresh_date').text('마지막 업데이트 : ' + new Date(json.refreshed_at).format('yyyy-MM-dd HH:mm:ss'));
+			} else {
+				$('#refresh_date').text('마지막 업데이트 : ');
+			}
+		}).fail(function (jqXHR, textStatus, errorThrown) {
+			$('[name="availableAmount"]').val('');
+			$('#refresh_date').text('마지막 업데이트 : ');
+			alert('처리 중 오류가 발생했습니다.');
+			return false;
+		});
+	}
 
 	// onclick="location.href=apiHost + '/files/download/5c71e049-f73c-2bf9-a9a0-2f91d067ef11?oid=spower&orgFilename=수익보고서_20200526100755.pdf'"
 
@@ -574,6 +629,12 @@
 			<div class="flex-start">
 				<h2 class="tx-tit">출금 계좌 번호</h2>
 				<span class="tx-tit">${param.req_detail_acc_info} ${param.req_detail_acc_holder}</span>
+			</div>
+			<div class="flex-start">
+				<h2 class="tx-tit">계좌 잔액: </h2>
+				<span class="tx-tit" id="availableAmount"></span>
+				<span class="tx-tit" id="refresh_date"></span>
+				<button type="button" id="refresh" class="btn-type03">입출금 내역 갱신</button>
 			</div>
 
 			<div class="table-wrap-type collect-wrap mt-30">

@@ -222,12 +222,7 @@
 			} else {
 				getDataList(searchOpt);
 			}
-
-			$('#searchForm').submit();
-		}).catch(error => {
-			errorMsg(error);
 		});
-	}
 
 		pageInit();
 	});
