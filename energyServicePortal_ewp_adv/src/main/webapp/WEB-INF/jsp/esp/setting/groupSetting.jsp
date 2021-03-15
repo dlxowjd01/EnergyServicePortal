@@ -145,7 +145,7 @@
 			initModal();
 		});
 	
-		$("#deleteConfirmModal").on("hide.bs.modal", function() {
+		$('#deleteConfirmModal').on("hide.bs.modal", function() {
 			$("#confirmGroupName").val("");
 			$("#deleteSuccessMsg").html("<h5 id='deleteSuccessMsg' class='ntit'><fmt:message key='groupSetting.errorTxt.1' /><br><span class='text-blue'></span>&ensp;<fmt:message key='groupSetting.errorTxt.2' /></h5>");
 			$("#deleteConfirmBtn").prop("disabled", true);
@@ -632,17 +632,10 @@
 								// });
 					// 		});
 					// 	});
-
-
 					// }
-				
-				
 				}
-
 			}
-
 		});
-
 
 		// WORK IN PROGRESS!!!!!!!!!!!!!!!
 		$("#deleteConfirmBtn").click(function(){
@@ -679,12 +672,7 @@
 
 			makeAjaxCall(optDelete).then( res => {
 				Promise.resolve(dTable.row(tr).remove().draw()).then( res => {
-					modalBody.addClass("hidden");
-					$("#deleteSuccessMsg").text("<fmt:message key='groupSetting.errorTxt.18' />").removeClass("hidden");
-					// refreshSiteList();
-					setTimeout(function(){
-						$("#deleteConfirmModal").modal("hide");
-					}, 1000);
+					showAjaxResultModal("ajaxResultModal", "deleteConfirmModal", "1", "<fmt:message key='groupSetting.errorTxt.18' />");
 				});
 
 			});
