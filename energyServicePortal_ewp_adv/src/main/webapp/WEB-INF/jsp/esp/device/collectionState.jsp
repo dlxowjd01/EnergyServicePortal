@@ -494,7 +494,6 @@
 			target.push("."+$(el).data("status"));
 		});
 		
-		console.log(target.join(", "))
 		$("#PV_INVERTER tbody tr").each((ix, el) => {
 			$(el).removeClass("visible");
 			if ($(el).is(target.join(", "))) {
@@ -627,6 +626,12 @@
 				const dbTime = new Date(detail['timestamp']);
 				$('.dbTime').text(dbTime.format('yyyy-MM-dd HH:mm:ss'));
 			} else {
+				const status = $('#deviceStatus').find('.data-val');
+				status.eq(0).text('- %');
+				status.eq(1).text('- %');
+				status.eq(2).text('- %');
+				status.eq(3).html('- &#8451;');
+
 				$('.dbTime').text('');
 				return false;
 			}
@@ -812,10 +817,9 @@
 							contentType: "application/json",
 							async: false,
 							success: function (rtuStatus) {
-								console.log(rtuStatus)
 								const rtuDate = new Date(rtu.createdAt).format('yyyy-MM-dd'),
 									siteName = rtu.siteName,
-									serialId = `#${'${rtu.serialNumber}'}`;
+									serialId = `#${'${rtu.rid}'}`;
 
 								let status = ["error", "이상"];
 								if (rtuStatus.rtus.length) {
@@ -825,7 +829,7 @@
 								}
 
 								rtuInfo =
-									`	<tr id="${'${rtu.serialNumber}'}" class="${'${status[0]}'}">
+									`	<tr id="${'${rtu.rid}'}" class="${'${status[0]}'}">
 											<td>${'${ix}'}</td>
 											<td>${'${siteName}'}</td>
 											<td>${'${rtu.name}'}</td>
@@ -1056,7 +1060,6 @@
 				contentType: "application/json",
 				async: false,
 				success: function (rtuStatus) {
-					console.log(rtuStatus)
 					const rtuDate = new Date(rtu.createdAt).format('yyyy-MM-dd'),
 						siteName = rtu.siteName,
 						serialId = `#${'${rtu.serialNumber}'}`;
