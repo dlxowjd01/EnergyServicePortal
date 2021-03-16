@@ -52,6 +52,7 @@
 	/**
 	 * 기기인증서 신청(기기등록)
 	 */
+	let duplication = false;
 	const register = (data) => {
 		const certType = $('#certType > button').data('value');
 		const policy = $('#policy > button').data('value');
@@ -89,12 +90,17 @@
 			}
 		}
 
-		$.ajax(option).done(function (result) {
-			const applyPkgID = result.applyPkgID;
-			certIssue(applyPkgID);
-		}).fail(function (error) {
-			console.log(error);
-		});
+		if (!duplication) {
+			duplication = true;
+			$.ajax(option).done(function (result) {
+				const applyPkgID = result.applyPkgID;
+				certIssue(applyPkgID);
+			}).fail(function (error) {
+				console.log(error);
+			}).always(function() {
+				duplication = false;
+			});
+		}
 	};
 
 	const certIssue = (apply_PKG_ID) => {

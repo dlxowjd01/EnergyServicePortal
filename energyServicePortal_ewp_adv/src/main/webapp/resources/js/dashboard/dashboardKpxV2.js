@@ -1489,6 +1489,8 @@ const searchSite = async function () {
 
 									commandHistory.forEach(command => {
 										if (rtuIds.includes(command.rid)) {
+											let hitoryDate = new Date(String(command.requested_at).replace(/[^0-9]/g,'').replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$2/$3/$1 $4:$5:$6'));
+
 											if (site['lastTargetActivePowerReqDate'] === '-') {
 												refineList[index]['lastTargetActivePowerReqDate'] = new Date(String(command.requested_at).replace(/[^0-9]/g,'').replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$2/$3/$1 $4:$5:$6')).format('yyyy-MM-dd HH:mm:ss');
 												refineList[index]['lastTargetActivePowerRecvDate'] = '-'
@@ -1503,7 +1505,6 @@ const searchSite = async function () {
 												}
 											} else {
 												let statusDate = new Date((site['lastTargetActivePowerRecvDate'].replace(/[^0-9]/g,'')).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$2/$3/$1 $4:$5:$6'));
-												let hitoryDate = new Date(String(command.requested_at).replace(/[^0-9]/g,'').replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$2/$3/$1 $4:$5:$6'));
 												if (statusDate.getTime() < hitoryDate.getTime()) {
 													refineList[index]['lastTargetActivePowerReqDate'] = hitoryDate.format('yyyy-MM-dd HH:mm:ss');
 													refineList[index]['lastTargetActivePowerRecvDate'] = '-'

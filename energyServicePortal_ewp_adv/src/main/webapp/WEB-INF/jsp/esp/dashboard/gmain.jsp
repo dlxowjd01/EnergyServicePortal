@@ -494,8 +494,8 @@
 <script type="text/javascript">
 	const siteList = JSON.parse('${siteList}')
 		, sgid = '${sgid}'
-		, haveMenu_gen = '${haveMenu}'
-		, haveMenu_fore = '${haveMenu}'
+		, haveMenu_gen = '${haveMenu_gen}'
+		, haveMenu_fore = '${haveMenu_fore}'
 		, today = new Date()
 		, divisionLocation = '${sessionScope.divisionLocation}'
 		, divisionResourceType = '${sessionScope.divisionResourceType}';
