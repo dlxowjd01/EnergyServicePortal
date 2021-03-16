@@ -138,7 +138,7 @@ $(document).ready(function () {
 			} else {
 				$(this).parent().find('img.next').addClass('hidden');
 			}
-			$('#miniLoadingCircle_type').show();
+			$('#miniLoadingCircle_daily').show();
 			dailyChartDraw(siteSids, standard);
 		} else {
 			const yesterday = new Date();
