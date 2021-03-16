@@ -219,10 +219,10 @@
 		$('#fromDate').datepicker('setDate', 'today'); //데이트 피커 기본
 		$('#toDate').datepicker('setDate', 'today'); //데이트 피커 기본
 
-		if (sidparam) {
-			$("#interval > ul > li:nth-child(3) > a").click();
-			setTimeout(searchGenData, 500)
-		}
+		// if (sidparam) {
+		// 	$("#interval > ul > li:nth-child(3) > a").click();
+		// 	setTimeout(searchGenData, 500)
+		// }
 	});
 
 	//사업소 호출
@@ -423,6 +423,9 @@
 				} else {
 					if (sidparam) {
 						$(':checkbox[name="device"][data-sid="' + sidparam + '"]').prop('checked', true);
+						displayDropdown($('#deviceType'));
+						$('#interval button').data('value', 'allSum').html('<fmt:message key="renewablesgen.3.sumtotal" /></a></li> <span class="caret"></span>');
+						searchGenData();
 					}
 				}
 			}).catch(error => {
@@ -684,6 +687,8 @@
 			}));
 		}
 
+
+		console.log('test');
 		$('#loadingCircle').show();
 		Promise.all(promiseUrl).then(response => {
 			generationData = new Object();
