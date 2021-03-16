@@ -8290,6 +8290,12 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	outline: none;
 }
 
+.btn-help.pvGen {
+	width: 35px !important;
+	height: 35px !important;
+	background-size: 40px !important;
+}
+
 .btn-close {
 	margin-left: 30px;
 	display: inline-block;

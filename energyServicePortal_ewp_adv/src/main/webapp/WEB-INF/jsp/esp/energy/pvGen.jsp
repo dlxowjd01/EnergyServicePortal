@@ -62,16 +62,6 @@
 							</div>
 						</div>
 					</div>
-					<div class="flex-group duration" id="dateArea">
-						<span class="tx-tit"><fmt:message key="pvGen.graph.date.input" /></span>
-						<div class="sel-calendar dateField">
-							<label for="fromDate" class="sr-only"><fmt:message key="pvGen.graph.date.start" /></label>
-							<input type="text" id="fromDate" class="sel fromDate" value="" autocomplete="off" readonly>
-							<em></em>
-							<label for="toDate" class="sr-only"><fmt:message key="pvGen.graph.date.end" /></label>
-							<input type="text" id="toDate" class="sel toDate" value="" autocomplete="off" readonly>
-						</div>
-					</div>
 					<div class="flex-group unit" id="cycle">
 						<span class="tx-tit"><fmt:message key="pvGen.graph.unit" /></span>
 						<div class="sa-select">
@@ -90,7 +80,18 @@
 							<small class="warning hidden"><fmt:message key="pvGen.graph.unit.warn" /></small>
 						</div>
 					</div>
+					<div class="flex-group duration" id="dateArea">
+						<span class="tx-tit"><fmt:message key="pvGen.graph.date.input" /></span>
+						<div class="sel-calendar dateField">
+							<label for="fromDate" class="sr-only"><fmt:message key="pvGen.graph.date.start" /></label>
+							<input type="text" id="fromDate" class="sel fromDate" value="" autocomplete="off" readonly>
+							<em></em>
+							<label for="toDate" class="sr-only"><fmt:message key="pvGen.graph.date.end" /></label>
+							<input type="text" id="toDate" class="sel toDate" value="" autocomplete="off" readonly>
+						</div>
+					</div>
 					<button type="button" class="btn-type" id="renderBtn"><fmt:message key="renewablesgen.3.update" /></button>
+					<button type="button" id="tooltip" onclick="$(this).tooltip('toggle');" class="btn-help pvGen" data-toggle="tooltip" data-placement="right" data-html="true" title="<div class='left'><span class='strong font-color-w87'>5분 단위는 최대 하루 기간 조회가 가능합니다.</span><br/><span class='strong font-color-w87'>15분 단위는 최대 일주일 기간 조회가 가능합니다.</span><br/><span class='strong font-color-w87'>1시간 단위는 최대 한달 기간 조회가 가능합니다.</span><br/></div>"></button>
 				</div>
 				<div class="end"><!--
 				--><span class="tx-tit"><fmt:message key="pvGen.graph.style" /></span><!--
@@ -437,36 +438,57 @@
 			document.querySelectorAll('[name="device"]:checked').forEach(device => {
 				if (device.dataset.type === 'time') { genHour = true; }
 			});
-
-			// if (genHour) {
-			// 	dropDownInit($('#interval'));
-			//
-			// 	document.querySelectorAll('#interval li').forEach(li => {
-			// 		if (li.dataset.value === 'day' || li.dataset.value === 'month') {
-			// 			li.classList.remove('disabled');
-			// 		} else {
-			// 			li.classList.add('disabled');
-			// 		}
-			// 	});
-			// } else {
-			// 	document.querySelectorAll('#interval li').forEach(li => {
-			// 		li.classList.remove('disabled');
-			// 	});
-			// }
 		} else if ($dropdownId === 'siteList') {
 			makeDeviceList();
 		} else if ($dropdownId === 'period') {
+			let interval = new Array();
 			let period = $('#period button').data('value');
 			if (period === 'today') { //오늘
 				$('#fromDate').datepicker('setDate', 'today'); //데이트 피커 기본
 				$('#toDate').datepicker('setDate', 'today'); //데이트 피커 기본
+				interval = ['5min', '15min', 'hour', 'day', 'month'];
 			} else if (period === 'week') { //이번주
 				$('#fromDate').datepicker('setDate', '-6'); //데이트 피커 기본
 				$('#toDate').datepicker('setDate', 'today'); //데이트 피커 기본
+				interval = ['15min', 'hour', 'day', 'month'];
 			} else { //이번달
 				$('#fromDate').datepicker('setDate', '-30'); //데이트 피커 기본
 				$('#toDate').datepicker('setDate', 'today'); //데이트 피커 기본
+				interval = ['hour', 'day', 'month'];
 			}
+
+			$('#interval li').each(function () {
+				if (interval.includes($(this).data('value'))) {
+					$(this).removeClass('disabled');
+				} else {
+					$(this).addClass('disabled');
+				}
+			});
+		} else if ($dropdownId === 'interval') {
+			let interval = $('#interval button').data('value');
+			const diff = dateDiff($('#toDate').datepicker('getDate'), $('#fromDate').datepicker('getDate'));
+			let period = new Array();
+
+			if (interval === '5min') {
+				period = ['today', 'setup'];
+				if (diff !== 0) alert('조회 기간을 확인해주세요.');
+			} else if (interval === '15min') {
+				period = ['today', 'week', 'setup'];
+				if (diff > 6) alert('조회 기간을 확인해주세요.');
+			} else if (interval === 'hour') {
+				period = ['today', 'week', 'month', 'setup'];
+				if (diff > 30) alert('조회 기간을 확인해주세요.');
+			} else {
+				period = ['today', 'week', 'month', 'setup'];
+			}
+
+			$('#period li').each(function () {
+				if (period.includes($(this).data('value'))) {
+					$(this).removeClass('disabled');
+				} else {
+					$(this).addClass('disabled');
+				}
+			});
 		} else if ($dropdownId.match('chartStyle')) {
 			chartDataDraw();
 		}
@@ -481,6 +503,8 @@
 		//기간 설정 확인
 		let startTime = $('#fromDate').val().replace(/-/g, '') + "000000";
 		let endTime = $('#toDate').val().replace(/-/g, '') + "235959";
+		const diff = dateDiff($('#toDate').datepicker('getDate'), $('#fromDate').datepicker('getDate'));
+
 		//주기 확인
 		interval = $('#interval button').data('value');
 
@@ -489,6 +513,23 @@
 		} else {
 			$('#chartStyle2').parent().addClass('hidden');
 			$('#chartStyle2 button').data('value', 'dayBy').html('<fmt:message key="pvGen.viewByDay" /> <span class="caret"></span>');
+		}
+
+		if (interval === '5min') {
+			if (diff !== 0) {
+				alert('조회 기간을 확인해주세요.');
+				return false;
+			}
+		} else if (interval === '15min') {
+			if (diff > 6) {
+				alert('조회 기간을 확인해주세요.');
+				return false;
+			}
+		} else if (interval === 'hour') {
+			if (diff > 30) {
+				alert('조회 기간을 확인해주세요.');
+				return false;
+			}
 		}
 
 		const billingSites = new Array();
