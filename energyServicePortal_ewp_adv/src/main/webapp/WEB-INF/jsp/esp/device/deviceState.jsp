@@ -499,6 +499,7 @@
 			getDeviceList();
 		} else if ($dropdownId == 'addSiteList') {
 			getRtusList();
+			setParentDevice();
 		} else if ($dropdownId == 'device_type') {
 			setParentDevice();
 			costSetList();
@@ -1516,6 +1517,10 @@
 						console.log(textStatus);
 					}
 				});
+
+				if (data.device_type === 'BMS_SYS' || data.device_type === 'BMS_RACK') {
+					setParentDevice(data.parent_did);
+				}
 			}).fail(function (jqXHR, textStatus, errorThrown) {
 				console.error(jqXHR);
 				console.error(textStatus);
@@ -1782,7 +1787,7 @@
 		});
 	}
 
-	const setParentDevice = () => {
+	const setParentDevice = (pDid) => {
 		const sid = $('#addSiteList button').data('value');
 		const device_type = $('#device_type button').data('value');
 		dropDownInit($('#parent_did'));
@@ -1813,6 +1818,14 @@
 						});
 					}
 				});
+
+				if (!isEmpty(pDid)) {
+					parentDidList.forEach(device => {
+						if (device.did === pDid) {
+							$('#parent_did button').data('value', device.did).html(device.name + '<span class="caret"></span>')
+						}
+					});
+				}
 
 				setMakeList(parentDidList, 'parent_didList', {'dataFunction': {}});
 			}).fail(function (jqXHR, textStatus, errorThrown) {
