@@ -1336,63 +1336,8 @@
 	var fetchCharts = function () {
 		dateArr = new Array();
 		let interval = $('#cycle button').data('value');
-		let sDate = $('#fromDate').val().replace(/-/g, '');
-		let eDate = $('#toDate').val().replace(/-/g, '');
 
-		if (interval == 'day') {
-			let diffDay = getDiff(eDate, sDate, 'day');
-			for (let j = 0; j < diffDay; j++) {
-				let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) - 1, Number(sDate.substring(6, 8)));
-				sDateTime.setDate(Number(sDateTime.getDate()) + j);
-				let toDate = sDateTime.format('yyyyMMdd');
-				dateArr.push(toDate);
-			}
-		} else if (interval == 'month') {
-			let diffMonth = getDiff(eDate, sDate, 'month');
-			for (let j = 0; j < diffMonth; j++) {
-				let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) + j - 1, 1);
-				let toDate = sDateTime.format('yyyyMM');
-				dateArr.push(toDate);
-			}
-		} else {
-			let diffDay = getDiff(eDate, sDate, 'day');
-			//diffDay 1보다 크면 시작일과 종료일이 다르다.
-			for (let j = 0; j < diffDay; j++) {
-				let sDateTime = new Date(Number(sDate.substring(0, 4)), Number(sDate.substring(4, 6)) - 1, Number(sDate.substring(6, 8)));
-				sDateTime.setDate(sDateTime.getDate() + j);
-				let toDate = sDateTime.format('yyyyMMdd');
-
-				for (let i = 0; i < 24; i++) {
-					if (interval == '15min') { //15분
-						if (String(i).length == 1) {
-							dateArr.push(toDate + '0' + i + '0000');
-							dateArr.push(toDate + '0' + i + '1500');
-							dateArr.push(toDate + '0' + i + '3000');
-							dateArr.push(toDate + '0' + i + '4500');
-						} else {
-							dateArr.push(toDate + i + '0000');
-							dateArr.push(toDate + i + '1500');
-							dateArr.push(toDate + i + '3000');
-							dateArr.push(toDate + i + '4500');
-						}
-					} else if (interval == '30min') { //30분
-						if (String(i).length == 1) {
-							dateArr.push(toDate + '0' + i + '0000');
-							dateArr.push(toDate + '0' + i + '3000');
-						} else {
-							dateArr.push(toDate + i + '0000');
-							dateArr.push(toDate + i + '3000');
-						}
-					} else { //시간
-						if (String(i).length == 1) {
-							dateArr.push(toDate + '0' + i + '0000');
-						} else {
-							dateArr.push(toDate + i + '0000');
-						}
-					}
-				}
-			}
-		}
+		dateArr = makeStandard(interval);
 
 		let data = changeTablegird;
 

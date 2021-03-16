@@ -41,49 +41,83 @@ public class DashboardController {
 			model.addAttribute("secondYAxis", true);
 		}
 
-		boolean haveMenu = false;
+		boolean haveMenu_gen = false;
+		boolean haveMenu_fore = false;
 		LinkedHashMap<String, Object> menuList = (LinkedHashMap<String, Object>) request.getAttribute("menuList");
 		for (Map.Entry<String, Object> elem : menuList.entrySet()) {
 			Map<String, Object> menuDetail = (Map<String, Object>) elem.getValue();
 			Map<String, Object> access = (Map<String, Object>) menuDetail.get("access");
 			String menuCode = (String) menuDetail.get("code");
 
-			if (menuCode.contains("generation")) {
+			if (menuCode.contains("generation") || menuCode.contains("forecasting")) {
 				if (!access.isEmpty()) {
 					if (access.containsKey("allow")) {
 						Map<String, Object> allowMap = (Map<String, Object>) access.get("allow");
 						if (allowMap.containsKey("oid") && ((List) allowMap.get("oid")).contains(userInfo.get("oid"))) {
-							haveMenu = true;
+							if (menuCode.contains("generation")) {
+								haveMenu_gen = true;
+							} else {
+								haveMenu_fore = true;
+							}
 						} else {
 							if (allowMap.containsKey("role") && ((List) allowMap.get("role")).contains(userInfo.get("role"))) {
-								haveMenu = true;
+								if (menuCode.contains("generation")) {
+									haveMenu_gen = true;
+								} else {
+									haveMenu_fore = true;
+								}
 							} else if (allowMap.containsKey("task") && ((List) allowMap.get("task")).contains(userInfo.get("task"))) {
-								haveMenu = true;
+								if (menuCode.contains("generation")) {
+									haveMenu_gen = true;
+								} else {
+									haveMenu_fore = true;
+								}
 							}
 						}
 					} else {
-						haveMenu = true;
+						if (menuCode.contains("generation")) {
+							haveMenu_gen = true;
+						} else {
+							haveMenu_fore = true;
+						}
 					}
 
 					if (access.containsKey("deny")) {
 						Map<String, Object> denyMap = (Map<String, Object>) access.get("deny");
 						if (denyMap.containsKey("oid") && ((List) denyMap.get("oid")).contains(userInfo.get("oid"))) {
-							haveMenu = false;
+							if (menuCode.contains("generation")) {
+								haveMenu_gen = false;
+							} else {
+								haveMenu_fore = false;
+							}
 						} else {
 							if (denyMap.containsKey("role") && ((List) denyMap.get("role")).contains(userInfo.get("role"))) {
-								haveMenu = false;
+								if (menuCode.contains("generation")) {
+									haveMenu_gen = false;
+								} else {
+									haveMenu_fore = false;
+								}
 							} else if (denyMap.containsKey("task") && ((List) denyMap.get("task")).contains(userInfo.get("task"))) {
-								haveMenu = false;
+								if (menuCode.contains("generation")) {
+									haveMenu_gen = false;
+								} else {
+									haveMenu_fore = false;
+								}
 							}
 						}
 					}
 				} else {
-					haveMenu = true;
+					if (menuCode.contains("generation")) {
+						haveMenu_gen = true;
+					} else {
+						haveMenu_fore = true;
+					}
 				}
 			}
 		}
 
-		model.addAttribute("haveMenu", haveMenu);
+		model.addAttribute("haveMenu_gen", haveMenu_gen);
+		model.addAttribute("haveMenu_fore", haveMenu_fore);
 		model.addAttribute("dashboardMap", dashboardMap);
 		return "esp/dashboard/gmain";
 	}

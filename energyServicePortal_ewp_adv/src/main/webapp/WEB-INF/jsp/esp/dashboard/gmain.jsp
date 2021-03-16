@@ -494,7 +494,8 @@
 <script type="text/javascript">
 	const siteList = JSON.parse('${siteList}')
 		, sgid = '${sgid}'
-		, haveMenu = '${haveMenu}'
+		, haveMenu_gen = '${haveMenu}'
+		, haveMenu_fore = '${haveMenu}'
 		, today = new Date()
 		, divisionLocation = '${sessionScope.divisionLocation}'
 		, divisionResourceType = '${sessionScope.divisionResourceType}';
@@ -771,19 +772,27 @@
 	}
 
 	const generation = (target, interval) => {
-		const standard = $('#typeSiteCurrent').parents('div.indiv').find('.term span').data('standard');
-		const site = siteList.find(e => e.name === target);
+		if (haveMenu_fore === 'true') {
+			const standard = $('#typeSiteCurrent').parents('div.indiv').find('.term span').data('standard');
+			const site = siteList.find(e => e.name === target);
 
-		let $form = $('#linkSiteForm');
-		let $inp = $('<input>').attr('type', 'hidden').attr('name', 'sidparam').val(site.sid);
-		let $inp2 = $('<input>').attr('type', 'hidden').attr('name', 'target').val(standard.format('yyyyMMdd'));
-		let $inp3 = $('<input>').attr('type', 'hidden').attr('name', 'interval').val(interval);
-		$form.append($inp).append($inp2).append($inp3).attr('action', '/diagnosis/generation.do').submit();
+			let $form = $('#linkSiteForm');
+			let $inp = $('<input>').attr('type', 'hidden').attr('name', 'sidparam').val(site.sid);
+			let $inp2 = $('<input>').attr('type', 'hidden').attr('name', 'target').val(standard.format('yyyyMMdd'));
+			let $inp3 = $('<input>').attr('type', 'hidden').attr('name', 'interval').val(interval);
+			$form.append($inp).append($inp2).append($inp3).attr('action', '/diagnosis/generation.do').submit();
+		} else {
+			$('#errMsg').html('메뉴 이동 권한이 없습니다.');
+			$('#errorModal').modal('show');
+
+			setTimeout(function(){
+				$('#errorModal').modal('hide');
+			}, 2000);
+		}
 	}
 
 	const goPvGen = (target, interval, type, sid) => {
-
-		if (haveMenu === 'true') {
+		if (haveMenu_gen === 'true') {
 			if (!$('#switchBtn').is(':checked')) {
 				if (interval === 'day') {
 					const standard = $('#monthlySum').parent().find('.term span').data('standard');

@@ -5,9 +5,22 @@
 	const spcId = '<c:out value="${param.spc_id}" escapeXml="false" />';
 	const siteId = '<c:out value="${param.site_id}" escapeXml="false" />';
 	const balance_yyyy = '<c:out value="${param.balance_yyyy}" escapeXml="false" />';
-	
+
 	$(function () {
 		setInitList('historyData');
+
+		$('#year ul').append(`<li data-value=""><a href="#">전체</a></li>`);
+		for (let i = 0; i > -3; i--) {
+			let year = new Date()
+			, fullYear = year.getFullYear();
+			year.setFullYear(fullYear + i);
+			fullYear = year.getFullYear();
+			$('#year ul').append(`<li data-value="${'${fullYear}'}"><a href="#">${'${fullYear}'}</a></li>`);
+
+			if (i === 0) {
+				$('#year button').data('value', fullYear).html(fullYear + '<span class="caret"></span>')
+			}
+		}
 
 		$(document).on('click', 'div.dropdown li', function() {
 			let dataValue = $(this).data('value'), dataText = $(this).text();
@@ -100,8 +113,6 @@
 
 		$('[id^="loan_"]:not(:eq(0))').remove();
 		$('[id^="interestCost_"]:not(:eq(0))').remove();
-
-		console.log(dataInfo);
 
 		let indexArray = new Array();
 		for(var i = 0; i < dataInfo.length; i++) {
@@ -278,9 +289,7 @@
 					<button type="button" class="dropdown-toggle w8" data-toggle="dropdown" data-value="2020">
 						2020년<span class="caret"></span>
 					</button>
-					<ul class="dropdown-menu dropdown-menu-form chk-type" role="menu">
-						<li data-value=""><a href="#">전체</a></li>
-						<li data-value="2020"><a href="#">2020</a></li>
+					<ul class="dropdown-menu chk-type" role="menu">
 					</ul>
 				</div>
 			</div>
