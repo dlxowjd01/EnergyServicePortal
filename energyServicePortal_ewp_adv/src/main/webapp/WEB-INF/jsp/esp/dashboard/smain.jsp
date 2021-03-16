@@ -384,7 +384,7 @@
 			</div>
 			<div class="col-xl-2 col-lg-2 col-md-3 col-sm-4">
 				<div class="indiv mini">
-					<h3 class="ntit"><fmt:message key='smain.monthDev' /></h3>
+					<h3 class="ntit"><fmt:message key='smain.lastMonthDev' /></h3>
 					<p class="word-wrap"><span class="data-num"></span><span class="data-unit"></span></p>
 				</div>
 			</div>
@@ -4077,13 +4077,14 @@
 						}
 						
 						if(chartItems1.length > 0) {
-							let initData = 0;
-							chartItems1.forEach((item, index) => {
-								initData += item.energy;
-								chartItems1[index].money = Math.floor(item.money / 1000);
-							});
+							// // ULON-1078: 올해 발전량 -> 전월 발전량 수정 요청
+							// let initData = 0;
+							// chartItems1.forEach((item, index) => {
+							//	initData += item.energy;
+							//	chartItems1[index].money = Math.floor(item.money / 1000);
+							// });
+							const initData = chartItems1[chartItems1.length-1].energy;
 							let monthGen = displayNumberFixedUnit(initData, 'Wh', 'MWh', 1);
-
 							el.eq(4).text(monthGen[0]);
 							el.eq(4).next().text(monthGen[1]);
 						} else {
