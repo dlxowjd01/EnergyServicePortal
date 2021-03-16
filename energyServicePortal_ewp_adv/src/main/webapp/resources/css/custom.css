@@ -1902,11 +1902,14 @@ table tbody td .dropdown-menu {
 }
 
 .mini-loading-image {
-	position: relative;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 	opacity: 0.3;
 	background-color: var(--white);
 	z-index: 240;
-	margin-top: 27%;
+	/* margin-top: 27%; */
 }
 
 /* ==================================
@@ -11426,4 +11429,10 @@ th > span.asterisk:after {
 
 .col-scroll .tab-content {
 	overflow-x: hidden;
+}
+
+.gmain-chart1,
+.gmain-chart2,
+.gmain-chart3 {
+	position: relative;
 }
