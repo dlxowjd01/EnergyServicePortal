@@ -839,11 +839,9 @@
 							contentType: "application/json",
 							async: false,
 							success: function (rtuStatus) {
-								console.log(rtuStatus);
 								const rtuDate = new Date(rtu.createdAt).format('yyyy-MM-dd'),
 									siteName = rtu.siteName,
-									serialId = `#${'${rtu.serialNumber}'}`;
-
+									serialId = `#${'${rtu.rid}'}`;
 								let status = ["error", "이상"];
 								if (rtuStatus.rtus.length) {
 									status = ["normal", "정상"];
