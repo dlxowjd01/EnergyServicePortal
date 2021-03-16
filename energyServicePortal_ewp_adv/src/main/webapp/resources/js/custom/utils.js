@@ -987,9 +987,37 @@ function setMakeList(jsonData, listId, opts) {
 
 	$selecter.data("gridJsonData", jsonData);
 
+	const columnName_SM_Table = [
+		'siteName',
+		'dname',
+		'localtime',
+		'operation',
+		'voltageR',
+		'voltageS',
+		'voltageT',
+		'currentR',
+		'currentS',
+		'currentT',
+		'frequency',
+		'activePower',
+		'reactivePowerLagging',
+		'reactivePowerLeading',
+		'dcVoltage',
+		'dcCurrent',
+		'dcPower',
+		'temperature',
+		'powerFactorR',
+		'powerFactorS',
+		'powerFactorT',
+	];
+
 	if (dataLenth > 0) {
 		for (var prop in jsonData[0]) {
 			arr_column.push(prop);
+		}
+
+		if (listId === 'SM_Table' || listId === 'INV_PV_Table') {
+			arr_column = columnName_SM_Table;
 		}
 		arr_column.push("INDEX");
 	} else {
@@ -1010,6 +1038,15 @@ function setMakeList(jsonData, listId, opts) {
 
 	var columLength = arr_column.length;
 	for (var i = 0; i < dataLenth; i++) {
+		if (listId === 'SM_Table' || listId === 'INV_PV_Table') {
+			for (var j in columnName_SM_Table) {
+				const columnName = columnName_SM_Table[j];
+				if (!jsonData[i][columnName]) {
+					jsonData[i][columnName] = '-';
+				}
+			}
+
+		}
 		jsonData[i]["INDEX"] = i;
 		tmpHtml = rowHtml;
 		for (var j = 0; j < columLength; j++) {

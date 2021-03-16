@@ -487,6 +487,28 @@
 			statusFilter();
 		});
 
+		$('#selectLogByDate')
+		.off('click')
+		.on('click', () => {
+			const rid = $('#selectedRTU').data('rid');
+
+			const datePicker1 = $('#datepicker1').datepicker('getDate');
+			const datePicker2 = $('#datepicker2').datepicker('getDate');
+			if(datePicker1 != null && datePicker2 != null) {
+				const start = datePicker1.format('yyyyMMdd');
+				const end = datePicker2.format('yyyyMMdd');
+				const startTimepicker = $('#timepicker1').wickedpicker('time').replace(/[^0-9]/g, '');
+				const endTimepicker = $('#timepicker2').wickedpicker('time').replace(/[^0-9]/g, '');
+
+				const startDate = start + startTimepicker + '00';
+				const endDate = end + endTimepicker + '00';
+
+				selectLog(rid, startDate, endDate);
+			} else {
+				alert('<fmt:message key="colState.alert.6" />');
+				return false;
+			}
+		});
 	})
 	function statusFilter() {
 		let target = [];
@@ -817,9 +839,10 @@
 							contentType: "application/json",
 							async: false,
 							success: function (rtuStatus) {
+								console.log(rtuStatus);
 								const rtuDate = new Date(rtu.createdAt).format('yyyy-MM-dd'),
 									siteName = rtu.siteName,
-									serialId = `#${'${rtu.rid}'}`;
+									serialId = `#${'${rtu.serialNumber}'}`;
 
 								let status = ["error", "이상"];
 								if (rtuStatus.rtus.length) {
@@ -847,8 +870,8 @@
 										rtuName.text(rtu.name).data('rid', rtu.rid).data('rName', rtu.name).data('sName', siteName);
 										selectLog(rtu.rid);
 									});
-
-								dateFilter
+								// selectedRTU를 가져오기 위해 바깥으로 뺌, 21.3.15. kimby
+								/* dateFilter
 									.off('click')
 									.on('click', () => {
 										const datePicker1 = $('#datepicker1').datepicker('getDate');
@@ -867,7 +890,7 @@
 											alert('<fmt:message key="colState.alert.6" />');
 											return false;
 										}
-									});
+									}); */
 								
 								statusFilter();
 

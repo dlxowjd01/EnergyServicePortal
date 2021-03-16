@@ -1715,6 +1715,9 @@ const searchSite = async function (siteSids) {
 			if (site['activePower'] === undefined) site['activePower'] = '-';
 			if (site['activePowerView'] === undefined) site['activePowerView'] = '-';
 			if (site['irradiationPoa'] === undefined) site['irradiationPoa'] = '-';
+			if (site['alarmError'] === undefined) site['alarmError'] = '-';
+			if (site['alarmWarning'] === undefined) site['alarmWarning'] = '-';
+			if (site['alarmTotal'] === undefined) site['alarmTotal'] = '-';
 
 			site['resourceClass'] = resourceIcon(site['resource_type']);
 			if (targetOperation && searchSite) {

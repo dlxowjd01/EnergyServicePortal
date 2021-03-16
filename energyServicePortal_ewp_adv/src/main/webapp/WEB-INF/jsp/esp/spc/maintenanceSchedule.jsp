@@ -287,6 +287,7 @@
 					modalPopInit(data.data);
 				} else {
 					checkCalendar(data.data);
+					checkCalendarVisual();
 				}
 			} else {
 				maintenance('get');
