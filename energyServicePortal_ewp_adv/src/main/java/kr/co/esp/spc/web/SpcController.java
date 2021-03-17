@@ -138,4 +138,10 @@ public class SpcController {
 		logger.debug("/spc/notice.do");
 		return "esp/spc/notice";
 	}
+
+	@RequestMapping(value = "/spc/spcDashboard.do")
+	public String spcDashboard(HttpServletRequest request, HttpSession session, Model model) {
+		logger.debug("/spc/spcDashboard.do");
+		return "esp/spc/spcDashboard";
+	}
 }

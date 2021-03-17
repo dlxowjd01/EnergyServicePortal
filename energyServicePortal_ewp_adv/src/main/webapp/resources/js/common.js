@@ -813,3 +813,16 @@ function fillArray(target, len, fill = 0) {
 		return target.concat(new Array(len - target.length).fill(fill));
 	}
 }
+
+function convDate(date, onlyYmd = false) {
+	const [y, m, d, h, i, s] = [
+		String(date.getFullYear()),
+		String(date.getMonth() + 1).padStart(2, 0),
+		String(date.getDate()).padStart(2, 0),
+		onlyYmd ? `00` : String(date.getHours()).padStart(2, 0),
+		onlyYmd ? `00` : String(date.getMinutes()).padStart(2, 0),
+		onlyYmd ? `00` : String(date.getSeconds()).padStart(2, 0),
+	];
+
+	return (y+m+d+h+i+s) * 1;
+}

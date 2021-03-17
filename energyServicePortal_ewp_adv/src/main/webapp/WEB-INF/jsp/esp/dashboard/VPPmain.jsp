@@ -239,7 +239,7 @@
 
 			<div class="vpp-2-2-center">
 				<p>사이트 현황</p>
-				<div class="auto-rolling play">
+				<div class="auto-rolling playing">
 					<p class="play"><img src="/img/vpp/play.svg" alt="자동 재생" /> 자동 재생</p>
 					<p class="stop"><img src="/img/vpp/pause.svg" alt="일시 정지" /> 일시 정지</p>
 				</div>
@@ -430,8 +430,9 @@
 					$(this).toggleClass("actived");
 				})
 				.on("click", ".auto-rolling", function(e) {
-					$(this).toggleClass("play stop");
-					rolling();
+					$(".auto-rolling").toggleClass("playing");
+
+					SiteStatus.rolling();
 				})
 				.on("click", ".vpp-1-3 > .title-area > .title", function(e) {
 					$(".vpp-1-3 > .title-area > .title.actived").removeClass("actived");
@@ -440,7 +441,9 @@
 					$(".vpp-1-3-content").removeClass("view");
 					$(".vpp-1-3-"+($(this).index() + 1)).addClass("view");
 				})
-				.on("click", ".vpp-focus-map, .vpp-pin", VppMap.focusTo)
+				.on("click", ".vpp-focus-map", function(e) {
+					VppMap.focusTo($(this).data("sid"));
+				})
 		},
 	}
 
@@ -684,8 +687,8 @@
 	// 수익현황
 	const Graph3 = {
 		series: [
-			{name: 'SMP', color: '#26ccc8', data: []},
-			{name: '예측', color: '#878787', data: []},
+			{name: 'SMP', color: '#26ccc8', data: [20, 10, 30, 50, 40, 20, 10, 60, 70, 10, 120, 205, 110, 20, 60, 10, 10, 20, 60]},
+			{name: '예측', color: '#878787', data: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 210, 80, 40, 60, 90, 110, 50, 120]},
 		],
 		target: {},
 
@@ -713,7 +716,6 @@
 					gridLineColor: 'var(--white25)',
 					tickWidth: 1,
 					tickLength: 6,
-					type: 'datetime',
 					labels: {
 						x: 9,
 						align: 'center',
@@ -727,6 +729,7 @@
 					title: {
 						text: null
 					},
+					type: 'datetime',
 					dateTimeLabelFormats: {
 						millisecond: '%H:%M:%S.%L',
 						second: '%H:%M:%S',
@@ -739,6 +742,7 @@
 					},
 					categories: null,
 					crosshair: true
+					
 				}],
 				yAxis: [{
 					lineColor: 'var(--grey)',
@@ -761,7 +765,7 @@
 						y: 15,
 						align: "left",
 						formatter: function () {
-							return Math.round(this.value / 1000);
+							return Math.round(this.value);
 						},
 						style: {
 							color: 'var(--grey)',
@@ -797,36 +801,36 @@
 						},
 						borderWidth: 0
 					},
-					area: {
-						lineColor: "transparent",
-						marker: {
-							enabled: false
-						}
-					},
+					column: {
+						stacking: true
+					}
 				},
 				series: Graph3.series
 			});
 		},
 
 		refresh() {
-			// $.when(getNow("15min"), getForecast("hour")).then((now, forecast) => {
-			// 	const data = [
-			// 		Object.entries(now[0].data).map(x => {
-			// 			x[1].sid = x[0];
+			$.when(getNow("15min"), getForecast("hour")).then((now, forecast) => {
+				const data = [
+					Object.entries(now[0].data).map(x => {
+						x[1].sid = x[0];
 						
-			// 			return x[1].energy;
-			// 		}),
-			// 		Object.entries(forecast[0].data).map(x => x[1][0].items[0].energy)
-			// 	];
+						return x[1];
+					}),
+					Object.entries(forecast[0].data).map(x => x[1][0].items[0])
+				];
+				
+				const date = [];
 		
-			// 	$.each(Graph3.series, (ix, el) => {
-			// 		Graph3.series[ix].data = fillArray(data[ix], 12);
-			// 	});
+				$.each(Graph3.series, (ix, el) => {
+					Graph3.series[ix].data = fillArray(data[ix].map(x => x.money), 12);
+				});
+
 
 				Graph3.setOption();
 
 				Graph3.target.redraw();
-			// })
+			})
 		},
 	}
 
@@ -963,10 +967,8 @@
 			}
 		},
 
-		focusTo() {
+		focusTo(sid) {
 			if (typeof(VppMap.smoothZoom) == 'function') {
-				let self = $(this);
-				let sid = self.data('sid');
 				let markerIcon = VppMap.makerObject[sid];
 
 				VppMap.map.setCenter(markerIcon.position);
@@ -979,6 +981,10 @@
 
 	// 사이트 현황
 	const SiteStatus = {
+		interval: null,
+		idx: 0,
+		len: $(".vpp-focus-map").length,
+
 		init() {
 			let tableTemplate = ``;
 			let energy = {};
@@ -1059,12 +1065,21 @@
 				VppMap.geocodeAddress(x.address, x.sid, x.latlng, "#90caf3");
 			})
 			$("#vppMapTable tbody").html(tableTemplate);
+
+			this.rolling();
 		},
 
 		rolling() {
-			const play = $(".auto-rolling").hasClass("play") ? true : false;
+			clearInterval(this.interval);
+			if ($(".auto-rolling").hasClass("playing")) {
+				this.len = $(".vpp-focus-map").length - 1;
+				this.interval = setInterval(_ => {
+					$(".vpp-focus-map")[this.idx].click();
 
-		}
+					this.idx = this.len > this.idx ? this.idx + 1 : 0;
+				}, 10000);
+			}
+		},
 	}
 
 	const Prediction = {
@@ -1126,7 +1141,7 @@
 					},
 					{
 						title: "이전 <br> 30일 오차<br>",
-						data: 'beforeError',
+						data: 'monthError',
 						className: 'dt-head-right dt-body-right'
 					},
 				],
@@ -1151,26 +1166,58 @@
 		},
 
 		refresh() {
+			Table.target.clear();
+			
 			const tableData = [];
 
-			App.sites.forEach((site, ix) => {
-				const ed = App.energyData.find(x => x.sid === site.sid);
+			const start = new Date();
+			const end = new Date();
 
-				tableData[ix] = {
-					name: site.name,
-					capacity: Math.round(ed.capacity / 1000),
-					todayError: "-",
-					weekError: "-",
-					beforeError: "-",
-				}
-			})
+			start.setDate(start.getDate() - 7);
+			const time = [
+				convDate(start, true),
+				convDate(end),
+			];
 
+			// timeout
+			$.ajax({
+				url: apiHost + "/energy/forecast/accuracy",
+				type: "POST",
+				dataType: 'json',
+				contentType: "application/json",
+				data: JSON.stringify({
+					"sids": App.sids,
+					"startTime": time[0],
+					"endTime": time[1],
+					"interval": "day",
+					"cal_incentive": true,
+				}),
+			}).done(r => {
+				const data = r.data.data.each
+				console.log(r)
 
+				App.sites.forEach((site, ix) => {
+					const ed = App.energyData.find(x => x.sid === site.sid);
+					let acc = null;
+					if (data[site.sid]) {
+						acc = Object.values(data[site.sid])
+					}
+					const today = acc ? acc.pop().accuracy.toFixed(1) : "-";
+					const week = acc ? acc.reduce((acc, cur) => acc + cur.accuracy, 0).toFixed(1) : "-";
+	
+					tableData[ix] = {
+						name: site.name,
+						capacity: Math.round(ed.capacity / 1000),
+						todayError: today,
+						weekError: week,
+						monthError: "-",
+					}
+					Table.target.rows.add(tableData[ix]);
+					Table.target.draw();
+					Table.target.columns.adjust();
+				});
+			});
 
-			Table.target.clear();
-			Table.target.rows.add(tableData);
-			Table.target.draw();
-			Table.target.columns.adjust();
 		}
 	}
 	

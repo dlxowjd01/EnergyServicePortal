@@ -256,7 +256,6 @@ h2.title {
 }
 
 .auto-rolling > p {
-	display: none;
 	align-items: center;
 }
 
@@ -264,9 +263,14 @@ h2.title {
 	margin-right: 8px;
 }
 
-.auto-rolling.play > p.stop,
-.auto-rolling.stop > p.play {
+.auto-rolling > p.play,
+.auto-rolling.playing > p.stop {
 	display: flex;
+}
+
+.auto-rolling.playing > p.play,
+.auto-rolling > p.stop {
+	display: none;
 }
 
 .vpp-2-2-table {

@@ -11436,3 +11436,17 @@ th > span.asterisk:after {
 .gmain-chart3 {
 	position: relative;
 }
+
+.number-unit {
+	margin-top: 16px;
+	display: flex;
+	align-items: flex-end;
+	color: var(--white60);
+	font-size: 16px;
+}
+
+.number-unit > span {
+	font-size: 28px;
+	margin-right: 8px;
+	color: var(--white87);
+}
