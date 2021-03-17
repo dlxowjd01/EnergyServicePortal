@@ -1,9 +1,37 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
-
 <link type="text/css" rel="stylesheet" href="/css/spcDashboard.css" />
+<script type="text/javascript">
+	const siteList = JSON.parse('${siteList}');
 
+	$(function() {
 
+	});
+
+	const deviceRaw = () => {
+		const targetApi = new Array();
+		const siteSids = new Array();
+
+		siteList.forEach(site => {
+			if (site.hasDevices) {
+				siteSids.push(site.sid);
+				// targetApi.push($.ajax({
+				// 	url: apiHost + '/status/raw/site',
+				// 	type: 'GET',
+				// 	data: {
+				// 		sid: site.sid,
+				// 		formId: 'v2'
+				// 	}
+				// }));
+			}
+		});
+
+		$.ajax({
+			url: apiHost + '/'
+		})
+		console.log(siteSids.toString());
+	}
+</script>
 <form id="linkSiteForm" name="linkSiteForm" method="post"></form>
 <div class="row header-wrapper">
 	<div class="col-lg-5 col-md-6 col-sm-12 dashboard-header"></div>

@@ -585,7 +585,21 @@
 		});
 
 		$("#deleteRowBtn").on("click", function(){
-			$("#tableBody tr:not(:first-child)").find('td input:checked').closest('tr').remove();
+			if ($("#tableBody tr").length > 1) {
+				if ($("#tableBody tr").length === $("#tableBody tr").find('td input:checked').length) {
+					$("#tableBody tr:not(:first-child)").find('td input:checked').closest('tr').remove();
+
+					alert('최소 한개의 행이 존재 해야합니다.');
+					return false;
+				} else {
+					$("#tableBody tr").find('td input:checked').closest('tr').remove();
+				}
+			} else {
+				alert('최소 한개의 행이 존재 해야합니다.');
+				return false;
+			}
+			$("#tableBody tr:first-child").find('td input.fromDate').prop('disabled', false);
+
 			let total = document.getElementById("total");
 			totalAmount = 0;
 			$(".amount").each(function(){

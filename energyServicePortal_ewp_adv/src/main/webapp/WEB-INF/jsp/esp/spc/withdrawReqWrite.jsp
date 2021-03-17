@@ -523,6 +523,8 @@
 				alert('최소 한개의 행이 존재 해야합니다.');
 				return false;
 			}
+
+			$("#tableBody tr:first-child").find('td input.fromDate').prop('disabled', false);
 		});
 
 		$("#selectAll").on("click", function(){
