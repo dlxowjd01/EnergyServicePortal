@@ -150,7 +150,7 @@
 			<div class="table-top clear">
 				<div class="input-group1">
 					<input type="text" class="input" id="searchName" name="searchName" value="" placeholder="사업소 검색" onkeyup="if (event.keyCode == 13) searchSiteList();">
-					<button type="button" onclick="searchSite();"><fmt:message key="vppdash.8.apply" /></button>
+					<button type="button" onclick="searchOperationSite();"><fmt:message key="vppdash.8.apply" /></button>
 				</div>
 				<div class="input-group2">
 					<span class="tx-tit"><fmt:message key="vppdash.8.status" /></span>
@@ -359,7 +359,8 @@
 	});
 
 	const rtnDropdown = () => {
-		searchSite();
+		// searchSite();
+		searchOperationSite();
 	}
 
 	const pageMove = (id, action) => {

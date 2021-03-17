@@ -1278,7 +1278,7 @@
 						</div>
 					</div>
 
-					<div class="flex-start2 mt-20">
+					<div class="flex-start2 mt-20 dateField">
 						<div>
 							<h2 class="tx-tit"><fmt:message key="statushistory.1.timeframe" /></h2>
 							<label for="fromDate" class="tx-tit sr-only"><fmt:message key='operHistory.detailSearch.start' /></label>

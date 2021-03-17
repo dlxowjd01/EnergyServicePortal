@@ -1876,9 +1876,18 @@ const searchOperationSite = () => {
 	});
 
 	$('#siteList tr.dbclickopen').each(function() {
-		const operation = $(this).data('operation')
-			, siteAddress = $(this).data('address')
-			, siteName = $(this).find('td:eq(4)').text();
+		// const operation = $(this).data('operation')
+		const siteAddress = $(this).data('address')
+			, siteName = $(this).find('td:eq(4)').text()
+			, rtuStatus = $(this).find('td:eq(3)').text();
+		let operation = 1;
+
+		// operation: rtuStatus로 만든 text로 설정
+		if(rtuStatus == '중지') {
+			operation = 0;
+		} else if(rtuStatus == '이상') {
+			operation = 2;
+		}
 
 		if (deviceStatus.length === 3) {
 			const searchPattern = new RegExp(searchName, 'i'); //ignoreCase 대소문자 구분X

@@ -5451,6 +5451,15 @@
 
 			alarmEl.attr("data-alarm", alarmColor);
 			alarmEl.find('em').text(alarmList.length);
+
+			if(alarmList.length==0) {
+				alarmList.push({
+					site_name: "noTodayError",
+					message: "<fmt:message key='smain.noTodayError' />",
+					standardTime: ""
+					});
+			}
+
 			setMakeList(alarmList, 'alarmNotice', {'dataFunction': {'level': levelClass}});
 
 		}).fail(function (jqXHR, textStatus, errorThrown) {

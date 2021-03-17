@@ -1057,6 +1057,10 @@ function setMakeList(jsonData, listId, opts) {
 			}
 		}
 
+		if(listId == 'alarmNotice') {
+			tmpHtml = tmpHtml.replace('<li>', '<li data-alarm="' + levelClass(jsonData[i].level) + '">');
+		}
+
 		if(opts.dataFunction['align']) {
 			tmpHtml = alignFunc(tmpHtml);
 		} else if(opts.dataFunction['setNull']) {
@@ -1065,6 +1069,10 @@ function setMakeList(jsonData, listId, opts) {
 		arrTagInfo.push(tmpHtml);
 	}
 
+	if(jsonData.length == 1 && listId == 'alarmNotice' && jsonData[0].site_name == "noTodayError") {
+		arrTagInfo = [];
+		arrTagInfo.push('<span class="no-data"' + ' style="color:#666666;font-size:12px;font-weight:bold;fill:#666666;">' + jsonData[0].message + '</span>');
+	}
 	$selecter.html(arrTagInfo.join(""));
 }
 
