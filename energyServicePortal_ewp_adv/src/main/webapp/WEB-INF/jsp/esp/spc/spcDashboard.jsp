@@ -47,7 +47,7 @@
 	</div>
 
 	<div class="indiv spcDashboard1-3">
-		<ul>
+		<ul id="spcCategory">
 			<li class="actived">보험료</li>
 			<li>세금과 공과</li>
 			<li>기장료</li>
@@ -95,7 +95,7 @@
 
 	<div class="indiv spcDashboard2-1">
 		<h2 class="title">평균 지출 비율</h2>
-		<div> 
+		<div id="graph1"> 
 			<!-- 그래프 -->
 		</div>
 	</div>
@@ -105,7 +105,7 @@
 			종합 지출 총계
 			<span>2021.01.01 ~ 2021.03.10</span>
 		</h2>
-		<div>
+		<div id="graph2">
 			<!-- 그래프 -->
 		</div>
 	</div>
@@ -144,21 +144,23 @@
 
 		<h3>발전소 수입/지출 현황</h3>
 		
-		<div class="spcDashboard-table">
+		<div class="spcDashboard-table" id=table1>
 			<!-- dataTable -->
 		</div>
 	</div>
 
 	<div class="indiv spcDashboard3-1">
-		<div class="title-area">
-			<h2 class="title actived">항목별 지출</h2>
-			<h2 class="title">용량대비 지출/관리운영비 추이</h2>
-		</div>
-		<ul class="interval-selector">
-			<li class="actived">월별</li>
-			<li>연도별</li>
-		</ul>
 		<div>
+			<div class="title-area">
+				<h2 class="title actived">항목별 지출</h2>
+				<h2 class="title">용량대비 지출/관리운영비 추이</h2>
+			</div>
+			<ul class="interval-selector">
+				<li class="actived">월별</li>
+				<li>연도별</li>
+			</ul>
+		</div>
+		<div id="graph3">
 			<!-- 그래프 -->
 		</div>
 	</div>
@@ -167,10 +169,35 @@
 		<h2 class="title">MW당 항목별 지출금액</h2>
 		<div class="spcDashboard3-2-graph-wrap">
 			<button class="direction-button prev"> <img src="/img/spcDashboard/pre.svg" alt=""> </button>
-			<div>
+			<div id="graph4">
 				<!-- 그래프 -->
 			</div>
 			<button class="direction-button next"> <img src="/img/spcDashboard/next.svg" alt=""> </button>
 		</div>
 	</div>
 </div>
+
+<script>
+	// 기본 상호작용
+	$("#spcCategory > li").on("click", function(e) {
+		$("#spcCategory > li").removeClass("actived");
+
+		$(this).addClass("actived");
+	});
+
+	$(".spcDashboard-filter > div").on("click", function(e) {
+		$(this).toggleClass("actived");
+	});
+
+	$(".spcDashboard3-1 > .title-area > .title").on("click", function(e) {
+		$(".spcDashboard3-1 > .title-area > .title").removeClass("actived");
+
+		$(this).addClass("actived");
+	});
+
+	$(".interval-selector > li").on("click", function(e) {
+		$(".interval-selector > li").removeClass("actived");
+
+		$(this).addClass("actived");
+	});
+</script>

@@ -220,15 +220,19 @@
 }
 
 
+.spcDashboard3-1 > div:first-child {
+	display: flex;
+	flex-direction: column;
+}
 
-.spcDashboard3-1 > .title-area {
+.spcDashboard3-1 > div > .title-area {
 	display: flex;
 	align-items: center;
 	margin-top: -24px;
 	margin-bottom: 16px;
 }
 
-.spcDashboard3-1 > .title-area > .title {
+.spcDashboard3-1 > div > .title-area > .title {
 	position: relative;
 	padding: 24px 0px 16px 0px;
 	cursor: pointer;
@@ -236,11 +240,11 @@
 	color: var(--white60);
 }
 
-.spcDashboard3-1 > .title-area > .title.actived {
+.spcDashboard3-1 > div > .title-area > .title.actived {
 	color: var(--white87);
 }
 
-.spcDashboard3-1 > .title-area > .title:after {
+.spcDashboard3-1 > div > .title-area > .title:after {
 	content: "";
 	width: 100%;
 	height: 4px;
@@ -249,7 +253,7 @@
 	left: 0;
 }
 
-.spcDashboard3-1 > .title-area > .title.actived:after {
+.spcDashboard3-1 > div > .title-area > .title.actived:after {
 	background: var(--white87);
 }
 
@@ -282,12 +286,6 @@
 }
 
 
-.spcDashboard3-2 {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-}
-
 .spcDashboard3-2-graph-wrap {
 	position: relative;
 }
@@ -314,4 +312,34 @@
 
 .direction-button:hover {
 	transform: translateY(-50%);
+}
+
+
+/* 그래프 세로사이즈 */
+#graph1,
+#graph2 {
+	height: 310px;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+#graph3,
+#graph4 {
+	height: 350px;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+#table1 {
+	height: 720px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+
+.spcDashboard2-1,
+.spcDashboard2-2,
+.spcDashboard3-1,
+.spcDashboard3-2 {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 }
