@@ -345,7 +345,7 @@
 				type: 'GET',
 				data: {
 					oid: oid,
-					spc_ids: selectedSpc.toString()
+					spc_ids: 'all'
 				},
 				timeout: 300000
 			}).done(function(data, textStatus, jqXHR) {
