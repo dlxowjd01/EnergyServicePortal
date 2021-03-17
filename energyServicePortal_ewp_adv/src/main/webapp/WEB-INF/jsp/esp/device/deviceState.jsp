@@ -900,17 +900,8 @@
 				} else {
 					if (!isEmpty(resultData) && !isEmpty(resultData[liData])) {
 						let dValue = '';
-						if(liData.match("activePower") || liData.match("dcPower")){
-							let tempVal = displayNumberFixedDecimal(resultData[liData], suffix, 3, 2);
-							tempVal[0] != '-' ? ( dValue = tempVal.join(' ')) : ( dValue = tempVal[0] );
-						} else {
-							if(liData.match("temperature") || liData.match("humidity")){
-								dValue = resultData[liData] != '-' ? displayNumberFixedUnit(resultData[liData], suffix, suffix, 1)[0] + ' ' + suffix : resultData[liData];
-							} else {
-								let tempVal = displayNumberFixedDecimal(resultData[liData], suffix, 3, 2);
-								dValue = tempVal[0] != '-' ? tempVal[0] + ' ' + suffix : tempVal[0];
-							}
-						}
+						let tempVal = displayNumberFixedDecimal(resultData[liData], suffix, 3, 2);
+						tempVal[0] != '-' ? ( dValue = tempVal.join(' ')) : ( dValue = tempVal[0] );
 						$(this).find('.t-value').text(dValue);
 					} else {
 						$(this).find('.t-value').text('-');
@@ -924,21 +915,8 @@
 
 				if (!isEmpty(resultData) && !isEmpty(resultData[liData])) {
 					let dValue = '';
-					if(liData.match("accumActiveEnergy")){
-						let tempVal = displayNumberFixedDecimal(resultData[liData], suffix, 3, 2);
-						tempVal[0] != '-' ? ( dValue = tempVal.join(' ')) : ( dValue = tempVal[0] );
-					} else {
-						let tempVal = displayNumberFixedDecimal(resultData[liData], suffix, 3, 2);
-						if(liData.match("voltageR") || liData.match("voltageS") || liData.match("voltageT")) {
-							dValue = tempVal[0] != '-' ? tempVal[0] + ' ' + 'V' : tempVal[0];
-						} else if(liData.match("currentR") || liData.match("currentS") || liData.match("currentT")) {
-							dValue = tempVal[0] != '-' ? tempVal[0] + ' ' + 'A' : tempVal[0];
-						} else if(liData.match("temperature")){
-							dValue = tempVal[0] + suffix;
-						} else {
-							dValue = tempVal[0] != '-' ? tempVal.join(' ') : tempVal[0];
-						}
-					}
+					let tempVal = displayNumberFixedDecimal(resultData[liData], suffix, 3, 2);
+					tempVal[0] !== '-' ? ( dValue = tempVal.join(' ')) : ( dValue = tempVal[0] );
 					$(this).find('.di-li-text').text(dValue);
 				} else {
 					$(this).find('.di-li-text').text('-');

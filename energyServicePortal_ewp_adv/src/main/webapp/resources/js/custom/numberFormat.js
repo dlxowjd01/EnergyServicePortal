@@ -59,12 +59,11 @@ const displayNumberFixedDecimal = function(number, unit, intChipher, decimalChip
 		{ unit: '천만', chipher: 10000000 },
 		{ unit: '억', chipher: 100000000 },
 	];
-	let suffix = '';
 
 	if(isEmpty(number)) {
 		return ['-', unit];
 	} else {
-		if( (unit.match('W')) || (unit === 'VAR') || (unit === 'W/㎡')) {
+		if(!unit.match('원')) {
 			if(isEmpty(intChipher)) {
 				decimalChipher = 3;
 			}
@@ -73,30 +72,27 @@ const displayNumberFixedDecimal = function(number, unit, intChipher, decimalChip
 			}
 
 			/* 시작 unit 단위가 w보다 클경우 */
-			const standardUnit = (unit.substr(0, 1)).replace(/W/i, '');
-			if (!isEmpty(standardUnit)) {
-				const findIndex = whUnit.findIndex(targetUnit => (targetUnit).match(standardUnit));
-				if (findIndex > 0) {
-					whUnit = whUnit.splice(findIndex, whUnit.length);
-				}
+			const preFixUnit = unit.substr(0, 1);
+			const findIndex = whUnit.findIndex(targetUnit => (targetUnit).match(preFixUnit));
+			let suffix = '';
+			if (findIndex > 0) {
+				whUnit = whUnit.splice(findIndex, whUnit.length);
+				suffix = unit.substr(1);
+			} else {
+				suffix = unit;
 			}
 			/* 시작 unit 단위가 w보다 클경우 */
-
-			if (unit.match('h')) {
-				suffix = 'h';
-			}
 
 			whUnit.some(function(v, k) {
 				let str = String(Math.floor(number));
 				if(str.length > intChipher && v != 'T') {
 					number = number / 1000;
 				} else {
-					let endUnit = unit.endsWith("VAR") ? "VAR" : unit.endsWith("W/㎡") ? "W/㎡" : "W";
 					if(decimalChipher === 0){
-						rtnValue = [numberComma(Math.round(number)), v + endUnit + suffix];
+						rtnValue = [numberComma(Math.round(number)), v + suffix];
 					} else {
 						let pFraction = Math.pow(10, decimalChipher);
-						rtnValue = [numberComma(( Math.round(number * pFraction) / pFraction ).toFixed(decimalChipher)), v + endUnit + suffix];
+						rtnValue = [numberComma(( Math.round(number * pFraction) / pFraction ).toFixed(decimalChipher)), v + suffix];
 					}
 					return rtnValue;
 				}
