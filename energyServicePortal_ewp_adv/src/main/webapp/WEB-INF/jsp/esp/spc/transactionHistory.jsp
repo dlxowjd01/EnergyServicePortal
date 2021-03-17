@@ -220,13 +220,19 @@
 					spcArray.push(spcList);
 				}
 
-				document.querySelectorAll('#spcList input').forEach(inp => {
-					if (spcArray.includes(inp.dataset.value)) {
+				if (spcArray.includes('all')) {
+					document.querySelectorAll('#spcList input').forEach(inp => {
 						inp.checked = true;
-					} else {
-						inp.checked = false;
-					}
-				});
+					});
+				} else {
+					document.querySelectorAll('#spcList input').forEach(inp => {
+						if (spcArray.includes(inp.dataset.value)) {
+							inp.checked = true;
+						} else {
+							inp.checked = false;
+						}
+					});
+				}
 
 				displayDropdown($('#spcList').parent('div'));
 			}
@@ -332,10 +338,16 @@
 	 * 입출금 내역 갱신
 	 */
 	$(document).on('click', '#refresh', function () {
-		let selectedSpc = new Array();
-		document.querySelectorAll('#spcList input:checked').forEach(inp => {
-			selectedSpc.push(inp.dataset.value);
-		});
+		let selectedSpc = '';
+
+		if (document.querySelector('#spcList input:first-child:checked')) {
+			selectedSpc = 'all';
+		} else {
+			selectedSpc = new Array();
+			document.querySelectorAll('#spcList input:checked').forEach(inp => {
+				selectedSpc.push(inp.dataset.value);
+			});
+		}
 
 		if (selectedSpc.length > 0) {
 			$('#loadingCircle').show();
