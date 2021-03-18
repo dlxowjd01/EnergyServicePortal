@@ -17,9 +17,18 @@ html.darkmode:root {
 	--ico-sort-down: url("/img/sorting_down.png");
 }
 
-.dataTable {
+.dataTable:not(.spcDashboard) {
 	width: 100%!important;
 	min-width: 1700px!important;
+	margin: 0 auto;
+	clear: both;
+	border-collapse: separate;
+	border-spacing: 0;
+}
+
+.dataTable.spcDashboard {
+	width: 100%!important;
+	min-width: 518px!important;
 	margin: 0 auto;
 	clear: both;
 	border-collapse: separate;

@@ -137,14 +137,20 @@
 
 .spcDashboard1-3 > div > div:not(:last-child) { margin-right: 12px; }
 
-
-.spcDashboard2-2 > .title {
+.spcDashboard2-1 > .title,
+.spcDashboard2-2 > .title,
+.spcDashboard2-3 > .title,
+.spcDashboard3-2 > .title {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 }
 
-.spcDashboard2-2 > .title > span {
+.spcDashboard2-1 > .title > span,
+.spcDashboard2-2 > .title > span,
+.spcDashboard2-3 > .title > span,
+.spcDashboard3-1 > div > .title-area > span,
+.spcDashboard3-2 > .title > span {
 	color: var(--white60);
 	font-size: 13px;
 }
@@ -319,13 +325,13 @@
 #graph1,
 #graph2 {
 	height: 310px;
-	border: 1px solid rgba(0, 0, 0, 0.2);
+	margin-top: 20px;
 }
 
 #graph3,
 #graph4 {
 	height: 350px;
-	border: 1px solid rgba(0, 0, 0, 0.2);
+	margin-top: 20px;
 }
 
 #table1 {
@@ -334,9 +340,6 @@
 	overflow-x: hidden;
 }
 
-
-.spcDashboard2-1,
-.spcDashboard2-2,
 .spcDashboard3-1,
 .spcDashboard3-2 {
 	display: flex;
