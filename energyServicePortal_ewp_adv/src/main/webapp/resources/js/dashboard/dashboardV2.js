@@ -1349,9 +1349,21 @@ const alarmInfoList = async (siteSids) => {
 			alarmEl.find('em').text(alarmList.length);
 			setMakeList(alarmList, 'alarmNotice', {'dataFunction': {'level': levelClass}}); //list생성
 		} else {
-			let alarmEl = $('.indiv[data-alarm]');
-			alarmEl.attr('data-alarm', '');
-			$('#alarmNotice').empty();
+			// let alarmEl = $('.indiv[data-alarm]');
+			// alarmEl.attr('data-alarm', '');
+			// $('#alarmNotice').empty();
+
+			let alarmList = new Array();
+			let noTodayErrorMsg = '발생한 오류가 없습니다';
+			if(langStatus == 'EN') {
+				noTodayErrorMsg = 'There is no alert';
+			}
+			alarmList.push({
+				site_name: "noTodayError",
+				message: noTodayErrorMsg,
+				standardTime: ""
+				});
+			setMakeList(alarmList, 'alarmNotice', {'dataFunction': {'level': levelClass}}); //list생성
 		}
 	}).fail((jqXHR, textStatus, errorThrown) => {
 		console.error(textStatus);
@@ -1874,20 +1886,12 @@ const searchOperationSite = () => {
 	document.querySelectorAll('[name="deviceStatus"]:checked').forEach(chk => {
 		deviceStatus.push(chk.value);
 	});
+	if (deviceStatus.includes("2")) {deviceStatus.push("-");} // 트립 선택시 알수없음(or 이상)포함
 
 	$('#siteList tr.dbclickopen').each(function() {
-		// const operation = $(this).data('operation')
-		const siteAddress = $(this).data('address')
-			, siteName = $(this).find('td:eq(4)').text()
-			, rtuStatus = $(this).find('td:eq(3)').text();
-		let operation = 1;
-
-		// operation: rtuStatus로 만든 text로 설정
-		if(rtuStatus == '중지') {
-			operation = 0;
-		} else if(rtuStatus == '이상') {
-			operation = 2;
-		}
+		const operation = $(this).data('operation')
+			, siteAddress = $(this).data('address')
+			, siteName = $(this).find('td:eq(4)').text();
 
 		if (deviceStatus.length === 3) {
 			const searchPattern = new RegExp(searchName, 'i'); //ignoreCase 대소문자 구분X

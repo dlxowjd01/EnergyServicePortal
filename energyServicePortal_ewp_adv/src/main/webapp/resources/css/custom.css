@@ -7423,7 +7423,8 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	margin: 10px 6px;
 	padding: 12px;
 	width: 115px;
-	min-height: 132px;
+	/* min-height: 132px; */
+	min-height: 1px;
 	border-radius: 4px;
 	text-align: left;
 	background: var(--box-darker);

@@ -1011,6 +1011,16 @@ function setMakeList(jsonData, listId, opts) {
 		'powerFactorT',
 	];
 
+	const columnName_SENSOR_SOLAR_Table = [
+		'siteName',
+		'dname',
+		'localtime',
+		'operation',
+		'temperature',
+		'irradiationPoa',
+		'irradiationHorizontal'
+	];
+
 	if (dataLenth > 0) {
 		for (var prop in jsonData[0]) {
 			arr_column.push(prop);
@@ -1018,6 +1028,9 @@ function setMakeList(jsonData, listId, opts) {
 
 		if (listId === 'SM_Table' || listId === 'INV_PV_Table') {
 			arr_column = columnName_SM_Table;
+		}
+		if (listId === 'SENSOR_SOLAR_Table') {
+			arr_column = columnName_SENSOR_SOLAR_Table;
 		}
 		arr_column.push("INDEX");
 	} else {
@@ -1045,8 +1058,16 @@ function setMakeList(jsonData, listId, opts) {
 					jsonData[i][columnName] = '-';
 				}
 			}
-
 		}
+		if (listId === 'SENSOR_SOLAR_Table') {
+			for (var j in columnName_SENSOR_SOLAR_Table) {
+				const columnName = columnName_SENSOR_SOLAR_Table[j];
+				if (!jsonData[i][columnName]) {
+					jsonData[i][columnName] = '-';
+				}
+			}
+		}
+
 		jsonData[i]["INDEX"] = i;
 		tmpHtml = rowHtml;
 		for (var j = 0; j < columLength; j++) {
