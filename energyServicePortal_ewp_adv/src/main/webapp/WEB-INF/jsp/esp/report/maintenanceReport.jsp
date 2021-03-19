@@ -255,7 +255,7 @@
 </script>
 <div class="row">
 	<div class="col-12">
-		<h1 class="page-header">작업 보고서</h1>
+		<h1 class="page-header"><fmt:message key="report.work.title" /></h1>
 	</div>
 </div>
 <div class="row">
@@ -283,18 +283,18 @@
 		<div class="flex-group">
 			<span class="tx-tit"><fmt:message key="workreportmain.1.dateOfIssue" /></span>
 			<div class="sel-calendar dateField">
-				<input type="text" id="write_date_from" class="sel fromDate" value="" autocomplete="off" placeholder="시작일" readonly />
+				<input type="text" id="write_date_from" class="sel fromDate" value="" autocomplete="off" placeholder="<fmt:message key='workreport.2.startDate' />" readonly />
 				<em></em>
-				<input type="text" id="write_date_to" class="sel toDate" value="" autocomplete="off" placeholder="종료일" readonly />
+				<input type="text" id="write_date_to" class="sel toDate" value="" autocomplete="off" placeholder="<fmt:message key='workreport.2.endDate' />" readonly />
 			</div>
 			<small id="dateWarning" class="hidden warning">시작일과 종료일을 모두 입력해 주세요.</small>
 		</div>
 		<div class="flex-group maintenance-search">
 			<div class="text-input-type mr-12">
-				<input type="text" id="key_word" placeholder="입력" />
+				<input type="text" id="key_word" placeholder="<fmt:message key='input.input' />" />
 			</div>
 			<button type="submit" class="btn-type" onclick="getDataList();">
-				<fmt:message key="workreportmain.1.search" />
+				<fmt:message key="report.work.search" />
 			</button>
 		</div>
 	</div>

@@ -25,36 +25,36 @@
 			paging: false,
 			columns: [
 				{
-					sTitle: '구분',
+					sTitle: '<fmt:message key="ugs.class" />',
 					mData: 'kind',
 					className: 'dt-center',
 					mRender: function ( data, type, full, rowIndex ) {
 						let text = '';
 						if (data === 1) {
-							text = '발전소';
+							text = "<fmt:message key='ugs.plant' />";
 						} else if(data === 2) {
 							text = 'SPC';
 						} else {
-							text = '그룹';
+							text = "<fmt:message key='ugs.group' />";
 						}
 
 						return text;
 					}
 				},
 				{
-					sTitle: '이름',
+					sTitle: "<fmt:message key='ugs.name' />",
 					mData: 'name',
 					className: 'dt-center'
 				},
 				{
-					sTitle: '권한',
+					sTitle: "<fmt:message key='ugs.auth' />",
 					mData: 'role',
 					mRender: function ( data, type, full, rowIndex ) {
 						let temp = ``;
 						if (data === 1) {
-							temp = `<button type="button" class="btn-type-sm btn-type03">관리 권한</button>`;
+							temp = `<button type="button" class="btn-type-sm btn-type03"><fmt:message key='ugs.auth.1' /></button>`;
 						} else {
-							temp = `<button type="button" class="btn-type-sm btn-type03">조회 권한</button>`;
+							temp = `<button type="button" class="btn-type-sm btn-type03"><fmt:message key='ugs.auth.2' /></button>`;
 						}
 						temp += `<button type="button" class="btn-close" data-value="${'${full.id}'}"></button>`;
 						return temp;
@@ -181,7 +181,7 @@
 		pageInit();
 
 		$('#customName').val(targetNm);
-		$('#addLevel').attr('onclick', 'addCustomLevel("PATCH");').text('수정');
+		$('#addLevel').attr('onclick', 'addCustomLevel("PATCH");').text('<fmt:message key="ugs.modify" />');
 		getUserMenuList(targetId);
 		getUserSiteList(targetId);
 	});
@@ -195,10 +195,10 @@
 		if (e.target.classList.contains('btn-type03')) {
 			if (etcTable.cell(this).data() === 1) {
 				etcTable.cell(this).data(2);
-				$(this).find('button.btn-type03').text('조회 권한');
+				$(this).find('button.btn-type03').text('<fmt:message key="ugs.auth.1" />');
 			} else {
 				etcTable.cell(this).data(1);
-				$(this).find('button.btn-type03').text('관리 권한');
+				$(this).find('button.btn-type03').text('<fmt:message key="ugs.auth.2" />');
 			}
 		} else if (e.target.classList.contains('btn-close')) {
 			const value = this.children[1].dataset.value;
@@ -227,7 +227,7 @@
 		$('.tab-content small').addClass('hidden');
 		$('.tab-content div.dropdown button').removeData('value').html('<fmt:message key="button.select" /> <span class="caret"></span>');
 
-		$('#addLevel').attr('onclick', 'addCustomLevel("POST");').text('등록');
+		$('#addLevel').attr('onclick', 'addCustomLevel("POST");').text('<fmt:message key="button.create" />');
 		$('.nav-tabs li:eq(0)').trigger('click');
 		etcTable.clear().draw();
 		$('#menuList input').prop('checked', false);
@@ -404,7 +404,7 @@
 				let menuTemp = ``;
 				menuTemp = `
 					<input type="checkbox" id="all-menu" name="menu" value="all">
-					<label class="custom-checkbox" for="all-menu">전체</label>
+					<label class="custom-checkbox" for="all-menu"><fmt:message key='ugs.all' /></label>
 				`;
 				menuList.forEach(menu => {
 					let menuName = JSON.parse(menu.name);
@@ -421,10 +421,11 @@
 								let subName = JSON.parse(subMenu.name);
 								let isSubChecked = '';
 								if (subMenu.code === 'gmain') isSubChecked = 'checked';
+								console.log(subName)
 								subMenuList += `
 									<li>
 										<input type="checkbox" id="menu-${'${subMenu.code}'}" name="menu" data-parent="${'${subMenu.parent}'}" ${'${isSubChecked}'} value="${'${subMenu.code}'}">
-										<label class="custom-checkbox" for="menu-${'${subMenu.code}'}">${'${subName.kr}'}</label>
+										<label class="custom-checkbox" for="menu-${'${subMenu.code}'}">${'${langStatus === "KR" ? subName.kr : subName.en}'}</label>
 									</li>
 								`;
 							}
@@ -451,7 +452,7 @@
 								<div class="panel-heading no-padding" role="tab">
 									<h4 class="panel-title">
 										<input type="checkbox" id="menu-${'${menu.code}'}" name="menu" ${'${isChecked}'} value="${'${menu.code}'}">
-										<label class="custom-checkbox" for="menu-${'${menu.code}'}">${'${menuName.kr}'}</label>
+										<label class="custom-checkbox" for="menu-${'${menu.code}'}">${'${langStatus === "KR" ? menuName.kr : menuName.en}'}</label>
 										${'${subDownButton}'}
 									</h4>
 								</div>
@@ -756,23 +757,23 @@
 			<div class="row" style="margin: 0;">
 				<div class="w-25">
 					<div>
-						<h2 class="sm-title">등급 이름</h2>
+						<h2 class="sm-title"><fmt:message key='ugs.levName' /></h2>
 						<div class="text-input-type mt-20">
 							<input type="text" id="customName" name="customName" placeholder="<fmt:message key='revenuereport.1.type_here' />" autocomplete="off">
 							<small id="isCustomNameEmpty" class="warning hidden"><fmt:message key="ugs.warning.1" /></small>
 						</div>
 
-						<h2 class="sm-title mt-30">구분</h2>
+						<h2 class="sm-title mt-30"><fmt:message key="ugs.class" /></h2>
 						<ul class="nav nav-tabs">
-							<li class="active w-33"><a data-toggle="tab" href="#groupTab">그룹</a></li>
+							<li class="active w-33"><a data-toggle="tab" href="#groupTab"><fmt:message key='ugs.group' /></a></li>
 							<li class="w-33"><a data-toggle="tab" href="#spcTab">SPC</a></li>
-							<li class="w-33"><a data-toggle="tab" href="#siteTab">발전소</a></li>
+							<li class="w-33"><a data-toggle="tab" href="#siteTab"><fmt:message key='ugs.plant' /></a></li>
 						</ul>
 
 						<div class="tab-content">
 							<div id="groupTab" class="tab-pane fade in active">
 								<div id="groupOpt" class="dropdown w-100 mt-10">
-									<div class="dropdown-search w-100"><input type="text" placeholder="그룹 검색" onkeyup="searchSite($(this).val(), 'group')"></div>
+									<div class="dropdown-search w-100"><input type="text" placeholder="<fmt:message key='input.search.group' />" onkeyup="searchSite($(this).val(), 'group')"></div>
 									<button type="button" class="dropdown-toggle w-100" data-toggle="dropdown" data-name="<fmt:message key='button.select' />"><fmt:message key='button.select' /><span class="caret"></span></button>
 									<ul id="groupOptList" class="dropdown-menu" style="top:75px; width:260px; height:300px;"></ul>
 								</div>
@@ -782,7 +783,7 @@
 
 							<div id="spcTab" class="tab-pane fade in">
 								<div id="spcOpt" class="dropdown w-100 mt-10">
-									<div class="dropdown-search w-100"><input type="text" placeholder="SPC 검색" onkeyup="searchSite($(this).val(), 'spc')"></div>
+									<div class="dropdown-search w-100"><input type="text" placeholder="<fmt:message key='input.search.spc' />" onkeyup="searchSite($(this).val(), 'spc')"></div>
 									<button type="button" class="dropdown-toggle w-100" data-toggle="dropdown" data-name="<fmt:message key='button.select' />"><fmt:message key='button.select' /><span class="caret"></span></button>
 									<ul id="spcOptList" class="dropdown-menu" style="top:75px; width:260px; height:300px;"></ul>
 								</div>
@@ -792,7 +793,7 @@
 
 							<div id="siteTab" class="tab-pane fade in">
 								<div id="siteOpt" class="dropdown w-100 mt-10">
-									<div class="dropdown-search w-100"><input type="text" placeholder="발전소 검색" onkeyup="searchSite($(this).val(), 'site')"></div>
+									<div class="dropdown-search w-100"><input type="text" placeholder="<fmt:message key='input.search.plant' />" onkeyup="searchSite($(this).val(), 'site')"></div>
 									<button type="button" class="dropdown-toggle w-100" data-toggle="dropdown" data-name="<fmt:message key='button.select' />"><fmt:message key='button.select' /><span class="caret"></span></button>
 									<ul id="siteOptList" class="dropdown-menu" style="top:75px; width:260px; height:300px;"></ul>
 								</div>
@@ -801,26 +802,26 @@
 							</div>
 						</div>
 
-						<h2 class="sm-title mt-30">권한</h2>
+						<h2 class="sm-title mt-30"><fmt:message key='ugs.auth' /></h2>
 						<div class="flex-start mt-10 auth">
 							<div class="radio-type">
 								<input type="radio" id="grade1" name="gradeType" value="1" checked="">
-								<label for="grade1">관리 권한</label>
+								<label for="grade1"><fmt:message key='ugs.auth.1' /></label>
 							</div>
 							<div class="radio-type">
 								<input type="radio" id="grade2" name="gradeType" value="2">
-								<label for="grade2">조회 권한</label>
+								<label for="grade2"><fmt:message key='ugs.auth.2' /></label>
 							</div>
 						</div>
 
 
 						<div class="flex-end mt-20">
-							<button type="button" class="btn-type big" onclick="addList();">추가</button>
+							<button type="button" class="btn-type big" onclick="addList();"><fmt:message key='ugs.add' /></button>
 						</div>
 					</div>
 				</div>
 				<div class="w-55 pr-20 ugs-table-wrap">
-					<h2 class="sm-title mb-10">추가 목록</h2>
+					<h2 class="sm-title mb-10"><fmt:message key='ugs.addList' /></h2>
 					<table id="etcTable" style="min-width: 500px !important;">
 						<colgroup>
 							<col style="width:25%">
@@ -832,14 +833,14 @@
 					</table>
 				</div>
 				<div class="w-20 ugs-menu-setting">
-					<h2 class="sm-title mb-10">메뉴 권한 설정</h2>
+					<h2 class="sm-title mb-10"><fmt:message key='ugs.menuAuthSetting' /></h2>
 					<div id="menuList" class="chk-type w-100" sytle="margin-top: -40px"></div>
 				</div>
 			</div>
 			<div class="row">
 				<div class="btn-wrap-type-r">
-					<button type="button" class="btn-type03 big" onclick="location.href='/setting/userSetting.do'">취소</button>
-					<button type="button" class="btn-type big" onclick="addCustomLevel('POST');" id="addLevel">저장</button>
+					<button type="button" class="btn-type03 big" onclick="location.href='/setting/userSetting.do'"><fmt:message key='ugs.back' /></button>
+					<button type="button" class="btn-type big" onclick="addCustomLevel('POST');" id="addLevel"><fmt:message key='ugs.save' /></button>
 				</div>
 			</div>
 		</div>

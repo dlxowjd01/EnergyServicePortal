@@ -1,4 +1,5 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+<%@ include file="/decorators/include/taglibs.jsp" %>
 <script type="text/javascript">
 	const nowDate = new Date();
 	let addListCnt1 = 0; // 첨부하는 파일 추가할 경우 카운트 1씩 증가 ( 현장점검 )
@@ -59,17 +60,17 @@
 			site_id = $('#gen button').data('value');
 
 		if (isEmpty(report_type)) {
-			alert('보고서 구분을 선택하세요.');
+			alert('<fmt:message key="report.post.alert.1" />');
 			return false;
 		}
 
 		if (isEmpty(report_name)) {
-			alert('보고서 명을 입력하세요.');
+			alert('<fmt:message key="report.post.alert.2" />');
 			return false;
 		}
 
 		if (isEmpty(site_id)) {
-			alert('발전소를 선택하세요.');
+			alert('<fmt:message key="report.post.alert.3" />');
 			return false;
 		}
 
@@ -98,7 +99,7 @@
 
 		if (!isEmpty(repair_maintenance_info.기타)) {
 			if (isEmpty(repair_maintenance_info.기타명)) {
-				alert('기타 금액 입력시 기타명은 필수입니다.');
+				alert('<fmt:message key="report.post.alert.4" />');
 				return false;
 			}
 		}
@@ -132,7 +133,7 @@
 						resultFiles = resultFiles.concat(result.files);
 					},
 					error: function (request, status, error) {
-						alert('오류가 발생하였습니다. \n관리자에게 문의하세요.');
+						alert('<fmt:message key="report.post.alert.5" />');
 					}
 				});
 			}
@@ -158,11 +159,11 @@
 				updated_by: loginId
 			}),
 			success: function (result) {
-				alert('등록되었습니다.');
+				alert('<fmt:message key="report.post.alert.6" />');
 				goMoveList();
 			},
 			error: function (request, status, error) {
-				alert('오류가 발생하였습니다. \n관리자에게 문의하세요.');
+				alert('<fmt:message key="report.post.alert.7" />');
 				return false;
 			}
 		});
@@ -188,21 +189,21 @@
 
 <div class="row">
 	<div class="col-lg-12">
-		<h1 class="page-header">출장/조치 보고서 </h1>
+		<h1 class="page-header"><fmt:message key='report.post.title' /> </h1>
 	</div>
 </div>
 <div class="row">
 	<div class="col-lg-12">
 		<div>
-			<span class="tx-tit asterisk">보고서 구분</span>
+			<span class="tx-tit asterisk"><fmt:message key='report.post.type' /></span>
 			<div class="sa-select">
 				<div class="dropdown" id="report_type">
 					<button type="button" class="dropdown-toggle w9" data-toggle="dropdown" data-value="">
-						선택<span class="caret"></span>
+						<fmt:message key='button.select' /><span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu chk-type" role="menu">
-						<li data-value="1"><a href="javascript:void(0);">출장/조치 보고서</a></li>
-						<li data-value="2"><a href="javascript:void(0);">QC 보고서</a></li>
+						<li data-value="1"><a href="javascript:void(0);"><fmt:message key='report.post.type.1' /></a></li>
+						<li data-value="2"><a href="javascript:void(0);"><fmt:message key='report.post.type.2' /></a></li>
 					</ul>
 				</div>
 			</div>
@@ -213,7 +214,7 @@
 	<div class="col-lg-12">
 		<div class="indiv report-post" id="work_info">
 			<div class="table-top">
-				<h2 class="ntit mt-25">출장 이력</h2>
+				<h2 class="ntit mt-25"><fmt:message key='report.post.visit' /></h2>
 			</div>
 			<div class="spc-table-row">
 				<table>
@@ -224,17 +225,17 @@
 						<col style="width:35%">
 					</colgroup>
 					<tr>
-						<th><span class="asterisk">보고서 명</span></th>
+						<th><span class="asterisk"><fmt:message key='report.post.name' /></span></th>
 						<td>
 							<div class="text-input-type edit">
-								<input type="text" id="report_name" placeholder="직접 입력">
+								<input type="text" id="report_name" placeholder="<fmt:message key='report.post.placeholder.1' />">
 							</div>
 						</td>
-						<th><span class="asterisk">발전소</span></th>
+						<th><span class="asterisk"><fmt:message key='report.post.plant' /></span></th>
 						<td class="group-type">
 							<div class="dropdown placeholder edit" id="gen" >
 								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="">
-									선택 <span class="caret"></span>
+									<fmt:message key='button.select' /> <span class="caret"></span>
 								</button>
 								<ul id="genList" class="dropdown-menu" role="menu">
 									<li data-value="[sid]"><a href="javascript:void(0);">[name]</a></li>
@@ -243,45 +244,45 @@
 						</td>
 					</tr>
 					<tr>
-						<th>출장 시기</th>
+						<th><fmt:message key='report.post.date' /></th>
 						<td>
 							<div class="sel-calendar edit twin clear">
-								<input type="text" id="출장_시기_from" class="sel datepicker fromDate" value="" autocomplete="off" placeholder="시작일" readonly>
-								<input type="text" id="출장_시기_to" class="sel datepicker toDate" value="" autocomplete="off" placeholder="종료일" readonly>
+								<input type="text" id="출장_시기_from" class="sel datepicker fromDate" value="" autocomplete="off" placeholder="<fmt:message key='workreport.2.startDate' />" readonly>
+								<input type="text" id="출장_시기_to" class="sel datepicker toDate" value="" autocomplete="off" placeholder="<fmt:message key='workreport.2.endDate' />" readonly>
 							</div>
 						</td>
-						<th>출장 장소</th>
+						<th><fmt:message key='workreport.2.placeVisited' /></th>
 						<td>
 							<div class="text-input-type edit">
-								<input type="text" id="출장_장소" placeholder="직접 입력">
+								<input type="text" id="출장_장소" placeholder="<fmt:message key='report.post.placeholder.1' />">
 							</div>
 						</td>
 					</tr>
 					<tr>
-						<th>작성 일자</th>
+						<th><fmt:message key='report.post.writeDate' /></th>
 						<td>
 							<div class="sel-calendar edit">
-								<input type="text" id="작성_일자" class="sel datepicker" value="" autocomplete="off" placeholder="날짜 선택">
+								<input type="text" id="작성_일자" class="sel datepicker" value="" autocomplete="off" placeholder="<fmt:message key='workreport.2.selectDate' />">
 							</div>
 						</td>
-						<th>출장 목적</th>
+						<th><fmt:message key='workreport.2.purpose' /></th>
 						<td>
 							<div class="text-input-type edit">
-								<input type="text" id="출장_목적" placeholder="직접 입력">
+								<input type="text" id="출장_목적" placeholder="<fmt:message key='report.post.placeholder.1' />">
 							</div>
 						</td>
 					</tr>
 					<tr>
-						<th>소속 부서</th>
+						<th><fmt:message key='report.post.dep' /></th>
 						<td>
 							<div class="text-input-type edit">
-								<input type="text" id="소속_부서" placeholder="직접 입력">
+								<input type="text" id="소속_부서" placeholder="<fmt:message key='report.post.placeholder.1' />">
 							</div>
 						</td>
-						<th>출장자</th>
+						<th><fmt:message key='report.post.reporter' /></th>
 						<td>
 							<div class="text-input-type edit">
-								<input type="text" id="출장자" placeholder="직접 입력">
+								<input type="text" id="출장자" placeholder="<fmt:message key='report.post.placeholder.1' />">
 							</div>
 						</td>
 					</tr>
@@ -291,7 +292,7 @@
 
 		<div class="indiv report-post mt-20" id="repair_maintenance_info">
 			<div class="table-top">
-				<h2 class="ntit mt-25">수선유지비 내역</h2>
+				<h2 class="ntit mt-25"><fmt:message key='report.post.history' /></h2>
 			</div>
 			<div class="spc-table-row">
 				<table>
@@ -302,100 +303,100 @@
 						<col style="width:35%">
 					</colgroup>
 					<tr>
-						<th>인버터 수리</th>
+						<th><fmt:message key='report.post.history.1' /></th>
 						<td>
 							<div class="text-input-type edit">
-								<input type="text" id="인버터_수리" placeholder="직접 입력">
+								<input type="text" id="인버터_수리" placeholder="<fmt:message key='report.post.placeholder.1' />">
 							</div>
 						</td>
 						<th></th>
 						<td></td>
 					</tr>
 					<tr>
-						<th>Tracker 보수</th>
+						<th><fmt:message key='report.post.history.2' /></th>
 						<td>
 							<div class="text-input-type edit">
-								<input type="text" id="tracker_보수" placeholder="직접 입력">
+								<input type="text" id="tracker_보수" placeholder="<fmt:message key='report.post.placeholder.1' />">
 							</div>
 						</td>
 						<th></th>
 						<td></td>
 					</tr>
 					<tr>
-						<th>모듈 보수</th>
+						<th><fmt:message key='report.post.history.3' /></th>
 						<td>
 							<div class="text-input-type edit">
-								<input type="text" id="모듈_보수" placeholder="직접 입력">
+								<input type="text" id="모듈_보수" placeholder="<fmt:message key='report.post.placeholder.1' />">
 							</div>
 						</td>
 						<th></th>
 						<td></td>
 					</tr>
 					<tr>
-						<th>구조물 보수</th>
+						<th><fmt:message key='report.post.history.4' /></th>
 						<td>
 							<div class="text-input-type edit">
-								<input type="text" id="구조물_보수" placeholder="직접 입력">
+								<input type="text" id="구조물_보수" placeholder="<fmt:message key='report.post.placeholder.1' />">
 							</div>
 						</td>
 						<th></th>
 						<td></td>
 					</tr>
 					<tr>
-						<th>접속반 보수</th>
+						<th><fmt:message key='report.post.history.5' /></th>
 						<td>
 							<div class="text-input-type edit">
-								<input type="text" id="접속반_보수" placeholder="직접 입력">
+								<input type="text" id="접속반_보수" placeholder="<fmt:message key='report.post.placeholder.1' />">
 							</div>
 						</td>
 						<th></th>
 						<td></td>
 					</tr>
 					<tr>
-						<th>케이블 보수</th>
+						<th><fmt:message key='report.post.history.6' /></th>
 						<td>
 							<div class="text-input-type edit">
-								<input type="text" id="케이블_보수" placeholder="직접 입력">
+								<input type="text" id="케이블_보수" placeholder="<fmt:message key='report.post.placeholder.1' />">
 							</div>
 						</td>
 						<th></th>
 						<td></td>
 					</tr>
 					<tr>
-						<th>보수공사 기타</th>
+						<th><fmt:message key='report.post.history.7' /></th>
 						<td>
 							<div class="text-input-type edit">
-								<input type="text" id="보수공사_기타" placeholder="직접 입력">
+								<input type="text" id="보수공사_기타" placeholder="<fmt:message key='report.post.placeholder.1' />">
 							</div>
 						</td>
 						<th></th>
 						<td></td>
 					</tr>
 					<tr>
-						<th>모니터링</th>
+						<th><fmt:message key='report.post.history.8' /></th>
 						<td>
 							<div class="text-input-type edit">
-								<input type="text" id="모니터링" placeholder="직접 입력">
+								<input type="text" id="모니터링" placeholder="<fmt:message key='report.post.placeholder.1' />">
 							</div>
 						</td>
 						<th></th>
 						<td></td>
 					</tr>
 					<tr>
-						<th>예초 및 각도</th>
+						<th><fmt:message key='report.post.history.9' /></th>
 						<td>
 							<div class="text-input-type edit">
-								<input type="text" id="예초_및_각도" placeholder="직접 입력">
+								<input type="text" id="예초_및_각도" placeholder="<fmt:message key='report.post.placeholder.1' />">
 							</div>
 						</td>
 						<th></th>
 						<td></td>
 					</tr>
 					<tr>
-						<th>민원 및 피해보상</th>
+						<th><fmt:message key='report.post.history.10' /></th>
 						<td>
 							<div class="text-input-type edit">
-								<input type="text" id="민원_및_피해보상" placeholder="직접 입력">
+								<input type="text" id="민원_및_피해보상" placeholder="<fmt:message key='report.post.placeholder.1' />">
 							</div>
 						</td>
 						<th></th>
@@ -404,12 +405,12 @@
 					<tr>
 						<th>
 							<div class="text-input-type edit w-150px">
-								<input type="text" id="기타명" placeholder="기타 (직접입력)">
+								<input type="text" id="기타명" placeholder="<fmt:message key='report.post.history.11' />">
 							</div>
 						</th>
 						<td>
 							<div class="text-input-type edit">
-								<input type="text" id="기타" placeholder="직접 입력">
+								<input type="text" id="기타" placeholder="<fmt:message key='report.post.placeholder.1' />">
 							</div>
 						</td>
 						<th></th>
@@ -418,10 +419,10 @@
 						</td>
 					</tr>
 					<tr>
-						<th>총 수선 유지비</th>
+						<th><fmt:message key='report.post.history.12' /></th>
 						<td>
 							<div class="text-input-type edit">
-								<input type="text" id="총_수선_유지비" placeholder="자동 완성" readonly>
+								<input type="text" id="총_수선_유지비" placeholder="<fmt:message key='report.post.placeholder.3' />" readonly>
 							</div>
 						</td>
 						<th></th>
@@ -434,57 +435,57 @@
 		<form id="work_detail_info" name="work_detail_info">
 			<div class="indiv mt-25 report-post02">
 				<div class="table-top">
-					<h2 class="ntit mt-25">처리 내역</h2>
+					<h2 class="ntit mt-25"><fmt:message key='report.post.result' /></h2>
 				</div>
 				<div class="spc-table-row">
 					<table>
 						<tr>
-							<th class="th-title">시스템 개요</th>
+							<th class="th-title"><fmt:message key="report.post.result.1" /></th>
 							<td>
 								<div class="textarea-input-type">
-									<textarea placeholder="내용 추가" id="시스템_개요" rows="4"></textarea>
+									<textarea placeholder="<fmt:message key='report.post.placeholder.2' />" id="시스템_개요" rows="4"></textarea>
 								</div>
 							</td>
 						</tr>
 						<tr>
-							<th class="th-title">현장 점검</th>
+							<th class="th-title"><fmt:message key="report.post.result.2" /></th>
 							<td id="addFileList01">
 								<input type="file" name="work_report_file_01" class="hidden" id="work_report_file_01" accept="image/*" multiple>
-								<label for="work_report_file_01" class="btn file-upload">파일 선택</label>
+								<label for="work_report_file_01" class="btn file-upload"><fmt:message key="report.post.result.7" /></label>
 								<div class="file_list ml-16">
 									<ul></ul>
 								</div>
 							</td>
 						</tr>
 						<tr>
-							<th class="th-title">특이사항</th>
+							<th class="th-title"><fmt:message key="report.post.result.3" /></th>
 							<td>
 								<div class="textarea-input-type">
-									<textarea id="특이사항" placeholder="내용 추가" rows="4"></textarea>
+									<textarea id="특이사항" placeholder="<fmt:message key='report.post.placeholder.2' />" rows="4"></textarea>
 								</div>
 							</td>
 						</tr>
 						<tr>
-							<th class="th-title">향후 진행예정 업무</th>
+							<th class="th-title"><fmt:message key="report.post.result.4" /></th>
 							<td>
 								<div class="textarea-input-type">
-									<textarea id="향후_진행예정_업무" placeholder="내용 추가" rows="4"></textarea>
+									<textarea id="향후_진행예정_업무" placeholder="<fmt:message key='report.post.placeholder.2' />" rows="4"></textarea>
 								</div>
 							</td>
 						</tr>
 						<tr>
-							<th class="th-title">담당자 의견</th>
+							<th class="th-title"><fmt:message key="report.post.result.5" /></th>
 							<td>
 								<div class="textarea-input-type">
-									<textarea id="담당자_의견" placeholder="내용 추가" rows="4"></textarea>
+									<textarea id="담당자_의견" placeholder="<fmt:message key='report.post.placeholder.2' />" rows="4"></textarea>
 								</div>
 							</td>
 						</tr>
 						<tr>
-							<th class="th-title">첨부 파일</th>
+							<th class="th-title"><fmt:message key="report.post.result.6" /></th>
 							<td id="addFileList02">
 								<input name="work_report_file_02" type="file" class="hidden" id="work_report_file_02" accept="image/*" multiple>
-								<label for="work_report_file_02" class="btn file-upload">파일 선택</label>
+								<label for="work_report_file_02" class="btn file-upload"><fmt:message key="report.post.result.7" /></label>
 								<div class="file_list ml-16">
 									<ul></ul>
 								</div>
@@ -493,8 +494,8 @@
 					</table>
 				</div>
 				<div class="btn-wrap-type02">
-					<button type="button" class="btn-type03" onclick="goMoveList();">목록</button>
-					<button type="button" class="btn-type" onclick="setSaveData();">등록</button>
+					<button type="button" class="btn-type03" onclick="goMoveList();"><fmt:message key="report.post.back" /></button>
+					<button type="button" class="btn-type" onclick="setSaveData();"><fmt:message key="report.post.register" /></button>
 				</div>
 			</div>
 		</form>
