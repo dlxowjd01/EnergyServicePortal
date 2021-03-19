@@ -8,7 +8,7 @@
 			const tab = $(this).attr('href');
 			$('.tab-content input').val('');
 			$('.tab-content small').addClass('hidden');
-			$('.tab-content div.dropdown button').removeData('value').html('선택 <span class="caret"></span>');
+			$('.tab-content div.dropdown button').removeData('value').html('<fmt:message key="button.select" /> <span class="caret"></span>');
 
 			if (/group/.test(tab)) { getGroupList(); }
 			else if (/spc/.test(tab)) { getSpcList(); }
@@ -69,8 +69,8 @@
 				},
 			],
 			language: {
-				emptyTable: '조회된 데이터가 없습니다.',
-				zeroRecords:  '검색된 결과가 없습니다.',
+				emptyTable: '<fmt:message key="yieldReport.noData.1" />',
+				zeroRecords:  '<fmt:message key="yieldReport.noData.2" />',
 				infoEmpty: '',
 				paginate: {
 					previous: '',
@@ -155,15 +155,15 @@
 			type: 'DELETE'
 		}).done((data, textStatus, jqXHR) => {
 			if (data.info.count >= 1) {
-				errorMsg('삭제가 완료되엇습니다.');
+				errorMsg('<fmt:message key="ugs.errorMsg.1" />');
 				return false;
 			} else {
-				errorMsg('삭제가 된 항목이 없습니다.');
+				errorMsg('<fmt:message key="ugs.errorMsg.2" />');
 				return false;
 			}
 		}).fail((jqXHR, textStatus, errorThrown) => {
 			console.error(textStatus);
-			errorMsg('삭제중 오류가 발생했습니다.');
+			errorMsg('<fmt:message key="ugs.errorMsg.3" />');
 			return false;
 		}).always(() => {
 			$('#comDeleteModal').modal('hide').removeData('value');
@@ -225,7 +225,7 @@
 		$('#isCustomNameEmpty').addClass('hidden');
 		$('.tab-content input').val('');
 		$('.tab-content small').addClass('hidden');
-		$('.tab-content div.dropdown button').removeData('value').html('선택 <span class="caret"></span>');
+		$('.tab-content div.dropdown button').removeData('value').html('<fmt:message key="button.select" /> <span class="caret"></span>');
 
 		$('#addLevel').attr('onclick', 'addCustomLevel("POST");').text('등록');
 		$('.nav-tabs li:eq(0)').trigger('click');
@@ -259,7 +259,7 @@
 			$('#custom-level').append(temp);
 		}).fail((jqXHR, textStatus, errorThrown) => {
 			console.error(textStatus);
-			errorMsg('처리중 오류가 발생했습니다.');
+			errorMsg('<fmt:message key="ugs.errorMsg.4" />');
 			return false;
 		});
 	}
@@ -506,7 +506,7 @@
 
 					etcTable.rows.add(addRow).draw();
 				} else {
-					errorMsg('중복된 발전소가 존재합니다.');
+					errorMsg('<fmt:message key="ugs.errorMsg.5" />');
 					return false;
 				}
 			}
@@ -594,12 +594,12 @@
 		}
 
 		if (siteList.length === 0) {
-			alert('추가 목록에 하나이상의 발전소를 추가해 주세요.');
+			alert('<fmt:message key="ugs.alert.1" />');
 			return false;
 		}
 
 		if ($(':checkbox[name="menu"]:checked').length === 0) {
-			alert('메뉴 권한 설정을 선택해 주세요.');
+			alert('<fmt:message key="ugs.alert.2" />');
 			return false;
 		}
 
@@ -694,9 +694,9 @@
 				pageInit();
 
 				if(method === 'PATCH') {
-					errorMsg('수정되었습니다.');
+					errorMsg('<fmt:message key="ugs.errorMsg.6" />');
 				} else {
-					errorMsg('등록되었습니다.');
+					errorMsg('<fmt:message key="ugs.errorMsg.7" />');
 				}
 
 				return false;
@@ -740,14 +740,14 @@
 
 <div class="row header-wrapper">
 	<div class="col-12">
-		<h1 class="page-header">사용자 관리 설정</h1>
+		<h1 class="page-header"><fmt:message key='ugs.title' /></h1>
 	</div>
 </div>
 
 <div class="row" id="userGradeSettingWrap">
 	<div class="col-lg-2 col-md-4 col-sm-6 pvGen-right">
 		<div id="custom-level" class="indiv chart-pv scroll">
-			<div class="title-block"> <span>사용자 등급</span> <button class="btn-type06" onclick="pageInit(); selectInit();"></button> </div>
+			<div class="title-block"> <span><fmt:message key='ugs.listName' /></span> <button class="btn-type06" onclick="pageInit(); selectInit();"></button> </div>
 		</div>
 	</div>
 
@@ -758,8 +758,8 @@
 					<div>
 						<h2 class="sm-title">등급 이름</h2>
 						<div class="text-input-type mt-20">
-							<input type="text" id="customName" name="customName" placeholder="입력" autocomplete="off">
-							<small id="isCustomNameEmpty" class="warning hidden">등급 이름을 입력해주세요.</small>
+							<input type="text" id="customName" name="customName" placeholder="<fmt:message key='revenuereport.1.type_here' />" autocomplete="off">
+							<small id="isCustomNameEmpty" class="warning hidden"><fmt:message key="ugs.warning.1" /></small>
 						</div>
 
 						<h2 class="sm-title mt-30">구분</h2>
@@ -773,31 +773,31 @@
 							<div id="groupTab" class="tab-pane fade in active">
 								<div id="groupOpt" class="dropdown w-100 mt-10">
 									<div class="dropdown-search w-100"><input type="text" placeholder="그룹 검색" onkeyup="searchSite($(this).val(), 'group')"></div>
-									<button type="button" class="dropdown-toggle w-100" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+									<button type="button" class="dropdown-toggle w-100" data-toggle="dropdown" data-name="<fmt:message key='button.select' />"><fmt:message key='button.select' /><span class="caret"></span></button>
 									<ul id="groupOptList" class="dropdown-menu" style="top:75px; width:260px; height:300px;"></ul>
 								</div>
-								<small id="isGroupEmpty" class="warning hidden">추가하실 그룹을 선택해 주세요.</small>
-								<small id="isGroupSelected" class="warning hidden">동일한 그룹이 이미 추가 되었습니다.</small>
+								<small id="isGroupEmpty" class="warning hidden"><fmt:message key="ugs.warning.2" /></small>
+								<small id="isGroupSelected" class="warning hidden"><fmt:message key="ugs.warning.3" /></small>
 							</div>
 
 							<div id="spcTab" class="tab-pane fade in">
 								<div id="spcOpt" class="dropdown w-100 mt-10">
 									<div class="dropdown-search w-100"><input type="text" placeholder="SPC 검색" onkeyup="searchSite($(this).val(), 'spc')"></div>
-									<button type="button" class="dropdown-toggle w-100" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+									<button type="button" class="dropdown-toggle w-100" data-toggle="dropdown" data-name="<fmt:message key='button.select' />"><fmt:message key='button.select' /><span class="caret"></span></button>
 									<ul id="spcOptList" class="dropdown-menu" style="top:75px; width:260px; height:300px;"></ul>
 								</div>
-								<small id="isSpcEmpty" class="warning hidden">추가하실 그룹을 선택해 주세요.</small>
-								<small id="isSpcSelected" class="warning hidden">동일한 그룹이 이미 추가 되었습니다.</small>
+								<small id="isSpcEmpty" class="warning hidden"><fmt:message key="ugs.warning.2" /></small>
+								<small id="isSpcSelected" class="warning hidden"><fmt:message key="ugs.warning.3" /></small>
 							</div>
 
 							<div id="siteTab" class="tab-pane fade in">
 								<div id="siteOpt" class="dropdown w-100 mt-10">
 									<div class="dropdown-search w-100"><input type="text" placeholder="발전소 검색" onkeyup="searchSite($(this).val(), 'site')"></div>
-									<button type="button" class="dropdown-toggle w-100" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+									<button type="button" class="dropdown-toggle w-100" data-toggle="dropdown" data-name="<fmt:message key='button.select' />"><fmt:message key='button.select' /><span class="caret"></span></button>
 									<ul id="siteOptList" class="dropdown-menu" style="top:75px; width:260px; height:300px;"></ul>
 								</div>
-								<small id="isSiteEmpty" class="warning hidden">추가하실 그룹을 선택해 주세요.</small>
-								<small id="isSiteSelected" class="warning hidden">동일한 그룹이 이미 추가 되었습니다.</small>
+								<small id="isSiteEmpty" class="warning hidden"><fmt:message key="ugs.warning.2" /></small>
+								<small id="isSiteSelected" class="warning hidden"><fmt:message key="ugs.warning.3" /></small>
 							</div>
 						</div>
 

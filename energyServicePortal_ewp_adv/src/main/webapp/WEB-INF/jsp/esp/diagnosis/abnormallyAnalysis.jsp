@@ -68,14 +68,14 @@
 		});
 
 		$('.btn-save').on('click', function (e) {
-			let excelName = '이상분석';
+			let excelName = '<fmt:message key="ab.title" />';
 			let $val = $('#datatable').find('tbody');
 			let cnt = $val.length;
 
 			if (cnt < 1) {
-				alert('다운받을 데이터가 없습니다.');
+				alert('<fmt:message key="ab.alert.1" />');
 			} else {
-				if (confirm('엑셀로 저장하시겠습니까?')) {
+				if (confirm('<fmt:message key="ab.confirm.1" />')) {
 					tableToExcel('datatable', excelName, e);
 				}
 			}
@@ -91,7 +91,7 @@
 				let divObj = $(this).parent(),
 					divId = divObj.attr('id');
 				if (divId == 'interval') {
-					$(this).data('value', 'hour').html('1시간 <span class="caret"></span>');
+					$(this).data('value', 'hour').html('<fmt:message key="interval.1h" /> <span class="caret"></span>');
 				} else {
 					dropDownInit(divObj);
 				}
@@ -197,7 +197,7 @@
 				console.error(textStatus);
 				console.error(errorThrown);
 
-				alert('처리 중 오류가 발생했습니다.');
+				alert('<fmt:message key="ab.alert.2" />');
 				return false;
 			});
 		} else {
@@ -280,7 +280,7 @@
 		setMakeList(deviceNameArr, targetId, {'dataFunction': {}});
 	}
 
-	//설비 속성 템플릿
+	// 설비속성 템플릿
 	const featureProperties = new Object();
 	const deviceProperties = () => {
 		$.ajax({
@@ -408,53 +408,53 @@
 		let interval = $('#interval').find('button').data('value');
 
 		if (siteArray.length <= 0) {
-			alert('사이트를 선택 해 주세요.');
+			alert('<fmt:message key="ab.alert.3" />');
 			return false;
 		}
 
 		if ($(':radio[name="type"]:checked').length <= 0) {
-			alert('검증성비 유형을 선택 해 주세요.');
+			alert('<fmt:message key="ab.alert.4" />');
 			return false;
 		}
 
 		if ($(':radio[name="compareType"]:checked').length <= 0) {
-			alert('비교성비 유형을 선택 해 주세요.');
+			alert('<fmt:message key="ab.alert.5" />');
 			return false;
 		}
 
 		if (deviceArray.length <= 0) {
-			alert('검증설비를 선택 해 주세요.');
+			alert('<fmt:message key="ab.alert.6" />');
 			return false;
 		}
 
 		if (compDeviceArray.length <= 0) {
-			alert('비교설비를 선택 해 주세요.');
+			alert('<fmt:message key="ab.alert.7" />');
 			return false;
 		}
 
 		if ($(':radio[name="attr"]:checked').length <= 0) {
-			alert('검증성비 속성을 선택 해 주세요.');
+			alert('<fmt:message key="ab.alert.8" />');
 			return false;
 		}
 
 		if ($(':radio[name="compAttr"]:checked').length <= 0) {
-			alert('비교성비 속성을 선택 해 주세요.');
+			alert('<fmt:message key="ab.alert.9" />');
 			return false;
 		}
 
 		if ($(':radio[name="benchmark"]:checked').length > 0 || $(':radio[name="unit"]:checked').length > 0 || $('[name="reference"]').val() != '') {
 			if ($(':radio[name="benchmark"]:checked').length <= 0) {
-				alert('제외 값의 기준을 선택 해 주세요.');
+				alert('<fmt:message key="ab.alert.10" />');
 				return false;
 			}
 
 			if ($(':radio[name="unit"]:checked').length <= 0) {
-				alert('제외 값의 단위를 선택 해 주세요.');
+				alert('<fmt:message key="ab.alert.11" />');
 				return false;
 			}
 
 			if (isEmpty($('[name="reference"]').val())) {
-				alert('제외 값의 기준 값을 선택 해 주세요.');
+				alert('<fmt:message key="ab.alert.12" />');
 				return false;
 			}
 		}
@@ -462,22 +462,22 @@
 		if (document.querySelector('[name="compare_formula"]:checked') != null || document.querySelector('[name="compare_criterion"]:checked') != null
 			|| !isEmpty(document.querySelector('[name="normality_threshold_lower"]').value) || !isEmpty(document.querySelector('[name="normality_threshold_upper"]').value)) {
 			if (document.querySelector('[name="compare_formula"]:checked') == null) {
-				alert('비교방법의 비교식을 선택 해 주세요.');
+				alert('<fmt:message key="ab.alert.13" />');
 				return false;
 			}
 
 			if (document.querySelector('[name="compare_criterion"]:checked') == null) {
-				alert('비교방법의 비교 기준을 선택 해 주세요.');
+				alert('<fmt:message key="ab.alert.14" />');
 				return false;
 			}
 
 			if (isEmpty(document.querySelector('[name="normality_threshold_upper"]').value)) {
-				alert('비교방법의 상한 허용치를 선택 해 주세요.');
+				alert('<fmt:message key="ab.alert.15" />');
 				return false;
 			}
 
 			if (isEmpty(document.querySelector('[name="normality_threshold_lower"]').value)) {
-				alert('비교방법의 하한 허용치를 선택 해 주세요.');
+				alert('<fmt:message key="ab.alert.16" />');
 				return false;
 			}
 		}
@@ -533,7 +533,7 @@
 					console.error(textStatus);
 					console.error(errorThrown);
 
-					alert('처리 중 오류가 발생했습니다.');
+					alert('<fmt:message key="ab.alert.17" />');
 					return false;
 				});
 			} else if ($(':radio[name="attr"]:checked').val() == 'forecasting') {
@@ -556,7 +556,7 @@
 					console.error(textStatus);
 					console.error(errorThrown);
 
-					alert('처리 중 오류가 발생했습니다.');
+					alert('<fmt:message key="ab.alert.17" />');
 					return false;
 				});
 			} else {
@@ -581,7 +581,7 @@
 					console.error(textStatus);
 					console.error(errorThrown);
 
-					alert('처리 중 오류가 발생했습니다.');
+					alert('<fmt:message key="ab.alert.17" />');
 					return false;
 				});
 			}
@@ -609,7 +609,7 @@
 					console.error(textStatus);
 					console.error(errorThrown);
 
-					alert('처리 중 오류가 발생했습니다.');
+					alert('<fmt:message key="ab.alert.17" />');
 					return false;
 				});
 			} else if ($(':radio[name="compAttr"]:checked').val() == 'forecasting') {
@@ -633,7 +633,7 @@
 					console.error(textStatus);
 					console.error(errorThrown);
 
-					alert('처리 중 오류가 발생했습니다.');
+					alert('<fmt:message key="ab.alert.17" />');
 					return false;
 				});
 			} else {
@@ -659,12 +659,12 @@
 					console.error(textStatus);
 					console.error(errorThrown);
 
-					alert('처리 중 오류가 발생했습니다.');
+					alert('<fmt:message key="ab.alert.17" />');
 					return false;
 				});
 			}
 		}).catch(error => {
-			alert('처리 중 에러가 발생했습니다.');
+			alert('<fmt:message key="ab.alert.17" />');
 			return false;
 		});
 	}
@@ -1000,7 +1000,7 @@
 			console.error(textStatus);
 			console.error(errorThrown);
 
-			alert('처리 중 오류가 발생했습니다.');
+			alert('<fmt:message key="ab.alert.17" />');
 			return false;
 		});
 
@@ -1203,14 +1203,14 @@
 
 <div class="row">
 	<div class="col-12">
-		<h1 class="page-header">이상 분석</h1>
+		<h1 class="page-header"><fmt:message key="ab.title" /></h1>
 	</div>
 </div>
 <div class="row">
 	<div id="siteList" class="dropdown-wrapper col-lg-2 col-md-4 col-sm-3">
 		<div class="dropdown" id="selectSiteList">
-			<button type="button" class="dropdown-toggle w-100 no-close" data-toggle="dropdown" data-name="선택해주세요.">
-				선택해주세요.<span class="caret"></span>
+			<button type="button" class="dropdown-toggle w-100 no-close" data-toggle="dropdown" data-name="<fmt:message key='ab.select' />">
+				<fmt:message key="ab.select" /><span class="caret"></span>
 			</button>
 			<ul class="dropdown-menu chk-type" role="menu" id="siteULList">
 				<li data-value="[sid]">
@@ -1226,18 +1226,18 @@
 		<div class="compare-wrapper">
 			<div class="search-expand">
 				<button type="button" class="btn clear-btn" data-target="#compareList" data-name="상세 조건" 
-						onclick="$('#searchDetail').toggleClass('open')">비교하기<span class="caret"></span></button>
+						onclick="$('#searchDetail').toggleClass('open')"><fmt:message key="ab.compare.1" /><span class="caret"></span></button>
 				<ul id="compareList" class="dropdown-menu search-dropdown unused">
 					<li>
 						<div class="compare-box">
 							<div class="row align-group2">
 								<div class="box-align">
-									<p class="compare-title type">검증 설비</p>
+									<p class="compare-title type"><fmt:message key="ab.device.a" /></p>
 									<ul class="compare-ul">
 										<li>
 											<div class="dropdown placeholder" id="typeList">
-												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="설비 유형">
-													설비 유형 <span class="caret"></span>
+												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='ab.device.type' />">
+													<fmt:message key='ab.device.type' /> <span class="caret"></span>
 												</button>
 												<!-- 라디오 타입 -->
 												<ul class="dropdown-menu radio-type" role="menu" id="typeULList">
@@ -1254,8 +1254,8 @@
 										</li>
 										<li>
 											<div class="dropdown placeholder" id="deviceList">
-												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="설비 명">
-													설비 명 <span class="caret"></span>
+												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='ab.device.name' />">
+													<fmt:message key='ab.device.name' /> <span class="caret"></span>
 												</button>
 												<!-- 체크박스 타입 -->
 												<ul class="dropdown-menu radio-type" id="deviceName">
@@ -1272,8 +1272,8 @@
 										</li>
 										<li>
 											<div class="dropdown placeholder" id="attrList">
-												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="설비 속성">
-													설비 속성 <span class="caret"></span>
+												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='ab.device.attr' />">
+													<fmt:message key='ab.device.attr' /> <span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu radio-type" role="menu" id="deviceAttribute">
 													<li>
@@ -1290,12 +1290,12 @@
 									</ul>
 								</div>
 								<div class="box-align">
-									<p class="compare-title type">비교 설비</p>
+									<p class="compare-title type"><fmt:message key='ab.device.b' /></p>
 									<ul class="compare-ul">
 										<li>
 											<div class="dropdown placeholder" id="compareTypeList">
-												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="설비 유형">
-													설비 유형 <span class="caret"></span>
+												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='ab.device.type' />">
+													<fmt:message key='ab.device.type' /> <span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu radio-type" role="menu" id="compareTypeULList">
 													<li data-type="[type]">
@@ -1311,8 +1311,8 @@
 										</li>
 										<li>
 											<div class="dropdown placeholder" id="compareDeviceList">
-												<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="설비 명">
-													설비 명 <span class="caret"></span>
+												<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="<fmt:message key='ab.device.name' />">
+													<fmt:message key='ab.device.name' /> <span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu chk-type" id="compareDeviceName">
 													<li data-type="[type]">
@@ -1328,8 +1328,8 @@
 										</li>
 										<li>
 											<div class="dropdown placeholder" id="compareAttrList">
-												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="설비 속성">
-													설비 속성 <span class="caret"></span>
+												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='ab.device.attr' />">
+													<fmt:message key='ab.device.attr' /> <span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu radio-type" role="menu" id="compareDeviceAttribute">
 													<li>
@@ -1347,21 +1347,21 @@
 								</div>
 							</div>
 
-							<p class="compare-title type2">제외값</p>
+							<p class="compare-title type2"><fmt:message key='ab.exc.val' /></p>
 							<div class="row align-group3">
 								<div class="box-align">
 									<ul class="compare-ul">
 										<li>
 											<div class="dropdown placeholder">
-												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="기준">
-													기준<span class="caret"></span>
+												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='ab.critria' />">
+													<fmt:message key='ab.critria' /><span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu radio-type">
 													<li>
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="compare-input">
 																<input type="radio" id="benchmark0" name="benchmark" value="up">
-																<label for="benchmark0">이상</label>
+																<label for="benchmark0"><fmt:message key='ab.attr.6' /></label>
 															</span>
 														</a>
 													</li>
@@ -1369,7 +1369,7 @@
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="compare-input">
 																<input type="radio" id="benchmark1" name="benchmark" value="down">
-																<label for="benchmark1">이하</label>
+																<label for="benchmark1"><fmt:message key='ab.attr.7' /></label>
 															</span>
 														</a>
 													</li>
@@ -1382,8 +1382,8 @@
 									<ul class="compare-ul">
 										<li>
 											<div class="dropdown placeholder">
-												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="단위">
-													단위<span class="caret"></span>
+												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='ab.unit' />">
+													<fmt:message key='ab.unit' /><span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu radio-type">
 													<li>
@@ -1398,7 +1398,7 @@
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="compare-input">
 																<input type="radio" id="unit1" name="unit" value="absolute">
-																<label for="unit1">절대값</label>
+																<label for="unit1"><fmt:message key='ab.attr.9' /></label>
 															</span>
 														</a>
 													</li>
@@ -1411,21 +1411,21 @@
 									<ul class="compare-ul">
 										<li>
 											<div class="text-input-type">
-												<input type="text" id="reference" name="reference" value="" placeholder="기준 값" autocomplete="off" onkeydown="onlyDecimal(event);">
+												<input type="text" id="reference" name="reference" value="" placeholder="<fmt:message key='ab.critria.val' />" autocomplete="off" onkeydown="onlyDecimal(event);">
 											</div>
 										</li>
 									</ul>
 								</div>
 							</div>
 
-							<p class="compare-title type2">비교 방법</p>
+							<p class="compare-title type2"><fmt:message key='ab.compare.method' /></p>
 							<div class="row align-group2">
 								<div class="box-align">
 									<ul class="compare-ul">
 										<li>
 											<div class="dropdown placeholder">
-												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="비교식">
-													비교식<span class="caret"></span>
+												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='ab.compare.f' />">
+													<fmt:message key='ab.compare.f' /><span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu radio-type">
 													<li>
@@ -1453,15 +1453,15 @@
 									<ul class="compare-ul">
 										<li>
 											<div class="dropdown placeholder">
-												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="비교 기준">
-													비교 기준 <span class="caret"></span>
+												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='ab.compare.critria' />">
+													<fmt:message key='ab.compare.critria' /> <span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu radio-type">
 													<li>
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="compare-input">
 																<input type="radio" id="compare_criterion0" name="compare_criterion" value="absolute">
-																<label for="compare_criterion0">절대값</label>
+																<label for="compare_criterion0"><fmt:message key='ab.attr.9.1' /></label>
 															</span>
 														</a>
 													</li>
@@ -1469,7 +1469,7 @@
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="compare-input">
 																<input type="radio" id="compare_criterion1" name="compare_criterion" value="relative">
-																<label for="compare_criterion1">상대값(%)</label>
+																<label for="compare_criterion1"><fmt:message key='ab.attr.10' /></label>
 															</span>
 														</a>
 													</li>
@@ -1477,7 +1477,7 @@
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="compare-input">
 																<input type="radio" id="compare_criterion2" name="compare_criterion" value="abs_of_absolute">
-																<label for="compare_criterion2">abs(절대값)</label>
+																<label for="compare_criterion2"><fmt:message key='ab.attr.11' /></label>
 															</span>
 														</a>
 													</li>
@@ -1485,7 +1485,7 @@
 														<a href="javascript:void(0);" tabindex="-1">
 															<span class="compare-input">
 																<input type="radio" id="compare_criterion3" name="compare_criterion" value="abs_of_relative">
-																<label for="compare_criterion3">abs(상대값) %</label>
+																<label for="compare_criterion3"><fmt:message key='ab.attr.12' /></label>
 															</span>
 														</a>
 													</li>
@@ -1500,7 +1500,7 @@
 									<ul class="compare-ul">
 										<li>
 											<div class="text-input-type">
-												<input type="text" id="normality_threshold_lower" name="normality_threshold_lower" value="" placeholder="하한 허용치" autocomplete="off" onkeydown="onlyDecimal(event);">
+												<input type="text" id="normality_threshold_lower" name="normality_threshold_lower" value="" placeholder="<fmt:message key='ab.compare.min' />" autocomplete="off" onkeydown="onlyDecimal(event);">
 											</div>
 										</li>
 									</ul>
@@ -1509,13 +1509,13 @@
 									<ul class="compare-ul">
 										<li>
 											<div class="text-input-type">
-												<input type="text" id="normality_threshold_upper" name="normality_threshold_upper" value="" placeholder="상한 허용치" autocomplete="off" onkeydown="onlyDecimal(event);">
+												<input type="text" id="normality_threshold_upper" name="normality_threshold_upper" value="" placeholder="<fmt:message key='ab.compare.max' />" autocomplete="off" onkeydown="onlyDecimal(event);">
 											</div>
 										</li>
 									</ul>
 								</div>
 							</div>
-							<p class="compare-title type2">비교 기간</p>
+							<p class="compare-title type2"><fmt:message key='ab.compare.period' /></p>
 							<div class="row align-group2 dateField">
 								<div class="sel-calendar">
 									<div class="box-align">
@@ -1536,20 +1536,20 @@
 									</div>
 								</div>
 							</div>						
-							<p class="compare-title type2">시간 단위</p>
+							<p class="compare-title type2"><fmt:message key='ab.time.unit' /></p>
 							<div class="row align-group2">
 								<div class="box-align">
 									<ul class="compare-ul">
 										<li>
 											<div class="dropdown placeholder" id="interval">
-												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="hour" data-name="1시간">
-													1시간 <span class="caret"></span>
+												<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-value="hour" data-name="<fmt:message key='interval.1h' />">
+													<fmt:message key='interval.1h' /> <span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu">
-													<li data-value="15min"><a href="javascript:void(0);">15분</a></li>
-													<li data-value="hour"><a href="javascript:void(0);">1시간</a></li>
-													<li data-value="day"><a href="javascript:void(0);">1일</a></li>
-													<li data-value="month"><a href="javascript:void(0);">1월</a></li>
+													<li data-value="15min"><a href="javascript:void(0);"><fmt:message key='interval.15min' /></a></li>
+													<li data-value="hour"><a href="javascript:void(0);"><fmt:message key='interval.1h' /></a></li>
+													<li data-value="day"><a href="javascript:void(0);"><fmt:message key='interval.1d' /></a></li>
+													<li data-value="month"><a href="javascript:void(0);"><fmt:message key='interval.1m' /></a></li>
 												</ul>
 											</div>
 										</li>
@@ -1558,7 +1558,7 @@
 							</div>
 						</div>
 						<div class="compare-btn-wrapper">
-							<button type="button" class="btn-type" id="renderBtn">규칙 등록</button>
+							<button type="button" class="btn-type" id="renderBtn"><fmt:message key='ab.apply' /></button>
 						</div>
 					</li>
 				</ul>
@@ -1569,19 +1569,19 @@
 <div class="row">
 	<div class="col-lg-2 col-md-4 col-sm-3">
 		<div class="indiv analysis-chart">
-			<h2 class="ntit">이상 비교</h2>
+			<h2 class="ntit"><fmt:message key='ab.compare.2' /></h2>
 			<div class="value-wrapper">
-				<h3 class="value-title2">검증 설비</h3>
-				<h3 class="value-title">평균</h3>
+				<h3 class="value-title2"><fmt:message key='ab.device.a' /></h3>
+				<h3 class="value-title"><fmt:message key='ab.avg' /></h3>
 				<p class="value-num"></p>
-				<h3 class="value-title">편차</h3>
+				<h3 class="value-title"><fmt:message key='ab.dev' /></h3>
 				<p class="value-num"></p>
 			</div>
 			<div class="value-wrapper">
-				<h3 class="value-title2">비교 설비</h3>
-				<h3 class="value-title">평균</h3>
+				<h3 class="value-title2"><fmt:message key='ab.device.b' /></h3>
+				<h3 class="value-title"><fmt:message key='ab.avg' /></h3>
 				<p class="value-num"></p>
-				<h3 class="value-title">편차</h3>
+				<h3 class="value-title"><fmt:message key='ab.dev' /></h3>
 				<p class="value-num"></p>
 			</div>
 		</div>
@@ -1596,7 +1596,7 @@
 	<div class="col-lg-12">
 		<div class="indiv clear">
 			<div class="table-save-box">
-				<a href="javascript:void(0);" class="btn-save">데이터저장</a>
+				<a href="javascript:void(0);" class="btn-save"><fmt:message key='ab.datasave' /></a>
 			</div>
 			<div class="table-top clear">
 				<ul class="fr mr-8">

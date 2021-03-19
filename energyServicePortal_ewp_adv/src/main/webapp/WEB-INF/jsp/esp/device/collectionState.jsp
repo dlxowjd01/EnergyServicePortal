@@ -81,8 +81,8 @@
 			<div class="table-top">
 				<h2 class="ntit fl"><fmt:message key="datacolleciton.1.rtu" /></h2>
 				<div>
-					<button class="status-button rtu-filter-button normal actived" data-status="normal">정상 (0)</button>
-					<button class="status-button rtu-filter-button error actived" data-status="error">이상 (0)</button>
+					<button class="status-button rtu-filter-button normal actived" data-status="normal"><fmt:message key="button.normal" /> (0)</button>
+					<button class="status-button rtu-filter-button error actived" data-status="error"><fmt:message key="button.error" /> (0)</button>
 				</div>
 			</div>
 			<div class="table-wrap-type collect-wrap">
@@ -842,9 +842,9 @@
 								const rtuDate = new Date(rtu.createdAt).format('yyyy-MM-dd'),
 									siteName = rtu.siteName,
 									serialId = `#${'${rtu.rid}'}`;
-								let status = ["error", "이상"];
+								let status = ["error", "<fmt:message key='button.error' />"];
 								if (rtuStatus.rtus.length) {
-									status = ["normal", "정상"];
+									status = ["normal", "<fmt:message key='button.normal' />"];
 									// if ((new Date().getTime() - rtuStatus.rtus[0]['last_timestamp']) <= 3600000) {
 									// }
 								}
@@ -892,8 +892,8 @@
 								
 								statusFilter();
 
-								$(".rtu-filter-button").first().html("정상 ("+$("tr.normal").length+")");
-								$(".rtu-filter-button").last().html("이상 ("+$("tr.error").length+")");
+								$(".rtu-filter-button").first().html("<fmt:message key='button.normal' /> ("+$("tr.normal").length+")");
+								$(".rtu-filter-button").last().html("<fmt:message key='button.error' /> ("+$("tr.error").length+")");
 							}
 						});
 						ix++;
@@ -1085,9 +1085,9 @@
 						siteName = rtu.siteName,
 						serialId = `#${'${rtu.serialNumber}'}`;
 
-					let status = ["error", "이상"];
+					let status = ["error", "<fmt:message key='button.error' />"];
 					if (rtuStatus.rtus.length) {
-						status = ["normal", "정상"];
+						status = ["normal", "<fmt:message key='button.normal' />"];
 						// if ((new Date().getTime() - rtuStatus.rtus[0]['last_timestamp']) <= 3600000) {
 						// }
 					}
@@ -1135,8 +1135,8 @@
 
 					statusFilter();
 
-					$(".rtu-filter-button").first().html("정상 ("+$("tr.normal").length+")");
-					$(".rtu-filter-button").last().html("이상 ("+$("tr.error").length+")");
+					$(".rtu-filter-button").first().html("<fmt:message key='button.normal' /> ("+$("tr.normal").length+")");
+					$(".rtu-filter-button").last().html("<fmt:message key='button.error' /> ("+$("tr.error").length+")");
 				}
 			});
 			ix++;

@@ -438,12 +438,12 @@ const minAjax = async () => {
 									if (!isEmpty(data.rtus) && data.rtus.length > 0) {
 										const operation = data.rtus.find(e => e.operation === 1);
 										if (!isEmpty(operation)) {
-											rtuStatus = '<span class="status-button normal">정상</span>';
+											rtuStatus = '<span class="status-button normal">'+i18nManager.tr("button.normal")+'</span>';
 										} else {
-											rtuStatus = '<span class="status-button error">이상</span>';
+											rtuStatus = '<span class="status-button error">'+i18nManager.tr("button.error")+'</span>';
 										}
 									} else {
-										rtuStatus = '<span class="status-button error">이상</span>';
+										rtuStatus = '<span class="status-button error">'+i18nManager.tr("button.error")+'</span>';
 									}
 								}
 							});
@@ -1604,7 +1604,7 @@ const searchSite = async function (siteSids) {
 								if (!isEmpty(data.rtus) && data.rtus.length > 0) {
 									const operation = data.rtus.find(e => e.operation === 1);
 									if (!isEmpty(operation)) {
-										site['rtustatus'] = '정상';
+										site['rtustatus'] = i18nManager.tr("button.normal");
 										site['rtustatusClass'] = 'normal';
 									} else {
 										site['rtustatus'] = '이상';

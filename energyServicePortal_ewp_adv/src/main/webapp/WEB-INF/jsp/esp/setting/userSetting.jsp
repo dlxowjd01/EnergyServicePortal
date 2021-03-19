@@ -1005,7 +1005,7 @@
 								if (role === '1') {
 									addBtnStr = `
 										<button type="button" class="btn-type fr mb-20 ml-6" onclick="updateModal('add')"><fmt:message key='userSetting.add' /></button>
-										<button type="button" class="btn-type fr mb-20" onclick="location.href='/setting/userGradeSetting.do'">설정</button>
+										<button type="button" class="btn-type fr mb-20" onclick="location.href='/setting/userGradeSetting.do'"><fmt:message key="button.setting" /></button>
 									`;
 								}
 								$("#userTable_wrapper").append($(str)).prepend($(addBtnStr));
@@ -1206,7 +1206,7 @@
 								if (role === '1') {
 									addBtnStr = `
 										<button type="button" class="btn-type fr mb-20 ml-6" onclick="updateModal('add')"><fmt:message key='userSetting.add' /></button>
-										<button type="button" class="btn-type fr mb-20" onclick="location.href='/setting/userGradeSetting.do'">설정</button>
+										<button type="button" class="btn-type fr mb-20" onclick="location.href='/setting/userGradeSetting.do'"><fmt:message key="button.setting" /></button>
 									`;
 								}
 

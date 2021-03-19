@@ -18,7 +18,7 @@
 		</c:if>
 		
 		<div id="dashboardTableSearch">
-			<input type="text" placeholder="발전소 명 검색">
+			<input type="text" placeholder="<fmt:message key='gmain.table.search' />">
 		</div>
 	</div>
 	<div class="col-lg-7 col-md-6 col-sm-12">

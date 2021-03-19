@@ -668,5 +668,6 @@ const koTranslation =
   "dashboard.EA": "개소",
   "gmain.1000won": "천원",
   "gmain.10000won": "만원",
-
+  "button.normal": "정상",
+  "button.error": "이상",
 }

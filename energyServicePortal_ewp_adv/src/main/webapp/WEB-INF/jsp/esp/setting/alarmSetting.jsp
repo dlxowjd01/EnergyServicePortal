@@ -55,7 +55,7 @@
 					className: 'dt-center no-sorting'
 				},
 				{
-					sTitle: '순번',
+					sTitle: '<fmt:message key="alarmSetting.ix" />',
 					mData: null,
 					mRender: function ( data, type, full, rowIndex ) {
 						return rowIndex.row + 1;
@@ -63,38 +63,38 @@
 					className: 'dt-center no-sorting'
 				},
 				{
-					sTitle: '설비타입',
+					sTitle: '<fmt:message key="alarmSetting.device.type" />',
 					mData: 'DEVICE_TYPE'
 				},
 				{
-					sTitle: '제조사',
+					sTitle: '<fmt:message key="alarmSetting.madeBy" />',
 					mData: 'MANUFACTURER'
 				},
 				{
-					sTitle: '모델명',
+					sTitle: '<fmt:message key="alarmSetting.model" />',
 					mData: 'MODEL'
 				},
 				{
-					sTitle: '펌웨어 버전',
+					sTitle: '<fmt:message key="alarmSetting.v" />',
 					mData: 'VERSION'
 				},
 				{
-					sTitle: '에러 코드',
+					sTitle: '<fmt:message key="alarmSetting.errorCode" />',
 					mData: 'CODE'
 				},
 				{
-					sTitle: '메세지',
+					sTitle: '<fmt:message key="alarmSetting.msg" />',
 					mData: 'MESSAGE'
 				},
 				{
-					sTitle: '알람 레벨',
+					sTitle: '<fmt:message key="alarmSetting.alarmLev" />',
 					mData: 'LEVEL',
 					mRender: function ( data ) {
 						return alarmLevel[data];
 					}
 				},
 				{
-					sTitle: '추가 정보',
+					sTitle: '<fmt:message key="alarmSetting.info" />',
 					mData: 'DESCRIPTION'
 				},
 				{
@@ -131,8 +131,8 @@
 				selector: 'td:first-child > :checkbox, tr'
 			},
 			language: {
-				emptyTable: "조회된 데이터가 없습니다.",
-				zeroRecords:  "검색된 결과가 없습니다.",
+				emptyTable: "<fmt:message key='alarmSetting.noData' />",
+				zeroRecords:  "<fmt:message key='yieldReport.noData.2' />",
 				infoEmpty: "",
 				paginate: {
 					previous: "",
@@ -142,7 +142,7 @@
 			},
 			initComplete: function(settings, json) {
 				let str = `<div id="btnGroup" class="right-end"><!--
-							--><button type="button" disabled class="btn-type03" onclick="deleteRow()">선택 삭제</button><!--
+							--><button type="button" disabled class="btn-type03" onclick="deleteRow()"><fmt:message key='alarmSetting.delete' /></button><!--
 						--></div>`;
 				$('#alarmTable_wrapper').append($(str));
 			},
@@ -168,7 +168,7 @@
 			buttons: [
 				{
 					extend: 'excel',
-					text: '엑셀 내보내기',
+					text: '<fmt:message key="alarmSetting.extract" />',
 					className: 'btn-save',
 					title: '',
 					messageTop: ' ',
@@ -185,7 +185,7 @@
 						$('row', sheet).first().attr('ht', '130').attr('customHeight', "1");
 						$('row c[r*=2]', sheet).attr('s', '30');
 					},
-					filename: '알람 메시지 레벨 설정'
+					filename: '<fmt:message key='alarmSetting.title' />'
 				}
 			]
 		});
@@ -302,12 +302,12 @@
 
 							$.when.apply($, deferreds3).then(function () {
 								schAlarmList();
-								errorMsg('알람 메세지가 삭제 되었습니다.');
+								errorMsg('<fmt:message key="alarmSetting.errorMsg.1" />');
 								return false;
 							});
 						} else {
 							schAlarmList();
-							errorMsg('알람 메세지가 삭제 되었습니다.');
+							errorMsg('<fmt:message key="alarmSetting.errorMsg.2" />');
 							return false;
 						}
 					});
@@ -318,7 +318,7 @@
 		});
 	});
 
-	<!-- 알람 코드 조회 -->
+	// 알람 코드 조회
 	const alermList = async ()  => {
 		$.ajax({
 			url: apiHost + '/alarms/code_sets',
@@ -335,7 +335,7 @@
 		});
 	}
 
-	<!-- properties 조회 -->
+	// properties 조회
 	const properties = async () => {
 		const urlDeivceProp = {
 			url: apiHost + '/config/view/device_properties',
@@ -392,7 +392,7 @@
 		});
 	};
 
-	<!-- 드롭다운 선택 -->
+	// 드롭다운 선택
 	const rtnDropdown = ($selector) => {
 		if ($selector == 'deviceType') {
 			let typeArray = new Array();
@@ -492,12 +492,12 @@
 		$('#regist').prop('disabled', true);
 		/* validation check */
 		if ($(':checkbox[name="deviceType"]:checked').length == 0) {
-			alert('설비타입을 한개이상 선택해 주세요.');
+			alert('<fmt:message key="alarmSetting.alert1" />');
 			return false;
 		}
 
 		if ($(':checkbox[name="manuf"]:checked').length == 0) {
-			alert('제조사를 한개이상 선택해 주세요.');
+			alert('<fmt:message key="alarmSetting.alert2" />');
 			return false;
 		}
 		/* validation check */
@@ -590,35 +590,35 @@
 					if (type === DEV_TYPE.v) typeCheck = true;
 				});
 				if (!typeCheck) {
-					errorMsg('설비유형은 코드로 입력하여야합니다.');
+					errorMsg('<fmt:message key="alarmSetting.errorMsg.3" />');
 					return false;
 				}
 			} else if (isEmpty(DEV_TYPE.v)) {
 				continue;
 			} else if (isEmpty(MANUFACTURER.v)) {
-				errorMsg('제조사는 필수값입니다.');
+				errorMsg('<fmt:message key="alarmSetting.errorMsg.4" />');
 				return false;
 			} else if (isEmpty(MODEL.v)) {
-				errorMsg('모델명은 필수값입니다.');
+				errorMsg('<fmt:message key="alarmSetting.errorMsg.5" />');
 				return false;
 			} else if (isEmpty(VERSION.v)) {
-				errorMsg('펌웨어 버전은 필수값입니다.');
+				errorMsg('<fmt:message key="alarmSetting.errorMsg.6" />');
 				return false;
 			} else if (isEmpty(ALARM_CODE.v)) {
-				errorMsg('에러 코드는 필수값입니다.');
+				errorMsg('<fmt:message key="alarmSetting.errorMsg.7" />');
 				return false;
 			} else if (isEmpty(ALARM_MSG.v)) {
-				errorMsg('메세지는 필수값입니다.');
+				errorMsg('<fmt:message key="alarmSetting.errorMsg.8" />');
 				return false;
 			}
 
 			if (strDataSet !== tempDataSet) {
-				errorMsg('엑셀 업로드는 하나의 데이터 셋만 가능합니다.');
+				errorMsg('<fmt:message key="alarmSetting.errorMsg.9" />');
 				return false;
 			}
 
 			if (isEmpty(alarmLevel[LEVEL.v])) {
-				errorMsg('레벨은 정의된 코드만 입력가능합니다.');
+				errorMsg('<fmt:message key="alarmSetting.errorMsg.10" />');
 				return false;
 			}
 
@@ -650,16 +650,16 @@
 		const firstData = dataArray[0];
 
 		if (isEmpty(firstData.DEVICE_TYPE)) {
-			errorMsg('설비타입은 필수값입니다.');
+			errorMsg('<fmt:message key="alarmSetting.errorMsg.11" />');
 			return false;
 		} else if (isEmpty(firstData.MANUFACTURER)) {
-			errorMsg('제조사는 필수값입니다.');
+			errorMsg('<fmt:message key="alarmSetting.errorMsg.12" />');
 			return false;
 		} else if (isEmpty(firstData.MODEL)) {
-			errorMsg('모델명은 필수값입니다.');
+			errorMsg('<fmt:message key="alarmSetting.errorMsg.13" />');
 			return false;
 		} else if (isEmpty(firstData.VERSION)) {
-			errorMsg('펌웨어 버전은 필수값입니다.');
+			errorMsg('<fmt:message key="alarmSetting.errorMsg.14" />');
 			return false;
 		}
 
@@ -714,14 +714,14 @@
 			});
 
 			$.when.apply($, deferreds).then(function () {
-				alert('등록 되었습니다.');
+				alert('<fmt:message key="alarmSetting.alert3" />');
 				alarmTable.clear().draw();
 
 				$('#excelUploadBtn').val('');
 				$('#regist').prop('disabled', true);
 			});
 		}).fail(function (jqXHR, textStatus, errorThrown) {
-			errorMsg('처리 중 오류가 발생했습니다.');
+			errorMsg('<fmt:message key="alarmSetting.errorMsg.15" />');
 			console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
 			return false;
 		});
@@ -780,7 +780,7 @@
 
 <div class="row header-wrapper">
 	<div class="col-12">
-		<h1 class="page-header">알람 메시지 레벨 설정</h1>
+		<h1 class="page-header"><fmt:message key='alarmSetting.title' /></h1>
 	</div>
 </div>
 
@@ -788,42 +788,42 @@
 	<div class="col-12 clear input-align alarmSetting-filter">
 		<div class="fl">
 			<div class="flex-group">
-				<span class="tx-tit">설비 타입</span>
+				<span class="tx-tit"><fmt:message key='alarmSetting.device.type' /></span>
 				<div class="dropdown" id="deviceType">
-					<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택">
-						선택 <span class="caret"></span>
+					<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="<fmt:message key='button.select' />">
+						<fmt:message key='button.select' /> <span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu chk-type" role="menu"></ul>
 				</div>
 			</div>
 			<div class="flex-group">
-				<span class="tx-tit">제조사</span>
+				<span class="tx-tit"><fmt:message key='alarmSetting.madeBy' /></span>
 				<div class="dropdown" id="manufacturer">
-					<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="선택">
-						선택 <span class="caret"></span>
+					<button type="button" class="dropdown-toggle no-close" data-toggle="dropdown" data-name="<fmt:message key='button.select' />">
+						<fmt:message key='button.select' /> <span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu chk-type" role="menu"></ul>
 				</div>
 			</div>
 			<div class="flex-group">
-				<span class="tx-tit">모델명</span>
+				<span class="tx-tit"><fmt:message key='alarmSetting.model' /></span>
 				<div class="dropdown" id="model">
-					<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
-						선택<span class="caret"></span>
+					<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='button.select' />">
+						<fmt:message key='button.select' /><span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu"></ul>
 				</div>
 			</div>
 			<div class="flex-group">
-				<span class="tx-tit">펌웨어 버전</span>
+				<span class="tx-tit"><fmt:message key="alarmSetting.v" /></span>
 				<div class="dropdown" id="version">
-					<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">
-						선택<span class="caret"></span>
+					<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='button.select' />">
+						<fmt:message key='button.select' /><span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu"></ul>
 				</div>
 			</div>
-			<button type="button" class="btn-type ml-16" onclick="schAlarmList();">검색</button>
+			<button type="button" class="btn-type ml-16" onclick="schAlarmList();"><fmt:message key="button.search" /></button>
 		</div>
 		<div id="exportBtnGroup" class="fr"></div>
 	</div>
@@ -834,11 +834,11 @@
 		<div class="indiv">
 			<div class="flex-wrapper mb-20 alarmSetting-table-button">
 				<div>
-					<button type="button" class="btn-type03 big" onclick="location.href='/excel/alarmSettingTemplate.xlsx'">템플릿 다운로드</button>
+					<button type="button" class="btn-type03" onclick="location.href='/excel/alarmSettingTemplate.xlsx'"><fmt:message key='alarmSetting.templateDown' /></button>
 				</div>
 				<div>
-					<button type="button" class="btn-type03 big" onclick="document.getElementById('excelUploadBtn').click();">엑셀 업로드</button>
-					<button type="button" class="btn-type" id="regist" onclick="register();" disabled>적용</button>
+					<button type="button" class="btn-type03" onclick="document.getElementById('excelUploadBtn').click();"><fmt:message key='alarmSetting.excelUpload' /></button>
+					<button type="button" class="btn-type" id="regist" onclick="register();" disabled><fmt:message key="button.apply" /></button>
 				</div>
 			</div>
 			<table id="alarmTable" class="chk-type">
@@ -862,7 +862,7 @@
 <div class="modal fade" id="addSiteModal" tabindex="-1" role="dialog">
 	<div class="modal-dialog">
 		<div class="setting-modal-content modal-content">
-			<div class="modal-header"><h1>사업소 추가</h1></div>
+			<div class="modal-header"><h1><fmt:message key='siteSetting.add.site' /></h1></div>
 			<div class="modal-body">
 			</div>
 		</div>

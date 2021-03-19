@@ -1173,9 +1173,9 @@
 
 						let dataName = '';
 						if (key == 'actual') {
-							dataName = '실측';
+							dataName = '<fmt:message key="gen.dataname.1" />';
 						} else {
-							dataName = '예측';
+							dataName = '<fmt:message key="gen.dataname.2" />';
 						}
 
 						dataArr.push({
@@ -1212,9 +1212,9 @@
 
 						let dataName = '';
 						if (key == 'actual') {
-							dataName = '실측';
+							dataName = '<fmt:message key="gen.dataname.1" />';
 						} else {
-							dataName = '예측';
+							dataName = '<fmt:message key="gen.dataname.2" />';
 						}
 
 						dataArr.push({
@@ -1270,7 +1270,7 @@
 
 						let dataName = '';
 						if (key == 'actual') {
-							dataName = '실측';
+							dataName = '<fmt:message key="gen.dataname.1" />';
 							let $temp = {
 								name: dataName,
 								type: applicationData.observedType,
@@ -1285,7 +1285,7 @@
 							applicationData.observed = dummy;
 							summary(total, 0);
 						} else {
-							dataName = '예측';
+							dataName = '<fmt:message key="gen.dataname.2" />';
 							let $temp = {
 								name: dataName,
 								type: applicationData.forecastedType,
@@ -1325,7 +1325,7 @@
 					if (arr.length == 1) {
 						let dataName = '';
 						if (key == 'actual') {
-							dataName = '실측';
+							dataName = '<fmt:message key="gen.dataname.1" />';
 							let $temp = {
 								name: dataName,
 								type: applicationData.observedType,
@@ -1340,7 +1340,7 @@
 							applicationData.observed = dummy;
 							summary(total, 0);
 						} else {
-							dataName = '예측';
+							dataName = '<fmt:message key="gen.dataname.2" />';
 							let $temp = {
 								name: dataName,
 								type: applicationData.forecastedType,

@@ -356,20 +356,29 @@
 					});
 				});
 
+				const start = new Date();
+				const end = new Date();
+
+				start.setDate(start.getDate() - 7);
+				const time = [
+					convDate(start, true),
+					String(convDate(end, true)).replace("000000", "595959") * 1,
+				];
+
 				$.ajax({
 					url: apiHost + "/energy/forecast/accuracy",
 					type: "POST",
-					dataType: 'json',
+					dataType: "json",
 					contentType: "application/json",
 					data: JSON.stringify({
 						"sids": sids,
-						"startTime": interval[0],
-						"endTime": interval[1],
+						"startTime": time[0],
+						"endTime": time[1],
 						"interval": "day",
 						"cal_incentive": true,
 						"additionalProp1": {}
 					}),
-					async: false
+					async: false,
 				}).done(r3 => {
 					App.acc = r3.data.data;
 				});
@@ -613,6 +622,10 @@
 
 	const PieGraph = {
 		init() {
+			const data = Object.entries(App.acc.total);
+			const length = data.length - 1;
+
+			const acc = data[length][1].accuracy
 			Highcharts.chart("vppPie", {
 				chart: {
 					type: "pie",
@@ -624,7 +637,7 @@
 					plotShadow: false,
 				},
 				title: {
-					text: (Object.values(App.acc.total)[0].accuracy * 100)+'%',
+					text: (acc * 100)+'%',
 					align: 'center',
 					verticalAlign: 'middle',
 					y: 13.5,
@@ -670,14 +683,14 @@
 						dataLabels: {
 							enabled: false
 						},
-						y: Object.values(App.acc.total)[0].accuracy * 100 //60% -- 아래로 총합 100%
+						y: acc * 100 //60% -- 아래로 총합 100%
 					}, {
 						color: '#656565',
 						name: "안예측",
 						dataLabels: {
 							enabled: false
 						},
-						y: 100 - (Object.values(App.acc.total)[0].accuracy * 100) //20% 나머지
+						y: 100 - (acc * 100) //20% 나머지
 					}]
 				}],
 			});
@@ -983,7 +996,7 @@
 	const SiteStatus = {
 		interval: null,
 		idx: 0,
-		len: $(".vpp-focus-map").length,
+		len: 0,
 
 		init() {
 			let tableTemplate = ``;
@@ -1095,13 +1108,12 @@
 					return App.energyData.find(site => site.sid === x.sid).capacity;
 				}).reduce((acc, cur) => acc + cur, 0);
 
-				const acc = Object.values(App.acc.total)[0].accuracy * 100
+				const acc = Object.values(App.acc.total)[0].accuracy * 100;
 
 				$("#totalSiteCount").html(forecast.length); // 총 예측 사이트
 				$("#totalCapacity").html(((capacity / 1000 / 1000).toFixed(2) * 1).toLocaleString());
 				$("#totalAcc").html(acc);
-
-			})
+			});
 		},
 	}
 
@@ -1170,54 +1182,29 @@
 			
 			const tableData = [];
 
-			const start = new Date();
-			const end = new Date();
 
-			start.setDate(start.getDate() - 7);
-			const time = [
-				convDate(start, true),
-				convDate(end),
-			];
+			App.sites.forEach((site, ix) => {
+				const ed = App.energyData.find(x => x.sid === site.sid);
+				let acc = [];
+				if (App.acc.each[site.sid]) {	
+					acc = Object.entries(App.acc.each[site.sid])
+				}
+				const today = acc ? acc.pop()[1].accuracy.toFixed(1) : "-";
+				const week = acc ? acc.reduce((acc, cur) => acc + cur[1].accuracy, 0).toFixed(1) : "-";
 
-			// timeout
-			$.ajax({
-				url: apiHost + "/energy/forecast/accuracy",
-				type: "POST",
-				dataType: 'json',
-				contentType: "application/json",
-				data: JSON.stringify({
-					"sids": App.sids,
-					"startTime": time[0],
-					"endTime": time[1],
-					"interval": "day",
-					"cal_incentive": true,
-				}),
-			}).done(r => {
-				const data = r.data.data.each
-				console.log(r)
-
-				App.sites.forEach((site, ix) => {
-					const ed = App.energyData.find(x => x.sid === site.sid);
-					let acc = null;
-					if (data[site.sid]) {
-						acc = Object.values(data[site.sid])
-					}
-					const today = acc ? acc.pop().accuracy.toFixed(1) : "-";
-					const week = acc ? acc.reduce((acc, cur) => acc + cur.accuracy, 0).toFixed(1) : "-";
-	
-					tableData[ix] = {
-						name: site.name,
-						capacity: Math.round(ed.capacity / 1000),
-						todayError: today,
-						weekError: week,
-						monthError: "-",
-					}
-					Table.target.rows.add(tableData[ix]);
-					Table.target.draw();
-					Table.target.columns.adjust();
-				});
+				tableData[ix] = {
+					name: site.name,
+					capacity: Math.round(ed.capacity / 1000),
+					todayError: today,
+					weekError: week,
+					monthError: "-",
+				}
+				console.log(tableData);
 			});
 
+			Table.target.rows.add(tableData);
+			Table.target.draw();
+			Table.target.columns.adjust();
 		}
 	}
 	

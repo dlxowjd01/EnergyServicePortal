@@ -4206,7 +4206,7 @@
 								<div class="col-xl-6 col-lg-6 col-md-4 col-sm-10 pl-0">
 									<div class="flex-start">
 										<div class="dropdown w-55">
-											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="국가 선택">국가 선택<span class="caret"></span></button>
+											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='siteSetting.loc.1' />"><fmt:message key='siteSetting.loc.1' /><span class="caret"></span></button>
 											<ul id="newCountryList" class="dropdown-menu">
 												<c:forEach var="country" items="${location}">
 													<li data-value="${country.value.code}">
@@ -4225,7 +4225,7 @@
 											</ul>
 										</div>
 										<div class="dropdown w-55">
-											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="시/도 선택">시/도 선택<span class="caret"></span></button>
+											<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='siteSetting.loc.2' />"><fmt:message key='siteSetting.loc.2' /><span class="caret"></span></button>
 											<ul id="newCityList" class="dropdown-menu">
 												<c:forEach var="country" items="${location}">
 													<c:forEach var="city" items="${country.value.locations}" varStatus="cityName">
