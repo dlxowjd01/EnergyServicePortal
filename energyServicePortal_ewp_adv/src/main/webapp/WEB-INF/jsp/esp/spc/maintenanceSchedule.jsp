@@ -95,22 +95,37 @@
 	});
 
 	//기본세팅
+	const monthArray = [
+		'<fmt:message key="spc.schedule.month.1" />',
+		'<fmt:message key="spc.schedule.month.2" />',
+		'<fmt:message key="spc.schedule.month.3" />',
+		'<fmt:message key="spc.schedule.month.4" />',
+		'<fmt:message key="spc.schedule.month.5" />',
+		'<fmt:message key="spc.schedule.month.6" />',
+		'<fmt:message key="spc.schedule.month.7" />',
+		'<fmt:message key="spc.schedule.month.8" />',
+		'<fmt:message key="spc.schedule.month.9" />',
+		'<fmt:message key="spc.schedule.month.10" />',
+		'<fmt:message key="spc.schedule.month.11" />',
+		'<fmt:message key="spc.schedule.month.12" />',
+	]
+
 	const pageInit = function () {
 		let html = '';
 		let year = today.getFullYear();
 		let month = today.getMonth() + 1;
 
 		$('#datepicker1').datepicker('setDate', 'today');
-		$('#year > button').html(year + '년<span class="caret"></span>').data('value', year);
-		$('#month > button').html(month + '월<span class="caret"></span>').data('value', month);
+		$('#year > button').html(year + '<span class="caret"></span>').data('value', year);
+		$('#month > button').html(monthArray[month - 1] + '<span class="caret"></span>').data('value', month);
 
 		let bfYear = new Date(year + 1, month + 1);
-		html += '<li data-value="' + bfYear.getFullYear() + '"><a href="javascript:void(0);">' + bfYear.getFullYear() + '년 </a></li>';
+		html += '<li data-value="' + bfYear.getFullYear() + '"><a href="javascript:void(0);">' + bfYear.getFullYear() + ' </a></li>';
 
 		for (let i = 0; i < 5; i++) {
 			let bfYear = new Date(year - i, month + 1);
 			let select = i == 0 ? 'on' : '';
-			html += '<li data-value="' + bfYear.getFullYear() + '" class="' + select + '"><a href="javascript:void(0);">' + bfYear.getFullYear() + '년 </a></li>';
+			html += '<li data-value="' + bfYear.getFullYear() + '" class="' + select + '"><a href="javascript:void(0);">' + bfYear.getFullYear() + ' </a></li>';
 		}
 
 		$('#year ul').empty().append(html);
@@ -152,9 +167,9 @@
 			}
 		}
 
-		$('.search-btn > strong').html(doMonth.getMonth() + 1 + '월');
-		$('#year > button').html(doMonth.getFullYear() + '년<span class="caret"></span>').data('value', doMonth.getFullYear());
-		$('#month > button').html(doMonth.getMonth() + 1 + '월<span class="caret"></span>').data('value', doMonth.getMonth() + 1);
+		$('.search-btn > strong').html(monthArray[doMonth.getMonth()]);
+		$('#year > button').html(doMonth.getFullYear() + '<span class="caret"></span>').data('value', doMonth.getFullYear());
+		$('#month > button').html(monthArray[doMonth.getMonth()] + '<span class="caret"></span>').data('value', doMonth.getMonth() + 1);
 
 		maintenance('get');
 	};
@@ -171,44 +186,44 @@
 		if (action === 'post' || action === 'patch') {
 			let data = setData();
 			if (isEmpty(data['site_id'])) {
-				alert('발전소명은 필수 값입니다.');
+				alert('<fmt:message key="spc.schedule.alert.1" />');
 				return false;
 			}
 
 			if (isEmpty(data['job_type'])) {
-				alert('점검 구분은 필수 값입니다.');
+				alert('<fmt:message key="spc.schedule.alert.2" />');
 				return false;
 			}
 
 			if (isEmpty(data['job_date'])) {
-				alert('기준 일자는 필수 값입니다.');
+				alert('<fmt:message key="spc.schedule.alert.3" />');
 				return false;
 			}
 
 			if (isEmpty(data['repeat_yn'])) {
-				alert('점검 주기는 필수 값입니다.');
+				alert('<fmt:message key="spc.schedule.alert.4" />');
 				return false;
 			} else {
 				if (data['repeat_yn'] == 'Y') {
 					if (isEmpty(data['repeat_interval'])) {
-						alert('정기 점검은 반복 기간은 필수 값입니다.');
+						alert('<fmt:message key="spc.schedule.alert.5" />');
 						return false;
 					}
 
 					if (isEmpty(data['repeat_unit'])) {
-						alert('정기 점검 반복 주기는 필수 값입니다.');
+						alert('<fmt:message key="spc.schedule.alert.6" />');
 						return false;
 					}
 
 					if (isEmpty(data['repeat_end'])) {
-						alert('정기 점검 반복 종료일 은 필수 값입니다.');
+						alert('<fmt:message key="spc.schedule.alert.7" />');
 						return false;
 					}
 				}
 			}
 
 			if (isEmpty(data['repeat_before_after_holiday'])) {
-				alert('공휴일 처리는 필수 값입니다.');
+				alert('<fmt:message key="spc.schedule.alert.8" />');
 				return false;
 			}
 
@@ -216,17 +231,17 @@
 			if (!isEmpty(job_info['alarmSetup'])) {
 
 				if (isEmpty(job_info['alarmDate'])) {
-					alert('알람 설정시 알람 일자는 필수 값입니다.');
+					alert('<fmt:message key="spc.schedule.alert.9" />');
 					return false;
 				}
 
 				if (isEmpty(job_info['alarmTime'])) {
-					alert('알람 설정시 알람 시간은 필수 값입니다.');
+					alert('<fmt:message key="spc.schedule.alert.10" />');
 					return false;
 				}
 
 				if (isEmpty(job_info['alarmPhone'])) {
-					alert('알람 설정시 알람 수신번호는 필수 값입니다.');
+					alert('<fmt:message key="spc.schedule.alert.11" />');
 					return false;
 				}
 			}
@@ -234,7 +249,7 @@
 			let jobText = jobId == undefined ? '' : '&jobId=' + jobId;
 			let url = '';
 			if (action === 'patch') {
-				if (!confirm('수정된 정보로 변경 하시겠습니까?')) {
+				if (!confirm('<fmt:message key="spc.schedule.confirm.1" />')) {
 					return false;
 				}
 
@@ -295,7 +310,7 @@
 			}
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			if (textStatus !== 'canceled') {
-				alert('처리 중 오류가 발생했습니다.');
+				alert('<fmt:message key="spc.schedule.alert.12" />');
 				return false;
 			}
 		});
@@ -402,7 +417,22 @@
 				return $(this).val();
 			}
 		));
-		const jobName = ['정기점검', '구조물 안전진단', '소방점검', '등기이사 기간만료', '모듈점검', '케이블점검', '구조물점검', '접속함점검', '인버터점검', '수배전반점검', '부자점검', '열화상점검', '소모품점검', '기타점검'];
+		const jobName = [
+			'<fmt:message key="spc.schedule.type.1" />',
+			'<fmt:message key="spc.schedule.type.2" />',
+			'<fmt:message key="spc.schedule.type.3" />',
+			'<fmt:message key="spc.schedule.type.4" />',
+			'<fmt:message key="spc.schedule.type.5" />',
+			'<fmt:message key="spc.schedule.type.6" />',
+			'<fmt:message key="spc.schedule.type.7" />',
+			'<fmt:message key="spc.schedule.type.8" />',
+			'<fmt:message key="spc.schedule.type.9" />',
+			'<fmt:message key="spc.schedule.type.10" />',
+			'<fmt:message key="spc.schedule.type.11" />',
+			'<fmt:message key="spc.schedule.type.12" />',
+			'<fmt:message key="spc.schedule.type.13" />',
+			'<fmt:message key="spc.schedule.type.14" />',
+		];
 		if (data.length > 0) {
 			data.forEach(function (v, k) {
 				let job_date = new Date(v.job_date).format('dd');
@@ -462,7 +492,7 @@
 		$('#repeat_end').parent().removeClass('sel-calendar').addClass('text-input-type');
 
 		if (data == undefined) {
-			title.contents().get(0).nodeValue = '점검계획 등록';
+			title.contents().get(0).nodeValue = '<fmt:message key="spc.schedule.register.title" />';
 			//팝업 오픈시 value 초기화
 			input.each(function () {
 				$(this).val('');
@@ -629,143 +659,143 @@
 	<div class="modal-dialog spc-modal-lg" role="modal">
 		<div class="modal-content spc-modal-content full-width">
 			<div class="modal-header">
-				<h2>점검계획 등록<span class="required fr">필수 입력 항목</span></h2>
+				<h2><fmt:message key="spc.schedule.register.title" /><span class="required fr"><fmt:message key="required" /></span></h2>
 			</div>
 			<div class="modal-body">
 				<div class="container-fluid">
 					<div class="row">
-						<div class="col-lg-2 col-md-2 col-sm-3"><span class="input-label asterisk">발전소 선택</span></div>
+						<div class="col-lg-2 col-md-2 col-sm-3"><span class="input-label asterisk"><fmt:message key="spc.schedule.register.plant" /></span></div>
 						<div class="col-lg-5 col-md-5 col-sm-9 flex-start">
 							<div class="text-input-type mr-12">
-								<input type="text" id="siteName" name="siteName" placeholder="입력" class="required" autocomplete="off">
+								<input type="text" id="siteName" name="siteName" placeholder="<fmt:message key='spc.schedule.register.input' />" class="required" autocomplete="off">
 								<input type="hidden" id="site_id" name="site_id">
 							</div>
-							<button type="submit" class="btn-type">검색</button>
+							<button type="submit" class="btn-type"><fmt:message key="button.search" /></button>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-lg-2 col-md-2 col-sm-3">
-							<span class="input-label asterisk">점검 구분</span>
+							<span class="input-label asterisk"><fmt:message key="spc.schedule.register.type" /></span>
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex-start">
 							<div class="dropdown placeholder" id="job_type">
-								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='button.select' />"><fmt:message key='button.select' /><span class="caret"></span></button>
 								<ul class="dropdown-menu">
-									<li data-value="1"><a href="javascript:void(0);">정기 점검</a></li>
-									<li data-value="2"><a href="javascript:void(0);">구조물 안전진단</a></li>
-									<li data-value="3"><a href="javascript:void(0);">소방점검</a></li>
-									<li data-value="4"><a href="javascript:void(0);">등기이사 기간만료</a></li>
-									<li data-value="5"><a href="javascript:void(0);">모듈점검</a></li>
-									<li data-value="6"><a href="javascript:void(0);">케이블점검</a></li>
-									<li data-value="7"><a href="javascript:void(0);">구조물점검</a></li>
-									<li data-value="8"><a href="javascript:void(0);">접속함점검</a></li>
-									<li data-value="9"><a href="javascript:void(0);">인버터점검</a></li>
-									<li data-value="10"><a href="javascript:void(0);">수배전반점검</a></li>
-									<li data-value="11"><a href="javascript:void(0);">부지점검</a></li>
-									<li data-value="12"><a href="javascript:void(0);">열화상점검</a></li>
-									<li data-value="13"><a href="javascript:void(0);">소모품점검</a></li>
-									<li data-value="14"><a href="javascript:void(0);">기타점검</a></li>
+									<li data-value="1"><a href="javascript:void(0);"><fmt:message key="spc.schedule.type.1" /></a></li>
+									<li data-value="2"><a href="javascript:void(0);"><fmt:message key="spc.schedule.type.2" /></a></li>
+									<li data-value="3"><a href="javascript:void(0);"><fmt:message key="spc.schedule.type.3" /></a></li>
+									<li data-value="4"><a href="javascript:void(0);"><fmt:message key="spc.schedule.type.4" /></a></li>
+									<li data-value="5"><a href="javascript:void(0);"><fmt:message key="spc.schedule.type.5" /></a></li>
+									<li data-value="6"><a href="javascript:void(0);"><fmt:message key="spc.schedule.type.6" /></a></li>
+									<li data-value="7"><a href="javascript:void(0);"><fmt:message key="spc.schedule.type.7" /></a></li>
+									<li data-value="8"><a href="javascript:void(0);"><fmt:message key="spc.schedule.type.8" /></a></li>
+									<li data-value="9"><a href="javascript:void(0);"><fmt:message key="spc.schedule.type.9" /></a></li>
+									<li data-value="10"><a href="javascript:void(0);"><fmt:message key="spc.schedule.type.10" /></a></li>
+									<li data-value="11"><a href="javascript:void(0);"><fmt:message key="spc.schedule.type.11" /></a></li>
+									<li data-value="12"><a href="javascript:void(0);"><fmt:message key="spc.schedule.type.12" /></a></li>
+									<li data-value="13"><a href="javascript:void(0);"><fmt:message key="spc.schedule.type.13" /></a></li>
+									<li data-value="14"><a href="javascript:void(0);"><fmt:message key="spc.schedule.type.14" /></a></li>
 								</ul>
 							</div>
 						</div>
 						<div class="col-lg-2 col-md-2 col-sm-3">
-							<span class="input-label asterisk">점검 주기</span>
+							<span class="input-label asterisk"><fmt:message key="spc.schedule.register.interval" /></span>
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex-start3">
 							<div id="repeat_yn" class="dropdown w-100">
-								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='button.select' />"><fmt:message key='button.select' /><span class="caret"></span></button>
 								<ul class="dropdown-menu">
-									<li data-value="Y"><a href="javascript:void(0);">정기 점검</a></li>
-									<li data-value="N"><a href="javascript:void(0);">일시 점검</a></li>
+									<li data-value="Y"><a href="javascript:void(0);"><fmt:message key="spc.schedule.register.interval.1" /></a></li>
+									<li data-value="N"><a href="javascript:void(0);"><fmt:message key="spc.schedule.register.interval.2" /></a></li>
 								</ul>
 							</div>
 							<div class="text-input-type ml-12 hidden">
-								<input type="text" id="repeat_interval" name="repeat_interval" placeholder="입력" onkeydown="onlyNum(event);" maxlength="2" autocomplete="off">
+								<input type="text" id="repeat_interval" name="repeat_interval" placeholder="<fmt:message key='spc.schedule.register.input' />" onkeydown="onlyNum(event);" maxlength="2" autocomplete="off">
 							</div>
 							<div class="dropdown hidden" id="repeat_unit">
-								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="주기">주기<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='spc.schedule.register.interval.unit' />"><fmt:message key='spc.schedule.register.interval.unit' /><span class="caret"></span></button>
 								<ul class="dropdown-menu">
-									<li data-value="year"><a href="javascript:void(0);">년</a></li>
-									<li data-value="half_year"><a href="javascript:void(0);">반기</a></li>
-									<li data-value="quarter_year"><a href="javascript:void(0);">분기</a></li>
-									<li data-value="month"><a href="javascript:void(0);">월</a></li>
-									<li data-value="day_of_week"><a href="javascript:void(0);">주</a></li>
+									<li data-value="year"><a href="javascript:void(0);"><fmt:message key="spc.schedule.register.interval.3" /></a></li>
+									<li data-value="half_year"><a href="javascript:void(0);"><fmt:message key="spc.schedule.register.interval.4" /></a></li>
+									<li data-value="quarter_year"><a href="javascript:void(0);"><fmt:message key="spc.schedule.register.interval.5" /></a></li>
+									<li data-value="month"><a href="javascript:void(0);"><fmt:message key="spc.schedule.register.interval.6" /></a></li>
+									<li data-value="day_of_week"><a href="javascript:void(0);"><fmt:message key="spc.schedule.register.interval.7" /></a></li>
 								</ul>
 							</div>
 						</div>
 					</div>
 					<div class="row dateField">
 						<div class="col-lg-2 col-md-2 col-sm-3">
-							<span class="input-label asterisk">기준 일자</span>
+							<span class="input-label asterisk"><fmt:message key='spc.schedule.register.date' /></span>
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex-start">
 							<div class="sel-calendar">
-								<input type="text" id="job_date" name="job_date" class="sel fromDate w-100" placeholder="기준 일자" value="" autocomplete="off" readonly>
+								<input type="text" id="job_date" name="job_date" class="sel fromDate w-100" placeholder="<fmt:message key='spc.schedule.register.date' />" value="" autocomplete="off" readonly>
 							</div>
 						</div>
 						<div class="col-lg-2 col-md-2 col-sm-3">
-							<span class="input-label">반복 종료일</span>
+							<span class="input-label"><fmt:message key='spc.schedule.register.interval.end' /></span>
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex-start">
 							<div class="text-input-type w-100">
-								<input type="text" id="repeat_end" name="repeat_end" class="toDate" placeholder="반복 종료일" value="" readonly>
+								<input type="text" id="repeat_end" name="repeat_end" class="toDate" placeholder="<fmt:message key='spc.schedule.register.interval.end' />" value="" readonly>
 							</div>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-lg-2 col-md-2 col-sm-3">
-							<span class="input-label asterisk">공휴일 처리</span>
+							<span class="input-label asterisk"><fmt:message key="spc.schedule.register.holiday" /></span>
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex-start">
 							<div class="dropdown placeholder" id="repeat_before_after_holiday">
-								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="선택">선택<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='button.select' />"><fmt:message key='button.select' /><span class="caret"></span></button>
 								<ul class="dropdown-menu">
-									<li data-value="N"><a href="javascript:void(0);">처리 안함</a></li>
-									<li data-value="B"><a href="javascript:void(0);">공휴일 직전 영업일</a></li>
-									<li data-value="A"><a href="javascript:void(0);">공휴일 직후 영업일</a></li>
+									<li data-value="N"><a href="javascript:void(0);"><fmt:message key="spc.schedule.register.holiday" /></a></li>
+									<li data-value="B"><a href="javascript:void(0);"><fmt:message key="spc.schedule.register.holiday" /></a></li>
+									<li data-value="A"><a href="javascript:void(0);"><fmt:message key="spc.schedule.register.holiday" /></a></li>
 								</ul>
 							</div>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-lg-2 col-md-2 col-sm-3">
-							<span class="input-label">내용</span>
+							<span class="input-label"><fmt:message key="spc.schedule.register.content" /></span>
 						</div>
 						<div class="col-lg-10 col-md-10 col-sm-9 flex-start">
-							<textarea class="textarea" id="description" name="description" placeholder="입력"></textarea>
+							<textarea class="textarea" id="description" name="description" placeholder="<fmt:message key='spc.schedule.register.input' />"></textarea>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-lg-2 col-md-2 col-sm-3">
-							<span class="input-label">작업자</span>
+							<span class="input-label"><fmt:message key="spc.schedule.register.reporter" /></span>
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex-start">
 							<div class="text-input-type">
-								<input type="text" id="worker" name="worker" placeholder="입력" maxlength="10">
+								<input type="text" id="worker" name="worker" placeholder="<fmt:message key='spc.schedule.register.input' />" maxlength="10">
 							</div>
 						</div>
 						<div class="col-lg-2 col-md-2 col-sm-3">
-							<span class="input-label">비고</span>
+							<span class="input-label"><fmt:message key="spc.schedule.register.note" /></span>
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex-start">
 							<div class="text-input-type w-100">
-								<input type="text" id="note" name="note" placeholder="입력" maxlength="50">
+								<input type="text" id="note" name="note" placeholder="<fmt:message key='spc.schedule.register.input' />" maxlength="50">
 							</div>
 						</div>
 					</div>
 					<div class="row end">
 						<div class="col-lg-2 col-md-2 col-sm-3">
-							<span class="input-label">알림 설정</span>
+							<span class="input-label"><fmt:message key="spc.schedule.register.setAlarm" /></span>
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex-start2">
 							<div class="dropdown mr-12" id="alarmSetup">
-								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="알림 없음">알림 없음<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='spc.schedule.register.setAlarm.1' />"><fmt:message key="spc.schedule.register.setAlarm.1" /><span class="caret"></span></button>
 								<ul class="dropdown-menu">
-									<li data-value=""><a href="javascript:void(0);">알림 없음</a></li>
-									<li data-value="1"><a href="javascript:void(0);">1일 전</a></li>
-									<li data-value="3"><a href="javascript:void(0);">3일 전</a></li>
-									<li data-value="7"><a href="javascript:void(0);">7일 전</a></li>
-									<li data-value="직접 설정"><a href="javascript:void(0);">직접 설정</a></li>
+									<li data-value=""><a href="javascript:void(0);"><fmt:message key="spc.schedule.register.setAlarm.1" /></a></li>
+									<li data-value="1"><a href="javascript:void(0);"><fmt:message key="spc.schedule.register.setAlarm.2" /></a></li>
+									<li data-value="3"><a href="javascript:void(0);"><fmt:message key="spc.schedule.register.setAlarm.3" /></a></li>
+									<li data-value="7"><a href="javascript:void(0);"><fmt:message key="spc.schedule.register.setAlarm.4" /></a></li>
+									<li data-value="직접 설정"><a href="javascript:void(0);"><fmt:message key="spc.schedule.register.setAlarm.5" /></a></li>
 								</ul>
 							</div>
 							<div class="sel-calendar">
@@ -773,28 +803,49 @@
 							</div>
 						</div>
 						<div class="col-lg-2 col-md-2 col-sm-3">
-							<span class="input-label">알림 시간</span>
+							<span class="input-label"><fmt:message key="spc.schedule.register.time" /></span>
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-9 flex-start2">
 							<div class="dropdown placeholder mr-12" id="alarmTime">
-								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="시간">시간<span class="caret"></span></button>
+								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='spc.schedule.register.time.1' />"><fmt:message key="spc.schedule.register.time.1" /><span class="caret"></span></button>
 								<ul class="dropdown-menu">
-									<c:forEach var="time" begin="0" end="23">
-										<li data-value="${time}"><a href="javascript:void(0);">${time}시</a></li>
-									</c:forEach>
+									<li data-value="0"><a href="javascript:void(0);"><fmt:message key='spc.schedule.register.time.0' /></a></li>
+									<li data-value="1"><a href="javascript:void(0);"><fmt:message key='spc.schedule.register.time.1' /></a></li>
+									<li data-value="2"><a href="javascript:void(0);"><fmt:message key='spc.schedule.register.time.2' /></a></li>
+									<li data-value="3"><a href="javascript:void(0);"><fmt:message key='spc.schedule.register.time.3' /></a></li>
+									<li data-value="4"><a href="javascript:void(0);"><fmt:message key='spc.schedule.register.time.4' /></a></li>
+									<li data-value="5"><a href="javascript:void(0);"><fmt:message key='spc.schedule.register.time.5' /></a></li>
+									<li data-value="6"><a href="javascript:void(0);"><fmt:message key='spc.schedule.register.time.6' /></a></li>
+									<li data-value="7"><a href="javascript:void(0);"><fmt:message key='spc.schedule.register.time.7' /></a></li>
+									<li data-value="8"><a href="javascript:void(0);"><fmt:message key='spc.schedule.register.time.8' /></a></li>
+									<li data-value="9"><a href="javascript:void(0);"><fmt:message key='spc.schedule.register.time.9' /></a></li>
+									<li data-value="10"><a href="javascript:void(0);"><fmt:message key='spc.schedule.register.time.10' /></a></li>
+									<li data-value="11"><a href="javascript:void(0);"><fmt:message key='spc.schedule.register.time.11' /></a></li>
+									<li data-value="12"><a href="javascript:void(0);"><fmt:message key='spc.schedule.register.time.12' /></a></li>
+									<li data-value="13"><a href="javascript:void(0);"><fmt:message key='spc.schedule.register.time.13' /></a></li>
+									<li data-value="14"><a href="javascript:void(0);"><fmt:message key='spc.schedule.register.time.14' /></a></li>
+									<li data-value="15"><a href="javascript:void(0);"><fmt:message key='spc.schedule.register.time.15' /></a></li>
+									<li data-value="16"><a href="javascript:void(0);"><fmt:message key='spc.schedule.register.time.16' /></a></li>
+									<li data-value="17"><a href="javascript:void(0);"><fmt:message key='spc.schedule.register.time.17' /></a></li>
+									<li data-value="18"><a href="javascript:void(0);"><fmt:message key='spc.schedule.register.time.18' /></a></li>
+									<li data-value="19"><a href="javascript:void(0);"><fmt:message key='spc.schedule.register.time.19' /></a></li>
+									<li data-value="20"><a href="javascript:void(0);"><fmt:message key='spc.schedule.register.time.20' /></a></li>
+									<li data-value="21"><a href="javascript:void(0);"><fmt:message key='spc.schedule.register.time.21' /></a></li>
+									<li data-value="22"><a href="javascript:void(0);"><fmt:message key='spc.schedule.register.time.22' /></a></li>
+									<li data-value="23"><a href="javascript:void(0);"><fmt:message key='spc.schedule.register.time.23' /></a></li>
 								</ul>
 							</div>
 							<div class="text-input-type w-100">
-								<input type="text" id="alarmPhone" name="alarmPhone" placeholder="수신 번호" maxlength="12" onkeydown="onlyNum(event)">
+								<input type="text" id="alarmPhone" name="alarmPhone" placeholder="<fmt:message key='spc.schedule.register.time.num' />" maxlength="12" onkeydown="onlyNum(event)">
 							</div>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-12 end">
 							<div class="btn-wrap-type02">
-								<button type="button" id="deleteScheduleBtn" class="btn-type04 hidden">삭제</button>
-								<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close">취소</button>
-								<button type="button" id="addScheduleBtn" class="btn-type">등록</button>
+								<button type="button" id="deleteScheduleBtn" class="btn-type04 hidden"><fmt:message key="button.delete" /></button>
+								<button type="button" class="btn-type03" data-dismiss="modal" aria-label="Close"><fmt:message key="button.cancel" /></button>
+								<button type="button" id="addScheduleBtn" class="btn-type"><fmt:message key="button.register" /></button>
 							</div>
 						</div>
 					</div>
@@ -806,7 +857,7 @@
 
 <div class="row header-wrapper">
 	<div class="col-12">
-		<h1 class="page-header">SPC 점검계획</h1>
+		<h1 class="page-header"><fmt:message key="spc.schedule.title" /></h1>
 	</div>
 </div>
 
@@ -831,18 +882,18 @@
 						<span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu">
-						<li data-value="1"><a href="javascript:void(0);">1월</a></li>
-						<li data-value="2"><a href="javascript:void(0);">2월</a></li>
-						<li data-value="3"><a href="javascript:void(0);">3월</a></li>
-						<li data-value="4"><a href="javascript:void(0);">4월</a></li>
-						<li data-value="5"><a href="javascript:void(0);">5월</a></li>
-						<li data-value="6"><a href="javascript:void(0);">6월</a></li>
-						<li data-value="7"><a href="javascript:void(0);">7월</a></li>
-						<li data-value="8"><a href="javascript:void(0);">8월</a></li>
-						<li data-value="9"><a href="javascript:void(0);">9월</a></li>
-						<li data-value="10"><a href="javascript:void(0);">10월</a></li>
-						<li data-value="11"><a href="javascript:void(0);">11월</a></li>
-						<li data-value="12"><a href="javascript:void(0);">12월</a></li>
+						<li data-value="1"><a href="javascript:void(0);"><fmt:message key="spc.schedule.month.1" /></a></li>
+						<li data-value="2"><a href="javascript:void(0);"><fmt:message key="spc.schedule.month.2" /></a></li>
+						<li data-value="3"><a href="javascript:void(0);"><fmt:message key="spc.schedule.month.3" /></a></li>
+						<li data-value="4"><a href="javascript:void(0);"><fmt:message key="spc.schedule.month.4" /></a></li>
+						<li data-value="5"><a href="javascript:void(0);"><fmt:message key="spc.schedule.month.5" /></a></li>
+						<li data-value="6"><a href="javascript:void(0);"><fmt:message key="spc.schedule.month.6" /></a></li>
+						<li data-value="7"><a href="javascript:void(0);"><fmt:message key="spc.schedule.month.7" /></a></li>
+						<li data-value="8"><a href="javascript:void(0);"><fmt:message key="spc.schedule.month.8" /></a></li>
+						<li data-value="9"><a href="javascript:void(0);"><fmt:message key="spc.schedule.month.9" /></a></li>
+						<li data-value="10"><a href="javascript:void(0);"><fmt:message key="spc.schedule.month.10" /></a></li>
+						<li data-value="11"><a href="javascript:void(0);"><fmt:message key="spc.schedule.month.11" /></a></li>
+						<li data-value="12"><a href="javascript:void(0);"><fmt:message key="spc.schedule.month.12" /></a></li>
 					</ul>
 				</div>
 			</div>
@@ -853,69 +904,69 @@
 <div class="row">
 	<div class="col-lg-2 col-md-3 col-sm-4 search-left">
 		<div class="indiv">
-			<h2 class="ntit">점검 구분</h2>
+			<h2 class="ntit"><fmt:message key="spc.schedule.type" /></h2>
 			<div class="search-input-wrapper">
 				<div class="chk-type c1">
 					<input type="checkbox" id="chk_op01" name="type" value="1" checked>
-					<label for="chk_op01">정기점검</label>
+					<label for="chk_op01"><fmt:message key="spc.schedule.type.1" /></label>
 				</div>
 				<div class="chk-type c2">
 					<input type="checkbox" id="chk_op02" name="type" value="2" checked>
-					<label for="chk_op02">구조물 안전진단</label>
+					<label for="chk_op02"><fmt:message key="spc.schedule.type.2" /></label>
 				</div>
 				<div class="chk-type c3">
 					<input type="checkbox" id="chk_op03" name="type" value="3" checked>
-					<label for="chk_op03">소방점검</label>
+					<label for="chk_op03"><fmt:message key="spc.schedule.type.3" /></label>
 				</div>
 				<div class="chk-type c4">
 					<input type="checkbox" id="chk_op04" name="type" value="4" checked>
-					<label for="chk_op04">등기이사 기간만료</label>
+					<label for="chk_op04"><fmt:message key="spc.schedule.type.4" /></label>
 				</div>
 				<div class="chk-type c5">
 					<input type="checkbox" id="chk_op05" name="type" value="5" checked>
-					<label for="chk_op05">모듈점검</label>
+					<label for="chk_op05"><fmt:message key="spc.schedule.type.5" /></label>
 				</div>
 				<div class="chk-type c6">
 					<input type="checkbox" id="chk_op06" name="type" value="6" checked>
-					<label for="chk_op06">케이블점검</label>
+					<label for="chk_op06"><fmt:message key="spc.schedule.type.6" /></label>
 				</div>
 				<div class="chk-type c7">
 					<input type="checkbox" id="chk_op07" name="type" value="7" checked>
-					<label for="chk_op07">구조물점검</label>
+					<label for="chk_op07"><fmt:message key="spc.schedule.type.7" /></label>
 				</div>
 				<div class="chk-type c8">
 					<input type="checkbox" id="chk_op08" name="type" value="8" checked>
-					<label for="chk_op08">접속함점검</label>
+					<label for="chk_op08"><fmt:message key="spc.schedule.type.8" /></label>
 				</div>
 				<div class="chk-type c9">
 					<input type="checkbox" id="chk_op09" name="type" value="9" checked>
-					<label for="chk_op09">인버터점검</label>
+					<label for="chk_op09"><fmt:message key="spc.schedule.type.9" /></label>
 				</div>
 				<div class="chk-type c10">
 					<input type="checkbox" id="chk_op10" name="type" value="10" checked>
-					<label for="chk_op10">수배전반점검</label>
+					<label for="chk_op10"><fmt:message key="spc.schedule.type.10" /></label>
 				</div>
 				<div class="chk-type c11">
 					<input type="checkbox" id="chk_op11" name="type" value="11" checked>
-					<label for="chk_op11">부지점검</label>
+					<label for="chk_op11"><fmt:message key="spc.schedule.type.11" /></label>
 				</div>
 				<div class="chk-type c12">
 					<input type="checkbox" id="chk_op12" name="type" value="12" checked>
-					<label for="chk_op12">열화상점검</label>
+					<label for="chk_op12"><fmt:message key="spc.schedule.type.12" /></label>
 				</div>
 				<div class="chk-type c13">
 					<input type="checkbox" id="chk_op13" name="type" value="13" checked>
-					<label for="chk_op13">소모품점검</label>
+					<label for="chk_op13"><fmt:message key="spc.schedule.type.13" /></label>
 				</div>
 				<div class="chk-type c14">
 					<input type="checkbox" id="chk_op14" name="type" value="14" checked>
-					<label for="chk_op14">기타점검</label>
+					<label for="chk_op14"><fmt:message key="spc.schedule.type.14" /></label>
 				</div>
 			</div>
 
-			<h2 class="ntit">발전소</h2>
+			<h2 class="ntit"><fmt:message key='spc.schedule.plant' /></h2>
 			<div class="text-input-type">
-				<input type="text" id="searchName" name="searchName" placeholder="입력">
+				<input type="text" id="searchName" name="searchName" placeholder="<fmt:message key='spc.schedule.search' />">
 			</div>
 		</div>
 	</div>
@@ -924,12 +975,12 @@
 			<div class="schedule_area">
 				<div class="search-top-info clear">
 					<div class="search-btn fl">
-						<button type="button" class="btn-type03 active">오늘</button>
+						<button type="button" class="btn-type03 active"><fmt:message key="spc.schedule.today" /></button>
 						<button type="button" class="btn-prev-month">prev</button>
 						<button type="button" class="btn-next-month">next</button>
 						<strong></strong>
 					</div>
-					<a href="javascript:void(0);" class="btn-type fr" id="register">등록</a>
+					<a href="javascript:void(0);" class="btn-type fr" id="register"><fmt:message key="button.create" /></a>
 					<!--<a href="/spc/maintenanceSchedulePost.do" class="btn-type fr">등록</a>-->
 				</div>
 				<div class="search-bottom-wrapper">
@@ -945,13 +996,13 @@
 						</colgroup>
 						<thead>
 						<tr>
-							<th>일</th>
-							<th>월</th>
-							<th>화</th>
-							<th>수</th>
-							<th>목</th>
-							<th>금</th>
-							<th>토</th>
+							<th><fmt:message key="spc.schedule.calendar.1" /></th>
+							<th><fmt:message key="spc.schedule.calendar.2" /></th>
+							<th><fmt:message key="spc.schedule.calendar.3" /></th>
+							<th><fmt:message key="spc.schedule.calendar.4" /></th>
+							<th><fmt:message key="spc.schedule.calendar.5" /></th>
+							<th><fmt:message key="spc.schedule.calendar.6" /></th>
+							<th><fmt:message key="spc.schedule.calendar.7" /></th>
 						</tr>
 						</thead>
 						<tbody>
