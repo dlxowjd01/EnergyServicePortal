@@ -1344,6 +1344,7 @@
 						totalTemp_time += `<h3 class="value-title">${'${total.name}'}</h3>
 								<p class="value-num"><span class="num">${'${numberComma(totalValue)}'}</span> hrs</p>`;
 					} else if (total.type === 'SENSOR_SOLAR') {
+						if ($('#interval button').data('value') === 'day') totalValue = totalValue === '-' ? '-' : Math.round(totalValue * 24 * 100) / 100;
 						totalTemp_insolation += `<h3 class="value-title">${'${total.name}'}</h3>
 								<p class="value-num"><span class="num">${'${numberComma(totalValue)}'}</span> W/m\xB2</p>`;
 					} else {

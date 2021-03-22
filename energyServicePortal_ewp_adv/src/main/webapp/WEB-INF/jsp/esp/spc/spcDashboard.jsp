@@ -244,7 +244,7 @@
 		{ name: '회계감사수수료', column: ['회계감사수수료'], color: 'var(--turquoise)', chartColor:'var(--lightish-blue)'},
 		{ name: '지급수수료', column: ['REC수수료', '재위탁수수료', '정기검사', '지급수수료_기타'], color: 'var(--turquoise)', chartColor:'var(--azul)'},
 		{ name: '경비용역료', column: ['경비용역료'], color: 'var(--turquoise)', chartColor:'var(--soft-blue)'},
-		{ name: '임대료', column: ['임대료'], color: 'var(--turquoise)', chartColor:'var(--light-urple)'},
+		{ name: '임대료', column: ['지출_정보_임대료'], color: 'var(--turquoise)', chartColor:'var(--light-urple)'},
 		{ name: '전력비', column: ['전력비'], color: 'var(--turquoise)', chartColor:'var(--dark-lilac)'},
 		{ name: '통신비', column: ['통신비'], color: 'var(--turquoise)', chartColor:'var(--apple-green)'},
 		{ name: '전기안전관리대행수수료', column: ['전기안전관리대행수수료'], color: 'var(--turquoise)', chartColor:'var(--bluish-green)'},
@@ -272,18 +272,17 @@
 		spcDetail.eq(0).find('span').eq(1).html(expend);
 
 		spcDetail.eq(1).find('span').eq(0).html(rank + '위');
-		if (isFinite(expendW)) {
-			spcDetail.eq(1).find('span').eq(1).html(expendW);
-		} else {
-			spcDetail.eq(1).find('span').eq(1).html('-');
-		}
+		if (isFinite(expendW)) spcDetail.eq(1).find('span').eq(1).html(expendW);
+		else spcDetail.eq(1).find('span').eq(1).html('-');
 
 
 		spcDetail.eq(2).find('span').eq(0).html(rank + '위');
-		spcDetail.eq(2).find('span').eq(1).html(prepare);
+		if (isFinite(prepare)) spcDetail.eq(2).find('span').eq(1).html(prepare);
+		else spcDetail.eq(2).find('span').eq(1).html('-');
 
 		spcDetail.eq(3).find('span').eq(0).html(rank + '위');
-		spcDetail.eq(3).find('span').eq(1).html(management);
+		if (isFinite(management)) spcDetail.eq(3).find('span').eq(1).html(management);
+		else spcDetail.eq(3).find('span').eq(1).html('-');
 
 		if (isEmpty(lastMonth) || lastMonth === 0 || !isFinite(lastMonth)) {
 			spcDetail.eq(4).find('span').eq(0).removeAttr('class').addClass('normal').html('변동없음');
@@ -783,7 +782,13 @@
 			//올해 지출 총계
 			document.querySelector('.spcDashboard1-2 div:nth-child(2) ul:nth-child(2) li:nth-child(2) span').innerHTML = numberComma(totalExpenditure);
 			//올해 이익률
-			document.querySelector('.spcDashboard1-1 div:nth-child(2) p.number-unit span').innerHTML = Math.floor((profit / (contractUnitPriceList[currentMonth] * currentMonth)) * 100);
+			const margin = Math.floor((profit / (contractUnitPriceList[currentMonth] * currentMonth)) * 100);
+			if (isFinite(margin)) {
+				document.querySelector('.spcDashboard1-1 div:nth-child(2) p.number-unit span').innerHTML = margin;
+			} else {
+				document.querySelector('.spcDashboard1-1 div:nth-child(2) p.number-unit span').innerHTML = '-';
+			}
+
 
 			//종합 지출 총계
 			document.querySelector('.spcDashboard2-1 h2.title span').innerHTML = lastMonth.getFullYear() + '.01.01 ~ ' + lastMonth.format('yyyy.MM.dd');
@@ -797,10 +802,10 @@
 				let target = $('#spcCategory li').eq(index);
 
 				target.data('rank', rankExpend[index]);
-				target.data('expend', numberComma(Math.floor(expend / 10000)));
-				target.data('expendW', numberComma(Math.floor((expend /(capacityList[currentMonth] / 1000000)) / 10000)));
-				target.data('prepare', numberComma(Math.floor((expend / totalExpenditure) * 100)));
-				target.data('management', numberComma(Math.floor((expend / contractUnitPriceList[currentMonth]) * 100)));
+				target.data('expend', numberComma(Math.floor((expend * currentMonth) / 10000)));
+				target.data('expendW', numberComma(Math.floor(((expend * currentMonth) /(capacityList[currentMonth] / 1000000)) / 10000)));
+				target.data('prepare', numberComma(Math.floor(((expend * currentMonth) / totalExpenditure) * 100)));
+				target.data('management', numberComma(Math.floor(((expend * currentMonth) / contractUnitPriceList[currentMonth]) * 100)));
 
 				if (index === 0 || index === 11) {
 					let current, lastMonth, lastYear;
