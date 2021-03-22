@@ -136,11 +136,8 @@
 	});
 
 	function getDataList(page, n, sort) {
-		console.log("search!")
 		const write_date_from = $('#write_date_from').datepicker('getDate')
 			, write_date_to = $('#write_date_to').datepicker('getDate')
-
-		console.log(write_date_from, write_date_to)
 
 		if ((write_date_from != null && write_date_to == null) || (write_date_from == null && write_date_to != null)) {
 			$('#dateWarning').removeClass('hidden');
@@ -157,9 +154,11 @@
 		}).done((json, textStatus, jqXHR) => {
 			const data = json['data'];
 			data.forEach((rowData, index) => {
-				const workInfo = JSON.parse(rowData['work_info'])
-					, workDate = workInfo['작성_일자'];
-				data[index]['write_date'] = new Date(workDate);
+				if (!isEmpty(rowData['work_info'])) {
+					const workInfo = JSON.parse(rowData['work_info'])
+						, workDate = workInfo['작성_일자'];
+					data[index]['write_date'] = new Date(workDate);
+				}
 			});
 
 			let refineList = data.filter(rowData => jsonDataFilter(rowData));
@@ -168,8 +167,6 @@
 			refineList.sort((a, b) => {
 				return a['workDate'] < b['workDate'] ? 1 : a['workDate'] > b['workDate'] ? -1 : 0;
 			});
-
-			console.log(refineList);
 
 			reportTable.clear();
 			reportTable.rows.add(refineList).draw();
@@ -181,61 +178,66 @@
 	}
 
 	function jsonDataFilter(rowData) {
-		const keyWord = $('#key_word').val().trim()
-			, report_type = $('#report_type').data('value')
-			, write_date_from = $('#write_date_from').datepicker('getDate')
-			, write_date_to = $('#write_date_to').datepicker('getDate')
-			, workInfo = JSON.parse(rowData['work_info']);
+		let bResult = false; //결과값
+		if (!isEmpty(rowData['work_info'])) {
+			const keyWord = $('#key_word').val().trim()
+				, report_type = $('#report_type').data('value')
+				, write_date_from = $('#write_date_from').datepicker('getDate')
+				, write_date_to = $('#write_date_to').datepicker('getDate')
+				, workInfo = JSON.parse(rowData['work_info']);
 
-		let bReportType = false
-		  , bWriteDate = false
-		  , bKeyWord = false
-		  , bResult = false; //결과값
+			let bReportType = false
+				, bWriteDate = false
+				, bKeyWord = false;
 
 
-		if (isEmpty(report_type) || (!isEmpty(report_type) && report_type == rowData['report_type'])) {
-			bReportType = true;
-		} else {
-			bReportType = false;
-		}
+			if (isEmpty(report_type) || (!isEmpty(report_type) && report_type == rowData['report_type'])) {
+				bReportType = true;
+			} else {
+				bReportType = false;
+			}
 
-		//작성일자
-		if (write_date_from == null && write_date_to == null) {
-			bWriteDate = true;
-		} else if (write_date_from != null && write_date_to != null) {
-			const write_date = rowData['write_date'];
-
-			if (write_date.getTime() >= write_date_from.getTime() && write_date.getTime() <= write_date_to.getTime()) {
+			//작성일자
+			if (write_date_from == null && write_date_to == null) {
 				bWriteDate = true;
+			} else if (write_date_from != null && write_date_to != null) {
+				const write_date = rowData['write_date'];
+
+				if (write_date.getTime() >= write_date_from.getTime() && write_date.getTime() <= write_date_to.getTime()) {
+					bWriteDate = true;
+				} else {
+					bWriteDate = false;
+				}
 			} else {
 				bWriteDate = false;
 			}
-		} else {
-			bWriteDate = false;
-		}
 
-		//키워드검색
-		if (!isEmpty(keyWord)) {
-			const keyWordPattern = new RegExp(keyWord, 'i'); //ignoreCase 대소문자 구분X
+			//키워드검색
+			if (!isEmpty(keyWord)) {
+				const keyWordPattern = new RegExp(keyWord, 'i'); //ignoreCase 대소문자 구분X
 
-			if (keyWordPattern.test(rowData['report_name'])
-				|| keyWordPattern.test(workInfo['출장_장소'])
-				|| keyWordPattern.test(workInfo['출장_목적'])
-				|| keyWordPattern.test(workInfo['출장자'])
-				|| keyWordPattern.test(rowData['site_name'])
-				|| keyWordPattern.test(rowData['updated_by'])
-			) {
-				bKeyWord = true;
+				if (keyWordPattern.test(rowData['report_name'])
+					|| keyWordPattern.test(workInfo['출장_장소'])
+					|| keyWordPattern.test(workInfo['출장_목적'])
+					|| keyWordPattern.test(workInfo['출장자'])
+					|| keyWordPattern.test(rowData['site_name'])
+					|| keyWordPattern.test(rowData['updated_by'])
+				) {
+					bKeyWord = true;
+				} else {
+					bKeyWord = false;
+				}
 			} else {
-				bKeyWord = false;
+				bKeyWord = true;
+			}
+
+			if (bReportType && bWriteDate && bKeyWord) {
+				bResult = true;
 			}
 		} else {
-			bKeyWord = true;
+			bResult = false;
 		}
 
-		if (bReportType && bWriteDate && bKeyWord) {
-			bResult = true;
-		}
 
 		return bResult;
 	}
