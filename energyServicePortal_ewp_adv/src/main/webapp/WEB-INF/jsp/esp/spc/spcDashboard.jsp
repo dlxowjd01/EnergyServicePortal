@@ -1417,7 +1417,7 @@
 			formatter: function () {
 				return this.points.reduce(function (s, point) {
 					if (point.y > 10000) {
-						let val = displayNumberFixedUnit(point.y, '원', '만원', 0, 'round')
+						let val = displayNumberFixedUnit(point.y, '원', '만원', 1, 'round')
 						return s + '<br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + val.join(' ');
 					} else {
 						return s + '<br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + point.y + '원';
