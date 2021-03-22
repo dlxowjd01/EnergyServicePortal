@@ -269,10 +269,10 @@
 	const summary = (rank, expend, expendW, prepare, management, lastMonth, lastYear) => {
 		const spcDetail = $('#spcCategory').next().find('div.spcDetail');
 		spcDetail.eq(0).find('span').eq(0).html(rank + '위');
-		spcDetail.eq(0).find('span').eq(1).html(expend);
+		spcDetail.eq(0).find('span').eq(1).html(numberComma(expend));
 
 		spcDetail.eq(1).find('span').eq(0).html(rank + '위');
-		if (isFinite(expendW)) spcDetail.eq(1).find('span').eq(1).html(expendW);
+		if (isFinite(expendW)) spcDetail.eq(1).find('span').eq(1).html(numberComma(expendW));
 		else spcDetail.eq(1).find('span').eq(1).html('-');
 
 
@@ -281,7 +281,7 @@
 		else spcDetail.eq(2).find('span').eq(1).html('-');
 
 		spcDetail.eq(3).find('span').eq(0).html(rank + '위');
-		if (isFinite(management)) spcDetail.eq(3).find('span').eq(1).html(management);
+		if (isFinite(management)) spcDetail.eq(3).find('span').eq(1).html(numberComma(management));
 		else spcDetail.eq(3).find('span').eq(1).html('-');
 
 		if (isEmpty(lastMonth) || lastMonth === 0 || !isFinite(lastMonth)) {
@@ -810,15 +810,15 @@
 
 				target.data('rank', rankExpend[index]);
 				if (index === 0 || index === 11) {
-					target.data('expend', numberComma(Math.floor(expend / 100) / 100));
-					target.data('expendW', numberComma(Math.floor((expend /(capacityValue / 1000)) / 100) / 100));
-					target.data('prepare', numberComma(Math.floor((expend / totalExpenditure) * 10000) / 100 ));
-					target.data('management', numberComma(Math.floor((expend / contractUnitPriceList[currentMonth]) * 10000) / 100));
+					target.data('expend', Math.floor(expend / 100) / 100);
+					target.data('expendW', Math.floor((expend /(capacityValue / 1000)) / 100) / 100);
+					target.data('prepare', Math.floor((expend / totalExpenditure) * 10000) / 100 );
+					target.data('management', Math.floor((expend / contractUnitPriceList[currentMonth]) * 10000) / 100);
 				} else {
-					target.data('expend', numberComma(Math.floor((expend * currentMonth) / 100) / 100));
-					target.data('expendW', numberComma(Math.floor(((expend * currentMonth) /(capacityValue / 1000)) / 100) / 100));
-					target.data('prepare', numberComma(Math.floor(((expend * currentMonth) / totalExpenditure) * 100)));
-					target.data('management', numberComma(Math.floor(((expend * currentMonth) / contractUnitPriceList[currentMonth]) * 100)));
+					target.data('expend', Math.floor((expend * currentMonth) / 100) / 100);
+					target.data('expendW', Math.floor(((expend * currentMonth) /(capacityValue / 1000)) / 100) / 100);
+					target.data('prepare', Math.floor(((expend * currentMonth) / totalExpenditure) * 100));
+					target.data('management', Math.floor(((expend * currentMonth) / contractUnitPriceList[currentMonth]) * 100));
 				}
 
 				if (index === 0 || index === 11) {
