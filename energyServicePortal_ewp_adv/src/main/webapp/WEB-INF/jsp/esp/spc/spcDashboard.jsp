@@ -475,10 +475,18 @@
 				const targetData = data[3] === '-' ? 1 : Number(data[3]);
 
 				let targetBoolean = false;
-				targetRange.forEach(range => {
-					if (range['min'] < targetData && range['max'] >= targetData) {
-						if ($('.spcDashboard-filter > div').eq(range['index']).hasClass('actived')) {
-							targetBoolean = true;
+				targetRange.forEach((range, index) => {
+					if (index === 5) {
+						if (range['min'] > targetData) {
+							if ($('.spcDashboard-filter > div').eq(range['index']).hasClass('actived')) {
+								targetBoolean = true;
+							}
+						}
+					} else {
+						if (range['min'] < targetData && range['max'] >= targetData) {
+							if ($('.spcDashboard-filter > div').eq(range['index']).hasClass('actived')) {
+								targetBoolean = true;
+							}
 						}
 					}
 				});
@@ -800,12 +808,21 @@
 			const rankExpend = rank(expenditureInfo);
 			expenditureInfo.forEach((expend, index) => {
 				let target = $('#spcCategory li').eq(index);
+				let capacityValue = capacityList[currentMonth];
+				if (currentMonth !== 0) { capacityValue += Number(capacityList[currentMonth - 1]); }
 
 				target.data('rank', rankExpend[index]);
-				target.data('expend', numberComma(Math.floor((expend * currentMonth) / 10000)));
-				target.data('expendW', numberComma(Math.floor(((expend * currentMonth) /(capacityList[currentMonth] / 1000000)) / 10000)));
-				target.data('prepare', numberComma(Math.floor(((expend * currentMonth) / totalExpenditure) * 100)));
-				target.data('management', numberComma(Math.floor(((expend * currentMonth) / contractUnitPriceList[currentMonth]) * 100)));
+				if (index === 0 || index === 11) {
+					target.data('expend', numberComma(Math.floor(expend / 100) / 100));
+					target.data('expendW', numberComma(Math.floor((expend /(capacityValue / 1000)) / 100) / 100));
+					target.data('prepare', numberComma(Math.floor((expend / totalExpenditure) * 10000) / 100 ));
+					target.data('management', numberComma(Math.floor((expend / contractUnitPriceList[currentMonth]) * 10000) / 100));
+				} else {
+					target.data('expend', numberComma(Math.floor((expend * currentMonth) / 100) / 100));
+					target.data('expendW', numberComma(Math.floor(((expend * currentMonth) /(capacityValue / 1000)) / 100) / 100));
+					target.data('prepare', numberComma(Math.floor(((expend * currentMonth) / totalExpenditure) * 100)));
+					target.data('management', numberComma(Math.floor(((expend * currentMonth) / contractUnitPriceList[currentMonth]) * 100)));
+				}
 
 				if (index === 0 || index === 11) {
 					let current, lastMonth, lastYear;
@@ -957,31 +974,6 @@
 			});
 			expenditureTransitionChart.redraw();
 
-			//MW당 항목별 지출금액
-			seriesLength = expenditureCapacityChart.series.length;
-			for (let i = seriesLength - 1; i > -1; i--) {
-				expenditureCapacityChart.series[i].remove();
-			}
-
-			expenditureInfo.forEach((expenditure, idx) => {
-				expenditureInfo[idx] = Math.round((expenditure / (capacityList[currentMonth] / 1000000)) * 100) / 100 ;
-			});
-
-			chartSeries = new Object();
-			chartSeries.name = '지출';
-			chartSeries.type = 'column';
-			chartSeries.color = 'var(--turquoise)';
-			chartSeries.data = expenditureInfo;
-			chartSeries.tooltip = {valueSuffix: '원'}
-			expenditureCapacityChart.addSeries(chartSeries, false);
-
-			expenditureCapacityChart.update({
-				xAxis: {
-					categories: expenditureCategory,
-				}
-			});
-			expenditureCapacityChart.redraw();
-
 			//발전소 수입/지출 현황
 			tableData.forEach(data => {
 				const month = new Date().getMonth();
@@ -1056,6 +1048,34 @@
 
 			spcTable.clear();
 			spcTable.rows.add(tableData).draw();
+
+			//MW당 항목별 지출금액
+			seriesLength = expenditureCapacityChart.series.length;
+			for (let i = seriesLength - 1; i > -1; i--) {
+				expenditureCapacityChart.series[i].remove();
+			}
+
+			let capacityValue = capacityList[currentMonth];
+			if (currentMonth !== 0) { capacityValue += Number(capacityList[currentMonth - 1]); }
+
+			expenditureDup.forEach((expenditure, idx) => {
+				expenditureDup[idx] = Math.round((expenditure / (capacityValue / 1000)) / 100) / 100 ;
+			});
+
+			chartSeries = new Object();
+			chartSeries.name = '지출';
+			chartSeries.type = 'column';
+			chartSeries.color = 'var(--turquoise)';
+			chartSeries.data = expenditureDup;
+			chartSeries.tooltip = {valueSuffix: '원'}
+			expenditureCapacityChart.addSeries(chartSeries, false);
+
+			expenditureCapacityChart.update({
+				xAxis: {
+					categories: expenditureCategory,
+				}
+			});
+			expenditureCapacityChart.redraw();
 		}).catch(error => {
 			console.error('Func spcList', error);
 			errorMsg('오류가 발생햇습니다.');
@@ -1503,7 +1523,7 @@
 				width: 1
 			}],
 			title: {
-				text: '(원)',
+				text: '(만원)',
 				align: 'low',
 				rotation: 0,
 				y: 30,
@@ -1533,12 +1553,7 @@
 		tooltip: {
 			formatter: function () {
 				return this.points.reduce(function (s, point) {
-					if (point.y > 10000) {
-						let val = displayNumberFixedUnit(point.y, '원', '만원', 0, 'round')
-						return s + '<br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + val.join(' ');
-					} else {
-						return s + '<br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + point.y + '원';
-					}
+					return s + '<br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + point.y + '만원';
 				}, '<span style="display:flex;"><b>' + this.x + '</b></span>');
 			},
 			shared: true,
