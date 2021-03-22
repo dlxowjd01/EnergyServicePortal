@@ -91,7 +91,13 @@
 						</div>
 					</div>
 					<button type="button" class="btn-type" id="renderBtn"><fmt:message key="renewablesgen.3.update" /></button>
-					<button type="button" id="tooltip" onclick="$(this).tooltip('toggle');" class="btn-help pvGen" data-toggle="tooltip" data-placement="right" data-html="true" title="<div class='left'><span class='strong font-color-w87'>5분 단위는 최대 하루 기간 조회가 가능합니다.</span><br/><span class='strong font-color-w87'>15분 단위는 최대 일주일 기간 조회가 가능합니다.</span><br/><span class='strong font-color-w87'>1시간 단위는 최대 한달 기간 조회가 가능합니다.</span><br/></div>"></button>
+					<button type="button" id="tooltip" onclick="$(this).tooltip('toggle');" class="btn-help pvGen" data-toggle="tooltip" data-placement="right" data-html="true" title="
+						<ul class='left'>
+							<li class='strong font-color-w87'><fmt:message key='pvGen.note.1' /></li>
+							<li class='strong font-color-w87'><fmt:message key='pvGen.note.2' /></li>
+							<li class='strong font-color-w87'><fmt:message key='pvGen.note.3' /></li>
+						</ul>
+					"></button>
 				</div>
 				<div class="end"><!--
 				--><span class="tx-tit"><fmt:message key="pvGen.graph.style" /></span><!--

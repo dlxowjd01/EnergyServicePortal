@@ -718,7 +718,7 @@
 			}
 
 			rChart3.addSeries({
-				name: '출력',
+				name: '<fmt:message key="chart.tooltip.output" />',
 				type: 'column',
 				color: '#2BEEE9',
 				data: pvListHourly,
@@ -728,7 +728,7 @@
 			});
 
 			rChart3.addSeries({
-				name: '입찰',
+				name: '<fmt:message key="chart.tooltip.bid" />',
 				type: 'column',
 				color: '#878787',
 				data: pvListForeHourly,
@@ -751,7 +751,7 @@
 			rChart3.redraw();
 
 			const currentTime = new Date().format('HH') + ':' + new Date().format('mm');
-			const label = `${' 현재시간<br><strong>${ currentTime }</strong>'}`;
+			const label = `<fmt:message key="chart.tooltip.currentTime" /> ${'<br><strong>${ currentTime }</strong>'}`;
 			const now = new Date().getMinutes();
 			const nowBottom = parseInt($('.realtime-bar').css('bottom'), 10);
 
@@ -917,7 +917,7 @@
 			},
 			borderWidth: 0,
 			tooltip: {
-				pointFormat: '출력: <b>{point.y} %</b>' + ''
+				pointFormat: '<fmt:message key="chart.tooltip.output" />: <b>{point.y} %</b>' + ''
 			},
 			colorByPoint: true
 		}],
@@ -961,14 +961,14 @@
 				}
 			},
 			title: {
-				text: '사업소 합계',
+				text: '<fmt:message key="chart.tooltip.siteTotal" />',
 				margin: 13,
 				style: {
 					fontSize: '12px',
 					color: 'var(--grey)'
 				}
 			},
-			categories: ['입찰', '출력'],
+			categories: ['<fmt:message key="chart.tooltip.bid" />', '<fmt:message key="chart.tooltip.output" />'],
 			crosshair: true
 		},
 		yAxis: {
@@ -1042,7 +1042,7 @@
 			enabled: false
 		},
 		series: [{
-			name: '입찰',
+			name: '<fmt:message key="chart.tooltip.bid" />',
 			data: [],
 			tooltip: {
 				valueSuffix: '%'
@@ -1052,7 +1052,7 @@
 			},
 			color: '#575757'
 		}, {
-			name: '출력',
+			name: '<fmt:message key="chart.tooltip.output" />',
 			data: [],
 			tooltip: {
 				valueSuffix: '%'
@@ -1161,10 +1161,13 @@
 		series: [],
 		tooltip: {
 			formatter: function () {
+				let clock = this.x > 12 ? "PM" : "AM";
+				let time = langStatus === "KO" ? this.x+"시" : this.x+clock;
 				return this.points.reduce(function (s, point) {
 					let suffix = point.series.userOptions.tooltip.valueSuffix;
+
 					return s + '<br/> <span style="color:' + point.color + '">\u25CF</span>' + point.series.name + ': ' + numberComma(Math.round(point.y)) + suffix;
-				}, '<b>' + this.x + '시 </b>');
+				}, '<b>' + time + ' </b>');
 			},
 			shared: true,
 			borderColor: 'none',

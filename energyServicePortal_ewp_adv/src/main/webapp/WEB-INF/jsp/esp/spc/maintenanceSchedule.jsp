@@ -506,7 +506,7 @@
 
 			$('#alarmPhone').val(contact_phone);
 			deleteScheduleBtn.addClass('hidden');
-			addScheduleBtn.attr('onclick', 'maintenance(\'post\');').text('등록');
+			addScheduleBtn.attr('onclick', 'maintenance(\'post\');').text('<fmt:message key="button.register" />');
 		} else {
 			title.contents().get(0).nodeValue = '점검계획 수정';
 			setJsonAutoMapping(data[0], 'registerModal');

@@ -1632,7 +1632,6 @@
 		},
 	});
 
-
 	var hourlyChart = Highcharts.chart('hourlyChart', {
 		chart: {
 			marginTop: 50,

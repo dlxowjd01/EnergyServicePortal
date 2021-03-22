@@ -1607,17 +1607,17 @@ const searchSite = async function (siteSids) {
 										site['rtustatus'] = i18nManager.tr("button.normal");
 										site['rtustatusClass'] = 'normal';
 									} else {
-										site['rtustatus'] = '이상';
+										site['rtustatus'] = i18nManager.tr("button.error");
 										site['rtustatusClass'] = 'error';
 									}
 								} else {
-									site['rtustatus'] = '이상';
+									site['rtustatus'] = i18nManager.tr("button.error");
 									site['rtustatusClass'] = 'error';
 								}
 							}
 						});
 					} else {
-						site['rtustatus'] = '이상';
+						site['rtustatus'] = i18nManager.tr("button.error");
 						site['rtustatusClass'] = 'error';
 					}
 				} else {

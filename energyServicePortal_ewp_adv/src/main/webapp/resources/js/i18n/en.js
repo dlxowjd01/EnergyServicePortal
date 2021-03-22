@@ -657,6 +657,6 @@ const enTranslation =
   "gmain.1000won": "$",
   "gmain.10000won": "$",
   "button.normal": "Stable",
-  "button.error": "Untable",
+  "button.error": "Unstable",
 
 }
