@@ -142,6 +142,10 @@
 
 .spcDashboard1-3 > div > div:not(:last-child) { margin-right: 12px; }
 
+.spcDetail > div > div > div {
+	display: flex;
+}
+
 .spcDashboard2-1 > .title,
 .spcDashboard2-2 > .title,
 .spcDashboard2-3 > .title,
