@@ -425,7 +425,7 @@
 								subMenuList += `
 									<li>
 										<input type="checkbox" id="menu-${'${subMenu.code}'}" name="menu" data-parent="${'${subMenu.parent}'}" ${'${isSubChecked}'} value="${'${subMenu.code}'}">
-										<label class="custom-checkbox" for="menu-${'${subMenu.code}'}">${'${langStatus === "KR" ? subName.kr : subName.en}'}</label>
+										<label class="custom-checkbox" for="menu-${'${subMenu.code}'}">${'${langStatus === "KO" ? subName.kr : subName.en}'}</label>
 									</li>
 								`;
 							}
@@ -452,7 +452,7 @@
 								<div class="panel-heading no-padding" role="tab">
 									<h4 class="panel-title">
 										<input type="checkbox" id="menu-${'${menu.code}'}" name="menu" ${'${isChecked}'} value="${'${menu.code}'}">
-										<label class="custom-checkbox" for="menu-${'${menu.code}'}">${'${langStatus === "KR" ? menuName.kr : menuName.en}'}</label>
+										<label class="custom-checkbox" for="menu-${'${menu.code}'}">${'${langStatus === "KO" ? menuName.kr : menuName.en}'}</label>
 										${'${subDownButton}'}
 									</h4>
 								</div>

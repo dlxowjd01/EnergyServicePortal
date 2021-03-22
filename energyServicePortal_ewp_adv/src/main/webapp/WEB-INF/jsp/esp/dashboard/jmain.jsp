@@ -630,7 +630,7 @@
 						}
 					},
 					tooltip: {
-						pointFormat: '출력: <b>{point.y} %</b>' + '',
+						pointFormat: '<fmt:message key="chart.tooltip.output" />: <b>{point.y} %</b>' + '',
 					},
 					colorByPoint: true
 				}],
@@ -648,7 +648,7 @@
 			}
 			rchart2.update({
 				series: [{
-					name: '입찰',
+					name: '<fmt:message key="chart.tooltip.bid" />',
 					data: [totalRestHourly],
 					tooltip: {
 						valueSuffix: '%',
@@ -665,7 +665,7 @@
 					},
 					color: 'var(--granite-gray)'
 				}, {
-					name: '출력',
+					name: '<fmt:message key="chart.tooltip.output" />',
 					data: [totalRatioHourly],
 					tooltip: {
 						valueSuffix: '%',

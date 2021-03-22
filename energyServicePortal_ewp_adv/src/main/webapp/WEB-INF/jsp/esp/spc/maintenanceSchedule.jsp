@@ -750,9 +750,9 @@
 							<div class="dropdown placeholder" id="repeat_before_after_holiday">
 								<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key='button.select' />"><fmt:message key='button.select' /><span class="caret"></span></button>
 								<ul class="dropdown-menu">
-									<li data-value="N"><a href="javascript:void(0);"><fmt:message key="spc.schedule.register.holiday" /></a></li>
-									<li data-value="B"><a href="javascript:void(0);"><fmt:message key="spc.schedule.register.holiday" /></a></li>
-									<li data-value="A"><a href="javascript:void(0);"><fmt:message key="spc.schedule.register.holiday" /></a></li>
+									<li data-value="N"><a href="javascript:void(0);"><fmt:message key="spc.schedule.register.holiday.1" /></a></li>
+									<li data-value="B"><a href="javascript:void(0);"><fmt:message key="spc.schedule.register.holiday.2" /></a></li>
+									<li data-value="A"><a href="javascript:void(0);"><fmt:message key="spc.schedule.register.holiday.3" /></a></li>
 								</ul>
 							</div>
 						</div>

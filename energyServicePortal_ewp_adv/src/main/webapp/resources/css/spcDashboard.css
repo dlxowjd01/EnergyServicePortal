@@ -1,7 +1,12 @@
 /* 그리드 */
 #spcDashboardContent {
 	display: grid;
-	grid-template-columns: 275px 275px 574px 580px;
+	grid-template-columns: 
+		minmax(275px, 1fr)
+		minmax(275px, 1fr)
+		minmax(573px, 2.08fr) 
+		minmax(574px, 2.08fr)
+	;
 	grid-template-rows: 232px 410px 510px;
 	grid-gap: 24px;
 	margin: 0!important;
