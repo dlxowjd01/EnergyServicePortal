@@ -272,7 +272,12 @@
 		spcDetail.eq(0).find('span').eq(1).html(expend);
 
 		spcDetail.eq(1).find('span').eq(0).html(rank + '위');
-		spcDetail.eq(1).find('span').eq(1).html(expendW);
+		if (isFinite(expendW)) {
+			spcDetail.eq(1).find('span').eq(1).html(expendW);
+		} else {
+			spcDetail.eq(1).find('span').eq(1).html('-');
+		}
+
 
 		spcDetail.eq(2).find('span').eq(0).html(rank + '위');
 		spcDetail.eq(2).find('span').eq(1).html(prepare);
@@ -684,54 +689,56 @@
 					});
 				} else {
 					targetData.forEach(rowData => {
-						const workInfo = JSON.parse(rowData['work_info'])
-							, repairMaintenanceInfo = JSON.parse(rowData['repair_maintenance_info'])
-							, fromTime = workInfo['출장_시기_from'] ? null : new Date(workInfo['출장_시기_from'])
-							, toTime = workInfo['출장_시기_to'] ? null : new Date(workInfo['출장_시기_to'])
-							, tableIndex = tableData.findIndex(e => e.id === rowData.site_id);
+						if (!isEmpty(rowData['work_info'])) {
+							const workInfo = JSON.parse(rowData['work_info'])
+								, repairMaintenanceInfo = JSON.parse(rowData['repair_maintenance_info'])
+								, fromTime = workInfo['출장_시기_from'] ? null : new Date(workInfo['출장_시기_from'])
+								, toTime = workInfo['출장_시기_to'] ? null : new Date(workInfo['출장_시기_to'])
+								, tableIndex = tableData.findIndex(e => e.id === rowData.site_id);
 
-						if (!isEmpty(repairMaintenanceInfo) && !isEmpty(fromTime) && !isEmpty(toTime) && tableIndex > -1) {
-							if (fromTime.getTime() <= lastYearMax.getTime() && toTime.getTime() >= lastYearMin.getTime()) {
-								if (isEmpty(tableData[tableIndex]['lastYearRepair'])) {
-									tableData[tableIndex]['lastYearRepair'] = Number(repairMaintenanceCost);
-									lastYearRepair = Number(repairMaintenanceCost);
-								} else {
-									tableData[tableIndex]['lastYearRepair'] += Number(repairMaintenanceCost);
-									lastYearRepair += Number(repairMaintenanceCost);
+							if (!isEmpty(repairMaintenanceInfo) && !isEmpty(fromTime) && !isEmpty(toTime) && tableIndex > -1) {
+								if (fromTime.getTime() <= lastYearMax.getTime() && toTime.getTime() >= lastYearMin.getTime()) {
+									if (isEmpty(tableData[tableIndex]['lastYearRepair'])) {
+										tableData[tableIndex]['lastYearRepair'] = Number(repairMaintenanceCost);
+										lastYearRepair = Number(repairMaintenanceCost);
+									} else {
+										tableData[tableIndex]['lastYearRepair'] += Number(repairMaintenanceCost);
+										lastYearRepair += Number(repairMaintenanceCost);
+									}
 								}
-							}
 
-							if (fromTime.getTime() <= lastMonthMax.getTime() && toTime.getTime() >= lastMonthMin.getTime()) {
-								if (isEmpty(tableData[tableIndex]['lastMonthRepair'])) {
-									tableData[tableIndex]['lastMonthRepair'] = Number(repairMaintenanceCost);
-									lastMonthRepair = Number(repairMaintenanceCost);
-								} else {
-									tableData[tableIndex]['lastMonthRepair'] += Number(repairMaintenanceCost);
-									lastMonthRepair += Number(repairMaintenanceCost);
+								if (fromTime.getTime() <= lastMonthMax.getTime() && toTime.getTime() >= lastMonthMin.getTime()) {
+									if (isEmpty(tableData[tableIndex]['lastMonthRepair'])) {
+										tableData[tableIndex]['lastMonthRepair'] = Number(repairMaintenanceCost);
+										lastMonthRepair = Number(repairMaintenanceCost);
+									} else {
+										tableData[tableIndex]['lastMonthRepair'] += Number(repairMaintenanceCost);
+										lastMonthRepair += Number(repairMaintenanceCost);
+									}
 								}
-							}
 
-							for (let i = 0; i < 12; i++) {
-								const standardMin = new Date(currentMonthMin.getFullYear(), i, 1)
-									, standardMax = new Date(currentMonthMin.getFullYear(), i + 1, 0);
+								for (let i = 0; i < 12; i++) {
+									const standardMin = new Date(currentMonthMin.getFullYear(), i, 1)
+										, standardMax = new Date(currentMonthMin.getFullYear(), i + 1, 0);
 
-								if (!isEmpty(repairMaintenanceInfo['총_수선_유지비'])) {
-									const repairMaintenanceCost = repairMaintenanceInfo['총_수선_유지비'].replace(/[^0-9]/g, '');
-									if (fromTime.getTime() <= standardMax.getTime() && toTime.getTime() >= standardMin.getTime()) {
-										repairMaintenanceCostList[i] += Number(repairMaintenanceCost);
-										if (isEmpty(tableData[tableIndex]['repairMaintenanceCost'])) {
-											tableData[tableIndex]['repairMaintenanceCost'] = Number(repairMaintenanceCost);
-											if (currentMonthMax.getMonth() === i) {
-												tableData[tableIndex]['currentRepair'] = Number(repairMaintenanceCost);
-											} else if (currentMonthMax.getMonth() - 1 === i) {
-												tableData[tableIndex]['lastMonthRepair'] = Number(repairMaintenanceCost);
-											}
-										} else {
-											tableData[tableIndex]['repairMaintenanceCost'] += Number(repairMaintenanceCost);
-											if (currentMonthMax.getMonth() === i) {
-												tableData[tableIndex]['currentRepair'] += Number(repairMaintenanceCost);
-											} else if (currentMonthMax.getMonth() - 1 === i) {
-												tableData[tableIndex]['lastMonthRepair'] += Number(repairMaintenanceCost);
+									if (!isEmpty(repairMaintenanceInfo['총_수선_유지비'])) {
+										const repairMaintenanceCost = repairMaintenanceInfo['총_수선_유지비'].replace(/[^0-9]/g, '');
+										if (fromTime.getTime() <= standardMax.getTime() && toTime.getTime() >= standardMin.getTime()) {
+											repairMaintenanceCostList[i] += Number(repairMaintenanceCost);
+											if (isEmpty(tableData[tableIndex]['repairMaintenanceCost'])) {
+												tableData[tableIndex]['repairMaintenanceCost'] = Number(repairMaintenanceCost);
+												if (currentMonthMax.getMonth() === i) {
+													tableData[tableIndex]['currentRepair'] = Number(repairMaintenanceCost);
+												} else if (currentMonthMax.getMonth() - 1 === i) {
+													tableData[tableIndex]['lastMonthRepair'] = Number(repairMaintenanceCost);
+												}
+											} else {
+												tableData[tableIndex]['repairMaintenanceCost'] += Number(repairMaintenanceCost);
+												if (currentMonthMax.getMonth() === i) {
+													tableData[tableIndex]['currentRepair'] += Number(repairMaintenanceCost);
+												} else if (currentMonthMax.getMonth() - 1 === i) {
+													tableData[tableIndex]['lastMonthRepair'] += Number(repairMaintenanceCost);
+												}
 											}
 										}
 									}
