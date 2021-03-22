@@ -199,21 +199,26 @@
 	</div>
 
 	<div class="indiv spcDashboard3-1">
-		<div>
-			<div class="title-area">
+<%--		<div>--%>
+<%--			<div class="title-area">--%>
 <%--				<h2 class="title actived">--%>
 <%--					항목별 지출--%>
 <%--				</h2>--%>
-				<h2 class="title">
-					용량대비 지출/관리운영비 추이
-				</h2>
-				<span></span>
-			</div>
+<%--				<h2 class="title">--%>
+<%--					용량대비 지출/관리운영비 추이--%>
+<%--				</h2>--%>
+<%--				<span></span>--%>
+<%--			</div>--%>
 <%--			<ul class="interval-selector">--%>
 <%--				<li class="actived">월별</li>--%>
 <%--				<li>연도별</li>--%>
 <%--			</ul>--%>
-		</div>
+<%--		</div>--%>
+		<h2 class="title">
+			용량대비 지출/관리운영비 추이
+			<span></span>
+		</h2>
+
 		<div id="graph3">
 			<!-- 그래프 -->
 		</div>
@@ -274,7 +279,6 @@
 		spcDetail.eq(1).find('span').eq(0).html(rank + '위');
 		if (isFinite(expendW)) spcDetail.eq(1).find('span').eq(1).html(numberComma(expendW));
 		else spcDetail.eq(1).find('span').eq(1).html('-');
-
 
 		spcDetail.eq(2).find('span').eq(0).html(rank + '위');
 		if (isFinite(prepare)) spcDetail.eq(2).find('span').eq(1).html(prepare);
@@ -552,6 +556,8 @@
 								let contractUnitPriceLastMonth = '', insuranceCostLastMonth = '';
 								let contractUnitPriceLastYear = '', insuranceCostLastYear = '';
 
+								let expenditureCurrent, expenditureLastMonth, expenditureLastYear;
+
 								//관리 운영 정보: 관리운영비 총액(계약 단가 총합)
 								if (!isEmpty(spcGen['maintenance_info'])) {
 									const maintenanceInfo = JSON.parse(spcGen['maintenance_info'])
@@ -571,6 +577,11 @@
 													contractUnitPriceLastYear += Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, ''));
 												}
 											}
+
+											if (!isEmpty(spcGen['spend_info'])) {
+												const spendInfo = JSON.parse(spcGen['spend_info']);
+												expenditureLastYear = spendInfo;
+											}
 										}
 
 										//이전달 계약 단가 합산
@@ -585,6 +596,11 @@
 													contractUnitPriceLastMonth += Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, ''));
 												}
 											}
+
+											if (!isEmpty(spcGen['spend_info'])) {
+												const spendInfo = JSON.parse(spcGen['spend_info']);
+												expenditureLastMonth = spendInfo;
+											}
 										}
 
 										for (let i = 0; i < 12; i++) {
@@ -593,11 +609,29 @@
 											if (fromTime.getTime() <= standardMax.getTime() && toTime.getTime() >= standardMin.getTime()) {
 												if (!isEmpty(maintenanceInfo['계약_단가'])) {
 													contractUnitPriceList[i] += Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, ''));
+													if (!isEmpty(spcGen['spend_info'])) {
+														const spendInfo = JSON.parse(spcGen['spend_info']);
+														expenditureInfo[i] = spendInfo;
+													}
 													if (i <= currentMonthMax.getMonth()) {
 														contractUnitPrice = Number(contractUnitPrice) + Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, ''));
-														if (i === currentMonthMax.getMonth()) contractUnitPriceCurrent = Number(contractUnitPriceCurrent) + Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, ''));
+														if (i === currentMonthMax.getMonth()) {
+															contractUnitPriceCurrent = Number(contractUnitPriceCurrent) + Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, ''));
+														}
 													}
 												}
+
+												if (i <= currentMonthMax.getMonth()) {
+													if (!isEmpty(spcGen['spend_info'])) {
+														const spendInfo = JSON.parse(spcGen['spend_info']);
+														expenditure = Number(spendInfo['지출_총계'].replace(/[^0-9]/g, ''));
+
+														if (i === currentMonthMax.getMonth()) {
+															expenditureCurrent = spendInfo;
+														}
+													}
+												}
+
 
 												if (!isEmpty(maintenanceInfo['설치_용량'])) {
 													capacityList[i] += Number(maintenanceInfo['설치_용량'].replace(/[^0-9]/g, ''));
@@ -605,26 +639,6 @@
 											}
 										}
 									}
-								}
-
-								if (!isEmpty(spcGen['spend_info'])) {
-									const spendInfo = JSON.parse(spcGen['spend_info']);
-									expenditure = spendInfo['지출_총계'].replace(/[^0-9]/g, '');
-
-									if (!isEmpty(spendInfo['지출_총계'])) {
-										expenditure = Number(expenditure);
-										totalExpenditure += expenditure;
-									} else {
-										expenditure = '-';
-									}
-
-									//종합 지출 총계
-									Object.entries(spendInfo).forEach(([key, data]) => {
-										const expenditureIndex = expenditureTemplate.findIndex(e => e['column'].includes(key));
-										if (expenditureIndex > -1 && !isEmpty(data)) {
-											expenditureInfo[expenditureIndex] += Number(data.replace(/[^0-9]/g, ''));
-										}
-									});
 								}
 
 								if (!isEmpty(spcGen['addlist_insurance_info'])) {
@@ -689,6 +703,9 @@
 									insuranceCostLastMonth: insuranceCostLastMonth,
 									insuranceCostLastYear: insuranceCostLastYear,
 									expenditure: expenditure,
+									expenditureCurrent: expenditureCurrent,
+									expenditureLastMonth: expenditureLastMonth,
+									expenditureLastYear: expenditureLastYear,
 									month: new Date().getMonth(),
 								});
 							});
@@ -753,18 +770,6 @@
 				}
 			});
 
-			insuranceCostList.forEach((cost, index) => {
-				if (index <= currentMonthMax.getMonth()) {
-					expenditureInfo[0] += cost
-				}
-			});
-
-			repairMaintenanceCostList.forEach((repair, index) => {
-				if (index <= currentMonthMax.getMonth()) {
-					expenditureInfo[11] += repair
-				}
-			});
-
 			return {capacityList, contractUnitPriceList, insuranceCostList, repairMaintenanceCostList, expenditureInfo, lastYearContractUnitPrice, lastYearInsuranceInfo, lastYearRepair, tableData};
 		}).then(({capacityList, contractUnitPriceList, insuranceCostList, repairMaintenanceCostList, expenditureInfo, lastYearContractUnitPrice, lastYearInsuranceInfo, lastYearRepair, tableData}) => {
 			const lastMonth = new Date(); lastMonth.setDate(0);
@@ -775,51 +780,60 @@
 			document.querySelector('.spcDashboard1-1 div:nth-child(1) .number-unit').innerHTML = '<span>' + refineCapacity[0] + '</span>' + refineCapacity[1];
 
 			//올해 이익금
-			const expenditureDup = expenditureInfo.slice();
-			expenditureDup.forEach((expend, index) => { if (index !== 0 && index !== 11) { expenditureDup[index] = expend * currentMonth; } });
+			let expenditure = 0;
+			let expenditureSum = new Array(12).fill(0);
+			expenditureInfo.forEach((expend, index) => {
+				if (index < currentMonth) {
+					expenditure += Number(expend['지출_총계'].replace(/[^0-9]/g, ''));
 
-			const expenditure = expenditureDup.reduce( function add(sum, currValue) { return Number(sum) + Number(currValue); });
-			const totalExpenditure = expenditure;
-			const profit = (contractUnitPriceList[currentMonth] * currentMonth) - totalExpenditure;
+					Object.entries(expend).forEach(([key, data]) => {
+						const expenditureIndex = expenditureTemplate.findIndex(e => e['column'].includes(key));
+						if (expenditureIndex > -1 && !isEmpty(data)) {
+							expenditureSum[expenditureIndex] += Number(data.replace(/[^0-9]/g, ''));
+						}
+					});
+				}
+			});
+			insuranceCostList.forEach((insurance, index) => { if (index < currentMonth) { expenditure += insurance; expenditureSum[0] += insurance } });
+			repairMaintenanceCostList.forEach((repair, index) => { if (index < currentMonth) { expenditure += repair; expenditureSum[11] += repair } });
+
+			let contractUnitPrice = 0;
+			contractUnitPriceList.forEach((contract, index) => { if (index < currentMonth) { contractUnitPrice += contract; } });
+
+			const profit = contractUnitPrice - expenditure;
 			document.querySelector('.spcDashboard1-2 div:nth-child(1) p.number-unit span').innerHTML = numberComma(profit);
-			//올해 수입 총계
-			document.querySelector('.spcDashboard1-2 div:nth-child(2) ul:nth-child(1) li:nth-child(2) span').innerHTML = numberComma(contractUnitPriceList[currentMonth] * currentMonth);
-			//올해 지출 총계
-			document.querySelector('.spcDashboard1-2 div:nth-child(2) ul:nth-child(2) li:nth-child(2) span').innerHTML = numberComma(totalExpenditure);
-			//올해 이익률
-			const margin = Math.floor((profit / (contractUnitPriceList[currentMonth] * currentMonth)) * 100);
+			// //올해 수입 총계
+			document.querySelector('.spcDashboard1-2 div:nth-child(2) ul:nth-child(1) li:nth-child(2) span').innerHTML = numberComma(contractUnitPrice);
+			// //올해 지출 총계
+			document.querySelector('.spcDashboard1-2 div:nth-child(2) ul:nth-child(2) li:nth-child(2) span').innerHTML = numberComma(expenditure);
+			// //올해 이익률
+			const margin = Math.floor((profit / contractUnitPrice) * 100);
 			if (isFinite(margin)) {
 				document.querySelector('.spcDashboard1-1 div:nth-child(2) p.number-unit span').innerHTML = margin;
 			} else {
 				document.querySelector('.spcDashboard1-1 div:nth-child(2) p.number-unit span').innerHTML = '-';
 			}
 
-
 			//종합 지출 총계
 			document.querySelector('.spcDashboard2-1 h2.title span').innerHTML = lastMonth.getFullYear() + '.01.01 ~ ' + lastMonth.format('yyyy.MM.dd');
 			document.querySelector('.spcDashboard2-2 h2.title span').innerHTML = lastMonth.getFullYear() + '.01.01 ~ ' + lastMonth.format('yyyy.MM.dd');
 			document.querySelector('.spcDashboard2-3 h2.title span').innerHTML = lastMonth.getFullYear() + '.01.01 ~ ' + lastMonth.format('yyyy.MM.dd');
-			document.querySelector('.spcDashboard3-1 div.title-area span').innerHTML = lastMonth.getFullYear() + '.01.01 ~ ' + lastMonth.format('yyyy.MM.dd');
+			document.querySelector('.spcDashboard3-1 h2.title span').innerHTML = lastMonth.getFullYear() + '.01.01 ~ ' + lastMonth.format('yyyy.MM.dd');
 			document.querySelector('.spcDashboard3-2 h2.title span').innerHTML = lastMonth.getFullYear() + '.01.01 ~ ' + lastMonth.format('yyyy.MM.dd');
 
-			const rankExpend = rank(expenditureInfo);
-			expenditureInfo.forEach((expend, index) => {
+			//오른쪽 상단 처리
+			const rankExpend = rank(expenditureSum);
+			expenditureSum.forEach((expend, index) => {
 				let target = $('#spcCategory li').eq(index);
 				let capacityValue = capacityList[currentMonth];
 				if (currentMonth !== 0) { capacityValue += Number(capacityList[currentMonth - 1]); }
 
 				target.data('rank', rankExpend[index]);
-				if (index === 0 || index === 11) {
-					target.data('expend', Math.floor(expend / 100) / 100);
-					target.data('expendW', Math.floor((expend /(capacityValue / 1000)) / 100) / 100);
-					target.data('prepare', Math.floor((expend / totalExpenditure) * 10000) / 100 );
-					target.data('management', Math.floor((expend / contractUnitPriceList[currentMonth]) * 10000) / 100);
-				} else {
-					target.data('expend', Math.floor((expend * currentMonth) / 100) / 100);
-					target.data('expendW', Math.floor(((expend * currentMonth) /(capacityValue / 1000)) / 100) / 100);
-					target.data('prepare', Math.floor(((expend * currentMonth) / totalExpenditure) * 100));
-					target.data('management', Math.floor(((expend * currentMonth) / contractUnitPriceList[currentMonth]) * 100));
-				}
+				target.data('expend', Math.round(expend / 100) / 100);
+				target.data('expendW', Math.round((expend / (capacityValue / 1000)) / 100) / 100);
+				target.data('prepare', Math.round((expend / expenditure) * 100));
+				target.data('management', Math.round((expend / contractUnitPriceList[currentMonth]) * 10000) / 100);
+
 
 				if (index === 0 || index === 11) {
 					let current, lastMonth, lastYear;
@@ -839,8 +853,18 @@
 					if (!isEmpty(lastYear)) target.data('lastYear', ((current - lastYear) / lastYear) * 100);
 					else target.data('lastYear', '');
 				} else {
-					target.data('lastMonth', '');
-					target.data('lastYear', '');
+					let current = 0, lastMonth = 0, lastYear = 0;
+					tableData.forEach(data => {
+						if (!isEmpty(data['expenditureCurrent']) && !isEmpty(data['expenditureCurrent'][expenditureTemplate[index]['name']])) current += Number(data['expenditureCurrent'][expenditureTemplate[index]['name']].replace(/[^0-9]/g, ''))
+						if (!isEmpty(data['expenditureLastMonth']) && !isEmpty(data['expenditureLastMonth'][expenditureTemplate[index]['name']])) lastMonth += Number(data['expenditureLastMonth'][expenditureTemplate[index]['name']].replace(/[^0-9]/g, ''))
+						if (!isEmpty(data['expenditureLastYear']) && !isEmpty(data['expenditureLastYear'][expenditureTemplate[index]['name']])) lastYear += Number(data['expenditureLastYear'][expenditureTemplate[index]['name']].replace(/[^0-9]/g, ''))
+					});
+
+					if (!isEmpty(lastMonth)) target.data('lastMonth', ((current - lastMonth) / lastMonth) * 100);
+					else target.data('lastMonth', '');
+
+					if (!isEmpty(lastYear)) target.data('lastYear', ((current - lastYear) / lastYear) * 100);
+					else target.data('lastYear', '');
 				}
 
 				if (index === 0) {
@@ -858,7 +882,7 @@
 			let treeData = new Array();
 			let chartValueTotal = 0;
 			expenditureTemplate.forEach((temp, index) => {
-				let chartValue = Math.round((expenditureDup[index] / totalExpenditure) * 100);
+				let chartValue = Math.round((expenditureSum[index] / expenditure) * 100);
 				if (!isFinite(chartValue)) chartValue = 0;
 				chartValueTotal += chartValue;
 
@@ -878,6 +902,8 @@
 			treeData[maxIndex]['value'] = max - (chartValueTotal - 100);
 			chartSeries.data = treeData;
 
+			$('#spcCategory li').eq(maxIndex).data('value')
+
 			expenditureTreeChart.addSeries(chartSeries, false);
 			expenditureTreeChart.redraw();
 			//평균 지출 비용
@@ -894,7 +920,7 @@
 			chartSeries = new Object();
 			chartSeries.name = '지출액';
 			chartSeries.color = 'var(--turquoise)';
-			chartSeries.data = expenditureDup;
+			chartSeries.data = expenditureSum;
 			chartSeries.pointWidth = 9;
 			chartSeries.pointPadding = 0.25;
 			chartSeries.tooltip = {valueSuffix: '원'}
@@ -933,7 +959,7 @@
 				if (index === 0) {
 					const chartArray = new Array(12).fill(0);
 					for (let i = 0; i < currentMonth; i++) {
-						chartArray[i] += Math.floor((insuranceCostList[i] + repairMaintenanceCostList[i]) / 10000);
+						chartArray[i] += Math.floor((insuranceCostList[i] + Number(expenditureInfo[i]['지출_총계'].replace(/[^0-9]/g, '')) + repairMaintenanceCostList[i]) / 10000);
 					}
 					//chartSeries.showInLegend = false;
 					chartSeries.data = chartArray;
@@ -958,7 +984,7 @@
 					const chartArray = capacityList.slice();
 					chartArray.forEach((capacity, index) => {
 						if (index < currentMonth) {
-							chartArray[index] = Math.floor(capacity / 1000000);
+							chartArray[index] = capacity / 1000;
 						} else {
 							chartArray[index] = null;
 						}
@@ -979,6 +1005,9 @@
 					, contractUnitPriceLastMonth = isEmpty(data['contractUnitPriceLastMonth']) ? '' : data['contractUnitPriceLastMonth']
 					, contractUnitPriceLastYear = isEmpty(data['contractUnitPriceLastYear']) ? '' : data['contractUnitPriceLastYear']
 					, expenditure = (isEmpty(data['expenditure']) || data['expenditure'] === '-') ? '' : data['expenditure']
+					, expenditureCurrent = (isEmpty(data['expenditureCurrent']) || data['expenditureCurrent'] === '-') ? '' : Number((data['expenditureCurrent']['지출_총계']).replace(/[^0-9]/g, ''))
+					, expenditureLastMonth = (isEmpty(data['expenditureLastMonth']) || data['expenditureLastMonth'] === '-') ? '' : Number((data['expenditureLastMonth']['지출_총계']).replace(/[^0-9]/g, ''))
+					, expenditureLastYear = (isEmpty(data['expenditureLastYear']) || data['expenditureLastYear'] === '-') ? '' : Number((data['expenditureLastYear']['지출_총계']).replace(/[^0-9]/g, ''))
 					, insuranceCost = isEmpty(data['insuranceCost']) ? '' : data['insuranceCost']
 					, insuranceCostCurrent = isEmpty(data['insuranceCostCurrent']) ? '' : data['insuranceCostCurrent']
 					, insuranceCostLastMonth = isEmpty(data['insuranceCostLastMonth']) ? '' : data['insuranceCostLastMonth']
@@ -988,9 +1017,9 @@
 					, lastMonthRepair = isEmpty(data['lastMonthRepair']) ? '' : data['lastMonthRepair']
 					, lastYearRepair = isEmpty(data['lastYearRepair']) ? '' : data['lastYearRepair']
 					, expenditureSum = (Number(expenditure) * month) + Number(insuranceCost) + Number(repairMaintenanceCost)
-					, lastMonthexpEnditureSum = Number(expenditure) + Number(insuranceCostLastMonth) + Number(lastMonthRepair)  //이전달 지출
-					, lastYearMonthexpEnditureSum = Number(expenditure) + Number(insuranceCostCurrent) + Number(lastYearRepair) //작년 마지막달과 동일달 지출
-					, currentMonthexpEnditureSum = Number(expenditure) + Number(insuranceCostLastYear) + Number(currentRepair)  //마지막달 지출
+					, lastMonthexpEnditureSum = Number(expenditureLastMonth) + Number(insuranceCostLastMonth) + Number(lastMonthRepair)  //이전달 지출
+					, lastYearMonthexpEnditureSum = Number(expenditureLastYear) + Number(insuranceCostCurrent) + Number(lastYearRepair) //작년 마지막달과 동일달 지출
+					, currentMonthexpEnditureSum = Number(expenditureCurrent) + Number(insuranceCostLastYear) + Number(currentRepair)  //마지막달 지출
 					, yield = Math.floor(((Number(contractUnitPrice) - Number(expenditureSum)) / Number(contractUnitPrice)) * 100)
 					, lastMonthYield = Math.floor(((Number(contractUnitPriceLastMonth) - Number(lastMonthexpEnditureSum)) / Number(contractUnitPriceLastMonth)) * 100)
 					, lastYearYield = Math.floor(((Number(contractUnitPriceLastYear) - Number(lastYearMonthexpEnditureSum)) / Number(contractUnitPriceLastYear)) * 100)
@@ -1055,23 +1084,18 @@
 			let capacityValue = capacityList[currentMonth];
 			if (currentMonth !== 0) { capacityValue += Number(capacityList[currentMonth - 1]); }
 
-			expenditureDup.forEach((expenditure, idx) => {
-				expenditureDup[idx] = Math.round((expenditure / (capacityValue / 1000)) / 100) / 100 ;
+			expenditureSum.forEach((expenditure, idx) => {
+				expenditureSum[idx] = Math.round((expenditure / (capacityValue / 1000)) / 100) / 100 ;
 			});
 
 			chartSeries = new Object();
 			chartSeries.name = '지출';
 			chartSeries.type = 'column';
 			chartSeries.color = 'var(--turquoise)';
-			chartSeries.data = expenditureDup;
+			chartSeries.data = expenditureSum;
 			chartSeries.tooltip = {valueSuffix: '원'}
 			expenditureCapacityChart.addSeries(chartSeries, false);
-
-			expenditureCapacityChart.update({
-				xAxis: {
-					categories: expenditureCategory,
-				}
-			});
+			expenditureCapacityChart.update({ xAxis: { categories: expenditureCategory } });
 			expenditureCapacityChart.redraw();
 		}).catch(error => {
 			console.error('Func spcList', error);
@@ -1093,28 +1117,13 @@
 	}
 
 	const expenditureTreeChart = Highcharts.chart('graph1', {
-		title: {
-			text: ''
+		chart: {
+			type: 'treemap',
+			backgroundColor: 'transparent',
+			layoutAlgorithm: 'squarified',
 		},
-		subtitle: {
-			text: ''
-		},
-		// legend: {
-		// 	enabled: true,
-		// 	align: 'right',
-		// 	verticalAlign: 'top',
-		// 	x: 5,
-		// 	y: -15,
-			itemStyle: {
-				color: 'var(--white87)',
-				fontSize: '12px',
-			},
-			itemHoverStyle: {
-				color: ''
-			},
-		// 	symbolPadding: 0,
-		// 	symbolHeight: 7
-		// },
+		title: { text: '' },
+		subtitle: { text: '' },
 		legend: {
 			layout: 'vertical',
 			align: 'right',
@@ -1126,20 +1135,34 @@
 			itemHoverStyle: {
 				color: ''
 			},
+			itemWidth: 150,
+			itemMarginTop: 3,
+			itemMarginBottom: 4,
 			labelFormatter: function () {
-				return `<div class="clear"><div class="fl">${'${this.name}'}</div> <div class="fr">${'${this.value}'} %</div></div>`;
+				return `<div class="fl">${'${this.name}'}</div> <div class="fr">${'${this.value}'}%</div>`;
 			}
-		},
-		chart: {
-			type: 'treemap',
-			backgroundColor: 'transparent',
-			layoutAlgorithm: 'squarified',
 		},
 		series: [{
 			showInLegend: true,
 			legendType: 'point',
 			data: []
 		}],
+		plotOptions: {
+			series: {
+				dataLabels: {
+					enabled: true,
+					style: {
+						color: 'var(--white87)',
+						fontSize: '12px',
+						fontWeight: 400,
+						textOutline: 0,
+						textAlign: 'left',
+					},
+					align: 'left',
+					verticalAlign: 'top'
+				}
+			}
+		}
 	});
 
 	const expenditureTransitionChart = Highcharts.chart('graph3', {
@@ -1166,17 +1189,6 @@
 			tickWidth: 1,
 			tickColor: 'var(--grey)',
 			gridLineColor: 'var(--white25)',
-			type: 'datetime',
-			dateTimeLabelFormats: {
-				millisecond: '%H:%M:%S.%L',
-				second: '%H:%M:%S',
-				minute: '%H:%M',
-				hour: '%H',
-				day: '%m.%d ',
-				week: '%m.%e',
-				month: '%m',
-				year: '%Y'
-			},
 			labels: {
 				align: 'center',
 				y: 27,
@@ -1204,11 +1216,11 @@
 				width: 1
 			}],
 			title: {
-				text: 'kWh',
+				text: '(만원)',
 				align: 'low',
 				rotation: 0,
-				y: 25,
-				x: 15,
+				y: 30,
+				x: 40,
 				style: {
 					color: 'var(--grey)',
 					fontSize: '12px',
@@ -1217,9 +1229,12 @@
 			},
 			labels: {
 				formatter: function () {
-					const suffix = this.chart.yAxis[0].userOptions.title.text;
-					const yAxisValue = displayNumberFixedUnit(this.value, 'kWh', suffix, 1);
-					return yAxisValue[0];
+					if (this.value < 10000) {
+						return this.value
+					} else {
+						const yAxisValue = displayNumberFixedUnit(this.value, '원', '만원', 0);
+						return yAxisValue[0];
+					}
 				},
 				style: {
 					color: 'var(--grey)',
@@ -1230,11 +1245,11 @@
 		}, {
 			gridLineWidth: 0,
 			title: {
-				text: i18nManager.tr("gmain.1000won"),
+				text: '(MW)',
 				align: 'low',
 				rotation: 0,
-				y: 25,
-				x: 0,
+				y: 30,
+				x: 20,
 				style: {
 					color: 'var(--grey)',
 					fontSize: '12px',

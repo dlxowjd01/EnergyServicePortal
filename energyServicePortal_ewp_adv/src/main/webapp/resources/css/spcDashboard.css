@@ -149,6 +149,7 @@
 .spcDashboard2-1 > .title,
 .spcDashboard2-2 > .title,
 .spcDashboard2-3 > .title,
+.spcDashboard3-1 > .title,
 .spcDashboard3-2 > .title {
 	display: flex;
 	align-items: center;
@@ -158,7 +159,7 @@
 .spcDashboard2-1 > .title > span,
 .spcDashboard2-2 > .title > span,
 .spcDashboard2-3 > .title > span,
-.spcDashboard3-1 > div > .title-area > span,
+.spcDashboard3-1 > .title > span,
 .spcDashboard3-2 > .title > span {
 	color: var(--white60);
 	font-size: 13px;
