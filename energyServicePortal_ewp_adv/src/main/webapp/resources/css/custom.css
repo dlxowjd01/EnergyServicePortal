@@ -7423,11 +7423,15 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	margin: 10px 6px;
 	padding: 12px;
 	width: 115px;
-	/* min-height: 132px; */
-	min-height: 1px;
+	min-height: 132px;
 	border-radius: 4px;
 	text-align: left;
 	background: var(--box-darker);
+}
+
+.device-list#rtuDeviceInfo li,
+.device-list#deviceStatus li {
+	min-height: 1px;
 }
 
 .device-list li:not(.equip-add) {
