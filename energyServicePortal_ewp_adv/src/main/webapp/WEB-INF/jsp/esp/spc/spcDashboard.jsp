@@ -1182,6 +1182,11 @@
 				return `<div class="box-graph-label"> <p>${'${this.name}'}</p> <p dx="${'${dx}'}">${'${this.value}'}%</p> </div>`;
 			}
 		},
+		tooltip: {
+			formatter() {
+				return `${'${this.key}'}: ${'${this.point.value}'}%`
+			}
+		},
 		series: [{
 			showInLegend: true,
 			legendType: 'point',
@@ -1193,7 +1198,7 @@
 					enabled: true,
 					style: {
 						color: 'var(--black)',
-						fontSize: '12px',
+						fontSize: '10px',
 						fontWeight: 400,
 						textOutline: 0,
 						textAlign: 'left',
