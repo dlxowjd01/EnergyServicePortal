@@ -859,11 +859,13 @@
 				let capacityValue = capacityList[currentMonth];
 				if (currentMonth !== 0) { capacityValue += Number(capacityList[currentMonth - 1]); }
 
+				let contractUnitPrice = contractUnitPriceList.reduce( function add(sum, currValue) { return sum + currValue; });
+
 				target.data('rank', rankExpend[index]);
 				target.data('expend', Math.round(expend / 100) / 100);
 				target.data('expendW', Math.round((expend / (capacityValue / 1000)) / 100) / 100);
 				target.data('prepare', Math.round((expend / expenditure) * 100));
-				target.data('management', Math.round((expend / contractUnitPriceList[currentMonth - 1]) * 10000) / 100);
+				target.data('management', Math.round((expend / contractUnitPrice) * 10000) / 100);
 
 
 				if (index === 0 || index === 11) {
