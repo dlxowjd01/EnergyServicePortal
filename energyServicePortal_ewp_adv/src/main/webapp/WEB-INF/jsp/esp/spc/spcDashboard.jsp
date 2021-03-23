@@ -293,10 +293,10 @@
 			spcDetail.eq(4).find('div').eq(1).html('<div><p class="number-unit"> <span>-</span> </p></div>');
 		} else if (lastMonth > 0){
 			spcDetail.eq(4).find('span').eq(0).removeAttr('class').addClass('increase').html('증가');
-			spcDetail.eq(4).find('div').eq(1).html('<div><img src="/img/spcDashboard/up.svg" alt="증가" /><p class="number-unit"> <span>' + lastMonth + '</span> </p></div>');
+			spcDetail.eq(4).find('div').eq(1).html('<div><img src="/img/spcDashboard/up.svg" alt="증가" /><p class="number-unit"> <span>' + lastMonth + '</span> %</p></div>');
 		} else {
 			spcDetail.eq(4).find('span').eq(0).removeAttr('class').addClass('decrease').html('감소');
-			spcDetail.eq(4).find('div').eq(1).html('<div><img src="/img/spcDashboard/flat.svg" alt="감소" /><p class="number-unit"> <span>' + (lastMonth * -1) + '</span> </p></div>');
+			spcDetail.eq(4).find('div').eq(1).html('<div><img src="/img/spcDashboard/flat.svg" alt="감소" /><p class="number-unit"> <span>' + (lastMonth * -1) + '</span> %</p></div>');
 		}
 
 		if (isEmpty(lastYear) || lastYear === 0 || !isFinite(lastYear)) {
@@ -304,10 +304,10 @@
 			spcDetail.eq(5).find('div').eq(1).html('<div><p class="number-unit"> <span>-</span> </p></div>');
 		} else if (lastYear > 0){
 			spcDetail.eq(5).find('span').eq(0).removeAttr('class').addClass('increase').html('증가');
-			spcDetail.eq(5).find('div').eq(1).html('<div><img src="/img/spcDashboard/up.svg" alt="증가" /><p class="number-unit"> <span>' + lastYear + '</span> </p></div>');
+			spcDetail.eq(5).find('div').eq(1).html('<div><img src="/img/spcDashboard/up.svg" alt="증가" /><p class="number-unit"> <span>' + lastYear + '</span> %</p></div>');
 		} else {
 			spcDetail.eq(5).find('span').eq(0).removeAttr('class').addClass('decrease').html('감소');
-			spcDetail.eq(5).find('div').eq(1).html('<div><img src="/img/spcDashboard/flat.svg" alt="감소" /><p class="number-unit"> <span>' + (lastYear * -1) + '</span> </p></div>');
+			spcDetail.eq(5).find('div').eq(1).html('<div><img src="/img/spcDashboard/flat.svg" alt="감소" /><p class="number-unit"> <span>' + (lastYear * -1) + '</span> %</p></div>');
 		}
 	}
 	$(function() {
@@ -506,12 +506,14 @@
 		const currentMonthMax = new Date(); currentMonthMax.setDate(0); //이번달 기준
 
 		//마지막 달의 이전달
-		const lastMonthMin = new Date(); lastMonthMin.setMonth(lastMonthMin.getMonth() - 1); lastMonthMin.setDate(1); //이전달 기준
-		const lastMonthMax = new Date(); lastMonthMax.setDate(0); //이전달 기준
+		const lastMonthMin = new Date();lastMonthMin.setMonth(lastMonthMin.getMonth() - 2); lastMonthMin.setDate(1); //이전달 기준
+		const lastMonthMax = new Date(); lastMonthMax.setMonth(lastMonthMax.getMonth() - 1); lastMonthMax.setDate(0); //이전달 기준
 
 		//작년 값 기준
 		const lastYearMin = new Date(); lastYearMin.setFullYear(lastYearMin.getFullYear() - 1); lastYearMin.setMonth(lastYearMin.getMonth() - 1); lastYearMin.setDate(1);
 		const lastYearMax = new Date(); lastYearMax.setFullYear(lastYearMax.getFullYear() - 1); lastYearMax.setMonth(lastYearMax.getMonth()); lastYearMax.setDate(0);
+
+		const currentMonth = new Date().getMonth();
 
 		const targetApi = new Array();
 		targetApi.push($.ajax({
@@ -534,12 +536,11 @@
 		}).then(response => {
 			const tableData = new Array();
 
-			let totalExpenditure = 0;
 			let capacityList = new Array(12).fill(0);
 			let contractUnitPriceList = new Array(12).fill(0);
 			let insuranceCostList = new Array(12).fill(0);
 			let repairMaintenanceCostList = new Array(12).fill(0);
-			let expenditureInfo = new Array(12).fill(0);
+			let expenditureInfo = new Array(12);
 
 			let lastYearContractUnitPrice, lastYearInsuranceInfo, lastYearRepair;
 			let lastMonthContractUnitPrice, lastMonthInsuranceInfo, lastMonthRepair;
@@ -580,7 +581,18 @@
 
 											if (!isEmpty(spcGen['spend_info'])) {
 												const spendInfo = JSON.parse(spcGen['spend_info']);
-												expenditureLastYear = spendInfo;
+												//종합 지출 총계
+												Object.entries(spendInfo).forEach(([key, data]) => {
+													const expenditureIndex = expenditureTemplate.findIndex(e => e['column'].includes(key));
+													if (expenditureIndex > -1 && !isEmpty(data)) {
+														if (isEmpty(expenditureLastYear)) {
+															expenditureLastYear = new Array(12).fill(0);
+															expenditureLastYear[expenditureIndex] += Number(data.replace(/[^0-9]/g, ''));
+														} else {
+															expenditureLastYear[expenditureIndex] += Number(data.replace(/[^0-9]/g, ''));
+														}
+													}
+												});
 											}
 										}
 
@@ -599,20 +611,26 @@
 
 											if (!isEmpty(spcGen['spend_info'])) {
 												const spendInfo = JSON.parse(spcGen['spend_info']);
-												expenditureLastMonth = spendInfo;
+												Object.entries(spendInfo).forEach(([key, data]) => {
+													const expenditureIndex = expenditureTemplate.findIndex(e => e['column'].includes(key));
+													if (expenditureIndex > -1 && !isEmpty(data)) {
+														if (isEmpty(expenditureLastMonth)) {
+															expenditureLastMonth = new Array(12).fill(0);
+															expenditureLastMonth[expenditureIndex] += Number(data.replace(/[^0-9]/g, ''));
+														} else {
+															expenditureLastMonth[expenditureIndex] += Number(data.replace(/[^0-9]/g, ''));
+														}
+													}
+												});
 											}
 										}
 
-										for (let i = 0; i < 12; i++) {
+										for (let i = 0; i < currentMonth; i++) {
 											const standardMin = new Date(currentMonthMin.getFullYear(), i, 1), standardMax = new Date(currentMonthMin.getFullYear(), i + 1, 0);
 											//관리 운영 기간의 시작일이 해당월이거나 그전이면서 종료일이 해당월이거나 그이후일경우
 											if (fromTime.getTime() <= standardMax.getTime() && toTime.getTime() >= standardMin.getTime()) {
 												if (!isEmpty(maintenanceInfo['계약_단가'])) {
 													contractUnitPriceList[i] += Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, ''));
-													if (!isEmpty(spcGen['spend_info'])) {
-														const spendInfo = JSON.parse(spcGen['spend_info']);
-														expenditureInfo[i] = spendInfo;
-													}
 													if (i <= currentMonthMax.getMonth()) {
 														contractUnitPrice = Number(contractUnitPrice) + Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, ''));
 														if (i === currentMonthMax.getMonth()) {
@@ -621,17 +639,31 @@
 													}
 												}
 
-												if (i <= currentMonthMax.getMonth()) {
-													if (!isEmpty(spcGen['spend_info'])) {
+												if (!isEmpty(spcGen['spend_info'])) {
+													const spendInfo = JSON.parse(spcGen['spend_info']);
+
+													//종합 지출 총계
+													Object.entries(spendInfo).forEach(([key, data]) => {
+														const expenditureIndex = expenditureTemplate.findIndex(e => e['column'].includes(key));
+														if (expenditureIndex > -1 && !isEmpty(data)) {
+															if (isEmpty(expenditureInfo[i])) {
+																expenditureInfo[i] = new Array(12).fill(0);
+																expenditureInfo[i][expenditureIndex] += Number(data.replace(/[^0-9]/g, ''));
+															} else {
+																expenditureInfo[i][expenditureIndex] += Number(data.replace(/[^0-9]/g, ''));
+															}
+														}
+													});
+
+													if (i <= currentMonthMax.getMonth()) {
 														const spendInfo = JSON.parse(spcGen['spend_info']);
 														expenditure = Number(spendInfo['지출_총계'].replace(/[^0-9]/g, ''));
 
 														if (i === currentMonthMax.getMonth()) {
-															expenditureCurrent = spendInfo;
+															expenditureCurrent = expenditureInfo[i];
 														}
 													}
 												}
-
 
 												if (!isEmpty(maintenanceInfo['설치_용량'])) {
 													capacityList[i] += Number(maintenanceInfo['설치_용량'].replace(/[^0-9]/g, ''));
@@ -667,15 +699,15 @@
 											if (!isEmpty(insuranceInfo['보험료_총계0'])) {
 												if (isEmpty(lastMonthInsuranceInfo)) {
 													lastMonthInsuranceInfo = Number(insuranceInfo['보험료_총계0'].replace(/[^0-9]/g, ''));
-													contractUnitPriceLastMonth = Number(insuranceInfo['보험료_총계0'].replace(/[^0-9]/g, ''));
+													insuranceCostLastMonth = Number(insuranceInfo['보험료_총계0'].replace(/[^0-9]/g, ''));
 												} else {
 													lastMonthInsuranceInfo += Number(insuranceInfo['보험료_총계0'].replace(/[^0-9]/g, ''));
-													contractUnitPriceLastMonth += Number(insuranceInfo['보험료_총계0'].replace(/[^0-9]/g, ''));
+													insuranceCostLastMonth += Number(insuranceInfo['보험료_총계0'].replace(/[^0-9]/g, ''));
 												}
 											}
 										}
 
-										for (let i = 0; i < 12; i++) {
+										for (let i = 0; i < currentMonth; i++) {
 											const standardMin = new Date(currentMonthMin.getFullYear(), i, 1), standardMax = new Date(currentMonthMin.getFullYear(), i + 1, 0);
 											//보험 기간의 시작일이 해당월이거나 그전이면서 종료일이 해당월이거나 그이후일경우
 											if (fromTime.getTime() <= standardMax.getTime() && toTime.getTime() >= standardMin.getTime()) {
@@ -741,7 +773,7 @@
 									}
 								}
 
-								for (let i = 0; i < 12; i++) {
+								for (let i = 0; i < currentMonth; i++) {
 									const standardMin = new Date(currentMonthMin.getFullYear(), i, 1)
 										, standardMax = new Date(currentMonthMin.getFullYear(), i + 1, 0);
 
@@ -776,7 +808,7 @@
 			const currentMonth = new Date().getMonth();
 
 			//발전 현황 (설비 용량)
-			const refineCapacity = displayNumberFixedDecimal(capacityList[currentMonth], 'kW', 3, 2);
+			const refineCapacity = displayNumberFixedDecimal(capacityList[currentMonth - 1], 'kW', 3, 2);
 			document.querySelector('.spcDashboard1-1 div:nth-child(1) .number-unit').innerHTML = '<span>' + refineCapacity[0] + '</span>' + refineCapacity[1];
 
 			//올해 이익금
@@ -784,15 +816,14 @@
 			let expenditureSum = new Array(12).fill(0);
 			expenditureInfo.forEach((expend, index) => {
 				if (index < currentMonth) {
-					expenditure += Number(expend['지출_총계'].replace(/[^0-9]/g, ''));
-
-					Object.entries(expend).forEach(([key, data]) => {
-						const expenditureIndex = expenditureTemplate.findIndex(e => e['column'].includes(key));
-						if (expenditureIndex > -1 && !isEmpty(data)) {
-							expenditureSum[expenditureIndex] += Number(data.replace(/[^0-9]/g, ''));
-						}
+					expenditure += expend.reduce( function add(sum, currValue) {
+						return sum + currValue;
 					});
 				}
+
+				expend.forEach((data, dataIdx) => {
+					expenditureSum[dataIdx] += data;
+				});
 			});
 			insuranceCostList.forEach((insurance, index) => { if (index < currentMonth) { expenditure += insurance; expenditureSum[0] += insurance } });
 			repairMaintenanceCostList.forEach((repair, index) => { if (index < currentMonth) { expenditure += repair; expenditureSum[11] += repair } });
@@ -847,23 +878,23 @@
 						lastYear = tableData.map(el => el['lastYearRepair']).reduce(function add(sum, currValue) { return Number(sum) + Number(currValue); });
 					}
 
-					if (!isEmpty(lastMonth)) target.data('lastMonth', ((current - lastMonth) / lastMonth) * 100);
+					if (!isEmpty(lastMonth)) target.data('lastMonth', Math.round(((current - lastMonth) / lastMonth) * 100));
 					else target.data('lastMonth', '');
 
-					if (!isEmpty(lastYear)) target.data('lastYear', ((current - lastYear) / lastYear) * 100);
+					if (!isEmpty(lastYear)) target.data('lastYear', Math.round(((current - lastYear) / lastYear) * 100));
 					else target.data('lastYear', '');
 				} else {
 					let current = 0, lastMonth = 0, lastYear = 0;
 					tableData.forEach(data => {
-						if (!isEmpty(data['expenditureCurrent']) && !isEmpty(data['expenditureCurrent'][expenditureTemplate[index]['name']])) current += Number(data['expenditureCurrent'][expenditureTemplate[index]['name']].replace(/[^0-9]/g, ''))
-						if (!isEmpty(data['expenditureLastMonth']) && !isEmpty(data['expenditureLastMonth'][expenditureTemplate[index]['name']])) lastMonth += Number(data['expenditureLastMonth'][expenditureTemplate[index]['name']].replace(/[^0-9]/g, ''))
-						if (!isEmpty(data['expenditureLastYear']) && !isEmpty(data['expenditureLastYear'][expenditureTemplate[index]['name']])) lastYear += Number(data['expenditureLastYear'][expenditureTemplate[index]['name']].replace(/[^0-9]/g, ''))
+						if (!isEmpty(data['expenditureCurrent']) && !isEmpty(data['expenditureCurrent'][index])) current += Number(data['expenditureCurrent'][index])
+						if (!isEmpty(data['expenditureLastMonth']) && !isEmpty(data['expenditureLastMonth'][index])) lastMonth += Number(data['expenditureLastMonth'][index])
+						if (!isEmpty(data['expenditureLastYear']) && !isEmpty(data['expenditureLastYear'][index])) lastYear += Number(data['expenditureLastYear'][index])
 					});
 
-					if (!isEmpty(lastMonth)) target.data('lastMonth', ((current - lastMonth) / lastMonth) * 100);
+					if (!isEmpty(lastMonth)) target.data('lastMonth', Math.round(((current - lastMonth) / lastMonth) * 100));
 					else target.data('lastMonth', '');
 
-					if (!isEmpty(lastYear)) target.data('lastYear', ((current - lastYear) / lastYear) * 100);
+					if (!isEmpty(lastYear)) target.data('lastYear', Math.round(((current - lastYear) / lastYear) * 100));
 					else target.data('lastYear', '');
 				}
 
@@ -959,7 +990,8 @@
 				if (index === 0) {
 					const chartArray = new Array(12).fill(0);
 					for (let i = 0; i < currentMonth; i++) {
-						chartArray[i] += Math.floor((insuranceCostList[i] + Number(expenditureInfo[i]['지출_총계'].replace(/[^0-9]/g, '')) + repairMaintenanceCostList[i]) / 10000);
+						let totalExpenditure = expenditureInfo[i].reduce( function add(sum, currValue) { return sum + currValue; });
+						chartArray[i] += Math.floor((insuranceCostList[i] + totalExpenditure + repairMaintenanceCostList[i]) / 10000);
 					}
 					//chartSeries.showInLegend = false;
 					chartSeries.data = chartArray;
@@ -1005,9 +1037,9 @@
 					, contractUnitPriceLastMonth = isEmpty(data['contractUnitPriceLastMonth']) ? '' : data['contractUnitPriceLastMonth']
 					, contractUnitPriceLastYear = isEmpty(data['contractUnitPriceLastYear']) ? '' : data['contractUnitPriceLastYear']
 					, expenditure = (isEmpty(data['expenditure']) || data['expenditure'] === '-') ? '' : data['expenditure']
-					, expenditureCurrent = (isEmpty(data['expenditureCurrent']) || data['expenditureCurrent'] === '-') ? '' : Number((data['expenditureCurrent']['지출_총계']).replace(/[^0-9]/g, ''))
-					, expenditureLastMonth = (isEmpty(data['expenditureLastMonth']) || data['expenditureLastMonth'] === '-') ? '' : Number((data['expenditureLastMonth']['지출_총계']).replace(/[^0-9]/g, ''))
-					, expenditureLastYear = (isEmpty(data['expenditureLastYear']) || data['expenditureLastYear'] === '-') ? '' : Number((data['expenditureLastYear']['지출_총계']).replace(/[^0-9]/g, ''))
+					, expenditureCurrent = (isEmpty(data['expenditureCurrent']) || data['expenditureCurrent'] === '-') ? '' : data['expenditureCurrent'].reduce( function add(sum, currValue) { return sum + currValue; })
+					, expenditureLastMonth = (isEmpty(data['expenditureLastMonth']) || data['expenditureLastMonth'] === '-') ? '' : data['expenditureLastMonth'].reduce( function add(sum, currValue) { return sum + currValue; })
+					, expenditureLastYear = (isEmpty(data['expenditureLastYear']) || data['expenditureLastYear'] === '-') ? '' : data['expenditureLastYear'].reduce( function add(sum, currValue) { return sum + currValue; })
 					, insuranceCost = isEmpty(data['insuranceCost']) ? '' : data['insuranceCost']
 					, insuranceCostCurrent = isEmpty(data['insuranceCostCurrent']) ? '' : data['insuranceCostCurrent']
 					, insuranceCostLastMonth = isEmpty(data['insuranceCostLastMonth']) ? '' : data['insuranceCostLastMonth']
