@@ -264,6 +264,7 @@
 			let newUseOpt = $('#newUseOpt').is(':checked') ? 'Y' : 'N';
 			let newUswOptName = $("#newUseOpt").prev().data("name");
 			let newUserDesc = $("#newUserDesc").val();
+			let department = $("#department").val();
 
 			let siteItemList = $("#selectedSiteList").find("li");
 			let spcItemList = $("#selectedSpcList").find("li");
@@ -313,6 +314,11 @@
 				if( !isEmpty(newUserDesc) ){
 					userObj.description = newUserDesc;
 				}
+				if( !isEmpty(department) ){
+					userObj.department = department;
+				}
+
+				console.log(userObj);
 
 				option = {
 					url: apiHost + '/config/users?oid=' + oid,
@@ -782,6 +788,7 @@
 
 				Promise.resolve(data.map((item, index) => {
 					let obj = {};
+					console.log(item)
 
 					obj.user_id = item.login_id;
 					obj.name = item.name;
@@ -870,6 +877,7 @@
 					if(!isEmpty(item.description)){
 						obj.desc = item.description;
 					}
+					obj.department = item.department ? item.department : "-";
 					obj.uid = item.uid;
 					obj.idx = index + 1;
 					obj.verify_level = item.verify_level;
@@ -928,6 +936,10 @@
 								{
 									"sTitle": "<fmt:message key='userSetting.email' />",
 									"mData": "contact_email",
+								},
+								{
+									"sTitle": "<fmt:message key='userSetting.dep' />",
+									"mData": "department",
 								},
 								{
 									"sTitle": "<fmt:message key='userSetting.team' />",
@@ -1131,6 +1143,10 @@
 									"mData": "contact_email",
 								},
 								{
+									"sTitle": "<fmt:message key='userSetting.dep' />",
+									"mData": "department",
+								},
+								{
 									"sTitle": "<fmt:message key='userSetting.team' />",
 									"mData": "team",
 								},
@@ -1322,7 +1338,7 @@
 					
 					$("#userList").find("li").on('click', function() {
 						if(!isEmpty($(this).data("value"))){
-							$("#userTable").DataTable().column("7").search("\\b"+$(this).data("name")+"\\b", true, false).draw();
+							$("#userTable").DataTable().column("8").search("\\b"+$(this).data("name")+"\\b", true, false).draw();
 
 							let tr = $("#userTable").find("tbody tr.selected");
 							let btn = $("#btnGroup").find(".btn-type03");
@@ -1336,7 +1352,7 @@
 								});
 							}
 						} else {
-							filterColumn("#userTable", "7", "");
+							filterColumn("#userTable", "8", "");
 						}
 					});
 					// $("#pageLengthList").find("li").on( 'click', function(){ 
@@ -2092,12 +2108,18 @@
 						</div>
 						<div class="row">
 							<div class="col-lg-2 col-sm-3"><span class="input-label"><fmt:message key='userSetting.certification' /></span></div>
-							<div class="col-lg-10 col-sm-9">
+							<div class="col-lg-4 col-sm-9">
 								<label class="switch switch-slide">
 									<input type="checkbox" value="showTable" id="switchBtn" class="switch-input">
 									<span class="switch-label" data-on="Y" data-off="N"></span>
 									<span class="switch-handle"></span>
 								</label>
+							</div>
+							<div class="col-lg-2 col-sm-3"><span class="input-label offset"><span><fmt:message key='userSetting.dep' /></span></span></div>
+							<div class="col-lg-4 col-sm-9">
+								<div class="text-input-type">
+									<input type="text" id="department" name="department" placeholder="<fmt:message key='userSetting.input' />" >
+								</div>
 							</div>
 						</div>
 						<div class="row">
@@ -2249,10 +2271,11 @@
 			</div> -->
 			<table id="userTable">
 				<colgroup>
-					<col style="width:6%">
+					<col style="width:4%">
 					<col style="width:8%">
-					<col style="width:14%">
+					<col style="width:12%">
 					<col style="width:9%">
+					<col style="width:5%">
 					<col style="width:13%">
 					<col style="width:9%">
 					<col style="width:8%">

@@ -97,7 +97,8 @@
 .spcDashboard1-3 > ul > li.actived { background: #1c98e9; }
 
 .spcDashboard1-3 > div > div {
-	width: 176px;
+	width: 100%;
+	min-width: 176px;
 	height: 124px;
 	padding: 16px;
 	border-radius: 4px;
@@ -355,4 +356,8 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
+}
+
+.box-graph-label {
+	font-weight: normal;
 }

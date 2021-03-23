@@ -1167,11 +1167,13 @@
 			itemHoverStyle: {
 				color: ''
 			},
-			itemWidth: 150,
+			width: 156,
 			itemMarginTop: 3,
 			itemMarginBottom: 4,
 			labelFormatter: function () {
-				return `<div class="fl">${'${this.name}'}</div> <div class="fr">${'${this.value}'}%</div>`;
+				const dx = 160 - getWidth(this.name+this.value+"%");
+				
+				return `<div class="box-graph-label"> <p>${'${this.name}'}</p> <p dx="${'${dx}'}">${'${this.value}'}%</p> </div>`;
 			}
 		},
 		series: [{
@@ -1184,7 +1186,7 @@
 				dataLabels: {
 					enabled: true,
 					style: {
-						color: 'var(--white87)',
+						color: 'var(--black)',
 						fontSize: '12px',
 						fontWeight: 400,
 						textOutline: 0,
@@ -1679,4 +1681,14 @@
 		// Strip out the unnecessary metadata
 		return tmpArr.map(v => v.rank);
 	};
+
+	const getWidth = (txt) => {
+		const $target = $("<span class='getWidthSpan' style='font-size: 12px;'>"+txt+"</span>").appendTo("body");
+
+		const width = $target.width() + 21;
+
+		$(".getWidthSpan").remove();
+
+		return width;
+	}
 </script>
