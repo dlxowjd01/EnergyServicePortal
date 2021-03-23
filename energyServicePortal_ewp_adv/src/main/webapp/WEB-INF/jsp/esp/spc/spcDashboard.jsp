@@ -97,7 +97,7 @@
 					<p>관리운영대비 비율</p>
 					<div>
 						<p class="number-unit">
-							<span></span> 만원
+							<span></span> %
 						</p>
 					</div>
 				</div>
