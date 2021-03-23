@@ -293,10 +293,10 @@
 			spcDetail.eq(4).find('div').eq(1).html('<div><img src="/img/spcDashboard/flat.svg" alt="변동없음" /><p class="number-unit"> <span>-</span> </p></div>');
 		} else if (lastMonth > 0){
 			spcDetail.eq(4).find('span').eq(0).removeAttr('class').addClass('increase').html('증가');
-			spcDetail.eq(4).find('div').eq(1).html('<div><img src="/img/spcDashboard/up.svg" alt="증가" /><p class="number-unit"> <span>' + lastMonth + '</span> %</p></div>');
+			spcDetail.eq(4).find('div').eq(1).html('<div><img src="/img/spcDashboard/up.svg" alt="증가" /><p class="number-unit"> <span>' + lastMonth.toFixed(2) + '</span> %</p></div>'); 
 		} else {
 			spcDetail.eq(4).find('span').eq(0).removeAttr('class').addClass('decrease').html('감소');
-			spcDetail.eq(4).find('div').eq(1).html('<div><img src="/img/spcDashboard/down.svg" alt="증가" /><p class="number-unit"> <span>' + (lastMonth * -1) + '</span> %</p></div>');
+			spcDetail.eq(4).find('div').eq(1).html('<div><img src="/img/spcDashboard/down.svg" alt="증가" /><p class="number-unit"> <span>' + (lastMonth * -1).toFixed(2) + '</span> %</p></div>');
 		}
 
 		if (isEmpty(lastYear) || lastYear === 0 || !isFinite(lastYear)) {
@@ -304,10 +304,10 @@
 			spcDetail.eq(5).find('div').eq(1).html('<div><img src="/img/spcDashboard/flat.svg" alt="변동없음" /><p class="number-unit"> <span>-</span> </p></div>');
 		} else if (lastYear > 0){
 			spcDetail.eq(5).find('span').eq(0).removeAttr('class').addClass('increase').html('증가');
-			spcDetail.eq(5).find('div').eq(1).html('<div><img src="/img/spcDashboard/up.svg" alt="증가" /><p class="number-unit"> <span>' + lastYear + '</span> %</p></div>');
+			spcDetail.eq(5).find('div').eq(1).html('<div><img src="/img/spcDashboard/up.svg" alt="증가" /><p class="number-unit"> <span>' + lastYear.toFixed(2) + '</span> %</p></div>');
 		} else {
 			spcDetail.eq(5).find('span').eq(0).removeAttr('class').addClass('decrease').html('감소');
-			spcDetail.eq(5).find('div').eq(1).html('<div><img src="/img/spcDashboard/down.svg" alt="증가" /><p class="number-unit"> <span>' + (lastYear * -1) + '</span> %</p></div>');
+			spcDetail.eq(5).find('div').eq(1).html('<div><img src="/img/spcDashboard/down.svg" alt="증가" /><p class="number-unit"> <span>' + (lastYear * -1).toFixed(2) + '</span> %</p></div>');
 		}
 	}
 	$(function() {
@@ -427,11 +427,11 @@
 						} else {
 							let template = ``;
 							if (data > 0) {
-								template = `<img src="/img/spcDashboard/up.svg" alt="증가" /> ${'${data}'}`;
+								template = `<img src="/img/spcDashboard/up.svg" alt="증가" /> ${'${data.toFixed(2)}'}`;
 							} else if (data < 0) {
-								template = `<img src="/img/spcDashboard/down.svg" alt="감소" />  ${'${data * -1}'}`;
+								template = `<img src="/img/spcDashboard/down.svg" alt="감소" />  ${'${(data * -1).toFixed(2)}'}`;
 							} else {
-								template = `<img src="/img/spcDashboard/flat.svg" alt="변동없음" /> ${'${data}'}`;
+								template = `<img src="/img/spcDashboard/flat.svg" alt="변동없음" /> ${'${data.toFixed(2)}'}`;
 							}
 
 							return template;
@@ -448,11 +448,11 @@
 						} else {
 							let template = ``;
 							if (data > 0) {
-								template = `<img src="/img/spcDashboard/up.svg" alt="증가" /> ${'${data}'}`;
+								template = `<img src="/img/spcDashboard/up.svg" alt="증가" /> ${'${data.toFixed(2)}'}`;
 							} else if (data < 0) {
-								template = `<img src="/img/spcDashboard/down.svg" alt="감소" />  ${'${data * -1}'}`;
+								template = `<img src="/img/spcDashboard/down.svg" alt="감소" />  ${'${(data * -1).toFixed(2)}'}`;
 							} else {
-								template = `<img src="/img/spcDashboard/flat.svg" alt="변동없음" /> ${'${data}'}`;
+								template = `<img src="/img/spcDashboard/flat.svg" alt="변동없음" /> ${'${data.toFixed(2)}'}`;
 							}
 
 							return template;
