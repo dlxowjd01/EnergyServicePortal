@@ -290,24 +290,24 @@
 
 		if (isEmpty(lastMonth) || lastMonth === 0 || !isFinite(lastMonth)) {
 			spcDetail.eq(4).find('span').eq(0).removeAttr('class').addClass('normal').html('변동없음');
-			spcDetail.eq(4).find('div').eq(1).html('<div><p class="number-unit"> <span>-</span> </p></div>');
+			spcDetail.eq(4).find('div').eq(1).html('<div><img src="/img/spcDashboard/flat.svg" alt="변동없음" /><p class="number-unit"> <span>-</span> </p></div>');
 		} else if (lastMonth > 0){
 			spcDetail.eq(4).find('span').eq(0).removeAttr('class').addClass('increase').html('증가');
 			spcDetail.eq(4).find('div').eq(1).html('<div><img src="/img/spcDashboard/up.svg" alt="증가" /><p class="number-unit"> <span>' + lastMonth + '</span> %</p></div>');
 		} else {
 			spcDetail.eq(4).find('span').eq(0).removeAttr('class').addClass('decrease').html('감소');
-			spcDetail.eq(4).find('div').eq(1).html('<div><img src="/img/spcDashboard/flat.svg" alt="감소" /><p class="number-unit"> <span>' + (lastMonth * -1) + '</span> %</p></div>');
+			spcDetail.eq(4).find('div').eq(1).html('<div><img src="/img/spcDashboard/down.svg" alt="증가" /><p class="number-unit"> <span>' + (lastMonth * -1) + '</span> %</p></div>');
 		}
 
 		if (isEmpty(lastYear) || lastYear === 0 || !isFinite(lastYear)) {
 			spcDetail.eq(5).find('span').eq(0).removeAttr('class').addClass('normal').html('변동없음');
-			spcDetail.eq(5).find('div').eq(1).html('<div><p class="number-unit"> <span>-</span> </p></div>');
+			spcDetail.eq(5).find('div').eq(1).html('<div><img src="/img/spcDashboard/flat.svg" alt="변동없음" /><p class="number-unit"> <span>-</span> </p></div>');
 		} else if (lastYear > 0){
 			spcDetail.eq(5).find('span').eq(0).removeAttr('class').addClass('increase').html('증가');
 			spcDetail.eq(5).find('div').eq(1).html('<div><img src="/img/spcDashboard/up.svg" alt="증가" /><p class="number-unit"> <span>' + lastYear + '</span> %</p></div>');
 		} else {
 			spcDetail.eq(5).find('span').eq(0).removeAttr('class').addClass('decrease').html('감소');
-			spcDetail.eq(5).find('div').eq(1).html('<div><img src="/img/spcDashboard/flat.svg" alt="감소" /><p class="number-unit"> <span>' + (lastYear * -1) + '</span> %</p></div>');
+			spcDetail.eq(5).find('div').eq(1).html('<div><img src="/img/spcDashboard/down.svg" alt="증가" /><p class="number-unit"> <span>' + (lastYear * -1) + '</span> %</p></div>');
 		}
 	}
 	$(function() {
@@ -429,9 +429,9 @@
 							if (data > 0) {
 								template = `<img src="/img/spcDashboard/up.svg" alt="증가" /> ${'${data}'}`;
 							} else if (data < 0) {
-								template = `<img src="/img/spcDashboard/flat.svg" alt="감소" />  ${'${data * -1}'}`;
+								template = `<img src="/img/spcDashboard/down.svg" alt="감소" />  ${'${data * -1}'}`;
 							} else {
-								template = `${'${data}'}`;
+								template = `<img src="/img/spcDashboard/flat.svg" alt="변동없음" /> ${'${data}'}`;
 							}
 
 							return template;
@@ -450,9 +450,9 @@
 							if (data > 0) {
 								template = `<img src="/img/spcDashboard/up.svg" alt="증가" /> ${'${data}'}`;
 							} else if (data < 0) {
-								template = `<img src="/img/spcDashboard/flat.svg" alt="감소" />  ${'${data * -1}'}`;
+								template = `<img src="/img/spcDashboard/down.svg" alt="감소" />  ${'${data * -1}'}`;
 							} else {
-								template = `${'${data}'}`;
+								template = `<img src="/img/spcDashboard/flat.svg" alt="변동없음" /> ${'${data}'}`;
 							}
 
 							return template;
@@ -880,10 +880,10 @@
 						lastYear = tableData.map(el => isEmpty(el['lastYearRepair']) ? 0 : el['lastYearRepair']).reduce(function add(sum, currValue) { return Number(sum) + Number(currValue); });
 					}
 
-					if (!isEmpty(lastMonth)) target.data('lastMonth', Math.round(((current - lastMonth) / lastMonth) * 100));
+					if (!isEmpty(lastMonth)) target.data('lastMonth', Math.round(((current - lastMonth) / lastMonth) * 10000) / 100);
 					else target.data('lastMonth', '');
 
-					if (!isEmpty(lastYear)) target.data('lastYear', Math.round(((current - lastYear) / lastYear) * 100));
+					if (!isEmpty(lastYear)) target.data('lastYear', Math.round(((current - lastYear) / lastYear) * 10000) / 100);
 					else target.data('lastYear', '');
 				} else {
 					let current = 0, lastMonth = 0, lastYear = 0;
@@ -893,10 +893,10 @@
 						if (!isEmpty(data['expenditureLastYear']) && !isEmpty(data['expenditureLastYear'][index])) lastYear += Number(data['expenditureLastYear'][index])
 					});
 
-					if (!isEmpty(lastMonth)) target.data('lastMonth', Math.round(((current - lastMonth) / lastMonth) * 100));
+					if (!isEmpty(lastMonth)) target.data('lastMonth', Math.round(((current - lastMonth) / lastMonth) * 10000) / 100);
 					else target.data('lastMonth', '');
 
-					if (!isEmpty(lastYear)) target.data('lastYear', Math.round(((current - lastYear) / lastYear) * 100));
+					if (!isEmpty(lastYear)) target.data('lastYear', Math.round(((current - lastYear) / lastYear) * 10000) / 100);
 					else target.data('lastYear', '');
 				}
 
@@ -1034,7 +1034,7 @@
 			//발전소 수입/지출 현황
 			tableData.forEach(data => {
 				const month = new Date().getMonth();
-				const contractUnitPrice = isEmpty(data['contractUnitPrice']) ? '' : data['contractUnitPrice']
+				let contractUnitPrice = isEmpty(data['contractUnitPrice']) ? '' : data['contractUnitPrice']
 					, contractUnitPriceCurrent = isEmpty(data['contractUnitPriceCurrent']) ? '' : data['contractUnitPriceCurrent']
 					, contractUnitPriceLastMonth = isEmpty(data['contractUnitPriceLastMonth']) ? '' : data['contractUnitPriceLastMonth']
 					, contractUnitPriceLastYear = isEmpty(data['contractUnitPriceLastYear']) ? '' : data['contractUnitPriceLastYear']
@@ -1052,12 +1052,12 @@
 					, lastYearRepair = isEmpty(data['lastYearRepair']) ? '' : data['lastYearRepair']
 					, expenditureSum = (Number(expenditure) * month) + Number(insuranceCost) + Number(repairMaintenanceCost)
 					, lastMonthexpEnditureSum = Number(expenditureLastMonth) + Number(insuranceCostLastMonth) + Number(lastMonthRepair)  //이전달 지출
-					, lastYearMonthexpEnditureSum = Number(expenditureLastYear) + Number(insuranceCostCurrent) + Number(lastYearRepair) //작년 마지막달과 동일달 지출
-					, currentMonthexpEnditureSum = Number(expenditureCurrent) + Number(insuranceCostLastYear) + Number(currentRepair)  //마지막달 지출
+					, lastYearMonthexpEnditureSum = Number(expenditureLastYear) + Number(insuranceCostLastYear) + Number(lastYearRepair) //작년 마지막달과 동일달 지출
+					, currentMonthexpEnditureSum = Number(expenditureCurrent) + Number(insuranceCostCurrent) + Number(currentRepair)  //마지막달 지출
 					, yield = Math.floor(((Number(contractUnitPrice) - Number(expenditureSum)) / Number(contractUnitPrice)) * 100)
-					, lastMonthYield = Math.floor(((Number(contractUnitPriceLastMonth) - Number(lastMonthexpEnditureSum)) / Number(contractUnitPriceLastMonth)) * 100)
-					, lastYearYield = Math.floor(((Number(contractUnitPriceLastYear) - Number(lastYearMonthexpEnditureSum)) / Number(contractUnitPriceLastYear)) * 100)
-					, currentYield = Math.floor(((Number(contractUnitPriceCurrent) - Number(currentMonthexpEnditureSum)) / Number(contractUnitPriceCurrent)) * 100);
+					, lastMonthYield = Math.floor(((Number(contractUnitPriceLastMonth) - Number(lastMonthexpEnditureSum)) / Number(contractUnitPriceLastMonth)) * 10000) / 100
+					, lastYearYield = Math.floor(((Number(contractUnitPriceLastYear) - Number(lastYearMonthexpEnditureSum)) / Number(contractUnitPriceLastYear)) * 10000) / 100
+					, currentYield = Math.floor(((Number(contractUnitPriceCurrent) - Number(currentMonthexpEnditureSum)) / Number(contractUnitPriceCurrent)) * 10000) / 100;
 
 				if (!isEmpty(expenditure) || !isEmpty(insuranceCost) || !isEmpty(repairMaintenanceCost)) {
 					data['expenditureSum'] = expenditureSum;
@@ -1065,16 +1065,20 @@
 					data['expenditureSum'] = '';
 				}
 
-				if (isFinite(currentYield) && isFinite(lastMonthYield)) {
-					data['lastMonthYield'] = currentYield - lastMonthYield;
-				} else {
+				if (!isFinite(currentYield) && !isFinite(lastMonthYield)) {
 					data['lastMonthYield'] = '';
+				} else {
+					if (!isFinite(currentYield)) currentYield = 0;
+					if (!isFinite(lastMonthYield)) lastMonthYield = 0;
+					data['lastMonthYield'] = currentYield - lastMonthYield;
 				}
 
-				if (isFinite(currentYield) && isFinite(lastYearYield)) {
-					data['lastYearYield'] = currentYield - lastYearYield;
-				} else {
+				if (!isFinite(currentYield) && !isFinite(lastYearYield)) {
 					data['lastYearYield'] = '';
+				} else {
+					if (!isFinite(currentYield)) currentYield = 0;
+					if (!isFinite(lastYearYield)) lastYearYield = 0;
+					data['lastYearYield'] = currentYield - lastYearYield;
 				}
 
 				if (isFinite(yield)) {

@@ -146,7 +146,6 @@
 			}
 		});
 
-		$('#' + targetId).parent().next().remove();
 		$('#' + targetId).parent().remove();
 
 		if ($(targetTab).hasClass('active')) {
@@ -1060,16 +1059,16 @@
 
 		const setData = new Object();
 		setData.address = JSON.stringify(address_info);
-		if($('#tabMaintenanceInfo').length > 0) setData.maintenance_info = JSON.stringify(maintenance_info);
-		if($('#tabFinanceInfo').length > 0) setData.finance_info = JSON.stringify(finance_info);
-		if($('#tabContractInfo').length > 0) setData.contract_info = JSON.stringify(contract_info);
-		if($('#tabInsuranceInfo').length > 0) setData.addlist_insurance_info = JSON.stringify(addlist_insurance_info);
-		if($('#tabSpendInfo').length > 0) setData.spend_info = JSON.stringify(spend_info);
-		if($('#tabDeviceInfo').length > 0) setData.device_info = JSON.stringify(device_info);
-		if($('#tabWarrantyInfo').length > 0) setData.warranty_info = JSON.stringify(warranty_info);
-		if($('#tabCoefficientInfo').length > 0) setData.coefficient_info = JSON.stringify(coefficient_info);
-		if($('#tabAssociatedInfo').length > 0) setData.associated_info = JSON.stringify(associated_info);
-		if($('#tabAttachementInfo').length > 0) setData.attachement_info = JSON.stringify(attachement_info);
+		if($('#tabMaintenanceInfo').length > 0) setData.maintenance_info = JSON.stringify(maintenance_info); else setData.maintenance_info = null
+		if($('#tabFinanceInfo').length > 0) setData.finance_info = JSON.stringify(finance_info); else setData.finance_info = null
+		if($('#tabContractInfo').length > 0) setData.contract_info = JSON.stringify(contract_info); else setData.contract_info = null
+		if($('#tabInsuranceInfo').length > 0) setData.addlist_insurance_info = JSON.stringify(addlist_insurance_info); else setData.addlist_insurance_info = null
+		if($('#tabSpendInfo').length > 0) setData.spend_info = JSON.stringify(spend_info); else setData.spend_info = null
+		if($('#tabDeviceInfo').length > 0) setData.device_info = JSON.stringify(device_info); else setData.device_info = null
+		if($('#tabWarrantyInfo').length > 0) setData.warranty_info = JSON.stringify(warranty_info); else setData.warranty_info = null
+		if($('#tabCoefficientInfo').length > 0) setData.coefficient_info = JSON.stringify(coefficient_info); else setData.coefficient_info = null
+		if($('#tabAssociatedInfo').length > 0) setData.associated_info = JSON.stringify(associated_info); else setData.associated_info = null
+		if($('#tabAttachementInfo').length > 0) setData.attachement_info = JSON.stringify(attachement_info); else setData.attachement_info = null
 		setData.updated_by = loginId;
 		setData.del_yn = 'N';
 
