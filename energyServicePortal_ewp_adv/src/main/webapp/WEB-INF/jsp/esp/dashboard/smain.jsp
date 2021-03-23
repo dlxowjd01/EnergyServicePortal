@@ -2808,6 +2808,12 @@
 							let dname = val.dname;
 							if (val.device_type == dvcType) {
 								let rowData = val.data;
+
+								const nowTimestamp = Number(new Date());
+								if (nowTimestamp - rowData[0].timestamp > 1000 * 60 * 60) {
+									rowData[0].operation = "0";
+								}
+
 								if(!isEmpty(rowData)) {
 									let operation = rowData[0]['operation'];
 
@@ -2936,13 +2942,18 @@
 									});
 
 									if (deviceSearch(dname, operation)) {
+										let rowData = val.data;
+										rowData[0]['dname'] = dname;
+
+										if (nowTimestamp - rowData[0].timestamp > 1000 * 60 * 60) {
+											rowData[0].activePower = "-";
+											rowData[0].dcPower = "-";
+											rowData[0].reactivePowerLagging = "-";
+										}
+
 										if(isEmpty(tableArray)) {
-											let rowData = val.data;
-											rowData[0]['dname'] = dname;
 											tableArray = rowData;
 										} else {
-											let rowData = val.data;
-											rowData[0]['dname'] = dname;
 											tableArray = tableArray.concat(rowData);
 										}
 									}

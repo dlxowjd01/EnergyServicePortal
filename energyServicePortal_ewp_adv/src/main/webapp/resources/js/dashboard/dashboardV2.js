@@ -1893,7 +1893,7 @@ const searchOperationSite = () => {
 			, siteAddress = $(this).data('address')
 			, siteName = $(this).find('td:eq(4)').text();
 
-		if (deviceStatus.length === 3) {
+		if (deviceStatus.length === 4) {
 			const searchPattern = new RegExp(searchName, 'i'); //ignoreCase 대소문자 구분X
 			if (searchPattern.test(siteName) || searchPattern.test(siteAddress)) {
 				$(this).removeClass('hidden');
