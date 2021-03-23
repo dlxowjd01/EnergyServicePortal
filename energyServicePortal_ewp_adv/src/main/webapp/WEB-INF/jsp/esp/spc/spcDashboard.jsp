@@ -863,7 +863,7 @@
 				target.data('expend', Math.round(expend / 100) / 100);
 				target.data('expendW', Math.round((expend / (capacityValue / 1000)) / 100) / 100);
 				target.data('prepare', Math.round((expend / expenditure) * 100));
-				target.data('management', Math.round((expend / contractUnitPriceList[currentMonth]) * 10000) / 100);
+				target.data('management', Math.round((expend / contractUnitPriceList[currentMonth - 1]) * 10000) / 100);
 
 
 				if (index === 0 || index === 11) {
@@ -933,7 +933,7 @@
 			treeData[maxIndex]['value'] = max - (chartValueTotal - 100);
 			chartSeries.data = treeData;
 
-			$('#spcCategory li').eq(maxIndex).data('value')
+			$('#spcCategory li').eq(maxIndex).data('prepare', max - (chartValueTotal - 100))
 
 			expenditureTreeChart.addSeries(chartSeries, false);
 			expenditureTreeChart.redraw();
