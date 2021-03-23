@@ -277,7 +277,7 @@
 						<a href="javascript:void(0);"><fmt:message key="workreport.1.tripActionReport" /></a>
 					</li>
 					<li data-value="2">
-						<a href="javascript:void(0);">QC 보고서</a>
+						<a href="javascript:void(0);"><fmt:message key="report.post.type.2" /></a>
 					</li>
 				</ul>
 			</div>

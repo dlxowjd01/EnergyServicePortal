@@ -1183,8 +1183,20 @@
 			}
 		},
 		tooltip: {
+			// minWidth: "200px",
+			// padding: "16px",
+			// background: "#0c0c0c",
+			// borderRadius: "4px",
+			// opacity: "0.8",
+			// boxShadow: "0px 4px 7px 1px rgba(0, 0, 0, 0.5)",
+			// display: "flex",
+			// alignItems: "center",
+			// justifyContent: "space-between",
+			// color: "var(--white87)",
+			// fontSize: "12px",
 			formatter() {
-				return `${'${this.key}'}: ${'${this.point.value}'}%`
+				console.log(this);
+				return `<div class="treemap-tooltip"><div><div class="color-circle" style="background: ${'${this.color}'};"></div>${'${this.key}'}</div> <p>${'${this.point.value}'}%</p></div>`
 			}
 		},
 		series: [{
