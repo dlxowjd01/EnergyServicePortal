@@ -256,7 +256,7 @@
 			let newAccName =$("#newAccLevel").prev().data("name");
 
 			let newPhoneNum = $("#newMobileNum").val();
-			let newAffiliation = $("#newAffiliation").val();
+			let newAffiliation = $("#newTeam").val();
 			let newEmailAddr =$("#newEmailAddr").val();
 			let newTaskList = !isEmpty($("#newTaskList").prev().data("value")) ? 0 : $("#newTaskList").prev().data("value");
 			let newTaskName = $("#newTaskList").prev().data("name");
@@ -314,11 +314,6 @@
 				if( !isEmpty(newUserDesc) ){
 					userObj.description = newUserDesc;
 				}
-				if( !isEmpty(department) ){
-					userObj.department = department;
-				}
-
-				console.log(userObj);
 
 				option = {
 					url: apiHost + '/config/users?oid=' + oid,
@@ -877,7 +872,6 @@
 					if(!isEmpty(item.description)){
 						obj.desc = item.description;
 					}
-					obj.department = item.department ? item.department : "-";
 					obj.uid = item.uid;
 					obj.idx = index + 1;
 					obj.verify_level = item.verify_level;
@@ -939,10 +933,6 @@
 								},
 								{
 									"sTitle": "<fmt:message key='userSetting.dep' />",
-									"mData": "department",
-								},
-								{
-									"sTitle": "<fmt:message key='userSetting.team' />",
 									"mData": "team",
 								},
 								{
@@ -1144,10 +1134,6 @@
 								},
 								{
 									"sTitle": "<fmt:message key='userSetting.dep' />",
-									"mData": "department",
-								},
-								{
-									"sTitle": "<fmt:message key='userSetting.team' />",
 									"mData": "team",
 								},
 								{
@@ -1321,7 +1307,7 @@
 
 					// userTable.buttons( 0, null ).containers().prependTo("#exportBtnGroup");
 					
-					$("#newAffiliation").autocomplete({
+					$("#newTeam").autocomplete({
 						source : affiliationList,
 						minLength: 1,
 						autoFocus: true,
@@ -1708,7 +1694,7 @@
 				}
 
 				if( !isEmpty(td.eq(5).text()) && td.eq(5).text() != "-" ){
-					$('#newAffiliation').val(td.eq(5).text())
+					$('#newTeam').val(td.eq(5).text())
 				}
 
 				if( !isEmpty(td.eq(7).text()) && td.eq(7).text() != "-" ){
@@ -2118,7 +2104,7 @@
 							<div class="col-lg-2 col-sm-3"><span class="input-label offset"><span><fmt:message key='userSetting.dep' /></span></span></div>
 							<div class="col-lg-4 col-sm-9">
 								<div class="text-input-type">
-									<input type="text" id="department" name="department" placeholder="<fmt:message key='userSetting.input' />" >
+									<input type="text" id="newTeam" name="team" placeholder="<fmt:message key='userSetting.input' />" >
 								</div>
 							</div>
 						</div>
@@ -2271,12 +2257,11 @@
 			</div> -->
 			<table id="userTable">
 				<colgroup>
-					<col style="width:4%">
-					<col style="width:8%">
+					<col style="width:6%">
+					<col style="width:10%">
 					<col style="width:12%">
 					<col style="width:9%">
 					<col style="width:5%">
-					<col style="width:13%">
 					<col style="width:9%">
 					<col style="width:8%">
 					<col style="width:8%">
