@@ -510,8 +510,8 @@
 		const lastMonthMax = new Date(); lastMonthMax.setMonth(lastMonthMax.getMonth() - 1); lastMonthMax.setDate(0); //이전달 기준
 
 		//작년 값 기준
-		const lastYearMin = new Date(); lastYearMin.setFullYear(lastYearMin.getFullYear() - 1); lastYearMin.setMonth(lastYearMin.getMonth() - 1); lastYearMin.setDate(1);
-		const lastYearMax = new Date(); lastYearMax.setFullYear(lastYearMax.getFullYear() - 1); lastYearMax.setMonth(lastYearMax.getMonth()); lastYearMax.setDate(0);
+		const lastYearMin = new Date(currentMonthMin.getFullYear() - 1, currentMonthMin.getMonth(), 1);
+		const lastYearMax = new Date(currentMonthMax.getFullYear() - 1, currentMonthMax.getMonth() + 1, 0);
 
 		const currentMonth = new Date().getMonth();
 
@@ -873,9 +873,9 @@
 						lastMonth = tableData.map(el => el['insuranceCostLastMonth']).reduce(function add(sum, currValue) { return Number(sum) + Number(currValue); }),
 						lastYear = tableData.map(el => el['insuranceCostLastYear']).reduce(function add(sum, currValue) { return Number(sum) + Number(currValue); });
 					} else {
-						current = tableData.map(el => el['currentRepair']).reduce(function add(sum, currValue) { return Number(sum) + Number(currValue); }),
-						lastMonth = tableData.map(el => el['lastMonthRepair']).reduce(function add(sum, currValue) { return Number(sum) + Number(currValue); }),
-						lastYear = tableData.map(el => el['lastYearRepair']).reduce(function add(sum, currValue) { return Number(sum) + Number(currValue); });
+						current = tableData.map(el => isEmpty(el['currentRepair']) ? 0 : el['currentRepair']).reduce(function add(sum, currValue) { return Number(sum) + Number(currValue); }),
+						lastMonth = tableData.map(el => isEmpty(el['lastMonthRepair']) ? 0 : el['lastMonthRepair']).reduce(function add(sum, currValue) { return Number(sum) + Number(currValue); }),
+						lastYear = tableData.map(el => isEmpty(el['lastYearRepair']) ? 0 : el['lastYearRepair']).reduce(function add(sum, currValue) { return Number(sum) + Number(currValue); });
 					}
 
 					if (!isEmpty(lastMonth)) target.data('lastMonth', Math.round(((current - lastMonth) / lastMonth) * 100));
