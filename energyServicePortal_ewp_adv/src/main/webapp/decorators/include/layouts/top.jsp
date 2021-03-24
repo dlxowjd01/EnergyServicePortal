@@ -42,8 +42,7 @@
 <script type="text/javascript" src="/js/i18n/ko.js"></script>
 <script type="text/javascript" src="/js/i18n/i18nManager.js"></script>
 
-<!-- high-stock -->
-<script type="text/javascript" src="/js/highcharts.js"></script>
+
 <!-- <script type="text/javascript" src="/js/modules/variwide.js"></script> -->
 <!-- <script type="text/javascript" src="/js/modules/data.min.js"></script> -->
 <!-- dataTable -->

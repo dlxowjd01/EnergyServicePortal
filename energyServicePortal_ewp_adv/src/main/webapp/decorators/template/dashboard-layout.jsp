@@ -4,6 +4,9 @@
 <!DOCTYPE html>
 <html class="darkmode">
 <head>
+	<!-- high-stock -->
+	<script type="text/javascript" src="/js/highstock.min.js"></script>
+
 	<script type="text/javascript">
 		const langStatus = '${cookieLang}';
 	</script>

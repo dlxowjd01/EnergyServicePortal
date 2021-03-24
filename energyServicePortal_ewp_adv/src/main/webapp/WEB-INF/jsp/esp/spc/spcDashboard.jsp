@@ -293,7 +293,7 @@
 			spcDetail.eq(4).find('div').eq(1).html('<div><img src="/img/spcDashboard/flat.svg" alt="변동없음" /><p class="number-unit"> <span>-</span> </p></div>');
 		} else if (lastMonth > 0){
 			spcDetail.eq(4).find('span').eq(0).removeAttr('class').addClass('increase').html('증가');
-			spcDetail.eq(4).find('div').eq(1).html('<div><img src="/img/spcDashboard/up.svg" alt="증가" /><p class="number-unit"> <span>' + lastMonth.toFixed(2) + '</span> %</p></div>'); 
+			spcDetail.eq(4).find('div').eq(1).html('<div><img src="/img/spcDashboard/up.svg" alt="증가" /><p class="number-unit"> <span>' + lastMonth.toFixed(2) + '</span> %</p></div>');
 		} else {
 			spcDetail.eq(4).find('span').eq(0).removeAttr('class').addClass('decrease').html('감소');
 			spcDetail.eq(4).find('div').eq(1).html('<div><img src="/img/spcDashboard/down.svg" alt="증가" /><p class="number-unit"> <span>' + (lastMonth * -1).toFixed(2) + '</span> %</p></div>');

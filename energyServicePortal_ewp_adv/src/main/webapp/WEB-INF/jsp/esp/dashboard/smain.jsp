@@ -1365,7 +1365,7 @@
 		},
 	});
 
-	var dailySolarTrendChart = Highcharts.stockChart('dailySolarTrendChart', {
+	var dailySolarTrendChart = Highcharts.chart('dailySolarTrendChart', {
 		chart: {
 			marginTop: 60,
 			marginLeft: 65,
