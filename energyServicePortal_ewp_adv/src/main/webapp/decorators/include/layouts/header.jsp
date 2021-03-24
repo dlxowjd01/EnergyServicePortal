@@ -359,6 +359,10 @@
 		$("#updateUserInfoModal").modal("hide");
 	}
 
+	function closeModal() {
+		$("#updateUserInfoModal").modal("hide");
+	}
+
 	function dashboardMove(type, key, value) {
 		let inp = $('input').attr('type', 'hidden').attr('name', key).attr('value', value);
 		let sysInp = $('<input>').attr('type', 'hidden').attr('name', 'divisionProc');
@@ -821,7 +825,10 @@
 			<div class="modal-footer border">
 				<div class="btn-wrap-type02">
 					<small class="text-blue text-sm left"><fmt:message key='account.alert.8' /></small>
-					<button type="button" class="btn-type" onclick="resetModal();" aria-label="Close"><fmt:message key='account.complete' /></button>
+					<div>
+						<button type="button" class="btn-type03" onclick="closeModal();" aria-label="Close"><fmt:message key='account.cancel' /></button>
+						<button type="button" class="btn-type" onclick="resetModal();" aria-label="Close"><fmt:message key='account.complete' /></button>
+					</div>
 				</div>
 			</div>
 		</div>
