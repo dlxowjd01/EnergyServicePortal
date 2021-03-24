@@ -608,10 +608,12 @@
 					deviceTemplate[deviceName] = devicePropName;
 
 
-					tempTable.push({
-						key: 'siteName',
-						value: siteLocaleName
-					});
+					tempTable.push(
+						{
+							key: 'siteName',
+							value: siteLocaleName
+						}
+					);
 
 					$.map(propList, function (v, k) {
 						if (v.analysis_table) {
@@ -776,9 +778,12 @@
 						$.each(typeArray, function (k, elm) {
 							if (elm == el.device_type) {
 								deviceProp.push(el);
+
+								let targetSite = siteList.find(e => e.sid === el.sid);
+
 								let str = `<li>
 												<a href="javascript:void(0);" data-value="${'${el.did}'}" tabindex="-1">
-													<input type="checkbox" id="device_${'${el.did}'}" name="device" value="${'${el.did}'}" data-sid="${'${el.sid}'}" data-type="${'${el.device_type}'}">
+													<input type="checkbox" id="device_${'${el.did}'}" name="device" value="${'${el.did}'}" data-sid="${'${el.sid}'}" data-type="${'${el.device_type}'}" data-sitename="${'${targetSite.name}'}">
 													<label for="device_${'${el.did}'}">${'${el.name}'}</label>
 												</a>
 											</li>`
@@ -851,11 +856,11 @@
 						let hCell = document.createElement("TH");
 						hCell.innerHTML = valObj.value;
 
-						if (idx == 0) { hCell.setAttribute('class', 'hidden'); }
+						// if (idx == 0) { hCell.setAttribute('class', 'hidden'); }
 						hRow.appendChild(hCell);
 
 						let bCell = bRow.insertCell();
-						if (idx == 0) { bCell.setAttribute('class', 'hidden'); }
+						// if (idx == 0) { bCell.setAttribute('class', 'hidden'); }
 						if (valObj.key == 'did') {
 							bCell.innerHTML = '[dname]';
 						} else {
@@ -944,15 +949,9 @@
 							value[idx].timestamp = new Date(value[idx].localtime).getTime();
 
 							const did = value[idx].did;
-							siteList.forEach(site => {
-								const devices = site.devices,
-									siteName = site.name;
-								if (!isEmpty(devices)) {
-									devices.forEach(device => {
-										if (device.did === did) {
-											value[idx]['siteName'] = siteName;
-										}
-									});
+							$(':checkbox[name="device"]').each(function() {
+								if ($(this).val() === did) {
+									value[idx].siteName = $(this).data('sitename');
 								}
 							});
 
