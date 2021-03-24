@@ -495,8 +495,6 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 			events: {
 				click: function (event) {
 					const x = event.point.category;
-					console.log(event);
-					console.log(x);
 					generation(x, 'hour');
 				}
 			}

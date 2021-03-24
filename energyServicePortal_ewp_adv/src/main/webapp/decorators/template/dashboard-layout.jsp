@@ -4,13 +4,13 @@
 <!DOCTYPE html>
 <html class="darkmode">
 <head>
-	<!-- high-stock -->
-	<script type="text/javascript" src="/js/highstock.min.js"></script>
-
 	<script type="text/javascript">
 		const langStatus = '${cookieLang}';
 	</script>
 	<page:applyDecorator name="top"/>
+
+	<!-- high-stock -->
+	<script type="text/javascript" src="/js/highstock.min.js"></script>
 </head>
 <body>
 <div id="outerWrapper" class="outer-wrapper">
