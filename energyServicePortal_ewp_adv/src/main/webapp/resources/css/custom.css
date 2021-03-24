@@ -4022,7 +4022,7 @@ li[data-alarm="urgent"]:before,
 
 .setting-form .input-label.asterisk:after {
 	display: flex;
-	margin: -55% 0 0 110%;
+	/* margin: -55% 0 0 110%; */
 	height: 27px;
 	content: "*";
 	color: var(--vivid-blue);
@@ -11354,7 +11354,7 @@ span.asterisk {
 span.asterisk:after {
 	content: "*";
 	position: absolute;
-	top: -5px;
+	top: 2px;
 	right: -9px;
 	color: var(--vivid-blue);
 }
