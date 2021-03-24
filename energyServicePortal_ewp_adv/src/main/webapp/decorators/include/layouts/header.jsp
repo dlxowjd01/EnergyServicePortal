@@ -335,31 +335,30 @@
 		}
 	}
 
-	function resetModal() {
-		let pwdInput = $("#pwdForm").find("input");
-		let warning = $("#updateUserInfoModal").find(".warning-text");
-		let tick = $(".tick");
+	function resetModal(update = false) {
+		if (update) {
+			let pwdInput = $("#pwdForm").find("input");
+			let warning = $("#updateUserInfoModal").find(".warning-text");
+			let tick = $(".tick");
 
-		warning.each(function(){
-			if(!$(this).hasClass("hidden")){
-				$(this).addClass("hidden");
-			}
-		});
-		pwdInput.each(function(){
-			let val = $(this).val();
-			if(!isEmpty(val)){
-				$(this).val("");
-			}
-		});
-		tick.each(function(){
-			if($(this).is(".checked")){
-				$(this).removeClass("checked");
-			}
-		});
-		$("#updateUserInfoModal").modal("hide");
-	}
+			warning.each(function(){
+				if(!$(this).hasClass("hidden")){
+					$(this).addClass("hidden");
+				}
+			});
+			pwdInput.each(function(){
+				let val = $(this).val();
+				if(!isEmpty(val)){
+					$(this).val("");
+				}
+			});
+			tick.each(function(){
+				if($(this).is(".checked")){
+					$(this).removeClass("checked");
+				}
+			});
+		}
 
-	function closeModal() {
 		$("#updateUserInfoModal").modal("hide");
 	}
 
@@ -826,8 +825,8 @@
 				<div class="btn-wrap-type02">
 					<small class="text-blue text-sm left"><fmt:message key='account.alert.8' /></small>
 					<div>
-						<button type="button" class="btn-type03" onclick="closeModal();" aria-label="Close"><fmt:message key='account.cancel' /></button>
-						<button type="button" class="btn-type" onclick="resetModal();" aria-label="Close"><fmt:message key='account.complete' /></button>
+						<button type="button" class="btn-type03" onclick="resetModal();" aria-label="Close"><fmt:message key='account.cancel' /></button>
+						<button type="button" class="btn-type" onclick="resetModal(true);" aria-label="Close"><fmt:message key='account.complete' /></button>
 					</div>
 				</div>
 			</div>
