@@ -349,7 +349,8 @@
 			url: apiHost + '/spcs',
 			type: 'get',
 			data: {
-				oid: oid
+				oid: oid,
+				includeGens: true
 			}
 		}, setSpc);
 	}
@@ -384,8 +385,10 @@
 			spcList.sortOn('name');
 			for (let i in spcList) {
 				let temp = spcList[i];
-				const html = `<li data-value="${'${temp.spc_id}'}"><a href="javascript:void(0);">${'${temp.name}'}</a></li>`;
-				$('#spc ul').append(html);
+				if (!isEmpty(temp['spcGens'])) {
+					const html = `<li data-value="${'${temp.spc_id}'}"><a href="javascript:void(0);">${'${temp.name}'}</a></li>`;
+					$('#spc ul').append(html);
+				}
 			}
 		} else {
 			const html = `<li class="no-data">조회 SPC가 없습니다.</li>`;
@@ -400,11 +403,10 @@
 
 		if (siteList.length > 0) {
 			siteList.sortOn('name');
-			for (let i in siteList) {
-				let temp = siteList[i];
+			siteList.forEach(temp => {
 				const html = `<li data-value="${'${temp.gen_id}'}"><a href="javascript:void(0);">${'${temp.name}'}</a></li>`;
 				$('#spcGen ul').append(html);
-			}
+			})
 		} else {
 			const html = `<li class="no-data">조회 발전소가 없습니다.</li>`;
 			$('#spcGen ul').append(html);

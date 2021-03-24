@@ -42,7 +42,7 @@
 	$(function () {
 		gmainTable = $('#gmainTable').DataTable({
 			autoWidth: true,
-			"table-layout": "fixed",
+			'table-layout': 'fixed',
 			scrollX: true,
 			scrollY: '720px',
 			scrollCollapse: true,
@@ -266,21 +266,9 @@
 
 		let tableData = new Array();
 		let urls = new Array();
-		let deferreds = new Array();
 		let siteArray = new Array();
 		
 		siteList.forEach(site => {
-
-			//사이트정보
-			urls.push({
-				url: apiHost + '/status/raw/site',
-				type: 'get',
-				data: {
-					sid: site.sid,
-					formId: 'v2'
-				}
-			});
-
 			siteArray.push(site.sid);
 			tableData.push({
 				sid: site.sid,
@@ -291,172 +279,234 @@
 		});
 
 		let siteArray_temp = siteArray;
-
 		if (isEmpty(sgid)) siteArray = 'all';
 
 		//오늘 발전
 		if (siteArray.length > 0) {
-			urls.push({
-				url: apiHost + '/energy/now/sites',
-				type: 'get',
-				data: {
+			urls.push($.ajax({
+				url: apiHost + '/get/energy/now/sites',
+				type: 'POST',
+				contentType: 'application/json',
+				data: JSON.stringify({
 					sids: siteArray.toString(),
-					metering_type: 2,
+					metering_type: '2',
 					interval: 'day'
-				}
-			});
+				})
+			}));
 
 			//어제 발전
-			urls.push({
-				url: apiHost + '/energy/sites?interval=day',
-				type: 'get',
-				data: {
+			urls.push($.ajax({
+				url: apiHost + '/get/energy/sites',
+				type: 'POST',
+				contentType: 'application/json',
+				data: JSON.stringify({
 					sid: siteArray.toString(),
-					startTime: yesterDayFormData.startTime,
-					endTime: yesterDayFormData.endTime,
+					startTime: Number(yesterDayFormData.startTime),
+					endTime: Number(yesterDayFormData.endTime),
+					interval: 'day',
 					displayType: 'dashboard',
 					formId: 'v2'
-				}
-			});
+				})
+			}));
 
 			//작년 동월 발전
-			urls.push({
-				url: apiHost + '/energy/sites?interval=month',
-				type: 'get',
-				data: {
+			urls.push($.ajax({
+				url: apiHost + '/get/energy/sites',
+				type: 'POST',
+				contentType: 'application/json',
+				data: JSON.stringify({
 					sid: siteArray.toString(),
-					startTime: beforeMonthFormData.startTime,
-					endTime: beforeMonthFormData.endTime,
+					startTime: Number(beforeMonthFormData.startTime),
+					endTime: Number(beforeMonthFormData.endTime),
+					interval: 'month',
 					displayType: 'dashboard',
 					formId: 'v2'
-				}
-			});
+				})
+			}));
 
 			//알람 이력
-			urls.push({
-				url: apiHost + '/alarms',
-				type: 'GET',
-				data: {
+			urls.push($.ajax({
+				url: apiHost + '/get/alarms',
+				type: 'POST',
+				contentType: 'application/json',
+				data: JSON.stringify({
 					sids: siteArray.toString(),
-					startTime: dayFormData.startTime,
-					endTime: dayFormData.endTime,
+					startTime: Number(dayFormData.startTime),
+					endTime: Number(dayFormData.endTime),
 					confirm: false
-				}
-			});
+				})
+			}));
 
 			//기상 정보 오늘
-			urls.push({
-				url: apiHost + '/weather/site',
-				type: 'get',
-				data: {
+			urls.push($.ajax({
+				url: apiHost + '/get/weather/site',
+				type: 'POST',
+				contentType: 'application/json',
+				data: JSON.stringify({
 					sid: siteArray.toString(),
 					interval: 'hour',
-					startTime: yesterDayFormData.startTime,
-					endTime: dayFormData.endTime,
+					startTime: Number(yesterDayFormData.startTime),
+					endTime: Number(dayFormData.endTime),
 					formId: 'v2'
-				}
-			});
+				})
+			}));
 
 			//기상 정보 어제
-			urls.push({
-				url: apiHost + '/weather/site',
-				type: 'get',
-				data: {
+			urls.push($.ajax({
+				url: apiHost + '/get/weather/site',
+				type: 'POST',
+				contentType: 'application/json',
+				data: JSON.stringify({
 					sid: siteArray.toString(),
 					interval: 'day',
-					startTime: yesterDayFormData.startTime,
-					endTime: yesterDayFormData.endTime,
+					startTime: Number(yesterDayFormData.startTime),
+					endTime: Number(yesterDayFormData.endTime),
 					formId: 'v2'
-				}
-			});
+				})
+			}));
 
 			// 통신 상태
-			
-			urls.push({
-				url: apiHost + "/get/status/health",
-				type: "post",
-				dataType: 'json',
-				contentType: "application/json",
+			urls.push($.ajax({
+				url: apiHost + '/get/status/health',
+				type: 'POST',
+				contentType: 'application/json',
 				data: JSON.stringify({
-					sids: siteArray_temp.join(","),
+					sids: siteArray_temp.join(','),
 					startTime: getTime(1, false)
 				}),
-			});
+			}));
+
+			//사이트정보
+			urls.push($.ajax({
+				url: apiHost + '/get/status/raw/sites',
+				type: 'POST',
+				contentType: 'application/json',
+				data: JSON.stringify({
+					sids: siteArray.toString(),
+					displayType: 'dashboard',
+					operation: 'active'
+				})
+			}));
 		}
 
 		document.getElementById('loadingCircleDashboard').style.display =  '';
-		//ajax 한번에 실행
-		deferreds = new Array();
-		urls.forEach(function (url) {
-			let deferred = $.Deferred();
-			deferreds.push(deferred);
 
-			$.ajax(url).done(function (data) {
-				data['url'] = url['url'];
-				(function (deferred) {
-					return deferred.resolve(data);
-				})(deferred);
-			}).fail(function (jqXHR, textStatus, errorThrown) {
-				document.getElementById('loadingCircleDashboard').style.display =  'none';
-				let errMsg = '처리 중 오류가 발생했습니다.<br/>에러 메세지:' + errorThrown;
-				let r = formatErrorMessage(jqXHR, errorThrown);
-				console.log("error===", r, url);
-				$("#errMsg").html(errMsg);
-				$("#errorModal").modal("show");
-				setTimeout(function(){
-					$("#errorModal").modal("hide");
-					location.reload();
-				}, 2000);
-				return false;
-			});
-		});
+		new Promise((resolve, reject) => {
+			resolve(Promise.all(urls));
+		}).then(response => {
+			response.forEach((resData, index) => {
+				if (index === 0) {
+					tableData.forEach((site, index) => {
+						let targetData = resData.data[site.sid];
+						if (isEmpty(targetData)) {
+							tableData[index]['nowEnergy'] = '-';
+						} else {
+							tableData[index]['nowEnergy_origin'] = targetData.energy;
+							tableData[index]['nowEnergy'] = !isNaN(targetData.energy) ? displayNumberFixedUnit(targetData.energy, 'W', 'kW', 0)[0] : '-';
+						}
+					});
+				} else if (index === 1) {
+					tableData.forEach((site, index) => {
+						let targetData = resData.data[site.sid];
+						if (!isEmpty(targetData)) {
+							const items = targetData[0]['items'];
+							if (!isEmpty(items)) {
+								let genEnergy = items.map(el => el['energy']).reduce( function add(sum, currValue) { return sum + currValue; });
+								tableData[index]['yesterEnergy_origin'] = genEnergy;
+								tableData[index]['yesterEnergy'] = !isNaN(genEnergy) ? displayNumberFixedUnit(genEnergy, 'W', 'kW', 0)[0] : '-';
+							}
+						}
+					});
+				} else if (index === 2) {
+					tableData.forEach((site, index) => {
+						let targetData = resData.data[site.sid];
+						if (!isEmpty(targetData)) {
+							const items = targetData[0]['items'];
+							if (!isEmpty(items)) {
+								let genEnergy = items.map(el => el['energy']).reduce( function add(sum, currValue) { return sum + currValue; });
+								tableData[index]['lastMonthGen_origin'] = genEnergy;
+								tableData[index]['lastMonthGen'] = !isNaN(genEnergy) ? displayNumberFixedUnit(genEnergy, 'W', 'kW', 0)[0] : '-';
+							}
+						}
+					});
+				} else if (index === 3) {
+					resData.sort((a, b) => {
+						return a.localtime > b.localtime ? -1 : a.localtime < b.localtime ? 1 : 0;
+					});
 
-		$.when.apply($, deferreds).then(function () {
-			Object.entries(arguments).forEach(arg => {
-				const result = arg[1];
-				if (!isEmpty(result)) {
-					const targetUrl = result.url;
-					if (targetUrl.match('/status/raw/site')) {
-						let totalCount = 0;
-						let runCount = 0;
-						let stopCount = 0;
-						let capacity = 0;
-						let targetSid = '';
-						let deviceFault = '';
-						Object.entries(result).forEach(detail => {
-							const deviceType = detail[0]
-								, deviceData = detail[1];
-							if (deviceType !== 'url' && deviceType.match('INV')) {
-								targetSid = deviceData.sid;
-								// capacity += deviceData.capacity;
-			
-								if (!isEmpty(deviceData.faultDesc)) {
-									deviceFault = deviceData.dname;
-									Object.entries(deviceData.faultDesc).forEach(fault => {
-										deviceFault += '[' + deviceData.fault[0] + ']';
-									});
-								}
-
-								if (!isEmpty(deviceData.devices)) {
-									deviceData.devices.forEach(db => {
-										totalCount++;
-										if (db.operation == 1) {
-											runCount++;
-										} else {
-											stopCount++;
-										}
-									});
-								}
-
-								if ($('.dbTime').data('timestamp') === undefined || ($('.dbTime').data('timestamp') != undefined && Number($('.dbTime').data('timestamp')) < deviceData['timestamp'])) {
-									const dbTime = new Date(deviceData['timestamp']);
-									$('.dbTime').data('timestamp', deviceData['timestamp']).text(dbTime.format('yyyy-MM-dd HH:mm:ss'));
+					tableData.forEach((site, index) => {
+						const alarm = resData.find(e => site['sid'] == e.sid);
+						if (!isEmpty(alarm)) {
+							tableData[index]['deviceFault'] = alarm['message'];
+						}
+					});
+				} else if (index === 4) {
+					const weatherData = resData['data'];
+					if (!isEmpty(weatherData)) {
+						tableData.forEach((site, index) => {
+							const datas = weatherData[site.sid]['items'];
+							if (isEmpty(datas)) {
+								tableData[index]['toDaySky'] = '-';
+							} else {
+								datas.sort((a, b) => {
+									return a.basetime > b.basetime ? -1 : a.basetime < b.basetime ? 1 : 0;
+								});
+								const curruntWeather = datas.find(item => item['observed'] === true);
+								if (isEmpty(curruntWeather)) {
+									tableData[index]['toDaySky'] = '';
+								} else {
+									tableData[index]['toDaySky'] = curruntWeather['sky'];
 								}
 							}
 						});
-
+					}
+				} else if (index === 5) {
+					const weatherData = resData['data'];
+					if (!isEmpty(weatherData)) {
 						tableData.forEach((site, index) => {
-							if (site.sid === targetSid) {
+							const datas = weatherData[site.sid]['items'];
+							if (isEmpty(datas)) {
+								tableData[index]['yesterDaySky'] = '-';
+							} else {
+								tableData[index]['yesterDaySky'] = datas[0]['sky'];
+							}
+						});
+					}
+				} else if (index === 6) {
+					const sites = resData['sites'];
+
+					tableData.forEach((site, index) => {
+						const comStatus = sites.find(x => site.sid === x.sid);
+						tableData[index]['comStatus'] = ["error", "<fmt:message key='button.error' />"];
+						if (!isEmpty(comStatus.rtus) && comStatus.rtus.length > 0) {
+							tableData[index]['comStatus'] = ["normal", "<fmt:message key='button.normal' />"];
+						}
+					});
+				} else {
+					tableData.forEach((site, index) => {
+						Object.entries(resData).forEach(([tSid, tData]) => {
+							if (site.sid === tSid) {
+								let totalCount = 0, runCount = 0, stopCount = 0;
+								Object.entries(tData).forEach(([deviceType, deviceData]) => {
+									if (!isEmpty(deviceData) && deviceType.match('INV')) {
+										if (!isEmpty(deviceData.devices)) {
+											deviceData.devices.forEach(db => {
+												totalCount++;
+												if (db.operation == 1) {
+													runCount++;
+												} else {
+													stopCount++;
+												}
+											});
+										}
+
+										if ($('.dbTime').data('timestamp') === undefined || ($('.dbTime').data('timestamp') != undefined && Number($('.dbTime').data('timestamp')) < deviceData['timestamp'])) {
+											const dbTime = new Date(deviceData['timestamp']);
+											$('.dbTime').data('timestamp', deviceData['timestamp']).text(dbTime.format('yyyy-MM-dd HH:mm:ss'));
+										}
+									}
+								});
+
 								if (totalCount == 0) {
 									tableData[index]['invCount'] = '-';
 								} else {
@@ -466,100 +516,23 @@
 										tableData[index]['invCount'] = 'INV (' + runCount + '/' + stopCount + '/' + totalCount + ')';;
 									}
 								}
-								//tableData[index]['deviceFault'] = deviceFault;
 							}
 						});
-					} else if (targetUrl.match('/energy/now/sites')) {
-						tableData.forEach((site, index) => {
-							let targetData = result.data[site.sid];
-							if (isEmpty(targetData)) {
-								tableData[index]['nowEnergy'] = '-';
-							} else {
-								tableData[index]['nowEnergy_origin'] = targetData.energy;
-								tableData[index]['nowEnergy'] = !isNaN(targetData.energy) ? displayNumberFixedUnit(targetData.energy, 'W', 'kW', 0)[0] : '-';
-							}
-						});
-					} else if (targetUrl.match('/weather/site')) {
-						const weatherData = result['data'];
-						if (result['interval'] === 'hour') { //오늘 날씨
-							if (!isEmpty(weatherData)) {
-								tableData.forEach((site, index) => {
-									const datas = weatherData[site.sid]['items'];
-									if (isEmpty(datas)) {
-										tableData[index]['toDaySky'] = '-';
-									} else {
-										datas.sort((a, b) => {
-											return a.basetime > b.basetime ? -1 : a.basetime < b.basetime ? 1 : 0;
-										});
-										const curruntWeather = datas.find(item => item['observed'] === true);
-										if (isEmpty(curruntWeather)) {
-											tableData[index]['toDaySky'] = '';
-										} else {
-											tableData[index]['toDaySky'] = curruntWeather['sky'];
-										}
-									}
-								});
-							}
-						} else { //어제 날씨
-							if (!isEmpty(weatherData)) {
-								tableData.forEach((site, index) => {
-									const datas = weatherData[site.sid]['items'];
-									if (isEmpty(datas)) {
-										tableData[index]['yesterDaySky'] = '-';
-									} else {
-										tableData[index]['yesterDaySky'] = datas[0]['sky'];
-									}
-								});
-							}
-						}
-					} else if (targetUrl.match('/energy/sites')) {
-						const interval = targetUrl.match('day');
-						tableData.forEach((site, index) => {
-							if (!isEmpty(result['data']) && !isEmpty(result['data'][site.sid])) {
-								const siteEnergyItem = result['data'][site.sid];
-								siteEnergyItem.forEach(siteEnergy => {
-									const items = siteEnergy['items'];
-									if (!isEmpty(items)) {
-										let genEnergy = 0;
-										items.map(e => genEnergy += e['energy']);
-										if (interval) {
-											tableData[index]['yesterEnergy_origin'] = genEnergy;
-											tableData[index]['yesterEnergy'] = !isNaN(genEnergy) ? displayNumberFixedUnit(genEnergy, 'W', 'kW', 0)[0] : '-';
-										} else {
-											tableData[index]['lastMonthGen_origin'] = genEnergy;
-											tableData[index]['lastMonthGen'] = !isNaN(genEnergy) ? displayNumberFixedUnit(genEnergy, 'W', 'kW', 0)[0] : '-';
-										}
-									}
-								});
-							}
-						});
-					} else if (targetUrl.match('/alarms')) {
-						result.sort((a, b) => {
-							return a.localtime > b.localtime ? -1 : a.localtime < b.localtime ? 1 : 0;
-						});
-
-						tableData.forEach((site, index) => {
-							const alarm = result.find(e => site['sid'] == e.sid);
-							if (!isEmpty(alarm)) {
-								tableData[index]['deviceFault'] = alarm['message'];
-							}
-						});
-					} else if (targetUrl.match('/get/status/health')) {
-						tableData.forEach((site, index) => {
-							const comStatus = result.sites.find(x => site.sid === x.sid);
-							tableData[index]['comStatus'] = ["error", "<fmt:message key='button.error' />"];
-							if (!isEmpty(comStatus.rtus) && comStatus.rtus.length > 0) {
-								tableData[index]['comStatus'] = ["normal", "<fmt:message key='button.normal' />"];
-							}
-						});
-					}
+					});
 				}
 			});
 
 			gmainTable.clear();
 			gmainTable.rows.add(tableData).draw();
 			$($.fn.dataTable.tables(true)).DataTable().columns.adjust();
-
+		}).catch(error => {
+			$('#errMsg').html('처리 중 오류가 발생했습니다.<br/>에러 메세지:' + error);
+			$('#errorModal').modal('show');
+			setTimeout(function(){
+				$('#errorModal').modal('hide');
+				location.reload();
+			}, 2000);
+		}).finally(() => {
 			document.getElementById('loadingCircleDashboard').style.display =  'none';
 		});
 	}
