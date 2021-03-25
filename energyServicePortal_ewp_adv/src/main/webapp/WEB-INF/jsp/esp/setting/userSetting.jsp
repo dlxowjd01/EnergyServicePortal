@@ -2031,7 +2031,7 @@
 						</div>
 
 						<div class="row">
-							<div class="col-lg-2 col-sm-3"><span class="input-label"><fmt:message key='userSetting.phone' /></span></div>
+							<div class="col-lg-2 col-sm-3"><span class="input-label"><span class="asterisk"><fmt:message key='userSetting.phone' /></span></span></div>
 							<div class="col-lg-4 col-sm-9">
 								<div class="text-input-type"><input type="text" id="newMobileNum" name="new_mobil_num" placeholder="<fmt:message key='userSetting.input' />" maxlength="13"></div>
 								<small id="isValidNewMobileNum" class=" warning hidden"><fmt:message key='userSetting.errorTxt.7' /></small>
@@ -2051,7 +2051,7 @@
 						</div>
 
 						<div class="row">
-							<div class="col-lg-2 col-sm-3"><span class="input-label"><fmt:message key='userSetting.email' /></span></div>
+							<div class="col-lg-2 col-sm-3"><span class="input-label"><span class="asterisk"><fmt:message key='userSetting.email' /></span></span></div>
 							<div class="col-lg-4 col-sm-9">
 								<div class="text-input-type"><input type="text" id="newEmailAddr" name="new_email_addr" placeholder="<fmt:message key='input.input' />"></div>
 								<small class="hidden warning"><fmt:message key='userSetting.errorTxt.8' /></small>
