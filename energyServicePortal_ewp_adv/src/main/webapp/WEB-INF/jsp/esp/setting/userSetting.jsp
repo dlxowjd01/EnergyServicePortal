@@ -258,7 +258,7 @@
 			let newPhoneNum = $("#newMobileNum").val();
 			let newAffiliation = $("#newTeam").val();
 			let newEmailAddr =$("#newEmailAddr").val();
-			let newTaskList = !isEmpty($("#newTaskList").prev().data("value")) ? 0 : $("#newTaskList").prev().data("value");
+			let newTaskList = isEmpty($("#newTaskList").prev().data("value")) ? 0 : $("#newTaskList").prev().data("value");
 			let newTaskName = $("#newTaskList").prev().data("name");
 
 			let newUseOpt = $('#newUseOpt').is(':checked') ? 'Y' : 'N';
@@ -477,7 +477,7 @@
 				}
 
 				// if (customLevelYn === 'N') {
-					if( !isEmpty(newTaskList) && !isEmpty(newTaskList) && ( newTaskName != td.eq(8).text() ) ) {
+					if( !isEmpty(newTaskList) && newTaskName != td.eq(8).text() ) {
 						if (!$('#newTaskList').prev().prop('disabled')) {
 							editUserObj.task = newTaskList;
 						}
