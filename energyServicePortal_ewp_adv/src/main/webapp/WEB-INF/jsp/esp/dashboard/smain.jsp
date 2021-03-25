@@ -2840,7 +2840,7 @@
 											$.each(val.prop, function(i, el) {
 												let value = rowData[0][el.key];
 												let tempObj = {};
-										
+
 												if(isEmpty(headerData[el.key])) {
 													tempObj['reducer'] = el.reducer;
 												} else {
@@ -2867,19 +2867,23 @@
 												} else {
 													if(!isEmpty(headerData[el.key])) {
 														if(typeof tempObj['value'] == 'number') {
-															tempObj['value'] = Number(value) + Number(tempObj['value']);
+															// tempObj['value'] = Number(value) + Number(tempObj['value']);
+															if(rowData[0].operation === 1 || el.key === 'accumActiveEnergy') {tempObj['value'] = Number(value) + Number(tempObj['value']);}
 															tempObj['cnt'] = Number(tempObj['cnt']) + 1;
 														} else {
-															tempObj['value'] = value;
+															// tempObj['value'] = value;
+															if(rowData[0].operation === 1) {tempObj['value'] = value;}
 															tempObj['cnt'] = 1;
 														}
 													
 													} else {
 														if(typeof tempObj['value'] == 'number') {
-															tempObj['value'] = Number(value);
+															// tempObj['value'] = Number(value);
+															if(rowData[0].operation === 1 || el.key === 'accumActiveEnergy') {tempObj['value'] = Number(value);}
 															tempObj['cnt'] = 1;
 														} else {
-															tempObj['value'] = value;
+															// tempObj['value'] = value;
+															if(rowData[0].operation === 1 || el.key === 'accumActiveEnergy') {tempObj['value'] = value;}
 															tempObj['cnt'] = 1;
 														}
 													}
@@ -4213,7 +4217,7 @@
 		if (isEmpty(flagDetail)) {		
 			sList.forEach(site => {
 				if (site.devices != undefined) {
-					site.devices.forEach(device => { 
+					site.devices.forEach(device => {
 						itemChartCapacity += device.capacity;
 					});
 				}
@@ -4827,9 +4831,17 @@
 								} else {
 									if (!isEmpty(deviceData) && !isEmpty(deviceData.data)) {
 										deviceData.data.forEach(el => {
-											if (!isEmpty(el.dcPower)) itemDcPower += el.dcPower;
-											if (!isEmpty(el.activePower)) itemAcPower += el.activePower;
-											if (!isEmpty(el.efficiency)) itemEfficiency += el.efficiency;
+											const nowTimestamp = Number(new Date());
+
+											if (nowTimestamp - el.timestamp > 1000 * 60 * 60) {
+												el.operationDuringAnHour = 0;
+											} else {
+												el.operationDuringAnHour = 1;
+											}
+
+											if (!isEmpty(el.dcPower) && el.operationDuringAnHour === 1) itemDcPower += el.dcPower;
+											if (!isEmpty(el.activePower) && el.operationDuringAnHour === 1) itemAcPower += el.activePower;
+											if (!isEmpty(el.efficiency) && el.operationDuringAnHour === 1) itemEfficiency += el.efficiency;
 										});
 									}
 								}

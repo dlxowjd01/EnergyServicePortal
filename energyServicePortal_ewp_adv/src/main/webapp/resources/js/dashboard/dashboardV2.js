@@ -167,6 +167,7 @@ const firstAjax = () => {
 	hourData = getSiteMainSchCollection('hour');
 
 	let siteSids = new Array();
+	const oid = siteList[0].oid;
 	siteList.forEach(site => { siteSids.push(site.sid);});
 
 	monthlyChartDraw(siteSids);
@@ -460,11 +461,11 @@ const minAjax = async () => {
 								if (deviceType.match('INV')) {
 									if (!operation.includes(deviceData['operation'])) { operation.push(deviceData['operation']); }
 									acPowerSum += (isEmpty(deviceData['activePower'])) ? 0 : Number(deviceData['activePower']);
-									capacitySum += (isEmpty(deviceData['capacity'])) ? 0 : Number(deviceData['capacity']);
+									// capacitySum += (isEmpty(deviceData['capacity'])) ? 0 : Number(deviceData['capacity']);
 									invertorCount += (isEmpty(deviceData['devices'])) ? 0 : deviceData['devices'].length;
 
 									activePower = (activePower != '-') ? Number(activePower) + Number(deviceData['activePower']) : Number(deviceData['activePower']);
-									capacity = (capacity != '-') ? Number(capacity) + Number(deviceData['capacity']) : Number(deviceData['capacity']);
+									// capacity = (capacity != '-') ? Number(capacity) + Number(deviceData['capacity']) : Number(deviceData['capacity']); // 사이트 용량: status에서 config값 으로 
 									inverterCnt = (!isEmpty(deviceData['devices'])) ? deviceData['devices'].length : '-';
 
 									if ($('.dbTime').data('timestamp') === undefined || ($('.dbTime').data('timestamp') != undefined && Number($('.dbTime').data('timestamp')) < deviceData['timestamp'])) {
@@ -477,6 +478,10 @@ const minAjax = async () => {
 									}
 								}
 							}
+						});
+						capacity = '';
+						siteList.forEach((siteConfig) => {
+							capacity = (siteConfig.sid === site_id) ? siteConfig.capacity : capacity;
 						});
 
 						$('#siteList tr.dbclickopen').each(function() {
@@ -515,6 +520,10 @@ const minAjax = async () => {
 								targetChart.redraw();
 							}
 						});
+					});
+					capacitySum = 0;
+					siteList.forEach(siteConfig => {
+						capacitySum += (isEmpty(siteConfig.capacities.gen)) ? 0 : siteConfig.capacities.gen;
 					});
 				}
 			}
@@ -1248,12 +1257,12 @@ const getTodayTotalDetail = async function (siteSids) {
 						}
 					});
 				}
-			} else if (!isEmpty(apiData) && index >= 2) {
+			} else if (!isEmpty(apiData) && index === 2) {
 				Object.entries(apiData).forEach(([site_id, siteDevice]) => {
 					Object.entries(siteDevice).forEach(([deviceType, deviceData]) => {
 						if (deviceType.match('INV') && !isEmpty(deviceData)) {
 							acPowerSum += (isEmpty(deviceData['activePower'])) ? 0 : deviceData['activePower'];
-							capacitySum += (isEmpty(deviceData['capacity'])) ? 0 : deviceData['capacity'];
+							// capacitySum += (isEmpty(deviceData['capacity'])) ? 0 : deviceData['capacity']; // status의 capacity를 config의 capacity로 변경(아래)
 							invertorCount += (isEmpty(deviceData['devices'])) ? 0 : deviceData['devices'].length;
 
 							if ($('.dbTime').data('timestamp') === undefined || ($('.dbTime').data('timestamp') != undefined && Number($('.dbTime').data('timestamp')) < deviceData['timestamp'])) {
@@ -1264,6 +1273,10 @@ const getTodayTotalDetail = async function (siteSids) {
 					});
 				});
 			}
+		});
+
+		siteList.forEach(siteConfig => {
+			capacitySum += (isEmpty(siteConfig.capacities.gen)) ? 0 : siteConfig.capacities.gen;
 		});
 
 		return {acPowerSum, capacitySum, invertorCount, energySum};
@@ -1620,7 +1633,7 @@ const searchSite = async function (siteSids) {
 						site['rtustatus'] = i18nManager.tr("button.error");
 						site['rtustatusClass'] = 'error';
 					}
-				} else {
+				} else if (index === 6) {
 					let operation = new Array();
 					let activePower = '';
 					let capacity = '';
@@ -1659,14 +1672,15 @@ const searchSite = async function (siteSids) {
 
 						site['inverterCount'] = inverterCount //사이트에 속한 인버터 갯수.
 						site['operation'] = operation; //사이트 상태 정보.
+						capacity = site.capacities.gen; //추가: 용량: status에서 config로 변경.
 						site['capacity'] = capacity;   //사이트에 속한 인버터 설비 용량 정보.
+						// site['capacity'] = site.capacities.gen;
 						site['capacityView'] = (isEmpty(capacity) || capacity === '-') ? '-' : displayNumberFixedUnit(capacity, 'W', 'kW', 0)[0];   //사이트에 속한 인버터 설비 용량 정보.
 						site['activePower'] = activePower;   //사이트에 속한 인버터.
 						site['activePowerView'] =(isEmpty(activePower) || activePower === '-') ? '-' : displayNumberFixedUnit(activePower, 'W', 'kW', 0)[0];   //사이트에 속한 인버터.
 						site['irradiationPoa'] = irradiationPoa;   //사이트에 속한 인버터 설비 용량 정보.
 					}
 				}
-
 			});
 		});
 
