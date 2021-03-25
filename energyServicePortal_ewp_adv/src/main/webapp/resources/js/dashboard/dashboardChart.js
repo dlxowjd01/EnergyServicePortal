@@ -385,12 +385,8 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 			enabled: false
 		}
 	},
-	title: {
-		text: ''
-	},
-	subtitle: {
-		text: ''
-	},
+	title: { text: '' },
+	subtitle: { text: '' },
 	xAxis: {
 		min: 0,
 		lineColor: 'var(--grey)',
@@ -410,9 +406,7 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 			}
 		},
 		categories: null,
-		title: {
-			text: ''
-		},
+		title: { text: '' },
 		showEmpty: false
 	},
 	yAxis: {
@@ -473,7 +467,8 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 			}, '<span style="display:flex;"><b>' + this.x + '</b></span>');
 		},
 		shared: true,
-		useHTML: true,
+		crosshairs: true,
+		// useHTML: true,
 		borderColor: 'none',
 		backgroundColor: 'var(--bg-color)',
 		padding: 16,
@@ -489,9 +484,6 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 			},
 			borderWidth: 0,
 			borderColor: 'transparent',
-			formatter: function () {
-				return 'test';
-			},
 			events: {
 				click: function (event) {
 					const x = event.point.category;
@@ -502,7 +494,6 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 		bar: {
 			dataLabels: {
 				enabled: true,
-				// inside: true,
 				style: {
 					color: 'var(--white87)',
 					fontSize: '9px',
@@ -515,12 +506,10 @@ const typeSiteCurrent = Highcharts.chart('typeSiteCurrent', {
 					let val = displayNumberFixedUnit(this.y, 'kWh', 'kWh', 0, "round");
 					return val[0] + " " +  val[1];
 				}
-			},
-		},
+			}
+		}
 	},
-	credits: {
-		enabled: false
-	}
+	credits: { enabled: false }
 });
 
 /**
