@@ -224,7 +224,6 @@
 				const reportDataStart = (new Date(data['report_data_start'])).format('yyyy-MM-dd')
 					, reportDataEnd = (new Date(data['report_data_end'])).format('yyyy-MM-dd');
 
-				console.log(data['report_type']);
 				data['reportTypeName'] = reportType[data['report_type']];
 				data['report_date'] = reportDataStart + ' ~ ' + reportDataEnd;
 
@@ -323,7 +322,7 @@
 		const spcs = $.ajax({
 			url: apiHost + '/spcs',
 			type: 'GET',
-			data: { oid: oid }
+			data: { oid: oid, includeGens: true }
 		});
 
 		const props = $.ajax({
@@ -363,7 +362,9 @@
 					$('#spc_id ul').append(`<li data-value="all"><a href="javascript:void(0);">전체</a></li>`);
 				}
 				spcData.forEach(spc => {
-					$('#spc_id ul').append(`<li data-value="${'${spc[\'spc_id\']}'}"><a href="javascript:void(0);">${'${spc[\'name\']}'}</a></li>`);
+					if (!isEmpty(spc['spcGens'])) {
+						$('#spc_id ul').append(`<li data-value="${'${spc[\'spc_id\']}'}"><a href="javascript:void(0);">${'${spc[\'name\']}'}</a></li>`);
+					}
 				});
 			}
 
