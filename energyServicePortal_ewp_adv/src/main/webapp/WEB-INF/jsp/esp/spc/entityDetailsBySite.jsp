@@ -22,13 +22,6 @@
 			}
 		}
 
-		$(document).on('click', 'div.dropdown li', function() {
-			let dataValue = $(this).data('value'), dataText = $(this).text();
-			$(this).parents('.dropdown').find('button').html(dataText + '<span class="caret"></span>').data('value', dataValue);
-
-			tableData();
-		});
-
 		$('.btn-save').on('click', function(e) {
 			let excelName = 'SPC 원가관리';
 			let $val = $('#balanceTable').find('tbody');
@@ -46,6 +39,10 @@
 		pageInit();
 	});
 
+	const rtnDropdown = function($selector) {
+		tableData();
+	}
+
 	const pageInit = function() {
 		callAjax({
 			url: apiHost + '/spcs/${param.spc_id}',
@@ -62,7 +59,7 @@
 		if($('#spcGen button').data('value') != '') {
 			data.site_id = $('#spcGen button').data('value');
 		}
-		data.year = $('#year button').data('value');
+		data.yyyymm = $('#year button').data('value') + '__';
 
 		callAjax({
 			url: apiHost + '/spcs/${param.spc_id}/balance/month?oid=' + oid,
@@ -167,7 +164,7 @@
 
 		let balanceTr = $('#balanceTable tr');
 		balanceTr.each(function() {
-			let td = $(this).find('td'), tdVal = 0;
+			let td = $(this).find('td:not(:first-child)'), tdVal = 0;
 			td.each(function() {
 				tdVal += $(this).text() == '-' ? 0 : Number($(this).text().replace(/[^0-9.-]/g, ''));
 			});
@@ -180,19 +177,16 @@
 		let siteList = data.data[0].spcGens;
 		let html = '';
 
-		//$('#spcGen button').html('전체 <span class="caret"></span>').data('value', ''); //초기화
-
 		html += '<li data-value=""><a href="javascript:void(0);">전체</a></li>';
-		for (let i in siteList) {
-			let temp = siteList[i];
+
+		siteList.forEach(temp => {
 			if(temp.gen_id == siteId) {
 				$('#spcGen button').html(temp.name +'<span class="caret"></span>').data('value', temp.gen_id);
 			}
 			html += '<li data-value="' + temp.gen_id + '"><a href="javascript:void(0);">' + temp.name + '</a></li>';
-		}
+		})
 
 		$('#spcGen ul').empty().append(html);
-
 		tableData();
 	}
 
@@ -271,7 +265,7 @@
 			<button type="button" class="dropdown-toggle w8" data-toggle="dropdown">
 				전체<span class="caret"></span>
 			</button>
-			<ul class="dropdown-menu dropdown-menu-form chk-type" role="menu">
+			<ul class="dropdown-menu chk-type" role="menu">
 			</ul>
 		</div>
 	</div>
