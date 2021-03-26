@@ -430,7 +430,7 @@
 					if (sidparam) {
 						$(':checkbox[name="device"][data-sid="' + sidparam + '"]').prop('checked', true);
 						displayDropdown($('#deviceType'));
-						$('#interval button').data('value', 'allSum').html('<fmt:message key="renewablesgen.3.sumtotal" /></a></li> <span class="caret"></span>');
+						$('#interval button').data('value', 'hour').html('<fmt:message key="renewablesgen.3.1hr" /></a></li> <span class="caret"></span>');
 						searchGenData();
 					}
 				}
@@ -693,8 +693,6 @@
 			}));
 		}
 
-
-		console.log('test');
 		$('#loadingCircle').show();
 		Promise.all(promiseUrl).then(response => {
 			generationData = new Object();
