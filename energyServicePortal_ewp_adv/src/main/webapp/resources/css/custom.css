@@ -11367,6 +11367,7 @@ th > span.asterisk:after {
     min-width: 60px;
 	font-size: 12px;
     display: inline-block;
+	text-align: center;
     padding: 4px 0px;
     border-radius: 2px;
     font-weight: 400;
@@ -11457,3 +11458,10 @@ th > span.asterisk:after {
 	margin-right: 8px;
 	color: var(--white87);
 }
+
+.pvGen .chart-top,
+.pvGen #deviceType,
+.pvGen #cycle {
+	align-items: flex-start;
+}
+
