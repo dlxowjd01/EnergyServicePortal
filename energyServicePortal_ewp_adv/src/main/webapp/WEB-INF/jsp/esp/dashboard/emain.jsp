@@ -13,6 +13,7 @@
 			scrollCollapse: true,
 			paging: false,
 			sortable: true,
+			order: [[0, 'asc'], [1, 'asc'], [2, 'asc']],
 			columns: [
 				{
 					title: '사이트명',

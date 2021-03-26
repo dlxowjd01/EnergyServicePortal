@@ -770,7 +770,7 @@
 			}
 
 			/* today */
-			if (i === today.getDate()) {
+			if (i === today.getDate() && (addMonth === undefined || addMonth === 0)) {
 				cell.setAttribute('class', 'today');
 			}
 		}
@@ -4575,7 +4575,9 @@
 		}).fail(function () {
 			console.error('rejected');
 		}).always(function () {
-			getWeatherCalendar();
+			if (addMonth === undefined || addMonth === 0) {
+				getWeatherCalendar();
+			}
 		});
 	}
 
