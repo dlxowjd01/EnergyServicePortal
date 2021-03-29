@@ -11465,3 +11465,8 @@ th > span.asterisk:after {
 	align-items: flex-start;
 }
 
+
+
+.highcharts-tooltip {
+	pointer-events: auto !important
+}

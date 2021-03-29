@@ -62,6 +62,16 @@
 							</div>
 						</div>
 					</div>
+					<div class="flex-group duration" id="dateArea">
+						<span class="tx-tit"><fmt:message key="pvGen.graph.date.input" /></span>
+						<div class="sel-calendar dateField">
+							<label for="fromDate" class="sr-only"><fmt:message key="pvGen.graph.date.start" /></label>
+							<input type="text" id="fromDate" class="sel fromDate" value="" autocomplete="off" readonly>
+							<em></em>
+							<label for="toDate" class="sr-only"><fmt:message key="pvGen.graph.date.end" /></label>
+							<input type="text" id="toDate" class="sel toDate" value="" autocomplete="off" readonly>
+						</div>
+					</div>
 					<div class="flex-group unit" id="cycle">
 						<span class="tx-tit"><fmt:message key="pvGen.graph.unit" /></span>
 						<div class="sa-select">
@@ -80,24 +90,7 @@
 							<small class="warning hidden"><fmt:message key="pvGen.graph.unit.warn" /></small>
 						</div>
 					</div>
-					<div class="flex-group duration" id="dateArea">
-						<span class="tx-tit"><fmt:message key="pvGen.graph.date.input" /></span>
-						<div class="sel-calendar dateField">
-							<label for="fromDate" class="sr-only"><fmt:message key="pvGen.graph.date.start" /></label>
-							<input type="text" id="fromDate" class="sel fromDate" value="" autocomplete="off" readonly>
-							<em></em>
-							<label for="toDate" class="sr-only"><fmt:message key="pvGen.graph.date.end" /></label>
-							<input type="text" id="toDate" class="sel toDate" value="" autocomplete="off" readonly>
-						</div>
-					</div>
 					<button type="button" class="btn-type" id="renderBtn"><fmt:message key="renewablesgen.3.update" /></button>
-					<button type="button" id="tooltip" onclick="$(this).tooltip('toggle');" class="btn-help pvGen" data-toggle="tooltip" data-placement="right" data-html="true" title="
-						<ul class='left'>
-							<li class='strong font-color-w87'><fmt:message key='pvGen.note.1' /></li>
-							<li class='strong font-color-w87'><fmt:message key='pvGen.note.2' /></li>
-							<li class='strong font-color-w87'><fmt:message key='pvGen.note.3' /></li>
-						</ul>
-					"></button>
 				</div>
 				<div class="end"><!--
 				--><span class="tx-tit"><fmt:message key="pvGen.graph.style" /></span><!--
@@ -171,7 +164,6 @@
 	const sites = JSON.parse('${siteList}');
 	const dashStandard = '${param.target}';
 	const dashInterval = '${param.interval}';
-	const dashType = '${param.type}';
 	let generationData = new Object()
 	  , summaryData = new Object()
 	  , standard = new Array()
@@ -225,10 +217,10 @@
 		$('#fromDate').datepicker('setDate', 'today'); //데이트 피커 기본
 		$('#toDate').datepicker('setDate', 'today'); //데이트 피커 기본
 
-		// if (sidparam) {
-		// 	$("#interval > ul > li:nth-child(3) > a").click();
-		// 	setTimeout(searchGenData, 500)
-		// }
+		if (sidparam) {
+			$("#interval > ul > li:nth-child(3) > a").click();
+			setTimeout(searchGenData, 500)
+		}
 	});
 
 	//사업소 호출
@@ -266,22 +258,16 @@
 			$("#siteList")
 				.prepend(`<div class="dropdown-search"><input type="text" placeholder="<fmt:message key="dropdown.siteSearch" />" onKeyup="searchSite($(this).val())" ></div>`)
 				.append(`<div class="btn-wrap-type03 btn-wrap-border dropdown-apply"><button type="button" class="btn-type mr-16"><fmt:message key="deviceState.apply" /></button></div>`);
+
+			if (sidparam) {
+				$("#siteList ul li a[data-value="+sidparam+"] > label").click();
+			}
 		}
 
 		if (!isEmpty(dashStandard) && !isEmpty(dashInterval)) {
-			if (!isEmpty(sidparam)) {
-				$(':checkbox[name="site"][value="' + sidparam + '"]').prop('checked', true);
-			} else {
-				$(':checkbox[name="site"]').prop('checked', true);
-			}
+			$(':checkbox[name="site"]').prop('checked', true);
 			displayDropdown($('#siteList'));
 			makeDeviceList();
-		} else {
-			if (!isEmpty(sidparam)) {
-				$(':checkbox[value=' + sidparam + ']').prop('checked', true);
-				displayDropdown($('#siteList'));
-				makeDeviceList();
-			}
 		}
 	};
 
@@ -397,20 +383,14 @@
 
 				deviceList.innerHTML = liStr;
 
+				if (sidparam) { $("#deviceType > div > div > div > div > div.fl > button:nth-child(1)").click(); }
+
 				if (!isEmpty(dashStandard) && !isEmpty(dashInterval)) {
-					if (!isEmpty(dashType) && dashType === 'time') {
-						$(':checkbox[name="device"]').each(function() {
-							if(/time/.test($(this).attr('id'))) {
-								$(this).prop('checked', true);
-							}
-						});
-					} else {
-						$(':checkbox[name="device"]').each(function() {
-							if(/dashboard/.test($(this).attr('id'))) {
-								$(this).prop('checked', true);
-							}
-						});
-					}
+					$(':checkbox[name="device"]').each(function() {
+						if(/dashboard/.test($(this).attr('id'))) {
+							$(this).prop('checked', true);
+						}
+					});
 
 					displayDropdown($('#deviceType'));
 					if (dashInterval === 'hour') {
@@ -426,13 +406,6 @@
 
 					$('#chartStyle button').data('value', 'allSum').html('<fmt:message key="renewablesgen.3.sumtotal" /></a></li> <span class="caret"></span>');
 					searchGenData();
-				} else {
-					if (sidparam) {
-						$(':checkbox[name="device"][data-sid="' + sidparam + '"]').prop('checked', true);
-						displayDropdown($('#deviceType'));
-						$('#interval button').data('value', 'hour').html('<fmt:message key="renewablesgen.3.1hr" /></a></li> <span class="caret"></span>');
-						searchGenData();
-					}
 				}
 			}).catch(error => {
 				console.error(error);
@@ -447,57 +420,36 @@
 			document.querySelectorAll('[name="device"]:checked').forEach(device => {
 				if (device.dataset.type === 'time') { genHour = true; }
 			});
+
+			// if (genHour) {
+			// 	dropDownInit($('#interval'));
+			//
+			// 	document.querySelectorAll('#interval li').forEach(li => {
+			// 		if (li.dataset.value === 'day' || li.dataset.value === 'month') {
+			// 			li.classList.remove('disabled');
+			// 		} else {
+			// 			li.classList.add('disabled');
+			// 		}
+			// 	});
+			// } else {
+			// 	document.querySelectorAll('#interval li').forEach(li => {
+			// 		li.classList.remove('disabled');
+			// 	});
+			// }
 		} else if ($dropdownId === 'siteList') {
 			makeDeviceList();
 		} else if ($dropdownId === 'period') {
-			let interval = new Array();
 			let period = $('#period button').data('value');
 			if (period === 'today') { //오늘
 				$('#fromDate').datepicker('setDate', 'today'); //데이트 피커 기본
 				$('#toDate').datepicker('setDate', 'today'); //데이트 피커 기본
-				interval = ['5min', '15min', 'hour', 'day', 'month'];
 			} else if (period === 'week') { //이번주
 				$('#fromDate').datepicker('setDate', '-6'); //데이트 피커 기본
 				$('#toDate').datepicker('setDate', 'today'); //데이트 피커 기본
-				interval = ['15min', 'hour', 'day', 'month'];
 			} else { //이번달
 				$('#fromDate').datepicker('setDate', '-30'); //데이트 피커 기본
 				$('#toDate').datepicker('setDate', 'today'); //데이트 피커 기본
-				interval = ['hour', 'day', 'month'];
 			}
-
-			$('#interval li').each(function () {
-				if (interval.includes($(this).data('value'))) {
-					$(this).removeClass('disabled');
-				} else {
-					$(this).addClass('disabled');
-				}
-			});
-		} else if ($dropdownId === 'interval') {
-			let interval = $('#interval button').data('value');
-			const diff = dateDiff($('#toDate').datepicker('getDate'), $('#fromDate').datepicker('getDate'));
-			let period = new Array();
-
-			if (interval === '5min') {
-				period = ['today', 'setup'];
-				if (diff !== 0) alert('조회 기간을 확인해주세요.');
-			} else if (interval === '15min') {
-				period = ['today', 'week', 'setup'];
-				if (diff > 6) alert('조회 기간을 확인해주세요.');
-			} else if (interval === 'hour') {
-				period = ['today', 'week', 'month', 'setup'];
-				if (diff > 30) alert('조회 기간을 확인해주세요.');
-			} else {
-				period = ['today', 'week', 'month', 'setup'];
-			}
-
-			$('#period li').each(function () {
-				if (period.includes($(this).data('value'))) {
-					$(this).removeClass('disabled');
-				} else {
-					$(this).addClass('disabled');
-				}
-			});
 		} else if ($dropdownId.match('chartStyle')) {
 			chartDataDraw();
 		}
@@ -512,8 +464,6 @@
 		//기간 설정 확인
 		let startTime = $('#fromDate').val().replace(/-/g, '') + "000000";
 		let endTime = $('#toDate').val().replace(/-/g, '') + "235959";
-		const diff = dateDiff($('#toDate').datepicker('getDate'), $('#fromDate').datepicker('getDate'));
-
 		//주기 확인
 		interval = $('#interval button').data('value');
 
@@ -522,23 +472,6 @@
 		} else {
 			$('#chartStyle2').parent().addClass('hidden');
 			$('#chartStyle2 button').data('value', 'dayBy').html('<fmt:message key="pvGen.viewByDay" /> <span class="caret"></span>');
-		}
-
-		if (interval === '5min') {
-			if (diff !== 0) {
-				alert('조회 기간을 확인해주세요.');
-				return false;
-			}
-		} else if (interval === '15min') {
-			if (diff > 6) {
-				alert('조회 기간을 확인해주세요.');
-				return false;
-			}
-		} else if (interval === 'hour') {
-			if (diff > 30) {
-				alert('조회 기간을 확인해주세요.');
-				return false;
-			}
 		}
 
 		const billingSites = new Array();
@@ -1348,7 +1281,6 @@
 						totalTemp_time += `<h3 class="value-title">${'${total.name}'}</h3>
 								<p class="value-num"><span class="num">${'${numberComma(totalValue)}'}</span> hrs</p>`;
 					} else if (total.type === 'SENSOR_SOLAR') {
-						if ($('#interval button').data('value') === 'day') totalValue = totalValue === '-' ? '-' : Math.round(totalValue * 24 * 100) / 100;
 						totalTemp_insolation += `<h3 class="value-title">${'${total.name}'}</h3>
 								<p class="value-num"><span class="num">${'${numberComma(totalValue)}'}</span> W/m\xB2</p>`;
 					} else {
@@ -1557,7 +1489,11 @@
 
 					}, '<b>' + dateFormat(this.points[0].point.name) + '</b>');
 				},
+				positioner: function(boxWidth, boxHeight, point) {
+					return {x:point.plotX + 20,y:point.plotY};
+				},
 				shared: true,
+				useHTML: true,
 				borderColor: 'none',
 				backgroundColor: 'var(--bg-color)',
 				padding: 16,
