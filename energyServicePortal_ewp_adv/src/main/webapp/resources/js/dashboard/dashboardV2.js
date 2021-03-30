@@ -96,6 +96,7 @@ $(document).ready(function () {
 			$('#miniLoadingCircle_month').show();
 			monthlyChartDraw(siteSids, standard);
 		} else if ($('img.next').index(this) === 1) {
+			standard.setDate(1);
 			standard.setMonth(standard.getMonth() + 1);
 			if (((today.getFullYear() === standard.getFullYear()) && today.getMonth() > standard.getMonth()) || today.getFullYear() != standard.getFullYear()) {
 				$(this).parent().find('img.next').removeClass('hidden');
@@ -132,6 +133,7 @@ $(document).ready(function () {
 			$('#miniLoadingCircle_month').show();
 			monthlyChartDraw(siteSids, standard);
 		} else if ($('img.back').index(this) === 1) {
+			standard.setDate(1);
 			standard.setMonth(standard.getMonth() - 1);
 			if (((today.getFullYear() === standard.getFullYear()) && today.getMonth() > standard.getMonth()) || today.getFullYear() != standard.getFullYear()) {
 				$(this).parent().find('img.next').removeClass('hidden');
