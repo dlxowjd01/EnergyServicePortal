@@ -533,14 +533,16 @@
 	        , today = new Date();
 
 	    let month = 1;
-	    if (dataInterval === 'year') {
-		    month += 12;
-	    } else {
-		    month += Number(dataRange);
+	    if (!isEmpty(dataInterval)) {
+		    if (dataInterval === 'year') {
+			    month = 12;
+		    } else {
+			    month = Number(dataRange);
+		    }
 	    }
 
 	    $('.fromDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - month, 1));
-	    $('.toDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth() - 1, 0));
+	    $('.toDate').datepicker('setDate', new Date(today.getFullYear(), today.getMonth(), 0));
 	}
 
 	//보고서 생성

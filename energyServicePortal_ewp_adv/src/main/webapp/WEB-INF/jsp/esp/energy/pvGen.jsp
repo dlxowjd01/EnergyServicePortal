@@ -177,19 +177,8 @@
 			let idx = $('#deviceType button.btn-type03').index($(this));
 			if (idx == 0) {
 				$(':checkbox[name="device"]').prop('checked', true);
-
-				// document.querySelectorAll('#interval li').forEach(li => {
-				// 	if (li.dataset.value === 'day' || li.dataset.value === 'month') {
-				// 		li.classList.remove('disabled');
-				// 	} else {
-				// 		li.classList.add('disabled');
-				// 	}
-				// });
 			} else {
 				$(':checkbox[name="device"]').prop('checked', false);
-				// document.querySelectorAll('#interval li').forEach(li => {
-				// 	li.classList.add('disabled');
-				// });
 			}
 
 			displayDropdown($('#deviceType'));

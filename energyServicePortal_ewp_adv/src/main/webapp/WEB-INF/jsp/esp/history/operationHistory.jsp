@@ -963,7 +963,7 @@
 						});
 
 						setMakeList(value, key + '_Table', {'dataFunction': {}}); //list생성
-						$('#' + key + '_Table').find('td').each(function () {
+						$('#' + key + '_Table td').each(function () {
 							$(this).html($(this).html().replace(/ *\[[^)]*\] */g, ''));
 						});
 					}
