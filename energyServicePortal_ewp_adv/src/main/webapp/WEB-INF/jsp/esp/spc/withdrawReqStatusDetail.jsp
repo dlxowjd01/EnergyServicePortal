@@ -410,20 +410,20 @@
 			type: 'GET',
 			data: {
 				oid: oid,
-				spcIds: spcId
+				spcIds: Number(spcId)
 			}
 		}).done(function (json, textStatus, jqXHR) {
 			console.log(json);
 			if (!isEmpty(json) && !isEmpty(json.data) && !isEmpty(json.data.items)) {
-				const targetAccount = json.data.items.find(e => e.account_no === account);
+				const targetAccount = json.data.items.find(e => e.account_no === accInfo.replace(/[^0-9]/g, ''));
 
 				if (isEmpty(targetAccount)) {
-					$('[name="availableAmount"]').val('');
+					$('#availableAmount').html('');
 				} else {
-					$('[name="availableAmount"]').val(numberComma(targetAccount.account_balance));
+					$('#availableAmount').html(numberComma(targetAccount.account_balance) + ' 원');
 				}
 			} else {
-				$('[name="availableAmount"]').val('');
+				$('#availableAmount').html('');
 			}
 
 			if (json.refreshed_at != null) {
@@ -432,7 +432,7 @@
 				$('#refresh_date').text('마지막 업데이트 : ');
 			}
 		}).fail(function (jqXHR, textStatus, errorThrown) {
-			$('[name="availableAmount"]').val('');
+			$('#availableAmount').html('');
 			$('#refresh_date').text('마지막 업데이트 : ');
 			alert('처리 중 오류가 발생했습니다.');
 			return false;

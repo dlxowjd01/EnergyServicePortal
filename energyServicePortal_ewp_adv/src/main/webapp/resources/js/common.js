@@ -116,6 +116,7 @@ $(function() {
 						google.maps.event.trigger(markerIcon, 'click');
 						
 						current.addClass("open");
+						target.siblings().find('.di-wrap').removeClass('open');
 					}
 				} else {
 					current.removeClass("open");
