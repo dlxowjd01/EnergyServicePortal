@@ -531,9 +531,21 @@
 			data: { oid: oid }
 		}));
 
+		targetApi.push($.ajax({
+			url: apiHost + '/auth/me/sites',
+			type: 'GET'
+		}));
+
 		new Promise ((resolve, reject) => {
 			resolve(Promise.all(targetApi));
 		}).then(response => {
+			let haveSite = new Array();
+			if (isEmpty(response[2])) {
+				throw new Error('조회가능한 사이트가 없습니다. 사용자 관리 설정을 확인해주세요.');
+			} else {
+				haveSite = [...response[2].map(el => el['sid'])]
+			}
+
 			const tableData = new Array();
 
 			let capacityList = new Array(12).fill(0);
@@ -552,6 +564,9 @@
 
 						if (!isEmpty(spcGens)) {
 							spcGens.forEach(spcGen => {
+
+								if (!haveSite.includes(spcGen['gen_id'])) return false;
+
 								let contractUnitPrice = '', expenditure = '', insuranceCost = '';
 								let contractUnitPriceCurrent = '', insuranceCostCurrent = '';
 								let contractUnitPriceLastMonth = '', insuranceCostLastMonth = '';
@@ -626,6 +641,11 @@
 										}
 
 										for (let i = 0; i < currentMonth; i++) {
+											const spendInfo = JSON.parse(spcGen['spend_info']);
+											if (!isEmpty(spcGen['spend_info'])) {
+												console.log('spendInfo', Number(spendInfo['지출_총계'].replace(/[^0-9]/g, '')))
+											}
+
 											const standardMin = new Date(currentMonthMin.getFullYear(), i, 1), standardMax = new Date(currentMonthMin.getFullYear(), i + 1, 0);
 											//관리 운영 기간의 시작일이 해당월이거나 그전이면서 종료일이 해당월이거나 그이후일경우
 											if (fromTime.getTime() <= standardMax.getTime() && toTime.getTime() >= standardMin.getTime()) {
@@ -641,7 +661,6 @@
 
 												if (!isEmpty(spcGen['spend_info'])) {
 													const spendInfo = JSON.parse(spcGen['spend_info']);
-
 													//종합 지출 총계
 													Object.entries(spendInfo).forEach(([key, data]) => {
 														const expenditureIndex = expenditureTemplate.findIndex(e => e['column'].includes(key));
@@ -655,11 +674,11 @@
 														}
 													});
 
-													if (i <= currentMonthMax.getMonth()) {
+													if (i < currentMonth) {
 														const spendInfo = JSON.parse(spcGen['spend_info']);
 														expenditure = Number(spendInfo['지출_총계'].replace(/[^0-9]/g, ''));
 
-														if (i === currentMonthMax.getMonth()) {
+														if (i === currentMonth) {
 															expenditureCurrent = expenditureInfo[i];
 														}
 													}
@@ -678,17 +697,24 @@
 										, fromTime = isEmpty(insuranceInfo['보험_기간_from0']) ? null : new Date(insuranceInfo['보험_기간_from0'])
 										, toTime = isEmpty(insuranceInfo['보험_기간_to0']) ? null : new Date(insuranceInfo['보험_기간_to0']);
 
+									let totalInsurance = 0;
+									Object.entries(insuranceInfo).forEach(([insuranceKey, insuranceData]) => {
+										if ((insuranceKey.match('이행보증보험료') || insuranceKey.match('보험료')) && !insuranceKey.match('보험료_총계')) {
+											totalInsurance += Number(String(insuranceData).replace(/[^0-9]/g, ''));
+										}
+									});
+
 									if (fromTime != null && toTime !== null) {
 										//작년 동일달 보험료 총계 합산
 										//보험 기간의 시작일이 해당월이거나 그전이면서 종료일이 해당월이거나 그이후일경우
 										if (fromTime.getTime() <= lastYearMax.getTime() && toTime.getTime() >= lastYearMin.getTime()) {
-											if (!isEmpty(insuranceInfo['보험료_총계0'])) {
+											if (!isEmpty(totalInsurance)) {
 												if (isEmpty(lastYearInsuranceInfo)) {
-													lastYearInsuranceInfo = Number(insuranceInfo['보험료_총계0'].replace(/[^0-9]/g, ''));
-													insuranceCostLastYear = Number(insuranceInfo['보험료_총계0'].replace(/[^0-9]/g, ''));
+													lastYearInsuranceInfo = totalInsurance;
+													insuranceCostLastYear = totalInsurance;
 												} else {
-													lastYearInsuranceInfo += Number(insuranceInfo['보험료_총계0'].replace(/[^0-9]/g, ''));
-													insuranceCostLastYear += Number(insuranceInfo['보험료_총계0'].replace(/[^0-9]/g, ''));
+													lastYearInsuranceInfo += totalInsurance;
+													insuranceCostLastYear += totalInsurance;
 												}
 											}
 										}
@@ -696,26 +722,28 @@
 										//이전달 동일달 보험료 총계 합산
 										//보험 기간의 시작일이 해당월이거나 그전이면서 종료일이 해당월이거나 그이후일경우
 										if (fromTime.getTime() <= lastMonthMax.getTime() && toTime.getTime() >= lastMonthMin.getTime()) {
-											if (!isEmpty(insuranceInfo['보험료_총계0'])) {
+											if (!isEmpty(totalInsurance)) {
 												if (isEmpty(lastMonthInsuranceInfo)) {
-													lastMonthInsuranceInfo = Number(insuranceInfo['보험료_총계0'].replace(/[^0-9]/g, ''));
-													insuranceCostLastMonth = Number(insuranceInfo['보험료_총계0'].replace(/[^0-9]/g, ''));
+													lastMonthInsuranceInfo = totalInsurance;
+													insuranceCostLastMonth = totalInsurance;
 												} else {
-													lastMonthInsuranceInfo += Number(insuranceInfo['보험료_총계0'].replace(/[^0-9]/g, ''));
-													insuranceCostLastMonth += Number(insuranceInfo['보험료_총계0'].replace(/[^0-9]/g, ''));
+													lastMonthInsuranceInfo += totalInsurance;
+													insuranceCostLastMonth += totalInsurance;
 												}
 											}
 										}
 
+										console.log(spcGen.name);
 										for (let i = 0; i < currentMonth; i++) {
 											const standardMin = new Date(currentMonthMin.getFullYear(), i, 1), standardMax = new Date(currentMonthMin.getFullYear(), i + 1, 0);
 											//보험 기간의 시작일이 해당월이거나 그전이면서 종료일이 해당월이거나 그이후일경우
 											if (fromTime.getTime() <= standardMax.getTime() && toTime.getTime() >= standardMin.getTime()) {
-												if (!isEmpty(insuranceInfo['보험료_총계0'])) {
-													insuranceCostList[i] += Number(insuranceInfo['보험료_총계0'].replace(/[^0-9]/g, ''));
+												if (!isEmpty(totalInsurance)) {
+													console.log(totalInsurance);
+													insuranceCostList[i] += totalInsurance;
 													if (i <= currentMonthMax.getMonth()) {
-														insuranceCost = Number(insuranceCost) + Number(insuranceInfo['보험료_총계0'].replace(/[^0-9]/g, ''));
-														if (i === currentMonthMax.getMonth()) insuranceCostCurrent = Number(insuranceCostCurrent) + Number(insuranceInfo['보험료_총계0'].replace(/[^0-9]/g, ''));
+														insuranceCost = Number(insuranceCost) + totalInsurance;
+														if (i === currentMonthMax.getMonth()) insuranceCostCurrent = Number(insuranceCostCurrent) + totalInsurance;
 													}
 												}
 											}
@@ -743,7 +771,7 @@
 							});
 						}
 					});
-				} else {
+				} else if (index === 1) {
 					targetData.forEach(rowData => {
 						if (!isEmpty(rowData['work_info'])) {
 							const workInfo = JSON.parse(rowData['work_info'])
@@ -1137,7 +1165,7 @@
 			expenditureCapacityChart.redraw();
 		}).catch(error => {
 			console.error('Func spcList', error);
-			errorMsg('오류가 발생햇습니다.');
+			errorMsg(error);
 		});
 	}
 

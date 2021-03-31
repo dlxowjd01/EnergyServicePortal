@@ -82,7 +82,7 @@
 
 		function getAmount() {
 			const spcId = $('#spcList').prev().data('value');
-			const account = $('#withdrawList').prev().data('value').replace(/[^\d]/g, '');
+			const account = $('#withdrawList').prev().data('value');
 
 			if (!isEmpty(spcId) && !isEmpty(account)) {
 				$.ajax({
@@ -93,7 +93,6 @@
 						spcIds: spcId
 					}
 				}).done(function (json, textStatus, jqXHR) {
-					console.log(json);
 					if (!isEmpty(json) && !isEmpty(json.data) && !isEmpty(json.data.items)) {
 						const targetAccount = json.data.items.find(e => e.account_no === account);
 
@@ -240,13 +239,18 @@
 							let bankName = '';
 							let accNum = '';
 							let accHolder = '';
-							if(v.accType.match("출금")){
+							console.log(v.accType);
+							console.log(v.accType.match("출금"));
+
+							if(v.accType.match("출금") || v.accType.match("입출금")) {
 								accNum = v.accNum;
 								accHolder = v.accHolder;
 								bankName = v.bankName;
 								sending = copyWithdrawList.replace(/\*bank_name\*/g, bankName).replace(/\*acc_num\*/g, accNum).replace(/\*acc_holder\*/g, accHolder);
 								withdrawList.append($(sending));
-							} else {
+							}
+
+							if(v.accType.match("입금") || v.accType.match("입출금")) {
 								bankName = v.bankName;
 								accNum = v.accNum;
 								accHolder = v.accHolder;

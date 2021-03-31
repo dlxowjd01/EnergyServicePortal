@@ -6,7 +6,7 @@
 	const siteList = JSON.parse('${siteList}');
 
 	const configDevice = '/config/orgs/' + oid;
-	const statusSummary = '/status/summary';
+	const statusSummary = '/get/status/summary';
 	const configDeviceData = {
 		includeUsers: false,
 		includSites: false,
@@ -917,23 +917,29 @@
 			$(this).find('button').html($(this).find('button').data('name') + '<span class="caret"></span>').data('value', '');
 		});
 
+		$('[id^="analyzeTag"] .tx-tit .tag-type').each(function () {
+			$(this).remove();
+		});
+
+
 		$('#way button').html($('#way button').data('name') + '<span class="caret"></span>');
 
 		let statusSummaryData = {
 			sids: siteArray.join(','),
 			dids: deviceArray.join(','),
 			//deviceType: '',
-			startTime: $('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000',
-			endTime: $('#toDate').datepicker('getDate').format('yyyyMMdd') + '235959',
+			startTime: Number($('#fromDate').datepicker('getDate').format('yyyyMMdd') + '000000'),
+			endTime: Number($('#toDate').datepicker('getDate').format('yyyyMMdd') + '235959'),
 			interval: $('#interval').find('button').data('value'),
 			formId: 'v2'
 		}
 
 		$.ajax({
 			url: apiHost + statusSummary,
-			type: 'get',
+			type: 'post',
 			async: false,
-			data: statusSummaryData,
+			contentType: 'application/json',
+			data: JSON.stringify(statusSummaryData),
 			success: function (result) {
 				let chart = $('#hchart2').highcharts();
 				if (chart) {
@@ -1151,17 +1157,18 @@
 				formatter: function () {
 					if ($(':radio[name="analyze"]:checked').val() == '시계열 분석') {
 						return this.points.reduce(function (s, point) {
-							return s + '<br/><span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + Number(point.y).toFixed(2) + point.series.userOptions.tooltip.valueSuffix;
+							return s + '<br/><span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + numberComma(Number(point.y).toFixed(2)) + point.series.userOptions.tooltip.valueSuffix;
 						}, '<span style="display:flex; margin-bottom:-10px;"><b>' + new Date(this.x).format('yyyy-MM-dd HH:mm:ss') + '</b></span>');
 					} else {
 						let tooltip = this.series.name + '<br/>' +
-							'X:' + (this.x).toFixed(2) + '<br/> Y:' + (this.y).toFixed(2);
+							'X:' + numberComma((this.x).toFixed(2)) + '<br/> Y:' + numberComma((this.y).toFixed(2));
 						return tooltip;
 					}
 				},
 				shared: true,
 				useHTML: true,
 				borderColor: 'none',
+				x: 0,
 				backgroundColor: 'var(--bg-color)',
 				padding: 16,
 				style: {

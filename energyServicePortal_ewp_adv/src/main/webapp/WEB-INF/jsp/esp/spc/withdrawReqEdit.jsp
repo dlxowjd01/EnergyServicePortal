@@ -252,7 +252,11 @@
 									let bankName = '';
 									let accNum = '';
 									let accHolder = '';
-									if(v.accType.match("출금")) {
+
+
+
+
+									if(v.accType.match("출금") || v.accType.match("입출금")) {
 										accNum = v.accNum;
 										accHolder = v.accHolder;
 										bankName = v.bankName;
@@ -263,7 +267,9 @@
 										// selectedAcc.html( selectedAcc.html().replace(/\*bank_name\*/g, bankName).replace(/\*acc_num\*/g, accNum) );
 										sending = copyWithdrawList.replace(/\*bank_name\*/g, bankName).replace(/\*acc_num\*/g, accNum).replace(/\*acc_holder\*/g, accHolder);
 										withdrawList.append($(sending));
-									} else {
+									}
+
+									if(v.accType.match("입금") || v.accType.match("입출금")) {
 										bankName = v.bankName;
 										accNum = v.accNum;
 										accHolder = v.accHolder;
