@@ -765,7 +765,7 @@ const dailyChartDraw = async (siteSids, standard) => {
 		$('.gmain-chart2 span.term span').text(standard.format('yyyy.MM') + '.01 ~ ' + standard.format('yyyy.MM') + '.' + ('0' + lastDay.getDate()).slice(-2)).data('standard', standard);
 		startTime = Number(standard.format('yyyyMM') + '01000000'), endTime = Number(lastDay.format('yyyyMMdd') + '235959');
 	} else {
-		lastDay = new Date(today.getFullYear(), today.getMonth() + 2, 0);
+		lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
 		$('.gmain-chart2 span.term span').text(today.format('yyyy.MM') + '.01 ~ ' + today.format('yyyy.MM') + '.' + ('0' + today.getDate()).slice(-2)).data('standard', new Date());
 		startTime = Number(monthData.startTime), endTime = Number(monthData.endTime);
 	}
