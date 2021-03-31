@@ -476,16 +476,15 @@
 					editUserObj.team = newAffiliation;
 				}
 
-				// if (customLevelYn === 'N') {
+				if (newAccVal == '1') {
+					editUserObj.task = 0;
+				} else {
 					if( !isEmpty(newTaskList) && newTaskName != td.eq(8).text() ) {
 						if (!$('#newTaskList').prev().prop('disabled')) {
 							editUserObj.task = newTaskList;
 						}
 					}
-				// } else {
-				// 	editUserObj.task = '';
-				// }
-
+				}
 
 				if( !isEmpty(newUseOpt) && (newUswOptName != td.eq(10).text() ) ) {
 					// console.log("newUseOpt===", newUseOpt, "newUswOptName===", newUswOptName);
