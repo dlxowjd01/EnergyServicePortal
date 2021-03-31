@@ -564,7 +564,6 @@
 						} else {
 							// if either pwd && editUserObj values are present (YES), but (NO) userSpc && userSite info
 							if( !isEmpty($("#newUserPwd").val()) ){
-								console.log("optionPwd===", optionPwd);
 								$.ajax(optionPwd).done(function (json, textStatus, jqXHR) {
 									refreshUserList();
 									showAjaxResultModal("ajaxResultModal", "addUserModal", "1", resultSuccessText);
@@ -751,7 +750,6 @@
 			async: false,
 			data: { oid: oid }
 		}).done((data, textStatus, jqXHR) => {
-			console.log(data);
 			let temp = ``;
 			(data.data).forEach(custom => {
 				temp += `<li data-value="${'${custom.level_id}'}" data-name="${'${custom.name}'}"><a href="#" tabindex="-1">${'${custom.name}'}</a></li>`;
@@ -782,7 +780,6 @@
 
 				Promise.resolve(data.map((item, index) => {
 					let obj = {};
-					console.log(item)
 
 					obj.user_id = item.login_id;
 					obj.name = item.name;
@@ -944,7 +941,11 @@
 									"mData": "custom_level_name",
 									"mRender": function ( data, type, row ) {
 										if (isEmpty(data)) {
-											return '-';
+											if (row.user_role === '일반 사용자') {
+												return '업무 구분';
+											} else {
+												return '-';
+											}
 										} else {
 											return data;
 										}
@@ -1145,7 +1146,11 @@
 									"mData": "custom_level_name",
 									"mRender": function ( data, type, row ) {
 										if (isEmpty(data)) {
-											return '-';
+											if (row.user_role === '일반 사용자') {
+												return '업무 구분';
+											} else {
+												return '-';
+											}
 										} else {
 											return data;
 										}

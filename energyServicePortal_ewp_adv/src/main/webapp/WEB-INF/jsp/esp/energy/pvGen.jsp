@@ -443,7 +443,7 @@
 		} else if ($dropdownId === 'period') {
 			let interval = new Array();
 			let period = $('#period button').data('value');
-			if (period === 'today') { //오늘
+			if (period === 'today' || period === 'setup') { //오늘
 				$('#fromDate').datepicker('setDate', 'today'); //데이트 피커 기본
 				$('#toDate').datepicker('setDate', 'today'); //데이트 피커 기본
 				interval = ['5min', '15min', 'hour', 'day', 'month'];

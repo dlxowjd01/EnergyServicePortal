@@ -1516,7 +1516,7 @@
 		],
 		yAxis: [
 			{
-				opposite: true,
+				opposite: false,
 				showEmpty: false,
 				min: 0,
 				gridLineWidth: 0,
@@ -1548,7 +1548,7 @@
 				},
 			},
 			{
-				opposite: false,
+				opposite: true,
 				showEmpty: false,
 				// minRange: 1,
 				min: 0,
