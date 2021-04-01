@@ -700,9 +700,11 @@
 								if (!isEmpty(res.SENSOR_SOLAR)) {
 									res.SENSOR_SOLAR.forEach(r => {
 										if (did === r.did) {
+											let unit = 1;
+											if (interval === 'day') unit = 24;
 											tempItem.push({
 												basetime: r.basetime,
-												irradiationPoa: r.mean.irradiationPoa
+												irradiationPoa: isEmpty(r.mean.irradiationPoa) ? 0 : r.mean.irradiationPoa * unit
 											})
 										}
 									});
