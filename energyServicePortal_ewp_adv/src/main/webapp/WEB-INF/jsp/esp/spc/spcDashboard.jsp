@@ -584,13 +584,15 @@
 										//작년 동일달 계약 단가 합산
 										//관리 운영 기간의 시작일이 해당월이거나 그전이면서 종료일이 해당월이거나 그이후일경우
 										if (fromTime.getTime() <= lastYearMax.getTime() && toTime.getTime() >= lastYearMin.getTime()) {
+											let daily = 1;
+											if (toTime.getFullYear() === lastYearMax.getFullYear() && toTime.getMonth() === lastYearMax.getMonth()) daily = toTime.getDate() / lastYearMax.getDate();
 											if (!isEmpty(maintenanceInfo['계약_단가'])) {
 												if (isEmpty(lastYearContractUnitPrice)) {
-													lastYearContractUnitPrice = Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, ''));
-													contractUnitPriceLastYear = Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, ''));
+													lastYearContractUnitPrice = Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, '')) * daily;
+													contractUnitPriceLastYear = Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, '')) * daily;
 												} else {
-													lastYearContractUnitPrice += Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, ''));
-													contractUnitPriceLastYear += Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, ''));
+													lastYearContractUnitPrice += Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, '')) * daily;
+													contractUnitPriceLastYear += Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, '')) * daily;
 												}
 											}
 
@@ -602,9 +604,9 @@
 													if (expenditureIndex > -1 && !isEmpty(data)) {
 														if (isEmpty(expenditureLastYear)) {
 															expenditureLastYear = new Array(12).fill(0);
-															expenditureLastYear[expenditureIndex] += Number(data.replace(/[^0-9]/g, ''));
+															expenditureLastYear[expenditureIndex] += Number(data.replace(/[^0-9]/g, '')) * daily;
 														} else {
-															expenditureLastYear[expenditureIndex] += Number(data.replace(/[^0-9]/g, ''));
+															expenditureLastYear[expenditureIndex] += Number(data.replace(/[^0-9]/g, '')) * daily;
 														}
 													}
 												});
@@ -614,13 +616,16 @@
 										//이전달 계약 단가 합산
 										//관리 운영 기간의 시작일이 해당월이거나 그전이면서 종료일이 해당월이거나 그이후일경우
 										if (fromTime.getTime() <= lastMonthMax.getTime() && toTime.getTime() >= lastMonthMin.getTime()) {
+											let daily = 1;
+											if (toTime.getFullYear() === lastMonthMax.getFullYear() && toTime.getMonth() === lastMonthMax.getMonth()) daily = toTime.getDate() / lastMonthMax.getDate();
+
 											if (!isEmpty(maintenanceInfo['계약_단가'])) {
 												if (isEmpty(lastMonthContractUnitPrice)) {
-													lastMonthContractUnitPrice = Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, ''));
-													contractUnitPriceLastMonth = Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, ''));
+													lastMonthContractUnitPrice = Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, '')) * daily;
+													contractUnitPriceLastMonth = Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, '')) * daily;
 												} else {
-													lastMonthContractUnitPrice += Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, ''));
-													contractUnitPriceLastMonth += Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, ''));
+													lastMonthContractUnitPrice += Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, '')) * daily;
+													contractUnitPriceLastMonth += Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, '')) * daily;
 												}
 											}
 
@@ -631,9 +636,9 @@
 													if (expenditureIndex > -1 && !isEmpty(data)) {
 														if (isEmpty(expenditureLastMonth)) {
 															expenditureLastMonth = new Array(12).fill(0);
-															expenditureLastMonth[expenditureIndex] += Number(data.replace(/[^0-9]/g, ''));
+															expenditureLastMonth[expenditureIndex] += Number(data.replace(/[^0-9]/g, '')) * daily;
 														} else {
-															expenditureLastMonth[expenditureIndex] += Number(data.replace(/[^0-9]/g, ''));
+															expenditureLastMonth[expenditureIndex] += Number(data.replace(/[^0-9]/g, '')) * daily;
 														}
 													}
 												});
@@ -642,19 +647,18 @@
 
 										for (let i = 0; i < currentMonth; i++) {
 											const spendInfo = JSON.parse(spcGen['spend_info']);
-											if (!isEmpty(spcGen['spend_info'])) {
-												console.log('spendInfo', Number(spendInfo['지출_총계'].replace(/[^0-9]/g, '')))
-											}
-
 											const standardMin = new Date(currentMonthMin.getFullYear(), i, 1), standardMax = new Date(currentMonthMin.getFullYear(), i + 1, 0);
 											//관리 운영 기간의 시작일이 해당월이거나 그전이면서 종료일이 해당월이거나 그이후일경우
 											if (fromTime.getTime() <= standardMax.getTime() && toTime.getTime() >= standardMin.getTime()) {
+												let daily = 1;
+												if (toTime.getFullYear() === standardMax.getFullYear() && toTime.getMonth() === standardMax.getMonth()) daily = toTime.getDate() / standardMax.getDate();
+
 												if (!isEmpty(maintenanceInfo['계약_단가'])) {
-													contractUnitPriceList[i] += Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, ''));
+													contractUnitPriceList[i] += Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, '')) * daily;
 													if (i <= currentMonthMax.getMonth()) {
-														contractUnitPrice = Number(contractUnitPrice) + Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, ''));
+														contractUnitPrice = Number(contractUnitPrice) + Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, '')) * daily;
 														if (i === currentMonthMax.getMonth()) {
-															contractUnitPriceCurrent = Number(contractUnitPriceCurrent) + Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, ''));
+															contractUnitPriceCurrent = Number(contractUnitPriceCurrent) + Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, '')) * daily;
 														}
 													}
 												}
@@ -667,16 +671,16 @@
 														if (expenditureIndex > -1 && !isEmpty(data)) {
 															if (isEmpty(expenditureInfo[i])) {
 																expenditureInfo[i] = new Array(12).fill(0);
-																expenditureInfo[i][expenditureIndex] += Number(data.replace(/[^0-9]/g, ''));
+																expenditureInfo[i][expenditureIndex] += Number(data.replace(/[^0-9]/g, '')) * daily;
 															} else {
-																expenditureInfo[i][expenditureIndex] += Number(data.replace(/[^0-9]/g, ''));
+																expenditureInfo[i][expenditureIndex] += Number(data.replace(/[^0-9]/g, '')) * daily;
 															}
 														}
 													});
 
 													if (i < currentMonth) {
 														const spendInfo = JSON.parse(spcGen['spend_info']);
-														expenditure = Number(spendInfo['지출_총계'].replace(/[^0-9]/g, ''));
+														expenditure = Number(spendInfo['지출_총계'].replace(/[^0-9]/g, '')) * daily;
 
 														if (i === currentMonth) {
 															expenditureCurrent = expenditureInfo[i];
@@ -694,61 +698,76 @@
 
 								if (!isEmpty(spcGen['addlist_insurance_info'])) {
 									const insuranceInfo = JSON.parse(spcGen['addlist_insurance_info'])
-										, fromTime = isEmpty(insuranceInfo['보험_기간_from0']) ? null : new Date(insuranceInfo['보험_기간_from0'])
-										, toTime = isEmpty(insuranceInfo['보험_기간_to0']) ? null : new Date(insuranceInfo['보험_기간_to0']);
-
-									let totalInsurance = 0;
-									Object.entries(insuranceInfo).forEach(([insuranceKey, insuranceData]) => {
-										if ((insuranceKey.match('이행보증보험료') || insuranceKey.match('보험료')) && !insuranceKey.match('보험료_총계')) {
-											totalInsurance += Number(String(insuranceData).replace(/[^0-9]/g, ''));
-										}
+										, targetArray = new Array();
+									Object.entries(insuranceInfo).forEach(([key, value]) => {
+										const targetIndex = key.replace(/[^0-9]/g, '');
+										if (!targetArray.includes(targetIndex)) targetArray.push(targetIndex);
 									});
 
-									if (fromTime != null && toTime !== null) {
-										//작년 동일달 보험료 총계 합산
-										//보험 기간의 시작일이 해당월이거나 그전이면서 종료일이 해당월이거나 그이후일경우
-										if (fromTime.getTime() <= lastYearMax.getTime() && toTime.getTime() >= lastYearMin.getTime()) {
-											if (!isEmpty(totalInsurance)) {
-												if (isEmpty(lastYearInsuranceInfo)) {
-													lastYearInsuranceInfo = totalInsurance;
-													insuranceCostLastYear = totalInsurance;
-												} else {
-													lastYearInsuranceInfo += totalInsurance;
-													insuranceCostLastYear += totalInsurance;
-												}
-											}
-										}
+									targetArray.forEach(target => {
+										const fromTime = isEmpty(insuranceInfo['보험_기간_from' + target]) ? null : new Date(insuranceInfo['보험_기간_from' + target])
+											, toTime = isEmpty(insuranceInfo['보험_기간_to' + target]) ? null : new Date(insuranceInfo['보험_기간_to' + target]);
 
-										//이전달 동일달 보험료 총계 합산
-										//보험 기간의 시작일이 해당월이거나 그전이면서 종료일이 해당월이거나 그이후일경우
-										if (fromTime.getTime() <= lastMonthMax.getTime() && toTime.getTime() >= lastMonthMin.getTime()) {
-											if (!isEmpty(totalInsurance)) {
-												if (isEmpty(lastMonthInsuranceInfo)) {
-													lastMonthInsuranceInfo = totalInsurance;
-													insuranceCostLastMonth = totalInsurance;
-												} else {
-													lastMonthInsuranceInfo += totalInsurance;
-													insuranceCostLastMonth += totalInsurance;
-												}
+										let totalInsurance = 0;
+										Object.entries(insuranceInfo).forEach(([insuranceKey, insuranceData]) => {
+											if (insuranceKey === '이행보증보험료' + target || insuranceKey === '보험료' + target) {
+												totalInsurance += Number(String(insuranceData).replace(/[^0-9]/g, ''));
 											}
-										}
+										});
 
-										console.log(spcGen.name);
-										for (let i = 0; i < currentMonth; i++) {
-											const standardMin = new Date(currentMonthMin.getFullYear(), i, 1), standardMax = new Date(currentMonthMin.getFullYear(), i + 1, 0);
+										if (fromTime != null && toTime !== null) {
+											//작년 동일달 보험료 총계 합산
 											//보험 기간의 시작일이 해당월이거나 그전이면서 종료일이 해당월이거나 그이후일경우
-											if (fromTime.getTime() <= standardMax.getTime() && toTime.getTime() >= standardMin.getTime()) {
+											if (fromTime.getTime() <= lastYearMax.getTime() && toTime.getTime() >= lastYearMin.getTime()) {
+												let daily = 1;
+												if (toTime.getFullYear() === lastYearMax.getFullYear() && toTime.getMonth() === lastYearMax.getMonth()) daily = toTime.getDate() / lastYearMax.getDate();
+
 												if (!isEmpty(totalInsurance)) {
-													console.log(totalInsurance);
-													insuranceCostList[i] += totalInsurance;
-													if (i <= currentMonthMax.getMonth()) {
-														insuranceCost = Number(insuranceCost) + totalInsurance;
-														if (i === currentMonthMax.getMonth()) insuranceCostCurrent = Number(insuranceCostCurrent) + totalInsurance;
+													if (isEmpty(lastYearInsuranceInfo)) {
+														lastYearInsuranceInfo = totalInsurance * daily;
+														insuranceCostLastYear = totalInsurance * daily;
+													} else {
+														lastYearInsuranceInfo += totalInsurance * daily;
+														insuranceCostLastYear += totalInsurance * daily;
+													}
+												}
+											}
+
+											//이전달 동일달 보험료 총계 합산
+											//보험 기간의 시작일이 해당월이거나 그전이면서 종료일이 해당월이거나 그이후일경우
+											if (fromTime.getTime() <= lastMonthMax.getTime() && toTime.getTime() >= lastMonthMin.getTime()) {
+												let daily = 1;
+												if (toTime.getFullYear() === lastMonthMax.getFullYear() && toTime.getMonth() === lastMonthMax.getMonth()) daily = toTime.getDate() / lastMonthMax.getDate();
+
+												if (!isEmpty(totalInsurance)) {
+													if (isEmpty(lastMonthInsuranceInfo)) {
+														lastMonthInsuranceInfo = totalInsurance * daily;
+														insuranceCostLastMonth = totalInsurance * daily;
+													} else {
+														lastMonthInsuranceInfo += totalInsurance * daily;
+														insuranceCostLastMonth += totalInsurance * daily;
+													}
+												}
+											}
+
+											for (let i = 0; i < currentMonth; i++) {
+												const standardMin = new Date(currentMonthMin.getFullYear(), i, 1), standardMax = new Date(currentMonthMin.getFullYear(), i + 1, 0);
+												//보험 기간의 시작일이 해당월이거나 그전이면서 종료일이 해당월이거나 그이후일경우
+												if (fromTime.getTime() <= standardMax.getTime() && toTime.getTime() >= standardMin.getTime()) {
+													let daily = 1;
+													if (toTime.getFullYear() === standardMax.getFullYear() && toTime.getMonth() === standardMax.getMonth()) daily = toTime.getDate() / standardMax.getDate();
+
+													if (!isEmpty(totalInsurance)) {
+														insuranceCostList[i] += totalInsurance * daily;
+														if (i <= currentMonthMax.getMonth()) {
+															insuranceCost = Number(insuranceCost) + (totalInsurance * daily);
+															if (i === currentMonthMax.getMonth()) insuranceCostCurrent = Number(insuranceCostCurrent) + (totalInsurance * daily);
+														}
 													}
 												}
 											}
 										}
-									}
+									});
 								}
 
 								tableData.push({
@@ -834,6 +853,8 @@
 		}).then(({capacityList, contractUnitPriceList, insuranceCostList, repairMaintenanceCostList, expenditureInfo, lastYearContractUnitPrice, lastYearInsuranceInfo, lastYearRepair, tableData}) => {
 			const lastMonth = new Date(); lastMonth.setDate(0);
 			const currentMonth = new Date().getMonth();
+			let f1 = d3.format(',.1f');
+			let f0 = d3.format(',.0f');
 
 			//발전 현황 (설비 용량)
 			const refineCapacity = displayNumberFixedDecimal(capacityList[currentMonth - 1], 'kW', 3, 2);
@@ -853,6 +874,7 @@
 					expenditureSum[dataIdx] += data;
 				});
 			});
+
 			insuranceCostList.forEach((insurance, index) => { if (index < currentMonth) { expenditure += insurance; expenditureSum[0] += insurance } });
 			repairMaintenanceCostList.forEach((repair, index) => { if (index < currentMonth) { expenditure += repair; expenditureSum[11] += repair } });
 
@@ -860,15 +882,15 @@
 			contractUnitPriceList.forEach((contract, index) => { if (index < currentMonth) { contractUnitPrice += contract; } });
 
 			const profit = contractUnitPrice - expenditure;
-			document.querySelector('.spcDashboard1-2 div:nth-child(1) p.number-unit span').innerHTML = numberComma(profit);
+			document.querySelector('.spcDashboard1-2 div:nth-child(1) p.number-unit span').innerHTML = f0(profit);
 			// //올해 수입 총계
-			document.querySelector('.spcDashboard1-2 div:nth-child(2) ul:nth-child(1) li:nth-child(2) span').innerHTML = numberComma(contractUnitPrice);
+			document.querySelector('.spcDashboard1-2 div:nth-child(2) ul:nth-child(1) li:nth-child(2) span').innerHTML = f0(contractUnitPrice);
 			// //올해 지출 총계
-			document.querySelector('.spcDashboard1-2 div:nth-child(2) ul:nth-child(2) li:nth-child(2) span').innerHTML = numberComma(expenditure);
+			document.querySelector('.spcDashboard1-2 div:nth-child(2) ul:nth-child(2) li:nth-child(2) span').innerHTML = f0(expenditure);
 			// //올해 이익률
-			const margin = Math.floor((profit / contractUnitPrice) * 100);
+			const margin = (profit / contractUnitPrice) * 100;
 			if (isFinite(margin)) {
-				document.querySelector('.spcDashboard1-1 div:nth-child(2) p.number-unit span').innerHTML = margin;
+				document.querySelector('.spcDashboard1-1 div:nth-child(2) p.number-unit span').innerHTML = f1(margin);
 			} else {
 				document.querySelector('.spcDashboard1-1 div:nth-child(2) p.number-unit span').innerHTML = '-';
 			}
@@ -1223,7 +1245,6 @@
 			// color: "var(--white87)",
 			// fontSize: "12px",
 			formatter() {
-				console.log(this);
 				return `<div class="treemap-tooltip"><div><div class="color-circle" style="background: ${'${this.color}'};"></div>${'${this.key}'}</div> <p>${'${this.point.value}'}%</p></div>`
 			}
 		},
