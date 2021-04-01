@@ -1,10 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
-
-<style type="text/css">
-
-</style>
-
 <form id="linkSiteForm" name="linkSiteForm" method="post"></form>
 <div class="container-fluid">
 	<div class="row header-wrapper">
@@ -3595,7 +3590,7 @@
 						}
 
 						if (currentMonthData[1] == 'success') {
-							let resultNow = currentMonthData[0].data[siteId];
+							let resultNow = isEmpty(currentMonthData[0].data[siteId]) ? 0 : currentMonthData[0].data[siteId];
 							chartItems1.push({
 								basetime: Number(monthFormData.startTime),
 								energy: resultNow.energy,
@@ -3671,7 +3666,7 @@
 						}
 
 						if (currentMonthData[1] == 'success') {
-							let resultNow = currentMonthData[0].data[siteId];
+							let resultNow = isEmpty(currentMonthData[0].data[siteId]) ? 0 : currentMonthData[0].data[siteId];
 							chartItems1.push({
 								basetime: monthFormData.startTime,
 								energy: resultNow.energy,
@@ -4131,7 +4126,7 @@
 					}
 
 					if(result1B[1] == 'success') {
-						let resultNow = result1B[0].data[siteId];
+						let resultNow = isEmpty(result1B[0].data[siteId]) ? 0 : result1B[0].data[siteId];
 						if(!isEmpty(chartItems1)){
 							chartItems1.push({
 								basetime: monthFormData.startTime,
