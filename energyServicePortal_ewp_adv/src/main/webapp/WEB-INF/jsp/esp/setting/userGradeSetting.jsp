@@ -195,10 +195,10 @@
 		if (e.target.classList.contains('btn-type03')) {
 			if (etcTable.cell(this).data() === 1) {
 				etcTable.cell(this).data(2);
-				$(this).find('button.btn-type03').text('<fmt:message key="ugs.auth.1" />');
+				$(this).find('button.btn-type03').text('<fmt:message key="ugs.auth.2" />');
 			} else {
 				etcTable.cell(this).data(1);
-				$(this).find('button.btn-type03').text('<fmt:message key="ugs.auth.2" />');
+				$(this).find('button.btn-type03').text('<fmt:message key="ugs.auth.1" />');
 			}
 		} else if (e.target.classList.contains('btn-close')) {
 			const value = this.children[1].dataset.value;
@@ -273,6 +273,7 @@
 				level_id: levelId
 			}
 		}).done((data, textStatus, jqXHR) => {
+			console.log(data);
 			if (!isEmpty(data.data)) {
 				(data.data).forEach(data => {
 					const menuCode = data.menu_code;
@@ -412,7 +413,7 @@
 					let isChecked = '';
 					if (menuCode === 'dashboard') isChecked = 'checked';
 
-					if (menu.parent === null) {
+					if (menu.parent === null && menuCode !== 'setting') {
 						let subMenuList = ``;
 						let subDownButton = ``;
 						let subDownSection = ``;
@@ -421,7 +422,6 @@
 								let subName = JSON.parse(subMenu.name);
 								let isSubChecked = '';
 								if (subMenu.code === 'gmain') isSubChecked = 'checked';
-								console.log(subName)
 								subMenuList += `
 									<li>
 										<input type="checkbox" id="menu-${'${subMenu.code}'}" name="menu" data-parent="${'${subMenu.parent}'}" ${'${isSubChecked}'} value="${'${subMenu.code}'}">
