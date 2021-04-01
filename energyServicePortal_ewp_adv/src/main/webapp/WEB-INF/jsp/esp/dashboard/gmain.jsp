@@ -517,14 +517,16 @@
 
 	$(function () {
 		let target = $("#innerBody").find(".content-wrapper");
-		var refreshMinInterval;
-		var refreshHourInterval;
-		var dashboardViewFlag = true;
+		let refreshMinInterval;
+		let refreshFiveMinInterval
+		let refreshHourInterval;
+		let dashboardViewFlag = true;
 
 		if ($("#switchBtn").is(":checked")) {
 			target.eq(0).addClass("hidden").next().removeClass("hidden");
 			// $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
 			getDashboardTable('gmainTable');
+			refreshFiveMinInterval  = setInterval(getDashboardTable, 5 * 60 * 1000);
 		} else {
 			target.eq(0).removeClass("hidden").next().addClass("hidden");
 
@@ -563,9 +565,10 @@
 				setCookie("switch", "checked");
 				target.eq(0).addClass('hidden').next().removeClass('hidden');
 				$($.fn.dataTable.tables(true)).DataTable().columns.adjust();
-				getDashboardTable('gmainTable');
 				clearInterval(refreshMinInterval);
 				clearInterval(refreshHourInterval);
+				getDashboardTable('gmainTable');
+				refreshFiveMinInterval  = setInterval(getDashboardTable, 5 * 60 * 1000);
 			} else {
 				// A. DashboardView
 				$("#dashboardTableSearch").addClass("hidden");
@@ -576,6 +579,7 @@
 					let pathName = window.location.pathname;
 
 					if (pathName.includes('gmain') && dashboardViewFlag === true) {
+						clearInterval(refreshFiveMinInterval);
 						firstAjax();
 						refreshHourInterval = setInterval(firstAjax, 60 * 60 * 1000); // 한시간에 한번 화면갱신
 						refreshMinInterval = setInterval(() => {
@@ -609,6 +613,7 @@
 		});
 
 		$(window).on("unload", function(e) {
+			clearInterval(refreshFiveMinInterval);
 			clearInterval(refreshMinInterval);
 			clearInterval(refreshHourInterval);
 		});
