@@ -413,27 +413,26 @@
 				spcIds: Number(spcId)
 			}
 		}).done(function (json, textStatus, jqXHR) {
-			console.log(json);
 			if (!isEmpty(json) && !isEmpty(json.data) && !isEmpty(json.data.items)) {
 				const targetAccount = json.data.items.find(e => e.account_no === accInfo.replace(/[^0-9]/g, ''));
 
 				if (isEmpty(targetAccount)) {
-					$('#availableAmount').html('');
+					$('#availableAmount').html('-');
 				} else {
 					$('#availableAmount').html(numberComma(targetAccount.account_balance) + ' 원');
 				}
 			} else {
-				$('#availableAmount').html('');
+				$('#availableAmount').html('-');
 			}
 
 			if (json.refreshed_at != null) {
-				$('#refresh_date').text('마지막 업데이트 : ' + new Date(json.refreshed_at).format('yyyy-MM-dd HH:mm:ss'));
+				$('#refresh_date').text(new Date(json.refreshed_at).format('yyyy-MM-dd HH:mm:ss'));
 			} else {
-				$('#refresh_date').text('마지막 업데이트 : ');
+				$('#refresh_date').text('');
 			}
 		}).fail(function (jqXHR, textStatus, errorThrown) {
 			$('#availableAmount').html('');
-			$('#refresh_date').text('마지막 업데이트 : ');
+			$('#refresh_date').text('');
 			alert('처리 중 오류가 발생했습니다.');
 			return false;
 		});
@@ -633,7 +632,12 @@
 			<div class="flex-start">
 				<h2 class="tx-tit">계좌 잔액: </h2>
 				<span class="tx-tit" id="availableAmount"></span>
-				<span class="tx-tit" id="refresh_date"></span>
+			</div>
+			<div class="flex-start">
+				<div style="flex-grow: 1">
+					<h2 class="tx-tit">마지막 업데이트: </h2>
+					<span class="tx-tit ml-20" id="refresh_date"></span>
+				</div>
 				<button type="button" id="refresh" class="btn-type03">입출금 내역 갱신</button>
 			</div>
 
