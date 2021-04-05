@@ -364,7 +364,7 @@
 					if (!isEmpty(searchOpt)) {
 						refineList = refineList.filter(rowData => {
 							if ((searchOpt.status).includes(String(rowData.statusVal))
-								&& (rowData.spcName).match(searchOpt.keyword)
+								&& ((rowData.spcName).match(searchOpt.keyword) || (rowData.requestedBy).match(searchOpt.keyword))
 								&& (!isEmpty(searchOpt.withdrawDay)
 									&& (rowData.withdrawDay != null
 										&& rowData.withdrawDay.replace(/[^0-9]/g, '') === searchOpt.withdrawDay.replace(/[^0-9]/g, ''))

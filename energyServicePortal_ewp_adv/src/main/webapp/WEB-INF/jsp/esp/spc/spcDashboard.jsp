@@ -588,11 +588,11 @@
 											if (toTime.getFullYear() === lastYearMax.getFullYear() && toTime.getMonth() === lastYearMax.getMonth()) daily = toTime.getDate() / lastYearMax.getDate();
 											if (!isEmpty(maintenanceInfo['계약_단가'])) {
 												if (isEmpty(lastYearContractUnitPrice)) {
-													lastYearContractUnitPrice = Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, '')) * daily;
-													contractUnitPriceLastYear = Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, '')) * daily;
+													lastYearContractUnitPrice = Number(maintenanceInfo['계약_단가'].replace(/[^0-9.]/g, '')) * daily;
+													contractUnitPriceLastYear = Number(maintenanceInfo['계약_단가'].replace(/[^0-9.]/g, '')) * daily;
 												} else {
-													lastYearContractUnitPrice += Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, '')) * daily;
-													contractUnitPriceLastYear += Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, '')) * daily;
+													lastYearContractUnitPrice += Number(maintenanceInfo['계약_단가'].replace(/[^0-9.]/g, '')) * daily;
+													contractUnitPriceLastYear += Number(maintenanceInfo['계약_단가'].replace(/[^0-9.]/g, '')) * daily;
 												}
 											}
 
@@ -604,9 +604,9 @@
 													if (expenditureIndex > -1 && !isEmpty(data)) {
 														if (isEmpty(expenditureLastYear)) {
 															expenditureLastYear = new Array(12).fill(0);
-															expenditureLastYear[expenditureIndex] += Number(data.replace(/[^0-9]/g, '')) * daily;
+															expenditureLastYear[expenditureIndex] += Number(data.replace(/[^0-9.]/g, '')) * daily;
 														} else {
-															expenditureLastYear[expenditureIndex] += Number(data.replace(/[^0-9]/g, '')) * daily;
+															expenditureLastYear[expenditureIndex] += Number(data.replace(/[^0-9.]/g, '')) * daily;
 														}
 													}
 												});
@@ -621,11 +621,11 @@
 
 											if (!isEmpty(maintenanceInfo['계약_단가'])) {
 												if (isEmpty(lastMonthContractUnitPrice)) {
-													lastMonthContractUnitPrice = Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, '')) * daily;
-													contractUnitPriceLastMonth = Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, '')) * daily;
+													lastMonthContractUnitPrice = Number(maintenanceInfo['계약_단가'].replace(/[^0-9.]/g, '')) * daily;
+													contractUnitPriceLastMonth = Number(maintenanceInfo['계약_단가'].replace(/[^0-9.]/g, '')) * daily;
 												} else {
-													lastMonthContractUnitPrice += Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, '')) * daily;
-													contractUnitPriceLastMonth += Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, '')) * daily;
+													lastMonthContractUnitPrice += Number(maintenanceInfo['계약_단가'].replace(/[^0-9.]/g, '')) * daily;
+													contractUnitPriceLastMonth += Number(maintenanceInfo['계약_단가'].replace(/[^0-9.]/g, '')) * daily;
 												}
 											}
 
@@ -636,9 +636,9 @@
 													if (expenditureIndex > -1 && !isEmpty(data)) {
 														if (isEmpty(expenditureLastMonth)) {
 															expenditureLastMonth = new Array(12).fill(0);
-															expenditureLastMonth[expenditureIndex] += Number(data.replace(/[^0-9]/g, '')) * daily;
+															expenditureLastMonth[expenditureIndex] += Number(data.replace(/[^0-9.]/g, '')) * daily;
 														} else {
-															expenditureLastMonth[expenditureIndex] += Number(data.replace(/[^0-9]/g, '')) * daily;
+															expenditureLastMonth[expenditureIndex] += Number(data.replace(/[^0-9.]/g, '')) * daily;
 														}
 													}
 												});
@@ -654,11 +654,11 @@
 												if (toTime.getFullYear() === standardMax.getFullYear() && toTime.getMonth() === standardMax.getMonth()) daily = toTime.getDate() / standardMax.getDate();
 
 												if (!isEmpty(maintenanceInfo['계약_단가'])) {
-													contractUnitPriceList[i] += Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, '')) * daily;
+													contractUnitPriceList[i] += Number(maintenanceInfo['계약_단가'].replace(/[^0-9.]/g, '')) * daily;
 													if (i <= currentMonthMax.getMonth()) {
-														contractUnitPrice = Number(contractUnitPrice) + Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, '')) * daily;
+														contractUnitPrice = Number(contractUnitPrice) + Number(maintenanceInfo['계약_단가'].replace(/[^0-9.]/g, '')) * daily;
 														if (i === currentMonthMax.getMonth()) {
-															contractUnitPriceCurrent = Number(contractUnitPriceCurrent) + Number(maintenanceInfo['계약_단가'].replace(/[^0-9]/g, '')) * daily;
+															contractUnitPriceCurrent = Number(contractUnitPriceCurrent) + Number(maintenanceInfo['계약_단가'].replace(/[^0-9.]/g, '')) * daily;
 														}
 													}
 												}
@@ -671,16 +671,16 @@
 														if (expenditureIndex > -1 && !isEmpty(data)) {
 															if (isEmpty(expenditureInfo[i])) {
 																expenditureInfo[i] = new Array(12).fill(0);
-																expenditureInfo[i][expenditureIndex] += Number(data.replace(/[^0-9]/g, '')) * daily;
+																expenditureInfo[i][expenditureIndex] += Number(data.replace(/[^0-9.]/g, '')) * daily;
 															} else {
-																expenditureInfo[i][expenditureIndex] += Number(data.replace(/[^0-9]/g, '')) * daily;
+																expenditureInfo[i][expenditureIndex] += Number(data.replace(/[^0-9.]/g, '')) * daily;
 															}
 														}
 													});
 
 													if (i < currentMonth) {
 														const spendInfo = JSON.parse(spcGen['spend_info']);
-														expenditure = Number(spendInfo['지출_총계'].replace(/[^0-9]/g, '')) * daily;
+														expenditure = Number(spendInfo['지출_총계'].replace(/[^0-9.]/g, '')) * daily;
 
 														if (i === currentMonth) {
 															expenditureCurrent = expenditureInfo[i];
@@ -689,7 +689,10 @@
 												}
 
 												if (!isEmpty(maintenanceInfo['설치_용량'])) {
-													capacityList[i] += Number(maintenanceInfo['설치_용량'].replace(/[^0-9]/g, ''));
+													if (i === (currentMonth - 1)) {
+														console.log(spcGen.name, maintenanceInfo['설치_용량'].replace(/[^0-9..]/g, ''));
+													}
+													capacityList[i] += Number(maintenanceInfo['설치_용량'].replace(/[^0-9..]/g, ''));
 												}
 											}
 										}
@@ -711,7 +714,7 @@
 										let totalInsurance = 0;
 										Object.entries(insuranceInfo).forEach(([insuranceKey, insuranceData]) => {
 											if (insuranceKey === '이행보증보험료' + target || insuranceKey === '보험료' + target) {
-												totalInsurance += Number(String(insuranceData).replace(/[^0-9]/g, ''));
+												totalInsurance += Number(String(insuranceData).replace(/[^0-9.]/g, ''));
 											}
 										});
 
@@ -799,7 +802,7 @@
 								, tableIndex = tableData.findIndex(e => e.id === rowData.site_id);
 
 							if (!isEmpty(repairMaintenanceInfo) && writeTime != null && tableIndex > -1) {
-								const repairMaintenanceCost = repairMaintenanceInfo['총_수선_유지비'].replace(/[^0-9]/g, '');
+								const repairMaintenanceCost = repairMaintenanceInfo['총_수선_유지비'].replace(/[^0-9.]/g, '');
 								if (writeTime.getTime() <= lastYearMax.getTime() && writeTime.getTime() >= lastYearMin.getTime()) {
 									if (isEmpty(tableData[tableIndex]['lastYearRepair'])) {
 										tableData[tableIndex]['lastYearRepair'] = Number(repairMaintenanceCost);
