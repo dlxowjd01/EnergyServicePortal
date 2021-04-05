@@ -950,28 +950,33 @@
 
 				$.map(result, function (value, key) {
 					if ($('#' + key + '_Table').length > 0) {
-						$.each(value, function (idx, valObj) {
-							value[idx].localtime = String(valObj.basetime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
-							value[idx].timestamp = new Date(value[idx].localtime).getTime();
+						if (isEmpty(value)) {
+							$('#' + key + '_Table').parents('.history-table').hide();
+						} else {
+							$.each(value, function (idx, valObj) {
+								value[idx].localtime = String(valObj.basetime).replace(/(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/, '$1-$2-$3 $4:$5:$6');
+								value[idx].timestamp = new Date(value[idx].localtime).getTime();
 
-							const did = value[idx].did;
-							$(':checkbox[name="device"]').each(function() {
-								if ($(this).val() === did) {
-									value[idx].siteName = $(this).data('sitename');
-								}
+								const did = value[idx].did;
+								$(':checkbox[name="device"]').each(function() {
+									if ($(this).val() === did) {
+										value[idx].siteName = $(this).data('sitename');
+									}
+								});
+
+								$.map(valObj.mean, function (v, k) {
+									if(typeof v == "number"){
+										valObj[k] = numberComma(v.toFixed(2));
+									}
+								});
 							});
 
-							$.map(valObj.mean, function (v, k) {
-								if(typeof v == "number"){
-									valObj[k] = numberComma(v.toFixed(2));
-								}
+							setMakeList(value, key + '_Table', {'dataFunction': {}}); //list생성
+							$('#' + key + '_Table td').each(function () {
+								$(this).html($(this).html().replace(/ *\[[^)]*\] */g, ''));
 							});
-						});
-
-						setMakeList(value, key + '_Table', {'dataFunction': {}}); //list생성
-						$('#' + key + '_Table td').each(function () {
-							$(this).html($(this).html().replace(/ *\[[^)]*\] */g, ''));
-						});
+							$('#' + key + '_Table').parents('.history-table').show();
+						}
 					}
 				});
 
@@ -1165,10 +1170,13 @@
 						return tooltip;
 					}
 				},
+				positioner: function(boxWidth, boxHeight, point) {
+					let xPosition = (point.plotX - 250) < 0 ? 0 : point.plotX - 250;
+					return {x: xPosition, y: point.plotY};
+				},
 				shared: true,
 				useHTML: true,
 				borderColor: 'none',
-				x: 0,
 				backgroundColor: 'var(--bg-color)',
 				padding: 16,
 				style: {

@@ -1551,7 +1551,8 @@
 					}, '<b>' + dateFormat(this.points[0].point.name) + '</b>');
 				},
 				positioner: function(boxWidth, boxHeight, point) {
-					return {x:point.plotX + 20,y:point.plotY};
+					let xPosition = (point.plotX - 250) < 0 ? 0 : point.plotX - 250;
+					return {x: xPosition, y: point.plotY};
 				},
 				shared: true,
 				useHTML: true,
