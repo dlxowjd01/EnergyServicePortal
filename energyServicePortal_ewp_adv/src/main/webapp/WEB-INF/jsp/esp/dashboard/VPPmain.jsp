@@ -98,7 +98,7 @@
 				<h2 class="title">충/방전 현황</h2>
 			</div>
 			<div class="vpp-1-3-1 vpp-1-3-content view">
-				<div>그래프</div>
+				<div id="vppGraph2">그래프</div>
 			</div>
 			<div class="vpp-1-3-2 vpp-1-3-content">
 				<div><!-- 그래프? --></div>
@@ -142,22 +142,22 @@
 						<h3>SMP 수익</h3>
 						<div class="vpp-infobox">
 							<p>당월</p>
-							<p>- 만원</p>
+							<p><span id="smpMonth">-</span> 만원</p>
 						</div>
 						<div class="vpp-infobox">
 							<p>당해</p>
-							<p>- 만원</p>
+							<p><span id="smpYear">-</span> 만원</p>
 						</div>
 					</div>
 					<div>
 						<h3>예측 수익</h3>
 						<div class="vpp-infobox">
 							<p>당월</p>
-							<p>- 만원</p>
+							<p><span id="accMonth">-</span> 만원</p>
 						</div>
 						<div class="vpp-infobox">
 							<p>당해</p>
-							<p>- 만원</p>
+							<p><span id="accYear">-</span> 만원</p>
 						</div>
 					</div>
 				</div>
@@ -202,9 +202,9 @@
 								<img src="/img/vpp/ess.svg" alt="태양광" />
 								<p>ESS</p>
 							</div>
-							<img src="" alt="" />
+							<img src="/img/vpp/network-normal.svg" alt="" />
 						</div>
-						<div class="actived" id="subResource_fuelcell">
+						<div class=" id="subResource_fuelcell">
 							<div class="flex-center">
 								<img src="/img/vpp/fuelcell.svg" alt="풍력" />
 								<p>연료전지</p>
@@ -327,78 +327,32 @@
 </div>
 
 <script>
+	// Document Ready
 	$(_ => {
-		$.when(
-			$.ajax({
-				type: "GET",
-				url: apiHost + "/config/vpp-groups/" + tempId,
-				data: {
-					includeSites: true,
-					includeDevices: true,
-				},
-			}).done(r1 => {
-				const sids = r1.sites.map(x => x.sid).join();
+		// VPP 그룹 정보
+		$.ajax({
+			type: "GET",
+			url: apiHost + "/config/vpp-groups/" + tempId,
+			data: {
+				includeSites: true,
+				includeDevices: true,
+			},
+		}).done(result => { 
+			console.log(result)
 
-				$.ajax({
-					url: apiHost + "/vpp/energy/sites",
-					data: {
-						sid: sids,
-						interval: "15min",
-						isLimited: true,
-						startTime: getTime(0, true)
-					},
-					async: false,
-				}).done(r2 => {
-					r1.energyData = Object.entries(r2.data).map(x => {
-						x[1].sid = x[0];
-
-						return x[1];
-					});
-				});
-
-				const start = new Date();
-				const end = new Date();
-
-				start.setDate(start.getDate() - 7);
-				const time = [
-					convDate(start, true),
-					String(convDate(end, true)).replace("000000", "595959") * 1,
-				];
-
-				$.ajax({
-					url: apiHost + "/energy/forecast/accuracy",
-					type: "POST",
-					dataType: "json",
-					contentType: "application/json",
-					data: JSON.stringify({
-						"sids": sids,
-						"startTime": time[0],
-						"endTime": time[1],
-						"interval": "day",
-						"cal_incentive": true,
-						"additionalProp1": {}
-					}),
-					async: false,
-				}).done(r3 => {
-					App.acc = r3.data.data;
-				});
-
-				return r1;
-			})
-		).then(r => {
-
-			App.sites = r.sites;
-			App.energyData = r.energyData;
-			App.sids = r.sites.map(x => x.sid).join();
-
+			App.sites = result.sites;
 			App.init();
+		}).fail(error => {
+			console.error(error);
 		})
-
-	});
+	})
 
 	// 임시 VPP ID --------
-	const tempId = "8b3c35b9-8229-447e-a9c2-b3c8e65bd622";
-	const interval = getDayInterval();
+	const tempId = "5bebbe35-7a26-401b-a8bc-c960a663eb13";
+	const interval = {
+		today: getDayInterval(),
+		month: getMonthInterval(),
+	};
 
 	// 메인 객체
 	const App = {
@@ -408,16 +362,248 @@
 		acc: [],
 
 		init() {
-			App.setEvent();
-			TotalTrading.init();
-			TotalProfit.init();
-			Resources.init();
-			Graph1.refresh(); // 전력거래량 예측 그래프
-			PieGraph.init(); // 예측정확도 파이그래프
-			Graph3.refresh(); // 
-			SiteStatus.init(); // 발전현황
-			Prediction.refresh();
+			const sids = this.sites.map(x => x.sid).join();
+			console.log(sids);
+
+			const apis = [
+				$.ajax({ // 0
+					type: "GET",
+					url: apiHost + "/vpp/energy/sites",
+					data: {
+						sid: sids,
+						startTime: interval.today[0],
+						endTime: interval.today[1],
+						interval: "day",
+						detailByBasetime: true,
+					},
+				}),
+				$.ajax({ // 1
+					type: "GET",
+					url: apiHost + "/vpp/energy/sites",
+					data: {
+						sid: sids,
+						startTime: interval.today[0],
+						endTime: interval.today[1],
+						interval: "15min",
+						detailByBasetime: true
+					},
+				}),
+				$.ajax({ // 2
+					url: apiHost + "/energy/forecast/accuracy",
+					type: "POST",
+					dataType: "json",
+					contentType: "application/json",
+					data: JSON.stringify({
+						"sids": sids,
+						"startTime": interval.today[0],
+						"endTime": interval.today[1],
+						"interval": "day",
+						"cal_incentive": true,
+						"additionalProp1": {}
+					})
+				}),
+				$.ajax({ // 3
+					url: apiHost + "/get/energy/forecasting/sites",
+					type: "POST",
+					dataType: "json",
+					contentType: "application/json",
+					data: JSON.stringify({
+						"sid": sids,
+						"startTime": interval.today[0],
+						"endTime": interval.today[1],
+						"interval": "hour",
+						"displayType": "dashboard",
+						"formId": "v2"
+					}),
+				}),
+				$.ajax({ // 4
+					url: apiHost + "/get/energy/forecasting/sites",
+					type: "POST",
+					dataType: "json",
+					contentType: "application/json",
+					data: JSON.stringify({
+						"sid": sids,
+						"startTime": interval.today[0],
+						"endTime": interval.today[1],
+						"interval": "15min",
+						"displayType": "dashboard",
+						"formId": "v2"
+					}),
+				}),
+				$.ajax({ // 5
+					url: apiHost + "/get/energy/forecasting/sites",
+					type: "POST",
+					dataType: "json",
+					contentType: "application/json",
+					data: JSON.stringify({
+						"sid": sids,
+						"startTime": interval.month[0],
+						"endTime": interval.month[1],
+						"interval": "day",
+						"displayType": "dashboard",
+						"formId": "v2"
+					}),
+				}),
+				$.ajax({ // 6
+					url: apiHost + "/energy/forecast/accuracy",
+					type: "POST",
+					dataType: "json",
+					contentType: "application/json",
+					data: JSON.stringify({
+						"sids": sids,
+						"startTime": interval.month[0],
+						"endTime": interval.month[1],
+						"interval": "day",
+						"cal_incentive": true,
+						"additionalProp1": {}
+					}),
+				}),
+				$.ajax({ // 7
+					url: apiHost + "/get/energy/forecasting/sites",
+					type: "POST",
+					dataType: "json",
+					contentType: "application/json",
+					data: JSON.stringify({
+						"sid": sids,
+						"startTime": interval.today[0],
+						"endTime": interval.today[1],
+						"interval": "day",	
+						"displayType": "dashboard",
+						"formId": "v2"
+					}),
+				}),
+				$.ajax({ // 8
+					type: "GET",
+					url: apiHost + "/vpp/energy/sites",
+					data: {
+						sid: sids,
+						"startTime": interval.month[0],
+						"endTime": interval.month[1],
+						interval: "day",
+						detailByBasetime: true
+					},
+				}),
+				$.ajax({ // 9 //  상태 조회용
+					url: apiHost + "/get/status/raw/sites",
+					type: "POST",
+					dataType: "json",
+					contentType: "application/json",
+					data: JSON.stringify({
+						"sids": sids,
+						"startTime": getTime(1, false),
+						"displayType": "dashboard",
+						"operation": "active",
+					}),
+				}),
+
+				$.ajax({ // 10 // 통신 조회용
+					url: apiHost + "/get/status/raw/sites",
+					type: "POST",
+					dataType: "json",
+					contentType: "application/json",
+					data: JSON.stringify({
+						"sids": sids,
+						"startTime": getTime(1, false),
+						"displayType": "dashboard",
+						"operation": "overall",
+					}),
+				}),
+				$.ajax({ // 11 // 테이블용
+					url: apiHost + "/get/status/raw/sites",
+					type: "POST",
+					dataType: "json",
+					contentType: "application/json",
+					data: JSON.stringify({
+						"sids": sids,
+						"displayType": "dashboard",
+						"operation": "active",
+					}),
+				}),
+				$.ajax({ // 12 // 테이블용
+					url: apiHost + "/energy/now/sites",
+					type: "GET",
+					data: {
+						sids: sids,
+						metering_type: 2,
+						interval: "hour",
+					},
+				}),
+				$.ajax({ // 13 // 테이블용
+					type: "GET",
+					url: apiHost + "/vpp/energy/sites",
+					data: {
+						sid: sids,
+						interval: "hour",
+					},
+				}),
+				$.ajax({ // 14 // 테이블용
+					url: apiHost + "/energy/forecast/accuracy",
+					type: "POST",
+					dataType: "json",
+					contentType: "application/json",
+					data: JSON.stringify({
+						"sids": sids,
+						"startTime": interval.today[0],
+						"endTime": (String(getTime(0, false)).substr(0, 10)+"0000") * 1,
+						"interval": "day",
+						"cal_incentive": true,
+						"additionalProp1": {}
+					}),
+				}),
+				$.ajax({ // 15
+					type: "GET",
+					url: apiHost + "/vpp/energy/sites",
+					data: {
+						sid: sids,
+						startTime: interval.today[0],
+						endTime: interval.today[1],
+						interval: "hour",
+						detailByBasetime: true,
+					},
+				}),
+			]
+
+			new Promise ((resolve, reject) => {
+				resolve(Promise.all(apis));
+			}).then(res => {
+				const vppInfo = {
+					"day" : Object.entries(res[0].data),
+					"15min" : Object.entries(res[1].data),
+					"month" : Object.entries(res[8].data),
+					"hour" : Object.entries(res[15].data),
+				};
+				const acc = {
+					"day": res[2].data.data,
+					"month": res[6].data.data,
+				};
+				const forecast = {
+					"hour": res[3].data,
+					"15min": res[4].data,
+					"month": res[5].data,
+					"day": res[7].data,
+				};
+				const status = {
+					"active": res[9],
+					"overall": res[10],
+				};
+
+				TotalTrading(vppInfo.day.map(x => x[1]));
+				TotalProfit(vppInfo.day.map(x => x[1]), acc.day);
+				SiteStatus.setList(vppInfo.day, forecast.day, status);
+				Graph1.setOption(vppInfo["hour"].map(x => x[1]), Object.values(forecast["hour"]));
+				Graph2.setOption(vppInfo.hour.map(x => x[1]));
+				Graph3.setOption(vppInfo.month.map(x => x[1]), Object.values(forecast.month), acc.month);
+				PieGraph.draw(acc.day.total.length ? Object.values(acc.day.total)[0].accuracy : "-");
+				setResourceStatus(vppInfo.day);
+				Table.refresh(res[11], res[12].data, res[13].data, res[14].data.data, acc.day);
+				setPrediction(forecast["15min"], vppInfo.day.map(x => x[1]), acc.day.total.length ? Object.values(acc.day.total)[0].accuracy : 0);
+
+			}).catch(error => {
+				console.log(error);
+			});
+
 			Table.init();
+			App.setEvent();
 		},
 
 		// 이벤트 체이닝
@@ -456,31 +642,38 @@
 		},
 	}
 
+	const Apis = {
+
+	}
+
 	// 금일 총 전력거래량
-	const TotalTrading = {
-		init() {
-			$("#totalEnergy").html((App.energyData.reduce((acc, cur) => acc + cur.energy, 0) / 1000 / 1000).toFixed(2));
-			$("#mainEnergy").html((App.energyData.reduce((acc, cur) => acc + cur.energyPrimary, 0) / 1000 / 1000).toFixed(2));
-			$("#subEnergy").html((App.energyData.reduce((acc, cur) => acc + cur.energySecondary, 0) / 1000 / 1000).toFixed(2));
-		},
+	const TotalTrading = (data) => {
+		const [primary, secondary] = [
+			data.reduce((acc, cur) => acc + cur.energyPrimary, 0),
+			data.reduce((acc, cur) => acc + cur.energySecondary, 0),
+		];
+		const total = primary + secondary;
+
+		$("#totalEnergy").html((total / 1000 / 1000).toFixed(2));
+		$("#mainEnergy").html((primary / 1000 / 1000).toFixed(2));
+		$("#subEnergy").html((secondary / 1000 / 1000).toFixed(2));
 	}
 
 	// 금일 총 수익
-	const TotalProfit = {
-		init() {
-			$.when(getNow(), getForecast()).then((now, forecast) => {
-				now = Object.entries(now[0].data).map(x => {
-					x[1].sid = x[0];
-					
-					return x[1];
-				});
-				
-				forecast = Object.entries(forecast[0].data).map(x => x[1][0].items[0]);
-				
-				$("#totalMoney, #todaySMP").html((now.reduce((acc, cur) => acc + cur.money, 0) / 1000).toFixed(2));
-				$("#todayPredictionMoney").html((forecast.reduce((acc, cur) => acc + cur.money, 0) / 1000).toFixed(2));
-			});
-		},
+	const TotalProfit = (now, forecast) => {
+		const smp = (now.reduce((acc, cur) => acc + cur.money, 0) / 1000).toFixed(2);
+		const incentive = forecast.total.length ? Object.entries(forecast.total)[0][1].incentive : 0;
+		// now = Object.entries(now[0].data).map(x => {
+		// 	x[1].sid = x[0];
+			
+		// 	return x[1];
+		// });
+		
+		// forecast = Object.entries(forecast[0].data).map(x => x[1][0].items[0]);
+		
+		// $("#totalMoney").html((now.reduce((acc, cur) => acc + cur.money, 0) / 1000).toFixed(2));
+		$("#todaySMP").html(smp);
+		$("#todayPredictionMoney").html(incentive);
 	}
 
 	// 전력거래량 예측
@@ -491,11 +684,12 @@
 		],
 		target: {},
 
-		setOption() {
+		draw() {
 			Graph1.target = Highcharts.chart("vppGraph1", {
 				chart: {
 					marginLeft: 0,
 					backgroundColor: 'transparent',
+					zoomType: 'xy'
 				},
 				navigation: {
 					buttonOptions: {
@@ -515,19 +709,22 @@
 					tickWidth: 1,
 					tickLength: 6,
 					labels: {
-						x: 9,
 						align: 'center',
+						y: 20,
 						style: {
 							color: 'var(--grey)',
 							fontSize: '10px',
 							rotation: 0
+						},
+						formatter() {
+							return this.value + 1;
 						}
 					},
 					tickInterval: 1,
 					title: {
 						text: null
 					},
-					categories: ['2', '4', '6', '8', '10', '12', '14', '16', '18', '20', '22', '24'],
+					crosshair: true,
 				}],
 				yAxis: [{
 					lineColor: 'var(--grey)',
@@ -536,7 +733,7 @@
 					gridLineWidth: 1,
 					title: {
 						x: 10,
-						y: 30,
+						y: 35,
 						text: 'kWh',
 						align: 'low',
 						rotation: 0,
@@ -547,9 +744,9 @@
 					},
 					labels: { 
 						x: 0,
-						y: 15,
+						y: -5,
 						align: "left",
-						formatter: function () {
+						formatter() {
 							return Math.round(this.value / 1000);
 						},
 						style: {
@@ -562,6 +759,21 @@
 						width: 1
 					}],
 				}],
+				tooltip: {
+					formatter() {
+						return this.points.reduce((acc, cur) => {	
+							return acc + '<br/><span style="color:' + cur.color + '">\u25CF</span> ' + cur.series.name + ': ' + (cur.y / 1000).toFixed(2) + 'kWh';
+						}, '<span style="display:flex;"><b>' + (this.x + 1) + '시</b></span>');
+					},
+					shared: true,
+					useHTML: true,
+					borderColor: 'none',
+					backgroundColor: 'var(--bg-color)',
+					padding: 16,
+					style: {
+						color: 'var(--white87)',
+					}
+				},
 				legend: {
 					enabled: true,
 					align: 'right',
@@ -597,35 +809,35 @@
 			});
 		},
 
-		refresh() {
-			$.when(getNow("15min"), getForecast("hour")).then((now, forecast) => {
-				const data = [
-					Object.entries(now[0].data).map(x => {
-						x[1].sid = x[0];
-						
-						return x[1].energy;
-					}),
-					Object.entries(forecast[0].data).map(x => x[1][0].items[0].energy)
-				];
-		
-				$.each(Graph1.series, (ix, el) => {
-					Graph1.series[ix].data = fillArray(data[ix], 12);
+		setOption(now, forecast) { // 고쳐야됌
+			const nowData = {};
+
+			now = now.map(x => x.detail);
+
+			$.each(now, (ix, el) => {
+				$.each(el, (k, v) => {
+					nowData[k] = (nowData[k] ? nowData[k] : 0);
+					if (k !== "devices") {
+						nowData[k] += v.energy;
+					}
 				});
+			});
 
+			for (let i = 0; i < 24; i++) {
+				this.series[1].data.push(forecast.map(x => x[0].items).reduce((acc, cur) => acc + cur[i].energy, 0));
+			}
+			
+			let temp = Object.entries(nowData).sort((a, b) => a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0);
+				temp.pop();
 
-				Graph1.setOption();
-
-				Graph1.target.redraw();
-			})
+			this.series[0].data = fillArray(temp.map(x => x[1]), 24);
+	
+			this.draw();
 		},
 	}
 
 	const PieGraph = {
-		init() {
-			const data = Object.entries(App.acc.total);
-			const length = data.length - 1;
-
-			const acc = data[length][1].accuracy
+		draw(acc) {
 			Highcharts.chart("vppPie", {
 				chart: {
 					type: "pie",
@@ -637,7 +849,7 @@
 					plotShadow: false,
 				},
 				title: {
-					text: (acc * 100)+'%',
+					text: acc === "-" ? "-" : (100 - (acc * 100)).toFixed(1)+'%',
 					align: 'center',
 					verticalAlign: 'middle',
 					y: 13.5,
@@ -683,34 +895,33 @@
 						dataLabels: {
 							enabled: false
 						},
-						y: acc * 100 //60% -- 아래로 총합 100%
+						y: acc === "-" ? 0 : 100 - (acc * 100) //60% -- 아래로 총합 100%
 					}, {
 						color: '#656565',
 						name: "안예측",
 						dataLabels: {
 							enabled: false
 						},
-						y: 100 - (acc * 100) //20% 나머지
+						y: acc === "-" ? 100 : acc * 100 //20% 나머지
 					}]
 				}],
 			});
 		}
 	}
 
-	// 수익현황
-	const Graph3 = {
+	const Graph2 = {
 		series: [
-			{name: 'SMP', color: '#26ccc8', data: [20, 10, 30, 50, 40, 20, 10, 60, 70, 10, 120, 205, 110, 20, 60, 10, 10, 20, 60]},
-			{name: '예측', color: '#878787', data: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 210, 80, 40, 60, 90, 110, 50, 120]},
+			{name: "실측", type: "column", color: "#26ccc8", data: [], suffix: "kWh"},
+			{name: "계획", type: "line", color: "var(--white)", data: [], suffix: "kWh"},
 		],
 		target: {},
 
-		setOption() {
-			Graph3.target = Highcharts.chart("moneyStatusGraph", {
+		draw() {
+			Graph2.target = Highcharts.chart("vppGraph2", {
 				chart: {
-					type: "column",
 					marginLeft: 0,
 					backgroundColor: 'transparent',
+					zoomType: 'xy'
 				},
 				navigation: {
 					buttonOptions: {
@@ -730,32 +941,22 @@
 					tickWidth: 1,
 					tickLength: 6,
 					labels: {
-						x: 9,
 						align: 'center',
+						y: 20,
 						style: {
 							color: 'var(--grey)',
 							fontSize: '10px',
 							rotation: 0
-						}
+						},
+						formatter() {
+							return this.value + 1;
+						},
 					},
 					tickInterval: 1,
 					title: {
 						text: null
 					},
-					type: 'datetime',
-					dateTimeLabelFormats: {
-						millisecond: '%H:%M:%S.%L',
-						second: '%H:%M:%S',
-						minute: '%H:%M',
-						hour: '%H',
-						day: '%m.%d ',
-						week: '%m.%e',
-						month: '%m',
-						year: '%Y'
-					},
-					categories: null,
-					crosshair: true
-					
+					crosshair: true,
 				}],
 				yAxis: [{
 					lineColor: 'var(--grey)',
@@ -764,8 +965,8 @@
 					gridLineWidth: 1,
 					title: {
 						x: 10,
-						y: 30,
-						text: '천원',
+						y: 35,
+						text: 'kWh',
 						align: 'low',
 						rotation: 0,
 						style: {
@@ -775,10 +976,10 @@
 					},
 					labels: { 
 						x: 0,
-						y: 15,
+						y: -5,
 						align: "left",
 						formatter: function () {
-							return Math.round(this.value);
+							return Math.round(this.value / 1000);
 						},
 						style: {
 							color: 'var(--grey)',
@@ -790,6 +991,21 @@
 						width: 1
 					}],
 				}],
+				tooltip: {
+					formatter() {
+						return this.points.reduce((acc, cur) => {	
+							return acc + '<br/><span style="color:' + cur.color + '">\u25CF</span> ' + cur.series.name + ': ' + (cur.y / 1000).toFixed(2) + 'kWh';
+						}, '<span style="display:flex;"><b>' + (this.x + 1) + '시</b></span>');
+					},
+					shared: true,
+					useHTML: true,
+					borderColor: 'none',
+					backgroundColor: 'var(--bg-color)',
+					padding: 16,
+					style: {
+						color: 'var(--white87)',
+					}
+				},
 				legend: {
 					enabled: true,
 					align: 'right',
@@ -814,70 +1030,271 @@
 						},
 						borderWidth: 0
 					},
-					column: {
-						stacking: true
+					area: {
+						lineColor: "transparent",
+						marker: {
+							enabled: false
+						}
+					},
+				},
+				series: Graph2.series
+			});
+		},
+
+		setOption(data) {
+			let now = {};
+			let forecast = {};
+
+			data = data.map(x => x.detail);
+			
+			$.each(data, (ix, el) => {
+				$.each(el, (k, v) => {
+					now[k] = (now[k] ? now[k] : 0);
+					forecast[k] = (forecast[k] ? forecast[k] : 0);
+					if (k !== "devices") {
+						now[k] += v.energySecondary;
+						forecast[k] += v.forecastSecondary;
 					}
+				});
+			});
+
+			now = Object.entries(now).sort((a, b) => a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0)
+			forecast = Object.entries(forecast).sort((a, b) => a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0)
+
+			now.pop();
+			forecast.pop();
+
+			this.series[0].data = fillArray(now.map(x => x[1]), 24)
+			this.series[1].data = fillArray(forecast.map(x => x[1]), 24)
+
+			this.draw();
+		}
+ 	}
+
+	// 수익현황
+	const Graph3 = {
+		series : [
+			{name: 'SMP', color: '#26ccc8', data: []},
+			{name: '예측', color: '#878787', data: []},
+		],
+		target: {},
+
+		draw() {
+			Graph3.target = Highcharts.chart("moneyStatusGraph", {
+				chart: {
+					type: "column",
+					marginLeft: 0,
+					backgroundColor: 'transparent',
+					zoomType: 'xy',
+				},
+				navigation: {
+					buttonOptions: {
+						enabled: false
+					}
+				},
+				title: {
+					text: ''
+				},
+				subtitle: {
+					text: ''
+				},
+				xAxis: [{
+					lineColor: 'var(--grey)',
+					tickColor: 'var(--grey)',
+					gridLineColor: 'var(--white25)',
+					tickWidth: 1,
+					tickLength: 6,
+					labels: {
+						align: 'center',
+						y: 20,
+						style: {
+							color: 'var(--grey)',
+							fontSize: '10px',
+							rotation: 0
+						},
+						formatter() {
+							return this.value + 1;
+						}
+					},
+					tickInterval: 1,
+					title: {
+						text: null
+					},
+					crosshair: true,
+				}],
+				yAxis: [{
+					lineColor: 'var(--grey)',
+					tickColor: 'var(--grey)',
+					gridLineColor: 'var(--white25)',
+					gridLineWidth: 1,
+					title: {
+						x: 10,
+						y: 35,
+						text: '천원',
+						align: 'low',
+						rotation: 0,
+						style: {
+							color: 'var(--grey)',
+							fontSize: '12px'
+						}
+					},
+					labels: { 
+						x: 0,
+						y: -5,
+						align: "left",
+						formatter: function () {
+							return Math.round(this.value / 1000);
+						},
+						style: {
+							color: 'var(--grey)',
+							fontSize: '12px'
+						},
+					},
+					plotLines: [{
+						color: 'var(--grey)',
+						width: 1
+					}],
+				}],
+				tooltip: {
+					formatter() {
+						return this.points.reduce((acc, cur) => {	
+							return acc + '<br/><span style="color:' + cur.color + '">\u25CF</span> ' + cur.series.name + ': ' + (cur.y / 1000).toFixed(2) + '천원';
+						}, '<span style="display:flex;"><b>' + (this.x + 1) + '일</b></span>');
+					},
+					shared: true,
+					useHTML: true,
+					borderColor: 'none',
+					backgroundColor: 'var(--bg-color)',
+					padding: 16,
+					style: {
+						color: 'var(--white87)',
+					}
+				},
+				legend: {
+					enabled: true,
+					align: 'right',
+					verticalAlign: 'top',
+					x: 5,
+					y: -15,
+					itemStyle: {
+						color: 'var(--white87)',
+						fontSize: '12px',
+						fontWeight: 400
+					},
+					itemHoverStyle: {
+						color: ''
+					},
+					symbolPadding: 0,
+					symbolHeight: 7
+				},
+				plotOptions: {
+					series: {
+						label: {
+							connectorAllowed: false
+						},
+						borderWidth: 0
+					},
+					area: {
+						lineColor: "transparent",
+						marker: {
+							enabled: false
+						}
+					},
 				},
 				series: Graph3.series
 			});
 		},
 
-		refresh() {
-			$.when(getNow("15min"), getForecast("hour")).then((now, forecast) => {
-				const data = [
-					Object.entries(now[0].data).map(x => {
-						x[1].sid = x[0];
-						
-						return x[1];
-					}),
-					Object.entries(forecast[0].data).map(x => x[1][0].items[0])
-				];
+		setOption(now, forecast, acc) {
+			// $.each(forecast, (ix, el) => {
+			// 	this.series[1].data.push()
+			// })
+			// now = Object.values(now.detail);
+			// now.pop();
+			// console.log(now);
+			
+			// $.each(now, (ix, el) => {
+			// 	let detail = Object.entries(el.detail);
+			// 		detail.pop();
+
+			// 	console.log(detail.reduce((acc, cur) => { console.log(cur) }, 0))
+			// 	// this.series[0].data.push();
+			// })
+			// console.log(now)
+			for (let i = 0; i < getLastDay(); i++) {
 				
-				const date = [];
-		
-				$.each(Graph3.series, (ix, el) => {
-					Graph3.series[ix].data = fillArray(data[ix].map(x => x.money), 12);
-				});
+				// this.series[0].data.push(now.map(x => x.detail).reduce((acc, cur) => acc + Object.values(Object.entries(cur)[i]).money, 0));
+				this.series[1].data.push(forecast.map(x => x[0].items).reduce((acc, cur) => acc + cur[i] ? cur[i].money : 0, 0));
+
+			// 	this.series[1].data.push(forecast.map(x => x.items).reduce((acc, cur) => acc + cur[i].money, 0))
+			}
 
 
-				Graph3.setOption();
-
-				Graph3.target.redraw();
-			})
+			$("#accMonth").html((Object.values(acc.total).reduce((acc, cur) => acc + cur.incentive, 0)).toLocaleString());
+			
+	
+			this.draw();
 		},
 	}
 
 	// 자원 현황
-	const Resources = {
-		init() {
-			App.energyData.map(x => {
-				if (!x.ess) {
-					$("#subResource_ESS").removeClass("actived");
-				}
-
-				let resource = "";
-				switch (x.resource_type) {
-					case 1:
-						resource = "#mainResource_sun";
-					break;
-					
-					case 2:
-						resource = "#mainResource_wind";
-					break;
-
-					case 4:
-						resource = "#subResource_fuelcell";
-					break;
-				}
-
-				$(resource).addClass("actived");
-				if ($(resource).find(".network-status-img").attr("src") === "" && (x.energyPrimary <= 0 || x.energySecondary <= 0)) {
-					$(resource).find(".network-status-img").attr("src", "/img/vpp/network-error-yellow.svg");
-				} else {
-					$(resource).find(".network-status-img").attr("src", "/img/vpp/network-normal.svg");
-				}
-			});
+	const setResourceStatus = (energy) => {
+		energy = energy.map(x => x[1]);
+		console.log(energy)
+		if (energy.find(x => x.ess === 0)) {
+			$("#subResource_ESS").removeClass("actived");
+			$("#subResource_ESS > img").attr("src", "");
 		}
+
+		if (energy.find(x => x.resource_type === 1)) {
+			$("#mainResource_sun").addClass("actived");
+			$("#mainResource_sun .network-status-img").attr("src", "/img/vpp/network-normal.svg");
+			if (energy.find(x => x.energyPrimary === 0)) {
+				$("#mainResource_sun .network-status-img").attr("src", "/img/vpp/network-error-yellow.svg");
+			}
+		}
+
+		if (energy.find(x => x.resource_type === 2)) {
+			$("#mainResource_wind").addClass("actived");
+			$("#mainResource_wind .network-status-img").attr("src", "/img/vpp/network-normal.svg");
+			if (energy.find(x => x.energyPrimary === 0)) {
+				$("#mainResource_wind .network-status-img").attr("src", "/img/vpp/network-error-yellow.svg");
+			}
+		}
+
+		if (energy.find(x => x.resource_type === 4)) {
+			$("#subResource_fuelcell").addClass("actived");
+		}
+		// energy.map(x => { 
+		// 	x = x[1];
+		// 	if (!x.ess) {
+		// 		$("#subResource_ESS").removeClass("actived");
+		// 		$("#subResource_ESS > img").attr("src", "");
+		// 	}
+
+		// 	let resource = "";
+		// 	switch (x.resource_type) {
+		// 		case 1:
+		// 			resource = "#mainResource_sun";
+		// 		break;
+				
+		// 		case 2:
+		// 			resource = "#mainResource_wind";
+		// 		break;
+
+		// 		case 4:
+		// 			resource = "#subResource_fuelcell";
+		// 		break;
+		// 	}
+
+		// 	$(resource).addClass("actived");
+		// 	// $(resource).find(".network-status-img").attr("src") === "" && 
+		// 	if (((x.reource_type === 1 || x.reource_type === 2) && x.energyPrimary <= 0) || (x.reource_type === 4 && x.energySecondary <= 0)) {
+		// 		$(resource).find(".network-status-img").attr("src", "/img/vpp/network-error-yellow.svg");
+		// 	} else {
+		// 		$(resource).find(".network-status-img").attr("src", "/img/vpp/network-normal.svg");
+		// 	}
+		// });
 	}
 	
 	// 발전 현황
@@ -998,11 +1415,18 @@
 		idx: 0,
 		len: 0,
 
-		init() {
+		setList(energyData, forecast, status) {
 			let tableTemplate = ``;
 			let energy = {};
+			let fc = {}
+			let active = {};
+			let overall = {};
+			console.log(status)
 			App.sites.map(x => {
-				energy = App.energyData.find(v => v.sid === x.sid);
+				energy = energyData.find(v => v[0] === x.sid)[1];
+				fc = forecast[x.sid] ? forecast[x.sid][0].items[0] : "";
+				active = Object.values(status.active[x.sid]).length ? ["normal", "정상"] : ["error", "이상"];
+				overall = Object.values(status.overall[x.sid]).length ? ["normal", "정상"] : ["error", "이상"];
 
 				tableTemplate += `
 					<tr class="vpp-focus-map" data-sid="${'${x.sid}'}">
@@ -1014,8 +1438,8 @@
 							<img src="/img/vpp/ess.svg" alt="자원" class="${'${x.ess === 1 && "actived"}'}">
 							<img src="/img/vpp/fuelcell.svg" alt="자원" class="${'${x.resource_type === 4 && "actived"}'}">
 						</td>
-						<td> <span class="status-button normal">정상</span> </td>
-						<td> <span class="status-button error">이상</span> </td>
+						<td> <span class="status-button ${'${active[0]}'}">${'${active[1]}'}</span> </td>
+						<td> <span class="status-button ${'${overall[0]}'}">${'${overall[1]}'}</span> </td>
 					</tr>
 					<tr class="vpp-fold-menu">
 						<td colspan="5">
@@ -1052,7 +1476,7 @@
 										</div>
 										<div class="vpp-infobox">
 											<p>금일 예측거래량</p>
-											<p>- kWh</p>
+											<p>${'${fc ? (fc.energy / 1000).toLocaleString() : "-"}'} kWh</p>
 										</div>
 									</div>
 									<div>
@@ -1062,11 +1486,11 @@
 										</div>
 										<div class="vpp-infobox">
 											<p>금일 예측 수익</p>
-											<p>- 천원</p>
+											<p>${'${fc ? (fc.money / 1000).toLocaleString() : "-"}'} 천원</p>
 										</div>
 										<div class="vpp-infobox">
 											<p>금일 총 수익</p>
-											<p>- 천원</p>
+											<p>${'${(energy.money / 1000).toLocaleString()}'} 천원</p>
 										</div>
 									</div>
 								</div>
@@ -1095,26 +1519,10 @@
 		},
 	}
 
-	const Prediction = {
-		refresh() {
-			$.when(getForecast()).then((forecast) => {
-				forecast = Object.entries(forecast.data).map(x => {
-					x[1][0].items[0].sid = x[0];
-
-					return x[1][0].items[0];
-				}).filter(x => x.energy > 0);
-
-				const capacity = forecast.map(x => {
-					return App.energyData.find(site => site.sid === x.sid).capacity;
-				}).reduce((acc, cur) => acc + cur, 0);
-
-				const acc = Object.values(App.acc.total)[0].accuracy * 100;
-
-				$("#totalSiteCount").html(forecast.length); // 총 예측 사이트
-				$("#totalCapacity").html(((capacity / 1000 / 1000).toFixed(2) * 1).toLocaleString());
-				$("#totalAcc").html(acc);
-			});
-		},
+	const setPrediction = (forecast, capacity, acc) => {
+		$("#totalSiteCount").html(Object.entries(forecast).length); // 총 예측 사이트
+		$("#totalCapacity").html(((capacity.reduce((acc, cur) => acc + cur.capacity, 0) / 1000 / 1000).toFixed(3) * 1).toLocaleString());
+		$("#totalAcc").html(acc === 0 ? "-" : (100 - (acc * 100)).toFixed(1));
 	}
 
 	// 주간 예측오차율 
@@ -1123,8 +1531,9 @@
 
 		init() {
 			Table.target = $("#vpp-3-2-dataTable").DataTable({
-				autoWidth: false,
-				"table-layout": "fixed",
+				autoWidth: true,
+				fixedHeader: true,
+				// "table-layout": "fixed",
 				scrollX: false,
 				scrollY: '720px',
 				scrollCollapse: true,
@@ -1134,27 +1543,47 @@
 					{
 						title: "사이트 명",
 						data: 'name',
-						className: 'dt-head-left dt-body-left'
+						className: 'dt-head-left dt-body-left',
 					},
 					{
-						title: "용량",
-						data: 'capacity',
-						className: 'dt-head-right dt-body-right'
+						title: "현재출력",
+						data: 'activePower',
+						className: 'dt-head-right dt-body-right',
+						render(data) {
+							return data === "-" ? "-" : Math.round(data / 1000);
+						},
+					},
+					{
+						title: "현시각 <br> 발전<br>",
+						data: 'currentDev',
+						className: 'dt-head-right dt-body-right',
+						render(data) {
+							return data === "-" ? "-" : Math.round(data / 1000);
+						},
+					},
+					{
+						title: "현시각 <br> 예측<br>",
+						data: 'currentFc',
+						className: 'dt-head-right dt-body-right',
+						render(data) {
+							return data === "-" ? "-" : Math.round(data / 1000);
+						},
 					},
 					{
 						title: "금일 <br> 오차<br>",
 						data: 'todayError',
-						className: 'dt-head-right dt-body-right'
+						className: 'dt-head-right dt-body-right',
+						render(data) {
+							return data === "-" ? "-" : data.toFixed(1);
+						},
 					},
 					{
 						title: "주간 <br> 오차<br>",
 						data: 'weekError',
-						className: 'dt-head-right dt-body-right'
-					},
-					{
-						title: "이전 <br> 30일 오차<br>",
-						data: 'monthError',
-						className: 'dt-head-right dt-body-right'
+						className: 'dt-head-right dt-body-right',
+						render(data) {
+							return data === "-" ? "-" : data.toFixed(1);
+						},
 					},
 				],
 				language: {
@@ -1168,38 +1597,28 @@
 					info: "",
 				},
 				columnDefs: [
-					{targets: [0], width: "185px"},
-					{targets: [1, 2, 3, 4], width: "75px"},
+					{targets: [0], width: "186px"},
+					{targets: [1, 2, 3], width: "60px"},
+					{targets: [4, 5], width: "42"},
 				],
 				dom: 'tip',
 			});
-
-			Table.refresh();
 		},
 
-		refresh() {
+		refresh(activePower, currentDev, currentFc, todayError, weekError) {
 			Table.target.clear();
 			
 			const tableData = [];
 
-
 			App.sites.forEach((site, ix) => {
-				const ed = App.energyData.find(x => x.sid === site.sid);
-				let acc = [];
-				if (App.acc.each[site.sid]) {	
-					acc = Object.entries(App.acc.each[site.sid])
-				}
-				const today = acc ? acc.pop()[1].accuracy.toFixed(1) : "-";
-				const week = acc ? acc.reduce((acc, cur) => acc + cur[1].accuracy, 0).toFixed(1) : "-";
-
 				tableData[ix] = {
 					name: site.name,
-					capacity: Math.round(ed.capacity / 1000),
-					todayError: today,
-					weekError: week,
-					monthError: "-",
+					activePower: activePower[site.sid]["INV_PV"].activePower ? activePower[site.sid]["INV_PV"].activePower : "-",
+					currentDev: currentDev[site.sid] ? currentDev[site.sid].energy : "-",
+					currentFc: currentFc[site.sid] ? currentFc[site.sid].forecast : "-",
+					todayError: todayError.each[site.sid] ? Object.values(todayError.each[site.sid])[0].accuracy : "-",
+					weekError: weekError.each[site.sid] ? Object.values(weekError.each[site.sid])[0].accuracy : "-",
 				}
-				console.log(tableData);
 			});
 
 			Table.target.rows.add(tableData);
@@ -1209,7 +1628,7 @@
 	}
 	
 	// 금일 데이터
-	function getNow(intv = "day") {
+	const getNow = (intv = "day") => {
 		return $.ajax({
 			url: apiHost+"/energy/now/sites",
 			type: "get",
@@ -1222,7 +1641,7 @@
 	}
 
 	// 금일 예측 데이터
-	function getForecast(intv = "day") {
+	const getForecast = (intv = "day") => {
 		return $.ajax({
 			url: apiHost+"/get/energy/forecasting/sites",
 			type: "POST",
@@ -1230,12 +1649,14 @@
 			contentType: "application/json",
 			data: JSON.stringify({
 				"sid": App.sids,
-				"startTime": interval[0],
-				"endTime": interval[1],
+				"startTime": interval.today[0],
+				"endTime": interval.today[1],
 				"interval": intv,
 				"displayType": "dashboard",
 				"formId": "v2"
 			}),
 		});
 	}
+
+
 </script>

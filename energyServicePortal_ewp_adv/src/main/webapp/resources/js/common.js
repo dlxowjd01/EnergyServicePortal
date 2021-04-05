@@ -793,7 +793,7 @@ function getTime(minusHour, onlyYmd = true) {
 function getDayInterval() {
 	const cur = new Date();
 
-	const [y, m, d, h, i, s] = [
+	const [y, m, d] = [
 		String(cur.getFullYear()),
 		String(cur.getMonth() + 1).padStart(2, 0),
 		String(cur.getDate()).padStart(2, 0),
@@ -805,6 +805,36 @@ function getDayInterval() {
 	];
 }
 
+function getMonthInterval() {
+	const cur = new Date();
+
+	const [y, m] = [
+		cur.getFullYear(),
+		cur.getMonth(),
+	];
+
+	const [start, end] = [
+		new Date(y, m, 1),
+		new Date(y, m + 1, 0),
+	];
+
+	return [
+		(String(start.getFullYear())+String(start.getMonth() + 1).padStart(2, 0)+String(start.getDate()).padStart(2, 0)+`000000`) * 1,
+		(String(end.getFullYear())+String(end.getMonth() + 1).padStart(2, 0)+String(end.getDate()).padStart(2, 0)+`235959`) * 1,
+	];
+}
+
+function getLastDay() {
+	const date = new Date();
+
+	const [y, m] = [
+		date.getFullYear(),
+		date.getMonth() + 1,
+	];
+
+	return new Date(y, m, 0).getDate();
+}
+
 function objectToArray(obj, mapFunc = {}) {
 	return Object.entries(obj).map(mapFunc);
 }
@@ -812,6 +842,8 @@ function objectToArray(obj, mapFunc = {}) {
 function fillArray(target, len, fill = 0) {
 	if (target.length < len) {
 		return target.concat(new Array(len - target.length).fill(fill));
+	} else {
+		return target;
 	}
 }
 
