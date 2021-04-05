@@ -1691,7 +1691,7 @@ const searchSite = async function (siteSids) {
 			let targetOperation = false;
 			let searchSite = false;
 
-			if (!isEmpty(operation)) {
+			if (!isEmpty(operation) && Array.isArray(operation)) {
 				const searchOperation = operation.some(target => {
 					return deviceStatus.includes(String(target));
 				});
