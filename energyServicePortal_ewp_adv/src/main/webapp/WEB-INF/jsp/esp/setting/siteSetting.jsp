@@ -1105,6 +1105,10 @@
 							item.powerSource = "<fmt:message key='siteSetting.windPower' />"
 						} else if(item.resource_type === 3){
 							item.powerSource = "<fmt:message key='siteSetting.smallHydro' />"
+						} else if(item.resource_type === 4) {
+							item.powerSource = "<fmt:message key='siteSetting.fuelCell' />"
+						} else if(item.resource_type === 5) {
+							item.powerSource = "<fmt:message key='siteSetting.bioMass' />"
 						}
 					}
 				}
@@ -1198,6 +1202,10 @@
 								$(td).attr('data-value', 2);
 							} else if(rowData.powerSource == "<fmt:message key='siteSetting.smallHydro' />"){
 								$(td).attr('data-value', 3);
+							} else if(rowData.powerSource == "<fmt:message key='siteSetting.fuelCell' />") {
+								$(td).attr('data-value', 4);
+							} else if(rowData.powerSource == "<fmt:message key='siteSetting.bioMass' />") {
+								$(td).attr('data-value', 5);
 							}
 						}
 					},
@@ -1513,6 +1521,10 @@
 							item.powerSource = "<fmt:message key='siteSetting.windPower' />"
 						} else if(item.resource_type === 3){
 							item.powerSource = "<fmt:message key='siteSetting.smallHydro' />"
+						} else if(item.resource_type === 4){
+							item.powerSource = "<fmt:message key='siteSetting.fuelCell' />"
+						} else if(item.resource_type === 5){
+							item.powerSource = "<fmt:message key='siteSetting.bioMass' />"
 						}
 					}
 				}
