@@ -791,24 +791,28 @@
 						<tr>
 							<th>부지 소유 / 임대 구분</th>
 							<td id="부지소유/임대구분"></td>
+							<th>임대료 지급일</th>
+							<td id="임대료_지급일"></td>
+						</tr>
+						<tr>
 							<th>개발행위필증 교부 여부</th>
 							<td id="개발행위필증_교부_여부"></td>
-						</tr>
-						<tr>
 							<th>지상권 및 지상권부근저당 설정 여부</th>
 							<td id="지상권설정여부"></td>
+						</tr>
+						<tr>
 							<th>동산담보표지판 설정 여부</th>
 							<td id="동산담보표지판_설정_여부"></td>
-						</tr>
-						<tr>
 							<th>자가부지공장근저당 목록 설정 여부</th>
 							<td id="자가부지공장근저당"></td>
-							<th>권리증 보유 현황</th>
-							<td id="권리증_보유_현황"></td>
 						</tr>
 						<tr>
+							<th>권리증 보유 현황</th>
+							<td id="권리증_보유_현황"></td>
 							<th>운영 여부</th>
 							<td id="운영_여부"></td>
+						</tr>
+						<tr>
 							<th>관리 계약 구분</th>
 							<td id="관리_계약_구분"></td>
 						</tr>
@@ -1117,15 +1121,6 @@
 									<span id="보험가액0"></span>
 									<span class="ml-6">원</span>
 								</div>
-							</td>
-						</tr>
-						<tr>
-							<th>시작일</th>
-							<td id="보험_시작일0"></td>
-							<th>종료일</th>
-							<td class="flex-start">
-								<span id="보험_종료일0"></span>
-								<span class="fixed-height" id="보험_종료일_차이0"></span>
 							</td>
 						</tr>
 						<tr>

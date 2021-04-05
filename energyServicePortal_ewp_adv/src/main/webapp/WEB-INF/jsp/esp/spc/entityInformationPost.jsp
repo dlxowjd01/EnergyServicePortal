@@ -58,6 +58,14 @@
 			}
 		});
 
+		$(':radio[name="부지소유/임대구분"]').change(function() {
+			if ($(this).val() === '임대구분' && $(this).is(':checked')) {
+				$('#임대료_지급일').prop('disabled', false);
+			} else {
+				$('#임대료_지급일').prop('disabled', true).val('');
+			}
+		});
+
 		initRow('addList_registered_seal');
 		addRow('addList_registered_seal');
 
@@ -1473,6 +1481,15 @@
 									</div>
 								</fieldset>
 							</td>
+							<th>임대료 지급일</th>
+							<td>
+								<fieldset class="sel-calendar edit twin clear dateField">
+									<legend class="sr-only">임대료 지급일</legend>
+									<input type="text" id="임대료_지급일" name="임대료_지급일" class="sel datepicker" value="" autocomplete="off" placeholder="임대료_지급일" readonly disabled>
+								</fieldset>
+							</td>
+						</tr>
+						<tr>
 							<th>개발행위필증 교부 여부</th>
 							<td>
 								<fieldset class="radio-type flex-start">
@@ -1487,8 +1504,6 @@
 									</div>
 								</fieldset>
 							</td>
-						</tr>
-						<tr>
 							<th>지상권 및 지상권부근저당 설정 여부</th>
 							<td>
 								<fieldset class="radio-type flex-start">
@@ -1503,6 +1518,8 @@
 									</div>
 								</fieldset>
 							</td>
+						</tr>
+						<tr>
 							<th>동산담보표지판 설정 여부</th>
 							<td>
 								<fieldset class="radio-type flex-start">
@@ -1517,8 +1534,6 @@
 									</div>
 								</fieldset>
 							</td>
-						</tr>
-						<tr>
 							<th>자가부지공장근저당 목록 설정 여부</th>
 							<td>
 								<fieldset class="radio-type flex-start">
@@ -1533,6 +1548,9 @@
 									</div>
 								</fieldset>
 							</td>
+						</tr>
+						<tr>
+
 							<th>권리증 보유 현황</th>
 							<td>
 								<fieldset class="radio-type flex-start">
@@ -1547,8 +1565,6 @@
 									</div>
 								</fieldset>
 							</td>
-						</tr>
-						<tr>
 							<th>운영 여부</th>
 							<td>
 								<fieldset class="radio-type flex-start">
@@ -1567,6 +1583,8 @@
 									</div>
 								</fieldset>
 							</td>
+						</tr>
+						<tr>
 							<th>관리 계약 구분</th>
 							<td>
 								<div class="dropdown placeholder edit mr-12 w-300px" id="관리_계약_구분">
@@ -2081,22 +2099,6 @@
 								<div class="text-input-type edit">
 									<input type="text" id="보험가액0" name="보험가액0" class="onlyNum" placeholder="직접 입력">
 								</div>
-							</td>
-						</tr>
-						<tr class="dateField">
-							<th><label for="보험_시작일0">시작일</label></th>
-							<td>
-								<div class="sel-calendar edit">
-									<input type="text" id="보험_시작일0" class="sel fromDate" name="보험_시작일0" value="" autocomplete="off" placeholder="날짜 선택" readonly>
-								</div>
-							</td>
-							<th><label for="보험_종료일0">종료일</label></th>
-							<td class="flex-start">
-								<div class="sel-calendar edit mr-24">
-									<input type="text" id="보험_종료일0" class="sel toDate" name="보험_종료일0" value="" autocomplete="off" placeholder="날짜 선택" readonly>
-									<input type="hidden" id="보험_종료일_차이0" name="보험_종료일_차이0" value="">
-								</div>
-								<span class="fixed-height"></span>
 							</td>
 						</tr>
 						<tr>
