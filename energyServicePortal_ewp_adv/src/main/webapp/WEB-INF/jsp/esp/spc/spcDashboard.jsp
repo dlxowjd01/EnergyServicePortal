@@ -413,7 +413,7 @@
 						if (isEmpty(data) || data === '-') {
 							return '-';
 						} else {
-							return data;
+							return numberComma(data.toFixed(2));
 						}
 					},
 					className: 'dt-right'
