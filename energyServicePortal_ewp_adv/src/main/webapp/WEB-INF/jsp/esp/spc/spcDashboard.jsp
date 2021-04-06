@@ -588,7 +588,7 @@
 											if (toTime.getFullYear() === lastYearMax.getFullYear() && toTime.getMonth() === lastYearMax.getMonth()) daily = toTime.getDate() / lastYearMax.getDate();
 											if (!isEmpty(maintenanceInfo['계약_단가'])) {
 												lastYearContractUnitPrice = Number(lastYearContractUnitPrice) + (Number(maintenanceInfo['계약_단가'].replace(/[^0-9.]/g, '')) * daily);
-												contractUnitPriceLastYear = Number(lastYearContractUnitPrice) + (Number(maintenanceInfo['계약_단가'].replace(/[^0-9.]/g, '')) * daily);
+												contractUnitPriceLastYear = Number(contractUnitPriceLastYear) + (Number(maintenanceInfo['계약_단가'].replace(/[^0-9.]/g, '')) * daily);
 											}
 
 											if (!isEmpty(spcGen['spend_info'])) {
