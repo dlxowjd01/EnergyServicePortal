@@ -55,7 +55,7 @@
 					}
 				}).done(function (json, textStatus, jqXHR) {
 					if (!isEmpty(json) && !isEmpty(json.data) && !isEmpty(json.data.items)) {
-						const targetAccount = json.data.items.find(e => e.account_no === account);
+						const targetAccount = json.data.items.find(e => e.account_no === account.replace(/[^0-9]/g, ''));
 
 						if (isEmpty(targetAccount)) {
 							$('[name="availableAmount"]').val('');
@@ -100,8 +100,6 @@
 
 			$.when($.ajax(option[0]),$.ajax(option[1])).done(function (result1, result2) {
 				if(!isEmpty(result1[0].data) && !isEmpty(result2[0].data)){
-					// console.log("1---", result1[0].data)
-					// console.log("2---", result2[0])
 					handleAccData(result1[0].data, result2[0].data);
 				}
 			}).fail(function (jqXHR, textStatus, errorThrown) {
@@ -162,7 +160,6 @@
 								}
 
 								if(!isEmpty(element.purpose)){
-									// console.log("element.purpose===", element)
 									purpose = purposeArr[0].value[element.purpose];
 									purpose_val = element.purpose;
 								} else {
@@ -260,7 +257,6 @@
 										accNum = v.accNum;
 										accHolder = v.accHolder;
 										bankName = v.bankName;
-										// console.log("v---", v);
 										let accInfo = bankName + '&nbsp;' + accNum;
 										let newHtml;
 										//withdrawList.prev().data({"value": accNum, "name": bankName }).html(accInfo + '<span class="caret"></span>');
@@ -291,14 +287,12 @@
 							$(".purpose-list").each(function(){
 								let purpose = $(this);
 								$(this).find("li").on("click", function(){
-									// console.log("purpose===", purpose)
 									purpose.data("value", $(this).data("value"));
 								})
 							});
 						}).then(() => {
 							calcTotal();
 							withdrawList.find("li").on("click", function(){
-								// console.log("withdrawList clicking---")
 								withdrawList.prev().data({"value": $(this).data("value"), "name": $(this).data("name"), "acc-holder" : $(this).data("acc-holder") });
 								getAmount();
 							});
@@ -318,14 +312,12 @@
 				$(".receive-list").each(function(){
 					$(this).empty().append($(receivingNodata));
 					$(this).find("li").on("click", function(){
-						// console.log("receive list clicking---")
 						$(this).prev().data({"value": "", "name": "" });
 					});
 				});
 				$(".purpose-list").each(function(){
 					let purpose = $(this);
 					$(this).find("li").on("click", function(){
-						console.log("purpose===", purpose)
 						purpose.data("value", $(this).data("value"));
 					})
 				});
@@ -399,7 +391,6 @@
 			jsonData.transfer_agent = loginName;
 			jsonData.total_amount = totalAmount;
 			
-			// console.log("total---", totalAmount);
 
 			let fileNames = $("#addFileList").find("li.upload-text");
 			$.each(fileNames, function(index, element){
@@ -434,18 +425,14 @@
 				}
 				arr.push(obj);
 			});
-			// console.log("total===0", totalAmount)
 
 			jsonData.to_account = JSON.stringify(arr);
-			// console.log("json--", jsonData);
 			let newJson = JSON.stringify(jsonData);
 			let formArr = [ jsonData.withdraw_day, arr ];
 			var flagArr = [];
 			flagArr.length = 0;
-			// console.log("formArr===", formArr)
 			$.each(formArr, function(index, value){
 				if(index === 0) {
-					console.log("arr===", arr)
 					arr.forEach((item, index) => {
 						if(item.purpose != 0 && item.purpose == "" || item.purpose != 0 && item.purpose == "undefined" ) {
 							let obj = { label: "purposeEmpty", val: 0 }
@@ -570,7 +557,6 @@
 			// TO: 정차장님 아래로 하면 한번만 선언해도 되는데 확인 부탁드릴꼐요.
 			// this.value = this.value.replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 			
-			// console.log("document on change===", evt)
 			if(newVal != "") {
 				// if ( (keyCode != 8 || keyCode ==32 ) && (keyCode < 48 || keyCode > 57)) { evt.preventDefault(); }
 				if (evt.which < 48 || evt.which > 57) { evt.preventDefault(); }

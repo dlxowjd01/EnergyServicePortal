@@ -94,7 +94,7 @@
 					}
 				}).done(function (json, textStatus, jqXHR) {
 					if (!isEmpty(json) && !isEmpty(json.data) && !isEmpty(json.data.items)) {
-						const targetAccount = json.data.items.find(e => e.account_no === account);
+						const targetAccount = json.data.items.find(e => e.account_no === account.replace(/[^0-9]/g, ''));
 
 						if (isEmpty(targetAccount)) {
 							$('[name="availableAmount"]').val('');
