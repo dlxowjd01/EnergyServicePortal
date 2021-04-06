@@ -897,7 +897,6 @@
 				target.data('prepare', Math.round((expend / expenditure) * 100));
 				target.data('management', Math.round((expend / contractUnitPrice) * 10000) / 100);
 
-
 				if (index === 0 || index === 11) {
 					let current, lastMonth, lastYear;
 					if (index === 0) {
@@ -1361,7 +1360,7 @@
 				return this.points.reduce(function (s, point) {
 					if(point.y !== 0) {
 						let suffix = point.series.userOptions.tooltip.valueSuffix;
-						return s + ' <br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + numberComma(Math.round(point.y)) + ' ' + suffix;
+						return s + ' <br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + numberComma(point.y) + ' ' + suffix;
 					} else {
 						return s
 					}
