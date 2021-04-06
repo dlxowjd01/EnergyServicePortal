@@ -976,7 +976,7 @@
 				});
 
 				$('[id$="_Table"]').each(function() {
-					if ($(this).find('tr').length === 0) {
+					if ($(this).find('tr').length === 1 && !isEmpty($(this).find('tr:first-child td').attr('style'))) {
 						$(this).parent().hide();
 					} else {
 						$(this).parent().show();

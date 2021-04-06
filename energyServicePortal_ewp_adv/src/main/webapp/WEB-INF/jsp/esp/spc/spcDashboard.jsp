@@ -791,6 +791,7 @@
 									}
 								}
 
+
 								if (writeTime.getTime() <= lastMonthMax.getTime() && writeTime.getTime() >= lastMonthMin.getTime()) {
 									if (isEmpty(tableData[tableIndex]['lastMonthRepair'])) {
 										tableData[tableIndex]['lastMonthRepair'] = Number(repairMaintenanceCost);
@@ -811,15 +812,11 @@
 											tableData[tableIndex]['repairMaintenanceCost'] = Number(repairMaintenanceCost);
 											if (currentMonthMax.getMonth() === i) {
 												tableData[tableIndex]['currentRepair'] = Number(repairMaintenanceCost);
-											} else if (currentMonthMax.getMonth() - 1 === i) {
-												tableData[tableIndex]['lastMonthRepair'] = Number(repairMaintenanceCost);
 											}
 										} else {
 											tableData[tableIndex]['repairMaintenanceCost'] += Number(repairMaintenanceCost);
 											if (currentMonthMax.getMonth() === i) {
 												tableData[tableIndex]['currentRepair'] += Number(repairMaintenanceCost);
-											} else if (currentMonthMax.getMonth() - 1 === i) {
-												tableData[tableIndex]['lastMonthRepair'] += Number(repairMaintenanceCost);
 											}
 										}
 									}
