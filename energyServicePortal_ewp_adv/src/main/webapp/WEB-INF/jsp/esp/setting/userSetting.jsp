@@ -740,6 +740,7 @@
 			$('#newTaskList').prev().prop('disabled', true);
 			$('.tab-content').addClass('hidden');
 			$('.tab-content').prev().addClass('hidden');
+			$('#newTaskList').prev().prop('disabled', true).html("<fmt:message key='userSetting.select' />" + '<span class="caret"></span>').data("value", "");
 		}
 	});
 
