@@ -30,9 +30,21 @@
 
 		$('.onlyNum').keyup(function() {
 			let thisVal = $(this).val().trim(), thisName = $(this).prop('name');
-			thisVal = thisVal.replace(/[^0-9 \.]/g, '');
+			thisVal = thisVal.replace(/[^0-9.]/g, '');
 
-			console.log(thisVal);
+			if (isEmpty(thisVal)) {
+				$(this).val('');
+			} else {
+				if (!/번호/.test(thisName) && !/연락처/.test(thisName) && thisVal.charAt(thisVal.length-1) !== '.') {
+					$(this).val(numberComma(thisVal));
+				}
+			}
+		});
+
+		$('.onlyNum').focusout(function() {
+			let thisVal = $(this).val().trim(), thisName = $(this).prop('name');
+			thisVal = thisVal.replace(/[^0-9.]/g, '');
+
 			if (isEmpty(thisVal)) {
 				$(this).val('');
 			} else {

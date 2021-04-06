@@ -502,16 +502,16 @@
 
 	const spcList = () => {
 		//마지막 달
-		const currentMonthMin = new Date(); currentMonthMin.setMonth(currentMonthMin.getMonth() - 1); currentMonthMin.setDate(1); //이번달 기준
-		const currentMonthMax = new Date(); currentMonthMax.setDate(0); //이번달 기준
+		const currentMonthMin = new Date(); currentMonthMin.setMonth(currentMonthMin.getMonth() - 1); currentMonthMin.setDate(1); currentMonthMin.setHours(0); //이번달 기준
+		const currentMonthMax = new Date(); currentMonthMax.setDate(0); currentMonthMax.setHours(23); currentMonthMax.setMinutes(59); currentMonthMax.setMilliseconds(59); //이번달 기준
 
 		//마지막 달의 이전달
-		const lastMonthMin = new Date();lastMonthMin.setMonth(lastMonthMin.getMonth() - 2); lastMonthMin.setDate(1); //이전달 기준
-		const lastMonthMax = new Date(); lastMonthMax.setMonth(lastMonthMax.getMonth() - 1); lastMonthMax.setDate(0); //이전달 기준
+		const lastMonthMin = new Date();lastMonthMin.setMonth(lastMonthMin.getMonth() - 2); lastMonthMin.setDate(1); lastMonthMin.setHours(0); //이전달 기준
+		const lastMonthMax = new Date(); lastMonthMax.setMonth(lastMonthMax.getMonth() - 1); lastMonthMax.setDate(0); lastMonthMax.setHours(23); lastMonthMax.setMinutes(59); lastMonthMax.setMilliseconds(59); //이전달 기준
 
 		//작년 값 기준
-		const lastYearMin = new Date(currentMonthMin.getFullYear() - 1, currentMonthMin.getMonth(), 1);
-		const lastYearMax = new Date(currentMonthMax.getFullYear() - 1, currentMonthMax.getMonth() + 1, 0);
+		const lastYearMin = new Date(currentMonthMin.getFullYear() - 1, currentMonthMin.getMonth(), 1); currentMonthMin.setHours(0);
+		const lastYearMax = new Date(currentMonthMax.getFullYear() - 1, currentMonthMax.getMonth() + 1, 0); currentMonthMax.setHours(23); currentMonthMax.setMinutes(59); currentMonthMax.setMilliseconds(59);
 
 		const currentMonth = new Date().getMonth();
 
@@ -668,11 +668,12 @@
 														}
 													});
 
-													if (i < currentMonth) {
+													if (i <= currentMonthMax.getMonth()) {
 														const spendInfo = JSON.parse(spcGen['spend_info']);
 														expenditure = Number(spendInfo['지출_총계'].replace(/[^0-9.]/g, '')) * daily;
 
-														if (i === currentMonth) {
+														if (i === currentMonthMax.getMonth()) {
+															console.log(expenditureInfo[i]);
 															expenditureCurrent = expenditureInfo[i];
 														}
 													}

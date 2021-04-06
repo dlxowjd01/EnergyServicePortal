@@ -47,7 +47,20 @@
 
 		$('.onlyNum').keyup(function() {
 			let thisVal = $(this).val().trim(), thisName = $(this).prop('name');
-			thisVal = thisVal.replace(/[^0-9 \.]/g, '');
+			thisVal = thisVal.replace(/[^0-9.]/g, '');
+
+			if (isEmpty(thisVal)) {
+				$(this).val('');
+			} else {
+				if (!/번호/.test(thisName) && !/연락처/.test(thisName) && thisVal.charAt(thisVal.length-1) !== '.') {
+					$(this).val(numberComma(thisVal));
+				}
+			}
+		});
+
+		$('.onlyNum').focusout(function() {
+			let thisVal = $(this).val().trim(), thisName = $(this).prop('name');
+			thisVal = thisVal.replace(/[^0-9.]/g, '');
 
 			if (isEmpty(thisVal)) {
 				$(this).val('');
@@ -1334,7 +1347,7 @@
 									<legend class="sr-only">설치 용량 및 설치 용량 기타</legend>
 									<div class="group-type flex-start">
 										<div class="text-input-type edit unit t1">
-											<input type="text" id="설치_용량" name="설치_용량" placeholder="설치용량">
+											<input type="text" id="설치_용량" name="설치_용량" placeholder="설치용량" class="onlyNum">
 											<span>kW</span>
 										</div>
 										<div class="text-input-type edit">
