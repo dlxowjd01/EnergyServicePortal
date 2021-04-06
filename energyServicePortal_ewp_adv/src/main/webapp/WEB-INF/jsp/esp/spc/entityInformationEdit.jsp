@@ -700,10 +700,48 @@
 					setJsonAutoMapping(finance_info, 'financeInfo');
 					setJsonAutoMapping(contract_info, 'contractInfo'); //반복없음
 
-					const insuranceRepeatItem = [
-						{name: '보험구분', id: 'insuranceInfoToggle', next: ''}
-					];
-					setMakeTag(insuranceRepeatItem, addlist_insurance_info, 'insuranceInfo'); //금융태그 생성
+					let insuranceIndexArray = new Array;
+					if (!isEmpty(addlist_insurance_info)) {
+						Object.entries(addlist_insurance_info).forEach(([key, val]) => {
+							const keyIndex = key.replace(/[^0-9]/g, '');
+							if (!insuranceIndexArray.includes(keyIndex)) { insuranceIndexArray.push(keyIndex); }
+						});
+
+						if ((insuranceIndexArray.includes("0") && insuranceIndexArray.length > 1)
+							|| (!insuranceIndexArray.includes("0") && insuranceIndexArray.length > 0)
+						) {
+							insuranceIndexArray.forEach(insuranceIndex => {
+								if (insuranceIndex !== "0") {
+									const insuranceTable = $('#insuranceInfo table:first-child').clone();
+									insuranceTable.find('input').each(function() {
+										if (!isEmpty($(this).attr('id'))) {
+											const targetId = $(this).attr('id').replace(/[0-9]/g, '') + insuranceIndex;
+											$(this).attr('id', targetId);
+										}
+
+										if (!isEmpty($(this).attr('name'))) {
+											const targetId = $(this).attr('name').replace(/[0-9]/g, '') + insuranceIndex;
+											$(this).attr('name', targetId);
+										}
+									});
+
+									insuranceTable.find('label').each(function() {
+										if (!isEmpty($(this).attr('for'))) {
+											const targetId = $(this).attr('for').replace(/[0-9]/g, '') + insuranceIndex;
+											$(this).attr('for', targetId);
+										}
+									});
+									$('#insuranceInfo').append(insuranceTable);
+								}
+
+								if (isEmpty(addlist_insurance_info['보험료_총계' + insuranceIndex])) {
+									const insurance = isEmpty(addlist_insurance_info['보험료' + insuranceIndex]) ? 0 : Number(addlist_insurance_info['보험료' + insuranceIndex].replace(/[^0-9.]/g, ''))
+									const performanceGuarantee = isEmpty(addlist_insurance_info['이행보증보험료' + insuranceIndex]) ? 0 : Number(addlist_insurance_info['이행보증보험료' + insuranceIndex].replace(/[^0-9.]/g, ''))
+									addlist_insurance_info['보험료_총계' + insuranceIndex] = numberComma(insurance + performanceGuarantee);
+								}
+							});
+						}
+					}
 					setJsonAutoMapping(addlist_insurance_info, 'insuranceInfo'); //보험정보 전체 반복
 
 					const deviceRepeatItem = [

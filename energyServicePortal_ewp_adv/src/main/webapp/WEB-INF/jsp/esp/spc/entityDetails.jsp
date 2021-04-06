@@ -397,9 +397,38 @@
 
 					setJsonAutoMapping(contract_info, 'contractInfo'); //반복없음
 
-					const insuranceRepeatItem = [
-						{name: '보험구분', id: 'insuranceInfoToggle', next: ''}
-					];
+					let insuranceIndexArray = new Array;
+					Object.entries(addlist_insurance_info).forEach(([key, val]) => {
+						const keyIndex = key.replace(/[^0-9]/g, '');
+						if (!insuranceIndexArray.includes(keyIndex)) { insuranceIndexArray.push(keyIndex); }
+					});
+
+					if ((insuranceIndexArray.includes("0") && insuranceIndexArray.length > 1)
+						|| (!insuranceIndexArray.includes("0") && insuranceIndexArray.length > 0)
+					) {
+						insuranceIndexArray.forEach(insuranceIndex => {
+							if (insuranceIndex !== "0") {
+								const insuranceTable = $('#insuranceInfo table:first-child').clone();
+								insuranceTable.find('td').each(function() {
+									if (!isEmpty($(this).attr('id'))) {
+										const targetId = $(this).attr('id').replace(/[0-9]/g, '') + insuranceIndex;
+										$(this).attr('id', targetId);
+									}
+								});
+
+								insuranceTable.find('span').each(function() {
+									if (!isEmpty($(this).attr('id'))) {
+										const targetId = $(this).attr('id').replace(/[0-9]/g, '') + insuranceIndex;
+										$(this).attr('id', targetId);
+									}
+								});
+
+								$('#insuranceInfo').append(insuranceTable);
+							}
+						});
+					}
+
+					const insuranceRepeatItem = [ {name: '보험구분', id: 'insuranceInfoToggle', next: ''} ];
 					setMakeTag(insuranceRepeatItem, addlist_insurance_info, 'insuranceInfo'); //금융태그 생성
 					setJsonAutoMapping(addlist_insurance_info, 'insuranceInfo'); //보험정보 전체 반복
 
