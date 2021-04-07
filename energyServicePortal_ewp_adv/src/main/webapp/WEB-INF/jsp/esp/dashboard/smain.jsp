@@ -798,7 +798,7 @@
 	const apiWeather = '/weather/site';
 	const apiForecastingSite = '/energy/forecasting/sites';
 	const apiStatusRawSite = '/status/raw/site';
-	const apiStatusRaw = '/status/raw';
+	const apiStatusRaw = '/get/status/raw';
 	const apiConfigDevice = '​/config/devices';
 	const apiGetDvcProperties = '/config/view/device_properties';
 	const apiGetProperties = '/config/view/properties2';
@@ -2281,11 +2281,11 @@
 
 			let statusRaw = {
 				url: apiHost + apiStatusRaw,
-				type: 'get',
-				dataType: 'json',
-				data: {
+				type: 'post',
+				contentType: 'application/json',
+				data: JSON.stringify({
 					dids: did
-				}
+				})
 			}
 
 			let properties = {
@@ -2772,11 +2772,11 @@
 			// currentR,S,T, voltage R,S,T reactivePower 등의 값들 때문에 /status/raw api 호출
 			$.ajax({
 				url: apiHost + apiStatusRaw,
-				type: 'get',
-				dataType: 'json',
-				data: {
+				type: 'post',
+				contentType: 'application/json',
+				data: JSON.stringify({
 					dids: deviceArray.toString()
-				}
+				})
 			}).done(function (data, textStatus, jqXHR) {
 				if (isEmpty(option)){
 					// #1 site Dashboard
@@ -2827,6 +2827,17 @@
 								const nowTimestamp = Number(new Date());
 								if (nowTimestamp - rowData[0].timestamp > 1000 * 60 * 60) {
 									rowData[0].operation = "0";
+								}
+
+								if (dvcType === 'COMBINER_BOX') {
+									rowData.forEach((devData, devIdx) => {
+										if (!isEmpty(devData.current)) {
+											let totalCurrent = (devData.current).reduce( function add(sum, currValue) { return sum + currValue; });
+											rowData[devIdx].current = (totalCurrent / (devData.current).length).toFixed(2);
+										} else {
+											rowData[devIdx].current = 0;
+										}
+									})
 								}
 
 								if(!isEmpty(rowData)) {
@@ -3030,6 +3041,7 @@
 						$('#typeList').find('.' + dvcType).find('.alert-icon .inv-normal span').html(operationNormal);
 						$('#typeList').find('.' + dvcType).find('.alert-icon .inv-error span').html(operationError);
 						$('#typeList').find('.' + dvcType).find('.alert-icon .inv-alert span').html(operationAlert);
+
 						setMakeList(tableArray, 'table_' + dvcType, {'dataFunction': {'operation': setOperation}});
 					});
 					$("#loadingCircle").hide();
@@ -4754,10 +4766,11 @@
 
 				urls.push({
 					url: apiHost + apiStatusRaw,
-					type: 'GET',
-					data: {
+					type: 'post',
+					contentType: 'application/json',
+					data: JSON.stringify({
 						dids: dids.toString()
-					}
+					})
 				});
 
 				urls.push({
