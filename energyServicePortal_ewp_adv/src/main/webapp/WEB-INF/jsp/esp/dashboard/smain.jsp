@@ -2832,10 +2832,21 @@
 								if (dvcType === 'COMBINER_BOX') {
 									rowData.forEach((devData, devIdx) => {
 										if (!isEmpty(devData.current)) {
-											let totalCurrent = (devData.current).reduce( function add(sum, currValue) { return sum + currValue; });
-											rowData[devIdx].current = (totalCurrent / (devData.current).length).toFixed(2);
-										} else {
-											rowData[devIdx].current = 0;
+											let total = (devData.current).reduce( function add(sum, currValue) { return sum + currValue; });
+											if (total > 0) {
+												rowData[devIdx].current = (total / (devData.current).length).toFixed(2);
+											} else {
+												rowData[devIdx].current = 0;
+											}
+										}
+
+										if (!isEmpty(devData.voltage)) {
+											let total = (devData.voltage).reduce( function add(sum, currValue) { return sum + currValue; });
+											if (total > 0) {
+												rowData[devIdx].voltage = (total / (devData.voltage).length).toFixed(2);
+											} else {
+												rowData[devIdx].voltage = 0;
+											}
 										}
 									})
 								}

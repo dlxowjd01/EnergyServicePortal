@@ -875,6 +875,27 @@
 				dName = data[did].dname,
 				operation = 't2';
 
+			if (dType === 'COMBINER_BOX') {
+				if (!isEmpty(resultData.current)) {
+					let total = (resultData.current).reduce( function add(sum, currValue) { return sum + currValue; });
+					if (total > 0) {
+						resultData.current = (total / (resultData.current).length).toFixed(2);
+					} else {
+						resultData.current = 0;
+					}
+				}
+
+				if (!isEmpty(resultData.voltage)) {
+					let total = (resultData.voltage).reduce( function add(sum, currValue) { return sum + currValue; });
+					if (total > 0) {
+						resultData.voltage = (total / (resultData.voltage).length).toFixed(2);
+					} else {
+						resultData.voltage = 0;
+					}
+				}
+			}
+
+
 				if(deviceStatus == 0){
 					// 중지
 					$('#' + dType + ' .equip-card').attr('class', 'indiv equip-card alert');
