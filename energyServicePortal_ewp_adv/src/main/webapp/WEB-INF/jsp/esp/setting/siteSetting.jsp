@@ -1300,7 +1300,7 @@
 				"select": {
 					style: 'single',
 					// selector: 'td input[type="checkbox"], tr'
-					selector: 'td input[type="checkbox"], td:not(:nth-of-type(11))'
+					selector: 'td input[type="checkbox"], td:not(:nth-child(10))'
 				},
 				"language": {
 					"paginate": {
@@ -1700,8 +1700,8 @@
 				"select": {
 					style: 'single',
 					// selector: 'td:first-child > a',
-					selector: 'td input[type="checkbox"], tr'
-					// selector: 'td input[type="checkbox"], td:not(:nth-of-type(11))'
+					// selector: 'td input[type="checkbox"], tr'
+					selector: 'td input[type="checkbox"], td:not(:nth-child(10))'
 				},
 				initComplete: function(settings, json ){	
 					let str = `<div id="btnGroup" class="right-end"><!--
