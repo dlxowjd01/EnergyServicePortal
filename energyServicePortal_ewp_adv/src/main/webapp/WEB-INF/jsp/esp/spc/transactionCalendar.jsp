@@ -1199,7 +1199,7 @@
 							<div class="col-lg-4 col-md-4 col-sm-12 flex-start">
 								<div id="spc_id" class="dropdown"><!--
 								--><button type="button" name="spcName" class="dropdown-toggle" data-toggle="dropdown" data-name="선택" data-value="">선택<span class="caret"></span></button><!--
-								--><ul id="spcList" class="dropdown-menu unused center" role="menu"><li data-name="*spcName*" data-value="*spcId*"><a href="javascript:void(0);" tabindex="-1">*spcName*</a></li></ul><!--
+								--><ul id="spcList" class="dropdown-menu center" role="menu"><li data-name="*spcName*" data-value="*spcId*"><a href="javascript:void(0);" tabindex="-1">*spcName*</a></li></ul><!--
 								--><small class="hidden warning">SPC를 선택해 주세요.</small>
 								</div>
 
