@@ -359,6 +359,13 @@
 				// if( !isEmpty(newSiteType) ){
 				// 	siteObj.ess = newSiteType;
 				// }
+
+				if ( !isEmpty(newSiteType) ) {
+					siteObj.site_type = newSiteType;
+				} else {
+					siteObj.site_type = 0;
+				}
+
 				if( !isEmpty(newCoord) ){
 					siteObj.latlng = newCoord;
 				}
@@ -519,6 +526,13 @@
 				// if( !isEmpty(newSiteType) && ( td.eq(1).text() != newSiteTypeName ) ){
 				// 	siteEditObj.ess = newSiteType;
 				// }
+
+				if ( !isEmpty(newSiteType) ) {
+					siteEditObj.site_type = newSiteType;
+				} else {
+					siteEditObj.site_type = 0;
+				}
+
 				if( !isEmpty(newResType) && ( td.eq(4).text() != newResTypeName ) ){
 					siteEditObj.resource_type = newResType;
 				}
@@ -1077,7 +1091,7 @@
 			callback();
 		}
 
-		if(siteData) {
+		if (siteData) {
 			const newArr = siteData.map((item, index) => {
 				$("#loadingCircle").show();
 				if(isEmpty(item.ess) || item.ess === 0){
@@ -1090,25 +1104,33 @@
 					}
 				}
 
+				if (item.site_type === 0) {
+					item.siteType = "<fmt:message key='siteSetting.noCase' />";
+				} else if (item.site_type === 1) {
+					item.siteType = "<fmt:message key='siteSetting.plant' />";
+				} else {
+					item.siteType = "<fmt:message key='siteSetting.needsResource' />";
+				}
+
+
 				if(item.resource_type === 0) {
-					// Demand && ESS : pair
-					item.siteType = "<fmt:message key='siteSetting.needsResource' />"
 					item.powerSource = "<fmt:message key='siteSetting.burden' />"
 				} else {
-					if(isEmpty(item.resource_type)){
-						item.siteType = "-"
-					} else {
-						item.siteType = "<fmt:message key='siteSetting.plant' />"
-						if(item.resource_type === 1){
-							item.powerSource = "<fmt:message key='siteSetting.solar' />"
-						} else if(item.resource_type === 2){
-							item.powerSource = "<fmt:message key='siteSetting.windPower' />"
-						} else if(item.resource_type === 3){
-							item.powerSource = "<fmt:message key='siteSetting.smallHydro' />"
-						} else if(item.resource_type === 4) {
-							item.powerSource = "<fmt:message key='siteSetting.fuelCell' />"
-						} else if(item.resource_type === 5) {
-							item.powerSource = "<fmt:message key='siteSetting.bioMass' />"
+					if(!isEmpty(item.resource_type)) {
+						if(item.resource_type == 0) {
+							item.powerSource = "<fmt:message key='siteSetting.burden' />"
+						} else {
+							if(item.resource_type === 1){
+								item.powerSource = "<fmt:message key='siteSetting.solar' />"
+							} else if(item.resource_type === 2){
+								item.powerSource = "<fmt:message key='siteSetting.windPower' />"
+							} else if(item.resource_type === 3){
+								item.powerSource = "<fmt:message key='siteSetting.smallHydro' />"
+							} else if(item.resource_type === 4){
+								item.powerSource = "<fmt:message key='siteSetting.fuelCell' />"
+							} else if(item.resource_type === 5){
+								item.powerSource = "<fmt:message key='siteSetting.bioMass' />"
+							}
 						}
 					}
 				}
@@ -1124,9 +1146,9 @@
 				}
 
 				// Match name with vpp_group_id
-				if(!isEmpty(item.vpp_group_id)){
+				if (!isEmpty(item.vpp_group_id)) {
 					let found = vppNameData.vpp_group.findIndex( x => x.vgid == item.vpp_group_id);
-					if(found > -1){
+					if (found > -1) {
 						item.vppName = vppNameData.vpp_group[found].name;
 					}
 				} else {
@@ -1505,16 +1527,18 @@
 					}
 				}
 
-				if(isEmpty(item.resource_type)){
-					item.siteType = "-"
+				if (item.site_type === 0) {
+					item.siteType = "<fmt:message key='siteSetting.noCase' />";
+				} else if (item.site_type === 1) {
+					item.siteType = "<fmt:message key='siteSetting.plant' />";
 				} else {
+					item.siteType = "<fmt:message key='siteSetting.needsResource' />";
+				}
 
+				if(!isEmpty(item.resource_type)) {
 					if(item.resource_type == 0) {
-						// Demand && ESS : pair
-						item.siteType = "<fmt:message key='siteSetting.needsResource' />"
 						item.powerSource = "<fmt:message key='siteSetting.burden' />"
 					} else {
-						item.siteType = "<fmt:message key='siteSetting.plant' />"
 						if(item.resource_type === 1){
 							item.powerSource = "<fmt:message key='siteSetting.solar' />"
 						} else if(item.resource_type === 2){
@@ -1528,6 +1552,7 @@
 						}
 					}
 				}
+
 				// Match name with dr_group_id
 				if(!isEmpty(item.dr_group_id)){
 					let found = vppNameData.dr_group.findIndex( x => x.dgid == item.dr_group_id);
@@ -2100,15 +2125,7 @@
 
 			$.each(s, function(index, el){
 				let name = langStatus === "EN" ? `${'${el.name.en}'}` : `${'${el.name.kr}'}`;
-				if(el.code == "gen"){
-					siteStr += `
-						<li data-name="${'${name}'}" data-value="1"><a href="#">${'${name}'}</a></li>
-					`;
-				} else if(el.code == "demand"){
-					siteStr += `
-						<li data-name="${'${name}'}" data-value="0"><a href="#">${'${name}'}</a></li>
-					`;
-				}
+				siteStr += `<li data-name="${'${name}'}" data-value="${'${el.code}'}"><a href="#">${'${name}'}</a></li>`
 			});
 
 
@@ -2116,7 +2133,7 @@
 			$("#siteType").append(allStr);
 
 			siteStr += `
-				<li><a href="#"><fmt:message key='siteSetting.noCase' /></a></li>
+				<li><a href="#" data-value="0"><fmt:message key='siteSetting.noCase' /></a></li>
 			`;
 			$("#newSiteType").append(siteStr);
 
@@ -2299,7 +2316,7 @@
 		});
 
 		$.each(dropdownBtn, function(index, element){
-			$(this).data({ "value": "", "vol-type": "", "plan-id" : "" }).html($(this).data('name') + '<span class="caret"></span>').prop("disabled", false);
+			$(this).data({ "value": "", "vol-type": "", "plan-id" : "" }).html('<fmt:message key="siteSetting.select" />' + '<span class="caret"></span>').prop("disabled", false);
 			$(this).next().find("li").removeClass("hidden");
 		});
 
