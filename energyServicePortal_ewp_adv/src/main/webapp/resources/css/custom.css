@@ -7483,7 +7483,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 }
 
 .device-list.list-disconnector li.text-black:before {
-	background: var(--ico-disconnector) no-repeat 0 0;
+	background: var(--ico-disconnect) no-repeat 0 0;
 }
 
 .device-list.list-connector li.text-black:before {

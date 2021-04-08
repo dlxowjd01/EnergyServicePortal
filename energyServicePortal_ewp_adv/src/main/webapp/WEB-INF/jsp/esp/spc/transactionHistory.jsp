@@ -495,9 +495,9 @@
 			</div>
 		</form>
 	</div>
-	<div>
-		<button type="button" id="refresh" class="btn-type03">입출금 내역 갱신</button>
-	</div>
+<%--	<div>--%>
+<%--		<button type="button" id="refresh" class="btn-type03">입출금 내역 갱신</button>--%>
+<%--	</div>--%>
 </div>
 
 <div class="row spc-transaction">
