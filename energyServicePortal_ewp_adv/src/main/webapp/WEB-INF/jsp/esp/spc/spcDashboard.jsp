@@ -413,7 +413,7 @@
 						if (isEmpty(data) || data === '-') {
 							return '-';
 						} else {
-							return numberComma(data.toFixed(2));
+							return numberComma(data);
 						}
 					},
 					className: 'dt-right'
@@ -673,7 +673,6 @@
 														expenditure = Number(spendInfo['지출_총계'].replace(/[^0-9.]/g, '')) * daily;
 
 														if (i === currentMonthMax.getMonth()) {
-															console.log(expenditureInfo[i]);
 															expenditureCurrent = expenditureInfo[i];
 														}
 													}
