@@ -1250,7 +1250,9 @@
 					if (data.dataType === 'time') {
 						let index = totalArr.findIndex(e => e.type === 'time');
 						if (index > -1) {
-							totalArr[index].totVal += data.total;
+							if (isFinite(data.total)) {
+								totalArr[index].totVal += data.total;
+							}
 						} else {
 							totalArr.push({
 								name: '<fmt:message key="pvGen.hourall" />',
@@ -1338,6 +1340,7 @@
 				totalArr.forEach(total => {
 					var totalValue = (!isNaN(total.totVal) && total.totVal != 0) ? Math.round(total.totVal * 100) / 100 : '-';
 					if (total.type === 'time') {
+						if (!isFinite(totalValue)) totalValue = '-';
 						totalTemp_time += `<h3 class="value-title">${'${total.name}'}</h3>
 								<p class="value-num"><span class="num">${'${numberComma(totalValue)}'}</span> hrs</p>`;
 					} else if (total.type === 'SENSOR_SOLAR') {
