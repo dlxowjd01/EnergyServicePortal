@@ -2863,8 +2863,6 @@
 									}
 									rowData[0]['dname'] = dname;
 
-									// console.log("featureProperties===", featureProperties);
-
 									$.map(featureProperties, function(val, key) {
 										let headerData = {};
 										let unitList = [];
@@ -2912,7 +2910,6 @@
 															if(rowData[0].operation === 1) {tempObj['value'] = value;}
 															tempObj['cnt'] = 1;
 														}
-
 													} else {
 														if(typeof tempObj['value'] == 'number') {
 															// tempObj['value'] = Number(value);
@@ -2973,7 +2970,7 @@
 														}
 													} else if(el.suffix.match('%') || el.key.match('temperature') || el.key.match("irradiationPoa") ) {
 														// Unit: percentage, celsius, meter square
-														rowData[0][el.key] = displayNumberFixedDecimal(value, el.suffix, 3, 2)[0] + " " + el.suffix;
+														rowData[0][el.key] = displayNumberFixedDecimal(value, el.suffix, 3, 2).join(' ');
 													}  else {
 														rowData[0][el.key] = value;
 													}
@@ -3013,6 +3010,7 @@
 									if(element.reducer == 'avg') {
 										textValue = (textValue / element.cnt);
 									}
+
 									if(!isEmpty(suffix)) {
 										if(key.match("accumActiveEnergy")) {
 											// Unit: Wh => kWh:(round), Wh, MWh, GWh
