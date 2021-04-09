@@ -5,23 +5,46 @@
 		<div class="indiv">
 			<table id="gmainTable" class="dashboard-table" >
 				<colgroup>
-					<col style="width:4%">  <!-- 순번 -->
-					<col style="width:14%"> <!-- 발전소 명 -->
-					<col style="width:9%">  <!-- 발전용량(kW) -->
-					<col style="width:8%">  <!-- 인버터 가동 상태 -->
-					<col style="width:5%">  <!-- 통신 상태 -->
-					<col style="width:11%"> <!-- 경고 알람 -->
-					<col style="width:7%">  <!-- 금일 발전시간 (Hrs) -->
-					<col style="width:7%">  <!-- 금일 누적발전량(kWh) -->
-					<col style="width:7%">  <!-- 현재 날씨 -->
-					<col style="width:7%">  <!-- 전일 발전 시간(Hrs) -->
-					<col style="width:7%">  <!-- 전일 발전량(kWh) -->
-					<col style="width:7%">  <!-- 전일 날씨 -->
-					<col style="width:7%">  <!-- 월간 발전량(MWh) -->
-					<col style="width:7%">  <!-- 전년 동월 발전량(MWh) -->
-					<col style="width:7%">  <!-- 전년 동월 대비 발전 비율(%) -->
+					<col style="width: 5%">  <!-- 순번 -->
+					<col style="width: 18%"> <!-- 발전소 명 -->
+					<col style="width: 8%">  <!-- 발전용량(kW) -->
+					<col style="width: 10%">  <!-- 인버터 가동 상태 -->
+					<col style="width: 8%">  <!-- 통신 상태 -->
+					<col style="width: 15%"> <!-- 경고 알람 -->
+					<col style="width: 8%">  <!-- 금일 발전시간 (Hrs) -->
+					<col style="width: 8%">  <!-- 금일 누적발전량(kWh) -->
+					<col style="width: 8%">  <!-- 현재 날씨 -->
+					<col style="width: 8%">  <!-- 전일 발전 시간(Hrs) -->
+					<col style="width: 8%">  <!-- 전일 발전량(kWh) -->
+					<col style="width: 8%">  <!-- 전일 날씨 -->
+					<col style="width: 8%">  <!-- 월간 발전량(MWh) -->
+					<col style="width: 8%">  <!-- 전년 동월 발전량(MWh) -->
+					<col style="width: 8%">  <!-- 전년 동월 대비 발전 비율(%) -->
 				</colgroup>
-				<thead></thead>
+				<thead>
+					<!-- <tr>
+						<th class="row-2" rowspan="2"></th>
+						<th class="row-2" rowspan="2"></th>
+						<th class="row-2" rowspan="2"></th>
+						<th class="row-2" rowspan="2"></th>
+						<th class="row-2" rowspan="2"></th>
+						<th class="row-2" rowspan="2"></th>
+						<th class="col-3" rowspan="1" colspan="3"></th>
+						<th class="col-3" rowspan="1" colspan="3"></th>
+						<th class="col-3" rowspan="1" colspan="3"></th>
+					</tr>
+					<tr>
+						<th rowspan="1"></th>
+						<th rowspan="1"></th>
+						<th rowspan="1"></th>
+						<th rowspan="1"></th>
+						<th rowspan="1"></th>
+						<th rowspan="1"></th>
+						<th rowspan="1"></th>
+						<th rowspan="1"></th>
+						<th rowspan="1"></th>
+					</tr> -->
+				</thead>
 				<tbody></tbody>
 			</table>
 		</div>
@@ -49,6 +72,7 @@
 			paging: false,
 			order: [[ 1, 'asc' ]],
 			sortable: true,
+			orderCellsTop: true,
 			columns: [
 				{
 					title: i18nManager.tr("dashboard.table.1"), // 순번
@@ -56,7 +80,7 @@
 					render: function (data, type, full, rowIndex) {
 						return rowIndex.row + 1;
 					},
-					className: 'dt-center no-sorting fixed'
+					className: 'dt-center no-sorting fixed',
 				},
 				{
 					title: i18nManager.tr("dashboard.table.2"), // 발전소 명
@@ -65,7 +89,7 @@
 						return '<a href="javascript:pageMove(\'' + full['sid'] + '\', \'siteMain\'), \'self\'">' + data + '</a>' +
 								'<button onclick="pageMove(\'' + full['sid'] + '\', \'siteMain\', \'blank\')" class="icon-open"></button>';
 					},
-					className: 'dt-head-left dt-body-left'
+					className: 'dt-head-left dt-body-left',
 				},
 				{
 					title: i18nManager.tr("dashboard.table.3"), // 발전용량
@@ -73,7 +97,7 @@
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
 					},
-					className: 'dt-center'
+					className: 'dt-center',
 				},
 				{
 					title: i18nManager.tr("dashboard.table.4"), // 인버터 가동상태
@@ -81,7 +105,7 @@
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
 					},
-					className: 'dt-center'
+					className: 'dt-center',
 				},
 				{
 					title: i18nManager.tr("dashboard.table.status"), // 통신상태
@@ -89,7 +113,7 @@
 					render: function (data, type, full, rowIndex) {
 						return `<span class="status-button ${'${data[0]}'}">${'${data[1]}'}</span>`;
 					},
-					className: 'dt-center'
+					className: 'dt-center',
 				},
 				{
 					title: i18nManager.tr("dashboard.table.5"), // 경고 알람
@@ -97,8 +121,9 @@
 					render: function (data, type, full, rowIndex) {
 						return isEmpty(data) ? '-' : data;
 					},
-					className: 'dt-center'
+					className: 'dt-center',
 				},
+				
 				{
 					title: i18nManager.tr("dashboard.table.nowTime"), // 금일 발전시간 | (신규) [금일 발전량 / 용량]
 					data: null,
@@ -116,10 +141,10 @@
 							}
 						}
 					},
-					className: 'dt-center'
+					className: 'dt-center',
 				},
 				{
-					title: i18nManager.tr("dashboard.table.6"), // 현재 발전량
+					title: i18nManager.tr("dashboard.table.6"), // 금일 발전량
 					data: 'nowEnergy',
 					render: function (data, type, full, rowIndex) {
 						if (isEmpty(data)) {
@@ -128,7 +153,7 @@
 							return `<a href="javascript:void(0);" onclick="goPvGen('${'${today.format(\'yyyyMMdd\')}'}', 'hour', '', '${'${full[\'sid\']}'}')">${'${data}'}</a>`;
 						}
 					},
-					className: 'dt-center'
+					className: 'dt-center',
 				},
 				{
 					title: i18nManager.tr("dashboard.table.7"), // 현재 날씨
@@ -142,8 +167,9 @@
 						}
 					},
 					sortable: false,
-					className: 'dt-center'
+					className: 'dt-center',
 				},
+
 				{
 					title: i18nManager.tr("dashboard.table.10"), // 전일 발전시간
 					data: null,
@@ -161,7 +187,7 @@
 							}
 						}
 					},
-					className: 'dt-center'
+					className: 'dt-center',
 				},
 				{
 					title: i18nManager.tr("dashboard.table.8"), // 전일 발전량
@@ -173,7 +199,7 @@
 							return `<a href="javascript:void(0);" onclick="goPvGen('${'${yester.format(\'yyyyMMdd\')}'}', 'hour', '', '${'${full[\'sid\']}'}')">${'${data}'}</a>`;
 						}
 					},
-					className: 'dt-center'
+					className: 'dt-center',
 				},
 				{
 					title: i18nManager.tr("dashboard.table.9"), // 전일 날씨
@@ -187,8 +213,9 @@
 						}
 					},
 					sortable: false,
-					className: 'dt-center'
+					className: 'dt-center',
 				},
+
 				{
 					title: i18nManager.tr("dashboard.table.14"), // 지난달 발전시간
 					data: null,
@@ -206,7 +233,7 @@
 							}
 						}
 					},
-					className: 'dt-center'
+					className: 'dt-center',
 				},
 				{
 					title: i18nManager.tr("dashboard.table.15"), // 지난달 발전량
@@ -218,7 +245,7 @@
 							return `<a href="javascript:void(0);" onclick="goPvGen('${'${lastMonth.format(\'yyyyMM\')}'}', 'day', '', '${'${full[\'sid\']}'}')">${'${data}'}</a>`;
 						}
 					},
-					className: 'dt-center'
+					className: 'dt-center',
 				},
 				{
 					title: i18nManager.tr("dashboard.table.16"), // 지난달 일 평균 발전시간
@@ -237,9 +264,14 @@
 							}
 						}
 					},
-					className: 'dt-center'
+					className: 'dt-center',
 				},
 			],
+			// columnDefs: [
+			// 	{ name: "today", orderData: [6, 7, 8], targets: 0 },
+			// 	{ name: "yesterday", orderData: [9, 10, 11], targets: 1 },
+			// 	{ name: "lastMonth", orderData: [12, 13, 14], targets: 2 },
+			// ],
 			language: {
 				emptyTable: i18nManager.tr("gdash.the_data_you_have_queried_does_not_exist"),
 				zeroRecords:  i18nManager.tr("gdash.your_search_has_not_returned_results"),
@@ -281,7 +313,7 @@
 		let siteArray_temp = siteArray;
 		if (isEmpty(sgid)) siteArray = 'all';
 
-		//오늘 발전
+		//오늘 발전 0
 		if (siteArray.length > 0) {
 			urls.push($.ajax({
 				url: apiHost + '/get/energy/now/sites',
@@ -294,7 +326,7 @@
 				})
 			}));
 
-			//어제 발전
+			//어제 발전 1
 			urls.push($.ajax({
 				url: apiHost + '/get/energy/sites',
 				type: 'POST',
@@ -309,7 +341,7 @@
 				})
 			}));
 
-			//작년 동월 발전
+			//작년 동월 발전 2
 			urls.push($.ajax({
 				url: apiHost + '/get/energy/sites',
 				type: 'POST',
@@ -324,7 +356,7 @@
 				})
 			}));
 
-			//알람 이력
+			//알람 이력 3
 			urls.push($.ajax({
 				url: apiHost + '/get/alarms',
 				type: 'POST',
@@ -337,7 +369,7 @@
 				})
 			}));
 
-			//기상 정보 오늘
+			//기상 정보 오늘 4
 			urls.push($.ajax({
 				url: apiHost + '/get/weather/site',
 				type: 'POST',
@@ -351,7 +383,7 @@
 				})
 			}));
 
-			//기상 정보 어제
+			//기상 정보 어제 5
 			urls.push($.ajax({
 				url: apiHost + '/get/weather/site',
 				type: 'POST',
@@ -365,7 +397,7 @@
 				})
 			}));
 
-			// 통신 상태
+			// 통신 상태 6
 			urls.push($.ajax({
 				url: apiHost + '/get/status/health',
 				type: 'POST',
@@ -376,7 +408,7 @@
 				}),
 			}));
 
-			//사이트정보
+			//사이트정보 7
 			urls.push($.ajax({
 				url: apiHost + '/get/status/raw/sites',
 				type: 'POST',
@@ -475,11 +507,17 @@
 				} else if (index === 6) {
 					const sites = resData['sites'];
 
+
 					tableData.forEach((site, index) => {
 						const comStatus = sites.find(x => site.sid === x.sid);
-						tableData[index]['comStatus'] = ["error", "<fmt:message key='button.error' />"];
-						if (!isEmpty(comStatus.rtus) && comStatus.rtus.length > 0) {
+						
+						if (!comStatus.rtus.length) {
+							tableData[index]['comStatus'] = ["error", "<fmt:message key='button.error' />"]
+						} else {
 							tableData[index]['comStatus'] = ["normal", "<fmt:message key='button.normal' />"];
+						}
+						if (siteList.find(x => x.sid === site.sid).rtus[0].rtu_type === 2) {
+							tableData[index]['comStatus'] = ["NA", "N/A"];
 						}
 					});
 				} else {
@@ -522,15 +560,17 @@
 				}
 			});
 
+			// console.log(gmainTable)
 			gmainTable.clear();
-			gmainTable.rows.add(tableData).draw();
-			$($.fn.dataTable.tables(true)).DataTable().columns.adjust();
+			gmainTable.rows.add(tableData);
+			$($.fn.dataTable.tables(true)).DataTable().columns.adjust().draw();
 		}).catch(error => {
 			$('#errMsg').html('처리 중 오류가 발생했습니다.<br/>에러 메세지:' + error);
 			$('#errorModal').modal('show');
+			console.log(error)
 			setTimeout(function(){
 				$('#errorModal').modal('hide');
-				location.reload();
+				// location.reload();
 			}, 2000);
 		}).finally(() => {
 			document.getElementById('loadingCircleDashboard').style.display =  'none';

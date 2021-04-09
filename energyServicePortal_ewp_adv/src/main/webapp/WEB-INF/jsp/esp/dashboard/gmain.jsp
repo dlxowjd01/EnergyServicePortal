@@ -12,8 +12,11 @@
 		<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
 			<label class="switch switch-slide">
 				<input type="checkbox" value="showTable" id="switchBtn" class="switch-input" ${cookie['switch'].value} />
-				<span class="switch-label" data-on="<fmt:message key='gmain.switch.table' />" data-off="<fmt:message key='gmain.switch.dashboard' />"></span>
-				<span class="switch-handle"></span>
+				<span class="controller"></span>
+				<span class="switch-dashboard"><fmt:message key='gmain.switch.dashboard' /></span>
+				<span class="switch-table"><fmt:message key='gmain.switch.table' /></span>
+				<!-- <span class="switch-label" data-on="<fmt:message key='gmain.switch.table' />" data-off="<fmt:message key='gmain.switch.dashboard' />"></span> -->
+				<!-- <span class="switch-handle"></span> -->
 			</label>
 		</c:if>
 		
@@ -337,36 +340,16 @@
 										<caption>(<fmt:message key='gmain.unit' />)</caption>
 										<thead>
 										<tr>
-											<th>
-												<button type="button" class="btn-align"><fmt:message key="gdash.7.status"/></button>
-											</th>
-											<th>
-												<button type="button" class="btn-align"><fmt:message key="gdash.7.err"/></button>
-											</th>
-											<th>
-												<button type="button" class="btn-align"><fmt:message key="gdash.7.medium"/></button>
-											</th>
-											<th>
-												<button type="button" class="btn-align"><fmt:message key="gdash.7.rtu_status"/></button>
-											</th>
-											<th>
-												<button type="button" class="btn-align"><fmt:message key="gdash.7.site"/></button>
-											</th>
-											<th>
-												<button type="button" class="btn-align"><fmt:message key="gdash.7.cap"/></button>
-											</th>
-											<th>
-												<button type="button" class="btn-align"><fmt:message key="gdash.7.forecast"/></button>
-											</th>
-											<th>
-												<button type="button" class="btn-align"><fmt:message key="gdash.7.gen"/></button>
-											</th>
-											<th class="ESS">
-												<button type="button" class="btn-align"><fmt:message key="gdash.7.charge"/></button>
-											</th>
-											<th class="ESS">
-												<button type="button" class="btn-align"><fmt:message key="gdash.7.discharge"/></button>
-											</th>
+											<th> <button type="button" class="btn-align"><fmt:message key="gdash.7.status"/></button> </th>
+											<th> <button type="button" class="btn-align"><fmt:message key="gdash.7.err"/></button> </th>
+											<th> <button type="button" class="btn-align"><fmt:message key="gdash.7.medium"/></button> </th>
+											<th> <button type="button" class="btn-align"><fmt:message key="gdash.7.rtu_status"/></button> </th>
+											<th> <button type="button" class="btn-align"><fmt:message key="gdash.7.site"/></button> </th>
+											<th> <button type="button" class="btn-align"><fmt:message key="gdash.7.cap"/></button> </th>
+											<th> <button type="button" class="btn-align"><fmt:message key="gdash.7.forecast"/></button> </th>
+											<th> <button type="button" class="btn-align"><fmt:message key="gdash.7.gen"/></button> </th>
+											<th  <button type="button" class="btn-align"><fmt:message key="gdash.7.charge"/></button> </th>
+											<th  <button type="button" class="btn-align"><fmt:message key="gdash.7.discharge"/></button> </th>
 										</tr>
 										</thead>
 										<tbody id="siteList">
@@ -523,11 +506,15 @@
 		let dashboardViewFlag = true;
 
 		if ($("#switchBtn").is(":checked")) {
+			// $(".switch-slide > .switch-table").addClass("actived");
+			$(".switch-slide > .controller").html("<fmt:message key='gmain.switch.table' />").addClass("table");
 			target.eq(0).addClass("hidden").next().removeClass("hidden");
 			// $($.fn.dataTable.tables(true)).DataTable().columns.adjust();
 			getDashboardTable('gmainTable');
 			refreshFiveMinInterval  = setInterval(getDashboardTable, 5 * 60 * 1000);
 		} else {
+			// $(".switch-slide > .switch-dashboard").addClass("actived");
+			$(".switch-slide > .controller").html("<fmt:message key='gmain.switch.dashboard' />").addClass("dashboard");
 			target.eq(0).removeClass("hidden").next().addClass("hidden");
 
 			if (!isEmpty(siteList) && siteList.length > 0) {
@@ -559,7 +546,10 @@
 
 		$('#switchBtn').on('click', function () {
 			if ($(this).is(':checked')) {
-			// B. TableView
+				// B. TableView
+				$(".switch-slide > .controller").html("<fmt:message key='gmain.switch.table' />").addClass("table").removeClass("dashboard");
+				// $(".switch-slide > .switch-table").addClass("actived");
+				// $(".switch-slide > .switch-dashboard").removeClass("actived");
 				$("#dashboardTableSearch").removeClass("hidden");
 				// document.cookie = 'switch=checked; path=/';
 				setCookie("switch", "checked");
@@ -571,6 +561,9 @@
 				refreshFiveMinInterval  = setInterval(getDashboardTable, 5 * 60 * 1000);
 			} else {
 				// A. DashboardView
+				$(".switch-slide > .controller").html("<fmt:message key='gmain.switch.dashboard' />").addClass("dashboard").removeClass("table");
+				// $(".switch-slide > .switch-table").removeClass("actived");
+				// $(".switch-slide > .switch-dashboard").addClass("actived");
 				$("#dashboardTableSearch").addClass("hidden");
 				target.eq(0).removeClass('hidden').next().addClass('hidden');
 				setCookie('switch', '');

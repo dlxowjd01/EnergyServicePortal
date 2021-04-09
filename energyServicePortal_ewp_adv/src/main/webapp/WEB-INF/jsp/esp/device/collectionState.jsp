@@ -845,6 +845,9 @@
 								let status = ["error", "<fmt:message key='button.error' />"];
 								if (rtuStatus.rtus.length) {
 									status = ["normal", "<fmt:message key='button.normal' />"];
+									if (rtuStatus.rtus.find(x => x.rtu_type === 2)) {
+										status = ["NA", "N/A"];
+									}
 									// if ((new Date().getTime() - rtuStatus.rtus[0]['last_timestamp']) <= 3600000) {
 									// }
 								}

@@ -5546,12 +5546,53 @@ html[lang="en"] .btn-save {
 }
 
 .switch-slide {
+	display: flex;
+	align-items: center;
 	position: relative;
 	margin: 0 0 0 20px;
-	width: 80px;
-	height: 30px;
-	cursor: pointer;
+	/* width: 150px; */
+	height: 36px;
+	background: #242427;
+	border-radius: 4px;
 }
+
+.switch-slide > span:not(.controller) {
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 0px 16px;
+	cursor: pointer;
+	border-radius: 4px;
+	color: rgba(255, 255, 255, 0.6);
+	font-size: 14px;
+	z-index: 99;
+}
+
+.switch-slide > .controller {
+	display: block;
+	position: absolute;
+	top: 0;
+	width: initial;
+	height: 100%;
+	border-radius: 4px;
+	background: #1c98e9;
+	transition: 0.5s all;
+	color: #1c98e9;
+	font-size: 14px;
+	padding: 0px 16px;
+	white-space: nowrap;
+}
+
+.switch-slide > .controller.dashboard {
+	transform: translateX(0%);
+}
+.switch-slide > .controller.table {
+	left: 12px;
+	transform: translateX(100%);
+}
+.switch-slide > .controller.dashboard ~ .switch-dashboard,
+.switch-slide > .controller.table ~ .switch-table { color: rgba(255, 255, 255, 0.87); }
 
 html[lang="en"] .switch-slide {
 	width: 110px;
@@ -11334,11 +11375,14 @@ table.table-footer tfoot td.light {
 }
 
 #dashboardTableSearch {
-	margin-left: 20px;
+	margin-left: 24px;
+	height: 36px;	
 }
 
 #dashboardTableSearch > input {
-	padding: 8px 15px;
+	width: 276px;
+	height: 100%;
+	padding: 8px 16px;
 	font-size: 14px;
 	border-radius: 2px;
 	background: var(--white20);
@@ -11364,21 +11408,43 @@ th > span.asterisk:after {
 }
 
 .status-button {
-    min-width: 60px;
+	/* min-width: 60px; */
+	/* width: 100%; */
 	font-size: 12px;
     display: inline-block;
 	text-align: center; 
-    padding: 4px 0px;
+    padding: 4px 7px;
     border-radius: 2px;
-    font-weight: 400;
+	font-weight: 400;
+	position: relative;
     color: rgba(0,0,0,.87);
 }
 
 .status-button.normal { background-color: #90caf3; }
 .status-button.error { background-color: #ffd954; }
+.status-button.NA { background-color: #878787; }
 .status-button.off {
 	background-color: #656565;
 	color: rgba(255, 255, 255, .4);
+}
+.status-button.NA:after {
+	content: "RTU 미등록";
+	position: absolute;
+	top: 50%;
+	left: calc(100% - 3px);
+	transition: 0.3s all;
+	transform: translateY(-50%);
+	padding: 4px 10px;
+	border-radius: 2px;
+	font-size: 12px;
+	white-space: nowrap;
+	color: rgba(255, 255, 255, 0.87);
+	background: rgba(0, 0, 0, 0.87);
+	opacity: 0;
+}
+.status-button.NA:hover:after {
+	opacity: 1;
+	left: calc(100% + 5px);
 }
 
 #colStateRtu > .table-top,
@@ -11469,4 +11535,18 @@ th > span.asterisk:after {
 
 .highcharts-tooltip {
 	pointer-events: auto !important
+}
+
+
+#gmainTable_wrapper .dataTables_scrollHeadInner th {
+	vertical-align: bottom;
+}
+
+#gmainTable_wrapper .row-2 {
+	padding: 14px 10px 19px 10px;
+}
+
+#gmainTable_wrapper .col-3 {
+	padding: 14px 10px 12px 14px;
+    border-left: 1px solid rgba(255, 255, 255, 0.25);
 }
