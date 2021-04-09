@@ -674,8 +674,18 @@
 														expenditure = Number(expenditure) + Number(spendInfo['지출_총계'].replace(/[^0-9.]/g, '')) * daily;
 
 														if (i === currentMonthMax.getMonth()) {
-															if (!isEmpty(expenditureInfo[i])) {
-																expenditureCurrent = Array.from(expenditureInfo[i]);
+															if (!isEmpty(spendInfo)) {
+																Object.entries(spendInfo).forEach(([key, data]) => {
+																	const expenditureIndex = expenditureTemplate.findIndex(e => e['column'].includes(key));
+																	if (expenditureIndex > -1 && !isEmpty(data)) {
+																		if (isEmpty(expenditureCurrent)) {
+																			expenditureCurrent = new Array(12).fill(0);
+																			expenditureCurrent[expenditureIndex] += Number(data.replace(/[^0-9.]/g, '')) * daily;
+																		} else {
+																			expenditureCurrent[expenditureIndex] += Number(data.replace(/[^0-9.]/g, '')) * daily;
+																		}
+																	}
+																});
 															}
 														}
 													}
@@ -765,7 +775,7 @@
 									insuranceCostLastMonth: insuranceCostLastMonth,
 									insuranceCostLastYear: insuranceCostLastYear,
 									expenditure: expenditure,
-									expenditureCurrent: expenditureCurrent,
+									expenditureCurrent: Array.from(expenditureCurrent),
 									expenditureLastMonth: expenditureLastMonth,
 									expenditureLastYear: expenditureLastYear,
 									month: new Date().getMonth(),
