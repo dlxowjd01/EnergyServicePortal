@@ -437,36 +437,53 @@ const minAjax = async () => {
 						const siteId = $(this).data('sid');
 						let rtuStatus = '';
 						if (!isEmpty(resData) && !isEmpty(resData.sites)) {
-							(resData.sites).forEach(data => {
-								if (siteId === data.sid) {
-									if (!isEmpty(data.rtus)) {
-										const operation = data.rtus.find(e => e.operation === 1);
-										if (!isEmpty(operation)) {
-											rtuStatus = '<span class="status-button normal">'+i18nManager.tr("button.normal")+'</span>';
-										} else {
-											rtuStatus = '<span class="status-button error">'+i18nManager.tr("button.error")+'</span>';
-										}
-									} else {
-										rtuStatus = '<span class="status-button error">'+i18nManager.tr("button.error")+'</span>';
-									}
-								}
+							// 
+							// (resData.sites).forEach(data => {
+							// 	console.log(data)
+							// 	if (siteId === data.sid) {
+							// 		if (!isEmpty(data.rtus)) {
+							// 			const operation = data.rtus.find(e => e.operation === 1);
+							// 			if (!isEmpty(operation)) {
+							// 				rtuStatus = '<span class="status-button normal">'+i18nManager.tr("button.normal")+'</span>';
+							// 			} else {
+							// 				rtuStatus = '<span class="status-button error">'+i18nManager.tr("button.error")+'</span>';
+							// 			}
+							// 		} else {
+							// 			rtuStatus = '<span class="status-button error">'+i18nManager.tr("button.error")+'</span>';
+							// 		}
+							// 	}
 
-								const targetSite = siteList.find(x => x.sid === data.sid)
-								if (targetSite.rtus) {
-									if (targetSite.rtus.find(x => x.rtu_type === 2)) {
-										rtuStatus = '<span class="status-button NA">N/A</span>';
-									}
-								}
-
-								// if (isEmpty(data.rtus)) {
-								// 	rtuStatus = '<span class="status-button error">'+i18nManager.tr("button.error")+'</span>';
+								// const targetSite = siteList.find(x => x.sid === data.sid);
+								// if (targetSite.rtus) {
+								// 	if (targetSite.rtus.find(x => x.rtu_type === 2)) {
+								// 		rtuStatus = '<span class="status-button NA">N/A</span>';
+								// 	}
 								// } else {
-								// 	rtuStatus = '<span class="status-button normal">'+i18nManager.tr("button.normal")+'</span>';
-									// if (siteList.find(x => x.sid === data.sid).rtus[0].rtu_type === 2) {
-									// 	rtuStatus = '<span class="status-button NA">N/A</span>';
-									// }
+								// 	rtuStatus = '<span class="status-button NA">N/A</span>';
 								// }
-							});
+							// });
+
+							const target = resData.sites.find(x => x.sid === siteId);
+
+							if (!isEmpty(target.rtus)) {
+								const operation = target.rtus.find(e => e.operation === 1);
+								if (!isEmpty(operation)) {
+									rtuStatus = '<span class="status-button normal">'+i18nManager.tr("button.normal")+'</span>';
+								} else {
+									rtuStatus = '<span class="status-button error">'+i18nManager.tr("button.error")+'</span>';
+								}
+							} else {
+								rtuStatus = '<span class="status-button error">'+i18nManager.tr("button.error")+'</span>';
+							}
+
+							const targetSite = siteList.find(x => x.sid === siteId);
+							if (targetSite.rtus) {
+								if (targetSite.rtus.find(x => x.rtu_type === 2)) {
+									rtuStatus = '<span class="status-button NA">N/A</span>';
+								}
+							} else {
+								rtuStatus = '<span class="status-button NA">N/A</span>';
+							}
 						}
 
 						$(this).find('td:eq(3)').html(rtuStatus);
@@ -1654,18 +1671,10 @@ const searchSite = async function (siteSids) {
 										site['rtustatus'] = "N/A";
 										site['rtustatusClass'] = "NA";
 									}
+								} else {
+									site['rtustatus'] = "N/A";
+									site['rtustatusClass'] = "NA";
 								}
-								// if (isEmpty(data.rtus)) {
-								// 	site['rtustatus'] = i18nManager.tr("button.error");
-								// 	site['rtustatusClass'] = 'error';
-								// } else {
-								// 	site['rtustatus'] = i18nManager.tr("button.normal");
-								// 	site['rtustatusClass'] = 'normal';
-								// 	if (siteList.find(x => x.sid === data.sid).rtus[0].rtu_type === 2) {
-								// 		site['rtustatus'] = "N/A";
-								// 		site['rtustatusClass'] = 'NA';
-								// 	}
-								// }
 							}
 						});
 					} else {

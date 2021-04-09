@@ -522,11 +522,13 @@
 							tableData[index]['comStatus'] = ["error", "<fmt:message key='button.error' />"];
 						}
 
-						const targetSite = siteList.find(x => x.sid === site.sid)
+						const targetSite = siteList.find(x => x.sid === site.sid);
 						if (targetSite.rtus) {
 							if (targetSite.rtus.find(x => x.rtu_type === 2)) {
 								tableData[index]['comStatus'] = ["NA", "N/A"];
 							}
+						} else {
+							tableData[index]['comStatus'] = ["NA", "N/A"];
 						}
 					});
 				} else {
