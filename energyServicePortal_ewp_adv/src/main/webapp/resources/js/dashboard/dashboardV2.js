@@ -451,11 +451,13 @@ const minAjax = async () => {
 									}
 								}
 
-								const rtus = siteList.find(x => x.sid === data.sid).rtus
-
-								if (rtus.find(x => x.rtu_type === 2)) {
-									rtuStatus = '<span class="status-button NA">N/A</span>';
+								const targetSite = siteList.find(x => x.sid === data.sid)
+								if (targetSite.rtus) {
+									if (targetSite.rtus.find(x => x.rtu_type === 2)) {
+										rtuStatus = '<span class="status-button NA">N/A</span>';
+									}
 								}
+
 								// if (isEmpty(data.rtus)) {
 								// 	rtuStatus = '<span class="status-button error">'+i18nManager.tr("button.error")+'</span>';
 								// } else {
@@ -1646,11 +1648,12 @@ const searchSite = async function (siteSids) {
 									site['rtustatusClass'] = 'error';
 								}
 
-								const rtus = siteList.find(x => x.sid === data.sid).rtus
-
-								if (rtus.find(x => x.rtu_type === 2)) {
-									site['rtustatus'] = "N/A";
-									site['rtustatusClass'] = 'NA';
+								const targetSite = siteList.find(x => x.sid === data.sid)
+								if (targetSite.rtus) {
+									if (targetSite.rtus.find(x => x.rtu_type === 2)) {
+										site['rtustatus'] = "N/A";
+										site['rtustatusClass'] = "NA";
+									}
 								}
 								// if (isEmpty(data.rtus)) {
 								// 	site['rtustatus'] = i18nManager.tr("button.error");

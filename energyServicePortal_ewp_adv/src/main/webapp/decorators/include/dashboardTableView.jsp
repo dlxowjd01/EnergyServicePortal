@@ -511,15 +511,6 @@
 					tableData.forEach((site, index) => {
 						const comStatus = sites.find(x => site.sid === x.sid);
 						
-						// if (isEmpty(comStatus.rtus)) { 
-						// 	tableData[index]['comStatus'] = ["error", "<fmt:message key='button.error' />"];
-						// } else {
-						// 	tableData[index]['comStatus'] = ["normal", "<fmt:message key='button.normal' />"];
-						// 	if (siteList.find(x => x.sid === site.sid).rtus[0].rtu_type === 2) {
-						// 		tableData[index]['comStatus'] = ["NA", "N/A"];
-						// 	}
-						// }
-
 						if (!isEmpty(comStatus.rtus)) {
 							const operation = comStatus.rtus.find(e => e.operation === 1);
 							if (!isEmpty(operation)) {
@@ -531,12 +522,12 @@
 							tableData[index]['comStatus'] = ["error", "<fmt:message key='button.error' />"];
 						}
 
-						const rtus = siteList.find(x => x.sid === site.sid).rtus
-
-						if (rtus.find(x => x.rtu_type === 2)) {
-							tableData[index]['comStatus'] = ["NA", "N/A"];
+						const targetSite = siteList.find(x => x.sid === site.sid)
+						if (targetSite.rtus) {
+							if (targetSite.rtus.find(x => x.rtu_type === 2)) {
+								tableData[index]['comStatus'] = ["NA", "N/A"];
+							}
 						}
-						
 					});
 				} else {
 					tableData.forEach((site, index) => {

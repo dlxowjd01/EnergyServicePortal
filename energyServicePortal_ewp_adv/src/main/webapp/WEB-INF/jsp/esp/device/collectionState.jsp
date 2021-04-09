@@ -83,6 +83,7 @@
 				<div>
 					<button class="status-button rtu-filter-button normal actived" data-status="normal"><fmt:message key="button.normal" /> (0)</button>
 					<button class="status-button rtu-filter-button error actived" data-status="error"><fmt:message key="button.error" /> (0)</button>
+					<button class="status-button rtu-filter-button NA actived" data-status="NA">N/A (0)</button>
 				</div>
 			</div>
 			<div class="table-wrap-type collect-wrap">
@@ -845,11 +846,12 @@
 								let status = ["error", "<fmt:message key='button.error' />"];
 								if (rtuStatus.rtus.length) {
 									status = ["normal", "<fmt:message key='button.normal' />"];
-									if (rtuStatus.rtus.find(x => x.rtu_type === 2)) {
-										status = ["NA", "N/A"];
-									}
 									// if ((new Date().getTime() - rtuStatus.rtus[0]['last_timestamp']) <= 3600000) {
 									// }
+								}
+
+								if (rtu.rtu_type === 2) {
+									status = ["NA", "N/A"];
 								}
 
 								rtuInfo =
@@ -895,8 +897,9 @@
 								
 								statusFilter();
 
-								$(".rtu-filter-button").first().html("<fmt:message key='button.normal' /> ("+$("tr.normal").length+")");
-								$(".rtu-filter-button").last().html("<fmt:message key='button.error' /> ("+$("tr.error").length+")");
+								$(".rtu-filter-button:nth-child(1)").html("<fmt:message key='button.normal' /> ("+$("tr.normal").length+")");
+								$(".rtu-filter-button:nth-child(2)").html("<fmt:message key='button.error' /> ("+$("tr.error").length+")");
+								$(".rtu-filter-button:nth-child(3)").html("N/A ("+$("tr.NA").length+")");
 							}
 						});
 						ix++;

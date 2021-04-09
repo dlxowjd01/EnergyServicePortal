@@ -5584,19 +5584,10 @@ html[lang="en"] .btn-save {
 	white-space: nowrap;
 }
 
-.switch-slide > .controller.dashboard {
-	transform: translateX(0%);
-}
-.switch-slide > .controller.table {
-	left: 12px;
-	transform: translateX(100%);
-}
+.switch-slide > .controller.dashboard { left: 0; }
+.switch-slide > .controller.table { right: 0; }
 .switch-slide > .controller.dashboard ~ .switch-dashboard,
 .switch-slide > .controller.table ~ .switch-table { color: rgba(255, 255, 255, 0.87); }
-
-html[lang="en"] .switch-slide {
-	width: 110px;
-}
 
 .switch-slide .switch-label {
 	box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12), inset 0 0 2px rgba(0, 0, 0, 0.15);
@@ -5639,13 +5630,13 @@ html[lang="en"] .switch-slide {
 	color: var(--white87);
 }
 
-html[lang="en"] .switch-slide .switch-label:after {
+/* html[lang="en"] .switch-slide .switch-label:after {
 	color: var(--white);
 	background: var(--vivid-blue);
 	content: attr(data-on);
 	left: 150px;
 	color: var(--white87);
-}
+} */
 
 .switch-slide .switch-handle {
 	position: absolute;
