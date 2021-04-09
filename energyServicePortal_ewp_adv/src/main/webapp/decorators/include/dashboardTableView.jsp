@@ -511,8 +511,8 @@
 					tableData.forEach((site, index) => {
 						const comStatus = sites.find(x => site.sid === x.sid);
 						
-						if (!isEmpty(comStatus.rtus) || comStatus.rtus.length <= 0) { 
-							tableData[index]['comStatus'] = ["error", "<fmt:message key='button.error' />"]
+						if (isEmpty(comStatus.rtus)) { 
+							tableData[index]['comStatus'] = ["error", "<fmt:message key='button.error' />"];
 						} else {
 							tableData[index]['comStatus'] = ["normal", "<fmt:message key='button.normal' />"];
 						}

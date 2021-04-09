@@ -450,7 +450,7 @@ const minAjax = async () => {
 								// 		rtuStatus = '<span class="status-button error">'+i18nManager.tr("button.error")+'</span>';
 								// 	}
 								// }
-								if (!isEmpty(data.rtus) || data.rtus.length <= 0) {
+								if (isEmpty(data.rtus)) {
 									rtuStatus = '<span class="status-button error">'+i18nManager.tr("button.error")+'</span>';
 								} else {
 									rtuStatus = '<span class="status-button normal">'+i18nManager.tr("button.normal")+'</span>';
@@ -1640,7 +1640,7 @@ const searchSite = async function (siteSids) {
 								// 	site['rtustatus'] = i18nManager.tr("button.error");
 								// 	site['rtustatusClass'] = 'error';
 								// }
-								if (!isEmpty(data.rtus) || data.rtus.length <= 0) {
+								if (isEmpty(data.rtus)) {
 									site['rtustatus'] = i18nManager.tr("button.error");
 									site['rtustatusClass'] = 'error';
 								} else {
