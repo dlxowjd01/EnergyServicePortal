@@ -572,7 +572,7 @@
 								let contractUnitPriceLastMonth = '', insuranceCostLastMonth = '';
 								let contractUnitPriceLastYear = '', insuranceCostLastYear = '';
 
-								let expenditureCurrent, expenditureLastMonth, expenditureLastYear;
+								let expenditureCurrent = '', expenditureLastMonth = '', expenditureLastYear = '';
 
 								//관리 운영 정보: 관리운영비 총액(계약 단가 총합)
 								if (!isEmpty(spcGen['maintenance_info'])) {
@@ -674,7 +674,9 @@
 														expenditure = Number(expenditure) + Number(spendInfo['지출_총계'].replace(/[^0-9.]/g, '')) * daily;
 
 														if (i === currentMonthMax.getMonth()) {
-															expenditureCurrent = expenditureInfo[i];
+															if (!isEmpty(expenditureInfo[i])) {
+																expenditureCurrent = Array.from(expenditureInfo[i]);
+															}
 														}
 													}
 												}
