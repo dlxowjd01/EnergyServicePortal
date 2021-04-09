@@ -527,12 +527,16 @@
 							} else {
 								tableData[index]['comStatus'] = ["error", "<fmt:message key='button.error' />"];
 							}
-							if (siteList.find(x => x.sid === site.sid).rtus[0].rtu_type === 2) {
-								tableData[index]['comStatus'] = ["NA", "N/A"];
-							}
 						} else {
 							tableData[index]['comStatus'] = ["error", "<fmt:message key='button.error' />"];
 						}
+
+						const rtus = siteList.find(x => x.sid === site.sid).rtus
+
+						if (rtus.find(x => x.rtu_type === 2)) {
+							tableData[index]['comStatus'] = ["NA", "N/A"];
+						}
+						
 					});
 				} else {
 					tableData.forEach((site, index) => {

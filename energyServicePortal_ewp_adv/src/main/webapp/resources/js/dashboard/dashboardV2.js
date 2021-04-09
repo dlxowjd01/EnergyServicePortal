@@ -446,12 +446,15 @@ const minAjax = async () => {
 										} else {
 											rtuStatus = '<span class="status-button error">'+i18nManager.tr("button.error")+'</span>';
 										}
-										if (siteList.find(x => x.sid === data.sid).rtus[0].rtu_type === 2) {
-											rtuStatus = '<span class="status-button NA">N/A</span>';
-										}
 									} else {
 										rtuStatus = '<span class="status-button error">'+i18nManager.tr("button.error")+'</span>';
 									}
+								}
+
+								const rtus = siteList.find(x => x.sid === data.sid).rtus
+
+								if (rtus.find(x => x.rtu_type === 2)) {
+									rtuStatus = '<span class="status-button NA">N/A</span>';
 								}
 								// if (isEmpty(data.rtus)) {
 								// 	rtuStatus = '<span class="status-button error">'+i18nManager.tr("button.error")+'</span>';
@@ -1631,7 +1634,6 @@ const searchSite = async function (siteSids) {
 							if (siteId === data.sid) {
 								if (!isEmpty(data.rtus)) {
 									const operation = data.rtus.find(e => e.operation === 1);
-									console.log(operation);
 									if (!isEmpty(operation)) {
 										site['rtustatus'] = i18nManager.tr("button.normal");
 										site['rtustatusClass'] = 'normal';
@@ -1639,13 +1641,16 @@ const searchSite = async function (siteSids) {
 										site['rtustatus'] = i18nManager.tr("button.error");
 										site['rtustatusClass'] = 'error';
 									}
-									if (siteList.find(x => x.sid === data.sid).rtus[0].rtu_type === 2) {
-										site['rtustatus'] = "N/A";
-										site['rtustatusClass'] = 'NA';
-									}
 								} else {
 									site['rtustatus'] = i18nManager.tr("button.error");
 									site['rtustatusClass'] = 'error';
+								}
+
+								const rtus = siteList.find(x => x.sid === data.sid).rtus
+
+								if (rtus.find(x => x.rtu_type === 2)) {
+									site['rtustatus'] = "N/A";
+									site['rtustatusClass'] = 'NA';
 								}
 								// if (isEmpty(data.rtus)) {
 								// 	site['rtustatus'] = i18nManager.tr("button.error");
