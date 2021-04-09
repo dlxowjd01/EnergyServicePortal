@@ -426,10 +426,11 @@
 							return '-';
 						} else {
 							let template = ``;
+							let f1 = d3.format(',.1f');
 							if (data > 0) {
-								template = `<img src="/img/spcDashboard/up.svg" alt="증가" /> ${'${numberComma(data.toFixed(2))}'}`;
+								template = `<img src="/img/spcDashboard/up.svg" alt="증가" /> ${'${f1(data)}'}`;
 							} else if (data < 0) {
-								template = `<img src="/img/spcDashboard/down.svg" alt="감소" />  ${'${numberComma((data * -1).toFixed(2))}'}`;
+								template = `<img src="/img/spcDashboard/down.svg" alt="감소" />  ${'${f1(data * -1)}'}`;
 							} else {
 								template = `<img src="/img/spcDashboard/flat.svg" alt="변동없음" />`;
 							}
@@ -447,10 +448,11 @@
 							return '-';
 						} else {
 							let template = ``;
+							let f1 = d3.format(',.1f');
 							if (data > 0) {
-								template = `<img src="/img/spcDashboard/up.svg" alt="증가" /> ${'${numberComma(data.toFixed(2))}'}`;
+								template = `<img src="/img/spcDashboard/up.svg" alt="증가" /> ${'${f1(data)}'}`;
 							} else if (data < 0) {
-								template = `<img src="/img/spcDashboard/down.svg" alt="감소" />  ${'${numberComma((data * -1).toFixed(2))}'}`;
+								template = `<img src="/img/spcDashboard/down.svg" alt="감소" />  ${'${f1(data * -1)}'}`;
 							} else {
 								template = `<img src="/img/spcDashboard/flat.svg" alt="변동없음" />`;
 							}
