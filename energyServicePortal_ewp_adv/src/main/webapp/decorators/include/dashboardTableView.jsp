@@ -515,9 +515,9 @@
 							tableData[index]['comStatus'] = ["error", "<fmt:message key='button.error' />"];
 						} else {
 							tableData[index]['comStatus'] = ["normal", "<fmt:message key='button.normal' />"];
-						}
-						if (siteList.find(x => x.sid === site.sid).rtus[0].rtu_type === 2) {
-							tableData[index]['comStatus'] = ["NA", "N/A"];
+							if (siteList.find(x => x.sid === site.sid).rtus[0].rtu_type === 2) {
+								tableData[index]['comStatus'] = ["NA", "N/A"];
+							}
 						}
 					});
 				} else {
