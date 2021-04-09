@@ -11438,6 +11438,10 @@ th > span.asterisk:after {
 	left: calc(100% + 5px);
 }
 
+.rtu-filter-button:after {
+	display: none!important;
+}
+
 #colStateRtu > .table-top,
 #colStateRtu > .table-top > div {
 	display: flex;
