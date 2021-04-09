@@ -248,7 +248,7 @@ const minAjax = async () => {
 		contentType: 'application/json',
 		data: JSON.stringify({
 			sids: siteSids.toString(),
-			startTime: getTime(1, false)
+			// startTime: getTime(1, false)
 		})
 	}));
 
@@ -438,26 +438,29 @@ const minAjax = async () => {
 						let rtuStatus = '';
 						if (!isEmpty(resData) && !isEmpty(resData.sites)) {
 							(resData.sites).forEach(data => {
-								// if (siteId === data.sid) {
-								// 	if (!isEmpty(data.rtus) && data.rtus.length > 0) {
-								// 		const operation = data.rtus.find(e => e.operation === 1);
-								// 		if (!isEmpty(operation)) {
-								// 			rtuStatus = '<span class="status-button normal">'+i18nManager.tr("button.normal")+'</span>';
-								// 		} else {
-								// 			rtuStatus = '<span class="status-button error">'+i18nManager.tr("button.error")+'</span>';
-								// 		}
-								// 	} else {
-								// 		rtuStatus = '<span class="status-button error">'+i18nManager.tr("button.error")+'</span>';
-								// 	}
-								// }
-								if (isEmpty(data.rtus)) {
-									rtuStatus = '<span class="status-button error">'+i18nManager.tr("button.error")+'</span>';
-								} else {
-									rtuStatus = '<span class="status-button normal">'+i18nManager.tr("button.normal")+'</span>';
-									if (siteList.find(x => x.sid === data.sid).rtus[0].rtu_type === 2) {
-										rtuStatus = '<span class="status-button NA">N/A</span>';
+								if (siteId === data.sid) {
+									if (!isEmpty(data.rtus)) {
+										const operation = data.rtus.find(e => e.operation === 1);
+										if (!isEmpty(operation)) {
+											rtuStatus = '<span class="status-button normal">'+i18nManager.tr("button.normal")+'</span>';
+										} else {
+											rtuStatus = '<span class="status-button error">'+i18nManager.tr("button.error")+'</span>';
+										}
+										if (siteList.find(x => x.sid === data.sid).rtus[0].rtu_type === 2) {
+											rtuStatus = '<span class="status-button NA">N/A</span>';
+										}
+									} else {
+										rtuStatus = '<span class="status-button error">'+i18nManager.tr("button.error")+'</span>';
 									}
 								}
+								// if (isEmpty(data.rtus)) {
+								// 	rtuStatus = '<span class="status-button error">'+i18nManager.tr("button.error")+'</span>';
+								// } else {
+								// 	rtuStatus = '<span class="status-button normal">'+i18nManager.tr("button.normal")+'</span>';
+									// if (siteList.find(x => x.sid === data.sid).rtus[0].rtu_type === 2) {
+									// 	rtuStatus = '<span class="status-button NA">N/A</span>';
+									// }
+								// }
 							});
 						}
 
@@ -1509,7 +1512,7 @@ const searchSite = async function (siteSids) {
 		contentType: 'application/json',
 		data: JSON.stringify({
 			sids: siteSids.toString(),
-			startTime: getTime(1, false)
+			// startTime: getTime(1, false)
 		})
 	}));
 
@@ -1626,31 +1629,35 @@ const searchSite = async function (siteSids) {
 					if (!isEmpty(apiData) && !isEmpty(apiData.sites)) {
 						(apiData.sites).forEach(data => {
 							if (siteId === data.sid) {
-								// if (!isEmpty(data.rtus) && data.rtus.length > 0) {
-								// 	const operation = data.rtus.find(e => e.operation === 1);
-								// 	console.log(operation);
-								// 	if (!isEmpty(operation)) {
-								// 		site['rtustatus'] = i18nManager.tr("button.normal");
-								// 		site['rtustatusClass'] = 'normal';
-								// 	} else {
-								// 		site['rtustatus'] = i18nManager.tr("button.error");
-								// 		site['rtustatusClass'] = 'error';
-								// 	}
-								// } else {
-								// 	site['rtustatus'] = i18nManager.tr("button.error");
-								// 	site['rtustatusClass'] = 'error';
-								// }
-								if (isEmpty(data.rtus)) {
-									site['rtustatus'] = i18nManager.tr("button.error");
-									site['rtustatusClass'] = 'error';
-								} else {
-									site['rtustatus'] = i18nManager.tr("button.normal");
-									site['rtustatusClass'] = 'normal';
+								if (!isEmpty(data.rtus)) {
+									const operation = data.rtus.find(e => e.operation === 1);
+									console.log(operation);
+									if (!isEmpty(operation)) {
+										site['rtustatus'] = i18nManager.tr("button.normal");
+										site['rtustatusClass'] = 'normal';
+									} else {
+										site['rtustatus'] = i18nManager.tr("button.error");
+										site['rtustatusClass'] = 'error';
+									}
 									if (siteList.find(x => x.sid === data.sid).rtus[0].rtu_type === 2) {
 										site['rtustatus'] = "N/A";
 										site['rtustatusClass'] = 'NA';
 									}
+								} else {
+									site['rtustatus'] = i18nManager.tr("button.error");
+									site['rtustatusClass'] = 'error';
 								}
+								// if (isEmpty(data.rtus)) {
+								// 	site['rtustatus'] = i18nManager.tr("button.error");
+								// 	site['rtustatusClass'] = 'error';
+								// } else {
+								// 	site['rtustatus'] = i18nManager.tr("button.normal");
+								// 	site['rtustatusClass'] = 'normal';
+								// 	if (siteList.find(x => x.sid === data.sid).rtus[0].rtu_type === 2) {
+								// 		site['rtustatus'] = "N/A";
+								// 		site['rtustatusClass'] = 'NA';
+								// 	}
+								// }
 							}
 						});
 					} else {

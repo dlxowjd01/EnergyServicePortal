@@ -337,6 +337,18 @@
 							<div class="gmain-wrap">
 								<div class="intable" id="statusSiteList">
 									<table class="dashboard-sort">
+										<colgroup>
+											<col style="width: 10%">
+											<col style="width: 5%">
+											<col style="width: 5%">
+											<col style="width: 10%">
+											<col style="width: 20%">
+											<col style="width: 10%">
+											<col style="width: 10%">
+											<col style="width: 10%">
+											<col style="width: 10%">
+											<col style="width: 10%">
+										</colgroup>
 										<caption>(<fmt:message key='gmain.unit' />)</caption>
 										<thead>
 										<tr>
@@ -348,106 +360,106 @@
 											<th> <button type="button" class="btn-align"><fmt:message key="gdash.7.cap"/></button> </th>
 											<th> <button type="button" class="btn-align"><fmt:message key="gdash.7.forecast"/></button> </th>
 											<th> <button type="button" class="btn-align"><fmt:message key="gdash.7.gen"/></button> </th>
-											<th  <button type="button" class="btn-align"><fmt:message key="gdash.7.charge"/></button> </th>
-											<th  <button type="button" class="btn-align"><fmt:message key="gdash.7.discharge"/></button> </th>
+											<th> <button type="button" class="btn-align"><fmt:message key="gdash.7.charge"/></button> </th>
+											<th> <button type="button" class="btn-align"><fmt:message key="gdash.7.discharge"/></button> </th>
 										</tr>
 										</thead>
 										<tbody id="siteList">
 										<!-- [D] 상태별 배경 : 't1' or 't2' 클래스 추가 -->
-										<tr class="dbclickopen flag[INDEX] [displayClass]" data-sid="[sid]" data-operation="[operation]" data-address="[address]">
-											<td class="first-td">
-												<span class="status [statusClass]" title="[status]">[status]</span>
-												<!-- <span class="status-bar"></span> -->
-											</td>
-											<td>[alarmError]</td>
-											<td>[alarmWarning]</td>
-											<td><span class="status-button [rtustatusClass]">[rtustatus]</span></td>
-											<td class="center">[name]</td>
-											<td class="center">[capacityView]</td>
-											<td class="center">[forecast]</td>
-											<td class="center">[accumulate]</td>
-											<td class="ESS">-</td>
-											<td class="ESS">-</td>
-										</tr>
-										<tr class="detail-info list[INDEX] flag[INDEX]">
-											<td colspan="9">
-												<div class="di-wrap">
-													<div class="di-wrap-in">
-														<div class="di-top-sec">
-															<span class="ico [resourceClass]"></span>
-															<div class="text-wrapper clear">
-																<div class="fl">
-																	<span class="tx"><fmt:message key="gdash.7.irr"/></span>
-																	<span class="tx2">[irradiationPoa] W/㎡</span>
-																</div>
-																<div class="fr">
-																	<span class="tx"><fmt:message key="gdash.7.temp"/></span>
-																	<span class="tx2">[temperature]</span>
-																	<span class="tx"><fmt:message key="gdash.7.humid"/></span>
-																	<span class="tx2">[humidity]</span>
-																</div>
-															</div>
-														</div>
-														<div class="di-bottom-sec clear">
-															<div class="sec-box left">
-																<div class="box-in">
-																	<div class="box-top">
-																		<div class="inchart" id="type_chart[INDEX]"></div>
+											<tr class="dbclickopen flag[INDEX] [displayClass]" data-sid="[sid]" data-operation="[operation]" data-address="[address]">
+												<td class="first-td">
+													<span class="status [statusClass]" title="[status]">[status]</span>
+													<!-- <span class="status-bar"></span> -->
+												</td>
+												<td>[alarmError]</td>
+												<td>[alarmWarning]</td>
+												<td><span class="status-button [rtustatusClass]">[rtustatus]</span></td>
+												<td class="center">[name]</td>
+												<td class="center">[capacityView]</td>
+												<td class="center">[forecast]</td>
+												<td class="center">[accumulate]</td>
+												<td class="ESS">-</td>
+												<td class="ESS">-</td>
+											</tr>
+											<tr class="detail-info list[INDEX] flag[INDEX]">
+												<td colspan="10">
+													<div class="di-wrap">
+														<div class="di-wrap-in">
+															<div class="di-top-sec">
+																<span class="ico [resourceClass]"></span>
+																<div class="text-wrapper clear">
+																	<div class="fl">
+																		<span class="tx"><fmt:message key="gdash.7.irr"/></span>
+																		<span class="tx2">[irradiationPoa] W/㎡</span>
 																	</div>
-																	<ul class="di-list">
-																		<li>
-																			<span class="di-li-title"><fmt:message key="gdash.7.production"/> (kW)</span>
-																			<span class="di-li-text">[activePowerView]</span>
-																		</li>
-																		<li>
-																			<span class="di-li-title"><fmt:message key="gdash.7.gen_today"/> (kWh)</span>
-																			<span class="di-li-text">[accumulate]</span>
-																		</li>
-																		<li>
-																			<span class="di-li-title"><fmt:message key="gdash.7.gen_forecast"/> (kWh)</span>
-																			<span class="di-li-text">[forecast]</span>
-																		</li>
-																		<li>
-																			<span class="di-li-title"><fmt:message key="gdash.7.gen_yesterday"/> (kWh)</span>
-																			<span class="di-li-text">[beforeDay]</span>
-																		</li>
-																	</ul>
-																</div>
-															</div>
-															<div class="sec-box right">
-																<div class="box-in">
-																	<div class="box-top">
-																		<div class="box-top-inner"></div>
-																	</div>
-																	<ul class="di-list">
-																		<li>
-																			<span class="di-li-title"><fmt:message key="gdash.7.tot_cap"/> (kW)</span>
-																			<span class="di-li-text">[capacityView]</span>
-																		</li>
-																		<li>
-																			<span class="di-li-title"><fmt:message key="gdash.7.num_inv"/> (EA)</span>
-																			<span class="di-li-text">[inverterCount]</span>
-																		</li>
-																	</ul>
-																	<div class="di-text-box">
-																		<a href="javascript:void(0);"
-																		   onclick="pageMove('[sid]', 'alarm')">
-																			<p class="tx"><fmt:message key="gdash.7.num_no_ack"/> :
-																				<span>[alarmTotal] <fmt:message key='gmain.cases' /></span></p>
-																		</a>
-																			<%--<p class="tx">2020-02-10 12:00:01 데이터 disconnected</p>--%>
-																			<%--<p class="tx">2020-02-09 11:41:26 인버터#1 이상 감지</p>--%>
+																	<div class="fr">
+																		<span class="tx"><fmt:message key="gdash.7.temp"/></span>
+																		<span class="tx2">[temperature]</span>
+																		<span class="tx"><fmt:message key="gdash.7.humid"/></span>
+																		<span class="tx2">[humidity]</span>
 																	</div>
 																</div>
 															</div>
-														</div>
-														<div class="btn-box clear">
-															<a href="javascript:void(0);" onclick="pageMove('[sid]', 'siteMain')" class="line-arrow"><fmt:message key="gdash.7.go_dashboard"/></a>
+															<div class="di-bottom-sec clear">
+																<div class="sec-box left">
+																	<div class="box-in">
+																		<div class="box-top">
+																			<div class="inchart" id="type_chart[INDEX]"></div>
+																		</div>
+																		<ul class="di-list">
+																			<li>
+																				<span class="di-li-title"><fmt:message key="gdash.7.production"/> (kW)</span>
+																				<span class="di-li-text">[activePowerView]</span>
+																			</li>
+																			<li>
+																				<span class="di-li-title"><fmt:message key="gdash.7.gen_today"/> (kWh)</span>
+																				<span class="di-li-text">[accumulate]</span>
+																			</li>
+																			<li>
+																				<span class="di-li-title"><fmt:message key="gdash.7.gen_forecast"/> (kWh)</span>
+																				<span class="di-li-text">[forecast]</span>
+																			</li>
+																			<li>
+																				<span class="di-li-title"><fmt:message key="gdash.7.gen_yesterday"/> (kWh)</span>
+																				<span class="di-li-text">[beforeDay]</span>
+																			</li>
+																		</ul>
+																	</div>
+																</div>
+																<div class="sec-box right">
+																	<div class="box-in">
+																		<div class="box-top">
+																			<div class="box-top-inner"></div>
+																		</div>
+																		<ul class="di-list">
+																			<li>
+																				<span class="di-li-title"><fmt:message key="gdash.7.tot_cap"/> (kW)</span>
+																				<span class="di-li-text">[capacityView]</span>
+																			</li>
+																			<li>
+																				<span class="di-li-title"><fmt:message key="gdash.7.num_inv"/> (EA)</span>
+																				<span class="di-li-text">[inverterCount]</span>
+																			</li>
+																		</ul>
+																		<div class="di-text-box">
+																			<a href="javascript:void(0);"
+																			onclick="pageMove('[sid]', 'alarm')">
+																				<p class="tx"><fmt:message key="gdash.7.num_no_ack"/> :
+																					<span>[alarmTotal] <fmt:message key='gmain.cases' /></span></p>
+																			</a>
+																				<%--<p class="tx">2020-02-10 12:00:01 데이터 disconnected</p>--%>
+																				<%--<p class="tx">2020-02-09 11:41:26 인버터#1 이상 감지</p>--%>
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<div class="btn-box clear">
+																<a href="javascript:void(0);" onclick="pageMove('[sid]', 'siteMain')" class="line-arrow"><fmt:message key="gdash.7.go_dashboard"/></a>
+															</div>
 														</div>
 													</div>
-												</div>
-											</td>
-										</tr>
+												</td>
+											</tr>
 										</tbody>
 									</table>
 								</div>
