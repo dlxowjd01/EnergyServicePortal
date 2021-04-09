@@ -655,6 +655,7 @@
 
 												if (!isEmpty(spcGen['spend_info'])) {
 													const spendInfo = JSON.parse(spcGen['spend_info']);
+
 													//종합 지출 총계
 													Object.entries(spendInfo).forEach(([key, data]) => {
 														const expenditureIndex = expenditureTemplate.findIndex(e => e['column'].includes(key));
@@ -670,7 +671,7 @@
 
 													if (i <= currentMonthMax.getMonth()) {
 														const spendInfo = JSON.parse(spcGen['spend_info']);
-														expenditure = Number(spendInfo['지출_총계'].replace(/[^0-9.]/g, '')) * daily;
+														expenditure = Number(expenditure) + Number(spendInfo['지출_총계'].replace(/[^0-9.]/g, '')) * daily;
 
 														if (i === currentMonthMax.getMonth()) {
 															expenditureCurrent = expenditureInfo[i];
@@ -1076,7 +1077,7 @@
 					, currentRepair = isEmpty(data['currentRepair']) ? '' : data['currentRepair']
 					, lastMonthRepair = isEmpty(data['lastMonthRepair']) ? '' : data['lastMonthRepair']
 					, lastYearRepair = isEmpty(data['lastYearRepair']) ? '' : data['lastYearRepair']
-					, expenditureSum = (Number(expenditure) * month) + Number(insuranceCost) + Number(repairMaintenanceCost)
+					, expenditureSum = Number(expenditure) + Number(insuranceCost) + Number(repairMaintenanceCost)
 					, lastMonthexpEnditureSum = Number(expenditureLastMonth) + Number(insuranceCostLastMonth) + Number(lastMonthRepair)  //이전달 지출
 					, lastYearMonthexpEnditureSum = Number(expenditureLastYear) + Number(insuranceCostLastYear) + Number(lastYearRepair) //작년 마지막달과 동일달 지출
 					, currentMonthexpEnditureSum = Number(expenditureCurrent) + Number(insuranceCostCurrent) + Number(currentRepair)  //마지막달 지출
