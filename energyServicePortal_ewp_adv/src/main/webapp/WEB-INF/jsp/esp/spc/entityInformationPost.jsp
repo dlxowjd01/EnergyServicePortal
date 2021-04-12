@@ -415,7 +415,10 @@
 			url: apiHost + '/spcs',
 			type: 'get',
 			async: false,
-			data: {oid: oid}
+			data: {
+				oid: oid,
+				includeGens: true
+			}
 		}
 
 		const spcAuthority = {
@@ -434,16 +437,18 @@
 
 					if (!isEmpty(spcAuth) && !isEmpty(spcList)) {
 						spcList.forEach(spc => {
-							const spcListId = spc.spc_id;
-							spcAuth.forEach(auth => {
-								if (spcListId == auth.spcid) {
-									if (auth.role == 1) {
-										refineSpcList.push(spc);
-									} else {
-										return false;
+							if (!isEmpty(spc.spcGens)) {
+								const spcListId = spc.spc_id;
+								spcAuth.forEach(auth => {
+									if (spcListId == auth.spcid) {
+										if (auth.role == 1) {
+											refineSpcList.push(spc);
+										} else {
+											return false;
+										}
 									}
-								}
-							});
+								});
+							}
 						});
 					}
 
@@ -463,10 +468,17 @@
 			$.ajax(spcSearch).done(function (data, textStatus, jqXHR) {
 				data.data.sortOn('name');
 
-				refineList = data.data;
+				const refineSpcList = new Array();
+				(data.data).forEach(spc => {
+					if (!isEmpty(spc.spcGens)) {
+						refineSpcList.push(spc);
+					}
+				})
 
-				data.data.unshift({spc_id: '', name: '직접입력'});
-				setMakeList(data.data, 'spcList', {'dataFunction': {}});
+				refineList = refineSpcList;
+
+				refineSpcList.unshift({spc_id: '', name: '직접입력'});
+				setMakeList(refineSpcList, 'spcList', {'dataFunction': {}});
 
 				$('#spcId').prepend(`<div class="dropdown-search"><input type="text" placeholder="SPC 검색" onKeyup="searchSite($(this).val())" ></div>`);
 			}).fail(function (jqXHR, textStatus, errorThrown) {
