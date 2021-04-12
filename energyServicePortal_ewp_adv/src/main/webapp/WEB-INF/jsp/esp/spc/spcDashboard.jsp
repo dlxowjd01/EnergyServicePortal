@@ -1095,10 +1095,10 @@
 					, lastMonthexpEnditureSum = Number(expenditureLastMonth) + Number(insuranceCostLastMonth) + Number(lastMonthRepair)  //이전달 지출
 					, lastYearMonthexpEnditureSum = Number(expenditureLastYear) + Number(insuranceCostLastYear) + Number(lastYearRepair) //작년 마지막달과 동일달 지출
 					, currentMonthexpEnditureSum = Number(expenditureCurrent) + Number(insuranceCostCurrent) + Number(currentRepair)  //마지막달 지출
-					, yield = Math.floor(((Number(contractUnitPrice) - Number(expenditureSum)) / Number(contractUnitPrice)) * 100)
-					, lastMonthYield = Math.floor(((Number(contractUnitPriceLastMonth) - Number(lastMonthexpEnditureSum)) / Number(contractUnitPriceLastMonth)) * 10000) / 100
-					, lastYearYield = Math.floor(((Number(contractUnitPriceLastYear) - Number(lastYearMonthexpEnditureSum)) / Number(contractUnitPriceLastYear)) * 10000) / 100
-					, currentYield = Math.floor(((Number(contractUnitPriceCurrent) - Number(currentMonthexpEnditureSum)) / Number(contractUnitPriceCurrent)) * 10000) / 100;
+					, yield = Math.round(((Number(contractUnitPrice) - Number(expenditureSum)) / Number(contractUnitPrice)) * 100)
+					, lastMonthYield = Math.round(((Number(contractUnitPriceLastMonth) - Number(lastMonthexpEnditureSum)) / Number(contractUnitPriceLastMonth)) * 10000) / 100
+					, lastYearYield = Math.round(((Number(contractUnitPriceLastYear) - Number(lastYearMonthexpEnditureSum)) / Number(contractUnitPriceLastYear)) * 10000) / 100
+					, currentYield = Math.round(((Number(contractUnitPriceCurrent) - Number(currentMonthexpEnditureSum)) / Number(contractUnitPriceCurrent)) * 10000) / 100;
 
 				if (!isEmpty(expenditure) || !isEmpty(insuranceCost) || !isEmpty(repairMaintenanceCost)) {
 					data['expenditureSum'] = expenditureSum;
