@@ -337,7 +337,7 @@
 							<div class="gmain-wrap">
 								<div class="intable" id="statusSiteList">
 									<table class="dashboard-sort">
-										<colgroup>
+										<!-- <colgroup>
 											<col style="width: 10%">
 											<col style="width: 5%">
 											<col style="width: 5%">
@@ -348,7 +348,7 @@
 											<col style="width: 10%">
 											<col style="width: 10%">
 											<col style="width: 10%">
-										</colgroup>
+										</colgroup> -->
 										<caption>(<fmt:message key='gmain.unit' />)</caption>
 										<thead>
 										<tr>
@@ -360,8 +360,8 @@
 											<th> <button type="button" class="btn-align"><fmt:message key="gdash.7.cap"/></button> </th>
 											<th> <button type="button" class="btn-align"><fmt:message key="gdash.7.forecast"/></button> </th>
 											<th> <button type="button" class="btn-align"><fmt:message key="gdash.7.gen"/></button> </th>
-											<th> <button type="button" class="btn-align"><fmt:message key="gdash.7.charge"/></button> </th>
-											<th> <button type="button" class="btn-align"><fmt:message key="gdash.7.discharge"/></button> </th>
+											<th class="ESS"> <button type="button" class="btn-align"><fmt:message key="gdash.7.charge"/></button> </th>
+											<th class="ESS"> <button type="button" class="btn-align"><fmt:message key="gdash.7.discharge"/></button> </th>
 										</tr>
 										</thead>
 										<tbody id="siteList">
