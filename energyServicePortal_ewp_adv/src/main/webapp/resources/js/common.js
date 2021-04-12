@@ -440,8 +440,8 @@ $(function() {
 
 
 /* type-list slideToggle */
-$(document).on('click', ".type-list .chart-top", function() {
-	$(this).next(".type-list-detail").slideToggle();
+$(document).on('click', ".type-list .chart-top .ntit", function() {
+	$(this).parent().next(".type-list-detail").slideToggle();
 	return false;
 });
 

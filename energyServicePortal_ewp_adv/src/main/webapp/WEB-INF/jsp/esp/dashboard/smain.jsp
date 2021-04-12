@@ -789,6 +789,36 @@
 		}
 	};
 
+	$(document).on('click', '.alert-icon span', function() {
+		const checkedArray = new Array()
+			, deviceType = $(this).parent().parent().parent().attr('class');
+
+		if ($(this).hasClass('on')) { $(this).removeClass('on');
+		} else { $(this).addClass('on'); }
+
+		$(this).parent().children('span.on').each(function () {
+			checkedArray.push($(this).text().substr(0, 2));
+		});
+
+		iconChecked(deviceType, checkedArray);
+	});
+
+	const iconChecked = function (type, checkedArray) {
+		let suffix = '';
+		if ($('#viewOptList').prev().data('value') == '2') {
+			suffix = '2';
+		}
+
+		$('#table_' + type + suffix).find('tr').each(function() {
+			const rowAlert = $(this).data('value');
+			if (checkedArray.includes(rowAlert)) {
+				$(this).removeClass('hidden');
+			} else {
+				$(this).addClass('hidden');
+			}
+		});
+	}
+
 	const siteId = '${sid}';
 	const sList = JSON.parse('${siteList}');
 
