@@ -483,7 +483,7 @@
 				let targetBoolean = false;
 				targetRange.forEach((range, index) => {
 					if (index === 5) {
-						if (range['min'] > targetData) {
+						if (range['max'] > targetData) {
 							if ($('.spcDashboard-filter > div').eq(range['index']).hasClass('actived')) {
 								targetBoolean = true;
 							}
