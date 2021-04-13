@@ -587,16 +587,18 @@
 					"overall": res[10],
 				};
 
+				console.log(acc)
+
 				TotalTrading(vppInfo.day.map(x => x[1]));
 				TotalProfit(vppInfo.day.map(x => x[1]), acc.day);
 				SiteStatus.setList(vppInfo.day, forecast.day, status);
 				Graph1.setOption(vppInfo["hour"].map(x => x[1]), Object.values(forecast["hour"]));
 				Graph2.setOption(vppInfo.hour.map(x => x[1]));
 				Graph3.setOption(vppInfo.month.map(x => x[1]), Object.values(forecast.month), acc.month);
-				PieGraph.draw(acc.day.total.length ? Object.values(acc.day.total)[0].accuracy : "-");
+				PieGraph.draw(Object.values(acc.day.total)[0].accuracy);
 				setResourceStatus(vppInfo.day);
 				Table.refresh(res[11], res[12].data, res[13].data, res[14].data.data, acc.day);
-				setPrediction(forecast["15min"], vppInfo.day.map(x => x[1]), acc.day.total.length ? Object.values(acc.day.total)[0].accuracy : 0);
+				setPrediction(forecast["15min"], vppInfo.day.map(x => x[1]), Object.values(acc.day.total)[0].accuracy);
 
 			}).catch(error => {
 				console.log(error);
@@ -837,7 +839,7 @@
 	}
 
 	const PieGraph = {
-		draw(acc) {
+		draw(acc) { 
 			Highcharts.chart("vppPie", {
 				chart: {
 					type: "pie",
@@ -1421,12 +1423,12 @@
 			let fc = {}
 			let active = {};
 			let overall = {};
-			console.log(status)
+			// console.log(status)
 			App.sites.map(x => {
 				energy = energyData.find(v => v[0] === x.sid)[1];
 				fc = forecast[x.sid] ? forecast[x.sid][0].items[0] : "";
-				active = Object.values(status.active[x.sid]).length ? ["normal", "정상"] : ["error", "이상"];
-				overall = Object.values(status.overall[x.sid]).length ? ["normal", "정상"] : ["error", "이상"];
+				active = Object.values(status.active[x.sid]["INV_PV"]).length ? ["normal", "정상"] : ["error", "이상"];
+				overall = Object.values(status.overall[x.sid]["INV_PV"]).length ? ["normal", "정상"] : ["error", "이상"];
 
 				tableTemplate += `
 					<tr class="vpp-focus-map" data-sid="${'${x.sid}'}">

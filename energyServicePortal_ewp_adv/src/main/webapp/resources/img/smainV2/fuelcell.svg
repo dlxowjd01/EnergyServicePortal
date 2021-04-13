@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+    <g fill="none" fill-rule="evenodd">
+        <g>
+            <g>
+                <g>
+                    <g>
+                        <g transform="translate(-994 -587) translate(672 272) translate(306 289) translate(16 26)">
+                            <path d="M0 0H24V24H0z"/>
+                            <path d="M2 2H22V22H2z"/>
+                            <rect width="16" height="16" x="4" y="4" stroke="#EAEAEA" stroke-width="2" rx="2"/>
+                            <g stroke="#EAEAEA" stroke-width="1.4">
+                                <path d="M0 0h6c.667 0 1 .333 1 1v1M5 6h1.25c.5 0 .75.333.75 1v1" transform="translate(3 7.5)"/>
+                                <path d="M4 4h1.571C5.857 4 6 4.333 6 5v1" transform="translate(3 7.5) rotate(180 5 5)"/>
+                                <path d="M0 7h6.429C6.809 7 7 7.333 7 8v1" transform="translate(3 7.5) matrix(1 0 0 -1 0 16)"/>
+                                <path stroke-linejoin="round" d="M5 1h1c.667 0 1 .333 1 1v1" transform="translate(3 7.5) matrix(1 0 0 -1 0 4)"/>
+                                <path stroke-linejoin="round" d="M4 3h1c.667 0 1 .333 1 1v1" transform="translate(3 7.5) matrix(-1 0 0 1 10 0)"/>
+                            </g>
+                            <g stroke="#EAEAEA" stroke-width="1.4">
+                                <path d="M0 0h6c.667 0 1 .333 1 1v1M5 6h1.25c.5 0 .75.333.75 1v1" transform="matrix(-1 0 0 1 21 7.5)"/>
+                                <path d="M4 4h1.571C5.857 4 6 4.333 6 5v1" transform="matrix(-1 0 0 1 21 7.5) rotate(180 5 5)"/>
+                                <path d="M0 7h6.429C6.809 7 7 7.333 7 8v1" transform="matrix(-1 0 0 1 21 7.5) matrix(1 0 0 -1 0 16)"/>
+                                <path stroke-linejoin="round" d="M5 1h1c.667 0 1 .333 1 1v1" transform="matrix(-1 0 0 1 21 7.5) matrix(1 0 0 -1 0 4)"/>
+                                <path stroke-linejoin="round" d="M4 3h1c.667 0 1 .333 1 1v1" transform="matrix(-1 0 0 1 21 7.5) matrix(-1 0 0 1 10 0)"/>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

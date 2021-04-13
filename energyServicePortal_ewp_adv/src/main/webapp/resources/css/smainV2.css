@@ -1,0 +1,124 @@
+#smainV2Content,
+.smainV2-block {
+	display: flex;
+}
+
+/* 간격 조정 */
+.smainV2-section > div:not(:last-child) {
+	margin-bottom: 24px;
+}
+
+.smainV2-block > div:not(:last-child) {
+	margin-right: 24px;
+}
+
+/* 사이즈 */
+.smainV2-block-s { height: 112px; }
+.smainV2-block-m { height: 260px; }
+.smainV2-block-l { height: 464px; }
+.smainV2-block-xl { height: 748px; }
+
+
+.smainV2-block .value-unit {
+	margin-top: 8px;
+}
+
+.smainV2-alarm {
+	position: relative;
+	padding: 0!important;
+}
+
+#smainV2-1-2 > div:first-of-type {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin: 24px 0;
+}
+
+#smainV2-1-2 > div:first-of-type > div {
+	width: calc(33.33% - 9px);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 16px;
+	border-radius: 4px;
+	white-space: nowrap;
+	border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+#smainV2-1-2 > div:first-of-type > div.actived {
+	background: rgba(255, 255, 255, 0.25);
+	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.24);
+}
+
+#smainV2-1-2 > div:first-of-type > div > p {
+	color: var(--white87);
+	font-size: 14px;
+}
+
+#smainV2-1-2 > div:first-of-type > div > span {
+	width: 44px;
+	color: var(--black20);
+	box-shadow: -1px 0 1px 0 var(--black20), 0 1px 1px 0 var(--black20);
+}
+
+#smainV2-1-2 > div:last-of-type > ul {
+	padding: 12px 0px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	font-size: 14px;
+}
+
+#smainV2-1-2 > div:last-of-type > ul:not(:last-child) {
+	border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+#smainV2-1-2 > div:last-of-type > ul > li:first-child {
+	color: var(--white60);
+}
+
+#smainV2-1-2 > div:last-of-type > ul > li:last-child {
+	color: var(--white87);
+}
+
+
+#smainV2-status {
+	display: flex;
+}
+
+.smainV2-status-block {
+	width: 100%;
+	padding: 12px 14px 12px 16px;
+	border-radius: 4px;
+	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.24);
+	border: solid 1px rgba(255, 255, 255, 0.25);
+	background-color: rgba(255, 255, 255, 0.25);
+	color: var(--white87);
+}
+
+.smainV2-status-block > ul {
+	padding: 14px 2px 14px 0;
+	border-radius: 4px;
+	font-size: 14px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.smainV2-status-block > ul > li:first-child {
+	display: flex;
+	align-items: center;
+}
+
+.smainV2-status-block > ul > li:first-child > img {
+	margin-right: 12px;
+}
+
+.smainV2-status-left {
+	width: 189px;
+}
+
+.smainV2-status-right {
+	width: 236px;
+}
