@@ -6,7 +6,7 @@
 </c:if>
 
 <form id="linkSiteForm" name="linkSiteForm" method="post"></form>
-<div class="row header-wrapper">
+<div class="row header-wrapper" id="gmainHeader">
 	<div class="col-lg-5 col-md-6 col-sm-12 dashboard-header">
 		<h1 class="page-header">${siteName}</h1>
 		<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx')}">

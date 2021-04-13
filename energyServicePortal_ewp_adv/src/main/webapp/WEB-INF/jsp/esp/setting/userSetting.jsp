@@ -2075,10 +2075,12 @@
 						<div class="row">
 							<div class="col-lg-2 col-sm-3"><span class="input-label"><fmt:message key='userSetting.isUse' /></span></div>
 							<div class="col-lg-4 col-sm-9">
-								<label class="switch switch-slide">
+								<label class="switch switch-slide user-setting-switch">
 									<input type="checkbox" value="showTable" id="newUseOpt" class="switch-input">
-									<span class="switch-label" data-on="Y" data-off="N"></span>
-									<span class="switch-handle"></span>
+									<span>Y</span>
+									<span>N</span>
+									<!-- <span class="switch-label" data-on="Y" data-off="N"></span> -->
+									<!-- <span class="switch-handle"></span> -->
 								</label>
 							</div>
 							<c:if test="${activateSPC eq true}">
@@ -2100,10 +2102,12 @@
 						<div class="row">
 							<div class="col-lg-2 col-sm-3"><span class="input-label"><fmt:message key='userSetting.certification' /></span></div>
 							<div class="col-lg-4 col-sm-9">
-								<label class="switch switch-slide">
+								<label class="switch switch-slide user-setting-switch">
 									<input type="checkbox" value="showTable" id="switchBtn" class="switch-input">
-									<span class="switch-label" data-on="Y" data-off="N"></span>
-									<span class="switch-handle"></span>
+									<span>Y</span>
+									<span>N</span>
+									<!-- <span class="switch-label" data-on="Y" data-off="N"></span> -->
+									<!-- <span class="switch-handle"></span> -->
 								</label>
 							</div>
 							<div class="col-lg-2 col-sm-3"><span class="input-label offset"><span><fmt:message key='userSetting.dep' /></span></span></div>
