@@ -740,13 +740,6 @@ const monthlyChartDraw = async (siteSids, standard) => {
 			}
 
 			chartSeries.tooltip = {valueSuffix: (/원/.test(el.suffix)) ? '만원' : el.suffix}
-
-			if (chartSeries.tooltip && chartSeries.tooltip.valueSuffix == '만원') {
-				for (let i in chartSeries.data) {
-					chartSeries.data[i] = Math.floor(chartSeries.data[i] / 10);
-				}
-			}
-
 			monthlyChart.addSeries(chartSeries, false);
 		});
 
@@ -942,13 +935,6 @@ const dailyChartDraw = async (siteSids, standard) => {
 			}
 
 			chartSeries.tooltip = {valueSuffix: (/원/.test(el.suffix)) ? '만원' : el.suffix}
-
-			if (chartSeries.tooltip && chartSeries.tooltip.valueSuffix == '만원') {
-				for (let i in chartSeries.data) {
-					chartSeries.data[i] = Math.floor(chartSeries.data[i] / 10);
-				}
-			}
-
 			dailyChart.addSeries(chartSeries, false);
 		});
 
@@ -1130,13 +1116,6 @@ const typeSiteDraw = async (siteSids, standard) => {
 			}
 
 			chartSeries.tooltip = {valueSuffix: (/원/.test(el.suffix)) ? '만원' : el.suffix}
-
-			if (chartSeries.tooltip && chartSeries.tooltip.valueSuffix == '만원') {
-				for (let i in chartSeries.data) {
-					chartSeries.data[i] = Math.floor(chartSeries.data[i] / 10);
-				}
-			}
-
 			typeSiteCurrent.addSeries(chartSeries, false);
 		});
 
