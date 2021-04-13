@@ -289,23 +289,23 @@
 			<h2 class="title">주간 예측오차율</h2>
 			<div class="vpp-3-2-graph">
 				<div class="actived">
-					<div>32</div>
+					<div>0</div>
 					<p>8%</p>
 				</div>
 				<div class="actived">
-					<div>42</div>
+					<div>0</div>
 					<p>6%</p>
 				</div>
 				<div class="actived">
-					<div>15</div>
+					<div>0</div>
 					<p>10%</p>
 				</div>
 				<div class="actived">
-					<div>4</div>
+					<div>0</div>
 					<p>20%</p>
 				</div>
 				<div class="actived">
-					<div>1</div>
+					<div>0</div>
 					<p>예측 오차</p>
 				</div>
 			</div>

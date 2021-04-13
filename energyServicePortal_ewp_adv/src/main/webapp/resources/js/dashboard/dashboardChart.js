@@ -119,7 +119,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 			return this.points.reduce(function (s, point) {
 				if(point.y !== 0) {
 					let suffix = point.series.userOptions.tooltip.valueSuffix;
-					return s + '<br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + numberComma(Math.round(point.y)) + ' ' + suffix;
+					return s + '<br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + numberComma(Math.round(point.y / 10)) + ' ' + suffix;
 				} else {
 					return s
 				}
@@ -302,7 +302,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 			return this.points.reduce(function (s, point) {
 				if(point.y !== 0) {
 					let suffix = point.series.userOptions.tooltip.valueSuffix;
-					return s + ' <br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + numberComma(Math.round(point.y)) + ' ' + suffix;
+					return s + ' <br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + numberComma(Math.round(point.y / 10)) + ' ' + suffix;
 				} else {
 					return s
 				}
