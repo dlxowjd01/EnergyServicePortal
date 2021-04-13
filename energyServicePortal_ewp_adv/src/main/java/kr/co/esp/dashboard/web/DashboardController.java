@@ -194,4 +194,17 @@ public class DashboardController {
 	public String VPPmain(HttpServletRequest request, HttpSession session, Model model) {
 		return "esp/dashboard/VPPmain";
 	}
+
+	/**
+	 * VPP 대시보드
+	 *
+	 * @param request
+	 * @param session
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/dashboard/smainV2.do")
+	public String smainV2(HttpServletRequest request, HttpSession session, Model model) {
+		return "esp/dashboard/smainV2";
+	}
 }

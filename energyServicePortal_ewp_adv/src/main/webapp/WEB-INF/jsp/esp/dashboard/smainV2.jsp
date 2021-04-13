@@ -67,8 +67,18 @@
 			</div>
 		</div>
 		<div class="indiv smainV2-block-l">
-			<h2 class="title">금일 발전현황</h2>
+			<h2 class="title mb-24">
+				금일 발전현황
+				<span class="term">
+					<img src="/img/ico-back.svg" class="back">
+					<span>2021.04.01 ~ 2021.04.13</span>
+					<img src="/img/ico-next.svg" class="next">
+				</span>
+			</h2>
 
+			<div id="">
+				<!-- 금일 발전현황 그래프 -->
+			</div>
 		</div>
 	</div>
 
@@ -93,18 +103,24 @@
 			<h2 class="title">실시간 운전현황</h2>
 			<div id="smainV2-status">
 				<div class="smainV2-status-left">
-					<h2 class="subtitle">연료 유입</h2>
-					<div class="smainV2-status-block">
-						<ul>
-							<li>
-								<img src="/img/smainV2/gas.svg" alt="GAS" />
-								<span>GAS</span>
-							</li>
-							<li>507 Nm3/hr</li>
-						</ul>
+					<p class="subtitle">연료 유입</p>
+					<div>
+						<div class="smainV2-status-block">
+							<ul>
+								<li>
+									<img src="/img/smainV2/gas.svg" alt="GAS" />
+									<span>GAS</span>
+								</li>
+								<li><span>507</span> N<span class="small-text">m</span>3/hr</li>
+							</ul>
+						</div>
+						<div class="arrow">
+							<div></div>
+							<div></div>
+							<div></div>
+						</div>
 					</div>
 				</div>
-				<div class="arrow"></div>
 				<div class="smainV2-status-right">
 					<div class="smainV2-status-block">
 						<ul>
@@ -112,34 +128,48 @@
 								<img src="/img/smainV2/electricity.svg" alt="전력" />
 								<span>전력</span>
 							</li>
-							<li>303.7 kW</li>
+							<li><span>303,7</span> kW</li>
 						</ul>
 					</div>
-					<div class="arrow"></div>
-					<div>
-						<img src="/img/smainV2/fuelcell.svg" alt="연료전지" />
+
+					<div class="arrow">
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
+
+					<div class="smainV2-status-block">
+						<ul>
+							<li>
+								<img src="/img/smainV2/fuelcell.svg" alt="연료전지" />
+								<span>연료전지</span>
+							</li>
+						</ul>
 						<div>
-							<h2>연료전지</h2>
-							<div>
-								<ul>
-									<li>전기 효율</li>
-									<li><span>9.6</span> %</li>
-								</ul>
-								<ul>
-									<li>열 효율</li>
-									<li><span>11</span> %</li>
-								</ul>
-							</div>
+							<ul>
+								<li>전기 효율</li>
+								<li><span>9.6</span> %</li>
+							</ul>
+							<ul>
+								<li>열 효율</li>
+								<li><span>11</span> %</li>
+							</ul>
 						</div>
 					</div>
-					<div class="arrow"></div>
+
+					<div class="arrow">
+						<div></div>
+						<div></div>
+						<div></div>
+					</div>
+
 					<div class="smainV2-status-block">
 						<ul>
 							<li>
 								<img src="/img/smainV2/hotwater.svg" alt="온수" />
 								<span>온수</span>
 							</li>
-							<li>60 °C</li>
+							<li><span>60</span> °C</li>
 						</ul>
 					</div>
 				</div>
@@ -166,8 +196,7 @@
 		</div>
 		<div class="indiv smainV2-block-m smainV2-alarm" data-alarm="">
 			<div class="alarm-status">
-				<div class="alarm-alert"><span><fmt:message key="gdash.6.today_alerts"/></span><em>0</em></div>
-				<div class="alarm-warning"><a href="javascript:void(0);" onclick="pageMove('all', 'alarm');" class="btn btn-cancel"><fmt:message key="gdash.6.details"/></a></div>
+				<div class="alarm-alert"><span>알림 메시지</span><em>0</em></div>
 			</div>
 			<div class="alarm-notice">
 				<ul id="alarmNotice">
@@ -181,8 +210,39 @@
 			</div>
 		</div>
 		<div class="indiv smainV2-block-l">
-			<h2 class="title">월별 발전량 종합</h2>
+			<h2 class="title">
+				월별 발전량 종합
+				<span class="term">
+					<img src="/img/ico-back.svg" class="back">
+					<span>2021.04.01 ~ 2021.04.13</span>
+					<img src="/img/ico-next.svg" class="next">
+				</span>
+			</h2>
 
+			<div class="smainV2-month-list">
+				<ul>
+					<li>이번달 총 발전량</li>
+					<li>
+						<span>8.49</span> kWh
+					</li>
+				</ul>
+				<ul>
+					<li>올해 누적 발전량</li>
+					<li>
+						<span>15.90</span> MWh
+					</li>
+				</ul>
+				<ul>
+					<li>이번달 운영 시간</li>
+					<li>
+						<span>3.69</span> Hrs
+					</li>
+				</ul>
+			</div>
+
+			<div id="">
+				<!-- 월별 발전량 종합 그래프 -->
+			</div>
 		</div>
 	</div>
 </div>

@@ -1265,17 +1265,9 @@ table tbody td .dropdown-menu {
 	display: none !important;
 }
 
-.next{
-	width: 24px;
-	margin: 0 0 -10px 12px;
-	padding: 8px 5px;
-	object-fit: contain;
-	cursor: pointer;
-}
+.next, 
 .back{
-	width: 24px;
-	margin: 0 12px -10px 15px;
-	padding: 8px 5px;
+	width: 20px;
 	object-fit: contain;
 	cursor: pointer;
 }
@@ -6512,9 +6504,18 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 
 .chart-top .term {
 	float: right;
+}
+
+.term {
+	display: flex;
+	align-items: center;
 	font-size: 13px;
 	color: var(--white87);
-	line-height: 26px;
+	font-weight: normal;
+}
+
+.term > span {
+	margin: 0 8px;
 }
 
 /* ==================================
@@ -11544,4 +11545,35 @@ th > span.asterisk:after {
 #gmainTable_wrapper .col-3 {
 	padding: 14px 10px 12px 14px;
     border-left: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.value-unit {
+	display: flex;
+	align-items: flex-end;
+}
+
+.value-unit > span:first-child {
+	font-size: 28px;
+	color: var(--white87);
+	margin-right: 8px;
+}
+
+.value-unit > span:last-child {
+	font-size: 16px;
+	color: var(--white60);
+}
+
+.subtitle {
+	font-size: 14px;
+	/* font-weight: 500; */
+	color: var(--white60);
+}
+
+.subtitle + .value-unit > span:first-child {
+	font-size: 24px;
+	letter-spacing: -0.17px;
+}
+
+.subtitle + .value-unit > span:last-child {
+	font-size: 13px;
 }
