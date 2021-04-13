@@ -1329,7 +1329,7 @@
 					
 					$("#userList").find("li").on('click', function() {
 						if(!isEmpty($(this).data("value"))){
-							$("#userTable").DataTable().column("8").search("\\b"+$(this).data("name")+"\\b", true, false).draw();
+							$("#userTable").DataTable().column("7").search($(this).data("name")).draw();
 
 							let tr = $("#userTable").find("tbody tr.selected");
 							let btn = $("#btnGroup").find(".btn-type03");
