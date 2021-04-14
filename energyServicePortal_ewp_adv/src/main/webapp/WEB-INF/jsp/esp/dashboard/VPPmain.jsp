@@ -1,12 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%@ include file="/decorators/include/taglibs.jsp" %>
 
-	<script src="https://unpkg.com/@googlemaps/markerclustererplus/dist/index.min.js"></script>
-	<script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyAgEDjSwQWd_Q9RF_owO8WkMtf-6lmVSpc"></script>
+<script src="https://unpkg.com/@googlemaps/markerclustererplus/dist/index.min.js"></script>
+<script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyAgEDjSwQWd_Q9RF_owO8WkMtf-6lmVSpc"></script>
 
 
 <link type="text/css" rel="stylesheet" href="/css/vppDashboard.css" />
 
+<!-- <div id="loadingCircle" class="loading"><img class="loading-image" src="/img/loading_icon.gif" alt="Loading..."/></div> -->
 
 <form id="linkSiteForm" name="linkSiteForm" method="post"></form>
 <div class="row header-wrapper">
@@ -290,11 +291,11 @@
 			<div class="vpp-3-2-graph">
 				<div class="actived">
 					<div>0</div>
-					<p>8%</p>
+					<p>6%</p>
 				</div>
 				<div class="actived">
 					<div>0</div>
-					<p>6%</p>
+					<p>8%</p>
 				</div>
 				<div class="actived">
 					<div>0</div>
@@ -332,7 +333,7 @@
 		// VPP 그룹 정보
 		$.ajax({
 			type: "GET",
-			url: apiHost + "/config/vpp-groups/" + tempId,
+			url: apiHost + "/config/vpp-groups/" + vppId,
 			data: {
 				includeSites: true,
 				includeDevices: true,
@@ -340,15 +341,21 @@
 		}).done(result => { 
 			console.log(result)
 
-			App.sites = result.sites;
-			App.init();
+			if (result.sites.length === 0) {
+				showError("등록된 사이트가 없습니다.");
+			} else {
+				App.sites = result.sites;
+				App.init();
+			}
 		}).fail(error => {
 			console.error(error);
+
+			showError("존재하지 않는 그룹입니다.");
 		})
 	})
 
 	// 임시 VPP ID --------
-	const tempId = "5bebbe35-7a26-401b-a8bc-c960a663eb13";
+	const vppId = "5bebbe35-7a26-401b-a8bc-c960a663eb13";
 	const interval = {
 		today: getDayInterval(),
 		month: getMonthInterval(),
@@ -399,7 +406,6 @@
 						"endTime": interval.today[1],
 						"interval": "day",
 						"cal_incentive": true,
-						"additionalProp1": {}
 					})
 				}),
 				$.ajax({ // 3
@@ -455,7 +461,6 @@
 						"endTime": interval.month[1],
 						"interval": "day",
 						"cal_incentive": true,
-						"additionalProp1": {}
 					}),
 				}),
 				$.ajax({ // 7
@@ -547,7 +552,6 @@
 						"endTime": (String(getTime(0, false)).substr(0, 10)+"0000") * 1,
 						"interval": "day",
 						"cal_incentive": true,
-						"additionalProp1": {}
 					}),
 				}),
 				$.ajax({ // 15
@@ -561,11 +565,15 @@
 						detailByBasetime: true,
 					},
 				}),
-			]
+			];
 
 			new Promise ((resolve, reject) => {
 				resolve(Promise.all(apis));
+
+				$("#loadingCircleDashboard").show();
 			}).then(res => {
+				$("#loadingCircleDashboard").hide();
+
 				const vppInfo = {
 					"day" : Object.entries(res[0].data),
 					"15min" : Object.entries(res[1].data),
@@ -599,9 +607,10 @@
 				setResourceStatus(vppInfo.day);
 				Table.refresh(res[11], res[12].data, res[13].data, res[14].data.data, acc.day);
 				setPrediction(forecast["15min"], vppInfo.day.map(x => x[1]), Object.values(acc.day.total)[0].accuracy);
-
 			}).catch(error => {
 				console.log(error);
+				
+				showError("오류가 발생했습니다.");
 			});
 
 			Table.init();
@@ -625,6 +634,8 @@
 				})
 				.on("click", ".vpp-3-2-graph > div", function(e) {
 					$(this).toggleClass("actived");
+
+					Table.target.draw();
 				})
 				.on("click", ".auto-rolling", function(e) {
 					$(".auto-rolling").toggleClass("playing");
@@ -876,15 +887,7 @@
 					}
 				},	
 				tooltip: {
-					shared: true,
-					borderColor: 'none',
-					backgroundColor: 'var(--bg-color)',
-					padding: 16,
-					style: {
-						color: 'var(--white87)',
-					},
-					valueSuffix: ' kwh',
-					pointFormat: '<b>{point.percentage:.0f}%</b>'
+					enabled: false
 				},
 				series: [{
 					type: 'pie',
@@ -893,18 +896,10 @@
 					colorByPoint: true,
 					data: [{
 						color: '#cfcfcf',
-						name: "예측",
-						dataLabels: {
-							enabled: false
-						},
-						y: acc === "-" ? 0 : 100 - (acc * 100) //60% -- 아래로 총합 100%
+						y: acc === "-" ? 0 : 100 - (acc * 100)
 					}, {
 						color: '#656565',
-						name: "안예측",
-						dataLabels: {
-							enabled: false
-						},
-						y: acc === "-" ? 100 : acc * 100 //20% 나머지
+						y: acc === "-" ? 100 : acc * 100
 					}]
 				}],
 			});
@@ -1429,6 +1424,7 @@
 				fc = forecast[x.sid] ? forecast[x.sid][0].items[0] : "";
 				active = Object.values(status.active[x.sid]["INV_PV"]).length ? ["normal", "정상"] : ["error", "이상"];
 				overall = Object.values(status.overall[x.sid]["INV_PV"]).length ? ["normal", "정상"] : ["error", "이상"];
+				console.log(energy)
 
 				tableTemplate += `
 					<tr class="vpp-focus-map" data-sid="${'${x.sid}'}">
@@ -1470,7 +1466,7 @@
 									<div>
 										<div class="vpp-infobox">
 											<p>발전소 용량</p>
-											<p>${'${energy.capacity.toLocaleString()}'} kW</p>
+											<p>${'${(energy.capacity / 1000).toLocaleString()}'} kW</p>
 										</div>
 										<div class="vpp-infobox">
 											<p>금일 누적거래량</p>
@@ -1530,6 +1526,13 @@
 	// 주간 예측오차율 
 	const Table = {
 		target: null,
+		range: [
+			{min: 0, max: 6, index: 0, count: 0},
+			{min: 6, max: 8, index: 1, count: 0},
+			{min: 8, max: 10, index: 2, count: 0},
+			{min: 10, max: 20, index: 3, count: 0},
+			{min: 20, max: 100, index: 4, count: 0},
+		],
 
 		init() {
 			Table.target = $("#vpp-3-2-dataTable").DataTable({
@@ -1537,7 +1540,7 @@
 				fixedHeader: true,
 				// "table-layout": "fixed",
 				scrollX: false,
-				scrollY: '720px',
+				scrollY: false,
 				scrollCollapse: true,
 				sortable: true,
 				paging: false,
@@ -1618,15 +1621,44 @@
 					activePower: activePower[site.sid]["INV_PV"].activePower ? activePower[site.sid]["INV_PV"].activePower : "-",
 					currentDev: currentDev[site.sid] ? currentDev[site.sid].energy : "-",
 					currentFc: currentFc[site.sid] ? currentFc[site.sid].forecast : "-",
-					todayError: todayError.each[site.sid] ? Object.values(todayError.each[site.sid])[0].accuracy : "-",
-					weekError: weekError.each[site.sid] ? Object.values(weekError.each[site.sid])[0].accuracy : "-",
+					todayError: todayError.each[site.sid] ? Object.values(todayError.each[site.sid])[0].accuracy * 100 : "-",
+					weekError: weekError.each[site.sid] ? Object.values(weekError.each[site.sid])[0].accuracy * 100 : "-",
 				}
+
+				Table.range.some((range, index) => {
+					let acc = tableData[ix].weekError === '-' ? 100 : tableData[ix].weekError;
+
+					if (range.min <= acc && acc <= range.max) {
+						Table.range[index].count++;
+
+						$(".vpp-3-2-graph > div:nth-child("+(index + 1)+") > div").html(Table.range[index].count);
+
+						return true;
+					}
+				});
 			});
 
+			$.fn.dataTable.ext.search.push (
+				function(settings, data, dataIndex) {
+					const acc = data[5] === '-' ? 100 : Number(data[5]);
+
+					let targetBoolean = false;
+					Table.range.forEach((range, index) => {
+						if (range.min <= acc && acc <= range.max) {
+							if ($(".vpp-3-2-graph > div").eq(range['index']).hasClass('actived')) {
+								targetBoolean = true;
+							}
+						}
+					});
+
+					return targetBoolean;
+				}
+			)
+
 			Table.target.rows.add(tableData);
-			Table.target.draw();
 			Table.target.columns.adjust();
-		}
+			Table.target.draw();
+		},
 	}
 	
 	// 금일 데이터
@@ -1658,6 +1690,14 @@
 				"formId": "v2"
 			}),
 		});
+	}
+
+	const showError = (msg) => {
+		$('#errMsg').text(msg);
+		$('#errorModal').modal('show');
+		setTimeout(function () {
+			$('#errorModal').modal('hide');
+		}, 2000);
 	}
 
 

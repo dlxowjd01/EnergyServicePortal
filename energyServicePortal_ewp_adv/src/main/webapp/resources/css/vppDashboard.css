@@ -458,6 +458,7 @@ h2.title {
 	width: 20%;
 	cursor: pointer;
 	opacity: 0.4;
+	transition: 0.2s all;
 }
 
 .vpp-3-2-graph > div:hover {
@@ -520,6 +521,15 @@ h2.title {
 .vpp-2-2,
 .vpp-3-2 {
 	height: 984px;
+}
+
+#vpp-3-2-dataTable_wrapper {
+	height: 750px;
+	overflow: initial;
+}
+
+#vpp-3-2-dataTable_wrapper .dataTables_scroll {
+	height: 100%;
 }
 
 #vpp-3-2-dataTable_wrapper .dataTable {
