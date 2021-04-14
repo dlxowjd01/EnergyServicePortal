@@ -153,8 +153,7 @@
 			});
 		}
 
-		$(document)
-			.on("keyup search input paste cut", "#spcListSearch > input", function(e) {
+		$(document).on("keyup search input paste cut", "#spcListSearch > input", function(e) {
 				const keyword = $(this).val().trim();
 
 				$("#spcList > li:not(#spcListSearch)").each((ix, el) => {
@@ -178,15 +177,15 @@
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
 				let sending = '';
 				let receiving = '';
-				console.log("json--", json.data[0].spcGens)
 				if (json.data[0].spcGens && json.data[0].spcGens.length > 0 ) {
 					let gensInfo = json.data[0].spcGens;
 					var tempArr = [];
 					var promises = [];
 
 					$.each(gensInfo, function(index, element){
-						promises.push(Promise.resolve(JSON.parse(element.finance_info)));
-						// promises.push(resolve(JSON.parse(element)));
+						if (!isEmpty(element.finance_info)) {
+							promises.push(Promise.resolve(JSON.parse(element.finance_info)));
+						}
 					});
 					Promise.all(promises).then(res => {
 						$(".receive-list").empty();

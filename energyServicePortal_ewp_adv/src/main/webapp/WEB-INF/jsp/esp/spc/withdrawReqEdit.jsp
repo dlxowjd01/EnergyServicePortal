@@ -120,8 +120,9 @@
 				var promises = [];
 
 				$.each(gensInfo, function(index, element){
-					promises.push(Promise.resolve(JSON.parse(element.finance_info)));
-					// promises.push(resolve(JSON.parse(element)));
+					if (!isEmpty(element.finance_info)) {
+						promises.push(Promise.resolve(JSON.parse(element.finance_info)));
+					}
 				});
 				Promise.all(promises).then(res => {
 					withdrawList.prev().data({"value": transactionData.withdraw_account_no, "name": transactionData.withdraw_bank }).html(transactionData.withdraw_bank + '&nbsp;' + transactionData.withdraw_account_no + '<span class="caret"></span>');

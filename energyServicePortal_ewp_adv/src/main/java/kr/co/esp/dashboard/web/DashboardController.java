@@ -2,6 +2,9 @@ package kr.co.esp.dashboard.web;
 
 import kr.co.esp.common.service.EgovProperties;
 import kr.co.esp.common.util.UserUtil;
+import org.codehaus.jettison.json.JSONArray;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -9,10 +12,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 대시보드 컨트롤러
@@ -151,9 +154,39 @@ public class DashboardController {
 	 * @return
 	 */
 	@RequestMapping(value = "/dashboard/smain.do")
-	public String smain(HttpServletRequest request, HttpSession session, Model model) {
+	public String smain(HttpServletRequest request, HttpSession session, Model model) throws JSONException {
 		Map<String, Object> userInfo = UserUtil.getUserInfo(session);
-		return "esp/dashboard/smain";
+		String rtnUrl = "esp/dashboard/smain";
+
+		JSONArray siteList = (JSONArray) request.getAttribute("siteList");
+
+		if (siteList != null && siteList.length() > 0) {
+			JSONObject siteMap = siteList.getJSONObject(0);
+			JSONArray deviceList = (JSONArray) siteMap.get("devices");
+
+			if (deviceList != null && deviceList.length() > 0) {
+				boolean fuelCell = false;
+
+				for (int i = 0; i < deviceList.length(); i++) {
+					JSONObject device = deviceList.getJSONObject(i);
+					if ("INV_FC".equalsIgnoreCase((String) device.get("device_type"))) {
+						fuelCell = true;
+					} else {
+						fuelCell = false;
+					}
+				}
+
+				if (fuelCell) {
+					rtnUrl = "esp/dashboard/fcmain";
+				} else {
+					rtnUrl = "esp/dashboard/smain";
+				}
+			} else {
+				rtnUrl = "esp/dashboard/smain";
+			}
+		}
+
+		return rtnUrl;
 	}
 
 	/**
@@ -193,18 +226,5 @@ public class DashboardController {
 	@RequestMapping(value = "/dashboard/VPPmain.do")
 	public String VPPmain(HttpServletRequest request, HttpSession session, Model model) {
 		return "esp/dashboard/VPPmain";
-	}
-
-	/**
-	 * VPP 대시보드
-	 *
-	 * @param request
-	 * @param session
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping(value = "/dashboard/smainV2.do")
-	public String smainV2(HttpServletRequest request, HttpSession session, Model model) {
-		return "esp/dashboard/smainV2";
 	}
 }
