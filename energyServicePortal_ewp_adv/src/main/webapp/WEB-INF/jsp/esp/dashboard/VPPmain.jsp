@@ -154,11 +154,11 @@
 						<h3>예측 수익</h3>
 						<div class="vpp-infobox">
 							<p>당월</p>
-							<p><span id="accMonth">-</span> 만원</p>
+							<p><span id="accMonth">-</span> 원</p>
 						</div>
 						<div class="vpp-infobox">
 							<p>당해</p>
-							<p><span id="accYear">-</span> 만원</p>
+							<p><span id="accYear">-</span> 원</p>
 						</div>
 					</div>
 				</div>
@@ -359,6 +359,7 @@
 	const interval = {
 		today: getDayInterval(),
 		month: getMonthInterval(),
+		week: getWeekInterval(),
 	};
 
 	// 메인 객체
@@ -595,6 +596,29 @@
 					"overall": res[10],
 				};
 
+				let weekErrorMean = {};
+				const weekStart = interval.week[0];
+				const eachError = res[6].data.data.each;
+
+				for(site in eachError) {
+					const siteData = eachError[site];
+					let accuSum = 0;
+					let count = 0;
+
+					for(date in siteData) {
+						date = Number(date);
+						if(date >= (weekStart / 1000000)) {
+							accuSum += siteData[date].accuracy;
+							count += 1;
+						}
+					}
+
+					if(count > 0) {
+						const accuMean = accuSum / count;
+						weekErrorMean[site] = accuMean;
+					}
+				}
+
 				console.log(acc)
 
 				TotalTrading(vppInfo.day.map(x => x[1]));
@@ -605,7 +629,8 @@
 				Graph3.setOption(vppInfo.month.map(x => x[1]), Object.values(forecast.month), acc.month);
 				PieGraph.draw(Object.values(acc.day.total)[0].accuracy);
 				setResourceStatus(vppInfo.day);
-				Table.refresh(res[11], res[12].data, res[13].data, res[14].data.data, acc.day);
+				// Table.refresh(res[11], res[12].data, res[13].data, res[14].data.data, acc.day);
+				Table.refresh(res[11], res[12].data, res[13].data, res[14].data.data, weekErrorMean);
 				setPrediction(forecast["15min"], vppInfo.day.map(x => x[1]), Object.values(acc.day.total)[0].accuracy);
 			}).catch(error => {
 				console.log(error);
@@ -1622,7 +1647,7 @@
 					currentDev: currentDev[site.sid] ? currentDev[site.sid].energy : "-",
 					currentFc: currentFc[site.sid] ? currentFc[site.sid].forecast : "-",
 					todayError: todayError.each[site.sid] ? Object.values(todayError.each[site.sid])[0].accuracy * 100 : "-",
-					weekError: weekError.each[site.sid] ? Object.values(weekError.each[site.sid])[0].accuracy * 100 : "-",
+					weekError: weekError[site.sid] ? weekError[site.sid] * 100 : "-",
 				}
 
 				Table.range.some((range, index) => {
