@@ -45,17 +45,23 @@
 				</div>
 				<div>
 					<p>출력 상태</p>
-					<span class="status-button error">이상</span>
+					<span class="status-button off">0%</span>
 				</div>
 			</div>
 			<div>
 				<ul>
 					<li>연료전지용량</li>
-					<li><span>0.8</span> MW</li>
+					<li>
+						<span>-</span>
+						<span></span>
+					</li>
 				</ul>
 				<ul>
 					<li>금일 운영시간</li>
-					<li><span>4.79</span> Hrs</li>
+					<li>
+						<span>-</span>
+						<span></span>
+					</li>
 				</ul>
 			</div>
 		</div>
@@ -378,15 +384,16 @@
 						$('.fcmain-block-s .value-unit span:first-child').eq(1).html('-') //금일 열 생산량
 						$('.fcmain-block-s .value-unit span:last-child').eq(1).html('') //금일 열 생산량
 					} else {
-						const todayEnergy = displayNumberFixedDecimal(siteEnergy['energy'], 'W', 3, 1);
+						const todayEnergy = displayNumberFixedDecimal(siteEnergy['energy'], 'W', 3, 1)
+							, todayHeat = displayNumberFixedDecimal(siteEnergy['henergy'], 'W', 3, 1);
 
 						//금일 발전량
 						$('.fcmain-block-s .value-unit span:first-child').eq(0).html(todayEnergy[0]); //금일 발전량
 						$('.fcmain-block-s .value-unit span:last-child').eq(0).html(todayEnergy[1]); //금일 발전량
 
 						//금일 열 생산량
-						$('.fcmain-block-s .value-unit span:first-child').eq(1).html('-') //금일 열 생산량
-						$('.fcmain-block-s .value-unit span:last-child').eq(1).html('') //금일 열 생산량
+						$('.fcmain-block-s .value-unit span:first-child').eq(1).html(todayHeat[0]) //금일 열 생산량
+						$('.fcmain-block-s .value-unit span:last-child').eq(1).html(todayHeat[1]) //금일 열 생산량
 					}
 				} else if (index === 1) {
 					const siteEnergy = rspns['data'][siteId];
@@ -400,15 +407,16 @@
 						$('.fcmain-block-s .value-unit span:first-child').eq(3).html('-') //전일 열 생성량
 						$('.fcmain-block-s .value-unit span:last-child').eq(3).html('') //전일 열 생성량
 					} else {
-						const yesterdayEnergy = displayNumberFixedDecimal(siteEnergy[0]['items'][0]['energy'], 'W', 3, 1);
+						const yesterdayEnergy = displayNumberFixedDecimal(siteEnergy[0]['items'][0]['energy'], 'W', 3, 1)
+							, yesterdayHeat = displayNumberFixedDecimal(siteEnergy[0]['items'][0]['henergy'], 'W', 3, 1);
 
 						//전일 발전량
 						$('.fcmain-block-s .value-unit span:first-child').eq(2).html(yesterdayEnergy[0]) //전일 발전량
 						$('.fcmain-block-s .value-unit span:last-child').eq(2).html(yesterdayEnergy[1]) //전일 발전량
-
+3
 						//전일 열 생산량
-						$('.fcmain-block-s .value-unit span:first-child').eq(3).html('-') //전일 열 생성량
-						$('.fcmain-block-s .value-unit span:last-child').eq(3).html('') //전일 열 생성량
+						$('.fcmain-block-s .value-unit span:first-child').eq(3).html(yesterdayHeat[0]) //전일 열 생성량
+						$('.fcmain-block-s .value-unit span:last-child').eq(3).html(yesterdayHeat[1]) //전일 열 생성량
 					}
 				} else if (index === 2) {
 					if (isEmpty(rspns['INV_FC'])) {
@@ -428,7 +436,9 @@
 							, realTimeGas = rspns['INV_FC']['gasUsage']
 							, realTimeActive = displayNumberFixedDecimal(rspns['INV_FC']['activePower'], 'W', 3, 1)
 							, realTimeHeat = displayNumberFixedDecimal(rspns['INV_FC']['heatPower'], 'W', 3, 1)
-							, deviceOperation = rspns['INV_FC']['operation'];
+							, deviceOperation = rspns['INV_FC']['operation']
+							, deviceLoad = rspns['INV_FC']['load']
+							, capacity = displayNumberFixedDecimal(sList[0]['capacities']['gen'], 'W', 3, 1);
 
 						$('.fcmain-block-s .value-unit span:first-child').eq(4).html(energy[0]) //누적 발전량
 						$('.fcmain-block-s .value-unit span:last-child').eq(4).html(energy[1]) //누적 발전량
@@ -440,6 +450,8 @@
 						$('#realTimeActive span:first-child').text(realTimeActive[0]).next().text(realTimeActive[1]);
 						$('#realTimeHeat span:first-child').text(realTimeHeat[0]).next().text(realTimeHeat[1]);
 
+						$('#fcmain-1-2 div:nth-child(3) ul:first-child li:last-child span:first-child').text(capacity[0]).next().text(capacity[1]);
+
 						if (isEmpty(deviceOperation)) {
 							if (deviceOperation !== 0) {
 								$('.status-button').eq(0).attr('class', 'status-button NA').text('N/A');
@@ -448,10 +460,20 @@
 							}
 						} else {
 							if (deviceOperation === 1) {
-								$('.status-button').eq(0).attr('class', 'status-button normal').text('정상');
+								$('.status-button').eq(0).attr('class', 'status-button normal').text('운전중');
 							} else {
-								$('.status-button').eq(0).attr('class', 'status-button error').text('트립');
+								$('.status-button').eq(0).attr('class', 'status-button error').text('오류');
 							}
+						}
+
+						if (isEmpty(deviceLoad)) {
+							$('.status-button').eq(2).attr('class', 'status-button off').text('-');
+						} else if (deviceLoad === 0) {
+							$('.status-button').eq(2).attr('class', 'status-button off').text(deviceLoad + '%');
+						} else if (deviceLoad > 0 && deviceLoad <= 50) {
+							$('.status-button').eq(2).attr('class', 'status-button error').text(deviceLoad + '%');
+						} else {
+							$('.status-button').eq(2).attr('class', 'status-button normal').text(deviceLoad + '%');
 						}
 					}
 				} else {
@@ -459,10 +481,15 @@
 						const rtus = rspns['sites'][0]['rtus'];
 						const rtuOperation = rtus.find(e => e.operation === 1);
 						const rtuType = rtus.find(e => e.rtu_type === 2);
-						if (!isEmpty(rtuOperation) && isEmpty(rtuType)) {
+
+						if (!isEmpty(rtuOperation) && (isEmpty(rtuType) || rtuType !== 2)) {
 							$('.status-button').eq(1).attr('class', 'status-button normal').text('정상');
 						} else {
-							$('.status-button').eq(1).attr('class', 'status-button error').text('error');
+							if (rtuType === 2) {
+								$('.status-button').eq(1).attr('class', 'status-button NA').text('N/A');
+							} else {
+								$('.status-button').eq(1).attr('class', 'status-button error').text('error');
+							}
 						}
 					} else {
 						$('.status-button').eq(1).attr('class', 'status-button error').text('error');
@@ -663,6 +690,7 @@
 	//월별 발전량 종합
 	const dailyGen = (standard) => {
 		let monthData = getSiteMainSchCollection('month');
+		let yearData = getSiteMainSchCollection('year');
 
 		let lastDay = 0, startTime = '', endTime = '';
 		if (standard !== undefined && (today.getFullYear() != standard.getFullYear() || today.getMonth() != standard.getMonth())) {
@@ -676,6 +704,27 @@
 		}
 
 		const targetApi = [
+			$.ajax({
+				url: apiHost + apiEnergySite,
+				type: 'get',
+				data: {
+					sid: siteId,
+					startTime: yearData.startTime,
+					endTime: yearData.endTime,
+					interval: 'month',
+					displayType: 'dashboard',
+					formId: 'v2'
+				}
+			}),
+			$.ajax({
+				url: apiHost + apiEnergyNowSite,
+				type: 'get',
+				data: {
+					sids: siteId,
+					metering_type: '2',
+					interval: 'month'
+				}
+			}),
 			$.ajax({
 				url: apiHost + apiEnergySite,
 				type: 'get',
@@ -710,48 +759,58 @@
 			const categories = new Array();
 			for (let i = 1; i <= lastDay.getDate(); i++) { categories.push(String(i)); }
 
+			let thisYearGen = null;
 			const monathlyGenData = new Array(lastDay.getDate()).fill(0);
 			const monathlyMoneyData = new Array(lastDay.getDate()).fill(0);
-			let yearGen = null;
 
 			response.forEach((rspns, index) => {
 				if (index === 0) {
 					if (!isEmpty(rspns['data'])) {
 						const siteData = rspns['data'][siteId][0];
 						(siteData.items).forEach(item => {
+							thisYearGen = Number(thisYearGen) + item['energy'];
+						});
+					}
+				} else if (index === 1) {
+					const siteData = rspns['data'][siteId]
+						, nowEnergyData = siteData['energy'];
+					thisYearGen = Number(thisYearGen) + nowEnergyData;
+				} else if (index === 2) {
+					if (!isEmpty(rspns['data'])) {
+						const siteData = rspns['data'][siteId][0];
+						(siteData.items).forEach(item => {
 							const baseTime = item['basetime']
 								, targetDay = Number(String(baseTime).substr(6, 2)) - 1;
-							yearGen = Number(yearGen) + item['energy'];
 							monathlyGenData[targetDay] = item['energy'];
 							monathlyMoneyData[targetDay] = item['money'];
 						});
 					}
 				} else {
 					const siteData = rspns['data'][siteId]
-						, nowEnergyData = siteData['energy']
-						, capacity = sList[0]['capacities']['gen']
-						, refinedData = displayNumberFixedDecimal(nowEnergyData, 'Wh', 3, 1)
-						, refinedHour = nowEnergyData / capacity / lastDay.getDate();
-
-					yearGen = Number(yearGen) + nowEnergyData;
+						, nowEnergyData = siteData['energy'];
 
 					monathlyGenData[today.getDate()] = nowEnergyData;
 					monathlyMoneyData[today.getDate()] = siteData['money'];
-
-					$('#monthEnergy').text(refinedData[0]).next().html(refinedData[1]);
-					if(isFinite(refinedHour)) {
-						$('#monthHours').text(f1(refinedHour));
-					} else {
-						$('#monthHours').text('-');
-					}
 				}
 			});
 
-			if (isEmpty(yearGen)) {
+			if (isEmpty(thisYearGen)) {
 				$('#yearEnergy').text('-').next().html('');
 			} else {
-				const refinedYearData = displayNumberFixedDecimal(yearGen, 'Wh', 3, 1);
-				$('#yearEnergy').text(refinedYearData[0]).next().html(refinedYearData[1]);
+				const refinedYearData = displayNumberFixedDecimal(thisYearGen, 'Wh', 3, 1);
+				$('#yearEnergy').text(refinedYearData[0]).next().text(refinedYearData[1]);
+			}
+
+			const totalMonthGen = monathlyGenData.reduce( function add(sum, currValue) { return sum + currValue; });
+			const refinedTotalMonth = displayNumberFixedDecimal(totalMonthGen, 'Wh', 3, 1);
+			const totalMonthGenHour = totalMonthGen / sList[0]['capacities']['gen'] / lastDay.getDate() * 100;
+
+			$('#monthEnergy').text(refinedTotalMonth[0]).next().text(refinedTotalMonth[1])
+
+			if (!isFinite(totalMonthGenHour)) {
+				$('#monthHours').text('-').next().text('');
+			} else {
+				$('#monthHours').text(f1(totalMonthGenHour)).next().text('hrs');
 			}
 
 			dailyChart.xAxis[0].update({categories: categories});

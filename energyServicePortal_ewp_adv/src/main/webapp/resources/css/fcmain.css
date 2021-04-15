@@ -58,8 +58,8 @@
 
 #fcmain-1-2 > div:first-of-type > div > span {
 	width: 44px;
-	color: var(--black20);
-	box-shadow: -1px 0 1px 0 var(--black20), 0 1px 1px 0 var(--black20);
+	/*color: var(--black20);*/
+	ㄱbox-shadow: -1px 0 1px 0 var(--black20), 0 1px 1px 0 var(--black20);
 }
 
 #fcmain-1-2 > div:last-of-type > ul {
