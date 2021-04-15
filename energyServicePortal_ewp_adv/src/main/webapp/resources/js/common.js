@@ -848,6 +848,27 @@ function getWeekInterval() {
 	];
 }
 
+function getDaysInWeek() {
+	const cur = new Date();
+
+	const [y, m, d, wday] = [
+		cur.getFullYear(),
+		cur.getMonth(),
+		cur.getDate(),
+		cur.getDay(),
+	];
+
+	const weekStartDate = new Date(y, m, d - wday);
+	let daysInWeek = [];
+
+	for(let i=0; i<7; i++) {
+		const thisDate = new Date(y, m, d - wday + i);
+		const yyyymmddhhmmss = (String(thisDate.getFullYear())+String(thisDate.getMonth() + 1).padStart(2, 0)+String(thisDate.getDate()).padStart(2, 0)) * 1
+		daysInWeek.push(yyyymmddhhmmss);
+	}
+	return daysInWeek;
+}
+
 function getYearInterval() {
 	const cur = new Date();
 

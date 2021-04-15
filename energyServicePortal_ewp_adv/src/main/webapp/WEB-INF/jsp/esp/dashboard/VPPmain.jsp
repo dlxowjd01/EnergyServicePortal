@@ -358,7 +358,6 @@
 	const interval = {
 		today: getDayInterval(),
 		month: getMonthInterval(),
-		week: getWeekInterval(),
 		year: getYearInterval(),
 	};
 
@@ -610,28 +609,7 @@
 					"overall": res[10],
 				};
 
-				let weekErrorMean = {};
-				const weekStart = interval.week[0];
-				const eachError = res[6].data.data.each;
-
-				for(site in eachError) {
-					const siteData = eachError[site];
-					let accuSum = 0;
-					let count = 0;
-
-					for(date in siteData) {
-						date = Number(date);
-						if(date >= (weekStart / 1000000)) {
-							accuSum += siteData[date].accuracy;
-							count += 1;
-						}
-					}
-
-					if(count > 0) {
-						const accuMean = accuSum / count;
-						weekErrorMean[site] = accuMean;
-					}
-				}
+				const weeklyMeanAccuracy = getWeeklyMeanAccuracy(res[6].data.data.each);
 
 				console.log(vppInfo.day, vppInfo.hour)
 
@@ -644,7 +622,7 @@
 				setResourceStatus(vppInfo.hour); // 자원 현황
 				SiteStatus.refresh(vppInfo.hour, forecast.day, acc.day, status); // 발전 현황
 				setPrediction(forecast["15min"], vppInfo.day.map(x => x[1]), Object.values(acc.day.total)[0].accuracy); // 총 예측사이트 , 설비용량 , 정확도
-				Table.refresh(res[11], res[12].data, res[13].data, res[14].data.data, weekErrorMean); // 주간 예측오차율
+				Table.refresh(res[11], res[12].data, res[13].data, res[14].data.data, weeklyMeanAccuracy); // 주간 예측오차율
 			}).catch(error => {
 				console.log(error);
 				
@@ -1722,6 +1700,30 @@
 		setTimeout(function () {
 			$('#errorModal').modal('hide');
 		}, 2000);
+	}
+
+	const getWeeklyMeanAccuracy = (eachSiteDailyAccuracy) => {
+		let weeklyAccuracyMean = {};
+		const weekStart = getWeekInterval()[0];
+		const daysInWeek = getDaysInWeek();
+
+		for(site in eachSiteDailyAccuracy) {
+			const siteData = eachSiteDailyAccuracy[site];
+			let accuSum = 0;
+			let count = 0;
+			for(date of daysInWeek) {
+				if(siteData[date]) {
+					accuSum += siteData[date].accuracy;
+					count += 1;
+				}
+			}
+
+			if(count > 0) {
+				const accuMean = accuSum / count;
+				weeklyAccuracyMean[site] = accuMean;
+			}
+		}
+		return weeklyAccuracyMean;
 	}
 
 
