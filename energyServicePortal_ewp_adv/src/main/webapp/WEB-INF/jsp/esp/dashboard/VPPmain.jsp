@@ -566,19 +566,19 @@
 						detailByBasetime: true,
 					},
 				}),
-				$.ajax({ // 16 // 당해
-					url: apiHost + "/energy/forecast/accuracy",
-					type: "POST",
-					dataType: "json",
-					contentType: "application/json",
-					data: JSON.stringify({
-						"sids": sids,
-						startTime: interval.year[0],
-						endTime: interval.year[1],
-						"interval": "year",
-						"cal_incentive": true,
-					}),
-				}),
+				// $.ajax({ // 16 // 당해
+				// 	url: apiHost + "/energy/forecast/accuracy",
+				// 	type: "POST",
+				// 	dataType: "json",
+				// 	contentType: "application/json",
+				// 	data: JSON.stringify({
+				// 		"sids": sids,
+				// 		startTime: interval.year[0],
+				// 		endTime: interval.year[1],
+				// 		"interval": "year",
+				// 		"cal_incentive": true,
+				// 	}),
+				// }),
 			];
 
 			new Promise ((resolve, reject) => {
@@ -597,7 +597,7 @@
 				const acc = {
 					"day": res[2].data.data,
 					"month": res[6].data.data,
-					"year": res[16].data.data
+					"year": [] // res[16].data.data
 				};
 				const forecast = {
 					"hour": res[3].data,
@@ -1256,7 +1256,7 @@
 			$("#smpMonth").html(((now.reduce((acc, cur) => acc + cur.money, 0) / 1000 / 1000).toFixed(2) * 1).toLocaleString())
 			$("#smpYear").html("0");
 			$("#accMonth").html(((Object.values(accMonth.total).reduce((acc, cur) => acc + cur.incentive, 0)).toFixed(2) * 1).toLocaleString());
-			$("#accYear").html(((Object.values(accYear.total).reduce((acc, cur) => acc + cur.incentive, 0)).toFixed(2) * 1).toLocaleString());
+			// $("#accYear").html(((Object.values(accYear.total).reduce((acc, cur) => acc + cur.incentive, 0)).toFixed(2) * 1).toLocaleString());
 			
 			this.draw();
 		},
