@@ -384,8 +384,8 @@
 						$('.fcmain-block-s .value-unit span:first-child').eq(1).html('-') //금일 열 생산량
 						$('.fcmain-block-s .value-unit span:last-child').eq(1).html('') //금일 열 생산량
 					} else {
-						const todayEnergy = displayNumberFixedDecimal(siteEnergy['energy'], 'W', 3, 1)
-							, todayHeat = displayNumberFixedDecimal(siteEnergy['henergy'], 'W', 3, 1);
+						const todayEnergy = displayNumberFixedDecimal(siteEnergy['energy'], 'Wh', 3, 1)
+							, todayHeat = displayNumberFixedDecimal(siteEnergy['henergy'], 'Wh', 3, 1);
 
 						//금일 발전량
 						$('.fcmain-block-s .value-unit span:first-child').eq(0).html(todayEnergy[0]); //금일 발전량
@@ -407,8 +407,8 @@
 						$('.fcmain-block-s .value-unit span:first-child').eq(3).html('-') //전일 열 생성량
 						$('.fcmain-block-s .value-unit span:last-child').eq(3).html('') //전일 열 생성량
 					} else {
-						const yesterdayEnergy = displayNumberFixedDecimal(siteEnergy[0]['items'][0]['energy'], 'W', 3, 1)
-							, yesterdayHeat = displayNumberFixedDecimal(siteEnergy[0]['items'][0]['henergy'], 'W', 3, 1);
+						const yesterdayEnergy = displayNumberFixedDecimal(siteEnergy[0]['items'][0]['energy'], 'Wh', 3, 1)
+							, yesterdayHeat = displayNumberFixedDecimal(siteEnergy[0]['items'][0]['henergy'], 'Wh', 3, 1);
 
 						//전일 발전량
 						$('.fcmain-block-s .value-unit span:first-child').eq(2).html(yesterdayEnergy[0]) //전일 발전량
