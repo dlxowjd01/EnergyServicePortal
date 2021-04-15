@@ -7,7 +7,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 	chart: {
 		marginTop: 40,
 		marginLeft: 60,
-		marginRight: 55,
+		marginRight: 65,
 		backgroundColor: 'transparent',
 		zoomType: 'xy'
 	},
@@ -103,7 +103,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 		},
 		labels: {
 			formatter: function () {
-				return  numberComma(this.value / 10);
+				return  numberComma(this.value);
 			},
 			style: {
 				color: 'var(--grey)',
@@ -119,7 +119,7 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 			return this.points.reduce(function (s, point) {
 				if(point.y !== 0) {
 					let suffix = point.series.userOptions.tooltip.valueSuffix;
-					return s + '<br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + numberComma(Math.round(point.y / 10)) + ' ' + suffix;
+					return s + '<br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + numberComma(Math.round(point.y)) + ' ' + suffix;
 				} else {
 					return s
 				}
@@ -163,7 +163,8 @@ const monthlyChart = Highcharts.chart('monthlyChart', {
 					const x = event.point.category;
 					goPvGen(x, 'day');
 				}
-			}
+			},
+			connectNulls: true
 		},
 		line: {
 			marker: {
@@ -302,7 +303,7 @@ const dailyChart = Highcharts.chart('dailyChart', {
 			return this.points.reduce(function (s, point) {
 				if(point.y !== 0) {
 					let suffix = point.series.userOptions.tooltip.valueSuffix;
-					return s + ' <br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + numberComma(Math.round(point.y / 10)) + ' ' + suffix;
+					return s + '<br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + numberComma(Math.round(point.y)) + ' ' + suffix;
 				} else {
 					return s
 				}
@@ -352,7 +353,8 @@ const dailyChart = Highcharts.chart('dailyChart', {
 					const x = event.point.category;
 					goPvGen(x, 'hour');
 				}
-			}
+			},
+			connectNulls: true
 		},
 		line: {
 			marker: {

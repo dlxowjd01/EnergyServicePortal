@@ -266,6 +266,20 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 								refineMap.put("hasDevices", false);
 							} else {
 								refineMap.put("hasDevices", true);
+
+								int essCnt = 0;
+								List<Map<String, Object>> devices = (List<Map<String, Object>>) refineMap.get("devices");
+								for(int j = 0; j < devices.size(); j++) {
+									if ("PCS_ESS".equalsIgnoreCase((String) devices.get(j).get("device_type"))) {
+										essCnt++;
+									}
+								}
+
+								if (essCnt > 0) {
+									refineMap.put("hasEssDevice", true);
+								} else {
+									refineMap.put("hasEssDevice", false);
+								}
 							}
 							refineMap.remove("devices");
 							jsonArray.put(jsonParser(refineMap));
@@ -299,6 +313,20 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 								refineMap.put("hasDevices", false);
 							} else {
 								refineMap.put("hasDevices", true);
+
+								int essCnt = 0;
+								List<Map<String, Object>> devices = (List<Map<String, Object>>) refineMap.get("devices");
+								for(int j = 0; j < devices.size(); j++) {
+									if ("PCS_ESS".equalsIgnoreCase((String) devices.get(j).get("device_type"))) {
+										essCnt++;
+									}
+								}
+
+								if (essCnt > 0) {
+									refineMap.put("hasEssDevice", true);
+								} else {
+									refineMap.put("hasEssDevice", false);
+								}
 							}
 							refineMap.remove("devices");
 							jsonArray.put(jsonParser(refineMap));
@@ -383,6 +411,20 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 									refineMap.put("hasDevices", false);
 								} else {
 									refineMap.put("hasDevices", true);
+
+									int essCnt = 0;
+									List<Map<String, Object>> devices = (List<Map<String, Object>>) refineMap.get("devices");
+									for(int j = 0; j < devices.size(); j++) {
+										if ("PCS_ESS".equalsIgnoreCase((String) devices.get(j).get("device_type"))) {
+											essCnt++;
+										}
+									}
+
+									if (essCnt > 0) {
+										refineMap.put("hasEssDevice", true);
+									} else {
+										refineMap.put("hasEssDevice", false);
+									}
 								}
 								refineMap.remove("devices");
 								jsonArray.put(jsonParser(refineMap));
@@ -415,6 +457,20 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 									refineMap.put("hasDevices", false);
 								} else {
 									refineMap.put("hasDevices", true);
+
+									int essCnt = 0;
+									List<Map<String, Object>> devices = (List<Map<String, Object>>) refineMap.get("devices");
+									for(int j = 0; j < devices.size(); j++) {
+										if ("PCS_ESS".equalsIgnoreCase((String) devices.get(j).get("device_type"))) {
+											essCnt++;
+										}
+									}
+
+									if (essCnt > 0) {
+										refineMap.put("hasEssDevice", true);
+									} else {
+										refineMap.put("hasEssDevice", false);
+									}
 								}
 								refineMap.remove("devices");
 								jsonArray.put(jsonParser(refineMap));
@@ -581,8 +637,23 @@ public class PreLoadInterceptor extends HandlerInterceptorAdapter {
 			for (int i = 0; i < refineList.size(); i++) {
 				if (refineList.get(i).get("devices") == null) {
 					refineList.get(i).put("hasDevices", false);
+					refineList.get(i).put("hasEssDevice", false);
 				} else {
 					refineList.get(i).put("hasDevices", true);
+
+					int essCnt = 0;
+					List<Map<String, Object>> devices = (List<Map<String, Object>>) refineList.get(i).get("devices");
+					for(int j = 0; j < devices.size(); j++) {
+						if ("PCS_ESS".equalsIgnoreCase((String) devices.get(j).get("device_type"))) {
+							essCnt++;
+						}
+					}
+
+					if (essCnt > 0) {
+						refineList.get(i).put("hasEssDevice", true);
+					} else {
+						refineList.get(i).put("hasEssDevice", false);
+					}
 				}
 				refineList.get(i).remove("devices");
 			}

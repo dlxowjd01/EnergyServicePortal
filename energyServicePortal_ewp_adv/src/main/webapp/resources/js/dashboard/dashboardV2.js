@@ -30,7 +30,19 @@ const replaceNotFullKorean = /[ㄱ-ㅎㅏ-ㅣ]/gi;
  */
 $(document).ready(function () {
 	setInitList('alarmNotice'); //알람 공지 세팅
-	$('#statusSiteList').find('.ESS').remove();
+
+	let hasEss = false;
+	siteList.forEach(site => {
+		if (site.hasEssDevice) {
+			hasEss = true;
+		}
+	});
+
+	if (!hasEss) {
+		$('#statusSiteList').find('.ESS').remove();
+		$('.gmain-chart4 .chart-info-right ul li:nth-child(3)').addClass('hidden');
+	}
+
 	setInitList('siteList'); //사이트 리스트
 
 	// 모든 table 헤더에 클릭 이벤트를 설정한다.
@@ -310,7 +322,7 @@ const minAjax = async () => {
 						for (let i = seriesLength - 1; i > -1; i--) {
 							const seriesData = monthlyChart.series[i].yData;
 							if (monthlyChart.series[i].name === i18nManager.tr("dashboard_payment")) {
-								seriesData[today.getMonth()] = Math.round(money / 1000)
+								seriesData[today.getMonth()] = Math.round(money / 10000)
 							} else if (monthlyChart.series[i].name === i18nManager.tr("dashboard_photovoltaic")) {
 								seriesData[today.getMonth()] = Math.round(energy / 1000)
 							}
@@ -362,8 +374,8 @@ const minAjax = async () => {
 						for (let i = seriesLength - 1; i > -1; i--) {
 							const seriesData = dailyChart.series[i].yData;
 							if (dailyChart.series[i].name === i18nManager.tr("dashboard_payment")) {
-								seriesData[today.getDate() - 2] = Math.round(yesterDayMoney / 1000)
-								seriesData[today.getDate() - 1] = Math.round(moneySum / 1000)
+								seriesData[today.getDate() - 2] = Math.round(yesterDayMoney / 10000)
+								seriesData[today.getDate() - 1] = Math.round(moneySum / 10000)
 							} else if (dailyChart.series[i].name === i18nManager.tr("dashboard_photovoltaic")) {
 								seriesData[today.getDate() - 2] = Math.round(yesterDayGen / 1000);
 								seriesData[today.getDate() - 1] = Math.round(energySum / 1000);
@@ -437,34 +449,7 @@ const minAjax = async () => {
 						const siteId = $(this).data('sid');
 						let rtuStatus = '';
 						if (!isEmpty(resData) && !isEmpty(resData.sites)) {
-							// 
-							// (resData.sites).forEach(data => {
-							// 	console.log(data)
-							// 	if (siteId === data.sid) {
-							// 		if (!isEmpty(data.rtus)) {
-							// 			const operation = data.rtus.find(e => e.operation === 1);
-							// 			if (!isEmpty(operation)) {
-							// 				rtuStatus = '<span class="status-button normal">'+i18nManager.tr("button.normal")+'</span>';
-							// 			} else {
-							// 				rtuStatus = '<span class="status-button error">'+i18nManager.tr("button.error")+'</span>';
-							// 			}
-							// 		} else {
-							// 			rtuStatus = '<span class="status-button error">'+i18nManager.tr("button.error")+'</span>';
-							// 		}
-							// 	}
-
-								// const targetSite = siteList.find(x => x.sid === data.sid);
-								// if (targetSite.rtus) {
-								// 	if (targetSite.rtus.find(x => x.rtu_type === 2)) {
-								// 		rtuStatus = '<span class="status-button NA">N/A</span>';
-								// 	}
-								// } else {
-								// 	rtuStatus = '<span class="status-button NA">N/A</span>';
-								// }
-							// });
-
 							const target = resData.sites.find(x => x.sid === siteId);
-
 							if (!isEmpty(target.rtus)) {
 								const operation = target.rtus.find(e => e.operation === 1);
 								if (!isEmpty(operation)) {

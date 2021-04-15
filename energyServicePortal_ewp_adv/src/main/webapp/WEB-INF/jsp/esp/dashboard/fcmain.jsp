@@ -44,7 +44,7 @@
 					<span class="status-button normal">정상</span>
 				</div>
 				<div>
-					<p>인버터 상태</p>
+					<p>출력 상태</p>
 					<span class="status-button error">이상</span>
 				</div>
 			</div>
@@ -64,7 +64,7 @@
 				금일 발전현황
 				<span class="term">
 					<img src="/img/ico-back.svg" class="back">
-					<span>2021.04.01 ~ 2021.04.13</span>
+					<span></span>
 					<img src="/img/ico-next.svg" class="next hidden">
 				</span>
 			</h2>
@@ -105,7 +105,7 @@
 									<span>GAS</span>
 								</li>
 								<li id="realTimeGas">
-									<span>507</span>
+									<span>-</span>
 									N<span class="small-text">m</span>3/hr
 								</li>
 							</ul>
@@ -125,7 +125,7 @@
 								<span>전력</span>
 							</li>
 							<li id="realTimeActive">
-								<span>303,7</span>
+								<span>-</span>
 								<span>kW</span>
 							</li>
 						</ul>
@@ -169,7 +169,7 @@
 								<span>열</span>
 							</li>
 							<li id="realTimeHeat">
-								<span>60</span>
+								<span>-</span>
 								<span>kW</span>
 							</li>
 						</ul>
@@ -225,27 +225,27 @@
 				<ul>
 					<li><fmt:message key='smain.totalMonthDev' /></li>
 					<li>
-						<span id="monthEnergy">8.49</span>
+						<span id="monthEnergy">-</span>
 						<span>kWh</span>
 					</li>
 				</ul>
 				<ul>
 					<li><fmt:message key='smain.totalYearDev' /></li>
 					<li>
-						<span id="yearEnergy">15.90</span>
+						<span id="yearEnergy">-</span>
 						<span>MWh</span>
 					</li>
 				</ul>
 				<ul>
 					<li><fmt:message key='smain.avgMonthDevTime' /></li>
 					<li>
-						<span id="monthHours">3.69</span>
+						<span id="monthHours">-</span>
 						<span>Hrs</span>
 					</li>
 				</ul>
 			</div>
 
-			<div id="monthlyChart">
+			<div id="dailyChart">
 				<!-- 월별 발전량 종합 그래프 -->
 			</div>
 		</div>
@@ -258,6 +258,10 @@
 	const apiEnergySite = '/energy/sites';
 	const apiEnergyNowSite = '/energy/now/sites';
 	const apiStatusRawSite = '/status/raw/site';
+	const apiStatusHealth = '/get/status/health';
+
+	let f1 = d3.format(',.1f');
+	let f2 = d3.format(',.2f');
 
 	const today = new Date();
 
@@ -265,12 +269,13 @@
 		setInitList('alarmNotice'); //알람 공지 세팅
 		todayStatus();
 		alarmInfoList();
-		monthlyGen();
+		todayGen();
+		dailyGen();
 
 		$('img.next').on('click', function() {
 			const standard = $(this).parent().find('span').data('standard');
 			if ($('img.next').index(this) === 0) {
-				standard.setDate(standard.getDate() - 1);
+				standard.setDate(standard.getDate() + 1);
 				if (today.getFullYear() === standard.getFullYear() && today.getMonth() === standard.getMonth() && today.getDate() === standard.getDate()) {
 					$(this).parent().find('img.next').addClass('hidden');
 				} else {
@@ -278,21 +283,21 @@
 				}
 				todayGen(standard);
 			} else {
-				standard.setFullYear(standard.getFullYear() - 1);
-				if (today.getFullYear() <= standard.getFullYear()) {
-					$(this).parent().find('img.next').addClass('hidden');
-				} else {
+				standard.setDate(1);
+				standard.setMonth(standard.getMonth() + 1);
+				if (((today.getFullYear() === standard.getFullYear()) && today.getMonth() > standard.getMonth()) || today.getFullYear() != standard.getFullYear()) {
 					$(this).parent().find('img.next').removeClass('hidden');
+				} else {
+					$(this).parent().find('img.next').addClass('hidden');
 				}
-				$('#miniLoadingCircle_type').show();
-				monthlyGen(standard);
+				dailyGen(standard);
 			}
 		});
 
 		$('img.back').on('click', function() {
 			const standard = $(this).parent().find('span').data('standard');
 			if ($('img.back').index(this) === 0) {
-				standard.setFullYear(standard.getFullYear() - 1);
+				standard.setDate(standard.getDate() - 1);
 				if (today.getFullYear() === standard.getFullYear() && today.getMonth() === standard.getMonth() && today.getDate() === standard.getDate()) {
 					$(this).parent().find('img.next').addClass('hidden');
 				} else {
@@ -301,14 +306,14 @@
 				$('#miniLoadingCircle_month').show();
 				todayGen(standard);
 			} else {
-				standard.setFullYear(standard.getFullYear() - 1);
-				if (today.getFullYear() > standard.getFullYear()) {
+				standard.setDate(1);
+				standard.setMonth(standard.getMonth() - 1);
+				if (((today.getFullYear() === standard.getFullYear()) && today.getMonth() > standard.getMonth()) || today.getFullYear() != standard.getFullYear()) {
 					$(this).parent().find('img.next').removeClass('hidden');
 				} else {
 					$(this).parent().find('img.next').addClass('hidden');
 				}
-				$('#miniLoadingCircle_month').show();
-				monthlyGen(standard);
+				dailyGen(standard);
 			}
 		});
 	});
@@ -322,7 +327,6 @@
 			$.ajax({
 				url: apiHost + apiEnergyNowSite,
 				type: 'GET',
-				async: true,
 				data: {
 					sids: siteId,
 					metering_type: 2,
@@ -345,11 +349,16 @@
 			$.ajax({
 				url: apiHost + apiStatusRawSite,
 				type: 'GET',
-				async: true,
 				data: {
 					sid: siteId,
 					formId: 'v2'
 				}
+			}),
+			$.ajax({
+				url: apiHost + apiStatusHealth,
+				type: 'POST',
+				contentType: 'application/json',
+				data: JSON.stringify({ sids: siteId })
 			})
 		];
 
@@ -401,7 +410,7 @@
 						$('.fcmain-block-s .value-unit span:first-child').eq(3).html('-') //전일 열 생성량
 						$('.fcmain-block-s .value-unit span:last-child').eq(3).html('') //전일 열 생성량
 					}
-				} else {
+				} else if (index === 2) {
 					if (isEmpty(rspns['INV_FC'])) {
 						$('.fcmain-block-s .value-unit span:first-child').eq(4).html('-') //누적 발전량
 						$('.fcmain-block-s .value-unit span:last-child').eq(4).html('') //누적 발전량
@@ -416,9 +425,10 @@
 					} else {
 						const energy = displayNumberFixedDecimal(rspns['INV_FC']['accumActiveEnergy'], 'Wh', 3, 1)
 							, heat = displayNumberFixedDecimal(rspns['INV_FC']['accumHeatEnergy'], 'cal/h', 3, 1)
-							, realTimeGas = displayNumberFixedDecimal(rspns['INV_FC']['gasUsage'], 'Nm3/hr', 3, 1)
+							, realTimeGas = rspns['INV_FC']['gasUsage']
 							, realTimeActive = displayNumberFixedDecimal(rspns['INV_FC']['activePower'], 'W', 3, 1)
-							, realTimeHeat = displayNumberFixedDecimal(rspns['INV_FC']['heatPower'], 'W', 3, 1);
+							, realTimeHeat = displayNumberFixedDecimal(rspns['INV_FC']['heatPower'], 'W', 3, 1)
+							, deviceOperation = rspns['INV_FC']['operation'];
 
 						$('.fcmain-block-s .value-unit span:first-child').eq(4).html(energy[0]) //누적 발전량
 						$('.fcmain-block-s .value-unit span:last-child').eq(4).html(energy[1]) //누적 발전량
@@ -426,9 +436,36 @@
 						$('.fcmain-block-s .value-unit span:first-child').eq(5).html(heat[0]) //누적 열 생성량
 						$('.fcmain-block-s .value-unit span:last-child').eq(5).html(heat[1]) //누적 열 생성량
 
-						$('#realTimeGas span:first-child').text(realTimeGas[0]).next().text(realTimeGas[1]);
+						$('#realTimeGas span:first-child').text(numberComma(realTimeGas));
 						$('#realTimeActive span:first-child').text(realTimeActive[0]).next().text(realTimeActive[1]);
 						$('#realTimeHeat span:first-child').text(realTimeHeat[0]).next().text(realTimeHeat[1]);
+
+						if (isEmpty(deviceOperation)) {
+							if (deviceOperation !== 0) {
+								$('.status-button').eq(0).attr('class', 'status-button NA').text('N/A');
+							} else {
+								$('.status-button').eq(0).attr('class', 'status-button off').text('정지');
+							}
+						} else {
+							if (deviceOperation === 1) {
+								$('.status-button').eq(0).attr('class', 'status-button normal').text('정상');
+							} else {
+								$('.status-button').eq(0).attr('class', 'status-button error').text('트립');
+							}
+						}
+					}
+				} else {
+					if (!isEmpty(rspns['sites']) && !isEmpty(rspns['sites'][0]) && !isEmpty(rspns['sites'][0]['rtus'])) {
+						const rtus = rspns['sites'][0]['rtus'];
+						const rtuOperation = rtus.find(e => e.operation === 1);
+						const rtuType = rtus.find(e => e.rtu_type === 2);
+						if (!isEmpty(rtuOperation) && isEmpty(rtuType)) {
+							$('.status-button').eq(1).attr('class', 'status-button normal').text('정상');
+						} else {
+							$('.status-button').eq(1).attr('class', 'status-button error').text('error');
+						}
+					} else {
+						$('.status-button').eq(1).attr('class', 'status-button error').text('error');
 					}
 				}
 			})
@@ -437,28 +474,17 @@
 		});
 	}
 
-	//실시간 운영정보
-	const realTimeOperationInfo = () => {
-
-	}
-
 	//금일 발전현황
 	const todayGen = (standard) => {
-
-	}
-
-	//월별 발전량 종합
-	const monthlyGen = (standard) => {
-		let monthlyDate = new Date();
-		let yearData = getSiteMainSchCollection('year');
+		let yearData = getSiteMainSchCollection('day');
 
 		let startTime = '', endTime = '';
-		if (standard != undefined && (monthlyDate.getFullYear() != standard.getFullYear())) {
-			$('#monthlyChart').parent().find('.title span.term span').text(standard.getFullYear() + '.01.01 ~ ' + standard.getFullYear() + '.12.31').data('standard', standard);
-			startTime = Number(standard.getFullYear() + '0101000000'), endTime = Number(standard.getFullYear() + '1231235959');
-		} else {
-			$('#monthlyChart').parent().find('.title span.term span').text(monthlyDate.getFullYear() + '.01.01 ~ ' + monthlyDate.format('yyyy.MM.dd')).data('standard', monthlyDate);
+		if (standard === undefined || (standard !== undefined && today.getFullYear() === standard.getFullYear() && today.getMonth() === standard.getMonth() && today.getDate() === standard.getDate())) {
+			$('#hourlyChart').parent().find('.title span.term span').text(today.format('yyyy.MM.dd')).data('standard', new Date());
 			startTime = Number(yearData.startTime), endTime = Number(yearData.endTime);
+		} else {
+			$('#hourlyChart').parent().find('.title span.term span').text(standard.format('yyyy.MM.dd')).data('standard', standard);
+			startTime = Number(standard.format('yyyyMMdd') + '000000'), endTime = Number(standard.format('yyyyMMdd') + '235959');
 		}
 
 		const targetApi = [
@@ -469,68 +495,64 @@
 					sid: siteId,
 					startTime: startTime,
 					endTime: endTime,
-					interval: 'month',
+					interval: 'hour',
 					displayType: 'dashboard',
 					formId: 'v2'
 				}
-			}),
-			$.ajax({
-				url: apiHost + apiEnergyNowSite,
-				type: 'get',
-				data: {
-					sids: siteId,
-					metering_type: '2',
-					interval: 'month'
-				}
 			})
-		];
+		]
+
+		if (standard === undefined || (standard !== undefined && today.getFullYear() === standard.getFullYear() && today.getMonth() === standard.getMonth() && today.getDate() === standard.getDate())) {
+			//오늘 일경우 now도 조회한다.
+			targetApi.push(
+				$.ajax({
+					url: apiHost + apiEnergyNowSite,
+					type: 'get',
+					data: {
+						sids: siteId,
+						metering_type: '2',
+						interval: 'hour'
+					}
+				})
+			);
+		}
 
 		new Promise(resolve => {
 			resolve(Promise.all(targetApi));
 		}).then(response => {
-			const monathlyGenData = new Array(12).fill(0);
-			const monathlyMoneyData = new Array(12).fill(0);
-			let yearGen = null;
+			const hourlyGen = new Array(24).fill(0);
+			const hourlyMoney = new Array(24).fill(0);
 
 			response.forEach((rspns, index) => {
 				if (index === 0) {
-					if (!isEmpty(rspns['data'])) {
+					if (!isEmpty(rspns['data'][siteId])) {
 						const siteData = rspns['data'][siteId][0];
-						(siteData.items).forEach(item => {
-							const baseTime = item['basetime']
-								, targetMonth = Number(String(baseTime).substr(4, 2)) - 1
-								, energyData = item['energy'];
-							yearGen = Number(yearGen) + energyData;
-							monathlyGenData[targetMonth] = energyData;
-						});
+						if (!isEmpty(siteData) && !isEmpty(siteData['items'])) {
+							const genItems = siteData['items'];
+							genItems.forEach(item => {
+								const timeIndex = Number(String(item['basetime']).substr(8, 2));
+								hourlyGen[timeIndex] = item['energy'] / 1000;
+								hourlyMoney[timeIndex] = item['money'] / 1000;
+							});
+						}
 					}
 				} else {
-					const siteData = rspns['data'][siteId]
-						, nowEnergyData = siteData['energy']
-						, capacity = sList[0]['capacities']['gen']
-						, refinedData = displayNumberFixedDecimal(nowEnergyData, 'Wh', 3, 1)
-						, refinedHour = nowEnergyData / capacity / monthlyDate.getDate();
-
-					yearGen = Number(yearGen) + nowEnergyData;
-					monathlyGenData[monthlyDate.getMonth()] = nowEnergyData;
-
-					$('#monthEnergy').text(refinedData[0]).next().html(refinedData[1]);
-					if(isFinite(refinedHour)) {
-						let f1 = d3.format(',.1f');
-						$('#monthHours').text(f1(refinedHour));
-					} else {
-						$('#monthHours').text('-');
+					if (!isEmpty(rspns['data']) && !isEmpty(rspns['data'][siteId])) {
+						const siteData = rspns['data'][siteId], nowDate = new Date();
+						hourlyGen[nowDate.getHours()] = siteData['energy'] / 1000;
+						hourlyMoney[nowDate.getHours()] = siteData['money'] / 1000;
 					}
 				}
 			});
 
-			if (isEmpty(yearGen)) {
-				$('#yearEnergy').text('-').next().html('');
-			} else {
-				const refinedYearData = displayNumberFixedDecimal(yearGen, 'Wh', 3, 1);
-				$('#yearEnergy').text(refinedYearData[0]).next().html(refinedYearData[1]);
-			}
-
+			hourlyChart.series.forEach((e, idx) => {
+				if (idx === 0) {
+					hourlyChart.series[idx].update({data: hourlyGen});
+				} else {
+					hourlyChart.series[idx].update({data: hourlyMoney});
+				}
+			});
+			hourlyChart.redraw();
 		}).catch(error => {
 			console.error(error);
 		});
@@ -589,10 +611,6 @@
 				alarmEl.find('em').text(alarmList.length);
 				setMakeList(alarmList, 'alarmNotice', {'dataFunction': {'level': levelClass}}); //list생성
 			} else {
-				// let alarmEl = $('.indiv[data-alarm]');
-				// alarmEl.attr('data-alarm', '');
-				// $('#alarmNotice').empty();
-
 				let alarmList = new Array();
 				let noTodayErrorMsg = '발생한 오류가 없습니다';
 				if(langStatus == 'EN') {
@@ -642,12 +660,120 @@
 		return rtnClass;
 	}
 
+	//월별 발전량 종합
+	const dailyGen = (standard) => {
+		let monthData = getSiteMainSchCollection('month');
+
+		let lastDay = 0, startTime = '', endTime = '';
+		if (standard !== undefined && (today.getFullYear() != standard.getFullYear() || today.getMonth() != standard.getMonth())) {
+			lastDay = new Date(standard.getFullYear(), standard.getMonth() + 1, 0);
+			$('#dailyChart').parent().find('.title span.term span').text(standard.format('yyyy.MM') + '.01 ~ ' + standard.format('yyyy.MM') + '.' + ('0' + lastDay.getDate()).slice(-2)).data('standard', standard);
+			startTime = Number(standard.format('yyyyMM') + '01000000'), endTime = Number(lastDay.format('yyyyMMdd') + '235959');
+		} else {
+			lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+			$('#dailyChart').parent().find('.title span.term span').text(today.format('yyyy.MM') + '.01 ~ ' + today.format('yyyy.MM') + '.' + ('0' + today.getDate()).slice(-2)).data('standard', new Date());
+			startTime = Number(monthData.startTime), endTime = Number(monthData.endTime);
+		}
+
+		const targetApi = [
+			$.ajax({
+				url: apiHost + apiEnergySite,
+				type: 'get',
+				data: {
+					sid: siteId,
+					startTime: startTime,
+					endTime: endTime,
+					interval: 'day',
+					displayType: 'dashboard',
+					formId: 'v2'
+				}
+			})
+		];
+
+		if (standard === undefined || (standard !== undefined && today.getFullYear() === standard.getFullYear() && today.getMonth() === standard.getMonth())) {
+			targetApi.push(
+				$.ajax({
+					url: apiHost + apiEnergyNowSite,
+					type: 'get',
+					data: {
+						sids: siteId,
+						metering_type: '2',
+						interval: 'day'
+					}
+				})
+			)
+		}
+
+		new Promise(resolve => {
+			resolve(Promise.all(targetApi));
+		}).then(response => {
+			const categories = new Array();
+			for (let i = 1; i <= lastDay.getDate(); i++) { categories.push(String(i)); }
+
+			const monathlyGenData = new Array(lastDay.getDate()).fill(0);
+			const monathlyMoneyData = new Array(lastDay.getDate()).fill(0);
+			let yearGen = null;
+
+			response.forEach((rspns, index) => {
+				if (index === 0) {
+					if (!isEmpty(rspns['data'])) {
+						const siteData = rspns['data'][siteId][0];
+						(siteData.items).forEach(item => {
+							const baseTime = item['basetime']
+								, targetDay = Number(String(baseTime).substr(6, 2)) - 1;
+							yearGen = Number(yearGen) + item['energy'];
+							monathlyGenData[targetDay] = item['energy'];
+							monathlyMoneyData[targetDay] = item['money'];
+						});
+					}
+				} else {
+					const siteData = rspns['data'][siteId]
+						, nowEnergyData = siteData['energy']
+						, capacity = sList[0]['capacities']['gen']
+						, refinedData = displayNumberFixedDecimal(nowEnergyData, 'Wh', 3, 1)
+						, refinedHour = nowEnergyData / capacity / lastDay.getDate();
+
+					yearGen = Number(yearGen) + nowEnergyData;
+
+					monathlyGenData[today.getDate()] = nowEnergyData;
+					monathlyMoneyData[today.getDate()] = siteData['money'];
+
+					$('#monthEnergy').text(refinedData[0]).next().html(refinedData[1]);
+					if(isFinite(refinedHour)) {
+						$('#monthHours').text(f1(refinedHour));
+					} else {
+						$('#monthHours').text('-');
+					}
+				}
+			});
+
+			if (isEmpty(yearGen)) {
+				$('#yearEnergy').text('-').next().html('');
+			} else {
+				const refinedYearData = displayNumberFixedDecimal(yearGen, 'Wh', 3, 1);
+				$('#yearEnergy').text(refinedYearData[0]).next().html(refinedYearData[1]);
+			}
+
+			dailyChart.xAxis[0].update({categories: categories});
+			dailyChart.series.forEach((e, idx) => {
+				if (idx === 0) {
+					dailyChart.series[idx].update({data: monathlyGenData});
+				} else {
+					dailyChart.series[idx].update({data: monathlyMoneyData});
+				}
+			});
+			dailyChart.redraw();
+		}).catch(error => {
+			console.error(error);
+		});
+	}
+
 	const hourlyChart = Highcharts.chart('hourlyChart', {
 		chart: {
 			marginTop: 50,
 			marginLeft: 50,
-			marginRight: 10,
-			height: 301,
+			marginRight: 50,
+			height: 380,
 			backgroundColor: 'transparent',
 			zoomType: 'xy'
 		},
@@ -680,7 +806,7 @@
 					fontSize: '12px'
 				}
 			},
-			tickInterval: 1,
+			tickInterval: 2,
 			title: {
 				text: null
 			},
@@ -701,7 +827,7 @@
 				gridLineWidth: 1,
 				min: 0,
 				title: {
-					x: 13,
+					x: 3,
 					y: 27,
 					text: 'kWh',
 					align: 'low',
@@ -714,13 +840,13 @@
 				labels: {
 					overflow: 'justify',
 					formatter: function () {
-						let length = String(this.value).length;
+						let length = String(Math.round(this.value)).length;
 						if (length >= 7) {
-							return numberComma(this.value / 1000000) + 'M';
+							return f1(this.value / 1000000) + 'M';
 						} else if ( (length >= 3) ){
-							return numberComma(this.value / 1000) + 'K';
+							return f1(this.value / 1000) + 'K';
 						} else {
-							return numberComma(this.value);
+							return f1(this.value);
 						}
 					},
 					x: -5,
@@ -729,7 +855,39 @@
 						fontSize: '11px'
 					}
 				}
-			}, {}
+			}, {
+				gridLineWidth: 0,
+				title: {
+					text: i18nManager.tr("gmain.1000won"),
+					align: 'low',
+					rotation: 0,
+					y: 25,
+					x: 15,
+					style: {
+						color: 'var(--grey)',
+						fontSize: '12px',
+						transform: 'translate(-30px, 0px)'
+					}
+				},
+				labels: {
+					style: {
+						color: 'var(--grey)',
+						fontSize: '12px'
+					},
+					formatter: function () {
+						let length = String(Math.round(this.value)).length;
+						if (length >= 7) {
+							return f1(this.value / 1000000) + 'M';
+						} else if ( (length >= 3) ){
+							return f1(this.value / 1000) + 'K';
+						} else {
+							return f1(this.value);
+						}
+					},
+				},
+				opposite: true,
+				showEmpty: false
+			}
 		],
 		tooltip: {
 			formatter: function () {
@@ -789,15 +947,8 @@
 		series: [
 			{
 				type: 'column',
-	<c:choose>
-		<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-				name: '<fmt:message key="smain.generationResults" />',
-		</c:when>
-		<c:otherwise>
-				name: '<fmt:message key='smain.PVGeneratedAmount' />',
-		</c:otherwise>
-	</c:choose>
-				color: 'var(--turquoise)', /* PV발전량 */
+				name: '<fmt:message key='smain.generation' />', /* 발전량 */
+				color: 'var(--turquoise)',
 				tooltip: {
 					valueSuffix: 'kWh',
 				},
@@ -806,17 +957,10 @@
 			{
 				type: 'spline',
 				dashStyle: 'ShortDash',
-	<c:choose>
-		<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-				name: '<fmt:message key="smain.devTime" />',
-		</c:when>
-		<c:otherwise>
-				name: '<fmt:message key="smain.devTime" />',
-		</c:otherwise>
-	</c:choose>
-				color: 'var(--turquoise)',
+				name: '<fmt:message key="gdash.1.revenue" />',
+				color: 'var(--white)',
 				tooltip: {
-					valueSuffix: 'H',
+					valueSuffix: '만원',
 				},
 				marker: {
 					symbol: 'circle'
@@ -827,17 +971,14 @@
 		],
 	});
 
-	var monthlyChart = Highcharts.chart('monthlyChart', {
+	const dailyChart = Highcharts.chart('dailyChart', {
 		chart: {
-			marginTop: 60,
+			marginTop: 40,
 			marginLeft: 50,
-			marginRight: 40,
-			height: 280,
+			marginRight: 50,
+			height: 300,
 			backgroundColor: 'transparent',
 			zoomType: 'xy'
-		},
-		lang: {
-			noData: "<fmt:message key='smain.noSearchData' />"
 		},
 		navigation: {
 			buttonOptions: {
@@ -852,164 +993,133 @@
 		},
 		xAxis: [{
 			lineColor: 'var(--grey)',
+			tickWidth: 1,
 			tickColor: 'var(--grey)',
 			gridLineColor: 'var(--white25)',
-			plotLines: [{
-				color: 'var(--grey)',
-				width: 1
-			}],
-			tickInterval: 1,
-			title: {
-				text: null
+			type: 'datetime',
+			dateTimeLabelFormats: {
+				millisecond: '%H:%M:%S.%L',
+				second: '%H:%M:%S',
+				minute: '%H:%M',
+				hour: '%H',
+				day: '%m.%d ',
+				week: '%m.%e',
+				month: '%m',
+				year: '%Y'
 			},
 			labels: {
 				align: 'center',
-				overflow: 'justify',
-				rotation: 0,
-				y: 25,
+				y: 27,
 				style: {
 					color: 'var(--grey)',
 					fontSize: '12px'
 				}
 			},
-			categories: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
+			tickWidth: 1,
+			tickColor: 'var(--grey)',
+			tickInterval: 1,
+			title: {
+				text: null
+			},
+			categories: null,
 			crosshair: true
 		}],
-		yAxis: [
-			{
-				showEmpty: false,
-				lineColor: 'var(--grey)',
-				tickColor: 'var(--grey)',
-				gridLineColor: 'var(--white25)',
-				gridLineWidth: 1,
-				plotLines: [{
+		yAxis: [{
+			lineColor: 'var(--grey)',
+			tickColor: 'var(--grey)',
+			gridLineColor: 'var(--white25)',
+			gridLineWidth: 1,
+			plotLines: [{
+				color: 'var(--grey)',
+				width: 1
+			}],
+			title: {
+				text: 'kWh',
+				align: 'low',
+				rotation: 0,
+				y: 25,
+				x: 15,
+				style: {
 					color: 'var(--grey)',
-					width: 1
-				}],
-				gridLineWidth: 1,
-				title: {
-					text: '',
-					align: 'low',
-					rotation: 0,
-					// x: 15,
-					y: 25,
-					style: {
-						color: 'var(--grey)',
-						fontSize: '12px'
-					}
-				},
-				labels: {
-					formatter: function () {
-						let suffix = this.chart.yAxis[0].userOptions.title.text;
-						if(suffix == "MWh"){
-							let length = String(this.value).length;
-							if(length >= 7 && length < 10){
-								return displayNumberFixedUnit(this.value, 'kWh', suffix, 0)[0];
-							} else if(length >= 10){
-								return displayNumberFixedUnit(this.value, 'kWh', "Gwh", 0)[0] + "k";
-							} else {
-								// NOT Mwh BUT longer enough to convert into floating number
-								if(length >= 3){
-									return displayNumberFixedUnit(this.value, 'kWh', suffix, 0)[0];
-								} else {
-									return displayNumberFixedUnit(this.value, 'kWh', 'kWh', 0)[0];
-								}
-							}
-
-						} else {
-							return displayNumberFixedUnit(this.value, 'kWh', suffix, 0)[0];
-						}
-					},
-					style: {
-						color: 'var(--grey)',
-						fontSize: '12px'
-					}
-				},
+					fontSize: '12px',
+					transform: 'translate(-28px, 0px)'
+				}
 			},
-			// NOT KPX
-			<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-			{
-				showEmpty: false,
-				opposite: true,
-				lineColor: 'var(--grey)',
-				tickColor: 'var(--grey)',
-				gridLineColor: 'var(--white25)',
-				gridLineWidth: 1,
-				plotLines: [
-					{
-						color: 'var(--grey)',
-						width: 1
-					}
-				],
-				gridLineWidth: 1,
-				title: {
-					text: '<fmt:message key="smain.1000won" />',
-					align: 'low',
-					rotation: 0,
-					y: 25,
-					style: {
-						color: 'var(--grey)',
-						fontSize: '12px'
-					}
+			labels: {
+				formatter: function () {
+					const suffix = this.chart.yAxis[0].userOptions.title.text;
+					const yAxisValue = displayNumberFixedUnit(this.value, 'kWh', suffix, 1);
+					return yAxisValue[0];
 				},
-				labels: {
-					formatter: function () {
-						let length = String(this.value).length;
-						if (length >= 7) {
-							return numberComma(this.value / 1000000) + 'M';
-						} else if ( (length >= 4) ){
-							return numberComma(this.value / 1000) + 'K';
-						} else {
-							return numberComma(this.value);
-						}
-					},
-					style: {
-						color: 'var(--grey)',
-						fontSize: '12px'
-					}
-				},
+				style: {
+					color: 'var(--grey)',
+					fontSize: '12px'
+				}
 			},
-			</c:if>
-		],
+			showEmpty: false
+		}, {
+			gridLineWidth: 0,
+			title: {
+				text: i18nManager.tr("gmain.1000won"),
+				align: 'low',
+				rotation: 0,
+				y: 25,
+				x: 0,
+				style: {
+					color: 'var(--grey)',
+					fontSize: '12px',
+					transform: 'translate(-30px, 0px)'
+				}
+			},
+			labels: {
+				formatter: function () {
+					return  numberComma(this.value);
+				},
+				style: {
+					color: 'var(--grey)',
+					fontSize: '12px',
+					transform: 'translate(-10px, 0px)'
+				}
+			},
+			opposite: true,
+			showEmpty: false
+		}],
 		tooltip: {
+			hideDelay: 1,
 			formatter: function () {
 				return this.points.reduce(function (s, point) {
-					let suffix = point.series.userOptions.tooltip.valueSuffix;
-					let val;
-					if (suffix.toLowerCase() === "hr"){
-						val = displayNumberFixedDecimal(point.y, 'kWh', 'kWh', 2)[0];
+					if(point.y !== 0) {
+						let suffix = point.series.userOptions.tooltip.valueSuffix;
+						return s + ' <br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + numberComma(Math.round(point.y / 10)) + ' ' + suffix;
 					} else {
-						val = displayNumberFixedDecimal(point.y, 'kWh', 'kWh', 0)[0];
+						return s
 					}
-					return s + '<br/><span style="color:' + point.color + '">\u25CF</span>  ' + point.series.name + ': ' + val + " " + suffix;
-				}, '<span style="display:flex; margin-bottom:-10px;"><b>'+(langStatus === "KO" ? this.x+'월' : monthEN[this.x-1])+'</b></span>');
-
+				}, `<span style="display:flex;"><b>${'${langStatus === "KO" ? this.x + "일" : dayEN[this.x - 1]}'}</b></span>`);
 			},
 			shared: true,
 			useHTML: true,
 			borderColor: 'none',
 			backgroundColor: 'var(--bg-color)',
 			padding: 16,
+
 			style: {
-				color: 'var(--white)',
+				color: 'var(--white87)',
 			}
 		},
 		legend: {
 			enabled: true,
-			// useHTML: true,
 			align: 'right',
 			verticalAlign: 'top',
-			x: 20,
-			y: -10,
+			x: 5,
+			y: -15,
 			itemStyle: {
 				color: 'var(--white87)',
 				fontSize: '12px',
-				fontWeight: 400
 			},
 			itemHoverStyle: {
 				color: ''
 			},
-			symbolPadding: 3,
+			symbolPadding: 0,
 			symbolHeight: 7
 		},
 		plotOptions: {
@@ -1017,34 +1127,20 @@
 				label: {
 					connectorAllowed: false
 				},
-				borderColor: 'var(--grey)',
 				borderWidth: 0,
-				// TO DO!!!!!!!!!!
-				// events: {
-				// 	legendItemClick: function(event) {
-				// 		var thisSeries = this;
-				// 		var index = thisSeries._i;
-				// 		var chart = thisSeries.chart;
-				// 		// var visibility = this.visible ? 'visible' : 'hidden';
-
-				// 		console.log("thisSeries==", index)
-				// 		chart.yAxis[index].
-				// 		// if (this.visible === true) {
-				// 		// 	this.hide();
-				// 		// 	chart.get("highcharts-navigator-series").hide();
-				// 		// } else {
-				// 		// 	this.show();
-				// 		// 	chart.series.forEach(function(el, inx) {
-				// 		// 		if (el !== thisSeries) {
-				// 		// 		el.hide();
-				// 		// 		}
-				// 		// 	});
-				// 		// 	chart.get("highcharts-navigator-series").setData(thisSeries.options.data, false);
-				// 		// 	chart.get("highcharts-navigator-series").show();
-				// 		// }
-				// 		// event.preventDefault();
-				// 	}
-				// }
+				events: {
+					legendItemClick: function () {
+						var visibility = this.visible ? 'visible' : 'hidden';
+						this.legendItem.styles.color == 'var(--white60)'
+						// var visibility = this.visible ? 'visible' : 'hidden';
+					}
+				},
+				events: {
+					click: function (event) {
+						const x = event.point.category;
+						goPvGen(x, 'hour');
+					}
+				}
 			},
 			line: {
 				marker: {
@@ -1055,40 +1151,33 @@
 				stacking: 'normal'
 			}
 		},
-		series: [
-			{
-				<c:choose>
-				<c:when test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-				name: '<fmt:message key='smain.generationResults' />',
-				</c:when>
-				<c:otherwise>
-				name: '<fmt:message key='smain.PVGeneratedAmount' />',
-				</c:otherwise>
-				</c:choose>
-				type: 'column',
-				color: 'var(--turquoise)',
-				data: [],
-				tooltip: {
-					valueSuffix: 'kWh',
-				}
-
-			},
-			<c:if test="${!fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
-			{
-				name: '<fmt:message key="smain.irradiance" />',
-				type: 'spline',
-				dashStyle: 'ShortDash',
-				color: 'var(--white60)',
-				yAxis: 1,
-				data: [],
-				tooltip: {
-					valueSuffix: '천원',
-				}
-			}
-			</c:if>
-		],
 		credits: {
 			enabled: false
 		},
+		series: [
+			{
+				type: 'column',
+				name: '<fmt:message key='smain.generation' />', /* 발전량 */
+				color: 'var(--turquoise)',
+				tooltip: {
+					valueSuffix: 'kWh',
+				},
+				data: []
+			},
+			{
+				type: 'spline',
+				dashStyle: 'ShortDash',
+				name: '<fmt:message key="gdash.1.revenue" />',
+				color: 'var(--white)',
+				tooltip: {
+					valueSuffix: '천원',
+				},
+				marker: {
+					symbol: 'circle'
+				},
+				yAxis: 1,
+				data: []
+			},
+		]
 	});
 </script>
