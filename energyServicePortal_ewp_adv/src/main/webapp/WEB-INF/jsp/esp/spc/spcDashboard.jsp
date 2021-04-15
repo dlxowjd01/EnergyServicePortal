@@ -478,7 +478,7 @@
 
 		$.fn.dataTable.ext.search.push (
 			function(settings, data, dataIndex) {
-				const targetData = data[3] === '-' ? 1 : Number(data[3]);
+				const targetData = data[3] === '-' ? 1 : Number(data[3].replace(/,/g, ''));
 
 				let targetBoolean = false;
 				targetRange.forEach((range, index) => {

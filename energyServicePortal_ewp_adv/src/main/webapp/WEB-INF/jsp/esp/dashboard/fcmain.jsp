@@ -453,18 +453,15 @@
 						$('#fcmain-1-2 div:nth-child(3) ul:first-child li:last-child span:first-child').text(capacity[0]).next().text(capacity[1]);
 
 						if (isEmpty(deviceOperation)) {
-							if (deviceOperation !== 0) {
-								$('.status-button').eq(0).attr('class', 'status-button NA').text('N/A');
-							} else {
-								$('.status-button').eq(0).attr('class', 'status-button off').text('정지');
-							}
+							$('.status-button').eq(0).attr('class', 'status-button NA').text('N/A');
+						} else if (deviceOperation === 0) {
+							$('.status-button').eq(0).attr('class', 'status-button off').text('정지');
+						} else if (deviceOperation === 1) {
+							$('.status-button').eq(0).attr('class', 'status-button normal').text('운전중');
 						} else {
-							if (deviceOperation === 1) {
-								$('.status-button').eq(0).attr('class', 'status-button normal').text('운전중');
-							} else {
-								$('.status-button').eq(0).attr('class', 'status-button error').text('오류');
-							}
+							$('.status-button').eq(0).attr('class', 'status-button error').text('오류');
 						}
+
 
 						if (isEmpty(deviceLoad)) {
 							$('.status-button').eq(2).attr('class', 'status-button off').text('-');
