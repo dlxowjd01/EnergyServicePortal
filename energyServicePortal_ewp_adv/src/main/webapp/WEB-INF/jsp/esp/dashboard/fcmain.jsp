@@ -188,7 +188,7 @@
 	<div class="fcmain-section col-xl-4 col-md-12 col-sm-12">
 		<div class="fcmain-block">
 			<div class="indiv fcmain-block-s">
-				<h2 class="title">누적 방전량</h2>
+				<h2 class="title">누적 발전량</h2>
 				<h1 class="value-unit">
 					<span>-</span>
 					<span>MWh</span>
