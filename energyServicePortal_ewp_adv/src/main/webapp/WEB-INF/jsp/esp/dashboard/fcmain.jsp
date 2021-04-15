@@ -229,7 +229,7 @@
 
 			<div class="fcmain-month-list">
 				<ul>
-					<li>이번달 총 발전량</li>
+					<li>총 발전량</li>
 					<li>
 						<span id="monthEnergy">-</span>
 						<span>kWh</span>
@@ -243,7 +243,7 @@
 					</li>
 				</ul>
 				<ul>
-					<li>이번달 발전시간 평균</li>
+					<li>총 운영시간</li>
 					<li>
 						<span id="monthHours">-</span>
 						<span>Hrs</span>
@@ -800,7 +800,7 @@
 
 			const totalMonthGen = monathlyGenData.reduce( function add(sum, currValue) { return sum + currValue; });
 			const refinedTotalMonth = displayNumberFixedDecimal(totalMonthGen, 'Wh', 3, 1);
-			const totalMonthGenHour = totalMonthGen / sList[0]['capacities']['gen'] / lastDay.getDate() * 100;
+			const totalMonthGenHour = totalMonthGen / sList[0]['capacities']['gen'] * 100;
 
 			$('#monthEnergy').text(refinedTotalMonth[0]).next().text(refinedTotalMonth[1])
 
