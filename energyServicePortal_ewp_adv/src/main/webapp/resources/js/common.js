@@ -848,6 +848,22 @@ function getWeekInterval() {
 	];
 }
 
+function getYearInterval() {
+	const cur = new Date();
+
+	const y = cur.getFullYear();
+
+	const [start, end] = [
+		new Date(y, 0, 1),
+		new Date(y, 11, 31),
+	];
+
+	return [
+		(String(start.getFullYear())+String(start.getMonth() + 1).padStart(2, 0)+String(start.getDate()).padStart(2, 0)+`000000`) * 1,
+		(String(end.getFullYear())+String(end.getMonth() + 1).padStart(2, 0)+String(end.getDate()).padStart(2, 0)+`235959`) * 1,
+	];
+}
+
 function getLastDay() {
 	const date = new Date();
 

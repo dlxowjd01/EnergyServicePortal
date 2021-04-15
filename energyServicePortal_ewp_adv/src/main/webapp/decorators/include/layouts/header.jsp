@@ -376,7 +376,8 @@
 		} else if(type == 'site') {
 			$('#dashboardForm').append(sysInp).append(inp).attr('action', '/dashboard/smain.do').submit();
 		} else if(type == 'vpp') {
-			$('#dashboardForm').append(sysInp).append(inp).attr('action', '/dashboard/jmain.do').submit();
+			// $('#dashboardForm').append(sysInp).append(inp).attr('action', '/dashboard/jmain.do').submit();
+			$('#dashboardForm').append(sysInp).append(inp).attr('action', '/dashboard/VPPmain.do').submit();
 		} else {
 			$("#errMsg").text("아직 정의 되지않은 타입입니다.");
 			$("#errorModal").modal("show");

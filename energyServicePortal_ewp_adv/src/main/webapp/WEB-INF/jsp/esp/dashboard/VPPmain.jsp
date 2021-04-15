@@ -352,14 +352,14 @@
 
 			showError("존재하지 않는 그룹입니다.");
 		})
-	})
+	});
 
-	// 임시 VPP ID --------
-	const vppId = "5bebbe35-7a26-401b-a8bc-c960a663eb13";
+	const vppId = '${vgid}';
 	const interval = {
 		today: getDayInterval(),
 		month: getMonthInterval(),
 		week: getWeekInterval(),
+		year: getYearInterval(),
 	};
 
 	// 메인 객체
@@ -566,6 +566,19 @@
 						detailByBasetime: true,
 					},
 				}),
+				$.ajax({ // 16 // 당해
+					url: apiHost + "/energy/forecast/accuracy",
+					type: "POST",
+					dataType: "json",
+					contentType: "application/json",
+					data: JSON.stringify({
+						"sids": sids,
+						startTime: interval.year[0],
+						endTime: interval.year[1],
+						"interval": "year",
+						"cal_incentive": true,
+					}),
+				}),
 			];
 
 			new Promise ((resolve, reject) => {
@@ -584,6 +597,7 @@
 				const acc = {
 					"day": res[2].data.data,
 					"month": res[6].data.data,
+					"year": res[16].data.data
 				};
 				const forecast = {
 					"hour": res[3].data,
@@ -619,19 +633,18 @@
 					}
 				}
 
-				console.log(acc)
+				console.log(vppInfo.day, vppInfo.hour)
 
-				TotalTrading(vppInfo.day.map(x => x[1]));
-				TotalProfit(vppInfo.day.map(x => x[1]), acc.day);
-				SiteStatus.setList(vppInfo.day, forecast.day, status);
-				Graph1.setOption(vppInfo["hour"].map(x => x[1]), Object.values(forecast["hour"]));
-				Graph2.setOption(vppInfo.hour.map(x => x[1]));
-				Graph3.setOption(vppInfo.month.map(x => x[1]), Object.values(forecast.month), acc.month);
-				PieGraph.draw(Object.values(acc.day.total)[0].accuracy);
-				setResourceStatus(vppInfo.day);
-				// Table.refresh(res[11], res[12].data, res[13].data, res[14].data.data, acc.day);
-				Table.refresh(res[11], res[12].data, res[13].data, res[14].data.data, weekErrorMean);
-				setPrediction(forecast["15min"], vppInfo.day.map(x => x[1]), Object.values(acc.day.total)[0].accuracy);
+				TotalTrading(vppInfo.hour.map(x => x[1])); // 금일 총 전력거래량
+				TotalProfit(vppInfo.hour.map(x => x[1]), acc.day); // 금일 총 수익
+				Graph1.setOption(vppInfo["hour"].map(x => x[1]), Object.values(forecast.hour)); // 전력거래량 예측
+				Graph2.setOption(vppInfo.hour.map(x => x[1])); // 보조자원 예측
+				Graph3.setOption(vppInfo.month.map(x => x[1]), Object.values(forecast.month), acc.month, acc.year); // 수익 현황
+				PieGraph.draw(Object.values(acc.day.total)[0].accuracy); // 예측 정확도
+				setResourceStatus(vppInfo.hour); // 자원 현황
+				SiteStatus.refresh(vppInfo.hour, forecast.day, acc.day, status); // 발전 현황
+				setPrediction(forecast["15min"], vppInfo.day.map(x => x[1]), Object.values(acc.day.total)[0].accuracy); // 총 예측사이트 , 설비용량 , 정확도
+				Table.refresh(res[11], res[12].data, res[13].data, res[14].data.data, weekErrorMean); // 주간 예측오차율
 			}).catch(error => {
 				console.log(error);
 				
@@ -699,19 +712,12 @@
 
 	// 금일 총 수익
 	const TotalProfit = (now, forecast) => {
-		const smp = (now.reduce((acc, cur) => acc + cur.money, 0) / 1000).toFixed(2);
-		const incentive = forecast.total.length ? Object.entries(forecast.total)[0][1].incentive : 0;
-		// now = Object.entries(now[0].data).map(x => {
-		// 	x[1].sid = x[0];
-			
-		// 	return x[1];
-		// });
+		const smp = now.reduce((acc, cur) => acc + cur.money, 0);
+		const incentive = Object.values(forecast.total).length ? Object.values(forecast.total)[0].incentive : 0;
 		
-		// forecast = Object.entries(forecast[0].data).map(x => x[1][0].items[0]);
-		
-		// $("#totalMoney").html((now.reduce((acc, cur) => acc + cur.money, 0) / 1000).toFixed(2));
-		$("#todaySMP").html(smp);
-		$("#todayPredictionMoney").html(incentive);
+		$("#todaySMP").html((smp / 1000).toFixed(2));
+		$("#todayPredictionMoney").html((incentive / 1000).toFixed(2));
+		$("#totalMoney").html(((incentive + smp) / 1000).toFixed(2))
 	}
 
 	// 전력거래량 예측
@@ -1227,34 +1233,31 @@
 			});
 		},
 
-		setOption(now, forecast, acc) {
-			// $.each(forecast, (ix, el) => {
-			// 	this.series[1].data.push()
-			// })
-			// now = Object.values(now.detail);
-			// now.pop();
-			// console.log(now);
-			
-			// $.each(now, (ix, el) => {
-			// 	let detail = Object.entries(el.detail);
-			// 		detail.pop();
+		setOption(now, forecast, accMonth, accYear) {
+			const nowData = {};
 
-			// 	console.log(detail.reduce((acc, cur) => { console.log(cur) }, 0))
-			// 	// this.series[0].data.push();
-			// })
-			// console.log(now)
+			$.each(now.map(x => x.detail), (ix, el) => {
+				$.each(el, (k, v) => {
+					nowData[k] = (nowData[k] ? nowData[k] : 0);
+					if (k !== "devices") {
+						nowData[k] += v.money;
+					}
+				});
+			});
+			
+			let temp = Object.entries(nowData).sort((a, b) => a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0);
+				temp.pop();
+
 			for (let i = 0; i < getLastDay(); i++) {
-				
-				// this.series[0].data.push(now.map(x => x.detail).reduce((acc, cur) => acc + Object.values(Object.entries(cur)[i]).money, 0));
 				this.series[1].data.push(forecast.map(x => x[0].items).reduce((acc, cur) => acc + cur[i] ? cur[i].money : 0, 0));
-
-			// 	this.series[1].data.push(forecast.map(x => x.items).reduce((acc, cur) => acc + cur[i].money, 0))
 			}
+			this.series[0].data = fillArray(temp.map(x => x[1]), getLastDay());
 
-
-			$("#accMonth").html((Object.values(acc.total).reduce((acc, cur) => acc + cur.incentive, 0)).toLocaleString());
+			$("#smpMonth").html(((now.reduce((acc, cur) => acc + cur.money, 0) / 1000 / 1000).toFixed(2) * 1).toLocaleString())
+			$("#smpYear").html("0");
+			$("#accMonth").html(((Object.values(accMonth.total).reduce((acc, cur) => acc + cur.incentive, 0)).toFixed(2) * 1).toLocaleString());
+			$("#accYear").html(((Object.values(accYear.total).reduce((acc, cur) => acc + cur.incentive, 0)).toFixed(2) * 1).toLocaleString());
 			
-	
 			this.draw();
 		},
 	}
@@ -1262,7 +1265,7 @@
 	// 자원 현황
 	const setResourceStatus = (energy) => {
 		energy = energy.map(x => x[1]);
-		console.log(energy)
+		
 		if (energy.find(x => x.ess === 0)) {
 			$("#subResource_ESS").removeClass("actived");
 			$("#subResource_ESS > img").attr("src", "");
@@ -1437,19 +1440,15 @@
 		idx: 0,
 		len: 0,
 
-		setList(energyData, forecast, status) {
+		refresh(energyData, forecast, acc, status) {
 			let tableTemplate = ``;
-			let energy = {};
-			let fc = {}
-			let active = {};
-			let overall = {};
-			// console.log(status)
+
 			App.sites.map(x => {
-				energy = energyData.find(v => v[0] === x.sid)[1];
-				fc = forecast[x.sid] ? forecast[x.sid][0].items[0] : "";
-				active = Object.values(status.active[x.sid]["INV_PV"]).length ? ["normal", "정상"] : ["error", "이상"];
-				overall = Object.values(status.overall[x.sid]["INV_PV"]).length ? ["normal", "정상"] : ["error", "이상"];
-				console.log(energy)
+				let now = energyData.find(v => v[0] === x.sid)[1];
+				let forecastEnergy = forecast[x.sid] ? forecast[x.sid][0].items[0].energy : 0;
+				let incentive = acc.each[x.sid] ? Object.values(acc.each[x.sid])[0].incentive : 0;
+				let active = Object.values(status.active[x.sid]["INV_PV"]).length ? ["normal", "정상"] : ["error", "이상"];
+				let overall = Object.values(status.overall[x.sid]["INV_PV"]).length ? ["normal", "정상"] : ["error", "이상"];
 
 				tableTemplate += `
 					<tr class="vpp-focus-map" data-sid="${'${x.sid}'}">
@@ -1491,29 +1490,29 @@
 									<div>
 										<div class="vpp-infobox">
 											<p>발전소 용량</p>
-											<p>${'${(energy.capacity / 1000).toLocaleString()}'} kW</p>
+											<p>${'${((now.capacity / 1000).toFixed(2) * 1).toLocaleString()}'} kW</p>
 										</div>
 										<div class="vpp-infobox">
 											<p>금일 누적거래량</p>
-											<p>${'${(energy.energy / 1000).toLocaleString()}'} kWh</p>
+											<p>${'${((now.energy / 1000).toFixed(2) * 1).toLocaleString()}'} kWh</p>
 										</div>
 										<div class="vpp-infobox">
 											<p>금일 예측거래량</p>
-											<p>${'${fc ? (fc.energy / 1000).toLocaleString() : "-"}'} kWh</p>
+											<p>${'${((forecastEnergy / 1000).toFixed(2) * 1).toLocaleString()}'} kWh</p>
 										</div>
 									</div>
 									<div>
 										<div class="vpp-infobox">
 											<p>금일 SMP 수익</p>
-											<p>- 천원</p>
+											<p>${'${((now.money / 1000).toFixed(2) * 1).toLocaleString()}'} 천원</p>
 										</div>
 										<div class="vpp-infobox">
 											<p>금일 예측 수익</p>
-											<p>${'${fc ? (fc.money / 1000).toLocaleString() : "-"}'} 천원</p>
+											<p>${'${((incentive / 1000).toFixed(2) * 1).toLocaleString()}'} 천원</p>
 										</div>
 										<div class="vpp-infobox">
 											<p>금일 총 수익</p>
-											<p>${'${(energy.money / 1000).toLocaleString()}'} 천원</p>
+											<p>${'${(((incentive + now.money) / 1000).toFixed(2) * 1).toLocaleString()}'} 천원</p>
 										</div>
 									</div>
 								</div>
@@ -1523,7 +1522,7 @@
 				`;
 
 				VppMap.geocodeAddress(x.address, x.sid, x.latlng, "#90caf3");
-			})
+			});
 			$("#vppMapTable tbody").html(tableTemplate);
 
 			this.rolling();
@@ -1563,7 +1562,7 @@
 			Table.target = $("#vpp-3-2-dataTable").DataTable({
 				autoWidth: true,
 				fixedHeader: true,
-				// "table-layout": "fixed",
+				"table-layout": "fixed",
 				scrollX: false,
 				scrollY: false,
 				scrollCollapse: true,
@@ -1649,11 +1648,11 @@
 					todayError: todayError.each[site.sid] ? Object.values(todayError.each[site.sid])[0].accuracy * 100 : "-",
 					weekError: weekError[site.sid] ? weekError[site.sid] * 100 : "-",
 				}
-
+				
 				Table.range.some((range, index) => {
 					let acc = tableData[ix].weekError === '-' ? 100 : tableData[ix].weekError;
 
-					if (range.min <= acc && acc <= range.max) {
+					if (range.min < acc && acc <= range.max) {
 						Table.range[index].count++;
 
 						$(".vpp-3-2-graph > div:nth-child("+(index + 1)+") > div").html(Table.range[index].count);
@@ -1665,11 +1664,11 @@
 
 			$.fn.dataTable.ext.search.push (
 				function(settings, data, dataIndex) {
-					const acc = data[5] === '-' ? 100 : Number(data[5]);
+					const acc = data[5] === '-' ? 100 : data[5];
 
 					let targetBoolean = false;
 					Table.range.forEach((range, index) => {
-						if (range.min <= acc && acc <= range.max) {
+						if (range.min < acc && acc <= range.max) {
 							if ($(".vpp-3-2-graph > div").eq(range['index']).hasClass('actived')) {
 								targetBoolean = true;
 							}
