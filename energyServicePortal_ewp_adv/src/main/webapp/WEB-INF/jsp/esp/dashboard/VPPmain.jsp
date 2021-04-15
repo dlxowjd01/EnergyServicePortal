@@ -392,7 +392,7 @@
 						startTime: interval.today[0],
 						endTime: interval.today[1],
 						interval: "15min",
-						detailByBasetime: true
+						detailByBasetime: true,
 					},
 				}),
 				$.ajax({ // 2
@@ -533,12 +533,15 @@
 						interval: "hour",
 					},
 				}),
-				$.ajax({ // 13 // 테이블용
+				$.ajax({ // 13
 					type: "GET",
 					url: apiHost + "/vpp/energy/sites",
 					data: {
 						sid: sids,
+						startTime: interval.today[0],
+						endTime: interval.today[1],
 						interval: "hour",
+						detailByBasetime: true,
 					},
 				}),
 				$.ajax({ // 14 // 테이블용
@@ -554,16 +557,18 @@
 						"cal_incentive": true,
 					}),
 				}),
-				$.ajax({ // 15
-					type: "GET",
-					url: apiHost + "/vpp/energy/sites",
-					data: {
-						sid: sids,
-						startTime: interval.today[0],
-						endTime: interval.today[1],
-						interval: "hour",
-						detailByBasetime: true,
-					},
+				$.ajax({ // 15 // 기상정보
+					url: apiHost + "/get/weather/site",
+					type: "POST",
+					dataType: "json",
+					contentType: "application/json",
+					data: JSON.stringify({
+						"sid": sids,
+						"startTime": interval.today[0],
+						"endTime": interval.today[1],
+						"interval": "day",
+						"formId": "v2",
+					}),
 				}),
 				// $.ajax({ // 16 // 당해
 				// 	url: apiHost + "/energy/forecast/accuracy",
@@ -591,7 +596,7 @@
 					"day" : Object.entries(res[0].data),
 					"15min" : Object.entries(res[1].data),
 					"month" : Object.entries(res[8].data),
-					"hour" : Object.entries(res[15].data),
+					"hour" : Object.entries(res[13].data),
 				};
 				const acc = {
 					"day": res[2].data.data,
@@ -611,18 +616,18 @@
 
 				const weeklyMeanAccuracy = getWeeklyMeanAccuracy(res[6].data.data.each);
 
-				console.log(vppInfo.day, vppInfo.hour)
+				console.log(vppInfo)
 
 				TotalTrading(vppInfo.hour.map(x => x[1])); // 금일 총 전력거래량
 				TotalProfit(vppInfo.hour.map(x => x[1]), acc.day); // 금일 총 수익
 				Graph1.setOption(vppInfo["hour"].map(x => x[1]), Object.values(forecast.hour)); // 전력거래량 예측
 				Graph2.setOption(vppInfo.hour.map(x => x[1])); // 보조자원 예측
 				Graph3.setOption(vppInfo.month.map(x => x[1]), Object.values(forecast.month), acc.month, acc.year); // 수익 현황
-				PieGraph.draw(Object.values(acc.day.total)[0].accuracy); // 예측 정확도
+				PieGraph.draw(Object.values(acc.day.total).length ? Object.values(acc.day.total)[0].accuracy : 0); // 예측 정확도
 				setResourceStatus(vppInfo.hour); // 자원 현황
-				SiteStatus.refresh(vppInfo.hour, forecast.day, acc.day, status); // 발전 현황
-				setPrediction(forecast["15min"], vppInfo.day.map(x => x[1]), Object.values(acc.day.total)[0].accuracy); // 총 예측사이트 , 설비용량 , 정확도
-				Table.refresh(res[11], res[12].data, res[13].data, res[14].data.data, weeklyMeanAccuracy); // 주간 예측오차율
+				SiteStatus.refresh(vppInfo.hour, forecast.day, acc.day, status, res[15]); // 발전 현황
+				setPrediction(forecast["15min"], vppInfo.day.map(x => x[1]), Object.values(acc.day.total).length ? Object.values(acc.day.total)[0].accuracy : 0); // 총 예측사이트 , 설비용량 , 정확도
+				Table.refresh(vppInfo.hour, res[11], res[14].data.data, weeklyMeanAccuracy); // 주간 예측오차율
 			}).catch(error => {
 				console.log(error);
 				
@@ -1080,8 +1085,8 @@
 	// 수익현황
 	const Graph3 = {
 		series : [
-			{name: 'SMP', color: '#26ccc8', data: []},
 			{name: '예측', color: '#878787', data: []},
+			{name: 'SMP', color: '#26ccc8', data: []},
 		],
 		target: {},
 
@@ -1156,6 +1161,9 @@
 							fontSize: '12px'
 						},
 					},
+					stackLabels: {
+						enabled: true,
+					},
 					plotLines: [{
 						color: 'var(--grey)',
 						width: 1
@@ -1200,12 +1208,12 @@
 						},
 						borderWidth: 0
 					},
-					area: {
-						lineColor: "transparent",
-						marker: {
+					column: {
+						stacking: 'normal',
+						dataLabels: {
 							enabled: false
 						}
-					},
+					}
 				},
 				series: Graph3.series
 			});
@@ -1227,9 +1235,9 @@
 				temp.pop();
 
 			for (let i = 0; i < getLastDay(); i++) {
-				this.series[1].data.push(forecast.map(x => x[0].items).reduce((acc, cur) => acc + cur[i] ? cur[i].money : 0, 0));
+				this.series[0].data.push(forecast.map(x => x[0].items).reduce((acc, cur) => acc + cur[i] ? cur[i].money : 0, 0));
 			}
-			this.series[0].data = fillArray(temp.map(x => x[1]), getLastDay());
+			this.series[1].data = fillArray(temp.map(x => x[1]), getLastDay());
 
 			$("#smpMonth").html(((now.reduce((acc, cur) => acc + cur.money, 0) / 1000 / 1000).toFixed(2) * 1).toLocaleString())
 			$("#smpYear").html("0");
@@ -1268,39 +1276,9 @@
 		if (energy.find(x => x.resource_type === 4)) {
 			$("#subResource_fuelcell").addClass("actived");
 		}
-		// energy.map(x => { 
-		// 	x = x[1];
-		// 	if (!x.ess) {
-		// 		$("#subResource_ESS").removeClass("actived");
-		// 		$("#subResource_ESS > img").attr("src", "");
-		// 	}
-
-		// 	let resource = "";
-		// 	switch (x.resource_type) {
-		// 		case 1:
-		// 			resource = "#mainResource_sun";
-		// 		break;
-				
-		// 		case 2:
-		// 			resource = "#mainResource_wind";
-		// 		break;
-
-		// 		case 4:
-		// 			resource = "#subResource_fuelcell";
-		// 		break;
-		// 	}
-
-		// 	$(resource).addClass("actived");
-		// 	// $(resource).find(".network-status-img").attr("src") === "" && 
-		// 	if (((x.reource_type === 1 || x.reource_type === 2) && x.energyPrimary <= 0) || (x.reource_type === 4 && x.energySecondary <= 0)) {
-		// 		$(resource).find(".network-status-img").attr("src", "/img/vpp/network-error-yellow.svg");
-		// 	} else {
-		// 		$(resource).find(".network-status-img").attr("src", "/img/vpp/network-normal.svg");
-		// 	}
-		// });
 	}
 	
-	// 발전 현황
+	// 발전 현황 지도
 	const VppMap = {
 		makerObject : {},
 		markers : [],
@@ -1418,7 +1396,7 @@
 		idx: 0,
 		len: 0,
 
-		refresh(energyData, forecast, acc, status) {
+		refresh(energyData, forecast, acc, status, weather) {
 			let tableTemplate = ``;
 
 			App.sites.map(x => {
@@ -1427,6 +1405,7 @@
 				let incentive = acc.each[x.sid] ? Object.values(acc.each[x.sid])[0].incentive : 0;
 				let active = Object.values(status.active[x.sid]["INV_PV"]).length ? ["normal", "정상"] : ["error", "이상"];
 				let overall = Object.values(status.overall[x.sid]["INV_PV"]).length ? ["normal", "정상"] : ["error", "이상"];
+				let weatherData = weather.data[x.sid].items[0];
 
 				tableTemplate += `
 					<tr class="vpp-focus-map" data-sid="${'${x.sid}'}">
@@ -1454,11 +1433,11 @@
 										<div class="flex-center">
 											<ul>
 												<li>온도</li>
-												<li>-%</li>
+												<li>${'${weatherData.temperature}'}%</li>
 											</ul>
 											<ul>
 												<li>습도</li>
-												<li>-%</li>
+												<li>${'${weatherData.humidity}'}%</li>
 											</ul>
 										</div>
 									</div>
@@ -1553,24 +1532,16 @@
 						className: 'dt-head-left dt-body-left',
 					},
 					{
+						title: "설비용량",
+						data: 'capacity',
+						className: 'dt-head-right dt-body-right',
+						render(data) {
+							return data === "-" ? "-" : Math.round(data / 1000);
+						},
+					},
+					{
 						title: "현재출력",
 						data: 'activePower',
-						className: 'dt-head-right dt-body-right',
-						render(data) {
-							return data === "-" ? "-" : Math.round(data / 1000);
-						},
-					},
-					{
-						title: "현시각 <br> 발전<br>",
-						data: 'currentDev',
-						className: 'dt-head-right dt-body-right',
-						render(data) {
-							return data === "-" ? "-" : Math.round(data / 1000);
-						},
-					},
-					{
-						title: "현시각 <br> 예측<br>",
-						data: 'currentFc',
 						className: 'dt-head-right dt-body-right',
 						render(data) {
 							return data === "-" ? "-" : Math.round(data / 1000);
@@ -1605,14 +1576,13 @@
 				},
 				columnDefs: [
 					{targets: [0], width: "186px"},
-					{targets: [1, 2, 3], width: "60px"},
-					{targets: [4, 5], width: "42"},
+					{targets: [1, 2, 3, 4], width: "60px"},
 				],
 				dom: 'tip',
 			});
 		},
 
-		refresh(activePower, currentDev, currentFc, todayError, weekError) {
+		refresh(capacity, activePower, todayError, weekError) {
 			Table.target.clear();
 			
 			const tableData = [];
@@ -1620,9 +1590,8 @@
 			App.sites.forEach((site, ix) => {
 				tableData[ix] = {
 					name: site.name,
+					capacity: capacity.find(x => x[0] === site.sid)[1].capacity,
 					activePower: activePower[site.sid]["INV_PV"].activePower ? activePower[site.sid]["INV_PV"].activePower : "-",
-					currentDev: currentDev[site.sid] ? currentDev[site.sid].energy : "-",
-					currentFc: currentFc[site.sid] ? currentFc[site.sid].forecast : "-",
 					todayError: todayError.each[site.sid] ? Object.values(todayError.each[site.sid])[0].accuracy * 100 : "-",
 					weekError: weekError[site.sid] ? weekError[site.sid] * 100 : "-",
 				}
@@ -1642,7 +1611,7 @@
 
 			$.fn.dataTable.ext.search.push (
 				function(settings, data, dataIndex) {
-					const acc = data[5] === '-' ? 100 : data[5];
+					const acc = data[4] === '-' ? 100 : data[4];
 
 					let targetBoolean = false;
 					Table.range.forEach((range, index) => {

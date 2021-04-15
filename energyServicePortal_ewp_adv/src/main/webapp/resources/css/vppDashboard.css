@@ -568,3 +568,7 @@ h2.title {
 .dataTable.no-footer.no-stripe thead th, .dataTables_scrollHeadInner>.dataTable td, .dataTables_scrollHeadInner>.dataTable th {
 	vertical-align: middle;
 }
+
+.highcharts-stack-labels {
+	display: none!important;
+}
