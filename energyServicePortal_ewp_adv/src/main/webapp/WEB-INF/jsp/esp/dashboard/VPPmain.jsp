@@ -352,6 +352,8 @@
 
 			showError("존재하지 않는 그룹입니다.");
 		})
+
+		setInitList("locationULList")
 	});
 
 	const vppId = '${vgid}';
@@ -616,17 +618,15 @@
 
 				const weeklyMeanAccuracy = getWeeklyMeanAccuracy(res[6].data.data.each);
 
-				console.log(vppInfo)
-
 				TotalTrading(vppInfo.hour.map(x => x[1])); // 금일 총 전력거래량
 				TotalProfit(vppInfo.hour.map(x => x[1]), acc.day); // 금일 총 수익
 				Graph1.setOption(vppInfo["hour"].map(x => x[1]), Object.values(forecast.hour)); // 전력거래량 예측
 				Graph2.setOption(vppInfo.hour.map(x => x[1])); // 보조자원 예측
 				Graph3.setOption(vppInfo.month.map(x => x[1]), Object.values(forecast.month), acc.month, acc.year); // 수익 현황
-				PieGraph.draw(Object.values(acc.day.total).length ? Object.values(acc.day.total)[0].accuracy : 0); // 예측 정확도
+				PieGraph.draw(Object.values(acc.day.total).length ? Object.values(acc.day.total)[0].accuracy : "-"); // 예측 정확도
 				setResourceStatus(vppInfo.hour); // 자원 현황
 				SiteStatus.refresh(vppInfo.hour, forecast.day, acc.day, status, res[15]); // 발전 현황
-				setPrediction(forecast["15min"], vppInfo.day.map(x => x[1]), Object.values(acc.day.total).length ? Object.values(acc.day.total)[0].accuracy : 0); // 총 예측사이트 , 설비용량 , 정확도
+				setPrediction(forecast["15min"], vppInfo.day.map(x => x[1]), Object.values(acc.day.total).length ? Object.values(acc.day.total)[0].accuracy : "-"); // 총 예측사이트 , 설비용량 , 정확도
 				Table.refresh(vppInfo.hour, res[11], res[14].data.data, weeklyMeanAccuracy); // 주간 예측오차율
 			}).catch(error => {
 				console.log(error);
@@ -850,14 +850,24 @@
 				});
 			});
 
-			for (let i = 0; i < 24; i++) {
-				this.series[1].data.push(forecast.map(x => x[0].items).reduce((acc, cur) => acc + cur[i].energy, 0));
-			}
-			
 			let temp = Object.entries(nowData).sort((a, b) => a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0);
 				temp.pop();
+				
+			const today = String(interval.today[0]).substr(0, 8);
+			for (let i = 0; i < 24; i++) {
+				let indexTime = String(i).padStart(2, 0);
+			
+				if (!temp.find(x => x[0].substr(8, 2) === indexTime)) {
+					temp.push([today+indexTime+"0000", 0]);
+				}
+
+				this.series[1].data.push(forecast.map(x => x[0].items).reduce((acc, cur) => acc + cur[i].energy, 0));
+			}
+
+			temp = temp.sort((a, b) => a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0);
 
 			this.series[0].data = fillArray(temp.map(x => x[1]), 24);
+
 	
 			this.draw();
 		},
@@ -1403,8 +1413,8 @@
 				let now = energyData.find(v => v[0] === x.sid)[1];
 				let forecastEnergy = forecast[x.sid] ? forecast[x.sid][0].items[0].energy : 0;
 				let incentive = acc.each[x.sid] ? Object.values(acc.each[x.sid])[0].incentive : 0;
-				let active = Object.values(status.active[x.sid]["INV_PV"]).length ? ["normal", "정상"] : ["error", "이상"];
-				let overall = Object.values(status.overall[x.sid]["INV_PV"]).length ? ["normal", "정상"] : ["error", "이상"];
+				let active = status.active[x.sid]["INV_PV"].sid ? ["normal", "정상"] : ["error", "이상"];
+				let overall = status.overall[x.sid]["INV_PV"].sid ? ["normal", "정상"] : ["error", "이상"];
 				let weatherData = weather.data[x.sid].items[0];
 
 				tableTemplate += `
@@ -1501,7 +1511,7 @@
 	const setPrediction = (forecast, capacity, acc) => {
 		$("#totalSiteCount").html(Object.entries(forecast).length); // 총 예측 사이트
 		$("#totalCapacity").html(((capacity.reduce((acc, cur) => acc + cur.capacity, 0) / 1000 / 1000).toFixed(3) * 1).toLocaleString());
-		$("#totalAcc").html(acc === 0 ? "-" : (100 - (acc * 100)).toFixed(1));
+		$("#totalAcc").html(acc === "-" ? "-" : (100 - (acc * 100)).toFixed(1));
 	}
 
 	// 주간 예측오차율 
