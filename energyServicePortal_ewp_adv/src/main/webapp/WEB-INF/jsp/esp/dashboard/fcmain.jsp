@@ -112,7 +112,7 @@
 								</li>
 								<li id="realTimeGas">
 									<span>-</span>
-									N<span class="small-text">m</span>3/hr
+									<span>Liter/hr</span>
 								</li>
 							</ul>
 						</div>
@@ -229,7 +229,7 @@
 
 			<div class="fcmain-month-list">
 				<ul>
-					<li><fmt:message key='smain.totalMonthDev' /></li>
+					<li>이번달 총 발전량</li>
 					<li>
 						<span id="monthEnergy">-</span>
 						<span>kWh</span>
@@ -243,7 +243,7 @@
 					</li>
 				</ul>
 				<ul>
-					<li><fmt:message key='smain.avgMonthDevTime' /></li>
+					<li>이번달 발전시간 평균</li>
 					<li>
 						<span id="monthHours">-</span>
 						<span>Hrs</span>
@@ -786,8 +786,8 @@
 					const siteData = rspns['data'][siteId]
 						, nowEnergyData = siteData['energy'];
 
-					monathlyGenData[today.getDate()] = nowEnergyData;
-					monathlyMoneyData[today.getDate()] = siteData['money'];
+					monathlyGenData[today.getDate() - 1] = nowEnergyData;
+					monathlyMoneyData[today.getDate() - 1] = siteData['money'];
 				}
 			});
 
@@ -1103,9 +1103,14 @@
 			},
 			labels: {
 				formatter: function () {
-					const suffix = this.chart.yAxis[0].userOptions.title.text;
-					const yAxisValue = displayNumberFixedUnit(this.value, 'kWh', suffix, 1);
-					return yAxisValue[0];
+					let length = String(Math.round(this.value)).length;
+					if (length >= 7) {
+						return f1(this.value / 1000000) + 'M';
+					} else if ( (length >= 3) ){
+						return f1(this.value / 1000) + 'K';
+					} else {
+						return f1(this.value);
+					}
 				},
 				style: {
 					color: 'var(--grey)',
@@ -1188,7 +1193,6 @@
 					legendItemClick: function () {
 						var visibility = this.visible ? 'visible' : 'hidden';
 						this.legendItem.styles.color == 'var(--white60)'
-						// var visibility = this.visible ? 'visible' : 'hidden';
 					}
 				},
 				events: {
