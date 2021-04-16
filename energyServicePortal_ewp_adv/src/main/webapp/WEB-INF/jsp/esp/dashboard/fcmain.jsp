@@ -1097,7 +1097,7 @@
 				align: 'low',
 				rotation: 0,
 				y: 25,
-				x: 15,
+				x: 40,
 				style: {
 					color: 'var(--grey)',
 					fontSize: '12px',
@@ -1128,7 +1128,7 @@
 				align: 'low',
 				rotation: 0,
 				y: 25,
-				x: 0,
+				x: 20,
 				style: {
 					color: 'var(--grey)',
 					fontSize: '12px',
@@ -1196,12 +1196,6 @@
 					legendItemClick: function () {
 						var visibility = this.visible ? 'visible' : 'hidden';
 						this.legendItem.styles.color == 'var(--white60)'
-					}
-				},
-				events: {
-					click: function (event) {
-						const x = event.point.category;
-						goPvGen(x, 'hour');
 					}
 				}
 			},
