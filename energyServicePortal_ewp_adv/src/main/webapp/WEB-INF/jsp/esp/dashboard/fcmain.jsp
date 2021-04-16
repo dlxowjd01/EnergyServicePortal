@@ -757,8 +757,8 @@
 			for (let i = 1; i <= lastDay.getDate(); i++) { categories.push(String(i)); }
 
 			let thisYearGen = null;
-			const monathlyGenData = new Array(lastDay.getDate()).fill(0);
-			const monathlyMoneyData = new Array(lastDay.getDate()).fill(0);
+			const monthlyGenData = new Array(lastDay.getDate()).fill(0);
+			const monthlyMoneyData = new Array(lastDay.getDate()).fill(0);
 
 			response.forEach((rspns, index) => {
 				if (index === 0) {
@@ -778,16 +778,16 @@
 						(siteData.items).forEach(item => {
 							const baseTime = item['basetime']
 								, targetDay = Number(String(baseTime).substr(6, 2)) - 1;
-							monathlyGenData[targetDay] = item['energy'];
-							monathlyMoneyData[targetDay] = item['money'];
+							monthlyGenData[targetDay] = item['energy'];
+							monthlyMoneyData[targetDay] = item['money'];
 						});
 					}
 				} else {
 					const siteData = rspns['data'][siteId]
 						, nowEnergyData = siteData['energy'];
 
-					monathlyGenData[today.getDate() - 1] = nowEnergyData;
-					monathlyMoneyData[today.getDate() - 1] = siteData['money'];
+					monthlyGenData[today.getDate() - 1] = nowEnergyData;
+					monthlyMoneyData[today.getDate() - 1] = siteData['money'];
 				}
 			});
 
@@ -798,7 +798,7 @@
 				$('#yearEnergy').text(refinedYearData[0]).next().text(refinedYearData[1]);
 			}
 
-			const totalMonthGen = monathlyGenData.reduce( function add(sum, currValue) { return sum + currValue; });
+			const totalMonthGen = monthlyGenData.reduce( function add(sum, currValue) { return sum + currValue; });
 			const refinedTotalMonth = displayNumberFixedDecimal(totalMonthGen, 'Wh', 3, 1);
 			const totalMonthGenHour = totalMonthGen / sList[0]['capacities']['gen'] * 100;
 
@@ -810,12 +810,15 @@
 				$('#monthHours').text(f1(totalMonthGenHour)).next().text('hrs');
 			}
 
+			monthlyGenData.forEach((data, index) => { monthlyGenData[index] = data / 1000; });
+			monthlyMoneyData.forEach((data, index) => { monthlyMoneyData[index] = data / 1000; });
+
 			dailyChart.xAxis[0].update({categories: categories});
 			dailyChart.series.forEach((e, idx) => {
 				if (idx === 0) {
-					dailyChart.series[idx].update({data: monathlyGenData});
+					dailyChart.series[idx].update({data: monthlyGenData});
 				} else {
-					dailyChart.series[idx].update({data: monathlyMoneyData});
+					dailyChart.series[idx].update({data: monthlyMoneyData});
 				}
 			});
 			dailyChart.redraw();
@@ -1151,7 +1154,7 @@
 				return this.points.reduce(function (s, point) {
 					if(point.y !== 0) {
 						let suffix = point.series.userOptions.tooltip.valueSuffix;
-						return s + ' <br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + numberComma(Math.round(point.y / 10)) + ' ' + suffix;
+						return s + ' <br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + numberComma(Math.round(point.y)) + ' ' + suffix;
 					} else {
 						return s
 					}
