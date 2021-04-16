@@ -1671,7 +1671,7 @@
 	const getWeeklyMeanAccuracy = (eachSiteDailyAccuracy) => {
 		let weeklyAccuracyMean = {};
 		const weekStart = getWeekInterval()[0];
-		const daysInWeek = getDaysInWeek();
+		const daysInWeek = getLast7Days();
 
 		for(site in eachSiteDailyAccuracy) {
 			const siteData = eachSiteDailyAccuracy[site];

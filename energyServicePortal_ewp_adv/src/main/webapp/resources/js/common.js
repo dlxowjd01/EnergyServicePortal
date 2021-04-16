@@ -869,6 +869,25 @@ function getDaysInWeek() {
 	return daysInWeek;
 }
 
+function getLast7Days() {
+	const cur = new Date();
+
+	const [y, m, d] = [
+		cur.getFullYear(),
+		cur.getMonth(),
+		cur.getDate(),
+	];
+
+	let daysInWeek = [];
+
+	for(let i=0; i<7; i++) {
+		const thisDate = new Date(y, m, d - 7 + i);
+		const yyyymmddhhmmss = (String(thisDate.getFullYear())+String(thisDate.getMonth() + 1).padStart(2, 0)+String(thisDate.getDate()).padStart(2, 0)) * 1
+		daysInWeek.push(yyyymmddhhmmss);
+	}
+	return daysInWeek;
+}
+
 function getYearInterval() {
 	const cur = new Date();
 
