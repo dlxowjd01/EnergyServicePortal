@@ -496,7 +496,7 @@ h2.title {
 .vpp-3-2-graph > div:nth-child(2) > div { background: #00b2aa; }
 .vpp-3-2-graph > div:nth-child(3) > div { background: #26ccc8; }
 .vpp-3-2-graph > div:nth-child(4) > div { background: #78dbda; }
-.vpp-3-2-graph > div:nth-child(5) > div { background: #b0e9e8; /*border-radius: 0px 4px 4px 0px;*/ }
+.vpp-3-2-graph > div:nth-child(5) > div { background: #bbbbbb; /*border-radius: 0px 4px 4px 0px;*/ }
 
 .vpp-3-2 > p {
 	text-align: right;
@@ -524,7 +524,7 @@ h2.title {
 }
 
 #vpp-3-2-dataTable_wrapper {
-	height: 750px;
+	height: 745px;
 	overflow: initial;
 }
 
@@ -571,4 +571,8 @@ h2.title {
 
 .highcharts-stack-labels {
 	display: none!important;
+}
+
+.dataTables_info {
+	padding-top: 0!important;
 }

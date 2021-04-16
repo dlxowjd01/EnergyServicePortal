@@ -1413,8 +1413,8 @@
 				let now = energyData.find(v => v[0] === x.sid)[1];
 				let forecastEnergy = forecast[x.sid] ? forecast[x.sid][0].items[0].energy : 0;
 				let incentive = acc.each[x.sid] ? Object.values(acc.each[x.sid])[0].incentive : 0;
-				let active = status.active[x.sid]["INV_PV"].sid ? ["normal", "정상"] : ["error", "이상"];
-				let overall = status.overall[x.sid]["INV_PV"].sid ? ["normal", "정상"] : ["error", "이상"];
+				let active = Object.values(status.active[x.sid])[0].sid ? ["normal", "정상"] : ["error", "이상"];
+				let overall = Object.values(status.overall[x.sid])[0].sid ? ["normal", "정상"] : ["error", "이상"];
 				let weatherData = weather.data[x.sid].items[0];
 
 				tableTemplate += `
@@ -1601,7 +1601,7 @@
 				tableData[ix] = {
 					name: site.name,
 					capacity: capacity.find(x => x[0] === site.sid)[1].capacity,
-					activePower: activePower[site.sid]["INV_PV"].activePower ? activePower[site.sid]["INV_PV"].activePower : "-",
+					activePower: Object.values(activePower[site.sid])[0].activePower ? Object.values(activePower[site.sid])[0].activePower : "-",
 					todayError: todayError.each[site.sid] ? Object.values(todayError.each[site.sid])[0].accuracy * 100 : "-",
 					weekError: weekError[site.sid] ? weekError[site.sid] * 100 : "-",
 				}
