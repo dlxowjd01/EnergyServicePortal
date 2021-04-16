@@ -581,3 +581,5 @@ h2.title {
 .dataTables_info {
 	padding-top: 0!important;
 }
+
+.status-button:after { display: none!important; }

@@ -1482,7 +1482,7 @@
 				let forecastEnergy = forecast[x.sid] ? forecast[x.sid][0].items[0].energy : 0;
 				let incentive = acc.each[x.sid] ? Object.values(acc.each[x.sid])[0].incentive : 0;
 				let active = Object.values(status.active[x.sid])[0].sid ? ["normal", "정상"] : ["error", "이상"];
-				let overall = Object.values(status.overall[x.sid])[0].sid ? ["normal", "정상"] : ["error", "이상"];
+				let overall = Object.values(status.overall[x.sid])[0].sid ? ["normal", "정상"] : ["NA", "N/A"];
 				let weatherData = weather.data[x.sid].items[0];
 				let irr = 
 					weatherData.sensor_solar.irradiationPoa
