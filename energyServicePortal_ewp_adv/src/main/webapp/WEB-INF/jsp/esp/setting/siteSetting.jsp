@@ -2591,7 +2591,7 @@
 				}
 
 				if( td.eq(8).text() != '-' ) {
-					$('#newVppResIdList').prev().data("value", td.eq(9).text() ).contents().get(0).nodeValue = td.eq(9).text();
+					$('#newVppResIdList').prev().data("value", td.eq(8).text() ).contents().get(0).nodeValue = td.eq(8).text();
 				} else {
 					$('#newVppResIdList').prev().data("value", "").html("<fmt:message key='siteSetting.select' /><span class='caret'></span>");
 				}
