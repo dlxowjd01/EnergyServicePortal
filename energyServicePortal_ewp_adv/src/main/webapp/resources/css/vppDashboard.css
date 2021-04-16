@@ -98,8 +98,13 @@ h2.title {
 	height: 100%;
 }
 
-.vpp-1-2-2 .vpp-infobox > p:first-child {
-	margin-right: 25px;
+.vpp-1-2-2 > .flex-center-between > div {
+	width: calc(50% - 8px);
+}
+
+.vpp-1-2-2 > .flex-center-between > div > div {
+	width: 100%;
+	align-items: initial;
 }
 
 .vpp-1-3 {

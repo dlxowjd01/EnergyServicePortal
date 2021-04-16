@@ -71,21 +71,21 @@
 						<div>
 							<div class="vpp-infobox">
 								<p>전일</p>
-								<p>- %</p>
+								<p><span id="accLastDay">-</span> %</p>
 							</div>
 							<div class="vpp-infobox">
 								<p>전주</p>
-								<p>- %</p>
+								<p><span id="accLastWeek">-</span> %</p>
 							</div>
 						</div>
 						<div>
 							<div class="vpp-infobox">
 								<p>전월</p>
-								<p>- %</p>
+								<p><span id="accLastMonth">-</span> %</p>
 							</div>
 							<div class="vpp-infobox">
 								<p>전년</p>
-								<p>- %</p>
+								<p><span id="accLastYear">-</span> %</p>
 							</div>
 						</div>
 					</div>
@@ -341,7 +341,7 @@
 		}).done(result => { 
 			console.log(result)
 
-			if (result.sites.length === 0) {
+			if (!result.sites || result.sites.length === 0) {
 				showError("등록된 사이트가 없습니다.");
 			} else {
 				App.sites = result.sites;
@@ -599,12 +599,24 @@
 				// 	contentType: "application/json",
 				// 	data: JSON.stringify({
 				// 		"sids": sids,
-				// 		startTime: interval.year[0],
-				// 		endTime: interval.year[1],
+				// 		"startTime": interval.year[0],
+				// 		"endTime": interval.today[1],
 				// 		"interval": "year",
 				// 		"cal_incentive": true,
+				// 		"includeEachSite": false,
 				// 	}),
 				// }),
+				$.ajax({ // 17
+					type: "GET",
+					url: apiHost + "/vpp/energy/sites",
+					data: {
+						sid: sids,
+						startTime: interval.year[0],
+						endTime: interval.year[1],
+						interval: "month",
+						detailByBasetime: true,
+					},
+				}),
 			];
 
 			new Promise ((resolve, reject) => {
@@ -619,12 +631,15 @@
 					"15min" : Object.entries(res[1].data),
 					"month" : Object.entries(res[8].data),
 					"hour" : Object.entries(res[13].data),
+					"year" : Object.entries(res[16].data),
 				};
 				const acc = {
 					"day": res[2].data.data,
 					"month": res[6].data.data,
 					"week": res[16].data.data,
-					"year": [] // res[17].data.data
+					"year": [],
+					"lastMonth": [],
+					"lastYear": [] // res[17].data.data
 				};
 				const forecast = {
 					"hour": res[3].data,
@@ -642,10 +657,11 @@
 
 				TotalTrading(vppInfo.hour.map(x => x[1])); // 금일 총 전력거래량
 				TotalProfit(vppInfo.hour.map(x => x[1]), acc.day); // 금일 총 수익
-				Graph1.setOption(vppInfo["hour"].map(x => x[1]), Object.values(forecast.hour)); // 전력거래량 예측
+				Graph1.setOption(vppInfo.hour.map(x => x[1]), Object.values(forecast.hour)); // 전력거래량 예측
 				Graph2.setOption(vppInfo.hour.map(x => x[1])); // 보조자원 예측
-				Graph3.setOption(vppInfo.month.map(x => x[1]), Object.values(forecast.month), acc.month, acc.year); // 수익 현황
+				Graph3.setOption(vppInfo.month.map(x => x[1]), vppInfo.year.map(x => x[1]), acc.month, acc.year); // 수익 현황
 				PieGraph.draw(Object.values(acc.day.total).length ? Object.values(acc.day.total)[0].accuracy : "-"); // 예측 정확도
+				PieGraph.setTextData(Object.values(acc.month.total), Object.values(acc.week.total)[0].accuracy, acc.lastMonth, acc.lastYear); // 예측 정확도 라벨
 				setResourceStatus(vppInfo.hour); // 자원 현황
 				SiteStatus.refresh(vppInfo.hour, forecast.day, acc.day, status, res[15]); // 발전 현황
 				setPrediction(forecast["15min"], vppInfo.day.map(x => x[1]), Object.values(acc.day.total).length ? Object.values(acc.day.total)[0].accuracy : "-"); // 총 예측사이트 , 설비용량 , 정확도
@@ -953,6 +969,15 @@
 					}]
 				}],
 			});
+		},
+
+		setTextData(day, week, month, year) {
+			day.pop()
+			console.log(day, week, month, year)
+			$("#accLastDay").html((100 - (day.pop().accuracy) * 100).toFixed(1));
+			$("#accLastWeek").html((100 - (week) * 100).toFixed(1));
+			// $("#accLastMonth").html((100 - (day) * 100).toFixed(1));
+			// $("#accLastYear").html((100 - (day) * 100).toFixed(1));
 		}
 	}
 
@@ -1257,12 +1282,12 @@
 			});
 		},
 
-		setOption(now, forecast, accMonth, accYear) {
+		setOption(smpMonth, smpYear, accMonth, accYear) {
 			this.series[0].data = this.series[1].data = [];
 			
 			const nowData = {};
 
-			$.each(now.map(x => x.detail), (ix, el) => {
+			$.each(smpMonth.map(x => x.detail), (ix, el) => {
 				$.each(el, (k, v) => {
 					nowData[k] = (nowData[k] ? nowData[k] : 0);
 					if (k !== "devices") {
@@ -1273,16 +1298,17 @@
 			
 			let temp = Object.entries(nowData).sort((a, b) => a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0);
 				temp.pop();
-
-			for (let i = 0; i < getLastDay(); i++) {
-				this.series[0].data.push(forecast.map(x => x[0].items).reduce((acc, cur) => acc + cur[i] ? cur[i].money : 0, 0));
-			}
+			
+			fillArray(Object.entries(accMonth.total).map(x => x[1].incentive), getLastDay()).forEach((v, k) => {
+				this.series[0].data.push(v);
+			});
 			this.series[1].data = fillArray(temp.map(x => x[1]), getLastDay());
 
-			$("#smpMonth").html(Math.round(now.reduce((acc, cur) => acc + cur.money, 0) / 1000).toLocaleString())
-			$("#smpYear").html("0");
+			$("#smpMonth").html(Math.round(smpMonth.reduce((acc, cur) => acc + cur.money, 0) / 1000).toLocaleString())
+			$("#smpYear").html(Math.round(smpYear.reduce((acc, cur) => acc + cur.money, 0) / 1000).toLocaleString());
 			$("#accMonth").html(Math.round(Object.values(accMonth.total).reduce((acc, cur) => acc + cur.incentive, 0) / 1000).toLocaleString());
 			// $("#accYear").html(Math.round(Object.values(accYear.total).reduce((acc, cur) => acc + cur.incentive, 0) / 1000).toLocaleString());
+			console.log(smpMonth, smpYear, accMonth, accYear)
 			
 			this.draw();
 		},
@@ -1439,6 +1465,7 @@
 		refresh(energyData, forecast, acc, status, weather) {
 			let tableTemplate = ``;
 
+			console.log(status)
 			App.sites.map(x => {
 				let now = energyData.find(v => v[0] === x.sid)[1];
 				let forecastEnergy = forecast[x.sid] ? forecast[x.sid][0].items[0].energy : 0;
@@ -1446,7 +1473,12 @@
 				let active = Object.values(status.active[x.sid])[0].sid ? ["normal", "정상"] : ["error", "이상"];
 				let overall = Object.values(status.overall[x.sid])[0].sid ? ["normal", "정상"] : ["error", "이상"];
 				let weatherData = weather.data[x.sid].items[0];
-				console.log(weatherData)
+				let irr = 
+					weatherData.sensor_solar.irradiationPoa
+					? weatherData.sensor_solar.irradiationPoa
+					: weatherData.irradiationPoa;
+
+				irr = irr === null && "-";
 
 				tableTemplate += `
 					<tr class="vpp-focus-map" data-sid="${'${x.sid}'}">
@@ -1469,7 +1501,7 @@
 									<div>
 										<ul>
 											<li>일사량</li>
-											<li>- kWh/m.day</li>
+											<li>${'${irr}'} kWh/m.day</li>
 										</ul>
 										<div class="flex-center">
 											<ul>
