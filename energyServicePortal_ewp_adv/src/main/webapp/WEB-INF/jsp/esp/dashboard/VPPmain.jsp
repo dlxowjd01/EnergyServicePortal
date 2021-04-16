@@ -592,7 +592,18 @@
 						"includeEachSite": true,
 					}),
 				}),
-				// $.ajax({ // 17 // 당해
+				$.ajax({ // 17
+					type: "GET",
+					url: apiHost + "/vpp/energy/sites",
+					data: {
+						sid: sids,
+						startTime: interval.year[0],
+						endTime: interval.year[1],
+						interval: "month",
+						detailByBasetime: true,
+					},
+				}),
+				// $.ajax({ // n // 당해 incentive
 				// 	url: apiHost + "/energy/forecast/accuracy",
 				// 	type: "POST",
 				// 	dataType: "json",
@@ -631,7 +642,7 @@
 					"15min" : Object.entries(res[1].data),
 					"month" : Object.entries(res[8].data),
 					"hour" : Object.entries(res[13].data),
-					"year" : Object.entries(res[16].data),
+					"year" : Object.entries(res[17].data),
 				};
 				const acc = {
 					"day": res[2].data.data,
