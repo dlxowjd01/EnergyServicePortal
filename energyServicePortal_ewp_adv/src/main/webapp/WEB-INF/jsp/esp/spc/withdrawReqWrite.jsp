@@ -769,8 +769,8 @@
 				</div>
 
 				<div class="btn-wrap-type05"><!--
-				--><button type="button" onclick="location.href='/spc/transactionCalendar.do'" class="btn btn-type03 w-80px">목록</button><!--
-				--><button type="submit" class="btn btn-type03 w-80px mr-12">임시 저장</button><!--
+				--><button type="button" onclick="location.href='/spc/transactionCalendar.do'" class="btn-type03 w-80px">목록</button><!--
+				--><button type="submit" class="btn-type03 w-80px mr-12">임시 저장</button><!--
 				--><button type="submit" class="btn btn-type">제출</button><!--
 			--></div>
 			</div>

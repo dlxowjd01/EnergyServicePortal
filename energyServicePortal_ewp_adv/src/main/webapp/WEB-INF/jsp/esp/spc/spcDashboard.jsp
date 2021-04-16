@@ -271,6 +271,10 @@
 
 	let spcTable = null;
 
+	let f0 = d3.format(',.0f');
+	let f1 = d3.format(',.1f');
+	let f2 = d3.format(',.2f');
+
 	const summary = (rank, expend, expendW, prepare, management, lastMonth, lastYear) => {
 		const spcDetail = $('#spcCategory').next().find('div.spcDetail');
 		spcDetail.eq(0).find('span').eq(0).html(rank + '위');
@@ -426,7 +430,6 @@
 							return '-';
 						} else {
 							let template = ``;
-							let f1 = d3.format(',.1f');
 							if (data > 0) {
 								template = `<img src="/img/spcDashboard/up.svg" alt="증가" /> ${'${f1(data)}'}`;
 							} else if (data < 0) {
@@ -448,7 +451,6 @@
 							return '-';
 						} else {
 							let template = ``;
-							let f1 = d3.format(',.1f');
 							if (data > 0) {
 								template = `<img src="/img/spcDashboard/up.svg" alt="증가" /> ${'${f1(data)}'}`;
 							} else if (data < 0) {
@@ -845,8 +847,6 @@
 		}).then(({capacityList, contractUnitPriceList, insuranceCostList, repairMaintenanceCostList, expenditureInfo, lastYearContractUnitPrice, lastYearInsuranceInfo, lastYearRepair, tableData}) => {
 			const lastMonth = new Date(); lastMonth.setDate(0);
 			const currentMonth = new Date().getMonth();
-			let f1 = d3.format(',.1f');
-			let f0 = d3.format(',.0f');
 
 			//발전 현황 (설비 용량)
 			const refineCapacity = displayNumberFixedDecimal(capacityList[currentMonth - 1], 'kW', 3, 2);
@@ -1372,7 +1372,7 @@
 				return this.points.reduce(function (s, point) {
 					if(point.y !== 0) {
 						let suffix = point.series.userOptions.tooltip.valueSuffix;
-						return s + ' <br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + numberComma(point.y) + ' ' + suffix;
+						return s + ' <br/><span style="color:' + point.color + '">\u25CF</span> ' + point.series.name + ': ' + f0(point.y) + ' ' + suffix;
 					} else {
 						return s
 					}
@@ -1415,12 +1415,6 @@
 						var visibility = this.visible ? 'visible' : 'hidden';
 						this.legendItem.styles.color == 'var(--white60)'
 						// var visibility = this.visible ? 'visible' : 'hidden';
-					}
-				},
-				events: {
-					click: function (event) {
-						const x = event.point.category;
-						goPvGen(x, 'hour');
 					}
 				}
 			},

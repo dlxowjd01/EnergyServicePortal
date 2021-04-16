@@ -819,9 +819,9 @@
 				</div>
 
 				<div class="btn-wrap-type05"><!--
-				--><button type="button" onclick="location.href='/spc/withdrawReqStatus.do'" class="btn btn-type03 w-80px <c:if test="${param.req_edit_req_status ne 9}"> mr-12 </c:if>">목록</button><!--
+				--><button type="button" onclick="location.href='/spc/withdrawReqStatus.do'" class="btn-type03 w-80px <c:if test="${param.req_edit_req_status ne 9}"> mr-12 </c:if>">목록</button><!--
 				<c:if test="${param.req_edit_req_status eq 9}">
-				--><button type="submit" class="btn btn-type03 w-80px mr-12">임시 저장</button><!--
+				--><button type="submit" class="btn-type03 w-80px mr-12">임시 저장</button><!--
 				</c:if>
 				--><button type="submit" class="btn btn-type">제출</button><!--
 			--></div>
