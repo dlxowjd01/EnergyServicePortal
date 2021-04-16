@@ -2140,19 +2140,6 @@
 
 
 			$("#newSiteType li").on("click", function() {
-				let val = $(this).data("value");
-				let newRes = $("#newResList");
-				let items = newRes.find("li");
-
-				newRes.prev().data({ "name" : "", "value": "" }).contents().get(0).nodeValue = "선택";
-				if(val == "0") {
-					items.eq(0).removeClass("hidden").siblings().addClass("hidden");
-				} else if(val == "1"){
-					items.eq(0).addClass("hidden").siblings().removeClass("hidden");
-				} else {
-					items.removeClass("hidden");
-				}
-
 				validateForm();
 			});
 
@@ -4209,7 +4196,7 @@
 									<small class="hidden warning"><fmt:message key='siteSetting.errorTxt.12' /></small>
 								</div>
 
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label asterisk"><fmt:message key='siteSetting.power' /></span></div>
+								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label asterisk"><fmt:message key='siteSetting.resourceType' /></span></div>
 								<div class="col-xl-2 col-lg-6 col-md-4 col-sm-10 pl-0">
 									<div class="dropdown">
 										<button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="<fmt:message key="dropDown.select" />"><fmt:message key='siteSetting.select' /><span class="caret"></span></button>
