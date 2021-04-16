@@ -432,7 +432,7 @@
 						$('#realTimeHeat span:first-child').text('-').next().text('');
 					} else {
 						const energy = displayNumberFixedDecimal(rspns['INV_FC']['accumActiveEnergy'], 'Wh', 3, 1)
-							, heat = displayNumberFixedDecimal(rspns['INV_FC']['accumHeatEnergy'], 'cal/h', 3, 1)
+							, heat = displayNumberFixedDecimal(rspns['INV_FC']['accumHeatEnergy'], 'Wh', 3, 1)
 							, realTimeGas = rspns['INV_FC']['gasUsage']
 							, realTimeActive = displayNumberFixedDecimal(rspns['INV_FC']['activePower'], 'W', 3, 1)
 							, realTimeHeat = displayNumberFixedDecimal(rspns['INV_FC']['heatPower'], 'W', 3, 1)
