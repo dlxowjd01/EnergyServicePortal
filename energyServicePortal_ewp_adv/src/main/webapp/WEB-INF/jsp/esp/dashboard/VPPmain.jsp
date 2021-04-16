@@ -366,6 +366,7 @@
 		today: getDayInterval(),
 		month: getMonthInterval(),
 		year: getYearInterval(),
+		week: getLast7DaysInterval()
 	};
 
 	// 메인 객체
@@ -577,7 +578,21 @@
 						"formId": "v2",
 					}),
 				}),
-				// $.ajax({ // 16 // 당해
+				$.ajax({ // 16 // 주간오차
+					url: apiHost + "/energy/forecast/accuracy",
+					type: "POST",
+					dataType: "json",
+					contentType: "application/json",
+					data: JSON.stringify({
+						"sids": sids,
+						"startTime": interval.week[0],
+						"endTime": interval.week[1],
+						"interval": "custom",
+						"cal_incentive": false,
+						"includeEachSite": true,
+					}),
+				}),
+				// $.ajax({ // 17 // 당해
 				// 	url: apiHost + "/energy/forecast/accuracy",
 				// 	type: "POST",
 				// 	dataType: "json",
@@ -608,7 +623,8 @@
 				const acc = {
 					"day": res[2].data.data,
 					"month": res[6].data.data,
-					"year": [] // res[16].data.data
+					"week": res[16].data.data,
+					"year": [] // res[17].data.data
 				};
 				const forecast = {
 					"hour": res[3].data,
@@ -621,7 +637,8 @@
 					"overall": res[10],
 				};
 
-				const weeklyMeanAccuracy = getWeeklyMeanAccuracy(res[6].data.data.each);
+				// const weeklyMeanAccuracy2 = getWeeklyMeanAccuracy(res[6].data.data.each); // [일~오늘] 에서 [7일전~어제(api호출값)]로 변경
+				const weeklyMeanAccuracy = convertFormatWeeklyAccuracy(acc.week.each);
 
 				TotalTrading(vppInfo.hour.map(x => x[1])); // 금일 총 전력거래량
 				TotalProfit(vppInfo.hour.map(x => x[1]), acc.day); // 금일 총 수익
@@ -1666,6 +1683,14 @@
 		setTimeout(function () {
 			$('#errorModal').modal('hide');
 		}, 2000);
+	}
+
+	const convertFormatWeeklyAccuracy = (each) => {
+		let result = {};
+		for(sid in each) {
+			result[sid] = Object.values(each[sid])[0].accuracy;
+		}
+		return result;
 	}
 
 	const getWeeklyMeanAccuracy = (eachSiteDailyAccuracy) => {

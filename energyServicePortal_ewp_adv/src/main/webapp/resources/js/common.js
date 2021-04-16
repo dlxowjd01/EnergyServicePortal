@@ -888,6 +888,26 @@ function getLast7Days() {
 	return daysInWeek;
 }
 
+function getLast7DaysInterval() {
+	const cur = new Date();
+
+	const [y, m, d] = [
+		cur.getFullYear(),
+		cur.getMonth(),
+		cur.getDate(),
+	];
+
+	const [start, end] = [
+		new Date(y, m, d - 7),
+		new Date(y, m, d),
+	];
+
+	return [
+		(String(start.getFullYear())+String(start.getMonth() + 1).padStart(2, 0)+String(start.getDate()).padStart(2, 0)+`000000`) * 1,
+		(String(end.getFullYear())+String(end.getMonth() + 1).padStart(2, 0)+String(end.getDate()).padStart(2, 0)+`000000`) * 1,
+	];
+}
+
 function getYearInterval() {
 	const cur = new Date();
 
