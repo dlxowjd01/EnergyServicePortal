@@ -143,22 +143,22 @@
 						<h3>SMP 수익</h3>
 						<div class="vpp-infobox">
 							<p>당월</p>
-							<p><span id="smpMonth">-</span> 만원</p>
+							<p><span id="smpMonth">-</span> 천원</p>
 						</div>
 						<div class="vpp-infobox">
 							<p>당해</p>
-							<p><span id="smpYear">-</span> 만원</p>
+							<p><span id="smpYear">-</span> 천원</p>
 						</div>
 					</div>
 					<div>
 						<h3>예측 수익</h3>
 						<div class="vpp-infobox">
 							<p>당월</p>
-							<p><span id="accMonth">-</span> 원</p>
+							<p><span id="accMonth">-</span> 천원</p>
 						</div>
 						<div class="vpp-infobox">
 							<p>당해</p>
-							<p><span id="accYear">-</span> 원</p>
+							<p><span id="accYear">-</span> 천원</p>
 						</div>
 					</div>
 				</div>
@@ -345,15 +345,20 @@
 				showError("등록된 사이트가 없습니다.");
 			} else {
 				App.sites = result.sites;
+
 				App.init();
 			}
 		}).fail(error => {
 			console.error(error);
-
+			
 			showError("존재하지 않는 그룹입니다.");
-		})
+		});
 
-		setInitList("locationULList")
+		setInterval(_ => {
+			App.init();
+		}, 1000 * 60 * 60);
+
+		setInitList("locationULList");
 	});
 
 	const vppId = '${vgid}';
@@ -634,7 +639,9 @@
 				showError("오류가 발생했습니다.");
 			});
 
-			Table.init();
+			if (!Table.target) {
+				Table.init();
+			}
 			App.setEvent();
 		},
 
@@ -698,9 +705,9 @@
 		const smp = now.reduce((acc, cur) => acc + cur.money, 0);
 		const incentive = Object.values(forecast.total).length ? Object.values(forecast.total)[0].incentive : 0;
 		
-		$("#todaySMP").html((smp / 1000).toFixed(2));
-		$("#todayPredictionMoney").html((incentive / 1000).toFixed(2));
-		$("#totalMoney").html(((incentive + smp) / 1000).toFixed(2))
+		$("#todaySMP").html(Math.round(smp / 1000).toLocaleString());
+		$("#todayPredictionMoney").html(Math.round(incentive / 1000).toLocaleString());
+		$("#totalMoney").html(Math.round((incentive + smp) / 1000).toLocaleString())
 	}
 
 	// 전력거래량 예측
@@ -837,6 +844,8 @@
 		},
 
 		setOption(now, forecast) { // 고쳐야됌
+			this.series[0].data = this.series[1].data = [];
+
 			const nowData = {};
 
 			now = now.map(x => x.detail);
@@ -1063,6 +1072,8 @@
 		},
 
 		setOption(data) {
+			this.series[0].data = this.series[1].data = [];
+
 			let now = {};
 			let forecast = {};
 
@@ -1230,6 +1241,8 @@
 		},
 
 		setOption(now, forecast, accMonth, accYear) {
+			this.series[0].data = this.series[1].data = [];
+			
 			const nowData = {};
 
 			$.each(now.map(x => x.detail), (ix, el) => {
@@ -1249,10 +1262,10 @@
 			}
 			this.series[1].data = fillArray(temp.map(x => x[1]), getLastDay());
 
-			$("#smpMonth").html(((now.reduce((acc, cur) => acc + cur.money, 0) / 1000 / 1000).toFixed(2) * 1).toLocaleString())
+			$("#smpMonth").html(Math.round(now.reduce((acc, cur) => acc + cur.money, 0) / 1000).toLocaleString())
 			$("#smpYear").html("0");
-			$("#accMonth").html(((Object.values(accMonth.total).reduce((acc, cur) => acc + cur.incentive, 0)).toFixed(2) * 1).toLocaleString());
-			// $("#accYear").html(((Object.values(accYear.total).reduce((acc, cur) => acc + cur.incentive, 0)).toFixed(2) * 1).toLocaleString());
+			$("#accMonth").html(Math.round(Object.values(accMonth.total).reduce((acc, cur) => acc + cur.incentive, 0) / 1000).toLocaleString());
+			// $("#accYear").html(Math.round(Object.values(accYear.total).reduce((acc, cur) => acc + cur.incentive, 0) / 1000).toLocaleString());
 			
 			this.draw();
 		},
@@ -1416,6 +1429,7 @@
 				let active = Object.values(status.active[x.sid])[0].sid ? ["normal", "정상"] : ["error", "이상"];
 				let overall = Object.values(status.overall[x.sid])[0].sid ? ["normal", "정상"] : ["error", "이상"];
 				let weatherData = weather.data[x.sid].items[0];
+				console.log(weatherData)
 
 				tableTemplate += `
 					<tr class="vpp-focus-map" data-sid="${'${x.sid}'}">
@@ -1471,15 +1485,15 @@
 									<div>
 										<div class="vpp-infobox">
 											<p>금일 SMP 수익</p>
-											<p>${'${((now.money / 1000).toFixed(2) * 1).toLocaleString()}'} 천원</p>
+											<p>${'${Math.round(now.money / 1000).toLocaleString()}'} 천원</p>
 										</div>
 										<div class="vpp-infobox">
 											<p>금일 예측 수익</p>
-											<p>${'${((incentive / 1000).toFixed(2) * 1).toLocaleString()}'} 천원</p>
+											<p>${'${Math.round(incentive / 1000).toLocaleString()}'} 천원</p>
 										</div>
 										<div class="vpp-infobox">
 											<p>금일 총 수익</p>
-											<p>${'${(((incentive + now.money) / 1000).toFixed(2) * 1).toLocaleString()}'} 천원</p>
+											<p>${'${Math.round((incentive + now.money) / 1000).toLocaleString()}'} 천원</p>
 										</div>
 									</div>
 								</div>
@@ -1497,6 +1511,8 @@
 
 		rolling() {
 			clearInterval(this.interval);
+			
+			this.idx = 0;
 			if ($(".auto-rolling").hasClass("playing")) {
 				this.len = $(".vpp-focus-map").length - 1;
 				this.interval = setInterval(_ => {
@@ -1517,13 +1533,6 @@
 	// 주간 예측오차율 
 	const Table = {
 		target: null,
-		range: [
-			{min: 0, max: 6, index: 0, count: 0},
-			{min: 6, max: 8, index: 1, count: 0},
-			{min: 8, max: 10, index: 2, count: 0},
-			{min: 10, max: 20, index: 3, count: 0},
-			{min: 20, max: 100, index: 4, count: 0},
-		],
 
 		init() {
 			Table.target = $("#vpp-3-2-dataTable").DataTable({
@@ -1558,7 +1567,7 @@
 						},
 					},
 					{
-						title: "금일 <br> 오차<br>",
+						title: "금일 오차",
 						data: 'todayError',
 						className: 'dt-head-right dt-body-right',
 						render(data) {
@@ -1566,7 +1575,7 @@
 						},
 					},
 					{
-						title: "주간 <br> 오차<br>",
+						title: "주간 오차",
 						data: 'weekError',
 						className: 'dt-head-right dt-body-right',
 						render(data) {
@@ -1596,6 +1605,14 @@
 			Table.target.clear();
 			
 			const tableData = [];
+
+			Table.range = [
+				{min: 0, max: 6, index: 0, count: 0},
+				{min: 6, max: 8, index: 1, count: 0},
+				{min: 8, max: 10, index: 2, count: 0},
+				{min: 10, max: 20, index: 3, count: 0},
+				{min: 20, max: 100, index: 4, count: 0},
+			];
 
 			App.sites.forEach((site, ix) => {
 				tableData[ix] = {
@@ -1641,40 +1658,10 @@
 			Table.target.draw();
 		},
 	}
-	
-	// 금일 데이터
-	const getNow = (intv = "day") => {
-		return $.ajax({
-			url: apiHost+"/energy/now/sites",
-			type: "get",
-			data: {
-				sids: App.sids,
-				metering_type: "2",
-				interval: intv,
-			},
-		});
-	}
 
-	// 금일 예측 데이터
-	const getForecast = (intv = "day") => {
-		return $.ajax({
-			url: apiHost+"/get/energy/forecasting/sites",
-			type: "POST",
-			dataType: 'json',
-			contentType: "application/json",
-			data: JSON.stringify({
-				"sid": App.sids,
-				"startTime": interval.today[0],
-				"endTime": interval.today[1],
-				"interval": intv,
-				"displayType": "dashboard",
-				"formId": "v2"
-			}),
-		});
-	}
-
+	// Etc. ƒunction
 	const showError = (msg) => {
-		$('#errMsg').text(msg);
+		$('#errMsg').text(msg);2
 		$('#errorModal').modal('show');
 		setTimeout(function () {
 			$('#errorModal').modal('hide');
