@@ -2932,21 +2932,17 @@
 												} else {
 													if(!isEmpty(headerData[el.key])) {
 														if(typeof tempObj['value'] == 'number') {
-															// tempObj['value'] = Number(value) + Number(tempObj['value']);
 															if(rowData[0].operation === 1 || el.key === 'accumActiveEnergy') {tempObj['value'] = Number(value) + Number(tempObj['value']);}
 															tempObj['cnt'] = Number(tempObj['cnt']) + 1;
 														} else {
-															// tempObj['value'] = value;
 															if(rowData[0].operation === 1) {tempObj['value'] = value;}
 															tempObj['cnt'] = 1;
 														}
 													} else {
 														if(typeof tempObj['value'] == 'number') {
-															// tempObj['value'] = Number(value);
 															if(rowData[0].operation === 1 || el.key === 'accumActiveEnergy') {tempObj['value'] = Number(value);}
 															tempObj['cnt'] = 1;
 														} else {
-															// tempObj['value'] = value;
 															if(rowData[0].operation === 1 || el.key === 'accumActiveEnergy') {tempObj['value'] = value;}
 															tempObj['cnt'] = 1;
 														}
@@ -2969,7 +2965,6 @@
 													if( el.key.match('activePower') || el.key.match('dcPower') ) {
 														let strVal = '';
 														if(el.key.startsWith("reactive")){
-														// console.log("el.key222==", el.key, "value===", value)
 														// Unit: Var => kVAR, mVAR, gVAR, tVAR)
 															if(!isEmpty(value)) {
 																if(value < 1000) {
@@ -4835,6 +4830,15 @@
 						formId: 'v2'
 					}
 				});
+
+				urls.push({
+					url: apiHost + '/get/status/health',
+					type: 'POST',
+					contentType: 'application/json',
+					data: JSON.stringify({
+						sids: siteId
+					})
+				});
 			}
 
 			//ajax 한번에 실행
@@ -4959,6 +4963,10 @@
 							$('#centerTbody tr td:nth-child(2)').html(tempEnergy[0] + '<em>&nbsp;kWh</em>');
 							$('#centerTbody tr td:nth-child(3)').html(tempEnergyHours + '<em>&nbsp;H</em>');
 							$('#centerTbody tr td:nth-child(5)').empty().html(tempSMP + '<em>&nbsp;' + tempSmpUnit + '</em>');
+						} else {
+							$('#centerTbody tr td:nth-child(2)').html('- <em>&nbsp;kWh</em>');
+							$('#centerTbody tr td:nth-child(3)').html('- <em>&nbsp;H</em>');
+							$('#centerTbody tr td:nth-child(5)').empty().html('- <em>&nbsp;천원</em>');
 						}
 					} else if ((url).match(apiForecastingSite)) {
 						let todayForeEnergy = 0;
@@ -4995,8 +5003,14 @@
 								targetActivePower = cmdBody.targetPower;
 							}
 						}
+					} else if ((url).match('/get/status/health')) {
+						const sites = data['sites'];
+						if (isEmpty(sites) || sites[0]['rtus'].length <= 0) {
+							const dbTime = new Date($('.dbTime').data('timestamp'));
+							$('#communicationErrorDate').text(dbTime.format('yyyy년 MM월 dd일 HH시 mm분 ss초'));
+							$('#communicationErrorModal').modal('show');
+						}
 					}
-
 				});
 
 				if (oid.match('testkpx')) {
@@ -5022,10 +5036,10 @@
 							if(sList[0].resource_type == "1") {
 								pieChart.series[0].name = "태양광"
 								e.update({y: usage});
-							} else if(sList[0].resource_type == "2"){
+							} else if(sList[0].resource_type == "2") {
 								pieChart.series[0].name = "풍력"
 								e.update({y: usage});
-							} else if(sList[0].resource_type == "3"){
+							} else if(sList[0].resource_type == "3") {
 								pieChart.series[0].name = "소수력"
 								e.update({y: usage});
 							}
