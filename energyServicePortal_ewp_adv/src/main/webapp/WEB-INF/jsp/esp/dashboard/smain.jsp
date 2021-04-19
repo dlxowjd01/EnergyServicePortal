@@ -5097,6 +5097,7 @@
 						sid: siteId,
 						startTime: formYesterData.startTime,
 						endTime: formYesterData.endTime,
+						displayType: 'dashboard',
 						interval: 'day',
 						formId: 'v2'
 						
