@@ -356,7 +356,7 @@
 
 		setInterval(_ => {
 			App.init();
-		}, 1000 * 60 * 60);
+		}, 1000 * 60 * 30);
 
 		setInitList("locationULList");
 	});

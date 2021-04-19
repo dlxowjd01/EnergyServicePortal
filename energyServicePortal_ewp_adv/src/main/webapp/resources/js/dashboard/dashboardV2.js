@@ -500,20 +500,18 @@ const minAjax = async () => {
 								}
 							}
 						});
-						capacity = '';
-						siteList.forEach((siteConfig) => {
-							capacity = (siteConfig.sid === site_id) ? siteConfig.capacity : capacity;
-						});
+
+						capacity = siteList.find(x => x.sid === site_id).capacities.gen;
 
 						$('#siteList tr.dbclickopen').each(function() {
 							if ($(this).data('sid') === site_id) {
-								$(this).find('td:eq(5)').text(numberComma(Math.round(capacity / 1000)));
+								$(this).find('td:eq(5)').text(displayNumberFixedUnit(siteList.find(x => x.sid === site_id).capacities.gen, "W", "kW", 0)[0]);
 								$(this).data('operation', operation);
 
 								const detail = $(this).next('tr.detail-info');
 								detail.find('.di-top-sec .fl .tx2').text(irradiationPoa + ' W/㎡');
 								detail.find('.di-bottom-sec .left .di-list li:eq(0) span.di-li-text').text(numberComma(Math.round(activePower / 1000)));
-								detail.find('.di-bottom-sec .right .di-list li:eq(0) span.di-li-text').text(numberComma(Math.round(capacity / 1000)));
+								detail.find('.di-bottom-sec .right .di-list li:eq(0) span.di-li-text').text(displayNumberFixedUnit(siteList.find(x => x.sid === site_id).capacities.gen, "W", "kW", 0)[0]);
 								detail.find('.di-bottom-sec .right .di-list li:eq(1) span.di-li-text').text(numberComma(inverterCnt));
 
 								let activePercent = 0, title = '', etc = 0;
@@ -1700,7 +1698,6 @@ const searchSite = async function (siteSids) {
 					}
 
 					const curSite = siteList.find(x => x.sid === siteId);
-					console.log(curSite);
 
 					if (targetDevice) {
 						if (isNaN(capacity)) { capacity = '-'; }
