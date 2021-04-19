@@ -458,7 +458,7 @@
 						"formId": "v2"
 					}),
 				}),
-				$.ajax({ // 6
+				/* $.ajax({ // 6
 					url: apiHost + "/energy/forecast/accuracy",
 					type: "POST",
 					dataType: "json",
@@ -470,7 +470,7 @@
 						"interval": "day",
 						"cal_incentive": true,
 					}),
-				}),
+				}), */
 				$.ajax({ // 7
 					url: apiHost + "/get/energy/forecasting/sites",
 					type: "POST",
@@ -640,14 +640,15 @@
 				const vppInfo = {
 					"day" : Object.entries(res[0].data),
 					"15min" : Object.entries(res[1].data),
-					"month" : Object.entries(res[8].data),
-					"hour" : Object.entries(res[13].data),
-					"year" : Object.entries(res[17].data),
+					"month" : Object.entries(res[7].data),
+					"hour" : Object.entries(res[12].data),
+					"year" : Object.entries(res[16].data),
 				};
 				const acc = {
 					"day": res[2].data.data,
-					"month": res[6].data.data,
-					"week": res[16].data.data,
+					/* "month": res[6].data.data, */
+					"month": [],
+					"week": res[15].data.data,
 					"year": [],
 					"lastMonth": [],
 					"lastYear": [] // res[17].data.data
@@ -656,11 +657,11 @@
 					"hour": res[3].data,
 					"15min": res[4].data,
 					"month": res[5].data,
-					"day": res[7].data,
+					"day": res[6].data,
 				};
 				const status = {
-					"active": res[9],
-					"overall": res[10],
+					"active": res[8],
+					"overall": res[9],
 				};
 
 				// const weeklyMeanAccuracy2 = getWeeklyMeanAccuracy(res[6].data.data.each); // [일~오늘] 에서 [7일전~어제(api호출값)]로 변경
@@ -672,11 +673,12 @@
 				Graph2.setOption(vppInfo.hour.map(x => x[1])); // 보조자원 예측
 				Graph3.setOption(vppInfo.month.map(x => x[1]), vppInfo.year.map(x => x[1]), acc.month, acc.year); // 수익 현황
 				PieGraph.draw(Object.values(acc.day.total).length ? Object.values(acc.day.total)[0].accuracy : "-"); // 예측 정확도
-				PieGraph.setTextData(Object.values(acc.month.total), Object.values(acc.week.total)[0].accuracy, acc.lastMonth, acc.lastYear); // 예측 정확도 라벨
+// 				PieGraph.setTextData(Object.values(acc.month.total), Object.values(acc.week.total)[0].accuracy, acc.lastMonth, acc.lastYear); // 예측 정확도 라벨
+				PieGraph.setTextData([], Object.values(acc.week.total)[0].accuracy, acc.lastMonth, acc.lastYear); // 예측 정확도 라벨
 				setResourceStatus(vppInfo.hour); // 자원 현황
-				SiteStatus.refresh(vppInfo.hour, forecast.day, acc.day, status, res[15]); // 발전 현황
+				SiteStatus.refresh(vppInfo.hour, forecast.day, acc.day, status, res[14]); // 발전 현황
 				setPrediction(forecast["15min"], vppInfo.day.map(x => x[1]), Object.values(acc.day.total).length ? Object.values(acc.day.total)[0].accuracy : "-"); // 총 예측사이트 , 설비용량 , 정확도
-				Table.refresh(vppInfo.hour, res[11], res[14].data.data, weeklyMeanAccuracy); // 주간 예측오차율
+				Table.refresh(vppInfo.hour, res[10], res[13].data.data, weeklyMeanAccuracy); // 주간 예측오차율
 			}).catch(error => {
 				console.log(error);
 				
@@ -985,7 +987,7 @@
 		setTextData(day, week, month, year) {
 			day.pop()
 			console.log(day, week, month, year)
-			$("#accLastDay").html((100 - (day.pop().accuracy) * 100).toFixed(1));
+// 			$("#accLastDay").html((100 - (day.pop().accuracy) * 100).toFixed(1));
 			$("#accLastWeek").html((100 - (week) * 100).toFixed(1));
 			// $("#accLastMonth").html((100 - (day) * 100).toFixed(1));
 			// $("#accLastYear").html((100 - (day) * 100).toFixed(1));
@@ -1310,14 +1312,17 @@
 			let temp = Object.entries(nowData).sort((a, b) => a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0);
 				temp.pop();
 			
-			fillArray(Object.entries(accMonth.total).map(x => x[1].incentive), getLastDay()).forEach((v, k) => {
-				this.series[0].data.push(v);
-			});
+			if(accMonth.total) {
+				fillArray(Object.entries(accMonth.total).map(x => x[1].incentive), getLastDay()).forEach((v, k) => {
+					this.series[0].data.push(v);
+				});
+			}
+
 			this.series[1].data = fillArray(temp.map(x => x[1]), getLastDay());
 
 			$("#smpMonth").html(Math.round(smpMonth.reduce((acc, cur) => acc + cur.money, 0) / 1000).toLocaleString())
 			$("#smpYear").html(Math.round(smpYear.reduce((acc, cur) => acc + cur.money, 0) / 1000).toLocaleString());
-			$("#accMonth").html(Math.round(Object.values(accMonth.total).reduce((acc, cur) => acc + cur.incentive, 0) / 1000).toLocaleString());
+			if(accMonth.total) {$("#accMonth").html(Math.round(Object.values(accMonth.total).reduce((acc, cur) => acc + cur.incentive, 0) / 1000).toLocaleString());}
 			// $("#accYear").html(Math.round(Object.values(accYear.total).reduce((acc, cur) => acc + cur.incentive, 0) / 1000).toLocaleString());
 			console.log(smpMonth, smpYear, accMonth, accYear)
 			
