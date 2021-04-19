@@ -1107,9 +1107,9 @@
 				if (item.site_type === 0) {
 					item.siteType = "<fmt:message key='siteSetting.noCase' />";
 				} else if (item.site_type === 1) {
-					item.siteType = "<fmt:message key='siteSetting.plant' />";
-				} else {
 					item.siteType = "<fmt:message key='siteSetting.needsResource' />";
+				} else {
+					item.siteType = "<fmt:message key='siteSetting.plant' />";
 				}
 
 
@@ -1530,9 +1530,9 @@
 				if (item.site_type === 0) {
 					item.siteType = "<fmt:message key='siteSetting.noCase' />";
 				} else if (item.site_type === 1) {
-					item.siteType = "<fmt:message key='siteSetting.plant' />";
-				} else {
 					item.siteType = "<fmt:message key='siteSetting.needsResource' />";
+				} else {
+					item.siteType = "<fmt:message key='siteSetting.plant' />";
 				}
 
 				if(!isEmpty(item.resource_type)) {
