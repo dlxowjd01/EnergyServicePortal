@@ -1485,8 +1485,8 @@
 				let now = energyData.find(v => v[0] === x.sid)[1];
 				let forecastEnergy = forecast[x.sid] ? forecast[x.sid][0].items[0].energy : 0;
 				let incentive = acc.each[x.sid] ? Object.values(acc.each[x.sid])[0].incentive : 0;
-				let active = Object.values(status.active[x.sid])[0].sid ? ["normal", "정상"] : ["error", "이상"];
-				let overall = Object.values(status.overall[x.sid])[0].sid ? ["normal", "정상"] : ["NA", "N/A"];
+				let active = Object.values(status.active[x.sid]).length ? ["normal", "정상"] : ["error", "이상"];
+				let overall = Object.values(status.overall[x.sid]).length ? ["normal", "정상"] : ["NA", "N/A"];
 				let weatherData = weather.data[x.sid].items[0];
 				let irr = 
 					weatherData.sensor_solar.irradiationPoa
@@ -1675,14 +1675,15 @@
 				{min: 6, max: 8, index: 1, count: 0},
 				{min: 8, max: 10, index: 2, count: 0},
 				{min: 10, max: 20, index: 3, count: 0},
-				{min: 20, max: 100, index: 4, count: 0},
+				{min: 20, max: Infinity, index: 4, count: 0},
 			];
-
 			App.sites.forEach((site, ix) => {
+				let ap = Object.values(activePower[site.sid])
+
 				tableData[ix] = {
 					name: site.name,
 					capacity: capacity.find(x => x[0] === site.sid)[1].capacity,
-					activePower: Object.values(activePower[site.sid])[0].activePower ? Object.values(activePower[site.sid])[0].activePower : "-",
+					activePower: (ap.length === 0 || Object.keys(ap)[0] === "0") ? "-" : ap[0].activePower,
 					todayError: todayError.each[site.sid] ? Object.values(todayError.each[site.sid])[0].accuracy * 100 : "-",
 					weekError: weekError[site.sid] ? weekError[site.sid] * 100 : "-",
 				}
@@ -1699,6 +1700,7 @@
 					}
 				});
 			});
+			console.log(tableData)
 
 			$.fn.dataTable.ext.search.push (
 				function(settings, data, dataIndex) {
