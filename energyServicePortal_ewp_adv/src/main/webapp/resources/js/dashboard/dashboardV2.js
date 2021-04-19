@@ -1699,9 +1699,13 @@ const searchSite = async function (siteSids) {
 						});
 					}
 
+					const curSite = siteList.find(x => x.sid === siteId);
+					console.log(curSite);
+
 					if (targetDevice) {
 						if (isNaN(capacity)) { capacity = '-'; }
 						if (isNaN(activePower)) { activePower = '-'; }
+
 
 						site['inverterCount'] = inverterCount //사이트에 속한 인버터 갯수.
 						site['operation'] = operation; //사이트 상태 정보.
@@ -1713,6 +1717,8 @@ const searchSite = async function (siteSids) {
 						site['activePowerView'] =(isEmpty(activePower) || activePower === '-') ? '-' : displayNumberFixedUnit(activePower, 'W', 'kW', 0)[0];   //사이트에 속한 인버터.
 						site['irradiationPoa'] = irradiationPoa;   //사이트에 속한 인버터 설비 용량 정보.
 					}
+						site['capacity'] = displayNumberFixedUnit(curSite.capacities.gen, 'W', 'kW', 0)[0];
+						site['capacityView'] = displayNumberFixedUnit(curSite.capacities.gen, 'W', 'kW', 0)[0];
 				}
 			});
 		});
