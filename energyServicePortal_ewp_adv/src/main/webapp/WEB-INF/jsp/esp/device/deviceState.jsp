@@ -255,6 +255,14 @@
 									</div>
 								</div>
 							</div>
+							<div class="input-group inline-flex deviceDescription">
+								<label for="descriptionId" class="input-label">ID</label>
+								<input class="input text-input-type" type="text" name="contact" id="descriptionId" autocomplete="off">
+								<label for="descriptionPass" class="input-label">Password</label>
+								<input class="input text-input-type" type="text" name="contact" id="descriptionPass" autocomplete="off">
+								<label for="descriptionCode" class="input-label">Code</label>
+								<input class="input text-input-type" type="text" name="contact" id="descriptionCode" autocomplete="off">
+							</div>
 							<div class="input-group inline-flex">
 								<label for="description" class="input-label"><fmt:message key="deviceState.popup.desc" /></label>
 								<textarea name="addDeviceDescription" id="description" class="textarea"></textarea>

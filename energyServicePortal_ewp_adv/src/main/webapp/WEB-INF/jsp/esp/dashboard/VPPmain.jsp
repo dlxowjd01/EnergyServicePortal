@@ -1476,7 +1476,6 @@
 		refresh(energyData, forecast, acc, status, weather) {
 			let tableTemplate = ``;
 
-			console.log(status)
 			App.sites.map(x => {
 				let now = energyData.find(v => v[0] === x.sid)[1];
 				let forecastEnergy = forecast[x.sid] ? forecast[x.sid][0].items[0].energy : 0;

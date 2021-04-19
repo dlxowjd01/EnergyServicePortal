@@ -444,7 +444,7 @@ video {
 	margin: 0;
 	padding: 0;
 	border: 0;
-	font-size: 100%;
+	/* font-size: 100%; */
 	font: inherit;
 	vertical-align: baseline;
 }
@@ -553,7 +553,7 @@ a.disabled:focus {
 	position: relative;
 	padding-right: 36px;
 	color: var(--vivid-blue);
-	font-size: 13px;
+	font-size: 1.3rem;
 	font-weight: 500;
 }
 
@@ -703,7 +703,7 @@ button.big {
 	outline-style: none;
 	border: 0;
 	padding: 0 25px;
-	font-size: 12px;
+	font-size: 1.2rem;
 	line-height: 36px;
 	background: var(--vivid-blue);
 	white-space: nowrap;
@@ -736,11 +736,11 @@ html[lang="en"] .btn-type04,
 html[lang="en"] .btn-type05,
 html[lang="en"] .btn-type06,
 html[lang="en"] .btn-type07 {
-	font-size: 14px;
+	font-size: 1.4rem;
 }
 
 .btn-type02 {
-	font-size: 13px;
+	font-size: 1.3rem;
 	font-weight: 500;
 	color: var(--vivid-blue);
 	line-height: 16px;
@@ -751,7 +751,7 @@ html[lang="en"] .btn-type07 {
 	border: 1px solid var(--white87);
 	padding: 0 12px;
 	color: var(--white87);
-	font-size: 12px;
+	font-size: 1.2rem;
 	background: var(--active);
 }
 
@@ -776,12 +776,12 @@ a.btn-type04.text-blue {
 	padding: 0 12px;
 	font-weight: 500;
 	color: var(--vivid-blue);
-	font-size: 14px;
+	font-size: 1.4rem;
 }
 
 .btn-type05 {
 	padding: 0 12px 0 6px;
-	font-size: 12px;
+	font-size: 1.2rem;
 	line-height: 22px;
 	border-radius: 4px;
 	border: 1px solid var(--white60);
@@ -791,7 +791,7 @@ a.btn-type04.text-blue {
 
 .btn-type06 {
 	padding: 4px 12px 0 6px;
-	font-size: 12px;
+	font-size: 1.2rem;
 	line-height: 18px;
 	color: var(--white60);
 	border: 0;
@@ -821,7 +821,7 @@ a.btn-add,
 	line-height: 24px;
 	background: var(--ico-add-svg) no-repeat 0 6px;
 	color: var(--vivid-blue);
-	font-size: 13px;
+	font-size: 1.3rem;
 	font-weight: 500;
 	cursor: pointer;
 }
@@ -844,7 +844,7 @@ a.btn-text-blue,
 	outline-style: none;
 	border: none;
 	color: var(--vivid-blue);
-	font-size: 13px;
+	font-size: 1.3rem;
 	line-height: 24px;
 	font-weight: 500;
 	cursor: pointer;
@@ -878,7 +878,7 @@ a.btn-text-blue,
 
 .btn-type07 {
 	padding: 2px 12px 0 6px;
-	font-size: 13px;
+	font-size: 1.3rem;
 	line-height: 24px;
 	color: var(--white60);
 	border: 0;
@@ -901,7 +901,7 @@ a.btn-text-blue,
 
 .btn-type-attachment {
 	padding: 0 12px 0 6px;
-	font-size: 12px;
+	font-size: 1.2rem;
 	line-height: 22px;
 	color: var(--white60);
 	border: 0;
@@ -919,7 +919,7 @@ a.btn-text-blue,
 
 .btn-type08 {
 	padding: 0 12px 0 6px;
-	font-size: 13px;
+	font-size: 1.3rem;
 	line-height: 24px;
 	color: var(--white60);
 	border: 0;
@@ -965,7 +965,7 @@ a.btn-text-blue,
 .btn-align {
 	line-height: 20px;
 	border: 0;
-	font-size: 13px;
+	font-size: 1.3rem;
 	color: var(--white87);
 	font-weight: normal;
 	vertical-align: middle;
@@ -1073,7 +1073,7 @@ input[type="file"] + .file-upload {
 	display: inline-block;
 	padding: 0 6px;
 	border: 1px solid var(--white);
-	font-size: 11px;
+	font-size: 1.1rem;
 	font-weight: 500;
 	line-height: 15px;
 	color: var(--dark-grey);
@@ -1084,7 +1084,7 @@ input[type="file"] + .file-upload {
 	padding: 0 20px;
 	height: 36px;
 	line-height: 36px;
-	font-size: 13px;
+	font-size: 1.3rem;
 	border-radius: 2px;
 	outline-style: none;
 	vertical-align: middle;
@@ -1093,7 +1093,7 @@ input[type="file"] + .file-upload {
 pre {
 	background-color: transparent;
 	color: var(--white87);
-	font-size: 13px;
+	font-size: 1.3rem;
 }
 
 .textarea {
@@ -1102,7 +1102,7 @@ pre {
 	height: 150px;
 	line-height: 1.4;
 	color: var(--white87);
-	font-size: 13px;
+	font-size: 1.3rem;
 	border: 0;
 	border-color: transparent;
 	border-radius: 4px;
@@ -1163,7 +1163,7 @@ table tbody td .dropdown-menu {
 	border-radius: 2px;
 	background: none;
 	color: var(--white87);
-	font-size: 13px;
+	font-size: 1.3rem;
 	white-space: normal;
 }
 
@@ -1184,7 +1184,7 @@ table tbody td .dropdown-menu {
 
 .text-input-type.unit > span {
 	color: var(--white60);
-	font-size: 13px;
+	font-size: 1.3rem;
 	line-height: 36px;
 	position: absolute;
 	top: 0;
@@ -1240,7 +1240,7 @@ table tbody td .dropdown-menu {
 	height: 36px;
 	line-height: 36px;
 	color: var(--white87);
-	font-size: 13px;
+	font-size: 1.3rem;
 	border-color: transparent;
 	border-radius: 2px;
 	outline-style: none;
@@ -1257,7 +1257,7 @@ table tbody td .dropdown-menu {
 
 .sel-calendar em {
 	display: inline-block;
-	font-size: 12px;
+	font-size: 1.2rem;
 	margin: 0 5px;
 }
 
@@ -1735,7 +1735,7 @@ table tbody td .dropdown-menu {
 .required {
 	/* color: var(--white87); */
 	color: var(--vivid-blue);
-	font-size: 12px;
+	font-size: 1.2rem;
 	font-weight: 500;
 	line-height: 20px;
 }
@@ -1744,12 +1744,12 @@ table tbody td .dropdown-menu {
 	content: "*";
 	padding-right: 5px;
 	color: var(--vivid-blue);
-	font-size: 16px;
+	font-size: 1.6rem;
 }
 
 .required-blue {
 	color: var(--white87);
-	font-size: 12px;
+	font-size: 1.2rem;
 	font-weight: 500;
 	line-height: 20px;
 }
@@ -1758,13 +1758,13 @@ table tbody td .dropdown-menu {
 	display: table;
 	padding-top: 12px;
 	margin-bottom: -12px;
-	font-size: 13px;
+	font-size: 1.3rem;
 	font-weight: 500;
 	color: var(--sandy-brown);
 }
 
 .warning-text {
-	font-size: 13px;
+	font-size: 1.3rem;
 	font-weight: 500;
 	color: var(--sandy-brown);
 }
@@ -1795,7 +1795,7 @@ table tbody td .dropdown-menu {
 
 .text-sm {
 	float: left;
-	font-size: 13px;
+	font-size: 1.3rem;
 	font-weight: 500;
 	line-height: 18px;
 	margin: 0 0 20px 120px;
@@ -1809,7 +1809,7 @@ table tbody td .dropdown-menu {
 .tick {
 	opacity: 0.4;
 	margin: 0 18px -12px 0;
-	font-size: 13px;
+	font-size: 1.3rem;
 	font-weight: 500;
 	color: var(--white87);
 }
@@ -1978,7 +1978,7 @@ footer .flex-wrapper {
 
 footer .copyright {
 	padding-left: 3px;
-	font-size: 12px;
+	font-size: 1.2rem;
 	font-weight: 500;
 	color: var(--white87);
 	letter-spacing: 0.3px;
@@ -2077,7 +2077,7 @@ footer .copyright a + a:before {
 	padding: 14px 0;
 	line-height: 28px;
 	color: var(--white87);
-	font-size: 16px;
+	font-size: 1.6rem;
 	font-weight: 500;
 }
 
@@ -2185,7 +2185,7 @@ li.on .sub-layer > ul {
 	display: block;
 	padding: 10px 10px 10px 86px;
 	line-height: 36px;
-	font-size: 16px;
+	font-size: 1.6rem;
 	color: var(--white87);
 	font-weight: 500;
 	opacity: 0;
@@ -2207,7 +2207,7 @@ li.on .sub-layer > ul {
 	display: block;
 	height: 36px;
 	line-height: 36px;
-	font-size: 13px;
+	font-size: 1.3rem;
 	padding-left: 20px;
 }
 
@@ -2292,7 +2292,7 @@ nav .site.form-group .btn {
 
 .nav-right li {
 	display: inline-block;
-	font-size: 10px;
+	font-size: 1rem;
 	font-weight: 400;
 	color: var(--white);
 	vertical-align: middle;
@@ -2325,7 +2325,7 @@ nav .site.form-group .btn {
 
 .nav-right li.member .fr {
 	margin-left: 10px;
-	font-size: 12px;
+	font-size: 1.2rem;
 	color: var(--white);
 	font-weight: 500;
 	font-weight: 400;
@@ -2359,7 +2359,7 @@ nav .site.form-group .btn {
 	display: inline-block;
 	margin-top: 9px;
 	color: var(--white87);
-	font-size: 16px;
+	font-size: 1.6rem;
 }
 
 .all-menu > a:after {
@@ -2424,7 +2424,7 @@ html[lang="en"] .all-menu > a:after {
 .all-menu .menu-wrapper > ul > li a {
 	display: block;
 	color: var(--white60);
-	font-size: 12px;
+	font-size: 1.2rem;
 	font-weight: 400;
 	line-height: 28px;
 	white-space: nowrap;
@@ -2470,7 +2470,7 @@ html[lang="en"] .all-menu > a:after {
 	height: 36px;
 	line-height: 36px;
 	color: var(--white);
-	font-size: 16px;
+	font-size: 1.6rem;
 	white-space: nowrap;
 	padding-left: 10px;
 }
@@ -2481,7 +2481,7 @@ html[lang="en"] .all-menu > a:after {
 
 .all-menu .menu-wrapper > ul > li > dl > dd ul label {
 	color: var(--white60);
-	font-size: 12px;
+	font-size: 1.2rem;
 	line-height: 2.2;
 	white-space: nowrap;
 	cursor: pointer;
@@ -2541,7 +2541,7 @@ html[lang="en"] .all-menu > a:after {
 
 .all-menu .menu-group .btn-group button {
 	border: 0;
-	font-size: 12px;
+	font-size: 1.2rem;
 	outline-style: none;
 	padding: 5px 10px;
 	color: var(--white);
@@ -2559,7 +2559,7 @@ html[lang="en"] .all-menu > a:after {
 	display: inline-block;
 	font-weight: 500;
 	vertical-align: middle;
-	font-size: 12px;
+	font-size: 1.2rem;
 	line-height: 40px;
 	margin-left: 15px;
 }
@@ -2633,7 +2633,7 @@ html[lang="en"] .all-menu > a:after {
 .lang.dropdown .dropdown-menu > li > a:focus,
 .lang.dropdown .dropdown-menu > li > a:hover {
 	padding: 5px 20px;
-	font-size: 15px !important;
+	font-size: 1.5rem !important;
 	color: var(--white87);
 }
 
@@ -2643,7 +2643,7 @@ html[lang="en"] .all-menu > a:after {
 	border: 0;
 	border-radius: 4px;
 	color: var(--white);
-	font-size: 13px;
+	font-size: 1.3rem;
 	font-weight: 400;
 }
 
@@ -2667,7 +2667,7 @@ html[lang="en"] .all-menu > a:after {
 .search-expand .btn,
 .dropdown-toggle {
 	color: var(--white60);
-	font-size: 13px;
+	font-size: 1.3rem;
 	font-weight: 500;
 	background: var(--white20);
 	border: 0;
@@ -2807,7 +2807,7 @@ html[lang="en"] .all-menu > a:after {
 
 .dropdown-menu > li > a {
 	color: var(--white60);
-	font-size: 12px;
+	font-size: 1.2rem;
 	/* line-height: 28px; */
 	padding: 10px 12px 8px;
 }
@@ -2916,7 +2916,7 @@ ul.ui-autocomplete.highlight {
 
 ul.ui-autocomplete.highlight > li > .ui-menu-item-wrapper {
 	padding: 8px 10px;
-	font-size: 14px;
+	font-size: 1.4rem;
 }
 
 ul.ui-autocomplete.highlight > li > .ui-menu-item-wrapper.ui-state-active {
@@ -2931,7 +2931,7 @@ ul.ui-autocomplete.highlight > li > .ui-menu-item-wrapper.ui-state-active {
 
 .legend-wrap span {
 	display: inline-block;
-	font-size: 11px;
+	font-size: 1.1rem;
 	color: var(--white60);
 	line-height: 13px;
 	vertical-align: top;
@@ -2988,7 +2988,7 @@ input[type="radio"] + label {
 	cursor: pointer;
 	line-height: 19px;
 	height: 19px;
-	font-size: 13px;
+	font-size: 1.3rem;
 }
 
 input[type="radio"]:not(:checked) + label {
@@ -3042,7 +3042,7 @@ input[type="radio"]:checked + label:after {
 }
 
 .flex-end input[type="radio"] + label {
-	font-size: 14px;
+	font-size: 1.4rem;
 }
 
 .radio-type li a span {
@@ -3114,7 +3114,7 @@ input[type="radio"]:checked + label:after {
 	padding: 0;
 	vertical-align: middle;
 	color: var(--white60);
-	font-size: 13px;
+	font-size: 1.3rem;
 	line-height: 23px;
 	cursor: pointer;
 }
@@ -3148,7 +3148,7 @@ input[type="radio"]:checked + label:after {
 	padding: 0;
 	vertical-align: middle;
 	color: var(--white60);
-	font-size: 13px;
+	font-size: 1.3rem;
 	line-height: 23px;
 	cursor: pointer;
 }
@@ -3432,8 +3432,8 @@ input[type="radio"]:checked + label:after {
 	display: inline-block;
 	padding: 3px 15px 5px 0;
 	color: var(--white);
-	font-size: 16px;
-	font-size: 16px;
+	font-size: 1.6rem;
+	font-size: 1.6rem;
 	font-weight: 500;
 	line-height: 27px;
 }
@@ -3448,11 +3448,11 @@ input[type="radio"]:checked + label:after {
 	height: 24px;
 	background: none;
 	color: var(--vivid-blue);
-	font-size: 14px;
+	font-size: 1.4rem;
 }
 
 .alarm-status > div em {
-	font-size: 16px;
+	font-size: 1.6rem;
 	color: var(--white);
 	line-height: 26px;
 	font-weight: 500;
@@ -3466,7 +3466,7 @@ input[type="radio"]:checked + label:after {
 }
 
 .alarm-notice h2 {
-	font-size: 16px;
+	font-size: 1.6rem;
 	color: var(--white);
 	font-weight: 500;
 	padding: 20px 0 15px;
@@ -3568,7 +3568,7 @@ li[data-alarm="urgent"]:before,
 
 .alarm-notice li span {
 	line-height: 24px;
-	font-size: 12px;
+	font-size: 1.2rem;
 	letter-spacing: -0.5px;
 }
 
@@ -3657,7 +3657,7 @@ li[data-alarm="urgent"]:before,
 }
 
 .modal.stack > .modal-sm h4 {
-	font-size: 16px;
+	font-size: 1.6rem;
 	font-weight: 400;
 	line-height: 24px;
 	word-wrap: break-word;
@@ -3666,7 +3666,7 @@ li[data-alarm="urgent"]:before,
 }
 
 .modal.stack > .modal-sm h5 {
-	font-size: 14px;
+	font-size: 1.4rem;
 	font-weight: normal;
 	line-height: 28px;
 	word-wrap: break-word;
@@ -3675,7 +3675,7 @@ li[data-alarm="urgent"]:before,
 }
 
 .modal.stack > .modal-sm h5 span {
-	font-size: 20px;
+	font-size: 2rem;
 	font-weight: 500;
 }
 
@@ -3737,7 +3737,7 @@ li[data-alarm="urgent"]:before,
 
 .modal-dialog.modal-warning .warning-text {
 	margin: 15px 10px;
-	font-size: 16px;
+	font-size: 1.6rem;
 	line-height: 24px;
 	word-break: break-word;
 }
@@ -3778,7 +3778,7 @@ li[data-alarm="urgent"]:before,
 }
 
 .modal-header h2 {
-	font-size: 20px;
+	font-size: 2rem;
 	color: var(--white87);
 }
 
@@ -3830,7 +3830,7 @@ li[data-alarm="urgent"]:before,
 	width: 100px;
 	padding: 10px 0;
 	color: var(--white60);
-	font-size: 13px;
+	font-size: 1.3rem;
 	font-weight: 400;
 	vertical-align: middle;
 }
@@ -3864,7 +3864,7 @@ li[data-alarm="urgent"]:before,
 }
 
 .modal-body .sub-title {
-	font-size: 14px;
+	font-size: 1.4rem;
 	font-weight: 500;
 	color: var(--white87);
 }
@@ -3883,7 +3883,7 @@ li[data-alarm="urgent"]:before,
 }
 
 .modal-body .input-group.inline-flex > * {
-	font-size: 13px;
+	font-size: 1.3rem;
 }
 
 .modal-body .input-group.inline-flex .input-label {
@@ -3924,7 +3924,7 @@ li[data-alarm="urgent"]:before,
 .settings-modal-content .clear-input {
 	width: 100%;
 	color: var(--white87);
-	font-size: 14px;
+	font-size: 1.4rem;
 	font-weight: 500;
 }
 
@@ -4128,7 +4128,7 @@ li[data-alarm="urgent"]:before,
 .user-modal-content .selected-list li {
 	list-style-type: decimal;
 	list-style-position: inside;
-	font-size: 13px;
+	font-size: 1.3rem;
 	color: var(--white60);
 }
 
@@ -4332,7 +4332,7 @@ li[data-alarm="urgent"]:before,
 
 .site-modal-content .tick,
 .group-modal-content .tick {
-	font-size: 12px;
+	font-size: 1.2rem;
 	margin: 0 8px 0 0;
 }
 
@@ -4346,7 +4346,7 @@ li[data-alarm="urgent"]:before,
 	right: 23px;
 	top: 22px;
 	color: var(--white60);
-	font-size: 13px;
+	font-size: 1.3rem;
 }
 
 .group-modal-content .pl-40,
@@ -4380,7 +4380,7 @@ li[data-alarm="urgent"]:before,
 	margin: 6px 10px;
 	list-style-type: decimal;
 	list-style-position: inside;
-	font-size: 13px;
+	font-size: 1.3rem;
 	color: var(--white60);
 }
 
@@ -4394,7 +4394,7 @@ li[data-alarm="urgent"]:before,
 
 .comcode-modal-content .file_list {
 	text-align: left;
-	font-size: 13px;
+	font-size: 1.3rem;
 	vertical-align: middle;
 	color: var(--white87);
 	white-space: nowrap;
@@ -4440,7 +4440,7 @@ input.inp[readonly]:focus {
 	line-height: 24px;
 	color: var(--white60);
 	text-align: center;
-	font-size: 13px;
+	font-size: 1.3rem;
 }
 
 .pagination a.active {
@@ -4475,7 +4475,7 @@ input.inp[readonly]:focus {
 	height: 24px;
 	line-height: 22px;
 	text-align: center;
-	font-size: 13px;
+	font-size: 1.3rem;
 }
 
 .pagination-wrapper a {
@@ -4522,7 +4522,7 @@ input.inp[readonly]:focus {
 	vertical-align: middle;
 	margin: 0;
 	padding: 0px!important;
-	font-size: 20px;
+	font-size: 2rem;
 	color: var(--white);
 	border: 0;
 	letter-spacing: 0;
@@ -4556,12 +4556,12 @@ input.inp[readonly]:focus {
 .stit {
 	margin: 6px 0 16px;
 	color: var(--white87);
-	font-size: 13px;
+	font-size: 1.3rem;
 }
 
 .ntit {
 	margin: 6px 0 10px;
-	font-size: 16px;
+	font-size: 1.6rem;
 	color: var(--white87);
 	font-weight: 500;
 }
@@ -4583,7 +4583,7 @@ input.inp[readonly]:focus {
 .ntit span.time {
 	margin-top: 10px;
 	text-align: right;
-	font-size: 10px;
+	font-size: 1rem;
 	color: var(--grey);
 	letter-spacing: 0.3px;
 	font-weight: normal;
@@ -4596,11 +4596,11 @@ input.inp[readonly]:focus {
 .data-num {
 	margin-right: 8px;
 	color: var(--white87);
-	font-size: 28px;
+	font-size: 2.8rem;
 }
 
 .data-unit {
-	font-size: 16px;
+	font-size: 1.6rem;
 	color: var(--white60);
 }
 
@@ -4646,7 +4646,7 @@ input.inp[readonly]:focus {
 	margin: 0 5px;
 	height: 36px;
 	line-height: 36px;
-	font-size: 14px;
+	font-size: 1.4rem;
 	color: var(--dark-grey);
 	font-weight: 500;
 }
@@ -4666,7 +4666,7 @@ input.inp[readonly]:focus {
 	height: 36px;
 	line-height: 34px;
 	background: var(--vivid-blue);
-	font-size: 14px;
+	font-size: 1.4rem;
 	color: var(--white);
 	font-weight: 500;
 	border: 0;
@@ -4684,7 +4684,7 @@ input.inp[readonly]:focus {
 	display: inline-block;
 	height: 36px;
 	line-height: 36px;
-	font-size: 14px;
+	font-size: 1.4rem;
 	color: var(--dark-grey);
 	font-weight: 500;
 	margin-right: 15px;
@@ -4693,7 +4693,7 @@ input.inp[readonly]:focus {
 .chart-top .time {
 	margin-top: 15px;
 	text-align: right;
-	font-size: 10px;
+	font-size: 1rem;
 	color: var(--grey);
 	letter-spacing: 0.3px;
 }
@@ -4716,7 +4716,7 @@ input.inp[readonly]:focus {
 	margin: 0 5px;
 	height: 36px;
 	line-height: 36px;
-	font-size: 14px;
+	font-size: 1.4rem;
 	color: var(--dark-grey);
 	font-weight: 500;
 }
@@ -4736,7 +4736,7 @@ input.inp[readonly]:focus {
 
 .chart-top .search-option > * {
 	vertical-align: top;
-	font-size: 14px;
+	font-size: 1.4rem;
 }
 
 .chart-top .search-option span {
@@ -4744,7 +4744,7 @@ input.inp[readonly]:focus {
 	margin: 0 5px;
 	height: 36px;
 	line-height: 36px;
-	font-size: 14px;
+	font-size: 1.4rem;
 	color: var(--dark-grey);
 	font-weight: 500;
 }
@@ -4764,7 +4764,7 @@ input.inp[readonly]:focus {
 	height: 36px;
 	line-height: 34px;
 	background: var(--vivid-blue);
-	font-size: 14px;
+	font-size: 1.4rem;
 	color: var(--white);
 	font-weight: 500;
 	border: 0;
@@ -4778,7 +4778,7 @@ input.inp[readonly]:focus {
 }
 
 .chart-top .checkbox {
-	font-size: 13px;
+	font-size: 1.3rem;
 	letter-spacing: -1px;
 }
 
@@ -4820,7 +4820,7 @@ input.inp[readonly]:focus {
 }
 
 .chart-middle .line1 {
-	font-size: 14px;
+	font-size: 1.4rem;
 	height: 24px;
 }
 
@@ -4829,7 +4829,7 @@ input.inp[readonly]:focus {
 }
 
 .chart-middle .line3 {
-	font-size: 12px;
+	font-size: 1.2rem;
 	height: 20px;
 }
 
@@ -4838,13 +4838,13 @@ input.inp[readonly]:focus {
 }
 
 .chart-middle .pv {
-	font-size: 28px;
+	font-size: 2.8rem;
 	padding-right: 5px;
 	color: var(--white);
 }
 
 .chart-middle em {
-	font-size: 12px;
+	font-size: 1.2rem;
 }
 
 .inchart {
@@ -4861,7 +4861,7 @@ input.inp[readonly]:focus {
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	font-size: 20px;
+	font-size: 2rem;
 	color: var(--dark-grey);
 	font-weight: 600;
 }
@@ -4879,7 +4879,7 @@ input.inp[readonly]:focus {
 	line-height: 36px;
 	background: var(--ico-line-graph) no-repeat 0 10px;
 	padding-left: 32px;
-	font-size: 13px;
+	font-size: 1.3rem;
 	color: var(--vivid-blue);
 	font-weight: 500;
 }
@@ -5018,7 +5018,7 @@ input.inp[readonly]:focus {
 	border: 4px solid transparent;
 	border-width: 0 0 2px 0;
 	color: var(--white40);
-	font-size: 13px;
+	font-size: 1.3rem;
 }
 
 .nav-tabs > li > a:focus,
@@ -5093,7 +5093,7 @@ input.inp[readonly]:focus {
 }
 
 .chart-table .table-desktop thead th {
-	font-size: 13px;
+	font-size: 1.3rem;
 	background: var(--box-darker);
 	color: var(--white87);
 	font-weight: normal;
@@ -5120,7 +5120,7 @@ input.inp[readonly]:focus {
 	line-height: 48px;
 	padding: 0 5px;
 	color: var(--white87);
-	font-size: 14px;
+	font-size: 1.4rem;
 	text-align: center;
 	white-space: nowrap;
 }
@@ -5234,7 +5234,7 @@ input.inp[readonly]:focus {
 	width: 100%;
 	padding: 18px 6px 28px 12px;
 	color: var(--white60);
-	font-size: 12px;
+	font-size: 1.2rem;
 	font-weight: 200;
 	text-align: right;
 }
@@ -5345,14 +5345,14 @@ input.inp[readonly]:focus {
 	line-height: 36px;
 	background: var(--btn-download) no-repeat 3px 9px;
 	color: var(--vivid-blue);
-	font-size: 13px;
+	font-size: 1.3rem;
 	font-weight: 500;
 	white-space: nowrap;
 	border: 0;
 }
 
 html[lang="en"] .btn-save {
-	font-size: 14px;
+	font-size: 1.4rem;
 }
 
 .btn-save:link,
@@ -5370,7 +5370,7 @@ html[lang="en"] .btn-save {
 	line-height: 36px;
 	text-align: center;
 	background: var(--light-blue) !important;
-	font-size: 13px;
+	font-size: 1.3rem;
 	color: var(--white);
 	font-weight: 500;
 	border: 0;
@@ -5393,7 +5393,7 @@ html[lang="en"] .btn-save {
 	height: 36px;
 	line-height: 36px;
 	background: var(--silver);
-	font-size: 13px;
+	font-size: 1.3rem;
 	color: var(--white);
 	font-weight: 600;
 	outline-style: none;
@@ -5431,7 +5431,7 @@ html[lang="en"] .btn-save {
 	height: 36px;
 	line-height: 36px;
 	background: var(--silver);
-	font-size: 13px;
+	font-size: 1.3rem;
 	color: var(--white);
 	font-weight: 600;
 	border-color: transparent;
@@ -5447,7 +5447,7 @@ html[lang="en"] .btn-save {
 	height: 36px;
 	line-height: 36px;
 	background: var(--vivid-blue);
-	font-size: 13px;
+	font-size: 1.3rem;
 	color: var(--white);
 	font-weight: 600;
 	border-radius: 4px;
@@ -5556,7 +5556,7 @@ html[lang="en"] .btn-save {
 	cursor: pointer;
 	border-radius: 4px;
 	color: rgba(255, 255, 255, 0.6);
-	font-size: 14px;
+	font-size: 1.4rem;
 	z-index: 99;
 }
 
@@ -5570,7 +5570,7 @@ html[lang="en"] .btn-save {
 	background: #1c98e9;
 	transition: 0.5s all;
 	color: #1c98e9;
-	font-size: 14px;
+	font-size: 1.4rem;
 	padding: 0px 16px;
 	white-space: nowrap;
 }
@@ -5684,7 +5684,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	display: block;
 	height: inherit;
 	background: var(--white87);
-	font-size: 13px;
+	font-size: 1.3rem;
 	text-transform: uppercase;
 	text-align: center;
 	border-radius: 2px;
@@ -5749,11 +5749,11 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 
 .battery-per span {
 	display: inline-block;
-	font-size: 24px;
+	font-size: 2.4rem;
 }
 
 .battery-per em {
-	font-size: 16px;
+	font-size: 1.6rem;
 }
 
 .device {
@@ -5810,7 +5810,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 }
 
 .device li span.dname {
-	font-size: 18px;
+	font-size: 1.8rem;
 	color: var(--white);
 	font-weight: 500;
 	text-align: center;
@@ -5841,7 +5841,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	transform: translate(-50%, -60%);
 	display: block;
 	line-height: 1.5;
-	font-size: 16px;
+	font-size: 1.6rem;
 	color: var(--white);
 }
 
@@ -5962,7 +5962,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	content: "\00d7";
 	color: var(--white);
 	padding: 3px 7px 0 0;
-	font-size: 24px;
+	font-size: 2.4rem;
 }
 
 .gm-ui-hover-effect img {
@@ -6003,7 +6003,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 
 .table-top {
 	color: var(--white);
-	font-size: 13px;
+	font-size: 1.3rem;
 }
 
 .table-top.clear .input-group1 {
@@ -6031,7 +6031,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 .table-top span:not(.caret) {
 	height: 24px;
 	line-height: 24px;
-	font-size: 14px;
+	font-size: 1.4rem;
 	color: var(--white87);
 	margin-right: 4px;
 }
@@ -6055,7 +6055,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	padding: 0;
 	width: 60px;
 	color: var(--white);
-	font-size: 12px;
+	font-size: 1.2rem;
 	background: var(--vivid-blue);
 	border-radius: 4px;
 }
@@ -6065,7 +6065,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	line-height: 30px;
 	color: var(--white87);
 	border: 0;
-	font-size: 12px;
+	font-size: 1.2rem;
 	background: var(--white10) var(--expand-arrow-down) no-repeat right 15px center;
 }
 
@@ -6078,7 +6078,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 
 .table-top .check-option label {
 	position: relative;
-	font-size: 14px;
+	font-size: 1.4rem;
 	padding-left: 15px;
 	cursor: pointer;
 	margin-right: 10px;
@@ -6094,7 +6094,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 
 .gmain-table div.alert-notice span {
 	display: inline-block;
-	font-size: 12px;
+	font-size: 1.2rem;
 	color: var(--white87);
 }
 
@@ -6124,7 +6124,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 .gmain-wrap .intable caption {
 	margin: 0 0 20px;
 	color: var(--white60);
-	font-size: 13px;
+	font-size: 1.3rem;
 	text-align: right;
 }
 
@@ -6134,7 +6134,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 }
 
 .gmain-wrap table thead th {
-	font-size: 13px;
+	font-size: 1.3rem;
 	color: var(--white87);
 	font-weight: normal;
 	border-bottom: 1px solid var(--dove-gray);
@@ -6145,7 +6145,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 }
 
 .gmain-wrap table thead th a {
-	font-size: 13px;
+	font-size: 1.3rem;
 	color: var(--white87);
 	font-weight: normal;
 }
@@ -6163,7 +6163,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	height: 47px;
 	line-height: 1.6;
 	color: var(--white60);
-	font-size: 13px;
+	font-size: 1.3rem;
 	text-align: center;
 	vertical-align: middle;
 }
@@ -6172,7 +6172,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	height: 47px;
 	line-height: 1.6;
 	color: var(--white60);
-	font-size: 13px;
+	font-size: 1.3rem;
 	text-align: left;
 	vertical-align: middle;
 }
@@ -6181,7 +6181,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	height: 47px;
 	line-height: 1.6;
 	color: var(--white60);
-	font-size: 13px;
+	font-size: 1.3rem;
 	text-align: right;
 	vertical-align: middle;
 }
@@ -6197,7 +6197,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 
 .gmain-wrap table tbody td a {
 	color: var(--white87);
-	font-size: 14px;
+	font-size: 1.4rem;
 }
 
 .gmain-wrap table tbody tr.click td a {
@@ -6265,7 +6265,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 
 .di-wrap dl dt .summ {
 	text-align: left;
-	font-size: 13px;
+	font-size: 1.3rem;
 	margin-top: -30px;
 }
 
@@ -6292,12 +6292,12 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 }
 
 .di-wrap dl dt .summ .soc .battery-per span {
-	font-size: 14px;
+	font-size: 1.4rem;
 	color: var(--white87);
 }
 
 .di-wrap dl dt .summ .soc .battery-per span em {
-	font-size: 16px;
+	font-size: 1.6rem;
 	color: var(--white);
 }
 
@@ -6316,7 +6316,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 }
 
 .di-wrap dl dd ul li {
-	font-size: 13px;
+	font-size: 1.3rem;
 	display: inline-block;
 	width: 50%;
 	white-space: nowrap;
@@ -6338,7 +6338,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 }
 
 .di-wrap dl dd .error h2 {
-	font-size: 12px;
+	font-size: 1.2rem;
 	display: table-cell;
 	white-space: nowrap;
 }
@@ -6352,7 +6352,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 }
 
 .di-wrap dl dd .error div p {
-	font-size: 12px;
+	font-size: 1.2rem;
 	white-space: nowrap;
 	line-height: 1.1;
 }
@@ -6429,7 +6429,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 .chart-wrapper .chart-top .ntit,
 .chart-wrapper2 .chart-top .ntit {
 	margin: 6px 0 20px;
-	font-size: 16px;
+	font-size: 1.6rem;
 	font-weight: 500;
 }
 
@@ -6443,7 +6443,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 
 .chart-wrapper .sum-list li {
 	color: var(--white87);
-	font-size: 14px;
+	font-size: 1.4rem;
 	font-weight: 400;
 }
 
@@ -6526,7 +6526,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 .term {
 	display: flex;
 	align-items: center;
-	font-size: 13px;
+	font-size: 1.3rem;
 	color: var(--white87);
 	font-weight: normal;
 }
@@ -6569,7 +6569,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	line-height: 1.6;
 	text-align: center;
 	vertical-align: middle;
-	font-size: 13px;
+	font-size: 1.3rem;
 	font-weight: normal;
 }
 
@@ -6607,7 +6607,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	line-height: 20px;
 	vertical-align: top;
 	width: 100%;
-	font-size: 13px;
+	font-size: 1.3rem;
 	color: var(--white);
 	text-align: right;
 	padding: 10px;
@@ -6628,7 +6628,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 
 .chart-info-right ul li em {
 	display: inline-block;
-	font-size: 14px;
+	font-size: 1.4rem;
 	color: var(--white87);
 	font-weight: 300;
 }
@@ -6645,7 +6645,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	width: 100%;
 	line-height: 25px;
 	display: table;
-	font-size: 16px;
+	font-size: 1.6rem;
 	color: var(--white);
 	text-align: right;
 }
@@ -6658,7 +6658,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 
 .smain-pv ul li > div:last-child {
 	text-align: right;
-	font-size: 13px;
+	font-size: 1.3rem;
 }
 
 .smain-pv ul li strong {
@@ -6670,14 +6670,14 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 
 .smain-pv ul li span {
 	display: inline-block;
-	font-size: 20px;
+	font-size: 2rem;
 	color: var(--white);
 	font-weight: 300;
 }
 
 .smain-pv ul li em {
 	display: inline-block;
-	font-size: 14px;
+	font-size: 1.4rem;
 	color: var(--white);
 	font-weight: 500;
 }
@@ -6708,7 +6708,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 .smain-cal .calendar thead th {
 	height: 34px;
 	line-height: 34px;
-	font-size: 12px;
+	font-size: 1.2rem;
 	text-align: center;
 }
 
@@ -6730,13 +6730,13 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	margin-bottom: 8px;
 	color: var(--white);
 	text-align: right;
-	font-size: 11px;
+	font-size: 1.1rem;
 }
 
 .smain-cal .calendar tbody td > div em:nth-child(2) {
 	margin-left: 4px;
 	color: var(--white60);
-	font-size: 11px;
+	font-size: 1.1rem;
 }
 
 .smain-cal .calendar tbody td div em .day {
@@ -6754,12 +6754,12 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	display: inline-flex;
 	white-space: nowrap;
 	color: var(--white);
-	font-size: 11px;
+	font-size: 1.1rem;
 }
 
 .smain-cal .calendar tbody td span strong {
 	color: var(--white);
-	font-size: 12px;
+	font-size: 1.2rem;
 	font-weight: 500;
 }
 
@@ -6767,7 +6767,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	margin-left: 4px;
 	color: var(--white60);
 	line-height: 16px;
-	font-size: 11px;
+	font-size: 1.1rem;
 }
 
 .smain-cal .calendar tbody td.disabled em {
@@ -6793,7 +6793,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 }
 
 .local-info table th {
-	font-size: 13px;
+	font-size: 1.3rem;
 	color: var(--white87);
 	font-weight: normal;
 	background: var(--white12);
@@ -6809,7 +6809,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 }
 
 .local-info table td {
-	font-size: 14px;
+	font-size: 1.4rem;
 	color: var(--white87);
 	font-weight: 300;
 }
@@ -6824,7 +6824,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 
 .smain.weather .chart-top .real-time {
 	float: right;
-	font-size: 12px;
+	font-size: 1.2rem;
 	color: var(--white87);
 }
 
@@ -6839,7 +6839,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 .weather-wrap table th,
 .weather-wrap table td {
 	padding: 5px 0;
-	font-size: 14px;
+	font-size: 1.4rem;
 	color: var(--grey);
 	text-align: center;
 }
@@ -6857,13 +6857,13 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	padding: 11px 16px;
 	background: var(--white10);
 	border-radius: 4px;
-	font-size: 14px;
+	font-size: 1.4rem;
 }
 
 .weather-table .today > * {
 	color: var(--white);
 	line-height: 24px;
-	font-size: 14px;
+	font-size: 1.4rem;
 }
 
 .weather-wrap .today span > * {
@@ -6958,7 +6958,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 .wt-list-wrap .list-type li {
 	border-bottom: 1px solid var(--bg-color2);
 	padding: 9px;
-	font-size: 12px;
+	font-size: 1.2rem;
 	line-height: 20px;
 	text-align: right;
 }
@@ -6977,7 +6977,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 .wt-list-wrap .list-type li strong,
 .wt-list-wrap .list-type li span {
 	font-weight: 300;
-	font-size: 12px;
+	font-size: 1.2rem;
 	line-height: 20px;
 }
 
@@ -7011,7 +7011,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	display: inline-block;
 	vertical-align: middle;
 	padding: 5px 10px;
-	font-size: 12px;
+	font-size: 1.2rem;
 	color: rgba(0, 0, 0, 0.87);
 	margin-left: 5px;
 	border-radius: 4px;
@@ -7033,18 +7033,18 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 
 .local-info table td {
 	border-bottom: 0;
-	font-size: 13px;
+	font-size: 1.3rem;
 }
 
 .local-info.smain td span {
-	font-size: 16px;
+	font-size: 1.6rem;
 }
 
 .smain-table .gmain-wrap table th,
 .smain-table .gmain-wrap table td {
 	padding: 2px 5px;
 	height: 30px;
-	font-size: 12px;
+	font-size: 1.2rem;
 	cursor: inherit;
 }
 
@@ -7107,13 +7107,13 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	color: var(--white60);
 	line-height: 22px;
 	text-align: left;
-	font-size: 12px;
+	font-size: 1.2rem;
 	font-weight: 500px;
 }
 
 .realtime-hhmm strong {
 	color: var(--white87);
-	font-size: 16px;
+	font-size: 1.6rem;
 	font-weight: 500;
 }
 
@@ -7128,7 +7128,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	left: 45px;
 	top: 0;
 	color: var(--white);
-	font-size: 12px;
+	font-size: 1.2rem;
 }
 
 .realtime-wrap .real-time .realtime-bar:before {
@@ -7198,7 +7198,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 .table-type th,
 .table-type td {
 	height: 25px;
-	font-size: 13px;
+	font-size: 1.3rem;
 	text-align: center;
 	border-left: 1px solid var(--bg-color2);
 	vertical-align: middle;
@@ -7236,11 +7236,11 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	height: 30px;
 	background: none;
 	color: var(--vivid-blue);
-	font-size: 13px;
+	font-size: 1.3rem;
 }
 
 .sm-title {
-	font-size: 14px;
+	font-size: 1.4rem;
 	color: var(--white87);
 }
 
@@ -7311,7 +7311,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 }
 
 .list-title {
-	font-size: 16px;
+	font-size: 1.6rem;
 	color: var(--white87);
 }
 
@@ -7323,7 +7323,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 
 .history-table thead th {
 	height: 56px;
-	font-size: 13px;
+	font-size: 1.3rem;
 	color: var(--white87);
 	font-weight: normal;
 	background: var(--box-darker);
@@ -7345,7 +7345,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 .history-table tbody td,
 .history-table tfoot td {
 	height: 38px;
-	font-size: 13px;
+	font-size: 1.3rem;
 	color: var(--white60);
 	text-align: center;
 	vertical-align: middle;
@@ -7428,7 +7428,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	display: inline-block;
 	vertical-align: middle;
 	padding: 5px 10px;
-	font-size: 12px;
+	font-size: 1.2rem;
 	color: rgba(0, 0, 0, 0.87);
 	margin-left: 10px;
 	border-radius: 4px;
@@ -7559,7 +7559,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 .device-list li.text-black span {
 	color: var(--black);
 	opacity: 0.87;
-	font-size: 14px;
+	font-size: 1.4rem;
 }
 
 .device-list li.text-black em {
@@ -7570,7 +7570,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 .device-list li:not(.text-black) span {
 	display: block;
 	font-weight: 400;
-	font-size: 14px;
+	font-size: 1.4rem;
 	line-height: 18px;
 	color: var(--white87);
 	white-space: nowrap;
@@ -7586,7 +7586,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 .device-list li em {
 	display: block;
 	margin-top: 10px;
-	font-size: 12px;
+	font-size: 1.2rem;
 	line-height: 14px;
 	color: var(--white87);
 	white-space: nowrap;
@@ -7693,7 +7693,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 }
 
 .equip-card .equip-card-ul .t-title {
-	font-size: 14px;
+	font-size: 1.4rem;
 	line-height: 20px;
 	color: var(--grey);
 }
@@ -7701,11 +7701,11 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 .equip-card .equip-card-ul .t-value {
 	padding: 8px 0 0 0;
 	line-height: 28px;
-	font-size: 20px;
+	font-size: 2rem;
 }
 
 .inv-search-box .inv-title {
-	font-size: 13px;
+	font-size: 1.3rem;
 	padding: 0 24px;
 	margin: 0 -24px;
 	line-height: 36px;
@@ -7769,7 +7769,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	display: flex;
 	align-items: center;
 	flex-wrap: wrap;
-	font-size: 14px;
+	font-size: 1.4rem;
 }
 
 .tag-box .tx-tit {
@@ -7784,7 +7784,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	margin: 0 12px 0 5px;
 	height: 36px;
 	line-height: 36px;
-	font-size: 14px;
+	font-size: 1.4rem;
 	color: var(--white60);
 	font-weight: 500;
 	vertical-align: middle;
@@ -7800,7 +7800,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	line-height: 1;
 	height: 28px;
 	color: var(--white87);
-	font-size: 12px;
+	font-size: 1.2rem;
 }
 
 .tag-box .axis-label {
@@ -7817,14 +7817,14 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	display: inline-block;
 	background: none;
 	border: 0;
-	font-size: 18px;
+	font-size: 1.8rem;
 	font-weight: 300;
 	padding: 0 5px 0 7px;
 }
 
 .tx-li-title {
 	margin-bottom: 10px;
-	font-size: 13px;
+	font-size: 1.3rem;
 }
 
 .sec-li-box {
@@ -7836,7 +7836,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	display: block;
 	/* padding: 3px 16px 3px 0; */
 	padding: 5px 0 3px;
-	font-size: 12px;
+	font-size: 1.2rem;
 	line-height: 28px;
 	color: var(--white60);
 }
@@ -7869,27 +7869,27 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 
 .value-wrapper .value-title {
 	margin-top: 25px;
-	font-size: 12px;
+	font-size: 1.2rem;
 	color: var(--white60);
 }
 
 .value-wrapper .value-title2 {
 	margin-top: 30px;
-	font-size: 13px;
+	font-size: 1.3rem;
 	color: var(--white87);
 }
 
 .value-wrapper .value-num {
 	margin-top: 5px;
 	text-align: right;
-	font-size: 11px;
+	font-size: 1.1rem;
 	color: var(--white60);
 }
 
 .analysis-chart .value-num,
 .value-wrapper .value-num .num {
 	margin-right: 5px;
-	font-size: 24px;
+	font-size: 2.4rem;
 	color: var(--white87);
 }
 
@@ -7909,7 +7909,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 
 .usage-chart .sel-calendar em {
 	display: inline-block;
-	font-size: 12px;
+	font-size: 1.2rem;
 	margin: 0 5px;
 }
 
@@ -7920,7 +7920,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	height: 36px;
 	line-height: 34px;
 	background: var(--vivid-blue);
-	font-size: 14px;
+	font-size: 1.4rem;
 	color: var(--white);
 	font-weight: 500;
 	border: 0;
@@ -8048,13 +8048,13 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 
 .di-list .di-li-title {
 	float: left;
-	font-size: 13px;
+	font-size: 1.3rem;
 	color: var(--white60);
 }
 
 .di-list .di-li-text {
 	float: right;
-	font-size: 13px;
+	font-size: 1.3rem;
 	color: var(--white87);
 }
 
@@ -8065,7 +8065,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 .di-text-box .tx {
 	color: var(--white60);
 	line-height: 23px;
-	font-size: 12px;
+	font-size: 1.2rem;
 	letter-spacing: -0.5px;
 }
 
@@ -8104,7 +8104,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 .toggle-box .table-text {
 	margin-top: 6px;
 	color: var(--white60);
-	font-size: 13px;
+	font-size: 1.3rem;
 	line-height: 36px;
 }
 
@@ -8146,7 +8146,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	border-radius: 2px;
 	border: 0;
 	color: var(--white87);
-	font-size: 14px;
+	font-size: 1.4rem;
 	resize: none;
 	width: 100%;
 	outline: none;
@@ -8184,7 +8184,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	padding: 0 13px;
 	border-bottom: 1px solid var(--dove-gray);
 	color: var(--white60);
-	font-size: 12px;
+	font-size: 1.2rem;
 	line-height: 40px;
 }
 
@@ -8199,7 +8199,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 .chart-legend-wrapper .legend-value {
 	float: right;
 	color: var(--white87);
-	font-size: 13px;
+	font-size: 1.3rem;
 }
 
 .table-wrap-type {
@@ -8486,7 +8486,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 .text-file > a {
 	display: block;
 	color: var(--vivid-blue);
-	font-size: 13px;
+	font-size: 1.3rem;
 }
 
 button.text-file {
@@ -8560,7 +8560,7 @@ button.text-file {
 
 .input-align .sel-calendar em {
 	display: inline-block;
-	font-size: 12px;
+	font-size: 1.2rem;
 	margin: 0 5px;
 }
 
@@ -8601,14 +8601,14 @@ button.text-file {
 
 .bullet span {
 	display: inline-block;
-	font-size: 13px;
+	font-size: 1.3rem;
 	line-height: 18px;
 }
 
 .bullet span:before {
 	display: inline-block;
 	margin: 4px 13px 0 0;
-	font-size: 13px;
+	font-size: 1.3rem;
 	width: 8px;
 	height: 8px;
 	border-radius: 4px;
@@ -8788,7 +8788,7 @@ button.text-file {
 
 .search-input-wrapper.narrow button.btn-add {
 	margin-top: 4px;
-	font-size: 15px;
+	font-size: 1.5rem;
 	border: none;
 	line-height: 24px;
 	height: 24px;
@@ -8842,7 +8842,7 @@ button.text-file {
 
 .search-top-info .search-btn strong {
 	margin: 0 12px;
-	font-size: 16px;
+	font-size: 1.6rem;
 }
 
 .search-bottom-wrapper {
@@ -8857,7 +8857,7 @@ button.text-file {
 .search-bottom-wrapper table th,
 .search-bottom-wrapper table td {
 	text-align: center;
-	font-size: 14px;
+	font-size: 1.4rem;
 }
 
 .search-bottom-wrapper table th {
@@ -8887,7 +8887,7 @@ button.text-file {
 
 .search-bottom-wrapper table td a {
 	color: var(--white87);
-	font-size: 14px;
+	font-size: 1.4rem;
 }
 
 .search-bottom-wrapper table td .link {
@@ -8906,7 +8906,7 @@ button.text-file {
 	text-align: left;
 	overflow: hidden;
 	margin-top: 6px;
-	font-size: 14px;
+	font-size: 1.4rem;
 	line-height: 20px;
 	white-space: wrap;
 }
@@ -8918,7 +8918,7 @@ button.text-file {
 .search-bottom-wrapper .bu:before {
 	display: inline-block;
 	margin: 0 13px 0 0;
-	font-size: 13px;
+	font-size: 1.3rem;
 	width: 8px;
 	height: 8px;
 	border-radius: 4px;
@@ -9019,7 +9019,7 @@ button.text-file {
 	width: calc(50% - 27px);
 	height: auto;
 	color: var(--white60);
-	font-size: 13px;
+	font-size: 1.3rem;
 	text-align: left;
 	border-bottom: 1px solid var(--white20);
 	border-radius: 0;
@@ -9031,7 +9031,7 @@ button.text-file {
 }
 
 .collect-box .command-list .flex-group .sm-title {
-	font-size: 13px;
+	font-size: 1.3rem;
 	color: var(--white60);
 	width: 6vw;
 }
@@ -9041,7 +9041,7 @@ button.text-file {
 	padding: 16px 0 14px;
 	width: calc(100%);
 	color: var(--white60);
-	font-size: 13px;
+	font-size: 1.3rem;
 	text-align: left;
 }
 
@@ -9145,7 +9145,7 @@ button.text-file {
 /* 원가관리 수정 */
 
 .text-type {
-	font-size: 13px;
+	font-size: 1.3rem;
 	line-height: 24px;
 	color: var(--white60);
 }
@@ -9191,7 +9191,7 @@ button.text-file {
 	box-sizing: unset;
 	vertical-align: middle;
 	text-align: center;
-	font-size: 13px;
+	font-size: 1.3rem;
 	color: var(--white60);
 }
 
@@ -9271,7 +9271,7 @@ button.text-file {
 /* 보고서 maintenanceReport.jsp && yieldReport.jsp */
 
 .ly-title {
-	font-size: 40px;
+	font-size: 4rem;
 	font-weight: 500;
 	color: var(--white87);
 }
@@ -9304,7 +9304,7 @@ button.text-file {
 }
 
 .spc-dialog {
-	font-size: 20px;
+	font-size: 2rem;
 	font-weight: 500;
 	color: var(--white87);
 }
@@ -9393,7 +9393,7 @@ th .btn-align {
 	line-height: 48px;
 	padding: 0 5px;
 	color: var(--white87);
-	font-size: 13px;
+	font-size: 1.3rem;
 	text-align: center;
 }
 
@@ -9455,7 +9455,7 @@ th .btn-align {
 	text-align: left;
 	height: 48px;
 	line-height: 24px;
-	font-size: 13px;
+	font-size: 1.3rem;
 	vertical-align: middle;
 	white-space: nowrap;
 }
@@ -9522,7 +9522,7 @@ th .btn-align {
 
 .desc {
 	margin-top: 6px;
-	font-size: 12px;
+	font-size: 1.2rem;
 	color: var(--white60);
 }
 
@@ -9784,7 +9784,7 @@ table.table-footer tfoot td.light {
 }
 
 .indiv.spc-detail h2.heading {
-	font-size: 14px;
+	font-size: 1.4rem;
 	color: var(--white87);
 }
 
@@ -9795,7 +9795,7 @@ table.table-footer tfoot td.light {
 
 .indiv.spc-detail .textarea {
 	padding: 12px 16px;
-	font-size: 14px;
+	font-size: 1.4rem;
 	color: var(--white60);
 }
 
@@ -9884,14 +9884,14 @@ table.table-footer tfoot td.light {
 
 .alarm-item .bu {
 	display: inline-block;
-	font-size: 13px;
+	font-size: 1.3rem;
 	line-height: 24px;
 }
 
 .alarm-item .bu:before {
 	display: inline-block;
 	margin: 0 13px 0 0;
-	font-size: 13px;
+	font-size: 1.3rem;
 	width: 8px;
 	height: 8px;
 	border-radius: 4px;
@@ -10148,7 +10148,7 @@ table.table-footer tfoot td.light {
 	display: flex;
 	align-items: center;
 	flex-wrap: wrap;
-	font-size: 14px;
+	font-size: 1.4rem;
 	border-bottom: 1px solid var(--dove-gray);
 }
 
@@ -10167,7 +10167,7 @@ table.table-footer tfoot td.light {
 	line-height: 1;
 	height: 28px;
 	color: var(--white87);
-	font-size: 12px;
+	font-size: 1.2rem;
 	cursor: pointer;
 }
 
@@ -10356,7 +10356,7 @@ table.table-footer tfoot td.light {
 
 .modal-content .upload-text {
 	color: var(--vivid-blue);
-	font-size: 12px;
+	font-size: 1.2rem;
 	line-height: 24px;
 }
 
@@ -10473,7 +10473,7 @@ table.table-footer tfoot td.light {
 .compare-title {
 	margin-top: 32px;
 	font-weight: 500;
-	font-size: 14px;
+	font-size: 1.4rem;
 	color: var(--white60);
 	line-height: 20px;
 }
@@ -10559,7 +10559,7 @@ table.table-footer tfoot td.light {
 	display: inline-block;
 	background: none;
 	border: 0;
-	font-size: 14px;
+	font-size: 1.4rem;
 	width: 100%;
 }
 
@@ -10612,7 +10612,7 @@ table.table-footer tfoot td.light {
 }
 
 .text-line1 {
-	font-size: 16px;
+	font-size: 1.6rem;
 	font-weight: 500;
 	line-height: 24px;
 	color: var(--white87);
@@ -10638,7 +10638,7 @@ table.table-footer tfoot td.light {
 .upload-photo .photo-text > * .upload-photo .photo-load,
 .report-select .report-text,
 .report-select .report-text > * .report-select .report-load {
-	font-size: 13px;
+	font-size: 1.3rem;
 	color: var(--white87);
 	line-height: 36px;
 }
@@ -10717,8 +10717,19 @@ table.table-footer tfoot td.light {
 	display: inline-block!important;
 }
 
+/* 반응형 시작 */
+html {
+	font-size: 10px;
+}
+
+@media (max-width: 1440px) {
+	html { font-size: 8px; }
+}
+
 /* Responsive - Tablet */
 @media (max-width: 768px) {
+	html { font-size: 7px; }
+
 	#deviceStateTypeList > .row {
 		height: auto!important;
 	}
@@ -10977,6 +10988,8 @@ table.table-footer tfoot td.light {
 
 /* Responsive - Mobile */
 @media (max-width: 480px) {
+	html { font-size: 6px; }
+
 	#rtuCommand .flex-group .sm-title {
 		width: 70px!important;
 	}
@@ -11362,7 +11375,7 @@ table.table-footer tfoot td.light {
     padding: 10px 5px;
     border-bottom: 1px solid var(--white50);
     margin: 0px 0px 10px 0px;
-    font-size: 14px;
+    font-size: 1.4rem;
 }
 
 .pointer {
@@ -11377,7 +11390,7 @@ table.table-footer tfoot td.light {
 .list-search > input {
 	width: 100%;
 	padding: 12px 8px;
-	font-size: 14px;
+	font-size: 1.4rem;
 	border: none;
 	background: none;
 	color: var(--white60);
@@ -11392,7 +11405,7 @@ table.table-footer tfoot td.light {
 	width: 276px;
 	height: 100%;
 	padding: 8px 16px;
-	font-size: 14px;
+	font-size: 1.4rem;
 	border-radius: 2px;
 	background: var(--white20);
 	border: none;
@@ -11419,7 +11432,7 @@ th > span.asterisk:after {
 .status-button {
 	/* min-width: 60px; */
 	/* width: 100%; */
-	font-size: 12px;
+	font-size: 1.2rem;
     display: inline-block;
 	text-align: center; 
     padding: 4px 7px;
@@ -11445,7 +11458,7 @@ th > span.asterisk:after {
 	transform: translateY(-50%);
 	padding: 4px 10px;
 	border-radius: 2px;
-	font-size: 12px;
+	font-size: 1.2rem;
 	white-space: nowrap;
 	color: rgba(255, 255, 255, 0.87);
 	background: rgba(0, 0, 0, 0.87);
@@ -11529,11 +11542,11 @@ th > span.asterisk:after {
 	display: flex;
 	align-items: flex-end;
 	color: var(--white60);
-	font-size: 16px;
+	font-size: 1.6rem;
 }
 
 .number-unit > span {
-	font-size: 28px;
+	font-size: 2.8rem;
 	margin-right: 8px;
 	color: var(--white87);
 }
@@ -11570,27 +11583,44 @@ th > span.asterisk:after {
 }
 
 .value-unit > span:first-child {
-	font-size: 28px;
+	font-size: 2.8rem;
 	color: var(--white87);
 	margin-right: 8px;
 }
 
 .value-unit > span:last-child {
-	font-size: 16px;
+	font-size: 1.6rem;
 	color: var(--white60);
 }
 
 .subtitle {
-	font-size: 14px;
+	font-size: 1.4rem;
 	/* font-weight: 500; */
 	color: var(--white60);
 }
 
 .subtitle + .value-unit > span:first-child {
-	font-size: 24px;
+	font-size: 2.4rem;
 	letter-spacing: -0.17px;
 }
 
 .subtitle + .value-unit > span:last-child {
-	font-size: 13px;
+	font-size: 1.3rem;
+}
+
+.deviceDescription {
+	justify-content: space-between;
+	align-items: center;
+}
+
+.deviceDescription > label {
+	min-width: 112px!important;
+}
+
+.deviceDescription > label:not(:first-child) {
+	padding-left: 20px!important;
+}
+
+.deviceDescription > input {
+	width: 130px!important;
 }
