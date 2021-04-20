@@ -255,14 +255,14 @@
 									</div>
 								</div>
 							</div>
-							<!-- <div class="input-group inline-flex deviceDescription">
+							<div class="input-group inline-flex deviceDescription">
 								<label for="descriptionId" class="input-label">ID</label>
 								<input class="input text-input-type" type="text" name="contact" id="descriptionId" autocomplete="off">
 								<label for="descriptionPass" class="input-label">Password</label>
 								<input class="input text-input-type" type="text" name="contact" id="descriptionPass" autocomplete="off">
 								<label for="descriptionCode" class="input-label">Code</label>
 								<input class="input text-input-type" type="text" name="contact" id="descriptionCode" autocomplete="off">
-							</div> -->
+							</div>
 							<div class="input-group inline-flex">
 								<label for="description" class="input-label"><fmt:message key="deviceState.popup.desc" /></label>
 								<textarea name="addDeviceDescription" id="description" class="textarea"></textarea>
@@ -1464,6 +1464,20 @@
 				async: false,
 				data: {},
 			}).done(function (data, textStatus, jqXHR) {
+				if (!isEmpty(data['description'])) {
+					try {
+						let description = /\{(.*?)\}/gi.exec(data['description']);
+						if (!isEmpty(description)) {
+							let json = JSON.parse(description[0]);
+							if (!isEmpty(json)) {
+								data['description'] = data['description'].replace(/{.*}/gi, '');
+								data['descriptionId'] = json['id'];
+								data['descriptionPass'] = json['pass'];
+								data['descriptionCode'] = json['rtoid'];
+							}
+						}
+					} catch (e) {}
+				}
 
 				setJsonAutoMapping(data, 'addDeviceModal', 'dropdown');
 
@@ -1593,6 +1607,19 @@
 			if (isEmpty(areaData['metering_type'])) {
 				alert('<fmt:message key="deviceState.alert.10" />');
 				return false;
+			}
+
+			if (!isEmpty(areaData['descriptionId']) || !isEmpty(areaData['descriptionPass']) || !isEmpty(areaData['descriptionCode'])) {
+				let description = new Object();
+				description['id'] = areaData['descriptionId'];
+				description['pass'] = areaData['descriptionPass'];
+				description['rtoid'] = areaData['descriptionCode'];
+
+				areaData['description'] = areaData['description'] + JSON.stringify(description);
+
+				delete areaData['descriptionId'];
+				delete areaData['descriptionPass'];
+				delete areaData['descriptionCode'];
 			}
 		}
 
