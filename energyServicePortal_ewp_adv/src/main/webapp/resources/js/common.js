@@ -79,7 +79,7 @@ $(function() {
 //        $(".table-wrapper").css("min-height",tbl_height);
 		$(this).parents('.indiv').find(".fold-box").slideToggle();
 		$(this).toggleClass("on");
-		$(this).text($(this).text() == '표접기' ? '펼치기' : '표접기');
+		// $(this).text($(this).text() == '표접기' ? '펼치기' : '표접기');
 	});
 });
 

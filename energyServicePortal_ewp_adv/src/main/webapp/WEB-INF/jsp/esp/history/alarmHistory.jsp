@@ -1743,7 +1743,10 @@
 				symbolHeight: 8
 			},
 			tooltip: {
-				shared: true
+				formatter() {
+					return this.key+": "+this.y+"<fmt:message key='alarm.cases' />";
+				},
+				shared: true,
 			},
 			plotOptions: {
 				pie: {

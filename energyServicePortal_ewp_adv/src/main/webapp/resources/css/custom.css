@@ -4901,7 +4901,7 @@ input.inp[readonly]:focus {
  ==================================== */
 
 .table-top {
-	padding-bottom: 28px;
+	padding-bottom: 10px;
 }
 
 .table-top .btn-fold {
@@ -11658,4 +11658,8 @@ th > span.asterisk:after {
 .table-unit-info {
 	color: var(--white60);
 	font-size: 1.4rem;
+}
+
+.pvGen-fold > span {
+	margin-right: 15px;
 }
