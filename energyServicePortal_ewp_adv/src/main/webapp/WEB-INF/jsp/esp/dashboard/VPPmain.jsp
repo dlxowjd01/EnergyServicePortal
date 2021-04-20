@@ -426,7 +426,7 @@
 						"startTime": interval.today[0],
 						"endTime": interval.today[1],
 						"interval": "hour",
-						"displayType": "dashboard",
+// 						"displayType": "dashboard",
 						"formId": "v2"
 					}),
 				}),
@@ -440,7 +440,7 @@
 						"startTime": interval.today[0],
 						"endTime": interval.today[1],
 						"interval": "15min",
-						"displayType": "dashboard",
+// 						"displayType": "dashboard",
 						"formId": "v2"
 					}),
 				}),
@@ -454,7 +454,7 @@
 						"startTime": interval.month[0],
 						"endTime": interval.month[1],
 						"interval": "day",
-						"displayType": "dashboard",
+// 						"displayType": "dashboard",
 						"formId": "v2"
 					}),
 				}),
@@ -481,7 +481,7 @@
 						"startTime": interval.today[0],
 						"endTime": interval.today[1],
 						"interval": "day",	
-						"displayType": "dashboard",
+// 						"displayType": "dashboard",
 						"formId": "v2"
 					}),
 				}),
