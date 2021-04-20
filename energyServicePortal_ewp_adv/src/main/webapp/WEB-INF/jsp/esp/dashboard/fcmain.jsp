@@ -336,7 +336,8 @@
 				data: {
 					sids: siteId,
 					metering_type: 2,
-					interval: 'day'
+					interval: 'day',
+					runningtime: true,
 				}
 			}),
 			$.ajax({
@@ -385,7 +386,8 @@
 						$('.fcmain-block-s .value-unit span:last-child').eq(1).html('') //금일 열 생산량
 					} else {
 						const todayEnergy = displayNumberFixedDecimal(siteEnergy['energy'], 'Wh', 3, 1)
-							, todayHeat = displayNumberFixedDecimal(siteEnergy['henergy'], 'Wh', 3, 1);
+							, todayHeat = displayNumberFixedDecimal(siteEnergy['henergy'], 'Wh', 3, 1)
+							, runningTime = siteEnergy['runningtime'];
 
 						//금일 발전량
 						$('.fcmain-block-s .value-unit span:first-child').eq(0).html(todayEnergy[0]); //금일 발전량
@@ -394,6 +396,13 @@
 						//금일 열 생산량
 						$('.fcmain-block-s .value-unit span:first-child').eq(1).html(todayHeat[0]) //금일 열 생산량
 						$('.fcmain-block-s .value-unit span:last-child').eq(1).html(todayHeat[1]) //금일 열 생산량
+
+						if (!isEmpty(runningTime)) {
+							const runningHour = f2(runningTime / 60);
+							$('#fcmain-1-2 div:nth-child(3) ul:last-child li:last-child span:first-child').text(runningHour).next().text('Hrs');
+						} else {
+							$('#fcmain-1-2 div:nth-child(3) ul:last-child li:last-child span:first-child').text('-').next().text('');
+						}
 					}
 				} else if (index === 1) {
 					const siteEnergy = rspns['data'][siteId];
@@ -783,11 +792,13 @@
 						});
 					}
 				} else {
-					const siteData = rspns['data'][siteId]
-						, nowEnergyData = siteData['energy'];
+					if (!isEmpty(rspns['data']) && !isEmpty(rspns['data'][siteId])) {
+						const siteData = rspns['data'][siteId]
+							, nowEnergyData = siteData['energy'];
 
-					monthlyGenData[today.getDate() - 1] = nowEnergyData;
-					monthlyMoneyData[today.getDate() - 1] = siteData['money'];
+						monthlyGenData[today.getDate() - 1] = nowEnergyData;
+						monthlyMoneyData[today.getDate() - 1] = siteData['money'];
+					}
 				}
 			});
 
