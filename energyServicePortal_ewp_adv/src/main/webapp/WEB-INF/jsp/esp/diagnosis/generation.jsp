@@ -183,7 +183,7 @@
 				<a href="javascript:void(0);" class="btn-save"><fmt:message key="genforecast.4.dataextracts" /></a>
 			</div>
 			<div class="table-top clear">
-				<h2 class="ntit fl"><fmt:message key="genforecast.4.datatable" /></h2>
+				<h2 class="ntit fl"><fmt:message key="genforecast.4.datatable" /> <span class="table-unit-info">(kWh)</span></h2>
 				<span class="fr"><a href="javascript:void(0);" class="btn-fold"><fmt:message key="generation.collapse" /></a></span>
 			</div>
 			<div class="table-wrapper">

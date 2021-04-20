@@ -1539,7 +1539,7 @@
 									</div>
 									<div class="radio-group">
 										<input type="radio" id="지상권부근저당" name="지상권설정여부" value="지상권부근저당">
-										<label for="지상권부근저당">지상관부근저당</label>
+										<label for="지상권부근저당">지상권부근저당</label>
 									</div>
 								</fieldset>
 							</td>

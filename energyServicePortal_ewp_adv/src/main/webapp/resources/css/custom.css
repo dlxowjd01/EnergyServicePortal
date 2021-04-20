@@ -11654,3 +11654,8 @@ th > span.asterisk:after {
 #deviceStateTypeList .indiv.equip-card {
 	overflow-y: auto;
 }
+
+.table-unit-info {
+	color: var(--white60);
+	font-size: 1.4rem;
+}

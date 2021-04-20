@@ -138,7 +138,7 @@
 		<div class="indiv chart-pv table-box">
 			<div class="table-save-box"><a href="#;" class="btn-save"><fmt:message key="renewablesgen.4.dataextracts" /></a></div>
 			<div class="table-top clear">
-				<h2 class="ntit fl"><fmt:message key="renewablesgen.4.powergenerationchart" /></h2>
+				<h2 class="ntit fl"><fmt:message key="renewablesgen.4.powergenerationchart" /> <span class="table-unit-info">(kWh)</span></h2>
 				<span class="fr"><a href="#;" class="btn-fold"><fmt:message key="pvGen.table.fold" /></a></span>
 			</div>
 			<div class="table-wrapper">
@@ -153,7 +153,7 @@
 		<div class="indiv chart-pv table-box">
 			<div class="table-save-box"><a href="#;" class="btn-save"><fmt:message key="renewablesgen.4.dataextracts" /></a></div>
 			<div class="table-top clear">
-				<h2 class="ntit fl"><fmt:message key="renewablesgen.4.powergenerationchart2" /></h2>
+				<h2 class="ntit fl"><fmt:message key="renewablesgen.4.powergenerationchart2" /> <span class="table-unit-info">(W/㎡)</span></h2>
 				<span class="fr"><a href="#;" class="btn-fold"><fmt:message key="pvGen.table.fold" /></a></span>
 			</div>
 			<div class="table-wrapper">
