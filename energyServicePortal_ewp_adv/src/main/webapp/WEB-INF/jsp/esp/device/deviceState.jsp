@@ -1616,11 +1616,11 @@
 				description['rtoid'] = areaData['descriptionCode'];
 
 				areaData['description'] = areaData['description'] + JSON.stringify(description);
-
-				delete areaData['descriptionId'];
-				delete areaData['descriptionPass'];
-				delete areaData['descriptionCode'];
 			}
+
+			delete areaData['descriptionId'];
+			delete areaData['descriptionPass'];
+			delete areaData['descriptionCode'];
 		}
 
 
