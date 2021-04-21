@@ -554,23 +554,22 @@
 
 							let chargeArr = new Array();
 							let dashArr = new Array();
-							let deviceType = ['SM', 'SM_ISMART', 'SM_KPX', 'SM_CRAWLING', 'SM_MANUAL', 'INV_PV', 'INV_WIND', 'PCS_ESS', 'BMS_SYS',
-								'BMS_RACK', 'SENSOR_SOLAR', 'SENSOR_FLAME', 'SENSOR_TEMP_HUMIDITY', 'CCTV', 'COMBINER_BOX', 'CIRCUIT_BREAKER', 'KPX_EPOWERMARKET'
-							];
+							// let deviceType = ['SM', 'SM_ISMART', 'SM_KPX', 'SM_CRAWLING', 'SM_MANUAL', 'INV_PV', 'INV_WIND', 'PCS_ESS', 'BMS_SYS',
+							// 	'BMS_RACK', 'SENSOR_SOLAR', 'SENSOR_FLAME', 'SENSOR_TEMP_HUMIDITY', 'CCTV', 'COMBINER_BOX', 'CIRCUIT_BREAKER', 'KPX_EPOWERMARKET'
+							// ];
 
 							devices.sortOn('name');
 							$.each(devices, function (i, el) {
 								if (el.billing) billingArray.push(el.did);
 								if (el.dashboard) dashboardArray.push(el.did);
-								$.each(deviceType, function (j, tp) {
-									if (tp == el.device_type && (el.dashboard || el.billing)) {
-										let deviceHtml = $('<li>').append('<a>');
-										deviceHtml.find('a').attr('href', '#').attr('tabindex', '-1');
-										deviceHtml.find('a').append('<input id="' + el.did + '" name="device" type="checkbox" value="' + el.did + '" data-name="' + sNm + '_' + el.name + '" data-did="' + el.did + '" data-capacity="' + el.capacity + '">').append('<label>');
-										deviceHtml.find('label').attr('for', el.did).append('<span>').append('&nbsp;' + el.name);
-										siteGrp.find('ul').append(deviceHtml);
-									}
-								});
+
+								if (el.forecasting && (el.dashboard || el.billing)) {
+									let deviceHtml = $('<li>').append('<a>');
+									deviceHtml.find('a').attr('href', '#').attr('tabindex', '-1');
+									deviceHtml.find('a').append('<input id="' + el.did + '" name="device" type="checkbox" value="' + el.did + '" data-name="' + sNm + '_' + el.name + '" data-did="' + el.did + '" data-capacity="' + el.capacity + '">').append('<label>');
+									deviceHtml.find('label').attr('for', el.did).append('<span>').append('&nbsp;' + el.name);
+									siteGrp.find('ul').append(deviceHtml);
+								}
 							});
 
 							$('#deviceType .selectDevices').prepend(siteGrp);
