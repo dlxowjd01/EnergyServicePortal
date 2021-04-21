@@ -229,6 +229,19 @@
 						</ul>
 					</div>
 				</li>
+				<li class="smn8 menu-item">
+					<a href="javascript:void(0);">설정</a>
+					<div class="sub-layer">
+						<ul>
+							<li><a href="/setting/userSetting.do">사용자관리</a></li>
+							<li><a href="/setting/siteSetting.do">사이트관리</a></li>
+							<li><a href="/setting/groupSetting.do">그룹관리</a></li>
+							<li><a href="/setting/alarmSetting.do">알람설정</a></li>
+							<li><a href="/setting/batchSetting.do">배치 설정</a></li>
+							<li><a href="/setting/comCodeSetting.do">공통코드 설정</a></li>
+						</ul>
+					</div>
+				</li>
 				<li class="smn9">
 					<a href="/spc/notice.do">공지사항</a>
 				</li>
@@ -355,6 +368,17 @@
 								<li><a href="javascript:void(0);">수익이력</a></li>
 								<li><a href="javascript:void(0);">자원정보</a></li>
 							</c:if>
+						</ul>
+					</li>
+					<li class="gmn8 menu-item">
+						<a href="javascript:void(0);">설정</a>
+						<ul class="sub-menu-list">
+							<li><a href="/setting/userSetting.do">사용자관리</a></li>
+							<li><a href="/setting/siteSetting.do">사이트관리</a></li>
+							<li><a href="/setting/groupSetting.do">그룹관리</a></li>
+							<li><a href="/setting/alarmSetting.do">알람설정</a></li>
+							<li><a href="/setting/batchSetting.do">배치 설정</a></li>
+							<li><a href="/setting/comCodeSetting.do">공통코드 설정</a></li>
 						</ul>
 					</li>
 					<li class="gmn9">
