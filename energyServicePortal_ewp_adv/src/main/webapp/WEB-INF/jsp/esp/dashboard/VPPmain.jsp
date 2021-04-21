@@ -364,6 +364,7 @@
 	const vppId = '${vgid}';
 	const interval = {
 		today: getDayInterval(),
+		yesterday: getYesterdayInterval(),
 		month: getMonthInterval(),
 		year: getYearInterval(),
 		week: getLast7DaysInterval()
@@ -471,7 +472,7 @@
 						"cal_incentive": true,
 					}),
 				}), */
-				$.ajax({ // 7
+				$.ajax({ // 7 - 1
 					url: apiHost + "/get/energy/forecasting/sites",
 					type: "POST",
 					dataType: "json",
@@ -485,7 +486,7 @@
 						"formId": "v2"
 					}),
 				}),
-				$.ajax({ // 8
+				$.ajax({ // 8 - 1
 					type: "GET",
 					url: apiHost + "/vpp/energy/sites",
 					data: {
@@ -496,7 +497,7 @@
 						detailByBasetime: true
 					},
 				}),
-				$.ajax({ // 9 //  상태 조회용
+				$.ajax({ // 9 - 1 //  상태 조회용
 					url: apiHost + "/get/status/raw/sites",
 					type: "POST",
 					dataType: "json",
@@ -509,7 +510,7 @@
 					}),
 				}),
 
-				$.ajax({ // 10 // 통신 조회용
+				$.ajax({ // 10 - 1 // 통신 조회용
 					url: apiHost + "/get/status/raw/sites",
 					type: "POST",
 					dataType: "json",
@@ -521,7 +522,7 @@
 						"operation": "overall",
 					}),
 				}),
-				$.ajax({ // 11 // 테이블용
+				$.ajax({ // 11 - 1 // 테이블용
 					url: apiHost + "/get/status/raw/sites",
 					type: "POST",
 					dataType: "json",
@@ -532,7 +533,7 @@
 						"operation": "active",
 					}),
 				}),
-				$.ajax({ // 12 // 테이블용
+				$.ajax({ // 12 - 1 // 테이블용
 					url: apiHost + "/energy/now/sites",
 					type: "GET",
 					data: {
@@ -541,7 +542,7 @@
 						interval: "hour",
 					},
 				}),
-				$.ajax({ // 13
+				$.ajax({ // 13 - 1
 					type: "GET",
 					url: apiHost + "/vpp/energy/sites",
 					data: {
@@ -552,7 +553,7 @@
 						detailByBasetime: true,
 					},
 				}),
-				$.ajax({ // 14 // 테이블용
+				$.ajax({ // 14 - 1 // 테이블용
 					url: apiHost + "/energy/forecast/accuracy",
 					type: "POST",
 					dataType: "json",
@@ -565,7 +566,7 @@
 						"cal_incentive": true,
 					}),
 				}),
-				$.ajax({ // 15 // 기상정보
+				$.ajax({ // 15 - 1 // 기상정보
 					url: apiHost + "/get/weather/site",
 					type: "POST",
 					dataType: "json",
@@ -578,7 +579,7 @@
 						"formId": "v2",
 					}),
 				}),
-				$.ajax({ // 16 // 주간오차
+				$.ajax({ // 16 - 1 // 주간오차
 					url: apiHost + "/energy/forecast/accuracy",
 					type: "POST",
 					dataType: "json",
@@ -592,7 +593,7 @@
 						"includeEachSite": true,
 					}),
 				}),
-				$.ajax({ // 17
+				$.ajax({ // 17 - 1
 					type: "GET",
 					url: apiHost + "/vpp/energy/sites",
 					data: {
@@ -617,7 +618,7 @@
 				// 		"includeEachSite": false,
 				// 	}),
 				// }),
-				$.ajax({ // 17
+				/* $.ajax({ // 18 - 1
 					type: "GET",
 					url: apiHost + "/vpp/energy/sites",
 					data: {
@@ -627,6 +628,19 @@
 						interval: "month",
 						detailByBasetime: true,
 					},
+				}), */
+				$.ajax({ // 17 // 임시 전일: // 6 호출 주석처리 되돌리면 삭제 필요
+				url: apiHost + "/energy/forecast/accuracy",
+				type: "POST",
+				dataType: "json",
+				contentType: "application/json",
+				data: JSON.stringify({
+					"sids": sids,
+					"startTime": interval.yesterday[0],
+					"endTime": interval.yesterday[1],
+					"interval": "day",
+					"cal_incentive": false,
+					}),
 				}),
 			];
 
@@ -666,15 +680,14 @@
 
 				// const weeklyMeanAccuracy2 = getWeeklyMeanAccuracy(res[6].data.data.each); // [일~오늘] 에서 [7일전~어제(api호출값)]로 변경
 				const weeklyMeanAccuracy = convertFormatWeeklyAccuracy(acc.week.each);
-
 				TotalTrading(vppInfo.hour.map(x => x[1])); // 금일 총 전력거래량
 				TotalProfit(vppInfo.hour.map(x => x[1]), acc.day); // 금일 총 수익
 				Graph1.setOption(vppInfo.hour.map(x => x[1]), Object.values(forecast.hour)); // 전력거래량 예측
 				Graph2.setOption(vppInfo.hour.map(x => x[1])); // 보조자원 예측
 				Graph3.setOption(vppInfo.month.map(x => x[1]), vppInfo.year.map(x => x[1]), acc.month, acc.year); // 수익 현황
 				PieGraph.draw(Object.values(acc.day.total).length ? Object.values(acc.day.total)[0].accuracy : "-"); // 예측 정확도
-// 				PieGraph.setTextData(Object.values(acc.month.total), Object.values(acc.week.total)[0].accuracy, acc.lastMonth, acc.lastYear); // 예측 정확도 라벨
-				PieGraph.setTextData([], Object.values(acc.week.total)[0].accuracy, acc.lastMonth, acc.lastYear); // 예측 정확도 라벨
+// 				PieGraph.setTextData(Object.values(acc.month.total), Object.values(acc.week.total)[0].accuracy, acc.lastMonth, acc.lastYear); // 예측 정확도 라벨 // 6 주석 되돌리면 반영 필요, 아래줄 삭제
+				PieGraph.setTextData(Object.values(res[17].data.data.total), Object.values(acc.week.total)[0].accuracy, acc.lastMonth, acc.lastYear); // 예측 정확도 라벨
 				setResourceStatus(vppInfo.hour); // 자원 현황
 				SiteStatus.refresh(vppInfo.hour, forecast.day, acc.day, status, res[14]); // 발전 현황
 				setPrediction(forecast["15min"], vppInfo.day.map(x => x[1]), Object.values(acc.day.total).length ? Object.values(acc.day.total)[0].accuracy : "-"); // 총 예측사이트 , 설비용량 , 정확도
@@ -985,9 +998,10 @@
 		},
 
 		setTextData(day, week, month, year) {
-			day.pop()
+// 			day.pop() // 6번 주석처리 취소시 반영 필요
 			console.log(day, week, month, year)
-// 			$("#accLastDay").html((100 - (day.pop().accuracy) * 100).toFixed(1));
+// 			$("#accLastDay").html((100 - (day.pop().accuracy) * 100).toFixed(1)); // 6번 주석처리 취소시 반영 필요, 아래 삭
+			$("#accLastDay").html((100 - (day[0].accuracy) * 100).toFixed(1));
 			$("#accLastWeek").html((100 - (week) * 100).toFixed(1));
 			// $("#accLastMonth").html((100 - (day) * 100).toFixed(1));
 			// $("#accLastYear").html((100 - (day) * 100).toFixed(1));

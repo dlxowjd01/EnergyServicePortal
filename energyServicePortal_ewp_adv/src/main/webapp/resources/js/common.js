@@ -805,6 +805,23 @@ function getDayInterval() {
 	];
 }
 
+function getYesterdayInterval() {
+	const cur = new Date();
+
+	const [y, m, d] = [
+		String(cur.getFullYear()),
+		String(cur.getMonth()).padStart(2, 0),
+		String(cur.getDate()).padStart(2, 0),
+	];
+
+	const yesterday = new Date(y, m, d - 1);
+
+	return [
+		(String(yesterday.getFullYear())+String(yesterday.getMonth() + 1).padStart(2, 0)+String(yesterday.getDate()).padStart(2, 0)+`000000`) * 1,
+		(String(yesterday.getFullYear())+String(yesterday.getMonth() + 1).padStart(2, 0)+String(yesterday.getDate()).padStart(2, 0)+`235959`) * 1,
+	];
+}
+
 function getMonthInterval() {
 	const cur = new Date();
 
