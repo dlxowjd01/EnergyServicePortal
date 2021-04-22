@@ -482,11 +482,9 @@ const minAjax = async () => {
 								if (deviceType.match('INV')) {
 									if (!operation.includes(deviceData['operation'])) { operation.push(deviceData['operation']); }
 									acPowerSum += (isEmpty(deviceData['activePower'])) ? 0 : Number(deviceData['activePower']);
-									// capacitySum += (isEmpty(deviceData['capacity'])) ? 0 : Number(deviceData['capacity']);
 									invertorCount += (isEmpty(deviceData['devices'])) ? 0 : deviceData['devices'].length;
 
 									activePower = (activePower != '-') ? Number(activePower) + Number(deviceData['activePower']) : Number(deviceData['activePower']);
-									// capacity = (capacity != '-') ? Number(capacity) + Number(deviceData['capacity']) : Number(deviceData['capacity']); // 사이트 용량: status에서 config값 으로 
 									inverterCnt = (!isEmpty(deviceData['devices'])) ? deviceData['devices'].length : '-';
 
 									if ($('.dbTime').data('timestamp') === undefined || ($('.dbTime').data('timestamp') != undefined && Number($('.dbTime').data('timestamp')) < deviceData['timestamp'])) {
@@ -501,21 +499,18 @@ const minAjax = async () => {
 							}
 						});
 
-						capacity = siteList.find(x => x.sid === site_id).capacities.gen;
-
 						$('#siteList tr.dbclickopen').each(function() {
 							if ($(this).data('sid') === site_id) {
-								$(this).find('td:eq(5)').text(displayNumberFixedUnit(siteList.find(x => x.sid === site_id).capacities.gen, "W", "kW", 0)[0]);
 								$(this).data('operation', operation);
 
+								const targetSite = siteList.find(x => x.sid === site_id);
 								const detail = $(this).next('tr.detail-info');
 								detail.find('.di-top-sec .fl .tx2').text(irradiationPoa + ' W/㎡');
 								detail.find('.di-bottom-sec .left .di-list li:eq(0) span.di-li-text').text(numberComma(Math.round(activePower / 1000)));
-								detail.find('.di-bottom-sec .right .di-list li:eq(0) span.di-li-text').text(displayNumberFixedUnit(siteList.find(x => x.sid === site_id).capacities.gen, "W", "kW", 0)[0]);
 								detail.find('.di-bottom-sec .right .di-list li:eq(1) span.di-li-text').text(numberComma(inverterCnt));
 
 								let activePercent = 0, title = '', etc = 0;
-								if ((!isNaN(activePower) || activePower > 0) && (!isNaN(capacity) || capacity > 0)) {
+								if ((!isNaN(activePower) || activePower > 0) && (!isNaN(targetSite.capacity) || targetSite.capacity > 0)) {
 									activePercent = Math.floor((activePower / capacity) * 100);
 									etc = 100 - activePercent;
 									title = activePercent + '%';
@@ -540,15 +535,13 @@ const minAjax = async () => {
 							}
 						});
 					});
-					capacitySum = 0;
-					siteList.forEach(siteConfig => {
-						capacitySum += (isEmpty(siteConfig.capacities.gen)) ? 0 : siteConfig.capacities.gen;
-					});
 				}
 			}
 		});
-		return {acPowerSum, capacitySum, invertorCount, energySum}
-	}).then(({acPowerSum, capacitySum, invertorCount, energySum}) => {
+		return {acPowerSum, invertorCount, energySum}
+	}).then(({acPowerSum, invertorCount, energySum}) => {
+		let capacitySum = siteList.map(el => el['capacity']).reduce(function add(sum, currValue) { return Number(sum) + Number(currValue); });
+
 		const usage = Math.floor((acPowerSum / capacitySum) * 100)
 			, other = 100 - usage
 			, generationHour = (Math.round((energySum / capacitySum) * 100) / 100).toFixed(2);
@@ -1667,7 +1660,6 @@ const searchSite = async function (siteSids) {
 				} else if (index === 6) {
 					let operation = new Array();
 					let activePower = '';
-					let capacity = '';
 					let inverterCount = '';
 					let irradiationPoa = '';
 
@@ -1685,7 +1677,6 @@ const searchSite = async function (siteSids) {
 									//대상은 INV 인버터 타입 대상
 									if (deviceType.match('INV')) {
 										activePower = (activePower != '-') ? activePower + deviceData['activePower'] : deviceData['activePower'];
-										capacity = (capacity != '-') ? capacity + deviceData['capacity'] : deviceData['capacity'];
 										inverterCount = (!isEmpty(deviceData['devices'])) ? deviceData['devices'].length : '-';
 									} else if (deviceType === 'SENSOR_SOLAR') {
 										if (!isEmpty(deviceData) && !isEmpty(deviceData['irradiationPoa'])) {
@@ -1697,25 +1688,17 @@ const searchSite = async function (siteSids) {
 						});
 					}
 
-					const curSite = siteList.find(x => x.sid === siteId);
-
 					if (targetDevice) {
-						if (isNaN(capacity)) { capacity = '-'; }
 						if (isNaN(activePower)) { activePower = '-'; }
-
 
 						site['inverterCount'] = inverterCount //사이트에 속한 인버터 갯수.
 						site['operation'] = operation; //사이트 상태 정보.
-						capacity = site.capacities.gen; //추가: 용량: status에서 config로 변경.
-						site['capacity'] = capacity;   //사이트에 속한 인버터 설비 용량 정보.
-						// site['capacity'] = site.capacities.gen;
-						site['capacityView'] = (isEmpty(capacity) || capacity === '-') ? '-' : displayNumberFixedUnit(capacity, 'W', 'kW', 0)[0];   //사이트에 속한 인버터 설비 용량 정보.
 						site['activePower'] = activePower;   //사이트에 속한 인버터.
 						site['activePowerView'] =(isEmpty(activePower) || activePower === '-') ? '-' : displayNumberFixedUnit(activePower, 'W', 'kW', 0)[0];   //사이트에 속한 인버터.
 						site['irradiationPoa'] = irradiationPoa;   //사이트에 속한 인버터 설비 용량 정보.
+						site['capacity'] = site.capacities.gen;
+						site['capacityView'] = displayNumberFixedUnit(site.capacities.gen, 'W', 'kW', 0)[0];
 					}
-						site['capacity'] = displayNumberFixedUnit(curSite.capacities.gen, 'W', 'kW', 0)[0];
-						site['capacityView'] = displayNumberFixedUnit(curSite.capacities.gen, 'W', 'kW', 0)[0];
 				}
 			});
 		});
@@ -1871,7 +1854,7 @@ const searchSite = async function (siteSids) {
 
 			setTimeout(function () {
 				refineList.forEach((site, siteIdx) => {
-					let capacity = (site.capacity === undefined || (site.capacity == '-' && isNaN(site.capacity))) ? 0 :site.capacity;
+					let capacity = (isEmpty(site.capacities) && isEmpty(site.capacities.gen)) ? 0 : site.capacities.gen;
 					let activePower = (site.activePower === undefined || (site.activePower == '-' && isNaN(site.activePower))) ? 0 : site.activePower;
 
 					let activePercent = 0, title = '', etc = 0;
