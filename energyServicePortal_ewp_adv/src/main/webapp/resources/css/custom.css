@@ -2757,6 +2757,12 @@ html[lang="en"] .all-menu > a:after {
 	height: 300px;
 }
 
+#abnormalitySite > .dropdown-menu {
+	top: 72px;
+	width: 260px;
+	height: 300px;
+}
+
 #spcId>.dropdown-menu,
 #genId>.dropdown-menu {
 	top:90px;width:260px;height:300px

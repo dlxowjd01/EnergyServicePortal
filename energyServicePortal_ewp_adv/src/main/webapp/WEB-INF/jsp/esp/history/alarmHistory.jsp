@@ -15,6 +15,67 @@
 	</div>
 </div>
 
+<div id="abnormalityModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content alarm-modal-content">
+			<div class="modal-header">
+				<h2>설비 이상 등록</h2>
+			</div>
+			<div class="modal-body">
+				<div class="flex-start">
+					<span class="input-label">사이트</span>
+					<div id="abnormalitySite" class="dropdown">
+						<button type="button" class="dropdown-toggle no-close required" data-name="<fmt:message key='alarm.popup.status.select' />" data-toggle="dropdown" aria-expanded="false">선택<span class="caret"></span></button>
+						<ul class="dropdown-menu chk-type" role="menu"></ul>
+					</div>
+				</div>
+				<hr>
+				<div class="flex-start">
+					<span class="input-label">설비유형</span>
+					<div id="abnormalityDeviceType" class="dropdown">
+						<button type="button" class="dropdown-toggle no-close required" data-name="<fmt:message key='alarm.popup.status.select' />" data-toggle="dropdown" aria-expanded="false">선택<span class="caret"></span></button>
+						<ul class="dropdown-menu chk-type"></ul>
+					</div>
+				</div>
+				<hr>
+				<div class="flex-start">
+					<span class="input-label">설비명</span>
+					<div id="abnormalityDevice" class="dropdown">
+						<button type="button" class="dropdown-toggle no-close required" data-name="<fmt:message key='alarm.popup.status.select' />" data-toggle="dropdown" aria-expanded="false">선택<span class="caret"></span></button>
+						<ul class="dropdown-menu chk-type"></ul>
+					</div>
+				</div>
+				<hr>
+				<div class="flex-start">
+					<span class="input-label">알람종류</span>
+					<div id="abnormalityAlarm" class="dropdown">
+						<button type="button" class="dropdown-toggle required" data-name="<fmt:message key='alarm.popup.status.select' />" data-toggle="dropdown" aria-expanded="false">선택<span class="caret"></span></button>
+						<ul class="dropdown-menu">
+							<li data-value="9"><a href="javascript:void(0);"><fmt:message key='alarm.search.level.unknown' /></a></li>
+							<li data-value="0"><a href="javascript:void(0);"><fmt:message key='alarm.search.level.info' /></a></li>
+							<li data-value="1"><a href="javascript:void(0);"><fmt:message key='alarm.search.level.warn' /></a></li>
+							<li data-value="2"><a href="javascript:void(0);"><fmt:message key='alarm.search.level.abnornal' /></a></li>
+							<li data-value="3"><a href="javascript:void(0);"><fmt:message key='alarm.search.level.trip' /></a></li>
+							<li data-value="4"><a href="javascript:void(0);"><fmt:message key='alarm.search.level.normal' /></a></li>
+						</ul>
+					</div>
+				</div>
+				<hr>
+				<div class="flex-start">
+					<span class="input-label">알람메세지</span>
+					<textarea id="abnormalityDesc" name="abnormalityDesc" class="textarea"></textarea>
+				</div>
+				<hr>
+				<div class="btn-wrap-type02">
+					<button type="button" class="btn-type03" data-dismiss="modal"><fmt:message key='alarm.popup.cancel' /></button>
+					<button type="button" class="btn-type ml-12" onclick="abnormalityRegister();"><fmt:message key='alarm.popup.confirm' /></button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
 <div id="alarmMeasure" class="modal fade" role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content alarm-modal-content">
@@ -72,7 +133,7 @@
 						<ul class="dropdown-menu"></ul>
 					</div>
 					<div class="text-input-type w-20 ml-6">
-						<input type="hidden" id="ticket_user_id" name="ticket_user_id" placeholder="<fmt:message key='alarm.selfInput' />" readonly autocomplete="off">
+						<input type="hidden" id="ticket_user_id" name="ticket_user_id" f="<fmt:message key='alarm.selfInput' />" readonly autocomplete="off">
 						<input type="text" id="ticket_phone" name="ticket_phone" placeholder="<fmt:message key='alarm.selfInput' />" autocomplete="off">
 					</div>
 				</div>
@@ -311,6 +372,12 @@
 					<button type="button" id="search" class="btn-type ml-6"><fmt:message key="alertshistory.1.update" /></button>
 				</div>
 			</div>
+
+			<div class="fr">
+				<div class="sa-select" style="display:inline-block;">
+					<button type="button" id="abnormality" class="btn-type03">설비 이상 등록</button>
+				</div>
+			</div>
 		</form>
 	</div>
 </div>
@@ -478,6 +545,17 @@
 			$('#picture').trigger('click');
 		});
 
+		$('#abnormality').on('click', function() {
+			/* 초기화 */
+			$('#abnormalityModal .dropdown-toggle').each(function() {
+				$(this).html($(this).data('name') + '<span class="caret"></span>').data('value', '');
+			});
+			$('#abnormalityDesc').val('');
+
+			abnormalitySite();
+
+			$('#abnormalityModal').modal('show');
+		});
 	});
 
 	$(document).on('change', 'input[type="file"]', function () {
@@ -540,6 +618,13 @@
 			deviceTypeList();
 		} else if (id == 'maintenanceReportList') {
 			addReportId();
+		} else if (id == 'abnormalitySite') {
+			dropDownInit($('#abnormalityDeviceType'));
+			dropDownInit($('#abnormalityDevice'));
+			deviceTypeList('', 'abnormalityDeviceType');
+		} else if (id === 'abnormalityDeviceType') {
+			dropDownInit($('#abnormalityDevice'));
+			abnormalityDevice();
 		}
 	}
 	
@@ -567,17 +652,134 @@
 		displayDropdown($('#site'));
 	};
 
-	const searchSite = keyword => {
+	const searchSite = (keyword, target) => {
 		const result = sites.filter(x => x.name.includes(keyword));
 
-		siteList("", result);
+		if (isEmpty(target)) {
+			siteList('', result);
+		} else {
+			abnormalitySite(result);
+		}
 	}
 
-	const deviceTypeList = function (sidparam) {
-		$('#equipmentList > div > ul').empty();
+	//설비이상 등록용 사이트 리스트
+	const abnormalitySite = (search = []) => {
+		const siteDropdown = $('#abnormalityModal .dropdown:eq(0)');
+		const makeSite = search.length ? Array.from(search) : Array.from(sites);
+		makeSite.sortOn('name');
+		makeSite.unshift({ sid: 'all', name: '<fmt:message key="alarm.search.all" />'});
+		siteDropdown.find('ul').empty();
+		makeSite.forEach((site, index) => {
+			siteDropdown.find('ul').append(`
+				<li data-value="${'${site.sid}'}">
+					<a href="javascript:void(0);" tabindex="-1">
+						<input type="checkbox" id="site_abnormality_${'${index}'}" name="site_abnormality" value="${'${site.sid}'}">
+						<label for="site_${'${index}'}">${'${site.name}'}</label>
+					</a>
+				</li>
+			`);
+		});
+
+		siteDropdown.find('input[value="all"]').parent().after('<li class="btn-wrap-border-min"></li>');
+		if (!siteDropdown.find('.dropdown-search').length) {
+			siteDropdown.prepend(`<div class="dropdown-search"><input type="text" placeholder="<fmt:message key="dropdown.siteSearch" />" onKeyup="searchSite($(this).val(), 'abnormality')" ></div>`);
+		}
+	};
+
+	//설비이상 디바이스 리스트
+	const abnormalityDevice = function () {
+		let siteArray = new Array();
+		$('#abnormalityDevice ul').empty();
+
+		if ($(':checkbox[name="site_abnormality"]:checked').val() === 'all') {
+			document.querySelectorAll('[name="site_abnormality"]').forEach(check => {
+				if (check.value !== 'all') { siteArray.push(check.value); }
+			});
+		} else {
+			document.querySelectorAll('[name="site_abnormality"]:checked').forEach(checked => { siteArray.push(checked.value); });
+		}
+
+		let devices = new Array();
+		const siteOid = sites[0].oid;
+		if (siteArray.length > 0) {
+			const arr = deviceInternet(siteArray, siteOid);
+			const deviceTypeList = new Array();
+			document.querySelectorAll('[name="deviceType_abnormality"]:checked').forEach(checked => { deviceTypeList.push(checked.value); });
+
+			arr.forEach((device, index) => {
+				if (deviceTypeList.includes(device.device_type)) {
+					$('#abnormalityDevice ul').append(`
+						<li data-value="${'${device.did}'}">
+							<a href="javascript:void(0);" tabindex="-1">
+								<input type="checkbox" id="device_abnormality_${'${index}'}" value="${'${device.did}'}" name="device_abnormality" data-type="${'${device.device_type}'}">
+									<label for="device_abnormality_${'${index}'}">${'${device.name}'}</label>
+							</a>
+						</li>
+					`);
+				}
+			});
+		}
+	}
+
+	/* 설비이상 등록 */
+	const abnormalityRegister = function () {
+		const registerDate = new Date();
+		const targetApi = new Array();
+		$('#abnormalityModal .dropdown-toggle').each(function() {
+			if (isEmpty($(this).data('value'))) {
+				alert($(this).parent().prev().text() + ' 선택해주세요.');
+				return false;
+			}
+		});
+
+		$('[name="device_abnormality"]:checked').each(function() {
+			targetApi.push($.ajax({
+				url: apiHost + '/tools/request/alarm?oid=' + oid + '&confirm=KEY_IDERMS_REQUEST_ALARM&type=device',
+				type: 'post',
+				contentType: 'application/json',
+				data: JSON.stringify({
+					did: $(this).val(),
+					device_type:  $(this).data('type'),
+					timestamp: Number(registerDate.getTime()),
+					localtime: Number(registerDate.format('yyyyMMddHHmmss')),
+					code: String($('#abnormalityAlarm button').data('value')),
+					desc: $('#abnormalityDesc').val()
+				})
+			}));
+		});
+
+		if (targetApi.length > 0) {
+			Promise.allSettled(targetApi).then(response => {
+				let success = 0, fail = 0;
+				response.forEach(rspn => {
+					if (rspn.status === 'fulfilled') {
+						success++;
+					} else {
+						fail++;
+					}
+				});
+
+				if (success > 0 && fail <=0) {
+					alert(success + '개의 설비이상을 등록했습니다.');
+					$('#abnormalityModal').modal('hide');
+					return false;
+				} else if (success <=0 && fail > 0) {
+					alert(fail + '개의 설비이상 등록에 실패했습니다.');
+					$('#abnormalityModal').modal('hide');
+					return false;
+				} else {
+					alert(success + '개의 설비를 등록했습니다.\n' + fail + '개의 설비 등록에 실패했습니다.');
+					$('#abnormalityModal').modal('hide');
+					return false;
+				}
+			});
+		}
+	}
+
+	const deviceTypeList = function (sidparam, target) {
 		let deviceList = [];
 		let sites = JSON.parse('${siteList}');
-		dataList = deviceType(sites, sidparam);
+		dataList = deviceType(sites, target, sidparam);
 		
 		$.each(dataList[0], function(i, deviceName){
 			const kdeviceName = eval('deviceTemplate.' + deviceName);
@@ -585,12 +787,26 @@
 		});
 
 		deviceList.sortOn('name');
-		setMakeList(deviceList, 'device', { 'dataFunction': {} });
+		if (isEmpty(target)) {
+			setMakeList(deviceList, 'device', { 'dataFunction': {} });
 
-		if (sidparam == '' || sidparam == undefined) {
-			$(':checkbox[name="deviceType"]').prop('checked', false);
+			if (sidparam == '' || sidparam == undefined) {
+				$(':checkbox[name="deviceType"]').prop('checked', false);
+			} else {
+				$(':checkbox[name="deviceType"]').prop('checked', true);
+			}
 		} else {
-			$(':checkbox[name="deviceType"]').prop('checked', true);
+			$('#abnormalityDeviceType ul').empty();
+			deviceList.forEach((device, index) => {
+				$('#abnormalityDeviceType ul').append(`
+					<li data-value="${'${device.type}'}">
+						<a href="javascript:void(0);" tabindex="-1">
+							<input type="checkbox" id="type_abnormality_${'${index}'}" value="${'${device.type}'}" name="deviceType_abnormality">
+								<label for="type_abnormality_${'${index}'}">${'${device.name}'}</label>
+						</a>
+					</li>
+				`);
+			});
 		}
 	};
 
@@ -1276,23 +1492,26 @@
 		});
 	}
 	
-	const deviceType = function (sites, sidparam) {
-		if (sidparam != undefined && sidparam != "") {
+	const deviceType = function (sites, target, sidparam) {
+		if (!isEmpty(sidparam)) {
 			$('#equipmentList button').empty().append('<fmt:message key="alarm.search.all" /><span class="caret"></span>');
 		} else {
-			$('#equipmentList button').empty().append('<fmt:message key="alarm.popup.status.select" /><span class="caret"></span>');
+			if (isEmpty(target)) {
+				$('#equipmentList button').empty().append('<fmt:message key="alarm.popup.status.select" /><span class="caret"></span>');
+			} else {
+				$('#abnormalityDeviceType button').empty().append('<fmt:message key="alarm.popup.status.select" /><span class="caret"></span>');
+			}
 		}
+
 		let siteArray = new Array();
-		if ($(':checkbox[name="site"]:checked').val() === 'all') {
-			document.querySelectorAll('[name="site"]').forEach(check => {
-				if (check.value !== 'all') {
-					siteArray.push(check.value);
-				}
+		let targetSite = 'site';
+		if (!isEmpty(target) && target === 'abnormalityDeviceType') { targetSite = 'site_abnormality'; }
+		if ($(':checkbox[name="' + targetSite + '"]:checked').val() === 'all') {
+			document.querySelectorAll('[name="' + targetSite + '"]').forEach(check => {
+				if (check.value !== 'all') { siteArray.push(check.value); }
 			});
 		} else {
-			document.querySelectorAll('[name="site"]:checked').forEach(checked => {
-				siteArray.push(checked.value);
-			});
+			document.querySelectorAll('[name="' + targetSite + '"]:checked').forEach(checked => { siteArray.push(checked.value); });
 		}
 
 		let deviceTypes = [];
