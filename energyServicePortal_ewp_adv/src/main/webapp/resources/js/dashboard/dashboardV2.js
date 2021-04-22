@@ -475,8 +475,7 @@ const minAjax = async () => {
 					});
 				} else {
 					Object.entries(resData).forEach(([site_id, siteDevice]) => {
-						let operation = new Array(), activePower = '', capacity = '',
-							inverterCnt = '', irradiationPoa = '';
+						let operation = new Array(), activePower = '', inverterCnt = '', irradiationPoa = '';
 						Object.entries(siteDevice).forEach(([deviceType, deviceData]) => {
 							if (!isEmpty(deviceData)) {
 								if (deviceType.match('INV')) {
@@ -511,7 +510,7 @@ const minAjax = async () => {
 
 								let activePercent = 0, title = '', etc = 0;
 								if ((!isNaN(activePower) || activePower > 0) && (!isNaN(targetSite.capacity) || targetSite.capacity > 0)) {
-									activePercent = Math.floor((activePower / capacity) * 100);
+									activePercent = Math.floor((activePower / targetSite.capacity) * 100);
 									etc = 100 - activePercent;
 									title = activePercent + '%';
 									if (isNaN(activePercent)) { title = '- %'; }
