@@ -725,54 +725,59 @@
 	const abnormalityRegister = function () {
 		const registerDate = new Date();
 		const targetApi = new Array();
+		let requierd = true;
+
 		$('#abnormalityModal .dropdown-toggle').each(function() {
 			if (isEmpty($(this).data('value'))) {
 				alert($(this).parent().prev().text() + ' 선택해주세요.');
+				requierd = false;
 				return false;
 			}
 		});
 
-		$('[name="device_abnormality"]:checked').each(function() {
-			targetApi.push($.ajax({
-				url: apiHost + '/tools/request/alarm?oid=' + oid + '&confirm=KEY_IDERMS_REQUEST_ALARM&type=device',
-				type: 'post',
-				contentType: 'application/json',
-				data: JSON.stringify({
-					did: $(this).val(),
-					device_type:  $(this).data('type'),
-					timestamp: Number(registerDate.getTime()),
-					localtime: Number(registerDate.format('yyyyMMddHHmmss')),
-					code: String($('#abnormalityAlarm button').data('value')),
-					desc: $('#abnormalityDesc').val()
-				})
-			}));
-		});
+		if (requierd) {
+			$('[name="device_abnormality"]:checked').each(function() {
+				targetApi.push($.ajax({
+					url: apiHost + '/tools/request/alarm?oid=' + oid + '&confirm=KEY_IDERMS_REQUEST_ALARM&type=device',
+					type: 'post',
+					contentType: 'application/json',
+					data: JSON.stringify({
+						did: $(this).val(),
+						device_type:  $(this).data('type'),
+						timestamp: Number(registerDate.getTime()),
+						localtime: Number(registerDate.format('yyyyMMddHHmmss')),
+						code: String($('#abnormalityAlarm button').data('value')),
+						desc: $('#abnormalityDesc').val()
+					})
+				}));
+			});
 
-		if (targetApi.length > 0) {
-			Promise.allSettled(targetApi).then(response => {
-				let success = 0, fail = 0;
-				response.forEach(rspn => {
-					if (rspn.status === 'fulfilled') {
-						success++;
+			if (targetApi.length > 0) {
+				Promise.allSettled(targetApi).then(response => {
+					let success = 0, fail = 0;
+					response.forEach(rspn => {
+						if (rspn.status === 'fulfilled') {
+							success++;
+						} else {
+							fail++;
+						}
+					});
+
+					if (success > 0 && fail <=0) {
+						alert(success + '개의 설비이상을 등록했습니다.');
+						$('#abnormalityModal').modal('hide');
+						return false;
+					} else if (success <=0 && fail > 0) {
+						alert(fail + '개의 설비이상 등록에 실패했습니다.');
+						$('#abnormalityModal').modal('hide');
+						return false;
 					} else {
-						fail++;
+						alert(success + '개의 설비를 등록했습니다.\n' + fail + '개의 설비 등록에 실패했습니다.');
+						$('#abnormalityModal').modal('hide');
+						return false;
 					}
 				});
-
-				if (success > 0 && fail <=0) {
-					alert(success + '개의 설비이상을 등록했습니다.');
-					$('#abnormalityModal').modal('hide');
-					return false;
-				} else if (success <=0 && fail > 0) {
-					alert(fail + '개의 설비이상 등록에 실패했습니다.');
-					$('#abnormalityModal').modal('hide');
-					return false;
-				} else {
-					alert(success + '개의 설비를 등록했습니다.\n' + fail + '개의 설비 등록에 실패했습니다.');
-					$('#abnormalityModal').modal('hide');
-					return false;
-				}
-			});
+			}
 		}
 	}
 

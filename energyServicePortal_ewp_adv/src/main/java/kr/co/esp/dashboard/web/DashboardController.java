@@ -17,6 +17,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static kr.co.esp.common.util.RestApiUtil.get;
+
 /**
  * 대시보드 컨트롤러
  */
@@ -225,6 +227,16 @@ public class DashboardController {
 	 */
 	@RequestMapping(value = "/dashboard/VPPmain.do")
 	public String VPPmain(HttpServletRequest request, HttpSession session, Model model) {
+		String vgid = (String) request.getAttribute("vgid");
+
+		if (vgid == null || "".equals(vgid)) {
+			List<Map<String, Object>> vppList = (List<Map<String, Object>>) request.getAttribute("vpp_group");
+			if (vppList != null && vppList.size() > 0) {
+				vgid = (String) vppList.get(0).get("vgid");
+			}
+		}
+
+		request.setAttribute("vgid", vgid);
 		return "esp/dashboard/VPPmain";
 	}
 }
