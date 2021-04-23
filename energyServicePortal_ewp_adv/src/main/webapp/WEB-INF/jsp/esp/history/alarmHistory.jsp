@@ -368,9 +368,11 @@
 					</div>
 				</div>
 
-				<div class="sa-select">
-					<button type="button" id="search" class="btn-type ml-6"><fmt:message key="alertshistory.1.update" /></button>
-				</div>
+				<c:if test="${fn:contains(pageContext.request.contextPath, 'local') or fn:contains(pageContext.request.contextPath, 'test')}">
+					<div class="sa-select">
+						<button type="button" id="search" class="btn-type ml-6"><fmt:message key="alertshistory.1.update" /></button>
+					</div>
+				</c:if>
 			</div>
 
 			<div class="fr">
