@@ -1743,7 +1743,7 @@
 	const showError = (msg) => {
 		$('#errMsg').text(msg);2
 		$('#errorModal').modal('show');
-		setTimeout(function () {
+		setTimeout(_ => {
 			$('#errorModal').modal('hide');
 		}, 2000);
 	}

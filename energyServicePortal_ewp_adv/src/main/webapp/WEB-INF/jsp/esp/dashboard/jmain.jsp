@@ -222,7 +222,7 @@
 						</tr>
 						</thead>
 						<tbody id="siteList">
-							<tr class="dbclickopen flag[INDEX]">
+							<tr class="dbclickopen flag[INDEX]" data-operation="[statusClass]">
 								<td class="first-td">
 									<span class="status [statusClass]" title="[status]">[status]</span>
 									<span class="status-bar"></span>

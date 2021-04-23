@@ -1929,12 +1929,28 @@ const searchOperationSite = () => {
 	document.querySelectorAll('[name="deviceStatus"]:checked').forEach(chk => {
 		deviceStatus.push(chk.value);
 	});
-	if (deviceStatus.includes("2")) {deviceStatus.push("-");} // 트립 선택시 알수없음(or 이상)포함
+	if (deviceStatus.includes("2")) { deviceStatus.push("-"); } // 트립 선택시 알수없음(or 이상)포함
 
 	$('#siteList tr.dbclickopen').each(function() {
-		const operation = $(this).data('operation')
-			, siteAddress = $(this).data('address')
+		let operation = $(this).data('operation');
+		const siteAddress = $(this).data('address')
 			, siteName = $(this).find('td:eq(4)').text();
+
+		switch (operation) {
+			case "status-drv":
+				operation = 1;
+			break;
+
+			case "status-stop":
+				operation = 0;
+			break;
+
+			case "status-error":
+				operation = 2;
+			break;
+		}
+
+		console.log(deviceStatus, operation)
 
 		if (deviceStatus.length === 4) {
 			const searchPattern = new RegExp(searchName, 'i'); //ignoreCase 대소문자 구분X

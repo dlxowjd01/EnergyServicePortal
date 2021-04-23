@@ -1769,7 +1769,6 @@ table tbody td .dropdown-menu {
 	color: var(--sandy-brown);
 }
 
-.warning:before,
 .warning-text:before {
 	display: block;
 	float: left;
@@ -6379,7 +6378,7 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	vertical-align: middle;
 	width: 22px;
 	height: 22px;
-	margin: 2px 2px auto 20px;
+	margin: 2px 2px auto 3px;
 }
 
 /* 운전 ?????? */
@@ -7959,6 +7958,13 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	margin: 2px auto;
 }
 
+.first-td .status-bar {
+	position: absolute;
+	right: 0;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
 .t1 .status-bar,
 .t2 .status-bar,
 .status-bar {
@@ -8091,7 +8097,8 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 }
 
 .gmain-table .gmain-wrap .first-td {
-	text-align: left;
+	text-align: center;
+	position: relative;
 }
 
 .menu-btn-wrapper {
