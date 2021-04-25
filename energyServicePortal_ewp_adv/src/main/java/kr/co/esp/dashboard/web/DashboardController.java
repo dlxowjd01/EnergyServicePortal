@@ -239,4 +239,10 @@ public class DashboardController {
 		request.setAttribute("vgid", vgid);
 		return "esp/dashboard/VPPmain";
 	}
+
+	// 예측입찰 (임시)
+	@RequestMapping(value = "/dashboard/predictionBid.do")
+	public String predictionBid(HttpServletRequest request, HttpSession session, Model model) {
+		return "esp/dashboard/predictionBid";
+	}
 }

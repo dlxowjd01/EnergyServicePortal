@@ -2779,7 +2779,7 @@
 								<td class="flex-start-td">
 									<input type="file" id="spc_file_05" class="hidden" name="spc_file_05" accept=".gif, .jpg, .png" multiple="">
 									<label for="spc_file_05" class="btn file-upload">파일 선택</label>
-									<<div class="file_list ml-16">
+									<div class="file_list ml-16">
 									<ul data-basic="No Files Selected">
 										<li>No Files Selected</li>
 									</ul>

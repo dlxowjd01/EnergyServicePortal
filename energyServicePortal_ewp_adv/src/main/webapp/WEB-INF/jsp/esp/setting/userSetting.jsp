@@ -35,40 +35,38 @@
 		getSpcList(optionList[1], copySpcList, setDropdownValue);
 
 		// Validation
-		$("#newId").on('keydown', function() {
-			$(this).val($(this).val().replace(/\s/g, ''));
-		});
+		$("#newId")
+			.on('keydown', function() {
+				$(this).val($(this).val().replace(/\s/g, ''));
+			})
+			.on('input', function() {
+				$("#validId").addClass("hidden");
+			})
+			.on('keyup', function() {
+				let warning = $("#newId").parents(".col-lg-4").find(".warning");
 
-		$("#newId").on('input', function() {
-			$("#validId").addClass("hidden");
-		});
+				if( $(this).val().match(/[^\x00-\x80]/) ){
+					$(this).val("");
+				}
 
-		$("#newId").on('keyup', function() {
-			let warning = $("#newId").parents(".col-lg-4").find(".warning");
+				if( $(this).val().match(/[^\w-_]/) ) {
+					warning.eq(2).removeClass("hidden");
+				} else {
+					warning.eq(2).addClass("hidden");
+				}
 
-			if( $(this).val().match(/[^\x00-\x80]/) ){
-				$(this).val("");
-			}
+				if( $(this).val().length <= 4 || $(this).val().length > 15) {
+					warning.eq(1).removeClass("hidden");
+				} else {
+					warning.eq(1).addClass("hidden");
+				}
 
-			if( $(this).val().match(/[^\w-_]/) ) {
-				warning.eq(2).removeClass("hidden");
-			} else {
-				warning.eq(2).addClass("hidden");
-			}
-
-			if( $(this).val().length <= 4 || $(this).val().length > 15) {
-				warning.eq(1).removeClass("hidden");
-			} else {
-				warning.eq(1).addClass("hidden");
-			}
-
-			if( warning.not(".hidden").index() == -1 ){
-				$("#newId").parent().next().prop("disabled", false);
-			} else {
-				$("#newId").parent().next().prop("disabled", true);
-			}
-
-		});
+				if( warning.not(".hidden").index() == -1 ){
+					$("#newId").parent().next().prop("disabled", false);
+				} else {
+					$("#newId").parent().next().prop("disabled", true);
+				}
+			});
 
 		$("#newUserPwd").on('input', validatePassword);
 
@@ -78,14 +76,24 @@
 			let validated = $("#pwdUserMatched").hasClass("hidden");
 		});
 
-		$("#newFullName").on('input', function(evt) {
-			if( $(this).val().match(/['.,!#$%&"*+/=?^`{|}~;:<>]+$/)){
-				$(this).parent().next().removeClass("hidden");
-				return false;
-			} else {
-				$(this).parent().next().addClass("hidden");
-			}
-		});
+		$("#newFullName")
+			.on("keyup", function(e) {
+				let warning = $(this).parents(".col-lg-4").find(".warning");
+				
+				if(($(this).val().length <= 3 || $(this).val().length > 28) && $(this).val().match(/['.,!#$%&"*+/=?^`{|}~;:<>]+$/)) {
+					warning.eq(1).removeClass("hidden");
+				} else {
+					warning.eq(1).addClass("hidden");
+				}
+			})
+			// .on('input', function(evt) {
+			// 	if( $(this).val().match(/['.,!#$%&"*+/=?^`{|}~;:<>]+$/)){
+			// 		$(this).parent().next().removeClass("hidden");
+			// 		return false;
+			// 	} else {
+			// 		$(this).parent().next().addClass("hidden");
+			// 	}
+			// });
 
 		$("#newFullName").on('keyup', function(evt) {
 			if(!isEmpty($(this).val())){
@@ -242,7 +250,7 @@
 		});
 
 		// Form Submission
-		$("#updateUserForm").on("submit", function(e){
+		$("#updateUserForm").on("submit", function(e) {
 			e.preventDefault();
 
 			let option = {};
@@ -2021,7 +2029,7 @@
 						<div class="row">
 							<div class="col-lg-2 col-sm-3"><span class="input-label"><span class="asterisk"><fmt:message key='userSetting.name' /></span></span></div>
 							<div class="col-lg-4 col-sm-9">
-								<div class="text-input-type"><input type="text" id="newFullName" name="new_full_name" placeholder="<fmt:message key='userSetting.input' />" minlength="2" maxlength="28"></div>
+								<div class="text-input-type"><input type="text" id="newFullName" name="new_full_name" placeholder="<fmt:message key='userSetting.input' />" minlength="3" maxlength="28"></div>
 								<small class="hidden warning"><fmt:message key='userSetting.errorTxt.6' /></small>
 							</div>
 							<div class="col-lg-2 col-sm-3"><span class="input-label offset"><span class="asterisk"><fmt:message key='userSetting.password' /></span></span></div>
