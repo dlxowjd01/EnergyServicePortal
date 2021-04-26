@@ -23,6 +23,9 @@
 		<c:when test="${fn:contains(pageContext.request.serverName, 'wpsolar')}">
 			<title>Wpsolar iDERMS</title>
 		</c:when>
+		<c:when test="${fn:contains(pageContext.request.serverName, 'msp')}">
+			<title>E-Max iDERMS</title>
+		</c:when>
 		<c:otherwise>
 			<title>Encored iDERMS</title>
 		</c:otherwise>
@@ -90,6 +93,9 @@
 				</c:when>
 				<c:when test="${fn:contains(pageContext.request.serverName, 'spower')}">
 					changeFavicon('/resources/favicon.ico');
+				</c:when>
+				<c:when test="${fn:contains(pageContext.request.serverName, 'msp')}">
+					changeFavicon('/resources/favicon_msp.ico');
 				</c:when>
 				<c:otherwise>
 					changeFavicon('/resources/favicon_encored.ico');
@@ -488,6 +494,9 @@
 				<c:when test="${fn:contains(pageContext.request.serverName, 'wpsolar')}">
 					<div class="nav-brand wpsolar"><a href="#">WpSolar</a></div>
 				</c:when>
+				<c:when test="${fn:contains(pageContext.request.serverName, 'msp')}">
+					<div class="nav-brand msp"><a href="#">E-Max</a></div>
+				</c:when>
 				<c:otherwise>
 					<div class="nav-brand"><a href="#">Encored</a></div>
 				</c:otherwise>
@@ -504,6 +513,9 @@
 					</c:when>
 					<c:when test="${fn:contains(pageContext.request.serverName, 'wpsolar')}">
 						<img src="../img/logo_wpsolar.svg" alt="login modal wpsolar logo" class="login-logo center"/>
+					</c:when>
+					<c:when test="${fn:contains(pageContext.request.serverName, 'msp')}">
+						<img src="../img/logo_msp.svg" alt="login modal msp logo" class="login-logo center login-msp"/>
 					</c:when>
 					<c:otherwise>
 						<img src="../img/logo_iderms.svg" alt="login modal iderms logo" class="login-logo center"/>

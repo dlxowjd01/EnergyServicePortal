@@ -13,6 +13,9 @@
 	<c:when test="${fn:contains(pageContext.request.serverName, 'wpsolar')}">
 		<title>WpSolar iDERMS</title>
 	</c:when>
+	<c:when test="${fn:contains(pageContext.request.serverName, 'msp')}">
+		<title>E-Max iDERMS</title>
+	</c:when>
 	<c:otherwise>
 		<title>Encored iDERMS</title>
 	</c:otherwise>
@@ -99,13 +102,16 @@
 	$(document).ready(function () {
 		<c:choose>
 			<c:when test="${fn:contains(pageContext.request.serverName, 'spower')}">
-		changeFavicon('/resources/favicon.ico');
+				changeFavicon('/resources/favicon.ico');
 			</c:when>
 			<c:when test="${fn:contains(pageContext.request.serverName, 'wpsolar')}">
-		changeFavicon('/resources/favicon_wpsolar.ico');
+				changeFavicon('/resources/favicon_wpsolar.ico');
+			</c:when>
+			<c:when test="${fn:contains(pageContext.request.serverName, 'msp')}">
+				changeFavicon('/resources/favicon_msp.ico');
 			</c:when>
 			<c:otherwise>
-		changeFavicon('/resources/favicon_encored.ico');
+				changeFavicon('/resources/favicon_encored.ico');
 			</c:otherwise>
 		</c:choose>
 

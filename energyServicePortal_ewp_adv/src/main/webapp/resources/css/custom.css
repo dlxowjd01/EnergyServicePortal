@@ -217,6 +217,7 @@ bootstrap default
 	--spower-logo: url("/img/logo_spower.svg");
 	--wpsolar-logo: url("/img/logo_wpsolar.svg");
 	--spower-logo-wh: url("/img/logo_spower_wh.svg");
+	--msp-logo: url("/img/logo_msp.svg");
 }
 
 html.darkmode:root {
@@ -2270,6 +2271,20 @@ nav .category {
 	background: var(--wpsolar-logo) no-repeat -25px 12px;
 	background-size: 182px 36px;
 	font-size: 0;
+}
+
+.nav-brand.msp a {
+	width: 130px;
+	height: 100%;
+	background: var(--msp-logo) no-repeat -25px 12px;
+	background-size: 90%;
+	font-size: 0;
+	background-position: center;
+}
+
+.login-msp {
+	width: 160px;
+	height: 48px; 
 }
 
 nav .site {

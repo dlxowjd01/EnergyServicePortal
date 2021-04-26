@@ -8,7 +8,7 @@
 <div class="modal fade" id="bidResult" tabindex="-1" role="dialog" aria-labelledby="bidResult" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 	<div class="modal-dialog modal-md-lg">
 		<div class="modal-content">
-			<h2>입찰 설정</h2>
+			<h2>입찰 결과</h2>
 			<div>
 				<div id="">
 					<!-- DataTables -->
@@ -105,7 +105,7 @@
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button class="btn-type03">취소</button>
+					<button class="btn-type03" onclick="$('#bidSettingModal').modal('hide')">취소</button>
 					<button class="btn-type">저장</button>
 				</div>
 			</form>
@@ -138,7 +138,7 @@
 					<h2 class="title newBadge" data-view="historyList">입찰내역</h2>
 				</div>
 				<div>
-					<button class="btn-type04" id="bidSetting">입찰 설정</button>
+					<button class="btn-type04" id="bidSetting" onclick="$('#bidSettingModal').modal('show')">입찰 설정</button>
 					<button class="btn-type" id="bidNow">즉시입찰</button>
 				</div>
 			</div>
