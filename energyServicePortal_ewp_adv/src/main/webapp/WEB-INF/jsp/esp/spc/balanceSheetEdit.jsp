@@ -21,7 +21,7 @@
 		//수기 입력
 		$('#noteDown').on('click', function () {
 			if ($(this).is(':checked')) {
-				$('#balanceTable').find('input[placeholder="자동 입력"]').prop('readonly', false).parent().removeClass('read').addClass('edit');
+				$('#balanceTable').find('input[placeholder="자동 입력"]').prop({'readonly' : false, 'placeholder' : "직접 입력"}).parent().removeClass('read').addClass('edit');
 			} else {
 				$('#balanceTable').find('input[placeholder="자동 입력"]').prop('readonly', true).parent().removeClass('edit').addClass('read');
 			}

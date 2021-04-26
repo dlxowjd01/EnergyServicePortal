@@ -77,12 +77,11 @@
 		});
 
 		$("#newFullName")
-			.on("keyup", function(e) {
+			.on("input", function(e) {
 				let warning = $(this).parents(".col-lg-4").find(".warning");
-				
-				if(($(this).val().length <= 3 || $(this).val().length > 28) && $(this).val().match(/['.,!#$%&"*+/=?^`{|}~;:<>]+$/)) {
-					warning.eq(1).removeClass("hidden");
-				} else {
+
+				warning.eq(1).removeClass("hidden");
+				if ($(this).val().match(/^[가-힣a-z]{2,28}$/gi) !== null) {
 					warning.eq(1).addClass("hidden");
 				}
 			})
@@ -2029,7 +2028,7 @@
 						<div class="row">
 							<div class="col-lg-2 col-sm-3"><span class="input-label"><span class="asterisk"><fmt:message key='userSetting.name' /></span></span></div>
 							<div class="col-lg-4 col-sm-9">
-								<div class="text-input-type"><input type="text" id="newFullName" name="new_full_name" placeholder="<fmt:message key='userSetting.input' />" minlength="3" maxlength="28"></div>
+								<div class="text-input-type"><input type="text" id="newFullName" name="new_full_name" placeholder="<fmt:message key='userSetting.input' />" minlength="2" maxlength="28"></div>
 								<small class="hidden warning"><fmt:message key='userSetting.errorTxt.6' /></small>
 							</div>
 							<div class="col-lg-2 col-sm-3"><span class="input-label offset"><span class="asterisk"><fmt:message key='userSetting.password' /></span></span></div>

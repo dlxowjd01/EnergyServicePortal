@@ -1950,8 +1950,6 @@ const searchOperationSite = () => {
 			break;
 		}
 
-		console.log(deviceStatus, operation)
-
 		if (deviceStatus.length === 4) {
 			const searchPattern = new RegExp(searchName, 'i'); //ignoreCase 대소문자 구분X
 			if (searchPattern.test(siteName) || searchPattern.test(siteAddress)) {
