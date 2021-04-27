@@ -242,6 +242,9 @@ html.darkmode:root {
 	--sidebar-ico8: url("/img/sidebar_icons/sidebar_ico8.svg");
 	--sidebar-ico9: url("/img/sidebar_icons/sidebar_ico9.svg");
 	--sidebar-ico10: url("/img/sidebar_icons/sidebar_ico10.svg");
+	--sidebar-ico11: url("/img/sidebar_icons/sidebar_ico11.svg");
+	--sidebar-ico12: url("/img/sidebar_icons/sidebar_ico12.svg");
+	--sidebar-ico13: url("/img/sidebar_icons/sidebar_ico13.svg");
 	--ico-eye: url("/img/ico_eye.svg");
 	--ico-eye-close: url("/img/ico_eye_close.svg");
 	/* ********* Status images ********* */
@@ -2154,6 +2157,18 @@ footer .copyright a + a:before {
 
 .side-nav > ul > li.smn10 > a:after {
 	background: var(--sidebar-ico10) no-repeat center;
+}
+
+.side-nav > ul > li.smn11 > a:after {
+	background: var(--sidebar-ico11) no-repeat center;
+}
+
+.side-nav > ul > li.smn12 > a:after {
+	background: var(--sidebar-ico12) no-repeat center;
+}
+
+.side-nav > ul > li.smn13 > a:after {
+	background: var(--sidebar-ico13) no-repeat center;
 }
 
 .side-nav:hover > ul > li.menu-item > a:hover {
@@ -10756,13 +10771,16 @@ html {
 }
 
 @media (max-width: 1440px) {
-	html { font-size: 8px; }
+	html { font-size: 9px; }
+
+	.local-info table th,
+	.local-info table td {
+		font-size: 1.2rem;
+	}
 }
 
 /* Responsive - Tablet */
 @media (max-width: 768px) {
-	html { font-size: 7px; }
-
 	#deviceStateTypeList > .row {
 		height: auto!important;
 	}
@@ -10771,7 +10789,7 @@ html {
 		display: block;
 	}
 	table {
-		overflow-x: auto;
+		overflow-x: auto;	
 		white-space: nowrap;
 	}
 	
@@ -11021,7 +11039,7 @@ html {
 
 /* Responsive - Mobile */
 @media (max-width: 480px) {
-	html { font-size: 6px; }
+	html { font-size: 8px; }
 
 	#rtuCommand .flex-group .sm-title {
 		width: 70px!important;
