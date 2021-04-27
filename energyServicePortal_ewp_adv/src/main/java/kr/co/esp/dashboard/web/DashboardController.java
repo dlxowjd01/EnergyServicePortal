@@ -34,7 +34,7 @@ public class DashboardController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/dashboard/gmain.do")
+	@RequestMapping(value = "/dashboard/gmain")
 	public String gmain(HttpServletRequest request, HttpSession session, Model model) {
 		Map<String, Object> userInfo = UserUtil.getUserInfo(request);
 		String dashboardMap = (String) EgovProperties.getProperty("dashboard.map"); // TEST 서버 여부
@@ -54,25 +54,25 @@ public class DashboardController {
 			Map<String, Object> access = (Map<String, Object>) menuDetail.get("access");
 			String menuCode = (String) menuDetail.get("code");
 
-			if (menuCode.contains("generation") || menuCode.contains("forecasting")) {
+			if (menuCode.contains("gen_pv") || menuCode.contains("forecasting")) {
 				if (!access.isEmpty()) {
 					if (access.containsKey("allow")) {
 						Map<String, Object> allowMap = (Map<String, Object>) access.get("allow");
 						if (allowMap.containsKey("oid") && ((List) allowMap.get("oid")).contains(userInfo.get("oid"))) {
-							if (menuCode.contains("generation")) {
+							if (menuCode.contains("gen_pv")) {
 								haveMenu_gen = true;
 							} else {
 								haveMenu_fore = true;
 							}
 						} else {
 							if (allowMap.containsKey("role") && ((List) allowMap.get("role")).contains(userInfo.get("role"))) {
-								if (menuCode.contains("generation")) {
+								if (menuCode.contains("gen_pv")) {
 									haveMenu_gen = true;
 								} else {
 									haveMenu_fore = true;
 								}
 							} else if (allowMap.containsKey("task") && ((List) allowMap.get("task")).contains(userInfo.get("task"))) {
-								if (menuCode.contains("generation")) {
+								if (menuCode.contains("gen_pv")) {
 									haveMenu_gen = true;
 								} else {
 									haveMenu_fore = true;
@@ -80,7 +80,7 @@ public class DashboardController {
 							}
 						}
 					} else {
-						if (menuCode.contains("generation")) {
+						if (menuCode.contains("gen_pv")) {
 							haveMenu_gen = true;
 						} else {
 							haveMenu_fore = true;
@@ -90,20 +90,20 @@ public class DashboardController {
 					if (access.containsKey("deny")) {
 						Map<String, Object> denyMap = (Map<String, Object>) access.get("deny");
 						if (denyMap.containsKey("oid") && ((List) denyMap.get("oid")).contains(userInfo.get("oid"))) {
-							if (menuCode.contains("generation")) {
+							if (menuCode.contains("gen_pv")) {
 								haveMenu_gen = false;
 							} else {
 								haveMenu_fore = false;
 							}
 						} else {
 							if (denyMap.containsKey("role") && ((List) denyMap.get("role")).contains(userInfo.get("role"))) {
-								if (menuCode.contains("generation")) {
+								if (menuCode.contains("gen_pv")) {
 									haveMenu_gen = false;
 								} else {
 									haveMenu_fore = false;
 								}
 							} else if (denyMap.containsKey("task") && ((List) denyMap.get("task")).contains(userInfo.get("task"))) {
-								if (menuCode.contains("generation")) {
+								if (menuCode.contains("gen_pv")) {
 									haveMenu_gen = false;
 								} else {
 									haveMenu_fore = false;
@@ -112,7 +112,7 @@ public class DashboardController {
 						}
 					}
 				} else {
-					if (menuCode.contains("generation")) {
+					if (menuCode.contains("gen_pv")) {
 						haveMenu_gen = true;
 					} else {
 						haveMenu_fore = true;
@@ -238,11 +238,5 @@ public class DashboardController {
 
 		request.setAttribute("vgid", vgid);
 		return "esp/dashboard/VPPmain";
-	}
-
-	// 예측입찰 (임시)
-	@RequestMapping(value = "/dashboard/predictionBid.do")
-	public String predictionBid(HttpServletRequest request, HttpSession session, Model model) {
-		return "esp/dashboard/predictionBid";
 	}
 }
