@@ -63,7 +63,14 @@
 						</div>
 						<div class="input-list">
 							<div>
-								<input type="text" name="bid_time" class="sel timepicker"/>
+								<input type="text" name="bid_time" class="sel timepicker w-20"/>
+								<div class="dropdown">
+									<button type="button" class="dropdown-toggle w8" data-toggle="dropdown" data-name="선택" data-value="">선택<span class="caret"></span></button>
+									<ul class="dropdown-menu chk-type" role="menu">
+										<li data-value="1"><a href="javascript:void(0);" tabindex="-1">1차</a></li>
+										<li data-value="2"><a href="javascript:void(0);" tabindex="-1">2차</a></li>
+									</ul>
+								</div>
 								<button type="button" class="btn-type03">수정</button>
 							</div>
 						</div>
@@ -121,7 +128,13 @@
 				<div class="controller" id="next"> <img src="/img/ico-next.svg" alt="next" /> </div>
 				<div class="actived first">
 					<ul>
-						<li>1차 자동</li>
+						<li>1회 입찰전</li>
+						<li></li>
+					</ul>
+				</div>
+				<div>
+					<ul>
+						<li>1회 입찰전</li>
 						<li>1차 최종입찰</li>
 					</ul>
 					<ul>
@@ -129,18 +142,10 @@
 						<li>2021-01-01 11:11:11</li>
 					</ul>
 				</div>
-<%--				<ul>--%>
-<%--					<li>2회 입찰</li>--%>
-<%--					<li>2021-01-01 11:11:11</li>--%>
-<%--				</ul>--%>
-<%--				<ul>--%>
-<%--					<li>3회 입찰</li>--%>
-<%--					<li>2021-01-01 11:11:11</li>--%>
-<%--				</ul>--%>
 			</div>
 			<div class="predictionBid-content">
 				<div class="predictionBid-toolbar">
-					<img src="/img/predictionBid/refresh.svg" alt="refresh">
+					<img src="/img/predictionBid/refresh.svg" alt="refresh" id="refresh">
 				</div>
 				<div class="content" id="todayList">
 					<div>
@@ -689,32 +694,82 @@
 				dom: 'tip',
 			});
 
-			// new $.fn.dataTable.Buttons(App.todayTable, {
-			// 	name: 'commands',
-			// 	buttons: [
-			// 		{
-			// 			extend: 'excel',
-			// 			text: '엑셀다운로드',
-			// 			className: 'btn-save',
-			// 			title: '',
-			// 			messageTop: ' ',
-			// 			filename: '입찰예측'
-			// 		}
-			// 	]
-			// });
-			//
-			// App.todayTable.buttons( 0, null ).containers().appendTo("#excelDown");
-
-
+			new $.fn.dataTable.Buttons($('#todayTable').DataTable(), {
+				name: 'commands',
+				buttons: [
+					{
+						extend: 'excel',
+						text: '엑셀다운로드',
+						className: 'btn-save',
+						title: '',
+						messageTop: ' ',
+						filename: '입찰예측'
+					}
+				]
+			});
+			$('#todayTable').DataTable().buttons( 0, null ).containers().appendTo("#excelDown");
 
 			App.bidTable = $('#bidTable').DataTable({
-				//rautoWidth: true,
 				scrollX: true,
-				// scrollY: '720px',
 				scrollCollapse: true,
-				paging: false,
-				sortable: true,
-				orderCellsTop: true,
+				columns: [
+					{
+						data: null,
+						title: '순번',
+						render: function (data, type, full, rowIndex) {
+							return rowIndex.row + 1;
+						},
+						className: 'dt-center no-sorting no-edit',
+					},
+					{
+						data: 'orgName',
+						title: '회원사명',
+						className: 'dt-left no-edit',
+					},
+					{
+						data: 'vppName',
+						title: '자원명',
+						className: 'dt-left no-edit',
+					},
+					{
+						data: null,
+						title: '발전기 수',
+						className: 'dt-left no-edit',
+					},
+					{
+						data: 'trade_day',
+						title: '입찰날짜',
+						className: 'dt-center'
+					},
+					{
+						data: null,
+						title: '입찰일시',
+						className: 'dt-center'
+					},
+					{
+						data: 'mode',
+						title: '입찰모드',
+						className: 'dt-center'
+					},
+					{
+						data: 'created_by_name',
+						title: '입찰인',
+						className: 'dt-center'
+					},
+					{
+						data: null,
+						title: '입찰상태',
+						className: 'dt-center'
+					},
+					{
+						data: null,
+						title: '입찰결과',
+						className: 'dt-center',
+						render: function (data, type, full, rowIndex) {
+
+						}
+					}
+				],
 				language: {
 					emptyTable: i18nManager.tr('gdash.the_data_you_have_queried_does_not_exist'),
 					zeroRecords: i18nManager.tr('gdash.your_search_has_not_returned_results'),
@@ -729,8 +784,268 @@
 			});
 
 			App.event();
+			refresh();
 			$('#switchView > h2:first-child').trigger('click');
+		},
 
+		event(events, handler) {
+			$(document).on('click', '#switchView > h2', switchView); //탭이동
+			$(document).on('click', '#bidSetting', bidSettingInit); //입찰세팅 팝업(Init)
+			$(document).on('click', '#bidSettingModal .btn-add', addItem); //입찰세팅 팝업 항목추가
+			$(document).on('click', '#bidSettingModal .input-list img', removeItem); //입찰세팅 팝업 항목삭제
+			$(document).on('click', '#settingSave', bidSettingSave); //입찰세팅 저장
+			$(document).on('click', '#bidSettingModal .input-list .btn-type03', bidSettingSave); //입찰세팅 저장
+			$(document).on('click', '#bidNow', bidNow); //즉시입찰 팝업 항목삭제
+
+			$(document).on('click', '#modifyTable', editActive);
+			$(document).on('click', '#todayTable tbody td:not(.no-edit)', function(e) { App.todayTable.include(this); });
+
+			$(document).on('click', '#refresh', refresh);
+		}
+	}
+
+	//탭이동
+	function switchView () {
+		$('#switchView > h2').removeClass('actived');
+		$(this).addClass('actived');
+
+		App.view = '#' + $(this).data('view');
+
+		$('.predictionBid-content > .content').fadeOut(500);
+		$(App.view).fadeIn(500);
+
+		if ($(this).data('view') === 'todayList' && $(this).hasClass('actived')) {
+			$('#manualMode').prop('disabled', false);
+		} else {
+			$('#manualMode').prop('disabled', true);
+		}
+	}
+
+	//즉시 입찰
+	function bidNow () {
+		const todayTime = new Date()
+			, nowTime = todayTime.getHours();
+		let part = 1; //차수
+
+		if (nowTime > 10 && nowTime <= 17) {
+			todayTime.setDate(todayTime.getDate() + 1);
+			part = 2;
+		} else {
+			if (nowTime > 10) {
+				todayTime.setDate(todayTime.getDate() + 1);
+				part = 2;
+			} else {
+				part = 1;
+			}
+		}
+
+		$.ajax({
+			url: apiHost + '/predic-sys/bid/send?oid=' + oid + '&vpp_id=' + App.vpp_id + '&trade_day=' + todayTime.format('yyyyMMdd') + '&part=' + part + '&revision=1',
+			type: 'POST',
+			contentType: 'application/json'
+		}).done((data, textStatus, xhr) => {
+			alert('즉시 입찰이 완료되었습니다. (아직 내용이 안들어옴)');
+			$('#switchView > h2:eq(1)').addClass('newBadge');
+			return false;
+		}).fail((xhr, textStatus, errorThrown) => {
+			console.error(textStatus, errorThrown);
+		});
+	}
+
+	//입찰세팅 팝업 (Init)
+	function bidSettingInit () {
+
+		if ($('#switchView h2.actived').data('view') === 'todayList') {
+			$('#manualMode').prop('disabled', false);
+		} else {
+			$('#manualMode').prop('disabled', true);
+		}
+
+		$(':radio[name="mode"]').prop('checked', false); //입찰모드 초기화
+
+		$('#bidSettingModal .input-list div:first-child:not(.radio-type)').siblings().remove(); //첫번째 항목만 남긴다.
+		$('#bidSettingModal .input-list div:first-child input[type="text"]').val(''); //input 초기화
+
+		// wickedpicker가 초기화가 불가능하므로 지워버리고 새로 만든다.
+		if ($('.timepicker').hasClass('hasWickedpicker')) {
+			$('[name="bid_time"]').parent().empty().append(`
+				<input type="text" name="bid_time" class="sel timepicker w-20"/>
+				<div class="dropdown">
+					<button type="button" class="dropdown-toggle w8" data-toggle="dropdown" data-name="선택" data-value="">선택<span class="caret"></span></button>
+					<ul class="dropdown-menu chk-type" role="menu">
+						<li data-value="1"><a href="javascript:void(0);" tabindex="-1">1차</a></li>
+						<li data-value="2"><a href="javascript:void(0);" tabindex="-1">2차</a></li>
+					</ul>
+				</div>
+				<button type="button" class="btn-type03">수정</button>
+			`);
+		}
+		$('#settingSave').data('method', 'POST');
+
+		$.ajax({
+			url: apiHost + '/predic-sys/bid/setting',
+			type: 'GET',
+			data: {
+				oid: oid,
+				vpp_id: App.vpp_id
+			}
+		}).done((data, textStatus, xhr) => {
+			if (!isEmpty(data)) {
+				const targetData = data[0];
+				$(':radio[name="mode"][value="' + targetData['mode'] + '"]').prop('checked', true); //모드 세팅
+				const emailTo = targetData['email_to'];
+				if (!isEmpty(emailTo)) {
+					try {
+						const targetEmail = emailTo.split(',');
+						for (let i = 0; i < targetEmail.length; i++) {
+							if (i !== 0) {
+								const email = $('[name="email_to"]:first-child').parent().clone()
+									, targetList = $('[name="email_to"]:first-child').parents('.input-list');
+								targetList.append(`<div>${'${email.html()}'}<img src="/img/predictionBid/delete.svg" alt="delete"></div>`);
+								$('[name="email_to"]:eq(' + i + ')').val(targetEmail[i])
+
+							} else {
+								$('[name="email_to"]:eq(0)').val(targetEmail[i]);
+							}
+						}
+					} catch (e) {
+						$('[name="email_to"]').val('');
+					}
+				}
+
+				const time = targetData['bid_time'];
+				if (!isEmpty(time)) {
+					try {
+						const targetTime = JSON.parse(time);
+						if (!isEmpty(targetTime)) {
+							for (let i = 0; i < targetTime.length; i++) {
+								const refinedTime = targetTime[i][0].substr(0, 2) + ' : ' + targetTime[i][0].substr(2, 2);
+								if (i !== 0) {
+									const bidTime = $('[name="bid_time"]:first-child').parent().clone()
+										, targetList = $('[name="bid_time"]:first-child').parents('.input-list');
+									bidTime.find('input').removeClass('hasWickedpicker');
+									targetList.append(`<div>${'${bidTime.html()}'}<img src="/img/predictionBid/delete.svg" alt="delete"></div>`);
+								}
+
+								$('[name="bid_time"]:eq(' + i + ')').wickedpicker({now: refinedTime, twentyFour: true}).next().find('button').data('value', targetTime[i][1]).html(targetTime[i][1] + '차 <span class="caret"></span>');;
+							}
+						} else {
+							$('[name="bid_time"]').wickedpicker({twentyFour: true});
+						}
+					} catch (e) {
+						$('[name="bid_time"]').wickedpicker({twentyFour: true});;
+					}
+				} else {
+					$('[name="bid_time"]').wickedpicker({twentyFour: true});
+				}
+
+				$('.wickedpicker').css('z-index', 200);
+				$('#settingSave').data('method', 'PATCH');
+			}
+		}).fail((xhr, textStatus, errorThrown) => {
+			console.error(textStatus, errorThrown);
+		});
+
+		$('#bidSettingModal').modal('show');
+	}
+
+	//입찰세팅 팝업에서 항목추가
+	function addItem () {
+		const target = $(this).parent().next()
+			, origin = target.find('div:first-child').clone();
+
+		origin.find('input').removeClass('hasWickedpicker');
+		target.append(`<div>${'${origin.html()}'}<img src="/img/predictionBid/delete.svg" alt="delete"></div>`);
+
+		if (target.find('input').hasClass('timepicker')) {
+			target.find('button').data('value', '').html('선택 <span class="caret"></span>');
+			target.find('input').wickedpicker({twentyFour: true});
+		}
+	}
+
+	//입찰세팅 팝업에서 항목삭제
+	function removeItem () { $(this).parent().remove(); }
+
+	//입찰세팅 팝업 저장
+	function bidSettingSave () {
+		const reg_email = /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
+
+		let methodType = $('#settingSave').data('method');
+		let emailTo = new Array();
+		let emailBoolean = true;
+
+		let time = new Array();
+		let timeBoolean = true;
+
+		if (isEmpty($(':radio[name="mode"]:checked').val())) {
+			alert('모드 선택은 필수입니다.');
+			return false;
+		}
+
+		$('[name="email_to"]').each(function() {
+			if (isEmpty($(this).val()) || !reg_email.test($(this).val())) { emailBoolean = false; }
+			else { emailTo.push($(this).val()); }
+		});
+		if (!emailBoolean) { alert('이메일이 잘못된 형식입니다.'); return false; }
+
+		$('[name="bid_time"]').each(function() {
+			if (!isEmpty($(this).val()) && !isEmpty($(this).next().find('button').data('value'))) {
+				time.push([$(this).wickedpicker('time').replace(/[^0-9]/g, ''), $(this).next().find('button').data('value')]);
+			} else {
+				timeBoolean = false;
+			}
+		});
+
+		let apiData = new Object();
+		let apiURL = apiHost + '/predic-sys/bid/setting';
+		if ($('#settingSave').data('method') === 'PATCH') { //수정
+			apiURL = apiHost + '/predic-sys/bid/setting?oid=' + oid + '&vpp_id=' + App.vpp_id;
+			apiData = JSON.stringify({
+				mode: $(':radio[name="mode"]:checked').val(),
+				is_on: 0,
+				email_to: emailTo.toString(),
+				email_from: 'dev@encoredtech.com',
+				bid_time: JSON.stringify(time)
+			});
+		} else { //등록
+			apiURL = apiHost + '/predic-sys/bid/setting';
+			apiData = JSON.stringify({
+				oid: oid,
+				vpp_id: App.vpp_id,
+				mode: $(':radio[name="mode"]:checked').val(),
+				is_on: 0,
+				email_to: emailTo.toString(),
+				email_from: 'dev@encoredtech.com',
+				bid_time: JSON.stringify(time)
+			});
+		}
+
+		$.ajax({
+			url: apiURL,
+			type: methodType,
+			contentType: 'application/json',
+			data: apiData
+		}).done((data, textStatus, xhr) => {
+			alert('저장 되었습니다.');
+			$('#bidSettingModal').modal('hide');
+			return false;
+		}).fail((xhr, textStatus, errorThrown) => {
+			console.error(textStatus, errorThrown);
+		});
+	}
+
+	//수정 활성화
+	function editActive () {
+		$('#todayTable tbody tr').each(function () {
+			const td = $(this).find('td');
+			for (let i = 11; i < td.length; i++) {
+				td[i].classList.remove('no-edit')
+			}
+		});
+	}
+
+	function refresh () {
+		if (App.view === '#todayList') {
 			const targetApi = new Array();
 			targetApi.push(
 				$.ajax({
@@ -826,244 +1141,8 @@
 				console.error(error);
 				return false;
 			})
-		},
-
-		event(events, handler) {
-			$(document).on('click', '#switchView > h2', switchView); //탭이동
-			$(document).on('click', '#bidSetting', bidSettingInit); //입찰세팅 팝업(Init)
-			$(document).on('click', '#bidSettingModal .btn-add', addItem); //입찰세팅 팝업 항목추가
-			$(document).on('click', '#bidSettingModal .input-list img', removeItem); //입찰세팅 팝업 항목삭제
-			$(document).on('click', '#settingSave', bidSettingSave); //입찰세팅 저장
-			$(document).on('click', '#bidSettingModal .input-list .btn-type03', bidSettingSave); //입찰세팅 저장
-			$(document).on('click', '#bidNow', bidNow); //즉시입찰 팝업 항목삭제
-			$(document).on('click', '#modifyTable', editActive)
-			$(document).on('click', '#todayTable tbody td:not(.no-edit)', function(e) { App.todayTable.include(this); });
-		}
-	}
-
-	//탭이동
-	function switchView () {
-		$('#switchView > h2').removeClass('actived');
-		$(this).addClass('actived');
-
-		App.view = '#' + $(this).data('view');
-
-		$('.predictionBid-content > .content').fadeOut(500);
-		$(App.view).fadeIn(500);
-
-		if ($(this).data('view') === 'todayList' && $(this).hasClass('actived')) {
-			$('#manualMode').prop('disabled', false);
 		} else {
-			$('#manualMode').prop('disabled', true);
+
 		}
-	}
-
-	//즉시 입찰
-	function bidNow () {
-		const todayTime = new Date()
-			, nowTime = todayTime.getHours();
-		let part = 1; //차수
-
-		if (nowTime > 10 && nowTime <= 17) {
-			todayTime.setDate(todayTime.getDate() + 1);
-			part = 2;
-		} else {
-			if (nowTime > 10) {
-				todayTime.setDate(todayTime.getDate() + 1);
-				part = 2;
-			} else {
-				part = 1;
-			}
-		}
-
-		$.ajax({
-			url: apiHost + '/predic-sys/bid/send?oid=' + oid + '&vpp_id=' + App.vpp_id + '&trade_day=' + todayTime.format('yyyyMMdd') + '&part=' + part + '&revision=1',
-			type: 'POST',
-			contentType: 'application/json'
-		}).done((data, textStatus, xhr) => {
-			alert('즉시 입찰이 완료되었습니다. (아직 내용이 안들어옴)');
-			$('#switchView > h2:eq(1)').addClass('newBadge');
-			return false;
-		}).fail((xhr, textStatus, errorThrown) => {
-			console.error(textStatus, errorThrown);
-		});
-	}
-
-	//입찰세팅 팝업 (Init)
-	function bidSettingInit () {
-
-		if ($('#switchView h2.actived').data('view') === 'todayList') {
-			$('#manualMode').prop('disabled', false);
-		} else {
-			$('#manualMode').prop('disabled', true);
-		}
-
-		$(':radio[name="mode"]').prop('checked', false); //입찰모드 초기화
-
-		$('#bidSettingModal .input-list div:first-child:not(.radio-type)').siblings().remove(); //첫번째 항목만 남긴다.
-		$('#bidSettingModal .input-list div:first-child input[type="text"]').val(''); //input 초기화
-
-		// wickedpicker가 초기화가 불가능하므로 지워버리고 새로 만든다.
-		if ($('.timepicker').hasClass('hasWickedpicker')) {
-			$('[name="bid_time"]').parent().empty().append(`
-				<input type="text" name="bid_time" class="sel timepicker"/>
-				<button type="button" class="btn-type03">수정</button>
-			`);
-		}
-
-		$('.wickedpicker').css('z-index', 200);
-		$('#settingSave').data('method', 'POST');
-
-		$.ajax({
-			url: apiHost + '/predic-sys/bid/setting',
-			type: 'GET',
-			data: {
-				oid: oid,
-				vpp_id: App.vpp_id
-			}
-		}).done((data, textStatus, xhr) => {
-			if (!isEmpty(data)) {
-				const targetData = data[0];
-				$(':radio[name="mode"][value="' + targetData['mode'] + '"]').prop('checked', true); //모드 세팅
-				const emailTo = targetData['email_to'];
-				if (!isEmpty(emailTo)) {
-					try {
-						const targetEmail = emailTo.split(',');
-						for (let i = 0; i < targetEmail.length; i++) {
-							if (i !== 0) {
-								const email = $('[name="email_to"]:first-child').parent().clone()
-									, targetList = $('[name="email_to"]:first-child').parents('.input-list');
-								targetList.append(`<div>${'${email.html()}'}<img src="/img/predictionBid/delete.svg" alt="delete"></div>`);
-								$('[name="email_to"]:eq(' + i + ')').val(targetEmail[i]);
-							} else {
-								$('[name="email_to"]:eq(0)').val(targetEmail[i]);
-							}
-						}
-					} catch (e) {
-						$('[name="email_to"]').val('');
-					}
-				}
-
-				const time = targetData['bid_time'];
-				if (!isEmpty(time)) {
-					try {
-						const targetTime = time.split(',');
-						for (let i = 0; i < targetTime.length; i++) {
-							const refinedTime = targetTime[i].substr(0, 2) + ' : ' + targetTime[i].substr(2, 2);
-							if (i !== 0) {
-								const bidTime = $('[name="bid_time"]:first-child').parent().clone()
-									, targetList = $('[name="bid_time"]:first-child').parents('.input-list');
-								bidTime.find('input').removeClass('hasWickedpicker');
-								targetList.append(`<div>${'${bidTime.html()}'}<img src="/img/predictionBid/delete.svg" alt="delete"></div>`);
-							}
-
-							$('[name="bid_time"]:eq(' + i + ')').wickedpicker({now: refinedTime, twentyFour: true});
-						}
-					} catch (e) {
-						$('[name="bid_time"]').val('');
-					}
-				} else {
-					$('[name="bid_time"]').wickedpicker({twentyFour: true});
-				}
-
-				$('#settingSave').data('method', 'PATCH');
-			}
-		}).fail((xhr, textStatus, errorThrown) => {
-			console.error(textStatus, errorThrown);
-		});
-
-		$('#bidSettingModal').modal('show');
-	}
-
-	//입찰세팅 팝업에서 항목추가
-	function addItem () {
-		const target = $(this).parent().next()
-			, origin = target.find('div:first-child').clone();
-
-		origin.find('input').removeClass('hasWickedpicker');
-		target.append(`<div>${'${origin.html()}'}<img src="/img/predictionBid/delete.svg" alt="delete"></div>`);
-
-		if (target.find('input').hasClass('timepicker')) {
-			target.find('input').wickedpicker({twentyFour: true});
-		}
-	}
-
-	//입찰세팅 팝업에서 항목삭제
-	function removeItem () { $(this).parent().remove(); }
-
-	//입찰세팅 팝업 저장
-	function bidSettingSave () {
-		const reg_email = /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
-
-		let methodType = $('#settingSave').data('method');
-		let emailTo = new Array();
-		let emailBoolean = true;
-
-		let time = new Array();
-		let timeBoolean = true;
-
-		if (isEmpty($(':radio[name="mode"]:checked').val())) {
-			alert('모드 선택은 필수입니다.');
-			return false;
-		}
-
-		$('[name="email_to"]').each(function() {
-			if (isEmpty($(this).val()) || !reg_email.test($(this).val())) { emailBoolean = false; }
-			else { emailTo.push($(this).val()); }
-		});
-		if (!emailBoolean) { alert('이메일이 잘못된 형식입니다.'); return false; }
-
-		$('[name="bid_time"]').each(function() {
-			if (!isEmpty($(this).val())) {
-				time.push($(this).wickedpicker('time').replace(/[^0-9]/g, ''));
-			} else {
-				timeBoolean = false;
-			}
-		});
-
-		let apiData = new Object();
-		let apiURL = apiHost + '/predic-sys/bid/setting';
-		if ($('#settingSave').data('method') === 'PATCH') { //수정
-			apiURL = apiHost + '/predic-sys/bid/setting?oid=' + oid + '&vpp_id=' + App.vpp_id;
-			apiData = JSON.stringify({
-				mode: $(':radio[name="mode"]:checked').val(),
-				is_on: 0,
-				email_to: emailTo.toString(),
-				bid_time: time.toString()
-			});
-		} else { //등록
-			apiURL = apiHost + '/predic-sys/bid/setting';
-			apiData = JSON.stringify({
-				oid: oid,
-				vpp_id: App.vpp_id,
-				mode: $(':radio[name="mode"]:checked').val(),
-				is_on: 0,
-				email_to: emailTo.toString(),
-				bid_time: time.toString()
-			});
-		}
-
-		$.ajax({
-			url: apiURL,
-			type: methodType,
-			contentType: 'application/json',
-			data: apiData
-		}).done((data, textStatus, xhr) => {
-			alert('저장 되었습니다.');
-			$('#bidSettingModal').modal('hide');
-			return false;
-		}).fail((xhr, textStatus, errorThrown) => {
-			console.error(textStatus, errorThrown);
-		});
-	}
-
-	//수정 활성화
-	function editActive () {
-		$('#todayTable tbody tr').each(function () {
-			const td = $(this).find('td');
-			for (let i = 11; i < td.length; i++) {
-				td[i].classList.remove('no-edit')
-			}
-		});
 	}
 </script>

@@ -332,6 +332,11 @@
 			gridX = $('#gridX').val();
 			gridY = $('#gridY').val();
 
+			let reserved_capacity, cbp_number, vpp_resource_code;
+			reserved_capacity = $('#reserved_capacity').val();
+			cbp_number = $('#cbp_number').val();
+			vpp_resource_code = $('#vpp_resource_code').val();
+
 			if (oid.match('testkpx')) {
 				kpxGenId = $('#kpx_genid').val();
 				kpxEmsId = $('#kpx_emsid').val();
@@ -394,6 +399,14 @@
 
 				if ( !isEmpty(gridY) ) {
 					siteObj.grid_y = Number(gridY);
+				}
+
+				if ( !isEmpty(reserved_capacity) ) {
+					siteObj.reserved_capacity = reserved_capacity;
+				}
+
+				if ( !isEmpty(cbp_number) ) {
+					siteObj.kpx_genid = cbp_number;
 				}
 
 				if (oid.match('testkpx')) {
@@ -487,6 +500,11 @@
 				if( !isEmpty(newVppRevShare) && newVppRevShare != "-"){
 					newVppObj.profile_share = newVppRevShare;
 				}
+
+				if( !isEmpty(vpp_resource_code) ){
+					newVppObj.resource_code = vpp_resource_code;
+				}
+
 				if( !isEmpty(newVppObj) ){
 					siteObj.vpp_info = JSON.stringify(newVppObj);
 				}
@@ -576,6 +594,14 @@
 					siteEditObj.grid_y = Number(gridY);
 				}
 
+				if ( !isEmpty(reserved_capacity) ) {
+					siteEditObj.reserved_capacity = reserved_capacity;
+				}
+
+				if ( !isEmpty(cbp_number) ) {
+					siteEditObj.kpx_genid = cbp_number;
+				}
+
 				if (oid.match('testkpx')) {
 					if ( !isEmpty(kpxGenId) ) {
 						siteEditObj.kpx_genid = kpxGenId;
@@ -663,6 +689,11 @@
 				if( !isEmpty(newVppRevShare) ){
 					newVppObj.profile_share = newVppRevShare;
 				}
+
+				if( !isEmpty(vpp_resource_code) ){
+					newVppObj.resource_code = vpp_resource_code;
+				}
+
 				if( !isEmpty(newVppObj) ){
 					siteEditObj.vpp_info = JSON.stringify(newVppObj);
 				}
@@ -2422,12 +2453,26 @@
 
 				$('#gridX').val(rowData.grid_x);
 				$('#gridY').val(rowData.grid_y);
+
 				// kpx
 				if (oid.match('testkpx')) {
 					$('#kpx_genid').val(rowData.kpx_genid);
 					$('#kpx_emsid').val(rowData.kpx_emsid);
 					$('#kpx_transvol').val(rowData.kpx_transvol);
 				}
+
+				if (!isEmpty(rowData.reserved_capacity)) {
+					$('#reserved_capacity').val(rowData.reserved_capacity);
+				}
+
+				if (!isEmpty(rowData.kpx_genid)) {
+					$('#cbp_number').val(rowData.kpx_genid);
+				}
+
+				if (rowData.vpp_info != null && !isEmpty(rowData.vpp_info.vpp_resource_code)) {
+					$('#vpp_resource_code').val(rowData.vpp_info.vpp_resource_code);
+				}
+
 				// Utility info
 				if( !isEmpty(rowData.utility)) {
 					Promise.resolve(JSON.parse(rowData.utility)).then( util => {
@@ -4297,6 +4342,24 @@
 									</div>
 								</div>
 							</div>
+							<div class="row">
+								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label"><fmt:message key='siteSetting.capacity' /></span></div>
+								<div class="col-xl-3 col-lg-3 col-md-4 col-sm-10 pl-0">
+									<div class="flex-start">
+										<div class="text-input-type">
+											<input type="text" name="reserved_capacity" id="reserved_capacity" oninput="truncateNonDigit(event, this, 'percentage')" placeholder="<fmt:message key='siteSetting.input' />" maxlength="15">
+										</div>
+									</div>
+								</div>
+								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2"><span class="input-label"><fmt:message key='siteSetting.CBP.genID' /></span></div>
+								<div class="col-xl-2 col-lg-2 col-md-4 col-sm-10 pl-0">
+									<div class="flex-start">
+										<div class="text-input-type">
+											<input type="text" name="cbp_number" id="cbp_number" placeholder="<fmt:message key='siteSetting.input' />" maxlength="4">
+										</div>
+									</div>
+								</div>
+							</div>
 
 							<c:if test="${fn:contains(sessionScope.userInfo.oid, 'testkpx')}">
 								<div class="row">
@@ -4489,6 +4552,11 @@
 									<div class="col-xl-1 col-lg-2 col-md-1 col-sm-2"><span class="input-label"><fmt:message key='siteSetting.revenue.share' /></span></div>
 									<div class="col-xl-2 col-lg-2 col-sm-4 pl-0">
 										<div class="text-input-type"><input type="text" name="vpp_rev_share" id="newVppRevShare" class="pr-36" oninput="truncateNonDigit(event, this, 'percentage')" onkeyup="formatRatio(this)" placeholder="<fmt:message key='siteSetting.input' />" maxlength="5"><span class="unit">%</span></div>
+									</div>
+
+									<div class="col-xl-1 col-lg-2 col-md-1 col-sm-2"><span class="input-label"><fmt:message key='siteSetting.vpp.resourceCode' /></span></div>
+									<div class="col-xl-2 col-lg-2 col-sm-4 pl-0">
+										<div class="text-input-type"><input type="text" name="vpp_resource_code" id="vpp_resource_code" class="pr-36" placeholder="<fmt:message key='siteSetting.input' />" maxlength="4"></div>
 									</div>
 								</div>
 							</section>
