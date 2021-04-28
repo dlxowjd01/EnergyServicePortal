@@ -82,30 +82,72 @@
 .predictionBid-items {
 	width: 100%;
 	margin-top: 24px;
-	overflow-x: auto;
+	position: relative;
 }
 
-.predictionBid-items > ul {
-	width: 240px;
-	height: 52px;
+.predictionBid-items .controller {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	box-shadow: 2px 2px 1px 0 var(--black-20), 0 1px 1px 0 rgba(0, 0, 0, 0.24);
+	background-color: rgba(40, 40, 40, 0.6);
 	display: flex;
 	align-items: center;
+	justify-content: center;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	z-index: 100;
+	cursor: pointer;
+}
+
+#prev { left: 10px; }
+#next { right: 10px; }
+
+.predictionBid-items > div:not(.controller) {
+	width: 240px;
 	padding-left: 16px;
+	padding: 8px 0px 12px 16px;
 	border-top-left-radius: 4px;
 	border-top-right-radius: 4px;
 	font-size: 1.4rem;
 	color: var(--white87);
-	font-weight: bold;
 	position: relative;
 	cursor: pointer;
 }
 
-.predictionBid-items > ul > li:first-child {
+.predictionBid-items > div > ul {
+	display: flex;
+	align-items: center;
+}
+
+.predictionBid-items > div > ul:first-child {
+	margin-bottom: 8px;
+}
+
+.predictionBid-items > div > ul:first-child > li {
+	padding: 3px 4px;
+	font-size: 1.2rem;
+	border-radius: 4px;
+	color: var(--white87);
+	letter-spacing: 0.2px;
+	margin-right: 6px;
+}
+
+.predictionBid-items > div > ul:first-child > li:first-child {
+	background: rgba(0, 0, 0, 0.24);
+}
+
+.predictionBid-items > div > ul:last-child > li {
+	font-weight: bold;
+}
+
+.predictionBid-items > div > ul:last-child > li:first-child {
 	display: flex; 
 	align-items: center;
 }
 
-.predictionBid-items > ul > li:first-child:after {
+.predictionBid-items > div > ul:last-child > li:first-child:after {
 	content: "";
 	width: 1px;
 	height: 16px;
@@ -114,11 +156,11 @@
 	background:rgba(255, 255, 255, 0.12);
 }
 
-.predictionBid-items > ul.actived {
+.predictionBid-items > div.actived {
 	background: #1d98e9;
 }
 
-.predictionBid-items > ul:not(:last-child):after {
+.predictionBid-items > div:not(.controller):not(:last-child):after {
 	content: "";
 	width: 1px;
 	height: 24px;

@@ -144,7 +144,7 @@
 			</div>
 			<div class="predictionBid-items">
 				<ul class="actived">
-					<li>1회 입찰</li>
+					<li>1회 입찰</li> 
 					<li>2021-01-01 11:11:11</li>
 				</ul>
 				<ul>

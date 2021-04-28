@@ -117,10 +117,18 @@
 				</div>
 			</div>
 			<div class="predictionBid-items">
-				<ul class="actived">
-					<li>1회 입찰</li>
-					<li>2021-01-01 11:11:11</li>
-				</ul>
+				<div class="controller" id="prev"> <img src="/img/ico-back.svg" alt="prev" /> </div>
+				<div class="controller" id="next"> <img src="/img/ico-next.svg" alt="next" /> </div>
+				<div class="actived">
+					<ul>
+						<li>1차 자동</li>
+						<li>1차 최종입찰</li>
+					</ul>
+					<ul>
+						<li>1회 입찰</li>
+						<li>2021-01-01 11:11:11</li>
+					</ul>
+				</div>
 <%--				<ul>--%>
 <%--					<li>2회 입찰</li>--%>
 <%--					<li>2021-01-01 11:11:11</li>--%>
