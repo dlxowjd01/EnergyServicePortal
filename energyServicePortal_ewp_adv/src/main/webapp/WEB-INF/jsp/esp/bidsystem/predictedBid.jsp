@@ -119,7 +119,7 @@
 			<div class="predictionBid-items">
 				<div class="controller" id="prev"> <img src="/img/ico-back.svg" alt="prev" /> </div>
 				<div class="controller" id="next"> <img src="/img/ico-next.svg" alt="next" /> </div>
-				<div class="actived">
+				<div class="actived first">
 					<ul>
 						<li>1차 자동</li>
 						<li>1차 최종입찰</li>

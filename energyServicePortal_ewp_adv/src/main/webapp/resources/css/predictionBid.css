@@ -138,6 +138,10 @@
 	background: rgba(0, 0, 0, 0.24);
 }
 
+/* 차수별 색상 */
+.predictionBid-items > div.first > ul:first-child > li:last-child { background: #5269ef; } 
+.predictionBid-items > div.second > ul:first-child > li:last-child { background: #274dea; } 
+
 .predictionBid-items > div > ul:last-child > li {
 	font-weight: bold;
 }
