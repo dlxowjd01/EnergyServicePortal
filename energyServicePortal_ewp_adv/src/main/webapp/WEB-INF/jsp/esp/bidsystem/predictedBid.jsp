@@ -260,7 +260,49 @@
 		vpp_id: '${vgid}',
 
 		init() {
-			App.todayTable = $('#todayTable').DataTable({
+
+			App.todayTable = new $.fn.dataTable.Editor({
+				table: '#todayTable',
+				idSrc: 'sid',
+				fields: [
+					{name: 'orgName'},
+					{name: 'vppName'},
+					{name: 'siteName'},
+					{name: 'gen_code'},
+					{name: 'vpp_resource_code'},
+					{name: 'resourceTypeName'},
+					{name: 'location'},
+					{name: 'capacity'},
+					{name: 'tradeDay'},
+					{name: 'part'},
+					{name: '1'},
+					{name: '2'},
+					{name: '3'},
+					{name: '4'},
+					{name: '5'},
+					{name: '6'},
+					{name: '7'},
+					{name: '8'},
+					{name: '9'},
+					{name: '10'},
+					{name: '11'},
+					{name: '12'},
+					{name: '13'},
+					{name: '14'},
+					{name: '15'},
+					{name: '16'},
+					{name: '17'},
+					{name: '18'},
+					{name: '19'},
+					{name: '20'},
+					{name: '21'},
+					{name: '22'},
+					{name: '23'},
+					{name: '24'},
+				]
+			});
+
+			$('#todayTable').DataTable({
 				authWidth: true,
 				scrollX: true,
 				scrollCollapse: true,
@@ -639,21 +681,22 @@
 				dom: 'tip',
 			});
 
-			new $.fn.dataTable.Buttons(App.todayTable, {
-				name: 'commands',
-				buttons: [
-					{
-						extend: 'excel',
-						text: '엑셀다운로드',
-						className: 'btn-save',
-						title: '',
-						messageTop: ' ',
-						filename: '입찰예측'
-					}
-				]
-			});
+			// new $.fn.dataTable.Buttons(App.todayTable, {
+			// 	name: 'commands',
+			// 	buttons: [
+			// 		{
+			// 			extend: 'excel',
+			// 			text: '엑셀다운로드',
+			// 			className: 'btn-save',
+			// 			title: '',
+			// 			messageTop: ' ',
+			// 			filename: '입찰예측'
+			// 		}
+			// 	]
+			// });
+			//
+			// App.todayTable.buttons( 0, null ).containers().appendTo("#excelDown");
 
-			App.todayTable.buttons( 0, null ).containers().appendTo("#excelDown");
 
 
 			App.bidTable = $('#bidTable').DataTable({
@@ -762,8 +805,9 @@
 									}
 								});
 
-								App.todayTable.clear();
-								App.todayTable.rows.add(refinedList).draw();
+
+								$('#todayTable').DataTable().clear();
+								$('#todayTable').DataTable().rows.add(refinedList).draw();
 							}
 						} else {
 							console.log(index, rspn);
@@ -785,7 +829,7 @@
 			$(document).on('click', '#bidSettingModal .input-list .btn-type03', bidSettingSave); //입찰세팅 저장
 			$(document).on('click', '#bidNow', bidNow); //즉시입찰 팝업 항목삭제
 			$(document).on('click', '#modifyTable', editActive)
-			$(document).on('click', '#todayTable tbody td:not(.no-edit)', function() { App.todayTable.bubble(this); });
+			$(document).on('click', '#todayTable tbody td:not(.no-edit)', function(e) { App.todayTable.include(this); });
 		}
 	}
 

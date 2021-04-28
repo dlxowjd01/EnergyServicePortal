@@ -327,9 +327,11 @@
 	</div>
 </div>
 
-<script>
+<script type="text/javascript">
 	// Document Ready
 	$(_ => {
+
+
 		// VPP 그룹 정보
 		$.ajax({
 			type: "GET",
@@ -376,6 +378,10 @@
 		sids: [],
 		energyData: [],
 		acc: [],
+
+		pre() {
+
+		},
 
 		init() {
 			const sids = this.sites.map(x => x.sid).join();
