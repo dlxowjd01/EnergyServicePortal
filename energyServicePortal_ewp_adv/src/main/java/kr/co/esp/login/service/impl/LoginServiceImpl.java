@@ -42,7 +42,7 @@ public class LoginServiceImpl extends EgovAbstractServiceImpl implements LoginSe
 		try {
 			if (fixedOid != null && !"".equals(fixedOid)) {
 				rtnMap.put("oid", fixedOid);
-				if ("testkpx".equals(fixedOid)) {
+				if ("testkpx".equals(fixedOid)||"kpxjeju".equals(fixedOid)) {
 					rtnMap.put("mode", "test");
 				} else {
 					rtnMap.put("mode", "");
