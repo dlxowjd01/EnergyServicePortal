@@ -13,6 +13,7 @@
 		const tableBody = $("#tableBody");
 		const copyWithdrawList = $("#withdrawList").clone().html();
 		const copyTableRow = tableBody.find(".template-row").clone().html();
+		const noHistory = "메모 히스토리가 없습니다.";
 
 		let fileList = [];
 		let totalAmount = 0;
@@ -111,6 +112,7 @@
 
 		function handleAccData(accInfo, transactionInfo){
 			let transactionData = transactionInfo[0];
+			let copyReceiveList = '';
 			if (accInfo[0].spcGens && accInfo[0].spcGens.length > 0 ) {
 				let accData = accInfo[0];
 				let gensInfo = accData.spcGens;
@@ -124,11 +126,14 @@
 						promises.push(Promise.resolve(JSON.parse(element.finance_info)));
 					}
 				});
+				$("#memoHistory").val(transactionData.memo_common);
+				$("#memoHistory").data('commonMemo', transactionData.memo_common);
 				Promise.all(promises).then(res => {
 					withdrawList.prev().data({"value": transactionData.withdraw_account_no, "name": transactionData.withdraw_bank }).html(transactionData.withdraw_bank + '&nbsp;' + transactionData.withdraw_account_no + '<span class="caret"></span>');
 					getAmount();
 					if(transactionData.to_account){
 						var withdraw_day = transactionData.withdraw_day;
+						let purposeAcc = '';
 						if (!isEmpty(withdraw_day) && withdraw_day.length == 8) {
 							withdraw_day = withdraw_day.substring(0, 4)+'-'+withdraw_day.substring(4, 6)+'-'+withdraw_day.substring(6, 8);
 						}
@@ -217,6 +222,7 @@
 									const strAccNum = "계좌_번호";
 									const bankName = "은행_리스트";
 									const accHolder = "예금주";
+									const purposeAcc = "계좌구분";
 
 									if(item[0].match(strAccType)){
 										let n = item[0].replace(strAccType, '');
@@ -226,6 +232,7 @@
 										myObj.accNum = element[strAccNum+n];
 										myObj.bankName = element[bankName+n];
 										myObj.accHolder = element[accHolder+n];
+										myObj.purposeAcc = element[purposeAcc+n];
 										tempArr.push(myObj);
 									}
 								});
@@ -264,6 +271,13 @@
 										// selectedAcc.html( selectedAcc.html().replace(/\*bank_name\*/g, bankName).replace(/\*acc_num\*/g, accNum) );
 										sending = copyWithdrawList.replace(/\*bank_name\*/g, bankName).replace(/\*acc_num\*/g, accNum).replace(/\*acc_holder\*/g, accHolder);
 										withdrawList.append($(sending));
+										if (isEmpty(v.purposeAcc)) {
+											purposeAcc = '';
+											$('[name="purposeAmount"]').val('');
+										} else {
+											purposeAcc = v.purposeAcc;
+											$('[name="purposeAmount"]').val(purposeAcc);
+										}
 									}
 
 									if(v.accType.match("입금") || v.accType.match("입출금")) {
@@ -271,7 +285,7 @@
 										accNum = v.accNum;
 										accHolder = v.accHolder;
 
-										let copyReceiveList = '<li data-acc-holder="*acc_holder*" data-acc-type="*to_acc_type*" data-name="*to_bank_name*" data-value="*to_account_no*"><a href="#" tabindex="-1">*to_bank_name* *to_account_no* *acc_holder*</a></li>';
+										copyReceiveList = '<li data-acc-holder="*acc_holder*" data-acc-type="*to_acc_type*" data-name="*to_bank_name*" data-value="*to_account_no*"><a href="#" tabindex="-1">*to_bank_name* *to_account_no* *acc_holder*</a></li>';
 
 										receiving = copyReceiveList.replace(/\*to_acc_type\*/g, v.accType).replace(/\*to_bank_name\*/g, bankName).replace(/\*to_account_no\*/g, accNum).replace(/\*acc_holder\*/g, accHolder);
 
@@ -295,6 +309,11 @@
 							calcTotal();
 							withdrawList.find("li").on("click", function(){
 								withdrawList.prev().data({"value": $(this).data("value"), "name": $(this).data("name"), "acc-holder" : $(this).data("acc-holder") });
+								if (isEmpty(purposeAcc)) {
+									$('[name="purposeAmount"]').val('');
+								} else {
+									$('[name="purposeAmount"]').val(purposeAcc);
+								}
 								getAmount();
 							});
 						}).finally(() => {
@@ -342,7 +361,8 @@
 							let downUrl = apiHost + '/files/download/' + attach.filedName + '?oid=' + oid + '&orgFilename=' + attach.originalName.trim();
 							let templateAttach = `
 								<li class="upload-text" data-id="${'${attach.filedName}'}">${'${attach.originalName.trim()}'}
-									<button type="button" class="btn-close btn-icon" onclick="deleteFile($(this))"></button>
+									<button type="button" class="btn-close btn-icon2" onclick="deleteFile($(this))"></button>
+									<img src="/img/reorder.svg" class="reorder">
 								</li>
 							`;
 							addFileList.append(templateAttach);
@@ -377,6 +397,9 @@
 			jsonData.withdraw_day = $("#requestedDate").val().replace(/-/g, "");
 			// to
 			jsonData.to_account = "";
+			
+			//memo
+			jsonData.memo_common = $("#memoHistory").val();
 
 			// status
 			if (e.originalEvent.submitter.textContent === '제출') {
@@ -516,6 +539,7 @@
 					let listItem = `<li class='upload-text' data-id="${'${file.fieldname}'}">
 									${'${file.originalname}'}
 									<button type='button' class='btn-close btn-icon' onclick='deleteFile($(this))'></button>
+									<img src="img/reorder.svg" class="reorder">
 								</li>`;
 
 					$('#fileInput').parent().find('div.file_list ul').append(listItem);
@@ -547,7 +571,38 @@
 				});
 			});
 		}
+		
+		$("#memoSaveBtn").on("click", function(){
+			const newStatus = null;
+			let input = $("#memo").val();
+			let d = new Date();
+			let prefix = d.toISOString().substring(0, 10) + ' '
+				+  d.toLocaleTimeString().substr(0, d.toLocaleTimeString().length-2)
+				+ '/ '
+				+ loginName
+				+ '\n';
 
+				console.log("prefix---", prefix)
+			if(isEmpty(input)){
+				$("#warningModal").modal("show");
+			} else {
+				let val = '';
+				if($("#memoHistory").val() == noHistory){
+					$("#memoHistory").val("");
+					val = prefix + input;
+				} else {
+					val = '\n' + prefix + input;
+				}
+			
+				let preserved = isEmpty($("#memoHistory").data('commonMemo')) ? '' : $("#memoHistory").data('commonMemo');
+				$("#memoHistory").val(preserved += val).data('commonMemo', preserved);
+				
+				// console.log("val==", preserved)
+				updateReq(undefined, undefined , preserved);
+				// handleReq(newStatus, updateReq);
+			}
+		});
+		
 		$(document).on("change", ".amount", function(evt) {
 			let newVal = this.value;
 			let total = document.getElementById("total");
@@ -605,6 +660,47 @@
 		$("#selectAll").on("click", function(){
 			$("#tableBody").find('input:checkbox').prop('checked', this.checked);
 		});
+		
+		function updateReq(newStatus, memoStr, commmonMemo){
+			let newData = {}
+			newStatus || newStatus == 0 || newStatus == 1 ? ( newData.status = newStatus ) : null;
+
+			if(newStatus != undefined) {
+				newData.status_changed_by = loginName;
+				newData.status_changed_at = new Date().toISOString();
+			}
+
+			if (memoStr != undefined) {
+				newData.memo = memoStr;
+			}
+
+			if (commmonMemo != undefined) {
+				newData.memo_common = commmonMemo;
+			}
+
+			let opt = {
+				url: apiHost + '/spcs/transactions/' + reqId + '?oid=' + oid,
+				type: "patch",
+				async: true,
+				dataType: 'json',
+				contentType: "application/json",
+				data: JSON.stringify(newData)
+			};
+			var reload = newStatus;
+			$.ajax(opt).done(function (json, textStatus, jqXHR) {
+				if(isEmpty(reload)){
+					$('#memo').val('');
+					return false;
+				} else {
+					window.location.href = window.location.origin + '/spc/withdrawReqStatus.do' ;
+				}
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				$("#warningModal .modal-title").text('처리 중 오류가 발생했습니다.');
+				$("#warningModal").modal("show");
+				console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
+				return false;
+			});
+		}
 
 		function bankProperties() {
 			let opt = {
@@ -662,6 +758,20 @@
 	}
 </script>
 
+<div class="modal fade" id="warningModal" role="dialog" aria-labelledby="warningModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content collect-modal-content">
+			<div class="modal-header">
+				<h4 lass="modal-title">저장 하실 내용을 입력해 주세요.</h4>
+			</div>
+			<div class="modal-footer">
+				<div class="btn-wrap-type02">
+					<button type="button" data-dismiss="modal" class="btn-type" aria-label="Close">확인</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
 <div class="row header-wrapper">
 	<div class="col-12">
@@ -683,6 +793,10 @@
 				--><button type="button" class="dropdown-toggle" data-toggle="dropdown" data-name="" data-value=""><span class="caret"></span></button>
 					<ul id="withdrawList" class="dropdown-menu unused center" role="menu"><li data-acc-holder="*acc_holder*" data-name="*bank_name*" data-value="*acc_num*"><a href="#" tabindex="-1">*bank_name* *acc_num*</a></li></ul>
 				</div>
+			</div>
+			<div class="sa-select"><!--
+			--><label for="purposeAmount" class="tx-tit">계좌 구분</label><!--
+			--><div class="text-input-type w-120px"><input type="text" id="" name="purposeAmount" disabled="" readonly=""></div>
 			</div>
 			<div class="sa-select"><!--
 			--><label for="availableAmount" class="tx-tit">계좌 잔액</label><!--
@@ -798,7 +912,7 @@
 				--><button type="button" id="addRowBtn" class="btn-text-blue">열 추가</button><!--
 			--></div>
 			</div>
-			<div class="indiv mt-25">
+			<div class="indiv mt-25 proof">
 				<div class="spc-table-row">
 					<table id="secondTable">
 						<colgroup>
@@ -817,15 +931,31 @@
 						</tr>
 					</table>
 				</div>
-
-				<div class="btn-wrap-type05"><!--
+			</div>
+			<div class="indiv mt-25 memo">
+				<div class="spc-table-row">
+					<div>
+						<h2 class="memotitle">메모 히스토리</h2>
+					</div>
+					<div class="textarea-container">	
+						<textarea id="memoHistory" class="textarea w-100" placeholder="메모 히스토리가 없습니다."></textarea>
+					</div>
+					<div>
+						<h2 class="memotitle">메모</h2>
+					</div>
+					<div class="textarea-container">
+						<button type="button" id="memoSaveBtn" class="btn-type03 btn-fixed">저장</button>
+						<textarea id="memo" class="textarea w-100" placeholder="직접 입력"></textarea>
+					</div>					
+				</div>
+			</div>
+			<div class="btn-wrap-type05"><!--
 				--><button type="button" onclick="location.href='/spc/withdrawReqStatus.do'" class="btn-type03 w-80px <c:if test="${param.req_edit_req_status ne 9}"> mr-12 </c:if>">목록</button><!--
 				<c:if test="${param.req_edit_req_status eq 9}">
 				--><button type="submit" class="btn-type03 w-80px mr-12">임시 저장</button><!--
 				</c:if>
 				--><button type="submit" class="btn btn-type">제출</button><!--
 			--></div>
-			</div>
 		</div>
 	</div>
 </form>

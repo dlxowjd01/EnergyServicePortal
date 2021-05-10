@@ -1171,7 +1171,22 @@ table tbody td .dropdown-menu {
 	white-space: normal;
 }
 
+.text-input-type textarea {
+	position: relative;
+	padding: 0;
+	width: 100%;
+	height: 36px;
+	line-height: 36px;
+	border-color: transparent;
+	border-radius: 2px;
+	background: none;
+	color: var(--white87);
+	font-size: 1.3rem;
+	white-space: normal;
+}
+
 .text-input-type > input[type="text"],
+.text-input-type > textarea,
 .text-input-type > input[type="search"],
 .text-input-type > input[type="password"] {
 	text-indent: 12px;
@@ -2761,6 +2776,12 @@ html[lang="en"] .all-menu > a:after {
 .dropdown > .btn,
 .dropdown.open > .btn {
 	border: transparent;
+}
+
+.modal-middle .alarm-header li span{
+	font-size: 2vh;
+	color : blue;
+	margin-left: 3vh;		
 }
 
 .dropdown-menu {
@@ -8428,6 +8449,18 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	outline: none;
 }
 
+.btn-close.btn-icon2 {
+	margin: 4px 0 0 10px;
+	width: 16px;
+	height: 16px;
+	border: 0;
+	text-indent: -9999px;
+	vertical-align: middle;
+	background: var(--btn-close) no-repeat center center;
+	background-size: 12px;
+	outline: none;
+}
+
 .icon-add {
 	display: inline-block;
 	width: 16px;
@@ -8464,6 +8497,17 @@ html[lang="en"] .switch-input:checked ~ .switch-handle {
 	text-indent: -9999px;
 	vertical-align: middle;
 	background: var(--btn-close) no-repeat center center;
+	outline: none;
+}
+
+.icon-new {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	border: 0;
+	text-indent: -9999px;
+	vertical-align: middle;
+	background: url('../img/new.svg'); 	
 	outline: none;
 }
 
@@ -11701,9 +11745,43 @@ th > span.asterisk:after {
 	overflow-y: auto;
 }
 
+.proof {
+	float: left;
+	width: 49%;
+  	height: 458px;
+  	margin: 24px 16px 24px 4px;
+  	border: solid 1px rgba(255, 255, 255, 0.25);
+}
+
+.memo {
+	float: right;
+	width: 49%;
+  	height: 458px;
+ 	margin: 24px 0 24px 0;
+  	border: solid 1px rgba(255, 255, 255, 0.25);
+}
+
+.memotitle{
+	font-size: 1.4rem;
+	padding: 8px 12px 12px 0;	
+}
+
 .table-unit-info {
 	color: var(--white60);
 	font-size: 1.4rem;
+}
+
+#memoSaveBtn {
+	position: absolute;
+	bottom: 115px;
+	right: 60px;
+}
+
+.reorder {
+  width: 10px;
+  height: 10px;
+  margin: 0 0 0 425px;
+  object-fit: contain;
 }
 
 .pvGen-fold > span {

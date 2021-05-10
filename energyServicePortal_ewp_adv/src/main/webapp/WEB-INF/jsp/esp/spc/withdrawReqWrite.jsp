@@ -79,11 +79,40 @@
 			let val = $(this).parent().data("value");
 			purposeList.prev().data("value", val);
 		});
+		
+		$("#memoSaveBtn").on("click", function(){
+			const newStatus = null;
+			let input = $("#memo").val();
+			let d = new Date();
+			let prefix = d.toISOString().substring(0, 10) + ' '
+				+  d.toLocaleTimeString().substr(0, d.toLocaleTimeString().length-2)
+				+ '/ '
+				+ loginName
+				+ '\n';
 
+				console.log("prefix---", prefix)
+			if(isEmpty(input)){
+				$("#warningModal").modal("show");
+			} else {
+				let	val = '\n' + prefix + input;
+			
+				$("#memoHistory").val(val).data('commonMemo', val);
+				$("#memo").val('');
+			}
+		});
+		
+		document.getElementById('note').addEventListener('keydown', (e) => {
+			const obj = e.target;
+			let numberOfLines = (obj.value.match(/\n/g) || []).length + 1;
+			let maxRows = obj.rows;
+			if(e.which === 13 && numberOfLines === maxRows) {
+				e.preventDefault();
+			}
+		});
+		
 		function getAmount() {
 			const spcId = $('#spcList').prev().data('value');
 			const account = $('#withdrawList').prev().data('value');
-
 			if (!isEmpty(spcId) && !isEmpty(account)) {
 				$.ajax({
 					url: apiHost + '/spcs/transactions/real/balance',
@@ -93,9 +122,9 @@
 						spcIds: spcId
 					}
 				}).done(function (json, textStatus, jqXHR) {
+					console.log("json:", json);				
 					if (!isEmpty(json) && !isEmpty(json.data) && !isEmpty(json.data.items)) {
 						const targetAccount = json.data.items.find(e => e.account_no === account.replace(/[^0-9]/g, ''));
-
 						if (isEmpty(targetAccount)) {
 							$('[name="availableAmount"]').val('');
 						} else {
@@ -119,6 +148,48 @@
 			}
 		}
 
+		function updateReq(newStatus, memoStr, commmonMemo){
+			let newData = {}
+			newStatus || newStatus == 0 || newStatus == 1 ? ( newData.status = newStatus ) : null;
+
+			if(newStatus != undefined) {
+				newData.status_changed_by = loginName;
+				newData.status_changed_at = new Date().toISOString();
+			}
+
+			if (memoStr != undefined) {
+				newData.memo = memoStr;
+			}
+
+			if (commmonMemo != undefined) {
+				newData.memo_common = commmonMemo;
+			}
+
+			let opt = {
+				url: apiHost + '/spcs/transactions/' + reqId + '?oid=' + oid,
+				type: "patch",
+				async: true,
+				dataType: 'json',
+				contentType: "application/json",
+				data: JSON.stringify(newData)
+			};
+			var reload = newStatus;
+			$.ajax(opt).done(function (json, textStatus, jqXHR) {
+				if(isEmpty(reload)){
+					$('#memoOpt').prop('checked', false);
+					$('#txt2').val('');
+					return false;
+				} else {
+					window.location.href = window.location.origin + '/spc/withdrawReqStatus.do' ;
+				}
+			}).fail(function (jqXHR, textStatus, errorThrown) {
+				$("#warningModal .modal-title").text('처리 중 오류가 발생했습니다.');
+				$("#warningModal").modal("show");
+				console.log("jqXHR===", jqXHR, " textStatus==",  textStatus )
+				return false;
+			});
+		}
+		
 		function getSpcList() {
 			let action = 'get';
 			let syncOpt = true;
@@ -174,9 +245,11 @@
 				type: action,
 				async: syncOpt
 			}
+			let purposeAcc = '';
 			$.ajax(option).done(function (json, textStatus, jqXHR) {
 				let sending = '';
 				let receiving = '';
+
 				if (json.data[0].spcGens && json.data[0].spcGens.length > 0 ) {
 					let gensInfo = json.data[0].spcGens;
 					var tempArr = [];
@@ -190,7 +263,7 @@
 					Promise.all(promises).then(res => {
 						$(".receive-list").empty();
 						$(".receive-list").prev().html('선택<span class="caret">');
-
+						console.log("res:", res);
 						// mergeArr(result)
 						res.map(x => {
 							// console.log("x===", x)
@@ -199,6 +272,7 @@
 								const strAccNum = "계좌_번호";
 								const bankName = "은행_리스트";
 								const accHolder = "예금주";
+								const purposeAcc = "계좌구분";
 
 								if(item[0].match(strAccType)){
 									let n = item[0].replace(strAccType, '');
@@ -209,6 +283,7 @@
 									myObj.accNum = x[strAccNum+n];
 									myObj.bankName = x[bankName+n];
 									myObj.accHolder = x[accHolder+n];
+									myObj.purposeAcc = x[purposeAcc+n];
 									tempArr.push(myObj);
 								}
 
@@ -240,6 +315,7 @@
 							let accHolder = '';
 							console.log(v.accType);
 							console.log(v.accType.match("출금"));
+							
 
 							if(v.accType.match("출금") || v.accType.match("입출금")) {
 								accNum = v.accNum;
@@ -247,7 +323,14 @@
 								bankName = v.bankName;
 								sending = copyWithdrawList.replace(/\*bank_name\*/g, bankName).replace(/\*acc_num\*/g, accNum).replace(/\*acc_holder\*/g, accHolder);
 								withdrawList.append($(sending));
+								if (isEmpty(v.purposeAcc)) {
+									purposeAcc = '';
+								} else {
+									purposeAcc = v.purposeAcc;
+								}
+								
 							}
+							console.log("purposeAcc",purposeAcc);
 
 							if(v.accType.match("입금") || v.accType.match("입출금")) {
 								bankName = v.bankName;
@@ -275,6 +358,11 @@
 			setTimeout(function(){
 				withdrawList.find("li").on("click", function(){
 					withdrawList.prev().data({"value": $(this).data("value"), "name": $(this).data("name"), "acc-holder" : $(this).data("acc-holder") });
+					if (isEmpty(purposeAcc)) {
+						$('[name="purposeAmount"]').val('');
+					} else {
+						$('[name="purposeAmount"]').val(purposeAcc);
+					}
 					getAmount();
 				});
 				receiveList.find("li").on("click", function(){
@@ -282,6 +370,8 @@
 				});
 			}, 300);
 		}
+		
+		
 
 		function uniqBy(a, key) {
 			var seen = {};
@@ -310,6 +400,9 @@
 			jsonData.withdraw_day = $("#requestedDate").val().replace(/-/g, "");
 			// to
 			jsonData.to_account = "";
+			
+			//memo
+			jsonData.memo_common = $("#memoHistory").val();
 
 			// status
 			if (e.originalEvent.submitter.textContent === '제출') {
@@ -453,7 +546,8 @@
 				fileList.forEach(file => {
 					let listItem = `<li class='upload-text' data-id="${'${file.fieldname}'}">
 									${'${file.originalname}'}
-									<button type='button' class='btn-close btn-icon' onclick='deleteFile($(this))'></button>
+									<button type='button' class='btn-close btn-icon2' onclick='deleteFile($(this))'></button>
+									<img src="/img/reorder.svg" class="reorder">
 								</li>`;
 
 					$('#fileInput').parent().find('div.file_list ul').append(listItem);
@@ -469,7 +563,7 @@
 			$(".amount").each(function() {
 				$(this).on('keypress', function(evt) {
 					let val = $(this).val();
-					
+					console.log("keypress", evt);
 					if (evt.which == "0".charCodeAt(0) && val.trim() == "") {
 						return false;
 					}
@@ -479,6 +573,7 @@
 				});
 
 				$(this).on('keyup', function(evt, limit) {
+					console.log("keyup", evt);
 					if( $(this).val().match(/[^\x00-\x80]/) ){
 						$(this).val("");
 					}
@@ -492,7 +587,7 @@
 			totalAmount = 0;
 			newVal = this.value.replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 			this.value = newVal;
-			// console.log("document on change===", evt)
+			console.log("document on change===", evt)
 			if(newVal != "") {
 				// if ( (keyCode != 8 || keyCode ==32 ) && (keyCode < 48 || keyCode > 57)) { evt.preventDefault(); }
 				if (evt.which < 48 || evt.which > 57) { evt.preventDefault(); }
@@ -607,6 +702,21 @@
 	}
 </script>
 
+<div class="modal fade" id="warningModal" role="dialog" aria-labelledby="warningModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+	<div class="modal-dialog">
+		<div class="modal-content collect-modal-content">
+			<div class="modal-header">
+				<h4 lass="modal-title">저장 하실 내용을 입력해 주세요.</h4>
+			</div>
+			<div class="modal-footer">
+				<div class="btn-wrap-type02">
+					<button type="button" data-dismiss="modal" class="btn-type" aria-label="Close">확인</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div class="row header-wrapper">
 	<div class="col-12">
 		<h1 class="page-header">출금 요청서 신청</h1>
@@ -637,6 +747,12 @@
 						<small class="hidden warning">출금 요청 계좌를 선택해 주세요.</small>
 					</div>
 				</div>
+				
+				<div class="sa-select"><!--
+				--><label for="purposeAmount" class="tx-tit">계좌 구분</label><!--
+				--><div class="text-input-type w-120px"><input type="text" id="" name="purposeAmount" disabled="" readonly=""></div>
+				</div>
+				
 				<div class="sa-select"><!--
 				--><label for="availableAmount" class="tx-tit">계좌 잔액</label><!--
 				--><div class="text-input-type w-120px"><input type="text" id="" name="availableAmount" disabled="" readonly=""></div>
@@ -724,7 +840,7 @@
 							--></div><!--
 						--></td>
 							<td>
-								<div class="text-input-type"><input type="text" id="note" name="note" placeholder="직접 입력"></div>
+								<div class="text-input-type"><textarea id="note" name="note" placeholder="직접 입력" cols="20" rows="5"></textarea></div>
 							</td>
 						</tr>
 					</tbody>
@@ -748,7 +864,7 @@
 				--><button type="button" id="addRowBtn" class="btn-text-blue">열 추가</button><!--
 			--></div>
 			</div>
-			<div class="indiv mt-25">
+			<div class="indiv mt-25 proof">
 				<div class="spc-table-row">
 					<table id="secondTable">
 						<colgroup>
@@ -767,13 +883,29 @@
 						</tr>
 					</table>
 				</div>
-
-				<div class="btn-wrap-type05"><!--
+			</div>
+			<div class="indiv mt-25 memo">
+				<div class="spc-table-row">
+					<div>
+						<h2 class="memotitle">메모 히스토리</h2>
+					</div>
+					<div class="textarea-container">	
+						<textarea id="memoHistory" class="textarea w-100" placeholder="메모 히스토리가 없습니다." readonly></textarea>
+					</div>
+					<div>
+					<h2 class="memotitle">메모</h2>
+					</div>
+					<div class="textarea-container">
+						<button type="button" id="memoSaveBtn" class="btn-type03 btn-fixed">저장</button>
+						<textarea id="memo" class="textarea w-100" placeholder="직접 입력"></textarea>
+					</div>					
+				</div>
+			</div>
+			<div class="btn-wrap-type05"><!--
 				--><button type="button" onclick="location.href='/spc/transactionCalendar.do'" class="btn-type03 w-80px">목록</button><!--
 				--><button type="submit" class="btn-type03 w-80px mr-12">임시 저장</button><!--
 				--><button type="submit" class="btn btn-type">제출</button><!--
 			--></div>
-			</div>
 		</div>
 	</div>
 </form>

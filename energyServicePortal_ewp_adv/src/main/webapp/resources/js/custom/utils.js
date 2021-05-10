@@ -1565,7 +1565,12 @@ const addRow = function (listId, type, nextIdx) {
 			if ($selecter.hasClass('entity')) {
 				$tr.find('.btn-add').remove();
 			}
-			$selecter.eq($selecter.length - 1).after($tr);
+			
+			if (listId = 'addList_account_holder') {
+				$selecter.eq(0).before($tr);				
+			} else {
+				$selecter.eq($selecter.length - 1).after($tr);
+			}
 		} else {
 			$selecter.eq($selecter.length -1).after('<div class="' + classes + '">' + rowHtml + '</div>');
 		}

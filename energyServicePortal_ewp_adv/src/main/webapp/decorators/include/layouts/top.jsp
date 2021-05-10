@@ -22,8 +22,8 @@
 </c:choose>
 
 <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css">
-<link type="text/css" rel="stylesheet" href="/css/custom.min.css">
-<!-- <link type="text/css" rel="stylesheet" href="/css/custom.css"> -->
+<!-- <link type="text/css" rel="stylesheet" href="/css/custom.min.css"> -->
+<link type="text/css" rel="stylesheet" href="/css/custom.css">
 <link type="text/css" rel="stylesheet" href="/css/custom-grid.min.css">
 <link type="text/css" rel="stylesheet" href="/css/custom-mquery.min.css">
 <link type="text/css" rel="stylesheet" href="/css/jquery-ui.min.css" media="all" >
@@ -73,7 +73,8 @@
 	// task => 0: 일반, 1:사무수탁, 2:자산운용, 3:출금관리, 4:사업주
 	const task = '${sessionScope.userInfo.task}';
 	const customYn = '${sessionScope.userInfo.custom_level_yn}';
-	const oid = '${sessionScope.userInfo.oid}';
+  	//const oid = '${sessionScope.userInfo.oid}';
+	const oid = 'encored';
 	const loginId = '${sessionScope.userInfo.login_id}';
 	const userInfoId = '${sessionScope.userInfo.uid}';
 	const loginName = '${sessionScope.userInfo.name}';

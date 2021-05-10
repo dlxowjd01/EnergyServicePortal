@@ -287,7 +287,9 @@
 	function getAttachFileDisplay(attachement_info){
 		var spcId = '${param.spc_id}',
 			genId = '${param.gen_id}',
-			oid = '${param.oid}';
+			oid = 'encored';
+// 			oid = '${param.oid}';
+
 
 		var	addFileList01 = [],addFileList02 = [],addFileList03 = [],addFileList04 = [],addFileList05 = [],
 			addFileList06 = [],addFileList07 = [],addFileList08 = [],addFileList09 = [],addFileList10 = [];
@@ -457,7 +459,7 @@
 	function getSpcAndGenData(){
 		var spcId = '${param.spc_id}',
 			genId = '${param.gen_id}';
-
+		console.log("oid????", oid, spcId, genId);
 		$.ajax({
 			url: apiHost + '/spcs/'+ spcId,
 			type: 'get',
@@ -1047,6 +1049,51 @@
 			associated_info = setAreaParamData('associatedInfo'),
 			attachement_info = files;
 
+		let accountTr = $('tr[class*="addList_account_holder"]');
+		
+		const bankList = new Array(accountTr.length);
+		const accountList = new Array(accountTr.length);
+		
+		if(accountTr.length > 1){
+			$.each(finance_info, function(key, val){
+				if(key.match('은행_리스트')){
+					if(typeof(key) != 'string'){
+						key = String(key);
+					}
+					let arrIdx = key.charAt(key.length-1);
+					arrIdx = Number(arrIdx);
+					bankList[arrIdx] = val;
+				} else if (key.match('계좌_번호')){
+					if(typeof(key) != 'string'){
+						key = String(key);
+					}
+					let arrIdx = key.charAt(key.length-1);
+					arrIdx = Number(arrIdx);
+					accountList[arrIdx] = val;
+				}
+			});
+			const dupleArr = new Array();
+			for(let i = 0; i < accountList.length; i++){
+				const nowElem = accountList[i];
+				for(let j = i+1; j < accountList.length; j++){
+					if(!isEmpty(nowElem) && nowElem === accountList[j]){
+						dupleArr.push(i);
+						dupleArr.push(j);
+					}
+				}
+			}
+		
+			for(let i = 0; i < dupleArr.length; i++){
+				const nowBankElem = bankList[dupleArr[i]];
+				for(let j = i+1; j < dupleArr.length; j++){
+					if(nowBankElem === bankList[dupleArr[j]]){
+						alert('동일한 계좌가 존재합니다.');
+						return false;
+					}
+				}
+			}
+		}
+		
 		let certificationFiles = new Array();
 		//추가
 		$('#financeInfo').find('input[type="file"]').each(function () {
@@ -1129,7 +1176,7 @@
 		if($('#tabAttachementInfo').length > 0) setData.attachement_info = JSON.stringify(attachement_info); else setData.attachement_info = null
 		setData.updated_by = loginId;
 		setData.del_yn = 'N';
-
+		
 		$.ajax({
 			url: apiHost + '/spcs/' + spcId +'/gens/' + genId + '?oid=' + oid,
 			type: 'patch',

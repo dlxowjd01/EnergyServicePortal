@@ -282,6 +282,8 @@
 									job_type: data.job_type,
 									spc_id: data.spc_id,
 									id: data.id,
+									total_amount: data.total_amount,
+									total_count : database.length,
 									modal_data: data
 								});
 							} else {
@@ -289,6 +291,8 @@
 								rtnArray.push({
 									date: data.withdraw_day,
 									spc_id: data.spc_id,
+									total_amount: data.total_amount,
+									total_count : database.length,
 									status: status
 								});
 							}
@@ -299,7 +303,7 @@
 				if (!isEmpty(rtnArray)) {
 					rtnArray = groupBy(rtnArray, 'date');
 				}
-
+				console.log("rtnArray", rtnArray);
 				fillCalender(rtnArray);
 			}).catch(error => {
 				console.error(error);
@@ -445,17 +449,20 @@
 			, regExp = new RegExp(searchName, 'i');
 
 		let modalStr = ``;
+		let totalObj = {
+			totalAmount : 0,
+			totTransactionCount: 0
+		}
 		Object.entries(data).forEach(([date, items]) => {
 			const calendarDate = Number(date.slice(-2)) - 1;
 			let tableStr = ``
+			  ,	monthTotStr = `` 
 			  , showCount = 0
 			  , transactionCount = 0
 			  , first = true;
-
 			items.forEach(item => { if(isEmpty(item.job_type)) { transactionCount++; } });
 			items.forEach((item, index) => {
 				let spcName = '', hiddenClass = '';
-
 				//SPC_NAME
 				spcPairArr.some(x => { if(x.spcId === item.spc_id) { spcName = x.spcName; } });
 				if (isEmpty(spcName)) spcName = 'spc_no_name';
@@ -483,15 +490,15 @@
 				if (showCount > 2) { hiddenClass = 'hidden'; }
 
 				if (!isEmpty(item.job_type)) {
-					tableStr += `<li data-jobId="${'${item.id}'}" data-id="${'${item.spc_id}'}" data-name="${'${spcName}'}" class="link bu t${'${jobType}'} ${'${hiddenClass}'}">[${'${spcName}'}] ${'${jobName}'}</li>`;
+					tableStr += `<li data-jobId="${'${item.id}'}" data-id="${'${item.spc_id}'}" data-totAmount="${'${item.total_amount}'}" data-name="${'${spcName}'}" class="link bu t${'${jobType}'} ${'${hiddenClass}'}">[${'${spcName}'}] ${'${jobName}'}</li>`;
 					modalStr += `<li class="link alarm-item ${'${hiddenClass}'}" data-id="${'${item.id}'}">
-									<span data-jobId="${'${item.id}'}" data-id="${'${item.spc_id}'}" data-name="${'${spcName}'}" class="bu t${'${jobType}'}">[${'${spcName}'}] ${'${jobName}'}</span>
+									<span data-jobId="${'${item.id}'}" data-id="${'${item.spc_id}'}" data-totAmount="${'${item.total_amount}'}" data-name="${'${spcName}'}" class="bu t${'${jobType}'}">[${'${spcName}'}] ${'${jobName}'}</span>
 									<span class="fr btn-next"></span>
 									<br>
 								</li>`;
 				} else {
 					const bulletIdx = statusCode(jobType);
-					tableStr += `<li data-id="${'${item.spc_id}'}" data-name="${'${spcName}'}" data-value="${'${jobType}'}" class="bu t${'${bulletIdx}'} ${'${hiddenClass}'}">[${'${spcName}'}] ${'${jobName}'}</li>`;
+					tableStr += `<li data-id="${'${item.spc_id}'}" data-name="${'${spcName}'}" data-totAmount="${'${item.total_amount}'}" data-value="${'${jobType}'}" class="bu t${'${bulletIdx}'} ${'${hiddenClass}'}">[${'${spcName}'}] ${'${jobName}'}</li>`;
 
 					if (first) {
 						first = false;
@@ -505,8 +512,18 @@
 									</li>`;
 					}
 				}
+				totalObj.totalAmount += item.total_amount;
+				totalObj.totCount = item.total_count;
 			});
-
+			console.log("totalObj",totalObj);
+			monthTotStr += `<li>
+								<span>
+							  총${'${totalObj.totCount}'}건/${'${totalObj.totalAmount}'}원
+								</span>
+							</li>`;
+								
+			document.querySelector('#detailInfoModal .alarm-header').innerHTML = monthTotStr;
+								
 			if ((showCount - 2) > 0) {
 				tableStr += `<li>
 								<button type="button" class="btn-type06" id="dateModal${'${calendarDate}'}">
@@ -573,11 +590,13 @@
 	 * 일자별 더보기 함수
 	 */
 	const dateModal = (date, items) => {
+		console.log("dayitem", date,items);
 		const calendarDate = (date.slice(-4)).replace(/(\d{2})(\d{2})/, '$1월 $2일')
 			, etcModal = document.getElementById('dateEtcModal')
 			, modalData = document.querySelector('#dateEtcModal .alarm-list')
 			, regExp = new RegExp(searchName, 'i');
 		let modalStr = ``;
+		let dayTotStr = ``;
 		let checkType = new Array();
 		document.querySelectorAll('[name="type"]:checked').forEach(checkbox => {
 			checkType.push(checkbox.value);
@@ -585,6 +604,10 @@
 
 		document.getElementById('dateEtcTitle').innerText = calendarDate;
 
+		let dayTotalObj = {
+				totalAmount : 0,
+				totTransactionCount: 0
+		}
 		items.forEach(item => {
 			let spcName = ''
 			  , hiddenClass = '';
@@ -647,8 +670,18 @@
 								<span class="fr btn-next"></span><br/>
 							</li>`;
 			}
+			dayTotalObj.totalAmount += item.total_amount;
 		});
-
+		dayTotalObj.totCount = items.length;
+		
+		dayTotStr += `<li>
+			<span>
+		  총${'${dayTotalObj.totCount}'}건/${'${dayTotalObj.totalAmount}'}원
+			</span>
+		</li>`;
+		console.log(dayTotStr);
+		document.querySelector('#dateEtcModal .alarm-header').innerHTML = dayTotStr;
+		
 		modalData.innerHTML = modalStr;
 		etcModal.classList.add('active');
 		if (document.getElementById('detailInfoModal').classList.contains('active')) {
@@ -1464,6 +1497,9 @@
 								<h2 id="modalTitle" class="fl"></h2>
 								<!-- <a href="#" class="btn-type02 fr">상세보기</a> -->
 							</div>
+							<div class="modal-middle">
+								<ul class="alarm-header"></ul>
+							</div>
 							<div class="modal-body">
 								<ul class="alarm-list"></ul>
 							</div>
@@ -1477,6 +1513,9 @@
 							<div class="modal-header">
 								<h2 id="dateEtcTitle" class="fl"></h2>
 								<!-- <a href="#" class="btn-type02 fr">상세보기</a> -->
+							</div>
+							<div class="modal-middle">
+								<ul class="alarm-header"></ul>
 							</div>
 							<div class="modal-body">
 								<ul class="alarm-list"></ul>

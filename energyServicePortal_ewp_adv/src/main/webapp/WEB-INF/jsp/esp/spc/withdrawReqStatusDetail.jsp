@@ -98,16 +98,16 @@
 							console.log("res=== attach", $("#proofFile").prev());
 							$("#proofFile").parents().find(".file-wrapper").empty();
 						})
-
-						if(typeof item.memo == "string"){
-							let showMemo = "";
-							if (task == 1) {
-								showMemo = item.memo_common;
-							} else {
-								showMemo = item.memo;
-							}
-
-							$("#txt1").val(showMemo).data('memo', item.memo).data('commonMemo', item.memo_common);
+						console.log("memo",task,item);
+						if(typeof item.memo == "string"|| typeof item.memo_common == "string"){
+// 							let showMemo = "";
+// 							if (task == 1) {
+// 								showMemo = item.memo_common;
+// 							} else {
+// 								showMemo = item.memo;
+// 							}
+							$("#txt0").val(item.memo).data('memo', item.memo).data('commonMemo', item.memo_common);
+							$("#txt1").val(item.memo_common).data('memo', item.memo).data('commonMemo', item.memo_common);
 							$("#txt2").val("");
 							return new Promise((resolve, reject) => {
 									// typeof v.to_account !== "string" ? JSON.parse(v.to_account) : v.to_account = v.to_account	
@@ -179,15 +179,26 @@
 								}
 							});
 						} else {
+							const promiseCommonMemo = Promise.resolve(JSON.parse(item.memo_common));
 							const promiseMemo = Promise.resolve(JSON.parse(item.memo));
 							const promiseAccount = Promise.resolve(JSON.parse(item.to_account));
 
-							return Promise.all([promiseAccount, promiseMemo]).then(res => {
-								if(res[1]){
-									$("#txt1").val(res[1].desc);
+							return Promise.all([promiseAccount, promiseMemo, promiseCommonMemo]).then(res => {
+								if(res[1]&&res[2]){
+									$("#txt0").val(res[1].desc);
+									$("#txt1").val(res[2].desc);
+									$("#txt2").val("");
+								} else if(res[1] == true && res[2] == false) {
+									$("#txt0").val(res[1].desc);
+									$("#txt1").val(noHistory);
+									$("#txt2").val("");	
+								} else if(res[1] == false && res[2] == true){
+									$("#txt0").val("");
+									$("#txt1").val(res[2].desc);
 									$("#txt2").val("");
 								} else {
 									console.log("no memo===");
+									$("#txt0").val("");
 									$("#txt1").val(noHistory);
 								}
 
@@ -285,24 +296,40 @@
 				+ '/ '
 				+ loginName
 				+ '\n';
-
+			let preserved = '';
+			let preserved2 = '';
 				console.log("prefix---", prefix)
 			if(isEmpty(input)){
 				$("#warningModal").modal("show");
 			} else {
 				let val = '';
-				if($("#txt1").val() == noHistory){
-					$("#txt1").val("");
-					val = prefix + input;
+				
+				if(task == 2){
+					if($("#txt0").val() == ""){
+						$("#txt0").val("");
+						val = prefix + input;
+					} else {
+						val = '\n' + prefix + input;
+					}		
 				} else {
-					val = '\n' + prefix + input;
+					if($("#txt1").val() == noHistory){
+						$("#txt1").val("");
+						val = prefix + input;
+					} else {
+						val = '\n' + prefix + input;
+					}
 				}
-			
-				let preserved = (isEmpty($("#txt1").data('memo')) ? '' : $("#txt1").data('memo')) ;
-				let preserved2 = isEmpty($("#txt1").data('commonMemo')) ? '' : $("#txt1").data('commonMemo');
-				$("#txt1").val(preserved += val).data('memo', preserved);
-				if ($("#memoOpt").is(":checked")) {
-					$("#txt1").data('commonMemo', preserved2 += val);
+				
+				if(task == 2 || task == 3) {
+					preserved = (isEmpty($("#txt0").data('memo')) ? '' : $("#txt0").data('memo')) ;
+					preserved2 = isEmpty($("#txt0").data('commonMemo')) ? '' : $("#txt0").data('commonMemo');
+					$("#txt0").val(preserved += val).data('memo', preserved);
+					if ($("#memoOpt").is(":checked")) {
+						$("#txt0").val(preserved2 += val).data('commonMemo', preserved2);
+					}
+				} else {
+					preserved2 = isEmpty($("#txt1").data('commonMemo')) ? '' : $("#txt1").data('commonMemo');
+					$("#txt1").val(preserved2 += val).data('commonMemo', preserved2);
 				}
 				// console.log("val==", preserved)
 				updateReq(undefined, preserved, preserved2);
@@ -704,6 +731,14 @@
 					--><button type="button" class="btn-type ml-12" onclick="downloadFile(this)" data-name="downloadMergeDocs" >다운로드</button><!--
 				--></div>
 				</div>
+				<c:if test="${userInfo.task eq 2 or userInfo.task eq 3 or userInfo.task eq 0}">
+				<div class="flex-wrapper mt-20">
+					<h2 class="heading">검토 히스토리</h2>
+				</div>
+				<div class="flex-wrapper border mt-12">
+					<textarea id="txt0" class="textarea w-100" placeholder="검토 히스토리가 없습니다." readonly></textarea>
+				</div>
+				</c:if>
 				<div class="flex-wrapper mt-20">
 					<h2 class="heading">메모 히스토리</h2>
 				</div>
@@ -714,7 +749,7 @@
 				<c:choose>
 					<c:when test="${userInfo.role eq 1}">
 						<div class="flex-wrapper mt-20">
-							<h2 class="heading">메모</h2><!--
+							<h2 class="heading">검토 의견 및 메모</h2><!--
 						--><a class="chk-type" href="javascript:void(0);"><input type="checkbox" id="memoOpt" name="memo_opt"><label for="memoOpt">사무수탁사 함께 보기</label></a><!--
 					--></div>
 						<div class="textarea-container mt-12">
@@ -747,7 +782,7 @@
 					<c:otherwise>
 						<c:if test="${userInfo.task ne 1}">
 							<div class="flex-wrapper mt-20">
-								<h2 class="heading">메모</h2><!--
+								<h2 class="heading">검토 의견 및 메모</h2><!--
 							--><a class="chk-type" href="javascript:void(0);"><input type="checkbox" id="memoOpt" name="memo_opt"><label for="memoOpt">사무수탁사 함께 보기</label></a><!--
 						--></div>
 							<div class="textarea-container mt-12">

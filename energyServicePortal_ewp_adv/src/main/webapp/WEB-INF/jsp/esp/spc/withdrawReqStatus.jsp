@@ -16,7 +16,7 @@
 			scrollCollapse: true,
 			sortable: true,
 			paging: true,
-			pageLength: 15,
+			pageLength: 25,
 			columns: [
 				{
 					title: '',
@@ -26,6 +26,11 @@
 								<label for="check${'${rowIndex.row}'}"></label>`;
 					},
 					className: 'dt-center no-sorting'
+				},
+				{
+					title: '순번',
+					data: 'index',
+					className: 'dt-center'
 				},
 				{
 					title: '출금 일자',
@@ -45,22 +50,27 @@
 					},
 					className: 'dt-head-center dt-body-right'
 				},
-				{
-					title: '입출금 구분',
-					data: null,
-					render: function (data, type, full, rowIndex) {
-						const toAccount = full['toAccount'];
+// 				{
+// 					title: '입출금 구분',
+// 					data: null,
+// 					render: function (data, type, full, rowIndex) {
+// 						const toAccount = full['toAccount'];
 
-						if (isEmpty(toAccount)) {
-							return '-';
-						} else {
-							if (toAccount.length > 1) {
-								return '출금 ' + (toAccount.length) + '건';
-							} else {
-								return '출금';
-							}
-						}
-					},
+// 						if (isEmpty(toAccount)) {
+// 							return '-';
+// 						} else {
+// 							if (toAccount.length > 1) {
+// 								return '출금 ' + (toAccount.length) + '건';
+// 							} else {
+// 								return '출금';
+// 							}
+// 						}
+// 					},
+// 					className: 'dt-center'
+// 				},
+				{
+					title: '출금 계좌 구분',
+					data: 'purposeAcc',
 					className: 'dt-center'
 				},
 				{
@@ -107,18 +117,41 @@
 					title: '상태',
 					data: 'status',
 					render: function (data, type, full, rowIndex) {
+						console.log("status", data,type,full,rowIndex);
 						let statusButton = `<button class="${'${full.statusClass}'} clear-btn" onclick="goToDetail(\'${'${rowIndex.row}'}\')">${'${data}'}</button>`;
 						if (task !== '2') {
 							if (!isEmpty(full['statusVal']) && full['statusVal'] === 0) {
-								statusButton += `<a href="javascript:void(0);" onclick="deleteRow(\'${'${rowIndex.row}'}\')" class="icon-delete"></a>`;
+								if(!isEmpty(full['badgeYn']) && full['badgeYn'] > 0) {
+									statusButton += `<a href="javascript:void(0);" class="icon-new"></a>
+													<a href="javascript:void(0);" onclick="deleteRow(\'${'${rowIndex.row}'}\')" class="icon-delete"></a>`;
+								} else {
+									statusButton += `<a href="javascript:void(0);" onclick="deleteRow(\'${'${rowIndex.row}'}\')" class="icon-delete"></a>`;
+								}
+				
 							} else if (!isEmpty(full['statusVal']) && full['statusVal'] === 1) {
-								statusButton += `<a href="javascript:void(0);" onclick="goToEdit(\'${'${rowIndex.row}'}\')" class="icon-edit"></a>
-												<a href="javascript:void(0);" onclick="deleteRow(\'${'${rowIndex.row}'}\')" class="icon-delete"></a>`;
+								if(!isEmpty(full['badgeYn']) && full['badgeYn'] > 0) {
+									statusButton += `<a href="javascript:void(0);" class="icon-new"></a>
+													<a href="javascript:void(0);" onclick="goToEdit(\'${'${rowIndex.row}'}\')" class="icon-edit"></a>
+													<a href="javascript:void(0);" onclick="deleteRow(\'${'${rowIndex.row}'}\')" class="icon-delete"></a>`;
+								} else {
+									statusButton += `<a href="javascript:void(0);" onclick="goToEdit(\'${'${rowIndex.row}'}\')" class="icon-edit"></a>
+													<a href="javascript:void(0);" onclick="deleteRow(\'${'${rowIndex.row}'}\')" class="icon-delete"></a>`;
+								}
+								
 							} else if (!isEmpty(full['statusVal']) && full['statusVal'] === 9) {
-								statusButton += `<a href="javascript:void(0);" onclick="goToEdit(\'${'${rowIndex.row}'}\')" class="icon-edit"></a>
-												<a href="javascript:void(0);" onclick="deleteRow(\'${'${rowIndex.row}'}\')" class="icon-delete"></a>`;
+								if(!isEmpty(full['badgeYn']) && full['badgeYn'] > 0) {
+									statusButton += `<a href="javascript:void(0);" class="icon-new"></a>
+													<a href="javascript:void(0);" onclick="goToEdit(\'${'${rowIndex.row}'}\')" class="icon-edit"></a>
+													<a href="javascript:void(0);" onclick="deleteRow(\'${'${rowIndex.row}'}\')" class="icon-delete"></a>`;
+								} else {
+									statusButton += `<a href="javascript:void(0);" onclick="goToEdit(\'${'${rowIndex.row}'}\')" class="icon-edit"></a>
+													<a href="javascript:void(0);" onclick="deleteRow(\'${'${rowIndex.row}'}\')" class="icon-delete"></a>`;
+								}
+								
 							}
 						}
+// 						return `<a href="javascript:void(0);" onclick="goToEdit(\'${'${rowIndex.row}'}\')" class="icon-edit"></a>
+// 						<a href="javascript:void(0);" onclick="deleteRow(\'${'${rowIndex.row}'}\')" class="icon-delete"></a>`;;
 						return statusButton;
 					},
 					className: 'dt-center'
@@ -197,7 +230,7 @@
 			searchOpt.status = status;
 
 			if (!isEmpty(document.getElementById('keyword').value.trim())) {
-				searchOpt.keyword = new RegExp(document.getElementById('keyword').value.trim(), 'i');
+				wndsearchOpt.keyword = new RegExp(document.getElementById('keyword').value.trim(), 'i');
 			}
 
 			if (!isEmpty(document.getElementById('withdrawDay').value.trim())) {
@@ -238,7 +271,8 @@
 					json.data.forEach(item => {
 						spcArr.push({
 							spc_id: item['spc_id'],
-							spc_name: item['name']
+							spc_name: item['name'],
+							accountArr : new Array()
 						});
 					});
 
@@ -283,13 +317,72 @@
 			if (!isEmpty(withdrawDay)) {
 				document.getElementById('withdrawDay').value = withdrawDay;
 			}
-
+			
+			getpurposeAcc();
 			$('#searchForm').submit();
 		}).catch(error => {
 			errorMsg(error);
 		});
 	}
+	
+	const getpurposeAcc = () => {
+		spcArr.forEach((spcinfo, i) => {
+			const typeArr = [];
+			return new Promise((resolve, reject) => {
+				$.ajax({
+					url: apiHost + '/spcs/' + spcinfo.spc_id + '?oid=' + oid + "&includeGens=true",
+					type: 'GET',
+					success: (json, textStatus, jqXHR) => {
+						
+						json.data.forEach((item, j) => {
+							if(spcinfo.spc_id == item.spc_id){
+								if(!isEmpty(item.spcGens)){
+									item.spcGens.forEach((spcGenInfo, idx) => {
+										if(!isEmpty(spcGenInfo.finance_info)){
+											const financeInfo = JSON.parse(spcGenInfo.finance_info);
+											$.each(financeInfo, function(key, val){
+												console.log("finance_info", key, val);
 
+												if(typeof(val) == 'string'){
+													if(val.match('출금')||val.match('입출금')){
+// 														let arrIdx = key.charAt(key.legnth-1);
+														let arrIdx = key.substring(key.legnth-2, key.legnth-1);
+														
+														arrIdx = Number(arrIdx);
+														typeArr.push(arrIdx);
+													}
+												}
+											})
+											$.each(financeInfo, function(k, v){
+												typeArr.forEach(function(accInfo, i){
+													if(k.match('계좌구분'+accInfo)){
+														spcinfo.accountArr.push(v);
+													}
+												})
+											});
+										}
+									})
+								}
+							}
+						});
+
+						resolve(spcArr);
+					},
+					error: (jqXHR, textStatus, errorThrown) => {
+						console.error(textStatus);
+						new Error('SPC정보 조회중 오류가 발생했습니다.');
+					}
+				})
+			}).then(spcArr => {
+				console.log("spcArr",spcArr);
+			
+			}).catch(error => {
+				errorMsg(error);
+			});
+			return spcinfo.accountArr;
+		});	
+	}
+	
 	const getDataList = (searchOpt) => {
 		Promise.all([$.ajax({
 			url: apiHost + '/spcs/transactions',
@@ -300,11 +393,11 @@
 		})]).then(response => {
 			response.forEach(res => {
 				if (!isEmpty(res) && !isEmpty(res['data'])) {
+					console.log("res",res);
 					let refineList = new Array();
-					res['data'].map(item => {
+					res['data'].map((item, index) => {
 						const found = spcArr.findIndex(x => x.spc_id === item.spc_id);
 						const to_account = JSON.parse(item.to_account);
-
 						let statusVal = ''
 						  , statusClass = '';
 						switch (item.status) {
@@ -340,8 +433,17 @@
 								statusVal = '';
 								statusClass = 'text-link';
 						}
-
+						let purposeAcc = '';
+						console.log("spcArr[found].accountArr",spcArr[found].accountArr);
+						for(let i = 0; i < spcArr[found].accountArr.length; i++){
+							if(purposeAcc == ''){
+								purposeAcc = spcArr[found].accountArr[i];
+							}
+						}
+						console.log("item",item);
+						purposeAcc = purposeAcc;
 						refineList.push({
+							index: index +1,
 							transactionSpcId: item.spc_id,
 							spcName: spcArr[found].spc_name,
 							transactionReqId: item.request_id,
@@ -357,7 +459,9 @@
 							transferAgent: item.transfer_agent,
 							requestedBy: item.requested_by,
 							statusChangedBy: item.status_changed_by,
-							toAccount: to_account
+							toAccount: to_account,
+							purposeAcc : purposeAcc,
+							badgeYn : item.badge_yn
 						});
 					});
 
@@ -743,9 +847,10 @@
 		<div class="indiv spc-transaction">
 			<table id="withdrawReqStatus" class="chk-type">
 				<colgroup>
-					<col style="width:4%"> <!-- 체크박스 -->
+					<col style="width:3%"> <!-- 체크박스 -->
+					<col style="width:3%"> <!-- 순번 -->
 					<col style="width:8%"> <!-- 출금일자 -->
-					<col style="width:12%"> <!-- SPC 명 -->
+					<col style="width:10%"> <!-- SPC 명 -->
 					<col style="width:10%"> <!-- 금 액 -->
 					<col style="width:8%"> <!-- 입출금 구분 -->
 					<col style="width:10%"> <!-- 용도 구분 -->
